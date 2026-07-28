@@ -34,6 +34,16 @@ teardown() {
   run warn "careful"
   [ "${status}" -eq 0 ]
 
+  INSTALL_T0="$(date +%s)"
+  run install_elapsed_s
+  [ "${status}" -eq 0 ]
+  run install_format_elapsed 90
+  [ "${output}" = "1:30" ]
+  run step 1 11 "Clone ComfyUI"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"step 1/11"* ]]
+  [[ "${output}" == *"Clone ComfyUI"* ]]
+
   mkdir -p "${COMFY_HOME}/models"
   run link_models diffusion_models
   [ "${status}" -eq 0 ]
@@ -49,8 +59,10 @@ teardown() {
   export CUSTOM="${TEST_TMP_DIR}/custom_nodes"
   mkdir -p "${CUSTOM}"
   install_mock_bin git 'echo "git $*"; exit 1'
+  install_mock_bin pip 'echo "pip $*"; exit 0'
   run clone_node "https://example.com/node.git" "DemoNode"
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"custom node"* ]]
 }
 
 @test "main with mocked install and NO_EXEC" {
@@ -61,12 +73,80 @@ teardown() {
   chmod +x "${VENV}/bin/python"
   # fake activate
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  : >"${STAMP}"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
-  # point patch path missing is fine
   run main
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"starting ComfyUI"* || "${output}" == *"installing"* ]]
+  [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"phase"* || "${output}" == *"refresh"* ]]
+}
+
+@test "entrypoint seeds from prebuilt when stamp missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local pre="${TEST_TMP_DIR}/prebuilt"
+  export LAB_PREBUILT_ROOT="${pre}"
+  export COMFY_HOME="${TEST_TMP_DIR}/seeded_comfy"
+  export VENV="${COMFY_HOME}/.venv"
+  export STAMP="${COMFY_HOME}/.lab-install-complete"
+  mkdir -p "${pre}/.venv/bin" "${pre}/user"
+  printf '#!/usr/bin/env bash\necho ok\n' >"${pre}/.venv/bin/python"
+  chmod +x "${pre}/.venv/bin/python"
+  printf 'export VIRTUAL_ENV=1\n' >"${pre}/.venv/bin/activate"
+  echo stamp >"${pre}/.lab-install-complete"
+  echo tree >"${pre}/marker.txt"
+  export LAB_ENTRYPOINT_INSTALL_CMD="true"
+  export LAB_ENTRYPOINT_NO_EXEC=1
+  unset LAB_FORCE_COLD_INSTALL
+  run main
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Seeding"* || "${output}" == *"prebuilt"* || "${output}" == *"Seed"* ]]
+  [[ -f ${COMFY_HOME}/marker.txt ]]
+  [[ -x ${COMFY_HOME}/.venv/bin/python ]]
+}
+
+@test "prebuilt_ready detects venv python" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export LAB_PREBUILT_ROOT="${TEST_TMP_DIR}/empty_pre"
+  mkdir -p "${LAB_PREBUILT_ROOT}"
+  run prebuilt_ready
+  [ "${status}" -ne 0 ]
+  mkdir -p "${LAB_PREBUILT_ROOT}/.venv/bin"
+  printf '#!/bin/sh\n' >"${LAB_PREBUILT_ROOT}/.venv/bin/python"
+  chmod +x "${LAB_PREBUILT_ROOT}/.venv/bin/python"
+  run prebuilt_ready
+  [ "${status}" -eq 0 ]
+}
+
+@test "entrypoint ep_log and seed_from_prebuilt helpers" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  run ep_log "progress marker"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"[entrypoint"* ]]
+  [[ "${output}" == *"progress marker"* ]]
+
+  local pre dest
+  pre="${TEST_TMP_DIR}/seed_src"
+  dest="${TEST_TMP_DIR}/seed_dst"
+  mkdir -p "${pre}/sub"
+  echo payload >"${pre}/sub/file.txt"
+  export LAB_PREBUILT_ROOT="${pre}"
+  export COMFY_HOME="${dest}"
+  run seed_from_prebuilt
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/sub/file.txt ]]
+  [[ "$(cat "${dest}/sub/file.txt")" == "payload" ]]
+}
+
+@test "install-comfy pip_install wrapper" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  install_mock_bin pip 'echo "pip $*"; exit 0'
+  run pip_install -U pip
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"pip:"* || "${output}" == *"pip "* ]]
 }
 
 @test "main fails when venv python missing" {

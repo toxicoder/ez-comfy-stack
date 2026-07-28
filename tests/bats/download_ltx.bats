@@ -63,12 +63,121 @@ teardown() {
   [ "${CMD}" = "status" ]
   run check_hf_cli
   [ "${status}" -eq 0 ]
+  export LAB_MOCK_HF_DOWNLOAD=1
   run hf_download "org/ltx" --local-dir "${MODELS_DIR}/ltx_mock"
   [ "${status}" -eq 0 ]
   run tier_size_gb "${MODELS_DIR}/ltx_mock"
   [ "${status}" -eq 0 ]
   run tier_size_gb "${MODELS_DIR}/nope"
   [ "${output}" = "0" ]
+}
+
+@test "download-ltx tier_include_patterns selective balanced and quality" {
+  run tier_include_patterns balanced
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"fp8_input_scaled_v3"* ]]
+  [[ "${output}" == *"text_encoders/ltx-2.3_text_projection_bf16.safetensors"* ]]
+  [[ "${output}" == *"vae/LTX23_video_vae_bf16.safetensors"* ]]
+  [[ "${output}" == *"vae/LTX23_audio_vae_bf16.safetensors"* ]]
+  # Must not request every monorepo variant / bf16 transformer on balanced
+  [[ "${output}" != *"dev_transformer"* ]]
+  [[ "${output}" != *"distilled_transformer_only_bf16"* ]]
+  [[ "${output}" != *"loras/"* ]]
+  run tier_include_patterns quality
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"distilled_transformer_only_bf16"* ]]
+  [[ "${output}" == *"text_encoders/"* ]]
+  [[ "${output}" != *"fp8_input_scaled_v3"* ]]
+  run tier_include_patterns bogus
+  [ "${status}" -eq 0 ]
+  [ -z "${output}" ]
+}
+
+@test "download-ltx cmd_run passes --include patterns to hf (selective)" {
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  unset LAB_MOCK_HF_DOWNLOAD
+  TIER=balanced
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  grep -q 'hf download Kijai/LTX2.3_comfy' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q -- '--include' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'fp8_input_scaled_v3' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'text_projection' "${TEST_TMP_DIR}/hf_calls.log"
+}
+
+@test "download-ltx cmd_run LTX_FULL_REPO=1 omits --include" {
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  unset LAB_MOCK_HF_DOWNLOAD
+  export LTX_FULL_REPO=1
+  TIER=balanced
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  grep -q 'hf download Kijai/LTX2.3_comfy' "${TEST_TMP_DIR}/hf_calls.log"
+  ! grep -q -- '--include' "${TEST_TMP_DIR}/hf_calls.log"
+  unset LTX_FULL_REPO
+}
+
+@test "download-ltx tier_files_ready skip and cleanup keeps resume cache" {
+  local tdir keep extra cache_inc
+  tdir="$(tier_dir balanced)"
+  mkdir -p "${tdir}/diffusion_models" "${tdir}/text_encoders" "${tdir}/vae" "${tdir}/loras" \
+    "${tdir}/.cache/huggingface/download"
+  keep="diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors"
+  echo keep >"${tdir}/${keep}"
+  echo te >"${tdir}/text_encoders/ltx-2.3_text_projection_bf16.safetensors"
+  echo vv >"${tdir}/vae/LTX23_video_vae_bf16.safetensors"
+  echo av >"${tdir}/vae/LTX23_audio_vae_bf16.safetensors"
+  echo meta >"${tdir}/LICENSE"
+  cache_inc="${tdir}/.cache/huggingface/download/blob.incomplete"
+  echo partial >"${cache_inc}"
+  extra="${tdir}/diffusion_models/ltx-2.3-22b-dev_transformer_only_bf16.safetensors"
+  echo waste >"${extra}"
+  echo waste >"${tdir}/loras/some_lora.safetensors"
+  echo waste >"${tdir}/.cache_junk"
+
+  run tier_files_ready balanced
+  [ "${status}" -eq 0 ]
+  rm -f "${tdir}/vae/LTX23_audio_vae_bf16.safetensors"
+  run tier_files_ready balanced
+  [ "${status}" -ne 0 ]
+  echo av >"${tdir}/vae/LTX23_audio_vae_bf16.safetensors"
+
+  run is_ltx_keep_relpath balanced "${keep}"
+  [ "${status}" -eq 0 ]
+  run is_ltx_keep_relpath balanced ".cache/huggingface/download/blob.incomplete"
+  [ "${status}" -eq 0 ]
+  run is_ltx_keep_relpath balanced "diffusion_models/ltx-2.3-22b-dev_transformer_only_bf16.safetensors"
+  [ "${status}" -ne 0 ]
+
+  run list_extra_ltx_files balanced
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"${extra}"* ]]
+  [[ "${output}" == *"loras/some_lora"* ]]
+  [[ "${output}" != *".cache/huggingface"* ]]
+  [[ "${output}" != *"fp8_input_scaled_v3"* ]]
+
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  unset LAB_MOCK_HF_DOWNLOAD
+  TIER=balanced
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"cache hit"* || "${output}" == *"skip balanced"* ]]
+  ! grep -q 'hf download' "${TEST_TMP_DIR}/hf_calls.log"
+
+  CLEANUP_YES=1
+  run cmd_cleanup
+  [ "${status}" -eq 0 ]
+  [[ ! -f ${extra} ]]
+  [[ ! -f ${tdir}/loras/some_lora.safetensors ]]
+  [[ -f ${tdir}/${keep} ]]
+  [[ -f ${cache_inc} ]]
+  [[ -f ${tdir}/LICENSE ]]
+
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" cleanup --tier balanced --dry-run"
+  [ "${status}" -eq 0 ]
+
+  run prune_empty_dirs "${tdir}"
+  [ "${status}" -eq 0 ]
 }
 
 @test "download-ltx link_into_comfy cmd_status cmd_run" {
@@ -89,4 +198,9 @@ teardown() {
   LAB_MOCK_HF_DOWNLOAD=1
   run cmd_run
   [ "${status}" -eq 0 ]
+  LAB_MOCK_HF_DOWNLOAD=fail
+  TIER=balanced
+  run cmd_run
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"No LTX tiers"* || "${output}" == *"failed"* ]]
 }

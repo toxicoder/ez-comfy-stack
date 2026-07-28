@@ -9,6 +9,10 @@
 #   pipeline and link them into ComfyUI model subfolders (diffusion_models,
 #   text_encoders, vae) under $MODELS_DIR/comfy.
 #
+#   By default each tier pulls a selective subset of Kijai/LTX2.3_comfy
+#   (one transformer + text encoder + VAEs, ~25–50 GB), not the full monorepo
+#   (~400 GB of every precision/variant). Set LTX_FULL_REPO=1 to pull everything.
+#
 # Audience:
 #   Operators preparing a Spark host for manage.sh start. Prefer
 #   manage.sh download-models for throttled sequential flux+ltx pulls.
@@ -16,12 +20,16 @@
 # Usage:
 #   ./scripts/utilities/download-ltx.sh status [--tier balanced|quality|all] [--json]
 #   ./scripts/utilities/download-ltx.sh run [--tier ...]
+#   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD — same semantics as download-flux.
+#   LTX_FULL_REPO=1 — download entire Kijai/LTX2.3_comfy snapshot (all variants).
 #
 # Safety:
 #   Multi‑GB transfer — use download-limit when on remote SSH.
+#   cleanup defaults to --dry-run; --yes deletes only non-selective files under
+#   the tier local-dir (never other MODELS_DIR trees like FLUX).
 #
 # Exit codes:
 #   0 success; 1 usage/tier/CLI errors.
@@ -41,6 +49,8 @@ MODELS_DIR=${MODELS_DIR:-"/mnt/models"}
 TIER="balanced"
 JSON_FLAG=""
 CMD="status"
+# cleanup: dry-run unless --yes (explicit delete)
+CLEANUP_YES=0
 
 #######################################
 # tier_repo helper.
@@ -65,30 +75,69 @@ tier_repo() {
 # Globals:
 #   See file header / caller environment.
 # Arguments:
-#   None
+#   $1  Tier name (balanced|quality|…)
 # Outputs:
-#   Status via log/warn/err on stderr unless noted.
+#   Minimum ready size in GB on stdout (selective payload, not full monorepo).
 # Returns:
-#   Exit status depends on command path; see implementation.
+#   0
 #######################################
 tier_min_gb() {
   case "${1}" in
+    # distilled fp8 transformer (~25 GB) + TE + VAEs ≈ 28–30 GB
     balanced) echo 20 ;;
+    # distilled bf16 transformer (~42 GB) + TE + VAEs ≈ 45–48 GB
     quality) echo 35 ;;
     *) echo 0 ;;
   esac
 }
 
 #######################################
+# Glob patterns for selective hf download of a tier (one line each).
+# Globals:
+#   None
+# Arguments:
+#   $1  Tier name (balanced|quality)
+# Outputs:
+#   Include globs on stdout (empty for unknown tier).
+# Returns:
+#   0
+#######################################
+tier_include_patterns() {
+  # Shared TE + VAEs for Comfy split loaders (not full monorepo).
+  local -a shared=(
+    "text_encoders/ltx-2.3_text_projection_bf16.safetensors"
+    "vae/LTX23_video_vae_bf16.safetensors"
+    "vae/LTX23_audio_vae_bf16.safetensors"
+  )
+  case "${1}" in
+    balanced)
+      # Distilled FP8 with calibrated input scales (Spark / modern NVIDIA FP8 matmul).
+      printf '%s\n' \
+        "diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors" \
+        "${shared[@]}"
+      ;;
+    quality)
+      # Distilled BF16 transformer for higher fidelity (much larger).
+      printf '%s\n' \
+        "diffusion_models/ltx-2.3-22b-distilled_transformer_only_bf16.safetensors" \
+        "${shared[@]}"
+      ;;
+    *)
+      return 0
+      ;;
+  esac
+}
+
+#######################################
 # tier_dir helper.
 # Globals:
-#   See file header / caller environment.
+#   MODELS_DIR
 # Arguments:
-#   None
+#   $1  Tier name
 # Outputs:
-#   Status via log/warn/err on stderr unless noted.
+#   Absolute local-dir path for that tier on stdout.
 # Returns:
-#   Exit status depends on command path; see implementation.
+#   0
 #######################################
 tier_dir() {
   local repo
@@ -96,56 +145,7 @@ tier_dir() {
   echo "${MODELS_DIR}/${repo//\//__}_${1}"
 }
 
-#######################################
-# check_hf_cli helper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status depends on command path; see implementation.
-#######################################
-check_hf_cli() {
-  if command -v huggingface-cli >/dev/null 2>&1 || command -v hf >/dev/null 2>&1; then
-    return 0
-  fi
-  err "Required tool missing: huggingface-cli or hf (pip install -U huggingface_hub)"
-  exit 1
-}
-
-#######################################
-# hf_download helper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status depends on command path; see implementation.
-#######################################
-hf_download() {
-  if [[ -n ${LAB_MOCK_HF_DOWNLOAD:-} ]]; then
-    local dest=""
-    local prev=""
-    for a in "$@"; do
-      if [[ ${prev} == "--local-dir" ]]; then
-        dest="$a"
-      fi
-      prev="$a"
-    done
-    mkdir -p "${dest}"
-    echo "mock" >"${dest}/.mock"
-    return 0
-  fi
-  if command -v huggingface-cli >/dev/null 2>&1; then
-    huggingface-cli download "$@"
-  else
-    hf download "$@"
-  fi
-}
+# check_hf_cli / hf_download: provided by scripts/lib/common.sh (prefer `hf download`).
 
 #######################################
 # tier_size_gb helper.
@@ -204,9 +204,12 @@ parse_args() {
         TIER="${2:?}"
         shift
         ;;
-      status | run) CMD="${1}" ;;
+      --dry-run) CLEANUP_YES=0 ;;
+      --yes | -y) CLEANUP_YES=1 ;;
+      status | run | cleanup) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status|run [--tier balanced|quality|all] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier balanced|quality|all] [--json]" >&2
+        echo "  cleanup options: --dry-run (default) | --yes  delete non-selective weights" >&2
         exit 0
         ;;
       *)
@@ -216,6 +219,118 @@ parse_args() {
     esac
     shift
   done
+}
+
+#######################################
+# Return 0 if relative path is kept for a selective tier (or tiny meta).
+# Globals:
+#   None
+# Arguments:
+#   $1  Tier name
+#   $2  Path relative to tier local-dir
+# Outputs:
+#   None
+# Returns:
+#   0 keep; 1 extra (candidate for cleanup)
+#######################################
+is_ltx_keep_relpath() {
+  local tier="${1}"
+  local rel="${2}"
+  local pat
+  case "${rel}" in
+    .gitattributes | LICENSE | README.md) return 0 ;;
+    # HF local-dir resume/cache metadata + partials (never wipe for cleanup)
+    .cache | .cache/*) return 0 ;;
+    *.incomplete) return 0 ;;
+    *.lock | *.lock.*) return 0 ;;
+  esac
+  while IFS= read -r pat; do
+    [[ -z ${pat} ]] && continue
+    if [[ ${rel} == "${pat}" ]]; then
+      return 0
+    fi
+  done < <(tier_include_patterns "${tier}")
+  return 1
+}
+
+#######################################
+# True if selective tier files are already on disk (skip re-download).
+# Globals:
+#   MODELS_DIR, LTX_FULL_REPO
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   None
+# Returns:
+#   0 ready; 1 not ready
+#######################################
+tier_files_ready() {
+  local tier="${1}"
+  local dir pat f size min
+  dir="$(tier_dir "${tier}")"
+  if [[ ! -d ${dir} ]]; then
+    return 1
+  fi
+  # Full monorepo mode: size floor only (no fixed include list)
+  if [[ ${LTX_FULL_REPO:-0} == "1" ]]; then
+    size="$(tier_size_gb "${dir}")"
+    min="$(tier_min_gb "${tier}")"
+    awk "BEGIN {exit !($size >= $min)}"
+    return $?
+  fi
+  while IFS= read -r pat; do
+    [[ -z ${pat} ]] && continue
+    f="${dir}/${pat}"
+    if [[ ! -f ${f} || ! -s ${f} ]]; then
+      return 1
+    fi
+  done < <(tier_include_patterns "${tier}")
+  return 0
+}
+
+#######################################
+# List files under a tier dir that are outside the selective keep set.
+# Globals:
+#   MODELS_DIR (via tier_dir)
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   Absolute paths of extra files on stdout (one per line)
+# Returns:
+#   0
+#######################################
+list_extra_ltx_files() {
+  local tier="${1}"
+  local dir rel f
+  dir="$(tier_dir "${tier}")"
+  if [[ ! -d ${dir} ]]; then
+    return 0
+  fi
+  while IFS= read -r f; do
+    [[ -z ${f} ]] && continue
+    rel="${f#"${dir}"/}"
+    if ! is_ltx_keep_relpath "${tier}" "${rel}"; then
+      printf '%s\n' "${f}"
+    fi
+  done < <(find "${dir}" -type f 2>/dev/null | LC_ALL=C sort)
+}
+
+#######################################
+# Remove empty directories under a tier local-dir (post-delete).
+# Globals:
+#   None
+# Arguments:
+#   $1  Absolute directory path
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+prune_empty_dirs() {
+  local root="${1}"
+  [[ -d ${root} ]] || return 0
+  # deepest-first so parents empty after children are removed
+  find "${root}" -depth -type d -empty -delete 2>/dev/null || true
 }
 
 #######################################
@@ -308,18 +423,116 @@ cmd_status() {
 #######################################
 cmd_run() {
   check_hf_cli
-  mkdir -p "$MODELS_DIR"
-  local tier repo
+  ensure_models_dir "${MODELS_DIR}" || exit 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+  local tier repo ok=0 fail=0 pat dir
+  local -a include_args=()
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")
-    log "Downloading ${repo} (tier: ${tier})..."
-    HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")" || {
-      warn "Download failed for ${repo} (${tier}). Continue."
+    dir="$(tier_dir "$tier")"
+    if tier_files_ready "${tier}"; then
+      log "skip ${tier}: already present at ${dir} (cache hit)"
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
       continue
-    }
-    link_into_comfy "$tier"
+    fi
+    include_args=()
+    if [[ ${LTX_FULL_REPO:-0} == "1" ]]; then
+      log "Downloading full ${repo} snapshot (tier: ${tier}; LTX_FULL_REPO=1)…"
+      log "Full monorepo is ~400 GB (every precision/variant). Prefer selective default."
+    else
+      log "Downloading ${repo} selective subset (tier: ${tier})…"
+      while IFS= read -r pat; do
+        [[ -z ${pat} ]] && continue
+        include_args+=(--include "${pat}")
+        log "  include: ${pat}"
+      done < <(tier_include_patterns "${tier}")
+      if [[ ${#include_args[@]} -eq 0 ]]; then
+        err "No include patterns for tier ${tier}; refusing full monorepo pull."
+        fail=$((fail + 1))
+        continue
+      fi
+      log "Tip: LTX_FULL_REPO=1 pulls the entire ~400 GB repo (not recommended)"
+    fi
+    # Empty include_args must not expand under set -u (bash unbound array).
+    local dl_rc=0
+    if [[ ${#include_args[@]} -gt 0 ]]; then
+      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" \
+        "${include_args[@]}" || dl_rc=$?
+    else
+      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" || dl_rc=$?
+    fi
+    if [[ ${dl_rc} -eq 0 ]]; then
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
+    else
+      warn "Skipping remaining setup for ${repo} (see short error above)."
+      warn "Partials kept under ${dir}; re-run to resume."
+      fail=$((fail + 1))
+    fi
   done
   cmd_status
+  if [[ ${ok} -eq 0 ]]; then
+    err "No LTX tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
+    exit 1
+  fi
+  if [[ ${fail} -gt 0 ]]; then
+    warn "Partial LTX download: ${ok} ok, ${fail} failed"
+  fi
+}
+
+#######################################
+# Remove non-selective weight files from tier local-dirs (dry-run by default).
+# Globals:
+#   MODELS_DIR, TIER, CLEANUP_YES
+# Arguments:
+#   None
+# Outputs:
+#   Logs kept/removed paths and size after
+# Returns:
+#   0; 1 on unknown tier
+#######################################
+cmd_cleanup() {
+  local tier dir f rel n_extra n_del size_before size_after total_extra=0
+  for tier in $(tiers_to_process); do
+    if [[ -z $(tier_repo "${tier}") ]]; then
+      err "Unknown tier: ${tier}"
+      exit 1
+    fi
+    dir="$(tier_dir "${tier}")"
+    if [[ ! -d ${dir} ]]; then
+      log "cleanup ${tier}: no directory at ${dir} (nothing to do)"
+      continue
+    fi
+    n_extra=0
+    n_del=0
+    size_before="$(tier_size_gb "${dir}")"
+    log "cleanup ${tier}: scanning ${dir} (current ≈ ${size_before} GB)"
+    log "cleanup ${tier}: keeping selective files from tier_include_patterns + LICENSE/README/.gitattributes"
+    while IFS= read -r f; do
+      [[ -z ${f} ]] && continue
+      n_extra=$((n_extra + 1))
+      rel="${f#"${dir}"/}"
+      if [[ ${CLEANUP_YES} -eq 1 ]]; then
+        rm -f "${f}" || warn "Failed to remove ${f}"
+        n_del=$((n_del + 1))
+        log "  removed: ${rel}"
+      else
+        log "  would remove: ${rel}"
+      fi
+    done < <(list_extra_ltx_files "${tier}")
+    total_extra=$((total_extra + n_extra))
+    if [[ ${CLEANUP_YES} -eq 1 ]]; then
+      prune_empty_dirs "${dir}"
+      size_after="$(tier_size_gb "${dir}")"
+      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} → ${size_after} GB"
+    else
+      log "cleanup ${tier}: ${n_extra} extra file(s) (dry-run). Re-run with --yes to delete."
+    fi
+  done
+  if [[ ${CLEANUP_YES} -ne 1 && ${total_extra} -gt 0 ]]; then
+    log "Tip: MODELS_DIR=${MODELS_DIR} $0 cleanup --tier ${TIER} --yes"
+  fi
 }
 
 #######################################
@@ -338,8 +551,9 @@ main() {
   case "$CMD" in
     status) cmd_status ;;
     run) cmd_run ;;
+    cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run [--tier balanced|quality|all] [--json]"
+      err "Usage: $0 status|run|cleanup [--tier balanced|quality|all] [--json] [--yes]"
       exit 1
       ;;
   esac

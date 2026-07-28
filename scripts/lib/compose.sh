@@ -77,9 +77,8 @@ compose_run() {
 #   0 when both work; otherwise dies (exit 1).
 #######################################
 require_docker() {
-  require_cmd docker
-  if ! docker compose version >/dev/null 2>&1; then
-    die "docker compose plugin is required"
+  if ! check_docker_preflight; then
+    die "Docker preflight failed (install with: ./scripts/manage.sh setup --install-docker)"
   fi
 }
 
@@ -133,6 +132,166 @@ compose_is_running() {
 }
 
 #######################################
+# After compose up, fail if comfyui is not running; print ps -a and recent logs.
+# Globals:
+#   None (uses compose_run)
+# Arguments:
+#   $1  Optional settle seconds (default 3)
+# Outputs:
+#   Status/errors on stderr; compose ps/logs on failure
+# Returns:
+#   0 if running; 1 if not
+#######################################
+stack_verify_running() {
+  local settle="${1:-3}"
+  local i retries=3
+  if [[ ${settle} -gt 0 ]]; then
+    sleep "${settle}"
+  else
+    retries=1
+  fi
+  i=0
+  while [[ ${i} -lt ${retries} ]]; do
+    i=$((i + 1))
+    if compose_is_running; then
+      return 0
+    fi
+    if [[ ${i} -lt ${retries} ]]; then
+      sleep 1
+    fi
+  done
+  err "Container is not running after start (restart: no → exits stay stopped)."
+  warn "compose ps -a:"
+  compose_run ps -a 2>/dev/null || true
+  warn "Recent comfyui logs:"
+  compose_run logs --tail 80 comfyui 2>/dev/null || true
+  err "Tips: ./scripts/manage.sh logs — if volume was poisoned by a failed first start:"
+  err "  ./scripts/manage.sh stop && docker volume rm ez-comfy-state  # then start again"
+  err "  Stop other GPU containers if nvidia runtime fails; check free RAM vs MEM_RESERVATION"
+  return 1
+}
+
+#######################################
+# True if ComfyUI port accepts TCP connections on localhost.
+# Globals:
+#   COMFY_PORT
+# Arguments:
+#   $1  Optional port (default COMFY_PORT or 8188)
+# Outputs:
+#   None
+# Returns:
+#   0 if open; 1 otherwise
+#######################################
+stack_port_open() {
+  local port="${1:-${COMFY_PORT:-8188}}"
+  if command -v curl >/dev/null 2>&1; then
+    curl -sf -o /dev/null --connect-timeout 1 "http://127.0.0.1:${port}/" 2>/dev/null && return 0
+    # Comfy may not answer HTTP until fully up; TCP is enough
+  fi
+  if command -v nc >/dev/null 2>&1; then
+    nc -z -w 1 127.0.0.1 "${port}" 2>/dev/null && return 0
+  fi
+  # Bash /dev/tcp fallback
+  (echo >/dev/tcp/127.0.0.1/"${port}") >/dev/null 2>&1 && return 0
+  return 1
+}
+
+#######################################
+# Stream compose logs and poll until UI port is open (or timeout / detach).
+# Ctrl+C detaches follower only — container keeps running.
+# Globals:
+#   COMFY_PORT, LAB_STACK_FOLLOW, LAB_STACK_READY_TIMEOUT, LAB_STACK_HEARTBEAT
+# Arguments:
+#   None
+# Outputs:
+#   Progress logs; compose log stream to stderr
+# Returns:
+#   0 always (timeout warns but leaves container running)
+#######################################
+stack_follow_until_ready() {
+  local port="${COMFY_PORT:-8188}"
+  local timeout_s="${LAB_STACK_READY_TIMEOUT:-2700}"
+  local heartbeat_s="${LAB_STACK_HEARTBEAT:-30}"
+  local t0 now elapsed log_pid=""
+  local follow="${LAB_STACK_FOLLOW:-}"
+
+  if [[ -z ${follow} ]]; then
+    if [[ -t 1 || -t 2 ]]; then
+      follow=1
+    else
+      follow=0
+    fi
+  fi
+  if [[ ${follow} == "0" ]]; then
+    log "LAB_STACK_FOLLOW=0 — not streaming logs; use: ./scripts/manage.sh logs"
+    return 0
+  fi
+
+  if stack_port_open "${port}"; then
+    log "ComfyUI already responding on http://localhost:${port}"
+    return 0
+  fi
+
+  log "Streaming container logs until UI is ready on :${port} (timeout ${timeout_s}s)"
+  log "Ctrl+C detaches this view only — container keeps installing/running"
+  log "Re-attach anytime: ./scripts/manage.sh logs"
+
+  t0="$(date +%s)"
+  local last_hb=0 aborted=0
+  set +m 2>/dev/null || true
+  (
+    compose_run logs -f --tail 50 2>&1
+  ) &
+  log_pid=$!
+  disown "${log_pid}" 2>/dev/null || true
+
+  # shellcheck disable=SC2329
+  _stack_follow_cleanup() {
+    if [[ -n ${log_pid} ]] && kill -0 "${log_pid}" 2>/dev/null; then
+      kill "${log_pid}" 2>/dev/null || true
+      wait "${log_pid}" 2>/dev/null || true
+    fi
+  }
+  trap 'aborted=1' INT TERM
+
+  while true; do
+    if [[ ${aborted} -eq 1 ]]; then
+      _stack_follow_cleanup
+      trap - INT TERM
+      log "Detached from log stream (container still running). ./scripts/manage.sh logs"
+      return 0
+    fi
+    if stack_port_open "${port}"; then
+      _stack_follow_cleanup
+      trap - INT TERM
+      log "✓ ComfyUI is up — http://localhost:${port}"
+      return 0
+    fi
+    if ! compose_is_running; then
+      _stack_follow_cleanup
+      trap - INT TERM
+      err "Container exited during install — see logs above"
+      compose_run ps -a 2>/dev/null || true
+      return 1
+    fi
+    now="$(date +%s)"
+    elapsed=$((now - t0))
+    if [[ ${elapsed} -ge ${timeout_s} ]]; then
+      _stack_follow_cleanup
+      trap - INT TERM
+      warn "Timed out after ${elapsed}s waiting for :${port} (install may still be running)"
+      warn "Continue with: ./scripts/manage.sh logs"
+      return 0
+    fi
+    if [[ $((elapsed - last_hb)) -ge ${heartbeat_s} ]]; then
+      log "… still waiting for ComfyUI on :${port} (elapsed ${elapsed}s; container running)"
+      last_hb=${elapsed}
+    fi
+    sleep 2
+  done
+}
+
+#######################################
 # Build images if needed and start the unified stack detached (`up -d --build`).
 # Exports default env for compose interpolation, ensures MODELS_DIR/comfy exists,
 # and logs cold-start expectations. Does not confirm with the user.
@@ -144,7 +303,60 @@ compose_is_running() {
 # Outputs:
 #   Status via log/warn/err on stderr unless noted.
 # Returns:
-#   Exit status of `compose up`.
+#   0 when up and container running; non-zero on compose or verify failure.
+#######################################
+#######################################
+# Resolve default GHCR image ref (public package; no credentials in repo).
+# Globals:
+#   EZ_COMFY_IMAGE
+# Arguments:
+#   None
+# Outputs:
+#   Image ref on stdout
+# Returns:
+#   0
+#######################################
+stack_default_image() {
+  echo "${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx}"
+}
+
+#######################################
+# Try docker pull of prebuilt image; return 0 if usable.
+# Globals:
+#   None
+# Arguments:
+#   $1  Image reference
+# Outputs:
+#   Status logs
+# Returns:
+#   0 if pull ok or image already local; 1 on failure
+#######################################
+stack_pull_image() {
+  local img="${1:?}"
+  if [[ ${LAB_STACK_SKIP_PULL:-0} == "1" ]]; then
+    log "LAB_STACK_SKIP_PULL=1 — not pulling ${img}"
+    return 1
+  fi
+  log "Pulling prebuilt image ${img} (GHCR; no model weights inside)…"
+  if docker pull "${img}"; then
+    log "Pull ok: ${img}"
+    return 0
+  fi
+  warn "Pull failed for ${img} — will build locally if needed (long if prebuild enabled)"
+  return 1
+}
+
+#######################################
+# Build images if needed and start the unified stack detached.
+# Prefers GHCR pull; falls back to compose build. Seeds volume from prebuilt.
+# Globals:
+#   See file header / caller environment.
+# Arguments:
+#   None
+# Outputs:
+#   Status via log/warn/err on stderr unless noted.
+# Returns:
+#   0 when up and container running; non-zero on compose or verify failure.
 #######################################
 stack_start() {
   require_docker
@@ -152,11 +364,40 @@ stack_start() {
   export COMFY_PORT="${COMFY_PORT:-8188}"
   export MEM_LIMIT="${MEM_LIMIT:-90g}"
   export MEM_RESERVATION="${MEM_RESERVATION:-80g}"
-  mkdir -p "${MODELS_DIR}/comfy" 2>/dev/null || true
-  log "Starting unified flux-to-ltx stack (mem_limit=${MEM_LIMIT})..."
-  compose_run up -d --build
-  log "Stack starting. UI: http://localhost:${COMFY_PORT}"
-  log "Cold start (first install) may take 10–30+ minutes."
+  export EZ_COMFY_IMAGE
+  EZ_COMFY_IMAGE="$(stack_default_image)"
+  ensure_models_dir "${MODELS_DIR}" || return 1
+  mkdir -p "${MODELS_DIR}/comfy"
+  log "══ start ══ unified flux-to-ltx (mem_limit=${MEM_LIMIT})"
+  log "Image: ${EZ_COMFY_IMAGE}"
+
+  local up_args=(up -d)
+  if [[ ${LAB_STACK_FORCE_BUILD:-0} == "1" ]]; then
+    log "LAB_STACK_FORCE_BUILD=1 — compose up --build (may take a long time)"
+    up_args+=(--build)
+  elif stack_pull_image "${EZ_COMFY_IMAGE}"; then
+    log "Using pulled image (compose up without rebuild)"
+  else
+    log "Building image locally (Dockerfile prebuild installs torch — can take 30+ min)…"
+    up_args+=(--build)
+  fi
+
+  if ! compose_run "${up_args[@]}"; then
+    err "compose up failed"
+    compose_run ps -a 2>/dev/null || true
+    compose_run logs --tail 80 comfyui 2>/dev/null || true
+    return 1
+  fi
+  log "Compose up finished — verifying container is running…"
+  # LAB_STACK_VERIFY_SETTLE=0 skips sleep in hermetic tests
+  if ! stack_verify_running "${LAB_STACK_VERIFY_SETTLE:-3}"; then
+    return 1
+  fi
+  log "Container is running. UI target: http://localhost:${COMFY_PORT}"
+  log "First start with prebuilt image: seeds volume from /opt/comfy-prebuilt (local copy)"
+  log "Without prebuilt: cold pip install (multi-GB). LAB_FORCE_COLD_INSTALL=1 forces pip path."
+  # Default FOLLOW on TTY; tests set LAB_STACK_FOLLOW=0
+  stack_follow_until_ready || return 1
 }
 
 #######################################

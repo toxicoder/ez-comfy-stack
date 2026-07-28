@@ -25,6 +25,31 @@ MODELS_DIR=/mnt/models
 
 Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
+### Permissions
+
+`doctor`, `download-models`, and download utilities require `MODELS_DIR` to be **writable by the current user**.
+
+Preferred:
+
+```bash
+./scripts/manage.sh setup
+# sudo mkdir -p + chown for MODELS_DIR when needed
+```
+
+Manual:
+
+```bash
+sudo mkdir -p /mnt/models
+sudo chown "$USER:$USER" /mnt/models
+```
+
+Or point at a home path:
+
+```bash
+# .env
+MODELS_DIR=$HOME/models
+```
+
 ## Layout
 
 ```text
@@ -67,6 +92,81 @@ Or:
 
 ```bash
 ./scripts/manage.sh download-models
+```
+
+### Cleanup extra LTX monorepo files
+
+If an older run pulled the full `Kijai/LTX2.3_comfy` snapshot into the balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:
+
+```bash
+# Preview (default)
+./scripts/utilities/download-ltx.sh cleanup --tier balanced
+
+# Delete extras (keeps FP8 transformer + TE + VAEs only)
+./scripts/utilities/download-ltx.sh cleanup --tier balanced --yes
+```
+
+Does **not** touch FLUX, nunchaku, or other trees under `MODELS_DIR`.
+
+Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`). Install:
+
+```bash
+command -v hf || pipx install huggingface_hub
+# or: pip install -U 'huggingface_hub[cli]'
+```
+
+Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. `HF_PROGRESS=0` turns progress lines off; `HF_PROGRESS_INTERVAL=10` sets the tick (seconds).
+
+### Prebuilt container image (GHCR)
+
+| Item | Detail |
+| --- | --- |
+| Image | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (arm64) |
+| Contains | CUDA base, ComfyUI, Python venv, PyTorch/CUDA wheels |
+| Does **not** contain | `HF_TOKEN`, `.env`, host PII, or FLUX/LTX weights |
+| First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
+| Weights | Still under `MODELS_DIR` via `download-models` |
+
+### Resume & cache
+
+Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
+
+| Behavior | Detail |
+| --- | --- |
+| Resume after interrupt | Ctrl+C / crash leaves `*.incomplete` under each tier’s `.cache/huggingface/`; re-run the same command to continue |
+| Skip when ready | `download-flux` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
+| `HF_HOME` | Set to `MODELS_DIR` so hub metadata lives on the durable model disk |
+| Cleanup | `download-ltx.sh cleanup --yes` removes non-selective monorepo weights but **keeps** `.cache/`, `*.incomplete`, and selective keep-set files |
+
+Do not delete a tier’s `.cache/huggingface/` folder if you want fast resume/metadata checks. Finished weight files are never re-downloaded unless missing or hub revision changes.
+
+### LTX selective download (not the full monorepo)
+
+`Kijai/LTX2.3_comfy` is a multi-variant hub repo (~**400 GB** if you pull everything). This stack defaults to a **selective** subset via `hf download --include`:
+
+| Tier | Transformer (approx) | Plus | Total (approx) |
+| --- | --- | --- | --- |
+| **balanced** | distilled FP8 `…fp8_input_scaled_v3` (~25 GB) | text projection + video/audio VAE | ~28–30 GB |
+| **quality** | distilled BF16 (~42 GB) | same TE + VAEs | ~45–48 GB |
+
+`status --json` readiness uses `min_gb` 20 (balanced) / 35 (quality) as a floor, not the full monorepo size.
+
+Escape hatch (operators who really want every precision/lora):
+
+```bash
+LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier balanced
+```
+
+After a full-repo mistake, use `cleanup --yes` (above) instead of wiping all of `MODELS_DIR`.
+
+### Gated models / HF_TOKEN
+
+FLUX and some LTX assets may require accepting the license on Hugging Face and a token:
+
+```bash
+# .env
+HF_TOKEN=hf_...
+# or: hf auth login
 ```
 
 ### Download path

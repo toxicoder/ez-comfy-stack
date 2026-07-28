@@ -119,56 +119,7 @@ comfy_link_dir() {
   echo "${MODELS_DIR}/comfy/diffusion_models"
 }
 
-#######################################
-# check_hf_cli helper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status depends on command path; see implementation.
-#######################################
-check_hf_cli() {
-  if command -v huggingface-cli >/dev/null 2>&1 || command -v hf >/dev/null 2>&1; then
-    return 0
-  fi
-  err "Required tool missing: huggingface-cli or hf (pip install -U huggingface_hub)"
-  exit 1
-}
-
-#######################################
-# hf_download helper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status depends on command path; see implementation.
-#######################################
-hf_download() {
-  if [[ -n ${LAB_MOCK_HF_DOWNLOAD:-} ]]; then
-    local dest=""
-    local prev=""
-    for a in "$@"; do
-      if [[ ${prev} == "--local-dir" ]]; then
-        dest="$a"
-      fi
-      prev="$a"
-    done
-    mkdir -p "${dest}"
-    echo "mock" >"${dest}/.mock"
-    return 0
-  fi
-  if command -v huggingface-cli >/dev/null 2>&1; then
-    huggingface-cli download "$@"
-  else
-    hf download "$@"
-  fi
-}
+# check_hf_cli / hf_download: provided by scripts/lib/common.sh (prefer `hf download`).
 
 #######################################
 # tier_size_gb helper.
@@ -188,6 +139,38 @@ tier_size_gb() {
     return
   fi
   du -sk "$dir" 2>/dev/null | awk '{printf "%.1f", $1/1024/1024}'
+}
+
+#######################################
+# True if tier local-dir already meets min size (skip re-download).
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   None
+# Returns:
+#   0 ready; 1 not ready
+#######################################
+tier_files_ready() {
+  local tier="${1}"
+  local dir size min
+  dir="$(tier_dir "${tier}")"
+  if [[ ! -d ${dir} ]]; then
+    return 1
+  fi
+  # Require at least one weight-like file so empty dirs with junk don't skip
+  local has_weight=0
+  while IFS= read -r _; do
+    has_weight=1
+    break
+  done < <(find "${dir}" -type f \( -name '*.safetensors' -o -name '*.sft' -o -name '*.gguf' -o -name '*.bin' \) 2>/dev/null)
+  if [[ ${has_weight} -ne 1 ]]; then
+    return 1
+  fi
+  size="$(tier_size_gb "${dir}")"
+  min="$(tier_min_gb "${tier}")"
+  awk "BEGIN {exit !($size >= $min)}"
 }
 
 #######################################
@@ -342,23 +325,42 @@ cmd_status() {
 #######################################
 cmd_run() {
   check_hf_cli
-  mkdir -p "$MODELS_DIR" "${MODELS_DIR}/comfy/diffusion_models" \
+  ensure_models_dir "${MODELS_DIR}" || exit 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+  mkdir -p "${MODELS_DIR}/comfy/diffusion_models" \
     "${MODELS_DIR}/comfy/text_encoders" "${MODELS_DIR}/comfy/vae"
-  local tier repo
+  local tier repo ok=0 fail=0 dir
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")
     if [[ -z ${repo} ]]; then
       err "Unknown tier: $tier"
       exit 1
     fi
-    log "Downloading ${repo} (tier: ${tier})..."
-    HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")" || {
-      warn "Download failed for ${repo} (gated license or network). Continue with other tiers."
+    dir="$(tier_dir "$tier")"
+    if tier_files_ready "${tier}"; then
+      log "skip ${tier}: already present at ${dir} (cache hit)"
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
       continue
-    }
-    link_into_comfy "$tier"
+    fi
+    log "Downloading ${repo} (tier: ${tier})..."
+    if HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}"; then
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
+    else
+      warn "Skipping remaining setup for ${repo} (see short error above)."
+      warn "Partials kept under ${dir}; re-run to resume."
+      fail=$((fail + 1))
+    fi
   done
   cmd_status
+  if [[ ${ok} -eq 0 ]]; then
+    err "No FLUX tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
+    exit 1
+  fi
+  if [[ ${fail} -gt 0 ]]; then
+    warn "Partial FLUX download: ${ok} ok, ${fail} failed"
+  fi
 }
 
 #######################################

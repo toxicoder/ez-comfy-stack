@@ -22,10 +22,12 @@ tags: [getting-started, docker, comfyui]
 ## Prerequisites
 
 - NVIDIA DGX Spark (or compatible GB10 host) with drivers + **NVIDIA Container Toolkit**
-- Docker with Compose v2 plugin
-- `git`, `python3`, `pip` (`huggingface_hub` for downloads)
-- Optional: `wondershaper`, `speedtest-cli` (auto-installed / used by download-limit)
-- Hugging Face account with licenses accepted for FLUX / LTX models; `HF_TOKEN` if gated
+- Docker with Compose v2 plugin (prefer apt `docker-ce`, not snap; user in `docker` group). Image build uses public **Docker Hub** `nvidia/cuda` (no NGC/`nvcr.io` login required)
+- Writable shared model cache: default `/mnt/models` (`sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models`) or override `MODELS_DIR` in `.env`
+- `git`, `python3`, `pip` / `pipx`
+- Hugging Face CLI: `hf` from `huggingface_hub` (`pipx install huggingface_hub` or `pip install -U 'huggingface_hub[cli]'`) — **not** the deprecated `huggingface-cli` stub
+- Optional: `wondershaper`, `speedtest-cli` (auto-installed / used by download-limit; HTB/`sch_htb` when shaping is desired)
+- Hugging Face account with licenses accepted for FLUX / LTX models; `HF_TOKEN` in `.env` or `hf auth login` if gated
 
 ```mermaid
 flowchart LR
@@ -53,8 +55,31 @@ flowchart LR
 git clone https://github.com/toxicoder/ez-comfy-stack.git
 cd ez-comfy-stack
 git checkout development   # or your feature branch
-cp .env.example .env
-# edit .env: HF_TOKEN, MODELS_DIR=/mnt/models
+
+# One-shot host bootstrap: .env, MODELS_DIR (sudo), Docker CE if missing, doctor
+./scripts/manage.sh setup --install-docker
+# approve sudo + type yes if prompted; edit .env for HF_TOKEN if models are gated
+```
+
+`setup` will:
+
+1. Create `.env` from `.env.example` if missing  
+2. Create and own `MODELS_DIR` (default `/mnt/models`) via sudo when needed  
+3. **Install Docker CE + compose plugin** when missing (`--install-docker` or interactive yes; apt preferred, not snap)  
+4. Add your user to the `docker` group; configure `nvidia-ctk` when present  
+5. Re-run `doctor`
+
+If the current shell lacks the docker group after install:
+
+```bash
+newgrp docker   # or re-login SSH
+./scripts/manage.sh doctor
+```
+
+Non-interactive:
+
+```bash
+LAB_NON_INTERACTIVE=1 LAB_CONFIRM_TOKEN=yes SETUP_INSTALL_DOCKER=1 ./scripts/manage.sh setup
 ```
 
 ## Doctor
@@ -63,15 +88,19 @@ cp .env.example .env
 ./scripts/manage.sh doctor
 ```
 
-Fix any errors before downloading multi-GB models.
-
+Fix any errors before downloading multi-GB models. Hard failures include **docker missing**, **docker compose missing**, **host headroom**, and **MODELS_DIR not writable**. Prefer `./scripts/manage.sh setup` first. See [Troubleshooting](troubleshooting.md) for copy-paste fixes.
 ## Download models (shared cache)
 
 ```bash
+# Ensure HF token for gated repos (FLUX):
+# echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
+
 ./scripts/manage.sh download-models
 ```
 
-This runs **flux-fast** + **ltx-balanced** under `download-limit wrap --limit auto` (speedtest → **85%** cap). Weights land under `MODELS_DIR` (default `/mnt/models`) in a layout compatible with nvidia-dgx-spark-lab.
+This runs **flux-fast** + **ltx-balanced** under `download-limit wrap --limit auto` (speedtest → **85%** cap), using **`hf download`**. Weights land under `MODELS_DIR` (default `/mnt/models`) in a layout compatible with nvidia-dgx-spark-lab. If bandwidth shaping fails on the kernel, downloads continue unthrottled with a warning (`DOWNLOAD_LIMIT=off` to skip shaping).
+
+LTX **balanced** pulls a **selective** subset of `Kijai/LTX2.3_comfy` (distilled FP8 + TE + VAEs, ~30 GB), not the full multi-variant monorepo (~400 GB). See [Models & Cache](models-and-cache.md).
 
 ## Start the stack
 
@@ -83,8 +112,16 @@ This runs **flux-fast** + **ltx-balanced** under `download-limit wrap --limit au
 
 Open `http://<spark-ip>:8188` (or port-forward if needed).
 
-!!! warning "Cold start"
-    First container start installs ComfyUI into the `comfy-state` volume and can take **10–30+ minutes**.
+!!! tip "Prebuilt image (GHCR)"
+    Default image is `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (**linux/arm64**, published by CI).  
+    It includes ComfyUI + PyTorch; **not** FLUX/LTX weights (those stay on `MODELS_DIR`).  
+    First start **seeds** the volume from `/opt/comfy-prebuilt` (local copy) instead of multi‑GB pip.  
+    No tokens or host secrets are baked into the image. Pull is public for public packages.
+
+!!! warning "Cold start without prebuilt"
+    If GHCR pull fails or you force a thin/local build without prebuild, first start can take **10–30+ minutes** of pip.  
+    `manage.sh start` streams logs until port 8188 responds (Ctrl+C detaches only).  
+    `LAB_STACK_FOLLOW=0` returns immediately after the container is up.
 
 ### First-run journey
 
