@@ -81,7 +81,8 @@ run_with_signal_forwarding() {
   "$@" &
   child=$!
   _RWSF_CHILD_PID="${child}"
-  # shellcheck disable=SC2329
+  # Trap-only handler: SC2329/SC2317 — ShellCheck does not see string trap refs as calls
+  # shellcheck disable=SC2317,SC2329
   _rwsf_on_signal() {
     log "Interrupted — stopping download process tree…"
     kill_pid_tree "${_RWSF_CHILD_PID}" "download"
@@ -754,7 +755,9 @@ clear_stale_hf_locks() {
 
   if [[ ${force} == "1" ]]; then
     for lock in "${locks[@]}"; do
-      rm -f "${lock}" 2>/dev/null && removed=$((removed + 1)) || true
+      if rm -f "${lock}" 2>/dev/null; then
+        removed=$((removed + 1))
+      fi
     done
     log "HF_LOCK_CLEAR_FORCE=1: removed ${removed} lock file(s) under ${root}"
     return 0
@@ -776,7 +779,9 @@ clear_stale_hf_locks() {
       active=$((active + 1))
       continue
     fi
-    rm -f "${lock}" 2>/dev/null && removed=$((removed + 1)) || true
+    if rm -f "${lock}" 2>/dev/null; then
+      removed=$((removed + 1))
+    fi
   done
 
   if [[ ${removed} -gt 0 ]]; then
@@ -1149,7 +1154,8 @@ hf_download() {
 
   local hb_pid="" hpid="" zero_streak=0
   _HF_PROGRESS_ON_TTY=0
-  # shellcheck disable=SC2329
+  # Trap-only handler: SC2329/SC2317 — ShellCheck does not see string trap refs as calls
+  # shellcheck disable=SC2317,SC2329
   _hf_dl_signal() {
     hf_progress_newline
     log "Interrupted — stopping hf download and progress monitor…"

@@ -45,6 +45,14 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "shellcheck clean on scripts/lib/common.sh (SC2317/SC2015 regression)" {
+  if ! command -v shellcheck >/dev/null 2>&1; then
+    skip "shellcheck not installed"
+  fi
+  run shellcheck -x "${REPO_ROOT}/scripts/lib/common.sh"
+  [ "${status}" -eq 0 ]
+}
+
 @test "common: log warn err die load_dotenv require_cmd docker models helpers" {
   run log "hi"
   [ "${status}" -eq 0 ]
