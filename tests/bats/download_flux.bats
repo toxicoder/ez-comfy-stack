@@ -99,9 +99,17 @@ teardown() {
   run check_hf_cli
   [ "${status}" -eq 0 ]
 
+  export LAB_MOCK_HF_DOWNLOAD=1
   run hf_download "org/model" --local-dir "${MODELS_DIR}/mock_repo"
   [ "${status}" -eq 0 ]
   [[ -f "${MODELS_DIR}/mock_repo/.mock" ]]
+
+  # Prefer hf over broken huggingface-cli when both on PATH
+  unset LAB_MOCK_HF_DOWNLOAD
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  run hf_download "org/real" --local-dir "${MODELS_DIR}/real_repo"
+  [ "${status}" -eq 0 ]
+  grep -q 'hf download org/real' "${TEST_TMP_DIR}/hf_calls.log"
 }
 
 @test "download-flux link_into_comfy tier_size_gb cmd_status cmd_run" {
@@ -127,4 +135,10 @@ teardown() {
   LAB_MOCK_HF_DOWNLOAD=1
   run cmd_run
   [ "${status}" -eq 0 ]
+  LAB_MOCK_HF_DOWNLOAD=fail
+  TIER=fast
+  INCLUDE_NUNCHAKU=0
+  run cmd_run
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"No FLUX tiers"* || "${output}" == *"failed"* ]]
 }

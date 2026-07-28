@@ -96,56 +96,7 @@ tier_dir() {
   echo "${MODELS_DIR}/${repo//\//__}_${1}"
 }
 
-#######################################
-# check_hf_cli helper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status depends on command path; see implementation.
-#######################################
-check_hf_cli() {
-  if command -v huggingface-cli >/dev/null 2>&1 || command -v hf >/dev/null 2>&1; then
-    return 0
-  fi
-  err "Required tool missing: huggingface-cli or hf (pip install -U huggingface_hub)"
-  exit 1
-}
-
-#######################################
-# hf_download helper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status depends on command path; see implementation.
-#######################################
-hf_download() {
-  if [[ -n ${LAB_MOCK_HF_DOWNLOAD:-} ]]; then
-    local dest=""
-    local prev=""
-    for a in "$@"; do
-      if [[ ${prev} == "--local-dir" ]]; then
-        dest="$a"
-      fi
-      prev="$a"
-    done
-    mkdir -p "${dest}"
-    echo "mock" >"${dest}/.mock"
-    return 0
-  fi
-  if command -v huggingface-cli >/dev/null 2>&1; then
-    huggingface-cli download "$@"
-  else
-    hf download "$@"
-  fi
-}
+# check_hf_cli / hf_download: provided by scripts/lib/common.sh (prefer `hf download`).
 
 #######################################
 # tier_size_gb helper.
@@ -309,17 +260,27 @@ cmd_status() {
 cmd_run() {
   check_hf_cli
   ensure_models_dir "${MODELS_DIR}" || exit 1
-  local tier repo
+  local tier repo ok=0 fail=0
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")
     log "Downloading ${repo} (tier: ${tier})..."
-    HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")" || {
-      warn "Download failed for ${repo} (${tier}). Continue."
-      continue
-    }
-    link_into_comfy "$tier"
+    if HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")"; then
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
+    else
+      warn "Download failed for ${repo} (${tier}): gated license, auth, or network."
+      warn "  Accept the model license on Hugging Face and set HF_TOKEN in .env, or: hf auth login"
+      fail=$((fail + 1))
+    fi
   done
   cmd_status
+  if [[ ${ok} -eq 0 ]]; then
+    err "No LTX tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
+    exit 1
+  fi
+  if [[ ${fail} -gt 0 ]]; then
+    warn "Partial LTX download: ${ok} ok, ${fail} failed"
+  fi
 }
 
 #######################################

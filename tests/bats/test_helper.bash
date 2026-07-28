@@ -228,11 +228,19 @@ exit 0
 #######################################
 install_hf_mock() {
   install_mock_bin hf '
+echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
 echo "hf $*"
 exit 0
 '
   install_mock_bin huggingface-cli '
+echo "huggingface-cli $*" >>"${TEST_TMP_DIR}/hf_calls.log"
 echo "huggingface-cli $*"
+# Simulate modern stub that refuses download
+if [[ "${1:-}" == "download" ]]; then
+  echo "Warning: huggingface-cli is deprecated and no longer works. Use hf instead." >&2
+  exit 1
+fi
 exit 0
 '
+  : >"${TEST_TMP_DIR}/hf_calls.log"
 }

@@ -118,6 +118,24 @@ teardown() {
   [ "${status}" -eq 0 ]
   [ -d "${TEST_TMP_DIR}/prepared_models" ]
   chmod 755 "${ro}"
+
+  install_hf_mock
+  run check_hf_cli
+  [ "${status}" -eq 0 ]
+  unset LAB_MOCK_HF_DOWNLOAD
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  run hf_download "org/model" --local-dir "${TEST_TMP_DIR}/hf_out"
+  [ "${status}" -eq 0 ]
+  grep -q '^hf download' "${TEST_TMP_DIR}/hf_calls.log"
+  ! grep -q '^huggingface-cli download' "${TEST_TMP_DIR}/hf_calls.log"
+  export LAB_MOCK_HF_DOWNLOAD=1
+  run hf_download "org/m" --local-dir "${TEST_TMP_DIR}/mock_out"
+  [ "${status}" -eq 0 ]
+  [[ -f "${TEST_TMP_DIR}/mock_out/.mock" ]]
+  export LAB_MOCK_HF_DOWNLOAD=fail
+  run hf_download "org/m" --local-dir "${TEST_TMP_DIR}/mock_fail"
+  [ "${status}" -ne 0 ]
+  unset LAB_MOCK_HF_DOWNLOAD
 }
 
 @test "safety: parse_gib host_free host_disk headroom confirms" {

@@ -63,6 +63,7 @@ teardown() {
   [ "${CMD}" = "status" ]
   run check_hf_cli
   [ "${status}" -eq 0 ]
+  export LAB_MOCK_HF_DOWNLOAD=1
   run hf_download "org/ltx" --local-dir "${MODELS_DIR}/ltx_mock"
   [ "${status}" -eq 0 ]
   run tier_size_gb "${MODELS_DIR}/ltx_mock"
@@ -89,4 +90,9 @@ teardown() {
   LAB_MOCK_HF_DOWNLOAD=1
   run cmd_run
   [ "${status}" -eq 0 ]
+  LAB_MOCK_HF_DOWNLOAD=fail
+  TIER=balanced
+  run cmd_run
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"No LTX tiers"* || "${output}" == *"failed"* ]]
 }

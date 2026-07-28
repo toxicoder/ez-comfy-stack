@@ -94,6 +94,23 @@ Or:
 ./scripts/manage.sh download-models
 ```
 
+Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`). Install:
+
+```bash
+command -v hf || pipx install huggingface_hub
+# or: pip install -U 'huggingface_hub[cli]'
+```
+
+### Gated models / HF_TOKEN
+
+FLUX and some LTX assets may require accepting the license on Hugging Face and a token:
+
+```bash
+# .env
+HF_TOKEN=hf_...
+# or: hf auth login
+```
+
 ### Download path
 
 ```mermaid

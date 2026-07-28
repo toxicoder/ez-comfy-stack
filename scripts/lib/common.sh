@@ -553,3 +553,78 @@ prepare_models_dir() {
   fi
   ensure_models_dir "${dir}"
 }
+
+#######################################
+# Ensure Hugging Face CLI is available (prefer modern `hf`).
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Error on stderr when missing
+# Returns:
+#   0 when hf or huggingface-cli is on PATH; exits 1 via die when missing
+#######################################
+check_hf_cli() {
+  if command -v hf >/dev/null 2>&1 || command -v huggingface-cli >/dev/null 2>&1; then
+    return 0
+  fi
+  die "Required tool missing: hf (pipx install huggingface_hub  OR  pip install -U 'huggingface_hub[cli]')"
+}
+
+#######################################
+# Download a Hugging Face repo snapshot into --local-dir (or mock in tests).
+# Prefers `hf download` over deprecated `huggingface-cli download` (the latter
+# is a non-working stub on recent huggingface_hub installs and may prompt).
+# Globals:
+#   LAB_MOCK_HF_DOWNLOAD, HF_TOKEN (read by hub), HF_HOME (caller may set)
+# Arguments:
+#   $@ - Passed to `hf download` / `huggingface-cli download`
+#        (typically REPO --local-dir PATH)
+# Outputs:
+#   Progress on stderr from the CLI; mock writes .mock marker under local-dir
+# Returns:
+#   0 on success; non-zero when the CLI fails
+#######################################
+hf_download() {
+  local dest="" prev="" a
+  if [[ -n ${LAB_MOCK_HF_DOWNLOAD:-} ]]; then
+    for a in "$@"; do
+      if [[ ${prev} == "--local-dir" ]]; then
+        dest="${a}"
+      fi
+      prev="${a}"
+    done
+    if [[ -z ${dest} ]]; then
+      err "hf_download mock requires --local-dir"
+      return 1
+    fi
+    if [[ ${LAB_MOCK_HF_DOWNLOAD} == "fail" ]]; then
+      err "LAB_MOCK_HF_DOWNLOAD=fail"
+      return 1
+    fi
+    mkdir -p "${dest}"
+    echo "mock" >"${dest}/.mock"
+    return 0
+  fi
+
+  # Non-interactive: avoid hub self-update / TTY prompts during automation
+  export CI="${CI:-1}"
+  export HF_HUB_DISABLE_TELEMETRY="${HF_HUB_DISABLE_TELEMETRY:-1}"
+  if [[ -n ${HF_TOKEN:-} ]]; then
+    log "HF_TOKEN is set (using for gated repos)"
+  fi
+
+  if command -v hf >/dev/null 2>&1; then
+    # Prefer modern CLI even when huggingface-cli is also on PATH
+    hf download "$@"
+    return $?
+  fi
+  if command -v huggingface-cli >/dev/null 2>&1; then
+    warn "Using deprecated huggingface-cli; install modern hf: pipx install huggingface_hub"
+    huggingface-cli download "$@"
+    return $?
+  fi
+  err "No hf or huggingface-cli on PATH"
+  return 1
+}

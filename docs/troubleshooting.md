@@ -27,6 +27,8 @@ tags: [troubleshooting, comfyui, docker]
 | Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
 | `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |
 | Empty models in UI | Downloads not run | `download-flux` / `download-ltx` status; check `MODELS_DIR` mount |
+| `huggingface-cli is deprecated` / 0 GB after download-models | Scripts used stub CLI | Pull latest; ensure `hf` on PATH (`pipx install huggingface_hub`); re-run download-models |
+| Download failed / gated license | No token or license not accepted | Accept model license on HF; set `HF_TOKEN` in `.env` or `hf auth login` |
 | Pending / can't start container | Docker/GPU runtime | `nvidia-smi`, Container Toolkit install |
 | Cold start forever | First PVC/volume pip+git | Wait; `manage.sh logs`; check network |
 | Nunchaku missing | aarch64 wheel fail | Fail-soft; quality/FP8 paths may still work |

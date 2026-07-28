@@ -24,9 +24,10 @@ tags: [getting-started, docker, comfyui]
 - NVIDIA DGX Spark (or compatible GB10 host) with drivers + **NVIDIA Container Toolkit**
 - Docker with Compose v2 plugin (prefer apt `docker-ce`, not snap; user in `docker` group)
 - Writable shared model cache: default `/mnt/models` (`sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models`) or override `MODELS_DIR` in `.env`
-- `git`, `python3`, `pip` (`huggingface_hub` for downloads)
+- `git`, `python3`, `pip` / `pipx`
+- Hugging Face CLI: `hf` from `huggingface_hub` (`pipx install huggingface_hub` or `pip install -U 'huggingface_hub[cli]'`) — **not** the deprecated `huggingface-cli` stub
 - Optional: `wondershaper`, `speedtest-cli` (auto-installed / used by download-limit; HTB/`sch_htb` when shaping is desired)
-- Hugging Face account with licenses accepted for FLUX / LTX models; `HF_TOKEN` if gated
+- Hugging Face account with licenses accepted for FLUX / LTX models; `HF_TOKEN` in `.env` or `hf auth login` if gated
 
 ```mermaid
 flowchart LR
@@ -91,10 +92,13 @@ Fix any errors before downloading multi-GB models. Hard failures include **docke
 ## Download models (shared cache)
 
 ```bash
+# Ensure HF token for gated repos (FLUX):
+# echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
+
 ./scripts/manage.sh download-models
 ```
 
-This runs **flux-fast** + **ltx-balanced** under `download-limit wrap --limit auto` (speedtest → **85%** cap). Weights land under `MODELS_DIR` (default `/mnt/models`) in a layout compatible with nvidia-dgx-spark-lab.
+This runs **flux-fast** + **ltx-balanced** under `download-limit wrap --limit auto` (speedtest → **85%** cap), using **`hf download`**. Weights land under `MODELS_DIR` (default `/mnt/models`) in a layout compatible with nvidia-dgx-spark-lab. If bandwidth shaping fails on the kernel, downloads continue unthrottled with a warning (`DOWNLOAD_LIMIT=off` to skip shaping).
 
 ## Start the stack
 
