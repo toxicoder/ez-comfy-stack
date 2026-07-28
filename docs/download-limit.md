@@ -128,10 +128,11 @@ You should not need `kill -9` on leftover download processes after a clean Ctrl+
 
 If auto mode cannot measure speed **before** download (no speedtest-cli, HTTP probe fail):
 
-1. Starts the model download immediately  
-2. Samples NIC **RX bytes** for ~15s (`LIVE_SPEED_SAMPLE_SEC`) while downloading  
-3. Sets limit = 85% of live Mbps (kernel HTB if available, else gentle HF workers)  
-4. Without HTB, **restarts once** so worker limits apply (Hugging Face **resumes** partial files)
+1. Starts a **sample-phase** download in the background (heartbeats every few seconds)  
+2. Samples NIC **RX bytes** for ~15s (`LIVE_SPEED_SAMPLE_SEC`)  
+3. Sets target = 85% of live Mbps  
+4. Kernel HTB only if it works **and** sudo is non-interactive; otherwise **gentle HF max-workers** (no mid-download sudo prompt)  
+5. Stops the sample phase and **resumes the download in the foreground** so tqdm progress is visible again (HF **resumes** partial files)
 
 Mock/tests: `LAB_MOCK_LIVE_RX_MBPS`.
 

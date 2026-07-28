@@ -337,9 +337,26 @@ enable_gentle_download_mode() {
   if [[ -z ${HF_DOWNLOAD_MAX_WORKERS:-} ]]; then
     export HF_DOWNLOAD_MAX_WORKERS="${workers}"
   fi
-  dl_warn "Kernel traffic shaping unavailable${iface:+ on ${iface}} (no HTB/IFB — common on DGX Spark)"
-  dl_warn "Gentle HF mode: max-workers=${HF_DOWNLOAD_MAX_WORKERS} (target ~${mbps} Mbps). Not a hard Mbps cap."
-  dl_warn "To skip limit machinery entirely: DOWNLOAD_LIMIT=off"
+  dl_log "Kernel Mbps cap unavailable${iface:+ on ${iface}} (common on DGX Spark) — gentle HF mode: max-workers=${HF_DOWNLOAD_MAX_WORKERS} (target ~${mbps} Mbps)"
+  dl_log "Tip: DOWNLOAD_LIMIT=off skips limit machinery entirely"
+}
+
+#######################################
+# Mark kernel shaping as unavailable for the rest of this process (no more sudo/ws).
+# Globals:
+#   LAB_SHAPING_SUPPORTED
+# Arguments:
+#   $1  Optional reason string
+# Outputs:
+#   One log line
+# Returns:
+#   0
+#######################################
+mark_shaping_unsupported() {
+  local reason="${1:-runtime apply failed}"
+  LAB_SHAPING_SUPPORTED=0
+  export LAB_SHAPING_SUPPORTED
+  dl_log "Disabling kernel shaping for this run (${reason})"
 }
 
 #######################################
@@ -422,18 +439,27 @@ apply_limits() {
   local up_mbps="${3:-$DEFAULT_UPLOAD_MBPS}"
   local down_kbps up_kbps ws_out
   if ! shaping_supported; then
-    dl_warn "Skipping wondershaper: kernel HTB not available"
     return 1
+  fi
+  # Avoid interactive sudo mid-download when ticket is cold
+  if [[ ${LAB_NO_SUDO:-} != "1" && ${LAB_MOCK_WONDERSHAPER:-} != "1" ]]; then
+    if command -v sudo >/dev/null 2>&1 && ! sudo -n true 2>/dev/null; then
+      mark_shaping_unsupported "sudo not cached (would prompt mid-download)"
+      return 1
+    fi
   fi
   down_kbps=$(clamp_rate_kbps $((down_mbps * BANDWIDTH_UNIT_MULTIPLIER)))
   up_kbps=$(clamp_rate_kbps $((up_mbps * BANDWIDTH_UNIT_MULTIPLIER)))
-  ensure_wondershaper || return 1
+  ensure_wondershaper || {
+    mark_shaping_unsupported "wondershaper missing"
+    return 1
+  }
   load_shaping_modules
   clear_limits "${iface}"
   dl_log "Applying limits on ${iface}: down=${down_mbps} Mbps up=${up_mbps} Mbps"
-  # Capture tc/wondershaper noise; surface a single diagnostic on failure.
+  # Capture tc/wondershaper noise; one short diagnostic on failure.
   if ! ws_out=$(sudo_wondershaper "${iface}" "${down_kbps}" "${up_kbps}" 2>&1); then
-    dl_warn "wondershaper apply failed (see LAB_DEBUG=1 for details)"
+    mark_shaping_unsupported "wondershaper apply failed"
     if [[ ${LAB_DEBUG:-} == "1" ]]; then
       dl_warn "${ws_out}"
     fi
@@ -441,7 +467,7 @@ apply_limits() {
     return 1
   fi
   if [[ -n ${ws_out} ]] && [[ ${ws_out} =~ [Ee]rror|Illegal|unknown ]]; then
-    dl_warn "wondershaper reported errors without hard Mbps cap"
+    mark_shaping_unsupported "qdisc/HTB/IFB unavailable at runtime"
     if [[ ${LAB_DEBUG:-} == "1" ]]; then
       dl_warn "${ws_out}"
     fi
@@ -449,7 +475,7 @@ apply_limits() {
     return 1
   fi
   if ! limits_active "${iface}"; then
-    dl_warn "Bandwidth limit not active on ${iface} after wondershaper (kernel qdisc missing?)"
+    mark_shaping_unsupported "qdisc not active after apply"
     clear_limits "${iface}"
     return 1
   fi
@@ -505,7 +531,9 @@ probe_http_download_mbps() {
 #   0 on success; 1 on failure
 #######################################
 run_speedtest_mbps() {
+  SPEED_MEASURE_ERROR=""
   if [[ ${LAB_FORCE_SPEEDTEST_FAIL:-} == "1" ]]; then
+    SPEED_MEASURE_ERROR="forced fail (test)"
     return 1
   fi
   if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
@@ -519,6 +547,7 @@ run_speedtest_mbps() {
       printf '%d\n' "${out%.*}"
       return 0
     fi
+    SPEED_MEASURE_ERROR="speedtest-cli present but no parseable result"
   fi
   if command -v speedtest >/dev/null 2>&1; then
     # Ookla CLI: --format=json or progress text
@@ -532,10 +561,16 @@ run_speedtest_mbps() {
       printf '%d\n' "${out%.*}"
       return 0
     fi
+    SPEED_MEASURE_ERROR="ookla speedtest present but no parseable result"
   fi
   if out=$(probe_http_download_mbps); then
     echo "${out}"
     return 0
+  fi
+  if [[ -z ${SPEED_MEASURE_ERROR} ]]; then
+    SPEED_MEASURE_ERROR="speedtest-cli/ookla missing and HTTP probe failed"
+  else
+    SPEED_MEASURE_ERROR="${SPEED_MEASURE_ERROR}; HTTP probe failed"
   fi
   return 1
 }
@@ -683,6 +718,7 @@ cmd_clear() {
 sample_iface_rx_mbps() {
   local iface="${1:-}"
   local sec="${2:-15}"
+  local download_pid="${3:-}"
   if [[ -n ${LAB_MOCK_LIVE_RX_MBPS:-} ]]; then
     sleep "${LAB_MOCK_LIVE_SAMPLE_SLEEP:-0}" 2>/dev/null || true
     echo "${LAB_MOCK_LIVE_RX_MBPS}"
@@ -691,13 +727,27 @@ sample_iface_rx_mbps() {
   if [[ -z ${iface} || ${sec} -lt 1 ]]; then
     return 1
   fi
-  local rx_path b1 b2 mbps
+  local rx_path b1 b2 mbps elapsed chunk left
   rx_path="/sys/class/net/${iface}/statistics/rx_bytes"
   if [[ ! -r ${rx_path} ]]; then
     return 1
   fi
   b1="$(cat "${rx_path}" 2>/dev/null)" || return 1
-  sleep "${sec}"
+  elapsed=0
+  chunk=3
+  while [[ ${elapsed} -lt ${sec} ]]; do
+    left=$((sec - elapsed))
+    if [[ ${left} -gt ${chunk} ]]; then
+      left=${chunk}
+    fi
+    sleep "${left}"
+    elapsed=$((elapsed + left))
+    if [[ -n ${download_pid} ]] && kill -0 "${download_pid}" 2>/dev/null; then
+      dl_log "Sampling live RX… ${elapsed}/${sec}s (download PID ${download_pid} still running)"
+    else
+      dl_log "Sampling live RX… ${elapsed}/${sec}s"
+    fi
+  done
   b2="$(cat "${rx_path}" 2>/dev/null)" || return 1
   if [[ -z ${b1} || -z ${b2} || ${b2} -lt ${b1} ]]; then
     return 1
@@ -724,8 +774,15 @@ apply_limit_from_measured() {
   local measured="${2}"
   local target
   target="$(compute_auto_limit "${measured}")"
-  dl_log "Using measured ≈ ${measured} Mbps → target limit ${target} Mbps (85%)"
-  if shaping_supported && apply_limits "${iface}" "${target}"; then
+  dl_log "Live sample done: ≈ ${measured} Mbps → target ${target} Mbps (85%)"
+  if ! shaping_supported; then
+    if [[ ${DOWNLOAD_LIMIT_REQUIRE:-} == "1" ]]; then
+      die "Failed to apply bandwidth limit on ${iface}"
+    fi
+    enable_gentle_download_mode "${target}" "${iface}"
+    return 1
+  fi
+  if apply_limits "${iface}" "${target}"; then
     dl_log "Kernel bandwidth limit active (~${target} Mbps down)"
     return 0
   fi
@@ -738,8 +795,8 @@ apply_limit_from_measured() {
 
 #######################################
 # When preflight speed fails: run download, sample live RX, then apply limit.
-# May restart the download once (HF resume) so gentle workers take effect.
-# Always interruptible via Ctrl+C (kills process group + clear_limits).
+# Restarts once in the FOREGROUND so tqdm progress is visible again.
+# Always interruptible via Ctrl+C (kills sample-phase PID + clear_limits).
 # Globals:
 #   WRAP_ARGS, LIVE_SPEED_SAMPLE_SEC, FALLBACK_MBPS
 # Arguments:
@@ -753,13 +810,15 @@ apply_limit_from_measured() {
 wrap_with_live_speed_limit() {
   local iface="${1}"
   local fallback_mbps="${2:-50}"
-  local sample_sec child live_mbps rc=0
+  local sample_sec child live_mbps
   sample_sec="${LIVE_SPEED_SAMPLE_SEC:-15}"
 
-  dl_log "Preflight speed unavailable — sampling live RX for ${sample_sec}s during download"
+  dl_log "Preflight speed unavailable — starting download and sampling live RX for ${sample_sec}s"
+  dl_log "Progress below is the sample phase (may look brief); a foreground resume follows"
   set -m 2>/dev/null || true
   "${WRAP_ARGS[@]}" &
   child=$!
+  dl_log "Sample-phase download PID ${child}"
 
   # shellcheck disable=SC2329
   _wrap_live_on_signal() {
@@ -769,39 +828,26 @@ wrap_with_live_speed_limit() {
     exit 130
   }
   trap '_wrap_live_on_signal' INT TERM
-  # Always clear kernel limits on normal exit too
   # shellcheck disable=SC2064
   trap 'clear_limits "'"${iface}"'"' EXIT
 
-  if live_mbps=$(sample_iface_rx_mbps "${iface}" "${sample_sec}"); then
+  if live_mbps=$(sample_iface_rx_mbps "${iface}" "${sample_sec}" "${child}"); then
     dl_log "Live RX ≈ ${live_mbps} Mbps on ${iface}"
-    if apply_limit_from_measured "${iface}" "${live_mbps}"; then
-      # Kernel limit applied mid-flight — let download finish
-      set +e
-      wait "${child}"
-      rc=$?
-      set -e
-      trap - INT TERM
-      return "${rc}"
-    fi
-    # Gentle mode: restart once so HF_DOWNLOAD_MAX_WORKERS applies (resume-safe)
-    dl_log "Restarting download once with gentle workers (HF cache resumes partial files)"
-    kill -INT -- "-${child}" 2>/dev/null || kill -INT "${child}" 2>/dev/null || true
-    wait "${child}" 2>/dev/null || true
-    trap - INT TERM
-    # shellcheck disable=SC2064
-    trap 'clear_limits "'"${iface}"'"' EXIT
-    run_with_signal_forwarding "${WRAP_ARGS[@]}"
-    return $?
+    apply_limit_from_measured "${iface}" "${live_mbps}" || true
+  else
+    dl_warn "Live RX sample failed; fallback gentle mode at ${fallback_mbps} Mbps"
+    enable_gentle_download_mode "${fallback_mbps}" "${iface}"
   fi
 
-  dl_warn "Live RX sample failed; fallback gentle mode at ${fallback_mbps} Mbps"
-  enable_gentle_download_mode "${fallback_mbps}" "${iface}"
+  # Always resume in FOREGROUND after sample so progress bars work (HF resumes files)
+  dl_log "Stopping sample-phase download (PID ${child}, resume-safe)…"
   kill -INT -- "-${child}" 2>/dev/null || kill -INT "${child}" 2>/dev/null || true
   wait "${child}" 2>/dev/null || true
   trap - INT TERM
   # shellcheck disable=SC2064
   trap 'clear_limits "'"${iface}"'"' EXIT
+  dl_log "Resuming download in foreground (live progress should appear below)…"
+  dl_log "Running: ${WRAP_ARGS[*]}"
   run_with_signal_forwarding "${WRAP_ARGS[@]}"
   return $?
 }
@@ -826,14 +872,14 @@ cmd_wrap() {
   [[ -n ${iface} ]] || die "Could not detect network interface"
 
   if [[ ${LIMIT_SPEC} == "auto" ]]; then
-    if measured=$(run_speedtest_mbps 2>/dev/null); then
+    if measured=$(run_speedtest_mbps); then
       mbps=$(compute_auto_limit "${measured}")
       preflight_ok=1
       dl_log "Preflight download ≈ ${measured} Mbps → auto limit ${mbps} Mbps (85%)"
     else
       preflight_ok=0
       mbps="${FALLBACK_MBPS}"
-      dl_warn "Preflight speed measure failed; will sample live RX during model download"
+      dl_log "Preflight speed measure failed (${SPEED_MEASURE_ERROR:-no detail}); will sample live RX during download"
     fi
   else
     mbps=$(resolve_limit_mbps "${LIMIT_SPEC}")

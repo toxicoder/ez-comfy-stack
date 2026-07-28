@@ -155,7 +155,7 @@ exit 0
   export LAB_MOCK_WONDERSHAPER=1
   run apply_limits eth0 50
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"Illegal"* || "${output}" == *"wondershaper reported"* || "${output}" == *"Error"* ]]
+  [[ "${output}" == *"Illegal"* || "${output}" == *"wondershaper"* || "${output}" == *"Error"* || "${output}" == *"Disabling kernel shaping"* || "${output}" == *"qdisc"* ]]
 }
 
 @test "apply_limits fails when limits_active is false after apply" {
@@ -217,7 +217,7 @@ exit 0
   WRAP_ARGS=(bash -c 'echo wrap-ran >"${TEST_TMP_DIR}/wrap.ok"')
   run cmd_wrap
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"Gentle"* || "${output}" == *"unavailable"* || "${output}" == *"max-workers"* ]]
+  [[ "${output}" == *"Gentle"* || "${output}" == *"gentle"* || "${output}" == *"unavailable"* || "${output}" == *"max-workers"* || "${output}" == *"qdisc"* ]]
   [ -f "${TEST_TMP_DIR}/wrap.ok" ]
   grep -q clear "${TEST_TMP_DIR}/wondershaper.log"
 }
@@ -259,7 +259,7 @@ exit 0
   run wrap_with_live_speed_limit eth0 50
   [ "${status}" -eq 0 ]
   [ -f "${TEST_TMP_DIR}/live.ok" ]
-  [[ "${output}" == *"Live RX"* || "${output}" == *"160"* || "${output}" == *"Gentle"* || "${output}" == *"Restarting"* ]]
+  [[ "${output}" == *"Live RX"* || "${output}" == *"160"* || "${output}" == *"gentle"* || "${output}" == *"Resuming"* || "${output}" == *"foreground"* ]]
 
   run apply_limit_from_measured eth0 100
   # gentle because NO_HTB
