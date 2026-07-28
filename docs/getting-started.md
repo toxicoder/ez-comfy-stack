@@ -12,6 +12,7 @@ tags: [getting-started, docker, comfyui]
 - Environment setup
 - Download models (throttled)
 - Start / status / stop
+- First-run and cold-start diagrams
 
 **What this enables**
 
@@ -25,6 +26,26 @@ tags: [getting-started, docker, comfyui]
 - `git`, `python3`, `pip` (`huggingface_hub` for downloads)
 - Optional: `wondershaper`, `speedtest-cli` (auto-installed / used by download-limit)
 - Hugging Face account with licenses accepted for FLUX / LTX models; `HF_TOKEN` if gated
+
+```mermaid
+flowchart LR
+  subgraph Required["Required on host"]
+    Drv["NVIDIA drivers"]
+    CTK["NVIDIA Container Toolkit"]
+    Dock["Docker + Compose v2"]
+    Git["git · python3 · pip"]
+  end
+  subgraph Optional["Optional / auto"]
+    WS["wondershaper"]
+    ST["speedtest-cli"]
+  end
+  subgraph Accounts["Accounts"]
+    HF["HF licenses + HF_TOKEN"]
+  end
+  Required --> Ready["Ready for doctor"]
+  Optional --> Ready
+  Accounts --> Ready
+```
 
 ## Setup
 
@@ -64,6 +85,46 @@ Open `http://<spark-ip>:8188` (or port-forward if needed).
 
 !!! warning "Cold start"
     First container start installs ComfyUI into the `comfy-state` volume and can take **10–30+ minutes**.
+
+### First-run journey
+
+```mermaid
+sequenceDiagram
+  actor Op as Operator
+  participant M as manage.sh
+  participant DL as download-limit
+  participant HF as Hugging Face
+  participant D as Docker / ComfyUI
+  participant B as Browser
+
+  Op->>M: clone + cp .env.example .env
+  Op->>M: doctor
+  M-->>Op: preflight OK
+  Op->>M: download-models
+  M->>DL: wrap --limit auto
+  DL->>HF: throttled pull (flux-fast + ltx-balanced)
+  HF-->>DL: weights → MODELS_DIR
+  DL-->>M: clear limit on exit
+  Op->>M: start
+  M-->>Op: type yes
+  Op->>M: yes
+  M->>D: compose up -d --build
+  D-->>Op: cold install 10–30+ min (first time)
+  Op->>B: open :8188
+  Op->>M: stop (before reboot)
+```
+
+### Cold-start phases (first `start`)
+
+```mermaid
+flowchart TB
+  A["manage.sh start<br/>type yes"] --> B["Docker build image<br/>ez-comfy:flux-to-ltx"]
+  B --> C["Create volume comfy-state"]
+  C --> D["entrypoint: install-comfy.sh<br/>pip + git · 10–30+ min"]
+  D --> E["patch_get_free_memory.py"]
+  E --> F["Exec ComfyUI on 0.0.0.0:8188"]
+  F --> G["UI ready"]
+```
 
 ## Stop (always before reboot)
 

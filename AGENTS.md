@@ -15,6 +15,12 @@ Shared style lives in [docs/project-conventions.md](docs/project-conventions.md)
 - Never force-push protected branches  
 - Conventional commits: `feat:`, `fix:`, `docs:`, `test:`, `chore:`  
 
+```mermaid
+flowchart LR
+  Feat["feature/* · fix/* · chore/* · docs/*"] --> Dev["development"]
+  Dev --> Main["main · production-ready only"]
+```
+
 ## TDD
 
 Default for non-trivial changes:
@@ -33,6 +39,16 @@ Default for non-trivial changes:
 | `scripts/utilities/<name>.sh` | `tests/bats/<name>.bats` (or extend existing) |
 | `scripts/manage.sh` | `tests/bats/manage.bats` |
 | `docker/patch_*.py` / compose safety fields | `tests/python/*` and/or `tests/bats/safety.bats` |
+
+```mermaid
+flowchart TB
+  subgraph SameCommit["Same commit"]
+    P1["scripts/lib/*.sh"] --> T1["tests/bats/lib_unit.bats"]
+    P2["scripts/utilities/name.sh"] --> T2["tests/bats/name.bats"]
+    P3["scripts/manage.sh"] --> T3["tests/bats/manage.bats"]
+    P4["docker/patch_*.py · safety"] --> T4["tests/python/* · safety.bats"]
+  end
+```
 
 ### Shell style (Google)
 
@@ -61,6 +77,14 @@ Any change to Docker resources, restart policy, headroom, or download-limit must
 - headroom preflight  
 - download-limit clear-on-exit for wrap  
 
+```mermaid
+flowchart TB
+  S1["restart: no"] --> Keep["Do not weaken"]
+  S2["heavy confirm on start"] --> Keep
+  S3["headroom preflight"] --> Keep
+  S4["download-limit clear-on-exit"] --> Keep
+```
+
 ## Paths
 
 Prefer relative paths. Prefer `./scripts/manage.sh` for operator actions.
@@ -68,6 +92,8 @@ Prefer relative paths. Prefer `./scripts/manage.sh` for operator actions.
 ## Docs
 
 Update `docs/*.md` and README when operator behavior changes. MkDocs pages need frontmatter + “What's on this page” / “What this enables”.
+
+Prefer **relative** in-repo doc links. Public site publishes after merge via `.github/workflows/deploy-docs.yml` (mike): `main` → `/latest/`, `development` → `/development/`.
 
 ## Scope
 

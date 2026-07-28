@@ -1,0 +1,5 @@
+# Pinned docs stack for local builds, CI (make docs), and GitHub Pages deploy.
+mkdocs==1.6.1
+mkdocs-material==9.7.6
+# Multi-version docs (latest from main, development from development branch).
+mike==2.1.3

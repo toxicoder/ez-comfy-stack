@@ -9,8 +9,9 @@ tags: [conventions, contributing, safety, shell, google-style]
 **What's on this page**
 
 - Core principles
+- Repo layout and ownership
 - Shell style (Google Shell Style Guide + project deviations)
-- Docker, testing, and branching rules
+- Docker, testing, coverage gate, and branching rules
 
 **What this enables**
 
@@ -28,6 +29,23 @@ tags: [conventions, contributing, safety, shell, google-style]
 | Docs as code | MkDocs pages with required sections |
 | Keep it small | No K8s/Ansible/dashboard/Bazel |
 | Style as gate | ShellCheck + shfmt on every change |
+
+## Repo layout
+
+```mermaid
+flowchart TB
+  Root["ez-comfy-stack"]
+  Root --> Manage["scripts/manage.sh<br/>operator CLI"]
+  Root --> Lib["scripts/lib/*<br/>common · compose · paths · safety"]
+  Root --> Util["scripts/utilities/*<br/>download-flux · download-ltx · download-limit"]
+  Root --> Docker["docker/*<br/>compose · Dockerfile · entrypoint · patch"]
+  Root --> Cfg["config/resource-policy.yaml"]
+  Root --> Docs["docs/ · MkDocs"]
+  Root --> Tests["tests/bats · tests/python"]
+  Manage --> Lib
+  Manage --> Util
+  Manage --> Docker
+```
 
 ## Shell style
 
@@ -135,12 +153,28 @@ Utilities under `scripts/utilities/` implement at least:
 | `run` | Idempotent where practical |
 | Extra | `clear` / `wrap` allowed for download-limit |
 
+```mermaid
+flowchart LR
+  Status["status --json<br/>read-only"] --> Ready["Report readiness"]
+  Run["run"] --> Work["Idempotent work"]
+  Extra["clear / wrap<br/>download-limit only"] --> Safety["Always clear on exit"]
+```
+
 ## Docker
 
 - One compose service for the unified stack  
 - Scripts as real files (not inline ConfigMap YAML)  
 - Host model cache + named volume for Comfy state  
 - Compose `restart: "no"`; explicit `mem_limit` / `mem_reservation`  
+
+```mermaid
+flowchart TB
+  Compose["docker-compose.yml"] --> Svc["comfyui service"]
+  Svc --> Restart["restart: no"]
+  Svc --> Mem["mem_limit / mem_reservation"]
+  Svc --> Models["bind MODELS_DIR"]
+  Svc --> State["volume comfy-state"]
+```
 
 ## Testing
 
@@ -152,8 +186,41 @@ Utilities under `scripts/utilities/` implement at least:
   - Full BATS suite green  
 - **Tests ship with production code** — same commit as the files under test  
 - **Test shell style**: `tests/bats/*.bats`, `tests/bats/*.bash`, and `tests/*.sh` follow the Google Shell Style Guide where applicable (quoted `"${var}"`, `[[ … ]]`, Google-style helper comments in `test_helper.bash`, 2-space indent / shfmt for `.sh` runners)
+
+```mermaid
+flowchart LR
+  Red["Red<br/>failing BATS / pytest"] --> Green["Green<br/>minimum production change"]
+  Green --> Refactor["Refactor<br/>keep green"]
+  Refactor --> Commit["Same commit<br/>tests + production"]
+```
+
+```mermaid
+flowchart TB
+  Cov["make coverage"] --> Py["100% line · patch_get_free_memory"]
+  Cov --> Shell["Every scripts/** + docker/** function<br/>named under tests/"]
+  Cov --> Bats["Full BATS suite green"]
+  Lint["make lint"] --> SC["ShellCheck warnings = defects"]
+  Lint --> Fmt["shfmt"]
+```
+
 ## Branches
 
 - Feature work from `development`: `feature/<short-description>`  
 - Conventional commit titles  
 - PR into `development` first  
+
+```mermaid
+flowchart LR
+  Feat["feature/* · fix/* · chore/* · docs/*"] --> Dev["development"]
+  Dev --> Main["main<br/>production-ready only"]
+```
+
+## Docs publish
+
+- Local / PR: `make docs` (strict MkDocs Material build into `site/`)
+- Public site (per long-lived branch) via **mike** on GitHub Pages:
+  - `main` → [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
+  - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
+- Workflow: `.github/workflows/deploy-docs.yml` (push to `main`/`development` with docs paths, or `workflow_dispatch`)
+- Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
+- Branch-stamped Edit links: `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION`

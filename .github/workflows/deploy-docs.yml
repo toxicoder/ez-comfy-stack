@@ -1,0 +1,120 @@
+name: Deploy Documentation
+
+# Publish MkDocs Material via mike to gh-pages (versioned aliases).
+# - main       → alias "latest" (default site)
+# - development → alias "development"
+#
+# GitHub Pages must publish from branch gh-pages with path "/" (repo root),
+# not "/docs", or /latest/ and /development/ will 404.
+#
+# PR docs validation stays in ci.yml (make docs). This workflow runs only on
+# push to long-lived branches (or workflow_dispatch).
+on:
+  push:
+    branches: [main, development]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "docs/requirements.txt"
+      - ".github/workflows/deploy-docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Required so subsequent git push (mike) authenticates as GITHUB_TOKEN.
+          persist-credentials: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: docs/requirements.txt
+
+      - name: Install docs dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r docs/requirements.txt
+
+      - name: Configure git identity for mike
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Ensure origin uses the Actions token for push to gh-pages.
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare gh-pages for mike
+        run: |
+          set -euo pipefail
+          # Existing gh-pages may be a full source mirror (pre-mike). Replace it
+          # once with an empty branch so version dirs are not mixed with tree.
+          # Do not checkout --orphan / checkout - : orphan leaves no @{-1} in
+          # Actions and fails with "pathspec '-' did not match".
+          if git fetch origin gh-pages 2>/dev/null; then
+            if git cat-file -e "origin/gh-pages:versions.json" 2>/dev/null; then
+              echo "gh-pages already has mike versions.json"
+            else
+              echo "gh-pages exists but is not a mike site; reinitializing empty branch"
+              empty_tree="$(git mktree </dev/null)"
+              empty_commit="$(
+                git commit-tree "${empty_tree}" -m "chore: initialize empty gh-pages for mike"
+              )"
+              git push -f origin "${empty_commit}:refs/heads/gh-pages"
+              git fetch origin gh-pages
+            fi
+          else
+            echo "No remote gh-pages yet; mike will create it on first deploy"
+          fi
+
+      - name: Build documentation (strict)
+        env:
+          EZ_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
+          MIKE_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
+        run: |
+          python -m mkdocs build --strict
+          # mike copies from site/; ensure no Jekyll processing on Pages.
+          touch site/.nojekyll
+
+      - name: Deploy with mike (versioned)
+        env:
+          EZ_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
+          MIKE_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.ref_name }}" == "development" ]]; then
+            mike deploy --push --update-aliases development -F mkdocs.yml
+          else
+            mike deploy --push --update-aliases latest -F mkdocs.yml
+            mike set-default --push latest -F mkdocs.yml
+          fi
+
+      - name: Verify gh-pages layout
+        run: |
+          set -euo pipefail
+          git fetch origin gh-pages
+          # versions.json must exist at branch root for multi-version mike sites.
+          git show origin/gh-pages:versions.json >/tmp/versions.json
+          echo "versions.json:"
+          cat /tmp/versions.json
+          git ls-tree --name-only origin/gh-pages | head -30
+          # Expect version dirs and/or aliases at root.
+          if ! git ls-tree --name-only origin/gh-pages | grep -E '^(latest|development|versions\.json)$' >/dev/null; then
+            echo "ERROR: gh-pages root missing mike version artifacts" >&2
+            exit 1
+          fi
