@@ -16,6 +16,19 @@ Inspired by [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark
 - Never auto-start heavy GPU work after reboot  
 - Hermetic tests with a **100% coverage gate**
 
+## Architecture
+
+```mermaid
+flowchart TB
+  Op["Operator"] --> CLI["manage.sh"]
+  CLI --> Compose["Docker Compose · restart: no"]
+  Compose --> Comfy["ComfyUI container"]
+  Models["/mnt/models"] -.->|bind| Comfy
+  State["comfy-state volume"] -.-> Comfy
+  Comfy --> UI[":8188"]
+  Op --> UI
+```
+
 ## Quick start
 
 ```bash
@@ -26,6 +39,22 @@ cp .env.example .env   # set HF_TOKEN if needed
 ./scripts/manage.sh status
 # open http://<spark-ip>:8188
 ./scripts/manage.sh stop              # before reboot
+```
+
+```mermaid
+sequenceDiagram
+  actor Op as Operator
+  participant M as manage.sh
+  participant D as Docker / ComfyUI
+  participant B as Browser
+
+  Op->>M: doctor
+  Op->>M: download-models
+  Note over M: wrap --limit auto · 85% of speedtest
+  Op->>M: start type yes
+  M->>D: compose up
+  Op->>B: open :8188
+  Op->>M: stop before reboot
 ```
 
 ## Layout
@@ -39,6 +68,16 @@ config/           Resource / headroom policy
 workflows/        Seeded Comfy workflow note
 docs/             MkDocs site
 tests/            BATS + pytest + coverage gate
+```
+
+```mermaid
+flowchart LR
+  Docker["docker/"] --> Manage["scripts/manage.sh"]
+  Manage --> Lib["scripts/lib/"]
+  Manage --> Util["scripts/utilities/"]
+  Manage --> Cfg["config/"]
+  Docker --> WF["workflows/"]
+  Docs["docs/"] --> Tests["tests/"]
 ```
 
 ## Documentation
