@@ -116,6 +116,12 @@ teardown() {
   export LAB_MOCK_WONDERSHAPER=1
   run shaping_supported
   [ "${status}" -eq 0 ]
+  run mark_shaping_unsupported "unit-test"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Disabling kernel shaping"* ]]
+  [ "${LAB_SHAPING_SUPPORTED}" = "0" ]
+  run shaping_supported
+  [ "${status}" -ne 0 ]
 }
 
 @test "clamp_rate_kbps clamps min max and passthrough" {
