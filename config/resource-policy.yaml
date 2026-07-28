@@ -1,0 +1,48 @@
+# Purpose:
+#   Human-readable resource and headroom policy for the unified flux-to-ltx
+#   Visual Generative AI stack on a single DGX Spark (GB10). Consumed by operators
+#   and mirrored by manage.sh defaults (MIN_HOST_FREE_GIB, MEM_LIMIT, model tiers).
+# Source of truth: this file
+# Regenerate: n/a
+# Safety:
+#   Headroom values leave free unified memory for OS and remote SSH while the
+#   ComfyUI container is limited near 90g. Do not lower min_host_free_gib without
+#   measuring SSH stability under load.
+#
+version: 1
+
+hardware:
+  name: dgx-spark-gb10
+  unified_memory_gib: 128
+  gpus: 1
+
+# Minimum free host memory (GiB) required before starting ComfyUI.
+# Leaves room for OS, Docker daemon, and interactive SSH.
+headroom:
+  min_host_free_gib: 28
+  min_disk_free_gib: 40
+
+stack:
+  id: flux-to-ltx
+  label: Unified Flux → LTX (ComfyUI)
+  heavy: true
+  gpus: 1
+  memory_limit: 90g
+  memory_reservation: 80g
+  cpu: "12"
+  models:
+    flux_tier: fast
+    ltx_tier: balanced
+  ports:
+    comfyui: 8188
+
+models:
+  flux_fast:
+    repos:
+      - black-forest-labs/FLUX.2-klein-9b-nvfp4
+      - tonera/FLUX.2-klein-9B-Nunchaku
+    min_gb: 12
+  ltx_balanced:
+    repos:
+      - Kijai/LTX2.3_comfy
+    min_gb: 20
