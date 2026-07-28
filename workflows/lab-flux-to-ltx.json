@@ -1,35 +1,210 @@
 {
   "id": "lab-flux-to-ltx",
-  "revision": 1,
-  "last_node_id": 1,
+  "revision": 2,
+  "last_node_id": 12,
   "last_link_id": 0,
   "nodes": [
     {
       "id": 1,
       "type": "Note",
       "pos": [40, 40],
-      "size": [600, 280],
+      "size": [720, 420],
       "flags": {},
       "order": 0,
       "mode": 0,
       "inputs": [],
       "outputs": [],
+      "title": "ez-comfy-stack · Flux → LTX",
       "properties": {},
       "widgets_values": [
-        "ez-comfy-stack flux-to-ltx pipeline\\n\\nFlow: text → FLUX.2 Klein NVFP4 image → LTX-2.3 I2V + audio\\n\\nDefaults: LAB_FLUX_TIER=fast, LAB_LTX_TIER=balanced\\nMemory: ~90Gi limit to keep both model families resident on GB10\\n\\n1. ./scripts/manage.sh download-models\\n2. ./scripts/manage.sh start\\n3. Open http://<spark-ip>:8188 and load this workflow note\\n4. Keep models loaded; avoid unloading between stages\\n\\nStop before reboot: ./scripts/manage.sh stop"
+        "ez-comfy-stack lab template (Flux.2 Klein NVFP4 → LTX-2.3)\n\nNOT the default Z-Image Turbo community template (wrong model pack).\n\nHost setup:\n  1. ./scripts/manage.sh download-models\n  2. ./scripts/manage.sh start\n  3. Load THIS workflow (user/default/workflows/lab-flux-to-ltx.json)\n\nModels this graph expects (after download-models + link_into_comfy):\n  diffusion_models/\n    flux-2-klein-9b-nvfp4.safetensors\n    ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors\n  text_encoders/\n    ltx-2.3_text_projection_bf16.safetensors\n  vae/\n    LTX23_video_vae_bf16.safetensors\n    LTX23_audio_vae_bf16.safetensors\n\nFlux stage (left): diffusion loaders for Klein NVFP4.\nWire UNET → your Flux.2 sampler / TE stack for this Comfy build\n(Flux.2 often needs companion TE/VAE from the Flux.2 family if not embedded).\n\nLTX stage (right): loaders for Kijai split LTX-2.3 balanced FP8 pack.\nConnect image latents → LTX I2V nodes (core or Kijai) using the LTX UNET + VAEs.\n\nMemory: MEM_LIMIT≈90g · restart:no · stop before reboot: manage.sh stop"
       ],
       "color": "#322",
       "bgcolor": "#544"
+    },
+    {
+      "id": 2,
+      "type": "UNETLoader",
+      "pos": [40, 520],
+      "size": [400, 82],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "title": "Flux · Klein 9B NVFP4",
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": ["flux-2-klein-9b-nvfp4.safetensors", "default"]
+    },
+    {
+      "id": 3,
+      "type": "Note",
+      "pos": [40, 640],
+      "size": [400, 140],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Flux stage",
+      "properties": {},
+      "widgets_values": [
+        "Text → image with FLUX.2 Klein NVFP4 (fast tier).\n\nConnect MODEL to Flux.2 sampling nodes for your ComfyUI version.\nIf the UI asks for clip/t5/vae companions, install Flux.2 TE/VAE\nor use an all-in-one loader that matches this UNET — never Z-Image files."
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 4,
+      "type": "UNETLoader",
+      "pos": [520, 520],
+      "size": [520, 82],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "title": "LTX · distilled FP8 (balanced)",
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "VAELoader",
+      "pos": [520, 640],
+      "size": [400, 58],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "title": "LTX · video VAE",
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": ["LTX23_video_vae_bf16.safetensors"]
+    },
+    {
+      "id": 6,
+      "type": "VAELoader",
+      "pos": [520, 740],
+      "size": [400, 58],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "title": "LTX · audio VAE",
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": ["LTX23_audio_vae_bf16.safetensors"]
+    },
+    {
+      "id": 7,
+      "type": "CLIPLoader",
+      "pos": [520, 840],
+      "size": [400, 82],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "title": "LTX · text projection",
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": ["ltx-2.3_text_projection_bf16.safetensors", "stable_diffusion", "default"]
+    },
+    {
+      "id": 8,
+      "type": "Note",
+      "pos": [520, 960],
+      "size": [520, 160],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "LTX stage (I2V + audio)",
+      "properties": {},
+      "widgets_values": [
+        "Image → video (+ audio) with Kijai LTX-2.3 split weights (balanced).\n\nUse LTX / LTXV nodes in your ComfyUI build with:\n  MODEL = distilled FP8 transformer (node 4)\n  VAE video / audio (nodes 5–6)\n  text projection (node 7) as required by the LTX loader docs\n\nOptional quality tier: swap UNET to\n  ltx-2.3-22b-distilled_transformer_only_bf16.safetensors\nafter download-ltx.sh run --tier quality."
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
     }
   ],
   "links": [],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1 · Flux (text → image)",
+      "bounding": [20, 480, 460, 320],
+      "color": "#3f789e"
+    },
+    {
+      "id": 2,
+      "title": "2 · LTX (image → video)",
+      "bounding": [500, 480, 560, 660],
+      "color": "#3f789e"
+    }
+  ],
   "config": {},
   "extra": {
     "lab_profile": "flux-to-ltx",
     "lab_flux_tier": "fast",
     "lab_ltx_tier": "balanced",
-    "lab_pipeline": true
+    "lab_pipeline": true,
+    "lab_models": {
+      "flux_unet": "flux-2-klein-9b-nvfp4.safetensors",
+      "ltx_unet": "ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors",
+      "ltx_text_projection": "ltx-2.3_text_projection_bf16.safetensors",
+      "ltx_video_vae": "LTX23_video_vae_bf16.safetensors",
+      "ltx_audio_vae": "LTX23_audio_vae_bf16.safetensors"
+    }
   },
   "version": 0.4
 }

@@ -117,6 +117,18 @@ command -v hf || pipx install huggingface_hub
 
 Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. `HF_PROGRESS=0` turns progress lines off; `HF_PROGRESS_INTERVAL=10` sets the tick (seconds).
 
+### Expected basenames after `download-models` (lab workflow)
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `flux-2-klein-9b-nvfp4.safetensors` | `diffusion_models/` | Flux fast UNET |
+| `ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors` | `diffusion_models/` | LTX balanced UNET |
+| `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection |
+| `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE |
+| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE |
+
+Workflow template: `workflows/lab-flux-to-ltx.json` (loaders + notes). Not Z-Image.
+
 ### Prebuilt container image (GHCR)
 
 | Item | Detail |

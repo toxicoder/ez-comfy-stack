@@ -42,6 +42,8 @@ tags: [troubleshooting, comfyui, docker]
 | `docker pull ghcr.io/...` denied / not found | Package not published yet or private | Run `publish-image` workflow; ensure package is public; or `LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start` (long local prebuild) |
 | First start still runs multi-GB pip | Thin image / no prebuilt / force cold | Check logs for “Seeding … prebuilt”. Rebuild with `EZ_COMFY_PREBUILD=1` or pull GHCR tag. Unset `LAB_FORCE_COLD_INSTALL` |
 | `IndentationError` in `model_management.py` / `mem_free_torch` | Old free-memory patch broke indent | Pull latest (patch is bind-mounted). `./scripts/manage.sh stop && ./scripts/manage.sh start` — auto-repairs via git restore + re-patch. No full image rebuild required |
+| Missing `ae.safetensors` / `qwen_3_4b` / `z_image_turbo_*.safetensors` | **Z-Image** template, not this stack | Load **lab-flux-to-ltx** workflow. Stack models are Flux Klein NVFP4 + LTX-2.3 (see [Models & Cache](models-and-cache.md)). Run `download-models` if those files are missing under `MODELS_DIR/comfy/` |
+| Missing `flux-2-klein-9b-nvfp4` or LTX `*.safetensors` | Weights not downloaded / not linked | `./scripts/manage.sh download-models` then confirm `ls $MODELS_DIR/comfy/diffusion_models` (symlinks from download-flux/ltx) |
 | Cold start forever | First PVC/volume pip+git | Wait; `manage.sh logs`; check network |
 | Nunchaku missing | aarch64 wheel fail | Fail-soft; quality/FP8 paths may still work |
 | Limits stuck after kill | trap skipped | `./scripts/manage.sh download-limit clear` |
