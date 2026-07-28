@@ -127,6 +127,23 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "wondershaper clear stdout does not pollute measured Mbps" {
+  install_mock_bin wondershaper '
+echo "wondershaper $*" >> "${TEST_TMP_DIR}/wondershaper.log"
+echo "Wondershaper queues have been cleared."
+exit 0
+'
+  export LAB_MOCK_WONDERSHAPER=1
+  export LAB_MOCK_SPEEDTEST_MBPS=100
+  # Command substitution must yield a clean integer only
+  measured=$(run_speedtest_mbps)
+  [ "${measured}" = "100" ]
+  run compute_auto_limit "${measured}"
+  [[ "${output}" == *"85"* ]]
+  run compute_auto_limit $'Wondershaper queues have been cleared.\n100'
+  [ "${status}" -ne 0 ]
+}
+
 @test "shaping_supported respects LAB_FORCE_NO_HTB" {
   export LAB_FORCE_NO_HTB=1
   unset LAB_SHAPING_SUPPORTED

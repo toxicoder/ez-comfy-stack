@@ -189,15 +189,29 @@ ensure_wondershaper() {
 #   Exit status depends on command path; see implementation.
 #######################################
 sudo_wondershaper() {
+  # Silence "queues have been cleared" on clear — that line pollutes
+  # measured=$(run_speedtest_mbps) if left on stdout. Keep apply output for error checks.
+  local quiet=0
+  if [[ ${1:-} == "clear" ]]; then
+    quiet=1
+  fi
   if [[ ${LAB_NO_SUDO:-} == "1" || ${LAB_MOCK_WONDERSHAPER:-} == "1" ]]; then
-    wondershaper "$@"
+    if [[ ${quiet} -eq 1 ]]; then
+      wondershaper "$@" >/dev/null 2>&1
+    else
+      wondershaper "$@"
+    fi
     return $?
   fi
   # Never prompt interactively during download-models
   if ! sudo -n true 2>/dev/null; then
     return 1
   fi
-  sudo -n wondershaper "$@"
+  if [[ ${quiet} -eq 1 ]]; then
+    sudo -n wondershaper "$@" >/dev/null 2>&1
+  else
+    sudo -n wondershaper "$@"
+  fi
 }
 
 #######################################
@@ -776,6 +790,11 @@ run_speedtest_mbps() {
 #######################################
 compute_auto_limit() {
   local measured="${1}"
+  # Only accept a pure number (reject polluted multi-line / text stdout)
+  if [[ ! ${measured} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    dl_err "compute_auto_limit: invalid measured Mbps '${measured//$'\n'/ }'"
+    return 1
+  fi
   python3 -c "print(max(1, int(float('${measured}') * ${AUTO_FRACTION})))"
 }
 
