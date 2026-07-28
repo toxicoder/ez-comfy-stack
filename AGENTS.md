@@ -93,6 +93,8 @@ Prefer relative paths. Prefer `./scripts/manage.sh` for operator actions.
 
 Update `docs/*.md` and README when operator behavior changes. MkDocs pages need frontmatter + “What's on this page” / “What this enables”.
 
+Prefer **relative** in-repo doc links. Public site publishes after merge via `.github/workflows/deploy-docs.yml` (mike): `main` → `/latest/`, `development` → `/development/`.
+
 ## Scope
 
 This is a **sample** stack. Do not pull in K3s, Bazel, full dashboard, or multi-node NCCL. Point long-term users at nvidia-dgx-spark-lab.

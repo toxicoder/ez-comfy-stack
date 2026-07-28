@@ -214,3 +214,13 @@ flowchart LR
   Feat["feature/* · fix/* · chore/* · docs/*"] --> Dev["development"]
   Dev --> Main["main<br/>production-ready only"]
 ```
+
+## Docs publish
+
+- Local / PR: `make docs` (strict MkDocs Material build into `site/`)
+- Public site (per long-lived branch) via **mike** on GitHub Pages:
+  - `main` → [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
+  - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
+- Workflow: `.github/workflows/deploy-docs.yml` (push to `main`/`development` with docs paths, or `workflow_dispatch`)
+- Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
+- Branch-stamped Edit links: `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION`

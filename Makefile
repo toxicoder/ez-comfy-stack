@@ -7,7 +7,7 @@
 #
 # Requirements:
 #   bash, bats, python3, shellcheck, shfmt; pytest+pytest-cov for coverage;
-#   mkdocs-material for docs.
+#   docs/requirements.txt (mkdocs-material + mike) for docs.
 
 .PHONY: help test bats python coverage lint fmt docs doctor clean
 
@@ -46,7 +46,7 @@ lint:
 fmt:
 	shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/entrypoint.sh tests/coverage.sh tests/run_all.sh
 
-# @target docs — strict MkDocs Material build into site/
+# @target docs — strict MkDocs Material build into site/ (publish is Actions + mike)
 docs:
 	python3 -m mkdocs build --strict
 

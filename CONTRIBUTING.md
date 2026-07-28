@@ -45,6 +45,15 @@ flowchart LR
 - [ ] Safety impact called out if Docker/resources/download-limit changed  
 - [ ] Docs updated for operator-facing changes  
 
+## Published docs
+
+Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (`development`).
+
+- PRs validate with `make docs` only (strict MkDocs).
+- After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes via **mike** → `gh-pages` (versioned aliases).
+- Prefer **relative** in-repo doc links (`docs/…`, same-folder page links) so they work on the branch you are viewing and under each published version path.
+- Install the pinned stack: `pip install -r docs/requirements.txt`.
+
 ## Style
 
 See [docs/project-conventions.md](docs/project-conventions.md) and [AGENTS.md](AGENTS.md).
