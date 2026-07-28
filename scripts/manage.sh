@@ -353,6 +353,6 @@ main() {
 }
 
 # Source guard: allow tests to source this file without executing main.
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
   main "$@"
 fi
