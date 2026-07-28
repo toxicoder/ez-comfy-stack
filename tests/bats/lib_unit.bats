@@ -328,6 +328,10 @@ line3" "org/x"
   export MODELS_DIR="${TEST_TMP_DIR}/models"
   export LAB_STACK_VERIFY_SETTLE=0
   export LAB_STACK_FOLLOW=0
+  export LAB_STACK_SKIP_PULL=1
+  export LAB_STACK_FORCE_BUILD=1
+  run stack_default_image
+  [[ "${output}" == *ghcr.io* && "${output}" == *ez-comfy* ]]
   run stack_start
   [ "${status}" -eq 0 ]
   run stack_follow_until_ready

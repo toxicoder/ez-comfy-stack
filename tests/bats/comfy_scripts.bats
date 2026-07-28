@@ -73,24 +73,50 @@ teardown() {
   chmod +x "${VENV}/bin/python"
   # fake activate
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  : >"${STAMP}"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
-  # Simulate bind-mounted workflow at the path entrypoint copies from
-  mkdir -p "${TEST_TMP_DIR}/opt-workflows"
-  echo '{"lab":true}' >"${TEST_TMP_DIR}/opt-workflows/lab-flux-to-ltx.json"
-  # shellcheck disable=SC2030
-  run bash -c "
-    mkdir -p /opt/ez-comfy/workflows 2>/dev/null || true
-    if [[ -d /opt/ez-comfy/workflows && -w /opt/ez-comfy/workflows ]]; then
-      cp '${TEST_TMP_DIR}/opt-workflows/lab-flux-to-ltx.json' /opt/ez-comfy/workflows/
-    fi
-    source '${REPO_ROOT}/docker/entrypoint.sh'
-    export COMFY_HOME='${COMFY_HOME}' VENV='${VENV}'
-    export LAB_ENTRYPOINT_INSTALL_CMD=true LAB_ENTRYPOINT_NO_EXEC=1
-    main
-  "
+  run main
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"starting ComfyUI"* || "${output}" == *"installing"* ]]
+  [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"phase"* || "${output}" == *"refresh"* ]]
+}
+
+@test "entrypoint seeds from prebuilt when stamp missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local pre="${TEST_TMP_DIR}/prebuilt"
+  export LAB_PREBUILT_ROOT="${pre}"
+  export COMFY_HOME="${TEST_TMP_DIR}/seeded_comfy"
+  export VENV="${COMFY_HOME}/.venv"
+  export STAMP="${COMFY_HOME}/.lab-install-complete"
+  mkdir -p "${pre}/.venv/bin" "${pre}/user"
+  printf '#!/usr/bin/env bash\necho ok\n' >"${pre}/.venv/bin/python"
+  chmod +x "${pre}/.venv/bin/python"
+  printf 'export VIRTUAL_ENV=1\n' >"${pre}/.venv/bin/activate"
+  echo stamp >"${pre}/.lab-install-complete"
+  echo tree >"${pre}/marker.txt"
+  export LAB_ENTRYPOINT_INSTALL_CMD="true"
+  export LAB_ENTRYPOINT_NO_EXEC=1
+  unset LAB_FORCE_COLD_INSTALL
+  run main
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Seeding"* || "${output}" == *"prebuilt"* || "${output}" == *"Seed"* ]]
+  [[ -f ${COMFY_HOME}/marker.txt ]]
+  [[ -x ${COMFY_HOME}/.venv/bin/python ]]
+}
+
+@test "prebuilt_ready detects venv python" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export LAB_PREBUILT_ROOT="${TEST_TMP_DIR}/empty_pre"
+  mkdir -p "${LAB_PREBUILT_ROOT}"
+  run prebuilt_ready
+  [ "${status}" -ne 0 ]
+  mkdir -p "${LAB_PREBUILT_ROOT}/.venv/bin"
+  printf '#!/bin/sh\n' >"${LAB_PREBUILT_ROOT}/.venv/bin/python"
+  chmod +x "${LAB_PREBUILT_ROOT}/.venv/bin/python"
+  run prebuilt_ready
+  [ "${status}" -eq 0 ]
 }
 
 @test "main fails when venv python missing" {

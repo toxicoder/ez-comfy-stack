@@ -112,10 +112,16 @@ LTX **balanced** pulls a **selective** subset of `Kijai/LTX2.3_comfy` (distilled
 
 Open `http://<spark-ip>:8188` (or port-forward if needed).
 
-!!! warning "Cold start"
-    First container start installs ComfyUI into the `comfy-state` volume and can take **10–30+ minutes** (multi‑GB PyTorch/CUDA wheels).  
-    `manage.sh start` **streams container logs** until port 8188 responds (Ctrl+C only detaches the stream).  
-    Set `LAB_STACK_FOLLOW=0` to return immediately after the container is up.
+!!! tip "Prebuilt image (GHCR)"
+    Default image is `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (**linux/arm64**, published by CI).  
+    It includes ComfyUI + PyTorch; **not** FLUX/LTX weights (those stay on `MODELS_DIR`).  
+    First start **seeds** the volume from `/opt/comfy-prebuilt` (local copy) instead of multi‑GB pip.  
+    No tokens or host secrets are baked into the image. Pull is public for public packages.
+
+!!! warning "Cold start without prebuilt"
+    If GHCR pull fails or you force a thin/local build without prebuild, first start can take **10–30+ minutes** of pip.  
+    `manage.sh start` streams logs until port 8188 responds (Ctrl+C detaches only).  
+    `LAB_STACK_FOLLOW=0` returns immediately after the container is up.
 
 ### First-run journey
 

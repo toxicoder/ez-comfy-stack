@@ -117,6 +117,16 @@ command -v hf || pipx install huggingface_hub
 
 Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. `HF_PROGRESS=0` turns progress lines off; `HF_PROGRESS_INTERVAL=10` sets the tick (seconds).
 
+### Prebuilt container image (GHCR)
+
+| Item | Detail |
+| --- | --- |
+| Image | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (arm64) |
+| Contains | CUDA base, ComfyUI, Python venv, PyTorch/CUDA wheels |
+| Does **not** contain | `HF_TOKEN`, `.env`, host PII, or FLUX/LTX weights |
+| First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
+| Weights | Still under `MODELS_DIR` via `download-models` |
+
 ### Resume & cache
 
 Downloads are **resumable** and **cacheable** under `MODELS_DIR`:

@@ -5,23 +5,14 @@
 # Container entrypoint for the ez-comfy flux-to-ltx image.
 #
 # Purpose:
-#   1) Run install-comfy.sh (idempotent ComfyUI + custom nodes + model symlinks)
-#   2) Re-apply the Spark free-memory patch
-#   3) Exec ComfyUI listening on 0.0.0.0:8188
-#
-# Style:
-#   Google Shell Style Guide (project deviations in docs/project-conventions.md).
-#   Sourcable for hermetic BATS via source guard.
+#   1) Seed ComfyUI from /opt/comfy-prebuilt when present (fast), else cold install
+#   2) Refresh model links + free-memory patch
+#   3) Exec ComfyUI on 0.0.0.0:8188
 #
 # Environment:
-#   COMFY_HOME — ComfyUI root (default /comfy-state/ComfyUI)
-#   PYTORCH_CUDA_ALLOC_CONF — defaults to expandable_segments:True
-#   LAB_ENTRYPOINT_INSTALL_CMD — optional override for install invocation (tests)
+#   COMFY_HOME, LAB_PREBUILT_ROOT, LAB_FORCE_COLD_INSTALL, LAB_ENTRYPOINT_*
 #
 set -euo pipefail
-
-COMFY_HOME="${COMFY_HOME:-/comfy-state/ComfyUI}"
-VENV="${COMFY_HOME}/.venv"
 
 #######################################
 # Timestamped entrypoint phase line.
@@ -39,52 +30,117 @@ ep_log() {
 }
 
 #######################################
-# Run install, patch, and exec ComfyUI (or stop before exec in tests).
+# True if prebuilt tree looks usable.
 # Globals:
-#   COMFY_HOME, VENV, LAB_ENTRYPOINT_INSTALL_CMD, LAB_ENTRYPOINT_NO_EXEC
+#   LAB_PREBUILT_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 if prebuilt venv python exists
+#######################################
+prebuilt_ready() {
+  local root="${LAB_PREBUILT_ROOT:-/opt/comfy-prebuilt}"
+  [[ -x "${root}/.venv/bin/python" ]]
+}
+
+#######################################
+# Copy prebuilt Comfy tree onto the volume (local disk; no pip).
+# Globals:
+#   COMFY_HOME, LAB_PREBUILT_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   Progress logs
+# Returns:
+#   0 on success
+#######################################
+seed_from_prebuilt() {
+  local root="${LAB_PREBUILT_ROOT:-/opt/comfy-prebuilt}"
+  local dest="${COMFY_HOME:-/comfy-state/ComfyUI}"
+  ep_log "Seeding ${dest} from ${root} (local copy — not re-downloading torch)"
+  mkdir -p "${dest}"
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a --info=progress2 "${root}/" "${dest}/" || rsync -a "${root}/" "${dest}/"
+  else
+    ep_log "rsync missing; using cp -a (no progress bar)"
+    cp -a "${root}/." "${dest}/"
+  fi
+  ep_log "Seed complete"
+}
+
+#######################################
+# Run install, seed, patch, and exec ComfyUI.
+# Globals:
+#   COMFY_HOME, VENV, LAB_* 
 # Arguments:
 #   None
 # Outputs:
 #   Progress on stdout/stderr
 # Returns:
-#   Does not return on success (exec); non-zero if install/venv missing
+#   Does not return on success (exec)
 #######################################
 main() {
   local install_cmd="${LAB_ENTRYPOINT_INSTALL_CMD:-bash /opt/ez-comfy/install-comfy.sh}"
+  local comfy_home venv stamp
+  # Read outer COMFY_HOME env before assigning locals
+  comfy_home="${COMFY_HOME:-/comfy-state/ComfyUI}"
+  venv="${comfy_home}/.venv"
+  stamp="${comfy_home}/.lab-install-complete"
+  LAB_PREBUILT_ROOT="${LAB_PREBUILT_ROOT:-/opt/comfy-prebuilt}"
   export PYTHONUNBUFFERED=1
+  export COMFY_HOME="${comfy_home}"
 
-  ep_log "══ cold start ══ first install can take 10–30+ minutes (pip multi-GB wheels)"
-  ep_log "phase 1/4: install / refresh ComfyUI (detailed steps follow)"
-  # shellcheck disable=SC2086
-  ${install_cmd}
-  ep_log "phase 1/4: install finished"
+  ep_log "══ start ══ COMFY_HOME=${comfy_home}"
+  ep_log "phase 1/4: prepare ComfyUI tree"
 
-  if [[ ! -x "${VENV}/bin/python" ]]; then
-    ep_log "ERROR: venv missing at ${VENV}"
+  if [[ ${LAB_FORCE_COLD_INSTALL:-0} == "1" ]]; then
+    ep_log "LAB_FORCE_COLD_INSTALL=1 — full pip install (slow)"
+    # shellcheck disable=SC2086
+    ${install_cmd}
+  elif [[ -f ${stamp} && -x ${venv}/bin/python ]]; then
+    ep_log "Install stamp present — refresh only (links + patch)"
+    # shellcheck disable=SC2086
+    ${install_cmd}
+  elif prebuilt_ready; then
+    ep_log "Prebuilt image detected — seeding volume (skip multi-GB pip)"
+    seed_from_prebuilt
+    # Refresh path: model links + patch (stamp already in prebuilt)
+    # shellcheck disable=SC2086
+    ${install_cmd}
+  else
+    ep_log "No prebuilt tree — cold install (10–30+ min; multi-GB wheels)"
+    # shellcheck disable=SC2086
+    ${install_cmd}
+  fi
+  ep_log "phase 1/4: prepare finished"
+
+  if [[ ! -x "${venv}/bin/python" ]]; then
+    ep_log "ERROR: venv missing at ${venv}"
     exit 1
   fi
 
   # shellcheck disable=SC1091
-  source "${VENV}/bin/activate"
+  source "${venv}/bin/activate"
 
   ep_log "phase 2/4: free-memory patch (best-effort)"
   if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
-    python3 /opt/ez-comfy/patch_get_free_memory.py "${COMFY_HOME}" || true
+    python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
   fi
 
   ep_log "phase 3/4: install lab workflow into user workflows"
-  mkdir -p "${COMFY_HOME}/user/default/workflows"
-  # Workflow is bind-mounted under /opt/ez-comfy/workflows (not into COMFY_HOME)
+  mkdir -p "${comfy_home}/user/default/workflows"
   if [[ -f /opt/ez-comfy/workflows/lab-flux-to-ltx.json ]]; then
     cp -f /opt/ez-comfy/workflows/lab-flux-to-ltx.json \
-      "${COMFY_HOME}/user/default/workflows/lab-flux-to-ltx.json"
+      "${comfy_home}/user/default/workflows/lab-flux-to-ltx.json"
     ep_log "installed lab-flux-to-ltx workflow"
   else
     ep_log "no workflow bind-mount at /opt/ez-comfy/workflows (optional)"
   fi
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
-  cd "${COMFY_HOME}"
+  cd "${comfy_home}"
   ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then
     ep_log "LAB_ENTRYPOINT_NO_EXEC=1; skipping exec"

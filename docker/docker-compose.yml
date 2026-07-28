@@ -20,7 +20,11 @@ services:
       args:
         # Public Hub by default; set CUDA_BASE_IMAGE in .env for NGC after docker login nvcr.io
         CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvidia/cuda:13.0.0-devel-ubuntu24.04}
-    image: ez-comfy:flux-to-ltx
+        # 1 = bake Comfy+torch into image (default). 0 = thin image (cold pip at runtime).
+        EZ_COMFY_PREBUILD: ${EZ_COMFY_PREBUILD:-1}
+    # Prefer GHCR prebuilt (arm64). Override EZ_COMFY_IMAGE for local tags.
+    # Never put tokens in this file; HF_TOKEN comes from host env/.env at runtime only.
+    image: ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx}
     container_name: ez-comfy-flux-to-ltx
     # Manual lifecycle only — operator uses manage.sh start/stop
     restart: "no"
@@ -31,7 +35,10 @@ services:
       MODELS_ROOT: /models
       HF_HOME: /models
       HUGGINGFACE_HUB_CACHE: /models/hub
+      # Runtime only — not baked into image layers
       HF_TOKEN: ${HF_TOKEN:-}
+      LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
+      LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
       PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
       CUDA_MODULE_LOADING: LAZY
       LAB_VISUAL_ENABLE_NVFP4: "1"

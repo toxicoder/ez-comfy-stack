@@ -43,6 +43,20 @@ teardown() {
   [ "$status" -ne 0 ]
 }
 
+@test "prebuilt image defaults to GHCR and never bakes HF_TOKEN in Dockerfile" {
+  run grep -E 'ghcr.io/.*/ez-comfy:flux-to-ltx' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'comfy-prebuilt|EZ_COMFY_PREBUILD' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  # Secrets must not appear as Dockerfile ENV/ARG assignments
+  run grep -iE '^(ENV|ARG).*HF_TOKEN|^(ENV|ARG).*API_KEY|COPY.*\.env' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -ne 0 ]
+  run grep -E 'ghcr.io' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  [ "$status" -eq 0 ]
+  run grep -iE 'dockerhub|docker\.io/.*push|DOCKERHUB' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  [ "$status" -ne 0 ]
+}
+
 @test "compose has mem_limit" {
   run grep -E 'mem_limit' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]

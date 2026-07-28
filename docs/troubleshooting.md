@@ -38,7 +38,9 @@ tags: [troubleshooting, comfyui, docker]
 | `failed to fetch oauth token: denied` / `nvcr.io` Access Denied on `start` | NGC base image pull without login | Pull latest (default base is **Docker Hub** `nvidia/cuda`). Rebuild: `./scripts/manage.sh start`. If you set `CUDA_BASE_IMAGE=nvcr.io/...`, run `docker login nvcr.io` (user `$oauthtoken`, password = NGC API key) |
 | Build OK, `status` empty / not in `docker ps` | Container exited immediately (`restart: "no"`) | Pull latest (workflow no longer mounts into `ComfyUI/` before clone). `./scripts/manage.sh logs` or `docker logs ez-comfy-flux-to-ltx`. Reset poisoned volume: `./scripts/manage.sh stop && docker volume rm ez-comfy-state` then `start` again. Stop other GPU containers if needed |
 | `start` returns while logs still downloading torch | Normal cold install; multi‑GB wheels | Leave it running; `start` streams logs by default. Re-attach: `./scripts/manage.sh logs`. Markers: `[comfy-install] ══ step N/11 ══` |
-| Quiet for minutes on step 4 (PyTorch) | Large cudnn/torch wheel download | pip progress bar should show MB; host heartbeat every 30s while waiting for :8188 |
+| Quiet for minutes on step 4 (PyTorch) | Large cudnn/torch wheel download | Prefer GHCR prebuilt image (seed, no pip). Or wait for pip bars; host heartbeat every 30s |
+| `docker pull ghcr.io/...` denied / not found | Package not published yet or private | Run `publish-image` workflow; ensure package is public; or `LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start` (long local prebuild) |
+| First start still runs multi-GB pip | Thin image / no prebuilt / force cold | Check logs for “Seeding … prebuilt”. Rebuild with `EZ_COMFY_PREBUILD=1` or pull GHCR tag. Unset `LAB_FORCE_COLD_INSTALL` |
 | Cold start forever | First PVC/volume pip+git | Wait; `manage.sh logs`; check network |
 | Nunchaku missing | aarch64 wheel fail | Fail-soft; quality/FP8 paths may still work |
 | Limits stuck after kill | trap skipped | `./scripts/manage.sh download-limit clear` |

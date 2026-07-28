@@ -69,6 +69,8 @@ setup_repo_env() {
   # Do not stream compose logs or wait for UI port in hermetic tests
   export LAB_STACK_FOLLOW=0
   export LAB_STACK_VERIFY_SETTLE=0
+  export LAB_STACK_SKIP_PULL=1
+  export LAB_STACK_FORCE_BUILD=1
 }
 
 #######################################
@@ -125,6 +127,10 @@ echo "docker $*" >> "${TEST_TMP_DIR}/docker_calls.log"
 if [[ "${1}" != "compose" ]]; then
   if [[ "${1}" == "--version" ]]; then
     echo "Docker version 27.0.0"
+    exit 0
+  fi
+  if [[ "${1}" == "pull" ]]; then
+    echo "Pulled ${2:-}"
     exit 0
   fi
   exit 0

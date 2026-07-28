@@ -305,17 +305,84 @@ stack_follow_until_ready() {
 # Returns:
 #   0 when up and container running; non-zero on compose or verify failure.
 #######################################
+#######################################
+# Resolve default GHCR image ref (public package; no credentials in repo).
+# Globals:
+#   EZ_COMFY_IMAGE
+# Arguments:
+#   None
+# Outputs:
+#   Image ref on stdout
+# Returns:
+#   0
+#######################################
+stack_default_image() {
+  echo "${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx}"
+}
+
+#######################################
+# Try docker pull of prebuilt image; return 0 if usable.
+# Globals:
+#   None
+# Arguments:
+#   $1  Image reference
+# Outputs:
+#   Status logs
+# Returns:
+#   0 if pull ok or image already local; 1 on failure
+#######################################
+stack_pull_image() {
+  local img="${1:?}"
+  if [[ ${LAB_STACK_SKIP_PULL:-0} == "1" ]]; then
+    log "LAB_STACK_SKIP_PULL=1 — not pulling ${img}"
+    return 1
+  fi
+  log "Pulling prebuilt image ${img} (GHCR; no model weights inside)…"
+  if docker pull "${img}"; then
+    log "Pull ok: ${img}"
+    return 0
+  fi
+  warn "Pull failed for ${img} — will build locally if needed (long if prebuild enabled)"
+  return 1
+}
+
+#######################################
+# Build images if needed and start the unified stack detached.
+# Prefers GHCR pull; falls back to compose build. Seeds volume from prebuilt.
+# Globals:
+#   See file header / caller environment.
+# Arguments:
+#   None
+# Outputs:
+#   Status via log/warn/err on stderr unless noted.
+# Returns:
+#   0 when up and container running; non-zero on compose or verify failure.
+#######################################
 stack_start() {
   require_docker
   export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
   export COMFY_PORT="${COMFY_PORT:-8188}"
   export MEM_LIMIT="${MEM_LIMIT:-90g}"
   export MEM_RESERVATION="${MEM_RESERVATION:-80g}"
+  export EZ_COMFY_IMAGE
+  EZ_COMFY_IMAGE="$(stack_default_image)"
   ensure_models_dir "${MODELS_DIR}" || return 1
   mkdir -p "${MODELS_DIR}/comfy"
   log "══ start ══ unified flux-to-ltx (mem_limit=${MEM_LIMIT})"
-  log "Building/recreating containers (docker compose up -d --build)…"
-  if ! compose_run up -d --build; then
+  log "Image: ${EZ_COMFY_IMAGE}"
+
+  local up_args=(up -d)
+  if [[ ${LAB_STACK_FORCE_BUILD:-0} == "1" ]]; then
+    log "LAB_STACK_FORCE_BUILD=1 — compose up --build (may take a long time)"
+    up_args+=( --build)
+  elif stack_pull_image "${EZ_COMFY_IMAGE}"; then
+    log "Using pulled image (compose up without rebuild)"
+  else
+    log "Building image locally (Dockerfile prebuild installs torch — can take 30+ min)…"
+    up_args+=( --build)
+  fi
+
+  if ! compose_run "${up_args[@]}"; then
     err "compose up failed"
     compose_run ps -a 2>/dev/null || true
     compose_run logs --tail 80 comfyui 2>/dev/null || true
@@ -327,7 +394,8 @@ stack_start() {
     return 1
   fi
   log "Container is running. UI target: http://localhost:${COMFY_PORT}"
-  log "Cold install (first time) downloads multi-GB PyTorch/CUDA wheels inside the container"
+  log "First start with prebuilt image: seeds volume from /opt/comfy-prebuilt (local copy)"
+  log "Without prebuilt: cold pip install (multi-GB). LAB_FORCE_COLD_INSTALL=1 forces pip path."
   # Default FOLLOW on TTY; tests set LAB_STACK_FOLLOW=0
   stack_follow_until_ready || return 1
 }
