@@ -101,6 +101,23 @@ command -v hf || pipx install huggingface_hub
 # or: pip install -U 'huggingface_hub[cli]'
 ```
 
+### LTX selective download (not the full monorepo)
+
+`Kijai/LTX2.3_comfy` is a multi-variant hub repo (~**400 GB** if you pull everything). This stack defaults to a **selective** subset via `hf download --include`:
+
+| Tier | Transformer (approx) | Plus | Total (approx) |
+| --- | --- | --- | --- |
+| **balanced** | distilled FP8 `…fp8_input_scaled_v3` (~25 GB) | text projection + video/audio VAE | ~28–30 GB |
+| **quality** | distilled BF16 (~42 GB) | same TE + VAEs | ~45–48 GB |
+
+`status --json` readiness uses `min_gb` 20 (balanced) / 35 (quality) as a floor, not the full monorepo size.
+
+Escape hatch (operators who really want every precision/lora):
+
+```bash
+LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier balanced
+```
+
 ### Gated models / HF_TOKEN
 
 FLUX and some LTX assets may require accepting the license on Hugging Face and a token:

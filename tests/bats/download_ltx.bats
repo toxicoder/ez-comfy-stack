@@ -72,6 +72,51 @@ teardown() {
   [ "${output}" = "0" ]
 }
 
+@test "download-ltx tier_include_patterns selective balanced and quality" {
+  run tier_include_patterns balanced
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"fp8_input_scaled_v3"* ]]
+  [[ "${output}" == *"text_encoders/ltx-2.3_text_projection_bf16.safetensors"* ]]
+  [[ "${output}" == *"vae/LTX23_video_vae_bf16.safetensors"* ]]
+  [[ "${output}" == *"vae/LTX23_audio_vae_bf16.safetensors"* ]]
+  # Must not request every monorepo variant / bf16 transformer on balanced
+  [[ "${output}" != *"dev_transformer"* ]]
+  [[ "${output}" != *"distilled_transformer_only_bf16"* ]]
+  [[ "${output}" != *"loras/"* ]]
+  run tier_include_patterns quality
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"distilled_transformer_only_bf16"* ]]
+  [[ "${output}" == *"text_encoders/"* ]]
+  [[ "${output}" != *"fp8_input_scaled_v3"* ]]
+  run tier_include_patterns bogus
+  [ "${status}" -eq 0 ]
+  [ -z "${output}" ]
+}
+
+@test "download-ltx cmd_run passes --include patterns to hf (selective)" {
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  unset LAB_MOCK_HF_DOWNLOAD
+  TIER=balanced
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  grep -q 'hf download Kijai/LTX2.3_comfy' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q -- '--include' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'fp8_input_scaled_v3' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'text_projection' "${TEST_TMP_DIR}/hf_calls.log"
+}
+
+@test "download-ltx cmd_run LTX_FULL_REPO=1 omits --include" {
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  unset LAB_MOCK_HF_DOWNLOAD
+  export LTX_FULL_REPO=1
+  TIER=balanced
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  grep -q 'hf download Kijai/LTX2.3_comfy' "${TEST_TMP_DIR}/hf_calls.log"
+  ! grep -q -- '--include' "${TEST_TMP_DIR}/hf_calls.log"
+  unset LTX_FULL_REPO
+}
+
 @test "download-ltx link_into_comfy cmd_status cmd_run" {
   local tdir
   tdir="$(tier_dir balanced)"

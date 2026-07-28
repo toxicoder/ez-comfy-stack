@@ -9,6 +9,10 @@
 #   pipeline and link them into ComfyUI model subfolders (diffusion_models,
 #   text_encoders, vae) under $MODELS_DIR/comfy.
 #
+#   By default each tier pulls a selective subset of Kijai/LTX2.3_comfy
+#   (one transformer + text encoder + VAEs, ~25–50 GB), not the full monorepo
+#   (~400 GB of every precision/variant). Set LTX_FULL_REPO=1 to pull everything.
+#
 # Audience:
 #   Operators preparing a Spark host for manage.sh start. Prefer
 #   manage.sh download-models for throttled sequential flux+ltx pulls.
@@ -19,6 +23,7 @@
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD — same semantics as download-flux.
+#   LTX_FULL_REPO=1 — download entire Kijai/LTX2.3_comfy snapshot (all variants).
 #
 # Safety:
 #   Multi‑GB transfer — use download-limit when on remote SSH.
@@ -65,30 +70,69 @@ tier_repo() {
 # Globals:
 #   See file header / caller environment.
 # Arguments:
-#   None
+#   $1  Tier name (balanced|quality|…)
 # Outputs:
-#   Status via log/warn/err on stderr unless noted.
+#   Minimum ready size in GB on stdout (selective payload, not full monorepo).
 # Returns:
-#   Exit status depends on command path; see implementation.
+#   0
 #######################################
 tier_min_gb() {
   case "${1}" in
+    # distilled fp8 transformer (~25 GB) + TE + VAEs ≈ 28–30 GB
     balanced) echo 20 ;;
+    # distilled bf16 transformer (~42 GB) + TE + VAEs ≈ 45–48 GB
     quality) echo 35 ;;
     *) echo 0 ;;
   esac
 }
 
 #######################################
+# Glob patterns for selective hf download of a tier (one line each).
+# Globals:
+#   None
+# Arguments:
+#   $1  Tier name (balanced|quality)
+# Outputs:
+#   Include globs on stdout (empty for unknown tier).
+# Returns:
+#   0
+#######################################
+tier_include_patterns() {
+  # Shared TE + VAEs for Comfy split loaders (not full monorepo).
+  local -a shared=(
+    "text_encoders/ltx-2.3_text_projection_bf16.safetensors"
+    "vae/LTX23_video_vae_bf16.safetensors"
+    "vae/LTX23_audio_vae_bf16.safetensors"
+  )
+  case "${1}" in
+    balanced)
+      # Distilled FP8 with calibrated input scales (Spark / modern NVIDIA FP8 matmul).
+      printf '%s\n' \
+        "diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors" \
+        "${shared[@]}"
+      ;;
+    quality)
+      # Distilled BF16 transformer for higher fidelity (much larger).
+      printf '%s\n' \
+        "diffusion_models/ltx-2.3-22b-distilled_transformer_only_bf16.safetensors" \
+        "${shared[@]}"
+      ;;
+    *)
+      return 0
+      ;;
+  esac
+}
+
+#######################################
 # tier_dir helper.
 # Globals:
-#   See file header / caller environment.
+#   MODELS_DIR
 # Arguments:
-#   None
+#   $1  Tier name
 # Outputs:
-#   Status via log/warn/err on stderr unless noted.
+#   Absolute local-dir path for that tier on stdout.
 # Returns:
-#   Exit status depends on command path; see implementation.
+#   0
 #######################################
 tier_dir() {
   local repo
@@ -261,11 +305,37 @@ cmd_run() {
   check_hf_cli
   ensure_models_dir "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
-  local tier repo ok=0 fail=0
+  local tier repo ok=0 fail=0 pat
+  local -a include_args=()
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")
-    log "Downloading ${repo} (tier: ${tier})..."
-    if HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")"; then
+    include_args=()
+    if [[ ${LTX_FULL_REPO:-0} == "1" ]]; then
+      log "Downloading full ${repo} snapshot (tier: ${tier}; LTX_FULL_REPO=1)…"
+      log "Full monorepo is ~400 GB (every precision/variant). Prefer selective default."
+    else
+      log "Downloading ${repo} selective subset (tier: ${tier})…"
+      while IFS= read -r pat; do
+        [[ -z ${pat} ]] && continue
+        include_args+=(--include "${pat}")
+        log "  include: ${pat}"
+      done < <(tier_include_patterns "${tier}")
+      if [[ ${#include_args[@]} -eq 0 ]]; then
+        err "No include patterns for tier ${tier}; refusing full monorepo pull."
+        fail=$((fail + 1))
+        continue
+      fi
+      log "Tip: LTX_FULL_REPO=1 pulls the entire ~400 GB repo (not recommended)"
+    fi
+    # Empty include_args must not expand under set -u (bash unbound array).
+    local dl_rc=0
+    if [[ ${#include_args[@]} -gt 0 ]]; then
+      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")" \
+        "${include_args[@]}" || dl_rc=$?
+    else
+      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")" || dl_rc=$?
+    fi
+    if [[ ${dl_rc} -eq 0 ]]; then
       link_into_comfy "$tier"
       ok=$((ok + 1))
     else

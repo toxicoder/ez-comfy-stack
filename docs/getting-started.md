@@ -100,6 +100,8 @@ Fix any errors before downloading multi-GB models. Hard failures include **docke
 
 This runs **flux-fast** + **ltx-balanced** under `download-limit wrap --limit auto` (speedtest → **85%** cap), using **`hf download`**. Weights land under `MODELS_DIR` (default `/mnt/models`) in a layout compatible with nvidia-dgx-spark-lab. If bandwidth shaping fails on the kernel, downloads continue unthrottled with a warning (`DOWNLOAD_LIMIT=off` to skip shaping).
 
+LTX **balanced** pulls a **selective** subset of `Kijai/LTX2.3_comfy` (distilled FP8 + TE + VAEs, ~30 GB), not the full multi-variant monorepo (~400 GB). See [Models & Cache](models-and-cache.md).
+
 ## Start the stack
 
 ```bash
