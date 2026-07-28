@@ -1,0 +1,48 @@
+site_name: ez-comfy-stack
+site_description: Simplified Visual Generative AI (ComfyUI flux-to-ltx) for a single NVIDIA DGX Spark
+repo_url: https://github.com/toxicoder/ez-comfy-stack
+edit_uri: edit/development/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Light mode
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Visual Generative AI: visual-generative-ai.md
+  - Models & Cache: models-and-cache.md
+  - Download Limit: download-limit.md
+  - Reboot Safety: reboot-safety.md
+  - Troubleshooting: troubleshooting.md
+  - Conventions: project-conventions.md
