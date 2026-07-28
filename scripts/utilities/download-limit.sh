@@ -432,17 +432,18 @@ limits_active() {
 #######################################
 clear_limits() {
   local iface="${1:-}"
+  local force="${2:-0}"
   if [[ -z ${iface} ]]; then
     iface=$(get_active_interface)
   fi
   if [[ -z ${iface} ]]; then
     return 0
   fi
-  # Skip if we already know shaping is off or sudo would prompt
-  if [[ ${LAB_SHAPING_SUPPORTED:-} == "0" ]]; then
+  # Normal path: skip if shaping marked off (unless force for speed tests)
+  if [[ ${force} != "1" && ${LAB_SHAPING_SUPPORTED:-} == "0" ]]; then
     return 0
   fi
-  if [[ ${LAB_NO_SUDO:-} != "1" && ${LAB_MOCK_WONDERSHAPER:-} != "1" ]]; then
+  if [[ ${force} != "1" && ${LAB_NO_SUDO:-} != "1" && ${LAB_MOCK_WONDERSHAPER:-} != "1" ]]; then
     if command -v sudo >/dev/null 2>&1 && ! sudo -n true 2>/dev/null; then
       return 0
     fi
@@ -451,7 +452,40 @@ clear_limits() {
     dl_log "Clearing bandwidth limits on ${iface}"
     sudo_wondershaper clear "${iface}" 2>/dev/null || true
   fi
+  # Best-effort raw tc clear (leftover qdiscs without wondershaper)
+  if [[ ${force} == "1" ]] && command -v tc >/dev/null 2>&1; then
+    if [[ ${LAB_NO_SUDO:-} == "1" || ${LAB_MOCK_WONDERSHAPER:-} == "1" ]]; then
+      tc qdisc del dev "${iface}" root 2>/dev/null || true
+      tc qdisc del dev "${iface}" ingress 2>/dev/null || true
+    elif command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+      sudo -n tc qdisc del dev "${iface}" root 2>/dev/null || true
+      sudo -n tc qdisc del dev "${iface}" ingress 2>/dev/null || true
+    fi
+  fi
   return 0
+}
+
+#######################################
+# Force-clear any shaping before speed measurement (ignore LAB_SHAPING_SUPPORTED=0).
+# Globals:
+#   See clear_limits
+# Arguments:
+#   $1  Optional interface
+# Outputs:
+#   Status logs
+# Returns:
+#   0
+#######################################
+clear_limits_for_speedtest() {
+  local iface="${1:-}"
+  if [[ -z ${iface} ]]; then
+    iface=$(get_active_interface)
+  fi
+  if [[ -z ${iface} ]]; then
+    return 0
+  fi
+  dl_log "Clearing any existing bandwidth limits before speed measure on ${iface}"
+  clear_limits "${iface}" 1
 }
 
 #######################################
@@ -553,8 +587,60 @@ probe_http_download_mbps() {
 }
 
 #######################################
+# Ensure speedtest-cli is available (pip --user preferred, then apt with sudo -n).
+# Globals:
+#   LAB_MOCK_SPEEDTEST_MBPS, LAB_NO_SUDO, PATH
+# Arguments:
+#   None
+# Outputs:
+#   Status logs
+# Returns:
+#   0 if speedtest-cli on PATH after attempt; 1 otherwise
+#######################################
+ensure_speedtest_cli() {
+  if command -v speedtest-cli >/dev/null 2>&1; then
+    return 0
+  fi
+  if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
+    return 0
+  fi
+  dl_log "speedtest-cli not found; attempting install…"
+  # Prefer user pip (no sudo) — works on shared Spark accounts
+  if command -v pip3 >/dev/null 2>&1; then
+    pip3 install --user -q speedtest-cli 2>/dev/null || true
+  elif command -v pip >/dev/null 2>&1; then
+    pip install --user -q speedtest-cli 2>/dev/null || true
+  elif command -v python3 >/dev/null 2>&1; then
+    python3 -m pip install --user -q speedtest-cli 2>/dev/null || true
+  fi
+  # Ensure ~/.local/bin is on PATH for --user installs
+  if [[ -d ${HOME}/.local/bin ]]; then
+    export PATH="${HOME}/.local/bin:${PATH}"
+  fi
+  if command -v speedtest-cli >/dev/null 2>&1; then
+    dl_log "speedtest-cli installed (pip --user)"
+    return 0
+  fi
+  # apt/dnf with non-interactive sudo
+  if [[ ${LAB_NO_SUDO:-} != "1" ]] && command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+    if command -v apt-get >/dev/null 2>&1; then
+      sudo -n apt-get update -qq 2>/dev/null || true
+      sudo -n apt-get install -y speedtest-cli 2>/dev/null || true
+    elif command -v dnf >/dev/null 2>&1; then
+      sudo -n dnf install -y speedtest-cli 2>/dev/null || true
+    fi
+  fi
+  if command -v speedtest-cli >/dev/null 2>&1; then
+    dl_log "speedtest-cli installed (package manager)"
+    return 0
+  fi
+  dl_warn "Could not install speedtest-cli; will try HTTP probe / live RX"
+  return 1
+}
+
+#######################################
 # Return measured download Mbps as integer, or empty on failure.
-# Tries speedtest-cli, Ookla speedtest, then HTTP probe (Cloudflare).
+# Clears any shaping first, ensures speedtest-cli, then CLI/Ookla/HTTP probes.
 # Globals:
 #   LAB_MOCK_SPEEDTEST_MBPS, LAB_MOCK_HTTP_SPEED_MBPS, SPEEDTEST_HTTP_*
 # Arguments:
@@ -573,6 +659,12 @@ run_speedtest_mbps() {
     echo "${LAB_MOCK_SPEEDTEST_MBPS}"
     return 0
   fi
+
+  # Unthrottle before any probe so residual wondershaper/tc does not skew results
+  clear_limits_for_speedtest
+
+  ensure_speedtest_cli || true
+
   local out="" reason=""
   if command -v speedtest-cli >/dev/null 2>&1; then
     out=$(speedtest-cli --simple 2>/dev/null | awk '/Download:/{print $2; exit}') || true
@@ -582,7 +674,7 @@ run_speedtest_mbps() {
     fi
     reason="speedtest-cli gave no parseable result"
   else
-    reason="speedtest-cli not installed"
+    reason="speedtest-cli not available after install attempt"
   fi
   if command -v speedtest >/dev/null 2>&1; then
     out=$(speedtest --accept-license --accept-gdpr -f json 2>/dev/null |
@@ -846,6 +938,7 @@ wrap_with_live_speed_limit() {
 
   dl_log "=== download-limit: measure (live RX, ${sample_sec}s) ==="
   dl_log "Not starting model download yet (avoids kill/restart and HF file locks)"
+  clear_limits_for_speedtest "${iface}"
 
   # Generate RX traffic during the sample window (no model repo locks)
   if command -v curl >/dev/null 2>&1 && [[ -z ${LAB_MOCK_LIVE_RX_MBPS:-} ]]; then

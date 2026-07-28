@@ -106,8 +106,25 @@ teardown() {
   rm -f "${TEST_TMP_DIR}/bin/speedtest-cli"
   run run_speedtest_mbps
   [[ "${output}" == *"120"* ]]
+  # clear_limits_for_speedtest should run (force clear) before measure
+  [[ "${output}" == *"Clearing any existing bandwidth limits"* || "${output}" == *"120"* ]]
   unset LAB_MOCK_HTTP_SPEED_MBPS
   install_speedtest_mock 100
+}
+
+@test "clear_limits_for_speedtest and ensure_speedtest_cli" {
+  export LAB_SHAPING_SUPPORTED=0
+  : >"${TEST_TMP_DIR}/wondershaper.log"
+  run clear_limits_for_speedtest eth0
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Clearing any existing bandwidth limits"* ]]
+  # force=1 should still invoke wondershaper clear despite LAB_SHAPING_SUPPORTED=0
+  grep -q clear "${TEST_TMP_DIR}/wondershaper.log"
+
+  # ensure when already present
+  install_speedtest_mock 50
+  run ensure_speedtest_cli
+  [ "${status}" -eq 0 ]
 }
 
 @test "shaping_supported respects LAB_FORCE_NO_HTB" {
