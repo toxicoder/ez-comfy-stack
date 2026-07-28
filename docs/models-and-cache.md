@@ -27,7 +27,16 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
 ### Permissions
 
-`doctor`, `download-models`, and download utilities require `MODELS_DIR` to be **writable by the current user**. If `/mnt` is root-owned:
+`doctor`, `download-models`, and download utilities require `MODELS_DIR` to be **writable by the current user**.
+
+Preferred:
+
+```bash
+./scripts/manage.sh setup
+# sudo mkdir -p + chown for MODELS_DIR when needed
+```
+
+Manual:
 
 ```bash
 sudo mkdir -p /mnt/models

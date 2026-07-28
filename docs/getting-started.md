@@ -54,9 +54,20 @@ flowchart LR
 git clone https://github.com/toxicoder/ez-comfy-stack.git
 cd ez-comfy-stack
 git checkout development   # or your feature branch
-cp .env.example .env
-# edit .env: HF_TOKEN, MODELS_DIR=/mnt/models
+
+# One-shot host bootstrap: .env, MODELS_DIR (sudo mkdir/chown), docker hints, doctor
+./scripts/manage.sh setup
+# edit .env: HF_TOKEN if gated models need it
 ```
+
+`setup` will:
+
+1. Create `.env` from `.env.example` if missing  
+2. Create and own `MODELS_DIR` (default `/mnt/models`) via sudo when needed  
+3. Print **copy-pasteable** Docker CE install steps if docker is missing  
+4. Re-run `doctor`
+
+If docker is not installed yet, install it (apt, **not** snap), re-login or `newgrp docker`, then re-run `setup`.
 
 ## Doctor
 
@@ -64,8 +75,7 @@ cp .env.example .env
 ./scripts/manage.sh doctor
 ```
 
-Fix any errors before downloading multi-GB models. Hard failures include **docker missing**, **docker compose missing**, **host headroom**, and **MODELS_DIR not writable**. See [Troubleshooting](troubleshooting.md) for copy-paste fixes.
-
+Fix any errors before downloading multi-GB models. Hard failures include **docker missing**, **docker compose missing**, **host headroom**, and **MODELS_DIR not writable**. Prefer `./scripts/manage.sh setup` first. See [Troubleshooting](troubleshooting.md) for copy-paste fixes.
 ## Download models (shared cache)
 
 ```bash

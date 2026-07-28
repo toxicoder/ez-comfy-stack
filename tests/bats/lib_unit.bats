@@ -45,7 +45,7 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
-@test "common: log warn err die load_dotenv require_cmd ensure_models_dir" {
+@test "common: log warn err die load_dotenv require_cmd docker models helpers" {
   run log "hi"
   [ "${status}" -eq 0 ]
   run warn "w"
@@ -56,13 +56,30 @@ teardown() {
   [ "${status}" -eq 1 ]
   run load_dotenv "${TEST_TMP_DIR}"
   [ "${status}" -eq 0 ]
-  echo 'export FOO_FROM_ENV=1' >"${TEST_TMP_DIR}/.env"
+  echo 'FOO_FROM_ENV=1' >"${TEST_TMP_DIR}/.env"
+  unset FOO_FROM_ENV
   run load_dotenv "${TEST_TMP_DIR}"
   [ "${status}" -eq 0 ]
+  # load_dotenv runs in a subshell under `run` — call directly for export effect
+  load_dotenv "${TEST_TMP_DIR}"
+  [ "${FOO_FROM_ENV}" = "1" ]
+  export PRESET_VAR=keep
+  echo 'PRESET_VAR=fromenv' >>"${TEST_TMP_DIR}/.env"
+  load_dotenv "${TEST_TMP_DIR}"
+  [ "${PRESET_VAR}" = "keep" ]
   run require_cmd bash
   [ "${status}" -eq 0 ]
   run require_cmd definitely-not-a-real-cmd-xyz
   [ "${status}" -ne 0 ]
+
+  run find_docker_bin
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"docker"* ]]
+  run resolve_docker_on_path
+  [ "${status}" -eq 0 ]
+  run print_docker_install_hints
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"docker-ce"* ]]
 
   run ensure_models_dir "${TEST_TMP_DIR}/models"
   [ "${status}" -eq 0 ]
@@ -76,6 +93,13 @@ teardown() {
   run ensure_models_dir "${ro}/blocked"
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"not writable"* ]]
+  [[ "${output}" == *"manage.sh setup"* ]]
+  export LAB_NO_SUDO=1
+  run prepare_models_dir "${ro}/blocked"
+  [ "${status}" -ne 0 ]
+  run prepare_models_dir "${TEST_TMP_DIR}/prepared_models"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/prepared_models" ]
   chmod 755 "${ro}"
 }
 

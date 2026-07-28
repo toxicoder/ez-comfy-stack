@@ -21,6 +21,8 @@ setup() {
   chmod +x "${MANAGE_SH}"
   # shellcheck disable=SC1090
   source "${MANAGE_SH}"
+  # Re-assert hermetic MODELS_DIR after manage.sh load_dotenv / defaults
+  export MODELS_DIR="${TEST_TMP_DIR}/models"
 }
 
 teardown() {
@@ -31,6 +33,7 @@ teardown() {
   run bash "${MANAGE_SH}" help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"doctor"* ]]
+  [[ "${output}" == *"setup"* ]]
   run bash "${MANAGE_SH}" not-a-command
   [ "${status}" -ne 0 ]
   run bash "${MANAGE_SH}" doctor
@@ -81,8 +84,39 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
-@test "manage cmd_* direct: help doctor status start stop restart logs download cleanup" {
+@test "manage setup creates env and models under LAB_NO_SUDO" {
+  export LAB_NO_SUDO=1
+  export LAB_MOCK_FREE_MEM_GIB=64
+  export LAB_MOCK_DISK_FREE_GIB=100
+  # Hermetic REPO_ROOT is the real repo; use writable MODELS_DIR only
+  export MODELS_DIR="${TEST_TMP_DIR}/setup_models"
+  # Point dotenv at a temp tree that has .env.example only
+  local fake_root
+  fake_root="${TEST_TMP_DIR}/fake_repo"
+  mkdir -p "${fake_root}"
+  cp "${REPO_ROOT}/.env.example" "${fake_root}/.env.example"
+  # cmd_setup uses global REPO_ROOT; override for this test
+  REPO_ROOT="${fake_root}"
+  export REPO_ROOT
+  # lab_compose_file will miss compose — doctor will fail compose check.
+  # Provide minimal compose path structure for doctor.
+  mkdir -p "${fake_root}/docker"
+  echo 'services: {}' >"${fake_root}/docker/docker-compose.yml"
+  # Re-source paths with new REPO_ROOT or rely on REPO_ROOT export in lab_repo_root
+  run cmd_setup
+  [ "${status}" -eq 0 ]
+  [ -f "${fake_root}/.env" ]
+  [ -d "${TEST_TMP_DIR}/setup_models" ]
+  [[ "${output}" == *"Setup OK"* || "${output}" == *"Doctor OK"* ]]
+}
+
+@test "manage cmd_* direct: help setup doctor status start stop restart logs download cleanup" {
   run cmd_help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"setup"* ]]
+  export LAB_NO_SUDO=1
+  export MODELS_DIR="${TEST_TMP_DIR}/models"
+  run cmd_setup
   [ "${status}" -eq 0 ]
   run cmd_doctor
   [ "${status}" -eq 0 ]

@@ -12,7 +12,7 @@
 #   remote-SSH operation.
 #
 # Usage:
-#   ./scripts/manage.sh help|doctor|status|start|stop|restart|logs|download-models|cleanup
+#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models|cleanup
 #   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 #
 # Safety:
@@ -21,7 +21,7 @@
 #   - Host free-memory/disk headroom checks before start
 #   - Model downloads default to bandwidth-limited (download-limit auto @ 85%)
 #   - Always stop before node reboot
-#
+#   - setup may use sudo only to create/chown MODELS_DIR#
 # Environment:
 #   See .env.example — MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
 #   LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, MIN_HOST_FREE_GIB, etc.
@@ -69,6 +69,7 @@ ez-comfy-stack manage — unified Visual Generative AI (Flux → LTX via ComfyUI
 
 Commands:
   help              Show this help
+  setup             Host bootstrap: .env, MODELS_DIR (sudo), docker hints, doctor
   doctor            Preflight: docker, GPU, free RAM/disk, models
   status [--json]   Stack status
   start             Start flux-to-ltx (requires yes)
@@ -81,6 +82,85 @@ Commands:
 
 Environment: see .env.example (MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
+}
+
+#######################################
+# Bootstrap host prerequisites for doctor/download/start.
+# Creates .env from example if missing; prepares MODELS_DIR (sudo mkdir/chown);
+# resolves docker on PATH or prints install hints; soft-checks GPU tooling;
+# then runs doctor.
+# Side effects: May write .env; may sudo for MODELS_DIR; may adjust PATH for docker.
+# Globals:
+#   REPO_ROOT, MODELS_DIR, LAB_NO_SUDO
+# Arguments:
+#   None
+# Outputs:
+#   Status via log/warn/err on stderr
+# Returns:
+#   0 when doctor passes; 1 when host still not ready
+#######################################
+cmd_setup() {
+  log "Host setup / bootstrap"
+  local ok=0
+
+  if [[ ! -f ${REPO_ROOT}/.env ]]; then
+    if [[ -f ${REPO_ROOT}/.env.example ]]; then
+      cp "${REPO_ROOT}/.env.example" "${REPO_ROOT}/.env"
+      log "Created .env from .env.example (set HF_TOKEN if models are gated)"
+    else
+      warn ".env.example missing; skipping .env create"
+    fi
+  else
+    log ".env already present"
+  fi
+  load_dotenv "${REPO_ROOT}"
+  MODELS_DIR=${MODELS_DIR:-/mnt/models}
+  export MODELS_DIR
+
+  log "MODELS_DIR=${MODELS_DIR}"
+  if prepare_models_dir "${MODELS_DIR}"; then
+    log "models dir ready: ${MODELS_DIR}"
+  else
+    ok=1
+  fi
+
+  if resolve_docker_on_path; then
+    log "docker: $(docker --version 2>/dev/null | head -1)"
+    if docker compose version >/dev/null 2>&1; then
+      log "docker compose: ok"
+    else
+      err "docker compose plugin missing — install docker-compose-plugin (not snap)"
+      ok=1
+    fi
+  else
+    print_docker_install_hints
+    if command -v sudo >/dev/null 2>&1 && sudo -n docker --version >/dev/null 2>&1; then
+      warn "sudo docker works — add your user to the docker group and re-login"
+    fi
+    ok=1
+  fi
+
+  if command -v nvidia-smi >/dev/null 2>&1; then
+    log "nvidia-smi: present"
+  else
+    warn "nvidia-smi not found (required on Spark for GPU workloads)"
+  fi
+  if command -v wondershaper >/dev/null 2>&1; then
+    log "wondershaper: present"
+  else
+    warn "wondershaper not found (download-limit will try to install or soft-fail)"
+  fi
+
+  log "Re-running doctor..."
+  if ! cmd_doctor; then
+    ok=1
+  fi
+  if [[ ${ok} -ne 0 ]]; then
+    err "Setup incomplete — fix errors above, then re-run: ./scripts/manage.sh setup"
+    return 1
+  fi
+  log "Setup OK — next: ./scripts/manage.sh download-models"
+  return 0
 }
 
 #######################################
@@ -101,7 +181,7 @@ EOF
 cmd_doctor() {
   log "Doctor / preflight"
   local ok=0
-  if command -v docker >/dev/null 2>&1; then
+  if resolve_docker_on_path; then
     log "docker: $(docker --version 2>/dev/null | head -1)"
     if docker compose version >/dev/null 2>&1; then
       log "docker compose: ok"
@@ -111,10 +191,7 @@ cmd_doctor() {
       ok=1
     fi
   else
-    err "docker missing (not on PATH)"
-    err "  On DGX Spark prefer apt docker-ce (not snap), then:"
-    err "    sudo usermod -aG docker YOUR_USER && newgrp docker"
-    err "  Re-login and re-run doctor. See docs/troubleshooting.md"
+    print_docker_install_hints
     if command -v sudo >/dev/null 2>&1 && sudo -n docker --version >/dev/null 2>&1; then
       warn "sudo docker works — add your user to the docker group and re-login"
     fi
@@ -148,7 +225,7 @@ cmd_doctor() {
     log "compose file: $(lab_compose_file)"
   fi
   if [[ ${ok} -ne 0 ]]; then
-    err "Doctor found problems"
+    err "Doctor found problems — try: ./scripts/manage.sh setup"
     return 1
   fi
   log "Doctor OK"
@@ -176,7 +253,7 @@ cmd_status() {
     return 0
   fi
   log "Stack status (project ez-comfy)"
-  if command -v docker >/dev/null 2>&1; then
+  if resolve_docker_on_path; then
     compose_run ps 2>/dev/null || warn "compose ps failed (stack may be stopped)"
   else
     warn "docker not available"
@@ -343,6 +420,7 @@ main() {
   shift || true
   case "${cmd}" in
     help | -h | --help) cmd_help ;;
+    setup) cmd_setup ;;
     doctor) cmd_doctor ;;
     status) cmd_status "$@" ;;
     start) cmd_start ;;

@@ -84,8 +84,9 @@ die() {
 }
 
 #######################################
-# Source a .env file from a directory if present (best-effort).
-# Enables set -a while sourcing so assignments export automatically.
+# Load a .env file from a directory if present (best-effort).
+# Only assigns keys that are not already set in the environment so operator
+# exports and hermetic tests (e.g. MODELS_DIR) take precedence over .env.
 # Globals:
 #   REPO_ROOT (read, optional default root)
 # Arguments:
@@ -98,13 +99,35 @@ die() {
 load_dotenv() {
   local root="${1:-${REPO_ROOT:-.}}"
   local env_file="${root}/.env"
-  if [[ -f ${env_file} ]]; then
-    # shellcheck disable=SC1090
-    set -a
-    # shellcheck source=/dev/null
-    source "${env_file}"
-    set +a
+  local line key val
+  if [[ ! -f ${env_file} ]]; then
+    return 0
   fi
+  while IFS= read -r line || [[ -n ${line} ]]; do
+    line="${line//$'\r'/}"
+    [[ ${line} =~ ^[[:space:]]*$ ]] && continue
+    [[ ${line} =~ ^[[:space:]]*# ]] && continue
+    if [[ ${line} =~ ^[[:space:]]*export[[:space:]]+(.*)$ ]]; then
+      line="${BASH_REMATCH[1]}"
+    fi
+    [[ ${line} == *"="* ]] || continue
+    key="${line%%=*}"
+    val="${line#*=}"
+    # trim whitespace around key
+    key="${key#"${key%%[![:space:]]*}"}"
+    key="${key%"${key##*[![:space:]]}"}"
+    [[ ${key} =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || continue
+    # Do not clobber variables already present in the environment
+    if [[ -n ${!key+x} ]]; then
+      continue
+    fi
+    if [[ ${val} =~ ^\"(.*)\"$ ]]; then
+      val="${BASH_REMATCH[1]}"
+    elif [[ ${val} =~ ^\'(.*)\'$ ]]; then
+      val="${BASH_REMATCH[1]}"
+    fi
+    export "${key}=${val}"
+  done <"${env_file}"
 }
 
 #######################################
@@ -126,6 +149,79 @@ require_cmd() {
 }
 
 #######################################
+# Locate a docker client binary (PATH first, then common absolute paths).
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Absolute or PATH-resolved docker path on stdout when found
+# Returns:
+#   0 when found; 1 when missing
+#######################################
+find_docker_bin() {
+  local candidate
+  if candidate=$(command -v docker 2>/dev/null); then
+    echo "${candidate}"
+    return 0
+  fi
+  for candidate in /usr/bin/docker /usr/local/bin/docker; do
+    if [[ -x ${candidate} ]]; then
+      echo "${candidate}"
+      return 0
+    fi
+  done
+  return 1
+}
+
+#######################################
+# Ensure docker is available as the bare command "docker" on PATH.
+# If only an absolute path exists, prepends its directory to PATH.
+# Globals:
+#   PATH (may be modified)
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 when docker is invocable; 1 otherwise
+#######################################
+resolve_docker_on_path() {
+  local bin dir
+  if command -v docker >/dev/null 2>&1; then
+    return 0
+  fi
+  if ! bin=$(find_docker_bin); then
+    return 1
+  fi
+  dir="$(dirname "${bin}")"
+  export PATH="${dir}:${PATH}"
+  command -v docker >/dev/null 2>&1
+}
+
+#######################################
+# Print copy-pasteable Docker CE install + docker group guidance.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Hints on stderr via err
+# Returns:
+#   0
+#######################################
+print_docker_install_hints() {
+  local user
+  user="$(id -un)"
+  err "docker missing — install Docker CE (not snap) on DGX Spark, then re-login:"
+  err "  sudo apt-get update"
+  err "  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin"
+  err "  sudo usermod -aG docker ${user}"
+  err "  newgrp docker   # or disconnect/reconnect SSH"
+  err "Then: ./scripts/manage.sh setup && ./scripts/manage.sh doctor"
+}
+
+#######################################
 # Ensure MODELS_DIR exists and is writable by the current user.
 # Tries mkdir -p as the current user; never uses sudo.
 # Globals:
@@ -139,6 +235,9 @@ require_cmd() {
 #######################################
 ensure_models_dir() {
   local dir="${1:-${MODELS_DIR:-/mnt/models}}"
+  local user group
+  user="$(id -un)"
+  group="$(id -gn)"
   if [[ ! -d ${dir} ]]; then
     mkdir -p "${dir}" 2>/dev/null || true
   fi
@@ -146,7 +245,42 @@ ensure_models_dir() {
     return 0
   fi
   err "MODELS_DIR=${dir} is not writable."
-  err "  sudo mkdir -p '${dir}' && sudo chown YOUR_USER:YOUR_USER '${dir}'"
+  err "  ./scripts/manage.sh setup"
+  err "  # or: sudo mkdir -p '${dir}' && sudo chown ${user}:${group} '${dir}'"
   err "or set MODELS_DIR to a path you own in .env (e.g. ~/models)."
   return 1
+}
+
+#######################################
+# Create MODELS_DIR with sudo and chown to the current user when needed.
+# Skips sudo when LAB_NO_SUDO=1 (tests / restricted environments).
+# Globals:
+#   LAB_NO_SUDO, MODELS_DIR
+# Arguments:
+#   $1 - Directory path (default MODELS_DIR or /mnt/models)
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 when writable afterward; 1 on failure
+#######################################
+prepare_models_dir() {
+  local dir="${1:-${MODELS_DIR:-/mnt/models}}"
+  if ensure_models_dir "${dir}" 2>/dev/null; then
+    return 0
+  fi
+  # ensure_models_dir already printed errors; clear intent for setup path
+  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
+    err "MODELS_DIR=${dir} not writable and LAB_NO_SUDO=1 (cannot sudo)"
+    return 1
+  fi
+  log "Creating MODELS_DIR with sudo: ${dir}"
+  if ! sudo mkdir -p "${dir}"; then
+    err "sudo mkdir -p '${dir}' failed"
+    return 1
+  fi
+  if ! sudo chown "$(id -u):$(id -g)" "${dir}"; then
+    err "sudo chown failed for '${dir}'"
+    return 1
+  fi
+  ensure_models_dir "${dir}"
 }

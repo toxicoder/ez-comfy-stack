@@ -77,7 +77,10 @@ compose_run() {
 #   0 when both work; otherwise dies (exit 1).
 #######################################
 require_docker() {
-  require_cmd docker
+  if ! resolve_docker_on_path; then
+    print_docker_install_hints
+    die "Required command not found: docker"
+  fi
   if ! docker compose version >/dev/null 2>&1; then
     die "docker compose plugin is required"
   fi

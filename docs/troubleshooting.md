@@ -18,8 +18,8 @@ tags: [troubleshooting, comfyui, docker]
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
-| `docker missing` in doctor | Docker not on PATH / removed / snap-only | Prefer apt `docker-ce` + Compose v2 (not snap); `sudo usermod -aG docker $USER` and re-login; re-run doctor |
-| `MODELS_DIR … not writable` | `/mnt/models` missing or root-owned | `sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models` **or** set `MODELS_DIR=$HOME/models` in `.env` |
+| `docker missing` in doctor | Docker not on PATH / removed / snap-only | `./scripts/manage.sh setup`; install apt `docker-ce` + Compose v2 (not snap); `sudo usermod -aG docker $USER` and re-login |
+| `MODELS_DIR … not writable` | `/mnt/models` missing or root-owned | `./scripts/manage.sh setup` **or** `sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models` **or** `MODELS_DIR=$HOME/models` |
 | wondershaper `qdisc kind is unknown` / `Illegal rate` | HTB modules missing or illegal rate | Doctor/download soft-continues unthrottled with a warn; install/load `sch_htb`; `download-limit clear`; optional `DOWNLOAD_LIMIT=off` if you accept SSH risk |
 | SSH freezes during download | Full-rate HF pull (limit off or soft-fail) | Prefer working `download-limit`; lower fixed Mbps; `download-limit clear` if half-applied |
 | Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
@@ -61,15 +61,26 @@ flowchart TB
 Docker is usually pre-installed on DGX Spark, but updates or OS reimages can remove it. Prefer **apt Docker CE** (not snap) so the NVIDIA Container Toolkit can attach GPUs.
 
 ```bash
-command -v docker || sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+./scripts/manage.sh setup
+# if still missing docker:
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 sudo usermod -aG docker "$USER"
 # re-login or: newgrp docker
+./scripts/manage.sh setup
 ./scripts/manage.sh doctor
 ```
 
 ## MODELS_DIR permission denied
 
-Default cache is `/mnt/models` (shared with nvidia-dgx-spark-lab). If create fails:
+Default cache is `/mnt/models` (shared with nvidia-dgx-spark-lab). Prefer bootstrap:
+
+```bash
+./scripts/manage.sh setup
+# creates/chowns MODELS_DIR with sudo when needed
+```
+
+Manual equivalent:
 
 ```bash
 sudo mkdir -p /mnt/models
