@@ -828,15 +828,24 @@ hf_download() {
     return 0
   fi
 
-  # Non-interactive: avoid hub self-update / TTY prompts during automation
+  # Non-interactive hub updates, but keep progress bars when on a TTY
   export CI="${CI:-1}"
   export HF_HUB_DISABLE_TELEMETRY="${HF_HUB_DISABLE_TELEMETRY:-1}"
+  export PYTHONUNBUFFERED=1
+  export TQDM_MININTERVAL="${TQDM_MININTERVAL:-0.1}"
   if [[ -n ${HF_TOKEN:-} ]]; then
     log "HF_TOKEN is set (using for gated repos)"
   fi
 
   hf_log="$(mktemp)"
   local -a hf_args=("$@")
+  local dest_dir="" prev_a="" a
+  for a in "$@"; do
+    if [[ ${prev_a} == "--local-dir" ]]; then
+      dest_dir="${a}"
+    fi
+    prev_a="${a}"
+  done
   # Gentle mode / operator override: limit parallel HF connections when set
   if [[ -n ${HF_DOWNLOAD_MAX_WORKERS:-} ]]; then
     if command -v hf >/dev/null 2>&1 && hf download --help 2>&1 | grep -q -- '--max-workers'; then
@@ -845,33 +854,75 @@ hf_download() {
     fi
   fi
 
-  # Foreground pipeline so tqdm progress stays visible; pipefail for real hf status.
   # shellcheck disable=SC2329
   _hf_dl_signal() {
+    if [[ -n ${hb_pid:-} ]]; then
+      kill "${hb_pid}" 2>/dev/null || true
+    fi
     rm -f "${hf_log}"
     exit 130
   }
   trap '_hf_dl_signal' INT TERM
+
+  # Heartbeat: prove progress even if hub UI is quiet (large single files)
+  local hb_pid=""
+  if [[ -n ${dest_dir} ]]; then
+    mkdir -p "${dest_dir}" 2>/dev/null || true
+    (
+      local prev=0 cur delta
+      prev=$(du -sk "${dest_dir}" 2>/dev/null | awk '{print $1}') || prev=0
+      while true; do
+        sleep 10
+        cur=$(du -sk "${dest_dir}" 2>/dev/null | awk '{print $1}') || cur=0
+        delta=$((cur - prev))
+        prev=${cur}
+        # KiB → MiB rough
+        log "download progress: ${dest_dir} ≈ $((cur / 1024)) MiB (+$((delta / 1024)) MiB / 10s)"
+      done
+    ) &
+    hb_pid=$!
+  fi
+
   if command -v hf >/dev/null 2>&1; then
     set +e
-    set -o pipefail
-    hf download "${hf_args[@]}" 2>&1 | tee "${hf_log}"
-    rc=${PIPESTATUS[0]}
-    set +o pipefail
+    if [[ -t 2 ]]; then
+      # Keep real TTY on stderr so tqdm shows live bars; still capture for errors
+      # shellcheck disable=SC2094
+      hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
+      rc=$?
+    else
+      set -o pipefail
+      hf download "${hf_args[@]}" 2>&1 | tee "${hf_log}"
+      rc=${PIPESTATUS[0]}
+      set +o pipefail
+    fi
     set -e
   elif command -v huggingface-cli >/dev/null 2>&1; then
     warn "Using deprecated huggingface-cli; install modern hf: pipx install huggingface_hub"
     set +e
-    set -o pipefail
-    huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
-    rc=${PIPESTATUS[0]}
-    set +o pipefail
+    if [[ -t 2 ]]; then
+      huggingface-cli download "$@" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
+      rc=$?
+    else
+      set -o pipefail
+      huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
+      rc=${PIPESTATUS[0]}
+      set +o pipefail
+    fi
     set -e
   else
+    if [[ -n ${hb_pid} ]]; then
+      kill "${hb_pid}" 2>/dev/null || true
+      wait "${hb_pid}" 2>/dev/null || true
+    fi
     trap - INT TERM
     rm -f "${hf_log}"
     err "No hf or huggingface-cli on PATH"
     return 1
+  fi
+  if [[ -n ${hb_pid} ]]; then
+    kill "${hb_pid}" 2>/dev/null || true
+    wait "${hb_pid}" 2>/dev/null || true
   fi
   trap - INT TERM
 

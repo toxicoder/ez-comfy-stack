@@ -87,7 +87,11 @@ teardown() {
   run gentle_hf_workers_for_mbps 40
   [ "${output}" = "2" ]
   run gentle_hf_workers_for_mbps 10
-  [ "${output}" = "1" ]
+  [ "${output}" = "2" ]
+  HF_DOWNLOAD_MIN_WORKERS=3
+  run gentle_hf_workers_for_mbps 10
+  [ "${output}" = "3" ]
+  unset HF_DOWNLOAD_MIN_WORKERS
   run enable_gentle_download_mode 40 eth0
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"Gentle"* || "${output}" == *"max-workers"* ]]

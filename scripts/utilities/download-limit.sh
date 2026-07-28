@@ -324,15 +324,22 @@ shaping_supported() {
 #######################################
 gentle_hf_workers_for_mbps() {
   local mbps="${1:-50}"
+  local min_w workers
+  # Floor ≥2: short HTTP probes often under-read line rate; workers=1 looks "hung" on multi-GB files
+  min_w="${HF_DOWNLOAD_MIN_WORKERS:-2}"
   if [[ ${mbps} -ge 200 ]]; then
-    echo 4
+    workers=4
   elif [[ ${mbps} -ge 80 ]]; then
-    echo 3
+    workers=3
   elif [[ ${mbps} -ge 30 ]]; then
-    echo 2
+    workers=2
   else
-    echo 1
+    workers=${min_w}
   fi
+  if [[ ${workers} -lt ${min_w} ]]; then
+    workers=${min_w}
+  fi
+  echo "${workers}"
 }
 
 #######################################

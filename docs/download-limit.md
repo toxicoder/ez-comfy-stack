@@ -99,8 +99,10 @@ Many Spark kernels lack `sch_htb` / IFB (`qdisc kind is unknown`). The tool **de
 | Path | Behavior |
 | --- | --- |
 | HTB available | wondershaper hard Mbps cap at 85% of measured |
-| HTB missing (typical Spark) | **Gentle HF mode**: `HF_DOWNLOAD_MAX_WORKERS` from measured Mbps (1–4), `HF_HUB_ENABLE_HF_TRANSFER=0` — not a hard Mbps cap |
+| HTB missing (typical Spark) | **Gentle HF mode**: `HF_DOWNLOAD_MAX_WORKERS` from measured Mbps (floor **2**–4), `HF_HUB_ENABLE_HF_TRANSFER=0` — not a hard Mbps cap |
 | `DOWNLOAD_LIMIT=off` | Full blast (SSH risk) |
+
+Model downloads keep a **real TTY** for `hf`/`tqdm` progress (no `2>&1 | tee` on interactive sessions). Cache hits still flash `100%` in 0s. Heartbeats every 10s show `du` growth under the target dir if bars are quiet.
 
 ## Apply verification and soft-fail
 
