@@ -308,8 +308,7 @@ cmd_run() {
       link_into_comfy "$tier"
       ok=$((ok + 1))
     else
-      warn "Download failed for ${repo} (gated license, auth, or network)."
-      warn "  Accept the model license on Hugging Face and set HF_TOKEN in .env, or: hf auth login"
+      warn "Skipping remaining setup for ${repo} (see short error above)."
       fail=$((fail + 1))
     fi
   done

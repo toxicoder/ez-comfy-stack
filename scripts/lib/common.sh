@@ -573,21 +573,96 @@ check_hf_cli() {
 }
 
 #######################################
+# Print plain-language guidance for a failed Hugging Face download.
+# Suppresses stack-trace noise unless LAB_DEBUG or HF_DOWNLOAD_DEBUG is set.
+# Globals:
+#   LAB_DEBUG, HF_DOWNLOAD_DEBUG
+# Arguments:
+#   $1 - Path to a log file, or raw error text
+#   $2 - Optional repo id (org/name)
+# Outputs:
+#   Short err/warn lines on stderr
+# Returns:
+#   0 always
+#######################################
+explain_hf_download_error() {
+  local source="${1:-}"
+  local repo="${2:-}"
+  local text="" extracted
+  if [[ -n ${source} && -f ${source} ]]; then
+    text="$(cat "${source}" 2>/dev/null || true)"
+  else
+    text="${source}"
+  fi
+  if [[ -z ${repo} ]]; then
+    extracted="$(printf '%s\n' "${text}" |
+      sed -n 's|.*huggingface\.co/\([A-Za-z0-9_.-]\+/[A-Za-z0-9_.-]\+\).*|\1|p' |
+      head -1)"
+    if [[ -n ${extracted} ]]; then
+      repo="${extracted}"
+    fi
+  fi
+  if [[ -z ${repo} ]]; then
+    repo="(unknown repo)"
+  fi
+
+  if [[ ${text} =~ GatedRepoError|not\ in\ the\ authorized\ list|restricted\ and\ you\ are\ not|Cannot\ access\ gated\ repo ]]; then
+    err "Hugging Face gated model — access not granted for: ${repo}"
+    err "  1. Open https://huggingface.co/${repo}"
+    err "  2. Log in as the SAME account that owns HF_TOKEN and click Agree / accept the license"
+    err "  3. Token needs gated-repo read: https://huggingface.co/settings/tokens"
+    err "  4. Check identity: hf auth whoami"
+    err "  5. Re-run download after access is approved"
+  elif [[ ${text} =~ Invalid\ user\ token|401\ Unauthorized|401\ Client\ Error|Unauthorized ]]; then
+    err "Hugging Face auth failed for: ${repo}"
+    err "  Set a valid token in .env (HF_TOKEN=hf_...) or run: hf auth login"
+    err "  Create tokens at: https://huggingface.co/settings/tokens"
+  elif [[ ${text} =~ 429|rate\ limit|Rate\ limit ]]; then
+    err "Hugging Face rate limit while downloading: ${repo}"
+    err "  Wait a few minutes and re-run download-models"
+  elif [[ ${text} =~ Could\ not\ connect|Name\ or\ service\ not\ known|Network\ is\ unreachable|Temporary\ failure\ in\ name\ resolution|Connection\ refused ]]; then
+    err "Network error while downloading: ${repo}"
+    err "  Check internet/DNS on this host and retry"
+  elif [[ ${text} =~ 403|Forbidden ]]; then
+    err "Hugging Face access denied (403) for: ${repo}"
+    err "  Accept the model license on the repo page and ensure HF_TOKEN has read access"
+    err "  https://huggingface.co/${repo}"
+  else
+    err "Hugging Face download failed for: ${repo}"
+    err "  Re-run with LAB_DEBUG=1 for the raw CLI log"
+  fi
+
+  if [[ ${LAB_DEBUG:-} == "1" || ${HF_DOWNLOAD_DEBUG:-} == "1" ]]; then
+    warn "--- raw hf download log (last 40 lines) ---"
+    if [[ -n ${source} && -f ${source} ]]; then
+      tail -n 40 "${source}" >&2 || true
+    else
+      printf '%s\n' "${text}" | tail -n 40 >&2 || true
+    fi
+    warn "--- end raw log ---"
+  fi
+}
+
+#######################################
 # Download a Hugging Face repo snapshot into --local-dir (or mock in tests).
 # Prefers `hf download` over deprecated `huggingface-cli download` (the latter
 # is a non-working stub on recent huggingface_hub installs and may prompt).
+# On failure, prints plain-language guidance (not a full Python traceback)
+# unless LAB_DEBUG=1 / HF_DOWNLOAD_DEBUG=1.
 # Globals:
-#   LAB_MOCK_HF_DOWNLOAD, HF_TOKEN (read by hub), HF_HOME (caller may set)
+#   LAB_MOCK_HF_DOWNLOAD, HF_TOKEN (read by hub), HF_HOME (caller may set),
+#   LAB_DEBUG, HF_DOWNLOAD_DEBUG, CI, HF_HUB_DISABLE_TELEMETRY
 # Arguments:
 #   $@ - Passed to `hf download` / `huggingface-cli download`
 #        (typically REPO --local-dir PATH)
 # Outputs:
-#   Progress on stderr from the CLI; mock writes .mock marker under local-dir
+#   Progress via tee; friendly errors on failure; mock writes .mock under local-dir
 # Returns:
 #   0 on success; non-zero when the CLI fails
 #######################################
 hf_download() {
-  local dest="" prev="" a
+  local dest="" prev="" a repo="" hf_log rc=0
+  repo="${1:-}"
   if [[ -n ${LAB_MOCK_HF_DOWNLOAD:-} ]]; then
     for a in "$@"; do
       if [[ ${prev} == "--local-dir" ]]; then
@@ -603,6 +678,16 @@ hf_download() {
       err "LAB_MOCK_HF_DOWNLOAD=fail"
       return 1
     fi
+    if [[ ${LAB_MOCK_HF_DOWNLOAD} == "fail-gated" ]]; then
+      explain_hf_download_error \
+        "GatedRepoError: Cannot access gated repo. not in the authorized list. https://huggingface.co/${repo}/resolve/main/x" \
+        "${repo}"
+      return 1
+    fi
+    if [[ ${LAB_MOCK_HF_DOWNLOAD} == "fail-auth" ]]; then
+      explain_hf_download_error "401 Client Error Unauthorized Invalid user token" "${repo}"
+      return 1
+    fi
     mkdir -p "${dest}"
     echo "mock" >"${dest}/.mock"
     return 0
@@ -615,16 +700,32 @@ hf_download() {
     log "HF_TOKEN is set (using for gated repos)"
   fi
 
+  hf_log="$(mktemp)"
+
   if command -v hf >/dev/null 2>&1; then
     # Prefer modern CLI even when huggingface-cli is also on PATH
-    hf download "$@"
-    return $?
-  fi
-  if command -v huggingface-cli >/dev/null 2>&1; then
+    set +e
+    hf download "$@" 2>&1 | tee "${hf_log}"
+    rc=${PIPESTATUS[0]}
+    set -e
+  elif command -v huggingface-cli >/dev/null 2>&1; then
     warn "Using deprecated huggingface-cli; install modern hf: pipx install huggingface_hub"
-    huggingface-cli download "$@"
-    return $?
+    set +e
+    huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
+    rc=${PIPESTATUS[0]}
+    set -e
+  else
+    rm -f "${hf_log}"
+    err "No hf or huggingface-cli on PATH"
+    return 1
   fi
-  err "No hf or huggingface-cli on PATH"
+
+  if [[ ${rc} -eq 0 ]]; then
+    rm -f "${hf_log}"
+    return 0
+  fi
+  # Replace traceback noise with a short checklist
+  explain_hf_download_error "${hf_log}" "${repo}"
+  rm -f "${hf_log}"
   return 1
 }

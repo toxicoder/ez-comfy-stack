@@ -135,6 +135,26 @@ teardown() {
   export LAB_MOCK_HF_DOWNLOAD=fail
   run hf_download "org/m" --local-dir "${TEST_TMP_DIR}/mock_fail"
   [ "${status}" -ne 0 ]
+  export LAB_MOCK_HF_DOWNLOAD=fail-gated
+  run hf_download "black-forest-labs/FLUX.2-klein-9b-nvfp4" --local-dir "${TEST_TMP_DIR}/gated"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"gated"* || "${output}" == *"Gated"* || "${output}" == *"Agree"* ]]
+  [[ "${output}" == *"black-forest-labs/FLUX.2-klein-9b-nvfp4"* ]]
+  [[ "${output}" != *"Traceback"* ]]
+  export LAB_MOCK_HF_DOWNLOAD=fail-auth
+  run hf_download "org/private" --local-dir "${TEST_TMP_DIR}/auth"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"HF_TOKEN"* || "${output}" == *"auth"* || "${output}" == *"token"* ]]
+  run explain_hf_download_error "GatedRepoError not in the authorized list https://huggingface.co/org/model/resolve/x" "org/model"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Agree"* ]]
+  export LAB_DEBUG=1
+  run explain_hf_download_error "some obscure failure line1
+line2
+line3" "org/x"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"raw hf download log"* || "${output}" == *"obscure"* ]]
+  unset LAB_DEBUG
   unset LAB_MOCK_HF_DOWNLOAD
 }
 
