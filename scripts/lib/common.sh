@@ -21,6 +21,51 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+# Used by run_with_signal_forwarding to kill the active child process group.
+_RWSF_CHILD_PID=""
+
+#######################################
+# Run a command in its own process group; forward Ctrl+C/TERM to the whole group.
+# Ensures pipelines and nested bash do not leave orphan download processes.
+# Globals:
+#   _RWSF_CHILD_PID
+# Arguments:
+#   $@ - Command and arguments to run
+# Outputs:
+#   Command's stdout/stderr
+# Returns:
+#   Command exit status; 130 if interrupted by INT/TERM
+#######################################
+run_with_signal_forwarding() {
+  local child rc=0
+  set -m 2>/dev/null || true
+  "$@" &
+  child=$!
+  _RWSF_CHILD_PID="${child}"
+  # shellcheck disable=SC2329
+  _rwsf_handle_signal() {
+    local c="${_RWSF_CHILD_PID:-}"
+    if [[ -n ${c} ]]; then
+      kill -INT -- "-${c}" 2>/dev/null || kill -INT "${c}" 2>/dev/null || true
+      wait "${c}" 2>/dev/null || true
+    fi
+    _RWSF_CHILD_PID=""
+    exit 130
+  }
+  trap '_rwsf_handle_signal' INT TERM
+  set +e
+  wait "${child}"
+  rc=$?
+  set -e
+  trap - INT TERM
+  _RWSF_CHILD_PID=""
+  # 130/143 = interrupted; normalize if wait saw 128+SIGINT
+  if [[ ${rc} -gt 128 ]]; then
+    return 130
+  fi
+  return "${rc}"
+}
+
 #######################################
 # Emit an informational diagnostic to stderr with [ez-comfy] prefix.
 # Globals:
@@ -710,17 +755,34 @@ hf_download() {
     fi
   fi
 
+  # Run in a process group so Ctrl+C kills hf + tee, not just tee
+  set -m 2>/dev/null || true
   if command -v hf >/dev/null 2>&1; then
-    # Prefer modern CLI even when huggingface-cli is also on PATH
     set +e
-    hf download "${hf_args[@]}" 2>&1 | tee "${hf_log}"
-    rc=${PIPESTATUS[0]}
+    (
+      hf download "${hf_args[@]}" 2>&1 | tee "${hf_log}"
+      exit "${PIPESTATUS[0]}"
+    ) &
+    local hpid=$!
+    _RWSF_CHILD_PID="${hpid}"
+    trap 'kill -INT -- "-'"${hpid}"'" 2>/dev/null || kill -INT "'"${hpid}"'" 2>/dev/null; wait "'"${hpid}"'" 2>/dev/null; rm -f "'"${hf_log}"'"; exit 130' INT TERM
+    wait "${hpid}"
+    rc=$?
+    trap - INT TERM
+    _RWSF_CHILD_PID=""
     set -e
   elif command -v huggingface-cli >/dev/null 2>&1; then
     warn "Using deprecated huggingface-cli; install modern hf: pipx install huggingface_hub"
     set +e
-    huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
-    rc=${PIPESTATUS[0]}
+    (
+      huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
+      exit "${PIPESTATUS[0]}"
+    ) &
+    local hpid=$!
+    trap 'kill -INT -- "-'"${hpid}"'" 2>/dev/null || kill -INT "'"${hpid}"'" 2>/dev/null; wait "'"${hpid}"'" 2>/dev/null; rm -f "'"${hf_log}"'"; exit 130' INT TERM
+    wait "${hpid}"
+    rc=$?
+    trap - INT TERM
     set -e
   else
     rm -f "${hf_log}"
@@ -731,6 +793,10 @@ hf_download() {
   if [[ ${rc} -eq 0 ]]; then
     rm -f "${hf_log}"
     return 0
+  fi
+  if [[ ${rc} -eq 130 || ${rc} -gt 128 ]]; then
+    rm -f "${hf_log}"
+    return 130
   fi
   # Replace traceback noise with a short checklist
   explain_hf_download_error "${hf_log}" "${repo}"

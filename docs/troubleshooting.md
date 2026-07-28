@@ -23,7 +23,8 @@ tags: [troubleshooting, comfyui, docker]
 | docker daemon not reachable | dockerd not running | `sudo systemctl start docker` |
 | `MODELS_DIR … not writable` | `/mnt/models` missing or root-owned | `./scripts/manage.sh setup` **or** `sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models` **or** `MODELS_DIR=$HOME/models` |
 | wondershaper `qdisc kind is unknown` / RTNETLINK | No HTB/IFB (common on DGX Spark) | Expected; wrap uses **gentle HF max-workers** from measured speed (HTTP probe). Not a hard Mbps cap. `DOWNLOAD_LIMIT=off` for full blast |
-| Speedtest failed / always 50 Mbps | speedtest-cli missing | Auto now uses **Cloudflare HTTP probe** if CLIs fail; check outbound HTTPS; override `SPEEDTEST_HTTP_URL` |
+| Speedtest failed / always 50 Mbps | speedtest-cli missing | Auto uses **HTTP probe**, then **live RX sample** during download if preflight fails |
+| Ctrl+C does not stop download | Old tee pipeline orphan | Pull latest; wrap/hf use process groups — Ctrl+C should stop `hf` within seconds |
 | SSH freezes during download | Full-rate HF pull (limit off or soft-fail) | Prefer working `download-limit`; lower fixed Mbps; `download-limit clear` if half-applied |
 | Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
 | `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |

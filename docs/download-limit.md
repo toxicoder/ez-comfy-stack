@@ -114,6 +114,27 @@ After wondershaper runs, the utility checks that a shaping qdisc is active (`tc 
 
 **Safety impact:** Gentle mode reduces parallel download stampede but is **not** a kernel Mbps cap. Prefer HTB where available. Clear-on-exit remains mandatory.
 
+## Ctrl+C
+
+Downloads run in a **process group**. Ctrl+C (SIGINT) or SIGTERM:
+
+1. Forwards to `hf` / nested bash (not only `tee`)
+2. Clears wondershaper limits if any
+3. Exits promptly (status 130)
+
+You should not need `kill -9` on leftover download processes after a clean Ctrl+C.
+
+## Live speed when preflight fails
+
+If auto mode cannot measure speed **before** download (no speedtest-cli, HTTP probe fail):
+
+1. Starts the model download immediately  
+2. Samples NIC **RX bytes** for ~15s (`LIVE_SPEED_SAMPLE_SEC`) while downloading  
+3. Sets limit = 85% of live Mbps (kernel HTB if available, else gentle HF workers)  
+4. Without HTB, **restarts once** so worker limits apply (Hugging Face **resumes** partial files)
+
+Mock/tests: `LAB_MOCK_LIVE_RX_MBPS`.
+
 ## Wrap lifecycle
 
 `wrap` always clears on `EXIT` / `INT` / `TERM` so a killed download cannot leave the host permanently throttled.

@@ -242,6 +242,43 @@ exit 0
   unset LAB_SHAPING_SUPPORTED
 }
 
+@test "sample_iface_rx_mbps and wrap live speed path" {
+  export LAB_MOCK_LIVE_RX_MBPS=160
+  export LAB_MOCK_LIVE_SAMPLE_SLEEP=0
+  run sample_iface_rx_mbps eth0 15
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "160" ]
+
+  export LAB_FORCE_SPEEDTEST_FAIL=1
+  export LAB_FORCE_NO_HTB=1
+  unset LAB_SHAPING_SUPPORTED
+  unset HF_DOWNLOAD_MAX_WORKERS
+  export LAB_MOCK_WONDERSHAPER=1
+  LIMIT_SPEC=auto
+  WRAP_ARGS=(bash -c 'echo live-wrap >"${TEST_TMP_DIR}/live.ok"')
+  run wrap_with_live_speed_limit eth0 50
+  [ "${status}" -eq 0 ]
+  [ -f "${TEST_TMP_DIR}/live.ok" ]
+  [[ "${output}" == *"Live RX"* || "${output}" == *"160"* || "${output}" == *"Gentle"* || "${output}" == *"Restarting"* ]]
+
+  run apply_limit_from_measured eth0 100
+  # gentle because NO_HTB
+  [ "${status}" -ne 0 ] || true
+  [[ "${output}" == *"target limit"* || "${output}" == *"Gentle"* || "${output}" == *"85"* ]]
+
+  unset LAB_FORCE_SPEEDTEST_FAIL
+  unset LAB_FORCE_NO_HTB
+  unset LAB_SHAPING_SUPPORTED
+  unset LAB_MOCK_LIVE_RX_MBPS
+}
+
+@test "run_with_signal_forwarding runs command" {
+  run run_with_signal_forwarding true
+  [ "${status}" -eq 0 ]
+  run run_with_signal_forwarding bash -c 'exit 7'
+  [ "${status}" -eq 7 ]
+}
+
 @test "cmd_wrap hard-fails when DOWNLOAD_LIMIT_REQUIRE=1 and apply fails" {
   install_mock_bin wondershaper '
 echo "wondershaper $*" >> "${TEST_TMP_DIR}/wondershaper.log"

@@ -505,6 +505,9 @@ probe_http_download_mbps() {
 #   0 on success; 1 on failure
 #######################################
 run_speedtest_mbps() {
+  if [[ ${LAB_FORCE_SPEEDTEST_FAIL:-} == "1" ]]; then
+    return 1
+  fi
   if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
     echo "${LAB_MOCK_SPEEDTEST_MBPS}"
     return 0
@@ -666,7 +669,146 @@ cmd_clear() {
 }
 
 #######################################
-# Apply limit, run remaining args, always clear.
+# Sample interface receive rate over a duration → Mbps integer.
+# Globals:
+#   LAB_MOCK_LIVE_RX_MBPS, LAB_MOCK_LIVE_SAMPLE_SLEEP
+# Arguments:
+#   $1  Interface name
+#   $2  Sample duration seconds (default 15)
+# Outputs:
+#   Integer Mbps on stdout
+# Returns:
+#   0 on success; 1 on failure
+#######################################
+sample_iface_rx_mbps() {
+  local iface="${1:-}"
+  local sec="${2:-15}"
+  if [[ -n ${LAB_MOCK_LIVE_RX_MBPS:-} ]]; then
+    sleep "${LAB_MOCK_LIVE_SAMPLE_SLEEP:-0}" 2>/dev/null || true
+    echo "${LAB_MOCK_LIVE_RX_MBPS}"
+    return 0
+  fi
+  if [[ -z ${iface} || ${sec} -lt 1 ]]; then
+    return 1
+  fi
+  local rx_path b1 b2 mbps
+  rx_path="/sys/class/net/${iface}/statistics/rx_bytes"
+  if [[ ! -r ${rx_path} ]]; then
+    return 1
+  fi
+  b1="$(cat "${rx_path}" 2>/dev/null)" || return 1
+  sleep "${sec}"
+  b2="$(cat "${rx_path}" 2>/dev/null)" || return 1
+  if [[ -z ${b1} || -z ${b2} || ${b2} -lt ${b1} ]]; then
+    return 1
+  fi
+  mbps="$(python3 -c "print(max(1, int((${b2} - ${b1}) * 8 / ${sec} / 1e6)))" 2>/dev/null)" || return 1
+  echo "${mbps}"
+  return 0
+}
+
+#######################################
+# Apply kernel limit or gentle HF workers from a measured Mbps value.
+# Globals:
+#   DOWNLOAD_LIMIT_REQUIRE
+# Arguments:
+#   $1  Interface
+#   $2  Measured raw Mbps (before 85% — this function applies auto fraction)
+# Outputs:
+#   Status logs
+# Returns:
+#   0 if kernel limit applied; 1 if gentle mode used instead
+#######################################
+apply_limit_from_measured() {
+  local iface="${1}"
+  local measured="${2}"
+  local target
+  target="$(compute_auto_limit "${measured}")"
+  dl_log "Using measured ≈ ${measured} Mbps → target limit ${target} Mbps (85%)"
+  if shaping_supported && apply_limits "${iface}" "${target}"; then
+    dl_log "Kernel bandwidth limit active (~${target} Mbps down)"
+    return 0
+  fi
+  if [[ ${DOWNLOAD_LIMIT_REQUIRE:-} == "1" ]]; then
+    die "Failed to apply bandwidth limit on ${iface}"
+  fi
+  enable_gentle_download_mode "${target}" "${iface}"
+  return 1
+}
+
+#######################################
+# When preflight speed fails: run download, sample live RX, then apply limit.
+# May restart the download once (HF resume) so gentle workers take effect.
+# Always interruptible via Ctrl+C (kills process group + clear_limits).
+# Globals:
+#   WRAP_ARGS, LIVE_SPEED_SAMPLE_SEC, FALLBACK_MBPS
+# Arguments:
+#   $1  Interface
+#   $2  Fallback Mbps if live sample fails
+# Outputs:
+#   Status logs; download progress
+# Returns:
+#   Download exit status (130 on Ctrl+C)
+#######################################
+wrap_with_live_speed_limit() {
+  local iface="${1}"
+  local fallback_mbps="${2:-50}"
+  local sample_sec child live_mbps rc=0
+  sample_sec="${LIVE_SPEED_SAMPLE_SEC:-15}"
+
+  dl_log "Preflight speed unavailable — sampling live RX for ${sample_sec}s during download"
+  set -m 2>/dev/null || true
+  "${WRAP_ARGS[@]}" &
+  child=$!
+
+  # shellcheck disable=SC2329
+  _wrap_live_on_signal() {
+    kill -INT -- "-${child}" 2>/dev/null || kill -INT "${child}" 2>/dev/null || true
+    wait "${child}" 2>/dev/null || true
+    clear_limits "${iface}"
+    exit 130
+  }
+  trap '_wrap_live_on_signal' INT TERM
+  # Always clear kernel limits on normal exit too
+  # shellcheck disable=SC2064
+  trap 'clear_limits "'"${iface}"'"' EXIT
+
+  if live_mbps=$(sample_iface_rx_mbps "${iface}" "${sample_sec}"); then
+    dl_log "Live RX ≈ ${live_mbps} Mbps on ${iface}"
+    if apply_limit_from_measured "${iface}" "${live_mbps}"; then
+      # Kernel limit applied mid-flight — let download finish
+      set +e
+      wait "${child}"
+      rc=$?
+      set -e
+      trap - INT TERM
+      return "${rc}"
+    fi
+    # Gentle mode: restart once so HF_DOWNLOAD_MAX_WORKERS applies (resume-safe)
+    dl_log "Restarting download once with gentle workers (HF cache resumes partial files)"
+    kill -INT -- "-${child}" 2>/dev/null || kill -INT "${child}" 2>/dev/null || true
+    wait "${child}" 2>/dev/null || true
+    trap - INT TERM
+    # shellcheck disable=SC2064
+    trap 'clear_limits "'"${iface}"'"' EXIT
+    run_with_signal_forwarding "${WRAP_ARGS[@]}"
+    return $?
+  fi
+
+  dl_warn "Live RX sample failed; fallback gentle mode at ${fallback_mbps} Mbps"
+  enable_gentle_download_mode "${fallback_mbps}" "${iface}"
+  kill -INT -- "-${child}" 2>/dev/null || kill -INT "${child}" 2>/dev/null || true
+  wait "${child}" 2>/dev/null || true
+  trap - INT TERM
+  # shellcheck disable=SC2064
+  trap 'clear_limits "'"${iface}"'"' EXIT
+  run_with_signal_forwarding "${WRAP_ARGS[@]}"
+  return $?
+}
+
+#######################################
+# Apply limit, run remaining args, always clear on exit; Ctrl+C kills children.
+# If auto preflight speed fails, samples live RX during download then limits.
 # Globals:
 #   See file header / caller environment.
 # Arguments:
@@ -674,28 +816,49 @@ cmd_clear() {
 # Outputs:
 #   Status via log/warn/err on stderr unless noted.
 # Returns:
-#   Exit status depends on command path; see implementation.
+#   Exit status of wrapped command (130 on Ctrl+C)
 #######################################
 cmd_wrap() {
-  local mbps iface
+  local mbps iface measured preflight_ok=0
   [[ -n ${LIMIT_SPEC} ]] || die "wrap requires --limit auto|N"
   [[ ${#WRAP_ARGS[@]} -gt 0 ]] || die "wrap requires a command after --"
-  mbps=$(resolve_limit_mbps "${LIMIT_SPEC}")
   iface=$(get_active_interface)
   [[ -n ${iface} ]] || die "Could not detect network interface"
+
+  if [[ ${LIMIT_SPEC} == "auto" ]]; then
+    if measured=$(run_speedtest_mbps 2>/dev/null); then
+      mbps=$(compute_auto_limit "${measured}")
+      preflight_ok=1
+      dl_log "Preflight download ≈ ${measured} Mbps → auto limit ${mbps} Mbps (85%)"
+    else
+      preflight_ok=0
+      mbps="${FALLBACK_MBPS}"
+      dl_warn "Preflight speed measure failed; will sample live RX during model download"
+    fi
+  else
+    mbps=$(resolve_limit_mbps "${LIMIT_SPEC}")
+    preflight_ok=1
+  fi
+
   # shellcheck disable=SC2064
-  trap 'clear_limits "'"${iface}"'"' EXIT INT TERM HUP
+  trap 'clear_limits "'"${iface}"'"' EXIT
+
+  if [[ ${preflight_ok} -eq 0 ]]; then
+    wrap_with_live_speed_limit "${iface}" "${mbps}"
+    return $?
+  fi
+
   if shaping_supported && apply_limits "${iface}" "${mbps}"; then
     dl_log "Kernel bandwidth limit active (~${mbps} Mbps down)"
   else
     if [[ ${DOWNLOAD_LIMIT_REQUIRE:-} == "1" ]]; then
       die "Failed to apply bandwidth limit on ${iface} (set DOWNLOAD_LIMIT=off to skip, or fix wondershaper/qdisc)"
     fi
-    # Clear-on-exit still registered. Soft path: gentle HF workers, not a hard Mbps cap.
     enable_gentle_download_mode "${mbps}" "${iface}"
   fi
   dl_log "Running: ${WRAP_ARGS[*]}"
-  "${WRAP_ARGS[@]}"
+  run_with_signal_forwarding "${WRAP_ARGS[@]}"
+  return $?
 }
 
 #######################################
