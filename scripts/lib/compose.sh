@@ -374,12 +374,12 @@ stack_start() {
   local up_args=(up -d)
   if [[ ${LAB_STACK_FORCE_BUILD:-0} == "1" ]]; then
     log "LAB_STACK_FORCE_BUILD=1 — compose up --build (may take a long time)"
-    up_args+=( --build)
+    up_args+=(--build)
   elif stack_pull_image "${EZ_COMFY_IMAGE}"; then
     log "Using pulled image (compose up without rebuild)"
   else
     log "Building image locally (Dockerfile prebuild installs torch — can take 30+ min)…"
-    up_args+=( --build)
+    up_args+=(--build)
   fi
 
   if ! compose_run "${up_args[@]}"; then
