@@ -119,6 +119,8 @@ teardown() {
   run mark_shaping_unsupported "unit-test"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"Disabling kernel shaping"* ]]
+  # Direct call so exported cache persists in this shell
+  mark_shaping_unsupported "unit-test-direct"
   [ "${LAB_SHAPING_SUPPORTED}" = "0" ]
   run shaping_supported
   [ "${status}" -ne 0 ]
