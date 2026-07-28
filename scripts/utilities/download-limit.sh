@@ -7,8 +7,10 @@
 # Purpose:
 #   Apply kernel traffic shaping via wondershaper on the default-route interface.
 #   Supports fixed Mbps caps and an **auto** mode that runs a speedtest and applies
-#   floor(0.85 × measured_download_mbps). The wrap subcommand always clears limits
-#   on EXIT/INT/TERM so a killed download cannot leave the host permanently throttled.
+#   floor(0.85 × measured_download_mbps). Apply is verified via tc qdisc (or mocks).
+#   The wrap subcommand always clears limits on EXIT/INT/TERM so a killed download
+#   cannot leave the host permanently throttled. If apply fails, wrap soft-fails
+#   (warn + continue unthrottled) unless DOWNLOAD_LIMIT_REQUIRE=1.
 #
 # Audience:
 #   Operators on remotely managed DGX Spark nodes; also invoked by manage.sh
@@ -23,16 +25,20 @@
 # Requirements:
 #   - sudo (unless LAB_NO_SUDO=1 for mocks)
 #   - wondershaper (best-effort auto-install on apt/dnf/pacman)
+#   - HTB/sch_* kernel modules for real shaping
 #   - speedtest-cli or Ookla speedtest for auto mode (optional with fallback)
 #
 # Test hooks:
-#   LAB_MOCK_IFACE, LAB_MOCK_WONDERSHAPER, LAB_MOCK_SPEEDTEST_MBPS, LAB_NO_SUDO
+#   LAB_MOCK_IFACE, LAB_MOCK_WONDERSHAPER, LAB_MOCK_SPEEDTEST_MBPS,
+#   LAB_MOCK_LIMITS_ACTIVE, LAB_NO_SUDO, DOWNLOAD_LIMIT_REQUIRE
 #
 # Units:
 #   Limits are megabits per second (Mbps), not MB/s. 40 Mbps ≈ 5 MB/s.
+#   Wondershaper rates are clamped to a legal HTB kbps range.
 #
 # Exit codes:
-#   0 success; 1 invalid args, missing interface, or apply failure.
+#   0 success (or wrap soft-fail with command success); 1 invalid args,
+#   missing interface, or hard apply failure (run / REQUIRE wrap).
 #
 # @command download-limit
 
@@ -47,7 +53,12 @@ source "${REPO_ROOT}/scripts/lib/common.sh"
 
 readonly AUTO_FRACTION="0.85"
 readonly BANDWIDTH_UNIT_MULTIPLIER=1000
-readonly DEFAULT_UPLOAD_MBPS=100000
+# High-but-legal "uncapped" upload for HTB (Mbps → ×1000 = kbps for wondershaper).
+# Values near 100000 Mbps produce Illegal "rate" on common kernels.
+readonly DEFAULT_UPLOAD_MBPS=10000
+# Clamp wondershaper kbps arguments to a range HTB typically accepts.
+readonly MIN_RATE_KBPS=8
+readonly MAX_RATE_KBPS=10000000
 
 CMD="status"
 LIMIT_SPEC=""
@@ -182,6 +193,88 @@ sudo_wondershaper() {
 }
 
 #######################################
+# Clamp a wondershaper rate (kbps) to MIN_RATE_KBPS..MAX_RATE_KBPS.
+# Globals:
+#   MIN_RATE_KBPS, MAX_RATE_KBPS
+# Arguments:
+#   $1  Rate in kbps (integer)
+# Outputs:
+#   Clamped integer rate on stdout
+# Returns:
+#   0
+#######################################
+clamp_rate_kbps() {
+  local rate="${1}"
+  if [[ ${rate} -lt ${MIN_RATE_KBPS} ]]; then
+    echo "${MIN_RATE_KBPS}"
+    return 0
+  fi
+  if [[ ${rate} -gt ${MAX_RATE_KBPS} ]]; then
+    echo "${MAX_RATE_KBPS}"
+    return 0
+  fi
+  echo "${rate}"
+}
+
+#######################################
+# Best-effort load of kernel qdisc modules used by wondershaper/HTB.
+# Skipped under LAB_MOCK_WONDERSHAPER or LAB_NO_SUDO.
+# Globals:
+#   LAB_MOCK_WONDERSHAPER, LAB_NO_SUDO
+# Arguments:
+#   None
+# Outputs:
+#   None (errors suppressed)
+# Returns:
+#   0 always
+#######################################
+load_shaping_modules() {
+  if [[ ${LAB_MOCK_WONDERSHAPER:-} == "1" || ${LAB_NO_SUDO:-} == "1" ]]; then
+    return 0
+  fi
+  if command -v modprobe >/dev/null 2>&1; then
+    sudo modprobe sch_htb 2>/dev/null || true
+    sudo modprobe sch_ingress 2>/dev/null || true
+    sudo modprobe sch_sfq 2>/dev/null || true
+  fi
+  return 0
+}
+
+#######################################
+# Return 0 when traffic shaping qdiscs appear active on the interface.
+# Under LAB_MOCK_WONDERSHAPER=1, treats limits as active (hermetic tests).
+# Globals:
+#   LAB_MOCK_WONDERSHAPER, LAB_MOCK_LIMITS_ACTIVE
+# Arguments:
+#   $1  Interface name
+# Outputs:
+#   None
+# Returns:
+#   0 if shaping looks active; 1 otherwise
+#######################################
+limits_active() {
+  local iface="${1:-}"
+  if [[ -z ${iface} ]]; then
+    return 1
+  fi
+  if [[ -n ${LAB_MOCK_LIMITS_ACTIVE:-} ]]; then
+    [[ ${LAB_MOCK_LIMITS_ACTIVE} == "1" ]]
+    return $?
+  fi
+  if [[ ${LAB_MOCK_WONDERSHAPER:-} == "1" ]]; then
+    return 0
+  fi
+  local out=""
+  if command -v tc >/dev/null 2>&1; then
+    out=$(tc qdisc show dev "${iface}" 2>/dev/null || true)
+    if [[ ${out} =~ htb|tbf|ingress|sfq ]]; then
+      return 0
+    fi
+  fi
+  return 1
+}
+
+#######################################
 # Clear wondershaper on interface.
 # Globals:
 #   See file header / caller environment.
@@ -209,29 +302,46 @@ clear_limits() {
 }
 
 #######################################
-# Apply download (and optional upload) Mbps caps.
+# Apply download (and optional upload) Mbps caps and verify qdiscs are active.
 # Globals:
 #   See file header / caller environment.
 # Arguments:
 #   $1  Interface
 #   $2  Download Mbps
-#   $3  Upload Mbps (optional; default uncapped)
+#   $3  Upload Mbps (optional; default high legal "uncapped")
 # Outputs:
 #   Status via log/warn/err on stderr unless noted.
 # Returns:
-#   0 on success; non-zero on failure where applicable.
+#   0 when apply succeeds and limits appear active; 1 otherwise
 #######################################
 apply_limits() {
   local iface="${1}"
   local down_mbps="${2}"
   local up_mbps="${3:-$DEFAULT_UPLOAD_MBPS}"
-  local down_kbps up_kbps
-  down_kbps=$((down_mbps * BANDWIDTH_UNIT_MULTIPLIER))
-  up_kbps=$((up_mbps * BANDWIDTH_UNIT_MULTIPLIER))
+  local down_kbps up_kbps ws_out
+  down_kbps=$(clamp_rate_kbps $((down_mbps * BANDWIDTH_UNIT_MULTIPLIER)))
+  up_kbps=$(clamp_rate_kbps $((up_mbps * BANDWIDTH_UNIT_MULTIPLIER)))
   ensure_wondershaper || return 1
+  load_shaping_modules
   clear_limits "${iface}"
   dl_log "Applying limits on ${iface}: down=${down_mbps} Mbps up=${up_mbps} Mbps"
-  sudo_wondershaper "${iface}" "${down_kbps}" "${up_kbps}"
+  # Capture tc/wondershaper noise; surface a single diagnostic on failure.
+  if ! ws_out=$(sudo_wondershaper "${iface}" "${down_kbps}" "${up_kbps}" 2>&1); then
+    dl_warn "wondershaper apply failed: ${ws_out}"
+    clear_limits "${iface}"
+    return 1
+  fi
+  if [[ -n ${ws_out} ]] && [[ ${ws_out} =~ [Ee]rror|Illegal|unknown ]]; then
+    dl_warn "wondershaper reported errors (exit 0): ${ws_out}"
+    clear_limits "${iface}"
+    return 1
+  fi
+  if ! limits_active "${iface}"; then
+    dl_warn "Bandwidth limit not active on ${iface} after wondershaper (kernel qdisc missing?)"
+    clear_limits "${iface}"
+    return 1
+  fi
+  return 0
 }
 
 #######################################
@@ -365,7 +475,9 @@ cmd_run() {
   mbps=$(resolve_limit_mbps "${LIMIT_SPEC}")
   iface=$(get_active_interface)
   [[ -n ${iface} ]] || die "Could not detect network interface"
-  apply_limits "${iface}" "${mbps}"
+  if ! apply_limits "${iface}" "${mbps}"; then
+    die "Failed to apply bandwidth limit on ${iface} (qdisc/HTB unavailable or rate rejected)"
+  fi
   dl_log "Limit applied. Use: $0 clear   to remove."
 }
 
@@ -406,7 +518,15 @@ cmd_wrap() {
   [[ -n ${iface} ]] || die "Could not detect network interface"
   # shellcheck disable=SC2064
   trap 'clear_limits "'"${iface}"'"' EXIT INT TERM HUP
-  apply_limits "${iface}" "${mbps}"
+  if ! apply_limits "${iface}" "${mbps}"; then
+    if [[ ${DOWNLOAD_LIMIT_REQUIRE:-} == "1" ]]; then
+      die "Failed to apply bandwidth limit on ${iface} (set DOWNLOAD_LIMIT=off to skip, or fix wondershaper/qdisc)"
+    fi
+    # Safety: clear-on-exit still registered. Soft-fail so multi-GB pulls can proceed
+    # when the kernel cannot shape (explicit SSH saturation risk warning).
+    dl_warn "Could not apply bandwidth limit; continuing unthrottled (may freeze remote SSH)"
+    dl_warn "Fix: install wondershaper + HTB (sch_htb), or DOWNLOAD_LIMIT=off / lower fixed Mbps after kernel support"
+  fi
   dl_log "Running: ${WRAP_ARGS[*]}"
   "${WRAP_ARGS[@]}"
 }

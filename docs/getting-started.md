@@ -22,9 +22,10 @@ tags: [getting-started, docker, comfyui]
 ## Prerequisites
 
 - NVIDIA DGX Spark (or compatible GB10 host) with drivers + **NVIDIA Container Toolkit**
-- Docker with Compose v2 plugin
+- Docker with Compose v2 plugin (prefer apt `docker-ce`, not snap; user in `docker` group)
+- Writable shared model cache: default `/mnt/models` (`sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models`) or override `MODELS_DIR` in `.env`
 - `git`, `python3`, `pip` (`huggingface_hub` for downloads)
-- Optional: `wondershaper`, `speedtest-cli` (auto-installed / used by download-limit)
+- Optional: `wondershaper`, `speedtest-cli` (auto-installed / used by download-limit; HTB/`sch_htb` when shaping is desired)
 - Hugging Face account with licenses accepted for FLUX / LTX models; `HF_TOKEN` if gated
 
 ```mermaid
@@ -63,7 +64,7 @@ cp .env.example .env
 ./scripts/manage.sh doctor
 ```
 
-Fix any errors before downloading multi-GB models.
+Fix any errors before downloading multi-GB models. Hard failures include **docker missing**, **docker compose missing**, **host headroom**, and **MODELS_DIR not writable**. See [Troubleshooting](troubleshooting.md) for copy-paste fixes.
 
 ## Download models (shared cache)
 

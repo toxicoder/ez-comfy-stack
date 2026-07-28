@@ -107,10 +107,17 @@ cmd_doctor() {
       log "docker compose: ok"
     else
       err "docker compose plugin missing"
+      err "  Install Compose v2 plugin (docker-compose-plugin) — avoid snap docker for GPU."
       ok=1
     fi
   else
-    err "docker missing"
+    err "docker missing (not on PATH)"
+    err "  On DGX Spark prefer apt docker-ce (not snap), then:"
+    err "    sudo usermod -aG docker YOUR_USER && newgrp docker"
+    err "  Re-login and re-run doctor. See docs/troubleshooting.md"
+    if command -v sudo >/dev/null 2>&1 && sudo -n docker --version >/dev/null 2>&1; then
+      warn "sudo docker works — add your user to the docker group and re-login"
+    fi
     ok=1
   fi
   if command -v nvidia-smi >/dev/null 2>&1; then
@@ -124,10 +131,10 @@ cmd_doctor() {
     ok=1
   fi
   log "MODELS_DIR=${MODELS_DIR}"
-  if [[ -d ${MODELS_DIR} ]]; then
-    log "models dir exists"
+  if ensure_models_dir "${MODELS_DIR}"; then
+    log "models dir exists and is writable"
   else
-    warn "models dir missing (will be created on download/start): ${MODELS_DIR}"
+    ok=1
   fi
   local flux_json ltx_json
   flux_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-flux.sh" status --tier fast --json 2>/dev/null || echo '{}')
@@ -267,6 +274,7 @@ cmd_logs() {
 cmd_download_models() {
   local limit="${DOWNLOAD_LIMIT}"
   local flux_cmd ltx_cmd
+  ensure_models_dir "${MODELS_DIR}" || return 1
   flux_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-flux.sh" run --tier fast)
   ltx_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" run --tier balanced)
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then

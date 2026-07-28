@@ -25,6 +25,22 @@ MODELS_DIR=/mnt/models
 
 Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
+### Permissions
+
+`doctor`, `download-models`, and download utilities require `MODELS_DIR` to be **writable by the current user**. If `/mnt` is root-owned:
+
+```bash
+sudo mkdir -p /mnt/models
+sudo chown "$USER:$USER" /mnt/models
+```
+
+Or point at a home path:
+
+```bash
+# .env
+MODELS_DIR=$HOME/models
+```
+
 ## Layout
 
 ```text

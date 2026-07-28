@@ -152,7 +152,8 @@ stack_start() {
   export COMFY_PORT="${COMFY_PORT:-8188}"
   export MEM_LIMIT="${MEM_LIMIT:-90g}"
   export MEM_RESERVATION="${MEM_RESERVATION:-80g}"
-  mkdir -p "${MODELS_DIR}/comfy" 2>/dev/null || true
+  ensure_models_dir "${MODELS_DIR}" || return 1
+  mkdir -p "${MODELS_DIR}/comfy"
   log "Starting unified flux-to-ltx stack (mem_limit=${MEM_LIMIT})..."
   compose_run up -d --build
   log "Stack starting. UI: http://localhost:${COMFY_PORT}"

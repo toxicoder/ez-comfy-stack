@@ -45,7 +45,7 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
-@test "common: log warn err die load_dotenv require_cmd" {
+@test "common: log warn err die load_dotenv require_cmd ensure_models_dir" {
   run log "hi"
   [ "${status}" -eq 0 ]
   run warn "w"
@@ -63,6 +63,20 @@ teardown() {
   [ "${status}" -eq 0 ]
   run require_cmd definitely-not-a-real-cmd-xyz
   [ "${status}" -ne 0 ]
+
+  run ensure_models_dir "${TEST_TMP_DIR}/models"
+  [ "${status}" -eq 0 ]
+  run ensure_models_dir "${TEST_TMP_DIR}/new_models_tree"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/new_models_tree" ]
+  local ro
+  ro="${TEST_TMP_DIR}/ro_parent"
+  mkdir -p "${ro}"
+  chmod 555 "${ro}"
+  run ensure_models_dir "${ro}/blocked"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  chmod 755 "${ro}"
 }
 
 @test "safety: parse_gib host_free host_disk headroom confirms" {

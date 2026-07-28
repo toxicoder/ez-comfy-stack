@@ -124,3 +124,29 @@ require_cmd() {
     die "Required command not found: ${name}"
   fi
 }
+
+#######################################
+# Ensure MODELS_DIR exists and is writable by the current user.
+# Tries mkdir -p as the current user; never uses sudo.
+# Globals:
+#   MODELS_DIR (read when $1 omitted)
+# Arguments:
+#   $1 - Directory path (default MODELS_DIR or /mnt/models)
+# Outputs:
+#   Actionable error text on stderr when not writable
+# Returns:
+#   0 when the directory exists and is writable; 1 otherwise
+#######################################
+ensure_models_dir() {
+  local dir="${1:-${MODELS_DIR:-/mnt/models}}"
+  if [[ ! -d ${dir} ]]; then
+    mkdir -p "${dir}" 2>/dev/null || true
+  fi
+  if [[ -d ${dir} && -w ${dir} ]]; then
+    return 0
+  fi
+  err "MODELS_DIR=${dir} is not writable."
+  err "  sudo mkdir -p '${dir}' && sudo chown YOUR_USER:YOUR_USER '${dir}'"
+  err "or set MODELS_DIR to a path you own in .env (e.g. ~/models)."
+  return 1
+}

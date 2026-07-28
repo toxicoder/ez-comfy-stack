@@ -35,11 +35,25 @@ teardown() {
   [ "${status}" -ne 0 ]
   run bash "${MANAGE_SH}" doctor
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"writable"* || "${output}" == *"Doctor OK"* ]]
   export LAB_MOCK_FREE_MEM_GIB=4
   run bash "${MANAGE_SH}" doctor
   [ "${status}" -ne 0 ]
   unset LAB_MOCK_FREE_MEM_GIB
   export LAB_MOCK_FREE_MEM_GIB=64
+  # Unwritable MODELS_DIR is a hard doctor failure
+  local ro
+  ro="${TEST_TMP_DIR}/ro_mnt"
+  mkdir -p "${ro}"
+  chmod 555 "${ro}"
+  run bash -c "MODELS_DIR=\"${ro}/models\" LAB_MOCK_FREE_MEM_GIB=64 bash \"${MANAGE_SH}\" doctor"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  # download-models fails early on unwritable MODELS_DIR (parent still 555)
+  run bash -c "MODELS_DIR=\"${ro}/models\" DOWNLOAD_LIMIT=off LAB_MOCK_HF_DOWNLOAD=1 bash \"${MANAGE_SH}\" download-models"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  chmod 755 "${ro}"
   run bash "${MANAGE_SH}" status
   [ "${status}" -eq 0 ]
   run bash "${MANAGE_SH}" status --json

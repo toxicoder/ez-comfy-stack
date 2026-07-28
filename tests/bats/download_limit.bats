@@ -61,6 +61,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   run clear_limits eth0
   [ "${status}" -eq 0 ]
+  run load_shaping_modules
+  [ "${status}" -eq 0 ]
   run apply_limits eth0 40
   [ "${status}" -eq 0 ]
 
@@ -76,6 +78,56 @@ teardown() {
   [[ "${output}" == *"50"* ]]
   run resolve_limit_mbps bad
   [ "${status}" -ne 0 ]
+}
+
+@test "clamp_rate_kbps clamps min max and passthrough" {
+  run clamp_rate_kbps 4
+  [ "${output}" = "8" ]
+  run clamp_rate_kbps 100000000
+  [ "${output}" = "10000000" ]
+  run clamp_rate_kbps 50000
+  [ "${output}" = "50000" ]
+}
+
+@test "limits_active respects LAB_MOCK_LIMITS_ACTIVE and mock wondershaper" {
+  export LAB_MOCK_LIMITS_ACTIVE=0
+  run limits_active eth0
+  [ "${status}" -ne 0 ]
+  export LAB_MOCK_LIMITS_ACTIVE=1
+  run limits_active eth0
+  [ "${status}" -eq 0 ]
+  unset LAB_MOCK_LIMITS_ACTIVE
+  export LAB_MOCK_WONDERSHAPER=1
+  run limits_active eth0
+  [ "${status}" -eq 0 ]
+  run limits_active ""
+  [ "${status}" -ne 0 ]
+}
+
+@test "apply_limits fails when wondershaper prints Illegal rate" {
+  install_mock_bin wondershaper '
+echo "wondershaper $*" >> "${TEST_TMP_DIR}/wondershaper.log"
+if [[ "$*" == clear* ]]; then exit 0; fi
+echo "Error: Specified qdisc kind is unknown."
+echo "Illegal \"rate\""
+exit 0
+'
+  unset LAB_MOCK_LIMITS_ACTIVE
+  # Force real verification path off mock-always-active when output has errors
+  export LAB_MOCK_WONDERSHAPER=1
+  run apply_limits eth0 50
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"Illegal"* || "${output}" == *"wondershaper reported"* || "${output}" == *"Error"* ]]
+}
+
+@test "apply_limits fails when limits_active is false after apply" {
+  install_wondershaper_mock
+  export LAB_MOCK_WONDERSHAPER=1
+  export LAB_MOCK_LIMITS_ACTIVE=0
+  run apply_limits eth0 50
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not active"* || "${output}" == *"Bandwidth limit"* ]]
+  unset LAB_MOCK_LIMITS_ACTIVE
 }
 
 @test "download-limit parse_args cmd_status cmd_run cmd_clear cmd_wrap" {
@@ -109,4 +161,51 @@ teardown() {
   rm -f "${TEST_TMP_DIR}/bin/speedtest-cli"
   run bash "${DLS}" run --limit auto --fallback 33
   [ "${status}" -eq 0 ]
+}
+
+@test "cmd_wrap soft-fails and still runs command when apply fails" {
+  install_mock_bin wondershaper '
+echo "wondershaper $*" >> "${TEST_TMP_DIR}/wondershaper.log"
+if [[ "$*" == clear* ]]; then exit 0; fi
+echo "Error: Specified qdisc kind is unknown."
+exit 0
+'
+  export LAB_MOCK_WONDERSHAPER=1
+  unset DOWNLOAD_LIMIT_REQUIRE
+  LIMIT_SPEC=50
+  WRAP_ARGS=(bash -c 'echo wrap-ran >"${TEST_TMP_DIR}/wrap.ok"')
+  run cmd_wrap
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"unthrottled"* || "${output}" == *"Could not apply"* ]]
+  [ -f "${TEST_TMP_DIR}/wrap.ok" ]
+  grep -q clear "${TEST_TMP_DIR}/wondershaper.log"
+}
+
+@test "cmd_wrap hard-fails when DOWNLOAD_LIMIT_REQUIRE=1 and apply fails" {
+  install_mock_bin wondershaper '
+echo "wondershaper $*" >> "${TEST_TMP_DIR}/wondershaper.log"
+if [[ "$*" == clear* ]]; then exit 0; fi
+echo "Error: Specified qdisc kind is unknown."
+exit 0
+'
+  export LAB_MOCK_WONDERSHAPER=1
+  export DOWNLOAD_LIMIT_REQUIRE=1
+  LIMIT_SPEC=50
+  WRAP_ARGS=(true)
+  run cmd_wrap
+  [ "${status}" -ne 0 ]
+  unset DOWNLOAD_LIMIT_REQUIRE
+}
+
+@test "cmd_run hard-fails when apply fails" {
+  install_mock_bin wondershaper '
+echo "wondershaper $*" >> "${TEST_TMP_DIR}/wondershaper.log"
+if [[ "$*" == clear* ]]; then exit 0; fi
+echo "Illegal \"rate\""
+exit 0
+'
+  export LAB_MOCK_WONDERSHAPER=1
+  LIMIT_SPEC=50
+  run cmd_run
+  [ "${status}" -ne 0 ]
 }

@@ -342,7 +342,8 @@ cmd_status() {
 #######################################
 cmd_run() {
   check_hf_cli
-  mkdir -p "$MODELS_DIR" "${MODELS_DIR}/comfy/diffusion_models" \
+  ensure_models_dir "${MODELS_DIR}" || exit 1
+  mkdir -p "${MODELS_DIR}/comfy/diffusion_models" \
     "${MODELS_DIR}/comfy/text_encoders" "${MODELS_DIR}/comfy/vae"
   local tier repo
   for tier in $(tiers_to_process); do

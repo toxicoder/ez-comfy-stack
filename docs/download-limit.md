@@ -77,7 +77,24 @@ flowchart TB
   C -->|no / fail| E["DOWNLOAD_LIMIT_FALLBACK<br/>default 50 Mbps"]
   D --> F["wondershaper on default-route iface"]
   E --> F
+  F --> G{"tc qdisc active?"}
+  G -->|yes| OK["limit applied"]
+  G -->|no| Fail["apply fails · clear partial state"]
 ```
+
+Upload is set to a high **legal** “uncapped” rate (clamped for HTB). Extremely large historical defaults (e.g. 100000 Mbps) produced `Illegal "rate"` on some kernels.
+
+## Apply verification and soft-fail
+
+After wondershaper runs, the utility checks that a shaping qdisc is active (`tc qdisc show`, or hermetic mocks). If apply fails:
+
+| Command | Behavior |
+| --- | --- |
+| `run` | **Hard-fail** (operator asked for a standing limit) |
+| `wrap` | **Soft-fail** by default: warn + run command **unthrottled** (SSH risk), still clear on exit |
+| `wrap` + `DOWNLOAD_LIMIT_REQUIRE=1` | **Hard-fail** like `run` |
+
+**Safety impact:** Soft-fail can saturate the WAN when HTB/wondershaper is broken. Prefer fixing qdisc modules (`sch_htb`) or using a lower fixed limit once shaping works. Clear-on-exit remains mandatory.
 
 ## Wrap lifecycle
 
@@ -91,8 +108,15 @@ sequenceDiagram
   participant Cmd as command e.g. download-flux
 
   Op->>W: wrap --limit auto -- command
-  W->>WS: apply limit
-  W->>Cmd: run
+  W->>WS: apply limit + verify qdisc
+  alt apply ok
+    W->>Cmd: run throttled
+  else apply fail and not REQUIRE
+    W-->>Op: warn unthrottled SSH risk
+    W->>Cmd: run unthrottled
+  else apply fail and REQUIRE=1
+    W-->>Op: hard fail
+  end
   alt success
     Cmd-->>W: exit 0
   else kill / fail

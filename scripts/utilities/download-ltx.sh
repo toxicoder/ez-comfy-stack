@@ -308,7 +308,7 @@ cmd_status() {
 #######################################
 cmd_run() {
   check_hf_cli
-  mkdir -p "$MODELS_DIR"
+  ensure_models_dir "${MODELS_DIR}" || exit 1
   local tier repo
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")

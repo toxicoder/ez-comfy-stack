@@ -18,7 +18,10 @@ tags: [troubleshooting, comfyui, docker]
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
-| SSH freezes during download | Full-rate HF pull | Use `download-models` (auto limit) or lower fixed Mbps; `download-limit clear` |
+| `docker missing` in doctor | Docker not on PATH / removed / snap-only | Prefer apt `docker-ce` + Compose v2 (not snap); `sudo usermod -aG docker $USER` and re-login; re-run doctor |
+| `MODELS_DIR … not writable` | `/mnt/models` missing or root-owned | `sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models` **or** set `MODELS_DIR=$HOME/models` in `.env` |
+| wondershaper `qdisc kind is unknown` / `Illegal rate` | HTB modules missing or illegal rate | Doctor/download soft-continues unthrottled with a warn; install/load `sch_htb`; `download-limit clear`; optional `DOWNLOAD_LIMIT=off` if you accept SSH risk |
+| SSH freezes during download | Full-rate HF pull (limit off or soft-fail) | Prefer working `download-limit`; lower fixed Mbps; `download-limit clear` if half-applied |
 | Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
 | `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |
 | Empty models in UI | Downloads not run | `download-flux` / `download-ltx` status; check `MODELS_DIR` mount |
@@ -32,6 +35,9 @@ tags: [troubleshooting, comfyui, docker]
 ```mermaid
 flowchart TB
   Q["What is broken?"]
+  Q --> Docker{"doctor: docker missing?"}
+  Q --> Models{"MODELS_DIR not writable?"}
+  Q --> Qdisc{"wondershaper / qdisc errors?"}
   Q --> SSH{"SSH freezes<br/>or host sluggish?"}
   Q --> Start{"start refused?"}
   Q --> Empty{"Empty models in UI?"}
@@ -39,12 +45,50 @@ flowchart TB
   Q --> Cold{"Cold start forever?"}
   Q --> Limit{"Bandwidth limit stuck?"}
 
+  Docker --> A0["apt docker-ce + compose plugin<br/>docker group · re-login"]
+  Models --> A0b["sudo mkdir/chown /mnt/models<br/>or MODELS_DIR in .env"]
+  Qdisc --> A0c["soft-fail unthrottled warn OK<br/>modprobe sch_htb · clear"]
   SSH -->|during download| A1["download-models / lower Mbps<br/>or download-limit clear"]
   Start --> A2["Free RAM/disk<br/>stop other GPU jobs · doctor"]
   Empty --> A3["download-flux/ltx status<br/>check MODELS_DIR mount"]
   Slow --> A4["Confirm free-memory patch<br/>in logs · restart container"]
   Cold --> A5["Wait 10–30+ min<br/>manage.sh logs · network"]
   Limit --> A6["manage.sh download-limit clear"]
+```
+
+## Docker missing on DGX Spark
+
+Docker is usually pre-installed on DGX Spark, but updates or OS reimages can remove it. Prefer **apt Docker CE** (not snap) so the NVIDIA Container Toolkit can attach GPUs.
+
+```bash
+command -v docker || sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo usermod -aG docker "$USER"
+# re-login or: newgrp docker
+./scripts/manage.sh doctor
+```
+
+## MODELS_DIR permission denied
+
+Default cache is `/mnt/models` (shared with nvidia-dgx-spark-lab). If create fails:
+
+```bash
+sudo mkdir -p /mnt/models
+sudo chown "$USER:$USER" /mnt/models
+# or in .env:
+# MODELS_DIR=$HOME/models
+./scripts/manage.sh doctor
+```
+
+## wondershaper / qdisc failures
+
+`download-models` wraps downloads under wondershaper. If the kernel rejects HTB (`qdisc kind is unknown`) or illegal rates, **wrap soft-fails**: it warns and continues **unthrottled** (SSH risk). Persistent `download-limit run` still hard-fails. Set `DOWNLOAD_LIMIT_REQUIRE=1` to hard-fail wrap too.
+
+```bash
+./scripts/manage.sh download-limit clear
+# optional: sudo modprobe sch_htb sch_ingress sch_sfq
+./scripts/manage.sh download-models
+# or explicitly:
+# DOWNLOAD_LIMIT=off ./scripts/manage.sh download-models
 ```
 
 ## Logs
