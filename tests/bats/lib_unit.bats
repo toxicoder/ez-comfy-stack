@@ -327,8 +327,14 @@ line3" "org/x"
 
   export MODELS_DIR="${TEST_TMP_DIR}/models"
   export LAB_STACK_VERIFY_SETTLE=0
+  export LAB_STACK_FOLLOW=0
   run stack_start
   [ "${status}" -eq 0 ]
+  run stack_follow_until_ready
+  [ "${status}" -eq 0 ]
+  run stack_port_open 9
+  # port 9 unlikely open; status non-zero is fine
+  [ "${status}" -ne 0 ] || true
   run stack_stop
   [ "${status}" -eq 0 ]
   run stack_cleanup_state

@@ -66,6 +66,9 @@ setup_repo_env() {
   export MIN_HOST_FREE_GIB=28
   export MIN_DISK_FREE_GIB=40
   export MEM_LIMIT=90g
+  # Do not stream compose logs or wait for UI port in hermetic tests
+  export LAB_STACK_FOLLOW=0
+  export LAB_STACK_VERIFY_SETTLE=0
 }
 
 #######################################

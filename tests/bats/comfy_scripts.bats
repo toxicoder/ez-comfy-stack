@@ -34,6 +34,16 @@ teardown() {
   run warn "careful"
   [ "${status}" -eq 0 ]
 
+  INSTALL_T0="$(date +%s)"
+  run install_elapsed_s
+  [ "${status}" -eq 0 ]
+  run install_format_elapsed 90
+  [ "${output}" = "1:30" ]
+  run step 1 11 "Clone ComfyUI"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"step 1/11"* ]]
+  [[ "${output}" == *"Clone ComfyUI"* ]]
+
   mkdir -p "${COMFY_HOME}/models"
   run link_models diffusion_models
   [ "${status}" -eq 0 ]
@@ -49,8 +59,10 @@ teardown() {
   export CUSTOM="${TEST_TMP_DIR}/custom_nodes"
   mkdir -p "${CUSTOM}"
   install_mock_bin git 'echo "git $*"; exit 1'
+  install_mock_bin pip 'echo "pip $*"; exit 0'
   run clone_node "https://example.com/node.git" "DemoNode"
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"custom node"* ]]
 }
 
 @test "main with mocked install and NO_EXEC" {

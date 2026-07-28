@@ -286,6 +286,10 @@ cmd_status() {
     compose_run ps -a 2>/dev/null || warn "compose ps failed (stack may be stopped)"
     if ! compose_is_running; then
       warn "comfyui is not running. Logs: ./scripts/manage.sh logs --tail 100"
+    elif ! stack_port_open "${COMFY_PORT:-8188}"; then
+      warn "container running but :${COMFY_PORT:-8188} not open yet (cold install?). ./scripts/manage.sh logs"
+    else
+      log "ComfyUI port open — http://localhost:${COMFY_PORT:-8188}"
     fi
   else
     warn "docker not available"

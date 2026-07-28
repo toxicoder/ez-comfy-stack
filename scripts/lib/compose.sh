@@ -172,6 +172,126 @@ stack_verify_running() {
 }
 
 #######################################
+# True if ComfyUI port accepts TCP connections on localhost.
+# Globals:
+#   COMFY_PORT
+# Arguments:
+#   $1  Optional port (default COMFY_PORT or 8188)
+# Outputs:
+#   None
+# Returns:
+#   0 if open; 1 otherwise
+#######################################
+stack_port_open() {
+  local port="${1:-${COMFY_PORT:-8188}}"
+  if command -v curl >/dev/null 2>&1; then
+    curl -sf -o /dev/null --connect-timeout 1 "http://127.0.0.1:${port}/" 2>/dev/null && return 0
+    # Comfy may not answer HTTP until fully up; TCP is enough
+  fi
+  if command -v nc >/dev/null 2>&1; then
+    nc -z -w 1 127.0.0.1 "${port}" 2>/dev/null && return 0
+  fi
+  # Bash /dev/tcp fallback
+  (echo >/dev/tcp/127.0.0.1/"${port}") >/dev/null 2>&1 && return 0
+  return 1
+}
+
+#######################################
+# Stream compose logs and poll until UI port is open (or timeout / detach).
+# Ctrl+C detaches follower only — container keeps running.
+# Globals:
+#   COMFY_PORT, LAB_STACK_FOLLOW, LAB_STACK_READY_TIMEOUT, LAB_STACK_HEARTBEAT
+# Arguments:
+#   None
+# Outputs:
+#   Progress logs; compose log stream to stderr
+# Returns:
+#   0 always (timeout warns but leaves container running)
+#######################################
+stack_follow_until_ready() {
+  local port="${COMFY_PORT:-8188}"
+  local timeout_s="${LAB_STACK_READY_TIMEOUT:-2700}"
+  local heartbeat_s="${LAB_STACK_HEARTBEAT:-30}"
+  local t0 now elapsed log_pid=""
+  local follow="${LAB_STACK_FOLLOW:-}"
+
+  if [[ -z ${follow} ]]; then
+    if [[ -t 1 || -t 2 ]]; then
+      follow=1
+    else
+      follow=0
+    fi
+  fi
+  if [[ ${follow} == "0" ]]; then
+    log "LAB_STACK_FOLLOW=0 — not streaming logs; use: ./scripts/manage.sh logs"
+    return 0
+  fi
+
+  if stack_port_open "${port}"; then
+    log "ComfyUI already responding on http://localhost:${port}"
+    return 0
+  fi
+
+  log "Streaming container logs until UI is ready on :${port} (timeout ${timeout_s}s)"
+  log "Ctrl+C detaches this view only — container keeps installing/running"
+  log "Re-attach anytime: ./scripts/manage.sh logs"
+
+  t0="$(date +%s)"
+  local last_hb=0 aborted=0
+  set +m 2>/dev/null || true
+  (
+    compose_run logs -f --tail 50 2>&1
+  ) &
+  log_pid=$!
+  disown "${log_pid}" 2>/dev/null || true
+
+  # shellcheck disable=SC2329
+  _stack_follow_cleanup() {
+    if [[ -n ${log_pid} ]] && kill -0 "${log_pid}" 2>/dev/null; then
+      kill "${log_pid}" 2>/dev/null || true
+      wait "${log_pid}" 2>/dev/null || true
+    fi
+  }
+  trap 'aborted=1' INT TERM
+
+  while true; do
+    if [[ ${aborted} -eq 1 ]]; then
+      _stack_follow_cleanup
+      trap - INT TERM
+      log "Detached from log stream (container still running). ./scripts/manage.sh logs"
+      return 0
+    fi
+    if stack_port_open "${port}"; then
+      _stack_follow_cleanup
+      trap - INT TERM
+      log "✓ ComfyUI is up — http://localhost:${port}"
+      return 0
+    fi
+    if ! compose_is_running; then
+      _stack_follow_cleanup
+      trap - INT TERM
+      err "Container exited during install — see logs above"
+      compose_run ps -a 2>/dev/null || true
+      return 1
+    fi
+    now="$(date +%s)"
+    elapsed=$((now - t0))
+    if [[ ${elapsed} -ge ${timeout_s} ]]; then
+      _stack_follow_cleanup
+      trap - INT TERM
+      warn "Timed out after ${elapsed}s waiting for :${port} (install may still be running)"
+      warn "Continue with: ./scripts/manage.sh logs"
+      return 0
+    fi
+    if [[ $((elapsed - last_hb)) -ge ${heartbeat_s} ]]; then
+      log "… still waiting for ComfyUI on :${port} (elapsed ${elapsed}s; container running)"
+      last_hb=${elapsed}
+    fi
+    sleep 2
+  done
+}
+
+#######################################
 # Build images if needed and start the unified stack detached (`up -d --build`).
 # Exports default env for compose interpolation, ensures MODELS_DIR/comfy exists,
 # and logs cold-start expectations. Does not confirm with the user.
@@ -193,19 +313,23 @@ stack_start() {
   export MEM_RESERVATION="${MEM_RESERVATION:-80g}"
   ensure_models_dir "${MODELS_DIR}" || return 1
   mkdir -p "${MODELS_DIR}/comfy"
-  log "Starting unified flux-to-ltx stack (mem_limit=${MEM_LIMIT})..."
+  log "══ start ══ unified flux-to-ltx (mem_limit=${MEM_LIMIT})"
+  log "Building/recreating containers (docker compose up -d --build)…"
   if ! compose_run up -d --build; then
     err "compose up failed"
     compose_run ps -a 2>/dev/null || true
     compose_run logs --tail 80 comfyui 2>/dev/null || true
     return 1
   fi
+  log "Compose up finished — verifying container is running…"
   # LAB_STACK_VERIFY_SETTLE=0 skips sleep in hermetic tests
   if ! stack_verify_running "${LAB_STACK_VERIFY_SETTLE:-3}"; then
     return 1
   fi
-  log "Stack starting. UI: http://localhost:${COMFY_PORT}"
-  log "Cold start (first install) may take 10–30+ minutes — follow: ./scripts/manage.sh logs"
+  log "Container is running. UI target: http://localhost:${COMFY_PORT}"
+  log "Cold install (first time) downloads multi-GB PyTorch/CUDA wheels inside the container"
+  # Default FOLLOW on TTY; tests set LAB_STACK_FOLLOW=0
+  stack_follow_until_ready || return 1
 }
 
 #######################################

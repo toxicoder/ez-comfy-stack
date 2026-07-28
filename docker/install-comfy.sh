@@ -25,6 +25,8 @@ COMFY_USER="${COMFY_USER:-0}"
 MODELS_ROOT="${MODELS_ROOT:-/models}"
 STAMP="${COMFY_HOME}/.lab-install-complete"
 VENV="${COMFY_HOME}/.venv"
+# Install wall-clock start (unix seconds); set in main
+INSTALL_T0="${INSTALL_T0:-}"
 
 #######################################
 # Log an install progress line to stdout (container logs).
@@ -57,6 +59,96 @@ warn() {
 }
 
 #######################################
+# Elapsed seconds since INSTALL_T0 (or 0 if unset).
+# Globals:
+#   INSTALL_T0
+# Arguments:
+#   None
+# Outputs:
+#   Integer seconds on stdout
+# Returns:
+#   0
+#######################################
+install_elapsed_s() {
+  local now
+  now="$(date +%s)"
+  if [[ -z ${INSTALL_T0} ]]; then
+    echo 0
+    return 0
+  fi
+  echo $((now - INSTALL_T0))
+}
+
+#######################################
+# Format seconds as m:ss or h:mm:ss for install logs.
+# Globals:
+#   None
+# Arguments:
+#   $1  Seconds
+# Outputs:
+#   Human elapsed on stdout
+# Returns:
+#   0
+#######################################
+install_format_elapsed() {
+  local secs="${1:-0}" h m s
+  if [[ ${secs} -lt 0 ]]; then
+    secs=0
+  fi
+  h=$((secs / 3600))
+  m=$(((secs % 3600) / 60))
+  s=$((secs % 60))
+  if [[ ${h} -gt 0 ]]; then
+    printf '%d:%02d:%02d' "${h}" "${m}" "${s}"
+  else
+    printf '%d:%02d' "${m}" "${s}"
+  fi
+}
+
+#######################################
+# Numbered phase banner with elapsed time.
+# Globals:
+#   INSTALL_T0
+# Arguments:
+#   $1  Step number
+#   $2  Total steps
+#   $3+ Message
+# Outputs:
+#   Progress log line
+# Returns:
+#   0
+#######################################
+step() {
+  local n="${1:?}"
+  local total="${2:?}"
+  shift 2
+  log "══ step ${n}/${total} ══ $*  [elapsed $(install_format_elapsed "$(install_elapsed_s)")]"
+}
+
+#######################################
+# Run pip with unbuffered output and progress bar when available.
+# Globals:
+#   None
+# Arguments:
+#   $@  Passed to pip
+# Outputs:
+#   pip stdout/stderr; short log of the command
+# Returns:
+#   pip exit status
+#######################################
+pip_install() {
+  local -a cmd=(pip install)
+  export PYTHONUNBUFFERED=1
+  export PIP_DISABLE_PIP_VERSION_CHECK=1
+  # Prefer progress bar when this pip supports it
+  if pip install --help 2>&1 | grep -q -- '--progress-bar'; then
+    cmd+=(--progress-bar on)
+  fi
+  log "pip: ${*}"
+  "${cmd[@]}" "$@"
+}
+
+#######################################
 # Clone or update a ComfyUI custom node and install its requirements.
 # Globals:
 #   CUSTOM — custom_nodes directory (must be set by caller)
@@ -71,15 +163,19 @@ warn() {
 clone_node() {
   local url="${1}"
   local name="${2}"
+  log "custom node: begin ${name}"
   if [[ ! -d "${CUSTOM}/${name}/.git" ]]; then
-    log "Installing custom node: ${name}"
+    log "custom node: cloning ${name}…"
     git clone --depth 1 "${url}" "${CUSTOM}/${name}" || warn "clone failed: ${name}"
   else
+    log "custom node: updating ${name}…"
     git -C "${CUSTOM}/${name}" pull --ff-only || true
   fi
   if [[ -f "${CUSTOM}/${name}/requirements.txt" ]]; then
-    pip install -r "${CUSTOM}/${name}/requirements.txt" || warn "requirements failed: ${name}"
+    log "custom node: pip requirements for ${name}…"
+    pip_install -r "${CUSTOM}/${name}/requirements.txt" || warn "requirements failed: ${name}"
   fi
+  log "custom node: done ${name}"
 }
 
 #######################################
@@ -119,21 +215,32 @@ link_models() {
 #   0 on success; non-zero if a hard step fails under set -e
 #######################################
 main() {
+  local total=11 refresh=0 sub
   export DEBIAN_FRONTEND=noninteractive
+  export PYTHONUNBUFFERED=1
+  INSTALL_T0="$(date +%s)"
+  log "Install started at $(date -u +%Y-%m-%dT%H:%MZ)"
+  log "Markers: ══ step N/M ══ — pip shows multi-GB wheel bars when downloading"
 
   if [[ -f ${STAMP} && -x "${VENV}/bin/python" ]]; then
-    log "Install stamp present; refreshing models links only"
+    refresh=1
+    total=3
+    log "Install stamp present — fast refresh (3 steps; cold install skipped)"
   else
+    log "Cold install path (~10–30+ min common on first start)"
+  fi
+
+  if [[ ${refresh} -eq 0 ]]; then
+    step 1 "${total}" "Clone or update ComfyUI into ${COMFY_HOME}"
     if [[ ! -d "${COMFY_HOME}/.git" ]]; then
-      log "Cloning ComfyUI into ${COMFY_HOME}"
       mkdir -p "$(dirname "${COMFY_HOME}")"
       # Destination may already exist (empty volume + old workflow bind mount created
       # intermediate dirs). git clone refuses non-empty targets — clone then merge.
       if [[ -d ${COMFY_HOME} && -n "$(ls -A "${COMFY_HOME}" 2>/dev/null || true)" ]]; then
         local tmp_clone
         tmp_clone="$(mktemp -d)"
+        log "git clone (temp) then merge into existing ${COMFY_HOME}…"
         git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git "${tmp_clone}/ComfyUI"
-        # Prefer rsync when present; else cp -a
         if command -v rsync >/dev/null 2>&1; then
           rsync -a "${tmp_clone}/ComfyUI/" "${COMFY_HOME}/"
         else
@@ -141,61 +248,98 @@ main() {
         fi
         rm -rf "${tmp_clone}"
       else
+        log "git clone into ${COMFY_HOME}…"
         git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git "${COMFY_HOME}"
       fi
     else
       log "ComfyUI tree present; pulling latest (best-effort)"
       git -C "${COMFY_HOME}" pull --ff-only || warn "git pull failed; continuing"
     fi
+    log "step 1 done"
 
+    step 2 "${total}" "Create Python venv (if missing)"
     if [[ ! -d ${VENV} ]]; then
-      log "Creating venv"
+      log "python3 -m venv ${VENV}"
       python3 -m venv "${VENV}"
+    else
+      log "venv already exists"
     fi
     # shellcheck disable=SC1091
     source "${VENV}/bin/activate"
-    pip install -U pip setuptools wheel
+    log "step 2 done"
 
-    log "Installing PyTorch (cu130 when available)"
-    pip install --upgrade torch torchvision torchaudio \
-      --index-url https://download.pytorch.org/whl/cu130 ||
-      pip install --upgrade torch torchvision torchaudio
+    step 3 "${total}" "Upgrade pip, setuptools, wheel"
+    pip_install -U pip setuptools wheel
+    log "step 3 done"
 
-    log "Installing ComfyUI requirements"
-    pip install -r "${COMFY_HOME}/requirements.txt"
-    pip install psutil huggingface_hub safetensors einops
+    step 4 "${total}" "Install PyTorch (cu130 when available) — multi-GB; many minutes"
+    log "Expect large wheels (torch + cuda toolkit + cudnn); progress bars below…"
+    pip_install --upgrade torch torchvision torchaudio \
+      --index-url https://download.pytorch.org/whl/cu130 || {
+      warn "cu130 index failed; falling back to default PyPI torch"
+      pip_install --upgrade torch torchvision torchaudio
+    }
+    log "step 4 done (elapsed $(install_format_elapsed "$(install_elapsed_s)"))"
 
+    step 5 "${total}" "Install ComfyUI requirements.txt"
+    pip_install -r "${COMFY_HOME}/requirements.txt"
+    log "step 5 done"
+
+    step 6 "${total}" "Install hub/runtime extras (psutil, huggingface_hub, …)"
+    pip_install psutil huggingface_hub safetensors einops
+    log "step 6 done"
+
+    step 7 "${total}" "Install custom nodes (Manager, Nunchaku)"
     CUSTOM="${COMFY_HOME}/custom_nodes"
     mkdir -p "${CUSTOM}"
-
     clone_node "https://github.com/ltdrdata/ComfyUI-Manager.git" "ComfyUI-Manager"
     clone_node "https://github.com/mit-han-lab/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" ||
       clone_node "https://github.com/nunchaku-tech/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" ||
       warn "Nunchaku custom node unavailable"
+    log "step 7 done"
 
-    log "Attempting SageAttention install (fail-soft)"
-    pip install sageattention || warn "SageAttention pip install failed (optional on aarch64)"
-    log "Attempting nunchaku package (fail-soft)"
-    pip install nunchaku || warn "nunchaku package install failed (optional)"
+    step 8 "${total}" "Optional SageAttention (fail-soft on aarch64)"
+    pip_install sageattention || warn "SageAttention pip install failed (optional on aarch64)"
+    log "step 8 done"
+
+    step 9 "${total}" "Optional nunchaku package (fail-soft)"
+    pip_install nunchaku || warn "nunchaku package install failed (optional)"
+    log "step 9 done"
 
     touch "${STAMP}"
+    log "Wrote install stamp ${STAMP}"
+
+    step 10 "${total}" "Link model subdirs under ${MODELS_ROOT}/comfy"
+  else
+    # shellcheck disable=SC1091
+    source "${VENV}/bin/activate"
+    step 1 "${total}" "Refresh model directory links"
   fi
 
   # shellcheck disable=SC1091
   [[ -f "${VENV}/bin/activate" ]] && source "${VENV}/bin/activate"
 
-  local sub
   for sub in checkpoints diffusion_models text_encoders vae loras clip clip_vision \
     unet controlnet embeddings upscale_models audio_encoders; do
     link_models "${sub}"
   done
+  log "model links done"
 
-  log "Applying Spark unified-memory patches"
+  if [[ ${refresh} -eq 1 ]]; then
+    step 2 "${total}" "Apply Spark free-memory patch"
+  else
+    step 11 "${total}" "Apply Spark free-memory patch"
+  fi
   if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
     python3 /opt/ez-comfy/patch_get_free_memory.py "${COMFY_HOME}" || warn "patch failed"
+  else
+    warn "patch_get_free_memory.py not found in image"
   fi
 
-  log "Install complete"
+  if [[ ${refresh} -eq 1 ]]; then
+    step 3 "${total}" "Refresh complete"
+  fi
+  log "══ Install complete ══ total elapsed $(install_format_elapsed "$(install_elapsed_s)")"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
