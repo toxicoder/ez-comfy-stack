@@ -73,7 +73,7 @@ seed_from_prebuilt() {
 #######################################
 # Run install, seed, patch, and exec ComfyUI.
 # Globals:
-#   COMFY_HOME, VENV, LAB_* 
+#   COMFY_HOME, VENV, LAB_*
 # Arguments:
 #   None
 # Outputs:
