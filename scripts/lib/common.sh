@@ -870,6 +870,65 @@ explain_hf_download_error() {
 }
 
 #######################################
+# Lab workflow model basenames expected under MODELS_DIR/comfy after download-models.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Lines: subdir/filename
+# Returns:
+#   0
+#######################################
+lab_expected_model_relpaths() {
+  cat <<'EOF'
+diffusion_models/flux-2-klein-9b-nvfp4.safetensors
+diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors
+text_encoders/ltx-2.3_text_projection_bf16.safetensors
+vae/LTX23_video_vae_bf16.safetensors
+vae/LTX23_audio_vae_bf16.safetensors
+EOF
+}
+
+#######################################
+# Check host MODELS_DIR/comfy for lab workflow weights; warn on missing.
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   $1  Optional models root (default MODELS_DIR)
+# Outputs:
+#   log/warn lines; list of missing files
+# Returns:
+#   0 if all present; 1 if any missing
+#######################################
+check_lab_models_ready() {
+  local root="${1:-${MODELS_DIR:-/mnt/models}}"
+  local rel path missing=0
+  local comfy="${root}/comfy"
+  if [[ ! -d ${comfy} ]]; then
+    warn "lab models: ${comfy} missing — run ./scripts/manage.sh download-models"
+    return 1
+  fi
+  while IFS= read -r rel; do
+    [[ -z ${rel} ]] && continue
+    path="${comfy}/${rel}"
+    if [[ -e ${path} || -L ${path} ]]; then
+      log "lab model ok: ${rel}"
+    else
+      warn "lab model MISSING: ${rel}"
+      missing=$((missing + 1))
+    fi
+  done < <(lab_expected_model_relpaths)
+  if [[ ${missing} -gt 0 ]]; then
+    warn "Missing ${missing} lab model(s) under ${comfy} — run ./scripts/manage.sh download-models"
+    warn "Then restart so Comfy models/* re-link to /models/comfy/*"
+    return 1
+  fi
+  log "lab models: all expected files present under ${comfy}"
+  return 0
+}
+
+#######################################
 # Count HF *.incomplete partials under a local-dir (resume state).
 # Globals:
 #   None

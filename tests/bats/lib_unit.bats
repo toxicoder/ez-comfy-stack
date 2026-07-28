@@ -45,6 +45,28 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "common: lab_expected_model_relpaths and check_lab_models_ready" {
+  run lab_expected_model_relpaths
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"flux-2-klein-9b-nvfp4.safetensors"* ]]
+  [[ "${output}" == *"LTX23_video_vae_bf16.safetensors"* ]]
+
+  local root="${TEST_TMP_DIR}/lab_models_root"
+  mkdir -p "${root}/comfy"
+  run check_lab_models_ready "${root}"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"MISSING"* || "${output}" == *"Missing"* ]]
+
+  while IFS= read -r rel; do
+    [[ -z ${rel} ]] && continue
+    mkdir -p "${root}/comfy/$(dirname "${rel}")"
+    : >"${root}/comfy/${rel}"
+  done < <(lab_expected_model_relpaths)
+  run check_lab_models_ready "${root}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"all expected"* || "${output}" == *"lab model ok"* ]]
+}
+
 @test "shellcheck clean on scripts/lib/common.sh (SC2317/SC2015 regression)" {
   if ! command -v shellcheck >/dev/null 2>&1; then
     skip "shellcheck not installed"
