@@ -20,6 +20,7 @@
 # Usage:
 #   ./scripts/utilities/download-ltx.sh status [--tier balanced|quality|all] [--json]
 #   ./scripts/utilities/download-ltx.sh run [--tier ...]
+#   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD — same semantics as download-flux.
@@ -27,6 +28,8 @@
 #
 # Safety:
 #   Multi‑GB transfer — use download-limit when on remote SSH.
+#   cleanup defaults to --dry-run; --yes deletes only non-selective files under
+#   the tier local-dir (never other MODELS_DIR trees like FLUX).
 #
 # Exit codes:
 #   0 success; 1 usage/tier/CLI errors.
@@ -46,6 +49,8 @@ MODELS_DIR=${MODELS_DIR:-"/mnt/models"}
 TIER="balanced"
 JSON_FLAG=""
 CMD="status"
+# cleanup: dry-run unless --yes (explicit delete)
+CLEANUP_YES=0
 
 #######################################
 # tier_repo helper.
@@ -199,9 +204,12 @@ parse_args() {
         TIER="${2:?}"
         shift
         ;;
-      status | run) CMD="${1}" ;;
+      --dry-run) CLEANUP_YES=0 ;;
+      --yes | -y) CLEANUP_YES=1 ;;
+      status | run | cleanup) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status|run [--tier balanced|quality|all] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier balanced|quality|all] [--json]" >&2
+        echo "  cleanup options: --dry-run (default) | --yes  delete non-selective weights" >&2
         exit 0
         ;;
       *)
@@ -211,6 +219,79 @@ parse_args() {
     esac
     shift
   done
+}
+
+#######################################
+# Return 0 if relative path is kept for a selective tier (or tiny meta).
+# Globals:
+#   None
+# Arguments:
+#   $1  Tier name
+#   $2  Path relative to tier local-dir
+# Outputs:
+#   None
+# Returns:
+#   0 keep; 1 extra (candidate for cleanup)
+#######################################
+is_ltx_keep_relpath() {
+  local tier="${1}"
+  local rel="${2}"
+  local pat
+  case "${rel}" in
+    .gitattributes | LICENSE | README.md) return 0 ;;
+  esac
+  while IFS= read -r pat; do
+    [[ -z ${pat} ]] && continue
+    if [[ ${rel} == "${pat}" ]]; then
+      return 0
+    fi
+  done < <(tier_include_patterns "${tier}")
+  return 1
+}
+
+#######################################
+# List files under a tier dir that are outside the selective keep set.
+# Globals:
+#   MODELS_DIR (via tier_dir)
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   Absolute paths of extra files on stdout (one per line)
+# Returns:
+#   0
+#######################################
+list_extra_ltx_files() {
+  local tier="${1}"
+  local dir rel f
+  dir="$(tier_dir "${tier}")"
+  if [[ ! -d ${dir} ]]; then
+    return 0
+  fi
+  while IFS= read -r f; do
+    [[ -z ${f} ]] && continue
+    rel="${f#"${dir}"/}"
+    if ! is_ltx_keep_relpath "${tier}" "${rel}"; then
+      printf '%s\n' "${f}"
+    fi
+  done < <(find "${dir}" -type f 2>/dev/null | LC_ALL=C sort)
+}
+
+#######################################
+# Remove empty directories under a tier local-dir (post-delete).
+# Globals:
+#   None
+# Arguments:
+#   $1  Absolute directory path
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+prune_empty_dirs() {
+  local root="${1}"
+  [[ -d ${root} ]] || return 0
+  # deepest-first so parents empty after children are removed
+  find "${root}" -depth -type d -empty -delete 2>/dev/null || true
 }
 
 #######################################
@@ -354,6 +435,60 @@ cmd_run() {
 }
 
 #######################################
+# Remove non-selective weight files from tier local-dirs (dry-run by default).
+# Globals:
+#   MODELS_DIR, TIER, CLEANUP_YES
+# Arguments:
+#   None
+# Outputs:
+#   Logs kept/removed paths and size after
+# Returns:
+#   0; 1 on unknown tier
+#######################################
+cmd_cleanup() {
+  local tier dir f rel n_extra n_del size_before size_after total_extra=0
+  for tier in $(tiers_to_process); do
+    if [[ -z $(tier_repo "${tier}") ]]; then
+      err "Unknown tier: ${tier}"
+      exit 1
+    fi
+    dir="$(tier_dir "${tier}")"
+    if [[ ! -d ${dir} ]]; then
+      log "cleanup ${tier}: no directory at ${dir} (nothing to do)"
+      continue
+    fi
+    n_extra=0
+    n_del=0
+    size_before="$(tier_size_gb "${dir}")"
+    log "cleanup ${tier}: scanning ${dir} (current ≈ ${size_before} GB)"
+    log "cleanup ${tier}: keeping selective files from tier_include_patterns + LICENSE/README/.gitattributes"
+    while IFS= read -r f; do
+      [[ -z ${f} ]] && continue
+      n_extra=$((n_extra + 1))
+      rel="${f#"${dir}"/}"
+      if [[ ${CLEANUP_YES} -eq 1 ]]; then
+        rm -f "${f}" || warn "Failed to remove ${f}"
+        n_del=$((n_del + 1))
+        log "  removed: ${rel}"
+      else
+        log "  would remove: ${rel}"
+      fi
+    done < <(list_extra_ltx_files "${tier}")
+    total_extra=$((total_extra + n_extra))
+    if [[ ${CLEANUP_YES} -eq 1 ]]; then
+      prune_empty_dirs "${dir}"
+      size_after="$(tier_size_gb "${dir}")"
+      log "cleanup ${tier}: deleted ${n_del} extra file(s); size ${size_before} → ${size_after} GB"
+    else
+      log "cleanup ${tier}: ${n_extra} extra file(s) (dry-run). Re-run with --yes to delete."
+    fi
+  done
+  if [[ ${CLEANUP_YES} -ne 1 && ${total_extra} -gt 0 ]]; then
+    log "Tip: MODELS_DIR=${MODELS_DIR} $0 cleanup --tier ${TIER} --yes"
+  fi
+}
+
+#######################################
 # main helper.
 # Globals:
 #   See file header / caller environment.
@@ -369,8 +504,9 @@ main() {
   case "$CMD" in
     status) cmd_status ;;
     run) cmd_run ;;
+    cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run [--tier balanced|quality|all] [--json]"
+      err "Usage: $0 status|run|cleanup [--tier balanced|quality|all] [--json] [--yes]"
       exit 1
       ;;
   esac

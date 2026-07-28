@@ -117,6 +117,56 @@ teardown() {
   unset LTX_FULL_REPO
 }
 
+@test "download-ltx cleanup dry-run and --yes keep selective files" {
+  local tdir keep extra
+  tdir="$(tier_dir balanced)"
+  mkdir -p "${tdir}/diffusion_models" "${tdir}/text_encoders" "${tdir}/vae" "${tdir}/loras"
+  keep="diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors"
+  echo keep >"${tdir}/${keep}"
+  echo te >"${tdir}/text_encoders/ltx-2.3_text_projection_bf16.safetensors"
+  echo vv >"${tdir}/vae/LTX23_video_vae_bf16.safetensors"
+  echo av >"${tdir}/vae/LTX23_audio_vae_bf16.safetensors"
+  echo meta >"${tdir}/LICENSE"
+  extra="${tdir}/diffusion_models/ltx-2.3-22b-dev_transformer_only_bf16.safetensors"
+  echo waste >"${extra}"
+  echo waste >"${tdir}/loras/some_lora.safetensors"
+  echo waste >"${tdir}/.cache_junk"
+
+  run is_ltx_keep_relpath balanced "${keep}"
+  [ "${status}" -eq 0 ]
+  run is_ltx_keep_relpath balanced "diffusion_models/ltx-2.3-22b-dev_transformer_only_bf16.safetensors"
+  [ "${status}" -ne 0 ]
+
+  run list_extra_ltx_files balanced
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"${extra}"* ]]
+  [[ "${output}" == *"loras/some_lora"* ]]
+  [[ "${output}" != *"fp8_input_scaled_v3"* ]]
+
+  TIER=balanced
+  CLEANUP_YES=0
+  run cmd_cleanup
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"would remove"* ]]
+  [[ -f ${extra} ]]
+
+  CLEANUP_YES=1
+  run cmd_cleanup
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"removed:"* ]]
+  [[ ! -f ${extra} ]]
+  [[ ! -f ${tdir}/loras/some_lora.safetensors ]]
+  [[ -f ${tdir}/${keep} ]]
+  [[ -f ${tdir}/text_encoders/ltx-2.3_text_projection_bf16.safetensors ]]
+  [[ -f ${tdir}/LICENSE ]]
+
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" cleanup --tier balanced --dry-run"
+  [ "${status}" -eq 0 ]
+
+  run prune_empty_dirs "${tdir}"
+  [ "${status}" -eq 0 ]
+}
+
 @test "download-ltx link_into_comfy cmd_status cmd_run" {
   local tdir
   tdir="$(tier_dir balanced)"

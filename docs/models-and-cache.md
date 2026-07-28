@@ -94,6 +94,20 @@ Or:
 ./scripts/manage.sh download-models
 ```
 
+### Cleanup extra LTX monorepo files
+
+If an older run pulled the full `Kijai/LTX2.3_comfy` snapshot into the balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:
+
+```bash
+# Preview (default)
+./scripts/utilities/download-ltx.sh cleanup --tier balanced
+
+# Delete extras (keeps FP8 transformer + TE + VAEs only)
+./scripts/utilities/download-ltx.sh cleanup --tier balanced --yes
+```
+
+Does **not** touch FLUX, nunchaku, or other trees under `MODELS_DIR`.
+
 Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`). Install:
 
 ```bash
@@ -117,6 +131,8 @@ Escape hatch (operators who really want every precision/lora):
 ```bash
 LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier balanced
 ```
+
+After a full-repo mistake, use `cleanup --yes` (above) instead of wiping all of `MODELS_DIR`.
 
 ### Gated models / HF_TOKEN
 
