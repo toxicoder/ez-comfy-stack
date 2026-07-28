@@ -236,8 +236,110 @@ load_shaping_modules() {
     sudo modprobe sch_htb 2>/dev/null || true
     sudo modprobe sch_ingress 2>/dev/null || true
     sudo modprobe sch_sfq 2>/dev/null || true
+    sudo modprobe ifb 2>/dev/null || true
   fi
   return 0
+}
+
+#######################################
+# Return 0 when kernel HTB-based shaping is likely available.
+# DGX Spark / NVIDIA OFED kernels often lack sch_htb — detect and skip wondershaper spam.
+# Globals:
+#   LAB_MOCK_WONDERSHAPER, LAB_FORCE_NO_HTB, LAB_SHAPING_SUPPORTED (cache 0|1)
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 if shaping looks available; 1 otherwise
+#######################################
+shaping_supported() {
+  if [[ -n ${LAB_SHAPING_SUPPORTED:-} ]]; then
+    [[ ${LAB_SHAPING_SUPPORTED} == "1" ]]
+    return $?
+  fi
+  if [[ ${LAB_FORCE_NO_HTB:-} == "1" ]]; then
+    LAB_SHAPING_SUPPORTED=0
+    export LAB_SHAPING_SUPPORTED
+    return 1
+  fi
+  if [[ ${LAB_MOCK_WONDERSHAPER:-} == "1" ]]; then
+    LAB_SHAPING_SUPPORTED=1
+    export LAB_SHAPING_SUPPORTED
+    return 0
+  fi
+  load_shaping_modules
+  if command -v modinfo >/dev/null 2>&1 && modinfo sch_htb >/dev/null 2>&1; then
+    LAB_SHAPING_SUPPORTED=1
+    export LAB_SHAPING_SUPPORTED
+    return 0
+  fi
+  local kver
+  kver="$(uname -r 2>/dev/null || true)"
+  if [[ -n ${kver} ]] && compgen -G "/lib/modules/${kver}/kernel/net/sched/sch_htb*" >/dev/null 2>&1; then
+    LAB_SHAPING_SUPPORTED=1
+    export LAB_SHAPING_SUPPORTED
+    return 0
+  fi
+  # Built-in HTB sometimes only appears via tc
+  if command -v tc >/dev/null 2>&1 && tc qdisc add help 2>&1 | grep -qi htb; then
+    LAB_SHAPING_SUPPORTED=1
+    export LAB_SHAPING_SUPPORTED
+    return 0
+  fi
+  LAB_SHAPING_SUPPORTED=0
+  export LAB_SHAPING_SUPPORTED
+  return 1
+}
+
+#######################################
+# Map measured/target Mbps to HF download worker count for gentle mode.
+# Globals:
+#   None
+# Arguments:
+#   $1  Mbps (integer)
+# Outputs:
+#   Worker count on stdout
+# Returns:
+#   0
+#######################################
+gentle_hf_workers_for_mbps() {
+  local mbps="${1:-50}"
+  if [[ ${mbps} -ge 200 ]]; then
+    echo 4
+  elif [[ ${mbps} -ge 80 ]]; then
+    echo 3
+  elif [[ ${mbps} -ge 30 ]]; then
+    echo 2
+  else
+    echo 1
+  fi
+}
+
+#######################################
+# Export HF env for reduced parallel saturation when kernel shaping is unavailable.
+# Globals:
+#   HF_DOWNLOAD_MAX_WORKERS, HF_HUB_ENABLE_HF_TRANSFER (export)
+# Arguments:
+#   $1  Target/measured Mbps
+#   $2  Optional interface name (for log text)
+# Outputs:
+#   Warnings via dl_warn
+# Returns:
+#   0
+#######################################
+enable_gentle_download_mode() {
+  local mbps="${1:-50}"
+  local iface="${2:-}"
+  local workers
+  workers="$(gentle_hf_workers_for_mbps "${mbps}")"
+  export HF_HUB_ENABLE_HF_TRANSFER=0
+  if [[ -z ${HF_DOWNLOAD_MAX_WORKERS:-} ]]; then
+    export HF_DOWNLOAD_MAX_WORKERS="${workers}"
+  fi
+  dl_warn "Kernel traffic shaping unavailable${iface:+ on ${iface}} (no HTB/IFB — common on DGX Spark)"
+  dl_warn "Gentle HF mode: max-workers=${HF_DOWNLOAD_MAX_WORKERS} (target ~${mbps} Mbps). Not a hard Mbps cap."
+  dl_warn "To skip limit machinery entirely: DOWNLOAD_LIMIT=off"
 }
 
 #######################################
@@ -261,7 +363,7 @@ limits_active() {
     [[ ${LAB_MOCK_LIMITS_ACTIVE} == "1" ]]
     return $?
   fi
-  if [[ ${LAB_MOCK_WONDERSHAPER:-} == "1" ]]; then
+  if [[ ${LAB_MOCK_WONDERSHAPER:-} == "1" && ${LAB_FORCE_NO_HTB:-} != "1" ]]; then
     return 0
   fi
   local out=""
@@ -319,6 +421,10 @@ apply_limits() {
   local down_mbps="${2}"
   local up_mbps="${3:-$DEFAULT_UPLOAD_MBPS}"
   local down_kbps up_kbps ws_out
+  if ! shaping_supported; then
+    dl_warn "Skipping wondershaper: kernel HTB not available"
+    return 1
+  fi
   down_kbps=$(clamp_rate_kbps $((down_mbps * BANDWIDTH_UNIT_MULTIPLIER)))
   up_kbps=$(clamp_rate_kbps $((up_mbps * BANDWIDTH_UNIT_MULTIPLIER)))
   ensure_wondershaper || return 1
@@ -327,12 +433,18 @@ apply_limits() {
   dl_log "Applying limits on ${iface}: down=${down_mbps} Mbps up=${up_mbps} Mbps"
   # Capture tc/wondershaper noise; surface a single diagnostic on failure.
   if ! ws_out=$(sudo_wondershaper "${iface}" "${down_kbps}" "${up_kbps}" 2>&1); then
-    dl_warn "wondershaper apply failed: ${ws_out}"
+    dl_warn "wondershaper apply failed (see LAB_DEBUG=1 for details)"
+    if [[ ${LAB_DEBUG:-} == "1" ]]; then
+      dl_warn "${ws_out}"
+    fi
     clear_limits "${iface}"
     return 1
   fi
   if [[ -n ${ws_out} ]] && [[ ${ws_out} =~ [Ee]rror|Illegal|unknown ]]; then
-    dl_warn "wondershaper reported errors (exit 0): ${ws_out}"
+    dl_warn "wondershaper reported errors without hard Mbps cap"
+    if [[ ${LAB_DEBUG:-} == "1" ]]; then
+      dl_warn "${ws_out}"
+    fi
     clear_limits "${iface}"
     return 1
   fi
@@ -345,15 +457,52 @@ apply_limits() {
 }
 
 #######################################
-# Return measured download Mbps as integer, or empty on failure.
+# HTTP download probe → approximate download Mbps (no sudo).
+# Uses Cloudflare speed endpoint by default; override with SPEEDTEST_HTTP_URL.
 # Globals:
-#   See file header / caller environment.
+#   LAB_MOCK_HTTP_SPEED_MBPS, SPEEDTEST_HTTP_URL, SPEEDTEST_HTTP_BYTES
 # Arguments:
 #   None
 # Outputs:
-#   Status via log/warn/err on stderr unless noted.
+#   Integer Mbps on stdout
 # Returns:
-#   Exit status depends on command path; see implementation.
+#   0 on success; 1 on failure
+#######################################
+probe_http_download_mbps() {
+  if [[ -n ${LAB_MOCK_HTTP_SPEED_MBPS:-} ]]; then
+    echo "${LAB_MOCK_HTTP_SPEED_MBPS}"
+    return 0
+  fi
+  if ! command -v curl >/dev/null 2>&1; then
+    return 1
+  fi
+  local bytes url bps mbps
+  bytes="${SPEEDTEST_HTTP_BYTES:-15000000}"
+  url="${SPEEDTEST_HTTP_URL:-https://speed.cloudflare.com/__down?bytes=${bytes}}"
+  bps="$(curl -fsSL --max-time 30 -o /dev/null -w '%{speed_download}' "${url}" 2>/dev/null)" || return 1
+  if [[ -z ${bps} || ! ${bps} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    return 1
+  fi
+  # bytes/s → Mbps; require at least ~0.5 Mbps of signal
+  mbps="$(python3 -c "print(max(1, int(float('${bps}') * 8 / 1e6)))" 2>/dev/null)" || return 1
+  if [[ ${mbps} -lt 1 ]]; then
+    return 1
+  fi
+  echo "${mbps}"
+  return 0
+}
+
+#######################################
+# Return measured download Mbps as integer, or empty on failure.
+# Tries speedtest-cli, Ookla speedtest, then HTTP probe (Cloudflare).
+# Globals:
+#   LAB_MOCK_SPEEDTEST_MBPS, LAB_MOCK_HTTP_SPEED_MBPS, SPEEDTEST_HTTP_*
+# Arguments:
+#   None
+# Outputs:
+#   Integer Mbps on stdout (no log noise on stdout)
+# Returns:
+#   0 on success; 1 on failure
 #######################################
 run_speedtest_mbps() {
   if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
@@ -363,7 +512,12 @@ run_speedtest_mbps() {
   local out=""
   if command -v speedtest-cli >/dev/null 2>&1; then
     out=$(speedtest-cli --simple 2>/dev/null | awk '/Download:/{print $2; exit}') || true
-  elif command -v speedtest >/dev/null 2>&1; then
+    if [[ -n ${out} && ${out} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+      printf '%d\n' "${out%.*}"
+      return 0
+    fi
+  fi
+  if command -v speedtest >/dev/null 2>&1; then
     # Ookla CLI: --format=json or progress text
     out=$(speedtest --accept-license --accept-gdpr -f json 2>/dev/null |
       python3 -c 'import json,sys; d=json.load(sys.stdin); print(int(d.get("download",{}).get("bandwidth",0)*8/1e6))' 2>/dev/null) || true
@@ -371,9 +525,13 @@ run_speedtest_mbps() {
       out=$(speedtest --accept-license --accept-gdpr --simple 2>/dev/null |
         awk '/Download/{print int($2); exit}') || true
     fi
+    if [[ -n ${out} && ${out} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+      printf '%d\n' "${out%.*}"
+      return 0
+    fi
   fi
-  if [[ -n ${out} && ${out} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-    printf '%d\n' "${out%.*}"
+  if out=$(probe_http_download_mbps); then
+    echo "${out}"
     return 0
   fi
   return 1
@@ -410,14 +568,19 @@ resolve_limit_mbps() {
   local spec="${1}"
   if [[ ${spec} == "auto" ]]; then
     local measured
-    if measured=$(run_speedtest_mbps); then
+    if measured=$(run_speedtest_mbps 2>/dev/null); then
       local auto
       auto=$(compute_auto_limit "${measured}")
-      dl_log "Speedtest download ≈ ${measured} Mbps → auto limit ${auto} Mbps (85%)"
+      # Heuristic label: mock/http vs classic speedtest
+      if [[ -n ${LAB_MOCK_HTTP_SPEED_MBPS:-} || -z ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
+        dl_log "Measured download ≈ ${measured} Mbps → auto limit ${auto} Mbps (85%)"
+      else
+        dl_log "Measured download ≈ ${measured} Mbps → auto limit ${auto} Mbps (85%)"
+      fi
       echo "${auto}"
       return 0
     fi
-    dl_warn "Speedtest failed; using fallback ${FALLBACK_MBPS} Mbps"
+    dl_warn "Could not measure download speed; using fallback ${FALLBACK_MBPS} Mbps"
     echo "${FALLBACK_MBPS}"
     return 0
   fi
@@ -441,15 +604,19 @@ resolve_limit_mbps() {
 #   Exit status depends on command path; see implementation.
 #######################################
 cmd_status() {
-  local iface
+  local iface shaping="no"
   iface=$(get_active_interface)
   iface=${iface:-unknown}
+  if shaping_supported; then
+    shaping="yes"
+  fi
   if [[ ${JSON_FLAG} -eq 1 ]]; then
-    printf '{"interface":"%s","tool":"wondershaper","auto_fraction":%s}\n' \
-      "${iface}" "${AUTO_FRACTION}"
+    printf '{"interface":"%s","tool":"wondershaper","auto_fraction":%s,"shaping_supported":%s}\n' \
+      "${iface}" "${AUTO_FRACTION}" "$([[ ${shaping} == yes ]] && echo true || echo false)"
   else
     dl_log "Interface: ${iface}"
     dl_log "auto fraction: ${AUTO_FRACTION} (85%)"
+    dl_log "kernel HTB shaping: ${shaping}"
     if check_wondershaper; then
       dl_log "wondershaper: present"
     else
@@ -518,14 +685,14 @@ cmd_wrap() {
   [[ -n ${iface} ]] || die "Could not detect network interface"
   # shellcheck disable=SC2064
   trap 'clear_limits "'"${iface}"'"' EXIT INT TERM HUP
-  if ! apply_limits "${iface}" "${mbps}"; then
+  if shaping_supported && apply_limits "${iface}" "${mbps}"; then
+    dl_log "Kernel bandwidth limit active (~${mbps} Mbps down)"
+  else
     if [[ ${DOWNLOAD_LIMIT_REQUIRE:-} == "1" ]]; then
       die "Failed to apply bandwidth limit on ${iface} (set DOWNLOAD_LIMIT=off to skip, or fix wondershaper/qdisc)"
     fi
-    # Safety: clear-on-exit still registered. Soft-fail so multi-GB pulls can proceed
-    # when the kernel cannot shape (explicit SSH saturation risk warning).
-    dl_warn "Could not apply bandwidth limit; continuing unthrottled (may freeze remote SSH)"
-    dl_warn "Fix: install wondershaper + HTB (sch_htb), or DOWNLOAD_LIMIT=off / lower fixed Mbps after kernel support"
+    # Clear-on-exit still registered. Soft path: gentle HF workers, not a hard Mbps cap.
+    enable_gentle_download_mode "${mbps}" "${iface}"
   fi
   dl_log "Running: ${WRAP_ARGS[*]}"
   "${WRAP_ARGS[@]}"

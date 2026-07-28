@@ -701,11 +701,19 @@ hf_download() {
   fi
 
   hf_log="$(mktemp)"
+  local -a hf_args=("$@")
+  # Gentle mode / operator override: limit parallel HF connections when set
+  if [[ -n ${HF_DOWNLOAD_MAX_WORKERS:-} ]]; then
+    if command -v hf >/dev/null 2>&1 && hf download --help 2>&1 | grep -q -- '--max-workers'; then
+      hf_args+=(--max-workers "${HF_DOWNLOAD_MAX_WORKERS}")
+      log "hf download using --max-workers=${HF_DOWNLOAD_MAX_WORKERS}"
+    fi
+  fi
 
   if command -v hf >/dev/null 2>&1; then
     # Prefer modern CLI even when huggingface-cli is also on PATH
     set +e
-    hf download "$@" 2>&1 | tee "${hf_log}"
+    hf download "${hf_args[@]}" 2>&1 | tee "${hf_log}"
     rc=${PIPESTATUS[0]}
     set -e
   elif command -v huggingface-cli >/dev/null 2>&1; then

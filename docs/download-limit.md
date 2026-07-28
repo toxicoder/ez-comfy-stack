@@ -62,39 +62,57 @@ flowchart TB
   Cmd -->|wrap| Wrap["Apply limit → run command<br/>always clear on exit"]
 ```
 
-## Auto mode
+## Auto mode (measure real Mbps)
 
-1. Run `speedtest-cli` (or Ookla `speedtest`)  
-2. Read download Mbps  
-3. Apply `floor(0.85 × measured)` (minimum 1 Mbps)  
-4. If speedtest fails, use `DOWNLOAD_LIMIT_FALLBACK` (default 50)
+1. Try `speedtest-cli --simple`  
+2. Else Ookla `speedtest`  
+3. Else **HTTP probe** (default Cloudflare `speed.cloudflare.com/__down?bytes=…`) via `curl`  
+4. Apply `floor(0.85 × measured)` (minimum 1 Mbps)  
+5. Only if all probes fail: `DOWNLOAD_LIMIT_FALLBACK` (default 50)
+
+Override HTTP probe: `SPEEDTEST_HTTP_URL`, `SPEEDTEST_HTTP_BYTES`.
 
 ```mermaid
 flowchart TB
-  A["--limit auto"] --> B["speedtest-cli or Ookla speedtest"]
-  B --> C{"measured Mbps?"}
-  C -->|yes| D["limit = max 1, floor 0.85 × Mbps"]
-  C -->|no / fail| E["DOWNLOAD_LIMIT_FALLBACK<br/>default 50 Mbps"]
-  D --> F["wondershaper on default-route iface"]
-  E --> F
-  F --> G{"tc qdisc active?"}
-  G -->|yes| OK["limit applied"]
-  G -->|no| Fail["apply fails · clear partial state"]
+  A["--limit auto"] --> B["speedtest-cli"]
+  B --> C{"ok?"}
+  C -->|no| D["Ookla speedtest"]
+  D --> E{"ok?"}
+  E -->|no| F["HTTP curl probe<br/>Cloudflare __down"]
+  F --> G{"ok?"}
+  C -->|yes| H["limit = floor 0.85 × Mbps"]
+  E -->|yes| H
+  G -->|yes| H
+  G -->|no| I["DOWNLOAD_LIMIT_FALLBACK"]
+  H --> J{"kernel HTB?"}
+  I --> J
+  J -->|yes| K["wondershaper Mbps cap"]
+  J -->|no| L["gentle HF max-workers"]
 ```
 
 Upload is set to a high **legal** “uncapped” rate (clamped for HTB). Extremely large historical defaults (e.g. 100000 Mbps) produced `Illegal "rate"` on some kernels.
 
+## DGX Spark / no HTB
+
+Many Spark kernels lack `sch_htb` / IFB (`qdisc kind is unknown`). The tool **detects** this and **does not** spam wondershaper/RTNETLINK.
+
+| Path | Behavior |
+| --- | --- |
+| HTB available | wondershaper hard Mbps cap at 85% of measured |
+| HTB missing (typical Spark) | **Gentle HF mode**: `HF_DOWNLOAD_MAX_WORKERS` from measured Mbps (1–4), `HF_HUB_ENABLE_HF_TRANSFER=0` — not a hard Mbps cap |
+| `DOWNLOAD_LIMIT=off` | Full blast (SSH risk) |
+
 ## Apply verification and soft-fail
 
-After wondershaper runs, the utility checks that a shaping qdisc is active (`tc qdisc show`, or hermetic mocks). If apply fails:
+After wondershaper runs, the utility checks that a shaping qdisc is active (`tc qdisc show`, or hermetic mocks). If apply fails or HTB is missing:
 
 | Command | Behavior |
 | --- | --- |
 | `run` | **Hard-fail** (operator asked for a standing limit) |
-| `wrap` | **Soft-fail** by default: warn + run command **unthrottled** (SSH risk), still clear on exit |
+| `wrap` | **Soft path**: gentle HF workers + clear on exit |
 | `wrap` + `DOWNLOAD_LIMIT_REQUIRE=1` | **Hard-fail** like `run` |
 
-**Safety impact:** Soft-fail can saturate the WAN when HTB/wondershaper is broken. Prefer fixing qdisc modules (`sch_htb`) or using a lower fixed limit once shaping works. Clear-on-exit remains mandatory.
+**Safety impact:** Gentle mode reduces parallel download stampede but is **not** a kernel Mbps cap. Prefer HTB where available. Clear-on-exit remains mandatory.
 
 ## Wrap lifecycle
 

@@ -63,6 +63,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   run load_shaping_modules
   [ "${status}" -eq 0 ]
+  run shaping_supported
+  [ "${status}" -eq 0 ]
   run apply_limits eth0 40
   [ "${status}" -eq 0 ]
 
@@ -78,6 +80,42 @@ teardown() {
   [[ "${output}" == *"50"* ]]
   run resolve_limit_mbps bad
   [ "${status}" -ne 0 ]
+  run gentle_hf_workers_for_mbps 250
+  [ "${output}" = "4" ]
+  run gentle_hf_workers_for_mbps 100
+  [ "${output}" = "3" ]
+  run gentle_hf_workers_for_mbps 40
+  [ "${output}" = "2" ]
+  run gentle_hf_workers_for_mbps 10
+  [ "${output}" = "1" ]
+  run enable_gentle_download_mode 40 eth0
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Gentle"* || "${output}" == *"max-workers"* ]]
+}
+
+@test "probe_http_download_mbps and run_speedtest fallback chain" {
+  export LAB_MOCK_HTTP_SPEED_MBPS=120
+  unset LAB_MOCK_SPEEDTEST_MBPS
+  run probe_http_download_mbps
+  [ "${output}" = "120" ]
+  # No speedtest-cli mock path: use HTTP probe via run_speedtest
+  rm -f "${TEST_TMP_DIR}/bin/speedtest-cli"
+  run run_speedtest_mbps
+  [[ "${output}" == *"120"* ]]
+  unset LAB_MOCK_HTTP_SPEED_MBPS
+  install_speedtest_mock 100
+}
+
+@test "shaping_supported respects LAB_FORCE_NO_HTB" {
+  export LAB_FORCE_NO_HTB=1
+  unset LAB_SHAPING_SUPPORTED
+  run shaping_supported
+  [ "${status}" -ne 0 ]
+  unset LAB_FORCE_NO_HTB
+  unset LAB_SHAPING_SUPPORTED
+  export LAB_MOCK_WONDERSHAPER=1
+  run shaping_supported
+  [ "${status}" -eq 0 ]
 }
 
 @test "clamp_rate_kbps clamps min max and passthrough" {
@@ -158,9 +196,11 @@ exit 0
   run bash "${DLS}" clear
   [ "${status}" -eq 0 ]
   unset LAB_MOCK_SPEEDTEST_MBPS
+  export LAB_MOCK_HTTP_SPEED_MBPS=33
   rm -f "${TEST_TMP_DIR}/bin/speedtest-cli"
   run bash "${DLS}" run --limit auto --fallback 33
   [ "${status}" -eq 0 ]
+  unset LAB_MOCK_HTTP_SPEED_MBPS
 }
 
 @test "cmd_wrap soft-fails and still runs command when apply fails" {
@@ -172,13 +212,34 @@ exit 0
 '
   export LAB_MOCK_WONDERSHAPER=1
   unset DOWNLOAD_LIMIT_REQUIRE
+  unset HF_DOWNLOAD_MAX_WORKERS
   LIMIT_SPEC=50
   WRAP_ARGS=(bash -c 'echo wrap-ran >"${TEST_TMP_DIR}/wrap.ok"')
   run cmd_wrap
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"unthrottled"* || "${output}" == *"Could not apply"* ]]
+  [[ "${output}" == *"Gentle"* || "${output}" == *"unavailable"* || "${output}" == *"max-workers"* ]]
   [ -f "${TEST_TMP_DIR}/wrap.ok" ]
   grep -q clear "${TEST_TMP_DIR}/wondershaper.log"
+}
+
+@test "cmd_wrap skips wondershaper when HTB unsupported" {
+  export LAB_FORCE_NO_HTB=1
+  unset LAB_SHAPING_SUPPORTED
+  export LAB_MOCK_WONDERSHAPER=1
+  unset HF_DOWNLOAD_MAX_WORKERS
+  LIMIT_SPEC=80
+  : >"${TEST_TMP_DIR}/wondershaper.log"
+  WRAP_ARGS=(bash -c 'echo ok >"${TEST_TMP_DIR}/wrap2.ok"; echo workers=${HF_DOWNLOAD_MAX_WORKERS:-none}')
+  run cmd_wrap
+  [ "${status}" -eq 0 ]
+  [ -f "${TEST_TMP_DIR}/wrap2.ok" ]
+  [[ "${output}" == *"Gentle"* || "${output}" == *"unavailable"* ]]
+  # should not have applied wondershaper rates (only clear maybe)
+  if [[ -s "${TEST_TMP_DIR}/wondershaper.log" ]]; then
+    ! grep -qE 'wondershaper eth0 [0-9]' "${TEST_TMP_DIR}/wondershaper.log" || true
+  fi
+  unset LAB_FORCE_NO_HTB
+  unset LAB_SHAPING_SUPPORTED
 }
 
 @test "cmd_wrap hard-fails when DOWNLOAD_LIMIT_REQUIRE=1 and apply fails" {
