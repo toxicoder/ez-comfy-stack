@@ -112,6 +112,12 @@ LTX **balanced** pulls a **selective** subset of `Kijai/LTX2.3_comfy` (distilled
 
 Open `http://<spark-ip>:8188` (or port-forward if needed).
 
+### Load the lab workflow (not Z-Image)
+
+In ComfyUI: **Workflows → lab-flux-to-ltx** (copied into the user workflows folder on start).
+
+That template references **only** the Flux Klein NVFP4 + LTX-2.3 balanced files from `download-models`. It does **not** use Z-Image files (`ae.safetensors`, `qwen_3_4b.safetensors`, `z_image_turbo_*.safetensors`). If Comfy asks for those three, you opened the wrong graph — load **lab-flux-to-ltx** instead.
+
 !!! tip "Prebuilt image (GHCR)"
     Default image is `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (**linux/arm64**, published by CI).  
     It includes ComfyUI + PyTorch; **not** FLUX/LTX weights (those stay on `MODELS_DIR`).  
