@@ -578,6 +578,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Default location">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -602,6 +619,61 @@
   
     <nav class="md-nav" aria-label="Utilities">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cleanup-extra-ltx-monorepo-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup extra LTX monorepo files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prebuilt-container-image-ghcr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prebuilt container image (GHCR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resume-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resume &amp; cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ltx-selective-download-not-the-full-monorepo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LTX selective download (not the full monorepo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gated-models-hf_token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gated models / HF_TOKEN
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#download-path" class="md-nav__link">
@@ -814,6 +886,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Default location">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -838,6 +927,61 @@
   
     <nav class="md-nav" aria-label="Utilities">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cleanup-extra-ltx-monorepo-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup extra LTX monorepo files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prebuilt-container-image-ghcr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prebuilt container image (GHCR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resume-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resume &amp; cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ltx-selective-download-not-the-full-monorepo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LTX selective download (not the full monorepo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gated-models-hf_token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gated models / HF_TOKEN
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#download-path" class="md-nav__link">
@@ -935,6 +1079,20 @@
 <div class="highlight"><pre><span></span><code>MODELS_DIR=/mnt/models
 </code></pre></div>
 <p>Override in <code>.env</code> if needed. Prefer a large, durable disk on the Spark.</p>
+<h3 id="permissions">Permissions<a class="headerlink" href="#permissions" title="Permanent link">&para;</a></h3>
+<p><code>doctor</code>, <code>download-models</code>, and download utilities require <code>MODELS_DIR</code> to be <strong>writable by the current user</strong>.</p>
+<p>Preferred:</p>
+<div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>setup
+<span class="c1"># sudo mkdir -p + chown for MODELS_DIR when needed</span>
+</code></pre></div>
+<p>Manual:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/models
+sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">&quot;</span><span class="w"> </span>/mnt/models
+</code></pre></div>
+<p>Or point at a home path:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># .env</span>
+<span class="nv">MODELS_DIR</span><span class="o">=</span><span class="nv">$HOME</span>/models
+</code></pre></div>
 <h2 id="layout">Layout<a class="headerlink" href="#layout" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>/mnt/models/
   black-forest-labs__FLUX.2-klein-9b-nvfp4/
@@ -965,6 +1123,117 @@
 </code></pre></div>
 <p>Or:</p>
 <div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>download-models
+</code></pre></div>
+<h3 id="cleanup-extra-ltx-monorepo-files">Cleanup extra LTX monorepo files<a class="headerlink" href="#cleanup-extra-ltx-monorepo-files" title="Permanent link">&para;</a></h3>
+<p>If an older run pulled the full <code>Kijai/LTX2.3_comfy</code> snapshot into the balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Preview (default)</span>
+./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span>balanced
+
+<span class="c1"># Delete extras (keeps FP8 transformer + TE + VAEs only)</span>
+./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span>balanced<span class="w"> </span>--yes
+</code></pre></div>
+<p>Does <strong>not</strong> touch FLUX, nunchaku, or other trees under <code>MODELS_DIR</code>.</p>
+<p>Downloads use the modern <strong><code>hf download</code></strong> CLI (not deprecated <code>huggingface-cli</code>). Install:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>hf<span class="w"> </span><span class="o">||</span><span class="w"> </span>pipx<span class="w"> </span>install<span class="w"> </span>huggingface_hub
+<span class="c1"># or: pip install -U &#39;huggingface_hub[cli]&#39;</span>
+</code></pre></div>
+<p>Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. <code>HF_PROGRESS=0</code> turns progress lines off; <code>HF_PROGRESS_INTERVAL=10</code> sets the tick (seconds).</p>
+<h3 id="prebuilt-container-image-ghcr">Prebuilt container image (GHCR)<a class="headerlink" href="#prebuilt-container-image-ghcr" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Image</td>
+<td><code>ghcr.io/toxicoder/ez-comfy:flux-to-ltx</code> (arm64)</td>
+</tr>
+<tr>
+<td>Contains</td>
+<td>CUDA base, ComfyUI, Python venv, PyTorch/CUDA wheels</td>
+</tr>
+<tr>
+<td>Does <strong>not</strong> contain</td>
+<td><code>HF_TOKEN</code>, <code>.env</code>, host PII, or FLUX/LTX weights</td>
+</tr>
+<tr>
+<td>First start</td>
+<td>Seeds <code>comfy-state</code> volume from <code>/opt/comfy-prebuilt</code> (local rsync/cp)</td>
+</tr>
+<tr>
+<td>Weights</td>
+<td>Still under <code>MODELS_DIR</code> via <code>download-models</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="resume-cache">Resume &amp; cache<a class="headerlink" href="#resume-cache" title="Permanent link">&para;</a></h3>
+<p>Downloads are <strong>resumable</strong> and <strong>cacheable</strong> under <code>MODELS_DIR</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Behavior</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resume after interrupt</td>
+<td>Ctrl+C / crash leaves <code>*.incomplete</code> under each tier’s <code>.cache/huggingface/</code>; re-run the same command to continue</td>
+</tr>
+<tr>
+<td>Skip when ready</td>
+<td><code>download-flux</code> / <code>download-ltx</code> skip tiers that already have required weights (log: <code>cache hit</code>)</td>
+</tr>
+<tr>
+<td><code>HF_HOME</code></td>
+<td>Set to <code>MODELS_DIR</code> so hub metadata lives on the durable model disk</td>
+</tr>
+<tr>
+<td>Cleanup</td>
+<td><code>download-ltx.sh cleanup --yes</code> removes non-selective monorepo weights but <strong>keeps</strong> <code>.cache/</code>, <code>*.incomplete</code>, and selective keep-set files</td>
+</tr>
+</tbody>
+</table>
+<p>Do not delete a tier’s <code>.cache/huggingface/</code> folder if you want fast resume/metadata checks. Finished weight files are never re-downloaded unless missing or hub revision changes.</p>
+<h3 id="ltx-selective-download-not-the-full-monorepo">LTX selective download (not the full monorepo)<a class="headerlink" href="#ltx-selective-download-not-the-full-monorepo" title="Permanent link">&para;</a></h3>
+<p><code>Kijai/LTX2.3_comfy</code> is a multi-variant hub repo (~<strong>400 GB</strong> if you pull everything). This stack defaults to a <strong>selective</strong> subset via <code>hf download --include</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Transformer (approx)</th>
+<th>Plus</th>
+<th>Total (approx)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>balanced</strong></td>
+<td>distilled FP8 <code>…fp8_input_scaled_v3</code> (~25 GB)</td>
+<td>text projection + video/audio VAE</td>
+<td>~28–30 GB</td>
+</tr>
+<tr>
+<td><strong>quality</strong></td>
+<td>distilled BF16 (~42 GB)</td>
+<td>same TE + VAEs</td>
+<td>~45–48 GB</td>
+</tr>
+</tbody>
+</table>
+<p><code>status --json</code> readiness uses <code>min_gb</code> 20 (balanced) / 35 (quality) as a floor, not the full monorepo size.</p>
+<p>Escape hatch (operators who really want every precision/lora):</p>
+<div class="highlight"><pre><span></span><code><span class="nv">LTX_FULL_REPO</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>balanced
+</code></pre></div>
+<p>After a full-repo mistake, use <code>cleanup --yes</code> (above) instead of wiping all of <code>MODELS_DIR</code>.</p>
+<h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
+<p>FLUX and some LTX assets may require accepting the license on Hugging Face and a token:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># .env</span>
+<span class="nv">HF_TOKEN</span><span class="o">=</span>hf_...
+<span class="c1"># or: hf auth login</span>
 </code></pre></div>
 <h3 id="download-path">Download path<a class="headerlink" href="#download-path" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram

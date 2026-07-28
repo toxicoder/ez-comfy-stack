@@ -662,6 +662,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#docker-missing-on-dgx-spark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker missing on DGX Spark
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models_dir-permission-denied" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MODELS_DIR permission denied
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wondershaper-qdisc-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wondershaper / qdisc failures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#logs" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -756,6 +789,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#docker-missing-on-dgx-spark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker missing on DGX Spark
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models_dir-permission-denied" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MODELS_DIR permission denied
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wondershaper-qdisc-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wondershaper / qdisc failures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#logs" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -818,50 +884,71 @@
 </thead>
 <tbody>
 <tr>
-<td>SSH freezes during download</td>
-<td>Full-rate HF pull</td>
-<td>Use <code>download-models</code> (auto limit) or lower fixed Mbps; <code>download-limit clear</code></td>
+<td><code>docker missing</code> in doctor</td>
+<td>Docker not installed / snap-only</td>
+<td><code>./scripts/manage.sh setup --install-docker</code> (sudo apt CE + compose); then <code>newgrp docker</code> or re-login</td>
 </tr>
 <tr>
-<td>Extreme model thrash / 5–15× slow</td>
-<td>Unpatched free-memory</td>
-<td>Confirm patch in container logs; re-run entrypoint install</td>
+<td>docker permission denied</td>
+<td>Not in <code>docker</code> group this session</td>
+<td><code>sudo usermod -aG docker $USER</code> then <code>newgrp docker</code> or re-login SSH</td>
 </tr>
 <tr>
-<td><code>start</code> refused</td>
-<td>Headroom check</td>
-<td>Free RAM/disk; stop other GPU jobs</td>
+<td>docker daemon not reachable</td>
+<td>dockerd not running</td>
+<td><code>sudo systemctl start docker</code></td>
 </tr>
 <tr>
-<td>Empty models in UI</td>
-<td>Downloads not run</td>
-<td><code>download-flux</code> / <code>download-ltx</code> status; check <code>MODELS_DIR</code> mount</td>
+<td><code>MODELS_DIR … not writable</code></td>
+<td><code>/mnt/models</code> missing or root-owned</td>
+<td><code>./scripts/manage.sh setup</code> <strong>or</strong> <code>sudo mkdir -p /mnt/models &amp;&amp; sudo chown $USER:$USER /mnt/models</code> <strong>or</strong> <code>MODELS_DIR=$HOME/models</code></td>
 </tr>
 <tr>
-<td>Pending / can't start container</td>
-<td>Docker/GPU runtime</td>
-<td><code>nvidia-smi</code>, Container Toolkit install</td>
+<td>wondershaper <code>qdisc kind is unknown</code> / RTNETLINK</td>
+<td>No HTB/IFB (common on DGX Spark)</td>
+<td>Expected; wrap uses <strong>gentle HF max-workers</strong> from measured speed (HTTP probe). Not a hard Mbps cap. <code>DOWNLOAD_LIMIT=off</code> for full blast</td>
 </tr>
 <tr>
-<td>Cold start forever</td>
-<td>First PVC/volume pip+git</td>
-<td>Wait; <code>manage.sh logs</code>; check network</td>
+<td>Speedtest failed / always 50 Mbps</td>
+<td>CLI missing or probe blocked</td>
+<td>Auto-installs <code>speedtest-cli</code> when possible; <strong>clears limits before measure</strong>; then HTTP probe / live RX. Check outbound HTTPS if all fail</td>
 </tr>
 <tr>
-<td>Nunchaku missing</td>
-<td>aarch64 wheel fail</td>
-<td>Fail-soft; quality/FP8 paths may still work</td>
+<td>Ctrl+C does not stop download</td>
+<td>Old tee pipeline orphan</td>
+<td>Pull latest; wrap/hf use process groups — Ctrl+C should stop <code>hf</code> within seconds</td>
 </tr>
 <tr>
-<td>Limits stuck after kill</td>
-<td>trap skipped</td>
-<td><code>./scripts/manage.sh download-limit clear</code></td>
+<td><code>Still waiting to acquire lock</code> on <code>*.lock</code></td>
+<td>Stale HF locks from killed downloads</td>
+<td><code>./scripts/manage.sh clear-hf-locks</code> or auto-clear on download-models; if stuck: <code>HF_LOCK_CLEAR_FORCE=1 ./scripts/manage.sh clear-hf-locks</code></td>
 </tr>
 </tbody>
 </table>
+<p>| SSH freezes during download | Full-rate HF pull (limit off or soft-fail) | Prefer working <code>download-limit</code>; lower fixed Mbps; <code>download-limit clear</code> if half-applied |
+| Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
+| <code>start</code> refused | Headroom check | Free RAM/disk; stop other GPU jobs |
+| Empty models in UI | Downloads not run | <code>download-flux</code> / <code>download-ltx</code> status; check <code>MODELS_DIR</code> mount |
+| <code>huggingface-cli is deprecated</code> / 0 GB after download-models | Scripts used stub CLI | Pull latest; ensure <code>hf</code> on PATH (<code>pipx install huggingface_hub</code>); re-run download-models |
+| Download failed / gated license | No token or license not accepted | Accept model license on HF; set <code>HF_TOKEN</code> in <code>.env</code> or <code>hf auth login</code> |
+| Long Python <code>GatedRepoError</code> traceback | Older CLI path / unparsed hub error | Current stack prints a short checklist; open the model URL, Agree as the token’s user, re-run download. Debug: <code>LAB_DEBUG=1</code> |
+| Pending / can't start container | Docker/GPU runtime | <code>nvidia-smi</code>, Container Toolkit install |
+| <code>failed to fetch oauth token: denied</code> / <code>nvcr.io</code> Access Denied on <code>start</code> | NGC base image pull without login | Pull latest (default base is <strong>Docker Hub</strong> <code>nvidia/cuda</code>). Rebuild: <code>./scripts/manage.sh start</code>. If you set <code>CUDA_BASE_IMAGE=nvcr.io/...</code>, run <code>docker login nvcr.io</code> (user <code>$oauthtoken</code>, password = NGC API key) |
+| Build OK, <code>status</code> empty / not in <code>docker ps</code> | Container exited immediately (<code>restart: "no"</code>) | Pull latest (workflow no longer mounts into <code>ComfyUI/</code> before clone). <code>./scripts/manage.sh logs</code> or <code>docker logs ez-comfy-flux-to-ltx</code>. Reset poisoned volume: <code>./scripts/manage.sh stop &amp;&amp; docker volume rm ez-comfy-state</code> then <code>start</code> again. Stop other GPU containers if needed |
+| <code>start</code> returns while logs still downloading torch | Normal cold install; multi‑GB wheels | Leave it running; <code>start</code> streams logs by default. Re-attach: <code>./scripts/manage.sh logs</code>. Markers: <code>[comfy-install] ══ step N/11 ══</code> |
+| Quiet for minutes on step 4 (PyTorch) | Large cudnn/torch wheel download | Prefer GHCR prebuilt image (seed, no pip). Or wait for pip bars; host heartbeat every 30s |
+| <code>docker pull ghcr.io/...</code> denied / not found | Package not published yet or private | Run <code>publish-image</code> workflow; ensure package is public; or <code>LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start</code> (long local prebuild) |
+| First start still runs multi-GB pip | Thin image / no prebuilt / force cold | Check logs for “Seeding … prebuilt”. Rebuild with <code>EZ_COMFY_PREBUILD=1</code> or pull GHCR tag. Unset <code>LAB_FORCE_COLD_INSTALL</code> |
+| <code>IndentationError</code> in <code>model_management.py</code> / <code>mem_free_torch</code> | Old free-memory patch broke indent | Pull latest (patch is bind-mounted). <code>./scripts/manage.sh stop &amp;&amp; ./scripts/manage.sh start</code> — auto-repairs via git restore + re-patch. No full image rebuild required |
+| Cold start forever | First PVC/volume pip+git | Wait; <code>manage.sh logs</code>; check network |
+| Nunchaku missing | aarch64 wheel fail | Fail-soft; quality/FP8 paths may still work |
+| Limits stuck after kill | trap skipped | <code>./scripts/manage.sh download-limit clear</code> |</p>
 <h2 id="symptom-decision-tree">Symptom decision tree<a class="headerlink" href="#symptom-decision-tree" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
   Q["What is broken?"]
+  Q --&gt; Docker{"doctor: docker missing?"}
+  Q --&gt; Models{"MODELS_DIR not writable?"}
+  Q --&gt; Qdisc{"wondershaper / qdisc errors?"}
   Q --&gt; SSH{"SSH freezes&lt;br/&gt;or host sluggish?"}
   Q --&gt; Start{"start refused?"}
   Q --&gt; Empty{"Empty models in UI?"}
@@ -869,12 +956,45 @@
   Q --&gt; Cold{"Cold start forever?"}
   Q --&gt; Limit{"Bandwidth limit stuck?"}
 
+  Docker --&gt; A0["apt docker-ce + compose plugin&lt;br/&gt;docker group · re-login"]
+  Models --&gt; A0b["sudo mkdir/chown /mnt/models&lt;br/&gt;or MODELS_DIR in .env"]
+  Qdisc --&gt; A0c["soft-fail unthrottled warn OK&lt;br/&gt;modprobe sch_htb · clear"]
   SSH --&gt;|during download| A1["download-models / lower Mbps&lt;br/&gt;or download-limit clear"]
   Start --&gt; A2["Free RAM/disk&lt;br/&gt;stop other GPU jobs · doctor"]
   Empty --&gt; A3["download-flux/ltx status&lt;br/&gt;check MODELS_DIR mount"]
   Slow --&gt; A4["Confirm free-memory patch&lt;br/&gt;in logs · restart container"]
   Cold --&gt; A5["Wait 10–30+ min&lt;br/&gt;manage.sh logs · network"]
   Limit --&gt; A6["manage.sh download-limit clear"]</code></pre>
+<h2 id="docker-missing-on-dgx-spark">Docker missing on DGX Spark<a class="headerlink" href="#docker-missing-on-dgx-spark" title="Permanent link">&para;</a></h2>
+<p>Docker is usually pre-installed on DGX Spark, but updates or OS reimages can remove it. Prefer <strong>apt Docker CE</strong> (not snap) so the NVIDIA Container Toolkit can attach GPUs.</p>
+<div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
+<span class="c1"># sudo password + type yes if prompted</span>
+newgrp<span class="w"> </span>docker<span class="w">   </span><span class="c1"># if permission denied in this shell</span>
+./scripts/manage.sh<span class="w"> </span>doctor
+</code></pre></div>
+<p>Non-interactive:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">LAB_NON_INTERACTIVE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">LAB_CONFIRM_TOKEN</span><span class="o">=</span>yes<span class="w"> </span><span class="nv">SETUP_INSTALL_DOCKER</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/manage.sh<span class="w"> </span>setup
+</code></pre></div>
+<h2 id="models_dir-permission-denied">MODELS_DIR permission denied<a class="headerlink" href="#models_dir-permission-denied" title="Permanent link">&para;</a></h2>
+<p>Default cache is <code>/mnt/models</code> (shared with nvidia-dgx-spark-lab). Prefer bootstrap:</p>
+<div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>setup
+<span class="c1"># creates/chowns MODELS_DIR with sudo when needed</span>
+</code></pre></div>
+<p>Manual equivalent:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/models
+sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">&quot;</span><span class="w"> </span>/mnt/models
+<span class="c1"># or in .env:</span>
+<span class="c1"># MODELS_DIR=$HOME/models</span>
+./scripts/manage.sh<span class="w"> </span>doctor
+</code></pre></div>
+<h2 id="wondershaper-qdisc-failures">wondershaper / qdisc failures<a class="headerlink" href="#wondershaper-qdisc-failures" title="Permanent link">&para;</a></h2>
+<p><code>download-models</code> wraps downloads under wondershaper. If the kernel rejects HTB (<code>qdisc kind is unknown</code>) or illegal rates, <strong>wrap soft-fails</strong>: it warns and continues <strong>unthrottled</strong> (SSH risk). Persistent <code>download-limit run</code> still hard-fails. Set <code>DOWNLOAD_LIMIT_REQUIRE=1</code> to hard-fail wrap too.</p>
+<div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>download-limit<span class="w"> </span>clear
+<span class="c1"># optional: sudo modprobe sch_htb sch_ingress sch_sfq</span>
+./scripts/manage.sh<span class="w"> </span>download-models
+<span class="c1"># or explicitly:</span>
+<span class="c1"># DOWNLOAD_LIMIT=off ./scripts/manage.sh download-models</span>
+</code></pre></div>
 <h2 id="logs">Logs<a class="headerlink" href="#logs" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>logs
 docker<span class="w"> </span>logs<span class="w"> </span>ez-comfy-flux-to-ltx

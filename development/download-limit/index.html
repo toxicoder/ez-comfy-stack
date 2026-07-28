@@ -636,10 +636,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#auto-mode" class="md-nav__link">
+  <a href="#auto-mode-measure-real-mbps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Auto mode
+        Auto mode (measure real Mbps)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dgx-spark-no-htb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGX Spark / no HTB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apply-verification-and-soft-fail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apply verification and soft-fail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ctrlc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ctrl+C
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-speed-when-preflight-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live speed when preflight fails
       
     </span>
   </a>
@@ -834,10 +878,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#auto-mode" class="md-nav__link">
+  <a href="#auto-mode-measure-real-mbps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Auto mode
+        Auto mode (measure real Mbps)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dgx-spark-no-htb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGX Spark / no HTB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apply-verification-and-soft-fail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apply verification and soft-fail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ctrlc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ctrl+C
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-speed-when-preflight-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live speed when preflight fails
       
     </span>
   </a>
@@ -938,20 +1026,100 @@
   Cmd --&gt;|run| Run["Apply fixed or auto limit"]
   Cmd --&gt;|clear| Clear["Remove wondershaper limit"]
   Cmd --&gt;|wrap| Wrap["Apply limit → run command&lt;br/&gt;always clear on exit"]</code></pre>
-<h2 id="auto-mode">Auto mode<a class="headerlink" href="#auto-mode" title="Permanent link">&para;</a></h2>
+<h2 id="auto-mode-measure-real-mbps">Auto mode (measure real Mbps)<a class="headerlink" href="#auto-mode-measure-real-mbps" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Run <code>speedtest-cli</code> (or Ookla <code>speedtest</code>)  </li>
-<li>Read download Mbps  </li>
-<li>Apply <code>floor(0.85 × measured)</code> (minimum 1 Mbps)  </li>
-<li>If speedtest fails, use <code>DOWNLOAD_LIMIT_FALLBACK</code> (default 50)</li>
+<li><strong>Clear any existing bandwidth limits</strong> on the default-route interface (wondershaper + best-effort <code>tc</code>) so residual caps do not skew the result  </li>
+<li><strong>Install <code>speedtest-cli</code> hard</strong> (<code>pip --user</code>, <code>--break-system-packages</code>, <code>pipx</code>, <code>apt</code>/<code>python3-speedtest-cli</code> with <code>sudo -n</code>)  </li>
+<li>Try <code>speedtest-cli --simple</code>  </li>
+<li>Else Ookla <code>speedtest</code>  </li>
+<li>Else <strong>HTTP probe</strong> multi-URL (Cloudflare, OVH, GitHub, …) via <code>curl -4</code>  </li>
+<li>Apply <code>floor(0.85 × measured)</code> (minimum 1 Mbps) when sample is <strong>trusted</strong>  </li>
+<li>If all probes fail: <strong>do not</strong> use idle NIC RX as line rate — use default <code>max-workers=4</code> and start download  </li>
 </ol>
+<p><strong>Ctrl+C</strong> kills the download process group, progress heartbeat, and HTTP probes (INT→TERM→KILL).</p>
+<p>Override HTTP probe: <code>SPEEDTEST_HTTP_URL</code>, <code>SPEEDTEST_HTTP_BYTES</code>.</p>
 <pre class="mermaid"><code>flowchart TB
-  A["--limit auto"] --&gt; B["speedtest-cli or Ookla speedtest"]
-  B --&gt; C{"measured Mbps?"}
-  C --&gt;|yes| D["limit = max 1, floor 0.85 × Mbps"]
-  C --&gt;|no / fail| E["DOWNLOAD_LIMIT_FALLBACK&lt;br/&gt;default 50 Mbps"]
-  D --&gt; F["wondershaper on default-route iface"]
-  E --&gt; F</code></pre>
+  A["--limit auto"] --&gt; B["speedtest-cli"]
+  B --&gt; C{"ok?"}
+  C --&gt;|no| D["Ookla speedtest"]
+  D --&gt; E{"ok?"}
+  E --&gt;|no| F["HTTP curl probe&lt;br/&gt;Cloudflare __down"]
+  F --&gt; G{"ok?"}
+  C --&gt;|yes| H["limit = floor 0.85 × Mbps"]
+  E --&gt;|yes| H
+  G --&gt;|yes| H
+  G --&gt;|no| I["DOWNLOAD_LIMIT_FALLBACK"]
+  H --&gt; J{"kernel HTB?"}
+  I --&gt; J
+  J --&gt;|yes| K["wondershaper Mbps cap"]
+  J --&gt;|no| L["gentle HF max-workers"]</code></pre>
+<p>Upload is set to a high <strong>legal</strong> “uncapped” rate (clamped for HTB). Extremely large historical defaults (e.g. 100000 Mbps) produced <code>Illegal "rate"</code> on some kernels.</p>
+<h2 id="dgx-spark-no-htb">DGX Spark / no HTB<a class="headerlink" href="#dgx-spark-no-htb" title="Permanent link">&para;</a></h2>
+<p>Many Spark kernels lack <code>sch_htb</code> / IFB (<code>qdisc kind is unknown</code>). The tool <strong>detects</strong> this and <strong>does not</strong> spam wondershaper/RTNETLINK.</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTB available</td>
+<td>wondershaper hard Mbps cap at 85% of measured</td>
+</tr>
+<tr>
+<td>HTB missing (typical Spark)</td>
+<td><strong>Gentle HF mode</strong>: <code>HF_DOWNLOAD_MAX_WORKERS</code> from measured Mbps (floor <strong>2</strong>–4), <code>HF_HUB_ENABLE_HF_TRANSFER=0</code> — not a hard Mbps cap</td>
+</tr>
+<tr>
+<td><code>DOWNLOAD_LIMIT=off</code></td>
+<td>Full blast (SSH risk)</td>
+</tr>
+</tbody>
+</table>
+<p>Model downloads keep a <strong>real TTY</strong> for <code>hf</code>/<code>tqdm</code> progress (no <code>2&gt;&amp;1 | tee</code> on interactive sessions). Cache hits still flash <code>100%</code> in 0s. Heartbeats every 10s show <code>du</code> growth under the target dir if bars are quiet.</p>
+<h2 id="apply-verification-and-soft-fail">Apply verification and soft-fail<a class="headerlink" href="#apply-verification-and-soft-fail" title="Permanent link">&para;</a></h2>
+<p>After wondershaper runs, the utility checks that a shaping qdisc is active (<code>tc qdisc show</code>, or hermetic mocks). If apply fails or HTB is missing:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>run</code></td>
+<td><strong>Hard-fail</strong> (operator asked for a standing limit)</td>
+</tr>
+<tr>
+<td><code>wrap</code></td>
+<td><strong>Soft path</strong>: gentle HF workers + clear on exit</td>
+</tr>
+<tr>
+<td><code>wrap</code> + <code>DOWNLOAD_LIMIT_REQUIRE=1</code></td>
+<td><strong>Hard-fail</strong> like <code>run</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Safety impact:</strong> Gentle mode reduces parallel download stampede but is <strong>not</strong> a kernel Mbps cap. Prefer HTB where available. Clear-on-exit remains mandatory.</p>
+<h2 id="ctrlc">Ctrl+C<a class="headerlink" href="#ctrlc" title="Permanent link">&para;</a></h2>
+<p>Downloads run in a <strong>process group</strong>. Ctrl+C (SIGINT) or SIGTERM:</p>
+<ol>
+<li>Forwards to <code>hf</code> / nested bash (not only <code>tee</code>)</li>
+<li>Clears wondershaper limits if any</li>
+<li>Exits promptly (status 130)</li>
+</ol>
+<p>You should not need <code>kill -9</code> on leftover download processes after a clean Ctrl+C.</p>
+<h2 id="live-speed-when-preflight-fails">Live speed when preflight fails<a class="headerlink" href="#live-speed-when-preflight-fails" title="Permanent link">&para;</a></h2>
+<p>If auto mode cannot measure speed <strong>before</strong> download:</p>
+<ol>
+<li><strong>Measure phase</strong> (~15s): sample NIC RX while a short HTTP download generates traffic (not the multi‑GB model pull — avoids HF locks and kill/restart hangs)  </li>
+<li>Set target = 85% of live Mbps → gentle HF max-workers (or kernel HTB only if <code>sudo -n</code> works and qdisc applies)  </li>
+<li><strong>Download phase</strong>: one <strong>foreground</strong> model download with live tqdm progress  </li>
+</ol>
+<p>No interactive sudo during this path. Mock/tests: <code>LAB_MOCK_LIVE_RX_MBPS</code>.</p>
 <h2 id="wrap-lifecycle">Wrap lifecycle<a class="headerlink" href="#wrap-lifecycle" title="Permanent link">&para;</a></h2>
 <p><code>wrap</code> always clears on <code>EXIT</code> / <code>INT</code> / <code>TERM</code> so a killed download cannot leave the host permanently throttled.</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -961,8 +1129,15 @@
   participant Cmd as command e.g. download-flux
 
   Op-&gt;&gt;W: wrap --limit auto -- command
-  W-&gt;&gt;WS: apply limit
-  W-&gt;&gt;Cmd: run
+  W-&gt;&gt;WS: apply limit + verify qdisc
+  alt apply ok
+    W-&gt;&gt;Cmd: run throttled
+  else apply fail and not REQUIRE
+    W--&gt;&gt;Op: warn unthrottled SSH risk
+    W-&gt;&gt;Cmd: run unthrottled
+  else apply fail and REQUIRE=1
+    W--&gt;&gt;Op: hard fail
+  end
   alt success
     Cmd--&gt;&gt;W: exit 0
   else kill / fail
