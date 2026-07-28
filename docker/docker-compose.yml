@@ -17,6 +17,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        # Public Hub by default; set CUDA_BASE_IMAGE in .env for NGC after docker login nvcr.io
+        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvidia/cuda:13.0.0-devel-ubuntu24.04}
     image: ez-comfy:flux-to-ltx
     container_name: ez-comfy-flux-to-ltx
     # Manual lifecycle only — operator uses manage.sh start/stop

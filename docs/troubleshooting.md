@@ -35,6 +35,7 @@ tags: [troubleshooting, comfyui, docker]
 | Download failed / gated license | No token or license not accepted | Accept model license on HF; set `HF_TOKEN` in `.env` or `hf auth login` |
 | Long Python `GatedRepoError` traceback | Older CLI path / unparsed hub error | Current stack prints a short checklist; open the model URL, Agree as the token’s user, re-run download. Debug: `LAB_DEBUG=1` |
 | Pending / can't start container | Docker/GPU runtime | `nvidia-smi`, Container Toolkit install |
+| `failed to fetch oauth token: denied` / `nvcr.io` Access Denied on `start` | NGC base image pull without login | Pull latest (default base is **Docker Hub** `nvidia/cuda`). Rebuild: `./scripts/manage.sh start`. If you set `CUDA_BASE_IMAGE=nvcr.io/...`, run `docker login nvcr.io` (user `$oauthtoken`, password = NGC API key) |
 | Cold start forever | First PVC/volume pip+git | Wait; `manage.sh logs`; check network |
 | Nunchaku missing | aarch64 wheel fail | Fail-soft; quality/FP8 paths may still work |
 | Limits stuck after kill | trap skipped | `./scripts/manage.sh download-limit clear` |

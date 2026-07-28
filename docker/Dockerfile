@@ -9,8 +9,14 @@
 #   No models baked into the image (mounted from host /mnt/models).
 #   Auto-restart is disabled in docker-compose.yml (restart: "no").
 #   PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True reduces allocator thrash.
+#
+# Base image:
+#   Default is public Docker Hub nvidia/cuda (no NGC login). nvcr.io often
+#   returns "oauth token: denied" without docker login nvcr.io.
+#   Override: CUDA_BASE_IMAGE=nvcr.io/nvidia/cuda:13.0.0-devel-ubuntu24.04
 
-FROM nvcr.io/nvidia/cuda:13.0.0-devel-ubuntu24.04 AS base
+ARG CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-devel-ubuntu24.04
+FROM ${CUDA_BASE_IMAGE} AS base
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \

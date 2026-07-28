@@ -22,7 +22,7 @@ tags: [getting-started, docker, comfyui]
 ## Prerequisites
 
 - NVIDIA DGX Spark (or compatible GB10 host) with drivers + **NVIDIA Container Toolkit**
-- Docker with Compose v2 plugin (prefer apt `docker-ce`, not snap; user in `docker` group)
+- Docker with Compose v2 plugin (prefer apt `docker-ce`, not snap; user in `docker` group). Image build uses public **Docker Hub** `nvidia/cuda` (no NGC/`nvcr.io` login required)
 - Writable shared model cache: default `/mnt/models` (`sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models`) or override `MODELS_DIR` in `.env`
 - `git`, `python3`, `pip` / `pipx`
 - Hugging Face CLI: `hf` from `huggingface_hub` (`pipx install huggingface_hub` or `pip install -U 'huggingface_hub[cli]'`) — **not** the deprecated `huggingface-cli` stub

@@ -24,6 +24,18 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "Dockerfile defaults to public Docker Hub CUDA base not nvcr" {
+  run grep -E 'ARG CUDA_BASE_IMAGE=nvidia/cuda:' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  run grep -E 'FROM \$\{CUDA_BASE_IMAGE\}' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  # Hardcoded FROM nvcr.io as sole base would re-break unauthenticated builds
+  run grep -E '^FROM nvcr\.io/' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -ne 0 ]
+  run grep -E 'CUDA_BASE_IMAGE' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+}
+
 @test "compose has mem_limit" {
   run grep -E 'mem_limit' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
