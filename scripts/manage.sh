@@ -282,7 +282,11 @@ cmd_status() {
   fi
   log "Stack status (project ez-comfy)"
   if resolve_docker_on_path; then
-    compose_run ps 2>/dev/null || warn "compose ps failed (stack may be stopped)"
+    # -a shows Exited containers (restart: no hides them from default ps)
+    compose_run ps -a 2>/dev/null || warn "compose ps failed (stack may be stopped)"
+    if ! compose_is_running; then
+      warn "comfyui is not running. Logs: ./scripts/manage.sh logs --tail 100"
+    fi
   else
     warn "docker not available"
   fi

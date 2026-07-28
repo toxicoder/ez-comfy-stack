@@ -326,6 +326,7 @@ line3" "org/x"
   [ "${status}" -eq 0 ]
 
   export MODELS_DIR="${TEST_TMP_DIR}/models"
+  export LAB_STACK_VERIFY_SETTLE=0
   run stack_start
   [ "${status}" -eq 0 ]
   run stack_stop
@@ -334,4 +335,44 @@ line3" "org/x"
   [ "${status}" -eq 0 ]
   run stack_logs
   [ "${status}" -eq 0 ]
+
+  # up without compose_running flag → verify fails
+  rm -f "${TEST_TMP_DIR}/compose_running"
+  install_mock_bin docker '
+echo "docker $*" >> "${TEST_TMP_DIR}/docker_calls.log"
+if [[ "${1}" == "compose" ]]; then
+  shift
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
+      -f|--file|--project-name|-p) shift 2 || true ;;
+      up) echo ok; exit 0 ;;
+      ps)
+        if [[ " $* " == *" --status running"* ]]; then exit 0; fi
+        echo "NAME STATUS"; exit 0
+        ;;
+      logs) echo "boom"; exit 0 ;;
+      *) shift || true ;;
+    esac
+  done
+fi
+exit 0
+'
+  export COMPOSE_BIN=""
+  # re-install full mocks then override? use COMPOSE_BIN for fail path
+  install_mock_bin fakecompose '
+if [[ "$1" == "up" ]]; then exit 0; fi
+if [[ "$1" == "ps" ]]; then
+  if [[ "$*" == *"--status running"* ]]; then exit 0; fi
+  echo "exited"
+  exit 0
+fi
+if [[ "$1" == "logs" ]]; then echo "git clone failed"; exit 0; fi
+exit 0
+'
+  export COMPOSE_BIN="${TEST_TMP_DIR}/bin/fakecompose"
+  run stack_verify_running 0
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not running"* || "${output}" == *"not running after start"* ]]
+  unset COMPOSE_BIN
+  install_docker_mocks
 }

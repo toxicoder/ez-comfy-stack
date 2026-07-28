@@ -36,6 +36,13 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "workflow mount is outside COMFY_HOME tree" {
+  run grep -E 'lab-flux-to-ltx.json:/opt/ez-comfy/workflows/' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'lab-flux-to-ltx.json:/comfy-state/ComfyUI/' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -ne 0 ]
+}
+
 @test "compose has mem_limit" {
   run grep -E 'mem_limit' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]

@@ -132,6 +132,46 @@ compose_is_running() {
 }
 
 #######################################
+# After compose up, fail if comfyui is not running; print ps -a and recent logs.
+# Globals:
+#   None (uses compose_run)
+# Arguments:
+#   $1  Optional settle seconds (default 3)
+# Outputs:
+#   Status/errors on stderr; compose ps/logs on failure
+# Returns:
+#   0 if running; 1 if not
+#######################################
+stack_verify_running() {
+  local settle="${1:-3}"
+  local i retries=3
+  if [[ ${settle} -gt 0 ]]; then
+    sleep "${settle}"
+  else
+    retries=1
+  fi
+  i=0
+  while [[ ${i} -lt ${retries} ]]; do
+    i=$((i + 1))
+    if compose_is_running; then
+      return 0
+    fi
+    if [[ ${i} -lt ${retries} ]]; then
+      sleep 1
+    fi
+  done
+  err "Container is not running after start (restart: no → exits stay stopped)."
+  warn "compose ps -a:"
+  compose_run ps -a 2>/dev/null || true
+  warn "Recent comfyui logs:"
+  compose_run logs --tail 80 comfyui 2>/dev/null || true
+  err "Tips: ./scripts/manage.sh logs — if volume was poisoned by a failed first start:"
+  err "  ./scripts/manage.sh stop && docker volume rm ez-comfy-state  # then start again"
+  err "  Stop other GPU containers if nvidia runtime fails; check free RAM vs MEM_RESERVATION"
+  return 1
+}
+
+#######################################
 # Build images if needed and start the unified stack detached (`up -d --build`).
 # Exports default env for compose interpolation, ensures MODELS_DIR/comfy exists,
 # and logs cold-start expectations. Does not confirm with the user.
@@ -143,7 +183,7 @@ compose_is_running() {
 # Outputs:
 #   Status via log/warn/err on stderr unless noted.
 # Returns:
-#   Exit status of `compose up`.
+#   0 when up and container running; non-zero on compose or verify failure.
 #######################################
 stack_start() {
   require_docker
@@ -154,9 +194,18 @@ stack_start() {
   ensure_models_dir "${MODELS_DIR}" || return 1
   mkdir -p "${MODELS_DIR}/comfy"
   log "Starting unified flux-to-ltx stack (mem_limit=${MEM_LIMIT})..."
-  compose_run up -d --build
+  if ! compose_run up -d --build; then
+    err "compose up failed"
+    compose_run ps -a 2>/dev/null || true
+    compose_run logs --tail 80 comfyui 2>/dev/null || true
+    return 1
+  fi
+  # LAB_STACK_VERIFY_SETTLE=0 skips sleep in hermetic tests
+  if ! stack_verify_running "${LAB_STACK_VERIFY_SETTLE:-3}"; then
+    return 1
+  fi
   log "Stack starting. UI: http://localhost:${COMFY_PORT}"
-  log "Cold start (first install) may take 10–30+ minutes."
+  log "Cold start (first install) may take 10–30+ minutes — follow: ./scripts/manage.sh logs"
 }
 
 #######################################

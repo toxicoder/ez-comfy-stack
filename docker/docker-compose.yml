@@ -45,7 +45,9 @@ services:
     volumes:
       - ${MODELS_DIR:-/mnt/models}:/models
       - comfy-state:/comfy-state
-      - ../workflows/lab-flux-to-ltx.json:/comfy-state/ComfyUI/user/default/workflows/lab-flux-to-ltx.json:ro
+      # Mount outside COMFY_HOME — binding into ComfyUI/ on an empty volume
+      # pre-creates that tree and breaks first-start `git clone`.
+      - ../workflows/lab-flux-to-ltx.json:/opt/ez-comfy/workflows/lab-flux-to-ltx.json:ro
     gpus: all
     shm_size: "16gb"
     mem_limit: ${MEM_LIMIT:-90g}

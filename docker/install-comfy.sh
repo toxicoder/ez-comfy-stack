@@ -127,7 +127,22 @@ main() {
     if [[ ! -d "${COMFY_HOME}/.git" ]]; then
       log "Cloning ComfyUI into ${COMFY_HOME}"
       mkdir -p "$(dirname "${COMFY_HOME}")"
-      git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git "${COMFY_HOME}"
+      # Destination may already exist (empty volume + old workflow bind mount created
+      # intermediate dirs). git clone refuses non-empty targets — clone then merge.
+      if [[ -d ${COMFY_HOME} && -n "$(ls -A "${COMFY_HOME}" 2>/dev/null || true)" ]]; then
+        local tmp_clone
+        tmp_clone="$(mktemp -d)"
+        git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git "${tmp_clone}/ComfyUI"
+        # Prefer rsync when present; else cp -a
+        if command -v rsync >/dev/null 2>&1; then
+          rsync -a "${tmp_clone}/ComfyUI/" "${COMFY_HOME}/"
+        else
+          cp -a "${tmp_clone}/ComfyUI/." "${COMFY_HOME}/"
+        fi
+        rm -rf "${tmp_clone}"
+      else
+        git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git "${COMFY_HOME}"
+      fi
     else
       log "ComfyUI tree present; pulling latest (best-effort)"
       git -C "${COMFY_HOME}" pull --ff-only || warn "git pull failed; continuing"

@@ -63,8 +63,20 @@ teardown() {
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
-  # point patch path missing is fine
-  run main
+  # Simulate bind-mounted workflow at the path entrypoint copies from
+  mkdir -p "${TEST_TMP_DIR}/opt-workflows"
+  echo '{"lab":true}' >"${TEST_TMP_DIR}/opt-workflows/lab-flux-to-ltx.json"
+  # shellcheck disable=SC2030
+  run bash -c "
+    mkdir -p /opt/ez-comfy/workflows 2>/dev/null || true
+    if [[ -d /opt/ez-comfy/workflows && -w /opt/ez-comfy/workflows ]]; then
+      cp '${TEST_TMP_DIR}/opt-workflows/lab-flux-to-ltx.json' /opt/ez-comfy/workflows/
+    fi
+    source '${REPO_ROOT}/docker/entrypoint.sh'
+    export COMFY_HOME='${COMFY_HOME}' VENV='${VENV}'
+    export LAB_ENTRYPOINT_INSTALL_CMD=true LAB_ENTRYPOINT_NO_EXEC=1
+    main
+  "
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"starting ComfyUI"* || "${output}" == *"installing"* ]]
 }

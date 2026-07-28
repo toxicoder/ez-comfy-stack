@@ -32,7 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /opt/ez-comfy
 
 COPY install-comfy.sh entrypoint.sh patch_get_free_memory.py /opt/ez-comfy/
-RUN chmod +x /opt/ez-comfy/install-comfy.sh /opt/ez-comfy/entrypoint.sh
+RUN chmod +x /opt/ez-comfy/install-comfy.sh /opt/ez-comfy/entrypoint.sh \
+    && mkdir -p /opt/ez-comfy/workflows
 
 ENV COMFY_HOME=/comfy-state/ComfyUI \
     MODELS_ROOT=/models \

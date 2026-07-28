@@ -53,6 +53,12 @@ main() {
   fi
 
   mkdir -p "${COMFY_HOME}/user/default/workflows"
+  # Workflow is bind-mounted under /opt/ez-comfy/workflows (not into COMFY_HOME)
+  if [[ -f /opt/ez-comfy/workflows/lab-flux-to-ltx.json ]]; then
+    cp -f /opt/ez-comfy/workflows/lab-flux-to-ltx.json \
+      "${COMFY_HOME}/user/default/workflows/lab-flux-to-ltx.json"
+    echo "[entrypoint] installed lab-flux-to-ltx workflow"
+  fi
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
   cd "${COMFY_HOME}"
