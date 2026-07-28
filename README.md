@@ -1,9 +1,13 @@
 # ez-comfy-stack
 
+[![Docs (latest)](https://img.shields.io/badge/docs-latest-indigo?style=for-the-badge&logo=materialformkdocs&logoColor=white)](https://toxicoder.github.io/ez-comfy-stack/latest/)
+[![Docs (development)](https://img.shields.io/badge/docs-development-blueviolet?style=for-the-badge&logo=materialformkdocs&logoColor=white)](https://toxicoder.github.io/ez-comfy-stack/development/)
 [![CI](https://img.shields.io/github/actions/workflow/status/toxicoder/ez-comfy-stack/ci.yml?branch=development&style=for-the-badge&logo=github&label=CI)](https://github.com/toxicoder/ez-comfy-stack/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/toxicoder/ez-comfy-stack?style=for-the-badge)](LICENSE)
 
 **Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with the unified **Flux → LTX** pipeline (image + video), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling.
+
+**Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) — MkDocs Material, published per branch via GitHub Pages.
 
 Inspired by [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) visual workloads — without K3s, Ansible, or the full lab dashboard. Use the lab for production multi-stack operations; use this repo for faster demos.
 
@@ -82,13 +86,17 @@ flowchart LR
 
 ## Documentation
 
+**Read online (published):** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) · [development](https://toxicoder.github.io/ez-comfy-stack/development/)
+
+CI deploys docs via `.github/workflows/deploy-docs.yml` after push to `main` / `development` (docs paths) or `workflow_dispatch`. PR checks run `make docs` only.
+
 ```bash
-pip install mkdocs-material
-make docs          # site/ 
+pip install -r docs/requirements.txt
+make docs          # site/ (strict MkDocs build)
 # or: mkdocs serve
 ```
 
-Key pages: [Getting Started](docs/getting-started.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
+Key pages (branch-relative source): [Getting Started](docs/getting-started.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
 
 ## Development
 

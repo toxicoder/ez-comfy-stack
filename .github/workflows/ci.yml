@@ -18,7 +18,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y shellcheck bats
-          pip install pytest pytest-cov mkdocs-material
+          pip install pytest pytest-cov
+          pip install -r docs/requirements.txt
           # shfmt
           curl -sSL https://github.com/mvdan/sh/releases/download/v3.8.0/shfmt_v3.8.0_linux_amd64 -o /tmp/shfmt
           sudo install -m 755 /tmp/shfmt /usr/local/bin/shfmt
