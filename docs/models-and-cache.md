@@ -117,6 +117,19 @@ command -v hf || pipx install huggingface_hub
 
 Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. `HF_PROGRESS=0` turns progress lines off; `HF_PROGRESS_INTERVAL=10` sets the tick (seconds).
 
+### Resume & cache
+
+Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
+
+| Behavior | Detail |
+| --- | --- |
+| Resume after interrupt | Ctrl+C / crash leaves `*.incomplete` under each tier’s `.cache/huggingface/`; re-run the same command to continue |
+| Skip when ready | `download-flux` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
+| `HF_HOME` | Set to `MODELS_DIR` so hub metadata lives on the durable model disk |
+| Cleanup | `download-ltx.sh cleanup --yes` removes non-selective monorepo weights but **keeps** `.cache/`, `*.incomplete`, and selective keep-set files |
+
+Do not delete a tier’s `.cache/huggingface/` folder if you want fast resume/metadata checks. Finished weight files are never re-downloaded unless missing or hub revision changes.
+
 ### LTX selective download (not the full monorepo)
 
 `Kijai/LTX2.3_comfy` is a multi-variant hub repo (~**400 GB** if you pull everything). This stack defaults to a **selective** subset via `hf download --include`:

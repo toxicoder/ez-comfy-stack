@@ -863,6 +863,28 @@ explain_hf_download_error() {
 }
 
 #######################################
+# Count HF *.incomplete partials under a local-dir (resume state).
+# Globals:
+#   None
+# Arguments:
+#   $1  Destination directory path
+# Outputs:
+#   Integer count on stdout
+# Returns:
+#   0
+#######################################
+count_hf_incomplete() {
+  local dest="${1:-}"
+  local n=0
+  if [[ -z ${dest} || ! -d ${dest} ]]; then
+    echo 0
+    return 0
+  fi
+  n="$(find "${dest}" -type f -name '*.incomplete' 2>/dev/null | wc -l | tr -d ' ')"
+  echo "${n:-0}"
+}
+
+#######################################
 # Short label for a download dest (basename of local-dir).
 # Globals:
 #   None
@@ -1078,7 +1100,12 @@ hf_download() {
     return 0
   fi
 
+  # Durable cache root on MODELS_DIR when callers did not set HF_HOME
+  if [[ -z ${HF_HOME:-} && -n ${MODELS_DIR:-} ]]; then
+    export HF_HOME="${MODELS_DIR}"
+  fi
   # Non-interactive hub; we own progress UI (disable tqdm smash with heartbeat)
+  # Do not set force-download — hub resumes *.incomplete and skips up-to-date files.
   export CI="${CI:-1}"
   export HF_HUB_DISABLE_TELEMETRY="${HF_HUB_DISABLE_TELEMETRY:-1}"
   export PYTHONUNBUFFERED=1
@@ -1092,6 +1119,7 @@ hf_download() {
   local -a hf_args=("$@")
   local dest_dir="" prev_a="" a
   local progress_label="" progress_interval start_ts final_kib final_elapsed
+  local incomplete_n=0
   for a in "$@"; do
     if [[ ${prev_a} == "--local-dir" ]]; then
       dest_dir="${a}"
@@ -1111,7 +1139,12 @@ hf_download() {
     fi
   fi
   if [[ -n ${dest_dir} ]]; then
-    log "downloading → ${dest_dir}"
+    mkdir -p "${dest_dir}" 2>/dev/null || true
+    incomplete_n="$(count_hf_incomplete "${dest_dir}")"
+    log "downloading → ${dest_dir}  (resume-capable; re-run continues partials)"
+    if [[ ${incomplete_n} -gt 0 ]]; then
+      log "found ${incomplete_n} incomplete file(s) — resuming"
+    fi
   fi
 
   local hb_pid="" hpid="" zero_streak=0
@@ -1122,6 +1155,9 @@ hf_download() {
     log "Interrupted — stopping hf download and progress monitor…"
     [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
     [[ -n ${hpid} ]] && kill_pid_tree "${hpid}" "hf download"
+    if [[ -n ${dest_dir} ]]; then
+      log "partial download kept under ${dest_dir}; re-run the same command to resume"
+    fi
     rm -f "${hf_log}"
     exit 130
   }

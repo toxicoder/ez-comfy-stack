@@ -127,6 +127,7 @@ teardown() {
   INCLUDE_NUNCHAKU=0
   run cmd_status
   [ "${status}" -eq 0 ]
+  # Not ready yet (size << min_gb) — still downloads via mock
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DF}\" run --tier fast --no-nunchaku"
   [ "${status}" -eq 0 ]
   # cmd_run via sourced function
@@ -141,4 +142,27 @@ teardown() {
   run cmd_run
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"No FLUX tiers"* || "${output}" == *"failed"* ]]
+}
+
+@test "download-flux tier_files_ready and cmd_run cache hit skip" {
+  local tdir
+  tdir="$(tier_dir fast)"
+  mkdir -p "${tdir}"
+  echo x >"${tdir}/model.safetensors"
+  # Override min so tiny fixture counts as ready
+  tier_min_gb() { echo 0; }
+  run tier_files_ready fast
+  [ "${status}" -eq 0 ]
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  unset LAB_MOCK_HF_DOWNLOAD
+  TIER=fast
+  INCLUDE_NUNCHAKU=0
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"cache hit"* || "${output}" == *"skip fast"* ]]
+  ! grep -q 'hf download' "${TEST_TMP_DIR}/hf_calls.log"
+  # no weights → not ready
+  rm -f "${tdir}/model.safetensors"
+  run tier_files_ready fast
+  [ "${status}" -ne 0 ]
 }

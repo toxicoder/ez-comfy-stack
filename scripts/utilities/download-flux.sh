@@ -142,6 +142,38 @@ tier_size_gb() {
 }
 
 #######################################
+# True if tier local-dir already meets min size (skip re-download).
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   None
+# Returns:
+#   0 ready; 1 not ready
+#######################################
+tier_files_ready() {
+  local tier="${1}"
+  local dir size min
+  dir="$(tier_dir "${tier}")"
+  if [[ ! -d ${dir} ]]; then
+    return 1
+  fi
+  # Require at least one weight-like file so empty dirs with junk don't skip
+  local has_weight=0
+  while IFS= read -r _; do
+    has_weight=1
+    break
+  done < <(find "${dir}" -type f \( -name '*.safetensors' -o -name '*.sft' -o -name '*.gguf' -o -name '*.bin' \) 2>/dev/null)
+  if [[ ${has_weight} -ne 1 ]]; then
+    return 1
+  fi
+  size="$(tier_size_gb "${dir}")"
+  min="$(tier_min_gb "${tier}")"
+  awk "BEGIN {exit !($size >= $min)}"
+}
+
+#######################################
 # tiers_to_process helper.
 # Globals:
 #   See file header / caller environment.
@@ -297,19 +329,27 @@ cmd_run() {
   clear_stale_hf_locks "${MODELS_DIR}"
   mkdir -p "${MODELS_DIR}/comfy/diffusion_models" \
     "${MODELS_DIR}/comfy/text_encoders" "${MODELS_DIR}/comfy/vae"
-  local tier repo ok=0 fail=0
+  local tier repo ok=0 fail=0 dir
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")
     if [[ -z ${repo} ]]; then
       err "Unknown tier: $tier"
       exit 1
     fi
+    dir="$(tier_dir "$tier")"
+    if tier_files_ready "${tier}"; then
+      log "skip ${tier}: already present at ${dir} (cache hit)"
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
+      continue
+    fi
     log "Downloading ${repo} (tier: ${tier})..."
-    if HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")"; then
+    if HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}"; then
       link_into_comfy "$tier"
       ok=$((ok + 1))
     else
       warn "Skipping remaining setup for ${repo} (see short error above)."
+      warn "Partials kept under ${dir}; re-run to resume."
       fail=$((fail + 1))
     fi
   done

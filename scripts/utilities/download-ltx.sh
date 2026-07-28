@@ -239,6 +239,10 @@ is_ltx_keep_relpath() {
   local pat
   case "${rel}" in
     .gitattributes | LICENSE | README.md) return 0 ;;
+    # HF local-dir resume/cache metadata + partials (never wipe for cleanup)
+    .cache | .cache/*) return 0 ;;
+    *.incomplete) return 0 ;;
+    *.lock | *.lock.*) return 0 ;;
   esac
   while IFS= read -r pat; do
     [[ -z ${pat} ]] && continue
@@ -247,6 +251,41 @@ is_ltx_keep_relpath() {
     fi
   done < <(tier_include_patterns "${tier}")
   return 1
+}
+
+#######################################
+# True if selective tier files are already on disk (skip re-download).
+# Globals:
+#   MODELS_DIR, LTX_FULL_REPO
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   None
+# Returns:
+#   0 ready; 1 not ready
+#######################################
+tier_files_ready() {
+  local tier="${1}"
+  local dir pat f size min
+  dir="$(tier_dir "${tier}")"
+  if [[ ! -d ${dir} ]]; then
+    return 1
+  fi
+  # Full monorepo mode: size floor only (no fixed include list)
+  if [[ ${LTX_FULL_REPO:-0} == "1" ]]; then
+    size="$(tier_size_gb "${dir}")"
+    min="$(tier_min_gb "${tier}")"
+    awk "BEGIN {exit !($size >= $min)}"
+    return $?
+  fi
+  while IFS= read -r pat; do
+    [[ -z ${pat} ]] && continue
+    f="${dir}/${pat}"
+    if [[ ! -f ${f} || ! -s ${f} ]]; then
+      return 1
+    fi
+  done < <(tier_include_patterns "${tier}")
+  return 0
 }
 
 #######################################
@@ -386,10 +425,17 @@ cmd_run() {
   check_hf_cli
   ensure_models_dir "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
-  local tier repo ok=0 fail=0 pat
+  local tier repo ok=0 fail=0 pat dir
   local -a include_args=()
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")
+    dir="$(tier_dir "$tier")"
+    if tier_files_ready "${tier}"; then
+      log "skip ${tier}: already present at ${dir} (cache hit)"
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
+      continue
+    fi
     include_args=()
     if [[ ${LTX_FULL_REPO:-0} == "1" ]]; then
       log "Downloading full ${repo} snapshot (tier: ${tier}; LTX_FULL_REPO=1)…"
@@ -411,16 +457,17 @@ cmd_run() {
     # Empty include_args must not expand under set -u (bash unbound array).
     local dl_rc=0
     if [[ ${#include_args[@]} -gt 0 ]]; then
-      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")" \
+      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" \
         "${include_args[@]}" || dl_rc=$?
     else
-      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")" || dl_rc=$?
+      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" || dl_rc=$?
     fi
     if [[ ${dl_rc} -eq 0 ]]; then
       link_into_comfy "$tier"
       ok=$((ok + 1))
     else
       warn "Skipping remaining setup for ${repo} (see short error above)."
+      warn "Partials kept under ${dir}; re-run to resume."
       fail=$((fail + 1))
     fi
   done

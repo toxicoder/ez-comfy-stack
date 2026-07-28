@@ -197,6 +197,19 @@ line3" "org/x"
   unset LAB_MOCK_HF_DOWNLOAD
 }
 
+@test "common: count_hf_incomplete for resume state" {
+  local d="${TEST_TMP_DIR}/inc_root"
+  mkdir -p "${d}/.cache/huggingface/download"
+  run count_hf_incomplete "${d}"
+  [ "${output}" = "0" ]
+  : >"${d}/.cache/huggingface/download/blob.incomplete"
+  : >"${d}/other.incomplete"
+  run count_hf_incomplete "${d}"
+  [ "${output}" = "2" ]
+  run count_hf_incomplete "${TEST_TMP_DIR}/missing_dir"
+  [ "${output}" = "0" ]
+}
+
 @test "common: hf progress formatters and emit helpers" {
   run hf_progress_label "/mnt/models/Kijai__LTX2.3_comfy_balanced"
   [ "${output}" = "Kijai__LTX2.3_comfy_balanced" ]
