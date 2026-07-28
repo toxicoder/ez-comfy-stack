@@ -79,6 +79,7 @@ Commands:
   logs              Follow compose logs
   download-models   Download flux-fast + ltx-balanced (bandwidth limited)
   download-limit    Proxy to utilities/download-limit.sh
+  clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
   cleanup           Remove comfy-state volume (type DELETE)
 
 Environment: see .env.example (MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
@@ -375,10 +376,27 @@ cmd_logs() {
 # Returns:
 #   Exit status of the download pipeline.
 #######################################
+#######################################
+# Clear stale Hugging Face download locks under MODELS_DIR.
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   None
+# Outputs:
+#   Status via log/warn
+# Returns:
+#   0
+#######################################
+cmd_clear_hf_locks() {
+  ensure_models_dir "${MODELS_DIR}" || return 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+}
+
 cmd_download_models() {
   local limit="${DOWNLOAD_LIMIT}"
   local flux_cmd ltx_cmd
   ensure_models_dir "${MODELS_DIR}" || return 1
+  clear_stale_hf_locks "${MODELS_DIR}"
   flux_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-flux.sh" run --tier fast)
   ltx_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" run --tier balanced)
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
@@ -456,6 +474,7 @@ main() {
     logs) cmd_logs "$@" ;;
     download-models) cmd_download_models ;;
     download-limit) cmd_download_limit "$@" ;;
+    clear-hf-locks) cmd_clear_hf_locks ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"

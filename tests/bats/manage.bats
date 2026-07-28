@@ -132,9 +132,12 @@ teardown() {
   run cmd_help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"setup"* ]]
+  [[ "${output}" == *"clear-hf-locks"* ]]
   export LAB_NO_SUDO=1
   export MODELS_DIR="${TEST_TMP_DIR}/models"
   run cmd_setup
+  [ "${status}" -eq 0 ]
+  run cmd_clear_hf_locks
   [ "${status}" -eq 0 ]
   run cmd_doctor
   [ "${status}" -eq 0 ]

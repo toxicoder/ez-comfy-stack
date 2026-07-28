@@ -294,6 +294,7 @@ cmd_status() {
 cmd_run() {
   check_hf_cli
   ensure_models_dir "${MODELS_DIR}" || exit 1
+  clear_stale_hf_locks "${MODELS_DIR}"
   mkdir -p "${MODELS_DIR}/comfy/diffusion_models" \
     "${MODELS_DIR}/comfy/text_encoders" "${MODELS_DIR}/comfy/vae"
   local tier repo ok=0 fail=0

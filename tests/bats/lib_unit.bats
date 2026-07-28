@@ -127,6 +127,31 @@ teardown() {
   install_hf_mock
   run check_hf_cli
   [ "${status}" -eq 0 ]
+
+  local lock_root
+  lock_root="${TEST_TMP_DIR}/lock_models"
+  mkdir -p "${lock_root}/.cache/huggingface/download"
+  : >"${lock_root}/.cache/huggingface/download/foo.safetensors.lock"
+  : >"${lock_root}/bar.lock"
+  run clear_stale_hf_locks "${lock_root}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Removed"* || "${output}" == *"lock"* || "${output}" == *"clean"* ]]
+  [[ ! -f "${lock_root}/.cache/huggingface/download/foo.safetensors.lock" ]]
+  [[ ! -f "${lock_root}/bar.lock" ]]
+  export HF_LOCK_CLEAR=0
+  : >"${lock_root}/skip.lock"
+  run clear_stale_hf_locks "${lock_root}"
+  [ "${status}" -eq 0 ]
+  [[ -f "${lock_root}/skip.lock" ]]
+  unset HF_LOCK_CLEAR
+  rm -f "${lock_root}/skip.lock"
+  : >"${lock_root}/force.lock"
+  export HF_LOCK_CLEAR_FORCE=1
+  run clear_stale_hf_locks "${lock_root}"
+  [ "${status}" -eq 0 ]
+  [[ ! -f "${lock_root}/force.lock" ]]
+  unset HF_LOCK_CLEAR_FORCE
+
   unset LAB_MOCK_HF_DOWNLOAD
   : >"${TEST_TMP_DIR}/hf_calls.log"
   run hf_download "org/model" --local-dir "${TEST_TMP_DIR}/hf_out"

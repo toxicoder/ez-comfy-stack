@@ -607,6 +607,107 @@ check_hf_cli() {
 }
 
 #######################################
+# Clear stale Hugging Face download locks under a models root.
+# Stops orphan hf/huggingface download processes when safe; removes .lock files
+# not held by a live process. FORCE deletes all locks after best-effort pkill.
+# Globals:
+#   HF_LOCK_CLEAR (0=skip), HF_LOCK_CLEAR_FORCE (1=force), MODELS_DIR
+# Arguments:
+#   $1 - Root directory (default MODELS_DIR or /mnt/models)
+# Outputs:
+#   Status via log/warn
+# Returns:
+#   0 always (best-effort; never aborts downloads solely for lock cleanup)
+#######################################
+clear_stale_hf_locks() {
+  local root="${1:-${MODELS_DIR:-/mnt/models}}"
+  local force="${HF_LOCK_CLEAR_FORCE:-0}"
+  local lock removed=0 active=0 pid pids=""
+
+  if [[ ${HF_LOCK_CLEAR:-1} == "0" ]]; then
+    log "HF lock clear skipped (HF_LOCK_CLEAR=0)"
+    return 0
+  fi
+  if [[ ! -d ${root} ]]; then
+    return 0
+  fi
+
+  log "Checking for stale Hugging Face download locks under ${root} …"
+
+  # Stop orphan downloaders that often leave locks after kill/restart experiments
+  if command -v pgrep >/dev/null 2>&1; then
+    while read -r pid; do
+      [[ -z ${pid} || ! ${pid} =~ ^[0-9]+$ ]] && continue
+      # Only target download-like command lines
+      if [[ -r /proc/${pid}/cmdline ]] || kill -0 "${pid}" 2>/dev/null; then
+        log "Stopping orphan download PID ${pid}"
+        kill -TERM "${pid}" 2>/dev/null || true
+        pids="${pids} ${pid}"
+      fi
+    done < <(pgrep -f 'hf download|huggingface-cli download|huggingface_hub' 2>/dev/null || true)
+    if [[ -n ${pids// /} ]]; then
+      sleep 2
+      for pid in ${pids}; do
+        if kill -0 "${pid}" 2>/dev/null; then
+          warn "Force-killing download PID ${pid}"
+          kill -KILL "${pid}" 2>/dev/null || true
+        fi
+      done
+      sleep 1
+    fi
+  fi
+
+  # Collect lock files
+  local -a locks=()
+  while IFS= read -r -d '' lock; do
+    locks+=("${lock}")
+  done < <(find "${root}" -type f \( -name '*.lock' -o -name '*.lock.*' \) -print0 2>/dev/null || true)
+
+  if [[ ${#locks[@]} -eq 0 ]]; then
+    log "No HF .lock files found under ${root}"
+    return 0
+  fi
+
+  if [[ ${force} == "1" ]]; then
+    for lock in "${locks[@]}"; do
+      rm -f "${lock}" 2>/dev/null && removed=$((removed + 1)) || true
+    done
+    log "HF_LOCK_CLEAR_FORCE=1: removed ${removed} lock file(s) under ${root}"
+    return 0
+  fi
+
+  for lock in "${locks[@]}"; do
+    local held=0
+    if command -v fuser >/dev/null 2>&1; then
+      if fuser "${lock}" >/dev/null 2>&1; then
+        held=1
+      fi
+    elif command -v lsof >/dev/null 2>&1; then
+      if lsof "${lock}" >/dev/null 2>&1; then
+        held=1
+      fi
+    fi
+    # Without fuser/lsof, treat as stale after process sweep (common on minimal hosts)
+    if [[ ${held} -eq 1 ]]; then
+      active=$((active + 1))
+      continue
+    fi
+    rm -f "${lock}" 2>/dev/null && removed=$((removed + 1)) || true
+  done
+
+  if [[ ${removed} -gt 0 ]]; then
+    log "Removed ${removed} stale HF lock file(s) under ${root}"
+  fi
+  if [[ ${active} -gt 0 ]]; then
+    warn "${active} lock(s) still held by live processes — wait for them or HF_LOCK_CLEAR_FORCE=1"
+  fi
+  if [[ ${removed} -eq 0 && ${active} -eq 0 ]]; then
+    log "HF lock check clean under ${root}"
+  fi
+  return 0
+}
+
+#######################################
 # Print plain-language guidance for a failed Hugging Face download.
 # Suppresses stack-trace noise unless LAB_DEBUG or HF_DOWNLOAD_DEBUG is set.
 # Globals:

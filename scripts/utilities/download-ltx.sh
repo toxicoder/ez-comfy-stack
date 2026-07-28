@@ -260,6 +260,7 @@ cmd_status() {
 cmd_run() {
   check_hf_cli
   ensure_models_dir "${MODELS_DIR}" || exit 1
+  clear_stale_hf_locks "${MODELS_DIR}"
   local tier repo ok=0 fail=0
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")
