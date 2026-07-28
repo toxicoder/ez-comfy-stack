@@ -119,6 +119,36 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "entrypoint ep_log and seed_from_prebuilt helpers" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  run ep_log "progress marker"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"[entrypoint"* ]]
+  [[ "${output}" == *"progress marker"* ]]
+
+  local pre dest
+  pre="${TEST_TMP_DIR}/seed_src"
+  dest="${TEST_TMP_DIR}/seed_dst"
+  mkdir -p "${pre}/sub"
+  echo payload >"${pre}/sub/file.txt"
+  export LAB_PREBUILT_ROOT="${pre}"
+  export COMFY_HOME="${dest}"
+  run seed_from_prebuilt
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/sub/file.txt ]]
+  [[ "$(cat "${dest}/sub/file.txt")" == "payload" ]]
+}
+
+@test "install-comfy pip_install wrapper" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  install_mock_bin pip 'echo "pip $*"; exit 0'
+  run pip_install -U pip
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"pip:"* || "${output}" == *"pip "* ]]
+}
+
 @test "main fails when venv python missing" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"

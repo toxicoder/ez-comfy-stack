@@ -414,11 +414,8 @@ install_docker_engine() {
   local user
   user="$(id -un)"
 
-  if docker_cli_ok; then
-    log "docker already available: $(docker --version 2>/dev/null | head -1)"
-    return 0
-  fi
-
+  # Hermetic tests first: always materialize mock docker even if host has docker
+  # (GitHub Actions runners often ship docker; tests assert LAB_MOCK_DOCKER_BIN_DIR).
   if [[ ${LAB_MOCK_DOCKER_INSTALL:-} == "1" ]]; then
     local bindir="${LAB_MOCK_DOCKER_BIN_DIR:-${TEST_TMP_DIR:-/tmp}/ez-comfy-docker-bin}"
     mkdir -p "${bindir}"
@@ -444,6 +441,11 @@ EOF
     log "LAB_MOCK_DOCKER_INSTALL: mock docker installed at ${bindir}/docker"
     docker_cli_ok
     return $?
+  fi
+
+  if docker_cli_ok; then
+    log "docker already available: $(docker --version 2>/dev/null | head -1)"
+    return 0
   fi
 
   if [[ ${LAB_NO_SUDO:-} == "1" ]]; then

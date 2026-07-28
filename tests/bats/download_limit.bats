@@ -101,13 +101,15 @@ teardown() {
   export LAB_MOCK_HTTP_SPEED_MBPS=120
   unset LAB_MOCK_SPEEDTEST_MBPS
   run probe_http_download_mbps
-  [ "${output}" = "120" ]
-  # No speedtest-cli mock path: use HTTP probe via run_speedtest
+  # bats merges stderr; last non-empty line is Mbps
+  local mbps
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "120" ]
+  # Host may have real speedtest-cli; HTTP mock must still win
   rm -f "${TEST_TMP_DIR}/bin/speedtest-cli"
   run run_speedtest_mbps
-  [[ "${output}" == *"120"* ]]
-  # clear_limits_for_speedtest should run (force clear) before measure
-  [[ "${output}" == *"Clearing any existing bandwidth limits"* || "${output}" == *"120"* ]]
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "120" ]
   unset LAB_MOCK_HTTP_SPEED_MBPS
   install_speedtest_mock 100
 }

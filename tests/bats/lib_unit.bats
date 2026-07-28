@@ -340,6 +340,13 @@ line3" "org/x"
   export LAB_STACK_FORCE_BUILD=1
   run stack_default_image
   [[ "${output}" == *ghcr.io* && "${output}" == *ez-comfy* ]]
+  # inventory + behavior: pull path when not skipped
+  unset LAB_STACK_SKIP_PULL
+  run stack_pull_image "ghcr.io/example/ez-comfy:test"
+  [ "${status}" -eq 0 ]
+  export LAB_STACK_SKIP_PULL=1
+  run stack_pull_image "ghcr.io/example/ez-comfy:skip"
+  [ "${status}" -ne 0 ]
   run stack_start
   [ "${status}" -eq 0 ]
   run stack_follow_until_ready

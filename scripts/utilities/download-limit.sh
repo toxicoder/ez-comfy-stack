@@ -737,6 +737,11 @@ run_speedtest_mbps() {
     echo "${LAB_MOCK_SPEEDTEST_MBPS}"
     return 0
   fi
+  # Hermetic HTTP mock must win over host speedtest-cli (CI runners may have it)
+  if [[ -n ${LAB_MOCK_HTTP_SPEED_MBPS:-} ]]; then
+    echo "${LAB_MOCK_HTTP_SPEED_MBPS}"
+    return 0
+  fi
 
   # Unthrottle before any probe so residual wondershaper/tc does not skew results
   clear_limits_for_speedtest
