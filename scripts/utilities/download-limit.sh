@@ -343,6 +343,21 @@ gentle_hf_workers_for_mbps() {
 }
 
 #######################################
+# Default workers when speed sample is untrusted (idle NIC / failed probe).
+# Globals:
+#   HF_DOWNLOAD_DEFAULT_WORKERS
+# Arguments:
+#   None
+# Outputs:
+#   Integer workers on stdout
+# Returns:
+#   0
+#######################################
+default_hf_workers_untrusted() {
+  echo "${HF_DOWNLOAD_DEFAULT_WORKERS:-4}"
+}
+
+#######################################
 # Export HF env for reduced parallel saturation when kernel shaping is unavailable.
 # Globals:
 #   HF_DOWNLOAD_MAX_WORKERS, HF_HUB_ENABLE_HF_TRANSFER (export)
@@ -570,20 +585,38 @@ probe_http_download_mbps() {
   if ! command -v curl >/dev/null 2>&1; then
     return 1
   fi
-  local bytes url bps mbps
+  local bytes bps mbps code url
+  local -a urls=()
   bytes="${SPEEDTEST_HTTP_BYTES:-15000000}"
-  url="${SPEEDTEST_HTTP_URL:-https://speed.cloudflare.com/__down?bytes=${bytes}}"
-  bps="$(curl -fsSL --max-time 30 -o /dev/null -w '%{speed_download}' "${url}" 2>/dev/null)" || return 1
-  if [[ -z ${bps} || ! ${bps} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-    return 1
+  if [[ -n ${SPEEDTEST_HTTP_URL:-} ]]; then
+    urls+=("${SPEEDTEST_HTTP_URL}")
   fi
-  # bytes/s → Mbps; require at least ~0.5 Mbps of signal
-  mbps="$(python3 -c "print(max(1, int(float('${bps}') * 8 / 1e6)))" 2>/dev/null)" || return 1
-  if [[ ${mbps} -lt 1 ]]; then
-    return 1
-  fi
-  echo "${mbps}"
-  return 0
+  urls+=(
+    "https://speed.cloudflare.com/__down?bytes=${bytes}"
+    "https://proof.ovh.net/files/10Mb.dat"
+    "https://github.com/github/gitignore/archive/refs/heads/main.zip"
+  )
+  for url in "${urls[@]}"; do
+    # -4 prefer IPv4; capture http_code + speed
+    code="$(curl -4 -L --connect-timeout 5 --max-time 25 -o /dev/null \
+      -w '%{http_code} %{speed_download}' "${url}" 2>/dev/null)" || continue
+    bps="$(echo "${code}" | awk '{print $2}')"
+    code="$(echo "${code}" | awk '{print $1}')"
+    if [[ ! ${code} =~ ^2[0-9][0-9]$ ]]; then
+      continue
+    fi
+    if [[ -z ${bps} || ! ${bps} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+      continue
+    fi
+    mbps="$(python3 -c "print(max(1, int(float('${bps}') * 8 / 1e6)))" 2>/dev/null)" || continue
+    if [[ ${mbps} -lt 1 ]]; then
+      continue
+    fi
+    dl_log "HTTP probe OK via ${url%%\?*} ≈ ${mbps} Mbps"
+    echo "${mbps}"
+    return 0
+  done
+  return 1
 }
 
 #######################################
@@ -598,43 +631,74 @@ probe_http_download_mbps() {
 #   0 if speedtest-cli on PATH after attempt; 1 otherwise
 #######################################
 ensure_speedtest_cli() {
+  local errf
   if command -v speedtest-cli >/dev/null 2>&1; then
     return 0
   fi
   if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
     return 0
   fi
-  dl_log "speedtest-cli not found; attempting install…"
-  # Prefer user pip (no sudo) — works on shared Spark accounts
-  if command -v pip3 >/dev/null 2>&1; then
-    pip3 install --user -q speedtest-cli 2>/dev/null || true
-  elif command -v pip >/dev/null 2>&1; then
-    pip install --user -q speedtest-cli 2>/dev/null || true
-  elif command -v python3 >/dev/null 2>&1; then
-    python3 -m pip install --user -q speedtest-cli 2>/dev/null || true
-  fi
-  # Ensure ~/.local/bin is on PATH for --user installs
+  dl_log "speedtest-cli not found; attempting install (multiple strategies)…"
   if [[ -d ${HOME}/.local/bin ]]; then
     export PATH="${HOME}/.local/bin:${PATH}"
   fi
-  if command -v speedtest-cli >/dev/null 2>&1; then
-    dl_log "speedtest-cli installed (pip --user)"
-    return 0
-  fi
-  # apt/dnf with non-interactive sudo
-  if [[ ${LAB_NO_SUDO:-} != "1" ]] && command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
-    if command -v apt-get >/dev/null 2>&1; then
-      sudo -n apt-get update -qq 2>/dev/null || true
-      sudo -n apt-get install -y speedtest-cli 2>/dev/null || true
-    elif command -v dnf >/dev/null 2>&1; then
-      sudo -n dnf install -y speedtest-cli 2>/dev/null || true
+  errf="$(mktemp)"
+
+  _speedtest_try() {
+    local desc="${1}"
+    shift
+    dl_log "  try: ${desc}"
+    if "$@" >"${errf}" 2>&1; then
+      return 0
+    fi
+    dl_warn "  failed: ${desc}: $(tail -n 2 "${errf}" | tr '\n' ' ')"
+    return 1
+  }
+
+  if command -v python3 >/dev/null 2>&1; then
+    _speedtest_try "pip --user" python3 -m pip install --user -q speedtest-cli || true
+    if ! command -v speedtest-cli >/dev/null 2>&1; then
+      _speedtest_try "pip --user --break-system-packages" \
+        python3 -m pip install --user --break-system-packages -q speedtest-cli || true
     fi
   fi
+  if ! command -v speedtest-cli >/dev/null 2>&1 && command -v pipx >/dev/null 2>&1; then
+    _speedtest_try "pipx install" pipx install speedtest-cli || true
+  fi
+  if ! command -v speedtest-cli >/dev/null 2>&1 &&
+    [[ ${LAB_NO_SUDO:-} != "1" ]] && command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+    if command -v apt-get >/dev/null 2>&1; then
+      _speedtest_try "apt speedtest-cli" sudo -n apt-get install -y speedtest-cli || true
+      _speedtest_try "apt python3-speedtest-cli" sudo -n apt-get install -y python3-speedtest-cli || true
+    elif command -v dnf >/dev/null 2>&1; then
+      _speedtest_try "dnf speedtest-cli" sudo -n dnf install -y speedtest-cli || true
+    fi
+  fi
+  rm -f "${errf}"
+
+  # Refresh PATH and common locations
+  export PATH="${HOME}/.local/bin:/usr/local/bin:/usr/bin:${PATH}"
+  hash -r 2>/dev/null || true
   if command -v speedtest-cli >/dev/null 2>&1; then
-    dl_log "speedtest-cli installed (package manager)"
+    dl_log "speedtest-cli ready: $(command -v speedtest-cli)"
     return 0
   fi
-  dl_warn "Could not install speedtest-cli; will try HTTP probe / live RX"
+  # Module-only install: wrap via python -m if import works
+  if python3 -c 'import speedtest' 2>/dev/null; then
+    dl_log "speedtest module importable; installing ~/.local/bin/speedtest-cli wrapper"
+    mkdir -p "${HOME}/.local/bin"
+    cat >"${HOME}/.local/bin/speedtest-cli" <<'EOF'
+#!/usr/bin/env bash
+exec python3 -m speedtest "$@"
+EOF
+    chmod +x "${HOME}/.local/bin/speedtest-cli"
+    export PATH="${HOME}/.local/bin:${PATH}"
+    hash -r 2>/dev/null || true
+    if command -v speedtest-cli >/dev/null 2>&1; then
+      return 0
+    fi
+  fi
+  dl_warn "Could not install speedtest-cli after all strategies; will try HTTP probe / live RX"
   return 1
 }
 
@@ -932,57 +996,31 @@ apply_limit_from_measured() {
 #######################################
 wrap_with_live_speed_limit() {
   local iface="${1}"
-  local fallback_mbps="${2:-50}"
-  local sample_sec live_mbps probe_pid=""
-  sample_sec="${LIVE_SPEED_SAMPLE_SEC:-15}"
+  local live_mbps
 
-  dl_log "=== download-limit: measure (live RX, ${sample_sec}s) ==="
-  dl_log "Not starting model download yet (avoids kill/restart and HF file locks)"
   clear_limits_for_speedtest "${iface}"
 
-  # Generate RX traffic during the sample window (no model repo locks)
-  if command -v curl >/dev/null 2>&1 && [[ -z ${LAB_MOCK_LIVE_RX_MBPS:-} ]]; then
-    local bytes url
-    bytes="${SPEEDTEST_HTTP_BYTES:-25000000}"
-    url="${SPEEDTEST_HTTP_URL:-https://speed.cloudflare.com/__down?bytes=${bytes}}"
-    curl -fsSL --max-time "$((sample_sec + 5))" -o /dev/null "${url}" >/dev/null 2>&1 &
-    probe_pid=$!
-    dl_log "Background HTTP probe PID ${probe_pid} (creates RX traffic for measurement)"
-  fi
-
-  # shellcheck disable=SC2329
-  _wrap_measure_on_signal() {
-    if [[ -n ${probe_pid} ]]; then
-      kill -INT "${probe_pid}" 2>/dev/null || true
-      wait "${probe_pid}" 2>/dev/null || true
-    fi
-    clear_limits "${iface}"
-    exit 130
-  }
-  trap '_wrap_measure_on_signal' INT TERM
-  # shellcheck disable=SC2064
-  trap 'clear_limits "'"${iface}"'"' EXIT
-
-  if live_mbps=$(sample_iface_rx_mbps "${iface}" "${sample_sec}" "${probe_pid}"); then
-    dl_log "Live RX ≈ ${live_mbps} Mbps on ${iface}"
+  # Quick dry-run: if HTTP probe works, use it as preflight-quality measure (no 15s idle)
+  if live_mbps=$(probe_http_download_mbps); then
+    dl_log "Reliable HTTP probe ≈ ${live_mbps} Mbps — skipping idle RX sample"
     if shaping_supported; then
       apply_limit_from_measured "${iface}" "${live_mbps}" || true
     else
       enable_gentle_download_mode "$(compute_auto_limit "${live_mbps}")" "${iface}"
     fi
-  else
-    dl_warn "Live RX sample failed; gentle mode at fallback ${fallback_mbps} Mbps"
-    enable_gentle_download_mode "${fallback_mbps}" "${iface}"
+    dl_log "=== download-limit: download (foreground) ==="
+    dl_log "Starting model download now — live progress should appear below"
+    dl_log "Running: ${WRAP_ARGS[*]}"
+    run_with_signal_forwarding "${WRAP_ARGS[@]}"
+    return $?
   fi
 
-  if [[ -n ${probe_pid} ]]; then
-    kill -INT "${probe_pid}" 2>/dev/null || true
-    wait "${probe_pid}" 2>/dev/null || true
-  fi
-  trap - INT TERM
-  # shellcheck disable=SC2064
-  trap 'clear_limits "'"${iface}"'"' EXIT
-
+  # No working probe URL: do NOT treat idle NIC RX as line rate
+  dl_log "=== download-limit: no reliable speed probe ==="
+  dl_log "HTTP/speedtest unavailable — using default max-workers=$(default_hf_workers_untrusted) (not idle RX)"
+  export HF_HUB_ENABLE_HF_TRANSFER=0
+  export HF_DOWNLOAD_MAX_WORKERS="${HF_DOWNLOAD_MAX_WORKERS:-$(default_hf_workers_untrusted)}"
+  dl_log "Gentle HF mode: max-workers=${HF_DOWNLOAD_MAX_WORKERS} (untrusted/idle sample avoided)"
   dl_log "=== download-limit: download (foreground) ==="
   dl_log "Starting model download now — live progress should appear below"
   dl_log "Running: ${WRAP_ARGS[*]}"

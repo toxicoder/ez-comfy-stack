@@ -21,34 +21,82 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-# Used by signal helpers to track an optional background sample-phase PID.
+# Used by signal helpers to track child PIDs for Ctrl+C cleanup.
 _RWSF_CHILD_PID=""
+_RWSF_EXTRA_PIDS=""
 
 #######################################
-# Run a command in the foreground so progress bars (tqdm) keep a TTY.
-# Ctrl+C/TERM aborts the command; returns 130 when interrupted.
+# Kill a PID and its process group (INT → TERM → KILL). Never hangs forever.
 # Globals:
 #   None
 # Arguments:
+#   $1 - PID
+#   $2 - Optional label for logs
+# Outputs:
+#   Optional log lines
+# Returns:
+#   0
+#######################################
+kill_pid_tree() {
+  local pid="${1:-}"
+  local label="${2:-process}"
+  local i
+  [[ -n ${pid} && ${pid} =~ ^[0-9]+$ ]] || return 0
+  if ! kill -0 "${pid}" 2>/dev/null; then
+    return 0
+  fi
+  log "Stopping ${label} (PID ${pid})…"
+  kill -INT -- "-${pid}" 2>/dev/null || kill -INT "${pid}" 2>/dev/null || true
+  for i in 1 2 3 4 5; do
+    kill -0 "${pid}" 2>/dev/null || return 0
+    sleep 0.2
+  done
+  kill -TERM -- "-${pid}" 2>/dev/null || kill -TERM "${pid}" 2>/dev/null || true
+  for i in 1 2 3; do
+    kill -0 "${pid}" 2>/dev/null || return 0
+    sleep 0.2
+  done
+  kill -KILL -- "-${pid}" 2>/dev/null || kill -KILL "${pid}" 2>/dev/null || true
+  return 0
+}
+
+#######################################
+# Run a command with Ctrl+C killing the whole process group (not just the shell).
+# Uses job control so children (hf workers) die; returns 130 on interrupt.
+# Globals:
+#   _RWSF_CHILD_PID
+# Arguments:
 #   $@ - Command and arguments to run
 # Outputs:
-#   Command's stdout/stderr (live)
+#   Command's stdout/stderr (live when TTY)
 # Returns:
 #   Command exit status; 130 if interrupted
 #######################################
 run_with_signal_forwarding() {
-  local rc=0
+  local child rc=0
+  set -m 2>/dev/null || true
+  "$@" &
+  child=$!
+  _RWSF_CHILD_PID="${child}"
   # shellcheck disable=SC2329
-  _rwsf_fg_signal() {
+  _rwsf_on_signal() {
+    log "Interrupted — stopping download process tree…"
+    kill_pid_tree "${_RWSF_CHILD_PID}" "download"
+    local extra
+    for extra in ${_RWSF_EXTRA_PIDS:-}; do
+      kill_pid_tree "${extra}" "helper"
+    done
+    _RWSF_CHILD_PID=""
+    _RWSF_EXTRA_PIDS=""
     exit 130
   }
-  trap '_rwsf_fg_signal' INT TERM
+  trap '_rwsf_on_signal' INT TERM
   set +e
-  # Foreground: preserves TTY for hf/tqdm progress (background & wait hides it)
-  "$@"
+  wait "${child}"
   rc=$?
   set -e
   trap - INT TERM
+  _RWSF_CHILD_PID=""
   if [[ ${rc} -gt 128 ]]; then
     return 130
   fi
@@ -854,76 +902,87 @@ hf_download() {
     fi
   fi
 
+  local hb_pid="" hpid="" zero_streak=0
   # shellcheck disable=SC2329
   _hf_dl_signal() {
-    if [[ -n ${hb_pid:-} ]]; then
-      kill "${hb_pid}" 2>/dev/null || true
-    fi
+    log "Interrupted — stopping hf download and progress monitor…"
+    [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
+    [[ -n ${hpid} ]] && kill_pid_tree "${hpid}" "hf download"
     rm -f "${hf_log}"
     exit 130
   }
   trap '_hf_dl_signal' INT TERM
 
   # Heartbeat: prove progress even if hub UI is quiet (large single files)
-  local hb_pid=""
   if [[ -n ${dest_dir} ]]; then
     mkdir -p "${dest_dir}" 2>/dev/null || true
     (
       local prev=0 cur delta
       prev=$(du -sk "${dest_dir}" 2>/dev/null | awk '{print $1}') || prev=0
+      zero_streak=0
       while true; do
         sleep 10
         cur=$(du -sk "${dest_dir}" 2>/dev/null | awk '{print $1}') || cur=0
         delta=$((cur - prev))
         prev=${cur}
-        # KiB → MiB rough
         log "download progress: ${dest_dir} ≈ $((cur / 1024)) MiB (+$((delta / 1024)) MiB / 10s)"
+        if [[ ${delta} -le 0 ]]; then
+          zero_streak=$((zero_streak + 1))
+          if [[ ${zero_streak} -ge 3 && ${HF_LOCK_CLEAR_MID:-1} == "1" ]]; then
+            warn "No disk growth for 30s — clearing stale HF locks once"
+            clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" || true
+            zero_streak=0
+          fi
+        else
+          zero_streak=0
+        fi
       done
     ) &
     hb_pid=$!
+    _RWSF_EXTRA_PIDS="${hb_pid}"
   fi
 
+  set -m 2>/dev/null || true
   if command -v hf >/dev/null 2>&1; then
     set +e
     if [[ -t 2 ]]; then
-      # Keep real TTY on stderr so tqdm shows live bars; still capture for errors
-      # shellcheck disable=SC2094
-      hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
-      rc=$?
+      # Process group + TTY-friendly capture of stderr for tqdm
+      (
+        hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
+      ) &
+      hpid=$!
     else
-      set -o pipefail
-      hf download "${hf_args[@]}" 2>&1 | tee "${hf_log}"
-      rc=${PIPESTATUS[0]}
-      set +o pipefail
+      (
+        set -o pipefail
+        hf download "${hf_args[@]}" 2>&1 | tee "${hf_log}"
+        exit "${PIPESTATUS[0]}"
+      ) &
+      hpid=$!
     fi
+    wait "${hpid}"
+    rc=$?
     set -e
   elif command -v huggingface-cli >/dev/null 2>&1; then
     warn "Using deprecated huggingface-cli; install modern hf: pipx install huggingface_hub"
     set +e
-    if [[ -t 2 ]]; then
-      huggingface-cli download "$@" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
-      rc=$?
-    else
+    (
       set -o pipefail
       huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
-      rc=${PIPESTATUS[0]}
-      set +o pipefail
-    fi
+      exit "${PIPESTATUS[0]}"
+    ) &
+    hpid=$!
+    wait "${hpid}"
+    rc=$?
     set -e
   else
-    if [[ -n ${hb_pid} ]]; then
-      kill "${hb_pid}" 2>/dev/null || true
-      wait "${hb_pid}" 2>/dev/null || true
-    fi
+    [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
     trap - INT TERM
     rm -f "${hf_log}"
     err "No hf or huggingface-cli on PATH"
     return 1
   fi
-  if [[ -n ${hb_pid} ]]; then
-    kill "${hb_pid}" 2>/dev/null || true
-    wait "${hb_pid}" 2>/dev/null || true
-  fi
+  [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
+  _RWSF_EXTRA_PIDS=""
   trap - INT TERM
 
   if [[ ${rc} -eq 0 ]]; then

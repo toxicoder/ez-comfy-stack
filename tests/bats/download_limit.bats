@@ -283,25 +283,38 @@ exit 0
   unset LAB_SHAPING_SUPPORTED
   unset HF_DOWNLOAD_MAX_WORKERS
   export LAB_MOCK_WONDERSHAPER=1
+  # Reliable HTTP mock → use probe path (not idle RX)
+  export LAB_MOCK_HTTP_SPEED_MBPS=200
   LIMIT_SPEC=auto
   WRAP_ARGS=(bash -c 'echo live-wrap >"${TEST_TMP_DIR}/live.ok"')
   run wrap_with_live_speed_limit eth0 50
   [ "${status}" -eq 0 ]
   [ -f "${TEST_TMP_DIR}/live.ok" ]
-  [[ "${output}" == *"Live RX"* || "${output}" == *"160"* || "${output}" == *"gentle"* || "${output}" == *"foreground"* || "${output}" == *"measure"* ]]
-  # Must not use kill/restart model-download path
+  [[ "${output}" == *"HTTP probe"* || "${output}" == *"200"* || "${output}" == *"gentle"* || "${output}" == *"foreground"* || "${output}" == *"max-workers"* ]]
   [[ "${output}" != *"Stopping sample-phase"* ]]
-  [[ "${output}" != *"Sample-phase download PID"* ]]
+
+  # No HTTP mock → untrusted path uses default workers=4
+  unset LAB_MOCK_HTTP_SPEED_MBPS
+  unset HF_DOWNLOAD_MAX_WORKERS
+  WRAP_ARGS=(bash -c 'echo untrusted >"${TEST_TMP_DIR}/untrusted.ok"; echo w=${HF_DOWNLOAD_MAX_WORKERS}')
+  run wrap_with_live_speed_limit eth0 50
+  [ "${status}" -eq 0 ]
+  [ -f "${TEST_TMP_DIR}/untrusted.ok" ]
+  [[ "${output}" == *"untrusted"* || "${output}" == *"default max-workers"* || "${output}" == *"max-workers=4"* ]]
 
   run apply_limit_from_measured eth0 100
-  # gentle because NO_HTB
-  [ "${status}" -ne 0 ] || true
-  [[ "${output}" == *"target limit"* || "${output}" == *"Gentle"* || "${output}" == *"85"* ]]
+  [[ "${output}" == *"target"* || "${output}" == *"gentle"* || "${output}" == *"85"* || "${output}" == *"Gentle"* ]]
+
+  run kill_pid_tree ""
+  [ "${status}" -eq 0 ]
+  run default_hf_workers_untrusted
+  [ "${output}" = "4" ]
 
   unset LAB_FORCE_SPEEDTEST_FAIL
   unset LAB_FORCE_NO_HTB
   unset LAB_SHAPING_SUPPORTED
   unset LAB_MOCK_LIVE_RX_MBPS
+  unset LAB_MOCK_HTTP_SPEED_MBPS
 }
 
 @test "run_with_signal_forwarding runs command" {

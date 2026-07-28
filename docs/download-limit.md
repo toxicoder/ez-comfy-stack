@@ -65,12 +65,14 @@ flowchart TB
 ## Auto mode (measure real Mbps)
 
 0. **Clear any existing bandwidth limits** on the default-route interface (wondershaper + best-effort `tc`) so residual caps do not skew the result  
-1. **Install `speedtest-cli` if missing** (`pip install --user`, else `apt` with `sudo -n`)  
+1. **Install `speedtest-cli` hard** (`pip --user`, `--break-system-packages`, `pipx`, `apt`/`python3-speedtest-cli` with `sudo -n`)  
 2. Try `speedtest-cli --simple`  
 3. Else Ookla `speedtest`  
-4. Else **HTTP probe** (default Cloudflare `speed.cloudflare.com/__down?bytes=…`) via `curl`  
-5. Apply `floor(0.85 × measured)` (minimum 1 Mbps)  
-6. Only if all probes fail: live RX sample, then `DOWNLOAD_LIMIT_FALLBACK` (default 50)
+4. Else **HTTP probe** multi-URL (Cloudflare, OVH, GitHub, …) via `curl -4`  
+5. Apply `floor(0.85 × measured)` (minimum 1 Mbps) when sample is **trusted**  
+6. If all probes fail: **do not** use idle NIC RX as line rate — use default `max-workers=4` and start download  
+
+**Ctrl+C** kills the download process group, progress heartbeat, and HTTP probes (INT→TERM→KILL).
 
 Override HTTP probe: `SPEEDTEST_HTTP_URL`, `SPEEDTEST_HTTP_BYTES`.
 

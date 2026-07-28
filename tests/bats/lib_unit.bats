@@ -123,6 +123,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   run run_with_signal_forwarding bash -c 'exit 3'
   [ "${status}" -eq 3 ]
+  run kill_pid_tree ""
+  [ "${status}" -eq 0 ]
 
   install_hf_mock
   run check_hf_cli
