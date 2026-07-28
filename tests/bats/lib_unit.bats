@@ -140,6 +140,13 @@ teardown() {
   [[ "${output}" == *"Removed"* || "${output}" == *"lock"* || "${output}" == *"clean"* ]]
   [[ ! -f "${lock_root}/.cache/huggingface/download/foo.safetensors.lock" ]]
   [[ ! -f "${lock_root}/bar.lock" ]]
+  # locks_only path still removes unheld locks
+  : >"${lock_root}/mid.lock"
+  run clear_stale_hf_locks "${lock_root}" "locks_only"
+  [ "${status}" -eq 0 ]
+  [[ ! -f "${lock_root}/mid.lock" ]]
+  run _hf_pid_is_protected "$$"
+  [ "${status}" -eq 0 ]
   export HF_LOCK_CLEAR=0
   : >"${lock_root}/skip.lock"
   run clear_stale_hf_locks "${lock_root}"

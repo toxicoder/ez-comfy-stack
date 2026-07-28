@@ -45,6 +45,8 @@ kill_pid_tree() {
   if ! kill -0 "${pid}" 2>/dev/null; then
     return 0
   fi
+  # Disable job-control notifications ([1]+ Terminated …)
+  set +m 2>/dev/null || true
   log "Stopping ${label} (PID ${pid})…"
   kill -INT -- "-${pid}" 2>/dev/null || kill -INT "${pid}" 2>/dev/null || true
   for i in 1 2 3 4 5; do
@@ -57,6 +59,7 @@ kill_pid_tree() {
     sleep 0.2
   done
   kill -KILL -- "-${pid}" 2>/dev/null || kill -KILL "${pid}" 2>/dev/null || true
+  wait "${pid}" 2>/dev/null || true
   return 0
 }
 
@@ -655,22 +658,52 @@ check_hf_cli() {
 }
 
 #######################################
-# Clear stale Hugging Face download locks under a models root.
-# Stops orphan hf/huggingface download processes when safe; removes .lock files
-# not held by a live process. FORCE deletes all locks after best-effort pkill.
+# Return 0 if PID must not be killed by lock cleanup (self / active download).
 # Globals:
-#   HF_LOCK_CLEAR (0=skip), HF_LOCK_CLEAR_FORCE (1=force), MODELS_DIR
+#   _HF_PROTECTED_PIDS, _RWSF_CHILD_PID, _RWSF_EXTRA_PIDS
 # Arguments:
-#   $1 - Root directory (default MODELS_DIR or /mnt/models)
+#   $1 - PID
+# Returns:
+#   0 if protected; 1 if may kill
+#######################################
+_hf_pid_is_protected() {
+  local pid="${1:-}"
+  local p
+  [[ -n ${pid} ]] || return 0
+  [[ ${pid} == "$$" || ${pid} == "${PPID}" ]] && return 0
+  for p in ${_HF_PROTECTED_PIDS:-} ${_RWSF_CHILD_PID:-} ${_RWSF_EXTRA_PIDS:-}; do
+    [[ ${pid} == "${p}" ]] && return 0
+  done
+  # Protect descendants of this shell (current hf children)
+  if [[ -r /proc/${pid}/stat ]]; then
+    local ppid
+    ppid="$(awk '{print $4}' "/proc/${pid}/stat" 2>/dev/null || true)"
+    [[ ${ppid} == "$$" ]] && return 0
+  fi
+  return 1
+}
+
+#######################################
+# Clear stale Hugging Face download locks under a models root.
+# By default may stop *orphan* hf PIDs (never the active download PIDs).
+# locks_only=1 (mid-download): remove unheld .lock files only — never pkill.
+# Globals:
+#   HF_LOCK_CLEAR, HF_LOCK_CLEAR_FORCE, _HF_PROTECTED_PIDS, MODELS_DIR
+# Arguments:
+#   $1 - Root directory (default MODELS_DIR)
+#   $2 - Optional "locks_only" to skip process kill entirely
 # Outputs:
 #   Status via log/warn
 # Returns:
-#   0 always (best-effort; never aborts downloads solely for lock cleanup)
+#   0 always
 #######################################
 clear_stale_hf_locks() {
   local root="${1:-${MODELS_DIR:-/mnt/models}}"
+  local mode="${2:-}"
   local force="${HF_LOCK_CLEAR_FORCE:-0}"
   local lock removed=0 active=0 pid pids=""
+  local locks_only=0
+  [[ ${mode} == "locks_only" ]] && locks_only=1
 
   if [[ ${HF_LOCK_CLEAR:-1} == "0" ]]; then
     log "HF lock clear skipped (HF_LOCK_CLEAR=0)"
@@ -682,22 +715,25 @@ clear_stale_hf_locks() {
 
   log "Checking for stale Hugging Face download locks under ${root} …"
 
-  # Stop orphan downloaders that often leave locks after kill/restart experiments
-  if command -v pgrep >/dev/null 2>&1; then
+  # Never kill our own active download (mid-download cleanup = locks only)
+  if [[ ${locks_only} -eq 0 ]] && command -v pgrep >/dev/null 2>&1; then
+    set +m 2>/dev/null || true
     while read -r pid; do
       [[ -z ${pid} || ! ${pid} =~ ^[0-9]+$ ]] && continue
-      # Only target download-like command lines
-      if [[ -r /proc/${pid}/cmdline ]] || kill -0 "${pid}" 2>/dev/null; then
+      if _hf_pid_is_protected "${pid}"; then
+        continue
+      fi
+      if kill -0 "${pid}" 2>/dev/null; then
         log "Stopping orphan download PID ${pid}"
         kill -TERM "${pid}" 2>/dev/null || true
         pids="${pids} ${pid}"
       fi
-    done < <(pgrep -f 'hf download|huggingface-cli download|huggingface_hub' 2>/dev/null || true)
+    done < <(pgrep -f 'hf download|huggingface-cli download' 2>/dev/null || true)
     if [[ -n ${pids// /} ]]; then
-      sleep 2
+      sleep 1
       for pid in ${pids}; do
-        if kill -0 "${pid}" 2>/dev/null; then
-          warn "Force-killing download PID ${pid}"
+        if kill -0 "${pid}" 2>/dev/null && ! _hf_pid_is_protected "${pid}"; then
+          warn "Force-killing orphan download PID ${pid}"
           kill -KILL "${pid}" 2>/dev/null || true
         fi
       done
@@ -735,7 +771,7 @@ clear_stale_hf_locks() {
         held=1
       fi
     fi
-    # Without fuser/lsof, treat as stale after process sweep (common on minimal hosts)
+    # Without fuser/lsof, treat as stale after optional process sweep
     if [[ ${held} -eq 1 ]]; then
       active=$((active + 1))
       continue
@@ -747,7 +783,7 @@ clear_stale_hf_locks() {
     log "Removed ${removed} stale HF lock file(s) under ${root}"
   fi
   if [[ ${active} -gt 0 ]]; then
-    warn "${active} lock(s) still held by live processes — wait for them or HF_LOCK_CLEAR_FORCE=1"
+    warn "${active} lock(s) still held by live processes — wait or HF_LOCK_CLEAR_FORCE=1"
   fi
   if [[ ${removed} -eq 0 && ${active} -eq 0 ]]; then
     log "HF lock check clean under ${root}"
@@ -914,6 +950,8 @@ hf_download() {
   trap '_hf_dl_signal' INT TERM
 
   # Heartbeat: prove progress even if hub UI is quiet (large single files)
+  # set +m + disown: avoid bash "[1]+ Terminated" dumps on stop
+  set +m 2>/dev/null || true
   if [[ -n ${dest_dir} ]]; then
     mkdir -p "${dest_dir}" 2>/dev/null || true
     (
@@ -929,8 +967,9 @@ hf_download() {
         if [[ ${delta} -le 0 ]]; then
           zero_streak=$((zero_streak + 1))
           if [[ ${zero_streak} -ge 3 && ${HF_LOCK_CLEAR_MID:-1} == "1" ]]; then
-            warn "No disk growth for 30s — clearing stale HF locks once"
-            clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" || true
+            # locks_only: NEVER pkill — that was killing the active hf download
+            warn "No disk growth for 30s — clearing unheld HF locks only (not killing download)"
+            clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" "locks_only" || true
             zero_streak=0
           fi
         else
@@ -939,6 +978,7 @@ hf_download() {
       done
     ) &
     hb_pid=$!
+    disown "${hb_pid}" 2>/dev/null || true
     _RWSF_EXTRA_PIDS="${hb_pid}"
   fi
 
@@ -946,7 +986,6 @@ hf_download() {
   if command -v hf >/dev/null 2>&1; then
     set +e
     if [[ -t 2 ]]; then
-      # Process group + TTY-friendly capture of stderr for tqdm
       (
         hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
       ) &
@@ -959,6 +998,9 @@ hf_download() {
       ) &
       hpid=$!
     fi
+    # Protect active download from clear_stale_hf_locks process sweep
+    _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
+    export _HF_PROTECTED_PIDS
     wait "${hpid}"
     rc=$?
     set -e
@@ -971,18 +1013,23 @@ hf_download() {
       exit "${PIPESTATUS[0]}"
     ) &
     hpid=$!
+    _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
+    export _HF_PROTECTED_PIDS
     wait "${hpid}"
     rc=$?
     set -e
   else
     [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
     trap - INT TERM
+    unset _HF_PROTECTED_PIDS
     rm -f "${hf_log}"
     err "No hf or huggingface-cli on PATH"
     return 1
   fi
+  set +m 2>/dev/null || true
   [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
   _RWSF_EXTRA_PIDS=""
+  unset _HF_PROTECTED_PIDS
   trap - INT TERM
 
   if [[ ${rc} -eq 0 ]]; then
