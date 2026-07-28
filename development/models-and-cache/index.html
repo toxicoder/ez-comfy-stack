@@ -632,6 +632,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#expected-basenames-after-download-models-lab-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expected basenames after download-models (lab workflow)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#prebuilt-container-image-ghcr" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -940,6 +951,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#expected-basenames-after-download-models-lab-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expected basenames after download-models (lab workflow)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#prebuilt-container-image-ghcr" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1138,6 +1160,44 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 <span class="c1"># or: pip install -U &#39;huggingface_hub[cli]&#39;</span>
 </code></pre></div>
 <p>Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. <code>HF_PROGRESS=0</code> turns progress lines off; <code>HF_PROGRESS_INTERVAL=10</code> sets the tick (seconds).</p>
+<h3 id="expected-basenames-after-download-models-lab-workflow">Expected basenames after <code>download-models</code> (lab workflow)<a class="headerlink" href="#expected-basenames-after-download-models-lab-workflow" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Comfy folder</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flux-2-klein-9b-nvfp4.safetensors</code></td>
+<td><code>diffusion_models/</code></td>
+<td>Flux fast UNET</td>
+</tr>
+<tr>
+<td><code>ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors</code></td>
+<td><code>diffusion_models/</code></td>
+<td>LTX balanced UNET</td>
+</tr>
+<tr>
+<td><code>ltx-2.3_text_projection_bf16.safetensors</code></td>
+<td><code>text_encoders/</code></td>
+<td>LTX text projection</td>
+</tr>
+<tr>
+<td><code>LTX23_video_vae_bf16.safetensors</code></td>
+<td><code>vae/</code></td>
+<td>LTX video VAE</td>
+</tr>
+<tr>
+<td><code>LTX23_audio_vae_bf16.safetensors</code></td>
+<td><code>vae/</code></td>
+<td>LTX audio VAE</td>
+</tr>
+</tbody>
+</table>
+<p>Workflow template: <code>workflows/lab-flux-to-ltx.json</code> (loaders + notes). Not Z-Image.</p>
 <h3 id="prebuilt-container-image-ghcr">Prebuilt container image (GHCR)<a class="headerlink" href="#prebuilt-container-image-ghcr" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
