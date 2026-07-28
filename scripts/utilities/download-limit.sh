@@ -159,13 +159,17 @@ ensure_wondershaper() {
   if check_wondershaper; then
     return 0
   fi
-  dl_warn "wondershaper not found; attempting install..."
+  dl_warn "wondershaper not found; attempting non-interactive install..."
+  if [[ ${LAB_NO_SUDO:-} == "1" ]] || ! command -v sudo >/dev/null 2>&1 || ! sudo -n true 2>/dev/null; then
+    dl_err "wondershaper missing and cannot install without interactive sudo"
+    return 1
+  fi
   if command -v apt-get >/dev/null 2>&1; then
-    sudo apt-get update -qq && sudo apt-get install -y wondershaper
+    sudo -n apt-get update -qq && sudo -n apt-get install -y wondershaper
   elif command -v dnf >/dev/null 2>&1; then
-    sudo dnf install -y wondershaper
+    sudo -n dnf install -y wondershaper
   elif command -v pacman >/dev/null 2>&1; then
-    sudo pacman -S --noconfirm wondershaper
+    sudo -n pacman -S --noconfirm wondershaper
   else
     dl_err "Install wondershaper manually (or set PATH to a mock for tests)"
     return 1
@@ -185,11 +189,15 @@ ensure_wondershaper() {
 #   Exit status depends on command path; see implementation.
 #######################################
 sudo_wondershaper() {
-  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
+  if [[ ${LAB_NO_SUDO:-} == "1" || ${LAB_MOCK_WONDERSHAPER:-} == "1" ]]; then
     wondershaper "$@"
-  else
-    sudo wondershaper "$@"
+    return $?
   fi
+  # Never prompt interactively during download-models
+  if ! sudo -n true 2>/dev/null; then
+    return 1
+  fi
+  sudo -n wondershaper "$@"
 }
 
 #######################################
@@ -232,11 +240,15 @@ load_shaping_modules() {
   if [[ ${LAB_MOCK_WONDERSHAPER:-} == "1" || ${LAB_NO_SUDO:-} == "1" ]]; then
     return 0
   fi
+  # Non-interactive only — never prompt mid-download
+  if ! command -v sudo >/dev/null 2>&1 || ! sudo -n true 2>/dev/null; then
+    return 0
+  fi
   if command -v modprobe >/dev/null 2>&1; then
-    sudo modprobe sch_htb 2>/dev/null || true
-    sudo modprobe sch_ingress 2>/dev/null || true
-    sudo modprobe sch_sfq 2>/dev/null || true
-    sudo modprobe ifb 2>/dev/null || true
+    sudo -n modprobe sch_htb 2>/dev/null || true
+    sudo -n modprobe sch_ingress 2>/dev/null || true
+    sudo -n modprobe sch_sfq 2>/dev/null || true
+    sudo -n modprobe ifb 2>/dev/null || true
   fi
   return 0
 }
@@ -268,7 +280,14 @@ shaping_supported() {
     export LAB_SHAPING_SUPPORTED
     return 0
   fi
+  # Detection only — no interactive sudo (load_shaping_modules is -n only)
   load_shaping_modules
+  # Require non-interactive sudo for any real apply path
+  if command -v sudo >/dev/null 2>&1 && ! sudo -n true 2>/dev/null; then
+    LAB_SHAPING_SUPPORTED=0
+    export LAB_SHAPING_SUPPORTED
+    return 1
+  fi
   if command -v modinfo >/dev/null 2>&1 && modinfo sch_htb >/dev/null 2>&1; then
     LAB_SHAPING_SUPPORTED=1
     export LAB_SHAPING_SUPPORTED
@@ -410,11 +429,19 @@ clear_limits() {
     iface=$(get_active_interface)
   fi
   if [[ -z ${iface} ]]; then
-    dl_warn "No interface for clear"
     return 0
   fi
-  dl_log "Clearing bandwidth limits on ${iface}"
+  # Skip if we already know shaping is off or sudo would prompt
+  if [[ ${LAB_SHAPING_SUPPORTED:-} == "0" ]]; then
+    return 0
+  fi
+  if [[ ${LAB_NO_SUDO:-} != "1" && ${LAB_MOCK_WONDERSHAPER:-} != "1" ]]; then
+    if command -v sudo >/dev/null 2>&1 && ! sudo -n true 2>/dev/null; then
+      return 0
+    fi
+  fi
   if check_wondershaper || [[ ${LAB_MOCK_WONDERSHAPER:-} == "1" ]]; then
+    dl_log "Clearing bandwidth limits on ${iface}"
     sudo_wondershaper clear "${iface}" 2>/dev/null || true
   fi
   return 0
@@ -531,26 +558,26 @@ probe_http_download_mbps() {
 #   0 on success; 1 on failure
 #######################################
 run_speedtest_mbps() {
-  SPEED_MEASURE_ERROR=""
   if [[ ${LAB_FORCE_SPEEDTEST_FAIL:-} == "1" ]]; then
-    SPEED_MEASURE_ERROR="forced fail (test)"
+    dl_warn "Preflight speed: forced fail (test)"
     return 1
   fi
   if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
     echo "${LAB_MOCK_SPEEDTEST_MBPS}"
     return 0
   fi
-  local out=""
+  local out="" reason=""
   if command -v speedtest-cli >/dev/null 2>&1; then
     out=$(speedtest-cli --simple 2>/dev/null | awk '/Download:/{print $2; exit}') || true
     if [[ -n ${out} && ${out} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
       printf '%d\n' "${out%.*}"
       return 0
     fi
-    SPEED_MEASURE_ERROR="speedtest-cli present but no parseable result"
+    reason="speedtest-cli gave no parseable result"
+  else
+    reason="speedtest-cli not installed"
   fi
   if command -v speedtest >/dev/null 2>&1; then
-    # Ookla CLI: --format=json or progress text
     out=$(speedtest --accept-license --accept-gdpr -f json 2>/dev/null |
       python3 -c 'import json,sys; d=json.load(sys.stdin); print(int(d.get("download",{}).get("bandwidth",0)*8/1e6))' 2>/dev/null) || true
     if [[ -z ${out} ]]; then
@@ -561,17 +588,15 @@ run_speedtest_mbps() {
       printf '%d\n' "${out%.*}"
       return 0
     fi
-    SPEED_MEASURE_ERROR="ookla speedtest present but no parseable result"
+    reason="${reason}; ookla speedtest gave no parseable result"
   fi
   if out=$(probe_http_download_mbps); then
     echo "${out}"
     return 0
   fi
-  if [[ -z ${SPEED_MEASURE_ERROR} ]]; then
-    SPEED_MEASURE_ERROR="speedtest-cli/ookla missing and HTTP probe failed"
-  else
-    SPEED_MEASURE_ERROR="${SPEED_MEASURE_ERROR}; HTTP probe failed"
-  fi
+  reason="${reason}; HTTP speed probe failed (curl/Cloudflare)"
+  # dl_warn is visible even under measured=$(run_speedtest_mbps) — stderr not captured
+  dl_warn "Preflight speed: ${reason}"
   return 1
 }
 
@@ -794,11 +819,10 @@ apply_limit_from_measured() {
 }
 
 #######################################
-# When preflight speed fails: run download, sample live RX, then apply limit.
-# Restarts once in the FOREGROUND so tqdm progress is visible again.
-# Always interruptible via Ctrl+C (kills sample-phase PID + clear_limits).
+# When preflight speed fails: measure live RX (HTTP traffic), then ONE foreground download.
+# Does NOT start/kill a sample-phase model download (avoids HF locks and hang-on-wait).
 # Globals:
-#   WRAP_ARGS, LIVE_SPEED_SAMPLE_SEC, FALLBACK_MBPS
+#   WRAP_ARGS, LIVE_SPEED_SAMPLE_SEC, FALLBACK_MBPS, SPEEDTEST_HTTP_*
 # Arguments:
 #   $1  Interface
 #   $2  Fallback Mbps if live sample fails
@@ -810,43 +834,57 @@ apply_limit_from_measured() {
 wrap_with_live_speed_limit() {
   local iface="${1}"
   local fallback_mbps="${2:-50}"
-  local sample_sec child live_mbps
+  local sample_sec live_mbps probe_pid=""
   sample_sec="${LIVE_SPEED_SAMPLE_SEC:-15}"
 
-  dl_log "Preflight speed unavailable — starting download and sampling live RX for ${sample_sec}s"
-  dl_log "Progress below is the sample phase (may look brief); a foreground resume follows"
-  set -m 2>/dev/null || true
-  "${WRAP_ARGS[@]}" &
-  child=$!
-  dl_log "Sample-phase download PID ${child}"
+  dl_log "=== download-limit: measure (live RX, ${sample_sec}s) ==="
+  dl_log "Not starting model download yet (avoids kill/restart and HF file locks)"
+
+  # Generate RX traffic during the sample window (no model repo locks)
+  if command -v curl >/dev/null 2>&1 && [[ -z ${LAB_MOCK_LIVE_RX_MBPS:-} ]]; then
+    local bytes url
+    bytes="${SPEEDTEST_HTTP_BYTES:-25000000}"
+    url="${SPEEDTEST_HTTP_URL:-https://speed.cloudflare.com/__down?bytes=${bytes}}"
+    curl -fsSL --max-time "$((sample_sec + 5))" -o /dev/null "${url}" >/dev/null 2>&1 &
+    probe_pid=$!
+    dl_log "Background HTTP probe PID ${probe_pid} (creates RX traffic for measurement)"
+  fi
 
   # shellcheck disable=SC2329
-  _wrap_live_on_signal() {
-    kill -INT -- "-${child}" 2>/dev/null || kill -INT "${child}" 2>/dev/null || true
-    wait "${child}" 2>/dev/null || true
+  _wrap_measure_on_signal() {
+    if [[ -n ${probe_pid} ]]; then
+      kill -INT "${probe_pid}" 2>/dev/null || true
+      wait "${probe_pid}" 2>/dev/null || true
+    fi
     clear_limits "${iface}"
     exit 130
   }
-  trap '_wrap_live_on_signal' INT TERM
+  trap '_wrap_measure_on_signal' INT TERM
   # shellcheck disable=SC2064
   trap 'clear_limits "'"${iface}"'"' EXIT
 
-  if live_mbps=$(sample_iface_rx_mbps "${iface}" "${sample_sec}" "${child}"); then
+  if live_mbps=$(sample_iface_rx_mbps "${iface}" "${sample_sec}" "${probe_pid}"); then
     dl_log "Live RX ≈ ${live_mbps} Mbps on ${iface}"
-    apply_limit_from_measured "${iface}" "${live_mbps}" || true
+    if shaping_supported; then
+      apply_limit_from_measured "${iface}" "${live_mbps}" || true
+    else
+      enable_gentle_download_mode "$(compute_auto_limit "${live_mbps}")" "${iface}"
+    fi
   else
-    dl_warn "Live RX sample failed; fallback gentle mode at ${fallback_mbps} Mbps"
+    dl_warn "Live RX sample failed; gentle mode at fallback ${fallback_mbps} Mbps"
     enable_gentle_download_mode "${fallback_mbps}" "${iface}"
   fi
 
-  # Always resume in FOREGROUND after sample so progress bars work (HF resumes files)
-  dl_log "Stopping sample-phase download (PID ${child}, resume-safe)…"
-  kill -INT -- "-${child}" 2>/dev/null || kill -INT "${child}" 2>/dev/null || true
-  wait "${child}" 2>/dev/null || true
+  if [[ -n ${probe_pid} ]]; then
+    kill -INT "${probe_pid}" 2>/dev/null || true
+    wait "${probe_pid}" 2>/dev/null || true
+  fi
   trap - INT TERM
   # shellcheck disable=SC2064
   trap 'clear_limits "'"${iface}"'"' EXIT
-  dl_log "Resuming download in foreground (live progress should appear below)…"
+
+  dl_log "=== download-limit: download (foreground) ==="
+  dl_log "Starting model download now — live progress should appear below"
   dl_log "Running: ${WRAP_ARGS[*]}"
   run_with_signal_forwarding "${WRAP_ARGS[@]}"
   return $?
@@ -879,7 +917,7 @@ cmd_wrap() {
     else
       preflight_ok=0
       mbps="${FALLBACK_MBPS}"
-      dl_log "Preflight speed measure failed (${SPEED_MEASURE_ERROR:-no detail}); will sample live RX during download"
+      dl_log "Preflight failed — next: live RX measure, then one foreground model download"
     fi
   else
     mbps=$(resolve_limit_mbps "${LIMIT_SPEC}")

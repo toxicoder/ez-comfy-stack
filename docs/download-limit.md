@@ -126,15 +126,13 @@ You should not need `kill -9` on leftover download processes after a clean Ctrl+
 
 ## Live speed when preflight fails
 
-If auto mode cannot measure speed **before** download (no speedtest-cli, HTTP probe fail):
+If auto mode cannot measure speed **before** download:
 
-1. Starts a **sample-phase** download in the background (heartbeats every few seconds)  
-2. Samples NIC **RX bytes** for ~15s (`LIVE_SPEED_SAMPLE_SEC`)  
-3. Sets target = 85% of live Mbps  
-4. Kernel HTB only if it works **and** sudo is non-interactive; otherwise **gentle HF max-workers** (no mid-download sudo prompt)  
-5. Stops the sample phase and **resumes the download in the foreground** so tqdm progress is visible again (HF **resumes** partial files)
+1. **Measure phase** (~15s): sample NIC RX while a short HTTP download generates traffic (not the multi‑GB model pull — avoids HF locks and kill/restart hangs)  
+2. Set target = 85% of live Mbps → gentle HF max-workers (or kernel HTB only if `sudo -n` works and qdisc applies)  
+3. **Download phase**: one **foreground** model download with live tqdm progress  
 
-Mock/tests: `LAB_MOCK_LIVE_RX_MBPS`.
+No interactive sudo during this path. Mock/tests: `LAB_MOCK_LIVE_RX_MBPS`.
 
 ## Wrap lifecycle
 

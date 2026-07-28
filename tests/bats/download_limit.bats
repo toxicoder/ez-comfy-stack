@@ -267,7 +267,10 @@ exit 0
   run wrap_with_live_speed_limit eth0 50
   [ "${status}" -eq 0 ]
   [ -f "${TEST_TMP_DIR}/live.ok" ]
-  [[ "${output}" == *"Live RX"* || "${output}" == *"160"* || "${output}" == *"gentle"* || "${output}" == *"Resuming"* || "${output}" == *"foreground"* ]]
+  [[ "${output}" == *"Live RX"* || "${output}" == *"160"* || "${output}" == *"gentle"* || "${output}" == *"foreground"* || "${output}" == *"measure"* ]]
+  # Must not use kill/restart model-download path
+  [[ "${output}" != *"Stopping sample-phase"* ]]
+  [[ "${output}" != *"Sample-phase download PID"* ]]
 
   run apply_limit_from_measured eth0 100
   # gentle because NO_HTB
