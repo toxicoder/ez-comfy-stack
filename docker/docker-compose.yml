@@ -1,0 +1,55 @@
+# Purpose:
+#   Docker Compose definition for the unified Visual Generative AI demo on a
+#   single NVIDIA DGX Spark: one ComfyUI service configured for Flux (fast) +
+#   LTX (balanced) text-to-image-to-video workflows.
+# Source of truth: this file (operator entry via scripts/manage.sh)
+# Regenerate: n/a
+# Safety:
+#   - restart: "no" — never auto-start after host reboot (remote SSH safety)
+#   - mem_limit / mem_reservation leave host headroom for OS and interactive SSH
+#   - host models at MODELS_DIR; Comfy install state on named volume only
+#   - gpus: all (exclusive GPU demo — stop other GPU workloads first)
+
+name: ez-comfy
+
+services:
+  comfyui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ez-comfy:flux-to-ltx
+    container_name: ez-comfy-flux-to-ltx
+    # Manual lifecycle only — operator uses manage.sh start/stop
+    restart: "no"
+    ports:
+      - "${COMFY_PORT:-8188}:8188"
+    environment:
+      COMFY_HOME: /comfy-state/ComfyUI
+      MODELS_ROOT: /models
+      HF_HOME: /models
+      HUGGINGFACE_HUB_CACHE: /models/hub
+      HF_TOKEN: ${HF_TOKEN:-}
+      PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+      CUDA_MODULE_LOADING: LAZY
+      LAB_VISUAL_ENABLE_NVFP4: "1"
+      LAB_VISUAL_PROFILE: flux-to-ltx
+      LAB_PIPELINE: flux-to-ltx
+      LAB_FLUX_TIER: fast
+      LAB_LTX_TIER: balanced
+      LAB_VISUAL_ENABLE_NUNCHAKU: "1"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    volumes:
+      - ${MODELS_DIR:-/mnt/models}:/models
+      - comfy-state:/comfy-state
+      - ../workflows/lab-flux-to-ltx.json:/comfy-state/ComfyUI/user/default/workflows/lab-flux-to-ltx.json:ro
+    gpus: all
+    shm_size: "16gb"
+    mem_limit: ${MEM_LIMIT:-90g}
+    mem_reservation: ${MEM_RESERVATION:-80g}
+    # cpus soft limit (compose v2)
+    cpus: 12.0
+
+volumes:
+  comfy-state:
+    name: ez-comfy-state
