@@ -55,19 +55,31 @@ git clone https://github.com/toxicoder/ez-comfy-stack.git
 cd ez-comfy-stack
 git checkout development   # or your feature branch
 
-# One-shot host bootstrap: .env, MODELS_DIR (sudo mkdir/chown), docker hints, doctor
-./scripts/manage.sh setup
-# edit .env: HF_TOKEN if gated models need it
+# One-shot host bootstrap: .env, MODELS_DIR (sudo), Docker CE if missing, doctor
+./scripts/manage.sh setup --install-docker
+# approve sudo + type yes if prompted; edit .env for HF_TOKEN if models are gated
 ```
 
 `setup` will:
 
 1. Create `.env` from `.env.example` if missing  
 2. Create and own `MODELS_DIR` (default `/mnt/models`) via sudo when needed  
-3. Print **copy-pasteable** Docker CE install steps if docker is missing  
-4. Re-run `doctor`
+3. **Install Docker CE + compose plugin** when missing (`--install-docker` or interactive yes; apt preferred, not snap)  
+4. Add your user to the `docker` group; configure `nvidia-ctk` when present  
+5. Re-run `doctor`
 
-If docker is not installed yet, install it (apt, **not** snap), re-login or `newgrp docker`, then re-run `setup`.
+If the current shell lacks the docker group after install:
+
+```bash
+newgrp docker   # or re-login SSH
+./scripts/manage.sh doctor
+```
+
+Non-interactive:
+
+```bash
+LAB_NON_INTERACTIVE=1 LAB_CONFIRM_TOKEN=yes SETUP_INSTALL_DOCKER=1 ./scripts/manage.sh setup
+```
 
 ## Doctor
 

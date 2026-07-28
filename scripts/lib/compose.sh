@@ -77,12 +77,8 @@ compose_run() {
 #   0 when both work; otherwise dies (exit 1).
 #######################################
 require_docker() {
-  if ! resolve_docker_on_path; then
-    print_docker_install_hints
-    die "Required command not found: docker"
-  fi
-  if ! docker compose version >/dev/null 2>&1; then
-    die "docker compose plugin is required"
+  if ! check_docker_preflight; then
+    die "Docker preflight failed (install with: ./scripts/manage.sh setup --install-docker)"
   fi
 }
 

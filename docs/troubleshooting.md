@@ -18,7 +18,9 @@ tags: [troubleshooting, comfyui, docker]
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
-| `docker missing` in doctor | Docker not on PATH / removed / snap-only | `./scripts/manage.sh setup`; install apt `docker-ce` + Compose v2 (not snap); `sudo usermod -aG docker $USER` and re-login |
+| `docker missing` in doctor | Docker not installed / snap-only | `./scripts/manage.sh setup --install-docker` (sudo apt CE + compose); then `newgrp docker` or re-login |
+| docker permission denied | Not in `docker` group this session | `sudo usermod -aG docker $USER` then `newgrp docker` or re-login SSH |
+| docker daemon not reachable | dockerd not running | `sudo systemctl start docker` |
 | `MODELS_DIR … not writable` | `/mnt/models` missing or root-owned | `./scripts/manage.sh setup` **or** `sudo mkdir -p /mnt/models && sudo chown $USER:$USER /mnt/models` **or** `MODELS_DIR=$HOME/models` |
 | wondershaper `qdisc kind is unknown` / `Illegal rate` | HTB modules missing or illegal rate | Doctor/download soft-continues unthrottled with a warn; install/load `sch_htb`; `download-limit clear`; optional `DOWNLOAD_LIMIT=off` if you accept SSH risk |
 | SSH freezes during download | Full-rate HF pull (limit off or soft-fail) | Prefer working `download-limit`; lower fixed Mbps; `download-limit clear` if half-applied |
@@ -61,14 +63,16 @@ flowchart TB
 Docker is usually pre-installed on DGX Spark, but updates or OS reimages can remove it. Prefer **apt Docker CE** (not snap) so the NVIDIA Container Toolkit can attach GPUs.
 
 ```bash
-./scripts/manage.sh setup
-# if still missing docker:
-sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-sudo usermod -aG docker "$USER"
-# re-login or: newgrp docker
-./scripts/manage.sh setup
+./scripts/manage.sh setup --install-docker
+# sudo password + type yes if prompted
+newgrp docker   # if permission denied in this shell
 ./scripts/manage.sh doctor
+```
+
+Non-interactive:
+
+```bash
+LAB_NON_INTERACTIVE=1 LAB_CONFIRM_TOKEN=yes SETUP_INSTALL_DOCKER=1 ./scripts/manage.sh setup
 ```
 
 ## MODELS_DIR permission denied

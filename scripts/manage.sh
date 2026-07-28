@@ -69,7 +69,8 @@ ez-comfy-stack manage — unified Visual Generative AI (Flux → LTX via ComfyUI
 
 Commands:
   help              Show this help
-  setup             Host bootstrap: .env, MODELS_DIR (sudo), docker hints, doctor
+  setup [--install-docker] [--yes]
+                    Host bootstrap: .env, MODELS_DIR (sudo), Docker CE install, doctor
   doctor            Preflight: docker, GPU, free RAM/disk, models
   status [--json]   Stack status
   start             Start flux-to-ltx (requires yes)
@@ -87,13 +88,14 @@ EOF
 #######################################
 # Bootstrap host prerequisites for doctor/download/start.
 # Creates .env from example if missing; prepares MODELS_DIR (sudo mkdir/chown);
-# resolves docker on PATH or prints install hints; soft-checks GPU tooling;
+# installs Docker CE when missing (confirm / --install-docker); soft-checks GPU;
 # then runs doctor.
-# Side effects: May write .env; may sudo for MODELS_DIR; may adjust PATH for docker.
+# Side effects: May write .env; may sudo for MODELS_DIR and package install.
 # Globals:
-#   REPO_ROOT, MODELS_DIR, LAB_NO_SUDO
+#   REPO_ROOT, MODELS_DIR, LAB_NO_SUDO, SETUP_INSTALL_DOCKER, SETUP_YES
 # Arguments:
-#   None
+#   Optional: --install-docker  force docker install path
+#             --yes             skip install confirmation
 # Outputs:
 #   Status via log/warn/err on stderr
 # Returns:
@@ -102,6 +104,35 @@ EOF
 cmd_setup() {
   log "Host setup / bootstrap"
   local ok=0
+  local force_docker=0
+  local arg
+
+  for arg in "$@"; do
+    case "${arg}" in
+      --install-docker)
+        force_docker=1
+        SETUP_INSTALL_DOCKER=1
+        export SETUP_INSTALL_DOCKER
+        ;;
+      --yes | -y)
+        SETUP_YES=1
+        export SETUP_YES
+        force_docker=1
+        ;;
+      -h | --help)
+        cat <<'EOF' >&2
+Usage: manage.sh setup [--install-docker] [--yes]
+  --install-docker  Install Docker CE if missing (sudo)
+  --yes             Skip install confirmation (still needs sudo)
+EOF
+        return 0
+        ;;
+      *)
+        err "Unknown setup flag: ${arg}"
+        return 1
+        ;;
+    esac
+  done
 
   if [[ ! -f ${REPO_ROOT}/.env ]]; then
     if [[ -f ${REPO_ROOT}/.env.example ]]; then
@@ -124,20 +155,26 @@ cmd_setup() {
     ok=1
   fi
 
-  if resolve_docker_on_path; then
-    log "docker: $(docker --version 2>/dev/null | head -1)"
-    if docker compose version >/dev/null 2>&1; then
-      log "docker compose: ok"
+  if check_docker_preflight; then
+    log "docker preflight: ok"
+  else
+    local conf_rc=0
+    confirm_docker_install "${force_docker}" || conf_rc=$?
+    if [[ ${conf_rc} -eq 0 ]]; then
+      if install_docker_engine; then
+        if check_docker_preflight; then
+          log "docker preflight: ok after install"
+        else
+          warn "Docker installed but preflight still failing — try: newgrp docker"
+          ok=1
+        fi
+      else
+        ok=1
+      fi
     else
-      err "docker compose plugin missing — install docker-compose-plugin (not snap)"
+      print_docker_install_hints
       ok=1
     fi
-  else
-    print_docker_install_hints
-    if command -v sudo >/dev/null 2>&1 && sudo -n docker --version >/dev/null 2>&1; then
-      warn "sudo docker works — add your user to the docker group and re-login"
-    fi
-    ok=1
   fi
 
   if command -v nvidia-smi >/dev/null 2>&1; then
@@ -156,7 +193,7 @@ cmd_setup() {
     ok=1
   fi
   if [[ ${ok} -ne 0 ]]; then
-    err "Setup incomplete — fix errors above, then re-run: ./scripts/manage.sh setup"
+    err "Setup incomplete — fix errors above, then re-run: ./scripts/manage.sh setup --install-docker"
     return 1
   fi
   log "Setup OK — next: ./scripts/manage.sh download-models"
@@ -181,19 +218,9 @@ cmd_setup() {
 cmd_doctor() {
   log "Doctor / preflight"
   local ok=0
-  if resolve_docker_on_path; then
-    log "docker: $(docker --version 2>/dev/null | head -1)"
-    if docker compose version >/dev/null 2>&1; then
-      log "docker compose: ok"
-    else
-      err "docker compose plugin missing"
-      err "  Install Compose v2 plugin (docker-compose-plugin) — avoid snap docker for GPU."
-      ok=1
-    fi
-  else
-    print_docker_install_hints
+  if ! check_docker_preflight; then
     if command -v sudo >/dev/null 2>&1 && sudo -n docker --version >/dev/null 2>&1; then
-      warn "sudo docker works — add your user to the docker group and re-login"
+      warn "sudo docker works — add your user to the docker group and re-login (newgrp docker)"
     fi
     ok=1
   fi
@@ -225,7 +252,7 @@ cmd_doctor() {
     log "compose file: $(lab_compose_file)"
   fi
   if [[ ${ok} -ne 0 ]]; then
-    err "Doctor found problems — try: ./scripts/manage.sh setup"
+    err "Doctor found problems — try: ./scripts/manage.sh setup --install-docker"
     return 1
   fi
   log "Doctor OK"
@@ -420,7 +447,7 @@ main() {
   shift || true
   case "${cmd}" in
     help | -h | --help) cmd_help ;;
-    setup) cmd_setup ;;
+    setup) cmd_setup "$@" ;;
     doctor) cmd_doctor ;;
     status) cmd_status "$@" ;;
     start) cmd_start ;;

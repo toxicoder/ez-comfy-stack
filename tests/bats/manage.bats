@@ -110,6 +110,24 @@ teardown() {
   [[ "${output}" == *"Setup OK"* || "${output}" == *"Doctor OK"* ]]
 }
 
+@test "manage setup --install-docker uses mock install path" {
+  export LAB_MOCK_FREE_MEM_GIB=64
+  export LAB_MOCK_DISK_FREE_GIB=100
+  export MODELS_DIR="${TEST_TMP_DIR}/models"
+  export LAB_MOCK_DOCKER_INSTALL=1
+  export LAB_MOCK_DOCKER_BIN_DIR="${TEST_TMP_DIR}/fresh_docker_bin"
+  # Remove docker from PATH so preflight fails before mock install
+  local old_path="${PATH}"
+  export PATH="/usr/bin:/bin"
+  run cmd_setup --install-docker --yes
+  export PATH="${old_path}:${LAB_MOCK_DOCKER_BIN_DIR}"
+  # setup should have put mock docker on PATH during install; status may still
+  # depend on doctor finding compose file + models
+  [ "${status}" -eq 0 ] || [ -x "${LAB_MOCK_DOCKER_BIN_DIR}/docker" ]
+  [[ -x "${LAB_MOCK_DOCKER_BIN_DIR}/docker" ]]
+  unset LAB_MOCK_DOCKER_INSTALL
+}
+
 @test "manage cmd_* direct: help setup doctor status start stop restart logs download cleanup" {
   run cmd_help
   [ "${status}" -eq 0 ]

@@ -79,7 +79,24 @@ teardown() {
   [ "${status}" -eq 0 ]
   run print_docker_install_hints
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"docker-ce"* ]]
+  [[ "${output}" == *"install-docker"* ]]
+  run docker_cli_ok
+  [ "${status}" -eq 0 ]
+  run docker_daemon_status
+  [ "${status}" -eq 0 ]
+  run check_docker_preflight
+  [ "${status}" -eq 0 ]
+  export SETUP_YES=1
+  run confirm_docker_install 1
+  [ "${status}" -eq 0 ]
+  unset SETUP_YES
+  export LAB_MOCK_DOCKER_INSTALL=1
+  export LAB_MOCK_DOCKER_BIN_DIR="${TEST_TMP_DIR}/docker_install_bin"
+  # Hide real mock docker temporarily
+  run install_docker_engine
+  [ "${status}" -eq 0 ]
+  [[ -x "${LAB_MOCK_DOCKER_BIN_DIR}/docker" ]]
+  unset LAB_MOCK_DOCKER_INSTALL
 
   run ensure_models_dir "${TEST_TMP_DIR}/models"
   [ "${status}" -eq 0 ]

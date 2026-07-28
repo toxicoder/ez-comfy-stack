@@ -213,12 +213,281 @@ resolve_docker_on_path() {
 print_docker_install_hints() {
   local user
   user="$(id -un)"
-  err "docker missing — install Docker CE (not snap) on DGX Spark, then re-login:"
+  err "docker missing — install Docker CE (not snap) on DGX Spark:"
+  err "  ./scripts/manage.sh setup --install-docker"
+  err "  # or non-interactive:"
+  err "  LAB_NON_INTERACTIVE=1 LAB_CONFIRM_TOKEN=yes SETUP_INSTALL_DOCKER=1 ./scripts/manage.sh setup"
+  err "Manual:"
   err "  sudo apt-get update"
   err "  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin"
   err "  sudo usermod -aG docker ${user}"
   err "  newgrp docker   # or disconnect/reconnect SSH"
-  err "Then: ./scripts/manage.sh setup && ./scripts/manage.sh doctor"
+  err "Then: ./scripts/manage.sh doctor"
+}
+
+#######################################
+# Return 0 when docker CLI + compose plugin respond successfully.
+# Globals:
+#   PATH (via resolve_docker_on_path)
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 when usable; 1 otherwise
+#######################################
+docker_cli_ok() {
+  resolve_docker_on_path || return 1
+  docker compose version >/dev/null 2>&1
+}
+
+#######################################
+# Probe docker daemon access (docker info). Distinguishes permission errors.
+# Under TEST_TMP_DIR or LAB_MOCK_DOCKER_INSTALL, compose OK is enough (hermetic).
+# Globals:
+#   TEST_TMP_DIR, LAB_MOCK_DOCKER_INSTALL
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 daemon OK; 1 permission denied; 2 other failure; 3 cli missing
+#######################################
+docker_daemon_status() {
+  local out
+  if ! resolve_docker_on_path; then
+    return 3
+  fi
+  if [[ -n ${TEST_TMP_DIR:-} || ${LAB_MOCK_DOCKER_INSTALL:-} == "1" ]]; then
+    if docker compose version >/dev/null 2>&1; then
+      return 0
+    fi
+    return 2
+  fi
+  if out=$(docker info 2>&1); then
+    return 0
+  fi
+  if [[ ${out} =~ [Pp]ermission\ denied|connect:\ permission ]]; then
+    return 1
+  fi
+  return 2
+}
+
+#######################################
+# Confirm whether setup may install Docker CE (interactive or env flags).
+# Globals:
+#   LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, SETUP_INSTALL_DOCKER, SETUP_YES
+# Arguments:
+#   $1 - Force yes when "1" (--install-docker or --yes on CLI)
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 proceed; 1 decline / missing token; 2 interactive abort
+#######################################
+confirm_docker_install() {
+  local force="${1:-0}"
+  if [[ ${force} == "1" || ${SETUP_YES:-} == "1" ]]; then
+    log "Docker install confirmed"
+    return 0
+  fi
+  if [[ ${SETUP_INSTALL_DOCKER:-} == "1" ]]; then
+    if [[ ${LAB_NON_INTERACTIVE:-} == "1" && ${LAB_CONFIRM_TOKEN:-} != "yes" ]]; then
+      err "SETUP_INSTALL_DOCKER=1 non-interactive needs LAB_CONFIRM_TOKEN=yes or --yes"
+      return 1
+    fi
+    log "Docker install confirmed (SETUP_INSTALL_DOCKER)"
+    return 0
+  fi
+  if [[ ${LAB_NON_INTERACTIVE:-} == "1" ]]; then
+    err "Docker missing. Re-run: ./scripts/manage.sh setup --install-docker"
+    return 1
+  fi
+  echo >&2
+  local response
+  read -r -p "Install Docker CE now (sudo apt)? Type yes to continue: " response
+  if [[ ${response} =~ ^[Yy][Ee][Ss]$ ]]; then
+    return 0
+  fi
+  log "Skipped Docker install."
+  return 2
+}
+
+#######################################
+# Install Docker CE + compose plugin and add current user to docker group.
+# Prefer apt packages; fall back to get.docker.com. Hermetic: LAB_MOCK_DOCKER_INSTALL=1.
+# Globals:
+#   LAB_NO_SUDO, LAB_MOCK_DOCKER_INSTALL, LAB_MOCK_DOCKER_BIN_DIR, PATH
+# Arguments:
+#   None
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 when docker CLI+compose available afterward; 1 on failure
+#######################################
+install_docker_engine() {
+  local user
+  user="$(id -un)"
+
+  if docker_cli_ok; then
+    log "docker already available: $(docker --version 2>/dev/null | head -1)"
+    return 0
+  fi
+
+  if [[ ${LAB_MOCK_DOCKER_INSTALL:-} == "1" ]]; then
+    local bindir="${LAB_MOCK_DOCKER_BIN_DIR:-${TEST_TMP_DIR:-/tmp}/ez-comfy-docker-bin}"
+    mkdir -p "${bindir}"
+    cat >"${bindir}/docker" <<'EOF'
+#!/usr/bin/env bash
+echo "docker $*" >>"${LAB_MOCK_DOCKER_BIN_DIR:-/tmp}/docker_install_calls.log" 2>/dev/null || true
+if [[ "${1:-}" == "--version" ]]; then
+  echo "Docker version 27.0.0"
+  exit 0
+fi
+if [[ "${1:-}" == "compose" ]]; then
+  echo "Docker Compose version v2.0.0"
+  exit 0
+fi
+if [[ "${1:-}" == "info" ]]; then
+  echo "Server Version: mock"
+  exit 0
+fi
+exit 0
+EOF
+    chmod +x "${bindir}/docker"
+    export PATH="${bindir}:${PATH}"
+    log "LAB_MOCK_DOCKER_INSTALL: mock docker installed at ${bindir}/docker"
+    docker_cli_ok
+    return $?
+  fi
+
+  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
+    err "Cannot install docker (LAB_NO_SUDO=1)"
+    print_docker_install_hints
+    return 1
+  fi
+
+  log "Installing Docker CE (apt preferred; may take a few minutes)..."
+
+  # Snap docker breaks GPU tooling — remove if present
+  if command -v snap >/dev/null 2>&1 && snap list docker >/dev/null 2>&1; then
+    warn "Removing snap docker (prefer apt docker-ce for NVIDIA)"
+    sudo snap remove docker 2>/dev/null || true
+  fi
+
+  local apt_ok=0
+  if command -v apt-get >/dev/null 2>&1; then
+    if sudo apt-get update -qq &&
+      sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        docker-ce docker-ce-cli containerd.io docker-compose-plugin; then
+      apt_ok=1
+    else
+      warn "apt docker-ce install failed; trying get.docker.com"
+    fi
+  fi
+
+  if [[ ${apt_ok} -ne 1 ]]; then
+    if command -v curl >/dev/null 2>&1; then
+      curl -fsSL https://get.docker.com | sudo sh || {
+        err "get.docker.com install failed"
+        print_docker_install_hints
+        return 1
+      }
+      sudo DEBIAN_FRONTEND=noninteractive apt-get install -y docker-compose-plugin 2>/dev/null || true
+    else
+      err "Neither apt docker-ce nor curl/get.docker.com available"
+      print_docker_install_hints
+      return 1
+    fi
+  fi
+
+  if command -v systemctl >/dev/null 2>&1; then
+    sudo systemctl enable --now docker 2>/dev/null || sudo service docker start 2>/dev/null || true
+  fi
+
+  sudo usermod -aG docker "${user}" 2>/dev/null || warn "usermod -aG docker failed (group may already include you)"
+
+  if command -v nvidia-ctk >/dev/null 2>&1; then
+    log "Configuring NVIDIA Container Toolkit for docker..."
+    sudo nvidia-ctk runtime configure --runtime=docker 2>/dev/null || warn "nvidia-ctk configure failed"
+    if command -v systemctl >/dev/null 2>&1; then
+      sudo systemctl restart docker 2>/dev/null || true
+    fi
+  elif command -v nvidia-smi >/dev/null 2>&1; then
+    warn "nvidia-smi present but nvidia-ctk missing — install nvidia-container-toolkit for GPU containers"
+  fi
+
+  # Refresh PATH for common install locations
+  export PATH="/usr/bin:/usr/local/bin:${PATH}"
+  hash -r 2>/dev/null || true
+
+  if ! resolve_docker_on_path; then
+    err "Docker install finished but docker binary still not found"
+    print_docker_install_hints
+    return 1
+  fi
+
+  log "docker installed: $(docker --version 2>/dev/null | head -1)"
+  if docker compose version >/dev/null 2>&1; then
+    log "docker compose: ok"
+  else
+    err "docker compose plugin still missing after install"
+    return 1
+  fi
+
+  if ! id -nG 2>/dev/null | grep -qw docker; then
+    warn "docker group not active in this shell yet — run: newgrp docker   (or re-login SSH)"
+  fi
+  return 0
+}
+
+#######################################
+# Doctor-oriented docker preflight: CLI, compose, daemon/group.
+# Globals:
+#   See resolve_docker_on_path / docker_daemon_status
+# Arguments:
+#   None
+# Outputs:
+#   log/err/warn diagnostics
+# Returns:
+#   0 ready; 1 not ready
+#######################################
+check_docker_preflight() {
+  if ! resolve_docker_on_path; then
+    print_docker_install_hints
+    return 1
+  fi
+  log "docker: $(docker --version 2>/dev/null | head -1)"
+  if ! docker compose version >/dev/null 2>&1; then
+    err "docker compose plugin missing"
+    err "  ./scripts/manage.sh setup --install-docker"
+    err "  # or: sudo apt-get install -y docker-compose-plugin"
+    return 1
+  fi
+  log "docker compose: ok"
+
+  local st=0
+  docker_daemon_status || st=$?
+  case "${st}" in
+    0)
+      return 0
+      ;;
+    1)
+      err "docker permission denied — user not active in docker group for this session"
+      err "  newgrp docker   # or disconnect/reconnect SSH"
+      err "  # ensure: sudo usermod -aG docker $(id -un)"
+      return 1
+      ;;
+    2)
+      err "docker daemon not reachable — is the service running?"
+      err "  sudo systemctl status docker"
+      err "  sudo systemctl start docker"
+      return 1
+      ;;
+    *)
+      print_docker_install_hints
+      return 1
+      ;;
+  esac
 }
 
 #######################################
