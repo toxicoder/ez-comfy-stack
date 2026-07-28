@@ -9,7 +9,8 @@ tags: [troubleshooting, comfyui, docker]
 **What's on this page**
 
 - Symptom → cause → action table
-- Useful log commands
+- Decision tree for common failures
+- Useful log commands and reset paths
 
 **What this enables**
 
@@ -26,6 +27,26 @@ tags: [troubleshooting, comfyui, docker]
 | Nunchaku missing | aarch64 wheel fail | Fail-soft; quality/FP8 paths may still work |
 | Limits stuck after kill | trap skipped | `./scripts/manage.sh download-limit clear` |
 
+## Symptom decision tree
+
+```mermaid
+flowchart TB
+  Q["What is broken?"]
+  Q --> SSH{"SSH freezes<br/>or host sluggish?"}
+  Q --> Start{"start refused?"}
+  Q --> Empty{"Empty models in UI?"}
+  Q --> Slow{"Extreme thrash<br/>5–15× slow?"}
+  Q --> Cold{"Cold start forever?"}
+  Q --> Limit{"Bandwidth limit stuck?"}
+
+  SSH -->|during download| A1["download-models / lower Mbps<br/>or download-limit clear"]
+  Start --> A2["Free RAM/disk<br/>stop other GPU jobs · doctor"]
+  Empty --> A3["download-flux/ltx status<br/>check MODELS_DIR mount"]
+  Slow --> A4["Confirm free-memory patch<br/>in logs · restart container"]
+  Cold --> A5["Wait 10–30+ min<br/>manage.sh logs · network"]
+  Limit --> A6["manage.sh download-limit clear"]
+```
+
 ## Logs
 
 ```bash
@@ -33,9 +54,25 @@ tags: [troubleshooting, comfyui, docker]
 docker logs ez-comfy-flux-to-ltx
 ```
 
+```mermaid
+flowchart LR
+  Op["Operator"] --> M["manage.sh logs"]
+  Op --> D["docker logs<br/>ez-comfy-flux-to-ltx"]
+  M --> Out["Compose / service logs"]
+  D --> Out
+```
+
 ## Reset Comfy install (keeps models)
 
 ```bash
 ./scripts/manage.sh cleanup   # type DELETE
 ./scripts/manage.sh start
+```
+
+```mermaid
+flowchart TB
+  Cleanup["manage.sh cleanup<br/>type DELETE"] --> Vol["Remove named volume<br/>comfy-state only"]
+  Vol --> Models["Host MODELS_DIR preserved"]
+  Models --> Start["manage.sh start"]
+  Start --> Reinstall["entrypoint reinstalls ComfyUI<br/>into fresh volume"]
 ```

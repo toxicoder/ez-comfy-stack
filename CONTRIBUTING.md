@@ -10,6 +10,14 @@ Thanks for improving **ez-comfy-stack**.
 4. Run `make lint` and `make docs`  
 5. Open a PR into `development`  
 
+```mermaid
+flowchart TB
+  A["Branch from development"] --> B["TDD: red → green → refactor"]
+  B --> C["Commit tests + production together"]
+  C --> D["make lint · make docs · make coverage"]
+  D --> E["PR into development"]
+```
+
 ## Commit messages
 
 ```text
@@ -17,6 +25,16 @@ Thanks for improving **ez-comfy-stack**.
 ```
 
 Types: `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`.
+
+## Tests ship with production code
+
+```mermaid
+flowchart LR
+  P["scripts/lib/*.sh"] --> T1["tests/bats/lib_unit.bats"]
+  U["scripts/utilities/name.sh"] --> T2["tests/bats/name.bats"]
+  M["scripts/manage.sh"] --> T3["tests/bats/manage.bats"]
+  D["docker/patch_*.py · safety"] --> T4["tests/python/* · safety.bats"]
+```
 
 ## PR checklist
 
