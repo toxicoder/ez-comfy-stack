@@ -64,6 +64,6 @@ main() {
   exec python main.py --listen 0.0.0.0 --port 8188
 }
 
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
   main "$@"
 fi

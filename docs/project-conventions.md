@@ -119,7 +119,8 @@ main() {
   …
 }
 
-if [[ -z "${BASH_SOURCE[0]:-}" || "${BASH_SOURCE[0]}" == "${0}" ]]; then
+# shfmt -s may leave ${BASH_SOURCE[0]} unquoted inside [[ ]]; that is intentional.
+if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
   main "$@"
 fi
 ```

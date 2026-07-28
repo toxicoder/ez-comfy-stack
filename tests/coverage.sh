@@ -104,6 +104,6 @@ main() {
   echo "Coverage gate PASSED (100% Python + strict shell inventory + BATS)"
 }
 
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
   main "$@"
 fi
