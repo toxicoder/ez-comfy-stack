@@ -116,16 +116,14 @@ teardown() {
   export MODELS_DIR="${TEST_TMP_DIR}/models"
   export LAB_MOCK_DOCKER_INSTALL=1
   export LAB_MOCK_DOCKER_BIN_DIR="${TEST_TMP_DIR}/fresh_docker_bin"
-  # Remove docker from PATH so preflight fails before mock install
-  local old_path="${PATH}"
-  export PATH="/usr/bin:/bin"
+  # Host docker may exist (CI); --install-docker + LAB_MOCK_DOCKER_INSTALL must still
+  # materialize the mock binary under LAB_MOCK_DOCKER_BIN_DIR.
   run cmd_setup --install-docker --yes
-  export PATH="${old_path}:${LAB_MOCK_DOCKER_BIN_DIR}"
-  # setup should have put mock docker on PATH during install; status may still
-  # depend on doctor finding compose file + models
-  [ "${status}" -eq 0 ] || [ -x "${LAB_MOCK_DOCKER_BIN_DIR}/docker" ]
+  [ "${status}" -eq 0 ]
   [[ -x "${LAB_MOCK_DOCKER_BIN_DIR}/docker" ]]
+  [[ "${output}" == *"LAB_MOCK_DOCKER_INSTALL"* || "${output}" == *"mock docker"* || -x "${LAB_MOCK_DOCKER_BIN_DIR}/docker" ]]
   unset LAB_MOCK_DOCKER_INSTALL
+  unset LAB_MOCK_DOCKER_BIN_DIR
 }
 
 @test "manage cmd_* direct: help setup doctor status start stop restart logs download cleanup" {

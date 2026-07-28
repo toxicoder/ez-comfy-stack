@@ -156,9 +156,19 @@ EOF
     ok=1
   fi
 
-  if check_docker_preflight; then
-    log "docker preflight: ok"
+  # Run install path when docker is missing, --install-docker/--yes, or hermetic mock.
+  # (CI has host docker; tests still need LAB_MOCK_DOCKER_INSTALL to create bindir.)
+  local need_docker_install=0
+  if ! check_docker_preflight; then
+    need_docker_install=1
+  elif [[ ${force_docker} -eq 1 || ${LAB_MOCK_DOCKER_INSTALL:-} == "1" ]]; then
+    need_docker_install=1
+    log "docker preflight: ok — still running install path (--install-docker or mock)"
   else
+    log "docker preflight: ok"
+  fi
+
+  if [[ ${need_docker_install} -eq 1 ]]; then
     local conf_rc=0
     confirm_docker_install "${force_docker}" || conf_rc=$?
     if [[ ${conf_rc} -eq 0 ]]; then
