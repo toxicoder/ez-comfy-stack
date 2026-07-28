@@ -55,6 +55,8 @@ services:
       # Mount outside COMFY_HOME — binding into ComfyUI/ on an empty volume
       # pre-creates that tree and breaks first-start `git clone`.
       - ../workflows/lab-flux-to-ltx.json:/opt/ez-comfy/workflows/lab-flux-to-ltx.json:ro
+      # Host patch script so spark free-memory fixes ship without image rebuild
+      - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
     gpus: all
     shm_size: "16gb"
     mem_limit: ${MEM_LIMIT:-90g}

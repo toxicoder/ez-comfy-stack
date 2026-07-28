@@ -41,6 +41,7 @@ tags: [troubleshooting, comfyui, docker]
 | Quiet for minutes on step 4 (PyTorch) | Large cudnn/torch wheel download | Prefer GHCR prebuilt image (seed, no pip). Or wait for pip bars; host heartbeat every 30s |
 | `docker pull ghcr.io/...` denied / not found | Package not published yet or private | Run `publish-image` workflow; ensure package is public; or `LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start` (long local prebuild) |
 | First start still runs multi-GB pip | Thin image / no prebuilt / force cold | Check logs for “Seeding … prebuilt”. Rebuild with `EZ_COMFY_PREBUILD=1` or pull GHCR tag. Unset `LAB_FORCE_COLD_INSTALL` |
+| `IndentationError` in `model_management.py` / `mem_free_torch` | Old free-memory patch broke indent | Pull latest (patch is bind-mounted). `./scripts/manage.sh stop && ./scripts/manage.sh start` — auto-repairs via git restore + re-patch. No full image rebuild required |
 | Cold start forever | First PVC/volume pip+git | Wait; `manage.sh logs`; check network |
 | Nunchaku missing | aarch64 wheel fail | Fail-soft; quality/FP8 paths may still work |
 | Limits stuck after kill | trap skipped | `./scripts/manage.sh download-limit clear` |
