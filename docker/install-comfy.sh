@@ -180,12 +180,15 @@ clone_node() {
 
 #######################################
 # Symlink a Comfy models subdir to the host cache under MODELS_ROOT/comfy.
+# Host MODELS_ROOT/comfy is the source of truth for weights (download-models).
+# Always retarget COMFY_HOME/models/<sub> → host dir so prebuilt/seeded trees
+# cannot leave a real directory that hides host files from ComfyUI.
 # Globals:
 #   MODELS_ROOT, COMFY_HOME
 # Arguments:
 #   $1 - Subdirectory name (e.g. diffusion_models)
 # Outputs:
-#   None
+#   Log line when (re)linked
 # Returns:
 #   0
 #######################################
@@ -193,14 +196,34 @@ link_models() {
   local sub="${1}"
   local host_dir="${MODELS_ROOT}/comfy/${sub}"
   local comfy_dir="${COMFY_HOME}/models/${sub}"
+  local target=""
   mkdir -p "${host_dir}" "${COMFY_HOME}/models"
-  if [[ -L ${comfy_dir} ]] || [[ ! -e ${comfy_dir} ]]; then
-    rm -rf "${comfy_dir}" 2>/dev/null || true
-    ln -sfn "${host_dir}" "${comfy_dir}"
-  elif [[ -d ${comfy_dir} && -z "$(ls -A "${comfy_dir}" 2>/dev/null || true)" ]]; then
-    rmdir "${comfy_dir}" 2>/dev/null || true
-    ln -sfn "${host_dir}" "${comfy_dir}"
+
+  # Already correctly linked?
+  if [[ -L ${comfy_dir} ]]; then
+    target="$(readlink -f "${comfy_dir}" 2>/dev/null || readlink "${comfy_dir}" || true)"
+    if [[ ${target} == "$(readlink -f "${host_dir}" 2>/dev/null || echo "${host_dir}")" ]] ||
+      [[ ${target} == "${host_dir}" ]]; then
+      return 0
+    fi
+    log "retarget models/${sub} → ${host_dir} (was symlink → ${target})"
+    rm -f "${comfy_dir}" 2>/dev/null || true
+  elif [[ -d ${comfy_dir} ]]; then
+    # Real dir (even non-empty) blocks host weights — move aside once
+    if [[ -n "$(ls -A "${comfy_dir}" 2>/dev/null || true)" ]]; then
+      local bak
+      bak="${comfy_dir}.bak.$(date +%s)"
+      log "moving non-empty models/${sub} aside → ${bak} (host weights take over)"
+      mv "${comfy_dir}" "${bak}" 2>/dev/null || rm -rf "${comfy_dir}" 2>/dev/null || true
+    else
+      rmdir "${comfy_dir}" 2>/dev/null || rm -rf "${comfy_dir}" 2>/dev/null || true
+    fi
+  elif [[ -e ${comfy_dir} ]]; then
+    rm -f "${comfy_dir}" 2>/dev/null || true
   fi
+
+  ln -sfn "${host_dir}" "${comfy_dir}"
+  log "link models/${sub} → ${host_dir}"
 }
 
 #######################################

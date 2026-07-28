@@ -54,6 +54,17 @@ teardown() {
   mkdir -p "${COMFY_HOME}/models/vae"
   run link_models vae
   [ "${status}" -eq 0 ]
+  [[ -L "${COMFY_HOME}/models/vae" ]]
+
+  # Non-empty real dir must be moved aside and replaced with host symlink
+  rm -f "${COMFY_HOME}/models/text_encoders"
+  mkdir -p "${COMFY_HOME}/models/text_encoders"
+  echo junk >"${COMFY_HOME}/models/text_encoders/old.bin"
+  run link_models text_encoders
+  [ "${status}" -eq 0 ]
+  [[ -L "${COMFY_HOME}/models/text_encoders" ]]
+  [[ ! -f ${COMFY_HOME}/models/text_encoders/old.bin ]]
+  [[ -d ${MODELS_ROOT}/comfy/text_encoders ]]
 
   # clone_node soft-fails without network if git missing target — mock git
   export CUSTOM="${TEST_TMP_DIR}/custom_nodes"

@@ -256,6 +256,8 @@ cmd_doctor() {
   ltx_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" status --tier balanced --json 2>/dev/null || echo '{}')
   log "flux status: ${flux_json}"
   log "ltx status: ${ltx_json}"
+  # Soft: missing lab weights do not fail doctor (download may be intentional later)
+  check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
   if [[ ! -f $(lab_compose_file) ]]; then
     err "compose file missing: $(lab_compose_file)"
     ok=1
