@@ -63,19 +63,19 @@ jobs:
           set -euo pipefail
           # Existing gh-pages may be a full source mirror (pre-mike). Replace it
           # once with an empty branch so version dirs are not mixed with tree.
-          if git fetch origin gh-pages:gh-pages 2>/dev/null; then
-            if git show gh-pages:versions.json >/dev/null 2>&1; then
+          # Do not checkout --orphan / checkout - : orphan leaves no @{-1} in
+          # Actions and fails with "pathspec '-' did not match".
+          if git fetch origin gh-pages 2>/dev/null; then
+            if git cat-file -e "origin/gh-pages:versions.json" 2>/dev/null; then
               echo "gh-pages already has mike versions.json"
             else
               echo "gh-pages exists but is not a mike site; reinitializing empty branch"
-              git checkout --orphan gh-pages-init
-              git rm -rf --quiet . 2>/dev/null || true
-              git commit --allow-empty -m "chore: initialize empty gh-pages for mike"
-              git push -f origin HEAD:gh-pages
-              git checkout -
-              git branch -D gh-pages-init
-              git branch -D gh-pages 2>/dev/null || true
-              git fetch origin gh-pages:gh-pages
+              empty_tree="$(git mktree </dev/null)"
+              empty_commit="$(
+                git commit-tree "${empty_tree}" -m "chore: initialize empty gh-pages for mike"
+              )"
+              git push -f origin "${empty_commit}:refs/heads/gh-pages"
+              git fetch origin gh-pages
             fi
           else
             echo "No remote gh-pages yet; mike will create it on first deploy"
