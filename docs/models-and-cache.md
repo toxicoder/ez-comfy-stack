@@ -115,6 +115,8 @@ command -v hf || pipx install huggingface_hub
 # or: pip install -U 'huggingface_hub[cli]'
 ```
 
+Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. `HF_PROGRESS=0` turns progress lines off; `HF_PROGRESS_INTERVAL=10` sets the tick (seconds).
+
 ### LTX selective download (not the full monorepo)
 
 `Kijai/LTX2.3_comfy` is a multi-variant hub repo (~**400 GB** if you pull everything). This stack defaults to a **selective** subset via `hf download --include`:

@@ -863,19 +863,185 @@ explain_hf_download_error() {
 }
 
 #######################################
+# Short label for a download dest (basename of local-dir).
+# Globals:
+#   None
+# Arguments:
+#   $1  Destination directory path
+# Outputs:
+#   Basename on stdout
+# Returns:
+#   0
+#######################################
+hf_progress_label() {
+  local dest="${1:-}"
+  if [[ -z ${dest} ]]; then
+    echo "download"
+    return 0
+  fi
+  basename "${dest}"
+}
+
+#######################################
+# Format kibibytes as a human size (MiB or GiB).
+# Globals:
+#   None
+# Arguments:
+#   $1  Size in KiB (integer)
+# Outputs:
+#   e.g. "179 MiB" or "28.4 GiB" on stdout
+# Returns:
+#   0
+#######################################
+hf_format_mib() {
+  local kib="${1:-0}"
+  if [[ ${kib} -lt 0 ]]; then
+    kib=0
+  fi
+  if [[ ${kib} -ge 1048576 ]]; then
+    awk -v k="${kib}" 'BEGIN { printf "%.1f GiB", k / 1048576 }'
+  else
+    awk -v k="${kib}" 'BEGIN { printf "%d MiB", int(k / 1024) }'
+  fi
+}
+
+#######################################
+# Format a transfer rate from KiB delta over seconds.
+# Globals:
+#   None
+# Arguments:
+#   $1  Delta KiB (integer; may be 0)
+#   $2  Interval seconds (positive integer)
+# Outputs:
+#   e.g. "13.7 MiB/s" on stdout
+# Returns:
+#   0
+#######################################
+hf_format_rate() {
+  local delta_kib="${1:-0}"
+  local interval_s="${2:-10}"
+  if [[ ${interval_s} -le 0 ]]; then
+    interval_s=1
+  fi
+  if [[ ${delta_kib} -le 0 ]]; then
+    echo "0 MiB/s"
+    return 0
+  fi
+  awk -v d="${delta_kib}" -v s="${interval_s}" 'BEGIN {
+    mibs = (d / 1024) / s
+    if (mibs >= 100) printf "%.0f MiB/s", mibs
+    else if (mibs >= 10) printf "%.1f MiB/s", mibs
+    else printf "%.2f MiB/s", mibs
+  }'
+}
+
+#######################################
+# Format elapsed seconds as m:ss or h:mm:ss.
+# Globals:
+#   None
+# Arguments:
+#   $1  Elapsed seconds
+# Outputs:
+#   Time string on stdout
+# Returns:
+#   0
+#######################################
+hf_format_elapsed() {
+  local secs="${1:-0}"
+  local h m s
+  if [[ ${secs} -lt 0 ]]; then
+    secs=0
+  fi
+  h=$((secs / 3600))
+  m=$(((secs % 3600) / 60))
+  s=$((secs % 60))
+  if [[ ${h} -gt 0 ]]; then
+    printf '%d:%02d:%02d' "${h}" "${m}" "${s}"
+  else
+    printf '%d:%02d' "${m}" "${s}"
+  fi
+}
+
+#######################################
+# Build progress body (no [ez-comfy] prefix).
+# Globals:
+#   None
+# Arguments:
+#   $1  Label
+#   $2  Size string
+#   $3  Rate string
+#   $4  Elapsed string
+# Outputs:
+#   Progress body on stdout
+# Returns:
+#   0
+#######################################
+hf_progress_line() {
+  local label="${1:-download}"
+  local size="${2:-0 MiB}"
+  local rate="${3:-0 MiB/s}"
+  local elapsed="${4:-0:00}"
+  printf '↓ %s  %s  %s  elapsed %s' "${label}" "${size}" "${rate}" "${elapsed}"
+}
+
+#######################################
+# Emit a progress line: rewrite on TTY stderr, log newline otherwise.
+# Globals:
+#   GREEN, NC, _HF_PROGRESS_ON_TTY (set to 1 after TTY emit)
+# Arguments:
+#   $1  Body line (without prefix)
+# Outputs:
+#   Progress to stderr
+# Returns:
+#   0
+#######################################
+hf_progress_emit() {
+  local body="${1:-}"
+  if [[ -t 2 ]]; then
+    # Clear line + rewrite so we never smash with prior content
+    printf '\r\033[K%s[ez-comfy]%s %s' "${GREEN}" "${NC}" "${body}" >&2
+    _HF_PROGRESS_ON_TTY=1
+  else
+    log "${body}"
+  fi
+}
+
+#######################################
+# End a TTY progress rewrite so the next log starts on a new line.
+# Globals:
+#   _HF_PROGRESS_ON_TTY
+# Arguments:
+#   None
+# Outputs:
+#   Optional newline on stderr
+# Returns:
+#   0
+#######################################
+hf_progress_newline() {
+  if [[ ${_HF_PROGRESS_ON_TTY:-0} == "1" ]]; then
+    printf '\n' >&2
+    _HF_PROGRESS_ON_TTY=0
+  fi
+}
+
+#######################################
 # Download a Hugging Face repo snapshot into --local-dir (or mock in tests).
 # Prefers `hf download` over deprecated `huggingface-cli download` (the latter
 # is a non-working stub on recent huggingface_hub installs and may prompt).
 # On failure, prints plain-language guidance (not a full Python traceback)
 # unless LAB_DEBUG=1 / HF_DOWNLOAD_DEBUG=1.
+# Progress UI: disables hub/tqdm bars and shows disk growth (size, MiB/s,
+# elapsed) on one rewriting TTY line or periodic non-TTY logs.
 # Globals:
 #   LAB_MOCK_HF_DOWNLOAD, HF_TOKEN (read by hub), HF_HOME (caller may set),
-#   LAB_DEBUG, HF_DOWNLOAD_DEBUG, CI, HF_HUB_DISABLE_TELEMETRY
+#   LAB_DEBUG, HF_DOWNLOAD_DEBUG, CI, HF_HUB_DISABLE_TELEMETRY,
+#   HF_DOWNLOAD_MAX_WORKERS, HF_PROGRESS (0 disables progress lines),
+#   HF_PROGRESS_INTERVAL (seconds, default 10), HF_LOCK_CLEAR_MID
 # Arguments:
 #   $@ - Passed to `hf download` / `huggingface-cli download`
 #        (typically REPO --local-dir PATH)
 # Outputs:
-#   Progress via tee; friendly errors on failure; mock writes .mock under local-dir
+#   Progress via controlled UI; friendly errors on failure; mock writes .mock
 # Returns:
 #   0 on success; non-zero when the CLI fails
 #######################################
@@ -912,11 +1078,12 @@ hf_download() {
     return 0
   fi
 
-  # Non-interactive hub updates, but keep progress bars when on a TTY
+  # Non-interactive hub; we own progress UI (disable tqdm smash with heartbeat)
   export CI="${CI:-1}"
   export HF_HUB_DISABLE_TELEMETRY="${HF_HUB_DISABLE_TELEMETRY:-1}"
   export PYTHONUNBUFFERED=1
-  export TQDM_MININTERVAL="${TQDM_MININTERVAL:-0.1}"
+  export TQDM_DISABLE="${TQDM_DISABLE:-1}"
+  export HF_HUB_DISABLE_PROGRESS_BARS="${HF_HUB_DISABLE_PROGRESS_BARS:-1}"
   if [[ -n ${HF_TOKEN:-} ]]; then
     log "HF_TOKEN is set (using for gated repos)"
   fi
@@ -924,23 +1091,34 @@ hf_download() {
   hf_log="$(mktemp)"
   local -a hf_args=("$@")
   local dest_dir="" prev_a="" a
+  local progress_label="" progress_interval start_ts final_kib final_elapsed
   for a in "$@"; do
     if [[ ${prev_a} == "--local-dir" ]]; then
       dest_dir="${a}"
     fi
     prev_a="${a}"
   done
+  progress_label="$(hf_progress_label "${dest_dir}")"
+  progress_interval="${HF_PROGRESS_INTERVAL:-10}"
+  if [[ ${progress_interval} -lt 1 ]]; then
+    progress_interval=10
+  fi
   # Gentle mode / operator override: limit parallel HF connections when set
   if [[ -n ${HF_DOWNLOAD_MAX_WORKERS:-} ]]; then
     if command -v hf >/dev/null 2>&1 && hf download --help 2>&1 | grep -q -- '--max-workers'; then
       hf_args+=(--max-workers "${HF_DOWNLOAD_MAX_WORKERS}")
-      log "hf download using --max-workers=${HF_DOWNLOAD_MAX_WORKERS}"
+      log "hf download  max-workers=${HF_DOWNLOAD_MAX_WORKERS}"
     fi
+  fi
+  if [[ -n ${dest_dir} ]]; then
+    log "downloading → ${dest_dir}"
   fi
 
   local hb_pid="" hpid="" zero_streak=0
+  _HF_PROGRESS_ON_TTY=0
   # shellcheck disable=SC2329
   _hf_dl_signal() {
+    hf_progress_newline
     log "Interrupted — stopping hf download and progress monitor…"
     [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
     [[ -n ${hpid} ]] && kill_pid_tree "${hpid}" "hf download"
@@ -949,26 +1127,34 @@ hf_download() {
   }
   trap '_hf_dl_signal' INT TERM
 
-  # Heartbeat: prove progress even if hub UI is quiet (large single files)
+  # Heartbeat: disk growth is the truth for multi-GB files (not file-count tqdm)
   # set +m + disown: avoid bash "[1]+ Terminated" dumps on stop
   set +m 2>/dev/null || true
-  if [[ -n ${dest_dir} ]]; then
+  start_ts="$(date +%s)"
+  if [[ -n ${dest_dir} && ${HF_PROGRESS:-1} != "0" ]]; then
     mkdir -p "${dest_dir}" 2>/dev/null || true
     (
-      local prev=0 cur delta
+      local prev=0 cur delta elapsed body
       prev=$(du -sk "${dest_dir}" 2>/dev/null | awk '{print $1}') || prev=0
       zero_streak=0
       while true; do
-        sleep 10
+        sleep "${progress_interval}"
         cur=$(du -sk "${dest_dir}" 2>/dev/null | awk '{print $1}') || cur=0
         delta=$((cur - prev))
         prev=${cur}
-        log "download progress: ${dest_dir} ≈ $((cur / 1024)) MiB (+$((delta / 1024)) MiB / 10s)"
+        elapsed=$(($(date +%s) - start_ts))
+        body="$(hf_progress_line \
+          "${progress_label}" \
+          "$(hf_format_mib "${cur}")" \
+          "$(hf_format_rate "${delta}" "${progress_interval}")" \
+          "$(hf_format_elapsed "${elapsed}")")"
+        hf_progress_emit "${body}"
         if [[ ${delta} -le 0 ]]; then
           zero_streak=$((zero_streak + 1))
           if [[ ${zero_streak} -ge 3 && ${HF_LOCK_CLEAR_MID:-1} == "1" ]]; then
             # locks_only: NEVER pkill — that was killing the active hf download
-            warn "No disk growth for 30s — clearing unheld HF locks only (not killing download)"
+            hf_progress_newline
+            warn "no disk growth for $((progress_interval * 3))s — clearing unheld HF locks (download still running)"
             clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" "locks_only" || true
             zero_streak=0
           fi
@@ -985,19 +1171,13 @@ hf_download() {
   set -m 2>/dev/null || true
   if command -v hf >/dev/null 2>&1; then
     set +e
-    if [[ -t 2 ]]; then
-      (
-        hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
-      ) &
-      hpid=$!
-    else
-      (
-        set -o pipefail
-        hf download "${hf_args[@]}" 2>&1 | tee "${hf_log}"
-        exit "${PIPESTATUS[0]}"
-      ) &
-      hpid=$!
-    fi
+    # Always capture CLI output for error explain; bars disabled above so no smash
+    (
+      set -o pipefail
+      hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
+      exit "${PIPESTATUS[0]}"
+    ) &
+    hpid=$!
     # Protect active download from clear_stale_hf_locks process sweep
     _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
     export _HF_PROTECTED_PIDS
@@ -1020,6 +1200,7 @@ hf_download() {
     set -e
   else
     [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
+    hf_progress_newline
     trap - INT TERM
     unset _HF_PROTECTED_PIDS
     rm -f "${hf_log}"
@@ -1030,9 +1211,19 @@ hf_download() {
   [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
   _RWSF_EXTRA_PIDS=""
   unset _HF_PROTECTED_PIDS
+  # Progress subshell may have left a \r line; always break TTY before final logs
+  if [[ -t 2 ]]; then
+    printf '\n' >&2
+  fi
+  _HF_PROGRESS_ON_TTY=0
   trap - INT TERM
 
   if [[ ${rc} -eq 0 ]]; then
+    if [[ -n ${dest_dir} ]]; then
+      final_kib=$(du -sk "${dest_dir}" 2>/dev/null | awk '{print $1}') || final_kib=0
+      final_elapsed=$(($(date +%s) - start_ts))
+      log "✓ ${progress_label}  $(hf_format_mib "${final_kib}")  in $(hf_format_elapsed "${final_elapsed}")"
+    fi
     rm -f "${hf_log}"
     return 0
   fi

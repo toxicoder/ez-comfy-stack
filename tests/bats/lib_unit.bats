@@ -197,6 +197,50 @@ line3" "org/x"
   unset LAB_MOCK_HF_DOWNLOAD
 }
 
+@test "common: hf progress formatters and emit helpers" {
+  run hf_progress_label "/mnt/models/Kijai__LTX2.3_comfy_balanced"
+  [ "${output}" = "Kijai__LTX2.3_comfy_balanced" ]
+  run hf_progress_label ""
+  [ "${output}" = "download" ]
+
+  run hf_format_mib 0
+  [ "${output}" = "0 MiB" ]
+  run hf_format_mib 1024
+  [ "${output}" = "1 MiB" ]
+  run hf_format_mib 183296
+  [ "${output}" = "179 MiB" ]
+  run hf_format_mib 29818880
+  [[ "${output}" == *"GiB"* ]]
+
+  run hf_format_rate 0 10
+  [ "${output}" = "0 MiB/s" ]
+  run hf_format_rate 140288 10
+  [[ "${output}" == *"MiB/s"* ]]
+  # 140288 KiB / 10s ≈ 13.7 MiB/s
+  [[ "${output}" == "13.7 MiB/s" ]]
+
+  run hf_format_elapsed 0
+  [ "${output}" = "0:00" ]
+  run hf_format_elapsed 90
+  [ "${output}" = "1:30" ]
+  run hf_format_elapsed 3723
+  [ "${output}" = "1:02:03" ]
+
+  run hf_progress_line "Kijai__LTX2.3_comfy_balanced" "179 MiB" "13.7 MiB/s" "0:30"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"↓ Kijai__LTX2.3_comfy_balanced"* ]]
+  [[ "${output}" == *"179 MiB"* ]]
+  [[ "${output}" == *"13.7 MiB/s"* ]]
+  [[ "${output}" == *"elapsed 0:30"* ]]
+
+  # non-TTY path uses log (no smash); force via redirect
+  run bash -c 'source "'"${REPO_ROOT}"'/scripts/lib/common.sh"; hf_progress_emit "↓ test 1 MiB  0 MiB/s  elapsed 0:00" 2>&1'
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"↓ test"* ]]
+  run hf_progress_newline
+  [ "${status}" -eq 0 ]
+}
+
 @test "safety: parse_gib host_free host_disk headroom confirms" {
   run parse_gib_from_mem_limit 90g
   [ "${output}" = "90" ]
