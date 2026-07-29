@@ -172,6 +172,78 @@ teardown() {
   [[ "${output}" == *"pip:"* || "${output}" == *"pip "* ]]
 }
 
+@test "install-comfy parse_install_args and run_install_phase" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  # Direct call (not `run`) so INSTALL_PHASE is set in this shell
+  INSTALL_PHASE=""
+  parse_install_args --phase venv
+  [ "${INSTALL_PHASE}" = "venv" ]
+
+  run parse_install_args --phase
+  [ "${status}" -eq 2 ]
+
+  run parse_install_args --bogus
+  [ "${status}" -eq 2 ]
+
+  run run_install_phase not-a-phase
+  [ "${status}" -eq 2 ]
+  [[ "${output}" == *"unknown phase"* ]]
+}
+
+@test "install-comfy phase helpers with mocks" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  install_mock_bin python3 'if [[ "$*" == *venv* ]]; then mkdir -p "${VENV}/bin"; printf "export VIRTUAL_ENV=1\n" >"${VENV}/bin/activate"; printf "#!/bin/sh\n" >"${VENV}/bin/python"; chmod +x "${VENV}/bin/python"; exit 0; fi; exit 0'
+  install_mock_bin pip 'echo "pip $*"; exit 0'
+  install_mock_bin git 'echo "git $*"; mkdir -p "${COMFY_HOME}/.git"; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
+
+  run phase_venv
+  [ "${status}" -eq 0 ]
+  [[ -f ${VENV}/bin/activate ]]
+
+  # Named for coverage inventory (also used by every phase)
+  run activate_venv
+  [ "${status}" -eq 0 ]
+
+  run phase_torch
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"pip:"* || "${output}" == *"torch"* ]]
+
+  run phase_clone_comfy
+  [ "${status}" -eq 0 ]
+
+  run phase_comfy
+  [ "${status}" -eq 0 ]
+
+  run phase_nodes
+  [ "${status}" -eq 0 ]
+
+  run link_all_models
+  [ "${status}" -eq 0 ]
+  [[ -L ${COMFY_HOME}/models/diffusion_models ]]
+
+  run apply_free_memory_patch
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || -z ${output} ]]
+
+  # finalize with mocked strip deps
+  run phase_finalize
+  [ "${status}" -eq 0 ]
+  [[ -f ${STAMP} ]]
+}
+
+@test "install-comfy main --phase dispatches without full cold install" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  install_mock_bin python3 'if [[ "$*" == *venv* ]]; then mkdir -p "${VENV}/bin"; printf "export VIRTUAL_ENV=1\n" >"${VENV}/bin/activate"; printf "#!/bin/sh\n" >"${VENV}/bin/python"; chmod +x "${VENV}/bin/python"; exit 0; fi; exit 0'
+  install_mock_bin pip 'echo "pip $*"; exit 0'
+  run main --phase venv
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Docker phase: venv"* || "${output}" == *"phase venv"* || "${output}" == *"venv"* ]]
+  [[ "${output}" == *"Phase venv complete"* || "${output}" == *"complete"* ]]
+}
+
 @test "main fails when venv python missing" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"

@@ -11,12 +11,18 @@
 #   links $MODELS_ROOT/comfy/* into ComfyUI/models/*, and applies the Spark
 #   free-memory patch.
 #
+#   For Docker layer caching, phases can be run alone so multi-GB torch stays
+#   cached when only Comfy or custom-node steps change:
+#     install-comfy.sh --phase venv|torch|comfy|nodes|finalize
+#   Default (no --phase): full cold install or stamp-based refresh.
+#
 # Style:
 #   Google Shell Style Guide (project deviations in docs/project-conventions.md).
 #   Sourcable for hermetic BATS via source guard at bottom.
 #
 # Environment:
 #   COMFY_HOME, COMFY_USER, MODELS_ROOT — defaults below
+#   COMFYUI_REF — optional git ref for ComfyUI clone (default: empty = default branch)
 #
 set -euo pipefail
 
@@ -27,6 +33,8 @@ STAMP="${COMFY_HOME}/.lab-install-complete"
 VENV="${COMFY_HOME}/.venv"
 # Install wall-clock start (unix seconds); set in main
 INSTALL_T0="${INSTALL_T0:-}"
+COMFYUI_REPO="${COMFYUI_REPO:-https://github.com/comfyanonymous/ComfyUI.git}"
+COMFYUI_REF="${COMFYUI_REF:-}"
 
 #######################################
 # Log an install progress line to stdout (container logs).
@@ -149,6 +157,25 @@ pip_install() {
 }
 
 #######################################
+# Activate the ComfyUI venv if present.
+# Globals:
+#   VENV
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 if activated or activate missing (no-op); non-zero if required and missing
+#######################################
+activate_venv() {
+  # shellcheck disable=SC1091
+  if [[ -f "${VENV}/bin/activate" ]]; then
+    # shellcheck disable=SC1091
+    source "${VENV}/bin/activate"
+  fi
+}
+
+#######################################
 # Clone or update a ComfyUI custom node and install its requirements.
 # Globals:
 #   CUSTOM — custom_nodes directory (must be set by caller)
@@ -255,29 +282,293 @@ strip_prebuilt() {
   # Pip cache if install used a local cache under the tree
   rm -rf "${root}/.cache" 2>/dev/null || true
   if command -v pip >/dev/null 2>&1; then
-    pip cache purge >/dev/null 2>&1 || true
+    # Purge in-tree/user cache only when not using a BuildKit cache mount path
+    # that operators may want to retain across Docker layers.
+    if [[ ${LAB_KEEP_PIP_CACHE:-0} != "1" ]]; then
+      pip cache purge >/dev/null 2>&1 || true
+    fi
   fi
   log "strip_prebuilt: done"
 }
 
 #######################################
-# Full install or refresh path for ComfyUI on the comfy-state volume.
+# Clone or update ComfyUI into COMFY_HOME.
 # Globals:
-#   COMFY_HOME, COMFY_USER, MODELS_ROOT, STAMP, VENV
+#   COMFY_HOME, COMFYUI_REPO, COMFYUI_REF
 # Arguments:
 #   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 on success; non-zero if clone fails under set -e
+#######################################
+phase_clone_comfy() {
+  local -a clone_args=(--depth 1)
+  if [[ -n ${COMFYUI_REF} ]]; then
+    clone_args+=(--branch "${COMFYUI_REF}")
+  fi
+  if [[ ! -d "${COMFY_HOME}/.git" ]]; then
+    mkdir -p "$(dirname "${COMFY_HOME}")"
+    # Destination may already exist (empty volume + old workflow bind mount created
+    # intermediate dirs). git clone refuses non-empty targets — clone then merge.
+    if [[ -d ${COMFY_HOME} && -n "$(ls -A "${COMFY_HOME}" 2>/dev/null || true)" ]]; then
+      local tmp_clone
+      tmp_clone="$(mktemp -d)"
+      log "git clone (temp) then merge into existing ${COMFY_HOME}…"
+      git clone "${clone_args[@]}" "${COMFYUI_REPO}" "${tmp_clone}/ComfyUI"
+      if command -v rsync >/dev/null 2>&1; then
+        rsync -a "${tmp_clone}/ComfyUI/" "${COMFY_HOME}/"
+      else
+        cp -a "${tmp_clone}/ComfyUI/." "${COMFY_HOME}/"
+      fi
+      rm -rf "${tmp_clone}"
+    else
+      log "git clone into ${COMFY_HOME}…"
+      git clone "${clone_args[@]}" "${COMFYUI_REPO}" "${COMFY_HOME}"
+    fi
+  else
+    log "ComfyUI tree present; pulling latest (best-effort)"
+    git -C "${COMFY_HOME}" pull --ff-only || warn "git pull failed; continuing"
+  fi
+}
+
+#######################################
+# Create venv and upgrade pip tooling (Docker phase: venv).
+# Globals:
+#   COMFY_HOME, VENV
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log
+# Returns:
+#   0 on success
+#######################################
+phase_venv() {
+  mkdir -p "$(dirname "${COMFY_HOME}")" "${COMFY_HOME}"
+  if [[ ! -d ${VENV} ]]; then
+    log "python3 -m venv ${VENV}"
+    python3 -m venv "${VENV}"
+  else
+    log "venv already exists"
+  fi
+  activate_venv
+  pip_install -U pip setuptools wheel
+}
+
+#######################################
+# Install PyTorch wheels (Docker phase: torch). Multi-GB; rare invalidation.
+# Globals:
+#   VENV
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 on success
+#######################################
+phase_torch() {
+  activate_venv
+  log "Expect large wheels (torch + cuda toolkit + cudnn); progress bars below…"
+  pip_install --upgrade torch torchvision torchaudio \
+    --index-url https://download.pytorch.org/whl/cu130 || {
+    warn "cu130 index failed; falling back to default PyPI torch"
+    pip_install --upgrade torch torchvision torchaudio
+  }
+}
+
+#######################################
+# Clone ComfyUI and install requirements + hub extras (Docker phase: comfy).
+# Globals:
+#   COMFY_HOME, VENV
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log
+# Returns:
+#   0 on success
+#######################################
+phase_comfy() {
+  phase_clone_comfy
+  activate_venv
+  pip_install -r "${COMFY_HOME}/requirements.txt"
+  pip_install psutil huggingface_hub safetensors einops
+}
+
+#######################################
+# Install custom nodes and optional packages (Docker phase: nodes).
+# Globals:
+#   COMFY_HOME, VENV, CUSTOM
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 (soft-fail optional packages)
+#######################################
+phase_nodes() {
+  activate_venv
+  CUSTOM="${COMFY_HOME}/custom_nodes"
+  mkdir -p "${CUSTOM}"
+  clone_node "https://github.com/ltdrdata/ComfyUI-Manager.git" "ComfyUI-Manager"
+  clone_node "https://github.com/mit-han-lab/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" ||
+    clone_node "https://github.com/nunchaku-tech/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" ||
+    warn "Nunchaku custom node unavailable"
+  pip_install sageattention || warn "SageAttention pip install failed (optional on aarch64)"
+  pip_install nunchaku || warn "nunchaku package install failed (optional)"
+}
+
+#######################################
+# Link all standard Comfy model subdirs to MODELS_ROOT/comfy.
+# Globals:
+#   MODELS_ROOT, COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log
+# Returns:
+#   0
+#######################################
+link_all_models() {
+  local sub
+  for sub in checkpoints diffusion_models text_encoders vae loras clip clip_vision \
+    unet controlnet embeddings upscale_models audio_encoders; do
+    link_models "${sub}"
+  done
+  log "model links done"
+}
+
+#######################################
+# Apply Spark free-memory patch when the script is present in the image.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 (patch failures are soft)
+#######################################
+apply_free_memory_patch() {
+  if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
+    python3 /opt/ez-comfy/patch_get_free_memory.py "${COMFY_HOME}" || warn "patch failed"
+  else
+    warn "patch_get_free_memory.py not found in image"
+  fi
+}
+
+#######################################
+# Stamp, strip, link models, optional patch (Docker phase: finalize).
+# Globals:
+#   COMFY_HOME, STAMP, VENV
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log
+# Returns:
+#   0
+#######################################
+phase_finalize() {
+  activate_venv
+  touch "${STAMP}"
+  log "Wrote install stamp ${STAMP}"
+  strip_prebuilt "${COMFY_HOME}"
+  link_all_models
+  apply_free_memory_patch
+}
+
+#######################################
+# Run a single named install phase (Docker layer cache entrypoint).
+# Globals:
+#   COMFY_HOME, VENV, MODELS_ROOT, STAMP
+# Arguments:
+#   $1  Phase name: venv|torch|comfy|nodes|finalize
+# Outputs:
+#   Progress via log
+# Returns:
+#   0 on success; 2 on unknown phase
+#######################################
+run_install_phase() {
+  local phase="${1:?phase name required}"
+  case "${phase}" in
+    venv) phase_venv ;;
+    torch) phase_torch ;;
+    comfy) phase_comfy ;;
+    nodes) phase_nodes ;;
+    finalize) phase_finalize ;;
+    *)
+      warn "unknown phase: ${phase} (expected venv|torch|comfy|nodes|finalize)"
+      return 2
+      ;;
+  esac
+}
+
+#######################################
+# Parse CLI for optional --phase NAME.
+# Globals:
+#   None
+# Arguments:
+#   $@  CLI args
+# Outputs:
+#   Sets INSTALL_PHASE via nameref-style echo to caller pattern — use globals
+#   INSTALL_PHASE (empty = full install path)
+# Returns:
+#   0 on success; 2 on bad usage
+#######################################
+parse_install_args() {
+  INSTALL_PHASE=""
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
+      --phase)
+        if [[ $# -lt 2 || -z ${2} ]]; then
+          warn "usage: install-comfy.sh [--phase venv|torch|comfy|nodes|finalize]"
+          return 2
+        fi
+        INSTALL_PHASE="${2}"
+        shift 2
+        ;;
+      -h | --help)
+        log "usage: install-comfy.sh [--phase venv|torch|comfy|nodes|finalize]"
+        return 1
+        ;;
+      *)
+        warn "unknown argument: ${1}"
+        warn "usage: install-comfy.sh [--phase venv|torch|comfy|nodes|finalize]"
+        return 2
+        ;;
+    esac
+  done
+  return 0
+}
+
+#######################################
+# Full install or refresh path for ComfyUI on the comfy-state volume.
+# Globals:
+#   COMFY_HOME, COMFY_USER, MODELS_ROOT, STAMP, VENV, INSTALL_PHASE
+# Arguments:
+#   $@  Optional --phase NAME for single Docker-cacheable phase
 # Outputs:
 #   Progress logs
 # Returns:
 #   0 on success; non-zero if a hard step fails under set -e
 #######################################
 main() {
-  local total=12 refresh=0 sub
+  local total=12 refresh=0
   export DEBIAN_FRONTEND=noninteractive
   export PYTHONUNBUFFERED=1
   INSTALL_T0="$(date +%s)"
+  INSTALL_PHASE=""
+  parse_install_args "$@" || return $?
+
   log "Install started at $(date -u +%Y-%m-%dT%H:%MZ)"
   log "Markers: ══ step N/M ══ — pip shows multi-GB wheel bars when downloading"
+
+  # Single phase (Dockerfile multi-layer prebuild) — never take refresh short-circuit
+  if [[ -n ${INSTALL_PHASE} ]]; then
+    log "Docker phase: ${INSTALL_PHASE}"
+    run_install_phase "${INSTALL_PHASE}"
+    log "══ Phase ${INSTALL_PHASE} complete ══ elapsed $(install_format_elapsed "$(install_elapsed_s)")"
+    return 0
+  fi
 
   if [[ -f ${STAMP} && -x "${VENV}/bin/python" ]]; then
     refresh=1
@@ -288,118 +579,42 @@ main() {
   fi
 
   if [[ ${refresh} -eq 0 ]]; then
-    step 1 "${total}" "Clone or update ComfyUI into ${COMFY_HOME}"
-    if [[ ! -d "${COMFY_HOME}/.git" ]]; then
-      mkdir -p "$(dirname "${COMFY_HOME}")"
-      # Destination may already exist (empty volume + old workflow bind mount created
-      # intermediate dirs). git clone refuses non-empty targets — clone then merge.
-      if [[ -d ${COMFY_HOME} && -n "$(ls -A "${COMFY_HOME}" 2>/dev/null || true)" ]]; then
-        local tmp_clone
-        tmp_clone="$(mktemp -d)"
-        log "git clone (temp) then merge into existing ${COMFY_HOME}…"
-        git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git "${tmp_clone}/ComfyUI"
-        if command -v rsync >/dev/null 2>&1; then
-          rsync -a "${tmp_clone}/ComfyUI/" "${COMFY_HOME}/"
-        else
-          cp -a "${tmp_clone}/ComfyUI/." "${COMFY_HOME}/"
-        fi
-        rm -rf "${tmp_clone}"
-      else
-        log "git clone into ${COMFY_HOME}…"
-        git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git "${COMFY_HOME}"
-      fi
-    else
-      log "ComfyUI tree present; pulling latest (best-effort)"
-      git -C "${COMFY_HOME}" pull --ff-only || warn "git pull failed; continuing"
-    fi
+    # Order matches Docker phased layers: venv → torch → comfy → nodes → finalize
+    step 1 "${total}" "Create Python venv + upgrade pip tooling"
+    phase_venv
     log "step 1 done"
 
-    step 2 "${total}" "Create Python venv (if missing)"
-    if [[ ! -d ${VENV} ]]; then
-      log "python3 -m venv ${VENV}"
-      python3 -m venv "${VENV}"
-    else
-      log "venv already exists"
-    fi
-    # shellcheck disable=SC1091
-    source "${VENV}/bin/activate"
-    log "step 2 done"
+    step 2 "${total}" "Install PyTorch (cu130 when available) — multi-GB; many minutes"
+    phase_torch
+    log "step 2 done (elapsed $(install_format_elapsed "$(install_elapsed_s)"))"
 
-    step 3 "${total}" "Upgrade pip, setuptools, wheel"
-    pip_install -U pip setuptools wheel
-    log "step 3 done"
+    step 3 "${total}" "Clone or update ComfyUI into ${COMFY_HOME}"
+    step 4 "${total}" "Install ComfyUI requirements.txt"
+    step 5 "${total}" "Install hub/runtime extras (psutil, huggingface_hub, …)"
+    phase_comfy
+    log "step 3–5 done"
 
-    step 4 "${total}" "Install PyTorch (cu130 when available) — multi-GB; many minutes"
-    log "Expect large wheels (torch + cuda toolkit + cudnn); progress bars below…"
-    pip_install --upgrade torch torchvision torchaudio \
-      --index-url https://download.pytorch.org/whl/cu130 || {
-      warn "cu130 index failed; falling back to default PyPI torch"
-      pip_install --upgrade torch torchvision torchaudio
-    }
-    log "step 4 done (elapsed $(install_format_elapsed "$(install_elapsed_s)"))"
+    step 6 "${total}" "Install custom nodes (Manager, Nunchaku)"
+    step 7 "${total}" "Optional SageAttention (fail-soft on aarch64)"
+    step 8 "${total}" "Optional nunchaku package (fail-soft)"
+    phase_nodes
+    log "step 6–8 done"
 
-    step 5 "${total}" "Install ComfyUI requirements.txt"
-    pip_install -r "${COMFY_HOME}/requirements.txt"
-    log "step 5 done"
-
-    step 6 "${total}" "Install hub/runtime extras (psutil, huggingface_hub, …)"
-    pip_install psutil huggingface_hub safetensors einops
-    log "step 6 done"
-
-    step 7 "${total}" "Install custom nodes (Manager, Nunchaku)"
-    CUSTOM="${COMFY_HOME}/custom_nodes"
-    mkdir -p "${CUSTOM}"
-    clone_node "https://github.com/ltdrdata/ComfyUI-Manager.git" "ComfyUI-Manager"
-    clone_node "https://github.com/mit-han-lab/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" ||
-      clone_node "https://github.com/nunchaku-tech/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" ||
-      warn "Nunchaku custom node unavailable"
-    log "step 7 done"
-
-    step 8 "${total}" "Optional SageAttention (fail-soft on aarch64)"
-    pip_install sageattention || warn "SageAttention pip install failed (optional on aarch64)"
-    log "step 8 done"
-
-    step 9 "${total}" "Optional nunchaku package (fail-soft)"
-    pip_install nunchaku || warn "nunchaku package install failed (optional)"
-    log "step 9 done"
-
-    touch "${STAMP}"
-    log "Wrote install stamp ${STAMP}"
-
+    step 9 "${total}" "Write install stamp"
     step 10 "${total}" "Strip prebuilt bloat (.git, bytecode, caches)"
-    strip_prebuilt "${COMFY_HOME}"
-    log "step 10 done"
-
     step 11 "${total}" "Link model subdirs under ${MODELS_ROOT}/comfy"
-  else
-    # shellcheck disable=SC1091
-    source "${VENV}/bin/activate"
-    step 1 "${total}" "Refresh model directory links"
-  fi
-
-  # shellcheck disable=SC1091
-  [[ -f "${VENV}/bin/activate" ]] && source "${VENV}/bin/activate"
-
-  for sub in checkpoints diffusion_models text_encoders vae loras clip clip_vision \
-    unet controlnet embeddings upscale_models audio_encoders; do
-    link_models "${sub}"
-  done
-  log "model links done"
-
-  if [[ ${refresh} -eq 1 ]]; then
-    step 2 "${total}" "Apply Spark free-memory patch"
-  else
     step 12 "${total}" "Apply Spark free-memory patch"
-  fi
-  if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
-    python3 /opt/ez-comfy/patch_get_free_memory.py "${COMFY_HOME}" || warn "patch failed"
+    phase_finalize
+    log "step 9–12 done"
   else
-    warn "patch_get_free_memory.py not found in image"
-  fi
-
-  if [[ ${refresh} -eq 1 ]]; then
+    activate_venv
+    step 1 "${total}" "Refresh model directory links"
+    link_all_models
+    step 2 "${total}" "Apply Spark free-memory patch"
+    apply_free_memory_patch
     step 3 "${total}" "Refresh complete"
   fi
+
   log "══ Install complete ══ total elapsed $(install_format_elapsed "$(install_elapsed_s)")"
 }
 
