@@ -654,6 +654,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#image-layer-cache-high-velocity-rebuilds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image layer cache (high-velocity rebuilds)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#resume-cache" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -973,6 +984,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#image-layer-cache-high-velocity-rebuilds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image layer cache (high-velocity rebuilds)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#resume-cache" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1090,12 +1112,14 @@
 <ul>
 <li>Default cache location and layout</li>
 <li>Download utilities and readiness checks</li>
+<li>Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)</li>
 <li>Sharing with nvidia-dgx-spark-lab</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
 <li>Downloading weights once and reusing them across stacks</li>
 <li>Checking readiness without network access</li>
+<li>Rebuilding/pulling only the layers that actually changed</li>
 </ul>
 <h2 id="default-location">Default location<a class="headerlink" href="#default-location" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>MODELS_DIR=/mnt/models
@@ -1300,6 +1324,40 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 </tr>
 </tbody>
 </table>
+<h3 id="image-layer-cache-high-velocity-rebuilds">Image layer cache (high-velocity rebuilds)<a class="headerlink" href="#image-layer-cache-high-velocity-rebuilds" title="Permanent link">&para;</a></h3>
+<p>Dockerfile order is intentional so <strong>ops-script edits do not re-download multi‑GB torch</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Rebuild multi‑GB prebuild?</th>
+<th>Re-pull multi‑GB layer?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entrypoint.sh</code> / <code>patch_get_free_memory.py</code></td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Custom-node / <code>nodes</code> phase only</td>
+<td>Nodes+finalize only (torch cached)</td>
+<td>Smaller delta</td>
+</tr>
+<tr>
+<td><code>install-comfy.sh</code> prebuild logic / torch phase</td>
+<td>Yes (expected)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>CUDA base / apt packages</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>Builder phases (with BuildKit pip cache mounts): <strong>venv+torch</strong> → <strong>comfy</strong> → <strong>nodes+finalize</strong>. Runtime copies <code>/opt/comfy-prebuilt</code> <strong>before</strong> embedding ops scripts. Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, and <code>patch_get_free_memory.py</code> so local script iteration needs <strong>no image rebuild</strong>; rebake the image only when you need a new prebuilt tree.</p>
 <h3 id="resume-cache">Resume &amp; cache<a class="headerlink" href="#resume-cache" title="Permanent link">&para;</a></h3>
 <p>Downloads are <strong>resumable</strong> and <strong>cacheable</strong> under <code>MODELS_DIR</code>:</p>
 <table>
