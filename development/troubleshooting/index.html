@@ -1243,6 +1243,11 @@
 <td>Re-run <code>./scripts/manage.sh download-models</code> or <code>./scripts/utilities/download-flux.sh run --tier companions</code>. Confirm <code>ls $MODELS_DIR/comfy/vae/flux2-vae.safetensors</code>. Restart Comfy after pull</td>
 </tr>
 <tr>
+<td>Comfy log: path <code>…/models/vae/*.safetensors</code> <strong>exists but doesn't link anywhere</strong>; UI missing <code>flux2-vae</code> / <code>LTX23_*_vae</code> while host <code>ls</code> looks fine</td>
+<td>Absolute host symlinks under <code>MODELS_DIR/comfy/*</code> (e.g. → <code>/mnt/models/…</code>) break inside the container where the cache is mounted at <code>/models</code></td>
+<td>Pull latest; re-run <code>./scripts/manage.sh download-models</code> (cache hit rewrites <strong>relative</strong> links — no full re-download). Check <code>readlink $MODELS_DIR/comfy/vae/flux2-vae.safetensors</code> starts with <code>../</code>, not <code>/</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx test -e /models/comfy/vae/flux2-vae.safetensors</code>. <strong>Do not</strong> wipe <code>ez-comfy-state</code> for this</td>
+</tr>
+<tr>
 <td>Missing <code>LTX23_video_vae_bf16</code> / LTX distilled FP8 in <strong>lab-ltx-</strong>*</td>
 <td>LTX balanced not downloaded or not linked (older <code>*te*</code> globs mis-linked every <code>*.safetensors</code> into <code>text_encoders/</code>)</td>
 <td>Pull latest; <code>./scripts/utilities/download-ltx.sh run --tier balanced</code> then <code>ls $MODELS_DIR/comfy/{diffusion_models,vae}</code> (not only <code>text_encoders/</code>). <code>doctor</code> / <code>download-models</code> gate on the full lab set</td>

@@ -1183,11 +1183,12 @@
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  tonera__FLUX.2-klein-9B-Nunchaku/           # optional (INCLUDE_NUNCHAKU)
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  Kijai__LTX2.3_comfy_balanced/               # ltx balanced selective
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  comfy/
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    diffusion_models/   # symlinks
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    diffusion_models/   # relative symlinks into tier repos above
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    text_encoders/
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    vae/
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>  hub/                  # HF cache (optional)
 </code></pre></div>
+<p><code>download-models</code> links weights into <code>comfy/*</code> with <strong>relative</strong> symlinks (e.g. <code>../../Comfy-Org__flux2-klein-9B/split_files/vae/flux2-vae.safetensors</code>). That way the same tree resolves on the host (<code>MODELS_DIR=/mnt/models</code>) and inside the container (bind-mounted at <code>/models</code>). Absolute <code>/mnt/models/…</code> file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.</p>
 <p>This matches the lab hostPath pattern so K8s and Docker demos can share weights.</p>
 <pre class="mermaid"><code>flowchart TB
   Root["/mnt/models · MODELS_DIR"]
