@@ -622,6 +622,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#build-the-image-locally-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build the image locally (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#example-workflows" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -973,6 +984,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#build-the-image-locally-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build the image locally (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#example-workflows" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1047,12 +1069,14 @@
 <li>What success looks like</li>
 <li>Prerequisites checklist</li>
 <li>Setup, doctor, download, start, stop</li>
+<li>Optional: build the Docker image locally instead of pulling GHCR</li>
 <li>Example workflows and optional deep-dives</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
 <li>A first successful open of ComfyUI at port <strong>8188</strong></li>
 <li>Safe model downloads that leave bandwidth for SSH</li>
+<li>Choosing prebuilt GHCR pull (default) or a local Dockerfile build</li>
 </ul>
 <hr />
 <h2 id="you-will-end-here">You will end here<a class="headerlink" href="#you-will-end-here" title="Permanent link">&para;</a></h2>
@@ -1270,9 +1294,88 @@
 <p class="admonition-title">Done when</p>
 <p>Port <strong>8188</strong> responds and you can load a <strong>lab-</strong>* workflow without missing-weight errors.</p>
 </div>
+<h3 id="build-the-image-locally-optional">Build the image locally (optional)<a class="headerlink" href="#build-the-image-locally-optional" title="Permanent link">&para;</a></h3>
+<p>By default, <code>manage.sh start</code> <strong>pulls</strong> a branch-aligned prebuilt image from GHCR (ComfyUI + PyTorch baked in; <strong>not</strong> FLUX/LTX weights). You can instead <strong>build</strong> <code>docker/Dockerfile</code> on the host and still use the same start path.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">One-shot env</label><label for="__tabbed_2_2">Persist in .env</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/manage.sh<span class="w"> </span>start
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># type: yes</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># in .env (see .env.example)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>./scripts/manage.sh<span class="w"> </span>start
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># type: yes</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>When to use local build</th>
+<th>When to stick with GHCR pull</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GHCR tag missing, private, or pull denied</td>
+<td>Normal first install / fastest path</td>
+</tr>
+<tr>
+<td>Rebaking <code>/opt/comfy-prebuilt</code> after pin or phase changes</td>
+<td>Ops-script-only edits (entrypoint / install / patch)</td>
+</tr>
+<tr>
+<td>Developing the image layers themselves</td>
+<td>You only need Comfy + weights running</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Still the same safety path:</strong> type <code>yes</code>, host headroom preflight, <code>restart: "no"</code>, and weights via <code>download-models</code> / <code>MODELS_DIR</code>. Local build does <strong>not</strong> skip confirmation or put models inside the image.</p>
+<div class="admonition warning">
+<p class="admonition-title">Expect a long Docker build</p>
+<p>With default <code>EZ_COMFY_PREBUILD=1</code>, local build installs torch and Comfy into the image and can take <strong>30+ minutes</strong> (multi‑GB wheels). Base layers come from public Docker Hub <code>nvidia/cuda</code> (no NGC login by default). Compose may use a previously pulled GHCR image as build cache (<code>cache_from</code>) when present.</p>
+</div>
+<p>After a successful prebuild image, first container start <strong>seeds</strong> the <code>comfy-state</code> volume from <code>/opt/comfy-prebuilt</code> (same as the GHCR path). A thin build (<code>EZ_COMFY_PREBUILD=0</code>) or <code>LAB_FORCE_COLD_INSTALL=1</code> falls back to cold multi‑GB pip at runtime.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LAB_STACK_FORCE_BUILD=1</code></td>
+<td>Prefer local <code>compose up --build</code> (skip pull-first path)</td>
+</tr>
+<tr>
+<td><code>LAB_STACK_SKIP_PULL=1</code></td>
+<td>Do not <code>docker pull</code>; start falls through to local <code>compose --build</code></td>
+</tr>
+<tr>
+<td><code>EZ_COMFY_PREBUILD=1</code> (default)</td>
+<td>Bake Comfy + torch into the image during build</td>
+</tr>
+<tr>
+<td><code>EZ_COMFY_PREBUILD=0</code></td>
+<td>Thin image → cold pip at first container start</td>
+</tr>
+<tr>
+<td><code>EZ_COMFY_IMAGE</code></td>
+<td>Tag for the pulled or built image (branch default if unset)</td>
+</tr>
+</tbody>
+</table>
+<p>Pull failures already fall back to local build automatically. Force-build is for when you <strong>want</strong> a rebuild even if GHCR is available.</p>
+<p>Layer invalidation and pin bumps: <a href="../models-and-cache/#prebuilt-container-image-ghcr">Models &amp; Cache</a>. Recovery rows: <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <h3 id="example-workflows">Example workflows<a class="headerlink" href="#example-workflows" title="Permanent link">&para;</a></h3>
 <p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>):</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Image (Flux)</label><label for="__tabbed_2_2">Video frames (LTX)</label><label for="__tabbed_2_3">Combined</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Image (Flux)</label><label for="__tabbed_3_2">Video frames (LTX)</label><label for="__tabbed_3_3">Combined</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1368,7 +1471,7 @@
 <p class="admonition-title">Golden rule</p>
 <p><strong>Never reboot with the heavy ComfyUI stack still running.</strong> Always stop first. See <a href="../reboot-safety/">Reboot Safety</a>.</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>./scripts/manage.sh<span class="w"> </span>stop
 </code></pre></div>
 <hr />
 <h2 id="optional-deep-dives">Optional deep-dives<a class="headerlink" href="#optional-deep-dives" title="Permanent link">&para;</a></h2>
@@ -1404,7 +1507,7 @@
 <summary>Dev: edit scripts without rebuilding</summary>
 <p>Compose bind-mounts <code>docker/entrypoint.sh</code>, <code>docker/install-comfy.sh</code>, <code>docker/install-comfy/</code>, and <code>docker/patch_get_free_memory.py</code> into the container.</p>
 <p>Change those files on the host, then restart the stack — <strong>no multi‑GB image rebuild</strong>.</p>
-<p>Rebuild (<code>LAB_STACK_FORCE_BUILD=1</code> or publish) only when you need a new baked <code>/opt/comfy-prebuilt</code> tree (torch / Comfy / nodes).</p>
+<p>Rebuild only when you need a new baked <code>/opt/comfy-prebuilt</code> tree (torch / Comfy / nodes): <a href="./#build-the-image-locally-optional">build the image locally</a> or publish.</p>
 <p>See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds-pulls">Models &amp; Cache</a> for what invalidates which layers.</p>
 </details>
 <details class="warning">

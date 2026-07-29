@@ -1172,7 +1172,7 @@
 <tr>
 <td><code>docker pull ghcr.io/...</code> denied / not found</td>
 <td>Wrong branch tag, package not published, or private</td>
-<td>Confirm tag matches branch (<code>:flux-to-ltx</code> on <code>main</code>, <code>:flux-to-ltx-development</code> on <code>development</code>/feature — see <code>doctor</code>). Run <code>publish-image</code> on that long-lived branch; make GHCR package public; or <code>EZ_COMFY_IMAGE=…</code> / <code>LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start</code></td>
+<td>Confirm tag matches branch (<code>:flux-to-ltx</code> on <code>main</code>, <code>:flux-to-ltx-development</code> on <code>development</code>/feature — see <code>doctor</code>). Run <code>publish-image</code> on that long-lived branch; make GHCR package public; or <code>EZ_COMFY_IMAGE=…</code> / force local build: <a href="../getting-started/#build-the-image-locally-optional">Getting Started — build locally</a></td>
 </tr>
 <tr>
 <td>First start still runs multi-GB pip</td>
@@ -1187,7 +1187,7 @@
 <tr>
 <td>Local script change has no effect</td>
 <td>Looking at baked image without restart</td>
-<td>Compose mounts <code>docker/*.sh</code>, <code>docker/install-comfy/</code>, and the patch; restart after edit. To rebake prebuilt tree: <code>LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start</code></td>
+<td>Compose mounts <code>docker/*.sh</code>, <code>docker/install-comfy/</code>, and the patch; restart after edit. To rebake prebuilt tree: <a href="../getting-started/#build-the-image-locally-optional">build locally</a> (<code>LAB_STACK_FORCE_BUILD=1</code>)</td>
 </tr>
 <tr>
 <td><code>IndentationError</code> in <code>model_management.py</code> / <code>mem_free_torch</code></td>
