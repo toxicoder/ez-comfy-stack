@@ -142,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Wide landscape of a two-lane coastal road curving along cliffs above a restless blue-green sea at golden hour. Low raking sun paints the asphalt with warm specular streaks; long shadows from wind-bent grasses stretch across the shoulder. Layered depth: wildflowers and a weathered guardrail in the foreground, the road ribbon in midground, headlands and layered cloud banks on the horizon. Photoreal cinematic travel still, 24\u201335mm look, deep but natural focus, rich atmospheric haze near the water, dramatic sky without oversaturation."
+        "Wide landscape of terraced rice paddies cascading toward a misty basalt coastline at blue hour. Flooded fields mirror a lavender-gray sky; a lone wooden footbridge zigzags through the midground. Soft moisture haze, gentle specular on water, 24mm landscape still, photoreal, uncluttered horizon."
       ],
       "title": "Positive"
     },
@@ -372,9 +372,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Flux landscape 1280\u00d7720 (lab)\n\nWhat this graph does: Widescreen landscape text\u2192image at 1280\u00d7720.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 1280\u00d7720 \u00b7 batch 1.\nSaveImage prefix: ez_flux_landscape.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
+        "## Flux txt2img landscape 1280×720 (lab)\n\nWhat this graph does: Landscape text→image at 1280×720.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · 1280×720 · batch 1\nSaveImage prefix: ez_flux_landscape.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n• Prefer positive constraints (“sharp focus”, “empty street”, “seamless white”) over “no X”.\n• Comfy (weight:1.4) emphasis is not applied by this text encoder.\n• At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
       ],
-      "title": "Flux landscape 1280\u00d7720 (lab) \u2014 operator note"
+      "title": "Flux landscape 1280×720 (lab) — operator note"
     }
   ],
   "links": [
@@ -463,8 +463,8 @@
         0
       ]
     },
-    "lab_note": "## Flux landscape 1280\u00d7720 (lab)\n\nWhat this graph does: Widescreen landscape text\u2192image at 1280\u00d7720.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 1280\u00d7720 \u00b7 batch 1.\nSaveImage prefix: ez_flux_landscape.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
-    "lab_description": "Widescreen landscape text\u2192image at 1280\u00d7720."
+    "lab_note": "## Flux txt2img landscape 1280×720 (lab)\n\nWhat this graph does: Landscape text→image at 1280×720.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · 1280×720 · batch 1\nSaveImage prefix: ez_flux_landscape.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n• Prefer positive constraints (“sharp focus”, “empty street”, “seamless white”) over “no X”.\n• Comfy (weight:1.4) emphasis is not applied by this text encoder.\n• At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
+    "lab_description": "Landscape text→image at 1280×720."
   },
   "version": 0.4
 }

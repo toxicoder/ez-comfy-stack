@@ -84,7 +84,7 @@ flowchart LR
   LTX --> Mp4["MP4 preview<br/>VHS_VideoCombine"]
 ```
 
-**Handoff:** load **flux-to-ltx-lab-example** (or any Flux T2I) → save still → open **ltx-i2v-lab-example** / **ltx-i2v-short-lab-example** and set `LoadImage` to that file → Queue → watch **Save video (MP4)** on the LTX graph.
+**Handoff:** load **flux-to-ltx-lab-example** (or any Flux T2I) → save still → open **ltx-i2v-lab-example** (~10 s) or **ltx-i2v-30s-lab-example** / **ltx-i2v-60s-lab-example** and set `LoadImage` to that file → Queue → watch **Save video (MP4)** on the LTX graph. I2V graphs also queue out of the box on Comfy’s default **example.png** (sketch→living character demos).
 
 !!! example "Pipeline tips"
 

@@ -142,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Night street-food stall under dense neon signage after rain. Steam rises from a steel griddle; plastic stools glisten with reflected magenta and cyan light on wet asphalt. A cook in a dark apron works mid-frame while bokeh traffic passes behind. Photoreal urban night photo, 35mm, high dynamic range without crushing blacks, crisp rain reflections, lively but readable composition suitable for generating two variants from one prompt."
+        "Night market alley after a cloudburst: dangling paper lanterns, steam from noodle carts, and oil-sheen puddles mirroring amber and jade light. A courier on a cargo bike cuts through mid-frame; rain still needles the air. Photoreal street photograph, handheld energy but sharp subject, no readable brand text."
       ],
       "title": "Positive"
     },
@@ -372,9 +372,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Flux batch\u00d72 @ 768\u00b2 (lab)\n\nWhat this graph does: Batch size 2 at 768\u00d7768 \u2014 one prompt, two seeds variants.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 768\u00d7768 \u00b7 batch 2.\nSaveImage prefix: ez_flux_batch2.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
+        "## Flux txt2img batch 2 (lab)\n\nWhat this graph does: Batch size 2 text→image at 768×768.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · 768×768 · batch 2\nSaveImage prefix: ez_flux_batch2.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n• Prefer positive constraints (“sharp focus”, “empty street”, “seamless white”) over “no X”.\n• Comfy (weight:1.4) emphasis is not applied by this text encoder.\n• At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
       ],
-      "title": "Flux batch\u00d72 @ 768\u00b2 (lab) \u2014 operator note"
+      "title": "Flux batch×2 @ 768² (lab) — operator note"
     }
   ],
   "links": [
@@ -463,8 +463,8 @@
         0
       ]
     },
-    "lab_note": "## Flux batch\u00d72 @ 768\u00b2 (lab)\n\nWhat this graph does: Batch size 2 at 768\u00d7768 \u2014 one prompt, two seeds variants.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 768\u00d7768 \u00b7 batch 2.\nSaveImage prefix: ez_flux_batch2.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
-    "lab_description": "Batch size 2 at 768\u00d7768 \u2014 one prompt, two seeds variants."
+    "lab_note": "## Flux txt2img batch 2 (lab)\n\nWhat this graph does: Batch size 2 text→image at 768×768.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · 768×768 · batch 2\nSaveImage prefix: ez_flux_batch2.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n• Prefer positive constraints (“sharp focus”, “empty street”, “seamless white”) over “no X”.\n• Comfy (weight:1.4) emphasis is not applied by this text encoder.\n• At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
+    "lab_description": "Batch size 2 text→image at 768×768."
   },
   "version": 0.4
 }

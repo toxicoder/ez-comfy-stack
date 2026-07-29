@@ -152,14 +152,16 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern
 | `flux-txt2img-batch2-lab-example.json` | batch 2 @ 768² |
 | `flux-txt2img-high-steps-lab-example.json` | 1024² / 16 steps |
 | `flux-txt2img-product-lab-example.json` | product / catalog prompt |
-| `flux-img2img-lab-example.json` | I2I denoise 0.65 |
-| `flux-img2img-subtle-lab-example.json` / `flux-img2img-strong-lab-example.json` | denoise 0.35 / 0.85 |
-| `ltx-i2v-lab-example.json` / `-short` / `-quick` | I2V frames (~97 / 33 / 17) |
-| `ltx-t2v-lab-example.json` / `-short` / `-quick` | T2V frames (~97 / 33 / 17) |
-| `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide short T2V |
-| `flux-to-ltx-lab-example.json` / `flux-to-ltx-short-lab-example.json` | Flux T2I + handoff note → LTX I2V |
+| `flux-img2img-lab-example.json` | I2I denoise 0.65; default **example.png** sketch→hero |
+| `flux-img2img-subtle-lab-example.json` / `flux-img2img-strong-lab-example.json` | denoise 0.35 / 0.85 on **example.png** |
+| `ltx-i2v-lab-example.json` | I2V ~10 s (241 @ 24 fps); default **example.png** |
+| `ltx-t2v-lab-example.json` | T2V ~10 s (241 @ 24 fps) |
+| `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide T2V ~10 s |
+| `ltx-*-30s-*-lab-example.json` (5 graphs) | ~30 s long-run I2V/T2V demos (721 frames) |
+| `ltx-*-60s-*-lab-example.json` (5 graphs) | ~60 s very heavy I2V/T2V demos (1441 frames) |
+| `flux-to-ltx-lab-example.json` / `flux-to-ltx-30s-lab-example.json` | Flux T2I + handoff → LTX I2V (~10 s / ~30 s) |
 
-Lab video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. Watch the **Save video (MP4)** node preview after Queue — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas **Note** with models, prompting, and video-output steps.
+Lab video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. All LTX lab examples are **≥ ~10 s**; 30 s / 60 s graphs are intentional long-run demos (high VRAM/time). Watch the **Save video (MP4)** node preview after Queue — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas **Note** with models, prompting, and video-output steps.
 
 ### Gated models / HF_TOKEN
 

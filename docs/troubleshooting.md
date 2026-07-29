@@ -148,6 +148,7 @@ sudo chown "$USER:$USER" /mnt/models
 | Missing `gemma_3_12B_it_fp4_mixed` in LTX graphs | Gemma companion not downloaded | `./scripts/utilities/download-ltx.sh run --tier balanced` (auto-includes gemma) or `download-models`; `ls $MODELS_DIR/comfy/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors` |
 | Missing `VHS_VideoCombine` node on **ltx-*-lab-example** | Image/volume predates VideoHelperSuite, or refresh clone failed | Pull/rebuild GHCR image (VHS is prebuilt). Restart container so stamp-present refresh runs `ensure_lab_video_nodes`. Confirm: `docker exec ez-comfy-flux-to-ltx test -d /comfy-state/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite`. Last resort: `LAB_FORCE_COLD_INSTALL=1` or volume cleanup, then re-open seeded workflows |
 | LTX finished but I only see PNGs / no MP4 preview | Old workflow JSON without VHS, or looking only at SaveImage | Re-open current **ltx-*-lab-example** from `user/default/workflows/` (entrypoint re-copies host `workflows/`). After Queue, open **Save video (MP4)** node for preview; MP4 is under Comfy `output/` as `ez_ltx_*_video_*.mp4`. Frames via SaveImage are secondary — [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx) |
+| OOM / multi-minute hang on **ltx-*-30s-*** / ***-60s-*** | Long latents (721 / 1441 frames) are heavy | Prefer base **~10 s** graphs for smoke tests. Confirm headroom preflight; close other GPU jobs; start with `ltx-i2v-lab-example` / `ltx-t2v-lab-example` before long-run demos |
 
 ---
 
