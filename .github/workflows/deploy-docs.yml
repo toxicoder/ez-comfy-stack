@@ -85,6 +85,8 @@ jobs:
         env:
           EZ_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
           MIKE_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
+          # Suppress Material MkDocs 2.0 advisory; pins stay on mkdocs 1.x.
+          NO_MKDOCS_2_WARNING: "1"
         run: |
           python -m mkdocs build --strict
           # mike copies from site/; ensure no Jekyll processing on Pages.
