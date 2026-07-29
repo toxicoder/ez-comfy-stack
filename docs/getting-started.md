@@ -11,12 +11,14 @@ tags: [getting-started, docker, comfyui]
 - What success looks like
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
+- Optional: build the Docker image locally instead of pulling GHCR
 - Example workflows and optional deep-dives
 
 **What this enables**
 
 - A first successful open of ComfyUI at port **8188**
 - Safe model downloads that leave bandwidth for SSH
+- Choosing prebuilt GHCR pull (default) or a local Dockerfile build
 
 ---
 
@@ -212,6 +214,53 @@ Open **`http://<spark-ip>:8188`** (or SSH port-forward if needed).
 
     Port **8188** responds and you can load a **lab-*** workflow without missing-weight errors.
 
+### Build the image locally (optional)
+
+By default, `manage.sh start` **pulls** a branch-aligned prebuilt image from GHCR (ComfyUI + PyTorch baked in; **not** FLUX/LTX weights). You can instead **build** `docker/Dockerfile` on the host and still use the same start path.
+
+=== "One-shot env"
+
+    ```bash
+    LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start
+    # type: yes
+    ```
+
+=== "Persist in .env"
+
+    ```bash
+    # in .env (see .env.example)
+    LAB_STACK_FORCE_BUILD=1
+
+    ./scripts/manage.sh start
+    # type: yes
+    ```
+
+| When to use local build | When to stick with GHCR pull |
+| --- | --- |
+| GHCR tag missing, private, or pull denied | Normal first install / fastest path |
+| Rebaking `/opt/comfy-prebuilt` after pin or phase changes | Ops-script-only edits (entrypoint / install / patch) |
+| Developing the image layers themselves | You only need Comfy + weights running |
+
+**Still the same safety path:** type `yes`, host headroom preflight, `restart: "no"`, and weights via `download-models` / `MODELS_DIR`. Local build does **not** skip confirmation or put models inside the image.
+
+!!! warning "Expect a long Docker build"
+
+    With default `EZ_COMFY_PREBUILD=1`, local build installs torch and Comfy into the image and can take **30+ minutes** (multi‑GB wheels). Base layers come from public Docker Hub `nvidia/cuda` (no NGC login by default). Compose may use a previously pulled GHCR image as build cache (`cache_from`) when present.
+
+After a successful prebuild image, first container start **seeds** the `comfy-state` volume from `/opt/comfy-prebuilt` (same as the GHCR path). A thin build (`EZ_COMFY_PREBUILD=0`) or `LAB_FORCE_COLD_INSTALL=1` falls back to cold multi‑GB pip at runtime.
+
+| Variable | Role |
+| --- | --- |
+| `LAB_STACK_FORCE_BUILD=1` | Prefer local `compose up --build` (skip pull-first path) |
+| `LAB_STACK_SKIP_PULL=1` | Do not `docker pull`; start falls through to local `compose --build` |
+| `EZ_COMFY_PREBUILD=1` (default) | Bake Comfy + torch into the image during build |
+| `EZ_COMFY_PREBUILD=0` | Thin image → cold pip at first container start |
+| `EZ_COMFY_IMAGE` | Tag for the pulled or built image (branch default if unset) |
+
+Pull failures already fall back to local build automatically. Force-build is for when you **want** a rebuild even if GHCR is available.
+
+Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-container-image-ghcr). Recovery rows: [Troubleshooting](troubleshooting.md).
+
 ### Example workflows
 
 After `download-models` + `start`, open ComfyUI and load from `user/default/workflows/` (seeded from host `workflows/`):
@@ -292,7 +341,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     Change those files on the host, then restart the stack — **no multi‑GB image rebuild**.
 
-    Rebuild (`LAB_STACK_FORCE_BUILD=1` or publish) only when you need a new baked `/opt/comfy-prebuilt` tree (torch / Comfy / nodes).
+    Rebuild only when you need a new baked `/opt/comfy-prebuilt` tree (torch / Comfy / nodes): [build the image locally](getting-started.md#build-the-image-locally-optional) or publish.
 
     See [Models & Cache](models-and-cache.md#image-layer-cache-high-velocity-rebuilds-pulls) for what invalidates which layers.
 
