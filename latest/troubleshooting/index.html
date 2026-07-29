@@ -1172,7 +1172,7 @@
 <tr>
 <td><code>docker pull ghcr.io/...</code> denied / not found</td>
 <td>Wrong branch tag, package not published, or private</td>
-<td>Confirm tag matches branch (<code>:flux-to-ltx</code> on <code>main</code>, <code>:flux-to-ltx-development</code> on <code>development</code>/feature — see <code>doctor</code>). Run <code>publish-image</code> on that long-lived branch; make GHCR package public; or <code>EZ_COMFY_IMAGE=…</code> / <code>LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start</code></td>
+<td>Confirm tag matches branch (<code>:flux-to-ltx</code> on <code>main</code>, <code>:flux-to-ltx-development</code> on <code>development</code>/feature — see <code>doctor</code>). Run <code>publish-image</code> on that long-lived branch; make GHCR package public; or <code>EZ_COMFY_IMAGE=…</code> / force local build: <a href="../getting-started/#build-the-image-locally-optional">Getting Started — build locally</a></td>
 </tr>
 <tr>
 <td>First start still runs multi-GB pip</td>
@@ -1187,7 +1187,7 @@
 <tr>
 <td>Local script change has no effect</td>
 <td>Looking at baked image without restart</td>
-<td>Compose mounts <code>docker/*.sh</code>, <code>docker/install-comfy/</code>, and the patch; restart after edit. To rebake prebuilt tree: <code>LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start</code></td>
+<td>Compose mounts <code>docker/*.sh</code>, <code>docker/install-comfy/</code>, and the patch; restart after edit. To rebake prebuilt tree: <a href="../getting-started/#build-the-image-locally-optional">build locally</a> (<code>LAB_STACK_FORCE_BUILD=1</code>)</td>
 </tr>
 <tr>
 <td><code>IndentationError</code> in <code>model_management.py</code> / <code>mem_free_torch</code></td>
@@ -1207,7 +1207,7 @@
 <tr>
 <td>Nunchaku missing</td>
 <td>aarch64 wheel unavailable</td>
-<td>Fail-soft; lab <strong>lab-flux-</strong><em> / </em><em>lab-ltx-</em>** paths still work</td>
+<td>Fail-soft; <strong>*-lab-example</strong> Flux / LTX paths still work</td>
 </tr>
 </tbody>
 </table>
@@ -1230,10 +1230,10 @@
 <tr>
 <td>Missing <code>ae.safetensors</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*.safetensors</code></td>
 <td><strong>Z-Image</strong> template, not this stack</td>
-<td>Load a <strong>lab-</strong><em> workflow (e.g. </em><em>lab-flux-txt2img</em><em> / </em><em>lab-flux-to-ltx</em>*). Stack models are Flux Klein NVFP4 + LTX-2.3 (see <a href="../models-and-cache/">Models &amp; Cache</a>). Run <code>download-models</code> if those files are missing under <code>MODELS_DIR/comfy/</code></td>
+<td>Load a <strong>*-lab-example</strong> workflow (e.g. <strong>flux-txt2img-lab-example</strong> / <strong>flux-to-ltx-lab-example</strong>). Stack models are Flux Klein NVFP4 + LTX-2.3 (see <a href="../models-and-cache/">Models &amp; Cache</a>). Run <code>download-models</code> if those files are missing under <code>MODELS_DIR/comfy/</code></td>
 </tr>
 <tr>
-<td>Missing <code>flux-2-klein-9b-nvfp4</code> or LTX <code>*.safetensors</code> in <strong>lab-</strong>* graphs</td>
+<td>Missing <code>flux-2-klein-9b-nvfp4</code> or LTX <code>*.safetensors</code> in <strong>*-lab-example</strong> graphs</td>
 <td>Weights not on host and/or Comfy <code>models/*</code> not symlinked to host</td>
 <td>1) <code>./scripts/manage.sh download-models</code> (exits non-zero until lab basenames exist) 2) <code>ls $MODELS_DIR/comfy/diffusion_models</code> 3) <code>docker exec ez-comfy-flux-to-ltx ls -la /comfy-state/ComfyUI/models/diffusion_models</code> — should be a <strong>symlink</strong> to <code>/models/comfy/diffusion_models</code>. Restart after pull so <code>link_models</code> retargets. Flux is gated: set <code>HF_TOKEN</code> and accept the BFL license</td>
 </tr>
@@ -1248,14 +1248,34 @@
 <td>Pull latest; re-run <code>./scripts/manage.sh download-models</code> (cache hit rewrites <strong>relative</strong> links — no full re-download). Check <code>readlink $MODELS_DIR/comfy/vae/flux2-vae.safetensors</code> starts with <code>../</code>, not <code>/</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx test -e /models/comfy/vae/flux2-vae.safetensors</code>. <strong>Do not</strong> wipe <code>ez-comfy-state</code> for this</td>
 </tr>
 <tr>
-<td>Missing <code>LTX23_video_vae_bf16</code> / LTX distilled FP8 in <strong>lab-ltx-</strong>*</td>
+<td>Missing <code>LTX23_video_vae_bf16</code> / LTX distilled FP8 in <strong>ltx-*-lab-example</strong></td>
 <td>LTX balanced not downloaded or not linked (older <code>*te*</code> globs mis-linked every <code>*.safetensors</code> into <code>text_encoders/</code>)</td>
 <td>Pull latest; <code>./scripts/utilities/download-ltx.sh run --tier balanced</code> then <code>ls $MODELS_DIR/comfy/{diffusion_models,vae}</code> (not only <code>text_encoders/</code>). <code>doctor</code> / <code>download-models</code> gate on the full lab set</td>
 </tr>
 <tr>
 <td>CLIP / latent errors on Flux lab graphs</td>
 <td>Wrong CLIP type or latent node</td>
-<td>Use seeded <strong>lab-flux-</strong><em> graphs: CLIP type </em><em><code>flux2</code></em><em> with <code>qwen_3_8b_fp4mixed</code>, latent </em><em><code>EmptyFlux2LatentImage</code></em>*. Do not use <code>qwen_image</code> / Z-Image loaders</td>
+<td>Use seeded <strong>flux-*-lab-example</strong> graphs: CLIP type <strong><code>flux2</code></strong> with <code>qwen_3_8b_fp4mixed</code>, latent <strong><code>EmptyFlux2LatentImage</code></strong>. Do not use <code>qwen_image</code> / Z-Image loaders</td>
+</tr>
+<tr>
+<td><code>Failed to find C compiler</code> / Triton on <strong>CLIPTextEncode</strong></td>
+<td>Runtime image missing <code>gcc</code>/<code>g++</code>; PyTorch 2.13 Triton JIT needs CC for <code>cuda_utils</code> / <code>bmm_outer_product</code></td>
+<td>Pull/rebuild image (runtime installs <code>gcc</code> <code>g++</code> + <code>python3-dev</code>) and restart. Confirm: <code>docker exec ez-comfy-flux-to-ltx which gcc</code></td>
+</tr>
+<tr>
+<td><code>CalledProcessError</code> compiling <code>cuda_utils*.so</code> / <code>bmm_outer_product</code> on <strong>CLIPTextEncode</strong> (LTX Gemma or Flux)</td>
+<td>Triton JIT has <code>gcc</code> but fails the compile (missing <code>Python.h</code> / <code>python3-dev</code>, or <code>libcuda.so.1</code> not on gcc <code>LIBRARY_PATH</code>). stderr is swallowed by Triton</td>
+<td>Pull/rebuild image so runtime has <strong><code>python3-dev</code></strong> + <code>gcc</code>/<code>g++</code>. Restart. Confirm: <code>docker exec ez-comfy-flux-to-ltx test -f /usr/include/python3.*/Python.h &amp;&amp; echo ok</code>. Logs should show <code>Triton JIT deps OK</code> (or auto-disable). Escape hatch: <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> then restart (eager/cuBLAS fallback; CLIP still works)</td>
+</tr>
+<tr>
+<td>KSampler LTX: <code>Expected size 768 but got size 4096</code> / <code>embeddings_connector</code></td>
+<td>Missing Gemma TE or projection-only CLIPLoader</td>
+<td>Lab graphs need <strong>DualCLIPLoader</strong>: <code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>. Run <code>./scripts/manage.sh download-models</code>, re-open <strong>ltx-*-lab-example</strong> from <code>workflows/</code></td>
+</tr>
+<tr>
+<td>Missing <code>gemma_3_12B_it_fp4_mixed</code> in LTX graphs</td>
+<td>Gemma companion not downloaded</td>
+<td><code>./scripts/utilities/download-ltx.sh run --tier balanced</code> (auto-includes gemma) or <code>download-models</code>; <code>ls $MODELS_DIR/comfy/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors</code></td>
 </tr>
 <tr>
 <td>Missing <code>VHS_VideoCombine</code> node</td>

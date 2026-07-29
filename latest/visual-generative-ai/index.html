@@ -976,19 +976,19 @@
 </tr>
 <tr>
 <td>LTX</td>
-<td>distilled FP8 balanced</td>
+<td>distilled FP8 balanced + Gemma DualCLIP</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="combined-pipeline-flux-ltx">Combined pipeline (Flux → LTX)<a class="headerlink" href="#combined-pipeline-flux-ltx" title="Permanent link">&para;</a></h2>
-<p>Text → image → <strong>video frames</strong> in one ComfyUI stack. Lab graphs use <code>SaveImage</code> for frames; the LTX <strong>audio VAE</strong> is downloaded for advanced AV work but is not wired into the seeded examples.</p>
+<p>Text → image → <strong>video frames</strong> in one ComfyUI stack. Lab graphs use <code>SaveImage</code> for frames; the LTX <strong>audio VAE</strong> is downloaded for advanced AV work but is not wired into the seeded examples. LTX text conditioning uses <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>) — not the projection file alone.</p>
 <pre class="mermaid"><code>flowchart LR
   Prompt["Text prompt"] --&gt; Flux["Flux T2I&lt;br/&gt;fast · Klein 9B NVFP4"]
   Flux --&gt; Image["Still image"]
   Image --&gt; LTX["LTX I2V&lt;br/&gt;balanced · distilled FP8"]
   LTX --&gt; Frames["Video frames&lt;br/&gt;SaveImage"]</code></pre>
-<p><strong>Handoff:</strong> load <strong>lab-flux-to-ltx</strong> (or any Flux T2I) → save still → open <strong>lab-ltx-i2v</strong> / <strong>lab-ltx-i2v-short</strong> and set <code>LoadImage</code> to that file.</p>
+<p><strong>Handoff:</strong> load <strong>flux-to-ltx-lab-example</strong> (or any Flux T2I) → save still → open <strong>ltx-i2v-lab-example</strong> / <strong>ltx-i2v-short-lab-example</strong> and set <code>LoadImage</code> to that file.</p>
 <div class="admonition example">
 <p class="admonition-title">Pipeline tips</p>
 <ol>

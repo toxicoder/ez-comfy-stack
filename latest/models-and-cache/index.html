@@ -1182,11 +1182,12 @@
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  Comfy-Org__flux2-klein-9B/                  # companions: Qwen TE + flux2 VAE
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  tonera__FLUX.2-klein-9B-Nunchaku/           # optional (INCLUDE_NUNCHAKU)
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  Kijai__LTX2.3_comfy_balanced/               # ltx balanced selective
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  comfy/
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    diffusion_models/   # relative symlinks into tier repos above
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    text_encoders/
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    vae/
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>  hub/                  # HF cache (optional)
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  Comfy-Org__ltx-2_gemma/                     # LTX Gemma 3 TE (DualCLIP)
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  comfy/
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    diffusion_models/   # relative symlinks into tier repos above
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    text_encoders/
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    vae/
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  hub/                  # HF cache (optional)
 </code></pre></div>
 <p><code>download-models</code> links weights into <code>comfy/*</code> with <strong>relative</strong> symlinks (e.g. <code>../../Comfy-Org__flux2-klein-9B/split_files/vae/flux2-vae.safetensors</code>). That way the same tree resolves on the host (<code>MODELS_DIR=/mnt/models</code>) and inside the container (bind-mounted at <code>/models</code>). Absolute <code>/mnt/models/…</code> file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.</p>
 <p>This matches the lab hostPath pattern so K8s and Docker demos can share weights.</p>
@@ -1196,6 +1197,7 @@
   Root --&gt; Comp["Comfy-Org__flux2-klein-9B"]
   Root --&gt; Flux2["tonera__FLUX.2-klein-9B-Nunchaku"]
   Root --&gt; Ltx["Kijai__LTX2.3_comfy_balanced"]
+  Root --&gt; Gemma["Comfy-Org__ltx-2_gemma"]
   Root --&gt; Comfy["comfy/"]
   Root --&gt; Hub["hub/ · optional HF cache"]
   Comfy --&gt; DM["diffusion_models/ · symlinks"]
@@ -1250,9 +1252,14 @@
 <td>LTX balanced UNET</td>
 </tr>
 <tr>
+<td><code>gemma_3_12B_it_fp4_mixed.safetensors</code></td>
+<td><code>text_encoders/</code></td>
+<td>LTX Gemma 3 TE (DualCLIP type <strong><code>ltxv</code></strong>, with projection)</td>
+</tr>
+<tr>
 <td><code>ltx-2.3_text_projection_bf16.safetensors</code></td>
 <td><code>text_encoders/</code></td>
-<td>LTX text projection</td>
+<td>LTX text projection (DualCLIP second clip)</td>
 </tr>
 <tr>
 <td><code>LTX23_video_vae_bf16.safetensors</code></td>
@@ -1267,7 +1274,7 @@
 </tbody>
 </table>
 <h3 id="example-graphs">Example graphs<a class="headerlink" href="#example-graphs" title="Permanent link">&para;</a></h3>
-<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/</code>:</p>
+<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/</code> (name pattern <strong><code>*-lab-example.json</code></strong>):</p>
 <table>
 <thead>
 <tr>
@@ -1277,35 +1284,63 @@
 </thead>
 <tbody>
 <tr>
-<td><code>lab-flux-txt2img.json</code></td>
+<td><code>flux-txt2img-lab-example.json</code></td>
 <td>1024² T2I</td>
 </tr>
 <tr>
-<td><code>lab-flux-txt2img-portrait.json</code></td>
+<td><code>flux-txt2img-portrait-lab-example.json</code></td>
 <td>768×1024</td>
 </tr>
 <tr>
-<td><code>lab-flux-txt2img-landscape.json</code></td>
+<td><code>flux-txt2img-landscape-lab-example.json</code></td>
 <td>1280×720</td>
 </tr>
 <tr>
-<td><code>lab-flux-txt2img-quick.json</code></td>
+<td><code>flux-txt2img-ultrawide-lab-example.json</code></td>
+<td>1536×640</td>
+</tr>
+<tr>
+<td><code>flux-txt2img-512-lab-example.json</code></td>
+<td>512² draft</td>
+</tr>
+<tr>
+<td><code>flux-txt2img-quick-lab-example.json</code></td>
 <td>768² / 4 steps smoke</td>
 </tr>
 <tr>
-<td><code>lab-flux-img2img.json</code></td>
-<td>I2I</td>
+<td><code>flux-txt2img-batch2-lab-example.json</code></td>
+<td>batch 2 @ 768²</td>
 </tr>
 <tr>
-<td><code>lab-ltx-i2v.json</code> / <code>lab-ltx-i2v-short.json</code></td>
-<td>I2V frames (~97 / ~33)</td>
+<td><code>flux-txt2img-high-steps-lab-example.json</code></td>
+<td>1024² / 16 steps</td>
 </tr>
 <tr>
-<td><code>lab-ltx-t2v.json</code> / <code>lab-ltx-t2v-short.json</code></td>
-<td>T2V frames (~97 / ~33)</td>
+<td><code>flux-txt2img-product-lab-example.json</code></td>
+<td>product / catalog prompt</td>
 </tr>
 <tr>
-<td><code>lab-flux-to-ltx.json</code></td>
+<td><code>flux-img2img-lab-example.json</code></td>
+<td>I2I denoise 0.65</td>
+</tr>
+<tr>
+<td><code>flux-img2img-subtle-lab-example.json</code> / <code>flux-img2img-strong-lab-example.json</code></td>
+<td>denoise 0.35 / 0.85</td>
+</tr>
+<tr>
+<td><code>ltx-i2v-lab-example.json</code> / <code>-short</code> / <code>-quick</code></td>
+<td>I2V frames (~97 / 33 / 17)</td>
+</tr>
+<tr>
+<td><code>ltx-t2v-lab-example.json</code> / <code>-short</code> / <code>-quick</code></td>
+<td>T2V frames (~97 / 33 / 17)</td>
+</tr>
+<tr>
+<td><code>ltx-t2v-portrait-lab-example.json</code> / <code>ltx-t2v-landscape-lab-example.json</code></td>
+<td>vertical / wide short T2V</td>
+</tr>
+<tr>
+<td><code>flux-to-ltx-lab-example.json</code> / <code>flux-to-ltx-short-lab-example.json</code></td>
 <td>Flux T2I + handoff note → LTX I2V</td>
 </tr>
 </tbody>
@@ -1341,12 +1376,19 @@
 <tr>
 <td><strong>quality</strong></td>
 <td>distilled BF16 (~42 GB)</td>
-<td>same TE + VAEs</td>
+<td>same projection + VAEs</td>
 <td>~45–48 GB</td>
+</tr>
+<tr>
+<td><strong>gemma</strong> (auto with balanced/quality)</td>
+<td>—</td>
+<td><code>gemma_3_12B_it_fp4_mixed</code> from <code>Comfy-Org/ltx-2</code></td>
+<td>~9.5 GB</td>
 </tr>
 </tbody>
 </table>
-<p><code>status --json</code> readiness uses <code>min_gb</code> 20 (balanced) / 35 (quality) as a floor, not the full monorepo size.</p>
+<p>Lab LTX graphs use <strong>DualCLIPLoader</strong> (<code>gemma</code> + <code>text_projection</code>, type <strong><code>ltxv</code></strong>). Projection alone is not a text encoder.</p>
+<p><code>status --json</code> readiness uses <code>min_gb</code> 20 (balanced) / 35 (quality) / 8 (gemma) as a floor, not the full monorepo size.</p>
 <details class="tip">
 <summary>Cleanup extra LTX monorepo files</summary>
 <p>If an older run pulled the full <code>Kijai/LTX2.3_comfy</code> snapshot into the balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:</p>
@@ -1479,6 +1521,10 @@
 <td>Publish</td>
 <td><code>publish-image</code> on <code>main</code> / <code>development</code> (docker/**); Buildx GHA layer cache</td>
 </tr>
+<tr>
+<td>Local build</td>
+<td>Optional: <code>LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start</code> builds <code>docker/Dockerfile</code> instead of pulling — see <a href="../getting-started/#build-the-image-locally-optional">Getting Started</a></td>
+</tr>
 </tbody>
 </table>
 <h3 id="image-layer-cache-high-velocity-rebuilds-pulls">Image layer cache (high-velocity rebuilds + pulls)<a class="headerlink" href="#image-layer-cache-high-velocity-rebuilds-pulls" title="Permanent link">&para;</a></h3>
@@ -1519,9 +1565,16 @@
 <td>Yes</td>
 <td>Yes</td>
 </tr>
+<tr>
+<td>Runtime <code>apt</code> only (<code>gcc</code>/<code>g++</code>/<code>python3-dev</code> for Triton JIT)</td>
+<td>No</td>
+<td>No (venv COPY still cacheable)</td>
+<td>No</td>
+</tr>
 </tbody>
 </table>
-<p>Builder: <strong>COPY only phase modules each <code>RUN</code> needs</strong> (<code>common</code>+<code>phase-venv-torch</code> → <code>phase-comfy</code> → <code>phase-nodes</code>+<code>phase-finalize</code>) with BuildKit pip cache mounts. Runtime: <strong><code>COPY /opt/parts/venv</code> then <code>/opt/parts/app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
+<p>Builder: <strong>COPY only phase modules each <code>RUN</code> needs</strong> (<code>common</code>+<code>phase-venv-torch</code> → <code>phase-comfy</code> → <code>phase-nodes</code>+<code>phase-finalize</code>) with BuildKit pip cache mounts. Runtime: <strong><code>COPY /opt/parts/venv</code> then <code>/opt/parts/app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, <code>pythonpath/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
+<p>Runtime installs <strong><code>gcc</code> + <code>g++</code> + <code>python3-dev</code></strong> (not full <code>build-essential</code>) so PyTorch 2.13 Triton can JIT-compile <code>cuda_utils</code> (needs <strong>CC + <code>Python.h</code></strong>) on first <code>CLIPTextEncode</code>. That is a small apt layer; it does <strong>not</strong> re-pull multi‑GB torch/venv. If JIT deps are still incomplete, the entrypoint sets <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> so torch falls back to eager/cuBLAS.</p>
 <p><strong>Caveat:</strong> the venv layer is the <strong>final</strong> <code>.venv</code> after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.</p>
 </details>
 <h3 id="prebuild-version-pins-validated">Prebuild version pins (validated)<a class="headerlink" href="#prebuild-version-pins-validated" title="Permanent link">&para;</a></h3>
@@ -1550,7 +1603,7 @@
 <tr>
 <td><code>COMFYUI_NUNCHAKU_NODE_REF</code></td>
 <td><code>v1.2.1</code></td>
-<td>Latest plugin release; aligned with <code>NUNCHAKU_VERSION=1.2.1</code>. <strong>Optional</strong> on GB10 (no official aarch64 engine wheels); lab-flux/lab-ltx graphs do not require it.</td>
+<td>Latest plugin release; aligned with <code>NUNCHAKU_VERSION=1.2.1</code>. <strong>Optional</strong> on GB10 (no official aarch64 engine wheels); <code>*-lab-example</code> graphs do not require it.</td>
 </tr>
 </tbody>
 </table>
