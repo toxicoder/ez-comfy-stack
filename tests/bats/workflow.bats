@@ -97,7 +97,7 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
-@test "ltx lab graphs use balanced FP8 pack and short variants" {
+@test "ltx lab graphs use DualCLIP Gemma+projection and balanced FP8 pack" {
   local dir="${REPO_ROOT}/workflows"
   local wf
   for wf in lab-ltx-i2v.json lab-ltx-i2v-short.json lab-ltx-t2v.json lab-ltx-t2v-short.json; do
@@ -108,6 +108,18 @@ teardown() {
     run grep -F 'LTX23_video_vae_bf16.safetensors' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
     run grep -F 'ltx-2.3_text_projection_bf16.safetensors' "${dir}/${wf}"
+    [ "${status}" -eq 0 ]
+    run grep -F 'gemma_3_12B_it_fp4_mixed.safetensors' "${dir}/${wf}"
+    [ "${status}" -eq 0 ]
+    run grep -F 'DualCLIPLoader' "${dir}/${wf}"
+    [ "${status}" -eq 0 ]
+    # DualCLIP type must be ltxv (not flux2 / SD)
+    run grep -E '"ltxv"' "${dir}/${wf}"
+    [ "${status}" -eq 0 ]
+    # Projection-only CLIPLoader is the broken 768-vs-4096 config
+    run python3 -c "import json; d=json.load(open('${dir}/${wf}'));
+assert not any(n.get('type')=='CLIPLoader' for n in d['nodes']), 'CLIPLoader must not remain on LTX graphs'
+assert any(n.get('type')=='DualCLIPLoader' and n.get('widgets_values',[''])[0]=='gemma_3_12B_it_fp4_mixed.safetensors' for n in d['nodes'])"
     [ "${status}" -eq 0 ]
     run grep -F 'KSampler' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
@@ -160,6 +172,7 @@ assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][2]==33 
   [[ "${output}" == *"flux2-vae.safetensors"* ]]
   [[ "${output}" == *"fp8_input_scaled_v3"* ]]
   [[ "${output}" == *"ltx-2.3_text_projection_bf16"* ]]
+  [[ "${output}" == *"gemma_3_12B_it_fp4_mixed"* ]]
   [[ "${output}" == *"LTX23_video_vae_bf16"* ]]
   [[ "${output}" == *"LTX23_audio_vae_bf16"* ]]
 }

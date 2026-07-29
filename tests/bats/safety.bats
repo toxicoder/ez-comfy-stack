@@ -45,6 +45,22 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "Dockerfile runtime installs gcc g++ for Triton JIT" {
+  local df="${REPO_ROOT}/docker/Dockerfile"
+  # Runtime stage must ship a C compiler (Torch 2.13 Triton bmm_outer_product)
+  run awk '
+    /^FROM .* AS runtime/ { in_rt=1; next }
+    in_rt && /^FROM / { in_rt=0 }
+    in_rt { print }
+  ' "${df}"
+  [ "$status" -eq 0 ]
+  [[ "${output}" == *gcc* ]]
+  [[ "${output}" == *g++* || "${output}" == *g\+\+* || "${output}" == *"g++"* ]]
+  # Guard against re-slimming away the compiler without replacement
+  run grep -E 'Triton|C compiler|Failed to find C compiler' "${df}"
+  [ "$status" -eq 0 ]
+}
+
 @test "Dockerfile layer order keeps multi-GB prebuild cache stable" {
   local df="${REPO_ROOT}/docker/Dockerfile"
   # BuildKit syntax for COPY --chmod and cache mounts

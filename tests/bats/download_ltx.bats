@@ -43,12 +43,16 @@ teardown() {
   [[ "${output}" == *"LTX"* || "${output}" == *"Kijai"* ]]
   run tier_repo quality
   [ "${status}" -eq 0 ]
+  run tier_repo gemma
+  [[ "${output}" == *"Comfy-Org/ltx-2"* ]]
   run tier_repo x
   [ "${output}" = "" ]
   run tier_min_gb balanced
   [ "${output}" = "20" ]
   run tier_min_gb quality
   [ "${output}" = "35" ]
+  run tier_min_gb gemma
+  [ "${output}" = "8" ]
   run tier_min_gb x
   [ "${output}" = "0" ]
   run tier_dir balanced
@@ -56,9 +60,11 @@ teardown() {
   TIER=all
   run tiers_to_process
   [[ "${output}" == *"quality"* ]]
+  [[ "${output}" == *"gemma"* ]]
   TIER=balanced
   run tiers_to_process
-  [ "${output}" = "balanced" ]
+  [[ "${output}" == *"balanced"* ]]
+  [[ "${output}" == *"gemma"* ]]
   parse_args status --tier balanced --json
   [ "${CMD}" = "status" ]
   run check_hf_cli
@@ -72,7 +78,7 @@ teardown() {
   [ "${output}" = "0" ]
 }
 
-@test "download-ltx tier_include_patterns selective balanced and quality" {
+@test "download-ltx tier_include_patterns selective balanced quality gemma" {
   run tier_include_patterns balanced
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"fp8_input_scaled_v3"* ]]
@@ -88,6 +94,10 @@ teardown() {
   [[ "${output}" == *"distilled_transformer_only_bf16"* ]]
   [[ "${output}" == *"text_encoders/"* ]]
   [[ "${output}" != *"fp8_input_scaled_v3"* ]]
+  run tier_include_patterns gemma
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"gemma_3_12B_it_fp4_mixed.safetensors"* ]]
+  [[ "${output}" == *"split_files/text_encoders/"* ]]
   run tier_include_patterns bogus
   [ "${status}" -eq 0 ]
   [ -z "${output}" ]
@@ -100,12 +110,14 @@ teardown() {
   run cmd_run
   [ "${status}" -eq 0 ]
   grep -q 'hf download Kijai/LTX2.3_comfy' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'hf download Comfy-Org/ltx-2' "${TEST_TMP_DIR}/hf_calls.log"
   grep -q -- '--include' "${TEST_TMP_DIR}/hf_calls.log"
   grep -q 'fp8_input_scaled_v3' "${TEST_TMP_DIR}/hf_calls.log"
   grep -q 'text_projection' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'gemma_3_12B_it_fp4_mixed' "${TEST_TMP_DIR}/hf_calls.log"
 }
 
-@test "download-ltx cmd_run LTX_FULL_REPO=1 omits --include" {
+@test "download-ltx cmd_run LTX_FULL_REPO=1 omits --include for Kijai not gemma" {
   : >"${TEST_TMP_DIR}/hf_calls.log"
   unset LAB_MOCK_HF_DOWNLOAD
   export LTX_FULL_REPO=1
@@ -113,12 +125,16 @@ teardown() {
   run cmd_run
   [ "${status}" -eq 0 ]
   grep -q 'hf download Kijai/LTX2.3_comfy' "${TEST_TMP_DIR}/hf_calls.log"
-  ! grep -q -- '--include' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'hf download Comfy-Org/ltx-2' "${TEST_TMP_DIR}/hf_calls.log"
+  # Kijai full monorepo line has no --include; gemma companion still selective
+  ! grep -E 'hf download Kijai/LTX2.3_comfy .*--include' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -E 'hf download Comfy-Org/ltx-2' "${TEST_TMP_DIR}/hf_calls.log" | grep -q -- '--include' \
+    || grep -q 'gemma_3_12B_it_fp4_mixed' "${TEST_TMP_DIR}/hf_calls.log"
   unset LTX_FULL_REPO
 }
 
 @test "download-ltx tier_files_ready skip and cleanup keeps resume cache" {
-  local tdir keep extra cache_inc
+  local tdir gdir keep extra cache_inc
   tdir="$(tier_dir balanced)"
   mkdir -p "${tdir}/diffusion_models" "${tdir}/text_encoders" "${tdir}/vae" "${tdir}/loras" \
     "${tdir}/.cache/huggingface/download"
@@ -134,8 +150,14 @@ teardown() {
   echo waste >"${extra}"
   echo waste >"${tdir}/loras/some_lora.safetensors"
   echo waste >"${tdir}/.cache_junk"
+  # Gemma companion must also be ready so balanced cmd_run is a pure cache hit
+  gdir="$(tier_dir gemma)"
+  mkdir -p "${gdir}/split_files/text_encoders"
+  echo g >"${gdir}/split_files/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors"
 
   run tier_files_ready balanced
+  [ "${status}" -eq 0 ]
+  run tier_files_ready gemma
   [ "${status}" -eq 0 ]
   rm -f "${tdir}/vae/LTX23_audio_vae_bf16.safetensors"
   run tier_files_ready balanced
@@ -161,7 +183,7 @@ teardown() {
   TIER=balanced
   run cmd_run
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"cache hit"* || "${output}" == *"skip balanced"* ]]
+  [[ "${output}" == *"cache hit"* || "${output}" == *"skip balanced"* || "${output}" == *"skip gemma"* ]]
   ! grep -q 'hf download' "${TEST_TMP_DIR}/hf_calls.log"
 
   CLEANUP_YES=1
@@ -200,14 +222,15 @@ teardown() {
   [ "${status}" -eq 0 ]
   LAB_MOCK_HF_DOWNLOAD=fail
   TIER=balanced
-  rm -rf "$(tier_dir balanced)"
+  # Wipe both auto-tiers so fail cannot soft-succeed on gemma cache hit alone
+  rm -rf "$(tier_dir balanced)" "$(tier_dir gemma)"
   run cmd_run
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"No LTX tiers"* || "${output}" == *"failed"* ]]
 }
 
 @test "download-ltx link_into_comfy routes by HF path not *te* in safetensors" {
-  local tdir
+  local tdir gdir
   tdir="$(tier_dir balanced)"
   mkdir -p "${tdir}/diffusion_models" "${tdir}/text_encoders" "${tdir}/vae"
   echo u >"${tdir}/diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors"
@@ -229,4 +252,16 @@ teardown() {
   [[ "${vlink}" != /* ]]
   [[ "${vlink}" == ../* ]]
   [[ -e "${MODELS_DIR}/comfy/vae/LTX23_video_vae_bf16.safetensors" ]]
+
+  # Gemma companion from Comfy-Org split_files layout
+  gdir="$(tier_dir gemma)"
+  mkdir -p "${gdir}/split_files/text_encoders"
+  echo g >"${gdir}/split_files/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors"
+  run link_into_comfy gemma
+  [ "${status}" -eq 0 ]
+  [[ -L "${MODELS_DIR}/comfy/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors" ]]
+  local glink
+  glink="$(readlink "${MODELS_DIR}/comfy/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors")"
+  [[ "${glink}" != /* ]]
+  [[ -e "${MODELS_DIR}/comfy/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors" ]]
 }

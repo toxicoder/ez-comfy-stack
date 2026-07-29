@@ -1,6 +1,6 @@
 {
   "id": "lab-ltx-i2v",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 12,
   "last_link_id": 18,
   "nodes": [
@@ -74,14 +74,14 @@
     },
     {
       "id": 3,
-      "type": "CLIPLoader",
+      "type": "DualCLIPLoader",
       "pos": [
         40,
         340
       ],
       "size": [
         400,
-        106
+        130
       ],
       "flags": {},
       "order": 2,
@@ -99,14 +99,15 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPLoader"
+        "Node name for S&R": "DualCLIPLoader"
       },
       "widgets_values": [
+        "gemma_3_12B_it_fp4_mixed.safetensors",
         "ltx-2.3_text_projection_bf16.safetensors",
         "ltxv",
         "default"
       ],
-      "title": "LTX text projection"
+      "title": "LTX Gemma + text projection"
     },
     {
       "id": 4,
@@ -611,7 +612,7 @@
   "extra": {
     "lab_profile": "ltx-i2v",
     "lab_ltx_tier": "balanced",
-    "lab_note": "Requires ComfyUI LTXV core nodes. Saves video frames via SaveImage. Audio VAE is downloaded for advanced AV experiments but not used in this lab graph."
+    "lab_note": "Requires ComfyUI LTXV core nodes. Saves video frames via SaveImage. Audio VAE is downloaded for advanced AV experiments but not used in this lab graph. DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv)."
   },
   "version": 0.4
 }

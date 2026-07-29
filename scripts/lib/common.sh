@@ -927,6 +927,7 @@ lab_expected_model_relpaths() {
 diffusion_models/flux-2-klein-9b-nvfp4.safetensors
 diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors
 text_encoders/qwen_3_8b_fp4mixed.safetensors
+text_encoders/gemma_3_12B_it_fp4_mixed.safetensors
 text_encoders/ltx-2.3_text_projection_bf16.safetensors
 vae/flux2-vae.safetensors
 vae/LTX23_video_vae_bf16.safetensors

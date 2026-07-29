@@ -190,7 +190,7 @@ Fix any errors **before** downloading multi‑GB models.
 | **Layout** | Weights under `MODELS_DIR` (default `/mnt/models`), compatible with nvidia-dgx-spark-lab |
 | **LTX size** | Selective subset of `Kijai/LTX2.3_comfy` (~**30 GB**), not the full monorepo (~400 GB) |
 
-`download-models` **exits non-zero** until every lab basename is present under `MODELS_DIR/comfy/` (Flux UNET + Qwen TE + `flux2-vae` + LTX distilled FP8 + text projection + video/audio VAEs).
+`download-models` **exits non-zero** until every lab basename is present under `MODELS_DIR/comfy/` (Flux UNET + Qwen TE + `flux2-vae` + LTX distilled FP8 + Gemma TE + text projection + video/audio VAEs).
 
 !!! tip "Bandwidth shaping soft-fail"
 
@@ -293,9 +293,10 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 ??? abstract "Lab workflow details"
 
     - Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
-    - LTX graphs save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
+    - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) and save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
     - `download-models` also places `LTX23_audio_vae_bf16` for advanced AV experiments; **lab examples do not wire audio**
     - Lab graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
+    - Runtime image includes **`gcc`/`g++`** so PyTorch 2.13 Triton can JIT on first CLIP encode
     - **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)
 
 ---
