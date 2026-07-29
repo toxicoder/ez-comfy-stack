@@ -1321,31 +1321,39 @@
 </tr>
 <tr>
 <td><code>flux-img2img-lab-example.json</code></td>
-<td>I2I denoise 0.65</td>
+<td>I2I denoise 0.65; default <strong>example.png</strong> sketch→hero</td>
 </tr>
 <tr>
 <td><code>flux-img2img-subtle-lab-example.json</code> / <code>flux-img2img-strong-lab-example.json</code></td>
-<td>denoise 0.35 / 0.85</td>
+<td>denoise 0.35 / 0.85 on <strong>example.png</strong></td>
 </tr>
 <tr>
-<td><code>ltx-i2v-lab-example.json</code> / <code>-short</code> / <code>-quick</code></td>
-<td>I2V frames (~97 / 33 / 17)</td>
+<td><code>ltx-i2v-lab-example.json</code></td>
+<td>I2V ~10 s (241 @ 24 fps); default <strong>example.png</strong></td>
 </tr>
 <tr>
-<td><code>ltx-t2v-lab-example.json</code> / <code>-short</code> / <code>-quick</code></td>
-<td>T2V frames (~97 / 33 / 17)</td>
+<td><code>ltx-t2v-lab-example.json</code></td>
+<td>T2V ~10 s (241 @ 24 fps)</td>
 </tr>
 <tr>
 <td><code>ltx-t2v-portrait-lab-example.json</code> / <code>ltx-t2v-landscape-lab-example.json</code></td>
-<td>vertical / wide short T2V</td>
+<td>vertical / wide T2V ~10 s</td>
 </tr>
 <tr>
-<td><code>flux-to-ltx-lab-example.json</code> / <code>flux-to-ltx-short-lab-example.json</code></td>
-<td>Flux T2I + handoff note → LTX I2V</td>
+<td><code>ltx-*-30s-*-lab-example.json</code> (5 graphs)</td>
+<td>~30 s long-run I2V/T2V demos (721 frames)</td>
+</tr>
+<tr>
+<td><code>ltx-*-60s-*-lab-example.json</code> (5 graphs)</td>
+<td>~60 s very heavy I2V/T2V demos (1441 frames)</td>
+</tr>
+<tr>
+<td><code>flux-to-ltx-lab-example.json</code> / <code>flux-to-ltx-30s-lab-example.json</code></td>
+<td>Flux T2I + handoff → LTX I2V (~10 s / ~30 s)</td>
 </tr>
 </tbody>
 </table>
-<p>Lab video graphs write <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write <strong>frames</strong> via <code>SaveImage</code>. Watch the <strong>Save video (MP4)</strong> node preview after Queue — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a>. They still <strong>must</strong> wire the audio VAE + <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas <strong>Note</strong> with models, prompting, and video-output steps.</p>
+<p>Lab video graphs write <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write <strong>frames</strong> via <code>SaveImage</code>. All LTX lab examples are <strong>≥ ~10 s</strong>; 30 s / 60 s graphs are intentional long-run demos (high VRAM/time). Watch the <strong>Save video (MP4)</strong> node preview after Queue — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a>. They still <strong>must</strong> wire the audio VAE + <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas <strong>Note</strong> with models, prompting, and video-output steps.</p>
 <h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
 <p>FLUX and some LTX assets may require accepting the license on Hugging Face and a token:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># .env</span>

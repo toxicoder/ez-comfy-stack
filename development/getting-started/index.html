@@ -1421,7 +1421,7 @@
 <p>Layer invalidation and pin bumps: <a href="../models-and-cache/#prebuilt-container-image-ghcr">Models &amp; Cache</a>. Recovery rows: <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <h3 id="example-workflows">Example workflows<a class="headerlink" href="#example-workflows" title="Permanent link">&para;</a></h3>
 <p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Image (Flux)</label><label for="__tabbed_3_2">Video frames (LTX)</label><label for="__tabbed_3_3">Combined</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Image (Flux)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1470,19 +1470,27 @@
 </tr>
 <tr>
 <td><strong>flux-img2img-lab-example</strong></td>
-<td>Image → image, denoise <strong>0.65</strong> (set LoadImage)</td>
+<td>Sketch→hero from Comfy <strong>example.png</strong>, denoise <strong>0.65</strong></td>
 </tr>
 <tr>
 <td><strong>flux-img2img-subtle-lab-example</strong></td>
-<td>Light edit, denoise <strong>0.35</strong></td>
+<td>Light polish of <strong>example.png</strong>, denoise <strong>0.35</strong></td>
 </tr>
 <tr>
 <td><strong>flux-img2img-strong-lab-example</strong></td>
-<td>Creative remix, denoise <strong>0.85</strong></td>
+<td>Cinematic remaster of <strong>example.png</strong>, denoise <strong>0.85</strong></td>
 </tr>
 </tbody>
 </table>
 </div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Img2img uses Comfy’s default doodle</p>
+<p>I2I graphs keep <strong>LoadImage = example.png</strong> (the crude pink-dress / yellow wing-hair stick figure that ships with ComfyUI). Positives deliberately turn that bad sketch into something incredible—swap in your own sketch anytime.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Video (LTX, ≥ ~10 s)</label><label for="__tabbed_4_2">Combined</label></div>
+<div class="tabbed-content">
 <div class="tabbed-block">
 <table>
 <thead>
@@ -1494,35 +1502,35 @@
 <tbody>
 <tr>
 <td><strong>ltx-i2v-lab-example</strong></td>
-<td>Image → video frames (~97 @ 24 fps; set start frame)</td>
-</tr>
-<tr>
-<td><strong>ltx-i2v-short-lab-example</strong></td>
-<td>Faster I2V: <strong>33</strong> frames @ 24 fps</td>
-</tr>
-<tr>
-<td><strong>ltx-i2v-quick-lab-example</strong></td>
-<td>Ultra-short I2V: <strong>17</strong> frames</td>
+<td>Image → video <strong>~10 s</strong> (241 @ 24 fps; default <strong>example.png</strong>)</td>
 </tr>
 <tr>
 <td><strong>ltx-t2v-lab-example</strong></td>
-<td>Text → video frames (~97 @ 24 fps)</td>
-</tr>
-<tr>
-<td><strong>ltx-t2v-short-lab-example</strong></td>
-<td>Faster T2V: <strong>33</strong> frames @ 24 fps</td>
-</tr>
-<tr>
-<td><strong>ltx-t2v-quick-lab-example</strong></td>
-<td>Ultra-short T2V: <strong>17</strong> frames</td>
+<td>Text → video <strong>~10 s</strong> (241 @ 24 fps)</td>
 </tr>
 <tr>
 <td><strong>ltx-t2v-portrait-lab-example</strong></td>
-<td>Vertical T2V <strong>512×768</strong>, short</td>
+<td>Vertical T2V <strong>512×768</strong>, <strong>~10 s</strong></td>
 </tr>
 <tr>
 <td><strong>ltx-t2v-landscape-lab-example</strong></td>
-<td>Wide T2V <strong>1024×576</strong>, short</td>
+<td>Wide T2V <strong>1024×576</strong>, <strong>~10 s</strong></td>
+</tr>
+<tr>
+<td><strong>ltx-i2v-30s-lab-example</strong> / <strong>ltx-i2v-orbit-30s-lab-example</strong></td>
+<td>I2V <strong>~30 s</strong> long-run demos</td>
+</tr>
+<tr>
+<td><strong>ltx-t2v-30s-lab-example</strong> / <strong>portrait-30s</strong> / <strong>landscape-30s</strong></td>
+<td>T2V <strong>~30 s</strong> long-run demos</td>
+</tr>
+<tr>
+<td><strong>ltx-i2v-60s-lab-example</strong></td>
+<td>I2V <strong>~60 s</strong> very heavy long-run demo</td>
+</tr>
+<tr>
+<td><strong>ltx-t2v-60s-lab-example</strong> / <strong>portrait-60s</strong> / <strong>landscape-60s</strong> / <strong>story-60s</strong></td>
+<td>T2V <strong>~60 s</strong> very heavy long-run demos</td>
 </tr>
 </tbody>
 </table>
@@ -1538,21 +1546,21 @@
 <tbody>
 <tr>
 <td><strong>flux-to-ltx-lab-example</strong></td>
-<td>Flux txt2img + handoff notes → load <strong>ltx-i2v-lab-example</strong> for video frames</td>
+<td>Flux txt2img + handoff → <strong>ltx-i2v-lab-example</strong> (~10 s)</td>
 </tr>
 <tr>
-<td><strong>flux-to-ltx-short-lab-example</strong></td>
-<td>Same handoff aimed at <strong>ltx-i2v-short-lab-example</strong> / quick I2V</td>
+<td><strong>flux-to-ltx-30s-lab-example</strong></td>
+<td>Flux handoff aimed at <strong>ltx-i2v-30s-lab-example</strong></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). LTX notes also explain how to turn frames into a playable video.</p>
+<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). LTX notes also explain MP4 output and long-run VRAM expectations.</p>
 <h3 id="prompting-these-models">Prompting these models<a class="headerlink" href="#prompting-these-models" title="Permanent link">&para;</a></h3>
 <p>Lab graphs ship research-backed <strong>Positive</strong> / <strong>Negative</strong> prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Flux.2 Klein (image)</label><label for="__tabbed_4_2">LTX-2.3 (video frames)</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Flux.2 Klein (image)</label><label for="__tabbed_5_2">LTX-2.3 (video frames)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
@@ -1566,8 +1574,8 @@
 <div class="tabbed-block">
 <ul>
 <li>Text encoder is <strong>Gemma 3 DualCLIP</strong> (type <strong><code>ltxv</code></strong>): describe <strong>actions over time</strong></li>
-<li><strong>I2V:</strong> briefly restate the still, then <strong>one</strong> camera move + light micro-motion; keep identity stable</li>
-<li><strong>T2V:</strong> chronological shot (establish → move → environment motion); one primary camera path on short clips</li>
+<li><strong>I2V:</strong> restate the still (lab default is Comfy <strong>example.png</strong>), then camera move + micro-motion; keep identity stable</li>
+<li><strong>T2V:</strong> chronological shot (establish → move → environment motion); for 30 s / 60 s graphs write a beginning → middle → end timeline</li>
 <li>Negatives should target <strong>temporal</strong> artifacts (morphing, flicker, jitter, stutter), not generic SD junk</li>
 <li>Light ambient-audio language is optional; lab does <strong>not</strong> save audio tracks</li>
 </ul>
@@ -1583,32 +1591,36 @@
 <thead>
 <tr>
 <th>Tier</th>
-<th>Frames</th>
+<th>Frames (<code>8n+1</code>)</th>
 <th>FPS</th>
 <th>≈ duration</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>full (<code>ltx-i2v</code> / <code>ltx-t2v</code> lab)</td>
-<td>97</td>
+<td>base (<code>ltx-*-lab-example</code> without duration suffix)</td>
+<td>241</td>
 <td>24</td>
-<td>~4.0 s</td>
+<td>~10.0 s</td>
 </tr>
 <tr>
-<td>short</td>
-<td>33</td>
+<td><strong><code>*-30s-*</code></strong> long-run demos</td>
+<td>721</td>
 <td>24</td>
-<td>~1.4 s</td>
+<td>~30.0 s</td>
 </tr>
 <tr>
-<td>quick</td>
-<td>17</td>
+<td><strong><code>*-60s-*</code></strong> very heavy demos</td>
+<td>1441</td>
 <td>24</td>
-<td>~0.7 s</td>
+<td>~60.0 s</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">30 s / 60 s graphs are heavy</p>
+<p>Longer latents need more VRAM and wall-clock time (often multi-minute). Prefer <strong>~10 s</strong> base graphs for smoke tests; keep headroom preflight green before queuing 30 s / 60 s demos.</p>
+</div>
 <p>Optional offline stitch of PNG frames only (if you need a host-side re-encode):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;ez_ltx_*_*.png&#39;</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
