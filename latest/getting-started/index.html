@@ -643,6 +643,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#prompting-these-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompting these models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#watch-the-video-ltx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch the video (LTX)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1005,6 +1027,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#prompting-these-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompting these models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#watch-the-video-ltx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch the video (LTX)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1070,13 +1114,15 @@
 <li>Prerequisites checklist</li>
 <li>Setup, doctor, download, start, stop</li>
 <li>Optional: build the Docker image locally instead of pulling GHCR</li>
-<li>Example workflows and optional deep-dives</li>
+<li>Example workflows, prompting tips, and watching LTX MP4 output</li>
+<li>Optional deep-dives</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
 <li>A first successful open of ComfyUI at port <strong>8188</strong></li>
 <li>Safe model downloads that leave bandwidth for SSH</li>
 <li>Choosing prebuilt GHCR pull (default) or a local Dockerfile build</li>
+<li>Correct Flux / LTX prompting and easy LTX video preview (VHS MP4)</li>
 </ul>
 <hr />
 <h2 id="you-will-end-here">You will end here<a class="headerlink" href="#you-will-end-here" title="Permanent link">&para;</a></h2>
@@ -1503,14 +1549,81 @@
 </div>
 </div>
 </div>
+<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). LTX notes also explain how to turn frames into a playable video.</p>
+<h3 id="prompting-these-models">Prompting these models<a class="headerlink" href="#prompting-these-models" title="Permanent link">&para;</a></h3>
+<p>Lab graphs ship research-backed <strong>Positive</strong> / <strong>Negative</strong> prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Flux.2 Klein (image)</label><label for="__tabbed_4_2">LTX-2.3 (video frames)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ul>
+<li>Text encoder is <strong>Qwen3</strong> (CLIP type <strong><code>flux2</code></strong>): write <strong>natural-language sentences</strong>, subject first, then place, materials, lighting, camera</li>
+<li>Ideal length is roughly <strong>40–120 words</strong> for hero shots; smoke graphs stay shorter</li>
+<li>Highest impact: materials/textures, light source + direction, lens language, foreground/midground/background</li>
+<li>Avoid: comma tag lists, <code>(weight:1.4)</code> emphasis (not applied), “masterpiece / best quality” spam</li>
+<li>Official FLUX.2 style: <strong>describe what you want</strong>, not long “no X” lists. Lab negatives are residual lists for experimenters; graphs ship at <strong>CFG 1.0</strong>, so quality is almost entirely the Positive prompt</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Text encoder is <strong>Gemma 3 DualCLIP</strong> (type <strong><code>ltxv</code></strong>): describe <strong>actions over time</strong></li>
+<li><strong>I2V:</strong> briefly restate the still, then <strong>one</strong> camera move + light micro-motion; keep identity stable</li>
+<li><strong>T2V:</strong> chronological shot (establish → move → environment motion); one primary camera path on short clips</li>
+<li>Negatives should target <strong>temporal</strong> artifacts (morphing, flicker, jitter, stutter), not generic SD junk</li>
+<li>Light ambient-audio language is optional; lab does <strong>not</strong> save audio tracks</li>
+</ul>
+</div>
+</div>
+</div>
+<h3 id="watch-the-video-ltx">Watch the video (LTX)<a class="headerlink" href="#watch-the-video-ltx" title="Permanent link">&para;</a></h3>
+<div class="admonition tip">
+<p class="admonition-title">Primary output is MP4</p>
+<p>Seeded <strong>ltx-</strong><em> graphs install </em><em>ComfyUI-VideoHelperSuite</em><em> and wire </em><em><code>VHS_VideoCombine</code></em><em> after video <code>VAEDecode</code>. After </em><em>Queue</em><em>, open the </em><em>Save video (MP4)</em><em> node for an </em><em>inline preview</em><em>, and find <code>ez_ltx_*_video_*.mp4</code> under Comfy’s </em><em>output/</em>* folder (on the <code>ez-comfy-state</code> volume). PNG frames are still written via <code>SaveImage</code> for inspection.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Frames</th>
+<th>FPS</th>
+<th>≈ duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>full (<code>ltx-i2v</code> / <code>ltx-t2v</code> lab)</td>
+<td>97</td>
+<td>24</td>
+<td>~4.0 s</td>
+</tr>
+<tr>
+<td>short</td>
+<td>33</td>
+<td>24</td>
+<td>~1.4 s</td>
+</tr>
+<tr>
+<td>quick</td>
+<td>17</td>
+<td>24</td>
+<td>~0.7 s</td>
+</tr>
+</tbody>
+</table>
+<p>Optional offline stitch of PNG frames only (if you need a host-side re-encode):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;ez_ltx_*_*.png&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
+</code></pre></div>
+<p>If <strong><code>VHS_VideoCombine</code> is missing</strong>, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <details class="abstract">
 <summary>Lab workflow details</summary>
 <ul>
 <li>Name pattern: host files <code>workflows/*-lab-example.json</code> (legacy <code>lab-*</code> names removed)</li>
+<li>Every graph has a ComfyUI <strong>Note</strong> node + <code>extra.lab_note</code> with the same operator guidance</li>
 <li>Flux CLIP loader type is <strong><code>flux2</code></strong> with <code>qwen_3_8b_fp4mixed</code> + <code>EmptyFlux2LatentImage</code> (simplified <code>KSampler</code>, not the full official advanced sampler subgraph)</li>
-<li>LTX graphs use <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>) and save <strong>frames</strong> via <code>SaveImage</code> (no VideoHelperSuite / VHS required)</li>
-<li><code>download-models</code> also places <code>LTX23_audio_vae_bf16</code> for advanced AV experiments; <strong>lab examples do not wire audio</strong></li>
-<li>Lab graphs use <strong>core</strong> loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples</li>
+<li>LTX graphs use <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>), save <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (h264, 24 fps), and still save <strong>frames</strong> via <code>SaveImage</code></li>
+<li>Stack installs <strong>ComfyUI-VideoHelperSuite</strong> (required) plus runtime <strong><code>ffmpeg</code></strong> (imageio-ffmpeg pip is fallback)</li>
+<li>LTX-2.3 is <strong>joint AV</strong>: lab graphs load <code>LTX23_audio_vae_bf16</code>, build empty audio latents (<code>LTXVEmptyLatentAudio</code>), <strong>concat</strong> with video latents before <code>KSampler</code>, then <strong>separate</strong> for video <code>VAEDecode</code>. Audio is sampled as empty noise (not saved into VHS); omitting empty audio causes <code>reshape … [1, 0, 32, -1]</code></li>
+<li>Lab Flux graphs use <strong>core</strong> loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples</li>
 <li>Runtime image includes <strong><code>gcc</code>/<code>g++</code></strong> and <strong><code>python3-dev</code></strong> so PyTorch 2.13 Triton can JIT <code>cuda_utils</code> on first CLIP encode (fallback: <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code>)</li>
 <li><strong>Not Z-Image.</strong> Community Z-Image templates need different weights (<code>ae</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*</code>)</li>
 </ul>
@@ -1521,7 +1634,7 @@
 <p class="admonition-title">Golden rule</p>
 <p><strong>Never reboot with the heavy ComfyUI stack still running.</strong> Always stop first. See <a href="../reboot-safety/">Reboot Safety</a>.</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>./scripts/manage.sh<span class="w"> </span>stop
 </code></pre></div>
 <hr />
 <h2 id="optional-deep-dives">Optional deep-dives<a class="headerlink" href="#optional-deep-dives" title="Permanent link">&para;</a></h2>
