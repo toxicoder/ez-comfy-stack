@@ -63,6 +63,17 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "dockerignore allowlists pythonpath for runtime COPY" {
+  local di="${REPO_ROOT}/docker/.dockerignore"
+  [[ -f ${di} ]]
+  # Whitelist-only context: without these lines, COPY pythonpath/ fails at build
+  run grep -E '^!pythonpath/' "${di}"
+  [ "$status" -eq 0 ]
+  run grep -E '^!pythonpath/\*\*' "${di}"
+  [ "$status" -eq 0 ]
+  [[ -f ${REPO_ROOT}/docker/pythonpath/sitecustomize.py ]]
+}
+
 @test "Dockerfile layer order keeps multi-GB prebuild cache stable" {
   local df="${REPO_ROOT}/docker/Dockerfile"
   # BuildKit syntax for COPY --chmod and cache mounts
