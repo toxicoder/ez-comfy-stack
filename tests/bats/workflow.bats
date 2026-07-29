@@ -174,6 +174,15 @@ assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==16 for n in d['
     [ "${status}" -eq 0 ]
     run grep -F 'LTX23_video_vae_bf16.safetensors' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
+    # LTX-2.3 is joint AV — empty audio latents + concat are required for KSampler
+    run grep -F 'LTX23_audio_vae_bf16.safetensors' "${dir}/${wf}"
+    [ "${status}" -eq 0 ]
+    run grep -F 'LTXVEmptyLatentAudio' "${dir}/${wf}"
+    [ "${status}" -eq 0 ]
+    run grep -F 'LTXVConcatAVLatent' "${dir}/${wf}"
+    [ "${status}" -eq 0 ]
+    run grep -F 'LTXVSeparateAVLatent' "${dir}/${wf}"
+    [ "${status}" -eq 0 ]
     run grep -F 'ltx-2.3_text_projection_bf16.safetensors' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
     run grep -F 'gemma_3_12B_it_fp4_mixed.safetensors' "${dir}/${wf}"
@@ -186,7 +195,28 @@ assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==16 for n in d['
     # Projection-only CLIPLoader is the broken 768-vs-4096 config
     run python3 -c "import json; d=json.load(open('${dir}/${wf}'));
 assert not any(n.get('type')=='CLIPLoader' for n in d['nodes']), 'CLIPLoader must not remain on LTX graphs'
-assert any(n.get('type')=='DualCLIPLoader' and n.get('widgets_values',[''])[0]=='gemma_3_12B_it_fp4_mixed.safetensors' for n in d['nodes'])"
+assert any(n.get('type')=='DualCLIPLoader' and n.get('widgets_values',[''])[0]=='gemma_3_12B_it_fp4_mixed.safetensors' for n in d['nodes'])
+assert any(n.get('type')=='VAELoader' and n.get('widgets_values',[''])[0]=='LTX23_audio_vae_bf16.safetensors' for n in d['nodes'])
+# empty audio frames_number + fps must match video length / LTXVConditioning
+vlen=None
+for n in d['nodes']:
+    if n.get('type') in ('EmptyLTXVLatentVideo','LTXVImgToVideo'):
+        vlen=int(n['widgets_values'][2]); break
+assert vlen is not None
+fps=next(float(n['widgets_values'][0]) for n in d['nodes'] if n.get('type')=='LTXVConditioning')
+ea=next(n for n in d['nodes'] if n.get('type')=='LTXVEmptyLatentAudio')
+assert int(ea['widgets_values'][0])==vlen, (ea['widgets_values'], vlen)
+assert float(ea['widgets_values'][1])==fps
+# KSampler latent_image must come from ConcatAV; VAEDecode samples from SeparateAV
+by={n['id']:n for n in d['nodes']}
+ks=next(n for n in d['nodes'] if n.get('type')=='KSampler')
+lat_link=next(i['link'] for i in ks['inputs'] if i.get('name')=='latent_image')
+src=by[next(L[1] for L in d['links'] if L[0]==lat_link)]
+assert src.get('type')=='LTXVConcatAVLatent'
+vd=next(n for n in d['nodes'] if n.get('type')=='VAEDecode')
+sl=next(i['link'] for i in vd['inputs'] if i.get('name')=='samples')
+src=by[next(L[1] for L in d['links'] if L[0]==sl)]
+assert src.get('type')=='LTXVSeparateAVLatent'"
     [ "${status}" -eq 0 ]
     run grep -F 'KSampler' "${dir}/${wf}"
     [ "${status}" -eq 0 ]

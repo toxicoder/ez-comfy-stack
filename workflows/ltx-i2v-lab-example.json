@@ -1,8 +1,8 @@
 {
   "id": "ltx-i2v-lab-example",
-  "revision": 3,
-  "last_node_id": 12,
-  "last_link_id": 18,
+  "revision": 4,
+  "last_node_id": 16,
+  "last_link_id": 24,
   "nodes": [
     {
       "id": 1,
@@ -121,7 +121,7 @@
         314
       ],
       "flags": {},
-      "order": 3,
+      "order": 4,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -161,7 +161,7 @@
         140
       ],
       "flags": {},
-      "order": 4,
+      "order": 5,
       "mode": 0,
       "inputs": [
         {
@@ -200,7 +200,7 @@
         100
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -239,7 +239,7 @@
         200
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -284,9 +284,9 @@
           "name": "latent",
           "type": "LATENT",
           "links": [
-            10
+            20
           ],
-          "slot_index": 0
+          "slot_index": 2
         }
       ],
       "title": "LTX Img\u2192Video condition",
@@ -312,7 +312,7 @@
         82
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -364,7 +364,7 @@
         262
       ],
       "flags": {},
-      "order": 8,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -385,7 +385,7 @@
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 10
+          "link": 22
         }
       ],
       "outputs": [
@@ -393,7 +393,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            13
+            23
           ],
           "slot_index": 0
         }
@@ -416,7 +416,7 @@
       "id": 10,
       "type": "VAEDecode",
       "pos": [
-        1880,
+        2200,
         80
       ],
       "size": [
@@ -424,13 +424,13 @@
         46
       ],
       "flags": {},
-      "order": 9,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 13
+          "link": 24
         },
         {
           "name": "vae",
@@ -458,7 +458,7 @@
       "id": 12,
       "type": "SaveImage",
       "pos": [
-        1880,
+        2200,
         176
       ],
       "size": [
@@ -466,7 +466,7 @@
         270
       ],
       "flags": {},
-      "order": 11,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -483,6 +483,165 @@
         "ez_ltx_i2v_frames"
       ],
       "title": "Save frames"
+    },
+    {
+      "id": 13,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        490
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "LTX23_audio_vae_bf16.safetensors"
+      ],
+      "title": "LTX audio VAE"
+    },
+    {
+      "id": 14,
+      "type": "LTXVEmptyLatentAudio",
+      "pos": [
+        1120,
+        460
+      ],
+      "size": [
+        300,
+        130
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Latent",
+          "type": "LATENT",
+          "links": [
+            21
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVEmptyLatentAudio"
+      },
+      "widgets_values": [
+        97,
+        24.0,
+        1
+      ],
+      "title": "Empty LTX audio latent"
+    },
+    {
+      "id": 15,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        1480,
+        400
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 20
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            22
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 16,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        1880,
+        80
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            24
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Separate AV latents"
     }
   ],
   "links": [
@@ -551,14 +710,6 @@
       "CONDITIONING"
     ],
     [
-      10,
-      7,
-      2,
-      9,
-      3,
-      "LATENT"
-    ],
-    [
       11,
       8,
       0,
@@ -573,14 +724,6 @@
       9,
       2,
       "CONDITIONING"
-    ],
-    [
-      13,
-      9,
-      0,
-      10,
-      0,
-      "LATENT"
     ],
     [
       16,
@@ -605,6 +748,54 @@
       12,
       0,
       "IMAGE"
+    ],
+    [
+      19,
+      13,
+      0,
+      14,
+      0,
+      "VAE"
+    ],
+    [
+      20,
+      7,
+      2,
+      15,
+      0,
+      "LATENT"
+    ],
+    [
+      21,
+      14,
+      0,
+      15,
+      1,
+      "LATENT"
+    ],
+    [
+      22,
+      15,
+      0,
+      9,
+      3,
+      "LATENT"
+    ],
+    [
+      23,
+      9,
+      0,
+      16,
+      0,
+      "LATENT"
+    ],
+    [
+      24,
+      16,
+      0,
+      10,
+      0,
+      "LATENT"
     ]
   ],
   "groups": [],
@@ -612,7 +803,8 @@
   "extra": {
     "lab_profile": "ltx-i2v",
     "lab_ltx_tier": "balanced",
-    "lab_note": "Requires ComfyUI LTXV core nodes. Saves video frames via SaveImage. DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv)."
+    "lab_note": "DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv). LTX-2.3 is joint AV: LTXVEmptyLatentAudio + LTXVConcatAVLatent required for KSampler; LTXVSeparateAVLatent then video VAEDecode + SaveImage (audio latent unused).",
+    "lab_ltx_av": true
   },
   "version": 0.4
 }
