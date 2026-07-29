@@ -1343,7 +1343,11 @@ main<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <li><code>development</code> → <a href="https://toxicoder.github.io/ez-comfy-stack/development/">development</a></li>
 <li>Workflow: <code>.github/workflows/deploy-docs.yml</code> (push to <code>main</code>/<code>development</code> with docs paths, or <code>workflow_dispatch</code>)</li>
 <li>Prefer <strong>relative</strong> links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix</li>
-<li>Branch-stamped Edit links: <code>docs/hooks.py</code> + <code>EZ_DOCS_VERSION</code> / <code>MIKE_DOCS_VERSION</code></li>
+<li>Branch-stamped at build time via <code>docs/hooks.py</code> + <code>EZ_DOCS_VERSION</code> / <code>MIKE_DOCS_VERSION</code> (optional <code>EZ_DOCS_GIT_REF</code> override):</li>
+<li>Edit links (<code>edit/&lt;ref&gt;/docs/</code>)</li>
+<li>This-repo GitHub <code>blob</code> / <code>tree</code> URLs</li>
+<li>Operator Setup git ref: write <code>development</code> in source (e.g. <code>git clone -b development</code>); hooks stamp <code>main</code> or <code>development</code> to match the published alias</li>
+<li>Operator docs that mean “the branch for <strong>these</strong> docs” must use <code>development</code>, not a hardcoded long-lived branch name. Contributor workflow text (“branch from <code>development</code>”) stays literal.</li>
 </ul>
 
 
