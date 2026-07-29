@@ -982,7 +982,7 @@
 </table>
 <hr />
 <h2 id="combined-pipeline-flux-ltx">Combined pipeline (Flux → LTX)<a class="headerlink" href="#combined-pipeline-flux-ltx" title="Permanent link">&para;</a></h2>
-<p>Text → image → <strong>video frames</strong> in one ComfyUI stack. Lab graphs use <code>SaveImage</code> for frames; the LTX <strong>audio VAE</strong> is downloaded for advanced AV work but is not wired into the seeded examples. LTX text conditioning uses <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>) — not the projection file alone.</p>
+<p>Text → image → <strong>video frames</strong> in one ComfyUI stack. Lab graphs use <code>SaveImage</code> for frames. LTX-2.3 is a <strong>joint audio/video</strong> transformer: seeded LTX graphs load the <strong>audio VAE</strong>, create matching empty audio latents, and concat them with video latents before <code>KSampler</code> (audio is not saved). LTX text conditioning uses <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>) — not the projection file alone.</p>
 <pre class="mermaid"><code>flowchart LR
   Prompt["Text prompt"] --&gt; Flux["Flux T2I&lt;br/&gt;fast · Klein 9B NVFP4"]
   Flux --&gt; Image["Still image"]

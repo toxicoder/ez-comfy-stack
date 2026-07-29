@@ -1273,6 +1273,11 @@
 <td>Lab graphs need <strong>DualCLIPLoader</strong>: <code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>. Run <code>./scripts/manage.sh download-models</code>, re-open <strong>ltx-*-lab-example</strong> from <code>workflows/</code></td>
 </tr>
 <tr>
+<td>KSampler LTX: <code>cannot reshape tensor of 0 elements into shape [1, 0, 32, -1]</code> / <code>freqs_cis_matrix</code> / <code>av_model</code> audio RoPE</td>
+<td>LTX-2.3 is a <strong>joint AV</strong> transformer; video-only latents leave audio length T=0</td>
+<td>Re-open a current <strong>ltx-*-lab-example</strong> graph (has <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> + <code>LTXVSeparateAVLatent</code> + <code>LTX23_audio_vae_bf16</code>). Do not feed <code>EmptyLTXVLatentVideo</code> / <code>LTXVImgToVideo</code> straight into <code>KSampler</code>. Confirm <code>ls $MODELS_DIR/comfy/vae/LTX23_audio_vae_bf16.safetensors</code></td>
+</tr>
+<tr>
 <td>Missing <code>gemma_3_12B_it_fp4_mixed</code> in LTX graphs</td>
 <td>Gemma companion not downloaded</td>
 <td><code>./scripts/utilities/download-ltx.sh run --tier balanced</code> (auto-includes gemma) or <code>download-models</code>; <code>ls $MODELS_DIR/comfy/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors</code></td>

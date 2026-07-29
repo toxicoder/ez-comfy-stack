@@ -1269,7 +1269,7 @@
 <tr>
 <td><code>LTX23_audio_vae_bf16.safetensors</code></td>
 <td><code>vae/</code></td>
-<td>LTX audio VAE (downloaded; <strong>not wired</strong> in lab graphs)</td>
+<td>LTX audio VAE (required by lab LTX graphs for joint AV empty audio latents)</td>
 </tr>
 </tbody>
 </table>
@@ -1345,7 +1345,7 @@
 </tr>
 </tbody>
 </table>
-<p>Lab video graphs write <strong>frames</strong> via <code>SaveImage</code> only (no VHS). Audio VAE remains on disk for operators who build joint AV graphs themselves.</p>
+<p>Lab video graphs write <strong>frames</strong> via <code>SaveImage</code> only (no VHS). They still <strong>must</strong> wire the audio VAE + <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> because LTX-2.3 is a joint AV model; audio decode/save is optional and not included in lab examples.</p>
 <h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
 <p>FLUX and some LTX assets may require accepting the license on Hugging Face and a token:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># .env</span>
