@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1379,6 +1379,7 @@
 <li><code>main</code> → <a href="https://toxicoder.github.io/ez-comfy-stack/latest/">latest</a></li>
 <li><code>development</code> → <a href="https://toxicoder.github.io/ez-comfy-stack/development/">development</a></li>
 <li>Workflow: <code>.github/workflows/deploy-docs.yml</code> (push to <code>main</code>/<code>development</code> with docs paths, or <code>workflow_dispatch</code>)</li>
+<li>Stack is <strong>MkDocs 1.x + Material</strong> (<code>docs/requirements.txt</code>). Do <strong>not</strong> upgrade to MkDocs 2.x (incompatible with Material plugins/theme; no migration path). CI and <code>make docs</code> set <code>NO_MKDOCS_2_WARNING=1</code> to suppress Material’s advisory. Revisit only if migrating tooling (e.g. Zensical evaluation).</li>
 <li>Prefer <strong>relative</strong> links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix</li>
 <li>Branch-stamped at build time via <code>docs/hooks.py</code> + <code>EZ_DOCS_VERSION</code> / <code>MIKE_DOCS_VERSION</code> (optional <code>EZ_DOCS_GIT_REF</code> override):</li>
 <li>Edit links (<code>edit/&lt;ref&gt;/docs/</code>)</li>
@@ -1507,7 +1508,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
