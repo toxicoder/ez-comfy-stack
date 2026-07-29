@@ -12,11 +12,13 @@ tags: [conventions, contributing, safety, shell, google-style]
 - Repo layout and ownership
 - Shell style (Google Shell Style Guide + project deviations)
 - Docker, testing, coverage gate, and branching rules
+- Docs publish and **human-readable formatting** patterns
 
 **What this enables**
 
 - Consistent, reviewable contributions without the full lab Bazel/K8s surface
 - Shell that matches industry practice while staying safe on remote DGX Spark hosts
+- MkDocs pages operators can **scan** (not only search)
 
 ## Principles
 
@@ -165,11 +167,12 @@ flowchart LR
 - One compose service for the unified stack  
 - Multi-stage image: **devel** builder + **runtime** final (no secrets/models)  
 - **Layer cache contract** (do not regress):
-  - Builder: `COPY` only `install-comfy.sh` before prebuild `RUN`s
-  - Builder prebuild is **phased** (`--phase venv|torch|comfy|nodes|finalize`) so torch survives node-only edits
-  - Runtime: `COPY --from=builder` prebuilt **before** entrypoint/install/patch
+  - Builder: `COPY` only the `install-comfy/` **phase modules** each prebuild `RUN` needs (not the full orchestrator before torch)
+  - Builder prebuild is **phased** (`venv+torch` → `comfy` → `nodes+finalize+package`) so torch survives node-only edits
+  - Runtime: `COPY --from=builder /opt/parts/venv` then `/opt/parts/app` **before** entrypoint/install/patch
+  - Validated pins: `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see models-and-cache.md)
   - BuildKit `# syntax=docker/dockerfile:1`, `COPY --chmod`, `RUN --mount=type=cache,target=/root/.cache/pip`
-  - Compose bind-mounts ops scripts for zero-rebuild iteration
+  - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
 - GHCR channel by long-lived branch: publish tags `flux-to-ltx` (`main`) and `flux-to-ltx-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel)  
 - Scripts as real files (not inline ConfigMap YAML)  
 - Host model cache + named volume for Comfy state  
@@ -240,3 +243,33 @@ flowchart LR
   - This-repo GitHub `blob` / `tree` URLs
   - Operator Setup git ref: write `__DOCS_GIT_REF__` in source (e.g. `git clone -b __DOCS_GIT_REF__`); hooks stamp `main` or `development` to match the published alias
 - Operator docs that mean “the branch for **these** docs” must use `__DOCS_GIT_REF__`, not a hardcoded long-lived branch name. Contributor workflow text (“branch from `development`”) stays literal.
+
+### Docs formatting (human readability)
+
+Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory and edge cases later.
+
+**Required page chrome** (every `docs/*.md` page):
+
+1. YAML frontmatter: `title`, `description`, `tags`
+2. **What's on this page** (bullet list)
+3. **What this enables** (bullet list)
+
+**Rich formatting patterns** (MkDocs Material — see `mkdocs.yml`):
+
+| Pattern | Use for |
+| --- | --- |
+| Numbered steps | Operator sequences (`setup` → `start` → `stop`) |
+| Tables | Defaults, symptom → action, file basenames |
+| `!!! tip` / `!!! warning` / `!!! danger` / `!!! success` | Side notes that must not break narrative flow |
+| `??? …` collapsible | Advanced, optional, “how it works”, long diagrams |
+| `=== "…"` content tabs | Mutually exclusive paths (interactive vs non-interactive; image vs video) |
+| Task lists `- [ ]` | Prerequisites the operator can check off |
+| `++ctrl+c++` (`pymdownx.keys`) | Keyboard shortcuts |
+| Mermaid | Architecture / decision trees — **after** actionable commands when the reader’s job is to run something |
+| Bold first phrase in list items | Scan anchors |
+
+**Getting Started** is the primary operator path: keep the happy path short; park image-layer, cold-start, and lab-internals content in collapsible blocks.
+
+```bash
+make docs   # strict build must stay green
+```

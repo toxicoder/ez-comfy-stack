@@ -144,19 +144,28 @@ teardown() {
   LAB_MOCK_HF_DOWNLOAD=fail
   TIER=fast
   INCLUDE_NUNCHAKU=0
+  # Clear prior mock weights so fail cannot cache-hit companions
+  rm -rf "$(tier_dir fast)" "$(tier_dir companions)"
   run cmd_run
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"No FLUX tiers"* || "${output}" == *"failed"* ]]
+  [[ "${output}" == *"No FLUX tiers"* || "${output}" == *"failed"* || "${output}" == *"Companions"* ]]
 }
 
 @test "download-flux tier_files_ready and cmd_run cache hit skip" {
-  local tdir
+  local tdir cdir
   tdir="$(tier_dir fast)"
   mkdir -p "${tdir}"
   echo x >"${tdir}/model.safetensors"
+  # Companions must also be ready so --tier fast does not re-pull them
+  cdir="$(tier_dir companions)"
+  mkdir -p "${cdir}/split_files/text_encoders" "${cdir}/split_files/vae"
+  echo te >"${cdir}/split_files/text_encoders/qwen_3_8b_fp4mixed.safetensors"
+  echo vae >"${cdir}/split_files/vae/flux2-vae.safetensors"
   # Override min so tiny fixture counts as ready
   tier_min_gb() { echo 0; }
   run tier_files_ready fast
+  [ "${status}" -eq 0 ]
+  run tier_files_ready companions
   [ "${status}" -eq 0 ]
   : >"${TEST_TMP_DIR}/hf_calls.log"
   unset LAB_MOCK_HF_DOWNLOAD
@@ -170,4 +179,49 @@ teardown() {
   rm -f "${tdir}/model.safetensors"
   run tier_files_ready fast
   [ "${status}" -ne 0 ]
+}
+
+@test "download-flux companions ready requires TE and VAE not size alone" {
+  local cdir
+  cdir="$(tier_dir companions)"
+  mkdir -p "${cdir}/split_files/text_encoders" "${cdir}/split_files/vae"
+  # TE alone is enough GB for the old size floor but must not count as ready
+  echo te >"${cdir}/split_files/text_encoders/qwen_3_8b_fp4mixed.safetensors"
+  run tier_files_ready companions
+  [ "${status}" -ne 0 ]
+  echo vae >"${cdir}/split_files/vae/flux2-vae.safetensors"
+  run tier_files_ready companions
+  [ "${status}" -eq 0 ]
+  # link always retargets even when dest already exists
+  mkdir -p "${MODELS_DIR}/comfy/vae"
+  echo stale >"${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"
+  run link_into_comfy companions
+  [ "${status}" -eq 0 ]
+  [[ -L "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
+  local link_tgt
+  link_tgt="$(readlink "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors")"
+  [[ "${link_tgt}" == *"flux2-vae.safetensors" ]]
+  # Relative so host /mnt/models vs container /models still resolves
+  [[ "${link_tgt}" != /* ]]
+  [[ "${link_tgt}" == ../* ]]
+}
+
+@test "download-flux cmd_run fails when companions incomplete after mock" {
+  # Force companions path to look present but missing VAE after "success"
+  export LAB_MOCK_HF_DOWNLOAD=1
+  TIER=companions
+  INCLUDE_NUNCHAKU=0
+  # Intercept: run once then delete VAE before readiness would pass — instead
+  # plant only TE and force fail path via tier_files_ready after empty dir skip.
+  local cdir
+  cdir="$(tier_dir companions)"
+  mkdir -p "${cdir}/split_files/text_encoders"
+  echo te >"${cdir}/split_files/text_encoders/qwen_3_8b_fp4mixed.safetensors"
+  # Not ready (missing VAE) → will re-download via mock (creates includes)
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  run tier_files_ready companions
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
 }

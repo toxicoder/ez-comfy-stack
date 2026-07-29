@@ -69,6 +69,58 @@ teardown() {
   [[ "${output}" == *"all expected"* || "${output}" == *"lab model ok"* ]]
 }
 
+@test "common: ln_sfn_relative creates resolvable relative symlink" {
+  local base="${TEST_TMP_DIR}/ln_rel"
+  local target="${base}/tier/split_files/vae/flux2-vae.safetensors"
+  local link="${base}/comfy/vae/flux2-vae.safetensors"
+  mkdir -p "$(dirname "${target}")"
+  echo weight >"${target}"
+  run ln_sfn_relative "${target}" "${link}"
+  [ "${status}" -eq 0 ]
+  [[ -L ${link} ]]
+  [[ -e ${link} ]]
+  local tgt
+  tgt="$(readlink "${link}")"
+  [[ ${tgt} != /* ]]
+  [[ ${tgt} == *"flux2-vae.safetensors"* ]]
+  [[ "$(cat "${link}")" == "weight" ]]
+}
+
+@test "common: check_lab_models_ready rejects broken symlinks" {
+  local root="${TEST_TMP_DIR}/lab_broken"
+  while IFS= read -r rel; do
+    [[ -z ${rel} ]] && continue
+    mkdir -p "${root}/comfy/$(dirname "${rel}")"
+    if [[ ${rel} == "vae/flux2-vae.safetensors" ]]; then
+      ln -sfn "/nonexistent/path/flux2-vae.safetensors" "${root}/comfy/${rel}"
+    else
+      echo ok >"${root}/comfy/${rel}"
+    fi
+  done < <(lab_expected_model_relpaths)
+  run check_lab_models_ready "${root}"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"BROKEN"* || "${output}" == *"MISSING"* || "${output}" == *"Missing"* ]]
+}
+
+@test "common: check_lab_models_ready warns on absolute symlinks" {
+  local root="${TEST_TMP_DIR}/lab_abs"
+  local real="${root}/real/flux2-vae.safetensors"
+  mkdir -p "$(dirname "${real}")"
+  echo vae >"${real}"
+  while IFS= read -r rel; do
+    [[ -z ${rel} ]] && continue
+    mkdir -p "${root}/comfy/$(dirname "${rel}")"
+    if [[ ${rel} == "vae/flux2-vae.safetensors" ]]; then
+      ln -sfn "${real}" "${root}/comfy/${rel}"
+    else
+      echo ok >"${root}/comfy/${rel}"
+    fi
+  done < <(lab_expected_model_relpaths)
+  run check_lab_models_ready "${root}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"absolute symlink"* || "${output}" == *"container-fragile"* ]]
+}
+
 @test "shellcheck clean on scripts/lib/common.sh (SC2317/SC2015 regression)" {
   if ! command -v shellcheck >/dev/null 2>&1; then
     skip "shellcheck not installed"

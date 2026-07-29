@@ -147,9 +147,11 @@ tier_size_gb() {
 }
 
 #######################################
-# True if tier local-dir already meets min size (skip re-download).
+# True if tier local-dir already has required weights (skip re-download).
+# Selective tiers (non-empty tier_include_patterns) require every include path.
+# Full-repo tiers use size floor + at least one weight file.
 # Globals:
-#   MODELS_DIR
+#   MODELS_DIR, FLUX_TE_VARIANT
 # Arguments:
 #   $1  Tier name
 # Outputs:
@@ -159,13 +161,26 @@ tier_size_gb() {
 #######################################
 tier_files_ready() {
   local tier="${1}"
-  local dir size min
+  local dir size min pat f
+  local has_include=0 has_weight=0
   dir="$(tier_dir "${tier}")"
   if [[ ! -d ${dir} ]]; then
     return 1
   fi
-  # Require at least one weight-like file so empty dirs with junk don't skip
-  local has_weight=0
+  # Selective download: every --include path must exist and be non-empty
+  # (TE alone is ~6.8 GB; size floor would false-ready without flux2-vae).
+  while IFS= read -r pat; do
+    [[ -z ${pat} ]] && continue
+    has_include=1
+    f="${dir}/${pat}"
+    if [[ ! -f ${f} || ! -s ${f} ]]; then
+      return 1
+    fi
+  done < <(tier_include_patterns "${tier}")
+  if [[ ${has_include} -eq 1 ]]; then
+    return 0
+  fi
+  # Full-repo tiers: require at least one weight + min size
   while IFS= read -r _; do
     has_weight=1
     break
@@ -284,7 +299,7 @@ parse_args() {
 #######################################
 link_into_comfy() {
   local tier="${1}"
-  local src base dest_sub
+  local src base dest_sub dest
   local comfy="${MODELS_DIR}/comfy"
   src=$(tier_dir "$tier")
   mkdir -p "${comfy}/diffusion_models" "${comfy}/text_encoders" "${comfy}/vae"
@@ -292,13 +307,25 @@ link_into_comfy() {
   while read -r f; do
     base="$(basename "${f}")"
     dest_sub="diffusion_models"
-    case "${base}" in
-      *vae*) dest_sub="vae" ;;
-      *qwen* | *clip* | *t5* | *text*) dest_sub="text_encoders" ;;
+    # Prefer split_files layout; avoid brittle *te*-style globs that hit ".safetensors"
+    case "${f#"${src}"/}" in
+      split_files/vae/* | */vae/* | *vae*) dest_sub="vae" ;;
+      split_files/text_encoders/* | */text_encoders/* | *qwen* | *clip* | *t5* | *text_encoder*)
+        dest_sub="text_encoders"
+        ;;
+      *)
+        case "${base}" in
+          *vae*) dest_sub="vae" ;;
+          *qwen* | *clip* | *t5* | *text_encoder*) dest_sub="text_encoders" ;;
+        esac
+        ;;
     esac
-    if [[ ! -e "${comfy}/${dest_sub}/${base}" ]]; then
-      ln -sfn "${f}" "${comfy}/${dest_sub}/${base}" || true
+    dest="${comfy}/${dest_sub}/${base}"
+    # Relative targets so bind-mount path (/mnt/models vs /models) does not break
+    if ln_sfn_relative "${f}" "${dest}"; then
       log "linked ${base} → comfy/${dest_sub}/"
+    else
+      warn "failed to link ${base} → comfy/${dest_sub}/"
     fi
   done < <(find "${src}" -type f \( -name '*.safetensors' -o -name '*.sft' \) 2>/dev/null)
 }
@@ -365,8 +392,9 @@ cmd_run() {
   clear_stale_hf_locks "${MODELS_DIR}"
   mkdir -p "${MODELS_DIR}/comfy/diffusion_models" \
     "${MODELS_DIR}/comfy/text_encoders" "${MODELS_DIR}/comfy/vae"
-  local tier repo ok=0 fail=0 dir
+  local tier repo ok=0 fail=0 dir need_companions=0
   for tier in $(tiers_to_process); do
+    [[ ${tier} == "companions" ]] && need_companions=1
     repo=$(tier_repo "$tier")
     if [[ -z ${repo} ]]; then
       err "Unknown tier: $tier"
@@ -394,6 +422,19 @@ cmd_run() {
       HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" || dl_rc=$?
     fi
     if [[ ${dl_rc} -eq 0 ]]; then
+      # Selective tiers only: size-based full-repo floors are not enforced mid-run
+      # (mock/partial sizes), but include paths must exist after a "success" pull.
+      local has_sel=0 sel_pat
+      while IFS= read -r sel_pat; do
+        [[ -z ${sel_pat} ]] && continue
+        has_sel=1
+        break
+      done < <(tier_include_patterns "${tier}")
+      if [[ ${has_sel} -eq 1 ]] && ! tier_files_ready "${tier}"; then
+        warn "Download reported ok but required files missing for ${tier} under ${dir}"
+        fail=$((fail + 1))
+        continue
+      fi
       link_into_comfy "$tier"
       ok=$((ok + 1))
     else
@@ -407,8 +448,14 @@ cmd_run() {
     err "No FLUX tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
     exit 1
   fi
+  if [[ ${need_companions} -eq 1 ]] && ! tier_files_ready companions; then
+    err "Companions (Qwen TE + flux2-vae) incomplete — lab image workflows need them."
+    err "Re-run: ./scripts/utilities/download-flux.sh run --tier companions"
+    exit 1
+  fi
   if [[ ${fail} -gt 0 ]]; then
     warn "Partial FLUX download: ${ok} ok, ${fail} failed"
+    # Lab-critical companions failure already exited; other tiers (nunchaku) soft-warn
   fi
 }
 

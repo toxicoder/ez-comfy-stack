@@ -24,8 +24,10 @@ services:
         CUDA_RUNTIME_IMAGE: ${CUDA_RUNTIME_IMAGE:-nvidia/cuda:13.0.0-runtime-ubuntu24.04}
         # 1 = bake Comfy+torch into image (default). 0 = thin image (cold pip at runtime).
         EZ_COMFY_PREBUILD: ${EZ_COMFY_PREBUILD:-1}
-        # Optional pin for ComfyUI git ref during image prebuild
-        COMFYUI_REF: ${COMFYUI_REF:-}
+        # Validated pins (see docs/models-and-cache.md). Override to bump or set empty to float.
+        COMFYUI_REF: ${COMFYUI_REF:-v0.29.0}
+        COMFYUI_MANAGER_REF: ${COMFYUI_MANAGER_REF:-4.2.2}
+        COMFYUI_NUNCHAKU_NODE_REF: ${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}
       # Reuse pulled GHCR layers as local build cache when rebuilding
       cache_from:
         - ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development}
@@ -66,6 +68,7 @@ services:
       # Host ops scripts — iterate without image rebuild (image still embeds for GHCR)
       - ./entrypoint.sh:/opt/ez-comfy/entrypoint.sh:ro
       - ./install-comfy.sh:/opt/ez-comfy/install-comfy.sh:ro
+      - ./install-comfy:/opt/ez-comfy/install-comfy:ro
       - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
     gpus: all
     shm_size: "16gb"

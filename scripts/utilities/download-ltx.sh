@@ -348,19 +348,33 @@ link_into_comfy() {
   local tier="${1}"
   local src="${MODELS_DIR}/comfy"
   mkdir -p "${src}/diffusion_models" "${src}/text_encoders" "${src}/vae" "${src}/checkpoints"
-  local dir
+  local dir base dest_sub dest rel
   dir=$(tier_dir "$tier")
   [[ -d ${dir} ]] || return 0
   while read -r f; do
-    local base dest_sub
     base="$(basename "${f}")"
+    rel="${f#"${dir}"/}"
     dest_sub="diffusion_models"
-    case "$base" in
-      *text* | *gemma* | *te*) dest_sub="text_encoders" ;;
-      *vae* | *audio*) dest_sub="vae" ;;
+    # Prefer HF layout path (vae/…, text_encoders/…); never match *te* against
+    # ".safetensors" (that mis-routed every weight into text_encoders).
+    case "${rel}" in
+      text_encoders/* | */text_encoders/*) dest_sub="text_encoders" ;;
+      vae/* | */vae/*) dest_sub="vae" ;;
+      diffusion_models/* | */diffusion_models/*) dest_sub="diffusion_models" ;;
+      *)
+        case "${base}" in
+          *text_projection* | *text_encoder* | *gemma*) dest_sub="text_encoders" ;;
+          *vae* | *audio*) dest_sub="vae" ;;
+          *) dest_sub="diffusion_models" ;;
+        esac
+        ;;
     esac
-    if [[ ! -e "${src}/${dest_sub}/${base}" ]]; then
-      ln -sfn "${f}" "${src}/${dest_sub}/${base}" || true
+    dest="${src}/${dest_sub}/${base}"
+    # Relative targets so bind-mount path (/mnt/models vs /models) does not break
+    if ln_sfn_relative "${f}" "${dest}"; then
+      log "linked ${base} → comfy/${dest_sub}/"
+    else
+      warn "failed to link ${base} → comfy/${dest_sub}/"
     fi
   done < <(find "${dir}" -type f \( -name '*.safetensors' -o -name '*.sft' -o -name '*.gguf' \) 2>/dev/null)
 }

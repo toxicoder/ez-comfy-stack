@@ -4,4 +4,6 @@
 !Dockerfile
 !entrypoint.sh
 !install-comfy.sh
+!install-comfy/
+!install-comfy/**
 !patch_get_free_memory.py

@@ -47,12 +47,12 @@ coverage:
 
 # @target lint — ShellCheck + shfmt diff (no write)
 lint:
-	shellcheck -x scripts/manage.sh scripts/lib/*.sh scripts/utilities/*.sh docker/*.sh
-	shfmt -d -s -i 2 -ci scripts docker/install-comfy.sh docker/entrypoint.sh tests/coverage.sh tests/run_all.sh
+	shellcheck -x scripts/manage.sh scripts/lib/*.sh scripts/utilities/*.sh docker/*.sh docker/install-comfy/*.sh
+	shfmt -d -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh
 
 # @target fmt — apply shfmt -w to shell sources
 fmt:
-	shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/entrypoint.sh tests/coverage.sh tests/run_all.sh
+	shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh
 
 # @target docs — strict MkDocs Material build into site/ (publish is Actions + mike)
 docs:

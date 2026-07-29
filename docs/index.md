@@ -9,15 +9,23 @@ tags: [comfyui, flux, ltx, dgx-spark, docker]
 **What's on this page**
 
 - What this project is (and is not)
-- System context and how pieces connect
-- Safety principles for remote DGX Spark access
-- High-level layout and next links
+- Default stack and safety principles
+- How pieces connect
+- Where to read next
 
 **What this enables**
 
 - Spinning up a **unified Flux → LTX** ComfyUI demo on one Spark quickly
 - Sharing model weights with other stacks via `/mnt/models`
 - Operating the stack safely over SSH without locking yourself out
+
+!!! tip "Start here"
+
+    New to this repo? Follow **[Getting Started](getting-started.md)** for setup → doctor → download → start → stop.
+
+    Contributors and shell style: [Conventions](project-conventions.md).
+
+---
 
 ## Purpose
 
@@ -48,6 +56,47 @@ flowchart TB
   EZ -->|"graduate when you outgrow demos"| LAB
 ```
 
+---
+
+## Default stack
+
+| Item | Value |
+| --- | --- |
+| Runtime | ComfyUI (Docker) |
+| Pipeline | **flux-to-ltx** (text → image → video frames; audio VAE available) |
+| Flux tier | fast — FLUX.2 Klein 9B NVFP4 + Nunchaku |
+| LTX tier | balanced — LTX-2.3 distilled FP8 |
+| Models | host `/mnt/models` |
+| UI | port **8188** |
+| Memory limit | **90g** (host headroom reserved for SSH) |
+
+---
+
+## Safety first
+
+!!! warning "Remote Spark rules"
+
+    These defaults protect SSH recoverability on a remotely managed host. Do not weaken them for demos.
+
+| Guard | Behavior |
+| --- | --- |
+| **No auto-start** | Compose `restart: "no"` after reboot |
+| **Heavy confirmation** | Type `yes` on `start` |
+| **Headroom preflight** | Free host RAM/disk checked before start |
+| **Download throttle** | `download-limit auto` = **85%** of speedtest (when HTB works) |
+
+```mermaid
+flowchart LR
+  S1["restart: no"] --> S2["type yes on start"]
+  S2 --> S3["RAM/disk headroom"]
+  S3 --> S4["download-limit auto 85%"]
+  S4 --> Safe["SSH stays usable"]
+```
+
+Details: [Reboot Safety](reboot-safety.md) · [Download Limit](download-limit.md).
+
+---
+
 ## System context
 
 How an operator reaches ComfyUI on a remotely managed Spark:
@@ -74,36 +123,19 @@ flowchart TB
   Op --> UI
 ```
 
-## Default stack
+---
 
-| Item | Value |
+## Documentation path
+
+| When | Read |
 | --- | --- |
-| Runtime | ComfyUI (Docker) |
-| Pipeline | **flux-to-ltx** (text → image → video frames; audio VAE available) |
-| Flux tier | fast — FLUX.2 Klein 9B NVFP4 + Nunchaku |
-| LTX tier | balanced — LTX-2.3 distilled FP8 |
-| Models | host `/mnt/models` |
-| UI | port **8188** |
-| Memory limit | **90g** (host headroom reserved for SSH) |
-
-## Safety first
-
-- **No auto-start** after reboot (`restart: "no"`)
-- **Heavy confirmation** on `start`
-- **Host free-memory headroom** checks
-- **Bandwidth-limited** model downloads (`download-limit auto` = 85% of speedtest)
-
-```mermaid
-flowchart LR
-  S1["restart: no"] --> S2["type yes on start"]
-  S2 --> S3["RAM/disk headroom"]
-  S3 --> S4["download-limit auto 85%"]
-  S4 --> Safe["SSH stays usable"]
-```
-
-See [Reboot Safety](reboot-safety.md).
-
-## Documentation map
+| **First run** | [Getting Started](getting-started.md) |
+| **How the pipeline works** | [Visual Generative AI](visual-generative-ai.md) |
+| **Weights, cache, image pins** | [Models & Cache](models-and-cache.md) |
+| **Throttled downloads** | [Download Limit](download-limit.md) |
+| **Before reboot** | [Reboot Safety](reboot-safety.md) |
+| **Something broke** | [Troubleshooting](troubleshooting.md) |
+| **Contributing** | [Conventions](project-conventions.md) |
 
 ```mermaid
 flowchart LR
@@ -117,10 +149,3 @@ flowchart LR
   RS --> TS
   Home --> Conv["Conventions"]
 ```
-
-## Quick links
-
-- [Getting Started](getting-started.md)
-- [Visual Generative AI](visual-generative-ai.md)
-- [Download Limit](download-limit.md)
-- [Troubleshooting](troubleshooting.md)
