@@ -1171,6 +1171,9 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 </code></pre></div>
 <p>Or:</p>
 <div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>download-models
+<span class="c1"># Exits non-zero until every lab basename under MODELS_DIR/comfy is present</span>
+<span class="c1"># (see table below). Companions (Qwen TE + flux2-vae) use file-level readiness</span>
+<span class="c1"># so a TE-only partial cannot cache-hit skip the VAE.</span>
 </code></pre></div>
 <h3 id="cleanup-extra-ltx-monorepo-files">Cleanup extra LTX monorepo files<a class="headerlink" href="#cleanup-extra-ltx-monorepo-files" title="Permanent link">&para;</a></h3>
 <p>If an older run pulled the full <code>Kijai/LTX2.3_comfy</code> snapshot into the balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:</p>
