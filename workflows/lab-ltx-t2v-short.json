@@ -1,6 +1,6 @@
 {
   "id": "lab-ltx-t2v-short",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 10,
   "last_link_id": 10,
   "nodes": [
@@ -73,14 +73,14 @@
     },
     {
       "id": 3,
-      "type": "CLIPLoader",
+      "type": "DualCLIPLoader",
       "pos": [
         40,
         340
       ],
       "size": [
         400,
-        106
+        130
       ],
       "flags": {},
       "order": 2,
@@ -98,14 +98,15 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPLoader"
+        "Node name for S&R": "DualCLIPLoader"
       },
       "widgets_values": [
+        "gemma_3_12B_it_fp4_mixed.safetensors",
         "ltx-2.3_text_projection_bf16.safetensors",
         "ltxv",
         "default"
       ],
-      "title": "LTX text projection"
+      "title": "LTX Gemma + text projection"
     },
     {
       "id": 4,
@@ -499,7 +500,7 @@
   "extra": {
     "lab_profile": "ltx-t2v-short",
     "lab_ltx_tier": "balanced",
-    "lab_note": "Short clip (~33 frames @ 24fps) for faster T2V demos. Frames via SaveImage."
+    "lab_note": "Short clip (~33 frames @ 24fps) for faster T2V demos. Frames via SaveImage. DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv)."
   },
   "version": 0.4
 }

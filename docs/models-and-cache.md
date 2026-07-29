@@ -68,6 +68,7 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
   Comfy-Org__flux2-klein-9B/                  # companions: Qwen TE + flux2 VAE
   tonera__FLUX.2-klein-9B-Nunchaku/           # optional (INCLUDE_NUNCHAKU)
   Kijai__LTX2.3_comfy_balanced/               # ltx balanced selective
+  Comfy-Org__ltx-2_gemma/                     # LTX Gemma 3 TE (DualCLIP)
   comfy/
     diffusion_models/   # relative symlinks into tier repos above
     text_encoders/
@@ -86,6 +87,7 @@ flowchart TB
   Root --> Comp["Comfy-Org__flux2-klein-9B"]
   Root --> Flux2["tonera__FLUX.2-klein-9B-Nunchaku"]
   Root --> Ltx["Kijai__LTX2.3_comfy_balanced"]
+  Root --> Gemma["Comfy-Org__ltx-2_gemma"]
   Root --> Comfy["comfy/"]
   Root --> Hub["hub/ · optional HF cache"]
   Comfy --> DM["diffusion_models/ · symlinks"]
@@ -130,7 +132,8 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `qwen_3_8b_fp4mixed.safetensors` | `text_encoders/` | Flux TE (Comfy-Org companions; CLIP type **`flux2`**) |
 | `flux2-vae.safetensors` | `vae/` | Flux VAE (Comfy-Org companions) |
 | `ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors` | `diffusion_models/` | LTX balanced UNET |
-| `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection |
+| `gemma_3_12B_it_fp4_mixed.safetensors` | `text_encoders/` | LTX Gemma 3 TE (DualCLIP type **`ltxv`**, with projection) |
+| `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection (DualCLIP second clip) |
 | `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE (used by lab I2V/T2V) |
 | `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (downloaded; **not wired** in lab graphs) |
 
@@ -174,9 +177,12 @@ HF_TOKEN=hf_...
 | Tier | Transformer (approx) | Plus | Total (approx) |
 | --- | --- | --- | --- |
 | **balanced** | distilled FP8 `…fp8_input_scaled_v3` (~25 GB) | text projection + video/audio VAE | ~28–30 GB |
-| **quality** | distilled BF16 (~42 GB) | same TE + VAEs | ~45–48 GB |
+| **quality** | distilled BF16 (~42 GB) | same projection + VAEs | ~45–48 GB |
+| **gemma** (auto with balanced/quality) | — | `gemma_3_12B_it_fp4_mixed` from `Comfy-Org/ltx-2` | ~9.5 GB |
 
-`status --json` readiness uses `min_gb` 20 (balanced) / 35 (quality) as a floor, not the full monorepo size.
+Lab LTX graphs use **DualCLIPLoader** (`gemma` + `text_projection`, type **`ltxv`**). Projection alone is not a text encoder.
+
+`status --json` readiness uses `min_gb` 20 (balanced) / 35 (quality) / 8 (gemma) as a floor, not the full monorepo size.
 
 ??? tip "Cleanup extra LTX monorepo files"
 
@@ -296,8 +302,11 @@ flowchart TB
     | `install-comfy/phase-nodes.sh` or node sources only (no new pip) | No | No | Yes (smaller) |
     | `install-comfy/phase-comfy.sh` / `COMFYUI_REF` bump (may change requirements) | No (torch phase) | **Yes if pip set changes** | Yes |
     | `install-comfy/phase-venv-torch.sh` / CUDA base / apt | Yes | Yes | Yes |
+    | Runtime `apt` only (`gcc`/`g++` for Triton JIT) | No | No (venv COPY still cacheable) | No |
 
     Builder: **COPY only phase modules each `RUN` needs** (`common`+`phase-venv-torch` → `phase-comfy` → `phase-nodes`+`phase-finalize`) with BuildKit pip cache mounts. Runtime: **`COPY /opt/parts/venv` then `/opt/parts/app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+
+    Runtime installs **`gcc` + `g++`** (not full `build-essential`) so PyTorch 2.13 Triton can JIT on first `CLIPTextEncode`. That is a small apt layer; it does **not** re-pull multi‑GB torch/venv.
 
     **Caveat:** the venv layer is the **final** `.venv` after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.
 

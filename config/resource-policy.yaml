@@ -45,4 +45,6 @@ models:
   ltx_balanced:
     repos:
       - Kijai/LTX2.3_comfy
-    min_gb: 20
+      - Comfy-Org/ltx-2
+    # Kijai selective (~28–30 GB) + Gemma fp4 TE (~9.5 GB)
+    min_gb: 30

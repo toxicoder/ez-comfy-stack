@@ -117,9 +117,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Runtime only: no build-essential / python3-dev / git-lfs (cold install uses wheels).
+# Runtime: keep slim (no python3-dev / git-lfs / full build-essential).
+# gcc+g++ are required: PyTorch 2.13 Triton JIT compiles small C helpers on first
+# CLIPTextEncode / native op use (e.g. bmm_outer_product). Without CC in PATH:
+# "Failed to find C compiler. Please specify via CC environment variable".
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git python3 python3-pip python3-venv \
+    gcc g++ \
     curl ca-certificates libgl1 libglib2.0-0 rsync \
     && mkdir -p /opt/ez-comfy/workflows /models /opt/ez-comfy/install-comfy \
     && rm -rf /var/lib/apt/lists/*

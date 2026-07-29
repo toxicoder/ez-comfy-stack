@@ -50,6 +50,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"flux-2-klein-9b-nvfp4.safetensors"* ]]
   [[ "${output}" == *"qwen_3_8b_fp4mixed.safetensors"* ]]
+  [[ "${output}" == *"gemma_3_12B_it_fp4_mixed.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.3_text_projection_bf16.safetensors"* ]]
   [[ "${output}" == *"flux2-vae.safetensors"* ]]
   [[ "${output}" == *"LTX23_video_vae_bf16.safetensors"* ]]
 

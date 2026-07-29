@@ -67,13 +67,13 @@ flowchart TB
 | GPU | all (1× GB10) |
 | restart | `"no"` |
 | Flux | Klein 9B NVFP4 + Nunchaku |
-| LTX | distilled FP8 balanced |
+| LTX | distilled FP8 balanced + Gemma DualCLIP |
 
 ---
 
 ## Combined pipeline (Flux → LTX)
 
-Text → image → **video frames** in one ComfyUI stack. Lab graphs use `SaveImage` for frames; the LTX **audio VAE** is downloaded for advanced AV work but is not wired into the seeded examples.
+Text → image → **video frames** in one ComfyUI stack. Lab graphs use `SaveImage` for frames; the LTX **audio VAE** is downloaded for advanced AV work but is not wired into the seeded examples. LTX text conditioning uses **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) — not the projection file alone.
 
 ```mermaid
 flowchart LR
