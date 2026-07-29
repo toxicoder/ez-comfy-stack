@@ -515,17 +515,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#system-context" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        System context
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#default-stack" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -548,10 +537,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation-map" class="md-nav__link">
+  <a href="#system-context" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Documentation map
+        System context
       
     </span>
   </a>
@@ -559,10 +548,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-links" class="md-nav__link">
+  <a href="#documentation-path" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick links
+        Documentation path
       
     </span>
   </a>
@@ -821,17 +810,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#system-context" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        System context
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#default-stack" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -854,10 +832,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation-map" class="md-nav__link">
+  <a href="#system-context" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Documentation map
+        System context
       
     </span>
   </a>
@@ -865,10 +843,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-links" class="md-nav__link">
+  <a href="#documentation-path" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick links
+        Documentation path
       
     </span>
   </a>
@@ -899,9 +877,9 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>What this project is (and is not)</li>
-<li>System context and how pieces connect</li>
-<li>Safety principles for remote DGX Spark access</li>
-<li>High-level layout and next links</li>
+<li>Default stack and safety principles</li>
+<li>How pieces connect</li>
+<li>Where to read next</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
@@ -909,6 +887,12 @@
 <li>Sharing model weights with other stacks via <code>/mnt/models</code></li>
 <li>Operating the stack safely over SSH without locking yourself out</li>
 </ul>
+<div class="admonition tip">
+<p class="admonition-title">Start here</p>
+<p>New to this repo? Follow <strong><a href="getting-started/">Getting Started</a></strong> for setup → doctor → download → start → stop.</p>
+<p>Contributors and shell style: <a href="project-conventions/">Conventions</a>.</p>
+</div>
+<hr />
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
 <p>This is a <strong>sample / demo</strong> repository for <strong>Visual Generative AI</strong> on a <strong>single NVIDIA DGX Spark (GB10)</strong>. It is deliberately smaller than <a href="https://github.com/toxicoder/nvidia-dgx-spark-lab">nvidia-dgx-spark-lab</a>: Docker Compose instead of K3s, one unified profile instead of a full lab.</p>
 <p>Long-term multi-workload operations should use the full lab project. Use <strong>ez-comfy-stack</strong> when you want faster experimentation.</p>
@@ -931,27 +915,7 @@
     L1 --&gt; L2 --&gt; L3
   end
   EZ --&gt;|"graduate when you outgrow demos"| LAB</code></pre>
-<h2 id="system-context">System context<a class="headerlink" href="#system-context" title="Permanent link">&para;</a></h2>
-<p>How an operator reaches ComfyUI on a remotely managed Spark:</p>
-<pre class="mermaid"><code>flowchart TB
-  Op["Operator workstation"]
-  SSH["SSH / port-forward"]
-  subgraph Spark["DGX Spark host"]
-    direction TB
-    Manage["./scripts/manage.sh"]
-    Compose["Docker Compose&lt;br/&gt;restart: no · mem_limit 90g"]
-    subgraph Ctr["comfyui container"]
-      Comfy["ComfyUI"]
-    end
-    Models["/mnt/models&lt;br/&gt;shared cache"]
-  end
-  UI["Browser · http://spark:8188"]
-
-  Op --&gt; SSH --&gt; Manage
-  Manage --&gt; Compose --&gt; Comfy
-  Models -.-&gt;|bind mount| Comfy
-  Comfy --&gt; UI
-  Op --&gt; UI</code></pre>
+<hr />
 <h2 id="default-stack">Default stack<a class="headerlink" href="#default-stack" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -991,20 +955,106 @@
 </tr>
 </tbody>
 </table>
+<hr />
 <h2 id="safety-first">Safety first<a class="headerlink" href="#safety-first" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>No auto-start</strong> after reboot (<code>restart: "no"</code>)</li>
-<li><strong>Heavy confirmation</strong> on <code>start</code></li>
-<li><strong>Host free-memory headroom</strong> checks</li>
-<li><strong>Bandwidth-limited</strong> model downloads (<code>download-limit auto</code> = 85% of speedtest)</li>
-</ul>
+<div class="admonition warning">
+<p class="admonition-title">Remote Spark rules</p>
+<p>These defaults protect SSH recoverability on a remotely managed host. Do not weaken them for demos.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Guard</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No auto-start</strong></td>
+<td>Compose <code>restart: "no"</code> after reboot</td>
+</tr>
+<tr>
+<td><strong>Heavy confirmation</strong></td>
+<td>Type <code>yes</code> on <code>start</code></td>
+</tr>
+<tr>
+<td><strong>Headroom preflight</strong></td>
+<td>Free host RAM/disk checked before start</td>
+</tr>
+<tr>
+<td><strong>Download throttle</strong></td>
+<td><code>download-limit auto</code> = <strong>85%</strong> of speedtest (when HTB works)</td>
+</tr>
+</tbody>
+</table>
 <pre class="mermaid"><code>flowchart LR
   S1["restart: no"] --&gt; S2["type yes on start"]
   S2 --&gt; S3["RAM/disk headroom"]
   S3 --&gt; S4["download-limit auto 85%"]
   S4 --&gt; Safe["SSH stays usable"]</code></pre>
-<p>See <a href="reboot-safety/">Reboot Safety</a>.</p>
-<h2 id="documentation-map">Documentation map<a class="headerlink" href="#documentation-map" title="Permanent link">&para;</a></h2>
+<p>Details: <a href="reboot-safety/">Reboot Safety</a> · <a href="download-limit/">Download Limit</a>.</p>
+<hr />
+<h2 id="system-context">System context<a class="headerlink" href="#system-context" title="Permanent link">&para;</a></h2>
+<p>How an operator reaches ComfyUI on a remotely managed Spark:</p>
+<pre class="mermaid"><code>flowchart TB
+  Op["Operator workstation"]
+  SSH["SSH / port-forward"]
+  subgraph Spark["DGX Spark host"]
+    direction TB
+    Manage["./scripts/manage.sh"]
+    Compose["Docker Compose&lt;br/&gt;restart: no · mem_limit 90g"]
+    subgraph Ctr["comfyui container"]
+      Comfy["ComfyUI"]
+    end
+    Models["/mnt/models&lt;br/&gt;shared cache"]
+  end
+  UI["Browser · http://spark:8188"]
+
+  Op --&gt; SSH --&gt; Manage
+  Manage --&gt; Compose --&gt; Comfy
+  Models -.-&gt;|bind mount| Comfy
+  Comfy --&gt; UI
+  Op --&gt; UI</code></pre>
+<hr />
+<h2 id="documentation-path">Documentation path<a class="headerlink" href="#documentation-path" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>First run</strong></td>
+<td><a href="getting-started/">Getting Started</a></td>
+</tr>
+<tr>
+<td><strong>How the pipeline works</strong></td>
+<td><a href="visual-generative-ai/">Visual Generative AI</a></td>
+</tr>
+<tr>
+<td><strong>Weights, cache, image pins</strong></td>
+<td><a href="models-and-cache/">Models &amp; Cache</a></td>
+</tr>
+<tr>
+<td><strong>Throttled downloads</strong></td>
+<td><a href="download-limit/">Download Limit</a></td>
+</tr>
+<tr>
+<td><strong>Before reboot</strong></td>
+<td><a href="reboot-safety/">Reboot Safety</a></td>
+</tr>
+<tr>
+<td><strong>Something broke</strong></td>
+<td><a href="troubleshooting/">Troubleshooting</a></td>
+</tr>
+<tr>
+<td><strong>Contributing</strong></td>
+<td><a href="project-conventions/">Conventions</a></td>
+</tr>
+</tbody>
+</table>
 <pre class="mermaid"><code>flowchart LR
   Home["Home"] --&gt; GS["Getting Started"]
   GS --&gt; Vis["Visual Generative AI"]
@@ -1015,13 +1065,6 @@
   DL --&gt; TS
   RS --&gt; TS
   Home --&gt; Conv["Conventions"]</code></pre>
-<h2 id="quick-links">Quick links<a class="headerlink" href="#quick-links" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="getting-started/">Getting Started</a></li>
-<li><a href="visual-generative-ai/">Visual Generative AI</a></li>
-<li><a href="download-limit/">Download Limit</a></li>
-<li><a href="troubleshooting/">Troubleshooting</a></li>
-</ul>
 
 
 
@@ -1042,6 +1085,8 @@
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
@@ -1080,7 +1125,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="assets/javascripts/bundle.79ae519e.min.js"></script>

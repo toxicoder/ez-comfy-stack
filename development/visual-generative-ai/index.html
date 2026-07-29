@@ -615,17 +615,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#combined-pipeline-tips" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Combined pipeline tips
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#safety" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -878,17 +867,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#combined-pipeline-tips" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Combined pipeline tips
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#safety" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -932,6 +910,11 @@
 <li>Running image + video generation tools in <strong>one</strong> Docker Compose stack</li>
 <li>Understanding why memory headroom and the free-memory patch matter on GB10</li>
 </ul>
+<div class="admonition tip">
+<p class="admonition-title">First run?</p>
+<p>For install and first UI open, use <a href="../getting-started/">Getting Started</a>. This page explains <strong>how the stack is wired</strong>.</p>
+</div>
+<hr />
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
 <p>Host operator path, container lifecycle, mounts, and UI:</p>
 <pre class="mermaid"><code>flowchart TB
@@ -997,6 +980,7 @@
 </tr>
 </tbody>
 </table>
+<hr />
 <h2 id="combined-pipeline-flux-ltx">Combined pipeline (Flux → LTX)<a class="headerlink" href="#combined-pipeline-flux-ltx" title="Permanent link">&para;</a></h2>
 <p>Text → image → <strong>video frames</strong> in one ComfyUI stack. Lab graphs use <code>SaveImage</code> for frames; the LTX <strong>audio VAE</strong> is downloaded for advanced AV work but is not wired into the seeded examples.</p>
 <pre class="mermaid"><code>flowchart LR
@@ -1004,7 +988,16 @@
   Flux --&gt; Image["Still image"]
   Image --&gt; LTX["LTX I2V&lt;br/&gt;balanced · distilled FP8"]
   LTX --&gt; Frames["Video frames&lt;br/&gt;SaveImage"]</code></pre>
-<p>Handoff: load <strong>lab-flux-to-ltx</strong> (or any Flux T2I) → save still → open <strong>lab-ltx-i2v</strong> / <strong>lab-ltx-i2v-short</strong> and set <code>LoadImage</code> to that file.</p>
+<p><strong>Handoff:</strong> load <strong>lab-flux-to-ltx</strong> (or any Flux T2I) → save still → open <strong>lab-ltx-i2v</strong> / <strong>lab-ltx-i2v-short</strong> and set <code>LoadImage</code> to that file.</p>
+<div class="admonition example">
+<p class="admonition-title">Pipeline tips</p>
+<ol>
+<li>Download <strong>flux fast</strong> + <strong>ltx balanced</strong> first</li>
+<li>Prefer keeping both model sets loaded between T2I and I2V</li>
+<li>Avoid concurrent large LLM containers on the same Spark</li>
+</ol>
+</div>
+<hr />
 <h2 id="memory-and-headroom-budget">Memory and headroom budget<a class="headerlink" href="#memory-and-headroom-budget" title="Permanent link">&para;</a></h2>
 <p>GB10 unified memory is shared by OS, SSH, Docker, and the ComfyUI container. Policy defaults leave free host RAM so remote access stays usable.</p>
 <pre class="mermaid"><code>flowchart TB
@@ -1017,6 +1010,7 @@
   Free --&gt; Gate{"doctor / start&lt;br/&gt;headroom OK?"}
   Gate --&gt;|yes| Cont
   Gate --&gt;|no| Refuse["start refused"]</code></pre>
+<hr />
 <h2 id="spark-optimizations">Spark optimizations<a class="headerlink" href="#spark-optimizations" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1059,13 +1053,44 @@
   P--&gt;&gt;E: patched (fail-soft)
   E-&gt;&gt;U: exec listen 0.0.0.0:8188
   Note over U: First cold start can take 10–30+ minutes</code></pre>
+<hr />
 <h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>doctor
-./scripts/manage.sh<span class="w"> </span>download-models
-./scripts/manage.sh<span class="w"> </span>start
-./scripts/manage.sh<span class="w"> </span>status
-./scripts/manage.sh<span class="w"> </span>logs
-./scripts/manage.sh<span class="w"> </span>stop
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Preflight</td>
+<td><code>./scripts/manage.sh doctor</code></td>
+</tr>
+<tr>
+<td>2. Weights</td>
+<td><code>./scripts/manage.sh download-models</code></td>
+</tr>
+<tr>
+<td>3. Start</td>
+<td><code>./scripts/manage.sh start</code> (type <code>yes</code>)</td>
+</tr>
+<tr>
+<td>4. Observe</td>
+<td><code>./scripts/manage.sh status</code> · <code>logs</code></td>
+</tr>
+<tr>
+<td>5. Stop</td>
+<td><code>./scripts/manage.sh stop</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>doctor
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-models
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>start
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>status
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/manage.sh<span class="w"> </span>logs
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>./scripts/manage.sh<span class="w"> </span>stop
 </code></pre></div>
 <pre class="mermaid"><code>flowchart LR
   Doctor["doctor"] --&gt; Download["download-models"]
@@ -1074,19 +1099,17 @@
   Status --&gt; Logs["logs"]
   Logs --&gt; Stop["stop"]
   Start --&gt; Cleanup["cleanup&lt;br/&gt;DELETE volume only"]</code></pre>
-<h2 id="combined-pipeline-tips">Combined pipeline tips<a class="headerlink" href="#combined-pipeline-tips" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Download <strong>flux fast</strong> + <strong>ltx balanced</strong> first  </li>
-<li>Prefer keeping both model sets loaded between T2I and I2V  </li>
-<li>Avoid concurrent large LLM containers on the same Spark  </li>
-</ol>
+<hr />
 <h2 id="safety">Safety<a class="headerlink" href="#safety" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Do not weaken</p>
 <ul>
-<li>Manual start only  </li>
-<li>Headroom preflight  </li>
-<li>Exclusive use of the GPU for this demo stack  </li>
-<li>Always <code>stop</code> before reboot  </li>
+<li>Manual start only (<code>restart: "no"</code>)</li>
+<li>Headroom preflight before start</li>
+<li>Exclusive use of the GPU for this demo stack</li>
+<li>Always <code>stop</code> before reboot — <a href="../reboot-safety/">Reboot Safety</a></li>
 </ul>
+</div>
 
 
 
@@ -1107,6 +1130,8 @@
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
@@ -1145,7 +1170,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
