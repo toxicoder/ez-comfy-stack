@@ -1258,6 +1258,21 @@
 <td>Use seeded <strong>lab-flux-</strong><em> graphs: CLIP type </em><em><code>flux2</code></em><em> with <code>qwen_3_8b_fp4mixed</code>, latent </em><em><code>EmptyFlux2LatentImage</code></em>*. Do not use <code>qwen_image</code> / Z-Image loaders</td>
 </tr>
 <tr>
+<td><code>Failed to find C compiler</code> / Triton on <strong>CLIPTextEncode</strong> (Flux lab graphs)</td>
+<td>Runtime image has no <code>gcc</code>/<code>g++</code>; PyTorch 2.13 Triton JIT needs CC for ops such as <code>bmm_outer_product</code></td>
+<td>Pull/rebuild the image (runtime stage installs <code>gcc</code> <code>g++</code>) and restart: <code>./scripts/manage.sh stop &amp;&amp; ./scripts/manage.sh start</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx which gcc</code></td>
+</tr>
+<tr>
+<td>KSampler LTX: <code>Expected size 768 but got size 4096</code> / <code>embeddings_connector</code></td>
+<td>Missing Gemma TE or projection-only CLIPLoader</td>
+<td>Lab graphs need <strong>DualCLIPLoader</strong>: <code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>. Run <code>./scripts/manage.sh download-models</code>, re-open <strong>lab-ltx-</strong>* from <code>workflows/</code></td>
+</tr>
+<tr>
+<td>Missing <code>gemma_3_12B_it_fp4_mixed</code> in LTX graphs</td>
+<td>Gemma companion not downloaded</td>
+<td><code>./scripts/utilities/download-ltx.sh run --tier balanced</code> (auto-includes gemma) or <code>download-models</code>; <code>ls $MODELS_DIR/comfy/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors</code></td>
+</tr>
+<tr>
 <td>Missing <code>VHS_VideoCombine</code> node</td>
 <td>Optional VideoHelperSuite not installed</td>
 <td>Lab LTX graphs only need core LTXV nodes + <strong>SaveImage</strong> frames. Install VHS yourself only if you want MP4 combine</td>
