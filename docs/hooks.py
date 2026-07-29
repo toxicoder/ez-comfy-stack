@@ -6,6 +6,8 @@ Branch-aware site artifacts (mike aliases ``latest`` / ``development``):
   (``edit/main/docs/`` or ``edit/development/docs/``).
 - ``on_page_markdown`` rewrites this-repo GitHub ``blob``/``tree`` links so
   source links match the same ref. Optional override: ``EZ_DOCS_GIT_REF``.
+- ``on_page_markdown`` / ``on_post_page`` also replace the operator token
+  ``__DOCS_GIT_REF__`` (e.g. Setup ``git clone -b``) with that ref.
 - When ``MIKE_DOCS_VERSION`` or ``EZ_DOCS_VERSION`` is ``development``, injects
   a small banner so readers know they are on the development docs alias.
 """
@@ -17,6 +19,10 @@ import re
 from typing import Any
 
 _REPO = "toxicoder/ez-comfy-stack"
+
+# Operator docs placeholder: stamped to docs_git_ref() at build time so Setup
+# (and similar) matches the published docs alias without hardcoding a branch.
+DOCS_GIT_REF_PLACEHOLDER = "__DOCS_GIT_REF__"
 
 _DEV_BANNER = (
     '<div class="ez-docs-dev-banner" role="status" '
@@ -109,18 +115,36 @@ def stamp_git_ref(text: str, ref: str | None = None) -> str:
     return _REPO_GITHUB_REF_RE.sub(rf"\g<1>{ref}\g<3>", text)
 
 
+def stamp_docs_git_ref_placeholder(text: str, ref: str | None = None) -> str:
+    """Replace ``__DOCS_GIT_REF__`` with the active long-lived git ref.
+
+    Use the placeholder in operator-facing docs (e.g. Setup ``git clone -b``)
+    so published pages match the docs alias. Literal branch names in
+    contributor workflow prose are left unchanged.
+
+    Args:
+        text: Markdown or HTML content.
+        ref: Optional explicit git ref; defaults to ``docs_git_ref()``.
+
+    Returns:
+        Content with all ``__DOCS_GIT_REF__`` tokens replaced.
+    """
+    ref = ref or docs_git_ref()
+    return text.replace(DOCS_GIT_REF_PLACEHOLDER, ref)
+
+
 def on_page_markdown(markdown: str, **kwargs: Any) -> str:
-    """Rewrite this-repo GitHub blob/tree branch segments to ``docs_git_ref()``.
+    """Stamp this-repo GitHub refs and ``__DOCS_GIT_REF__`` to ``docs_git_ref()``.
 
     Args:
         markdown: Raw page markdown before rendering.
         **kwargs: Unused MkDocs hook metadata accepted for API compatibility.
 
     Returns:
-        Markdown with branch-stamped GitHub source links for this repository.
+        Markdown with branch-stamped source links and Setup git ref tokens.
     """
     del kwargs
-    return stamp_git_ref(markdown)
+    return stamp_docs_git_ref_placeholder(stamp_git_ref(markdown))
 
 
 def on_post_page(output: str, **kwargs: Any) -> str:
@@ -135,7 +159,7 @@ def on_post_page(output: str, **kwargs: Any) -> str:
         development banner near the start of the content.
     """
     del kwargs
-    output = stamp_git_ref(output)
+    output = stamp_docs_git_ref_placeholder(stamp_git_ref(output))
 
     if docs_version() != "development" or "ez-docs-dev-banner" in output:
         return output

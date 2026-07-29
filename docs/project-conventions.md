@@ -235,4 +235,8 @@ flowchart LR
   - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
 - Workflow: `.github/workflows/deploy-docs.yml` (push to `main`/`development` with docs paths, or `workflow_dispatch`)
 - Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
-- Branch-stamped Edit links: `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION`
+- Branch-stamped at build time via `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION` (optional `EZ_DOCS_GIT_REF` override):
+  - Edit links (`edit/<ref>/docs/`)
+  - This-repo GitHub `blob` / `tree` URLs
+  - Operator Setup git ref: write `__DOCS_GIT_REF__` in source (e.g. `git clone -b __DOCS_GIT_REF__`); hooks stamp `main` or `development` to match the published alias
+- Operator docs that mean “the branch for **these** docs” must use `__DOCS_GIT_REF__`, not a hardcoded long-lived branch name. Contributor workflow text (“branch from `development`”) stays literal.
