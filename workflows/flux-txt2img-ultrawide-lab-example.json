@@ -1,7 +1,7 @@
 {
   "id": "flux-txt2img-ultrawide-lab-example",
-  "revision": 2,
-  "last_node_id": 9,
+  "revision": 3,
+  "last_node_id": 10,
   "last_link_id": 9,
   "nodes": [
     {
@@ -142,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "ultrawide cinematic vista of a desert highway at dusk, anamorphic feel"
+        "Ultrawide cinematic vista of an empty desert highway stretching to a vanishing point under a vast dusk sky. Anamorphic widescreen framing with subtle horizontal lens character, warm sodium-amber horizon glow fading into deep indigo above. Heat shimmer softens distant asphalt; dry brush and red rock shoulders occupy the lower thirds. Photoreal still from a road-movie sequence, low camera height near the centerline, long exposure feel without motion blur on the road surface, high dynamic range clouds, lonely open-world mood."
       ],
       "title": "Positive"
     },
@@ -181,7 +181,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        ""
+        "washed-out colors, muddy blacks, plastic skin, melted geometry, duplicate limbs, illegible gibberish text, logos, watermarks, heavy compression artifacts, oversharpen halos"
       ],
       "title": "Negative"
     },
@@ -351,6 +351,30 @@
         "ez_flux_ultrawide"
       ],
       "title": "Save"
+    },
+    {
+      "id": 10,
+      "type": "Note",
+      "pos": [
+        40,
+        606.0
+      ],
+      "size": [
+        960,
+        280
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## Flux ultrawide 1536\u00d7640 (lab)\n\nWhat this graph does: Cinematic ultrawide text\u2192image at 1536\u00d7640.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 1536\u00d7640 \u00b7 batch 1.\nSaveImage prefix: ez_flux_ultrawide.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
+      ],
+      "title": "Flux ultrawide 1536\u00d7640 (lab) \u2014 operator note"
     }
   ],
   "links": [
@@ -438,7 +462,9 @@
         0,
         0
       ]
-    }
+    },
+    "lab_note": "## Flux ultrawide 1536\u00d7640 (lab)\n\nWhat this graph does: Cinematic ultrawide text\u2192image at 1536\u00d7640.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 1536\u00d7640 \u00b7 batch 1.\nSaveImage prefix: ez_flux_ultrawide.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
+    "lab_description": "Cinematic ultrawide text\u2192image at 1536\u00d7640."
   },
   "version": 0.4
 }

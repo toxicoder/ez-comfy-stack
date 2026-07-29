@@ -135,7 +135,7 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `gemma_3_12B_it_fp4_mixed.safetensors` | `text_encoders/` | LTX Gemma 3 TE (DualCLIP type **`ltxv`**, with projection) |
 | `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection (DualCLIP second clip) |
 | `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE (used by lab I2V/T2V) |
-| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (downloaded; **not wired** in lab graphs) |
+| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (required by lab LTX graphs for joint AV empty audio latents) |
 
 ### Example graphs
 
@@ -159,7 +159,7 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern
 | `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide short T2V |
 | `flux-to-ltx-lab-example.json` / `flux-to-ltx-short-lab-example.json` | Flux T2I + handoff note → LTX I2V |
 
-Lab video graphs write **frames** via `SaveImage` only (no VHS). Audio VAE remains on disk for operators who build joint AV graphs themselves.
+Lab video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. Watch the **Save video (MP4)** node preview after Queue — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas **Note** with models, prompting, and video-output steps.
 
 ### Gated models / HF_TOKEN
 
@@ -307,6 +307,7 @@ flowchart TB
     | --- | --- | --- | --- |
     | `entrypoint.sh` / `patch_get_free_memory.py` / orchestrator | No | No | No |
     | `install-comfy/phase-nodes.sh` or node sources only (no new pip) | No | No | Yes (smaller) |
+    | VideoHelperSuite / new node **pip** deps (e.g. opencv, imageio-ffmpeg) | No | **Yes** (final venv includes node requirements) | Yes |
     | `install-comfy/phase-comfy.sh` / `COMFYUI_REF` bump (may change requirements) | No (torch phase) | **Yes if pip set changes** | Yes |
     | `install-comfy/phase-venv-torch.sh` / CUDA base / apt | Yes | Yes | Yes |
     | Runtime `apt` only (`gcc`/`g++`/`python3-dev` for Triton JIT) | No | No (venv COPY still cacheable) | No |
@@ -328,5 +329,6 @@ flowchart TB
     | `COMFYUI_REF` | `v0.29.0` | Latest ComfyUI release (2026-07-29). Official README recommends **torch cu130**. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use **core** nodes only (`UNETLoader`, `EmptyFlux2LatentImage`, `LTXV*`, …). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
     | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
+    | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for LTX lab **`VHS_VideoCombine`** MP4. **Required** for `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |
 
     **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, and `docker/install-comfy/common.sh`, then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).

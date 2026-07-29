@@ -63,7 +63,7 @@ flowchart TB
 | Item | Value |
 | --- | --- |
 | Runtime | ComfyUI (Docker) |
-| Pipeline | **flux-to-ltx** (text → image → video frames; audio VAE available) |
+| Pipeline | **flux-to-ltx** (text → image → video frames; LTX-2.3 joint AV empty audio latents) |
 | Flux tier | fast — FLUX.2 Klein 9B NVFP4 + Nunchaku |
 | LTX tier | balanced — LTX-2.3 distilled FP8 |
 | Models | host `/mnt/models` |

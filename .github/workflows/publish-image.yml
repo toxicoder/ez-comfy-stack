@@ -74,8 +74,9 @@ jobs:
             COMFYUI_REF=v0.29.0
             COMFYUI_MANAGER_REF=4.2.2
             COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
+            COMFYUI_VHS_REF=
           # Do not pass HF_TOKEN or any host secrets as build-args
-          # Pins validated 2026-07-29 (ComfyUI latest + Manager 4.2.2 + nunchaku node 1.2.1)
+          # Pins validated 2026-07-29 (ComfyUI + Manager + nunchaku node + VHS main)
           provenance: false
           sbom: false
           cache-from: type=gha,scope=ez-comfy-arm64
