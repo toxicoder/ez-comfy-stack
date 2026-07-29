@@ -572,10 +572,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example-workflows-image-video" class="md-nav__link">
+  <a href="#example-workflows-image-video-frames" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Example workflows (image + video)
+        Example workflows (image + video frames)
       
     </span>
   </a>
@@ -884,10 +884,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example-workflows-image-video" class="md-nav__link">
+  <a href="#example-workflows-image-video-frames" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Example workflows (image + video)
+        Example workflows (image + video frames)
       
     </span>
   </a>
@@ -1046,7 +1046,7 @@ git<span class="w"> </span>checkout<span class="w"> </span>development<span clas
 ./scripts/manage.sh<span class="w"> </span>status
 </code></pre></div>
 <p>Open <code>http://&lt;spark-ip&gt;:8188</code> (or port-forward if needed).</p>
-<h3 id="example-workflows-image-video">Example workflows (image + video)<a class="headerlink" href="#example-workflows-image-video" title="Permanent link">&para;</a></h3>
+<h3 id="example-workflows-image-video-frames">Example workflows (image + video frames)<a class="headerlink" href="#example-workflows-image-video-frames" title="Permanent link">&para;</a></h3>
 <p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load one of:</p>
 <table>
 <thead>
@@ -1058,7 +1058,19 @@ git<span class="w"> </span>checkout<span class="w"> </span>development<span clas
 <tbody>
 <tr>
 <td><strong>lab-flux-txt2img</strong></td>
-<td>Text → image (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE)</td>
+<td>Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE)</td>
+</tr>
+<tr>
+<td><strong>lab-flux-txt2img-portrait</strong></td>
+<td>Text → image <strong>768×1024</strong> portrait</td>
+</tr>
+<tr>
+<td><strong>lab-flux-txt2img-landscape</strong></td>
+<td>Text → image <strong>1280×720</strong> landscape</td>
+</tr>
+<tr>
+<td><strong>lab-flux-txt2img-quick</strong></td>
+<td>Smoke test: <strong>768²</strong>, <strong>4</strong> steps</td>
 </tr>
 <tr>
 <td><strong>lab-flux-img2img</strong></td>
@@ -1066,20 +1078,34 @@ git<span class="w"> </span>checkout<span class="w"> </span>development<span clas
 </tr>
 <tr>
 <td><strong>lab-ltx-i2v</strong></td>
-<td>Image → video frames (LTX-2.3 balanced FP8; set start frame)</td>
+<td>Image → video frames (~97 @ 24 fps; set start frame)</td>
+</tr>
+<tr>
+<td><strong>lab-ltx-i2v-short</strong></td>
+<td>Faster I2V: <strong>33</strong> frames @ 24 fps</td>
 </tr>
 <tr>
 <td><strong>lab-ltx-t2v</strong></td>
-<td>Text → video frames (LTX empty latent)</td>
+<td>Text → video frames (~97 @ 24 fps)</td>
+</tr>
+<tr>
+<td><strong>lab-ltx-t2v-short</strong></td>
+<td>Faster T2V: <strong>33</strong> frames @ 24 fps</td>
 </tr>
 <tr>
 <td><strong>lab-flux-to-ltx</strong></td>
-<td>Flux txt2img graph + notes for handoff to LTX I2V</td>
+<td>Flux txt2img + handoff notes → load <strong>lab-ltx-i2v</strong> for video frames</td>
 </tr>
 </tbody>
 </table>
 <p>These are under <code>user/default/workflows/</code> (copied from the host <code>workflows/</code> mount).</p>
-<p><strong>Not Z-Image.</strong> Community Z-Image templates need different weights (<code>ae</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*</code>). Use the lab workflows above for this stack.</p>
+<p><strong>Lab details</strong></p>
+<ul>
+<li>Flux CLIP loader type is <strong><code>flux2</code></strong> with <code>qwen_3_8b_fp4mixed</code> + <code>EmptyFlux2LatentImage</code> (simplified <code>KSampler</code>, not the full official advanced sampler subgraph)</li>
+<li>LTX graphs save <strong>frames</strong> via <code>SaveImage</code> (no VideoHelperSuite / VHS required)</li>
+<li><code>download-models</code> also places <code>LTX23_audio_vae_bf16</code> for advanced AV experiments; <strong>lab examples do not wire audio</strong></li>
+<li><strong>Not Z-Image.</strong> Community Z-Image templates need different weights (<code>ae</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*</code>)</li>
+</ul>
 <div class="admonition tip">
 <p class="admonition-title">Prebuilt image (GHCR)</p>
 <p><code>manage.sh start</code> pulls a <strong>branch-aligned</strong> arm64 image published by the <code>publish-image</code> workflow:</p>

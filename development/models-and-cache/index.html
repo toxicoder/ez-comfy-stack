@@ -1117,9 +1117,10 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 </code></pre></div>
 <h2 id="layout">Layout<a class="headerlink" href="#layout" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>/mnt/models/
-  black-forest-labs__FLUX.2-klein-9b-nvfp4/
-  tonera__FLUX.2-klein-9B-Nunchaku/
-  Kijai__LTX2.3_comfy_balanced/
+  black-forest-labs__FLUX.2-klein-9b-nvfp4/   # flux fast UNET
+  Comfy-Org__flux2-klein-9B/                  # companions: Qwen TE + flux2 VAE
+  tonera__FLUX.2-klein-9B-Nunchaku/           # optional (INCLUDE_NUNCHAKU)
+  Kijai__LTX2.3_comfy_balanced/               # ltx balanced selective
   comfy/
     diffusion_models/   # symlinks
     text_encoders/
@@ -1130,6 +1131,7 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 <pre class="mermaid"><code>flowchart TB
   Root["/mnt/models · MODELS_DIR"]
   Root --&gt; Flux1["black-forest-labs__FLUX.2-klein-9b-nvfp4"]
+  Root --&gt; Comp["Comfy-Org__flux2-klein-9B"]
   Root --&gt; Flux2["tonera__FLUX.2-klein-9B-Nunchaku"]
   Root --&gt; Ltx["Kijai__LTX2.3_comfy_balanced"]
   Root --&gt; Comfy["comfy/"]
@@ -1178,7 +1180,7 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 <tr>
 <td><code>qwen_3_8b_fp4mixed.safetensors</code></td>
 <td><code>text_encoders/</code></td>
-<td>Flux TE (Comfy-Org companions)</td>
+<td>Flux TE (Comfy-Org companions; CLIP type <strong><code>flux2</code></strong>)</td>
 </tr>
 <tr>
 <td><code>flux2-vae.safetensors</code></td>
@@ -1198,16 +1200,59 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 <tr>
 <td><code>LTX23_video_vae_bf16.safetensors</code></td>
 <td><code>vae/</code></td>
-<td>LTX video VAE</td>
+<td>LTX video VAE (used by lab I2V/T2V)</td>
 </tr>
 <tr>
 <td><code>LTX23_audio_vae_bf16.safetensors</code></td>
 <td><code>vae/</code></td>
-<td>LTX audio VAE</td>
+<td>LTX audio VAE (downloaded; <strong>not wired</strong> in lab graphs)</td>
 </tr>
 </tbody>
 </table>
-<p>Example graphs: <code>workflows/lab-flux-txt2img.json</code>, <code>lab-flux-img2img.json</code>, <code>lab-ltx-i2v.json</code>, <code>lab-ltx-t2v.json</code>, <code>lab-flux-to-ltx.json</code>.</p>
+<p>Example graphs under <code>workflows/</code> (seeded into Comfy <code>user/default/workflows/</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Graph</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lab-flux-txt2img.json</code></td>
+<td>1024² T2I</td>
+</tr>
+<tr>
+<td><code>lab-flux-txt2img-portrait.json</code></td>
+<td>768×1024</td>
+</tr>
+<tr>
+<td><code>lab-flux-txt2img-landscape.json</code></td>
+<td>1280×720</td>
+</tr>
+<tr>
+<td><code>lab-flux-txt2img-quick.json</code></td>
+<td>768² / 4 steps smoke</td>
+</tr>
+<tr>
+<td><code>lab-flux-img2img.json</code></td>
+<td>I2I</td>
+</tr>
+<tr>
+<td><code>lab-ltx-i2v.json</code> / <code>lab-ltx-i2v-short.json</code></td>
+<td>I2V frames (~97 / ~33)</td>
+</tr>
+<tr>
+<td><code>lab-ltx-t2v.json</code> / <code>lab-ltx-t2v-short.json</code></td>
+<td>T2V frames (~97 / ~33)</td>
+</tr>
+<tr>
+<td><code>lab-flux-to-ltx.json</code></td>
+<td>Flux T2I + handoff note → LTX I2V</td>
+</tr>
+</tbody>
+</table>
+<p>Lab video graphs write <strong>frames</strong> via <code>SaveImage</code> only (no VHS). Audio VAE remains on disk for operators who build joint AV graphs themselves.</p>
 <h3 id="prebuilt-container-image-ghcr">Prebuilt container image (GHCR)<a class="headerlink" href="#prebuilt-container-image-ghcr" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
