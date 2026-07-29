@@ -117,17 +117,19 @@ command -v hf || pipx install huggingface_hub
 
 Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. `HF_PROGRESS=0` turns progress lines off; `HF_PROGRESS_INTERVAL=10` sets the tick (seconds).
 
-### Expected basenames after `download-models` (lab workflow)
+### Expected basenames after `download-models` (lab workflows)
 
 | File | Comfy folder | Role |
 | --- | --- | --- |
-| `flux-2-klein-9b-nvfp4.safetensors` | `diffusion_models/` | Flux fast UNET |
+| `flux-2-klein-9b-nvfp4.safetensors` | `diffusion_models/` | Flux fast UNET (BFL) |
+| `qwen_3_8b_fp4mixed.safetensors` | `text_encoders/` | Flux TE (Comfy-Org companions) |
+| `flux2-vae.safetensors` | `vae/` | Flux VAE (Comfy-Org companions) |
 | `ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors` | `diffusion_models/` | LTX balanced UNET |
 | `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection |
 | `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE |
 | `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE |
 
-Workflow template: `workflows/lab-flux-to-ltx.json` (loaders + notes). Not Z-Image.
+Example graphs: `workflows/lab-flux-txt2img.json`, `lab-flux-img2img.json`, `lab-ltx-i2v.json`, `lab-ltx-t2v.json`, `lab-flux-to-ltx.json`.
 
 ### Prebuilt container image (GHCR)
 

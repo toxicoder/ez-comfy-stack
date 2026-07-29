@@ -49,6 +49,8 @@ teardown() {
   run lab_expected_model_relpaths
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"flux-2-klein-9b-nvfp4.safetensors"* ]]
+  [[ "${output}" == *"qwen_3_8b_fp4mixed.safetensors"* ]]
+  [[ "${output}" == *"flux2-vae.safetensors"* ]]
   [[ "${output}" == *"LTX23_video_vae_bf16.safetensors"* ]]
 
   local root="${TEST_TMP_DIR}/lab_models_root"
