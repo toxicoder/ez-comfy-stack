@@ -54,9 +54,10 @@ MODELS_DIR=$HOME/models
 
 ```text
 /mnt/models/
-  black-forest-labs__FLUX.2-klein-9b-nvfp4/
-  tonera__FLUX.2-klein-9B-Nunchaku/
-  Kijai__LTX2.3_comfy_balanced/
+  black-forest-labs__FLUX.2-klein-9b-nvfp4/   # flux fast UNET
+  Comfy-Org__flux2-klein-9B/                  # companions: Qwen TE + flux2 VAE
+  tonera__FLUX.2-klein-9B-Nunchaku/           # optional (INCLUDE_NUNCHAKU)
+  Kijai__LTX2.3_comfy_balanced/               # ltx balanced selective
   comfy/
     diffusion_models/   # symlinks
     text_encoders/
@@ -70,6 +71,7 @@ This matches the lab hostPath pattern so K8s and Docker demos can share weights.
 flowchart TB
   Root["/mnt/models · MODELS_DIR"]
   Root --> Flux1["black-forest-labs__FLUX.2-klein-9b-nvfp4"]
+  Root --> Comp["Comfy-Org__flux2-klein-9B"]
   Root --> Flux2["tonera__FLUX.2-klein-9B-Nunchaku"]
   Root --> Ltx["Kijai__LTX2.3_comfy_balanced"]
   Root --> Comfy["comfy/"]
@@ -122,14 +124,27 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | File | Comfy folder | Role |
 | --- | --- | --- |
 | `flux-2-klein-9b-nvfp4.safetensors` | `diffusion_models/` | Flux fast UNET (BFL) |
-| `qwen_3_8b_fp4mixed.safetensors` | `text_encoders/` | Flux TE (Comfy-Org companions) |
+| `qwen_3_8b_fp4mixed.safetensors` | `text_encoders/` | Flux TE (Comfy-Org companions; CLIP type **`flux2`**) |
 | `flux2-vae.safetensors` | `vae/` | Flux VAE (Comfy-Org companions) |
 | `ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors` | `diffusion_models/` | LTX balanced UNET |
 | `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection |
-| `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE |
-| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE |
+| `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE (used by lab I2V/T2V) |
+| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (downloaded; **not wired** in lab graphs) |
 
-Example graphs: `workflows/lab-flux-txt2img.json`, `lab-flux-img2img.json`, `lab-ltx-i2v.json`, `lab-ltx-t2v.json`, `lab-flux-to-ltx.json`.
+Example graphs under `workflows/` (seeded into Comfy `user/default/workflows/`):
+
+| Graph | Notes |
+| --- | --- |
+| `lab-flux-txt2img.json` | 1024² T2I |
+| `lab-flux-txt2img-portrait.json` | 768×1024 |
+| `lab-flux-txt2img-landscape.json` | 1280×720 |
+| `lab-flux-txt2img-quick.json` | 768² / 4 steps smoke |
+| `lab-flux-img2img.json` | I2I |
+| `lab-ltx-i2v.json` / `lab-ltx-i2v-short.json` | I2V frames (~97 / ~33) |
+| `lab-ltx-t2v.json` / `lab-ltx-t2v-short.json` | T2V frames (~97 / ~33) |
+| `lab-flux-to-ltx.json` | Flux T2I + handoff note → LTX I2V |
+
+Lab video graphs write **frames** via `SaveImage` only (no VHS). Audio VAE remains on disk for operators who build joint AV graphs themselves.
 
 ### Prebuilt container image (GHCR)
 
