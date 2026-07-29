@@ -278,6 +278,17 @@ line3" "org/x"
   [[ "${output}" == *"13.7 MiB/s"* ]]
   [[ "${output}" == *"elapsed 0:30"* ]]
 
+  # Color vars must be real ESC (ANSI-C) so printf %s works — not only echo -e
+  [[ "${GREEN}" == $'\033'* ]]
+  [[ "${YELLOW}" == $'\033'* ]]
+  [[ "${RED}" == $'\033'* ]]
+  [[ "${NC}" == $'\033'* ]]
+  # TTY-style progress prefix must not print literal \033 when using printf %s
+  run bash -c 'source "'"${REPO_ROOT}"'/scripts/lib/common.sh"; printf "%s[ez-comfy]%s" "${GREEN}" "${NC}"'
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *'\\033'* ]]
+  [[ "${output}" == $'\033'*"[ez-comfy]"$'\033'* ]]
+
   # non-TTY path uses log (no smash); force via redirect
   run bash -c 'source "'"${REPO_ROOT}"'/scripts/lib/common.sh"; hf_progress_emit "↓ test 1 MiB  0 MiB/s  elapsed 0:00" 2>&1'
   [ "${status}" -eq 0 ]

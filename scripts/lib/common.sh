@@ -15,11 +15,13 @@
 #   All error/status messages go to STDERR (Google S3).
 #
 
+# ANSI-C quotes so colors are real ESC bytes (printf %s and echo -e both work).
+# Single-quoted '\033…' stays literal and breaks hf_progress_emit TTY lines.
 # shellcheck disable=SC2034
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-NC='\033[0m'
+GREEN=$'\033[0;32m'
+YELLOW=$'\033[0;33m'
+RED=$'\033[0;31m'
+NC=$'\033[0m'
 
 # Used by signal helpers to track child PIDs for Ctrl+C cleanup.
 _RWSF_CHILD_PID=""
