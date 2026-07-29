@@ -103,6 +103,91 @@ def test_stamp_git_ref_rewrites_this_repo_only(
     assert "https://github.com/toxicoder/ez-comfy-stack/tree/development/scripts/" in out
 
 
+def test_stamp_docs_git_ref_placeholder_default_main(hooks) -> None:
+    """Unset version replaces __DOCS_GIT_REF__ with main."""
+    text = "git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git"
+    out = hooks.stamp_docs_git_ref_placeholder(text)
+    assert out == (
+        "git clone -b main https://github.com/toxicoder/ez-comfy-stack.git"
+    )
+    assert "__DOCS_GIT_REF__" not in out
+
+
+def test_stamp_docs_git_ref_placeholder_development(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Development docs version stamps the placeholder to development."""
+    monkeypatch.setenv("EZ_DOCS_VERSION", "development")
+    text = "git clone -b __DOCS_GIT_REF__ https://example.invalid/repo.git"
+    out = hooks.stamp_docs_git_ref_placeholder(text)
+    assert "git clone -b development " in out
+    assert "__DOCS_GIT_REF__" not in out
+
+
+def test_stamp_docs_git_ref_placeholder_override(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """EZ_DOCS_GIT_REF wins when stamping the placeholder."""
+    monkeypatch.setenv("EZ_DOCS_VERSION", "development")
+    monkeypatch.setenv("EZ_DOCS_GIT_REF", "main")
+    assert (
+        hooks.stamp_docs_git_ref_placeholder("ref=__DOCS_GIT_REF__") == "ref=main"
+    )
+
+
+def test_stamp_docs_git_ref_placeholder_leaves_prose(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Literal branch names in prose are not rewritten without the placeholder."""
+    monkeypatch.setenv("EZ_DOCS_VERSION", "latest")
+    text = "Always branch from development; PR into development."
+    assert hooks.stamp_docs_git_ref_placeholder(text) == text
+
+
+def test_on_page_markdown_stamps_setup_clone(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """on_page_markdown stamps Setup-style clone -b and GitHub refs together."""
+    monkeypatch.setenv("EZ_DOCS_VERSION", "development")
+    md = (
+        "```bash\n"
+        "git clone -b __DOCS_GIT_REF__ "
+        "https://github.com/toxicoder/ez-comfy-stack.git\n"
+        "```\n"
+        "see https://github.com/toxicoder/ez-comfy-stack/blob/main/README.md\n"
+        "Always branch from development.\n"
+    )
+    out = hooks.on_page_markdown(md)
+    assert "git clone -b development " in out
+    assert "__DOCS_GIT_REF__" not in out
+    assert (
+        "https://github.com/toxicoder/ez-comfy-stack/blob/development/README.md"
+        in out
+    )
+    assert "Always branch from development." in out
+
+
+def test_on_page_markdown_stamps_main_for_latest(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """latest alias stamps the placeholder to main."""
+    monkeypatch.setenv("EZ_DOCS_VERSION", "latest")
+    out = hooks.on_page_markdown("git clone -b __DOCS_GIT_REF__ url")
+    assert out == "git clone -b main url"
+
+
+def test_on_post_page_stamps_placeholder(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """on_post_page replaces residual __DOCS_GIT_REF__ in rendered HTML."""
+    monkeypatch.setenv("MIKE_DOCS_VERSION", "development")
+    html = "<pre>git clone -b __DOCS_GIT_REF__ repo</pre><h1>Title</h1>"
+    out = hooks.on_post_page(html)
+    assert "git clone -b development " in out
+    assert "__DOCS_GIT_REF__" not in out
+    assert "ez-docs-dev-banner" in out
+
+
 def test_on_post_page_injects_dev_banner(
     hooks, monkeypatch: pytest.MonkeyPatch
 ) -> None:

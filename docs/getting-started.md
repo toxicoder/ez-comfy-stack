@@ -51,10 +51,11 @@ flowchart LR
 
 ## Setup
 
+Clone the **same long-lived branch these docs describe** (`main` for [latest](https://toxicoder.github.io/ez-comfy-stack/latest/), `development` for [development](https://toxicoder.github.io/ez-comfy-stack/development/)). Feature work still branches from `development` (see [Conventions](project-conventions.md)).
+
 ```bash
-git clone https://github.com/toxicoder/ez-comfy-stack.git
+git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
 cd ez-comfy-stack
-git checkout development   # or your feature branch
 
 # One-shot host bootstrap: .env, MODELS_DIR (sudo), Docker CE if missing, doctor
 ./scripts/manage.sh setup --install-docker
