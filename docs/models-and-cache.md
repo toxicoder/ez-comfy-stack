@@ -135,13 +135,15 @@ Example graphs: `workflows/lab-flux-txt2img.json`, `lab-flux-img2img.json`, `lab
 
 | Item | Detail |
 | --- | --- |
-| Image | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (arm64) |
+| Image (`main`) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (arm64) |
+| Image (`development` / feature) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development` (arm64) |
+| Selection | `manage.sh` maps current git branch → tag (override: `EZ_COMFY_IMAGE`) |
 | Final base | `nvidia/cuda` **runtime** (builder uses **devel** only during image build) |
 | Contains | CUDA runtime, ComfyUI, Python venv, PyTorch/CUDA wheels (`.git`/caches stripped) |
 | Does **not** contain | `HF_TOKEN`, `.env`, host PII, or FLUX/LTX weights |
 | First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
 | Weights | Still under `MODELS_DIR` via `download-models` |
-| Publish | `publish-image` workflow uses Buildx GHA layer cache |
+| Publish | `publish-image` on `main` / `development` (docker/**); Buildx GHA layer cache |
 
 ### Resume & cache
 

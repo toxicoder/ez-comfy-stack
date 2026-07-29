@@ -264,6 +264,8 @@ cmd_doctor() {
   else
     log "compose file: $(lab_compose_file)"
   fi
+  # Soft: show which GHCR channel start would pull (branch-aligned; no network)
+  log "default image: $(stack_default_image) (branch=$(stack_git_branch))"
   if [[ ${ok} -ne 0 ]]; then
     err "Doctor found problems — try: ./scripts/manage.sh setup --install-docker"
     return 1
