@@ -69,11 +69,13 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
   tonera__FLUX.2-klein-9B-Nunchaku/           # optional (INCLUDE_NUNCHAKU)
   Kijai__LTX2.3_comfy_balanced/               # ltx balanced selective
   comfy/
-    diffusion_models/   # symlinks
+    diffusion_models/   # relative symlinks into tier repos above
     text_encoders/
     vae/
   hub/                  # HF cache (optional)
 ```
+
+`download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-klein-9B/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/…` file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.
 
 This matches the lab hostPath pattern so K8s and Docker demos can share weights.
 

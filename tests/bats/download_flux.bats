@@ -198,7 +198,13 @@ teardown() {
   run link_into_comfy companions
   [ "${status}" -eq 0 ]
   [[ -L "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
-  [[ "$(readlink "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors")" == *"flux2-vae.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
+  local link_tgt
+  link_tgt="$(readlink "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors")"
+  [[ "${link_tgt}" == *"flux2-vae.safetensors" ]]
+  # Relative so host /mnt/models vs container /models still resolves
+  [[ "${link_tgt}" != /* ]]
+  [[ "${link_tgt}" == ../* ]]
 }
 
 @test "download-flux cmd_run fails when companions incomplete after mock" {
