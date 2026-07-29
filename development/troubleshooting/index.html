@@ -1258,9 +1258,14 @@
 <td>Use seeded <strong>flux-*-lab-example</strong> graphs: CLIP type <strong><code>flux2</code></strong> with <code>qwen_3_8b_fp4mixed</code>, latent <strong><code>EmptyFlux2LatentImage</code></strong>. Do not use <code>qwen_image</code> / Z-Image loaders</td>
 </tr>
 <tr>
-<td><code>Failed to find C compiler</code> / Triton on <strong>CLIPTextEncode</strong> (Flux lab graphs)</td>
-<td>Runtime image has no <code>gcc</code>/<code>g++</code>; PyTorch 2.13 Triton JIT needs CC for ops such as <code>bmm_outer_product</code></td>
-<td>Pull/rebuild the image (runtime stage installs <code>gcc</code> <code>g++</code>) and restart: <code>./scripts/manage.sh stop &amp;&amp; ./scripts/manage.sh start</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx which gcc</code></td>
+<td><code>Failed to find C compiler</code> / Triton on <strong>CLIPTextEncode</strong></td>
+<td>Runtime image missing <code>gcc</code>/<code>g++</code>; PyTorch 2.13 Triton JIT needs CC for <code>cuda_utils</code> / <code>bmm_outer_product</code></td>
+<td>Pull/rebuild image (runtime installs <code>gcc</code> <code>g++</code> + <code>python3-dev</code>) and restart. Confirm: <code>docker exec ez-comfy-flux-to-ltx which gcc</code></td>
+</tr>
+<tr>
+<td><code>CalledProcessError</code> compiling <code>cuda_utils*.so</code> / <code>bmm_outer_product</code> on <strong>CLIPTextEncode</strong> (LTX Gemma or Flux)</td>
+<td>Triton JIT has <code>gcc</code> but fails the compile (missing <code>Python.h</code> / <code>python3-dev</code>, or <code>libcuda.so.1</code> not on gcc <code>LIBRARY_PATH</code>). stderr is swallowed by Triton</td>
+<td>Pull/rebuild image so runtime has <strong><code>python3-dev</code></strong> + <code>gcc</code>/<code>g++</code>. Restart. Confirm: <code>docker exec ez-comfy-flux-to-ltx test -f /usr/include/python3.*/Python.h &amp;&amp; echo ok</code>. Logs should show <code>Triton JIT deps OK</code> (or auto-disable). Escape hatch: <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> then restart (eager/cuBLAS fallback; CLIP still works)</td>
 </tr>
 <tr>
 <td>KSampler LTX: <code>Expected size 768 but got size 4096</code> / <code>embeddings_connector</code></td>

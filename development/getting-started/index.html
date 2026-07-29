@@ -1511,7 +1511,7 @@
 <li>LTX graphs use <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>) and save <strong>frames</strong> via <code>SaveImage</code> (no VideoHelperSuite / VHS required)</li>
 <li><code>download-models</code> also places <code>LTX23_audio_vae_bf16</code> for advanced AV experiments; <strong>lab examples do not wire audio</strong></li>
 <li>Lab graphs use <strong>core</strong> loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples</li>
-<li>Runtime image includes <strong><code>gcc</code>/<code>g++</code></strong> so PyTorch 2.13 Triton can JIT on first CLIP encode</li>
+<li>Runtime image includes <strong><code>gcc</code>/<code>g++</code></strong> and <strong><code>python3-dev</code></strong> so PyTorch 2.13 Triton can JIT <code>cuda_utils</code> on first CLIP encode (fallback: <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code>)</li>
 <li><strong>Not Z-Image.</strong> Community Z-Image templates need different weights (<code>ae</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*</code>)</li>
 </ul>
 </details>

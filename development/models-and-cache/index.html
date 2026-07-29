@@ -1566,15 +1566,15 @@
 <td>Yes</td>
 </tr>
 <tr>
-<td>Runtime <code>apt</code> only (<code>gcc</code>/<code>g++</code> for Triton JIT)</td>
+<td>Runtime <code>apt</code> only (<code>gcc</code>/<code>g++</code>/<code>python3-dev</code> for Triton JIT)</td>
 <td>No</td>
 <td>No (venv COPY still cacheable)</td>
 <td>No</td>
 </tr>
 </tbody>
 </table>
-<p>Builder: <strong>COPY only phase modules each <code>RUN</code> needs</strong> (<code>common</code>+<code>phase-venv-torch</code> → <code>phase-comfy</code> → <code>phase-nodes</code>+<code>phase-finalize</code>) with BuildKit pip cache mounts. Runtime: <strong><code>COPY /opt/parts/venv</code> then <code>/opt/parts/app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
-<p>Runtime installs <strong><code>gcc</code> + <code>g++</code></strong> (not full <code>build-essential</code>) so PyTorch 2.13 Triton can JIT on first <code>CLIPTextEncode</code>. That is a small apt layer; it does <strong>not</strong> re-pull multi‑GB torch/venv.</p>
+<p>Builder: <strong>COPY only phase modules each <code>RUN</code> needs</strong> (<code>common</code>+<code>phase-venv-torch</code> → <code>phase-comfy</code> → <code>phase-nodes</code>+<code>phase-finalize</code>) with BuildKit pip cache mounts. Runtime: <strong><code>COPY /opt/parts/venv</code> then <code>/opt/parts/app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, <code>pythonpath/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
+<p>Runtime installs <strong><code>gcc</code> + <code>g++</code> + <code>python3-dev</code></strong> (not full <code>build-essential</code>) so PyTorch 2.13 Triton can JIT-compile <code>cuda_utils</code> (needs <strong>CC + <code>Python.h</code></strong>) on first <code>CLIPTextEncode</code>. That is a small apt layer; it does <strong>not</strong> re-pull multi‑GB torch/venv. If JIT deps are still incomplete, the entrypoint sets <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> so torch falls back to eager/cuBLAS.</p>
 <p><strong>Caveat:</strong> the venv layer is the <strong>final</strong> <code>.venv</code> after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.</p>
 </details>
 <h3 id="prebuild-version-pins-validated">Prebuild version pins (validated)<a class="headerlink" href="#prebuild-version-pins-validated" title="Permanent link">&para;</a></h3>
