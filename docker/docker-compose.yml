@@ -58,6 +58,9 @@ services:
       LAB_FLUX_TIER: fast
       LAB_LTX_TIER: balanced
       LAB_VISUAL_ENABLE_NUNCHAKU: "1"
+      # 1 = force-disable torch.backends.python_native.triton (CLIP still works via eager)
+      # Entrypoint may also set this when Triton JIT deps are missing.
+      LAB_DISABLE_TORCH_NATIVE_TRITON: ${LAB_DISABLE_TORCH_NATIVE_TRITON:-0}
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
     volumes:
@@ -70,6 +73,7 @@ services:
       - ./install-comfy.sh:/opt/ez-comfy/install-comfy.sh:ro
       - ./install-comfy:/opt/ez-comfy/install-comfy:ro
       - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
+      - ./pythonpath:/opt/ez-comfy/pythonpath:ro
     gpus: all
     shm_size: "16gb"
     mem_limit: ${MEM_LIMIT:-90g}

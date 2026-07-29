@@ -309,11 +309,11 @@ flowchart TB
     | `install-comfy/phase-nodes.sh` or node sources only (no new pip) | No | No | Yes (smaller) |
     | `install-comfy/phase-comfy.sh` / `COMFYUI_REF` bump (may change requirements) | No (torch phase) | **Yes if pip set changes** | Yes |
     | `install-comfy/phase-venv-torch.sh` / CUDA base / apt | Yes | Yes | Yes |
-    | Runtime `apt` only (`gcc`/`g++` for Triton JIT) | No | No (venv COPY still cacheable) | No |
+    | Runtime `apt` only (`gcc`/`g++`/`python3-dev` for Triton JIT) | No | No (venv COPY still cacheable) | No |
 
-    Builder: **COPY only phase modules each `RUN` needs** (`common`+`phase-venv-torch` → `phase-comfy` → `phase-nodes`+`phase-finalize`) with BuildKit pip cache mounts. Runtime: **`COPY /opt/parts/venv` then `/opt/parts/app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+    Builder: **COPY only phase modules each `RUN` needs** (`common`+`phase-venv-torch` → `phase-comfy` → `phase-nodes`+`phase-finalize`) with BuildKit pip cache mounts. Runtime: **`COPY /opt/parts/venv` then `/opt/parts/app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, `pythonpath/`, and the free-memory patch so local script iteration needs **no image rebuild**.
 
-    Runtime installs **`gcc` + `g++`** (not full `build-essential`) so PyTorch 2.13 Triton can JIT on first `CLIPTextEncode`. That is a small apt layer; it does **not** re-pull multi‑GB torch/venv.
+    Runtime installs **`gcc` + `g++` + `python3-dev`** (not full `build-essential`) so PyTorch 2.13 Triton can JIT-compile `cuda_utils` (needs **CC + `Python.h`**) on first `CLIPTextEncode`. That is a small apt layer; it does **not** re-pull multi‑GB torch/venv. If JIT deps are still incomplete, the entrypoint sets `LAB_DISABLE_TORCH_NATIVE_TRITON=1` so torch falls back to eager/cuBLAS.
 
     **Caveat:** the venv layer is the **final** `.venv` after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.
 

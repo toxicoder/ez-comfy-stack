@@ -326,3 +326,106 @@ teardown() {
   run main
   [ "${status}" -ne 0 ]
 }
+
+@test "find_libcuda_dir and ensure_triton_build_env set LIBRARY_PATH" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local fake_dir
+  fake_dir="${TEST_TMP_DIR}/fakecuda"
+  mkdir -p "${fake_dir}"
+  : >"${fake_dir}/libcuda.so.1"
+  export LD_LIBRARY_PATH="${fake_dir}"
+  unset LIBRARY_PATH
+
+  run find_libcuda_dir
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == "${fake_dir}" ]]
+
+  run ensure_triton_build_env
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"libcuda dir=${fake_dir}"* ]]
+  # ensure_triton_build_env exports in subshell via run — re-run in current shell
+  ensure_triton_build_env
+  [[ "${LIBRARY_PATH}" == *"${fake_dir}"* ]]
+  [[ "${LD_LIBRARY_PATH}" == *"${fake_dir}"* ]]
+}
+
+@test "find_libcuda_dir fails when libcuda missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export LD_LIBRARY_PATH="${TEST_TMP_DIR}/empty_ld"
+  mkdir -p "${LD_LIBRARY_PATH}"
+  # Hide system ldconfig results by putting a no-op ldconfig first if present is hard;
+  # just assert search of empty LD path + missing common files may still find host
+  # libcuda on developer machines. Force failure by only using a private path
+  # and stubbing ldconfig.
+  install_mock_bin ldconfig 'exit 1'
+  run find_libcuda_dir
+  [ "${status}" -ne 0 ]
+}
+
+@test "triton_build_deps_ok requires gcc Python.h and libcuda" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  install_mock_bin ldconfig 'exit 1'
+  export LD_LIBRARY_PATH="${TEST_TMP_DIR}/no_cuda"
+  mkdir -p "${LD_LIBRARY_PATH}"
+  # Host may still have gcc + Python.h; without libcuda this must fail.
+  run triton_build_deps_ok
+  [ "${status}" -ne 0 ]
+
+  local fake_dir py_inc
+  fake_dir="${TEST_TMP_DIR}/okcuda"
+  mkdir -p "${fake_dir}"
+  : >"${fake_dir}/libcuda.so.1"
+  export LD_LIBRARY_PATH="${fake_dir}"
+  install_mock_bin gcc 'exit 0'
+  # Provide a fake Python that reports include under TEST_TMP and a real Python.h
+  py_inc="${TEST_TMP_DIR}/pyinc"
+  mkdir -p "${py_inc}"
+  : >"${py_inc}/Python.h"
+  install_mock_bin python "echo '${py_inc}'"
+  run triton_build_deps_ok
+  [ "${status}" -eq 0 ]
+}
+
+@test "configure_torch_native_triton force and auto-disable" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export LAB_PYTHONPATH_ROOT="${REPO_ROOT}/docker/pythonpath"
+  unset PYTHONPATH
+
+  export LAB_DISABLE_TORCH_NATIVE_TRITON=1
+  run configure_torch_native_triton
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"LAB_DISABLE_TORCH_NATIVE_TRITON=1"* ]]
+  configure_torch_native_triton
+  [[ "${PYTHONPATH}" == *"${LAB_PYTHONPATH_ROOT}"* ]]
+
+  # Auto-disable when deps incomplete
+  export LAB_DISABLE_TORCH_NATIVE_TRITON=0
+  install_mock_bin ldconfig 'exit 1'
+  export LD_LIBRARY_PATH="${TEST_TMP_DIR}/no_cuda2"
+  mkdir -p "${LD_LIBRARY_PATH}"
+  configure_torch_native_triton
+  [[ "${LAB_DISABLE_TORCH_NATIVE_TRITON}" == "1" ]]
+}
+
+@test "configure_torch_native_triton keeps Triton when deps OK" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export LAB_PYTHONPATH_ROOT="${REPO_ROOT}/docker/pythonpath"
+  export LAB_DISABLE_TORCH_NATIVE_TRITON=0
+  local fake_dir py_inc
+  fake_dir="${TEST_TMP_DIR}/okcuda2"
+  py_inc="${TEST_TMP_DIR}/pyinc2"
+  mkdir -p "${fake_dir}" "${py_inc}"
+  : >"${fake_dir}/libcuda.so.1"
+  : >"${py_inc}/Python.h"
+  export LD_LIBRARY_PATH="${fake_dir}"
+  install_mock_bin ldconfig 'exit 1'
+  install_mock_bin gcc 'exit 0'
+  install_mock_bin python "echo '${py_inc}'"
+  configure_torch_native_triton
+  [[ "${LAB_DISABLE_TORCH_NATIVE_TRITON}" == "0" ]]
+}

@@ -117,12 +117,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Runtime: keep slim (no python3-dev / git-lfs / full build-essential).
-# gcc+g++ are required: PyTorch 2.13 Triton JIT compiles small C helpers on first
-# CLIPTextEncode / native op use (e.g. bmm_outer_product). Without CC in PATH:
-# "Failed to find C compiler. Please specify via CC environment variable".
+# Runtime: keep slim (no git-lfs / full build-essential).
+# Triton JIT (PyTorch 2.13 torch._native / first CLIPTextEncode) needs:
+#   - gcc/g++  — compile cuda_utils.c (else "Failed to find C compiler")
+#   - python3-dev — Python.h for that extension (else CalledProcessError from gcc)
+# Not full build-essential: small apt layer; does not bust multi-GB venv cache.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git python3 python3-pip python3-venv \
+    git python3 python3-pip python3-venv python3-dev \
     gcc g++ \
     curl ca-certificates libgl1 libglib2.0-0 rsync \
     && mkdir -p /opt/ez-comfy/workflows /models /opt/ez-comfy/install-comfy \
@@ -140,6 +141,8 @@ COPY --from=builder /opt/parts/app /opt/comfy-prebuilt
 COPY --chmod=755 install-comfy.sh entrypoint.sh /opt/ez-comfy/
 COPY --chmod=755 install-comfy/ /opt/ez-comfy/install-comfy/
 COPY --chmod=644 patch_get_free_memory.py /opt/ez-comfy/
+# PYTHONPATH sitecustomize: optional torch.backends.python_native.triton disable
+COPY --chmod=644 pythonpath/ /opt/ez-comfy/pythonpath/
 
 # Runtime uses the named volume; seed from LAB_PREBUILT_ROOT on first start
 ENV COMFY_HOME=/comfy-state/ComfyUI \
