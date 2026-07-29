@@ -18,8 +18,10 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        # Public Hub by default; set CUDA_BASE_IMAGE in .env for NGC after docker login nvcr.io
+        # Builder (devel) for optional compile; public Hub by default.
+        # Set CUDA_BASE_IMAGE / CUDA_RUNTIME_IMAGE in .env for NGC after docker login nvcr.io
         CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvidia/cuda:13.0.0-devel-ubuntu24.04}
+        CUDA_RUNTIME_IMAGE: ${CUDA_RUNTIME_IMAGE:-nvidia/cuda:13.0.0-runtime-ubuntu24.04}
         # 1 = bake Comfy+torch into image (default). 0 = thin image (cold pip at runtime).
         EZ_COMFY_PREBUILD: ${EZ_COMFY_PREBUILD:-1}
     # Prefer GHCR prebuilt (arm64). Override EZ_COMFY_IMAGE for local tags.

@@ -39,9 +39,9 @@ teardown() {
   [ "${status}" -eq 0 ]
   run install_format_elapsed 90
   [ "${output}" = "1:30" ]
-  run step 1 11 "Clone ComfyUI"
+  run step 1 12 "Clone ComfyUI"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"step 1/11"* ]]
+  [[ "${output}" == *"step 1/12"* ]]
   [[ "${output}" == *"Clone ComfyUI"* ]]
 
   mkdir -p "${COMFY_HOME}/models"
@@ -74,6 +74,18 @@ teardown() {
   run clone_node "https://example.com/node.git" "DemoNode"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"custom node"* ]]
+
+  # strip_prebuilt removes .git and bytecode junk
+  local strip_root
+  strip_root="${TEST_TMP_DIR}/strip_tree"
+  mkdir -p "${strip_root}/.git" "${strip_root}/pkg/__pycache__" "${strip_root}/pkg"
+  : >"${strip_root}/pkg/__pycache__/x.pyc"
+  : >"${strip_root}/pkg/mod.py"
+  run strip_prebuilt "${strip_root}"
+  [ "${status}" -eq 0 ]
+  [[ ! -d ${strip_root}/.git ]]
+  [[ ! -d ${strip_root}/pkg/__pycache__ ]]
+  [[ -f ${strip_root}/pkg/mod.py ]]
 }
 
 @test "main with mocked install and NO_EXEC" {

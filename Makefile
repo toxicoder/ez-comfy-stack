@@ -25,9 +25,17 @@ help:
 test:
 	bash tests/run_all.sh
 
-# @target bats — shell behavior tests only
+# @target bats — shell behavior tests only (parallel across files when available)
 bats:
-	bats tests/bats/*.bats
+	@jobs="$${BATS_JOBS:-}"; \
+	if [ -z "$$jobs" ]; then \
+	  jobs=$$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4); \
+	fi; \
+	if bats --help 2>&1 | grep -q -- '--jobs' && command -v parallel >/dev/null 2>&1; then \
+	  bats --jobs "$$jobs" --no-parallelize-within-files tests/bats; \
+	else \
+	  bats tests/bats; \
+	fi
 
 # @target python — patch module unit tests with 100% coverage fail-under
 python:

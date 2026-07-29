@@ -718,8 +718,11 @@ clear_stale_hf_locks() {
 
   log "Checking for stale Hugging Face download locks under ${root} …"
 
-  # Never kill our own active download (mid-download cleanup = locks only)
-  if [[ ${locks_only} -eq 0 ]] && command -v pgrep >/dev/null 2>&1; then
+  # Never kill our own active download (mid-download cleanup = locks only).
+  # Skip process sweep under LAB_HERMETIC=1: parallel BATS files share a host PID
+  # namespace and pgrep -f 'hf download' would kill sibling test processes.
+  if [[ ${locks_only} -eq 0 && ${LAB_HERMETIC:-0} != "1" ]] &&
+    command -v pgrep >/dev/null 2>&1; then
     set +m 2>/dev/null || true
     while read -r pid; do
       [[ -z ${pid} || ! ${pid} =~ ^[0-9]+$ ]] && continue

@@ -1,7 +1,6 @@
 # Purpose:
-#   CUDA 13 image for ComfyUI flux-to-ltx on DGX Spark (GB10 / aarch64).
-#   Optionally prebuilds ComfyUI + PyTorch into /opt/comfy-prebuilt so first
-#   container start seeds the volume from local disk (no multi-GB pip).
+#   Multi-stage CUDA image for ComfyUI flux-to-ltx on DGX Spark (GB10 / aarch64).
+#   Builder (devel) prebuilds ComfyUI + PyTorch; runtime (runtime base) is slim.
 #
 # Privacy:
 #   Build context is only whitelisted docker/* scripts (see .dockerignore).
@@ -11,12 +10,16 @@
 # Safety:
 #   No models in image (host MODELS_DIR). restart: "no" in compose.
 #
-# Base image:
-#   Public Docker Hub nvidia/cuda (pull only). Publish *our* image to GHCR only.
-#   Override: CUDA_BASE_IMAGE=nvcr.io/nvidia/cuda:13.0.0-devel-ubuntu24.04
+# Base images:
+#   Builder default: public Docker Hub nvidia/cuda devel (compile optional wheels).
+#   Runtime default: public Docker Hub nvidia/cuda runtime (no nvcc).
+#   Override: CUDA_BASE_IMAGE / CUDA_RUNTIME_IMAGE (NGC after docker login nvcr.io).
 
 ARG CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-devel-ubuntu24.04
-FROM ${CUDA_BASE_IMAGE} AS base
+ARG CUDA_RUNTIME_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
+
+# ── builder: install Comfy + torch, strip bloat ─────────────────────────────
+FROM ${CUDA_BASE_IMAGE} AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -44,11 +47,33 @@ ENV COMFY_HOME=/opt/comfy-prebuilt \
 RUN if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \
       echo "[Dockerfile] prebuilding ComfyUI into /opt/comfy-prebuilt …"; \
       bash /opt/ez-comfy/install-comfy.sh; \
-      rm -rf /root/.cache/pip /tmp/*; \
+      rm -rf /root/.cache /tmp/* /var/tmp/*; \
     else \
       echo "[Dockerfile] EZ_COMFY_PREBUILD=0 — skipping prebuild"; \
       mkdir -p /opt/comfy-prebuilt; \
     fi
+
+# ── runtime: slim CUDA runtime + prebuilt tree ──────────────────────────────
+FROM ${CUDA_RUNTIME_IMAGE} AS runtime
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Runtime only: no build-essential / python3-dev / git-lfs (cold install uses wheels).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git python3 python3-pip python3-venv \
+    curl ca-certificates libgl1 libglib2.0-0 rsync \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/ez-comfy
+
+COPY install-comfy.sh entrypoint.sh patch_get_free_memory.py /opt/ez-comfy/
+RUN chmod +x /opt/ez-comfy/install-comfy.sh /opt/ez-comfy/entrypoint.sh \
+    && mkdir -p /opt/ez-comfy/workflows /models
+
+COPY --from=builder /opt/comfy-prebuilt /opt/comfy-prebuilt
 
 # Runtime uses the named volume; seed from LAB_PREBUILT_ROOT on first start
 ENV COMFY_HOME=/comfy-state/ComfyUI \
