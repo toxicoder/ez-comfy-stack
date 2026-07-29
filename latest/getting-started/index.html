@@ -1005,9 +1005,9 @@
   Optional --&gt; Ready
   Accounts --&gt; Ready</code></pre>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
+<p>Clone the <strong>same long-lived branch these docs describe</strong> (<code>main</code> for <a href="https://toxicoder.github.io/ez-comfy-stack/latest/">latest</a>, <code>development</code> for <a href="https://toxicoder.github.io/ez-comfy-stack/development/">development</a>). Feature work still branches from <code>development</code> (see <a href="../project-conventions/">Conventions</a>).</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>main<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
 <span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
-git<span class="w"> </span>checkout<span class="w"> </span>development<span class="w">   </span><span class="c1"># or your feature branch</span>
 
 <span class="c1"># One-shot host bootstrap: .env, MODELS_DIR (sudo), Docker CE if missing, doctor</span>
 ./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
