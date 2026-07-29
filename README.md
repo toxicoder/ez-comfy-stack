@@ -69,7 +69,7 @@ scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
 scripts/utilities download-flux, download-ltx, download-limit
 config/           Resource / headroom policy
-workflows/        Seeded Comfy workflow note
+workflows/        Seeded lab ComfyUI example graphs
 docs/             MkDocs site
 tests/            BATS + pytest + coverage gate
 ```

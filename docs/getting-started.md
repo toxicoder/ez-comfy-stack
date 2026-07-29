@@ -112,21 +112,31 @@ LTX **balanced** pulls a **selective** subset of `Kijai/LTX2.3_comfy` (distilled
 
 Open `http://<spark-ip>:8188` (or port-forward if needed).
 
-### Example workflows (image + video)
+### Example workflows (image + video frames)
 
 After `download-models` + `start`, open ComfyUI and load one of:
 
 | Workflow | What it does |
 | --- | --- |
-| **lab-flux-txt2img** | Text → image (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE) |
+| **lab-flux-txt2img** | Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE) |
+| **lab-flux-txt2img-portrait** | Text → image **768×1024** portrait |
+| **lab-flux-txt2img-landscape** | Text → image **1280×720** landscape |
+| **lab-flux-txt2img-quick** | Smoke test: **768²**, **4** steps |
 | **lab-flux-img2img** | Image → image (same Flux pack; set LoadImage input) |
-| **lab-ltx-i2v** | Image → video frames (LTX-2.3 balanced FP8; set start frame) |
-| **lab-ltx-t2v** | Text → video frames (LTX empty latent) |
-| **lab-flux-to-ltx** | Flux txt2img graph + notes for handoff to LTX I2V |
+| **lab-ltx-i2v** | Image → video frames (~97 @ 24 fps; set start frame) |
+| **lab-ltx-i2v-short** | Faster I2V: **33** frames @ 24 fps |
+| **lab-ltx-t2v** | Text → video frames (~97 @ 24 fps) |
+| **lab-ltx-t2v-short** | Faster T2V: **33** frames @ 24 fps |
+| **lab-flux-to-ltx** | Flux txt2img + handoff notes → load **lab-ltx-i2v** for video frames |
 
 These are under `user/default/workflows/` (copied from the host `workflows/` mount).
 
-**Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`). Use the lab workflows above for this stack.
+**Lab details**
+
+- Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
+- LTX graphs save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
+- `download-models` also places `LTX23_audio_vae_bf16` for advanced AV experiments; **lab examples do not wire audio**
+- **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)
 
 !!! tip "Prebuilt image (GHCR)"
     `manage.sh start` pulls a **branch-aligned** arm64 image published by the `publish-image` workflow:

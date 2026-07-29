@@ -1,8 +1,8 @@
 {
   "id": "lab-ltx-i2v",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 12,
-  "last_link_id": 12,
+  "last_link_id": 18,
   "nodes": [
     {
       "id": 1,
@@ -92,7 +92,8 @@
           "name": "CLIP",
           "type": "CLIP",
           "links": [
-            4
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -165,7 +166,7 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 4
+          "link": 16
         }
       ],
       "outputs": [
@@ -204,7 +205,7 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 4
+          "link": 17
         }
       ],
       "outputs": [
@@ -441,7 +442,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            14
+            18
           ],
           "slot_index": 0
         }
@@ -451,47 +452,6 @@
       },
       "widgets_values": [],
       "title": "VAE Decode"
-    },
-    {
-      "id": 11,
-      "type": "VHS_VideoCombine",
-      "pos": [
-        1640,
-        400
-      ],
-      "size": [
-        320,
-        300
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 14
-        }
-      ],
-      "outputs": [
-        {
-          "name": "Filenames",
-          "type": "VHS_FILENAMES",
-          "links": null
-        }
-      ],
-      "title": "Save video (VHS if installed)",
-      "properties": {
-        "Node name for S&R": "VHS_VideoCombine"
-      },
-      "widgets_values": {
-        "frame_rate": 24,
-        "loop_count": 0,
-        "filename_prefix": "ez_ltx_i2v",
-        "format": "video/h264-mp4",
-        "pingpong": false,
-        "save_output": true
-      }
     },
     {
       "id": 12,
@@ -511,7 +471,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 14
+          "link": 18
         }
       ],
       "outputs": [],
@@ -521,7 +481,7 @@
       "widgets_values": [
         "ez_ltx_i2v_frames"
       ],
-      "title": "Save frames (always works)"
+      "title": "Save frames"
     }
   ],
   "links": [
@@ -548,14 +508,6 @@
       10,
       1,
       "VAE"
-    ],
-    [
-      4,
-      3,
-      0,
-      5,
-      0,
-      "CLIP"
     ],
     [
       5,
@@ -630,15 +582,23 @@
       "LATENT"
     ],
     [
-      14,
-      10,
+      16,
+      3,
       0,
-      11,
+      5,
       0,
-      "IMAGE"
+      "CLIP"
     ],
     [
-      15,
+      17,
+      3,
+      0,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      18,
       10,
       0,
       12,
@@ -651,7 +611,7 @@
   "extra": {
     "lab_profile": "ltx-i2v",
     "lab_ltx_tier": "balanced",
-    "lab_note": "Requires ComfyUI LTXV core nodes; SaveImage always works for frames. VHS_VideoCombine optional."
+    "lab_note": "Requires ComfyUI LTXV core nodes. Saves video frames via SaveImage. Audio VAE is downloaded for advanced AV experiments but not used in this lab graph."
   },
   "version": 0.4
 }

@@ -1,6 +1,6 @@
 {
   "id": "lab-flux-txt2img",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 9,
   "last_link_id": 9,
   "nodes": [
@@ -69,7 +69,7 @@
       },
       "widgets_values": [
         "qwen_3_8b_fp4mixed.safetensors",
-        "qwen_image",
+        "flux2",
         "default"
       ],
       "title": "Qwen3-8B TE (fp4)"
@@ -187,7 +187,7 @@
     },
     {
       "id": 6,
-      "type": "EmptySD3LatentImage",
+      "type": "EmptyFlux2LatentImage",
       "pos": [
         450,
         450
@@ -211,7 +211,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "EmptySD3LatentImage"
+        "Node name for S&R": "EmptyFlux2LatentImage"
       },
       "widgets_values": [
         1024,
