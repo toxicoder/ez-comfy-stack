@@ -1,7 +1,7 @@
 {
   "id": "ltx-i2v-lab-example",
-  "revision": 4,
-  "last_node_id": 16,
+  "revision": 5,
+  "last_node_id": 17,
   "last_link_id": 24,
   "nodes": [
     {
@@ -184,7 +184,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "smooth camera push-in, cinematic motion, natural lighting"
+        "Photoreal continuation of the input still. Begin on the locked composition of the first frame, then execute a smooth cinematic push-in toward the main subject over several seconds. Micro-motion only: gentle parallax, soft light shifts, fabric or foliage stir if present, natural ambient life in the background. Preserve subject identity, materials, and lighting direction from the still. Steady camera, continuous motion, no jump cuts. Soft environmental ambience\u2014distant city hush or light wind\u2014without dialogue."
       ],
       "title": "Motion / prompt"
     },
@@ -223,7 +223,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "blurry, jitter, watermark"
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text, overexposed flash frames, chaotic camera shake"
       ],
       "title": "Negative"
     },
@@ -642,6 +642,30 @@
       },
       "widgets_values": [],
       "title": "Separate AV latents"
+    },
+    {
+      "id": 17,
+      "type": "Note",
+      "pos": [
+        40,
+        774.0
+      ],
+      "size": [
+        960,
+        340
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## LTX I2V ~97 frames @ 24 fps (lab)\n\nWhat this graph does: Image\u2192video frames (~97 @ 24 fps \u2248 4 s). Set LoadImage to your still.\nModels: ltx distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 20 steps \u00b7 97 frames @ 24.0 fps \u2248 4.0 s \u00b7 768\u00d7512.\nSaveImage prefix: ez_ltx_i2v_frames (frame sequence).\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion), not a static caption alone.\n\u2022 I2V: restate the still\u2019s content, then one clear camera move + micro-motion; keep identity stable.\n\u2022 T2V: chronological shot description; one primary camera move for short clips.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) when you experiment with CFG > 1.\n\nHow to run:\n1. Set LoadImage to your start frame (e.g. Flux bicycle still).\n2. Review Motion / prompt; queue.\n3. Encode frames \u2192 MP4 with ffmpeg (below).\n\nOUTPUT = FRAMES, NOT MP4\nThis lab saves a PNG sequence via SaveImage (prefix above). VideoHelperSuite (VHS) is NOT installed.\n\nTo get a playable video on the host (24 fps lab default):\n  ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_i2v_frames_*.png' \\\n    -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4\nFind frames under Comfy\u2019s output folder (container volume / mapped host path).\nOptional in-Comfy MP4: install ComfyUI-VideoHelperSuite and add VHS_VideoCombine after VAEDecode.\nAudio: LTX-2.3 uses empty joint-AV audio latents; lab does not decode/save audio.\n\nJoint AV note: LTXVEmptyLatentAudio + LTXVConcatAVLatent are required for KSampler; LTXVSeparateAVLatent then video VAEDecode + SaveImage (audio latent unused)."
+      ],
+      "title": "LTX I2V ~97 frames @ 24 fps (lab) \u2014 operator note"
     }
   ],
   "links": [
@@ -803,8 +827,9 @@
   "extra": {
     "lab_profile": "ltx-i2v",
     "lab_ltx_tier": "balanced",
-    "lab_note": "DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv). LTX-2.3 is joint AV: LTXVEmptyLatentAudio + LTXVConcatAVLatent required for KSampler; LTXVSeparateAVLatent then video VAEDecode + SaveImage (audio latent unused).",
-    "lab_ltx_av": true
+    "lab_note": "## LTX I2V ~97 frames @ 24 fps (lab)\n\nWhat this graph does: Image\u2192video frames (~97 @ 24 fps \u2248 4 s). Set LoadImage to your still.\nModels: ltx distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 20 steps \u00b7 97 frames @ 24.0 fps \u2248 4.0 s \u00b7 768\u00d7512.\nSaveImage prefix: ez_ltx_i2v_frames (frame sequence).\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion), not a static caption alone.\n\u2022 I2V: restate the still\u2019s content, then one clear camera move + micro-motion; keep identity stable.\n\u2022 T2V: chronological shot description; one primary camera move for short clips.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) when you experiment with CFG > 1.\n\nHow to run:\n1. Set LoadImage to your start frame (e.g. Flux bicycle still).\n2. Review Motion / prompt; queue.\n3. Encode frames \u2192 MP4 with ffmpeg (below).\n\nOUTPUT = FRAMES, NOT MP4\nThis lab saves a PNG sequence via SaveImage (prefix above). VideoHelperSuite (VHS) is NOT installed.\n\nTo get a playable video on the host (24 fps lab default):\n  ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_i2v_frames_*.png' \\\n    -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4\nFind frames under Comfy\u2019s output folder (container volume / mapped host path).\nOptional in-Comfy MP4: install ComfyUI-VideoHelperSuite and add VHS_VideoCombine after VAEDecode.\nAudio: LTX-2.3 uses empty joint-AV audio latents; lab does not decode/save audio.\n\nJoint AV note: LTXVEmptyLatentAudio + LTXVConcatAVLatent are required for KSampler; LTXVSeparateAVLatent then video VAEDecode + SaveImage (audio latent unused).",
+    "lab_ltx_av": true,
+    "lab_description": "Image\u2192video frames (~97 @ 24 fps \u2248 4 s). Set LoadImage to your still."
   },
   "version": 0.4
 }

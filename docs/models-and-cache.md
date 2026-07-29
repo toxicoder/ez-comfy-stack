@@ -159,7 +159,7 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern
 | `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide short T2V |
 | `flux-to-ltx-lab-example.json` / `flux-to-ltx-short-lab-example.json` | Flux T2I + handoff note → LTX I2V |
 
-Lab video graphs write **frames** via `SaveImage` only (no VHS). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save is optional and not included in lab examples.
+Lab video graphs write **frames** via `SaveImage` only (no VHS). Stitch a playable MP4 on the host with `ffmpeg` at the graph frame rate (lab default **24 fps**), or install VideoHelperSuite yourself — see [Getting Started → Frames → playable video](getting-started.md#frames-playable-video-ltx). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save is optional and not included in lab examples. Every lab graph includes an on-canvas **Note** with models, prompting, and (for LTX) frames→video steps.
 
 ### Gated models / HF_TOKEN
 

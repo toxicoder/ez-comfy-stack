@@ -12,13 +12,15 @@ tags: [getting-started, docker, comfyui]
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- Example workflows and optional deep-dives
+- Example workflows, prompting tips, and frames → playable video
+- Optional deep-dives
 
 **What this enables**
 
 - A first successful open of ComfyUI at port **8188**
 - Safe model downloads that leave bandwidth for SSH
 - Choosing prebuilt GHCR pull (default) or a local Dockerfile build
+- Correct Flux / LTX prompting and turning LTX frame sequences into MP4
 
 ---
 
@@ -302,9 +304,54 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **flux-to-ltx-lab-example** | Flux txt2img + handoff notes → load **ltx-i2v-lab-example** for video frames |
     | **flux-to-ltx-short-lab-example** | Same handoff aimed at **ltx-i2v-short-lab-example** / quick I2V |
 
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain how to turn frames into a playable video.
+
+### Prompting these models
+
+Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.
+
+=== "Flux.2 Klein (image)"
+
+    - Text encoder is **Qwen3** (CLIP type **`flux2`**): write **natural-language sentences**, subject first, then place, materials, lighting, camera
+    - Ideal length is roughly **40–120 words** for hero shots; smoke graphs stay shorter
+    - Highest impact: materials/textures, light source + direction, lens language, foreground/midground/background
+    - Avoid: comma tag lists, `(weight:1.4)` emphasis (not applied), “masterpiece / best quality” spam
+    - Official FLUX.2 style: **describe what you want**, not long “no X” lists. Lab negatives are residual lists for experimenters; graphs ship at **CFG 1.0**, so quality is almost entirely the Positive prompt
+
+=== "LTX-2.3 (video frames)"
+
+    - Text encoder is **Gemma 3 DualCLIP** (type **`ltxv`**): describe **actions over time**
+    - **I2V:** briefly restate the still, then **one** camera move + light micro-motion; keep identity stable
+    - **T2V:** chronological shot (establish → move → environment motion); one primary camera path on short clips
+    - Negatives should target **temporal** artifacts (morphing, flicker, jitter, stutter), not generic SD junk
+    - Light ambient-audio language is optional; lab does **not** save audio tracks
+
+### Frames → playable video (LTX)
+
+!!! important "Lab LTX graphs save frames, not MP4"
+
+    Seeded **ltx-*** examples write a **PNG sequence** with `SaveImage` (prefixes like `ez_ltx_i2v_frames`). That is intentional: the stack does **not** install VideoHelperSuite (VHS). You still get real motion—you assemble the video on the host (or install VHS yourself).
+
+| Tier | Frames | FPS | ≈ duration |
+| --- | --- | --- | --- |
+| full (`ltx-i2v` / `ltx-t2v` lab) | 97 | 24 | ~4.0 s |
+| short | 33 | 24 | ~1.4 s |
+| quick | 17 | 24 | ~0.7 s |
+
+After Queue completes, find the batch in Comfy’s **output** folder (container volume / host mapping). Stitch at **24 fps**:
+
+```bash
+# From the directory that contains the PNGs (adjust prefix to match SaveImage)
+ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_*_*.png' \
+  -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4
+```
+
+Optional in-Comfy MP4: install [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) yourself and add **`VHS_VideoCombine`** after video `VAEDecode`. Missing VHS is expected on a stock lab image — see [Troubleshooting](troubleshooting.md).
+
 ??? abstract "Lab workflow details"
 
     - Name pattern: host files `workflows/*-lab-example.json` (legacy `lab-*` names removed)
+    - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
     - Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
     - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) and save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
     - LTX-2.3 is **joint AV**: lab graphs load `LTX23_audio_vae_bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`, then **separate** for video `VAEDecode`. Audio is sampled as empty noise (not saved); omitting empty audio causes `reshape … [1, 0, 32, -1]`
