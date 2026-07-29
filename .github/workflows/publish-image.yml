@@ -1,5 +1,10 @@
 # Publish prebuilt ez-comfy image to GitHub Container Registry only.
 # Privacy: no HF_TOKEN, no .env, no model weights — public git/pip in Dockerfile only.
+#
+# Tag matrix (keep in sync with scripts/lib/compose.sh stack_image_tag_for_branch):
+#   main (default branch) → flux-to-ltx + flux-to-ltx-main + sha-*
+#   development           → flux-to-ltx-development + sha-*
+# Operators pull via manage.sh stack_default_image (branch-aligned).
 name: publish-image
 
 on:

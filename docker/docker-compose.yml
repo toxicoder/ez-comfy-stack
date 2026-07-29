@@ -24,9 +24,11 @@ services:
         CUDA_RUNTIME_IMAGE: ${CUDA_RUNTIME_IMAGE:-nvidia/cuda:13.0.0-runtime-ubuntu24.04}
         # 1 = bake Comfy+torch into image (default). 0 = thin image (cold pip at runtime).
         EZ_COMFY_PREBUILD: ${EZ_COMFY_PREBUILD:-1}
-    # Prefer GHCR prebuilt (arm64). Override EZ_COMFY_IMAGE for local tags.
+    # Prefer GHCR prebuilt (arm64). manage.sh sets EZ_COMFY_IMAGE from git branch:
+    #   main → :flux-to-ltx ; development/feature → :flux-to-ltx-development
+    # Static fallback matches primary integration branch (development).
     # Never put tokens in this file; HF_TOKEN comes from host env/.env at runtime only.
-    image: ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx}
+    image: ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development}
     container_name: ez-comfy-flux-to-ltx
     # Manual lifecycle only — operator uses manage.sh start/stop
     restart: "no"

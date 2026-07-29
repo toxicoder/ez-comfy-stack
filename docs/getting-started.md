@@ -129,11 +129,19 @@ These are under `user/default/workflows/` (copied from the host `workflows/` mou
 **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`). Use the lab workflows above for this stack.
 
 !!! tip "Prebuilt image (GHCR)"
-    Default image is `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (**linux/arm64**, published by CI).  
+    `manage.sh start` pulls a **branch-aligned** arm64 image published by the `publish-image` workflow:
+
+    | Git branch | Image tag |
+    | --- | --- |
+    | `main` | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` |
+    | `development` (and feature branches) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development` |
+
+    Override with `EZ_COMFY_IMAGE` in `.env` if needed.  
     Multi-stage: **devel** builder installs Comfy+torch; final stage is **CUDA runtime** (no nvcc).  
     It includes ComfyUI + PyTorch; **not** FLUX/LTX weights (those stay on `MODELS_DIR`).  
     First start **seeds** the volume from `/opt/comfy-prebuilt` (local copy) instead of multi‑GB pip.  
-    No tokens or host secrets are baked into the image. Pull is public for public packages.
+    No tokens or host secrets are baked into the image. Pull is public for public packages.  
+    `./scripts/manage.sh doctor` prints the resolved default image before you start.
 
 !!! warning "Cold start without prebuilt"
     If GHCR pull fails or you force a thin/local build without prebuild, first start can take **10–30+ minutes** of pip.  

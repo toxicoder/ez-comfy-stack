@@ -306,9 +306,64 @@ stack_follow_until_ready() {
 #   0 when up and container running; non-zero on compose or verify failure.
 #######################################
 #######################################
-# Resolve default GHCR image ref (public package; no credentials in repo).
+# Resolve the current git branch for GHCR image channel selection.
+# Prefers LAB_GIT_BRANCH (tests / hermetic override); else git rev-parse.
 # Globals:
-#   EZ_COMFY_IMAGE
+#   LAB_GIT_BRANCH (optional)
+# Arguments:
+#   None
+# Outputs:
+#   Branch name on stdout (or "unknown")
+# Returns:
+#   0
+#######################################
+stack_git_branch() {
+  if [[ -n ${LAB_GIT_BRANCH:-} ]]; then
+    echo "${LAB_GIT_BRANCH}"
+    return 0
+  fi
+  local root branch
+  root="$(lab_repo_root)"
+  branch="$(git -C "${root}" rev-parse --abbrev-ref HEAD 2>/dev/null || true)"
+  if [[ -z ${branch} || ${branch} == "HEAD" ]]; then
+    echo "unknown"
+    return 0
+  fi
+  echo "${branch}"
+}
+
+#######################################
+# Map a git branch name to the published GHCR image tag channel.
+# Aligns with publish-image.yml: main → flux-to-ltx; development →
+# flux-to-ltx-development; feature/other → development channel.
+# Globals:
+#   None
+# Arguments:
+#   $1  Git branch name
+# Outputs:
+#   Image tag (without registry) on stdout
+# Returns:
+#   0
+#######################################
+stack_image_tag_for_branch() {
+  local branch="${1:-unknown}"
+  case "${branch}" in
+    main)
+      echo "flux-to-ltx"
+      ;;
+    *)
+      # development, feature/*, detached/unknown → integration channel
+      echo "flux-to-ltx-development"
+      ;;
+  esac
+}
+
+#######################################
+# Resolve default GHCR image ref (public package; no credentials in repo).
+# Uses EZ_COMFY_IMAGE when set; otherwise branch-aligned tag from
+# stack_git_branch + stack_image_tag_for_branch (matches publish-image.yml).
+# Globals:
+#   EZ_COMFY_IMAGE, LAB_GIT_BRANCH
 # Arguments:
 #   None
 # Outputs:
@@ -317,7 +372,13 @@ stack_follow_until_ready() {
 #   0
 #######################################
 stack_default_image() {
-  echo "${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx}"
+  if [[ -n ${EZ_COMFY_IMAGE:-} ]]; then
+    echo "${EZ_COMFY_IMAGE}"
+    return 0
+  fi
+  local tag
+  tag="$(stack_image_tag_for_branch "$(stack_git_branch)")"
+  echo "ghcr.io/toxicoder/ez-comfy:${tag}"
 }
 
 #######################################
@@ -365,11 +426,13 @@ stack_start() {
   export MEM_LIMIT="${MEM_LIMIT:-90g}"
   export MEM_RESERVATION="${MEM_RESERVATION:-80g}"
   export EZ_COMFY_IMAGE
+  local branch
+  branch="$(stack_git_branch)"
   EZ_COMFY_IMAGE="$(stack_default_image)"
   ensure_models_dir "${MODELS_DIR}" || return 1
   mkdir -p "${MODELS_DIR}/comfy"
   log "══ start ══ unified flux-to-ltx (mem_limit=${MEM_LIMIT})"
-  log "Image: ${EZ_COMFY_IMAGE}"
+  log "Image: ${EZ_COMFY_IMAGE} (branch=${branch})"
 
   local up_args=(up -d)
   if [[ ${LAB_STACK_FORCE_BUILD:-0} == "1" ]]; then

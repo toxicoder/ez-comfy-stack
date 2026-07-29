@@ -164,6 +164,7 @@ flowchart LR
 
 - One compose service for the unified stack  
 - Multi-stage image: **devel** builder + **runtime** final (no secrets/models)  
+- GHCR channel by long-lived branch: publish tags `flux-to-ltx` (`main`) and `flux-to-ltx-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel)  
 - Scripts as real files (not inline ConfigMap YAML)  
 - Host model cache + named volume for Comfy state  
 - Compose `restart: "no"`; explicit `mem_limit` / `mem_reservation`  
