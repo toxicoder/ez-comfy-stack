@@ -144,7 +144,7 @@ install_nunchaku_wheel() {
   # Official v1.2.1 release assets are linux_x86_64 / win_amd64 only — no aarch64
   if [[ ${plat} == "linux_aarch64" ]]; then
     warn "nunchaku: no official linux_aarch64 wheels (GB10/Spark) — skipping"
-    warn "lab-flux/lab-ltx graphs use core UNET/CLIP/VAE loaders and do not need nunchaku"
+    warn "*-lab-example graphs use core UNET/CLIP/VAE loaders and do not need nunchaku"
     return 0
   fi
 

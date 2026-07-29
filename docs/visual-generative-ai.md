@@ -83,7 +83,7 @@ flowchart LR
   LTX --> Frames["Video frames<br/>SaveImage"]
 ```
 
-**Handoff:** load **lab-flux-to-ltx** (or any Flux T2I) → save still → open **lab-ltx-i2v** / **lab-ltx-i2v-short** and set `LoadImage` to that file.
+**Handoff:** load **flux-to-ltx-lab-example** (or any Flux T2I) → save still → open **ltx-i2v-lab-example** / **ltx-i2v-short-lab-example** and set `LoadImage` to that file.
 
 !!! example "Pipeline tips"
 
