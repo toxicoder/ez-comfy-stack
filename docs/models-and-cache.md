@@ -19,6 +19,12 @@ tags: [models, huggingface, cache]
 - Checking readiness without network access
 - Rebuilding/pulling only the layers that actually changed
 
+!!! tip "Operator path"
+
+    Most operators only need: set `MODELS_DIR` → `download-models` → confirm basenames. Layer pins and Dockerfile cache order are for maintainers — collapsed below.
+
+---
+
 ## Default location
 
 ```text
@@ -31,26 +37,28 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
 `doctor`, `download-models`, and download utilities require `MODELS_DIR` to be **writable by the current user**.
 
-Preferred:
+=== "Preferred (setup)"
 
-```bash
-./scripts/manage.sh setup
-# sudo mkdir -p + chown for MODELS_DIR when needed
-```
+    ```bash
+    ./scripts/manage.sh setup
+    # sudo mkdir -p + chown for MODELS_DIR when needed
+    ```
 
-Manual:
+=== "Manual"
 
-```bash
-sudo mkdir -p /mnt/models
-sudo chown "$USER:$USER" /mnt/models
-```
+    ```bash
+    sudo mkdir -p /mnt/models
+    sudo chown "$USER:$USER" /mnt/models
+    ```
 
-Or point at a home path:
+=== "Home path"
 
-```bash
-# .env
-MODELS_DIR=$HOME/models
-```
+    ```bash
+    # .env
+    MODELS_DIR=$HOME/models
+    ```
+
+---
 
 ## Layout
 
@@ -83,7 +91,18 @@ flowchart TB
   Comfy --> VAE["vae/"]
 ```
 
-## Utilities
+---
+
+## Download
+
+```bash
+./scripts/manage.sh download-models
+# Exits non-zero until every lab basename under MODELS_DIR/comfy is present
+# Companions (Qwen TE + flux2-vae) use file-level readiness so a TE-only
+# partial cannot cache-hit skip the VAE.
+```
+
+Or per utility:
 
 ```bash
 ./scripts/utilities/download-flux.sh status --tier fast --json
@@ -92,30 +111,7 @@ flowchart TB
 ./scripts/utilities/download-ltx.sh run --tier balanced
 ```
 
-Or:
-
-```bash
-./scripts/manage.sh download-models
-# Exits non-zero until every lab basename under MODELS_DIR/comfy is present
-# (see table below). Companions (Qwen TE + flux2-vae) use file-level readiness
-# so a TE-only partial cannot cache-hit skip the VAE.
-```
-
-### Cleanup extra LTX monorepo files
-
-If an older run pulled the full `Kijai/LTX2.3_comfy` snapshot into the balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:
-
-```bash
-# Preview (default)
-./scripts/utilities/download-ltx.sh cleanup --tier balanced
-
-# Delete extras (keeps FP8 transformer + TE + VAEs only)
-./scripts/utilities/download-ltx.sh cleanup --tier balanced --yes
-```
-
-Does **not** touch FLUX, nunchaku, or other trees under `MODELS_DIR`.
-
-Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`). Install:
+Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`):
 
 ```bash
 command -v hf || pipx install huggingface_hub
@@ -136,7 +132,9 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE (used by lab I2V/T2V) |
 | `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (downloaded; **not wired** in lab graphs) |
 
-Example graphs under `workflows/` (seeded into Comfy `user/default/workflows/`):
+### Example graphs
+
+Seeded into Comfy `user/default/workflows/` from host `workflows/`:
 
 | Graph | Notes |
 | --- | --- |
@@ -151,61 +149,23 @@ Example graphs under `workflows/` (seeded into Comfy `user/default/workflows/`):
 
 Lab video graphs write **frames** via `SaveImage` only (no VHS). Audio VAE remains on disk for operators who build joint AV graphs themselves.
 
-### Prebuilt container image (GHCR)
+### Gated models / HF_TOKEN
 
-| Item | Detail |
-| --- | --- |
-| Image (`main`) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (arm64) |
-| Image (`development` / feature) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development` (arm64) |
-| Selection | `manage.sh` maps current git branch → tag (override: `EZ_COMFY_IMAGE`) |
-| Final base | `nvidia/cuda` **runtime** (builder uses **devel** only during image build) |
-| Contains | CUDA runtime, ComfyUI, Python venv, PyTorch/CUDA wheels (`.git`/caches stripped) |
-| Does **not** contain | `HF_TOKEN`, `.env`, host PII, or FLUX/LTX weights |
-| First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
-| Weights | Still under `MODELS_DIR` via `download-models` |
-| Publish | `publish-image` on `main` / `development` (docker/**); Buildx GHA layer cache |
+FLUX and some LTX assets may require accepting the license on Hugging Face and a token:
 
-### Image layer cache (high-velocity rebuilds + pulls)
+```bash
+# .env
+HF_TOKEN=hf_...
+# or: hf auth login
+```
 
-Dockerfile order is intentional so **ops-script edits do not re-download multi‑GB torch**, and **app-only prebuild churn does not re-pull the full venv blob**:
+### Disk headroom
 
-| Change | Rebuild multi‑GB torch phase? | Re-pull multi‑GB **venv** layer? | Re-pull **app** layer? |
-| --- | --- | --- | --- |
-| `entrypoint.sh` / `patch_get_free_memory.py` / orchestrator | No | No | No |
-| `install-comfy/phase-nodes.sh` or node sources only (no new pip) | No | No | Yes (smaller) |
-| `install-comfy/phase-comfy.sh` / `COMFYUI_REF` bump (may change requirements) | No (torch phase) | **Yes if pip set changes** | Yes |
-| `install-comfy/phase-venv-torch.sh` / CUDA base / apt | Yes | Yes | Yes |
+`manage.sh doctor` / `start` require free disk ≥ `MIN_DISK_FREE_GIB` (default 40).
 
-Builder: **COPY only phase modules each `RUN` needs** (`common`+`phase-venv-torch` → `phase-comfy` → `phase-nodes`+`phase-finalize`) with BuildKit pip cache mounts. Runtime: **`COPY /opt/parts/venv` then `/opt/parts/app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+---
 
-**Caveat:** the venv layer is the **final** `.venv` after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.
-
-### Prebuild version pins (validated)
-
-Defaults are intentional tags so GHCR rebuilds are reproducible. Validated **2026-07-29**:
-
-| Pin | Default | Why this value |
-| --- | --- | --- |
-| `COMFYUI_REF` | `v0.29.0` | Latest ComfyUI release (2026-07-29). Official README recommends **torch cu130**. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use **core** nodes only (`UNETLoader`, `EmptyFlux2LatentImage`, `LTXV*`, …). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
-| `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
-| `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); lab-flux/lab-ltx graphs do not require it. |
-
-**How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, and `docker/install-comfy/common.sh`, then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).
-
-### Resume & cache
-
-Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
-
-| Behavior | Detail |
-| --- | --- |
-| Resume after interrupt | Ctrl+C / crash leaves `*.incomplete` under each tier’s `.cache/huggingface/`; re-run the same command to continue |
-| Skip when ready | `download-flux` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
-| `HF_HOME` | Set to `MODELS_DIR` so hub metadata lives on the durable model disk |
-| Cleanup | `download-ltx.sh cleanup --yes` removes non-selective monorepo weights but **keeps** `.cache/`, `*.incomplete`, and selective keep-set files |
-
-Do not delete a tier’s `.cache/huggingface/` folder if you want fast resume/metadata checks. Finished weight files are never re-downloaded unless missing or hub revision changes.
-
-### LTX selective download (not the full monorepo)
+## LTX selective download
 
 `Kijai/LTX2.3_comfy` is a multi-variant hub repo (~**400 GB** if you pull everything). This stack defaults to a **selective** subset via `hf download --include`:
 
@@ -216,22 +176,58 @@ Do not delete a tier’s `.cache/huggingface/` folder if you want fast resume/me
 
 `status --json` readiness uses `min_gb` 20 (balanced) / 35 (quality) as a floor, not the full monorepo size.
 
-Escape hatch (operators who really want every precision/lora):
+??? tip "Cleanup extra LTX monorepo files"
 
-```bash
-LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier balanced
-```
+    If an older run pulled the full `Kijai/LTX2.3_comfy` snapshot into the balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:
 
-After a full-repo mistake, use `cleanup --yes` (above) instead of wiping all of `MODELS_DIR`.
+    ```bash
+    # Preview (default)
+    ./scripts/utilities/download-ltx.sh cleanup --tier balanced
 
-### Gated models / HF_TOKEN
+    # Delete extras (keeps FP8 transformer + TE + VAEs only)
+    ./scripts/utilities/download-ltx.sh cleanup --tier balanced --yes
+    ```
 
-FLUX and some LTX assets may require accepting the license on Hugging Face and a token:
+    Does **not** touch FLUX, nunchaku, or other trees under `MODELS_DIR`.
 
-```bash
-# .env
-HF_TOKEN=hf_...
-# or: hf auth login
+??? warning "Full monorepo escape hatch"
+
+    Operators who really want every precision/lora:
+
+    ```bash
+    LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier balanced
+    ```
+
+    After a full-repo mistake, use `cleanup --yes` instead of wiping all of `MODELS_DIR`.
+
+---
+
+## Resume & cache
+
+Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
+
+| Behavior | Detail |
+| --- | --- |
+| Resume after interrupt | ++ctrl+c++ / crash leaves `*.incomplete` under each tier’s `.cache/huggingface/`; re-run the same command to continue |
+| Skip when ready | `download-flux` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
+| `HF_HOME` | Set to `MODELS_DIR` so hub metadata lives on the durable model disk |
+| Cleanup | `download-ltx.sh cleanup --yes` removes non-selective monorepo weights but **keeps** `.cache/`, `*.incomplete`, and selective keep-set files |
+
+!!! tip "Keep `.cache/`"
+
+    Do not delete a tier’s `.cache/huggingface/` folder if you want fast resume/metadata checks. Finished weight files are never re-downloaded unless missing or hub revision changes.
+
+---
+
+## Multi-stack sharing
+
+```mermaid
+flowchart LR
+  EZ["ez-comfy-stack<br/>Docker bind mount"]
+  Cache["/mnt/models<br/>shared host path"]
+  Lab["nvidia-dgx-spark-lab<br/>K8s hostPath"]
+  EZ <--> Cache
+  Lab <--> Cache
 ```
 
 ### Download path
@@ -257,17 +253,6 @@ sequenceDiagram
   W-->>M: clear limit on EXIT/INT/TERM
 ```
 
-### Multi-stack sharing
-
-```mermaid
-flowchart LR
-  EZ["ez-comfy-stack<br/>Docker bind mount"]
-  Cache["/mnt/models<br/>shared host path"]
-  Lab["nvidia-dgx-spark-lab<br/>K8s hostPath"]
-  EZ <--> Cache
-  Lab <--> Cache
-```
-
 ### Readiness check
 
 ```mermaid
@@ -280,10 +265,49 @@ flowchart TB
   Check -->|no| Missing["Run download-models<br/>or fix MODELS_DIR mount"]
 ```
 
-## Licenses & tokens
+---
 
-Accept model licenses on Hugging Face. Set `HF_TOKEN` in `.env` when downloads are gated.
+## Prebuilt container image (GHCR)
 
-## Disk headroom
+| Item | Detail |
+| --- | --- |
+| Image (`main`) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (arm64) |
+| Image (`development` / feature) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development` (arm64) |
+| Selection | `manage.sh` maps current git branch → tag (override: `EZ_COMFY_IMAGE`) |
+| Final base | `nvidia/cuda` **runtime** (builder uses **devel** only during image build) |
+| Contains | CUDA runtime, ComfyUI, Python venv, PyTorch/CUDA wheels (`.git`/caches stripped) |
+| Does **not** contain | `HF_TOKEN`, `.env`, host PII, or FLUX/LTX weights |
+| First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
+| Weights | Still under `MODELS_DIR` via `download-models` |
+| Publish | `publish-image` on `main` / `development` (docker/**); Buildx GHA layer cache |
 
-`manage.sh doctor` / `start` require free disk ≥ `MIN_DISK_FREE_GIB` (default 40).
+### Image layer cache (high-velocity rebuilds + pulls)
+
+??? abstract "Layer invalidation matrix"
+
+    Dockerfile order is intentional so **ops-script edits do not re-download multi‑GB torch**, and **app-only prebuild churn does not re-pull the full venv blob**:
+
+    | Change | Rebuild multi‑GB torch phase? | Re-pull multi‑GB **venv** layer? | Re-pull **app** layer? |
+    | --- | --- | --- | --- |
+    | `entrypoint.sh` / `patch_get_free_memory.py` / orchestrator | No | No | No |
+    | `install-comfy/phase-nodes.sh` or node sources only (no new pip) | No | No | Yes (smaller) |
+    | `install-comfy/phase-comfy.sh` / `COMFYUI_REF` bump (may change requirements) | No (torch phase) | **Yes if pip set changes** | Yes |
+    | `install-comfy/phase-venv-torch.sh` / CUDA base / apt | Yes | Yes | Yes |
+
+    Builder: **COPY only phase modules each `RUN` needs** (`common`+`phase-venv-torch` → `phase-comfy` → `phase-nodes`+`phase-finalize`) with BuildKit pip cache mounts. Runtime: **`COPY /opt/parts/venv` then `/opt/parts/app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+
+    **Caveat:** the venv layer is the **final** `.venv` after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.
+
+### Prebuild version pins (validated)
+
+??? abstract "Pin table and bump procedure"
+
+    Defaults are intentional tags so GHCR rebuilds are reproducible. Validated **2026-07-29**:
+
+    | Pin | Default | Why this value |
+    | --- | --- | --- |
+    | `COMFYUI_REF` | `v0.29.0` | Latest ComfyUI release (2026-07-29). Official README recommends **torch cu130**. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use **core** nodes only (`UNETLoader`, `EmptyFlux2LatentImage`, `LTXV*`, …). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
+    | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
+    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); lab-flux/lab-ltx graphs do not require it. |
+
+    **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, and `docker/install-comfy/common.sh`, then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).

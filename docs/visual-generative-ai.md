@@ -18,6 +18,12 @@ tags: [comfyui, flux, ltx, visual, nvfp4]
 - Running image + video generation tools in **one** Docker Compose stack
 - Understanding why memory headroom and the free-memory patch matter on GB10
 
+!!! tip "First run?"
+
+    For install and first UI open, use [Getting Started](getting-started.md). This page explains **how the stack is wired**.
+
+---
+
 ## Architecture
 
 Host operator path, container lifecycle, mounts, and UI:
@@ -63,6 +69,8 @@ flowchart TB
 | Flux | Klein 9B NVFP4 + Nunchaku |
 | LTX | distilled FP8 balanced |
 
+---
+
 ## Combined pipeline (Flux → LTX)
 
 Text → image → **video frames** in one ComfyUI stack. Lab graphs use `SaveImage` for frames; the LTX **audio VAE** is downloaded for advanced AV work but is not wired into the seeded examples.
@@ -75,7 +83,15 @@ flowchart LR
   LTX --> Frames["Video frames<br/>SaveImage"]
 ```
 
-Handoff: load **lab-flux-to-ltx** (or any Flux T2I) → save still → open **lab-ltx-i2v** / **lab-ltx-i2v-short** and set `LoadImage` to that file.
+**Handoff:** load **lab-flux-to-ltx** (or any Flux T2I) → save still → open **lab-ltx-i2v** / **lab-ltx-i2v-short** and set `LoadImage` to that file.
+
+!!! example "Pipeline tips"
+
+    1. Download **flux fast** + **ltx balanced** first
+    2. Prefer keeping both model sets loaded between T2I and I2V
+    3. Avoid concurrent large LLM containers on the same Spark
+
+---
 
 ## Memory and headroom budget
 
@@ -93,6 +109,8 @@ flowchart TB
   Gate -->|yes| Cont
   Gate -->|no| Refuse["start refused"]
 ```
+
+---
 
 ## Spark optimizations
 
@@ -122,7 +140,17 @@ sequenceDiagram
   Note over U: First cold start can take 10–30+ minutes
 ```
 
+---
+
 ## Commands
+
+| Step | Command |
+| --- | --- |
+| 1. Preflight | `./scripts/manage.sh doctor` |
+| 2. Weights | `./scripts/manage.sh download-models` |
+| 3. Start | `./scripts/manage.sh start` (type `yes`) |
+| 4. Observe | `./scripts/manage.sh status` · `logs` |
+| 5. Stop | `./scripts/manage.sh stop` |
 
 ```bash
 ./scripts/manage.sh doctor
@@ -143,15 +171,13 @@ flowchart LR
   Start --> Cleanup["cleanup<br/>DELETE volume only"]
 ```
 
-## Combined pipeline tips
-
-1. Download **flux fast** + **ltx balanced** first  
-2. Prefer keeping both model sets loaded between T2I and I2V  
-3. Avoid concurrent large LLM containers on the same Spark  
+---
 
 ## Safety
 
-- Manual start only  
-- Headroom preflight  
-- Exclusive use of the GPU for this demo stack  
-- Always `stop` before reboot  
+!!! warning "Do not weaken"
+
+    - Manual start only (`restart: "no"`)
+    - Headroom preflight before start
+    - Exclusive use of the GPU for this demo stack
+    - Always `stop` before reboot — [Reboot Safety](reboot-safety.md)

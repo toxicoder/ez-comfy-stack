@@ -16,9 +16,11 @@ tags: [bandwidth, wondershaper, speedtest, safety]
 
 - Downloading multi‑GB FLUX/LTX weights without saturating the uplink and freezing SSH
 
+---
+
 ## Why
 
-DGX Spark nodes are often operated **over the internet** without physical console access. A full-rate Hugging Face pull can starve interactive SSH. This utility applies kernel-level traffic shaping via **wondershaper**.
+DGX Spark nodes are often operated **over the internet** without physical console access. A full-rate Hugging Face pull can starve interactive SSH. This utility applies kernel-level traffic shaping via **wondershaper** when HTB is available, and falls back to gentler HF client settings when it is not.
 
 Inspired by the throttled Ollama downloader in `dgx-spark-it-up`, generalized and improved with **auto** limiting.
 
@@ -34,7 +36,17 @@ flowchart LR
   end
 ```
 
+---
+
 ## Commands
+
+| Command | Purpose |
+| --- | --- |
+| `status [--json]` | Report interface + current limit |
+| `run --limit 50` | Apply a fixed Mbps cap |
+| `run --limit auto` | Measure line rate, apply 85% |
+| `clear` | Remove wondershaper limit |
+| `wrap --limit auto -- <cmd…>` | Apply → run command → **always clear on exit** |
 
 ```bash
 ./scripts/utilities/download-limit.sh status [--json]
@@ -51,8 +63,6 @@ Via manage:
 ./scripts/manage.sh download-models   # wrap --limit ${DOWNLOAD_LIMIT:-auto}
 ```
 
-### CLI decision tree
-
 ```mermaid
 flowchart TB
   Start["download-limit.sh"] --> Cmd{"subcommand"}
@@ -62,17 +72,21 @@ flowchart TB
   Cmd -->|wrap| Wrap["Apply limit → run command<br/>always clear on exit"]
 ```
 
+---
+
 ## Auto mode (measure real Mbps)
 
-0. **Clear any existing bandwidth limits** on the default-route interface (wondershaper + best-effort `tc`) so residual caps do not skew the result  
-1. **Install `speedtest-cli` hard** (`pip --user`, `--break-system-packages`, `pipx`, `apt`/`python3-speedtest-cli` with `sudo -n`)  
-2. Try `speedtest-cli --simple`  
-3. Else Ookla `speedtest`  
-4. Else **HTTP probe** multi-URL (Cloudflare, OVH, GitHub, …) via `curl -4`  
-5. Apply `floor(0.85 × measured)` (minimum 1 Mbps) when sample is **trusted**  
-6. If all probes fail: **do not** use idle NIC RX as line rate — use default `max-workers=4` and start download  
+When you pass `--limit auto`:
 
-**Ctrl+C** kills the download process group, progress heartbeat, and HTTP probes (INT→TERM→KILL).
+1. **Clear** any existing bandwidth limits on the default-route interface (wondershaper + best-effort `tc`) so residual caps do not skew the result
+2. **Install `speedtest-cli`** hard (`pip --user`, `--break-system-packages`, `pipx`, `apt`/`python3-speedtest-cli` with `sudo -n`)
+3. Try `speedtest-cli --simple`
+4. Else Ookla `speedtest`
+5. Else **HTTP probe** multi-URL (Cloudflare, OVH, GitHub, …) via `curl -4`
+6. Apply `floor(0.85 × measured)` (minimum 1 Mbps) when the sample is **trusted**
+7. If all probes fail: **do not** use idle NIC RX as line rate — use default `max-workers=4` and start download
+
+++ctrl+c++ kills the download process group, progress heartbeat, and HTTP probes (INT→TERM→KILL).
 
 Override HTTP probe: `SPEEDTEST_HTTP_URL`, `SPEEDTEST_HTTP_BYTES`.
 
@@ -96,6 +110,8 @@ flowchart TB
 
 Upload is set to a high **legal** “uncapped” rate (clamped for HTB). Extremely large historical defaults (e.g. 100000 Mbps) produced `Illegal "rate"` on some kernels.
 
+---
+
 ## DGX Spark / no HTB
 
 Many Spark kernels lack `sch_htb` / IFB (`qdisc kind is unknown`). The tool **detects** this and **does not** spam wondershaper/RTNETLINK.
@@ -104,9 +120,11 @@ Many Spark kernels lack `sch_htb` / IFB (`qdisc kind is unknown`). The tool **de
 | --- | --- |
 | HTB available | wondershaper hard Mbps cap at 85% of measured |
 | HTB missing (typical Spark) | **Gentle HF mode**: `HF_DOWNLOAD_MAX_WORKERS` from measured Mbps (floor **2**–4), `HF_HUB_ENABLE_HF_TRANSFER=0` — not a hard Mbps cap |
-| `DOWNLOAD_LIMIT=off` | Full blast (SSH risk) |
+| `DOWNLOAD_LIMIT=off` | Full blast (**SSH risk**) |
 
 Model downloads keep a **real TTY** for `hf`/`tqdm` progress (no `2>&1 | tee` on interactive sessions). Cache hits still flash `100%` in 0s. Heartbeats every 10s show `du` growth under the target dir if bars are quiet.
+
+---
 
 ## Apply verification and soft-fail
 
@@ -118,11 +136,15 @@ After wondershaper runs, the utility checks that a shaping qdisc is active (`tc 
 | `wrap` | **Soft path**: gentle HF workers + clear on exit |
 | `wrap` + `DOWNLOAD_LIMIT_REQUIRE=1` | **Hard-fail** like `run` |
 
-**Safety impact:** Gentle mode reduces parallel download stampede but is **not** a kernel Mbps cap. Prefer HTB where available. Clear-on-exit remains mandatory.
+!!! warning "Safety impact"
+
+    Gentle mode reduces parallel download stampede but is **not** a kernel Mbps cap. Prefer HTB where available. **Clear-on-exit remains mandatory** for `wrap`.
+
+---
 
 ## Ctrl+C
 
-Downloads run in a **process group**. Ctrl+C (SIGINT) or SIGTERM:
+Downloads run in a **process group**. ++ctrl+c++ (SIGINT) or SIGTERM:
 
 1. Forwards to `hf` / nested bash (not only `tee`)
 2. Clears wondershaper limits if any
@@ -130,15 +152,7 @@ Downloads run in a **process group**. Ctrl+C (SIGINT) or SIGTERM:
 
 You should not need `kill -9` on leftover download processes after a clean Ctrl+C.
 
-## Live speed when preflight fails
-
-If auto mode cannot measure speed **before** download:
-
-1. **Measure phase** (~15s): sample NIC RX while a short HTTP download generates traffic (not the multi‑GB model pull — avoids HF locks and kill/restart hangs)  
-2. Set target = 85% of live Mbps → gentle HF max-workers (or kernel HTB only if `sudo -n` works and qdisc applies)  
-3. **Download phase**: one **foreground** model download with live tqdm progress  
-
-No interactive sudo during this path. Mock/tests: `LAB_MOCK_LIVE_RX_MBPS`.
+---
 
 ## Wrap lifecycle
 
@@ -170,15 +184,17 @@ sequenceDiagram
   Note over W,WS: Always clear even when traps fire on kill
 ```
 
+---
+
 ## Emergency clear
 
 If the host feels “stuck” throttled after a crash:
 
 ```bash
 ./scripts/utilities/download-limit.sh clear
+# or:
+./scripts/manage.sh download-limit clear
 ```
-
-`wrap` always clears on `EXIT` / `INT` / `TERM`.
 
 ```mermaid
 flowchart TB
@@ -186,6 +202,22 @@ flowchart TB
   Clear --> Resume["Resume SSH / downloads"]
 ```
 
+---
+
 ## Units
 
-Limits are in **Mbps** (megabits), not MB/s. Example: 40 Mbps ≈ 5 MB/s.
+Limits are in **Mbps** (megabits), not MB/s. Example: **40 Mbps ≈ 5 MB/s**.
+
+---
+
+## Advanced
+
+??? abstract "Live speed when preflight fails"
+
+    If auto mode cannot measure speed **before** download:
+
+    1. **Measure phase** (~15s): sample NIC RX while a short HTTP download generates traffic (not the multi‑GB model pull — avoids HF locks and kill/restart hangs)
+    2. Set target = 85% of live Mbps → gentle HF max-workers (or kernel HTB only if `sudo -n` works and qdisc applies)
+    3. **Download phase**: one **foreground** model download with live tqdm progress
+
+    No interactive sudo during this path. Mock/tests: `LAB_MOCK_LIVE_RX_MBPS`.
