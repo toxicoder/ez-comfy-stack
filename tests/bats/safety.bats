@@ -52,26 +52,40 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'mount=type=cache,target=/root/\.cache/pip' "${df}"
   [ "$status" -eq 0 ]
-  run grep -E 'install-comfy\.sh --phase' "${df}"
+  # Phased module sources (not monolithic install-comfy.sh before torch)
+  run grep -E 'phase-venv-torch\.sh|phase_venv|phase_torch' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'phase-comfy\.sh|phase_comfy' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'phase-nodes\.sh|phase_nodes' "${df}"
   [ "$status" -eq 0 ]
 
-  # Builder: only install-comfy.sh is COPYed before prebuild phases
-  run grep -E 'COPY.*entrypoint' "${df}"
-  [ "$status" -eq 0 ]
-  # First COPY in file should be install-comfy only (not entrypoint/patch)
+  # Builder: first COPY is phase modules only (not entrypoint/patch/orchestrator)
   run awk '/^COPY /{print; exit}' "${df}"
   [ "$status" -eq 0 ]
-  [[ "${output}" == *install-comfy.sh* ]]
+  [[ "${output}" == *phase-venv-torch* || "${output}" == *install-comfy/common* ]]
   [[ "${output}" != *entrypoint* ]]
   [[ "${output}" != *patch_get_free_memory* ]]
+  [[ "${output}" != *install-comfy.sh* ]]
 
-  # Runtime: prebuilt COPY must appear before entrypoint COPY (line order)
-  local prebuilt_line entry_line
-  prebuilt_line="$(grep -n 'COPY --from=builder /opt/comfy-prebuilt' "${df}" | head -1 | cut -d: -f1)"
+  # Runtime: split parts COPY (venv then app) before entrypoint
+  local venv_line app_line entry_line
+  venv_line="$(grep -n 'COPY --from=builder /opt/parts/venv' "${df}" | head -1 | cut -d: -f1)"
+  app_line="$(grep -n 'COPY --from=builder /opt/parts/app' "${df}" | head -1 | cut -d: -f1)"
   entry_line="$(grep -n 'COPY.*entrypoint\.sh' "${df}" | head -1 | cut -d: -f1)"
-  [ -n "${prebuilt_line}" ]
+  [ -n "${venv_line}" ]
+  [ -n "${app_line}" ]
   [ -n "${entry_line}" ]
-  [ "${prebuilt_line}" -lt "${entry_line}" ]
+  [ "${venv_line}" -lt "${app_line}" ]
+  [ "${app_line}" -lt "${entry_line}" ]
+
+  # Validated non-empty default pins
+  run grep -E 'ARG COMFYUI_REF=v0\.' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'ARG COMFYUI_MANAGER_REF=' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'ARG COMFYUI_NUNCHAKU_NODE_REF=v' "${df}"
+  [ "$status" -eq 0 ]
 }
 
 @test "compose bind-mounts ops scripts for zero-rebuild iteration" {
@@ -80,9 +94,13 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'install-comfy\.sh:/opt/ez-comfy/install-comfy\.sh' "${compose}"
   [ "$status" -eq 0 ]
+  run grep -E 'install-comfy:/opt/ez-comfy/install-comfy' "${compose}"
+  [ "$status" -eq 0 ]
   run grep -E 'patch_get_free_memory\.py:/opt/ez-comfy/patch_get_free_memory\.py' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'cache_from:' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'COMFYUI_REF:.*v0\.' "${compose}"
   [ "$status" -eq 0 ]
 }
 

@@ -6,7 +6,7 @@
 #
 # Gates:
 #   1. Python — pytest-cov on patch_get_free_memory with --cov-fail-under=100
-#   2. Shell function inventory — every function under scripts/ and docker/*.sh
+#   2. Shell function inventory — every function under scripts/ and docker/**/*.sh
 #      must be named under tests/ (strict; production-only refs do not count)
 #   3. Full BATS suite
 #   4. Optional kcov when available (non-fatal on hosts without kcov)
