@@ -225,7 +225,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Preserve the same subject, camera angle, and overall composition as the input image. Enhance micro-detail and material fidelity: richer textures, cleaner edges, more deliberate cinematic lighting with a stronger key and soft fill. Keep identity and layout stable while elevating clarity and color depth to a polished editorial still."
+        "Transform ComfyUI's crude example doodle into a rich stylized illustration while locking the same composition: a cheerful character in a pink dress standing with arms open on a green hill under a bright blue sky with soft clouds, crowned by huge golden-yellow wing-shaped hair. Upgrade flat MS-Paint shapes into layered fabric folds, voluminous hair strands, subtle cheek shading, grass texture, and a gentle sky gradient—same pose, silhouette, and color story, far higher craft."
       ],
       "title": "Positive"
     },
@@ -420,9 +420,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Flux img2img denoise 0.65 (lab)\n\nWhat this graph does: Image\u2192image medium edit (denoise 0.65). Set LoadImage first.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 denoise 0.65.\nSaveImage prefix: ez_flux_img2img.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Set LoadImage to your source still.\n2. Adjust Positive (edit instruction) if needed; queue."
+        "## Flux img2img denoise 0.65 (lab)\n\nWhat this graph does: Medium **sketch → incredible** remaster of Comfy **example.png** (denoise 0.65).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · denoise 0.65.\nSaveImage prefix: ez_flux_img2img.\nDefault LoadImage: **example.png** (pink dress / yellow wing-hair stick figure on green hill).\n\nDemo thesis: same silhouette and color blocks as the trash doodle, elevated into a rich illustration.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Restate dress, wing-hair, pose, hill, sky, then upgrade materials and light.\n• Prefer positive craft language over “no X”.\n\nHow to run:\n1. Keep example.png (or use your own bad sketch).\n2. Queue; try subtle (0.35) and strong (0.85) siblings for the denoise ladder."
       ],
-      "title": "Flux img2img denoise 0.65 (lab) \u2014 operator note"
+      "title": "Flux img2img denoise 0.65 (lab) — operator note"
     }
   ],
   "links": [
@@ -520,8 +520,8 @@
   "extra": {
     "lab_profile": "flux-img2img",
     "lab_flux_tier": "fast",
-    "lab_note": "## Flux img2img denoise 0.65 (lab)\n\nWhat this graph does: Image\u2192image medium edit (denoise 0.65). Set LoadImage first.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 denoise 0.65.\nSaveImage prefix: ez_flux_img2img.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Set LoadImage to your source still.\n2. Adjust Positive (edit instruction) if needed; queue.",
-    "lab_description": "Image\u2192image medium edit (denoise 0.65). Set LoadImage first."
+    "lab_note": "## Flux img2img denoise 0.65 (lab)\n\nWhat this graph does: Medium **sketch → incredible** remaster of Comfy **example.png** (denoise 0.65).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · denoise 0.65.\nSaveImage prefix: ez_flux_img2img.\nDefault LoadImage: **example.png** (pink dress / yellow wing-hair stick figure on green hill).\n\nDemo thesis: same silhouette and color blocks as the trash doodle, elevated into a rich illustration.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Restate dress, wing-hair, pose, hill, sky, then upgrade materials and light.\n• Prefer positive craft language over “no X”.\n\nHow to run:\n1. Keep example.png (or use your own bad sketch).\n2. Queue; try subtle (0.35) and strong (0.85) siblings for the denoise ladder.",
+    "lab_description": "Medium **sketch → incredible** remaster of Comfy **example.png** (denoise 0.65)."
   },
   "version": 0.4
 }

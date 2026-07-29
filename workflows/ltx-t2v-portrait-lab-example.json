@@ -143,7 +143,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Vertical handheld-style walk through a narrow neon alley at night after rain. Camera advances at walking pace past reflective puddles and layered magenta-cyan signage; shallow sense of immersion, smooth stabilized motion (not chaotic shake). Photoreal urban night, readable neon glow, continuous forward move, ambient city hum, no readable brand logos required."
+        "Vertical ten-second shot: camera tracks beside a violinist walking a rain-wet tram corridor. Amber cabin light and cyan window glow cross their coat; shallow depth, stabilized walk pace, continuous forward motion, photoreal night interior."
       ],
       "title": "Positive"
     },
@@ -211,14 +211,14 @@
           "slot_index": 0
         }
       ],
-      "title": "Empty LTX latent 512x768 short",
+      "title": "Empty LTX latent 512x768",
       "properties": {
         "Node name for S&R": "EmptyLTXVLatentVideo"
       },
       "widgets_values": [
         512,
         768,
-        33,
+        241,
         1
       ]
     },
@@ -473,7 +473,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        33,
+        241,
         24.0,
         1
       ],
@@ -584,9 +584,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-t2v-portrait (lab)\n\nWhat this graph does: Vertical T2V short (512\u00d7768).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 33 frames @ 24 fps \u2248 1.4 s \u00b7 512\u00d7768.\n\nPRIMARY OUTPUT \u2014 MP4 (easy to watch)\n\u2022 Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n\u2022 After Queue: open that node for an inline video preview.\n\u2022 File also under ComfyUI/output/ as ez_ltx_t2v_portrait_video_*.mp4 (comfy-state volume).\n\u2022 Frames still saved via SaveImage prefix ez_ltx_t2v_portrait for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion).\n\u2022 T2V: chronological shot; one primary camera move on short clips.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review Positive prompt; Queue.\n3. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
+        "## ltx-t2v-portrait (lab)\n\nWhat this graph does: Vertical text→video (~10 s) tram-corridor track with a violinist.\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 241 frames @ 24 fps ≈ 10.0 s · 512×768.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_t2v_portrait_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_t2v_portrait for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
       ],
-      "title": "Operator note \u2014 video output"
+      "title": "Operator note — video output"
     },
     {
       "id": 16,
@@ -788,9 +788,9 @@
   "extra": {
     "lab_profile": "ltx-t2v-portrait",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-t2v-portrait (lab)\n\nWhat this graph does: Vertical T2V short (512\u00d7768).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 33 frames @ 24 fps \u2248 1.4 s \u00b7 512\u00d7768.\n\nPRIMARY OUTPUT \u2014 MP4 (easy to watch)\n\u2022 Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n\u2022 After Queue: open that node for an inline video preview.\n\u2022 File also under ComfyUI/output/ as ez_ltx_t2v_portrait_video_*.mp4 (comfy-state volume).\n\u2022 Frames still saved via SaveImage prefix ez_ltx_t2v_portrait for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion).\n\u2022 T2V: chronological shot; one primary camera move on short clips.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review Positive prompt; Queue.\n3. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
+    "lab_note": "## ltx-t2v-portrait (lab)\n\nWhat this graph does: Vertical text→video (~10 s) tram-corridor track with a violinist.\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 241 frames @ 24 fps ≈ 10.0 s · 512×768.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_t2v_portrait_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_t2v_portrait for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
     "lab_ltx_av": true,
-    "lab_description": "LTX lab: MP4 via VHS_VideoCombine (ez_ltx_t2v_portrait_video) + frames via SaveImage (ez_ltx_t2v_portrait)."
+    "lab_description": "Vertical text→video (~10 s) tram-corridor track with a violinist."
   },
   "version": 0.4
 }

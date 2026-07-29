@@ -280,31 +280,35 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **flux-txt2img-batch2-lab-example** | Batch size **2** at 768² |
     | **flux-txt2img-high-steps-lab-example** | 1024² with **16** steps |
     | **flux-txt2img-product-lab-example** | Product / catalog prompt + square |
-    | **flux-img2img-lab-example** | Image → image, denoise **0.65** (set LoadImage) |
-    | **flux-img2img-subtle-lab-example** | Light edit, denoise **0.35** |
-    | **flux-img2img-strong-lab-example** | Creative remix, denoise **0.85** |
+    | **flux-img2img-lab-example** | Sketch→hero from Comfy **example.png**, denoise **0.65** |
+    | **flux-img2img-subtle-lab-example** | Light polish of **example.png**, denoise **0.35** |
+    | **flux-img2img-strong-lab-example** | Cinematic remaster of **example.png**, denoise **0.85** |
 
-=== "Video frames (LTX)"
+!!! tip "Img2img uses Comfy’s default doodle"
+
+    I2I graphs keep **LoadImage = example.png** (the crude pink-dress / yellow wing-hair stick figure that ships with ComfyUI). Positives deliberately turn that bad sketch into something incredible—swap in your own sketch anytime.
+
+=== "Video (LTX, ≥ ~10 s)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **ltx-i2v-lab-example** | Image → video frames (~97 @ 24 fps; set start frame) |
-    | **ltx-i2v-short-lab-example** | Faster I2V: **33** frames @ 24 fps |
-    | **ltx-i2v-quick-lab-example** | Ultra-short I2V: **17** frames |
-    | **ltx-t2v-lab-example** | Text → video frames (~97 @ 24 fps) |
-    | **ltx-t2v-short-lab-example** | Faster T2V: **33** frames @ 24 fps |
-    | **ltx-t2v-quick-lab-example** | Ultra-short T2V: **17** frames |
-    | **ltx-t2v-portrait-lab-example** | Vertical T2V **512×768**, short |
-    | **ltx-t2v-landscape-lab-example** | Wide T2V **1024×576**, short |
+    | **ltx-i2v-lab-example** | Image → video **~10 s** (241 @ 24 fps; default **example.png**) |
+    | **ltx-t2v-lab-example** | Text → video **~10 s** (241 @ 24 fps) |
+    | **ltx-t2v-portrait-lab-example** | Vertical T2V **512×768**, **~10 s** |
+    | **ltx-t2v-landscape-lab-example** | Wide T2V **1024×576**, **~10 s** |
+    | **ltx-i2v-30s-lab-example** / **ltx-i2v-orbit-30s-lab-example** | I2V **~30 s** long-run demos |
+    | **ltx-t2v-30s-lab-example** / **portrait-30s** / **landscape-30s** | T2V **~30 s** long-run demos |
+    | **ltx-i2v-60s-lab-example** | I2V **~60 s** very heavy long-run demo |
+    | **ltx-t2v-60s-lab-example** / **portrait-60s** / **landscape-60s** / **story-60s** | T2V **~60 s** very heavy long-run demos |
 
 === "Combined"
 
     | Workflow | What it does |
     | --- | --- |
-    | **flux-to-ltx-lab-example** | Flux txt2img + handoff notes → load **ltx-i2v-lab-example** for video frames |
-    | **flux-to-ltx-short-lab-example** | Same handoff aimed at **ltx-i2v-short-lab-example** / quick I2V |
+    | **flux-to-ltx-lab-example** | Flux txt2img + handoff → **ltx-i2v-lab-example** (~10 s) |
+    | **flux-to-ltx-30s-lab-example** | Flux handoff aimed at **ltx-i2v-30s-lab-example** |
 
-Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain how to turn frames into a playable video.
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain MP4 output and long-run VRAM expectations.
 
 ### Prompting these models
 
@@ -321,8 +325,8 @@ Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer edit
 === "LTX-2.3 (video frames)"
 
     - Text encoder is **Gemma 3 DualCLIP** (type **`ltxv`**): describe **actions over time**
-    - **I2V:** briefly restate the still, then **one** camera move + light micro-motion; keep identity stable
-    - **T2V:** chronological shot (establish → move → environment motion); one primary camera path on short clips
+    - **I2V:** restate the still (lab default is Comfy **example.png**), then camera move + micro-motion; keep identity stable
+    - **T2V:** chronological shot (establish → move → environment motion); for 30 s / 60 s graphs write a beginning → middle → end timeline
     - Negatives should target **temporal** artifacts (morphing, flicker, jitter, stutter), not generic SD junk
     - Light ambient-audio language is optional; lab does **not** save audio tracks
 
@@ -332,11 +336,15 @@ Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer edit
 
     Seeded **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**, and find `ez_ltx_*_video_*.mp4` under Comfy’s **output/** folder (on the `ez-comfy-state` volume). PNG frames are still written via `SaveImage` for inspection.
 
-| Tier | Frames | FPS | ≈ duration |
+| Tier | Frames (`8n+1`) | FPS | ≈ duration |
 | --- | --- | --- | --- |
-| full (`ltx-i2v` / `ltx-t2v` lab) | 97 | 24 | ~4.0 s |
-| short | 33 | 24 | ~1.4 s |
-| quick | 17 | 24 | ~0.7 s |
+| base (`ltx-*-lab-example` without duration suffix) | 241 | 24 | ~10.0 s |
+| **`*-30s-*`** long-run demos | 721 | 24 | ~30.0 s |
+| **`*-60s-*`** very heavy demos | 1441 | 24 | ~60.0 s |
+
+!!! warning "30 s / 60 s graphs are heavy"
+
+    Longer latents need more VRAM and wall-clock time (often multi-minute). Prefer **~10 s** base graphs for smoke tests; keep headroom preflight green before queuing 30 s / 60 s demos.
 
 Optional offline stitch of PNG frames only (if you need a host-side re-encode):
 

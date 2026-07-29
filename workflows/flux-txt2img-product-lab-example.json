@@ -142,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Catalog product photograph of matte-black over-ear wireless headphones centered on a seamless pure white cyclorama. Soft three-point studio lighting with a broad key and gentle rim to separate the headband silhouette; fabric ear cushions show fine weave, metal yoke shows subtle brushed finish. True-to-life proportions, sharp focus across the product, minimal soft contact shadow, e-commerce hero framing, no brand marks, no on-image text, no extra props."
+        "Catalog product photograph of a matte sage-green mechanical keyboard with cream keycaps, centered on a seamless warm-gray sweep. Soft three-point studio lighting, gentle rim on the aluminum plate, crisp legends, no cable clutter, photoreal ecommerce hero."
       ],
       "title": "Positive"
     },
@@ -181,7 +181,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "extra product copies, floating debris, busy props, brand logos, price tags, watermarks, on-image marketing text, fingerprints on product, dusty surface, harsh specular blowouts"
+        "washed-out colors, muddy blacks, plastic skin, melted geometry, duplicate limbs, illegible gibberish text, logos, watermarks, heavy compression artifacts, oversharpen halos"
       ],
       "title": "Negative"
     },
@@ -372,9 +372,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Flux product / catalog (lab)\n\nWhat this graph does: Catalog-style product shot on seamless white (1024\u00b2, 10 steps).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 10 steps \u00b7 1024\u00d71024 \u00b7 batch 1.\nSaveImage prefix: ez_flux_product.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
+        "## Flux txt2img product (lab)\n\nWhat this graph does: Catalog / product text→image at 1024×1024.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 10 steps · 1024×1024 · batch 1\nSaveImage prefix: ez_flux_product.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n• Prefer positive constraints (“sharp focus”, “empty street”, “seamless white”) over “no X”.\n• Comfy (weight:1.4) emphasis is not applied by this text encoder.\n• At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
       ],
-      "title": "Flux product / catalog (lab) \u2014 operator note"
+      "title": "Flux product / catalog (lab) — operator note"
     }
   ],
   "links": [
@@ -463,8 +463,8 @@
         0
       ]
     },
-    "lab_note": "## Flux product / catalog (lab)\n\nWhat this graph does: Catalog-style product shot on seamless white (1024\u00b2, 10 steps).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 10 steps \u00b7 1024\u00d71024 \u00b7 batch 1.\nSaveImage prefix: ez_flux_product.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
-    "lab_description": "Catalog-style product shot on seamless white (1024\u00b2, 10 steps)."
+    "lab_note": "## Flux txt2img product (lab)\n\nWhat this graph does: Catalog / product text→image at 1024×1024.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 10 steps · 1024×1024 · batch 1\nSaveImage prefix: ez_flux_product.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n• Prefer positive constraints (“sharp focus”, “empty street”, “seamless white”) over “no X”.\n• Comfy (weight:1.4) emphasis is not applied by this text encoder.\n• At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
+    "lab_description": "Catalog / product text→image at 1024×1024."
   },
   "version": 0.4
 }
