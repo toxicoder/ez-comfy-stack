@@ -1,5 +1,7 @@
-# Pinned docs stack for local builds, CI (make docs), and GitHub Pages deploy.
+# Docs stack: MkDocs 1.x + Material only (local, CI make docs, GitHub Pages deploy).
+# Do not install mkdocs>=2 — breaks Material plugins/theme; no migration path.
+# Material requires mkdocs<2,>=1.6 (PyPI metadata). Stay on exact pins for CI.
 mkdocs==1.6.1
-mkdocs-material==9.7.6
+mkdocs-material==9.7.7
 # Multi-version docs (latest from main, development from development branch).
 mike==2.1.3
