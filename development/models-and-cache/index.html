@@ -654,10 +654,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#image-layer-cache-high-velocity-rebuilds" class="md-nav__link">
+  <a href="#image-layer-cache-high-velocity-rebuilds-pulls" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Image layer cache (high-velocity rebuilds)
+        Image layer cache (high-velocity rebuilds + pulls)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prebuild-version-pins-validated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prebuild version pins (validated)
       
     </span>
   </a>
@@ -984,10 +995,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#image-layer-cache-high-velocity-rebuilds" class="md-nav__link">
+  <a href="#image-layer-cache-high-velocity-rebuilds-pulls" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Image layer cache (high-velocity rebuilds)
+        Image layer cache (high-velocity rebuilds + pulls)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prebuild-version-pins-validated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prebuild version pins (validated)
       
     </span>
   </a>
@@ -1327,40 +1349,75 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 </tr>
 </tbody>
 </table>
-<h3 id="image-layer-cache-high-velocity-rebuilds">Image layer cache (high-velocity rebuilds)<a class="headerlink" href="#image-layer-cache-high-velocity-rebuilds" title="Permanent link">&para;</a></h3>
-<p>Dockerfile order is intentional so <strong>ops-script edits do not re-download multi‑GB torch</strong>:</p>
+<h3 id="image-layer-cache-high-velocity-rebuilds-pulls">Image layer cache (high-velocity rebuilds + pulls)<a class="headerlink" href="#image-layer-cache-high-velocity-rebuilds-pulls" title="Permanent link">&para;</a></h3>
+<p>Dockerfile order is intentional so <strong>ops-script edits do not re-download multi‑GB torch</strong>, and <strong>app-only prebuild churn does not re-pull the full venv blob</strong>:</p>
 <table>
 <thead>
 <tr>
 <th>Change</th>
-<th>Rebuild multi‑GB prebuild?</th>
-<th>Re-pull multi‑GB layer?</th>
+<th>Rebuild multi‑GB torch phase?</th>
+<th>Re-pull multi‑GB <strong>venv</strong> layer?</th>
+<th>Re-pull <strong>app</strong> layer?</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>entrypoint.sh</code> / <code>patch_get_free_memory.py</code></td>
+<td><code>entrypoint.sh</code> / <code>patch_get_free_memory.py</code> / orchestrator</td>
+<td>No</td>
 <td>No</td>
 <td>No</td>
 </tr>
 <tr>
-<td>Custom-node / <code>nodes</code> phase only</td>
-<td>Nodes+finalize only (torch cached)</td>
-<td>Smaller delta</td>
+<td><code>install-comfy/phase-nodes.sh</code> or node sources only (no new pip)</td>
+<td>No</td>
+<td>No</td>
+<td>Yes (smaller)</td>
 </tr>
 <tr>
-<td><code>install-comfy.sh</code> prebuild logic / torch phase</td>
-<td>Yes (expected)</td>
+<td><code>install-comfy/phase-comfy.sh</code> / <code>COMFYUI_REF</code> bump (may change requirements)</td>
+<td>No (torch phase)</td>
+<td><strong>Yes if pip set changes</strong></td>
 <td>Yes</td>
 </tr>
 <tr>
-<td>CUDA base / apt packages</td>
+<td><code>install-comfy/phase-venv-torch.sh</code> / CUDA base / apt</td>
+<td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
 </tbody>
 </table>
-<p>Builder phases (with BuildKit pip cache mounts): <strong>venv+torch</strong> → <strong>comfy</strong> → <strong>nodes+finalize</strong>. Runtime copies <code>/opt/comfy-prebuilt</code> <strong>before</strong> embedding ops scripts. Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, and <code>patch_get_free_memory.py</code> so local script iteration needs <strong>no image rebuild</strong>; rebake the image only when you need a new prebuilt tree.</p>
+<p>Builder: <strong>COPY only phase modules each <code>RUN</code> needs</strong> (<code>common</code>+<code>phase-venv-torch</code> → <code>phase-comfy</code> → <code>phase-nodes</code>+<code>phase-finalize</code>) with BuildKit pip cache mounts. Runtime: <strong><code>COPY /opt/parts/venv</code> then <code>/opt/parts/app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
+<p><strong>Caveat:</strong> the venv layer is the <strong>final</strong> <code>.venv</code> after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.</p>
+<h3 id="prebuild-version-pins-validated">Prebuild version pins (validated)<a class="headerlink" href="#prebuild-version-pins-validated" title="Permanent link">&para;</a></h3>
+<p>Defaults are intentional tags so GHCR rebuilds are reproducible. Validated <strong>2026-07-29</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Default</th>
+<th>Why this value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COMFYUI_REF</code></td>
+<td><code>v0.29.0</code></td>
+<td>Latest ComfyUI release (2026-07-29). Official README recommends <strong>torch cu130</strong>. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use <strong>core</strong> nodes only (<code>UNETLoader</code>, <code>EmptyFlux2LatentImage</code>, <code>LTXV*</code>, …). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
+</tr>
+<tr>
+<td><code>COMFYUI_MANAGER_REF</code></td>
+<td><code>4.2.2</code></td>
+<td>Latest stable Manager tag; <code>requires-python &gt;= 3.9</code>; no hard ComfyUI version floor.</td>
+</tr>
+<tr>
+<td><code>COMFYUI_NUNCHAKU_NODE_REF</code></td>
+<td><code>v1.2.1</code></td>
+<td>Latest plugin release; aligned with <code>NUNCHAKU_VERSION=1.2.1</code>. <strong>Optional</strong> on GB10 (no official aarch64 engine wheels); lab-flux/lab-ltx graphs do not require it.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How to bump pins:</strong> change the defaults in <code>docker/Dockerfile</code> <code>ARG</code>s, <code>docker/docker-compose.yml</code> build-args, <code>.github/workflows/publish-image.yml</code>, and <code>docker/install-comfy/common.sh</code>, then rebuild/publish. Escape hatch: set <code>COMFYUI_REF=</code> empty to float the default branch (not recommended for GHCR).</p>
 <h3 id="resume-cache">Resume &amp; cache<a class="headerlink" href="#resume-cache" title="Permanent link">&para;</a></h3>
 <p>Downloads are <strong>resumable</strong> and <strong>cacheable</strong> under <code>MODELS_DIR</code>:</p>
 <table>

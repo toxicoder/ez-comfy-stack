@@ -1286,11 +1286,12 @@ main<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <li>One compose service for the unified stack  </li>
 <li>Multi-stage image: <strong>devel</strong> builder + <strong>runtime</strong> final (no secrets/models)  </li>
 <li><strong>Layer cache contract</strong> (do not regress):</li>
-<li>Builder: <code>COPY</code> only <code>install-comfy.sh</code> before prebuild <code>RUN</code>s</li>
-<li>Builder prebuild is <strong>phased</strong> (<code>--phase venv|torch|comfy|nodes|finalize</code>) so torch survives node-only edits</li>
-<li>Runtime: <code>COPY --from=builder</code> prebuilt <strong>before</strong> entrypoint/install/patch</li>
+<li>Builder: <code>COPY</code> only the <code>install-comfy/</code> <strong>phase modules</strong> each prebuild <code>RUN</code> needs (not the full orchestrator before torch)</li>
+<li>Builder prebuild is <strong>phased</strong> (<code>venv+torch</code> → <code>comfy</code> → <code>nodes+finalize+package</code>) so torch survives node-only edits</li>
+<li>Runtime: <code>COPY --from=builder /opt/parts/venv</code> then <code>/opt/parts/app</code> <strong>before</strong> entrypoint/install/patch</li>
+<li>Validated pins: <code>COMFYUI_REF</code>, <code>COMFYUI_MANAGER_REF</code>, <code>COMFYUI_NUNCHAKU_NODE_REF</code> (see models-and-cache.md)</li>
 <li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --chmod</code>, <code>RUN --mount=type=cache,target=/root/.cache/pip</code></li>
-<li>Compose bind-mounts ops scripts for zero-rebuild iteration</li>
+<li>Compose bind-mounts ops scripts + <code>install-comfy/</code> for zero-rebuild iteration</li>
 <li>GHCR channel by long-lived branch: publish tags <code>flux-to-ltx</code> (<code>main</code>) and <code>flux-to-ltx-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel)  </li>
 <li>Scripts as real files (not inline ConfigMap YAML)  </li>
 <li>Host model cache + named volume for Comfy state  </li>

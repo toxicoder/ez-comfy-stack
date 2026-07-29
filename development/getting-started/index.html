@@ -1130,18 +1130,18 @@
 </tbody>
 </table>
 <p>Override with <code>EZ_COMFY_IMAGE</code> in <code>.env</code> if needed.<br />
-Multi-stage: <strong>devel</strong> builder installs Comfy+torch in <strong>phased layers</strong> (torch separate from custom nodes); final stage is <strong>CUDA runtime</strong> (no nvcc).<br />
-It includes ComfyUI + PyTorch; <strong>not</strong> FLUX/LTX weights (those stay on <code>MODELS_DIR</code>).<br />
+Multi-stage: <strong>devel</strong> builder installs Comfy+torch in <strong>phased modules</strong> (torch separate from custom nodes); final stage is <strong>CUDA runtime</strong> (no nvcc) with <strong>split layers</strong> (venv vs app) so pulls reuse multi‑GB torch when only app bits change.<br />
+It includes ComfyUI + PyTorch (pinned refs — see <a href="../models-and-cache/#prebuild-version-pins-validated">Models &amp; Cache</a>); <strong>not</strong> FLUX/LTX weights (those stay on <code>MODELS_DIR</code>).<br />
 First start <strong>seeds</strong> the volume from <code>/opt/comfy-prebuilt</code> (local copy) instead of multi‑GB pip.<br />
 No tokens or host secrets are baked into the image. Pull is public for public packages.<br />
 <code>./scripts/manage.sh doctor</code> prints the resolved default image before you start.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Dev: edit scripts without rebuilding</p>
-<p>Compose bind-mounts <code>docker/entrypoint.sh</code>, <code>docker/install-comfy.sh</code>, and <code>docker/patch_get_free_memory.py</code> into the container.<br />
+<p>Compose bind-mounts <code>docker/entrypoint.sh</code>, <code>docker/install-comfy.sh</code>, <code>docker/install-comfy/</code>, and <code>docker/patch_get_free_memory.py</code> into the container.<br />
 Change those files on the host, then restart the stack — <strong>no multi‑GB image rebuild</strong>.<br />
 Rebuild (<code>LAB_STACK_FORCE_BUILD=1</code> or publish) only when you need a new baked <code>/opt/comfy-prebuilt</code> tree (torch / Comfy / nodes).<br />
-See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds">Models &amp; Cache</a> for what invalidates which layers.</p>
+See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds--pulls">Models &amp; Cache</a> for what invalidates which layers.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Cold start without prebuilt</p>
