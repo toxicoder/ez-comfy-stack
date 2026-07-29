@@ -321,9 +321,12 @@ link_into_comfy() {
         ;;
     esac
     dest="${comfy}/${dest_sub}/${base}"
-    # Always retarget so partial/stale links cannot hide host weights
-    ln -sfn "${f}" "${dest}" || true
-    log "linked ${base} → comfy/${dest_sub}/"
+    # Relative targets so bind-mount path (/mnt/models vs /models) does not break
+    if ln_sfn_relative "${f}" "${dest}"; then
+      log "linked ${base} → comfy/${dest_sub}/"
+    else
+      warn "failed to link ${base} → comfy/${dest_sub}/"
+    fi
   done < <(find "${src}" -type f \( -name '*.safetensors' -o -name '*.sft' \) 2>/dev/null)
 }
 

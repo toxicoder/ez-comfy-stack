@@ -875,6 +875,43 @@ explain_hf_download_error() {
 }
 
 #######################################
+# Create or replace a symlink using a path relative to the link's directory.
+# Absolute targets break inside Docker when host MODELS_DIR is mounted at a
+# different path (/mnt/models on host vs /models in the container).
+# Globals:
+#   None
+# Arguments:
+#   $1  Target path (must exist; may be absolute)
+#   $2  Link path to create or retarget
+# Outputs:
+#   warn on missing target or fallback to absolute
+# Returns:
+#   0 on success; 1 if target missing or link creation fails
+#######################################
+ln_sfn_relative() {
+  local target="${1:?ln_sfn_relative requires target}"
+  local linkpath="${2:?ln_sfn_relative requires link path}"
+  local linkdir rel
+  linkdir="$(dirname "${linkpath}")"
+  mkdir -p "${linkdir}" || return 1
+  if [[ ! -e ${target} ]]; then
+    warn "ln_sfn_relative: target missing: ${target}"
+    return 1
+  fi
+  # Prefer GNU realpath; fall back to python3 (macOS / minimal hosts)
+  if rel="$(realpath --relative-to="${linkdir}" "${target}" 2>/dev/null)" && [[ -n ${rel} ]]; then
+    :
+  elif command -v python3 >/dev/null 2>&1; then
+    rel="$(python3 -c 'import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' \
+      "${target}" "${linkdir}")" || return 1
+  else
+    rel="${target}"
+    warn "ln_sfn_relative: no relpath support; using absolute target (container-fragile)"
+  fi
+  ln -sfn "${rel}" "${linkpath}"
+}
+
+#######################################
 # Lab workflow model basenames expected under MODELS_DIR/comfy after download-models.
 # Globals:
 #   None
@@ -899,6 +936,8 @@ EOF
 
 #######################################
 # Check host MODELS_DIR/comfy for lab workflow weights; warn on missing.
+# Requires resolvable paths (broken symlinks count as missing). Absolute
+# symlinks under comfy/ are container-fragile and produce a warn.
 # Globals:
 #   MODELS_DIR
 # Arguments:
@@ -910,7 +949,7 @@ EOF
 #######################################
 check_lab_models_ready() {
   local root="${1:-${MODELS_DIR:-/mnt/models}}"
-  local rel path missing=0
+  local rel path missing=0 link_tgt
   local comfy="${root}/comfy"
   if [[ ! -d ${comfy} ]]; then
     warn "lab models: ${comfy} missing — run ./scripts/manage.sh download-models"
@@ -919,10 +958,22 @@ check_lab_models_ready() {
   while IFS= read -r rel; do
     [[ -z ${rel} ]] && continue
     path="${comfy}/${rel}"
-    if [[ -e ${path} || -L ${path} ]]; then
+    # -e follows symlinks; broken links must not count as ready
+    if [[ -e ${path} ]]; then
+      if [[ -L ${path} ]]; then
+        link_tgt="$(readlink "${path}" 2>/dev/null || true)"
+        if [[ ${link_tgt} == /* ]]; then
+          warn "lab model absolute symlink (container-fragile): ${rel} → ${link_tgt}"
+          warn "  Re-run ./scripts/manage.sh download-models to rewrite relative links"
+        fi
+      fi
       log "lab model ok: ${rel}"
     else
-      warn "lab model MISSING: ${rel}"
+      if [[ -L ${path} ]]; then
+        warn "lab model BROKEN symlink: ${rel} → $(readlink "${path}" 2>/dev/null || echo '?')"
+      else
+        warn "lab model MISSING: ${rel}"
+      fi
       missing=$((missing + 1))
     fi
   done < <(lab_expected_model_relpaths)
