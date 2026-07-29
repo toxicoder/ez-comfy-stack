@@ -460,18 +460,18 @@ cleanup_wrong_nunchaku() {
 }
 
 #######################################
-# Map uname -m to manylinux/win wheel platform tag used by nunchaku releases.
+# Map machine arch to manylinux wheel platform tag used by nunchaku releases.
 # Globals:
 #   None
 # Arguments:
-#   $1  Optional machine arch (default: uname -m)
+#   $1  Machine arch (e.g. from uname -m: x86_64, aarch64)
 # Outputs:
 #   Platform tag on stdout (empty if unsupported)
 # Returns:
 #   0
 #######################################
 nunchaku_platform_tag() {
-  local arch="${1:-$(uname -m)}"
+  local arch="${1:?nunchaku_platform_tag requires arch}"
   case "${arch}" in
     x86_64 | amd64) echo "linux_x86_64" ;;
     aarch64 | arm64) echo "linux_aarch64" ;;
@@ -535,7 +535,7 @@ install_nunchaku_wheel() {
     return 0
   fi
 
-  plat="$(nunchaku_platform_tag)"
+  plat="$(nunchaku_platform_tag "$(uname -m)")"
   if [[ -z ${plat} ]]; then
     warn "nunchaku: unsupported arch $(uname -m); skipping (optional)"
     return 0
