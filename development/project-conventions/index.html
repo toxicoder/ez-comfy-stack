@@ -1285,6 +1285,7 @@ main<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <ul>
 <li>One compose service for the unified stack  </li>
 <li>Multi-stage image: <strong>devel</strong> builder + <strong>runtime</strong> final (no secrets/models)  </li>
+<li>GHCR channel by long-lived branch: publish tags <code>flux-to-ltx</code> (<code>main</code>) and <code>flux-to-ltx-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel)  </li>
 <li>Scripts as real files (not inline ConfigMap YAML)  </li>
 <li>Host model cache + named volume for Comfy state  </li>
 <li>Compose <code>restart: "no"</code>; explicit <code>mem_limit</code> / <code>mem_reservation</code>  </li>

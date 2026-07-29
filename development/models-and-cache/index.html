@@ -1218,8 +1218,16 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 </thead>
 <tbody>
 <tr>
-<td>Image</td>
+<td>Image (<code>main</code>)</td>
 <td><code>ghcr.io/toxicoder/ez-comfy:flux-to-ltx</code> (arm64)</td>
+</tr>
+<tr>
+<td>Image (<code>development</code> / feature)</td>
+<td><code>ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development</code> (arm64)</td>
+</tr>
+<tr>
+<td>Selection</td>
+<td><code>manage.sh</code> maps current git branch → tag (override: <code>EZ_COMFY_IMAGE</code>)</td>
 </tr>
 <tr>
 <td>Final base</td>
@@ -1243,7 +1251,7 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 </tr>
 <tr>
 <td>Publish</td>
-<td><code>publish-image</code> workflow uses Buildx GHA layer cache</td>
+<td><code>publish-image</code> on <code>main</code> / <code>development</code> (docker/**); Buildx GHA layer cache</td>
 </tr>
 </tbody>
 </table>
