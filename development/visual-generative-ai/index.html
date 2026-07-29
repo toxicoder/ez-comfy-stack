@@ -987,14 +987,17 @@
   Prompt["Text prompt"] --&gt; Flux["Flux T2I&lt;br/&gt;fast · Klein 9B NVFP4"]
   Flux --&gt; Image["Still image"]
   Image --&gt; LTX["LTX I2V&lt;br/&gt;balanced · distilled FP8"]
-  LTX --&gt; Frames["Video frames&lt;br/&gt;SaveImage"]</code></pre>
-<p><strong>Handoff:</strong> load <strong>flux-to-ltx-lab-example</strong> (or any Flux T2I) → save still → open <strong>ltx-i2v-lab-example</strong> / <strong>ltx-i2v-short-lab-example</strong> and set <code>LoadImage</code> to that file.</p>
+  LTX --&gt; Frames["Video frames&lt;br/&gt;SaveImage"]
+  LTX --&gt; Mp4["MP4 preview&lt;br/&gt;VHS_VideoCombine"]</code></pre>
+<p><strong>Handoff:</strong> load <strong>flux-to-ltx-lab-example</strong> (or any Flux T2I) → save still → open <strong>ltx-i2v-lab-example</strong> / <strong>ltx-i2v-short-lab-example</strong> and set <code>LoadImage</code> to that file → Queue → watch <strong>Save video (MP4)</strong> on the LTX graph.</p>
 <div class="admonition example">
 <p class="admonition-title">Pipeline tips</p>
 <ol>
 <li>Download <strong>flux fast</strong> + <strong>ltx balanced</strong> first</li>
 <li>Prefer keeping both model sets loaded between T2I and I2V</li>
 <li>Avoid concurrent large LLM containers on the same Spark</li>
+<li>LTX lab graphs emit <strong>MP4</strong> via <strong>VideoHelperSuite</strong> (<code>VHS_VideoCombine</code>, 24 fps) plus optional PNG frames — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a></li>
+<li>Prompting: Flux wants Qwen-style prose (subject → light → camera); LTX wants chronological motion. Every <strong>*-lab-example</strong> canvas has an operator <strong>Note</strong></li>
 </ol>
 </div>
 <hr />

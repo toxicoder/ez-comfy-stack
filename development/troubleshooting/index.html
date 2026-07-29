@@ -1283,9 +1283,14 @@
 <td><code>./scripts/utilities/download-ltx.sh run --tier balanced</code> (auto-includes gemma) or <code>download-models</code>; <code>ls $MODELS_DIR/comfy/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors</code></td>
 </tr>
 <tr>
-<td>Missing <code>VHS_VideoCombine</code> node</td>
-<td>Optional VideoHelperSuite not installed</td>
-<td>Lab LTX graphs only need core LTXV nodes + <strong>SaveImage</strong> frames. Install VHS yourself only if you want MP4 combine</td>
+<td>Missing <code>VHS_VideoCombine</code> node on <strong>ltx-*-lab-example</strong></td>
+<td>Image/volume predates VideoHelperSuite, or refresh clone failed</td>
+<td>Pull/rebuild GHCR image (VHS is prebuilt). Restart container so stamp-present refresh runs <code>ensure_lab_video_nodes</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx test -d /comfy-state/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite</code>. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or volume cleanup, then re-open seeded workflows</td>
+</tr>
+<tr>
+<td>LTX finished but I only see PNGs / no MP4 preview</td>
+<td>Old workflow JSON without VHS, or looking only at SaveImage</td>
+<td>Re-open current <strong>ltx-*-lab-example</strong> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open <strong>Save video (MP4)</strong> node for preview; MP4 is under Comfy <code>output/</code> as <code>ez_ltx_*_video_*.mp4</code>. Frames via SaveImage are secondary — <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a></td>
 </tr>
 </tbody>
 </table>

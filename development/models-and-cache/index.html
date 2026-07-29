@@ -1345,7 +1345,7 @@
 </tr>
 </tbody>
 </table>
-<p>Lab video graphs write <strong>frames</strong> via <code>SaveImage</code> only (no VHS). They still <strong>must</strong> wire the audio VAE + <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> because LTX-2.3 is a joint AV model; audio decode/save is optional and not included in lab examples.</p>
+<p>Lab video graphs write <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write <strong>frames</strong> via <code>SaveImage</code>. Watch the <strong>Save video (MP4)</strong> node preview after Queue — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a>. They still <strong>must</strong> wire the audio VAE + <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas <strong>Note</strong> with models, prompting, and video-output steps.</p>
 <h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
 <p>FLUX and some LTX assets may require accepting the license on Hugging Face and a token:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># .env</span>
@@ -1554,6 +1554,12 @@
 <td>Yes (smaller)</td>
 </tr>
 <tr>
+<td>VideoHelperSuite / new node <strong>pip</strong> deps (e.g. opencv, imageio-ffmpeg)</td>
+<td>No</td>
+<td><strong>Yes</strong> (final venv includes node requirements)</td>
+<td>Yes</td>
+</tr>
+<tr>
 <td><code>install-comfy/phase-comfy.sh</code> / <code>COMFYUI_REF</code> bump (may change requirements)</td>
 <td>No (torch phase)</td>
 <td><strong>Yes if pip set changes</strong></td>
@@ -1604,6 +1610,11 @@
 <td><code>COMFYUI_NUNCHAKU_NODE_REF</code></td>
 <td><code>v1.2.1</code></td>
 <td>Latest plugin release; aligned with <code>NUNCHAKU_VERSION=1.2.1</code>. <strong>Optional</strong> on GB10 (no official aarch64 engine wheels); <code>*-lab-example</code> graphs do not require it.</td>
+</tr>
+<tr>
+<td><code>COMFYUI_VHS_REF</code></td>
+<td><em>(empty = main)</em></td>
+<td><a href="https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite">ComfyUI-VideoHelperSuite</a> for LTX lab <strong><code>VHS_VideoCombine</code></strong> MP4. <strong>Required</strong> for <code>ltx-*-lab-example</code>. Empty ref clones default branch; set a tag/branch when you need a pin.</td>
 </tr>
 </tbody>
 </table>
