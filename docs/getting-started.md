@@ -147,11 +147,17 @@ These are under `user/default/workflows/` (copied from the host `workflows/` mou
     | `development` (and feature branches) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development` |
 
     Override with `EZ_COMFY_IMAGE` in `.env` if needed.  
-    Multi-stage: **devel** builder installs Comfy+torch; final stage is **CUDA runtime** (no nvcc).  
+    Multi-stage: **devel** builder installs Comfy+torch in **phased layers** (torch separate from custom nodes); final stage is **CUDA runtime** (no nvcc).  
     It includes ComfyUI + PyTorch; **not** FLUX/LTX weights (those stay on `MODELS_DIR`).  
     First start **seeds** the volume from `/opt/comfy-prebuilt` (local copy) instead of multi‑GB pip.  
     No tokens or host secrets are baked into the image. Pull is public for public packages.  
     `./scripts/manage.sh doctor` prints the resolved default image before you start.
+
+!!! tip "Dev: edit scripts without rebuilding"
+    Compose bind-mounts `docker/entrypoint.sh`, `docker/install-comfy.sh`, and `docker/patch_get_free_memory.py` into the container.  
+    Change those files on the host, then restart the stack — **no multi‑GB image rebuild**.  
+    Rebuild (`LAB_STACK_FORCE_BUILD=1` or publish) only when you need a new baked `/opt/comfy-prebuilt` tree (torch / Comfy / nodes).  
+    See [Models & Cache](models-and-cache.md#image-layer-cache-high-velocity-rebuilds) for what invalidates which layers.
 
 !!! warning "Cold start without prebuilt"
     If GHCR pull fails or you force a thin/local build without prebuild, first start can take **10–30+ minutes** of pip.  

@@ -10,12 +10,14 @@ tags: [models, huggingface, cache]
 
 - Default cache location and layout
 - Download utilities and readiness checks
+- Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
 - Sharing with nvidia-dgx-spark-lab
 
 **What this enables**
 
 - Downloading weights once and reusing them across stacks
 - Checking readiness without network access
+- Rebuilding/pulling only the layers that actually changed
 
 ## Default location
 
@@ -159,6 +161,19 @@ Lab video graphs write **frames** via `SaveImage` only (no VHS). Audio VAE remai
 | First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
 | Weights | Still under `MODELS_DIR` via `download-models` |
 | Publish | `publish-image` on `main` / `development` (docker/**); Buildx GHA layer cache |
+
+### Image layer cache (high-velocity rebuilds)
+
+Dockerfile order is intentional so **ops-script edits do not re-download multi‑GB torch**:
+
+| Change | Rebuild multi‑GB prebuild? | Re-pull multi‑GB layer? |
+| --- | --- | --- |
+| `entrypoint.sh` / `patch_get_free_memory.py` | No | No |
+| Custom-node / `nodes` phase only | Nodes+finalize only (torch cached) | Smaller delta |
+| `install-comfy.sh` prebuild logic / torch phase | Yes (expected) | Yes |
+| CUDA base / apt packages | Yes | Yes |
+
+Builder phases (with BuildKit pip cache mounts): **venv+torch** → **comfy** → **nodes+finalize**. Runtime copies `/opt/comfy-prebuilt` **before** embedding ops scripts. Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, and `patch_get_free_memory.py` so local script iteration needs **no image rebuild**; rebake the image only when you need a new prebuilt tree.
 
 ### Resume & cache
 

@@ -164,6 +164,12 @@ flowchart LR
 
 - One compose service for the unified stack  
 - Multi-stage image: **devel** builder + **runtime** final (no secrets/models)  
+- **Layer cache contract** (do not regress):
+  - Builder: `COPY` only `install-comfy.sh` before prebuild `RUN`s
+  - Builder prebuild is **phased** (`--phase venv|torch|comfy|nodes|finalize`) so torch survives node-only edits
+  - Runtime: `COPY --from=builder` prebuilt **before** entrypoint/install/patch
+  - BuildKit `# syntax=docker/dockerfile:1`, `COPY --chmod`, `RUN --mount=type=cache,target=/root/.cache/pip`
+  - Compose bind-mounts ops scripts for zero-rebuild iteration
 - GHCR channel by long-lived branch: publish tags `flux-to-ltx` (`main`) and `flux-to-ltx-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel)  
 - Scripts as real files (not inline ConfigMap YAML)  
 - Host model cache + named volume for Comfy state  
@@ -176,7 +182,9 @@ flowchart TB
   Svc --> Mem["mem_limit / mem_reservation"]
   Svc --> Models["bind MODELS_DIR"]
   Svc --> State["volume comfy-state"]
+  Svc --> Scripts["bind entrypoint · install · patch"]
 ```
+
 
 ## Testing
 
