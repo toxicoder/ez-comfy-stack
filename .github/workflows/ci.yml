@@ -75,4 +75,7 @@ jobs:
         run: pip install -r docs/requirements.txt
 
       - name: Docs
+        env:
+          # Suppress Material MkDocs 2.0 advisory; pins stay on mkdocs 1.x.
+          NO_MKDOCS_2_WARNING: "1"
         run: make docs
