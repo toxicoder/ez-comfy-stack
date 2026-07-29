@@ -1,8 +1,8 @@
 {
-  "id": "ltx-i2v-quick-lab-example",
-  "revision": 6,
-  "last_node_id": 18,
-  "last_link_id": 25,
+  "id": "ltx-t2v-portrait-30s-lab-example",
+  "revision": 5,
+  "last_node_id": 16,
+  "last_link_id": 18,
   "nodes": [
     {
       "id": 1,
@@ -58,8 +58,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            2,
-            3
+            2
           ],
           "slot_index": 0
         }
@@ -92,8 +91,8 @@
           "name": "CLIP",
           "type": "CLIP",
           "links": [
-            16,
-            17
+            3,
+            4
           ],
           "slot_index": 0
         }
@@ -111,54 +110,53 @@
     },
     {
       "id": 4,
-      "type": "LoadImage",
+      "type": "CLIPTextEncode",
       "pos": [
         620,
         80
       ],
       "size": [
-        320,
-        314
+        420,
+        160
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        }
+      ],
       "outputs": [
         {
-          "name": "IMAGE",
-          "type": "IMAGE",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
           "links": [
             5
           ],
           "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null,
-          "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "example.png",
-        "image"
+        "Vertical thirty-second long take: slow walk up a narrow stone stairwell lit by successive paper lanterns. Camera advances at walking pace; warm lantern pools and cool stone shadows alternate; dust motes in beams; continuous motion, photoreal, intimate scale."
       ],
-      "title": "Start frame"
+      "title": "Positive"
     },
     {
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
         620,
-        444
+        290
       ],
       "size": [
         420,
-        140
+        100
       ],
       "flags": {},
       "order": 5,
@@ -167,7 +165,7 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 16
+          "link": 4
         }
       ],
       "outputs": [
@@ -184,83 +182,70 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Ultra-short motion test from the input still: a slight continuous zoom-in with rock-steady framing, preserving every major detail of the first frame. Tiny natural micro-motion only; no scene change, no morphing, no flicker."
-      ],
-      "title": "Motion / prompt"
-    },
-    {
-      "id": 6,
-      "type": "CLIPTextEncode",
-      "pos": [
-        620,
-        634
-      ],
-      "size": [
-        420,
-        100
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 17
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            7
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text, overexposed flash frames, chaotic camera shake"
+        "static freeze-frame, no motion, morphing, warping landscape, flicker, jitter, stutter, melting terrain, texture crawl, sudden cuts, watermark, burned-in text, overexposed flashes, chaotic whip-pans"
       ],
       "title": "Negative"
     },
     {
+      "id": 6,
+      "type": "EmptyLTXVLatentVideo",
+      "pos": [
+        620,
+        440
+      ],
+      "size": [
+        300,
+        130
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "title": "Empty LTX latent 512x768",
+      "properties": {
+        "Node name for S&R": "EmptyLTXVLatentVideo"
+      },
+      "widgets_values": [
+        512,
+        768,
+        721,
+        1
+      ]
+    },
+    {
       "id": 7,
-      "type": "LTXVImgToVideo",
+      "type": "LTXVConditioning",
       "pos": [
         1120,
         80
       ],
       "size": [
-        320,
-        200
+        280,
+        82
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 6
+          "link": 5
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 7
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 2
-        },
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 5
+          "link": 6
         }
       ],
       "outputs": [
@@ -279,72 +264,8 @@
             9
           ],
           "slot_index": 0
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            20
-          ],
-          "slot_index": 2
         }
       ],
-      "title": "LTX Img\u2192Video quick 17f",
-      "properties": {
-        "Node name for S&R": "LTXVImgToVideo"
-      },
-      "widgets_values": [
-        768,
-        512,
-        17,
-        1
-      ]
-    },
-    {
-      "id": 8,
-      "type": "LTXVConditioning",
-      "pos": [
-        1120,
-        330
-      ],
-      "size": [
-        280,
-        82
-      ],
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 8
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 9
-        }
-      ],
-      "outputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "links": [
-            11
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "links": [
-            12
-          ],
-          "slot_index": 0
-        }
-      ],
-      "title": "LTX frame rate cond",
       "properties": {
         "Node name for S&R": "LTXVConditioning"
       },
@@ -353,7 +274,7 @@
       ]
     },
     {
-      "id": 9,
+      "id": 8,
       "type": "KSampler",
       "pos": [
         1480,
@@ -375,17 +296,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 11
+          "link": 8
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 12
+          "link": 9
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 22
+          "link": 15
         }
       ],
       "outputs": [
@@ -393,7 +314,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            23
+            16
           ],
           "slot_index": 0
         }
@@ -404,7 +325,7 @@
       "widgets_values": [
         42,
         "fixed",
-        16,
+        20,
         1.0,
         "euler",
         "simple",
@@ -413,10 +334,10 @@
       "title": "KSampler"
     },
     {
-      "id": 10,
+      "id": 9,
       "type": "VAEDecode",
       "pos": [
-        2200,
+        1880,
         80
       ],
       "size": [
@@ -424,18 +345,18 @@
         46
       ],
       "flags": {},
-      "order": 13,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 24
+          "link": 17
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 3
+          "link": 2
         }
       ],
       "outputs": [
@@ -443,8 +364,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            18,
-            25
+            11,
+            18
           ],
           "slot_index": 0
         }
@@ -452,14 +373,13 @@
       "properties": {
         "Node name for S&R": "VAEDecode"
       },
-      "widgets_values": [],
-      "title": "VAE Decode"
+      "widgets_values": []
     },
     {
-      "id": 12,
+      "id": 10,
       "type": "SaveImage",
       "pos": [
-        2200,
+        1880,
         176
       ],
       "size": [
@@ -467,13 +387,13 @@
         270
       ],
       "flags": {},
-      "order": 14,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 18
+          "link": 11
         }
       ],
       "outputs": [],
@@ -481,12 +401,12 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_i2v_quick"
+        "ez_ltx_t2v_portrait_30s"
       ],
       "title": "Save frames"
     },
     {
-      "id": 13,
+      "id": 11,
       "type": "VAELoader",
       "pos": [
         40,
@@ -505,7 +425,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            19
+            12
           ],
           "slot_index": 0
         }
@@ -519,24 +439,24 @@
       "title": "LTX audio VAE"
     },
     {
-      "id": 14,
+      "id": 12,
       "type": "LTXVEmptyLatentAudio",
       "pos": [
-        1120,
-        460
+        620,
+        610
       ],
       "size": [
         300,
         130
       ],
       "flags": {},
-      "order": 9,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "audio_vae",
           "type": "VAE",
-          "link": 19
+          "link": 12
         }
       ],
       "outputs": [
@@ -544,7 +464,7 @@
           "name": "Latent",
           "type": "LATENT",
           "links": [
-            21
+            14
           ],
           "slot_index": 0
         }
@@ -553,15 +473,57 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        17,
+        721,
         24.0,
         1
       ],
       "title": "Empty LTX audio latent"
     },
     {
-      "id": 15,
+      "id": 13,
       "type": "LTXVConcatAVLatent",
+      "pos": [
+        1120,
+        220
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 13
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            15
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 14,
+      "type": "LTXVSeparateAVLatent",
       "pos": [
         1480,
         400
@@ -575,51 +537,9 @@
       "mode": 0,
       "inputs": [
         {
-          "name": "video_latent",
-          "type": "LATENT",
-          "link": 20
-        },
-        {
-          "name": "audio_latent",
-          "type": "LATENT",
-          "link": 21
-        }
-      ],
-      "outputs": [
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            22
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVConcatAVLatent"
-      },
-      "widgets_values": [],
-      "title": "Concat AV latents"
-    },
-    {
-      "id": 16,
-      "type": "LTXVSeparateAVLatent",
-      "pos": [
-        1880,
-        80
-      ],
-      "size": [
-        280,
-        66
-      ],
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [
-        {
           "name": "av_latent",
           "type": "LATENT",
-          "link": 23
+          "link": 16
         }
       ],
       "outputs": [
@@ -627,7 +547,7 @@
           "name": "video_latent",
           "type": "LATENT",
           "links": [
-            24
+            17
           ],
           "slot_index": 0
         },
@@ -645,18 +565,18 @@
       "title": "Separate AV latents"
     },
     {
-      "id": 17,
+      "id": 15,
       "type": "Note",
       "pos": [
         40,
-        774.0
+        780.0
       ],
       "size": [
         960,
         360
       ],
       "flags": {},
-      "order": 17,
+      "order": 15,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -664,15 +584,15 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-i2v-quick (lab)\n\nWhat this graph does: I2V smoke (17f). Set LoadImage.\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 17 frames @ 24 fps \u2248 0.7 s \u00b7 768\u00d7512.\n\nPRIMARY OUTPUT \u2014 MP4 (easy to watch)\n\u2022 Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n\u2022 After Queue: open that node for an inline video preview.\n\u2022 File also under ComfyUI/output/ as ez_ltx_i2v_quick_video_*.mp4 (comfy-state volume).\n\u2022 Frames still saved via SaveImage prefix ez_ltx_i2v_quick for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion).\n\u2022 I2V: restate the still, then one clear camera move + micro-motion; keep identity stable.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Set LoadImage to your start frame (e.g. Flux still).\n2. Review Motion / prompt; Queue.\n3. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
+        "## ltx-t2v-portrait-30s (lab)\n\nWhat this graph does: Vertical text→video (~30 s) lantern stairwell long take (long-run demo).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 721 frames @ 24 fps ≈ 30.0 s · 512×768.\n\nHEAVY RUN: long latent length. Expect multi-minute generation and high VRAM; keep headroom preflight green; prefer 10s graphs for smoke tests.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_t2v_portrait_30s_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_t2v_portrait_30s for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
       ],
-      "title": "Operator note \u2014 video output"
+      "title": "Operator note — video output"
     },
     {
-      "id": 18,
+      "id": 16,
       "type": "VHS_VideoCombine",
       "pos": [
-        2520.0,
+        2200.0,
         80
       ],
       "size": [
@@ -680,13 +600,13 @@
         420
       ],
       "flags": {},
-      "order": 18,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 25
+          "link": 18
         },
         {
           "name": "audio",
@@ -721,7 +641,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_ltx_i2v_quick_video",
+        "filename_prefix": "ez_ltx_t2v_portrait_30s_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -738,7 +658,7 @@
       1,
       1,
       0,
-      9,
+      8,
       0,
       "MODEL"
     ],
@@ -746,37 +666,37 @@
       2,
       2,
       0,
-      7,
-      2,
+      9,
+      1,
       "VAE"
     ],
     [
       3,
-      2,
+      3,
       0,
-      10,
-      1,
-      "VAE"
+      4,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      0,
+      "CLIP"
     ],
     [
       5,
       4,
       0,
       7,
-      3,
-      "IMAGE"
-    ],
-    [
-      6,
-      5,
-      0,
-      7,
       0,
       "CONDITIONING"
     ],
     [
-      7,
       6,
+      5,
       0,
       7,
       1,
@@ -787,7 +707,7 @@
       7,
       0,
       8,
-      0,
+      1,
       "CONDITIONING"
     ],
     [
@@ -795,102 +715,70 @@
       7,
       1,
       8,
-      1,
+      2,
       "CONDITIONING"
     ],
     [
       11,
-      8,
-      0,
       9,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      12,
-      8,
-      1,
-      9,
-      2,
-      "CONDITIONING"
-    ],
-    [
-      16,
-      3,
       0,
-      5,
-      0,
-      "CLIP"
-    ],
-    [
-      17,
-      3,
-      0,
-      6,
-      0,
-      "CLIP"
-    ],
-    [
-      18,
       10,
-      0,
-      12,
       0,
       "IMAGE"
     ],
     [
-      19,
-      13,
+      12,
+      11,
       0,
-      14,
+      12,
       0,
       "VAE"
     ],
     [
-      20,
-      7,
-      2,
-      15,
+      13,
+      6,
+      0,
+      13,
       0,
       "LATENT"
     ],
     [
-      21,
       14,
+      12,
       0,
-      15,
+      13,
       1,
       "LATENT"
     ],
     [
-      22,
       15,
+      13,
       0,
-      9,
+      8,
       3,
       "LATENT"
     ],
     [
-      23,
+      16,
+      8,
+      0,
+      14,
+      0,
+      "LATENT"
+    ],
+    [
+      17,
+      14,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      18,
       9,
       0,
       16,
-      0,
-      "LATENT"
-    ],
-    [
-      24,
-      16,
-      0,
-      10,
-      0,
-      "LATENT"
-    ],
-    [
-      25,
-      10,
-      0,
-      18,
       0,
       "IMAGE"
     ]
@@ -898,11 +786,11 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "ltx-i2v-quick",
+    "lab_profile": "ltx-t2v-portrait",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-i2v-quick (lab)\n\nWhat this graph does: I2V smoke (17f). Set LoadImage.\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 17 frames @ 24 fps \u2248 0.7 s \u00b7 768\u00d7512.\n\nPRIMARY OUTPUT \u2014 MP4 (easy to watch)\n\u2022 Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n\u2022 After Queue: open that node for an inline video preview.\n\u2022 File also under ComfyUI/output/ as ez_ltx_i2v_quick_video_*.mp4 (comfy-state volume).\n\u2022 Frames still saved via SaveImage prefix ez_ltx_i2v_quick for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion).\n\u2022 I2V: restate the still, then one clear camera move + micro-motion; keep identity stable.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Set LoadImage to your start frame (e.g. Flux still).\n2. Review Motion / prompt; Queue.\n3. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
+    "lab_note": "## ltx-t2v-portrait-30s (lab)\n\nWhat this graph does: Vertical text→video (~30 s) lantern stairwell long take (long-run demo).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 721 frames @ 24 fps ≈ 30.0 s · 512×768.\n\nHEAVY RUN: long latent length. Expect multi-minute generation and high VRAM; keep headroom preflight green; prefer 10s graphs for smoke tests.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_t2v_portrait_30s_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_t2v_portrait_30s for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
     "lab_ltx_av": true,
-    "lab_description": "LTX lab: MP4 via VHS_VideoCombine (ez_ltx_i2v_quick_video) + frames via SaveImage (ez_ltx_i2v_quick)."
+    "lab_description": "Vertical text→video (~30 s) lantern stairwell long take (long-run demo)."
   },
   "version": 0.4
 }

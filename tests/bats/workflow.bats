@@ -7,6 +7,8 @@
 #   Flux.2 Klein node types, stay free of Z-Image templates, avoid
 #   optional third-party nodes not installed by this stack, use the
 #   *-lab-example name pattern, and keep non-overlapping node layouts.
+#   LTX lab video graphs are at least ~10 s (241 frames @ 24 fps) with
+#   dedicated 30 s (721) and 60 s (1441) long-run examples.
 #
 
 load 'test_helper'
@@ -25,13 +27,23 @@ teardown() {
   shopt -s nullglob
   local -a files=("${dir}"/*-lab-example.json)
   shopt -u nullglob
-  [[ ${#files[@]} -ge 20 ]]
+  [[ ${#files[@]} -ge 25 ]]
 
   # No legacy lab-*.json names
   shopt -s nullglob
   local -a legacy=("${dir}"/lab-*.json)
   shopt -u nullglob
   [[ ${#legacy[@]} -eq 0 ]]
+
+  # Retired sub-10 s LTX basenames must stay gone
+  for gone in \
+    ltx-i2v-short-lab-example.json \
+    ltx-i2v-quick-lab-example.json \
+    ltx-t2v-short-lab-example.json \
+    ltx-t2v-quick-lab-example.json \
+    flux-to-ltx-short-lab-example.json; do
+    [[ ! -f ${dir}/${gone} ]]
+  done
 
   for wf in "${files[@]}"; do
     n=$((n + 1))
@@ -74,7 +86,7 @@ for i in range(len(boxes)):
 "
     [ "${status}" -eq 0 ]
   done
-  [[ ${n} -ge 20 ]]
+  [[ ${n} -ge 25 ]]
 }
 
 @test "flux lab graphs use flux2 CLIP EmptyFlux2Latent and stack weights" {
@@ -94,7 +106,7 @@ for i in range(len(boxes)):
     flux-img2img-subtle-lab-example.json \
     flux-img2img-strong-lab-example.json \
     flux-to-ltx-lab-example.json \
-    flux-to-ltx-short-lab-example.json; do
+    flux-to-ltx-30s-lab-example.json; do
     [[ -f ${dir}/${wf} ]]
     run grep -F 'flux-2-klein-9b-nvfp4.safetensors' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
@@ -125,7 +137,7 @@ for i in range(len(boxes)):
     flux-txt2img-high-steps-lab-example.json \
     flux-txt2img-product-lab-example.json \
     flux-to-ltx-lab-example.json \
-    flux-to-ltx-short-lab-example.json; do
+    flux-to-ltx-30s-lab-example.json; do
     run grep -F 'EmptyFlux2LatentImage' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
     run grep -F 'EmptySD3LatentImage' "${dir}/${wf}"
@@ -161,44 +173,66 @@ assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==16 for n in d['
   [ "${status}" -eq 0 ]
 }
 
-@test "ltx lab graphs use DualCLIP Gemma+projection and balanced FP8 pack" {
+@test "flux img2img and ltx i2v keep example.png and sketch-aware prompts" {
   local dir="${REPO_ROOT}/workflows"
   local wf
   for wf in \
+    flux-img2img-lab-example.json \
+    flux-img2img-subtle-lab-example.json \
+    flux-img2img-strong-lab-example.json \
     ltx-i2v-lab-example.json \
-    ltx-i2v-short-lab-example.json \
-    ltx-i2v-quick-lab-example.json \
-    ltx-t2v-lab-example.json \
-    ltx-t2v-short-lab-example.json \
-    ltx-t2v-quick-lab-example.json \
-    ltx-t2v-portrait-lab-example.json \
-    ltx-t2v-landscape-lab-example.json; do
-    [[ -f ${dir}/${wf} ]]
-    run grep -F 'ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors' \
-      "${dir}/${wf}"
+    ltx-i2v-30s-lab-example.json \
+    ltx-i2v-orbit-30s-lab-example.json \
+    ltx-i2v-60s-lab-example.json; do
+    run python3 -c "
+import json,re
+d=json.load(open('${dir}/${wf}'))
+loads=[n for n in d['nodes'] if n.get('type')=='LoadImage']
+assert loads, '${wf}: missing LoadImage'
+assert loads[0]['widgets_values'][0]=='example.png', loads[0]['widgets_values']
+pos=next(n for n in d['nodes'] if n.get('type')=='CLIPTextEncode' and n.get('title') in ('Positive','Motion / prompt'))
+text=pos['widgets_values'][0].lower()
+# Must anchor the crude doodle (dress / hair / hill / sky / sketch / doodle / example)
+assert re.search(r'pink|dress|wing|hair|hill|sky|sketch|doodle|example\.png|example png', text), text[:200]
+"
     [ "${status}" -eq 0 ]
-    run grep -F 'LTX23_video_vae_bf16.safetensors' "${dir}/${wf}"
+  done
+}
+
+@test "ltx lab graphs use DualCLIP Gemma+projection, AV pack, and duration floors" {
+  local dir="${REPO_ROOT}/workflows"
+  local wf
+  shopt -s nullglob
+  local -a ltx_files=("${dir}"/ltx-*-lab-example.json)
+  shopt -u nullglob
+  [[ ${#ltx_files[@]} -ge 14 ]]
+
+  for wf in "${ltx_files[@]}"; do
+    [[ -f ${wf} ]]
+    run grep -F 'ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors' "${wf}"
+    [ "${status}" -eq 0 ]
+    run grep -F 'LTX23_video_vae_bf16.safetensors' "${wf}"
     [ "${status}" -eq 0 ]
     # LTX-2.3 is joint AV — empty audio latents + concat are required for KSampler
-    run grep -F 'LTX23_audio_vae_bf16.safetensors' "${dir}/${wf}"
+    run grep -F 'LTX23_audio_vae_bf16.safetensors' "${wf}"
     [ "${status}" -eq 0 ]
-    run grep -F 'LTXVEmptyLatentAudio' "${dir}/${wf}"
+    run grep -F 'LTXVEmptyLatentAudio' "${wf}"
     [ "${status}" -eq 0 ]
-    run grep -F 'LTXVConcatAVLatent' "${dir}/${wf}"
+    run grep -F 'LTXVConcatAVLatent' "${wf}"
     [ "${status}" -eq 0 ]
-    run grep -F 'LTXVSeparateAVLatent' "${dir}/${wf}"
+    run grep -F 'LTXVSeparateAVLatent' "${wf}"
     [ "${status}" -eq 0 ]
-    run grep -F 'ltx-2.3_text_projection_bf16.safetensors' "${dir}/${wf}"
+    run grep -F 'ltx-2.3_text_projection_bf16.safetensors' "${wf}"
     [ "${status}" -eq 0 ]
-    run grep -F 'gemma_3_12B_it_fp4_mixed.safetensors' "${dir}/${wf}"
+    run grep -F 'gemma_3_12B_it_fp4_mixed.safetensors' "${wf}"
     [ "${status}" -eq 0 ]
-    run grep -F 'DualCLIPLoader' "${dir}/${wf}"
+    run grep -F 'DualCLIPLoader' "${wf}"
     [ "${status}" -eq 0 ]
     # DualCLIP type must be ltxv (not flux2 / SD)
-    run grep -E '"ltxv"' "${dir}/${wf}"
+    run grep -E '"ltxv"' "${wf}"
     [ "${status}" -eq 0 ]
     # Projection-only CLIPLoader is the broken 768-vs-4096 config
-    run python3 -c "import json; d=json.load(open('${dir}/${wf}'));
+    run python3 -c "import json; d=json.load(open('${wf}'));
 assert not any(n.get('type')=='CLIPLoader' for n in d['nodes']), 'CLIPLoader must not remain on LTX graphs'
 assert any(n.get('type')=='DualCLIPLoader' and n.get('widgets_values',[''])[0]=='gemma_3_12B_it_fp4_mixed.safetensors' for n in d['nodes'])
 assert any(n.get('type')=='VAELoader' and n.get('widgets_values',[''])[0]=='LTX23_audio_vae_bf16.safetensors' for n in d['nodes'])
@@ -208,6 +242,7 @@ for n in d['nodes']:
     if n.get('type') in ('EmptyLTXVLatentVideo','LTXVImgToVideo'):
         vlen=int(n['widgets_values'][2]); break
 assert vlen is not None
+assert vlen >= 241, (vlen, '${wf}')
 fps=next(float(n['widgets_values'][0]) for n in d['nodes'] if n.get('type')=='LTXVConditioning')
 ea=next(n for n in d['nodes'] if n.get('type')=='LTXVEmptyLatentAudio')
 assert int(ea['widgets_values'][0])==vlen, (ea['widgets_values'], vlen)
@@ -223,36 +258,51 @@ sl=next(i['link'] for i in vd['inputs'] if i.get('name')=='samples')
 src=by[next(L[1] for L in d['links'] if L[0]==sl)]
 assert src.get('type')=='LTXVSeparateAVLatent'"
     [ "${status}" -eq 0 ]
-    run grep -F 'KSampler' "${dir}/${wf}"
+    run grep -F 'KSampler' "${wf}"
     [ "${status}" -eq 0 ]
-    run grep -F 'SaveImage' "${dir}/${wf}"
+    run grep -F 'SaveImage' "${wf}"
     [ "${status}" -eq 0 ]
   done
 
-  # Short demos use 33-frame length in LTX latent widgets
-  run python3 -c "import json; d=json.load(open('${dir}/ltx-i2v-short-lab-example.json'));
-assert any(n.get('type')=='LTXVImgToVideo' and n['widgets_values'][2]==33 for n in d['nodes'])"
+  # Duration buckets: base 241, *-30s-* 721, *-60s-* 1441; at least 5 of each long bucket
+  run python3 -c "
+import json,glob,os
+dir='${dir}'
+counts={241:0,721:0,1441:0}
+for path in glob.glob(dir+'/ltx-*-lab-example.json'):
+    d=json.load(open(path))
+    vlen=None
+    for n in d['nodes']:
+        if n.get('type') in ('EmptyLTXVLatentVideo','LTXVImgToVideo'):
+            vlen=int(n['widgets_values'][2]); break
+    assert vlen is not None, path
+    base=os.path.basename(path)
+    if '-60s-' in base:
+        assert vlen==1441, (base,vlen)
+    elif '-30s-' in base:
+        assert vlen==721, (base,vlen)
+    else:
+        assert vlen==241, (base,vlen)
+    counts[vlen]=counts.get(vlen,0)+1
+assert counts[241]>=4, counts
+assert counts[721]>=5, counts
+assert counts[1441]>=5, counts
+print(counts)
+"
   [ "${status}" -eq 0 ]
-  run python3 -c "import json; d=json.load(open('${dir}/ltx-t2v-short-lab-example.json'));
-assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][2]==33 for n in d['nodes'])"
-  [ "${status}" -eq 0 ]
-  # Quick demos use 17 frames
-  run python3 -c "import json; d=json.load(open('${dir}/ltx-i2v-quick-lab-example.json'));
-assert any(n.get('type')=='LTXVImgToVideo' and n['widgets_values'][2]==17 for n in d['nodes'])"
-  [ "${status}" -eq 0 ]
-  run python3 -c "import json; d=json.load(open('${dir}/ltx-t2v-quick-lab-example.json'));
-assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][2]==17 for n in d['nodes'])"
-  [ "${status}" -eq 0 ]
-  # Portrait / landscape geometry
+
+  # Portrait / landscape geometry on base + duration variants
   run python3 -c "import json; d=json.load(open('${dir}/ltx-t2v-portrait-lab-example.json'));
 assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][0]==512 and n['widgets_values'][1]==768 for n in d['nodes'])"
   [ "${status}" -eq 0 ]
   run python3 -c "import json; d=json.load(open('${dir}/ltx-t2v-landscape-lab-example.json'));
 assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][0]==1024 and n['widgets_values'][1]==576 for n in d['nodes'])"
   [ "${status}" -eq 0 ]
-  run grep -F 'ez_ltx_i2v_short' "${dir}/ltx-i2v-short-lab-example.json"
+  run python3 -c "import json; d=json.load(open('${dir}/ltx-t2v-portrait-30s-lab-example.json'));
+assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][0]==512 and n['widgets_values'][1]==768 and n['widgets_values'][2]==721 for n in d['nodes'])"
   [ "${status}" -eq 0 ]
-  run grep -F 'ez_ltx_t2v_short' "${dir}/ltx-t2v-short-lab-example.json"
+  run python3 -c "import json; d=json.load(open('${dir}/ltx-t2v-landscape-60s-lab-example.json'));
+assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][0]==1024 and n['widgets_values'][1]==576 and n['widgets_values'][2]==1441 for n in d['nodes'])"
   [ "${status}" -eq 0 ]
 }
 
@@ -262,7 +312,7 @@ assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][0]==102
   shopt -s nullglob
   local -a files=("${dir}"/*-lab-example.json)
   shopt -u nullglob
-  [[ ${#files[@]} -ge 20 ]]
+  [[ ${#files[@]} -ge 25 ]]
 
   for wf in "${files[@]}"; do
     run python3 -c "
@@ -290,38 +340,35 @@ assert isinstance(d.get('extra', {}).get('lab_note'), str) and d['extra']['lab_n
     [ "${status}" -eq 0 ]
   done
 
-  for wf in \
-    ltx-i2v-lab-example.json \
-    ltx-i2v-short-lab-example.json \
-    ltx-i2v-quick-lab-example.json \
-    ltx-t2v-lab-example.json \
-    ltx-t2v-short-lab-example.json \
-    ltx-t2v-quick-lab-example.json \
-    ltx-t2v-portrait-lab-example.json \
-    ltx-t2v-landscape-lab-example.json; do
+  shopt -s nullglob
+  local -a ltx_files=("${dir}"/ltx-*-lab-example.json)
+  shopt -u nullglob
+  for wf in "${ltx_files[@]}"; do
     run python3 -c "
-import json
-d = json.load(open('${dir}/${wf}'))
+import json,os
+path='${wf}'
+d = json.load(open(path))
+base=os.path.basename(path)
 vhs = [n for n in d['nodes'] if n.get('type') == 'VHS_VideoCombine']
-assert len(vhs) == 1, '${wf}: expected exactly one VHS_VideoCombine'
+assert len(vhs) == 1, f'{base}: expected exactly one VHS_VideoCombine'
 wv = vhs[0].get('widgets_values') or {}
-assert isinstance(wv, dict), '${wf}: VHS widgets_values must be a dict'
-assert wv.get('format') == 'video/h264-mp4', '${wf}: expected video/h264-mp4'
-assert float(wv.get('frame_rate', 0)) == 24, '${wf}: expected frame_rate 24'
-assert wv.get('save_output') is True, '${wf}: save_output must be true'
-assert wv.get('filename_prefix'), '${wf}: missing filename_prefix'
+assert isinstance(wv, dict), f'{base}: VHS widgets_values must be a dict'
+assert wv.get('format') == 'video/h264-mp4', f'{base}: expected video/h264-mp4'
+assert float(wv.get('frame_rate', 0)) == 24, f'{base}: expected frame_rate 24'
+assert wv.get('save_output') is True, f'{base}: save_output must be true'
+assert wv.get('filename_prefix'), f'{base}: missing filename_prefix'
 # IMAGE from VAEDecode must reach VHS
 decode_ids = {n['id'] for n in d['nodes'] if n.get('type') == 'VAEDecode'}
 vhs_id = vhs[0]['id']
 assert any(
     isinstance(L, list) and len(L) >= 5 and L[1] in decode_ids and L[3] == vhs_id and L[5] == 'IMAGE'
     for L in d.get('links', [])
-), '${wf}: VHS must be linked from VAEDecode IMAGE'
+), f'{base}: VHS must be linked from VAEDecode IMAGE'
 notes = [n for n in d['nodes'] if n.get('type') == 'Note']
 body = '\n'.join((n.get('widgets_values') or [''])[0] for n in notes)
-assert 'VHS' in body or 'VideoCombine' in body or 'Save video' in body, '${wf}: Note must mention VHS/video'
-assert 'MP4' in body or 'mp4' in body, '${wf}: Note must mention MP4'
-assert 'SaveImage' in body or 'frames' in body.lower(), '${wf}: Note should still mention frames'
+assert 'VHS' in body or 'VideoCombine' in body or 'Save video' in body, f'{base}: Note must mention VHS/video'
+assert 'MP4' in body or 'mp4' in body, f'{base}: Note must mention MP4'
+assert 'SaveImage' in body or 'frames' in body.lower(), f'{base}: Note should still mention frames'
 "
     [ "${status}" -eq 0 ]
   done

@@ -1,5 +1,5 @@
 {
-  "id": "flux-to-ltx-short-lab-example",
+  "id": "flux-to-ltx-30s-lab-example",
   "revision": 6,
   "last_node_id": 9,
   "last_link_id": 9,
@@ -142,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A classic cherry-red steel city bicycle rests on wet cobblestones in a quiet European side street at golden hour. Warm low sunlight rakes from camera-left, throwing long soft shadows across uneven stones still glistening from a recent shower. Chrome handlebars and thin tire beads catch specular highlights; paint shows gentle wear at the chainstay. Midground: caf\u00e9 chairs and a parked scooter; background: soft terracotta facades and a pale amber sky. Photorealistic editorial travel photo, shot on a 35mm full-frame lens around f/4, natural color, crisp focus on the bicycle frame, gentle depth falloff toward the street beyond."
+        "A weathered indigo fishing skiff rests half-ashore on wet black sand under a bruised sunset. Orange light rakes the hull planks; tide foam laces the foreground; distant basalt stacks silhouette the horizon. Photoreal coastal still meant as a start frame for a longer LTX I2V take, 35mm, crisp hull detail."
       ],
       "title": "Positive"
     },
@@ -348,7 +348,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_flux_to_ltx_short"
+        "ez_flux_to_ltx_30s"
       ],
       "title": "Save"
     },
@@ -372,9 +372,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Flux \u2192 LTX handoff (lab)\n\nWhat this graph does: Flux txt2img still intended as the start frame for ltx-i2v-short-lab-example (or ltx-i2v-quick-lab-example).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nLTX side (next graph): DualCLIP gemma + projection (ltxv) + distilled FP8 + video/audio VAEs.\n\nHow to run:\n1. Queue this Flux graph; note the saved still (SaveImage).\n2. Open ltx-i2v-short-lab-example (or ltx-i2v-quick-lab-example), set LoadImage to that still, Queue.\n3. Watch Save video (MP4) / VHS_VideoCombine preview on the LTX graph \u2014 primary output is MP4 under ComfyUI/output/.\n4. PNG frames remain available via SaveImage on the LTX graph if you need them.\n\nPrompting (Flux): natural-language prose, subject first, materials + lighting + camera. CFG 1.0 \u2192 Positive does the work.\nStack installs ComfyUI-VideoHelperSuite for LTX MP4 (not required on this Flux-only graph).\n"
+        "## Flux → LTX 30s handoff (lab)\n\nWhat this graph does: Flux txt2img still intended as start frame for **ltx-i2v-30s-lab-example** (~30 s I2V).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\n\nHow to run:\n1. Queue this Flux graph; note the saved still.\n2. Open **ltx-i2v-30s-lab-example**, set LoadImage to that still, Queue.\n3. Watch Save video (MP4). Long run: expect multi-minute generation / high VRAM.\n\nPrompting (Flux): natural-language prose; craft a strong still with clear subject and depth for camera motion.\n"
       ],
-      "title": "Flux \u2192 LTX handoff \u2014 then watch MP4 on I2V"
+      "title": "Flux → LTX handoff — then watch MP4 on I2V"
     }
   ],
   "links": [
@@ -454,11 +454,11 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "flux-to-ltx-short",
+    "lab_profile": "flux-to-ltx-30s",
     "lab_flux_tier": "fast",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## Flux \u2192 LTX handoff (lab)\n\nWhat this graph does: Flux txt2img still intended as the start frame for ltx-i2v-short-lab-example (or ltx-i2v-quick-lab-example).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nLTX side (next graph): DualCLIP gemma + projection (ltxv) + distilled FP8 + video/audio VAEs.\n\nHow to run:\n1. Queue this Flux graph; note the saved still (SaveImage).\n2. Open ltx-i2v-short-lab-example (or ltx-i2v-quick-lab-example), set LoadImage to that still, Queue.\n3. Watch Save video (MP4) / VHS_VideoCombine preview on the LTX graph \u2014 primary output is MP4 under ComfyUI/output/.\n4. PNG frames remain available via SaveImage on the LTX graph if you need them.\n\nPrompting (Flux): natural-language prose, subject first, materials + lighting + camera. CFG 1.0 \u2192 Positive does the work.\nStack installs ComfyUI-VideoHelperSuite for LTX MP4 (not required on this Flux-only graph).\n",
-    "lab_description": "Flux still for ltx-i2v-short / quick handoff demos."
+    "lab_note": "## Flux → LTX 30s handoff (lab)\n\nWhat this graph does: Flux txt2img still intended as start frame for **ltx-i2v-30s-lab-example** (~30 s I2V).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\n\nHow to run:\n1. Queue this Flux graph; note the saved still.\n2. Open **ltx-i2v-30s-lab-example**, set LoadImage to that still, Queue.\n3. Watch Save video (MP4). Long run: expect multi-minute generation / high VRAM.\n\nPrompting (Flux): natural-language prose; craft a strong still with clear subject and depth for camera motion.\n",
+    "lab_description": "Flux txt2img still intended as start frame for **ltx-i2v-30s-lab-example** (~30 s I2V)."
   },
   "version": 0.4
 }

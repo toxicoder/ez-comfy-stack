@@ -1,5 +1,5 @@
 {
-  "id": "ltx-i2v-lab-example",
+  "id": "ltx-i2v-30s-lab-example",
   "revision": 6,
   "last_node_id": 18,
   "last_link_id": 25,
@@ -184,7 +184,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Lock the first frame to Comfy's crude pink-dress doodle character—yellow wing-like hair, open arms, green hill, blue sky—then lift it into a living stylized scene over ten seconds. Gentle cinematic push-in toward the figure; hair and dress fabric stir in a soft breeze; clouds drift slowly; grass micro-motion. Preserve silhouette and cheerful face identity. Steady camera, continuous motion, soft outdoor ambience, no dialogue."
+        "Thirty-second continuation of the pink-dress / golden wing-hair sketch character on the green hill. 0–10s: hold composition, subtle breeze and cloud drift as the doodle becomes richer and more dimensional. 10–20s: slow arc left revealing more of the hillside and sky while keeping the figure centered. 20–30s: gentle push-in to a medium shot, hair volume and dress folds alive, photoreal-stylized, no morphing, continuous motion."
       ],
       "title": "Motion / prompt"
     },
@@ -296,7 +296,7 @@
       "widgets_values": [
         768,
         512,
-        241,
+        721,
         1
       ]
     },
@@ -481,7 +481,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_i2v_frames"
+        "ez_ltx_i2v_30s_frames"
       ],
       "title": "Save frames"
     },
@@ -553,7 +553,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        241,
+        721,
         24.0,
         1
       ],
@@ -664,7 +664,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-i2v (lab)\n\nWhat this graph does: Image→video (~10 s) from Comfy **example.png** (sketch→living character). Swap LoadImage for your still anytime.\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 241 frames @ 24 fps ≈ 10.0 s · 768×512.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_i2v_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_i2v_frames for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
+        "## ltx-i2v-30s (lab)\n\nWhat this graph does: Image→video (~30 s) from example.png; phased sketch→living character (long-run demo).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 721 frames @ 24 fps ≈ 30.0 s · 768×512.\n\nHEAVY RUN: long latent length. Expect multi-minute generation and high VRAM; keep headroom preflight green; prefer 10s graphs for smoke tests.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_i2v_30s_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_i2v_30s_frames for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
       ],
       "title": "Operator note — video output"
     },
@@ -721,7 +721,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_ltx_i2v_video",
+        "filename_prefix": "ez_ltx_i2v_30s_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -900,9 +900,9 @@
   "extra": {
     "lab_profile": "ltx-i2v",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-i2v (lab)\n\nWhat this graph does: Image→video (~10 s) from Comfy **example.png** (sketch→living character). Swap LoadImage for your still anytime.\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 241 frames @ 24 fps ≈ 10.0 s · 768×512.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_i2v_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_i2v_frames for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
+    "lab_note": "## ltx-i2v-30s (lab)\n\nWhat this graph does: Image→video (~30 s) from example.png; phased sketch→living character (long-run demo).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 721 frames @ 24 fps ≈ 30.0 s · 768×512.\n\nHEAVY RUN: long latent length. Expect multi-minute generation and high VRAM; keep headroom preflight green; prefer 10s graphs for smoke tests.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_i2v_30s_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_i2v_30s_frames for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
     "lab_ltx_av": true,
-    "lab_description": "Image→video (~10 s) from Comfy **example.png** (sketch→living character). Swap LoadImage for your still anytime."
+    "lab_description": "Image→video (~30 s) from example.png; phased sketch→living character (long-run demo)."
   },
   "version": 0.4
 }

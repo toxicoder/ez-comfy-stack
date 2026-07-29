@@ -1,5 +1,5 @@
 {
-  "id": "ltx-t2v-short-lab-example",
+  "id": "ltx-t2v-landscape-60s-lab-example",
   "revision": 5,
   "last_node_id": 16,
   "last_link_id": 18,
@@ -143,7 +143,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Short aerial pan along a forested ridge at dawn. Camera travels laterally above dark pines while low sun rakes mist between the trees. Smooth single-axis move, stable exposure, photoreal, continuous gentle motion from first frame to last."
+        "Wide sixty-second drone path along flooded rice terraces into coastal mist. Begin high and wide, descend to bridge height by mid-clip, then rise again over the basalt shoreline. Blue hour palette, continuous smooth motion, photoreal moisture haze."
       ],
       "title": "Positive"
     },
@@ -211,14 +211,14 @@
           "slot_index": 0
         }
       ],
-      "title": "Empty LTX latent short",
+      "title": "Empty LTX latent 1024x576",
       "properties": {
         "Node name for S&R": "EmptyLTXVLatentVideo"
       },
       "widgets_values": [
-        768,
-        512,
-        33,
+        1024,
+        576,
+        1441,
         1
       ]
     },
@@ -401,7 +401,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_t2v_short"
+        "ez_ltx_t2v_landscape_60s"
       ],
       "title": "Save frames"
     },
@@ -473,7 +473,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        33,
+        1441,
         24.0,
         1
       ],
@@ -584,9 +584,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-t2v-short (lab)\n\nWhat this graph does: Faster T2V (33f).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 33 frames @ 24 fps \u2248 1.4 s \u00b7 768\u00d7512.\n\nPRIMARY OUTPUT \u2014 MP4 (easy to watch)\n\u2022 Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n\u2022 After Queue: open that node for an inline video preview.\n\u2022 File also under ComfyUI/output/ as ez_ltx_t2v_short_video_*.mp4 (comfy-state volume).\n\u2022 Frames still saved via SaveImage prefix ez_ltx_t2v_short for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion).\n\u2022 T2V: chronological shot; one primary camera move on short clips.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review Positive prompt; Queue.\n3. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
+        "## ltx-t2v-landscape-60s (lab)\n\nWhat this graph does: Wide text→video (~60 s) rice-terrace to coast drone path (very heavy long-run demo).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 1441 frames @ 24 fps ≈ 60.0 s · 1024×576.\n\nHEAVY RUN: long latent length. Expect multi-minute generation and high VRAM; keep headroom preflight green; prefer 10s graphs for smoke tests.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_t2v_landscape_60s_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_t2v_landscape_60s for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
       ],
-      "title": "Operator note \u2014 video output"
+      "title": "Operator note — video output"
     },
     {
       "id": 16,
@@ -641,7 +641,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_ltx_t2v_short_video",
+        "filename_prefix": "ez_ltx_t2v_landscape_60s_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -786,11 +786,11 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "ltx-t2v-short",
+    "lab_profile": "ltx-t2v-landscape",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-t2v-short (lab)\n\nWhat this graph does: Faster T2V (33f).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 33 frames @ 24 fps \u2248 1.4 s \u00b7 768\u00d7512.\n\nPRIMARY OUTPUT \u2014 MP4 (easy to watch)\n\u2022 Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n\u2022 After Queue: open that node for an inline video preview.\n\u2022 File also under ComfyUI/output/ as ez_ltx_t2v_short_video_*.mp4 (comfy-state volume).\n\u2022 Frames still saved via SaveImage prefix ez_ltx_t2v_short for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion).\n\u2022 T2V: chronological shot; one primary camera move on short clips.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review Positive prompt; Queue.\n3. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
+    "lab_note": "## ltx-t2v-landscape-60s (lab)\n\nWhat this graph does: Wide text→video (~60 s) rice-terrace to coast drone path (very heavy long-run demo).\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler · simple · CFG 1.0 · 1441 frames @ 24 fps ≈ 60.0 s · 1024×576.\n\nHEAVY RUN: long latent length. Expect multi-minute generation and high VRAM; keep headroom preflight green; prefer 10s graphs for smoke tests.\n\nPRIMARY OUTPUT — MP4 (easy to watch)\n• Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n• After Queue: open that node for an inline video preview.\n• File also under ComfyUI/output/ as ez_ltx_t2v_landscape_60s_video_*.mp4 (comfy-state volume).\n• Frames still saved via SaveImage prefix ez_ltx_t2v_landscape_60s for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n• Describe actions over time (camera path + subject/environment motion).\n• For longer clips, write a beginning → middle → end timeline.\n• Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Review prompts / LoadImage; Queue.\n2. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
     "lab_ltx_av": true,
-    "lab_description": "LTX lab: MP4 via VHS_VideoCombine (ez_ltx_t2v_short_video) + frames via SaveImage (ez_ltx_t2v_short)."
+    "lab_description": "Wide text→video (~60 s) rice-terrace to coast drone path (very heavy long-run demo)."
   },
   "version": 0.4
 }
