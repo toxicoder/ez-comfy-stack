@@ -11,13 +11,27 @@ Shared style lives in [docs/project-conventions.md](docs/project-conventions.md)
 | `development` | Primary integration |
 | `main` | Production-ready promotion only |
 
-- Branch from `development`: `feature/…`, `fix/…`, `chore/…`, `docs/…`  
-- Never force-push protected branches  
-- Conventional commits: `feat:`, `fix:`, `docs:`, `test:`, `chore:`  
+### Always branch from `development`
+
+**Mandatory for every feature, fix, chore, or docs change:**
+
+1. Update integration: `git fetch origin && git checkout development && git pull --ff-only origin development`
+2. Create a topic branch: `feature/…`, `fix/…`, `chore/…`, or `docs/…`
+3. Implement and open a PR **into `development`**
+
+**Do not:**
+
+- Commit feature/fix work directly on `development` or `main`
+- Base a new branch on `main` (exception: explicit production hotfix only; state that in the PR)
+- Force-push protected branches (`development`, `main`)
+
+Conventional commits: `feat:`, `fix:`, `docs:`, `test:`, `chore:`
 
 ```mermaid
 flowchart LR
-  Feat["feature/* · fix/* · chore/* · docs/*"] --> Dev["development"]
+  Base["checkout + update development"] --> Topic["feature/* · fix/* · chore/* · docs/*"]
+  Topic --> PR["PR → development"]
+  PR --> Dev["development"]
   Dev --> Main["main · production-ready only"]
 ```
 
@@ -91,9 +105,18 @@ Prefer relative paths. Prefer `./scripts/manage.sh` for operator actions.
 
 ## Docs
 
-Update `docs/*.md` and README when operator behavior changes. MkDocs pages need frontmatter + “What's on this page” / “What this enables”.
+### Always keep documentation current with the change
 
-Prefer **relative** in-repo doc links. Public site publishes after merge via `.github/workflows/deploy-docs.yml` (mike): `main` → `/latest/`, `development` → `/development/`.
+**Mandatory:** when operator behavior, CLI surface, env vars, safety, or failure modes change, update docs in the **same change set** as the production code. Do not land behavior changes with a default “docs later” follow-up.
+
+After code changes, agents must:
+
+1. Update the relevant `docs/*.md` pages (and README if onboarding/commands change)
+2. Keep MkDocs frontmatter + “What's on this page” / “What this enables”
+3. Prefer **relative** in-repo doc links
+4. Update [docs/troubleshooting.md](docs/troubleshooting.md) when new symptoms or fixes appear
+
+Public site publishes after merge via `.github/workflows/deploy-docs.yml` (mike): `main` → `/latest/`, `development` → `/development/`.
 
 ## Scope
 

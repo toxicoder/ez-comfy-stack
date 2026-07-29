@@ -40,7 +40,7 @@ flowchart TB
   end
 
   Vol["named volume<br/>comfy-state"]
-  WF["workflows/lab-flux-to-ltx.json"]
+  WF["workflows/*.json<br/>lab examples"]
   GPU["GPU · all · 1× GB10"]
   UI["UI :8188"]
 
@@ -48,7 +48,7 @@ flowchart TB
   Compose --> EP
   Models -.->|bind /models| Ctr
   Vol -.->|/comfy-state| Ctr
-  WF -.->|ro workflow| Ctr
+  WF -.->|ro workflows| Ctr
   GPU --> Comfy
   Comfy --> UI
   Policy -.->|mirrored defaults| CLI
@@ -65,15 +65,17 @@ flowchart TB
 
 ## Combined pipeline (Flux → LTX)
 
-Text → image → video (+ audio) in one ComfyUI stack:
+Text → image → **video frames** in one ComfyUI stack. Lab graphs use `SaveImage` for frames; the LTX **audio VAE** is downloaded for advanced AV work but is not wired into the seeded examples.
 
 ```mermaid
 flowchart LR
-  Prompt["Text prompt"] --> Flux["Flux T2I<br/>fast · Klein 9B NVFP4<br/>+ Nunchaku"]
+  Prompt["Text prompt"] --> Flux["Flux T2I<br/>fast · Klein 9B NVFP4"]
   Flux --> Image["Still image"]
   Image --> LTX["LTX I2V<br/>balanced · distilled FP8"]
-  LTX --> Video["Video + audio"]
+  LTX --> Frames["Video frames<br/>SaveImage"]
 ```
+
+Handoff: load **lab-flux-to-ltx** (or any Flux T2I) → save still → open **lab-ltx-i2v** / **lab-ltx-i2v-short** and set `LoadImage` to that file.
 
 ## Memory and headroom budget
 

@@ -7,7 +7,8 @@
 # Purpose:
 #   Pull Hugging Face snapshots for the unified flux-to-ltx demo (default tier:
 #   fast = Klein 9B NVFP4 + optional Nunchaku) and symlink safetensors into
-#   $MODELS_DIR/comfy/diffusion_models for ComfyUI discovery.
+#   $MODELS_DIR/comfy/{diffusion_models,text_encoders,vae} for ComfyUI discovery.
+#   Companions (Comfy-Org TE + VAE) are pulled with the fast tier for runnable graphs.
 #
 # Audience:
 #   Operators on the Spark host (or CI with LAB_MOCK_HF_DOWNLOAD). Prefer
@@ -63,6 +64,8 @@ tier_repo() {
     fast) echo "black-forest-labs/FLUX.2-klein-9b-nvfp4" ;;
     quality) echo "black-forest-labs/FLUX.2-dev" ;;
     nunchaku) echo "tonera/FLUX.2-klein-9B-Nunchaku" ;;
+    # Comfy-Org split TE + VAE required for runnable Flux.2 Klein graphs
+    companions) echo "Comfy-Org/flux2-klein-9B" ;;
     *) echo "" ;;
   esac
 }
@@ -80,9 +83,11 @@ tier_repo() {
 #######################################
 tier_min_gb() {
   case "${1}" in
-    fast) echo 12 ;;
+    fast) echo 5 ;;
     quality) echo 30 ;;
     nunchaku) echo 4 ;;
+    # qwen fp4mixed ~6.8G + flux2-vae ~0.3G
+    companions) echo 6 ;;
     *) echo 0 ;;
   esac
 }
@@ -119,56 +124,7 @@ comfy_link_dir() {
   echo "${MODELS_DIR}/comfy/diffusion_models"
 }
 
-#######################################
-# check_hf_cli helper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status depends on command path; see implementation.
-#######################################
-check_hf_cli() {
-  if command -v huggingface-cli >/dev/null 2>&1 || command -v hf >/dev/null 2>&1; then
-    return 0
-  fi
-  err "Required tool missing: huggingface-cli or hf (pip install -U huggingface_hub)"
-  exit 1
-}
-
-#######################################
-# hf_download helper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status depends on command path; see implementation.
-#######################################
-hf_download() {
-  if [[ -n ${LAB_MOCK_HF_DOWNLOAD:-} ]]; then
-    local dest=""
-    local prev=""
-    for a in "$@"; do
-      if [[ ${prev} == "--local-dir" ]]; then
-        dest="$a"
-      fi
-      prev="$a"
-    done
-    mkdir -p "${dest}"
-    echo "mock" >"${dest}/.mock"
-    return 0
-  fi
-  if command -v huggingface-cli >/dev/null 2>&1; then
-    huggingface-cli download "$@"
-  else
-    hf download "$@"
-  fi
-}
+# check_hf_cli / hf_download: provided by scripts/lib/common.sh (prefer `hf download`).
 
 #######################################
 # tier_size_gb helper.
@@ -191,6 +147,38 @@ tier_size_gb() {
 }
 
 #######################################
+# True if tier local-dir already meets min size (skip re-download).
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   None
+# Returns:
+#   0 ready; 1 not ready
+#######################################
+tier_files_ready() {
+  local tier="${1}"
+  local dir size min
+  dir="$(tier_dir "${tier}")"
+  if [[ ! -d ${dir} ]]; then
+    return 1
+  fi
+  # Require at least one weight-like file so empty dirs with junk don't skip
+  local has_weight=0
+  while IFS= read -r _; do
+    has_weight=1
+    break
+  done < <(find "${dir}" -type f \( -name '*.safetensors' -o -name '*.sft' -o -name '*.gguf' -o -name '*.bin' \) 2>/dev/null)
+  if [[ ${has_weight} -ne 1 ]]; then
+    return 1
+  fi
+  size="$(tier_size_gb "${dir}")"
+  min="$(tier_min_gb "${tier}")"
+  awk "BEGIN {exit !($size >= $min)}"
+}
+
+#######################################
 # tiers_to_process helper.
 # Globals:
 #   See file header / caller environment.
@@ -205,21 +193,47 @@ tiers_to_process() {
   case "$TIER" in
     all)
       if [[ ${INCLUDE_NUNCHAKU} == "1" ]]; then
-        echo "fast nunchaku quality"
+        echo "fast companions nunchaku quality"
       else
-        echo "fast quality"
+        echo "fast companions quality"
       fi
       ;;
     fast)
+      # Companions (Qwen TE + flux2 VAE) required for lab image workflows
       if [[ ${INCLUDE_NUNCHAKU} == "1" ]]; then
-        echo "fast nunchaku"
+        echo "fast companions nunchaku"
       else
-        echo "fast"
+        echo "fast companions"
       fi
       ;;
     quality) echo "quality" ;;
     nunchaku) echo "nunchaku" ;;
+    companions) echo "companions" ;;
     *) echo "${TIER}" ;;
+  esac
+}
+
+#######################################
+# HF --include patterns for selective companion download (one line each).
+# Globals:
+#   FLUX_TE_VARIANT — fp4 (default) | full
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   Include globs on stdout
+# Returns:
+#   0
+#######################################
+tier_include_patterns() {
+  case "${1}" in
+    companions)
+      if [[ ${FLUX_TE_VARIANT:-fp4} == "full" ]]; then
+        echo "split_files/text_encoders/qwen_3_8b.safetensors"
+      else
+        echo "split_files/text_encoders/qwen_3_8b_fp4mixed.safetensors"
+      fi
+      echo "split_files/vae/flux2-vae.safetensors"
+      ;;
   esac
 }
 
@@ -270,18 +284,23 @@ parse_args() {
 #######################################
 link_into_comfy() {
   local tier="${1}"
-  local src dest
+  local src base dest_sub
+  local comfy="${MODELS_DIR}/comfy"
   src=$(tier_dir "$tier")
-  dest=$(comfy_link_dir "$tier")
-  mkdir -p "$dest"
+  mkdir -p "${comfy}/diffusion_models" "${comfy}/text_encoders" "${comfy}/vae"
   [[ -d ${src} ]] || return 0
   while read -r f; do
-    local base
     base="$(basename "${f}")"
-    if [[ ! -e "${dest}/${base}" ]]; then
-      ln -sfn "${f}" "${dest}/${base}" || true
+    dest_sub="diffusion_models"
+    case "${base}" in
+      *vae*) dest_sub="vae" ;;
+      *qwen* | *clip* | *t5* | *text*) dest_sub="text_encoders" ;;
+    esac
+    if [[ ! -e "${comfy}/${dest_sub}/${base}" ]]; then
+      ln -sfn "${f}" "${comfy}/${dest_sub}/${base}" || true
+      log "linked ${base} → comfy/${dest_sub}/"
     fi
-  done < <(find "${src}" -maxdepth 3 -type f \( -name '*.safetensors' -o -name '*.sft' \) 2>/dev/null)
+  done < <(find "${src}" -type f \( -name '*.safetensors' -o -name '*.sft' \) 2>/dev/null)
 }
 
 #######################################
@@ -342,23 +361,55 @@ cmd_status() {
 #######################################
 cmd_run() {
   check_hf_cli
-  mkdir -p "$MODELS_DIR" "${MODELS_DIR}/comfy/diffusion_models" \
+  ensure_models_dir "${MODELS_DIR}" || exit 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+  mkdir -p "${MODELS_DIR}/comfy/diffusion_models" \
     "${MODELS_DIR}/comfy/text_encoders" "${MODELS_DIR}/comfy/vae"
-  local tier repo
+  local tier repo ok=0 fail=0 dir
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "$tier")
     if [[ -z ${repo} ]]; then
       err "Unknown tier: $tier"
       exit 1
     fi
-    log "Downloading ${repo} (tier: ${tier})..."
-    HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "$(tier_dir "$tier")" || {
-      warn "Download failed for ${repo} (gated license or network). Continue with other tiers."
+    dir="$(tier_dir "$tier")"
+    if tier_files_ready "${tier}"; then
+      log "skip ${tier}: already present at ${dir} (cache hit)"
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
       continue
-    }
-    link_into_comfy "$tier"
+    fi
+    log "Downloading ${repo} (tier: ${tier})..."
+    local -a include_args=()
+    local pat dl_rc=0
+    while IFS= read -r pat; do
+      [[ -z ${pat} ]] && continue
+      include_args+=(--include "${pat}")
+      log "  include: ${pat}"
+    done < <(tier_include_patterns "${tier}")
+    if [[ ${#include_args[@]} -gt 0 ]]; then
+      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" \
+        "${include_args[@]}" || dl_rc=$?
+    else
+      HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" || dl_rc=$?
+    fi
+    if [[ ${dl_rc} -eq 0 ]]; then
+      link_into_comfy "$tier"
+      ok=$((ok + 1))
+    else
+      warn "Skipping remaining setup for ${repo} (see short error above)."
+      warn "Partials kept under ${dir}; re-run to resume."
+      fail=$((fail + 1))
+    fi
   done
   cmd_status
+  if [[ ${ok} -eq 0 ]]; then
+    err "No FLUX tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
+    exit 1
+  fi
+  if [[ ${fail} -gt 0 ]]; then
+    warn "Partial FLUX download: ${ok} ok, ${fail} failed"
+  fi
 }
 
 #######################################

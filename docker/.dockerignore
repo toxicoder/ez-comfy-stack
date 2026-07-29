@@ -1,3 +1,5 @@
+# Whitelist-only context — never bake secrets, models, or host files.
+# (Parent repo .env, MODELS_DIR, and HF caches must not appear here.)
 *
 !Dockerfile
 !entrypoint.sh

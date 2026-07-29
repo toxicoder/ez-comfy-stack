@@ -86,15 +86,35 @@ main() {
   fi
 
   echo "=== BATS suite ==="
-  bats tests/bats/*.bats || FAIL=1
+  JOBS="${BATS_JOBS:-}"
+  if [[ -z ${JOBS} ]]; then
+    if command -v nproc >/dev/null 2>&1; then
+      JOBS="$(nproc)"
+    elif command -v sysctl >/dev/null 2>&1; then
+      JOBS="$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+    else
+      JOBS=4
+    fi
+  fi
+  if bats --help 2>&1 | grep -q -- '--jobs' &&
+    { command -v parallel >/dev/null 2>&1 || command -v rush >/dev/null 2>&1; }; then
+    echo "bats --jobs ${JOBS} --no-parallelize-within-files"
+    bats --jobs "${JOBS}" --no-parallelize-within-files tests/bats || FAIL=1
+  else
+    bats tests/bats || FAIL=1
+  fi
 
+  # Optional kcov — never fail the gate (CI/mac may lack paths kcov expects)
   if command -v kcov >/dev/null 2>&1; then
-    echo "=== kcov line coverage (optional) ==="
+    echo "=== kcov line coverage (optional; non-fatal) ==="
     rm -rf coverage/kcov
     mkdir -p coverage/kcov
-    kcov --bash-dont-parse-binary-dir coverage/kcov \
-      bash scripts/manage.sh help || true
-    echo "kcov report: coverage/kcov"
+    if kcov --bash-dont-parse-binary-dir coverage/kcov \
+      bash scripts/manage.sh help 2>/dev/null; then
+      echo "kcov report: coverage/kcov"
+    else
+      echo "kcov skipped or failed (non-fatal)"
+    fi
   fi
 
   if [[ ${FAIL} -ne 0 ]]; then

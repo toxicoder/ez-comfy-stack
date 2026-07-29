@@ -12,7 +12,7 @@
 #   remote-SSH operation.
 #
 # Usage:
-#   ./scripts/manage.sh help|doctor|status|start|stop|restart|logs|download-models|cleanup
+#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models|cleanup
 #   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 #
 # Safety:
@@ -21,7 +21,7 @@
 #   - Host free-memory/disk headroom checks before start
 #   - Model downloads default to bandwidth-limited (download-limit auto @ 85%)
 #   - Always stop before node reboot
-#
+#   - setup may use sudo only to create/chown MODELS_DIR#
 # Environment:
 #   See .env.example — MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
 #   LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, MIN_HOST_FREE_GIB, etc.
@@ -69,6 +69,8 @@ ez-comfy-stack manage — unified Visual Generative AI (Flux → LTX via ComfyUI
 
 Commands:
   help              Show this help
+  setup [--install-docker] [--yes]
+                    Host bootstrap: .env, MODELS_DIR (sudo), Docker CE install, doctor
   doctor            Preflight: docker, GPU, free RAM/disk, models
   status [--json]   Stack status
   start             Start flux-to-ltx (requires yes)
@@ -77,10 +79,136 @@ Commands:
   logs              Follow compose logs
   download-models   Download flux-fast + ltx-balanced (bandwidth limited)
   download-limit    Proxy to utilities/download-limit.sh
+  clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
   cleanup           Remove comfy-state volume (type DELETE)
 
 Environment: see .env.example (MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
+}
+
+#######################################
+# Bootstrap host prerequisites for doctor/download/start.
+# Creates .env from example if missing; prepares MODELS_DIR (sudo mkdir/chown);
+# installs Docker CE when missing (confirm / --install-docker); soft-checks GPU;
+# then runs doctor.
+# Side effects: May write .env; may sudo for MODELS_DIR and package install.
+# Globals:
+#   REPO_ROOT, MODELS_DIR, LAB_NO_SUDO, SETUP_INSTALL_DOCKER, SETUP_YES
+# Arguments:
+#   Optional: --install-docker  force docker install path
+#             --yes             skip install confirmation
+# Outputs:
+#   Status via log/warn/err on stderr
+# Returns:
+#   0 when doctor passes; 1 when host still not ready
+#######################################
+cmd_setup() {
+  log "Host setup / bootstrap"
+  local ok=0
+  local force_docker=0
+  local arg
+
+  for arg in "$@"; do
+    case "${arg}" in
+      --install-docker)
+        force_docker=1
+        SETUP_INSTALL_DOCKER=1
+        export SETUP_INSTALL_DOCKER
+        ;;
+      --yes | -y)
+        SETUP_YES=1
+        export SETUP_YES
+        force_docker=1
+        ;;
+      -h | --help)
+        cat <<'EOF' >&2
+Usage: manage.sh setup [--install-docker] [--yes]
+  --install-docker  Install Docker CE if missing (sudo)
+  --yes             Skip install confirmation (still needs sudo)
+EOF
+        return 0
+        ;;
+      *)
+        err "Unknown setup flag: ${arg}"
+        return 1
+        ;;
+    esac
+  done
+
+  if [[ ! -f ${REPO_ROOT}/.env ]]; then
+    if [[ -f ${REPO_ROOT}/.env.example ]]; then
+      cp "${REPO_ROOT}/.env.example" "${REPO_ROOT}/.env"
+      log "Created .env from .env.example (set HF_TOKEN if models are gated)"
+    else
+      warn ".env.example missing; skipping .env create"
+    fi
+  else
+    log ".env already present"
+  fi
+  load_dotenv "${REPO_ROOT}"
+  MODELS_DIR=${MODELS_DIR:-/mnt/models}
+  export MODELS_DIR
+
+  log "MODELS_DIR=${MODELS_DIR}"
+  if prepare_models_dir "${MODELS_DIR}"; then
+    log "models dir ready: ${MODELS_DIR}"
+  else
+    ok=1
+  fi
+
+  # Run install path when docker is missing, --install-docker/--yes, or hermetic mock.
+  # (CI has host docker; tests still need LAB_MOCK_DOCKER_INSTALL to create bindir.)
+  local need_docker_install=0
+  if ! check_docker_preflight; then
+    need_docker_install=1
+  elif [[ ${force_docker} -eq 1 || ${LAB_MOCK_DOCKER_INSTALL:-} == "1" ]]; then
+    need_docker_install=1
+    log "docker preflight: ok — still running install path (--install-docker or mock)"
+  else
+    log "docker preflight: ok"
+  fi
+
+  if [[ ${need_docker_install} -eq 1 ]]; then
+    local conf_rc=0
+    confirm_docker_install "${force_docker}" || conf_rc=$?
+    if [[ ${conf_rc} -eq 0 ]]; then
+      if install_docker_engine; then
+        if check_docker_preflight; then
+          log "docker preflight: ok after install"
+        else
+          warn "Docker installed but preflight still failing — try: newgrp docker"
+          ok=1
+        fi
+      else
+        ok=1
+      fi
+    else
+      print_docker_install_hints
+      ok=1
+    fi
+  fi
+
+  if command -v nvidia-smi >/dev/null 2>&1; then
+    log "nvidia-smi: present"
+  else
+    warn "nvidia-smi not found (required on Spark for GPU workloads)"
+  fi
+  if command -v wondershaper >/dev/null 2>&1; then
+    log "wondershaper: present"
+  else
+    warn "wondershaper not found (download-limit will try to install or soft-fail)"
+  fi
+
+  log "Re-running doctor..."
+  if ! cmd_doctor; then
+    ok=1
+  fi
+  if [[ ${ok} -ne 0 ]]; then
+    err "Setup incomplete — fix errors above, then re-run: ./scripts/manage.sh setup --install-docker"
+    return 1
+  fi
+  log "Setup OK — next: ./scripts/manage.sh download-models"
+  return 0
 }
 
 #######################################
@@ -101,16 +229,10 @@ EOF
 cmd_doctor() {
   log "Doctor / preflight"
   local ok=0
-  if command -v docker >/dev/null 2>&1; then
-    log "docker: $(docker --version 2>/dev/null | head -1)"
-    if docker compose version >/dev/null 2>&1; then
-      log "docker compose: ok"
-    else
-      err "docker compose plugin missing"
-      ok=1
+  if ! check_docker_preflight; then
+    if command -v sudo >/dev/null 2>&1 && sudo -n docker --version >/dev/null 2>&1; then
+      warn "sudo docker works — add your user to the docker group and re-login (newgrp docker)"
     fi
-  else
-    err "docker missing"
     ok=1
   fi
   if command -v nvidia-smi >/dev/null 2>&1; then
@@ -124,24 +246,28 @@ cmd_doctor() {
     ok=1
   fi
   log "MODELS_DIR=${MODELS_DIR}"
-  if [[ -d ${MODELS_DIR} ]]; then
-    log "models dir exists"
+  if ensure_models_dir "${MODELS_DIR}"; then
+    log "models dir exists and is writable"
   else
-    warn "models dir missing (will be created on download/start): ${MODELS_DIR}"
+    ok=1
   fi
   local flux_json ltx_json
   flux_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-flux.sh" status --tier fast --json 2>/dev/null || echo '{}')
   ltx_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" status --tier balanced --json 2>/dev/null || echo '{}')
   log "flux status: ${flux_json}"
   log "ltx status: ${ltx_json}"
+  # Soft: missing lab weights do not fail doctor (download may be intentional later)
+  check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
   if [[ ! -f $(lab_compose_file) ]]; then
     err "compose file missing: $(lab_compose_file)"
     ok=1
   else
     log "compose file: $(lab_compose_file)"
   fi
+  # Soft: show which GHCR channel start would pull (branch-aligned; no network)
+  log "default image: $(stack_default_image) (branch=$(stack_git_branch))"
   if [[ ${ok} -ne 0 ]]; then
-    err "Doctor found problems"
+    err "Doctor found problems — try: ./scripts/manage.sh setup --install-docker"
     return 1
   fi
   log "Doctor OK"
@@ -169,8 +295,16 @@ cmd_status() {
     return 0
   fi
   log "Stack status (project ez-comfy)"
-  if command -v docker >/dev/null 2>&1; then
-    compose_run ps 2>/dev/null || warn "compose ps failed (stack may be stopped)"
+  if resolve_docker_on_path; then
+    # -a shows Exited containers (restart: no hides them from default ps)
+    compose_run ps -a 2>/dev/null || warn "compose ps failed (stack may be stopped)"
+    if ! compose_is_running; then
+      warn "comfyui is not running. Logs: ./scripts/manage.sh logs --tail 100"
+    elif ! stack_port_open "${COMFY_PORT:-8188}"; then
+      warn "container running but :${COMFY_PORT:-8188} not open yet (cold install?). ./scripts/manage.sh logs"
+    else
+      log "ComfyUI port open — http://localhost:${COMFY_PORT:-8188}"
+    fi
   else
     warn "docker not available"
   fi
@@ -264,9 +398,27 @@ cmd_logs() {
 # Returns:
 #   Exit status of the download pipeline.
 #######################################
+#######################################
+# Clear stale Hugging Face download locks under MODELS_DIR.
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   None
+# Outputs:
+#   Status via log/warn
+# Returns:
+#   0
+#######################################
+cmd_clear_hf_locks() {
+  ensure_models_dir "${MODELS_DIR}" || return 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+}
+
 cmd_download_models() {
   local limit="${DOWNLOAD_LIMIT}"
   local flux_cmd ltx_cmd
+  ensure_models_dir "${MODELS_DIR}" || return 1
+  clear_stale_hf_locks "${MODELS_DIR}"
   flux_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-flux.sh" run --tier fast)
   ltx_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" run --tier balanced)
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
@@ -335,6 +487,7 @@ main() {
   shift || true
   case "${cmd}" in
     help | -h | --help) cmd_help ;;
+    setup) cmd_setup "$@" ;;
     doctor) cmd_doctor ;;
     status) cmd_status "$@" ;;
     start) cmd_start ;;
@@ -343,6 +496,7 @@ main() {
     logs) cmd_logs "$@" ;;
     download-models) cmd_download_models ;;
     download-limit) cmd_download_limit "$@" ;;
+    clear-hf-locks) cmd_clear_hf_locks ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"

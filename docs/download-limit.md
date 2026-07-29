@@ -62,22 +62,83 @@ flowchart TB
   Cmd -->|wrap| Wrap["Apply limit → run command<br/>always clear on exit"]
 ```
 
-## Auto mode
+## Auto mode (measure real Mbps)
 
-1. Run `speedtest-cli` (or Ookla `speedtest`)  
-2. Read download Mbps  
-3. Apply `floor(0.85 × measured)` (minimum 1 Mbps)  
-4. If speedtest fails, use `DOWNLOAD_LIMIT_FALLBACK` (default 50)
+0. **Clear any existing bandwidth limits** on the default-route interface (wondershaper + best-effort `tc`) so residual caps do not skew the result  
+1. **Install `speedtest-cli` hard** (`pip --user`, `--break-system-packages`, `pipx`, `apt`/`python3-speedtest-cli` with `sudo -n`)  
+2. Try `speedtest-cli --simple`  
+3. Else Ookla `speedtest`  
+4. Else **HTTP probe** multi-URL (Cloudflare, OVH, GitHub, …) via `curl -4`  
+5. Apply `floor(0.85 × measured)` (minimum 1 Mbps) when sample is **trusted**  
+6. If all probes fail: **do not** use idle NIC RX as line rate — use default `max-workers=4` and start download  
+
+**Ctrl+C** kills the download process group, progress heartbeat, and HTTP probes (INT→TERM→KILL).
+
+Override HTTP probe: `SPEEDTEST_HTTP_URL`, `SPEEDTEST_HTTP_BYTES`.
 
 ```mermaid
 flowchart TB
-  A["--limit auto"] --> B["speedtest-cli or Ookla speedtest"]
-  B --> C{"measured Mbps?"}
-  C -->|yes| D["limit = max 1, floor 0.85 × Mbps"]
-  C -->|no / fail| E["DOWNLOAD_LIMIT_FALLBACK<br/>default 50 Mbps"]
-  D --> F["wondershaper on default-route iface"]
-  E --> F
+  A["--limit auto"] --> B["speedtest-cli"]
+  B --> C{"ok?"}
+  C -->|no| D["Ookla speedtest"]
+  D --> E{"ok?"}
+  E -->|no| F["HTTP curl probe<br/>Cloudflare __down"]
+  F --> G{"ok?"}
+  C -->|yes| H["limit = floor 0.85 × Mbps"]
+  E -->|yes| H
+  G -->|yes| H
+  G -->|no| I["DOWNLOAD_LIMIT_FALLBACK"]
+  H --> J{"kernel HTB?"}
+  I --> J
+  J -->|yes| K["wondershaper Mbps cap"]
+  J -->|no| L["gentle HF max-workers"]
 ```
+
+Upload is set to a high **legal** “uncapped” rate (clamped for HTB). Extremely large historical defaults (e.g. 100000 Mbps) produced `Illegal "rate"` on some kernels.
+
+## DGX Spark / no HTB
+
+Many Spark kernels lack `sch_htb` / IFB (`qdisc kind is unknown`). The tool **detects** this and **does not** spam wondershaper/RTNETLINK.
+
+| Path | Behavior |
+| --- | --- |
+| HTB available | wondershaper hard Mbps cap at 85% of measured |
+| HTB missing (typical Spark) | **Gentle HF mode**: `HF_DOWNLOAD_MAX_WORKERS` from measured Mbps (floor **2**–4), `HF_HUB_ENABLE_HF_TRANSFER=0` — not a hard Mbps cap |
+| `DOWNLOAD_LIMIT=off` | Full blast (SSH risk) |
+
+Model downloads keep a **real TTY** for `hf`/`tqdm` progress (no `2>&1 | tee` on interactive sessions). Cache hits still flash `100%` in 0s. Heartbeats every 10s show `du` growth under the target dir if bars are quiet.
+
+## Apply verification and soft-fail
+
+After wondershaper runs, the utility checks that a shaping qdisc is active (`tc qdisc show`, or hermetic mocks). If apply fails or HTB is missing:
+
+| Command | Behavior |
+| --- | --- |
+| `run` | **Hard-fail** (operator asked for a standing limit) |
+| `wrap` | **Soft path**: gentle HF workers + clear on exit |
+| `wrap` + `DOWNLOAD_LIMIT_REQUIRE=1` | **Hard-fail** like `run` |
+
+**Safety impact:** Gentle mode reduces parallel download stampede but is **not** a kernel Mbps cap. Prefer HTB where available. Clear-on-exit remains mandatory.
+
+## Ctrl+C
+
+Downloads run in a **process group**. Ctrl+C (SIGINT) or SIGTERM:
+
+1. Forwards to `hf` / nested bash (not only `tee`)
+2. Clears wondershaper limits if any
+3. Exits promptly (status 130)
+
+You should not need `kill -9` on leftover download processes after a clean Ctrl+C.
+
+## Live speed when preflight fails
+
+If auto mode cannot measure speed **before** download:
+
+1. **Measure phase** (~15s): sample NIC RX while a short HTTP download generates traffic (not the multi‑GB model pull — avoids HF locks and kill/restart hangs)  
+2. Set target = 85% of live Mbps → gentle HF max-workers (or kernel HTB only if `sudo -n` works and qdisc applies)  
+3. **Download phase**: one **foreground** model download with live tqdm progress  
+
+No interactive sudo during this path. Mock/tests: `LAB_MOCK_LIVE_RX_MBPS`.
 
 ## Wrap lifecycle
 
@@ -91,8 +152,15 @@ sequenceDiagram
   participant Cmd as command e.g. download-flux
 
   Op->>W: wrap --limit auto -- command
-  W->>WS: apply limit
-  W->>Cmd: run
+  W->>WS: apply limit + verify qdisc
+  alt apply ok
+    W->>Cmd: run throttled
+  else apply fail and not REQUIRE
+    W-->>Op: warn unthrottled SSH risk
+    W->>Cmd: run unthrottled
+  else apply fail and REQUIRE=1
+    W-->>Op: hard fail
+  end
   alt success
     Cmd-->>W: exit 0
   else kill / fail

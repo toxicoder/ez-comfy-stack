@@ -24,6 +24,93 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "Dockerfile defaults to public Docker Hub CUDA base not nvcr" {
+  run grep -E 'ARG CUDA_BASE_IMAGE=nvidia/cuda:.*devel' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  run grep -E 'ARG CUDA_RUNTIME_IMAGE=nvidia/cuda:.*runtime' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  run grep -E 'FROM \$\{CUDA_BASE_IMAGE\}' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  run grep -E 'FROM \$\{CUDA_RUNTIME_IMAGE\}' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  # Multi-stage: builder prebuilds, runtime is the published stage
+  run grep -E 'AS builder|AS runtime' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  # Hardcoded FROM nvcr.io as sole base would re-break unauthenticated builds
+  run grep -E '^FROM nvcr\.io/' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -ne 0 ]
+  run grep -E 'CUDA_BASE_IMAGE' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'CUDA_RUNTIME_IMAGE' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+}
+
+@test "Dockerfile layer order keeps multi-GB prebuild cache stable" {
+  local df="${REPO_ROOT}/docker/Dockerfile"
+  # BuildKit syntax for COPY --chmod and cache mounts
+  run grep -E '^# syntax=docker/dockerfile' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'mount=type=cache,target=/root/\.cache/pip' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'install-comfy\.sh --phase' "${df}"
+  [ "$status" -eq 0 ]
+
+  # Builder: only install-comfy.sh is COPYed before prebuild phases
+  run grep -E 'COPY.*entrypoint' "${df}"
+  [ "$status" -eq 0 ]
+  # First COPY in file should be install-comfy only (not entrypoint/patch)
+  run awk '/^COPY /{print; exit}' "${df}"
+  [ "$status" -eq 0 ]
+  [[ "${output}" == *install-comfy.sh* ]]
+  [[ "${output}" != *entrypoint* ]]
+  [[ "${output}" != *patch_get_free_memory* ]]
+
+  # Runtime: prebuilt COPY must appear before entrypoint COPY (line order)
+  local prebuilt_line entry_line
+  prebuilt_line="$(grep -n 'COPY --from=builder /opt/comfy-prebuilt' "${df}" | head -1 | cut -d: -f1)"
+  entry_line="$(grep -n 'COPY.*entrypoint\.sh' "${df}" | head -1 | cut -d: -f1)"
+  [ -n "${prebuilt_line}" ]
+  [ -n "${entry_line}" ]
+  [ "${prebuilt_line}" -lt "${entry_line}" ]
+}
+
+@test "compose bind-mounts ops scripts for zero-rebuild iteration" {
+  local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -E 'entrypoint\.sh:/opt/ez-comfy/entrypoint\.sh' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'install-comfy\.sh:/opt/ez-comfy/install-comfy\.sh' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'patch_get_free_memory\.py:/opt/ez-comfy/patch_get_free_memory\.py' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'cache_from:' "${compose}"
+  [ "$status" -eq 0 ]
+}
+
+@test "workflow mount is outside COMFY_HOME tree" {
+  # Host workflows/ tree → image path (not under comfy-state volume)
+  run grep -E 'workflows:/opt/ez-comfy/workflows' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'workflows:.*/comfy-state/ComfyUI/' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -ne 0 ]
+}
+
+@test "prebuilt image defaults to GHCR and never bakes HF_TOKEN in Dockerfile" {
+  run grep -E 'ghcr.io/.*/ez-comfy:flux-to-ltx' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'comfy-prebuilt|EZ_COMFY_PREBUILD' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  # Secrets must not appear as Dockerfile ENV/ARG assignments
+  run grep -iE '^(ENV|ARG).*HF_TOKEN|^(ENV|ARG).*API_KEY|COPY.*\.env' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -ne 0 ]
+  run grep -E 'ghcr.io' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  [ "$status" -eq 0 ]
+  run grep -iE 'dockerhub|docker\.io/.*push|DOCKERHUB' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  [ "$status" -ne 0 ]
+  # Publish uses Buildx GHA cache (faster rebuilds)
+  run grep -E 'cache-from:.*type=gha|cache-to:.*type=gha' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  [ "$status" -eq 0 ]
+}
+
 @test "compose has mem_limit" {
   run grep -E 'mem_limit' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]

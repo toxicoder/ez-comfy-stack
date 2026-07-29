@@ -17,7 +17,23 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ez-comfy:flux-to-ltx
+      args:
+        # Builder (devel) for optional compile; public Hub by default.
+        # Set CUDA_BASE_IMAGE / CUDA_RUNTIME_IMAGE in .env for NGC after docker login nvcr.io
+        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvidia/cuda:13.0.0-devel-ubuntu24.04}
+        CUDA_RUNTIME_IMAGE: ${CUDA_RUNTIME_IMAGE:-nvidia/cuda:13.0.0-runtime-ubuntu24.04}
+        # 1 = bake Comfy+torch into image (default). 0 = thin image (cold pip at runtime).
+        EZ_COMFY_PREBUILD: ${EZ_COMFY_PREBUILD:-1}
+        # Optional pin for ComfyUI git ref during image prebuild
+        COMFYUI_REF: ${COMFYUI_REF:-}
+      # Reuse pulled GHCR layers as local build cache when rebuilding
+      cache_from:
+        - ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development}
+    # Prefer GHCR prebuilt (arm64). manage.sh sets EZ_COMFY_IMAGE from git branch:
+    #   main → :flux-to-ltx ; development/feature → :flux-to-ltx-development
+    # Static fallback matches primary integration branch (development).
+    # Never put tokens in this file; HF_TOKEN comes from host env/.env at runtime only.
+    image: ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development}
     container_name: ez-comfy-flux-to-ltx
     # Manual lifecycle only — operator uses manage.sh start/stop
     restart: "no"
@@ -28,7 +44,10 @@ services:
       MODELS_ROOT: /models
       HF_HOME: /models
       HUGGINGFACE_HUB_CACHE: /models/hub
+      # Runtime only — not baked into image layers
       HF_TOKEN: ${HF_TOKEN:-}
+      LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
+      LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
       PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
       CUDA_MODULE_LOADING: LAZY
       LAB_VISUAL_ENABLE_NVFP4: "1"
@@ -42,7 +61,12 @@ services:
     volumes:
       - ${MODELS_DIR:-/mnt/models}:/models
       - comfy-state:/comfy-state
-      - ../workflows/lab-flux-to-ltx.json:/comfy-state/ComfyUI/user/default/workflows/lab-flux-to-ltx.json:ro
+      # All example workflows (host tree); entrypoint copies into user workflows
+      - ../workflows:/opt/ez-comfy/workflows:ro
+      # Host ops scripts — iterate without image rebuild (image still embeds for GHCR)
+      - ./entrypoint.sh:/opt/ez-comfy/entrypoint.sh:ro
+      - ./install-comfy.sh:/opt/ez-comfy/install-comfy.sh:ro
+      - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
     gpus: all
     shm_size: "16gb"
     mem_limit: ${MEM_LIMIT:-90g}

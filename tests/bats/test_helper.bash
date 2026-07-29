@@ -63,9 +63,21 @@ setup_repo_env() {
   export LAB_MOCK_WONDERSHAPER=1
   export LAB_NO_SUDO=1
   export LAB_MOCK_HF_DOWNLOAD=1
+  # Default speed/probe mocks — tests must not hit real network (curl/speedtest).
+  export LAB_MOCK_HTTP_SPEED_MBPS="${LAB_MOCK_HTTP_SPEED_MBPS:-100}"
+  export LAB_MOCK_SPEEDTEST_MBPS="${LAB_MOCK_SPEEDTEST_MBPS:-100}"
+  # Hermetic guard: probe_http_download_mbps / run_speedtest skip real I/O.
+  export LAB_HERMETIC="${LAB_HERMETIC:-1}"
+  # Skip hf_download progress subshell + kill_pid_tree cost (~1.5s per call).
+  export HF_PROGRESS="${HF_PROGRESS:-0}"
   export MIN_HOST_FREE_GIB=28
   export MIN_DISK_FREE_GIB=40
   export MEM_LIMIT=90g
+  # Do not stream compose logs or wait for UI port in hermetic tests
+  export LAB_STACK_FOLLOW=0
+  export LAB_STACK_VERIFY_SETTLE=0
+  export LAB_STACK_SKIP_PULL=1
+  export LAB_STACK_FORCE_BUILD=1
 }
 
 #######################################
@@ -122,6 +134,10 @@ echo "docker $*" >> "${TEST_TMP_DIR}/docker_calls.log"
 if [[ "${1}" != "compose" ]]; then
   if [[ "${1}" == "--version" ]]; then
     echo "Docker version 27.0.0"
+    exit 0
+  fi
+  if [[ "${1}" == "pull" ]]; then
+    echo "Pulled ${2:-}"
     exit 0
   fi
   exit 0
@@ -228,11 +244,19 @@ exit 0
 #######################################
 install_hf_mock() {
   install_mock_bin hf '
+echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
 echo "hf $*"
 exit 0
 '
   install_mock_bin huggingface-cli '
+echo "huggingface-cli $*" >>"${TEST_TMP_DIR}/hf_calls.log"
 echo "huggingface-cli $*"
+# Simulate modern stub that refuses download
+if [[ "${1:-}" == "download" ]]; then
+  echo "Warning: huggingface-cli is deprecated and no longer works. Use hf instead." >&2
+  exit 1
+fi
 exit 0
 '
+  : >"${TEST_TMP_DIR}/hf_calls.log"
 }

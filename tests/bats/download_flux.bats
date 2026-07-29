@@ -49,7 +49,11 @@ teardown() {
   run tier_repo bogus
   [ "${output}" = "" ]
   run tier_min_gb fast
-  [ "${output}" = "12" ]
+  [ "${output}" = "5" ]
+  run tier_repo companions
+  [[ "${output}" == *"Comfy-Org"* ]]
+  run tier_min_gb companions
+  [ "${output}" = "6" ]
   run tier_min_gb quality
   [ "${output}" = "30" ]
   run tier_min_gb nunchaku
@@ -79,7 +83,8 @@ teardown() {
   TIER=fast
   INCLUDE_NUNCHAKU=0
   run tiers_to_process
-  [ "${output}" = "fast" ]
+  [[ "${output}" == *"fast"* ]]
+  [[ "${output}" == *"companions"* ]]
   TIER=quality
   run tiers_to_process
   [ "${output}" = "quality" ]
@@ -99,9 +104,17 @@ teardown() {
   run check_hf_cli
   [ "${status}" -eq 0 ]
 
+  export LAB_MOCK_HF_DOWNLOAD=1
   run hf_download "org/model" --local-dir "${MODELS_DIR}/mock_repo"
   [ "${status}" -eq 0 ]
   [[ -f "${MODELS_DIR}/mock_repo/.mock" ]]
+
+  # Prefer hf over broken huggingface-cli when both on PATH
+  unset LAB_MOCK_HF_DOWNLOAD
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  run hf_download "org/real" --local-dir "${MODELS_DIR}/real_repo"
+  [ "${status}" -eq 0 ]
+  grep -q 'hf download org/real' "${TEST_TMP_DIR}/hf_calls.log"
 }
 
 @test "download-flux link_into_comfy tier_size_gb cmd_status cmd_run" {
@@ -119,6 +132,7 @@ teardown() {
   INCLUDE_NUNCHAKU=0
   run cmd_status
   [ "${status}" -eq 0 ]
+  # Not ready yet (size << min_gb) — still downloads via mock
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DF}\" run --tier fast --no-nunchaku"
   [ "${status}" -eq 0 ]
   # cmd_run via sourced function
@@ -127,4 +141,33 @@ teardown() {
   LAB_MOCK_HF_DOWNLOAD=1
   run cmd_run
   [ "${status}" -eq 0 ]
+  LAB_MOCK_HF_DOWNLOAD=fail
+  TIER=fast
+  INCLUDE_NUNCHAKU=0
+  run cmd_run
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"No FLUX tiers"* || "${output}" == *"failed"* ]]
+}
+
+@test "download-flux tier_files_ready and cmd_run cache hit skip" {
+  local tdir
+  tdir="$(tier_dir fast)"
+  mkdir -p "${tdir}"
+  echo x >"${tdir}/model.safetensors"
+  # Override min so tiny fixture counts as ready
+  tier_min_gb() { echo 0; }
+  run tier_files_ready fast
+  [ "${status}" -eq 0 ]
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  unset LAB_MOCK_HF_DOWNLOAD
+  TIER=fast
+  INCLUDE_NUNCHAKU=0
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"cache hit"* || "${output}" == *"skip fast"* ]]
+  ! grep -q 'hf download' "${TEST_TMP_DIR}/hf_calls.log"
+  # no weights → not ready
+  rm -f "${tdir}/model.safetensors"
+  run tier_files_ready fast
+  [ "${status}" -ne 0 ]
 }

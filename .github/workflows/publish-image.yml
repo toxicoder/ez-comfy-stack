@@ -1,0 +1,78 @@
+# Publish prebuilt ez-comfy image to GitHub Container Registry only.
+# Privacy: no HF_TOKEN, no .env, no model weights — public git/pip in Dockerfile only.
+#
+# Tag matrix (keep in sync with scripts/lib/compose.sh stack_image_tag_for_branch):
+#   main (default branch) → flux-to-ltx + flux-to-ltx-main + sha-*
+#   development           → flux-to-ltx-development + sha-*
+# Operators pull via manage.sh stack_default_image (branch-aligned).
+name: publish-image
+
+on:
+  push:
+    branches: [main, development]
+    paths:
+      - "docker/**"
+      - ".github/workflows/publish-image.yml"
+  workflow_dispatch:
+    inputs:
+      prebuild:
+        description: "Bake Comfy+torch into image (EZ_COMFY_PREBUILD)"
+        type: choice
+        options: ["1", "0"]
+        default: "1"
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-image-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-arm64:
+    # DGX Spark / GB10 — native arm64 (avoid qemu for multi-GB torch)
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 360
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Image metadata (public labels only)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/ez-comfy
+          tags: |
+            type=raw,value=flux-to-ltx,enable={{is_default_branch}}
+            type=raw,value=flux-to-ltx-${{ github.ref_name }}
+            type=sha,prefix=sha-,format=short
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push (linux/arm64, GHCR only)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./docker
+          file: ./docker/Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            EZ_COMFY_PREBUILD=${{ github.event.inputs.prebuild || '1' }}
+            CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-devel-ubuntu24.04
+            CUDA_RUNTIME_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
+          # Do not pass HF_TOKEN or any host secrets as build-args
+          provenance: false
+          sbom: false
+          cache-from: type=gha,scope=ez-comfy-arm64
+          cache-to: type=gha,mode=max,scope=ez-comfy-arm64
