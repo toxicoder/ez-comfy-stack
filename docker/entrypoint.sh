@@ -129,14 +129,21 @@ main() {
     python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
   fi
 
-  ep_log "phase 3/4: install lab workflow into user workflows"
+  ep_log "phase 3/4: install lab workflows into user workflows"
   mkdir -p "${comfy_home}/user/default/workflows"
-  if [[ -f /opt/ez-comfy/workflows/lab-flux-to-ltx.json ]]; then
-    cp -f /opt/ez-comfy/workflows/lab-flux-to-ltx.json \
-      "${comfy_home}/user/default/workflows/lab-flux-to-ltx.json"
-    ep_log "installed lab-flux-to-ltx workflow"
+  local wf n_wf=0
+  if [[ -d /opt/ez-comfy/workflows ]]; then
+    for wf in /opt/ez-comfy/workflows/*.json; do
+      [[ -f ${wf} ]] || continue
+      cp -f "${wf}" "${comfy_home}/user/default/workflows/"
+      n_wf=$((n_wf + 1))
+      ep_log "installed workflow $(basename "${wf}")"
+    done
+  fi
+  if [[ ${n_wf} -eq 0 ]]; then
+    ep_log "no workflows under /opt/ez-comfy/workflows (optional mount)"
   else
-    ep_log "no workflow bind-mount at /opt/ez-comfy/workflows (optional)"
+    ep_log "installed ${n_wf} workflow(s)"
   fi
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"

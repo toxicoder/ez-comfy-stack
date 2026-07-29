@@ -1,6 +1,6 @@
 {
-  "id": "lab-flux-to-ltx",
-  "revision": 3,
+  "id": "lab-flux-txt2img",
+  "revision": 1,
   "last_node_id": 9,
   "last_link_id": 9,
   "nodes": [
@@ -351,30 +351,6 @@
         "ez_flux_txt2img"
       ],
       "title": "Save"
-    },
-    {
-      "id": 20,
-      "type": "Note",
-      "pos": [
-        40,
-        700
-      ],
-      "size": [
-        900,
-        200
-      ],
-      "flags": {},
-      "order": 20,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "Note"
-      },
-      "widgets_values": [
-        "Pipeline: run Flux txt2img (above) \u2192 save image \u2192 open lab-ltx-i2v.json, set LoadImage to that file, queue for video.\n\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed + flux2-vae + LTX distilled FP8 + LTX23 VAEs + text_projection.\ndownload-models pulls all of the above."
-      ],
-      "title": "Flux \u2192 LTX handoff"
     }
   ],
   "links": [
@@ -454,10 +430,15 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "flux-to-ltx",
+    "lab_profile": "flux-txt2img",
     "lab_flux_tier": "fast",
-    "lab_ltx_tier": "balanced",
-    "lab_pipeline": true
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
   },
   "version": 0.4
 }

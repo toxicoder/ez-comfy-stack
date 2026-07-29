@@ -49,7 +49,11 @@ teardown() {
   run tier_repo bogus
   [ "${output}" = "" ]
   run tier_min_gb fast
-  [ "${output}" = "12" ]
+  [ "${output}" = "5" ]
+  run tier_repo companions
+  [[ "${output}" == *"Comfy-Org"* ]]
+  run tier_min_gb companions
+  [ "${output}" = "6" ]
   run tier_min_gb quality
   [ "${output}" = "30" ]
   run tier_min_gb nunchaku
@@ -79,7 +83,8 @@ teardown() {
   TIER=fast
   INCLUDE_NUNCHAKU=0
   run tiers_to_process
-  [ "${output}" = "fast" ]
+  [[ "${output}" == *"fast"* ]]
+  [[ "${output}" == *"companions"* ]]
   TIER=quality
   run tiers_to_process
   [ "${output}" = "quality" ]
