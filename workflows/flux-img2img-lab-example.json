@@ -1,8 +1,8 @@
 {
-  "id": "lab-flux-txt2img-landscape",
-  "revision": 1,
-  "last_node_id": 9,
-  "last_link_id": 9,
+  "id": "flux-img2img-lab-example",
+  "revision": 2,
+  "last_node_id": 10,
+  "last_link_id": 10,
   "nodes": [
     {
       "id": 1,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        220
+        212
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        380
+        368
       ],
       "size": [
         360,
@@ -94,7 +94,8 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            7
+            7,
+            10
           ],
           "slot_index": 0
         }
@@ -108,10 +109,92 @@
       "title": "Flux2 VAE"
     },
     {
+      "id": 10,
+      "type": "LoadImage",
+      "pos": [
+        480,
+        440
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Input image"
+    },
+    {
+      "id": 11,
+      "type": "VAEEncode",
+      "pos": [
+        980,
+        400
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode"
+    },
+    {
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        450,
+        480,
         80
       ],
       "size": [
@@ -119,7 +202,7 @@
         160
       ],
       "flags": {},
-      "order": 3,
+      "order": 5,
       "mode": 0,
       "inputs": [
         {
@@ -142,7 +225,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "wide landscape of a coastal road at golden hour, dramatic sky, cinematic still"
+        "same scene, enhanced detail, cinematic lighting"
       ],
       "title": "Positive"
     },
@@ -150,15 +233,15 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        450,
-        280
+        480,
+        290
       ],
       "size": [
         420,
-        120
+        100
       ],
       "flags": {},
-      "order": 4,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -186,45 +269,10 @@
       "title": "Negative"
     },
     {
-      "id": 6,
-      "type": "EmptyFlux2LatentImage",
-      "pos": [
-        450,
-        450
-      ],
-      "size": [
-        280,
-        106
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            6
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EmptyFlux2LatentImage"
-      },
-      "widgets_values": [
-        1280,
-        720,
-        1
-      ],
-      "title": "Latent 1280x720"
-    },
-    {
       "id": 7,
       "type": "KSampler",
       "pos": [
-        920,
+        980,
         80
       ],
       "size": [
@@ -232,7 +280,7 @@
         262
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -270,29 +318,29 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        42,
+        7,
         "fixed",
         8,
         1.0,
         "euler",
         "simple",
-        1.0
+        0.65
       ],
-      "title": "KSampler"
+      "title": "KSampler denoise 0.65"
     },
     {
       "id": 8,
       "type": "VAEDecode",
       "pos": [
-        920,
-        400
+        1380,
+        80
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -326,15 +374,15 @@
       "id": 9,
       "type": "SaveImage",
       "pos": [
-        1220,
-        400
+        1380,
+        176
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
@@ -348,7 +396,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_flux_landscape"
+        "ez_flux_img2img"
       ],
       "title": "Save"
     }
@@ -396,7 +444,7 @@
     ],
     [
       6,
-      6,
+      11,
       0,
       7,
       3,
@@ -425,12 +473,28 @@
       9,
       0,
       "IMAGE"
+    ],
+    [
+      10,
+      3,
+      0,
+      11,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "flux-txt2img-landscape",
+    "lab_profile": "flux-img2img",
     "lab_flux_tier": "fast"
   },
   "version": 0.4

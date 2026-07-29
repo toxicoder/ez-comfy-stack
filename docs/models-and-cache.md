@@ -139,18 +139,25 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/` from host `workflows/`:
+Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern **`*-lab-example.json`**):
 
 | Graph | Notes |
 | --- | --- |
-| `lab-flux-txt2img.json` | 1024² T2I |
-| `lab-flux-txt2img-portrait.json` | 768×1024 |
-| `lab-flux-txt2img-landscape.json` | 1280×720 |
-| `lab-flux-txt2img-quick.json` | 768² / 4 steps smoke |
-| `lab-flux-img2img.json` | I2I |
-| `lab-ltx-i2v.json` / `lab-ltx-i2v-short.json` | I2V frames (~97 / ~33) |
-| `lab-ltx-t2v.json` / `lab-ltx-t2v-short.json` | T2V frames (~97 / ~33) |
-| `lab-flux-to-ltx.json` | Flux T2I + handoff note → LTX I2V |
+| `flux-txt2img-lab-example.json` | 1024² T2I |
+| `flux-txt2img-portrait-lab-example.json` | 768×1024 |
+| `flux-txt2img-landscape-lab-example.json` | 1280×720 |
+| `flux-txt2img-ultrawide-lab-example.json` | 1536×640 |
+| `flux-txt2img-512-lab-example.json` | 512² draft |
+| `flux-txt2img-quick-lab-example.json` | 768² / 4 steps smoke |
+| `flux-txt2img-batch2-lab-example.json` | batch 2 @ 768² |
+| `flux-txt2img-high-steps-lab-example.json` | 1024² / 16 steps |
+| `flux-txt2img-product-lab-example.json` | product / catalog prompt |
+| `flux-img2img-lab-example.json` | I2I denoise 0.65 |
+| `flux-img2img-subtle-lab-example.json` / `flux-img2img-strong-lab-example.json` | denoise 0.35 / 0.85 |
+| `ltx-i2v-lab-example.json` / `-short` / `-quick` | I2V frames (~97 / 33 / 17) |
+| `ltx-t2v-lab-example.json` / `-short` / `-quick` | T2V frames (~97 / 33 / 17) |
+| `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide short T2V |
+| `flux-to-ltx-lab-example.json` / `flux-to-ltx-short-lab-example.json` | Flux T2I + handoff note → LTX I2V |
 
 Lab video graphs write **frames** via `SaveImage` only (no VHS). Audio VAE remains on disk for operators who build joint AV graphs themselves.
 
@@ -320,6 +327,6 @@ flowchart TB
     | --- | --- | --- |
     | `COMFYUI_REF` | `v0.29.0` | Latest ComfyUI release (2026-07-29). Official README recommends **torch cu130**. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use **core** nodes only (`UNETLoader`, `EmptyFlux2LatentImage`, `LTXV*`, …). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
-    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); lab-flux/lab-ltx graphs do not require it. |
+    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
 
     **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, and `docker/install-comfy/common.sh`, then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).

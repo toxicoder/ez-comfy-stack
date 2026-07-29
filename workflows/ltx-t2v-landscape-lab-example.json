@@ -1,5 +1,5 @@
 {
-  "id": "lab-ltx-t2v-short",
+  "id": "ltx-t2v-landscape-lab-example",
   "revision": 2,
   "last_node_id": 10,
   "last_link_id": 10,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        220
+        212
       ],
       "size": [
         360,
@@ -76,7 +76,7 @@
       "type": "DualCLIPLoader",
       "pos": [
         40,
-        340
+        320
       ],
       "size": [
         400,
@@ -112,7 +112,7 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        500,
+        620,
         80
       ],
       "size": [
@@ -143,7 +143,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "short aerial pan over a forest ridge at dawn, smooth motion"
+        "wide coastal flyover at golden hour, smooth cinematic motion"
       ],
       "title": "Positive"
     },
@@ -151,8 +151,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        500,
-        280
+        620,
+        290
       ],
       "size": [
         420,
@@ -190,8 +190,8 @@
       "id": 6,
       "type": "EmptyLTXVLatentVideo",
       "pos": [
-        500,
-        420
+        620,
+        440
       ],
       "size": [
         300,
@@ -211,13 +211,13 @@
           "slot_index": 0
         }
       ],
-      "title": "Empty LTX latent short",
+      "title": "Empty LTX latent 1024x576 short",
       "properties": {
         "Node name for S&R": "EmptyLTXVLatentVideo"
       },
       "widgets_values": [
-        768,
-        512,
+        1024,
+        576,
         33,
         1
       ]
@@ -226,7 +226,7 @@
       "id": 7,
       "type": "LTXVConditioning",
       "pos": [
-        850,
+        1120,
         80
       ],
       "size": [
@@ -277,7 +277,7 @@
       "id": 8,
       "type": "KSampler",
       "pos": [
-        1200,
+        1480,
         80
       ],
       "size": [
@@ -337,8 +337,8 @@
       "id": 9,
       "type": "VAEDecode",
       "pos": [
-        1200,
-        400
+        1880,
+        80
       ],
       "size": [
         240,
@@ -378,8 +378,8 @@
       "id": 10,
       "type": "SaveImage",
       "pos": [
-        1500,
-        400
+        1880,
+        176
       ],
       "size": [
         280,
@@ -400,7 +400,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_t2v_short"
+        "ez_ltx_t2v_landscape"
       ],
       "title": "Save frames"
     }
@@ -498,9 +498,9 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "ltx-t2v-short",
+    "lab_profile": "ltx-t2v-landscape",
     "lab_ltx_tier": "balanced",
-    "lab_note": "Short clip (~33 frames @ 24fps) for faster T2V demos. Frames via SaveImage. DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv)."
+    "lab_note": "DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv)."
   },
   "version": 0.4
 }

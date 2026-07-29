@@ -1,5 +1,5 @@
 {
-  "id": "lab-ltx-i2v",
+  "id": "ltx-i2v-lab-example",
   "revision": 3,
   "last_node_id": 12,
   "last_link_id": 18,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        220
+        212
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "DualCLIPLoader",
       "pos": [
         40,
-        340
+        320
       ],
       "size": [
         400,
@@ -113,7 +113,7 @@
       "id": 4,
       "type": "LoadImage",
       "pos": [
-        500,
+        620,
         80
       ],
       "size": [
@@ -153,8 +153,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        500,
-        420
+        620,
+        444
       ],
       "size": [
         420,
@@ -192,8 +192,8 @@
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        500,
-        600
+        620,
+        634
       ],
       "size": [
         420,
@@ -231,7 +231,7 @@
       "id": 7,
       "type": "LTXVImgToVideo",
       "pos": [
-        980,
+        1120,
         80
       ],
       "size": [
@@ -304,8 +304,8 @@
       "id": 8,
       "type": "LTXVConditioning",
       "pos": [
-        980,
-        340
+        1120,
+        330
       ],
       "size": [
         280,
@@ -356,7 +356,7 @@
       "id": 9,
       "type": "KSampler",
       "pos": [
-        1340,
+        1480,
         80
       ],
       "size": [
@@ -416,8 +416,8 @@
       "id": 10,
       "type": "VAEDecode",
       "pos": [
-        1340,
-        400
+        1880,
+        80
       ],
       "size": [
         240,
@@ -458,8 +458,8 @@
       "id": 12,
       "type": "SaveImage",
       "pos": [
-        1640,
-        80
+        1880,
+        176
       ],
       "size": [
         280,
@@ -612,7 +612,7 @@
   "extra": {
     "lab_profile": "ltx-i2v",
     "lab_ltx_tier": "balanced",
-    "lab_note": "Requires ComfyUI LTXV core nodes. Saves video frames via SaveImage. Audio VAE is downloaded for advanced AV experiments but not used in this lab graph. DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv)."
+    "lab_note": "Requires ComfyUI LTXV core nodes. Saves video frames via SaveImage. DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv)."
   },
   "version": 0.4
 }
