@@ -237,6 +237,7 @@ flowchart LR
   - `main` → [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
   - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
 - Workflow: `.github/workflows/deploy-docs.yml` (push to `main`/`development` with docs paths, or `workflow_dispatch`)
+- Stack is **MkDocs 1.x + Material** (`docs/requirements.txt`). Do **not** upgrade to MkDocs 2.x (incompatible with Material plugins/theme; no migration path). CI and `make docs` set `NO_MKDOCS_2_WARNING=1` to suppress Material’s advisory. Revisit only if migrating tooling (e.g. Zensical evaluation).
 - Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
 - Branch-stamped at build time via `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION` (optional `EZ_DOCS_GIT_REF` override):
   - Edit links (`edit/<ref>/docs/`)

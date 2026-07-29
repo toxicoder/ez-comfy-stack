@@ -31,14 +31,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           # Required so subsequent git push (mike) authenticates as GITHUB_TOKEN.
           persist-credentials: true
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -85,6 +85,8 @@ jobs:
         env:
           EZ_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
           MIKE_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
+          # Suppress Material MkDocs 2.0 advisory; pins stay on mkdocs 1.x.
+          NO_MKDOCS_2_WARNING: "1"
         run: |
           python -m mkdocs build --strict
           # mike copies from site/; ensure no Jekyll processing on Pages.

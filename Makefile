@@ -55,8 +55,11 @@ fmt:
 	shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh
 
 # @target docs — strict MkDocs Material build into site/ (publish is Actions + mike)
+# NO_MKDOCS_2_WARNING: suppress Material advisory; stack is pinned to mkdocs 1.x.
 docs:
-	python3 -m mkdocs build --strict
+	NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict
+	# Match deploy-docs.yml: mike copies from site/; skip Jekyll on Pages.
+	touch site/.nojekyll
 
 # @target doctor — host preflight without starting the stack
 doctor:
