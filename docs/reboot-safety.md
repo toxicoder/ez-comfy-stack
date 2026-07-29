@@ -16,9 +16,13 @@ tags: [safety, reboot]
 
 - Rebooting a Spark without losing SSH recoverability or corrupting long downloads
 
+---
+
 ## Golden rule
 
-**Never reboot with the heavy ComfyUI stack still running.**
+!!! danger "Never reboot with the heavy ComfyUI stack still running"
+
+    Always `stop` first. Compose uses `restart: "no"` so the stack will **not** come back by itself — that is intentional, but a live GPU load during reboot still risks painful recovery.
 
 ```mermaid
 flowchart LR
@@ -32,6 +36,8 @@ flowchart LR
     S3 --> S4["doctor → start"]
   end
 ```
+
+---
 
 ## Sequence
 
@@ -54,6 +60,7 @@ flowchart LR
 
    ```bash
    ./scripts/manage.sh start
+   # type: yes
    ```
 
 ```mermaid
@@ -75,6 +82,8 @@ sequenceDiagram
   M->>D: compose up
 ```
 
+---
+
 ## Why containers do not return
 
 Compose uses `restart: "no"`. There is no systemd unit that auto-starts this demo. That is intentional.
@@ -92,11 +101,23 @@ stateDiagram-v2
   end note
 ```
 
+!!! tip "Safety impact"
+
+    Manual start + headroom preflight + heavy confirmation keep remote SSH recoverable. Do not add auto-start units for this demo stack.
+
+---
+
 ## If SSH is already unresponsive
 
-- Use BMC / serial console  
-- Hard power cycle only as last resort  
-- After recovery: `download-limit clear`, `manage.sh stop`, then doctor  
+1. Use **BMC / serial console**
+2. **Hard power cycle** only as last resort
+3. After recovery:
+
+   ```bash
+   ./scripts/manage.sh download-limit clear
+   ./scripts/manage.sh stop
+   ./scripts/manage.sh doctor
+   ```
 
 ```mermaid
 flowchart TB

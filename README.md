@@ -35,8 +35,11 @@ flowchart TB
 
 ## Quick start
 
+Full walkthrough (prerequisites, setup, workflows): **[Getting Started](https://toxicoder.github.io/ez-comfy-stack/latest/getting-started/)** (or the [development](https://toxicoder.github.io/ez-comfy-stack/development/getting-started/) docs if you track that branch).
+
 ```bash
-cp .env.example .env   # set HF_TOKEN if needed
+./scripts/manage.sh setup --install-docker   # .env, MODELS_DIR, Docker if needed
+# set HF_TOKEN in .env if models are gated
 ./scripts/manage.sh doctor
 ./scripts/manage.sh download-models   # throttled flux-fast + ltx-balanced
 ./scripts/manage.sh start             # type yes
