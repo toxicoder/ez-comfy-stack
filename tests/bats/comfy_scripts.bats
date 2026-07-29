@@ -27,6 +27,36 @@ teardown() {
   teardown_repo_env
 }
 
+@test "install-comfy nunchaku helpers never use bare PyPI nunchaku" {
+  run nunchaku_platform_tag x86_64
+  [ "${output}" = "linux_x86_64" ]
+  run nunchaku_platform_tag aarch64
+  [ "${output}" = "linux_aarch64" ]
+  run nunchaku_platform_tag bogus
+  [ "${output}" = "" ]
+  run nunchaku_wheel_url "linux_x86_64" "cp312" "cu13.0" "torch2.11"
+  [[ "${output}" == *"nunchaku-ai/nunchaku/releases/download"* ]]
+  [[ "${output}" == *"linux_x86_64.whl"* ]]
+  [[ "${output}" == *"cp312"* ]]
+  [[ "${output}" != *"pypi.org"* ]]
+
+  # aarch64 path: skip without attempting bare PyPI nunchaku
+  : >"${TEST_TMP_DIR}/pip_calls.log"
+  install_mock_bin pip 'echo "pip $*" >>"'"${TEST_TMP_DIR}"'/pip_calls.log"; exit 1'
+  # python: package not installed, then version helpers unused on aarch64 skip
+  install_mock_bin python 'exit 1'
+  nunchaku_platform_tag() { echo "linux_aarch64"; }
+  nunchaku_is_real() { return 1; }
+  cleanup_wrong_nunchaku() { return 0; }
+  run install_nunchaku_wheel
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"aarch64"* || "${output}" == *"skipping"* || "${output}" == *"no official"* ]]
+  # Must never install the bare package name from PyPI
+  if [[ -s ${TEST_TMP_DIR}/pip_calls.log ]]; then
+    ! grep -qE 'pip install( --[^ ]+)* nunchaku( |$)' "${TEST_TMP_DIR}/pip_calls.log"
+  fi
+}
+
 @test "install-comfy log warn link_models clone_node" {
   run log "hello"
   [ "${status}" -eq 0 ]

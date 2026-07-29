@@ -96,6 +96,9 @@ Or:
 
 ```bash
 ./scripts/manage.sh download-models
+# Exits non-zero until every lab basename under MODELS_DIR/comfy is present
+# (see table below). Companions (Qwen TE + flux2-vae) use file-level readiness
+# so a TE-only partial cannot cache-hit skip the VAE.
 ```
 
 ### Cleanup extra LTX monorepo files

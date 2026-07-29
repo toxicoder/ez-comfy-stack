@@ -141,6 +141,13 @@ assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][2]==33 
   run tiers_to_process
   [[ "${output}" == *"companions"* ]]
   [[ "${output}" == *"fast"* ]]
+  # TE-only dir is not ready (regression: size floor skipped VAE)
+  local cdir
+  cdir="$(tier_dir companions)"
+  mkdir -p "${cdir}/split_files/text_encoders"
+  echo te >"${cdir}/split_files/text_encoders/qwen_3_8b_fp4mixed.safetensors"
+  run tier_files_ready companions
+  [ "${status}" -ne 0 ]
 }
 
 @test "lab_expected_model_relpaths matches download-models pack" {
