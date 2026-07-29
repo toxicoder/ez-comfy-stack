@@ -572,6 +572,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#example-workflows-image-video-frames" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example workflows (image + video frames)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#first-run-journey" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -873,6 +884,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#example-workflows-image-video-frames" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example workflows (image + video frames)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#first-run-journey" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -958,10 +980,12 @@
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <ul>
 <li>NVIDIA DGX Spark (or compatible GB10 host) with drivers + <strong>NVIDIA Container Toolkit</strong></li>
-<li>Docker with Compose v2 plugin</li>
-<li><code>git</code>, <code>python3</code>, <code>pip</code> (<code>huggingface_hub</code> for downloads)</li>
-<li>Optional: <code>wondershaper</code>, <code>speedtest-cli</code> (auto-installed / used by download-limit)</li>
-<li>Hugging Face account with licenses accepted for FLUX / LTX models; <code>HF_TOKEN</code> if gated</li>
+<li>Docker with Compose v2 plugin (prefer apt <code>docker-ce</code>, not snap; user in <code>docker</code> group). Image build uses public <strong>Docker Hub</strong> <code>nvidia/cuda</code> (no NGC/<code>nvcr.io</code> login required)</li>
+<li>Writable shared model cache: default <code>/mnt/models</code> (<code>sudo mkdir -p /mnt/models &amp;&amp; sudo chown $USER:$USER /mnt/models</code>) or override <code>MODELS_DIR</code> in <code>.env</code></li>
+<li><code>git</code>, <code>python3</code>, <code>pip</code> / <code>pipx</code></li>
+<li>Hugging Face CLI: <code>hf</code> from <code>huggingface_hub</code> (<code>pipx install huggingface_hub</code> or <code>pip install -U 'huggingface_hub[cli]'</code>) — <strong>not</strong> the deprecated <code>huggingface-cli</code> stub</li>
+<li>Optional: <code>wondershaper</code>, <code>speedtest-cli</code> (auto-installed / used by download-limit; HTB/<code>sch_htb</code> when shaping is desired)</li>
+<li>Hugging Face account with licenses accepted for FLUX / LTX models; <code>HF_TOKEN</code> in <code>.env</code> or <code>hf auth login</code> if gated</li>
 </ul>
 <pre class="mermaid"><code>flowchart LR
   subgraph Required["Required on host"]
@@ -984,26 +1008,144 @@
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
 <span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
 git<span class="w"> </span>checkout<span class="w"> </span>development<span class="w">   </span><span class="c1"># or your feature branch</span>
-cp<span class="w"> </span>.env.example<span class="w"> </span>.env
-<span class="c1"># edit .env: HF_TOKEN, MODELS_DIR=/mnt/models</span>
+
+<span class="c1"># One-shot host bootstrap: .env, MODELS_DIR (sudo), Docker CE if missing, doctor</span>
+./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
+<span class="c1"># approve sudo + type yes if prompted; edit .env for HF_TOKEN if models are gated</span>
+</code></pre></div>
+<p><code>setup</code> will:</p>
+<ol>
+<li>Create <code>.env</code> from <code>.env.example</code> if missing  </li>
+<li>Create and own <code>MODELS_DIR</code> (default <code>/mnt/models</code>) via sudo when needed  </li>
+<li><strong>Install Docker CE + compose plugin</strong> when missing (<code>--install-docker</code> or interactive yes; apt preferred, not snap)  </li>
+<li>Add your user to the <code>docker</code> group; configure <code>nvidia-ctk</code> when present  </li>
+<li>Re-run <code>doctor</code></li>
+</ol>
+<p>If the current shell lacks the docker group after install:</p>
+<div class="highlight"><pre><span></span><code>newgrp<span class="w"> </span>docker<span class="w">   </span><span class="c1"># or re-login SSH</span>
+./scripts/manage.sh<span class="w"> </span>doctor
+</code></pre></div>
+<p>Non-interactive:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">LAB_NON_INTERACTIVE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">LAB_CONFIRM_TOKEN</span><span class="o">=</span>yes<span class="w"> </span><span class="nv">SETUP_INSTALL_DOCKER</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/manage.sh<span class="w"> </span>setup
 </code></pre></div>
 <h2 id="doctor">Doctor<a class="headerlink" href="#doctor" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>doctor
 </code></pre></div>
-<p>Fix any errors before downloading multi-GB models.</p>
+<p>Fix any errors before downloading multi-GB models. Hard failures include <strong>docker missing</strong>, <strong>docker compose missing</strong>, <strong>host headroom</strong>, and <strong>MODELS_DIR not writable</strong>. Prefer <code>./scripts/manage.sh setup</code> first. See <a href="../troubleshooting/">Troubleshooting</a> for copy-paste fixes.</p>
 <h2 id="download-models-shared-cache">Download models (shared cache)<a class="headerlink" href="#download-models-shared-cache" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>download-models
+<div class="highlight"><pre><span></span><code><span class="c1"># Ensure HF token for gated repos (FLUX):</span>
+<span class="c1"># echo &#39;HF_TOKEN=hf_...&#39; &gt;&gt; .env   # or: hf auth login</span>
+
+./scripts/manage.sh<span class="w"> </span>download-models
 </code></pre></div>
-<p>This runs <strong>flux-fast</strong> + <strong>ltx-balanced</strong> under <code>download-limit wrap --limit auto</code> (speedtest → <strong>85%</strong> cap). Weights land under <code>MODELS_DIR</code> (default <code>/mnt/models</code>) in a layout compatible with nvidia-dgx-spark-lab.</p>
+<p>This runs <strong>flux-fast</strong> + <strong>ltx-balanced</strong> under <code>download-limit wrap --limit auto</code> (speedtest → <strong>85%</strong> cap), using <strong><code>hf download</code></strong>. Weights land under <code>MODELS_DIR</code> (default <code>/mnt/models</code>) in a layout compatible with nvidia-dgx-spark-lab. If bandwidth shaping fails on the kernel, downloads continue unthrottled with a warning (<code>DOWNLOAD_LIMIT=off</code> to skip shaping).</p>
+<p>LTX <strong>balanced</strong> pulls a <strong>selective</strong> subset of <code>Kijai/LTX2.3_comfy</code> (distilled FP8 + TE + VAEs, ~30 GB), not the full multi-variant monorepo (~400 GB). See <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
 <h2 id="start-the-stack">Start the stack<a class="headerlink" href="#start-the-stack" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>./scripts/manage.sh<span class="w"> </span>start
 <span class="c1"># type: yes</span>
 ./scripts/manage.sh<span class="w"> </span>status
 </code></pre></div>
 <p>Open <code>http://&lt;spark-ip&gt;:8188</code> (or port-forward if needed).</p>
+<h3 id="example-workflows-image-video-frames">Example workflows (image + video frames)<a class="headerlink" href="#example-workflows-image-video-frames" title="Permanent link">&para;</a></h3>
+<p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load one of:</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>lab-flux-txt2img</strong></td>
+<td>Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE)</td>
+</tr>
+<tr>
+<td><strong>lab-flux-txt2img-portrait</strong></td>
+<td>Text → image <strong>768×1024</strong> portrait</td>
+</tr>
+<tr>
+<td><strong>lab-flux-txt2img-landscape</strong></td>
+<td>Text → image <strong>1280×720</strong> landscape</td>
+</tr>
+<tr>
+<td><strong>lab-flux-txt2img-quick</strong></td>
+<td>Smoke test: <strong>768²</strong>, <strong>4</strong> steps</td>
+</tr>
+<tr>
+<td><strong>lab-flux-img2img</strong></td>
+<td>Image → image (same Flux pack; set LoadImage input)</td>
+</tr>
+<tr>
+<td><strong>lab-ltx-i2v</strong></td>
+<td>Image → video frames (~97 @ 24 fps; set start frame)</td>
+</tr>
+<tr>
+<td><strong>lab-ltx-i2v-short</strong></td>
+<td>Faster I2V: <strong>33</strong> frames @ 24 fps</td>
+</tr>
+<tr>
+<td><strong>lab-ltx-t2v</strong></td>
+<td>Text → video frames (~97 @ 24 fps)</td>
+</tr>
+<tr>
+<td><strong>lab-ltx-t2v-short</strong></td>
+<td>Faster T2V: <strong>33</strong> frames @ 24 fps</td>
+</tr>
+<tr>
+<td><strong>lab-flux-to-ltx</strong></td>
+<td>Flux txt2img + handoff notes → load <strong>lab-ltx-i2v</strong> for video frames</td>
+</tr>
+</tbody>
+</table>
+<p>These are under <code>user/default/workflows/</code> (copied from the host <code>workflows/</code> mount).</p>
+<p><strong>Lab details</strong></p>
+<ul>
+<li>Flux CLIP loader type is <strong><code>flux2</code></strong> with <code>qwen_3_8b_fp4mixed</code> + <code>EmptyFlux2LatentImage</code> (simplified <code>KSampler</code>, not the full official advanced sampler subgraph)</li>
+<li>LTX graphs save <strong>frames</strong> via <code>SaveImage</code> (no VideoHelperSuite / VHS required)</li>
+<li><code>download-models</code> also places <code>LTX23_audio_vae_bf16</code> for advanced AV experiments; <strong>lab examples do not wire audio</strong></li>
+<li><strong>Not Z-Image.</strong> Community Z-Image templates need different weights (<code>ae</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*</code>)</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Prebuilt image (GHCR)</p>
+<p><code>manage.sh start</code> pulls a <strong>branch-aligned</strong> arm64 image published by the <code>publish-image</code> workflow:</p>
+<table>
+<thead>
+<tr>
+<th>Git branch</th>
+<th>Image tag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main</code></td>
+<td><code>ghcr.io/toxicoder/ez-comfy:flux-to-ltx</code></td>
+</tr>
+<tr>
+<td><code>development</code> (and feature branches)</td>
+<td><code>ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development</code></td>
+</tr>
+</tbody>
+</table>
+<p>Override with <code>EZ_COMFY_IMAGE</code> in <code>.env</code> if needed.<br />
+Multi-stage: <strong>devel</strong> builder installs Comfy+torch in <strong>phased layers</strong> (torch separate from custom nodes); final stage is <strong>CUDA runtime</strong> (no nvcc).<br />
+It includes ComfyUI + PyTorch; <strong>not</strong> FLUX/LTX weights (those stay on <code>MODELS_DIR</code>).<br />
+First start <strong>seeds</strong> the volume from <code>/opt/comfy-prebuilt</code> (local copy) instead of multi‑GB pip.<br />
+No tokens or host secrets are baked into the image. Pull is public for public packages.<br />
+<code>./scripts/manage.sh doctor</code> prints the resolved default image before you start.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Dev: edit scripts without rebuilding</p>
+<p>Compose bind-mounts <code>docker/entrypoint.sh</code>, <code>docker/install-comfy.sh</code>, and <code>docker/patch_get_free_memory.py</code> into the container.<br />
+Change those files on the host, then restart the stack — <strong>no multi‑GB image rebuild</strong>.<br />
+Rebuild (<code>LAB_STACK_FORCE_BUILD=1</code> or publish) only when you need a new baked <code>/opt/comfy-prebuilt</code> tree (torch / Comfy / nodes).<br />
+See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds">Models &amp; Cache</a> for what invalidates which layers.</p>
+</div>
 <div class="admonition warning">
-<p class="admonition-title">Cold start</p>
-<p>First container start installs ComfyUI into the <code>comfy-state</code> volume and can take <strong>10–30+ minutes</strong>.</p>
+<p class="admonition-title">Cold start without prebuilt</p>
+<p>If GHCR pull fails or you force a thin/local build without prebuild, first start can take <strong>10–30+ minutes</strong> of pip.<br />
+<code>manage.sh start</code> streams logs until port 8188 responds (Ctrl+C detaches only).<br />
+<code>LAB_STACK_FOLLOW=0</code> returns immediately after the container is up.</p>
 </div>
 <h3 id="first-run-journey">First-run journey<a class="headerlink" href="#first-run-journey" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram

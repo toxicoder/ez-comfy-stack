@@ -951,7 +951,7 @@
   end
 
   Vol["named volume&lt;br/&gt;comfy-state"]
-  WF["workflows/lab-flux-to-ltx.json"]
+  WF["workflows/*.json&lt;br/&gt;lab examples"]
   GPU["GPU · all · 1× GB10"]
   UI["UI :8188"]
 
@@ -959,7 +959,7 @@
   Compose --&gt; EP
   Models -.-&gt;|bind /models| Ctr
   Vol -.-&gt;|/comfy-state| Ctr
-  WF -.-&gt;|ro workflow| Ctr
+  WF -.-&gt;|ro workflows| Ctr
   GPU --&gt; Comfy
   Comfy --&gt; UI
   Policy -.-&gt;|mirrored defaults| CLI</code></pre>
@@ -998,12 +998,13 @@
 </tbody>
 </table>
 <h2 id="combined-pipeline-flux-ltx">Combined pipeline (Flux → LTX)<a class="headerlink" href="#combined-pipeline-flux-ltx" title="Permanent link">&para;</a></h2>
-<p>Text → image → video (+ audio) in one ComfyUI stack:</p>
+<p>Text → image → <strong>video frames</strong> in one ComfyUI stack. Lab graphs use <code>SaveImage</code> for frames; the LTX <strong>audio VAE</strong> is downloaded for advanced AV work but is not wired into the seeded examples.</p>
 <pre class="mermaid"><code>flowchart LR
-  Prompt["Text prompt"] --&gt; Flux["Flux T2I&lt;br/&gt;fast · Klein 9B NVFP4&lt;br/&gt;+ Nunchaku"]
+  Prompt["Text prompt"] --&gt; Flux["Flux T2I&lt;br/&gt;fast · Klein 9B NVFP4"]
   Flux --&gt; Image["Still image"]
   Image --&gt; LTX["LTX I2V&lt;br/&gt;balanced · distilled FP8"]
-  LTX --&gt; Video["Video + audio"]</code></pre>
+  LTX --&gt; Frames["Video frames&lt;br/&gt;SaveImage"]</code></pre>
+<p>Handoff: load <strong>lab-flux-to-ltx</strong> (or any Flux T2I) → save still → open <strong>lab-ltx-i2v</strong> / <strong>lab-ltx-i2v-short</strong> and set <code>LoadImage</code> to that file.</p>
 <h2 id="memory-and-headroom-budget">Memory and headroom budget<a class="headerlink" href="#memory-and-headroom-budget" title="Permanent link">&para;</a></h2>
 <p>GB10 unified memory is shared by OS, SSH, Docker, and the ComfyUI container. Policy defaults leave free host RAM so remote access stays usable.</p>
 <pre class="mermaid"><code>flowchart TB

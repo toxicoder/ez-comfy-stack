@@ -1284,6 +1284,14 @@ main<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h2>
 <ul>
 <li>One compose service for the unified stack  </li>
+<li>Multi-stage image: <strong>devel</strong> builder + <strong>runtime</strong> final (no secrets/models)  </li>
+<li><strong>Layer cache contract</strong> (do not regress):</li>
+<li>Builder: <code>COPY</code> only <code>install-comfy.sh</code> before prebuild <code>RUN</code>s</li>
+<li>Builder prebuild is <strong>phased</strong> (<code>--phase venv|torch|comfy|nodes|finalize</code>) so torch survives node-only edits</li>
+<li>Runtime: <code>COPY --from=builder</code> prebuilt <strong>before</strong> entrypoint/install/patch</li>
+<li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --chmod</code>, <code>RUN --mount=type=cache,target=/root/.cache/pip</code></li>
+<li>Compose bind-mounts ops scripts for zero-rebuild iteration</li>
+<li>GHCR channel by long-lived branch: publish tags <code>flux-to-ltx</code> (<code>main</code>) and <code>flux-to-ltx-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel)  </li>
 <li>Scripts as real files (not inline ConfigMap YAML)  </li>
 <li>Host model cache + named volume for Comfy state  </li>
 <li>Compose <code>restart: "no"</code>; explicit <code>mem_limit</code> / <code>mem_reservation</code>  </li>
@@ -1293,11 +1301,14 @@ main<span class="o">()</span><span class="w"> </span><span class="o">{</span>
   Svc --&gt; Restart["restart: no"]
   Svc --&gt; Mem["mem_limit / mem_reservation"]
   Svc --&gt; Models["bind MODELS_DIR"]
-  Svc --&gt; State["volume comfy-state"]</code></pre>
+  Svc --&gt; State["volume comfy-state"]
+  Svc --&gt; Scripts["bind entrypoint · install · patch"]</code></pre>
 <h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
 <ul>
 <li>TDD for behavior changes  </li>
 <li>BATS for shell; pytest for Python  </li>
+<li><strong>Hermetic by default</strong>: <code>test_helper.bash</code> sets <code>LAB_HERMETIC=1</code>, speed/probe mocks, and <code>HF_PROGRESS=0</code> (no real curl/speedtest, no progress-monitor sleeps)</li>
+<li><strong>Parallel BATS</strong>: <code>bats --jobs</code> across files when GNU <code>parallel</code> is installed (<code>BATS_JOBS</code> override); serialize within files</li>
 <li><code>make coverage</code> enforces:</li>
 <li><strong>100% Python line coverage</strong> on <code>patch_get_free_memory</code></li>
 <li><strong>Strict shell inventory</strong>: every function in <code>scripts/**/*.sh</code> and <code>docker/**/*.sh</code> must be <strong>named under <code>tests/</code></strong> (production-only references do not count)</li>
