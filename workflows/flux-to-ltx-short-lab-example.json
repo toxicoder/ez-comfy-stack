@@ -372,7 +372,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "Pipeline: run Flux txt2img (above) \u2192 save image \u2192 open ltx-i2v-short-lab-example (or ltx-i2v-quick-lab-example), set LoadImage to that file, queue for video frames.\n\nModels (download-models): flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae + LTX distilled FP8 + gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16 (DualCLIP type ltxv) + LTX23_video_vae (+ audio VAE on disk for advanced AV).\nLab graphs save video frames via SaveImage (no VHS required)."
+        "Pipeline: run Flux txt2img (above) \u2192 save image \u2192 open ltx-i2v-short-lab-example (or ltx-i2v-quick-lab-example), set LoadImage to that file, queue for video frames.\n\nModels (download-models): flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae + LTX distilled FP8 + gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16 (DualCLIP type ltxv) + LTX23_video_vae + LTX23_audio_vae (joint AV empty audio latents required by LTX-2.3 KSampler).\nLab LTX graphs concat empty audio + video latents, then save video frames via SaveImage (no VHS / no audio save required)."
       ],
       "title": "Flux \u2192 LTX short handoff"
     }

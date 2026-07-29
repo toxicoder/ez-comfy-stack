@@ -135,7 +135,7 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `gemma_3_12B_it_fp4_mixed.safetensors` | `text_encoders/` | LTX Gemma 3 TE (DualCLIP type **`ltxv`**, with projection) |
 | `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection (DualCLIP second clip) |
 | `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE (used by lab I2V/T2V) |
-| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (downloaded; **not wired** in lab graphs) |
+| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (required by lab LTX graphs for joint AV empty audio latents) |
 
 ### Example graphs
 
@@ -159,7 +159,7 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern
 | `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide short T2V |
 | `flux-to-ltx-lab-example.json` / `flux-to-ltx-short-lab-example.json` | Flux T2I + handoff note → LTX I2V |
 
-Lab video graphs write **frames** via `SaveImage` only (no VHS). Audio VAE remains on disk for operators who build joint AV graphs themselves.
+Lab video graphs write **frames** via `SaveImage` only (no VHS). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save is optional and not included in lab examples.
 
 ### Gated models / HF_TOKEN
 
