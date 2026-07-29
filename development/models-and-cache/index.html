@@ -1274,7 +1274,7 @@
 </tbody>
 </table>
 <h3 id="example-graphs">Example graphs<a class="headerlink" href="#example-graphs" title="Permanent link">&para;</a></h3>
-<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/</code>:</p>
+<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/</code> (name pattern <strong><code>*-lab-example.json</code></strong>):</p>
 <table>
 <thead>
 <tr>
@@ -1284,35 +1284,63 @@
 </thead>
 <tbody>
 <tr>
-<td><code>lab-flux-txt2img.json</code></td>
+<td><code>flux-txt2img-lab-example.json</code></td>
 <td>1024² T2I</td>
 </tr>
 <tr>
-<td><code>lab-flux-txt2img-portrait.json</code></td>
+<td><code>flux-txt2img-portrait-lab-example.json</code></td>
 <td>768×1024</td>
 </tr>
 <tr>
-<td><code>lab-flux-txt2img-landscape.json</code></td>
+<td><code>flux-txt2img-landscape-lab-example.json</code></td>
 <td>1280×720</td>
 </tr>
 <tr>
-<td><code>lab-flux-txt2img-quick.json</code></td>
+<td><code>flux-txt2img-ultrawide-lab-example.json</code></td>
+<td>1536×640</td>
+</tr>
+<tr>
+<td><code>flux-txt2img-512-lab-example.json</code></td>
+<td>512² draft</td>
+</tr>
+<tr>
+<td><code>flux-txt2img-quick-lab-example.json</code></td>
 <td>768² / 4 steps smoke</td>
 </tr>
 <tr>
-<td><code>lab-flux-img2img.json</code></td>
-<td>I2I</td>
+<td><code>flux-txt2img-batch2-lab-example.json</code></td>
+<td>batch 2 @ 768²</td>
 </tr>
 <tr>
-<td><code>lab-ltx-i2v.json</code> / <code>lab-ltx-i2v-short.json</code></td>
-<td>I2V frames (~97 / ~33)</td>
+<td><code>flux-txt2img-high-steps-lab-example.json</code></td>
+<td>1024² / 16 steps</td>
 </tr>
 <tr>
-<td><code>lab-ltx-t2v.json</code> / <code>lab-ltx-t2v-short.json</code></td>
-<td>T2V frames (~97 / ~33)</td>
+<td><code>flux-txt2img-product-lab-example.json</code></td>
+<td>product / catalog prompt</td>
 </tr>
 <tr>
-<td><code>lab-flux-to-ltx.json</code></td>
+<td><code>flux-img2img-lab-example.json</code></td>
+<td>I2I denoise 0.65</td>
+</tr>
+<tr>
+<td><code>flux-img2img-subtle-lab-example.json</code> / <code>flux-img2img-strong-lab-example.json</code></td>
+<td>denoise 0.35 / 0.85</td>
+</tr>
+<tr>
+<td><code>ltx-i2v-lab-example.json</code> / <code>-short</code> / <code>-quick</code></td>
+<td>I2V frames (~97 / 33 / 17)</td>
+</tr>
+<tr>
+<td><code>ltx-t2v-lab-example.json</code> / <code>-short</code> / <code>-quick</code></td>
+<td>T2V frames (~97 / 33 / 17)</td>
+</tr>
+<tr>
+<td><code>ltx-t2v-portrait-lab-example.json</code> / <code>ltx-t2v-landscape-lab-example.json</code></td>
+<td>vertical / wide short T2V</td>
+</tr>
+<tr>
+<td><code>flux-to-ltx-lab-example.json</code> / <code>flux-to-ltx-short-lab-example.json</code></td>
 <td>Flux T2I + handoff note → LTX I2V</td>
 </tr>
 </tbody>
@@ -1575,7 +1603,7 @@
 <tr>
 <td><code>COMFYUI_NUNCHAKU_NODE_REF</code></td>
 <td><code>v1.2.1</code></td>
-<td>Latest plugin release; aligned with <code>NUNCHAKU_VERSION=1.2.1</code>. <strong>Optional</strong> on GB10 (no official aarch64 engine wheels); lab-flux/lab-ltx graphs do not require it.</td>
+<td>Latest plugin release; aligned with <code>NUNCHAKU_VERSION=1.2.1</code>. <strong>Optional</strong> on GB10 (no official aarch64 engine wheels); <code>*-lab-example</code> graphs do not require it.</td>
 </tr>
 </tbody>
 </table>

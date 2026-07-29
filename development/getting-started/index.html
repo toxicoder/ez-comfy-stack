@@ -1094,7 +1094,7 @@
 </tr>
 <tr>
 <td><strong>Workflow</strong></td>
-<td>A seeded <strong>lab-</strong>* graph (image and/or video frames)</td>
+<td>A seeded <strong>*-lab-example</strong> graph (image and/or video frames)</td>
 </tr>
 <tr>
 <td><strong>Weights</strong></td>
@@ -1282,7 +1282,7 @@
 <p class="admonition-title">Bandwidth shaping soft-fail</p>
 <p>If kernel HTB is missing (common on DGX Spark), downloads continue with gentle HF workers and a warning. Use <code>DOWNLOAD_LIMIT=off</code> only when you accept SSH risk. See <a href="../download-limit/">Download Limit</a>.</p>
 </div>
-<p>If Comfy shows <strong>Missing Models</strong> on <strong>lab-</strong>* graphs, re-run download and <code>doctor</code>. Full basename table: <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
+<p>If Comfy shows <strong>Missing Models</strong> on <strong>*-lab-example</strong> graphs, re-run download and <code>doctor</code>. Full basename table: <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
 <hr />
 <h2 id="start-the-stack">Start the stack<a class="headerlink" href="#start-the-stack" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>start
@@ -1292,7 +1292,7 @@
 <p>Open <strong><code>http://&lt;spark-ip&gt;:8188</code></strong> (or SSH port-forward if needed).</p>
 <div class="admonition success">
 <p class="admonition-title">Done when</p>
-<p>Port <strong>8188</strong> responds and you can load a <strong>lab-</strong>* workflow without missing-weight errors.</p>
+<p>Port <strong>8188</strong> responds and you can load a <strong>*-lab-example</strong> workflow without missing-weight errors.</p>
 </div>
 <h3 id="build-the-image-locally-optional">Build the image locally (optional)<a class="headerlink" href="#build-the-image-locally-optional" title="Permanent link">&para;</a></h3>
 <p>By default, <code>manage.sh start</code> <strong>pulls</strong> a branch-aligned prebuilt image from GHCR (ComfyUI + PyTorch baked in; <strong>not</strong> FLUX/LTX weights). You can instead <strong>build</strong> <code>docker/Dockerfile</code> on the host and still use the same start path.</p>
@@ -1374,7 +1374,7 @@
 <p>Pull failures already fall back to local build automatically. Force-build is for when you <strong>want</strong> a rebuild even if GHCR is available.</p>
 <p>Layer invalidation and pin bumps: <a href="../models-and-cache/#prebuilt-container-image-ghcr">Models &amp; Cache</a>. Recovery rows: <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <h3 id="example-workflows">Example workflows<a class="headerlink" href="#example-workflows" title="Permanent link">&para;</a></h3>
-<p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>):</p>
+<p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Image (Flux)</label><label for="__tabbed_3_2">Video frames (LTX)</label><label for="__tabbed_3_3">Combined</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -1387,24 +1387,52 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>lab-flux-txt2img</strong></td>
+<td><strong>flux-txt2img-lab-example</strong></td>
 <td>Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE)</td>
 </tr>
 <tr>
-<td><strong>lab-flux-txt2img-portrait</strong></td>
+<td><strong>flux-txt2img-portrait-lab-example</strong></td>
 <td>Text → image <strong>768×1024</strong> portrait</td>
 </tr>
 <tr>
-<td><strong>lab-flux-txt2img-landscape</strong></td>
+<td><strong>flux-txt2img-landscape-lab-example</strong></td>
 <td>Text → image <strong>1280×720</strong> landscape</td>
 </tr>
 <tr>
-<td><strong>lab-flux-txt2img-quick</strong></td>
+<td><strong>flux-txt2img-ultrawide-lab-example</strong></td>
+<td>Text → image <strong>1536×640</strong> cinematic wide</td>
+</tr>
+<tr>
+<td><strong>flux-txt2img-512-lab-example</strong></td>
+<td>Fast draft: <strong>512²</strong></td>
+</tr>
+<tr>
+<td><strong>flux-txt2img-quick-lab-example</strong></td>
 <td>Smoke test: <strong>768²</strong>, <strong>4</strong> steps</td>
 </tr>
 <tr>
-<td><strong>lab-flux-img2img</strong></td>
-<td>Image → image (set LoadImage input)</td>
+<td><strong>flux-txt2img-batch2-lab-example</strong></td>
+<td>Batch size <strong>2</strong> at 768²</td>
+</tr>
+<tr>
+<td><strong>flux-txt2img-high-steps-lab-example</strong></td>
+<td>1024² with <strong>16</strong> steps</td>
+</tr>
+<tr>
+<td><strong>flux-txt2img-product-lab-example</strong></td>
+<td>Product / catalog prompt + square</td>
+</tr>
+<tr>
+<td><strong>flux-img2img-lab-example</strong></td>
+<td>Image → image, denoise <strong>0.65</strong> (set LoadImage)</td>
+</tr>
+<tr>
+<td><strong>flux-img2img-subtle-lab-example</strong></td>
+<td>Light edit, denoise <strong>0.35</strong></td>
+</tr>
+<tr>
+<td><strong>flux-img2img-strong-lab-example</strong></td>
+<td>Creative remix, denoise <strong>0.85</strong></td>
 </tr>
 </tbody>
 </table>
@@ -1419,20 +1447,36 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>lab-ltx-i2v</strong></td>
+<td><strong>ltx-i2v-lab-example</strong></td>
 <td>Image → video frames (~97 @ 24 fps; set start frame)</td>
 </tr>
 <tr>
-<td><strong>lab-ltx-i2v-short</strong></td>
+<td><strong>ltx-i2v-short-lab-example</strong></td>
 <td>Faster I2V: <strong>33</strong> frames @ 24 fps</td>
 </tr>
 <tr>
-<td><strong>lab-ltx-t2v</strong></td>
+<td><strong>ltx-i2v-quick-lab-example</strong></td>
+<td>Ultra-short I2V: <strong>17</strong> frames</td>
+</tr>
+<tr>
+<td><strong>ltx-t2v-lab-example</strong></td>
 <td>Text → video frames (~97 @ 24 fps)</td>
 </tr>
 <tr>
-<td><strong>lab-ltx-t2v-short</strong></td>
+<td><strong>ltx-t2v-short-lab-example</strong></td>
 <td>Faster T2V: <strong>33</strong> frames @ 24 fps</td>
+</tr>
+<tr>
+<td><strong>ltx-t2v-quick-lab-example</strong></td>
+<td>Ultra-short T2V: <strong>17</strong> frames</td>
+</tr>
+<tr>
+<td><strong>ltx-t2v-portrait-lab-example</strong></td>
+<td>Vertical T2V <strong>512×768</strong>, short</td>
+</tr>
+<tr>
+<td><strong>ltx-t2v-landscape-lab-example</strong></td>
+<td>Wide T2V <strong>1024×576</strong>, short</td>
 </tr>
 </tbody>
 </table>
@@ -1447,8 +1491,12 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>lab-flux-to-ltx</strong></td>
-<td>Flux txt2img + handoff notes → load <strong>lab-ltx-i2v</strong> for video frames</td>
+<td><strong>flux-to-ltx-lab-example</strong></td>
+<td>Flux txt2img + handoff notes → load <strong>ltx-i2v-lab-example</strong> for video frames</td>
+</tr>
+<tr>
+<td><strong>flux-to-ltx-short-lab-example</strong></td>
+<td>Same handoff aimed at <strong>ltx-i2v-short-lab-example</strong> / quick I2V</td>
 </tr>
 </tbody>
 </table>
@@ -1458,6 +1506,7 @@
 <details class="abstract">
 <summary>Lab workflow details</summary>
 <ul>
+<li>Name pattern: host files <code>workflows/*-lab-example.json</code> (legacy <code>lab-*</code> names removed)</li>
 <li>Flux CLIP loader type is <strong><code>flux2</code></strong> with <code>qwen_3_8b_fp4mixed</code> + <code>EmptyFlux2LatentImage</code> (simplified <code>KSampler</code>, not the full official advanced sampler subgraph)</li>
 <li>LTX graphs use <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>) and save <strong>frames</strong> via <code>SaveImage</code> (no VideoHelperSuite / VHS required)</li>
 <li><code>download-models</code> also places <code>LTX23_audio_vae_bf16</code> for advanced AV experiments; <strong>lab examples do not wire audio</strong></li>
