@@ -1,8 +1,8 @@
 {
-  "id": "lab-ltx-i2v-short",
-  "revision": 1,
-  "last_node_id": 12,
-  "last_link_id": 18,
+  "id": "flux-txt2img-ultrawide-lab-example",
+  "revision": 2,
+  "last_node_id": 9,
+  "last_link_id": 9,
   "nodes": [
     {
       "id": 1,
@@ -12,7 +12,7 @@
         80
       ],
       "size": [
-        520,
+        360,
         82
       ],
       "flags": {},
@@ -33,21 +33,21 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors",
+        "flux-2-klein-9b-nvfp4.safetensors",
         "default"
       ],
-      "title": "LTX 2.3 distilled FP8"
+      "title": "Flux Klein 9B NVFP4"
     },
     {
       "id": 2,
-      "type": "VAELoader",
+      "type": "CLIPLoader",
       "pos": [
         40,
-        220
+        212
       ],
       "size": [
         360,
-        58
+        106
       ],
       "flags": {},
       "order": 1,
@@ -55,8 +55,8 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "VAE",
-          "type": "VAE",
+          "name": "CLIP",
+          "type": "CLIP",
           "links": [
             2,
             3
@@ -65,23 +65,25 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "VAELoader"
+        "Node name for S&R": "CLIPLoader"
       },
       "widgets_values": [
-        "LTX23_video_vae_bf16.safetensors"
+        "qwen_3_8b_fp4mixed.safetensors",
+        "flux2",
+        "default"
       ],
-      "title": "LTX video VAE"
+      "title": "Qwen3-8B TE (fp4)"
     },
     {
       "id": 3,
-      "type": "CLIPLoader",
+      "type": "VAELoader",
       "pos": [
         40,
-        340
+        368
       ],
       "size": [
-        400,
-        106
+        360,
+        58
       ],
       "flags": {},
       "order": 2,
@@ -89,75 +91,71 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "CLIP",
-          "type": "CLIP",
+          "name": "VAE",
+          "type": "VAE",
           "links": [
-            16,
-            17
+            7
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPLoader"
+        "Node name for S&R": "VAELoader"
       },
       "widgets_values": [
-        "ltx-2.3_text_projection_bf16.safetensors",
-        "ltxv",
-        "default"
+        "flux2-vae.safetensors"
       ],
-      "title": "LTX text projection"
+      "title": "Flux2 VAE"
     },
     {
       "id": 4,
-      "type": "LoadImage",
+      "type": "CLIPTextEncode",
       "pos": [
-        500,
+        480,
         80
       ],
       "size": [
-        320,
-        314
+        420,
+        160
       ],
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        }
+      ],
       "outputs": [
         {
-          "name": "IMAGE",
-          "type": "IMAGE",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
           "links": [
-            5
+            4
           ],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null,
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "example.png",
-        "image"
+        "ultrawide cinematic vista of a desert highway at dusk, anamorphic feel"
       ],
-      "title": "Start frame"
+      "title": "Positive"
     },
     {
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        500,
-        420
+        480,
+        290
       ],
       "size": [
         420,
-        140
+        120
       ],
       "flags": {},
       "order": 4,
@@ -166,13 +164,46 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 16
+          "link": 3
         }
       ],
       "outputs": [
         {
           "name": "CONDITIONING",
           "type": "CONDITIONING",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "Negative"
+    },
+    {
+      "id": 6,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        480,
+        460
+      ],
+      "size": [
+        280,
+        106
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
           "links": [
             6
           ],
@@ -180,182 +211,20 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPTextEncode"
+        "Node name for S&R": "EmptyFlux2LatentImage"
       },
       "widgets_values": [
-        "gentle pan right, short motion test, natural light"
+        1536,
+        640,
+        1
       ],
-      "title": "Motion / prompt"
-    },
-    {
-      "id": 6,
-      "type": "CLIPTextEncode",
-      "pos": [
-        500,
-        600
-      ],
-      "size": [
-        420,
-        100
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 17
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            7
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "blurry, jitter, watermark"
-      ],
-      "title": "Negative"
+      "title": "Latent 1536x640"
     },
     {
       "id": 7,
-      "type": "LTXVImgToVideo",
-      "pos": [
-        980,
-        80
-      ],
-      "size": [
-        320,
-        200
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 6
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 7
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 2
-        },
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 5
-        }
-      ],
-      "outputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "links": [
-            8
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "links": [
-            9
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            10
-          ],
-          "slot_index": 0
-        }
-      ],
-      "title": "LTX Img\u2192Video short",
-      "properties": {
-        "Node name for S&R": "LTXVImgToVideo"
-      },
-      "widgets_values": [
-        768,
-        512,
-        33,
-        1
-      ]
-    },
-    {
-      "id": 8,
-      "type": "LTXVConditioning",
-      "pos": [
-        980,
-        340
-      ],
-      "size": [
-        280,
-        82
-      ],
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 8
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 9
-        }
-      ],
-      "outputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "links": [
-            11
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "links": [
-            12
-          ],
-          "slot_index": 0
-        }
-      ],
-      "title": "LTX frame rate cond",
-      "properties": {
-        "Node name for S&R": "LTXVConditioning"
-      },
-      "widgets_values": [
-        24.0
-      ]
-    },
-    {
-      "id": 9,
       "type": "KSampler",
       "pos": [
-        1340,
+        980,
         80
       ],
       "size": [
@@ -363,7 +232,7 @@
         262
       ],
       "flags": {},
-      "order": 8,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -374,17 +243,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 11
+          "link": 4
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 12
+          "link": 5
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 10
+          "link": 6
         }
       ],
       "outputs": [
@@ -392,7 +261,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            13
+            8
           ],
           "slot_index": 0
         }
@@ -403,7 +272,7 @@
       "widgets_values": [
         42,
         "fixed",
-        20,
+        8,
         1.0,
         "euler",
         "simple",
@@ -412,29 +281,29 @@
       "title": "KSampler"
     },
     {
-      "id": 10,
+      "id": 8,
       "type": "VAEDecode",
       "pos": [
-        1340,
-        400
+        1380,
+        80
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 9,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 13
+          "link": 8
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 3
+          "link": 7
         }
       ],
       "outputs": [
@@ -442,7 +311,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            18
+            9
           ],
           "slot_index": 0
         }
@@ -454,24 +323,24 @@
       "title": "VAE Decode"
     },
     {
-      "id": 12,
+      "id": 9,
       "type": "SaveImage",
       "pos": [
-        1640,
-        80
+        1380,
+        176
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 11,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 18
+          "link": 9
         }
       ],
       "outputs": [],
@@ -479,9 +348,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_i2v_short"
+        "ez_flux_ultrawide"
       ],
-      "title": "Save frames"
+      "title": "Save"
     }
   ],
   "links": [
@@ -489,7 +358,7 @@
       1,
       1,
       0,
-      9,
+      7,
       0,
       "MODEL"
     ],
@@ -497,111 +366,63 @@
       2,
       2,
       0,
-      7,
-      2,
-      "VAE"
+      4,
+      0,
+      "CLIP"
     ],
     [
       3,
       2,
       0,
-      10,
-      1,
-      "VAE"
+      5,
+      0,
+      "CLIP"
     ],
     [
-      5,
+      4,
       4,
       0,
       7,
-      3,
-      "IMAGE"
+      1,
+      "CONDITIONING"
     ],
     [
-      6,
+      5,
       5,
       0,
       7,
-      0,
-      "CONDITIONING"
-    ],
-    [
-      7,
-      6,
-      0,
-      7,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      8,
-      7,
-      0,
-      8,
-      0,
-      "CONDITIONING"
-    ],
-    [
-      9,
-      7,
-      1,
-      8,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      10,
-      7,
-      2,
-      9,
-      3,
-      "LATENT"
-    ],
-    [
-      11,
-      8,
-      0,
-      9,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      12,
-      8,
-      1,
-      9,
       2,
       "CONDITIONING"
     ],
     [
-      13,
-      9,
+      6,
+      6,
       0,
-      10,
+      7,
+      3,
+      "LATENT"
+    ],
+    [
+      7,
+      3,
+      0,
+      8,
+      1,
+      "VAE"
+    ],
+    [
+      8,
+      7,
+      0,
+      8,
       0,
       "LATENT"
     ],
     [
-      16,
-      3,
+      9,
+      8,
       0,
-      5,
-      0,
-      "CLIP"
-    ],
-    [
-      17,
-      3,
-      0,
-      6,
-      0,
-      "CLIP"
-    ],
-    [
-      18,
-      10,
-      0,
-      12,
+      9,
       0,
       "IMAGE"
     ]
@@ -609,9 +430,15 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "ltx-i2v-short",
-    "lab_ltx_tier": "balanced",
-    "lab_note": "Short clip (~33 frames @ 24fps) for faster I2V demos. Frames via SaveImage."
+    "lab_profile": "flux-txt2img-ultrawide",
+    "lab_flux_tier": "fast",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
   },
   "version": 0.4
 }

@@ -68,6 +68,7 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
   Comfy-Org__flux2-klein-9B/                  # companions: Qwen TE + flux2 VAE
   tonera__FLUX.2-klein-9B-Nunchaku/           # optional (INCLUDE_NUNCHAKU)
   Kijai__LTX2.3_comfy_balanced/               # ltx balanced selective
+  Comfy-Org__ltx-2_gemma/                     # LTX Gemma 3 TE (DualCLIP)
   comfy/
     diffusion_models/   # relative symlinks into tier repos above
     text_encoders/
@@ -86,6 +87,7 @@ flowchart TB
   Root --> Comp["Comfy-Org__flux2-klein-9B"]
   Root --> Flux2["tonera__FLUX.2-klein-9B-Nunchaku"]
   Root --> Ltx["Kijai__LTX2.3_comfy_balanced"]
+  Root --> Gemma["Comfy-Org__ltx-2_gemma"]
   Root --> Comfy["comfy/"]
   Root --> Hub["hub/ · optional HF cache"]
   Comfy --> DM["diffusion_models/ · symlinks"]
@@ -130,24 +132,32 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `qwen_3_8b_fp4mixed.safetensors` | `text_encoders/` | Flux TE (Comfy-Org companions; CLIP type **`flux2`**) |
 | `flux2-vae.safetensors` | `vae/` | Flux VAE (Comfy-Org companions) |
 | `ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors` | `diffusion_models/` | LTX balanced UNET |
-| `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection |
+| `gemma_3_12B_it_fp4_mixed.safetensors` | `text_encoders/` | LTX Gemma 3 TE (DualCLIP type **`ltxv`**, with projection) |
+| `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection (DualCLIP second clip) |
 | `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE (used by lab I2V/T2V) |
 | `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (downloaded; **not wired** in lab graphs) |
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/` from host `workflows/`:
+Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern **`*-lab-example.json`**):
 
 | Graph | Notes |
 | --- | --- |
-| `lab-flux-txt2img.json` | 1024² T2I |
-| `lab-flux-txt2img-portrait.json` | 768×1024 |
-| `lab-flux-txt2img-landscape.json` | 1280×720 |
-| `lab-flux-txt2img-quick.json` | 768² / 4 steps smoke |
-| `lab-flux-img2img.json` | I2I |
-| `lab-ltx-i2v.json` / `lab-ltx-i2v-short.json` | I2V frames (~97 / ~33) |
-| `lab-ltx-t2v.json` / `lab-ltx-t2v-short.json` | T2V frames (~97 / ~33) |
-| `lab-flux-to-ltx.json` | Flux T2I + handoff note → LTX I2V |
+| `flux-txt2img-lab-example.json` | 1024² T2I |
+| `flux-txt2img-portrait-lab-example.json` | 768×1024 |
+| `flux-txt2img-landscape-lab-example.json` | 1280×720 |
+| `flux-txt2img-ultrawide-lab-example.json` | 1536×640 |
+| `flux-txt2img-512-lab-example.json` | 512² draft |
+| `flux-txt2img-quick-lab-example.json` | 768² / 4 steps smoke |
+| `flux-txt2img-batch2-lab-example.json` | batch 2 @ 768² |
+| `flux-txt2img-high-steps-lab-example.json` | 1024² / 16 steps |
+| `flux-txt2img-product-lab-example.json` | product / catalog prompt |
+| `flux-img2img-lab-example.json` | I2I denoise 0.65 |
+| `flux-img2img-subtle-lab-example.json` / `flux-img2img-strong-lab-example.json` | denoise 0.35 / 0.85 |
+| `ltx-i2v-lab-example.json` / `-short` / `-quick` | I2V frames (~97 / 33 / 17) |
+| `ltx-t2v-lab-example.json` / `-short` / `-quick` | T2V frames (~97 / 33 / 17) |
+| `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide short T2V |
+| `flux-to-ltx-lab-example.json` / `flux-to-ltx-short-lab-example.json` | Flux T2I + handoff note → LTX I2V |
 
 Lab video graphs write **frames** via `SaveImage` only (no VHS). Audio VAE remains on disk for operators who build joint AV graphs themselves.
 
@@ -174,9 +184,12 @@ HF_TOKEN=hf_...
 | Tier | Transformer (approx) | Plus | Total (approx) |
 | --- | --- | --- | --- |
 | **balanced** | distilled FP8 `…fp8_input_scaled_v3` (~25 GB) | text projection + video/audio VAE | ~28–30 GB |
-| **quality** | distilled BF16 (~42 GB) | same TE + VAEs | ~45–48 GB |
+| **quality** | distilled BF16 (~42 GB) | same projection + VAEs | ~45–48 GB |
+| **gemma** (auto with balanced/quality) | — | `gemma_3_12B_it_fp4_mixed` from `Comfy-Org/ltx-2` | ~9.5 GB |
 
-`status --json` readiness uses `min_gb` 20 (balanced) / 35 (quality) as a floor, not the full monorepo size.
+Lab LTX graphs use **DualCLIPLoader** (`gemma` + `text_projection`, type **`ltxv`**). Projection alone is not a text encoder.
+
+`status --json` readiness uses `min_gb` 20 (balanced) / 35 (quality) / 8 (gemma) as a floor, not the full monorepo size.
 
 ??? tip "Cleanup extra LTX monorepo files"
 
@@ -282,6 +295,7 @@ flowchart TB
 | First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
 | Weights | Still under `MODELS_DIR` via `download-models` |
 | Publish | `publish-image` on `main` / `development` (docker/**); Buildx GHA layer cache |
+| Local build | Optional: `LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start` builds `docker/Dockerfile` instead of pulling — see [Getting Started](getting-started.md#build-the-image-locally-optional) |
 
 ### Image layer cache (high-velocity rebuilds + pulls)
 
@@ -295,8 +309,11 @@ flowchart TB
     | `install-comfy/phase-nodes.sh` or node sources only (no new pip) | No | No | Yes (smaller) |
     | `install-comfy/phase-comfy.sh` / `COMFYUI_REF` bump (may change requirements) | No (torch phase) | **Yes if pip set changes** | Yes |
     | `install-comfy/phase-venv-torch.sh` / CUDA base / apt | Yes | Yes | Yes |
+    | Runtime `apt` only (`gcc`/`g++`/`python3-dev` for Triton JIT) | No | No (venv COPY still cacheable) | No |
 
-    Builder: **COPY only phase modules each `RUN` needs** (`common`+`phase-venv-torch` → `phase-comfy` → `phase-nodes`+`phase-finalize`) with BuildKit pip cache mounts. Runtime: **`COPY /opt/parts/venv` then `/opt/parts/app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+    Builder: **COPY only phase modules each `RUN` needs** (`common`+`phase-venv-torch` → `phase-comfy` → `phase-nodes`+`phase-finalize`) with BuildKit pip cache mounts. Runtime: **`COPY /opt/parts/venv` then `/opt/parts/app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, `pythonpath/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+
+    Runtime installs **`gcc` + `g++` + `python3-dev`** (not full `build-essential`) so PyTorch 2.13 Triton can JIT-compile `cuda_utils` (needs **CC + `Python.h`**) on first `CLIPTextEncode`. That is a small apt layer; it does **not** re-pull multi‑GB torch/venv. If JIT deps are still incomplete, the entrypoint sets `LAB_DISABLE_TORCH_NATIVE_TRITON=1` so torch falls back to eager/cuBLAS.
 
     **Caveat:** the venv layer is the **final** `.venv` after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.
 
@@ -310,6 +327,6 @@ flowchart TB
     | --- | --- | --- |
     | `COMFYUI_REF` | `v0.29.0` | Latest ComfyUI release (2026-07-29). Official README recommends **torch cu130**. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use **core** nodes only (`UNETLoader`, `EmptyFlux2LatentImage`, `LTXV*`, …). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
-    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); lab-flux/lab-ltx graphs do not require it. |
+    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
 
     **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, and `docker/install-comfy/common.sh`, then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).

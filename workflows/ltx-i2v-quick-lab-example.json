@@ -1,6 +1,6 @@
 {
-  "id": "lab-ltx-i2v",
-  "revision": 2,
+  "id": "ltx-i2v-quick-lab-example",
+  "revision": 3,
   "last_node_id": 12,
   "last_link_id": 18,
   "nodes": [
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        220
+        212
       ],
       "size": [
         360,
@@ -74,14 +74,14 @@
     },
     {
       "id": 3,
-      "type": "CLIPLoader",
+      "type": "DualCLIPLoader",
       "pos": [
         40,
-        340
+        320
       ],
       "size": [
         400,
-        106
+        130
       ],
       "flags": {},
       "order": 2,
@@ -99,20 +99,21 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPLoader"
+        "Node name for S&R": "DualCLIPLoader"
       },
       "widgets_values": [
+        "gemma_3_12B_it_fp4_mixed.safetensors",
         "ltx-2.3_text_projection_bf16.safetensors",
         "ltxv",
         "default"
       ],
-      "title": "LTX text projection"
+      "title": "LTX Gemma + text projection"
     },
     {
       "id": 4,
       "type": "LoadImage",
       "pos": [
-        500,
+        620,
         80
       ],
       "size": [
@@ -152,8 +153,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        500,
-        420
+        620,
+        444
       ],
       "size": [
         420,
@@ -183,7 +184,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "smooth camera push-in, cinematic motion, natural lighting"
+        "tiny motion smoke test, slight zoom"
       ],
       "title": "Motion / prompt"
     },
@@ -191,8 +192,8 @@
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        500,
-        600
+        620,
+        634
       ],
       "size": [
         420,
@@ -230,7 +231,7 @@
       "id": 7,
       "type": "LTXVImgToVideo",
       "pos": [
-        980,
+        1120,
         80
       ],
       "size": [
@@ -288,14 +289,14 @@
           "slot_index": 0
         }
       ],
-      "title": "LTX Img\u2192Video condition",
+      "title": "LTX Img\u2192Video quick 17f",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
       "widgets_values": [
         768,
         512,
-        97,
+        17,
         1
       ]
     },
@@ -303,8 +304,8 @@
       "id": 8,
       "type": "LTXVConditioning",
       "pos": [
-        980,
-        340
+        1120,
+        330
       ],
       "size": [
         280,
@@ -355,7 +356,7 @@
       "id": 9,
       "type": "KSampler",
       "pos": [
-        1340,
+        1480,
         80
       ],
       "size": [
@@ -403,7 +404,7 @@
       "widgets_values": [
         42,
         "fixed",
-        20,
+        16,
         1.0,
         "euler",
         "simple",
@@ -415,8 +416,8 @@
       "id": 10,
       "type": "VAEDecode",
       "pos": [
-        1340,
-        400
+        1880,
+        80
       ],
       "size": [
         240,
@@ -457,8 +458,8 @@
       "id": 12,
       "type": "SaveImage",
       "pos": [
-        1640,
-        80
+        1880,
+        176
       ],
       "size": [
         280,
@@ -479,7 +480,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_i2v_frames"
+        "ez_ltx_i2v_quick"
       ],
       "title": "Save frames"
     }
@@ -609,9 +610,9 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "ltx-i2v",
+    "lab_profile": "ltx-i2v-quick",
     "lab_ltx_tier": "balanced",
-    "lab_note": "Requires ComfyUI LTXV core nodes. Saves video frames via SaveImage. Audio VAE is downloaded for advanced AV experiments but not used in this lab graph."
+    "lab_note": "Requires ComfyUI LTXV core nodes. Saves video frames via SaveImage. DualCLIPLoader: gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection (type ltxv)."
   },
   "version": 0.4
 }

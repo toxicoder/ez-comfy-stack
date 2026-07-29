@@ -71,6 +71,161 @@ seed_from_prebuilt() {
 }
 
 #######################################
+# Resolve directory containing libcuda.so.1 for gcc link / dlopen.
+# Globals:
+#   LD_LIBRARY_PATH
+# Arguments:
+#   None
+# Outputs:
+#   Absolute directory path on stdout when found
+# Returns:
+#   0 if found; 1 otherwise
+#######################################
+find_libcuda_dir() {
+  local line path dir cand
+  local -a search_dirs=()
+  local old_ifs="${IFS}"
+  if command -v ldconfig >/dev/null 2>&1; then
+    while IFS= read -r line; do
+      # ldconfig -p lines: "libcuda.so.1 (libc6,…) => /path/libcuda.so.1"
+      path="${line#*=>}"
+      path="${path#"${path%%[![:space:]]*}"}"
+      path="${path%"${path##*[![:space:]]}"}"
+      if [[ -n ${path} && -e ${path} ]]; then
+        dir="$(dirname "${path}")"
+        echo "${dir}"
+        return 0
+      fi
+    done < <(ldconfig -p 2>/dev/null | grep -F 'libcuda.so.1' || true)
+  fi
+  if [[ -n ${LD_LIBRARY_PATH:-} ]]; then
+    IFS=':'
+    # shellcheck disable=SC2206
+    search_dirs=(${LD_LIBRARY_PATH})
+    IFS="${old_ifs}"
+  fi
+  search_dirs+=(
+    /lib/aarch64-linux-gnu
+    /usr/lib/aarch64-linux-gnu
+    /lib/x86_64-linux-gnu
+    /usr/lib/x86_64-linux-gnu
+    /usr/local/nvidia/lib64
+    /usr/local/cuda/compat/lib
+    /usr/local/cuda/lib64
+  )
+  for dir in "${search_dirs[@]}"; do
+    [[ -n ${dir} ]] || continue
+    cand="${dir}/libcuda.so.1"
+    if [[ -e ${cand} ]]; then
+      echo "${dir}"
+      return 0
+    fi
+  done
+  return 1
+}
+
+#######################################
+# Export LIBRARY_PATH / LD_LIBRARY_PATH so Triton can link libcuda at JIT time.
+# Globals:
+#   LIBRARY_PATH, LD_LIBRARY_PATH
+# Arguments:
+#   None
+# Outputs:
+#   Progress logs
+# Returns:
+#   0 always (best-effort)
+#######################################
+ensure_triton_build_env() {
+  local cuda_dir
+  if cuda_dir="$(find_libcuda_dir)"; then
+    export LIBRARY_PATH="${cuda_dir}${LIBRARY_PATH:+:${LIBRARY_PATH}}"
+    case ":${LD_LIBRARY_PATH:-}:" in
+      *":${cuda_dir}:"*) ;;
+      *)
+        export LD_LIBRARY_PATH="${cuda_dir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+        ;;
+    esac
+    ep_log "Triton link env: libcuda dir=${cuda_dir}"
+  else
+    ep_log "Triton link env: libcuda.so.1 not found yet (GPU mount may appear later)"
+  fi
+  return 0
+}
+
+#######################################
+# True when gcc, Python.h, and libcuda look available for Triton cuda_utils JIT.
+# Globals:
+#   None (uses active python on PATH)
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 if deps OK; 1 otherwise
+#######################################
+triton_build_deps_ok() {
+  local py_include
+  if ! command -v gcc >/dev/null 2>&1; then
+    return 1
+  fi
+  if ! command -v python >/dev/null 2>&1 && ! command -v python3 >/dev/null 2>&1; then
+    return 1
+  fi
+  py_include="$(
+    python -c 'import sysconfig; print(sysconfig.get_paths().get("include",""))' 2>/dev/null ||
+      python3 -c 'import sysconfig; print(sysconfig.get_paths().get("include",""))' 2>/dev/null ||
+      true
+  )"
+  if [[ -z ${py_include} || ! -f ${py_include}/Python.h ]]; then
+    return 1
+  fi
+  if ! find_libcuda_dir >/dev/null; then
+    return 1
+  fi
+  return 0
+}
+
+#######################################
+# Prefer working Triton; disable torch python_native Triton when deps missing.
+# Globals:
+#   LAB_DISABLE_TORCH_NATIVE_TRITON, PYTHONPATH
+# Arguments:
+#   None
+# Outputs:
+#   Progress logs; may export env for sitecustomize
+# Returns:
+#   0 always
+#######################################
+configure_torch_native_triton() {
+  local py_root="${LAB_PYTHONPATH_ROOT:-/opt/ez-comfy/pythonpath}"
+  # Always expose sitecustomize so the disable flag can take effect.
+  if [[ -d ${py_root} ]]; then
+    case ":${PYTHONPATH:-}:" in
+      *":${py_root}:"*) ;;
+      *)
+        export PYTHONPATH="${py_root}${PYTHONPATH:+:${PYTHONPATH}}"
+        ;;
+    esac
+  fi
+
+  if [[ ${LAB_DISABLE_TORCH_NATIVE_TRITON:-0} == "1" ]]; then
+    ep_log "LAB_DISABLE_TORCH_NATIVE_TRITON=1 — torch.backends.python_native.triton off"
+    return 0
+  fi
+
+  if triton_build_deps_ok; then
+    ep_log "Triton JIT deps OK (gcc + Python.h + libcuda) — native Triton enabled"
+    export LAB_DISABLE_TORCH_NATIVE_TRITON=0
+    return 0
+  fi
+
+  export LAB_DISABLE_TORCH_NATIVE_TRITON=1
+  ep_log "WARN: Triton JIT deps incomplete — disabling torch.backends.python_native.triton"
+  ep_log "WARN: CLIP still works via eager/cuBLAS. Fix: image with python3-dev+gcc, GPU toolkit mounts"
+  return 0
+}
+
+#######################################
 # Run install, seed, patch, and exec ComfyUI.
 # Globals:
 #   COMFY_HOME, VENV, LAB_*
@@ -147,6 +302,8 @@ main() {
   fi
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
+  ensure_triton_build_env
+  configure_torch_native_triton
   cd "${comfy_home}"
   ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then

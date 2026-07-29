@@ -45,6 +45,35 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "Dockerfile runtime installs gcc g++ for Triton JIT" {
+  local df="${REPO_ROOT}/docker/Dockerfile"
+  # Runtime stage must ship CC + Python.h (Torch 2.13 Triton cuda_utils JIT)
+  run awk '
+    /^FROM .* AS runtime/ { in_rt=1; next }
+    in_rt && /^FROM / { in_rt=0 }
+    in_rt { print }
+  ' "${df}"
+  [ "$status" -eq 0 ]
+  [[ "${output}" == *gcc* ]]
+  [[ "${output}" == *g++* || "${output}" == *g\+\+* || "${output}" == *"g++"* ]]
+  [[ "${output}" == *python3-dev* ]]
+  [[ "${output}" == *pythonpath* ]]
+  # Guard against re-slimming away the compiler/headers without replacement
+  run grep -E 'Triton|C compiler|Failed to find C compiler|Python\.h' "${df}"
+  [ "$status" -eq 0 ]
+}
+
+@test "dockerignore allowlists pythonpath for runtime COPY" {
+  local di="${REPO_ROOT}/docker/.dockerignore"
+  [[ -f ${di} ]]
+  # Whitelist-only context: without these lines, COPY pythonpath/ fails at build
+  run grep -E '^!pythonpath/' "${di}"
+  [ "$status" -eq 0 ]
+  run grep -E '^!pythonpath/\*\*' "${di}"
+  [ "$status" -eq 0 ]
+  [[ -f ${REPO_ROOT}/docker/pythonpath/sitecustomize.py ]]
+}
+
 @test "Dockerfile layer order keeps multi-GB prebuild cache stable" {
   local df="${REPO_ROOT}/docker/Dockerfile"
   # BuildKit syntax for COPY --chmod and cache mounts
@@ -97,6 +126,10 @@ teardown() {
   run grep -E 'install-comfy:/opt/ez-comfy/install-comfy' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'patch_get_free_memory\.py:/opt/ez-comfy/patch_get_free_memory\.py' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'pythonpath:/opt/ez-comfy/pythonpath' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'LAB_DISABLE_TORCH_NATIVE_TRITON' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'cache_from:' "${compose}"
   [ "$status" -eq 0 ]

@@ -67,13 +67,13 @@ flowchart TB
 | GPU | all (1× GB10) |
 | restart | `"no"` |
 | Flux | Klein 9B NVFP4 + Nunchaku |
-| LTX | distilled FP8 balanced |
+| LTX | distilled FP8 balanced + Gemma DualCLIP |
 
 ---
 
 ## Combined pipeline (Flux → LTX)
 
-Text → image → **video frames** in one ComfyUI stack. Lab graphs use `SaveImage` for frames; the LTX **audio VAE** is downloaded for advanced AV work but is not wired into the seeded examples.
+Text → image → **video frames** in one ComfyUI stack. Lab graphs use `SaveImage` for frames; the LTX **audio VAE** is downloaded for advanced AV work but is not wired into the seeded examples. LTX text conditioning uses **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) — not the projection file alone.
 
 ```mermaid
 flowchart LR
@@ -83,7 +83,7 @@ flowchart LR
   LTX --> Frames["Video frames<br/>SaveImage"]
 ```
 
-**Handoff:** load **lab-flux-to-ltx** (or any Flux T2I) → save still → open **lab-ltx-i2v** / **lab-ltx-i2v-short** and set `LoadImage` to that file.
+**Handoff:** load **flux-to-ltx-lab-example** (or any Flux T2I) → save still → open **ltx-i2v-lab-example** / **ltx-i2v-short-lab-example** and set `LoadImage` to that file.
 
 !!! example "Pipeline tips"
 

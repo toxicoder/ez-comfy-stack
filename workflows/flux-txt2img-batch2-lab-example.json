@@ -1,8 +1,8 @@
 {
-  "id": "lab-flux-img2img",
+  "id": "flux-txt2img-batch2-lab-example",
   "revision": 2,
-  "last_node_id": 10,
-  "last_link_id": 10,
+  "last_node_id": 9,
+  "last_link_id": 9,
   "nodes": [
     {
       "id": 1,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        220
+        212
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        380
+        368
       ],
       "size": [
         360,
@@ -94,8 +94,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            7,
-            10
+            7
           ],
           "slot_index": 0
         }
@@ -109,92 +108,10 @@
       "title": "Flux2 VAE"
     },
     {
-      "id": 10,
-      "type": "LoadImage",
-      "pos": [
-        450,
-        450
-      ],
-      "size": [
-        320,
-        314
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            11
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "example.png",
-        "image"
-      ],
-      "title": "Input image"
-    },
-    {
-      "id": 11,
-      "type": "VAEEncode",
-      "pos": [
-        800,
-        450
-      ],
-      "size": [
-        240,
-        46
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "pixels",
-          "type": "IMAGE",
-          "link": 11
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 10
-        }
-      ],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            6
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEEncode"
-      },
-      "widgets_values": [],
-      "title": "Encode"
-    },
-    {
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        450,
+        480,
         80
       ],
       "size": [
@@ -202,7 +119,7 @@
         160
       ],
       "flags": {},
-      "order": 5,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -225,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "same scene, enhanced detail, cinematic lighting"
+        "two variants: neon street food stall at night, rain reflections"
       ],
       "title": "Positive"
     },
@@ -233,15 +150,15 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        450,
-        280
+        480,
+        290
       ],
       "size": [
         420,
-        100
+        120
       ],
       "flags": {},
-      "order": 6,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
@@ -269,10 +186,45 @@
       "title": "Negative"
     },
     {
+      "id": 6,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        480,
+        460
+      ],
+      "size": [
+        280,
+        106
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        768,
+        768,
+        2
+      ],
+      "title": "Latent 768 batch2"
+    },
+    {
       "id": 7,
       "type": "KSampler",
       "pos": [
-        1100,
+        980,
         80
       ],
       "size": [
@@ -280,7 +232,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -318,29 +270,29 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        7,
+        42,
         "fixed",
         8,
         1.0,
         "euler",
         "simple",
-        0.65
+        1.0
       ],
-      "title": "KSampler denoise 0.65"
+      "title": "KSampler"
     },
     {
       "id": 8,
       "type": "VAEDecode",
       "pos": [
-        1100,
-        400
+        1380,
+        80
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 8,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -374,15 +326,15 @@
       "id": 9,
       "type": "SaveImage",
       "pos": [
-        1400,
-        400
+        1380,
+        176
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 9,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -396,7 +348,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_flux_img2img"
+        "ez_flux_batch2"
       ],
       "title": "Save"
     }
@@ -444,7 +396,7 @@
     ],
     [
       6,
-      11,
+      6,
       0,
       7,
       3,
@@ -471,22 +423,6 @@
       8,
       0,
       9,
-      0,
-      "IMAGE"
-    ],
-    [
-      10,
-      3,
-      0,
-      11,
-      1,
-      "VAE"
-    ],
-    [
-      11,
-      10,
-      0,
-      11,
       0,
       "IMAGE"
     ]
@@ -494,8 +430,15 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "flux-img2img",
-    "lab_flux_tier": "fast"
+    "lab_profile": "flux-txt2img-batch2",
+    "lab_flux_tier": "fast",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
   },
   "version": 0.4
 }

@@ -11,12 +11,14 @@ tags: [getting-started, docker, comfyui]
 - What success looks like
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
+- Optional: build the Docker image locally instead of pulling GHCR
 - Example workflows and optional deep-dives
 
 **What this enables**
 
 - A first successful open of ComfyUI at port **8188**
 - Safe model downloads that leave bandwidth for SSH
+- Choosing prebuilt GHCR pull (default) or a local Dockerfile build
 
 ---
 
@@ -25,7 +27,7 @@ tags: [getting-started, docker, comfyui]
 | Goal | Detail |
 | --- | --- |
 | **UI** | ComfyUI at `http://<spark-ip>:8188` |
-| **Workflow** | A seeded **lab-*** graph (image and/or video frames) |
+| **Workflow** | A seeded **\*-lab-example** graph (image and/or video frames) |
 | **Weights** | Flux **fast** + LTX **balanced** under `MODELS_DIR` (default `/mnt/models`) |
 
 **Expect** multi‑GB Hugging Face pulls (throttled by default). First start usually **seeds** from a prebuilt GHCR image; without that image, cold pip can take **10–30+ minutes**.
@@ -188,13 +190,13 @@ Fix any errors **before** downloading multi‑GB models.
 | **Layout** | Weights under `MODELS_DIR` (default `/mnt/models`), compatible with nvidia-dgx-spark-lab |
 | **LTX size** | Selective subset of `Kijai/LTX2.3_comfy` (~**30 GB**), not the full monorepo (~400 GB) |
 
-`download-models` **exits non-zero** until every lab basename is present under `MODELS_DIR/comfy/` (Flux UNET + Qwen TE + `flux2-vae` + LTX distilled FP8 + text projection + video/audio VAEs).
+`download-models` **exits non-zero** until every lab basename is present under `MODELS_DIR/comfy/` (Flux UNET + Qwen TE + `flux2-vae` + LTX distilled FP8 + Gemma TE + text projection + video/audio VAEs).
 
 !!! tip "Bandwidth shaping soft-fail"
 
     If kernel HTB is missing (common on DGX Spark), downloads continue with gentle HF workers and a warning. Use `DOWNLOAD_LIMIT=off` only when you accept SSH risk. See [Download Limit](download-limit.md).
 
-If Comfy shows **Missing Models** on **lab-*** graphs, re-run download and `doctor`. Full basename table: [Models & Cache](models-and-cache.md).
+If Comfy shows **Missing Models** on **\*-lab-example** graphs, re-run download and `doctor`. Full basename table: [Models & Cache](models-and-cache.md).
 
 ---
 
@@ -210,43 +212,104 @@ Open **`http://<spark-ip>:8188`** (or SSH port-forward if needed).
 
 !!! success "Done when"
 
-    Port **8188** responds and you can load a **lab-*** workflow without missing-weight errors.
+    Port **8188** responds and you can load a **\*-lab-example** workflow without missing-weight errors.
+
+### Build the image locally (optional)
+
+By default, `manage.sh start` **pulls** a branch-aligned prebuilt image from GHCR (ComfyUI + PyTorch baked in; **not** FLUX/LTX weights). You can instead **build** `docker/Dockerfile` on the host and still use the same start path.
+
+=== "One-shot env"
+
+    ```bash
+    LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start
+    # type: yes
+    ```
+
+=== "Persist in .env"
+
+    ```bash
+    # in .env (see .env.example)
+    LAB_STACK_FORCE_BUILD=1
+
+    ./scripts/manage.sh start
+    # type: yes
+    ```
+
+| When to use local build | When to stick with GHCR pull |
+| --- | --- |
+| GHCR tag missing, private, or pull denied | Normal first install / fastest path |
+| Rebaking `/opt/comfy-prebuilt` after pin or phase changes | Ops-script-only edits (entrypoint / install / patch) |
+| Developing the image layers themselves | You only need Comfy + weights running |
+
+**Still the same safety path:** type `yes`, host headroom preflight, `restart: "no"`, and weights via `download-models` / `MODELS_DIR`. Local build does **not** skip confirmation or put models inside the image.
+
+!!! warning "Expect a long Docker build"
+
+    With default `EZ_COMFY_PREBUILD=1`, local build installs torch and Comfy into the image and can take **30+ minutes** (multi‑GB wheels). Base layers come from public Docker Hub `nvidia/cuda` (no NGC login by default). Compose may use a previously pulled GHCR image as build cache (`cache_from`) when present.
+
+After a successful prebuild image, first container start **seeds** the `comfy-state` volume from `/opt/comfy-prebuilt` (same as the GHCR path). A thin build (`EZ_COMFY_PREBUILD=0`) or `LAB_FORCE_COLD_INSTALL=1` falls back to cold multi‑GB pip at runtime.
+
+| Variable | Role |
+| --- | --- |
+| `LAB_STACK_FORCE_BUILD=1` | Prefer local `compose up --build` (skip pull-first path) |
+| `LAB_STACK_SKIP_PULL=1` | Do not `docker pull`; start falls through to local `compose --build` |
+| `EZ_COMFY_PREBUILD=1` (default) | Bake Comfy + torch into the image during build |
+| `EZ_COMFY_PREBUILD=0` | Thin image → cold pip at first container start |
+| `EZ_COMFY_IMAGE` | Tag for the pulled or built image (branch default if unset) |
+
+Pull failures already fall back to local build automatically. Force-build is for when you **want** a rebuild even if GHCR is available.
+
+Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-container-image-ghcr). Recovery rows: [Troubleshooting](troubleshooting.md).
 
 ### Example workflows
 
-After `download-models` + `start`, open ComfyUI and load from `user/default/workflows/` (seeded from host `workflows/`):
+After `download-models` + `start`, open ComfyUI and load from `user/default/workflows/` (seeded from host `workflows/`). Filenames end with **`-lab-example`**.
 
 === "Image (Flux)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **lab-flux-txt2img** | Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE) |
-    | **lab-flux-txt2img-portrait** | Text → image **768×1024** portrait |
-    | **lab-flux-txt2img-landscape** | Text → image **1280×720** landscape |
-    | **lab-flux-txt2img-quick** | Smoke test: **768²**, **4** steps |
-    | **lab-flux-img2img** | Image → image (set LoadImage input) |
+    | **flux-txt2img-lab-example** | Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE) |
+    | **flux-txt2img-portrait-lab-example** | Text → image **768×1024** portrait |
+    | **flux-txt2img-landscape-lab-example** | Text → image **1280×720** landscape |
+    | **flux-txt2img-ultrawide-lab-example** | Text → image **1536×640** cinematic wide |
+    | **flux-txt2img-512-lab-example** | Fast draft: **512²** |
+    | **flux-txt2img-quick-lab-example** | Smoke test: **768²**, **4** steps |
+    | **flux-txt2img-batch2-lab-example** | Batch size **2** at 768² |
+    | **flux-txt2img-high-steps-lab-example** | 1024² with **16** steps |
+    | **flux-txt2img-product-lab-example** | Product / catalog prompt + square |
+    | **flux-img2img-lab-example** | Image → image, denoise **0.65** (set LoadImage) |
+    | **flux-img2img-subtle-lab-example** | Light edit, denoise **0.35** |
+    | **flux-img2img-strong-lab-example** | Creative remix, denoise **0.85** |
 
 === "Video frames (LTX)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **lab-ltx-i2v** | Image → video frames (~97 @ 24 fps; set start frame) |
-    | **lab-ltx-i2v-short** | Faster I2V: **33** frames @ 24 fps |
-    | **lab-ltx-t2v** | Text → video frames (~97 @ 24 fps) |
-    | **lab-ltx-t2v-short** | Faster T2V: **33** frames @ 24 fps |
+    | **ltx-i2v-lab-example** | Image → video frames (~97 @ 24 fps; set start frame) |
+    | **ltx-i2v-short-lab-example** | Faster I2V: **33** frames @ 24 fps |
+    | **ltx-i2v-quick-lab-example** | Ultra-short I2V: **17** frames |
+    | **ltx-t2v-lab-example** | Text → video frames (~97 @ 24 fps) |
+    | **ltx-t2v-short-lab-example** | Faster T2V: **33** frames @ 24 fps |
+    | **ltx-t2v-quick-lab-example** | Ultra-short T2V: **17** frames |
+    | **ltx-t2v-portrait-lab-example** | Vertical T2V **512×768**, short |
+    | **ltx-t2v-landscape-lab-example** | Wide T2V **1024×576**, short |
 
 === "Combined"
 
     | Workflow | What it does |
     | --- | --- |
-    | **lab-flux-to-ltx** | Flux txt2img + handoff notes → load **lab-ltx-i2v** for video frames |
+    | **flux-to-ltx-lab-example** | Flux txt2img + handoff notes → load **ltx-i2v-lab-example** for video frames |
+    | **flux-to-ltx-short-lab-example** | Same handoff aimed at **ltx-i2v-short-lab-example** / quick I2V |
 
 ??? abstract "Lab workflow details"
 
+    - Name pattern: host files `workflows/*-lab-example.json` (legacy `lab-*` names removed)
     - Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
-    - LTX graphs save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
+    - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) and save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
     - `download-models` also places `LTX23_audio_vae_bf16` for advanced AV experiments; **lab examples do not wire audio**
     - Lab graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
+    - Runtime image includes **`gcc`/`g++`** and **`python3-dev`** so PyTorch 2.13 Triton can JIT `cuda_utils` on first CLIP encode (fallback: `LAB_DISABLE_TORCH_NATIVE_TRITON=1`)
     - **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)
 
 ---
@@ -292,7 +355,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     Change those files on the host, then restart the stack — **no multi‑GB image rebuild**.
 
-    Rebuild (`LAB_STACK_FORCE_BUILD=1` or publish) only when you need a new baked `/opt/comfy-prebuilt` tree (torch / Comfy / nodes).
+    Rebuild only when you need a new baked `/opt/comfy-prebuilt` tree (torch / Comfy / nodes): [build the image locally](getting-started.md#build-the-image-locally-optional) or publish.
 
     See [Models & Cache](models-and-cache.md#image-layer-cache-high-velocity-rebuilds-pulls) for what invalidates which layers.
 

@@ -1,6 +1,6 @@
 {
-  "id": "lab-flux-txt2img-portrait",
-  "revision": 1,
+  "id": "flux-txt2img-quick-lab-example",
+  "revision": 2,
   "last_node_id": 9,
   "last_link_id": 9,
   "nodes": [
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        220
+        212
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        380
+        368
       ],
       "size": [
         360,
@@ -111,7 +111,7 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        450,
+        480,
         80
       ],
       "size": [
@@ -142,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "portrait photo of a traveler with a red backpack, soft window light, detailed face, 85mm"
+        "quick smoke test: red cube on a wooden table, studio light"
       ],
       "title": "Positive"
     },
@@ -150,8 +150,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        450,
-        280
+        480,
+        290
       ],
       "size": [
         420,
@@ -189,8 +189,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        450,
-        450
+        480,
+        460
       ],
       "size": [
         280,
@@ -215,16 +215,16 @@
       },
       "widgets_values": [
         768,
-        1024,
+        768,
         1
       ],
-      "title": "Latent 768x1024"
+      "title": "Latent 768x768"
     },
     {
       "id": 7,
       "type": "KSampler",
       "pos": [
-        920,
+        980,
         80
       ],
       "size": [
@@ -272,7 +272,7 @@
       "widgets_values": [
         42,
         "fixed",
-        8,
+        4,
         1.0,
         "euler",
         "simple",
@@ -284,8 +284,8 @@
       "id": 8,
       "type": "VAEDecode",
       "pos": [
-        920,
-        400
+        1380,
+        80
       ],
       "size": [
         240,
@@ -326,8 +326,8 @@
       "id": 9,
       "type": "SaveImage",
       "pos": [
-        1220,
-        400
+        1380,
+        176
       ],
       "size": [
         280,
@@ -348,7 +348,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_flux_portrait"
+        "ez_flux_quick"
       ],
       "title": "Save"
     }
@@ -430,8 +430,15 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "flux-txt2img-portrait",
-    "lab_flux_tier": "fast"
+    "lab_profile": "flux-txt2img-quick",
+    "lab_flux_tier": "fast",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
   },
   "version": 0.4
 }

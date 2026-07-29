@@ -10,7 +10,8 @@
 #   text_encoders, vae) under $MODELS_DIR/comfy.
 #
 #   By default each tier pulls a selective subset of Kijai/LTX2.3_comfy
-#   (one transformer + text encoder + VAEs, ~25–50 GB), not the full monorepo
+#   (one transformer + text projection + VAEs) plus the Gemma 3 TE companion
+#   from Comfy-Org/ltx-2 (DualCLIP with type ltxv). Not the full monorepo
 #   (~400 GB of every precision/variant). Set LTX_FULL_REPO=1 to pull everything.
 #
 # Audience:
@@ -18,7 +19,7 @@
 #   manage.sh download-models for throttled sequential flux+ltx pulls.
 #
 # Usage:
-#   ./scripts/utilities/download-ltx.sh status [--tier balanced|quality|all] [--json]
+#   ./scripts/utilities/download-ltx.sh status [--tier balanced|quality|gemma|all] [--json]
 #   ./scripts/utilities/download-ltx.sh run [--tier ...]
 #   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
 #
@@ -66,6 +67,8 @@ CLEANUP_YES=0
 tier_repo() {
   case "${1}" in
     balanced | quality) echo "Kijai/LTX2.3_comfy" ;;
+    # Gemma 3 TE for DualCLIPLoader type=ltxv (required with text_projection)
+    gemma) echo "Comfy-Org/ltx-2" ;;
     *) echo "" ;;
   esac
 }
@@ -83,10 +86,12 @@ tier_repo() {
 #######################################
 tier_min_gb() {
   case "${1}" in
-    # distilled fp8 transformer (~25 GB) + TE + VAEs ≈ 28–30 GB
+    # distilled fp8 transformer (~25 GB) + projection + VAEs ≈ 28–30 GB
     balanced) echo 20 ;;
-    # distilled bf16 transformer (~42 GB) + TE + VAEs ≈ 45–48 GB
+    # distilled bf16 transformer (~42 GB) + projection + VAEs ≈ 45–48 GB
     quality) echo 35 ;;
+    # gemma_3_12B_it_fp4_mixed ≈ 9.45 GB
+    gemma) echo 8 ;;
     *) echo 0 ;;
   esac
 }
@@ -103,7 +108,7 @@ tier_min_gb() {
 #   0
 #######################################
 tier_include_patterns() {
-  # Shared TE + VAEs for Comfy split loaders (not full monorepo).
+  # Shared projection + VAEs for Comfy split loaders (not full monorepo).
   local -a shared=(
     "text_encoders/ltx-2.3_text_projection_bf16.safetensors"
     "vae/LTX23_video_vae_bf16.safetensors"
@@ -121,6 +126,11 @@ tier_include_patterns() {
       printf '%s\n' \
         "diffusion_models/ltx-2.3-22b-distilled_transformer_only_bf16.safetensors" \
         "${shared[@]}"
+      ;;
+    gemma)
+      # Official Comfy-Org LTX-2 Gemma 3 TE (DualCLIP pair with Kijai text_projection).
+      printf '%s\n' \
+        "split_files/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors"
       ;;
     *)
       return 0
@@ -180,7 +190,11 @@ tier_size_gb() {
 #######################################
 tiers_to_process() {
   case "$TIER" in
-    all) echo "balanced quality" ;;
+    # Gemma TE is required for runnable LTX lab graphs (DualCLIP type ltxv)
+    all) echo "balanced quality gemma" ;;
+    balanced) echo "balanced gemma" ;;
+    quality) echo "quality gemma" ;;
+    gemma) echo "gemma" ;;
     *) echo "${TIER}" ;;
   esac
 }
@@ -208,8 +222,9 @@ parse_args() {
       --yes | -y) CLEANUP_YES=1 ;;
       status | run | cleanup) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--tier balanced|quality|all] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier balanced|quality|gemma|all] [--json]" >&2
         echo "  cleanup options: --dry-run (default) | --yes  delete non-selective weights" >&2
+        echo "  balanced/quality auto-include gemma (Comfy-Org/ltx-2 TE for DualCLIP)" >&2
         exit 0
         ;;
       *)
@@ -271,8 +286,8 @@ tier_files_ready() {
   if [[ ! -d ${dir} ]]; then
     return 1
   fi
-  # Full monorepo mode: size floor only (no fixed include list)
-  if [[ ${LTX_FULL_REPO:-0} == "1" ]]; then
+  # Full monorepo mode: size floor only (no fixed include list); never for gemma
+  if [[ ${LTX_FULL_REPO:-0} == "1" && ${tier} != "gemma" ]]; then
     size="$(tier_size_gb "${dir}")"
     min="$(tier_min_gb "${tier}")"
     awk "BEGIN {exit !($size >= $min)}"
@@ -451,7 +466,8 @@ cmd_run() {
       continue
     fi
     include_args=()
-    if [[ ${LTX_FULL_REPO:-0} == "1" ]]; then
+    # Full monorepo escape hatch is only for Kijai/LTX2.3_comfy, not Gemma companion
+    if [[ ${LTX_FULL_REPO:-0} == "1" && ${tier} != "gemma" ]]; then
       log "Downloading full ${repo} snapshot (tier: ${tier}; LTX_FULL_REPO=1)…"
       log "Full monorepo is ~400 GB (every precision/variant). Prefer selective default."
     else
@@ -466,7 +482,9 @@ cmd_run() {
         fail=$((fail + 1))
         continue
       fi
-      log "Tip: LTX_FULL_REPO=1 pulls the entire ~400 GB repo (not recommended)"
+      if [[ ${tier} != "gemma" ]]; then
+        log "Tip: LTX_FULL_REPO=1 pulls the entire ~400 GB Kijai monorepo (not recommended)"
+      fi
     fi
     # Empty include_args must not expand under set -u (bash unbound array).
     local dl_rc=0
