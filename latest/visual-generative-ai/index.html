@@ -989,7 +989,7 @@
   Image --&gt; LTX["LTX I2V&lt;br/&gt;balanced · distilled FP8"]
   LTX --&gt; Frames["Video frames&lt;br/&gt;SaveImage"]
   LTX --&gt; Mp4["MP4 preview&lt;br/&gt;VHS_VideoCombine"]</code></pre>
-<p><strong>Handoff:</strong> load <strong>flux-to-ltx-lab-example</strong> (or any Flux T2I) → save still → open <strong>ltx-i2v-lab-example</strong> / <strong>ltx-i2v-short-lab-example</strong> and set <code>LoadImage</code> to that file → Queue → watch <strong>Save video (MP4)</strong> on the LTX graph.</p>
+<p><strong>Handoff:</strong> load <strong>flux-to-ltx-lab-example</strong> (or any Flux T2I) → save still → open <strong>ltx-i2v-lab-example</strong> (~10 s) or <strong>ltx-i2v-30s-lab-example</strong> / <strong>ltx-i2v-60s-lab-example</strong> and set <code>LoadImage</code> to that file → Queue → watch <strong>Save video (MP4)</strong> on the LTX graph. I2V graphs also queue out of the box on Comfy’s default <strong>example.png</strong> (sketch→living character demos).</p>
 <div class="admonition example">
 <p class="admonition-title">Pipeline tips</p>
 <ol>
