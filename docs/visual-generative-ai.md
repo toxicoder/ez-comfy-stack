@@ -81,16 +81,17 @@ flowchart LR
   Flux --> Image["Still image"]
   Image --> LTX["LTX I2V<br/>balanced · distilled FP8"]
   LTX --> Frames["Video frames<br/>SaveImage"]
+  LTX --> Mp4["MP4 preview<br/>VHS_VideoCombine"]
 ```
 
-**Handoff:** load **flux-to-ltx-lab-example** (or any Flux T2I) → save still → open **ltx-i2v-lab-example** / **ltx-i2v-short-lab-example** and set `LoadImage` to that file → queue for **frames** → stitch to MP4 on the host (lab does not emit video containers).
+**Handoff:** load **flux-to-ltx-lab-example** (or any Flux T2I) → save still → open **ltx-i2v-lab-example** / **ltx-i2v-short-lab-example** and set `LoadImage` to that file → Queue → watch **Save video (MP4)** on the LTX graph.
 
 !!! example "Pipeline tips"
 
     1. Download **flux fast** + **ltx balanced** first
     2. Prefer keeping both model sets loaded between T2I and I2V
     3. Avoid concurrent large LLM containers on the same Spark
-    4. LTX lab graphs write **PNG sequences** via `SaveImage` (not MP4). Encode with `ffmpeg` at 24 fps, or install VHS yourself — see [Getting Started → Frames → playable video](getting-started.md#frames-playable-video-ltx)
+    4. LTX lab graphs emit **MP4** via **VideoHelperSuite** (`VHS_VideoCombine`, 24 fps) plus optional PNG frames — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx)
     5. Prompting: Flux wants Qwen-style prose (subject → light → camera); LTX wants chronological motion. Every **\*-lab-example** canvas has an operator **Note**
 
 ---

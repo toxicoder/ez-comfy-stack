@@ -27,6 +27,7 @@
 #
 # Pins (validated 2026-07-29 — bump deliberately; see docs/models-and-cache.md):
 #   COMFYUI_REF=v0.29.0  COMFYUI_MANAGER_REF=4.2.2  COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
+#   COMFYUI_VHS_REF= (empty = VideoHelperSuite main; required for LTX lab MP4)
 
 ARG CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-devel-ubuntu24.04
 ARG CUDA_RUNTIME_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
@@ -56,13 +57,15 @@ ARG EZ_COMFY_PREBUILD=1
 ARG COMFYUI_REF=v0.29.0
 ARG COMFYUI_MANAGER_REF=4.2.2
 ARG COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
+ARG COMFYUI_VHS_REF=
 ENV COMFY_HOME=/opt/comfy-prebuilt \
     MODELS_ROOT=/models \
     LAB_PREBUILT_ROOT=/opt/comfy-prebuilt \
     LAB_PARTS_ROOT=/opt/parts \
     COMFYUI_REF=${COMFYUI_REF} \
     COMFYUI_MANAGER_REF=${COMFYUI_MANAGER_REF} \
-    COMFYUI_NUNCHAKU_NODE_REF=${COMFYUI_NUNCHAKU_NODE_REF}
+    COMFYUI_NUNCHAKU_NODE_REF=${COMFYUI_NUNCHAKU_NODE_REF} \
+    COMFYUI_VHS_REF=${COMFYUI_VHS_REF}
 
 # Phase pair 1: only torch-stable module inputs (nodes edits must not bust this)
 COPY --chmod=755 install-comfy/common.sh install-comfy/phase-venv-torch.sh \
@@ -122,9 +125,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
 #   - gcc/g++  — compile cuda_utils.c (else "Failed to find C compiler")
 #   - python3-dev — Python.h for that extension (else CalledProcessError from gcc)
 # Not full build-essential: small apt layer; does not bust multi-GB venv cache.
+# ffmpeg: preferred by VideoHelperSuite (imageio-ffmpeg is pip fallback)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git python3 python3-pip python3-venv python3-dev \
     gcc g++ \
+    ffmpeg \
     curl ca-certificates libgl1 libglib2.0-0 rsync \
     && mkdir -p /opt/ez-comfy/workflows /models /opt/ez-comfy/install-comfy \
     && rm -rf /var/lib/apt/lists/*

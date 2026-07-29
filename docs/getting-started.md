@@ -12,7 +12,7 @@ tags: [getting-started, docker, comfyui]
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- Example workflows, prompting tips, and frames → playable video
+- Example workflows, prompting tips, and watching LTX MP4 output
 - Optional deep-dives
 
 **What this enables**
@@ -20,7 +20,7 @@ tags: [getting-started, docker, comfyui]
 - A first successful open of ComfyUI at port **8188**
 - Safe model downloads that leave bandwidth for SSH
 - Choosing prebuilt GHCR pull (default) or a local Dockerfile build
-- Correct Flux / LTX prompting and turning LTX frame sequences into MP4
+- Correct Flux / LTX prompting and easy LTX video preview (VHS MP4)
 
 ---
 
@@ -326,11 +326,11 @@ Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer edit
     - Negatives should target **temporal** artifacts (morphing, flicker, jitter, stutter), not generic SD junk
     - Light ambient-audio language is optional; lab does **not** save audio tracks
 
-### Frames → playable video (LTX)
+### Watch the video (LTX)
 
-!!! important "Lab LTX graphs save frames, not MP4"
+!!! tip "Primary output is MP4"
 
-    Seeded **ltx-*** examples write a **PNG sequence** with `SaveImage` (prefixes like `ez_ltx_i2v_frames`). That is intentional: the stack does **not** install VideoHelperSuite (VHS). You still get real motion—you assemble the video on the host (or install VHS yourself).
+    Seeded **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**, and find `ez_ltx_*_video_*.mp4` under Comfy’s **output/** folder (on the `ez-comfy-state` volume). PNG frames are still written via `SaveImage` for inspection.
 
 | Tier | Frames | FPS | ≈ duration |
 | --- | --- | --- | --- |
@@ -338,24 +338,24 @@ Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer edit
 | short | 33 | 24 | ~1.4 s |
 | quick | 17 | 24 | ~0.7 s |
 
-After Queue completes, find the batch in Comfy’s **output** folder (container volume / host mapping). Stitch at **24 fps**:
+Optional offline stitch of PNG frames only (if you need a host-side re-encode):
 
 ```bash
-# From the directory that contains the PNGs (adjust prefix to match SaveImage)
 ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_*_*.png' \
   -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4
 ```
 
-Optional in-Comfy MP4: install [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) yourself and add **`VHS_VideoCombine`** after video `VAEDecode`. Missing VHS is expected on a stock lab image — see [Troubleshooting](troubleshooting.md).
+If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see [Troubleshooting](troubleshooting.md).
 
 ??? abstract "Lab workflow details"
 
     - Name pattern: host files `workflows/*-lab-example.json` (legacy `lab-*` names removed)
     - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
     - Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
-    - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) and save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
-    - LTX-2.3 is **joint AV**: lab graphs load `LTX23_audio_vae_bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`, then **separate** for video `VAEDecode`. Audio is sampled as empty noise (not saved); omitting empty audio causes `reshape … [1, 0, 32, -1]`
-    - Lab graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
+    - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps), and still save **frames** via `SaveImage`
+    - Stack installs **ComfyUI-VideoHelperSuite** (required) plus runtime **`ffmpeg`** (imageio-ffmpeg pip is fallback)
+    - LTX-2.3 is **joint AV**: lab graphs load `LTX23_audio_vae_bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`, then **separate** for video `VAEDecode`. Audio is sampled as empty noise (not saved into VHS); omitting empty audio causes `reshape … [1, 0, 32, -1]`
+    - Lab Flux graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
     - Runtime image includes **`gcc`/`g++`** and **`python3-dev`** so PyTorch 2.13 Triton can JIT `cuda_utils` on first CLIP encode (fallback: `LAB_DISABLE_TORCH_NATIVE_TRITON=1`)
     - **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)
 

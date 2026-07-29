@@ -25,6 +25,7 @@
 #   COMFYUI_REF — ComfyUI git pin (default v0.29.0; empty = default branch)
 #   COMFYUI_MANAGER_REF — Manager pin (default 4.2.2)
 #   COMFYUI_NUNCHAKU_NODE_REF — nunchaku node pin (default v1.2.1)
+#   COMFYUI_VHS_REF — VideoHelperSuite git ref (default empty = main; required for LTX MP4)
 #   LAB_PACKAGE_PARTS=1 — split tree into /opt/parts/{venv,app} (Docker only)
 #
 set -euo pipefail
@@ -165,7 +166,7 @@ main() {
     phase_comfy
     log "step 3–5 done"
 
-    step 6 "${total}" "Install custom nodes (Manager, Nunchaku)"
+    step 6 "${total}" "Install custom nodes (Manager, VideoHelperSuite, Nunchaku)"
     step 7 "${total}" "Optional SageAttention (fail-soft on aarch64)"
     step 8 "${total}" "Optional nunchaku package (fail-soft)"
     phase_nodes
@@ -181,11 +182,13 @@ main() {
     activate_venv
     step 1 "${total}" "Refresh model directory links"
     link_all_models
-    step 2 "${total}" "Remove wrong PyPI nunchaku if present"
+    step 2 "${total}" "Ensure VideoHelperSuite (LTX lab MP4)"
+    ensure_lab_video_nodes || warn "VideoHelperSuite refresh failed — LTX lab MP4 may be unavailable"
+    step 3 "${total}" "Remove wrong PyPI nunchaku if present"
     cleanup_wrong_nunchaku
-    step 3 "${total}" "Apply Spark free-memory patch"
+    step 4 "${total}" "Apply Spark free-memory patch"
     apply_free_memory_patch
-    step 4 "${total}" "Refresh complete"
+    step 5 "${total}" "Refresh complete"
   fi
 
   log "══ Install complete ══ total elapsed $(install_format_elapsed "$(install_elapsed_s)")"

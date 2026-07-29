@@ -44,10 +44,14 @@ teardown() {
     # No Z-Image pack basenames as model widgets
     run grep -E 'z_image_turbo|qwen_3_4b|"ae\.safetensors"' "${wf}"
     [ "${status}" -ne 0 ]
-    # No optional VHS *nodes* (not installed by install-comfy.sh).
-    # Operator Notes may mention VHS/ffmpeg for frames→MP4 guidance.
-    run grep -E '"type"[[:space:]]*:[[:space:]]*"VHS_VideoCombine"' "${wf}"
-    [ "${status}" -ne 0 ]
+    # Flux graphs must not require VHS; LTX graphs must ship VHS_VideoCombine (MP4).
+    if [[ $(basename "${wf}") == ltx-* ]]; then
+      run grep -E '"type"[[:space:]]*:[[:space:]]*"VHS_VideoCombine"' "${wf}"
+      [ "${status}" -eq 0 ]
+    else
+      run grep -E '"type"[[:space:]]*:[[:space:]]*"VHS_VideoCombine"' "${wf}"
+      [ "${status}" -ne 0 ]
+    fi
     # Node AABB must not overlap (20px pad) — UI layout guard
     run python3 -c "
 import json
@@ -252,7 +256,7 @@ assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][0]==102
   [ "${status}" -eq 0 ]
 }
 
-@test "lab examples have operator Notes, non-empty prompts, LTX frames-to-video guidance" {
+@test "lab examples have operator Notes, non-empty prompts, LTX VHS MP4 output" {
   local dir="${REPO_ROOT}/workflows"
   local wf
   shopt -s nullglob
@@ -298,11 +302,26 @@ assert isinstance(d.get('extra', {}).get('lab_note'), str) and d['extra']['lab_n
     run python3 -c "
 import json
 d = json.load(open('${dir}/${wf}'))
+vhs = [n for n in d['nodes'] if n.get('type') == 'VHS_VideoCombine']
+assert len(vhs) == 1, '${wf}: expected exactly one VHS_VideoCombine'
+wv = vhs[0].get('widgets_values') or {}
+assert isinstance(wv, dict), '${wf}: VHS widgets_values must be a dict'
+assert wv.get('format') == 'video/h264-mp4', '${wf}: expected video/h264-mp4'
+assert float(wv.get('frame_rate', 0)) == 24, '${wf}: expected frame_rate 24'
+assert wv.get('save_output') is True, '${wf}: save_output must be true'
+assert wv.get('filename_prefix'), '${wf}: missing filename_prefix'
+# IMAGE from VAEDecode must reach VHS
+decode_ids = {n['id'] for n in d['nodes'] if n.get('type') == 'VAEDecode'}
+vhs_id = vhs[0]['id']
+assert any(
+    isinstance(L, list) and len(L) >= 5 and L[1] in decode_ids and L[3] == vhs_id and L[5] == 'IMAGE'
+    for L in d.get('links', [])
+), '${wf}: VHS must be linked from VAEDecode IMAGE'
 notes = [n for n in d['nodes'] if n.get('type') == 'Note']
 body = '\n'.join((n.get('widgets_values') or [''])[0] for n in notes)
-assert 'SaveImage' in body, '${wf}: Note must mention SaveImage frames'
-assert 'ffmpeg' in body, '${wf}: Note must document ffmpeg frames→video'
-assert 'MP4' in body or 'mp4' in body or 'playable' in body.lower()
+assert 'VHS' in body or 'VideoCombine' in body or 'Save video' in body, '${wf}: Note must mention VHS/video'
+assert 'MP4' in body or 'mp4' in body, '${wf}: Note must mention MP4'
+assert 'SaveImage' in body or 'frames' in body.lower(), '${wf}: Note should still mention frames'
 "
     [ "${status}" -eq 0 ]
   done

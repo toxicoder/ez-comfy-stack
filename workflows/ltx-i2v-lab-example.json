@@ -1,8 +1,8 @@
 {
   "id": "ltx-i2v-lab-example",
-  "revision": 5,
-  "last_node_id": 17,
-  "last_link_id": 24,
+  "revision": 6,
+  "last_node_id": 18,
+  "last_link_id": 25,
   "nodes": [
     {
       "id": 1,
@@ -443,7 +443,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            18
+            18,
+            25
           ],
           "slot_index": 0
         }
@@ -652,7 +653,7 @@
       ],
       "size": [
         960,
-        340
+        360
       ],
       "flags": {},
       "order": 17,
@@ -663,9 +664,73 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## LTX I2V ~97 frames @ 24 fps (lab)\n\nWhat this graph does: Image\u2192video frames (~97 @ 24 fps \u2248 4 s). Set LoadImage to your still.\nModels: ltx distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 20 steps \u00b7 97 frames @ 24.0 fps \u2248 4.0 s \u00b7 768\u00d7512.\nSaveImage prefix: ez_ltx_i2v_frames (frame sequence).\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion), not a static caption alone.\n\u2022 I2V: restate the still\u2019s content, then one clear camera move + micro-motion; keep identity stable.\n\u2022 T2V: chronological shot description; one primary camera move for short clips.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) when you experiment with CFG > 1.\n\nHow to run:\n1. Set LoadImage to your start frame (e.g. Flux bicycle still).\n2. Review Motion / prompt; queue.\n3. Encode frames \u2192 MP4 with ffmpeg (below).\n\nOUTPUT = FRAMES, NOT MP4\nThis lab saves a PNG sequence via SaveImage (prefix above). VideoHelperSuite (VHS) is NOT installed.\n\nTo get a playable video on the host (24 fps lab default):\n  ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_i2v_frames_*.png' \\\n    -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4\nFind frames under Comfy\u2019s output folder (container volume / mapped host path).\nOptional in-Comfy MP4: install ComfyUI-VideoHelperSuite and add VHS_VideoCombine after VAEDecode.\nAudio: LTX-2.3 uses empty joint-AV audio latents; lab does not decode/save audio.\n\nJoint AV note: LTXVEmptyLatentAudio + LTXVConcatAVLatent are required for KSampler; LTXVSeparateAVLatent then video VAEDecode + SaveImage (audio latent unused)."
+        "## ltx-i2v (lab)\n\nWhat this graph does: Image\u2192video (~97f). Set LoadImage to your still.\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 97 frames @ 24 fps \u2248 4.0 s \u00b7 768\u00d7512.\n\nPRIMARY OUTPUT \u2014 MP4 (easy to watch)\n\u2022 Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n\u2022 After Queue: open that node for an inline video preview.\n\u2022 File also under ComfyUI/output/ as ez_ltx_i2v_video_*.mp4 (comfy-state volume).\n\u2022 Frames still saved via SaveImage prefix ez_ltx_i2v_frames for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion).\n\u2022 I2V: restate the still, then one clear camera move + micro-motion; keep identity stable.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Set LoadImage to your start frame (e.g. Flux still).\n2. Review Motion / prompt; Queue.\n3. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames."
       ],
-      "title": "LTX I2V ~97 frames @ 24 fps (lab) \u2014 operator note"
+      "title": "Operator note \u2014 video output"
+    },
+    {
+      "id": 18,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        2520.0,
+        80
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 25
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "ez_ltx_i2v_video",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 18,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "title": "Save video (MP4)"
     }
   ],
   "links": [
@@ -820,6 +885,14 @@
       10,
       0,
       "LATENT"
+    ],
+    [
+      25,
+      10,
+      0,
+      18,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [],
@@ -827,9 +900,9 @@
   "extra": {
     "lab_profile": "ltx-i2v",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## LTX I2V ~97 frames @ 24 fps (lab)\n\nWhat this graph does: Image\u2192video frames (~97 @ 24 fps \u2248 4 s). Set LoadImage to your still.\nModels: ltx distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 20 steps \u00b7 97 frames @ 24.0 fps \u2248 4.0 s \u00b7 768\u00d7512.\nSaveImage prefix: ez_ltx_i2v_frames (frame sequence).\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion), not a static caption alone.\n\u2022 I2V: restate the still\u2019s content, then one clear camera move + micro-motion; keep identity stable.\n\u2022 T2V: chronological shot description; one primary camera move for short clips.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) when you experiment with CFG > 1.\n\nHow to run:\n1. Set LoadImage to your start frame (e.g. Flux bicycle still).\n2. Review Motion / prompt; queue.\n3. Encode frames \u2192 MP4 with ffmpeg (below).\n\nOUTPUT = FRAMES, NOT MP4\nThis lab saves a PNG sequence via SaveImage (prefix above). VideoHelperSuite (VHS) is NOT installed.\n\nTo get a playable video on the host (24 fps lab default):\n  ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_i2v_frames_*.png' \\\n    -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4\nFind frames under Comfy\u2019s output folder (container volume / mapped host path).\nOptional in-Comfy MP4: install ComfyUI-VideoHelperSuite and add VHS_VideoCombine after VAEDecode.\nAudio: LTX-2.3 uses empty joint-AV audio latents; lab does not decode/save audio.\n\nJoint AV note: LTXVEmptyLatentAudio + LTXVConcatAVLatent are required for KSampler; LTXVSeparateAVLatent then video VAEDecode + SaveImage (audio latent unused).",
+    "lab_note": "## ltx-i2v (lab)\n\nWhat this graph does: Image\u2192video (~97f). Set LoadImage to your still.\nModels: LTX distilled FP8 UNET + DualCLIP (gemma_3_12B_it_fp4_mixed + ltx-2.3_text_projection_bf16, type ltxv) + LTX23 video/audio VAEs (joint AV empty audio latents required before KSampler).\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 97 frames @ 24 fps \u2248 4.0 s \u00b7 768\u00d7512.\n\nPRIMARY OUTPUT \u2014 MP4 (easy to watch)\n\u2022 Node: Save video (MP4) = VHS_VideoCombine (format video/h264-mp4, 24 fps).\n\u2022 After Queue: open that node for an inline video preview.\n\u2022 File also under ComfyUI/output/ as ez_ltx_i2v_video_*.mp4 (comfy-state volume).\n\u2022 Frames still saved via SaveImage prefix ez_ltx_i2v_frames for inspection.\n\nPrompting (LTX-2.3 + Gemma DualCLIP):\n\u2022 Describe actions over time (camera path + subject/environment motion).\n\u2022 I2V: restate the still, then one clear camera move + micro-motion; keep identity stable.\n\u2022 Negatives target temporal artifacts (morphing, flicker, jitter) if you raise CFG.\n\nHow to run:\n1. Set LoadImage to your start frame (e.g. Flux still).\n2. Review Motion / prompt; Queue.\n3. Watch Save video (MP4) preview; optional: open output/*.mp4.\n\nStack installs ComfyUI-VideoHelperSuite (VHS) + system/imageio ffmpeg.\nJoint AV: LTXVEmptyLatentAudio + concat required; audio latent unused (not saved).\nOptional offline: stitch PNG frames with host ffmpeg if you only need frames.",
     "lab_ltx_av": true,
-    "lab_description": "Image\u2192video frames (~97 @ 24 fps \u2248 4 s). Set LoadImage to your still."
+    "lab_description": "LTX lab: MP4 via VHS_VideoCombine (ez_ltx_i2v_video) + frames via SaveImage (ez_ltx_i2v_frames)."
   },
   "version": 0.4
 }

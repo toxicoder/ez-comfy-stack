@@ -20,6 +20,8 @@ COMFYUI_REPO="${COMFYUI_REPO:-https://github.com/comfyanonymous/ComfyUI.git}"
 COMFYUI_REF="${COMFYUI_REF:-v0.29.0}"
 COMFYUI_MANAGER_REF="${COMFYUI_MANAGER_REF:-4.2.2}"
 COMFYUI_NUNCHAKU_NODE_REF="${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}"
+# Empty = clone default branch (main). Set to a tag/branch/SHA branch name when available.
+COMFYUI_VHS_REF="${COMFYUI_VHS_REF:-}"
 
 #######################################
 # Log an install progress line to stdout (container logs).
