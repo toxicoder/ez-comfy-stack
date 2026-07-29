@@ -632,10 +632,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#expected-basenames-after-download-models-lab-workflow" class="md-nav__link">
+  <a href="#expected-basenames-after-download-models-lab-workflows" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Expected basenames after download-models (lab workflow)
+        Expected basenames after download-models (lab workflows)
       
     </span>
   </a>
@@ -951,10 +951,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#expected-basenames-after-download-models-lab-workflow" class="md-nav__link">
+  <a href="#expected-basenames-after-download-models-lab-workflows" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Expected basenames after download-models (lab workflow)
+        Expected basenames after download-models (lab workflows)
       
     </span>
   </a>
@@ -1160,7 +1160,7 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 <span class="c1"># or: pip install -U &#39;huggingface_hub[cli]&#39;</span>
 </code></pre></div>
 <p>Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. <code>HF_PROGRESS=0</code> turns progress lines off; <code>HF_PROGRESS_INTERVAL=10</code> sets the tick (seconds).</p>
-<h3 id="expected-basenames-after-download-models-lab-workflow">Expected basenames after <code>download-models</code> (lab workflow)<a class="headerlink" href="#expected-basenames-after-download-models-lab-workflow" title="Permanent link">&para;</a></h3>
+<h3 id="expected-basenames-after-download-models-lab-workflows">Expected basenames after <code>download-models</code> (lab workflows)<a class="headerlink" href="#expected-basenames-after-download-models-lab-workflows" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1173,7 +1173,17 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 <tr>
 <td><code>flux-2-klein-9b-nvfp4.safetensors</code></td>
 <td><code>diffusion_models/</code></td>
-<td>Flux fast UNET</td>
+<td>Flux fast UNET (BFL)</td>
+</tr>
+<tr>
+<td><code>qwen_3_8b_fp4mixed.safetensors</code></td>
+<td><code>text_encoders/</code></td>
+<td>Flux TE (Comfy-Org companions)</td>
+</tr>
+<tr>
+<td><code>flux2-vae.safetensors</code></td>
+<td><code>vae/</code></td>
+<td>Flux VAE (Comfy-Org companions)</td>
 </tr>
 <tr>
 <td><code>ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors</code></td>
@@ -1197,7 +1207,7 @@ sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;
 </tr>
 </tbody>
 </table>
-<p>Workflow template: <code>workflows/lab-flux-to-ltx.json</code> (loaders + notes). Not Z-Image.</p>
+<p>Example graphs: <code>workflows/lab-flux-txt2img.json</code>, <code>lab-flux-img2img.json</code>, <code>lab-ltx-i2v.json</code>, <code>lab-ltx-t2v.json</code>, <code>lab-flux-to-ltx.json</code>.</p>
 <h3 id="prebuilt-container-image-ghcr">Prebuilt container image (GHCR)<a class="headerlink" href="#prebuilt-container-image-ghcr" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

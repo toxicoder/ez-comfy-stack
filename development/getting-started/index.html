@@ -572,10 +572,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#load-the-lab-workflow-not-z-image" class="md-nav__link">
+  <a href="#example-workflows-image-video" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Load the lab workflow (not Z-Image)
+        Example workflows (image + video)
       
     </span>
   </a>
@@ -884,10 +884,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#load-the-lab-workflow-not-z-image" class="md-nav__link">
+  <a href="#example-workflows-image-video" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Load the lab workflow (not Z-Image)
+        Example workflows (image + video)
       
     </span>
   </a>
@@ -1046,9 +1046,40 @@ git<span class="w"> </span>checkout<span class="w"> </span>development<span clas
 ./scripts/manage.sh<span class="w"> </span>status
 </code></pre></div>
 <p>Open <code>http://&lt;spark-ip&gt;:8188</code> (or port-forward if needed).</p>
-<h3 id="load-the-lab-workflow-not-z-image">Load the lab workflow (not Z-Image)<a class="headerlink" href="#load-the-lab-workflow-not-z-image" title="Permanent link">&para;</a></h3>
-<p>In ComfyUI: <strong>Workflows → lab-flux-to-ltx</strong> (copied into the user workflows folder on start).</p>
-<p>That template references <strong>only</strong> the Flux Klein NVFP4 + LTX-2.3 balanced files from <code>download-models</code>. It does <strong>not</strong> use Z-Image files (<code>ae.safetensors</code>, <code>qwen_3_4b.safetensors</code>, <code>z_image_turbo_*.safetensors</code>). If Comfy asks for those three, you opened the wrong graph — load <strong>lab-flux-to-ltx</strong> instead.</p>
+<h3 id="example-workflows-image-video">Example workflows (image + video)<a class="headerlink" href="#example-workflows-image-video" title="Permanent link">&para;</a></h3>
+<p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load one of:</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>lab-flux-txt2img</strong></td>
+<td>Text → image (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE)</td>
+</tr>
+<tr>
+<td><strong>lab-flux-img2img</strong></td>
+<td>Image → image (same Flux pack; set LoadImage input)</td>
+</tr>
+<tr>
+<td><strong>lab-ltx-i2v</strong></td>
+<td>Image → video frames (LTX-2.3 balanced FP8; set start frame)</td>
+</tr>
+<tr>
+<td><strong>lab-ltx-t2v</strong></td>
+<td>Text → video frames (LTX empty latent)</td>
+</tr>
+<tr>
+<td><strong>lab-flux-to-ltx</strong></td>
+<td>Flux txt2img graph + notes for handoff to LTX I2V</td>
+</tr>
+</tbody>
+</table>
+<p>These are under <code>user/default/workflows/</code> (copied from the host <code>workflows/</code> mount).</p>
+<p><strong>Not Z-Image.</strong> Community Z-Image templates need different weights (<code>ae</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*</code>). Use the lab workflows above for this stack.</p>
 <div class="admonition tip">
 <p class="admonition-title">Prebuilt image (GHCR)</p>
 <p>Default image is <code>ghcr.io/toxicoder/ez-comfy:flux-to-ltx</code> (<strong>linux/arm64</strong>, published by CI).<br />
