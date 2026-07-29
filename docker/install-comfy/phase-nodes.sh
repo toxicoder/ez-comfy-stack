@@ -178,15 +178,42 @@ install_nunchaku_wheel() {
 }
 
 #######################################
+# Ensure ComfyUI-VideoHelperSuite is present (required for LTX lab MP4 output).
+# Idempotent: safe on cold install and stamp-present refresh.
+# Globals:
+#   COMFY_HOME, CUSTOM, COMFYUI_VHS_REF, VENV
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn/err
+# Returns:
+#   0 if VHS tree exists; 1 if still missing after clone attempt
+#######################################
+ensure_lab_video_nodes() {
+  activate_venv
+  CUSTOM="${COMFY_HOME}/custom_nodes"
+  mkdir -p "${CUSTOM}"
+  clone_node "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git" \
+    "ComfyUI-VideoHelperSuite" "${COMFYUI_VHS_REF:-}"
+  if [[ ! -d ${CUSTOM}/ComfyUI-VideoHelperSuite ]]; then
+    warn "ComfyUI-VideoHelperSuite missing under ${CUSTOM} (required for LTX lab MP4)"
+    return 1
+  fi
+  return 0
+}
+
+#######################################
 # Install custom nodes and optional packages (Docker phase: nodes).
 # Globals:
-#   COMFY_HOME, VENV, CUSTOM, COMFYUI_MANAGER_REF, COMFYUI_NUNCHAKU_NODE_REF
+#   COMFY_HOME, VENV, CUSTOM, COMFYUI_MANAGER_REF, COMFYUI_NUNCHAKU_NODE_REF,
+#   COMFYUI_VHS_REF
 # Arguments:
 #   None
 # Outputs:
 #   Progress via log/warn
 # Returns:
-#   0 (soft-fail optional packages)
+#   0 on success; non-zero if required VideoHelperSuite is missing
+#   (nunchaku/SageAttention remain fail-soft)
 #######################################
 phase_nodes() {
   activate_venv
@@ -194,6 +221,8 @@ phase_nodes() {
   mkdir -p "${CUSTOM}"
   clone_node "https://github.com/ltdrdata/ComfyUI-Manager.git" "ComfyUI-Manager" \
     "${COMFYUI_MANAGER_REF:-}"
+  # Required for ltx-*-lab-example VHS_VideoCombine MP4 output
+  ensure_lab_video_nodes || return 1
   clone_node "https://github.com/nunchaku-ai/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" \
     "${COMFYUI_NUNCHAKU_NODE_REF:-}" ||
     clone_node "https://github.com/nunchaku-tech/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" \

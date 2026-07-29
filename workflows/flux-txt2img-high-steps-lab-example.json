@@ -1,7 +1,7 @@
 {
   "id": "flux-txt2img-high-steps-lab-example",
-  "revision": 2,
-  "last_node_id": 9,
+  "revision": 3,
+  "last_node_id": 10,
   "last_link_id": 9,
   "nodes": [
     {
@@ -142,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "high detail still life of fruit and glassware, studio softbox lighting"
+        "High-detail studio still life: a cluster of late-summer fruit\u2014fig halves, green grapes, a sliced pear\u2014arranged with cut-crystal glassware on a dark walnut table. Large softbox key light from camera-left, broad fill bounce, delicate caustics through the glass, condensation beads on a chilled tumbler. Macro-aware textures on fruit skin and wood grain, commercial food-photography polish, centered calm composition, deep but controlled contrast, no props with logos or text."
       ],
       "title": "Positive"
     },
@@ -181,7 +181,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "blurry, low quality, watermark"
+        "washed-out colors, muddy blacks, plastic skin, melted geometry, duplicate limbs, illegible gibberish text, logos, watermarks, heavy compression artifacts, oversharpen halos"
       ],
       "title": "Negative"
     },
@@ -351,6 +351,30 @@
         "ez_flux_high_steps"
       ],
       "title": "Save"
+    },
+    {
+      "id": 10,
+      "type": "Note",
+      "pos": [
+        40,
+        606.0
+      ],
+      "size": [
+        960,
+        280
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## Flux high-steps 1024\u00b2 / 16 (lab)\n\nWhat this graph does: Higher step count (16) still-life quality check at 1024\u00d71024.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 16 steps \u00b7 1024\u00d71024 \u00b7 batch 1.\nSaveImage prefix: ez_flux_high_steps.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
+      ],
+      "title": "Flux high-steps 1024\u00b2 / 16 (lab) \u2014 operator note"
     }
   ],
   "links": [
@@ -438,7 +462,9 @@
         0,
         0
       ]
-    }
+    },
+    "lab_note": "## Flux high-steps 1024\u00b2 / 16 (lab)\n\nWhat this graph does: Higher step count (16) still-life quality check at 1024\u00d71024.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler \u00b7 simple \u00b7 CFG 1.0 \u00b7 16 steps \u00b7 1024\u00d71024 \u00b7 batch 1.\nSaveImage prefix: ez_flux_high_steps.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n\u2022 Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n\u2022 Prefer positive constraints (\u201csharp focus\u201d, \u201cempty street\u201d, \u201cseamless white\u201d) over \u201cno X\u201d.\n\u2022 Comfy (weight:1.4) emphasis is not applied by this text encoder.\n\u2022 At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
+    "lab_description": "Higher step count (16) still-life quality check at 1024\u00d71024."
   },
   "version": 0.4
 }

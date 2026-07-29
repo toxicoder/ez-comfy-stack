@@ -12,13 +12,15 @@ tags: [getting-started, docker, comfyui]
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- Example workflows and optional deep-dives
+- Example workflows, prompting tips, and watching LTX MP4 output
+- Optional deep-dives
 
 **What this enables**
 
 - A first successful open of ComfyUI at port **8188**
 - Safe model downloads that leave bandwidth for SSH
 - Choosing prebuilt GHCR pull (default) or a local Dockerfile build
+- Correct Flux / LTX prompting and easy LTX video preview (VHS MP4)
 
 ---
 
@@ -302,13 +304,58 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **flux-to-ltx-lab-example** | Flux txt2img + handoff notes → load **ltx-i2v-lab-example** for video frames |
     | **flux-to-ltx-short-lab-example** | Same handoff aimed at **ltx-i2v-short-lab-example** / quick I2V |
 
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain how to turn frames into a playable video.
+
+### Prompting these models
+
+Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.
+
+=== "Flux.2 Klein (image)"
+
+    - Text encoder is **Qwen3** (CLIP type **`flux2`**): write **natural-language sentences**, subject first, then place, materials, lighting, camera
+    - Ideal length is roughly **40–120 words** for hero shots; smoke graphs stay shorter
+    - Highest impact: materials/textures, light source + direction, lens language, foreground/midground/background
+    - Avoid: comma tag lists, `(weight:1.4)` emphasis (not applied), “masterpiece / best quality” spam
+    - Official FLUX.2 style: **describe what you want**, not long “no X” lists. Lab negatives are residual lists for experimenters; graphs ship at **CFG 1.0**, so quality is almost entirely the Positive prompt
+
+=== "LTX-2.3 (video frames)"
+
+    - Text encoder is **Gemma 3 DualCLIP** (type **`ltxv`**): describe **actions over time**
+    - **I2V:** briefly restate the still, then **one** camera move + light micro-motion; keep identity stable
+    - **T2V:** chronological shot (establish → move → environment motion); one primary camera path on short clips
+    - Negatives should target **temporal** artifacts (morphing, flicker, jitter, stutter), not generic SD junk
+    - Light ambient-audio language is optional; lab does **not** save audio tracks
+
+### Watch the video (LTX)
+
+!!! tip "Primary output is MP4"
+
+    Seeded **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**, and find `ez_ltx_*_video_*.mp4` under Comfy’s **output/** folder (on the `ez-comfy-state` volume). PNG frames are still written via `SaveImage` for inspection.
+
+| Tier | Frames | FPS | ≈ duration |
+| --- | --- | --- | --- |
+| full (`ltx-i2v` / `ltx-t2v` lab) | 97 | 24 | ~4.0 s |
+| short | 33 | 24 | ~1.4 s |
+| quick | 17 | 24 | ~0.7 s |
+
+Optional offline stitch of PNG frames only (if you need a host-side re-encode):
+
+```bash
+ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_*_*.png' \
+  -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4
+```
+
+If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see [Troubleshooting](troubleshooting.md).
+
 ??? abstract "Lab workflow details"
 
     - Name pattern: host files `workflows/*-lab-example.json` (legacy `lab-*` names removed)
+    - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
     - Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
-    - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) and save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
-    - LTX-2.3 is **joint AV**: lab graphs load `LTX23_audio_vae_bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`, then **separate** for video `VAEDecode`. Audio is sampled as empty noise (not saved); omitting empty audio causes `reshape … [1, 0, 32, -1]`
-    - Lab graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
+    - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps), and still save **frames** via `SaveImage`
+    - Stack installs **ComfyUI-VideoHelperSuite** (required) plus runtime **`ffmpeg`** (imageio-ffmpeg pip is fallback)
+    - LTX-2.3 is **joint AV**: lab graphs load `LTX23_audio_vae_bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`, then **separate** for video `VAEDecode`. Audio is sampled as empty noise (not saved into VHS); omitting empty audio causes `reshape … [1, 0, 32, -1]`
+    - Lab Flux graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
     - Runtime image includes **`gcc`/`g++`** and **`python3-dev`** so PyTorch 2.13 Triton can JIT `cuda_utils` on first CLIP encode (fallback: `LAB_DISABLE_TORCH_NATIVE_TRITON=1`)
     - **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)
 

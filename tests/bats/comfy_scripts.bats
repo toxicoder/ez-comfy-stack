@@ -27,6 +27,19 @@ teardown() {
   teardown_repo_env
 }
 
+@test "install-comfy phase_nodes and ensure_lab_video_nodes require VideoHelperSuite" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  run grep -F 'ComfyUI-VideoHelperSuite' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'ensure_lab_video_nodes' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'ensure_lab_video_nodes' "${REPO_ROOT}/docker/install-comfy.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'COMFYUI_VHS_REF' "${REPO_ROOT}/docker/install-comfy/common.sh"
+  [ "${status}" -eq 0 ]
+}
+
 @test "install-comfy nunchaku helpers never use bare PyPI nunchaku" {
   run nunchaku_platform_tag x86_64
   [ "${output}" = "linux_x86_64" ]
@@ -226,7 +239,8 @@ teardown() {
   source "${REPO_ROOT}/docker/install-comfy.sh"
   install_mock_bin python3 'if [[ "$*" == *venv* ]]; then mkdir -p "${VENV}/bin"; printf "export VIRTUAL_ENV=1\n" >"${VENV}/bin/activate"; printf "#!/bin/sh\n" >"${VENV}/bin/python"; chmod +x "${VENV}/bin/python"; exit 0; fi; exit 0'
   install_mock_bin pip 'echo "pip $*"; exit 0'
-  install_mock_bin git 'echo "git $*"; mkdir -p "${COMFY_HOME}/.git"; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
+  # Last arg of git clone is destination; create it so ensure_lab_video_nodes succeeds
+  install_mock_bin git 'echo "git $*"; dest="${@: -1}"; mkdir -p "${dest}" 2>/dev/null || true; mkdir -p "${COMFY_HOME}/.git"; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
 
   run phase_venv
   [ "${status}" -eq 0 ]

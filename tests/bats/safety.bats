@@ -115,6 +115,11 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'ARG COMFYUI_NUNCHAKU_NODE_REF=v' "${df}"
   [ "$status" -eq 0 ]
+  # VideoHelperSuite pin surface + runtime ffmpeg for VHS
+  run grep -E 'ARG COMFYUI_VHS_REF=' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E '^\s*ffmpeg\s*$|ffmpeg \\' "${df}"
+  [ "$status" -eq 0 ]
 }
 
 @test "compose bind-mounts ops scripts for zero-rebuild iteration" {

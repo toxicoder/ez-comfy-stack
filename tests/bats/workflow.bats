@@ -44,9 +44,14 @@ teardown() {
     # No Z-Image pack basenames as model widgets
     run grep -E 'z_image_turbo|qwen_3_4b|"ae\.safetensors"' "${wf}"
     [ "${status}" -ne 0 ]
-    # No optional VHS (not installed by install-comfy.sh)
-    run grep -F 'VHS_VideoCombine' "${wf}"
-    [ "${status}" -ne 0 ]
+    # Flux graphs must not require VHS; LTX graphs must ship VHS_VideoCombine (MP4).
+    if [[ $(basename "${wf}") == ltx-* ]]; then
+      run grep -E '"type"[[:space:]]*:[[:space:]]*"VHS_VideoCombine"' "${wf}"
+      [ "${status}" -eq 0 ]
+    else
+      run grep -E '"type"[[:space:]]*:[[:space:]]*"VHS_VideoCombine"' "${wf}"
+      [ "${status}" -ne 0 ]
+    fi
     # Node AABB must not overlap (20px pad) — UI layout guard
     run python3 -c "
 import json
@@ -249,6 +254,77 @@ assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][0]==102
   [ "${status}" -eq 0 ]
   run grep -F 'ez_ltx_t2v_short' "${dir}/ltx-t2v-short-lab-example.json"
   [ "${status}" -eq 0 ]
+}
+
+@test "lab examples have operator Notes, non-empty prompts, LTX VHS MP4 output" {
+  local dir="${REPO_ROOT}/workflows"
+  local wf
+  shopt -s nullglob
+  local -a files=("${dir}"/*-lab-example.json)
+  shopt -u nullglob
+  [[ ${#files[@]} -ge 20 ]]
+
+  for wf in "${files[@]}"; do
+    run python3 -c "
+import json
+p = '${wf}'
+d = json.load(open(p))
+notes = [n for n in d['nodes'] if n.get('type') == 'Note']
+assert notes, f'{p}: missing Note node'
+assert any(
+    isinstance(n.get('widgets_values'), list)
+    and n['widgets_values']
+    and isinstance(n['widgets_values'][0], str)
+    and len(n['widgets_values'][0].strip()) > 40
+    for n in notes
+), f'{p}: empty Note'
+clips = [n for n in d['nodes'] if n.get('type') == 'CLIPTextEncode']
+assert len(clips) >= 2, f'{p}: expected Positive+Negative CLIPTextEncode'
+for n in clips:
+    title = (n.get('title') or '').lower()
+    text = (n.get('widgets_values') or [''])[0]
+    assert isinstance(text, str) and text.strip(), f'{p}: empty prompt on {title!r}'
+# Hidden parity with on-canvas note
+assert isinstance(d.get('extra', {}).get('lab_note'), str) and d['extra']['lab_note'].strip()
+"
+    [ "${status}" -eq 0 ]
+  done
+
+  for wf in \
+    ltx-i2v-lab-example.json \
+    ltx-i2v-short-lab-example.json \
+    ltx-i2v-quick-lab-example.json \
+    ltx-t2v-lab-example.json \
+    ltx-t2v-short-lab-example.json \
+    ltx-t2v-quick-lab-example.json \
+    ltx-t2v-portrait-lab-example.json \
+    ltx-t2v-landscape-lab-example.json; do
+    run python3 -c "
+import json
+d = json.load(open('${dir}/${wf}'))
+vhs = [n for n in d['nodes'] if n.get('type') == 'VHS_VideoCombine']
+assert len(vhs) == 1, '${wf}: expected exactly one VHS_VideoCombine'
+wv = vhs[0].get('widgets_values') or {}
+assert isinstance(wv, dict), '${wf}: VHS widgets_values must be a dict'
+assert wv.get('format') == 'video/h264-mp4', '${wf}: expected video/h264-mp4'
+assert float(wv.get('frame_rate', 0)) == 24, '${wf}: expected frame_rate 24'
+assert wv.get('save_output') is True, '${wf}: save_output must be true'
+assert wv.get('filename_prefix'), '${wf}: missing filename_prefix'
+# IMAGE from VAEDecode must reach VHS
+decode_ids = {n['id'] for n in d['nodes'] if n.get('type') == 'VAEDecode'}
+vhs_id = vhs[0]['id']
+assert any(
+    isinstance(L, list) and len(L) >= 5 and L[1] in decode_ids and L[3] == vhs_id and L[5] == 'IMAGE'
+    for L in d.get('links', [])
+), '${wf}: VHS must be linked from VAEDecode IMAGE'
+notes = [n for n in d['nodes'] if n.get('type') == 'Note']
+body = '\n'.join((n.get('widgets_values') or [''])[0] for n in notes)
+assert 'VHS' in body or 'VideoCombine' in body or 'Save video' in body, '${wf}: Note must mention VHS/video'
+assert 'MP4' in body or 'mp4' in body, '${wf}: Note must mention MP4'
+assert 'SaveImage' in body or 'frames' in body.lower(), '${wf}: Note should still mention frames'
+"
+    [ "${status}" -eq 0 ]
+  done
 }
 
 @test "download-flux companions tier and includes" {
