@@ -20,6 +20,10 @@ permissions:
   contents: read
   packages: write
 
+concurrency:
+  group: publish-image-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-arm64:
     # DGX Spark / GB10 — native arm64 (avoid qemu for multi-GB torch)
@@ -61,6 +65,9 @@ jobs:
           build-args: |
             EZ_COMFY_PREBUILD=${{ github.event.inputs.prebuild || '1' }}
             CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-devel-ubuntu24.04
+            CUDA_RUNTIME_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
           # Do not pass HF_TOKEN or any host secrets as build-args
           provenance: false
           sbom: false
+          cache-from: type=gha,scope=ez-comfy-arm64
+          cache-to: type=gha,mode=max,scope=ez-comfy-arm64

@@ -25,21 +25,31 @@ teardown() {
 }
 
 @test "Dockerfile defaults to public Docker Hub CUDA base not nvcr" {
-  run grep -E 'ARG CUDA_BASE_IMAGE=nvidia/cuda:' "${REPO_ROOT}/docker/Dockerfile"
+  run grep -E 'ARG CUDA_BASE_IMAGE=nvidia/cuda:.*devel' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  run grep -E 'ARG CUDA_RUNTIME_IMAGE=nvidia/cuda:.*runtime' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -eq 0 ]
   run grep -E 'FROM \$\{CUDA_BASE_IMAGE\}' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  run grep -E 'FROM \$\{CUDA_RUNTIME_IMAGE\}' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -eq 0 ]
+  # Multi-stage: builder prebuilds, runtime is the published stage
+  run grep -E 'AS builder|AS runtime' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -eq 0 ]
   # Hardcoded FROM nvcr.io as sole base would re-break unauthenticated builds
   run grep -E '^FROM nvcr\.io/' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -ne 0 ]
   run grep -E 'CUDA_BASE_IMAGE' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
+  run grep -E 'CUDA_RUNTIME_IMAGE' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
 }
 
 @test "workflow mount is outside COMFY_HOME tree" {
-  run grep -E 'lab-flux-to-ltx.json:/opt/ez-comfy/workflows/' "${REPO_ROOT}/docker/docker-compose.yml"
+  # Host workflows/ tree → image path (not under comfy-state volume)
+  run grep -E 'workflows:/opt/ez-comfy/workflows' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
-  run grep -E 'lab-flux-to-ltx.json:/comfy-state/ComfyUI/' "${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -E 'workflows:.*/comfy-state/ComfyUI/' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -ne 0 ]
 }
 
@@ -55,6 +65,9 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -iE 'dockerhub|docker\.io/.*push|DOCKERHUB' "${REPO_ROOT}/.github/workflows/publish-image.yml"
   [ "$status" -ne 0 ]
+  # Publish uses Buildx GHA cache (faster rebuilds)
+  run grep -E 'cache-from:.*type=gha|cache-to:.*type=gha' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  [ "$status" -eq 0 ]
 }
 
 @test "compose has mem_limit" {

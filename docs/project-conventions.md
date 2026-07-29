@@ -163,6 +163,7 @@ flowchart LR
 ## Docker
 
 - One compose service for the unified stack  
+- Multi-stage image: **devel** builder + **runtime** final (no secrets/models)  
 - Scripts as real files (not inline ConfigMap YAML)  
 - Host model cache + named volume for Comfy state  
 - Compose `restart: "no"`; explicit `mem_limit` / `mem_reservation`  
@@ -180,6 +181,8 @@ flowchart TB
 
 - TDD for behavior changes  
 - BATS for shell; pytest for Python  
+- **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
+- **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `make coverage` enforces:
   - **100% Python line coverage** on `patch_get_free_memory`
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (production-only references do not count)

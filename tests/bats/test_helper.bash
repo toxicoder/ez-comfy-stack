@@ -63,6 +63,13 @@ setup_repo_env() {
   export LAB_MOCK_WONDERSHAPER=1
   export LAB_NO_SUDO=1
   export LAB_MOCK_HF_DOWNLOAD=1
+  # Default speed/probe mocks — tests must not hit real network (curl/speedtest).
+  export LAB_MOCK_HTTP_SPEED_MBPS="${LAB_MOCK_HTTP_SPEED_MBPS:-100}"
+  export LAB_MOCK_SPEEDTEST_MBPS="${LAB_MOCK_SPEEDTEST_MBPS:-100}"
+  # Hermetic guard: probe_http_download_mbps / run_speedtest skip real I/O.
+  export LAB_HERMETIC="${LAB_HERMETIC:-1}"
+  # Skip hf_download progress subshell + kill_pid_tree cost (~1.5s per call).
+  export HF_PROGRESS="${HF_PROGRESS:-0}"
   export MIN_HOST_FREE_GIB=28
   export MIN_DISK_FREE_GIB=40
   export MEM_LIMIT=90g

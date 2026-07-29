@@ -130,6 +130,7 @@ These are under `user/default/workflows/` (copied from the host `workflows/` mou
 
 !!! tip "Prebuilt image (GHCR)"
     Default image is `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (**linux/arm64**, published by CI).  
+    Multi-stage: **devel** builder installs Comfy+torch; final stage is **CUDA runtime** (no nvcc).  
     It includes ComfyUI + PyTorch; **not** FLUX/LTX weights (those stay on `MODELS_DIR`).  
     First start **seeds** the volume from `/opt/comfy-prebuilt` (local copy) instead of multi‑GB pip.  
     No tokens or host secrets are baked into the image. Pull is public for public packages.

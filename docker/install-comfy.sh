@@ -227,6 +227,40 @@ link_models() {
 }
 
 #######################################
+# Strip bloat from a prebuilt Comfy tree (image size / seed speed).
+# Removes VCS metadata, bytecode caches, and common non-runtime dirs.
+# Safe for runtime: does not delete Python packages or model links.
+# Globals:
+#   None
+# Arguments:
+#   $1 - Root directory (default: COMFY_HOME)
+# Outputs:
+#   Progress via log
+# Returns:
+#   0
+#######################################
+strip_prebuilt() {
+  local root="${1:-${COMFY_HOME}}"
+  if [[ ! -d ${root} ]]; then
+    warn "strip_prebuilt: not a directory: ${root}"
+    return 0
+  fi
+  log "strip_prebuilt: cleaning ${root}"
+  # Git metadata from shallow clones (ComfyUI + custom nodes)
+  find "${root}" -type d -name '.git' -prune -exec rm -rf {} + 2>/dev/null || true
+  # Bytecode / test caches
+  find "${root}" \( -type d -name '__pycache__' -o -type d -name '.pytest_cache' \
+    -o -type d -name '.mypy_cache' \) -prune -exec rm -rf {} + 2>/dev/null || true
+  find "${root}" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete 2>/dev/null || true
+  # Pip cache if install used a local cache under the tree
+  rm -rf "${root}/.cache" 2>/dev/null || true
+  if command -v pip >/dev/null 2>&1; then
+    pip cache purge >/dev/null 2>&1 || true
+  fi
+  log "strip_prebuilt: done"
+}
+
+#######################################
 # Full install or refresh path for ComfyUI on the comfy-state volume.
 # Globals:
 #   COMFY_HOME, COMFY_USER, MODELS_ROOT, STAMP, VENV
@@ -238,7 +272,7 @@ link_models() {
 #   0 on success; non-zero if a hard step fails under set -e
 #######################################
 main() {
-  local total=11 refresh=0 sub
+  local total=12 refresh=0 sub
   export DEBIAN_FRONTEND=noninteractive
   export PYTHONUNBUFFERED=1
   INSTALL_T0="$(date +%s)"
@@ -332,7 +366,11 @@ main() {
     touch "${STAMP}"
     log "Wrote install stamp ${STAMP}"
 
-    step 10 "${total}" "Link model subdirs under ${MODELS_ROOT}/comfy"
+    step 10 "${total}" "Strip prebuilt bloat (.git, bytecode, caches)"
+    strip_prebuilt "${COMFY_HOME}"
+    log "step 10 done"
+
+    step 11 "${total}" "Link model subdirs under ${MODELS_ROOT}/comfy"
   else
     # shellcheck disable=SC1091
     source "${VENV}/bin/activate"
@@ -351,7 +389,7 @@ main() {
   if [[ ${refresh} -eq 1 ]]; then
     step 2 "${total}" "Apply Spark free-memory patch"
   else
-    step 11 "${total}" "Apply Spark free-memory patch"
+    step 12 "${total}" "Apply Spark free-memory patch"
   fi
   if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
     python3 /opt/ez-comfy/patch_get_free_memory.py "${COMFY_HOME}" || warn "patch failed"

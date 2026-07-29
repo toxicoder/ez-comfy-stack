@@ -312,14 +312,22 @@ exit 0
   [[ "${output}" == *"HTTP probe"* || "${output}" == *"200"* || "${output}" == *"gentle"* || "${output}" == *"foreground"* || "${output}" == *"max-workers"* ]]
   [[ "${output}" != *"Stopping sample-phase"* ]]
 
-  # No HTTP mock → untrusted path uses default workers=4
+  # No HTTP mock + hermetic → untrusted path (no real curl), default workers=4
   unset LAB_MOCK_HTTP_SPEED_MBPS
+  unset LAB_MOCK_SPEEDTEST_MBPS
+  export LAB_HERMETIC=1
   unset HF_DOWNLOAD_MAX_WORKERS
   WRAP_ARGS=(bash -c 'echo untrusted >"${TEST_TMP_DIR}/untrusted.ok"; echo w=${HF_DOWNLOAD_MAX_WORKERS}')
   run wrap_with_live_speed_limit eth0 50
   [ "${status}" -eq 0 ]
   [ -f "${TEST_TMP_DIR}/untrusted.ok" ]
   [[ "${output}" == *"untrusted"* || "${output}" == *"default max-workers"* || "${output}" == *"max-workers=4"* ]]
+
+  # Hermetic probe must not call network
+  unset LAB_MOCK_HTTP_SPEED_MBPS
+  export LAB_HERMETIC=1
+  run probe_http_download_mbps
+  [ "${status}" -ne 0 ]
 
   run apply_limit_from_measured eth0 100
   [[ "${output}" == *"target"* || "${output}" == *"gentle"* || "${output}" == *"85"* || "${output}" == *"Gentle"* ]]

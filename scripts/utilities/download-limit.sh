@@ -596,6 +596,10 @@ probe_http_download_mbps() {
     echo "${LAB_MOCK_HTTP_SPEED_MBPS}"
     return 0
   fi
+  # Hermetic / offline: never curl real endpoints (CI and BATS).
+  if [[ ${LAB_HERMETIC:-0} == "1" || ${LAB_NO_NETWORK:-0} == "1" ]]; then
+    return 1
+  fi
   if ! command -v curl >/dev/null 2>&1; then
     return 1
   fi
@@ -741,6 +745,11 @@ run_speedtest_mbps() {
   if [[ -n ${LAB_MOCK_HTTP_SPEED_MBPS:-} ]]; then
     echo "${LAB_MOCK_HTTP_SPEED_MBPS}"
     return 0
+  fi
+  # No real CLI/HTTP when hermetic (tests set LAB_HERMETIC=1 via test_helper)
+  if [[ ${LAB_HERMETIC:-0} == "1" || ${LAB_NO_NETWORK:-0} == "1" ]]; then
+    dl_warn "Preflight speed: hermetic/no-network (no mock Mbps set)"
+    return 1
   fi
 
   # Unthrottle before any probe so residual wondershaper/tc does not skew results
