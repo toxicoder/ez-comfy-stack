@@ -165,11 +165,12 @@ flowchart LR
 - One compose service for the unified stack  
 - Multi-stage image: **devel** builder + **runtime** final (no secrets/models)  
 - **Layer cache contract** (do not regress):
-  - Builder: `COPY` only `install-comfy.sh` before prebuild `RUN`s
-  - Builder prebuild is **phased** (`--phase venv|torch|comfy|nodes|finalize`) so torch survives node-only edits
-  - Runtime: `COPY --from=builder` prebuilt **before** entrypoint/install/patch
+  - Builder: `COPY` only the `install-comfy/` **phase modules** each prebuild `RUN` needs (not the full orchestrator before torch)
+  - Builder prebuild is **phased** (`venv+torch` → `comfy` → `nodes+finalize+package`) so torch survives node-only edits
+  - Runtime: `COPY --from=builder /opt/parts/venv` then `/opt/parts/app` **before** entrypoint/install/patch
+  - Validated pins: `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see models-and-cache.md)
   - BuildKit `# syntax=docker/dockerfile:1`, `COPY --chmod`, `RUN --mount=type=cache,target=/root/.cache/pip`
-  - Compose bind-mounts ops scripts for zero-rebuild iteration
+  - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
 - GHCR channel by long-lived branch: publish tags `flux-to-ltx` (`main`) and `flux-to-ltx-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel)  
 - Scripts as real files (not inline ConfigMap YAML)  
 - Host model cache + named volume for Comfy state  

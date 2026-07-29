@@ -165,18 +165,32 @@ Lab video graphs write **frames** via `SaveImage` only (no VHS). Audio VAE remai
 | Weights | Still under `MODELS_DIR` via `download-models` |
 | Publish | `publish-image` on `main` / `development` (docker/**); Buildx GHA layer cache |
 
-### Image layer cache (high-velocity rebuilds)
+### Image layer cache (high-velocity rebuilds + pulls)
 
-Dockerfile order is intentional so **ops-script edits do not re-download multi‑GB torch**:
+Dockerfile order is intentional so **ops-script edits do not re-download multi‑GB torch**, and **app-only prebuild churn does not re-pull the full venv blob**:
 
-| Change | Rebuild multi‑GB prebuild? | Re-pull multi‑GB layer? |
+| Change | Rebuild multi‑GB torch phase? | Re-pull multi‑GB **venv** layer? | Re-pull **app** layer? |
+| --- | --- | --- | --- |
+| `entrypoint.sh` / `patch_get_free_memory.py` / orchestrator | No | No | No |
+| `install-comfy/phase-nodes.sh` or node sources only (no new pip) | No | No | Yes (smaller) |
+| `install-comfy/phase-comfy.sh` / `COMFYUI_REF` bump (may change requirements) | No (torch phase) | **Yes if pip set changes** | Yes |
+| `install-comfy/phase-venv-torch.sh` / CUDA base / apt | Yes | Yes | Yes |
+
+Builder: **COPY only phase modules each `RUN` needs** (`common`+`phase-venv-torch` → `phase-comfy` → `phase-nodes`+`phase-finalize`) with BuildKit pip cache mounts. Runtime: **`COPY /opt/parts/venv` then `/opt/parts/app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+
+**Caveat:** the venv layer is the **final** `.venv` after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.
+
+### Prebuild version pins (validated)
+
+Defaults are intentional tags so GHCR rebuilds are reproducible. Validated **2026-07-29**:
+
+| Pin | Default | Why this value |
 | --- | --- | --- |
-| `entrypoint.sh` / `patch_get_free_memory.py` | No | No |
-| Custom-node / `nodes` phase only | Nodes+finalize only (torch cached) | Smaller delta |
-| `install-comfy.sh` prebuild logic / torch phase | Yes (expected) | Yes |
-| CUDA base / apt packages | Yes | Yes |
+| `COMFYUI_REF` | `v0.29.0` | Latest ComfyUI release (2026-07-29). Official README recommends **torch cu130**. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use **core** nodes only (`UNETLoader`, `EmptyFlux2LatentImage`, `LTXV*`, …). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
+| `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
+| `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); lab-flux/lab-ltx graphs do not require it. |
 
-Builder phases (with BuildKit pip cache mounts): **venv+torch** → **comfy** → **nodes+finalize**. Runtime copies `/opt/comfy-prebuilt` **before** embedding ops scripts. Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, and `patch_get_free_memory.py` so local script iteration needs **no image rebuild**; rebake the image only when you need a new prebuilt tree.
+**How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, and `docker/install-comfy/common.sh`, then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).
 
 ### Resume & cache
 

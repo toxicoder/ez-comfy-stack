@@ -274,6 +274,49 @@ teardown() {
   [[ "${output}" == *"Phase venv complete"* || "${output}" == *"complete"* ]]
 }
 
+@test "package_prebuilt_parts splits venv and app when LAB_PACKAGE_PARTS=1" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  local root parts
+  root="${TEST_TMP_DIR}/prebuilt_tree"
+  parts="${TEST_TMP_DIR}/parts"
+  mkdir -p "${root}/.venv/bin" "${root}/custom_nodes/demo" "${root}/comfy"
+  echo py >"${root}/.venv/bin/python"
+  echo app >"${root}/main.py"
+  echo node >"${root}/custom_nodes/demo/node.py"
+  export COMFY_HOME="${root}"
+  export LAB_PARTS_ROOT="${parts}"
+  export LAB_PACKAGE_PARTS=1
+  run package_prebuilt_parts
+  [ "${status}" -eq 0 ]
+  [[ -f ${parts}/venv/bin/python ]]
+  [[ -f ${parts}/app/main.py ]]
+  [[ -f ${parts}/app/custom_nodes/demo/node.py ]]
+  [[ ! -e ${parts}/app/.venv ]]
+  # Disabled path is a no-op
+  export LAB_PACKAGE_PARTS=0
+  run package_prebuilt_parts
+  [ "${status}" -eq 0 ]
+}
+
+@test "default pins are non-empty validated tags" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  [[ -n ${COMFYUI_REF} ]]
+  [[ "${COMFYUI_REF}" == v0.* ]]
+  [[ -n ${COMFYUI_MANAGER_REF} ]]
+  [[ -n ${COMFYUI_NUNCHAKU_NODE_REF} ]]
+  [[ "${COMFYUI_NUNCHAKU_NODE_REF}" == v* ]]
+}
+
+@test "install-comfy modules exist for Docker phase COPY contract" {
+  [[ -f ${REPO_ROOT}/docker/install-comfy/common.sh ]]
+  [[ -f ${REPO_ROOT}/docker/install-comfy/phase-venv-torch.sh ]]
+  [[ -f ${REPO_ROOT}/docker/install-comfy/phase-comfy.sh ]]
+  [[ -f ${REPO_ROOT}/docker/install-comfy/phase-nodes.sh ]]
+  [[ -f ${REPO_ROOT}/docker/install-comfy/phase-finalize.sh ]]
+}
+
 @test "main fails when venv python missing" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
