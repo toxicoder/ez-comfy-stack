@@ -101,7 +101,9 @@ Fix any errors before downloading multi-GB models. Hard failures include **docke
 
 This runs **flux-fast** + **ltx-balanced** under `download-limit wrap --limit auto` (speedtest → **85%** cap), using **`hf download`**. Weights land under `MODELS_DIR` (default `/mnt/models`) in a layout compatible with nvidia-dgx-spark-lab. If bandwidth shaping fails on the kernel, downloads continue unthrottled with a warning (`DOWNLOAD_LIMIT=off` to skip shaping).
 
-LTX **balanced** pulls a **selective** subset of `Kijai/LTX2.3_comfy` (distilled FP8 + TE + VAEs, ~30 GB), not the full multi-variant monorepo (~400 GB). See [Models & Cache](models-and-cache.md).
+`download-models` **exits non-zero** until every lab basename is present under `MODELS_DIR/comfy/` (Flux UNET + Qwen TE + `flux2-vae` + LTX distilled FP8 + text projection + video/audio VAEs). If Comfy shows **Missing Models** on **lab-*** graphs, re-run download and `./scripts/manage.sh doctor`. See [Models & Cache](models-and-cache.md) and [Troubleshooting](troubleshooting.md).
+
+LTX **balanced** pulls a **selective** subset of `Kijai/LTX2.3_comfy` (distilled FP8 + TE + VAEs, ~30 GB), not the full multi-variant monorepo (~400 GB).
 
 ## Start the stack
 
@@ -137,6 +139,7 @@ These are under `user/default/workflows/` (copied from the host `workflows/` mou
 - Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
 - LTX graphs save **frames** via `SaveImage` (no VideoHelperSuite / VHS required)
 - `download-models` also places `LTX23_audio_vae_bf16` for advanced AV experiments; **lab examples do not wire audio**
+- Lab graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
 - **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)
 
 !!! tip "Prebuilt image (GHCR)"

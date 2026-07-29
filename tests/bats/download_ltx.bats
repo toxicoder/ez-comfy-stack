@@ -200,7 +200,27 @@ teardown() {
   [ "${status}" -eq 0 ]
   LAB_MOCK_HF_DOWNLOAD=fail
   TIER=balanced
+  rm -rf "$(tier_dir balanced)"
   run cmd_run
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"No LTX tiers"* || "${output}" == *"failed"* ]]
+}
+
+@test "download-ltx link_into_comfy routes by HF path not *te* in safetensors" {
+  local tdir
+  tdir="$(tier_dir balanced)"
+  mkdir -p "${tdir}/diffusion_models" "${tdir}/text_encoders" "${tdir}/vae"
+  echo u >"${tdir}/diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors"
+  echo t >"${tdir}/text_encoders/ltx-2.3_text_projection_bf16.safetensors"
+  echo v >"${tdir}/vae/LTX23_video_vae_bf16.safetensors"
+  echo a >"${tdir}/vae/LTX23_audio_vae_bf16.safetensors"
+  run link_into_comfy balanced
+  [ "${status}" -eq 0 ]
+  [[ -L "${MODELS_DIR}/comfy/diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors" ]]
+  [[ -L "${MODELS_DIR}/comfy/text_encoders/ltx-2.3_text_projection_bf16.safetensors" ]]
+  [[ -L "${MODELS_DIR}/comfy/vae/LTX23_video_vae_bf16.safetensors" ]]
+  [[ -L "${MODELS_DIR}/comfy/vae/LTX23_audio_vae_bf16.safetensors" ]]
+  # Must not land transformers/VAEs under text_encoders via *te* ↔ safetensors
+  [[ ! -e ${MODELS_DIR}/comfy/text_encoders/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors ]]
+  [[ ! -e ${MODELS_DIR}/comfy/text_encoders/LTX23_video_vae_bf16.safetensors ]]
 }

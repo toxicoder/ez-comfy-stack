@@ -1170,6 +1170,31 @@ hf_download() {
     fi
     mkdir -p "${dest}"
     echo "mock" >"${dest}/.mock"
+    # Honor --include paths so selective tier_files_ready works under mock
+    local prev_m="" a_m rel_m has_inc=0
+    for a_m in "$@"; do
+      if [[ ${prev_m} == "--include" ]]; then
+        has_inc=1
+        rel_m="${a_m}"
+        mkdir -p "${dest}/$(dirname "${rel_m}")"
+        echo "mock" >"${dest}/${rel_m}"
+      fi
+      prev_m="${a_m}"
+    done
+    # Full-repo mock: drop a weight basename matching lab UNET when known
+    if [[ ${has_inc} -eq 0 ]]; then
+      case "${repo}" in
+        *FLUX.2-klein-9b-nvfp4* | *FLUX.2-klein-9B-nvfp4*)
+          echo "mock" >"${dest}/flux-2-klein-9b-nvfp4.safetensors"
+          ;;
+        *Nunchaku* | *nunchaku*)
+          echo "mock" >"${dest}/flux-klein-nunchaku.safetensors"
+          ;;
+        *)
+          echo "mock" >"${dest}/mock-weight.safetensors"
+          ;;
+      esac
+    fi
     return 0
   fi
 

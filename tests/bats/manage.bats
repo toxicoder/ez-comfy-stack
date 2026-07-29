@@ -156,8 +156,25 @@ teardown() {
   run cmd_logs
   [ "${status}" -eq 0 ]
   export DOWNLOAD_LIMIT=off
+  export LAB_MOCK_HF_DOWNLOAD=1
   run cmd_download_models
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"lab workflow weights ready"* || "${output}" == *"lab model ok"* ]]
+  [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
+  # Wipe comfy links only — cache hit + link_into_comfy should restore
+  rm -f "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"
+  run cmd_download_models
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
+  # Gate fails when downloads fail and lab files are gone
+  rm -rf "${MODELS_DIR}/comfy" "${MODELS_DIR}/Comfy-Org__flux2-klein-9B" \
+    "${MODELS_DIR}/black-forest-labs__FLUX.2-klein-9b-nvfp4" \
+    "${MODELS_DIR}/Kijai__LTX2.3_comfy_balanced" \
+    "${MODELS_DIR}/tonera__FLUX.2-klein-9B-Nunchaku"
+  export LAB_MOCK_HF_DOWNLOAD=fail
+  run cmd_download_models
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"incomplete"* || "${output}" == *"MISSING"* || "${output}" == *"failed"* ]]
   run cmd_download_limit status --json
   [ "${status}" -eq 0 ]
   export LAB_CONFIRM_TOKEN=DELETE

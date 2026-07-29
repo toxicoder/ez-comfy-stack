@@ -416,21 +416,35 @@ cmd_clear_hf_locks() {
 
 cmd_download_models() {
   local limit="${DOWNLOAD_LIMIT}"
-  local flux_cmd ltx_cmd
+  local flux_cmd ltx_cmd rc=0
   ensure_models_dir "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   flux_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-flux.sh" run --tier fast)
   ltx_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" run --tier balanced)
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
     warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
-    "${flux_cmd[@]}"
-    "${ltx_cmd[@]}"
-    return 0
+    "${flux_cmd[@]}" || rc=$?
+    if [[ ${rc} -eq 0 ]]; then
+      "${ltx_cmd[@]}" || rc=$?
+    fi
+  else
+    local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
+    bash "${dl}" wrap --limit "${limit}" -- bash -c \
+      "MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-flux.sh' run --tier fast && \
+       MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-ltx.sh' run --tier balanced" ||
+      rc=$?
   fi
-  local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
-  bash "${dl}" wrap --limit "${limit}" -- bash -c \
-    "MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-flux.sh' run --tier fast && \
-     MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-ltx.sh' run --tier balanced"
+  # Lab workflows need the full basename set under MODELS_DIR/comfy (not size-only tiers)
+  if ! check_lab_models_ready "${MODELS_DIR}"; then
+    err "download-models: lab workflow weights incomplete under ${MODELS_DIR}/comfy"
+    err "Re-run after fixing HF_TOKEN / network, or download tiers individually."
+    return 1
+  fi
+  if [[ ${rc} -ne 0 ]]; then
+    warn "download-models: download reported errors (rc=${rc}) but lab files are present"
+  fi
+  log "download-models: lab workflow weights ready under ${MODELS_DIR}/comfy"
+  return 0
 }
 
 #######################################
