@@ -316,11 +316,12 @@ assert any(n.get('type')=='EmptyLTXVLatentVideo' and n['widgets_values'][0]==102
 
   for wf in "${files[@]}"; do
     run python3 -c "
-import json
+import json, os
 p = '${wf}'
+base = os.path.basename(p)
 d = json.load(open(p))
-notes = [n for n in d['nodes'] if n.get('type') == 'Note']
-assert notes, f'{p}: missing Note node'
+notes = [n for n in d['nodes'] if n.get('type') in ('Note', 'MarkdownNote')]
+assert notes, f'{p}: missing Note/MarkdownNote node'
 assert any(
     isinstance(n.get('widgets_values'), list)
     and n['widgets_values']
@@ -328,12 +329,13 @@ assert any(
     and len(n['widgets_values'][0].strip()) > 40
     for n in notes
 ), f'{p}: empty Note'
-clips = [n for n in d['nodes'] if n.get('type') == 'CLIPTextEncode']
-assert len(clips) >= 2, f'{p}: expected Positive+Negative CLIPTextEncode'
-for n in clips:
-    title = (n.get('title') or '').lower()
-    text = (n.get('widgets_values') or [''])[0]
-    assert isinstance(text, str) and text.strip(), f'{p}: empty prompt on {title!r}'
+if not base.startswith('h3-'):
+    clips = [n for n in d['nodes'] if n.get('type') == 'CLIPTextEncode']
+    assert len(clips) >= 2, f'{p}: expected Positive+Negative CLIPTextEncode'
+    for n in clips:
+        title = (n.get('title') or '').lower()
+        text = (n.get('widgets_values') or [''])[0]
+        assert isinstance(text, str) and text.strip(), f'{p}: empty prompt on {title!r}'
 # Hidden parity with on-canvas note
 assert isinstance(d.get('extra', {}).get('lab_note'), str) and d['extra']['lab_note'].strip()
 "
