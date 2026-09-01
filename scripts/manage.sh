@@ -78,6 +78,11 @@ Commands:
   restart           stop + start
   logs              Follow compose logs
   download-models   Download flux-fast + ltx-balanced (bandwidth limited)
+                    --with-h3 also pulls MiniMax H3 pruned INT8 (~40 GB)
+  download-h3       Download MiniMax H3 only (opt-in; bandwidth limited)
+  queue-h3          POST a 90s H3 film graph to local ComfyUI :8188
+  farm-h3           Queue films across SPARK_COMFY_URLS (never starts compose)
+  stitch-h3         ffmpeg mux of H3-native shots; hard-cap 90.00s
   download-limit    Proxy to utilities/download-limit.sh
   clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
   cleanup           Remove comfy-state volume (type DELETE)
@@ -258,6 +263,9 @@ cmd_doctor() {
   log "ltx status: ${ltx_json}"
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
+  if [[ ${LAB_PIPELINE:-} == "h3" ]]; then
+    check_h3_models_ready "${MODELS_DIR}" || warn "H3 workflow models incomplete (not a hard doctor failure)"
+  fi
   if [[ ! -f $(lab_compose_file) ]]; then
     err "compose file missing: $(lab_compose_file)"
     ok=1
@@ -416,7 +424,25 @@ cmd_clear_hf_locks() {
 
 cmd_download_models() {
   local limit="${DOWNLOAD_LIMIT}"
-  local flux_cmd ltx_cmd rc=0
+  local flux_cmd ltx_cmd rc=0 with_h3=0
+  local arg
+  for arg in "$@"; do
+    case "${arg}" in
+      --with-h3) with_h3=1 ;;
+      -h | --help)
+        cat <<'EOF' >&2
+Usage: manage.sh download-models [--with-h3]
+  Default: flux-fast + ltx-balanced (does not pull H3).
+  --with-h3  also download MiniMax H3 pruned INT8 (~40 GB).
+EOF
+        return 0
+        ;;
+      *)
+        err "Unknown download-models flag: ${arg}"
+        return 1
+        ;;
+    esac
+  done
   ensure_models_dir "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   flux_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-flux.sh" run --tier fast)
@@ -427,11 +453,18 @@ cmd_download_models() {
     if [[ ${rc} -eq 0 ]]; then
       "${ltx_cmd[@]}" || rc=$?
     fi
+    if [[ ${rc} -eq 0 && ${with_h3} -eq 1 ]]; then
+      bash "${REPO_ROOT}/scripts/utilities/download-h3.sh" run --tier pruned || rc=$?
+    fi
   else
     local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
-    bash "${dl}" wrap --limit "${limit}" -- bash -c \
-      "MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-flux.sh' run --tier fast && \
-       MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-ltx.sh' run --tier balanced" ||
+    local inner
+    inner="MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-flux.sh' run --tier fast && \
+       MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-ltx.sh' run --tier balanced"
+    if [[ ${with_h3} -eq 1 ]]; then
+      inner="${inner} && MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-h3.sh' run --tier pruned"
+    fi
+    bash "${dl}" wrap --limit "${limit}" -- bash -c "${inner}" ||
       rc=$?
   fi
   # Lab workflows need the full basename set under MODELS_DIR/comfy (not size-only tiers)
@@ -440,11 +473,76 @@ cmd_download_models() {
     err "Re-run after fixing HF_TOKEN / network, or download tiers individually."
     return 1
   fi
+  if [[ ${with_h3} -eq 1 ]] && ! check_h3_models_ready "${MODELS_DIR}"; then
+    err "download-models --with-h3: H3 weights incomplete under ${MODELS_DIR}/comfy"
+    return 1
+  fi
   if [[ ${rc} -ne 0 ]]; then
     warn "download-models: download reported errors (rc=${rc}) but lab files are present"
   fi
   log "download-models: lab workflow weights ready under ${MODELS_DIR}/comfy"
   return 0
+}
+
+#######################################
+# Download MiniMax H3 pruned weights only (opt-in; bandwidth-limited).
+# Globals:
+#   MODELS_DIR, DOWNLOAD_LIMIT
+# Arguments:
+#   $@  forwarded to download-h3.sh after `run` (e.g. --tier turbo)
+# Returns:
+#   0 when four H3 basenames are present
+#######################################
+cmd_download_h3() {
+  local limit="${DOWNLOAD_LIMIT}"
+  local rc=0
+  ensure_models_dir "${MODELS_DIR}" || return 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+  if [[ ${limit} == "off" || ${limit} == "0" ]]; then
+    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    bash "${REPO_ROOT}/scripts/utilities/download-h3.sh" run "$@" || rc=$?
+  else
+    local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
+    bash "${dl}" wrap --limit "${limit}" -- bash -c \
+      "MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-h3.sh' run $*" ||
+      rc=$?
+  fi
+  if ! check_h3_models_ready "${MODELS_DIR}"; then
+    err "download-h3: H3 weights incomplete under ${MODELS_DIR}/comfy"
+    return 1
+  fi
+  if [[ ${rc} -ne 0 ]]; then
+    warn "download-h3: download reported errors (rc=${rc}) but H3 files are present"
+  fi
+  log "download-h3: MiniMax H3 weights ready under ${MODELS_DIR}/comfy"
+  return 0
+}
+
+#######################################
+# POST an H3 90s film graph to one ComfyUI URL.
+# Arguments:
+#   $@  forwarded to queue-h3-film.sh
+#######################################
+cmd_queue_h3() {
+  bash "${REPO_ROOT}/scripts/utilities/queue-h3-film.sh" "$@"
+}
+
+#######################################
+# Farm H3 films across SPARK_COMFY_URLS (does not start compose).
+# Arguments:
+#   $@  forwarded to spark-farm.sh run
+#######################################
+cmd_farm_h3() {
+  bash "${REPO_ROOT}/scripts/utilities/spark-farm.sh" run "$@"
+}
+
+#######################################
+# ffmpeg mux of H3-native shot media; refuse soundtracks; cap 90s.
+# Arguments:
+#   $@  forwarded to queue-h3-film.sh stitch
+#######################################
+cmd_stitch_h3() {
+  bash "${REPO_ROOT}/scripts/utilities/queue-h3-film.sh" stitch "$@"
 }
 
 #######################################
@@ -508,7 +606,11 @@ main() {
     stop) cmd_stop ;;
     restart) cmd_restart ;;
     logs) cmd_logs "$@" ;;
-    download-models) cmd_download_models ;;
+    download-models) cmd_download_models "$@" ;;
+    download-h3) cmd_download_h3 "$@" ;;
+    queue-h3) cmd_queue_h3 "$@" ;;
+    farm-h3) cmd_farm_h3 "$@" ;;
+    stitch-h3) cmd_stitch_h3 "$@" ;;
     download-limit) cmd_download_limit "$@" ;;
     clear-hf-locks) cmd_clear_hf_locks ;;
     cleanup) cmd_cleanup ;;
