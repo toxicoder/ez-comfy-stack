@@ -22,7 +22,7 @@ tags: [safety, reboot]
 
 !!! danger "Never reboot with the heavy ComfyUI stack still running"
 
-    Always `stop` first. Compose uses `restart: "no"` so the stack will **not** come back by itself — that is intentional, but a live GPU load during reboot still risks painful recovery.
+    Always `stop` first. Compose uses `restart: "no"` so the stack will **not** come back by itself — that is intentional, but a live GPU load during reboot still risks painful recovery. Three Spark farm containers still use `restart: "no"`; `farm-h3` never starts compose on a remote node.
 
 ```mermaid
 flowchart LR

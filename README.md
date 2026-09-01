@@ -9,7 +9,7 @@
 
 **Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) — MkDocs Material, published per branch via GitHub Pages.
 
-Inspired by [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) visual workloads — without K3s, Ansible, or the full lab dashboard. Use the lab for production multi-stack operations; use this repo for faster demos.
+Inspired by [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) visual workloads — without K3s, Ansible, or the full lab dashboard. Use the lab for production multi-stack operations; use this repo for faster demos. Optional MiniMax H3 90.00s films (GO SEE) and a 3-Spark farm on shared models: [H3 films](docs/h3-films.md) · [Spark farm](docs/spark-farm.md) — does not replace the Flux→LTX one-command path.
 
 ## Goals
 
@@ -70,7 +70,7 @@ sequenceDiagram
 docker/           Dockerfile + compose (flux-to-ltx)
 scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
-scripts/utilities download-flux, download-ltx, download-limit
+scripts/utilities download-flux, download-ltx, download-h3, download-limit, spark-farm, queue-h3-film
 config/           Resource / headroom policy
 workflows/        Seeded lab ComfyUI example graphs
 docs/             MkDocs site
