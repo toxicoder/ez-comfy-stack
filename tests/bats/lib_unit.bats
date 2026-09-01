@@ -71,6 +71,30 @@ teardown() {
   [[ "${output}" == *"all expected"* || "${output}" == *"lab model ok"* ]]
 }
 
+@test "common: h3_expected_model_relpaths and check_h3_models_ready" {
+  run h3_expected_model_relpaths
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"minimax_h3_fl2va_pruned_int8_convrot.safetensors"* ]]
+  [[ "${output}" == *"qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"* ]]
+  [[ "${output}" == *"minimax_h3_video_vae_fp16.safetensors"* ]]
+  [[ "${output}" == *"minimax_h3_audio_vae_fp32.safetensors"* ]]
+
+  local root="${TEST_TMP_DIR}/h3_models_root"
+  mkdir -p "${root}/comfy"
+  run check_h3_models_ready "${root}"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"MISSING"* || "${output}" == *"Missing"* || "${output}" == *"missing"* ]]
+
+  while IFS= read -r rel; do
+    [[ -z ${rel} ]] && continue
+    mkdir -p "${root}/comfy/$(dirname "${rel}")"
+    : >"${root}/comfy/${rel}"
+  done < <(h3_expected_model_relpaths)
+  run check_h3_models_ready "${root}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"H3 models"* || "${output}" == *"H3 model ok"* ]]
+}
+
 @test "common: ln_sfn_relative creates resolvable relative symlink" {
   local base="${TEST_TMP_DIR}/ln_rel"
   local target="${base}/tier/split_files/vae/flux2-vae.safetensors"

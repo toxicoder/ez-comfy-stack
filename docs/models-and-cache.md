@@ -161,7 +161,20 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern
 | `ltx-*-60s-*-lab-example.json` (5 graphs) | ~60 s very heavy I2V/T2V demos (1441 frames) |
 | `flux-to-ltx-lab-example.json` / `flux-to-ltx-30s-lab-example.json` | Flux T2I + handoff → LTX I2V (~10 s / ~30 s) |
 
-Lab video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. All LTX lab examples are **≥ ~10 s**; 30 s / 60 s graphs are intentional long-run demos (high VRAM/time). Watch the **Save video (MP4)** node preview after Queue — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas **Note** with models, prompting, and video-output steps.
+Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. All LTX lab examples are **≥ ~10 s**; 30 s / 60 s graphs are intentional long-run demos (high VRAM/time). Watch the **Save video (MP4)** node preview after Queue — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas **Note** (H3 graphs use **MarkdownNote**) with models, prompting, and video-output steps.
+
+### MiniMax H3 (opt-in)
+
+`download-models` does **not** pull H3. Use `./scripts/manage.sh download-h3` or `download-models --with-h3`. See [H3 90s films](h3-films.md).
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `minimax_h3_fl2va_pruned_int8_convrot.safetensors` | `diffusion_models/` | FL2VA pruned INT8 (~19.5 GB) |
+| `qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | `text_encoders/` | Qwen3-VL-32B NVFP4 (CLIP type **`minimax`**) |
+| `minimax_h3_video_vae_fp16.safetensors` | `vae/` | Video VAE |
+| `minimax_h3_audio_vae_fp32.safetensors` | `vae/` | Audio VAE (native stereo) |
+
+Graphs: `h3-go-see-90s-lab-example.json`, `h3-still-here-90s-lab-example.json`, `h3-switchyard-90s-lab-example.json`. Output **2160 frames / 90.00s** (not 90.17s). `LAB_PIPELINE=h3` makes `doctor` also check these four files.
 
 ### Gated models / HF_TOKEN
 
@@ -328,7 +341,7 @@ flowchart TB
 
     | Pin | Default | Why this value |
     | --- | --- | --- |
-    | `COMFYUI_REF` | `v0.29.0` | Latest ComfyUI release (2026-07-29). Official README recommends **torch cu130**. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use **core** nodes only (`UNETLoader`, `EmptyFlux2LatentImage`, `LTXV*`, …). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
+    | `COMFYUI_REF` | `v0.34.0` | First release with **`MiniMaxH3AddGuide`** (needed for the 90s six-column chain). Native H3 nodes landed in 0.30.0; AddGuide is `#15439` in 0.34.0. Flux + LTX + VHS remain. Torch cu130. Rebuild the **comfy** image phase after this bump (torch phase stays cached). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
     | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
     | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for LTX lab **`VHS_VideoCombine`** MP4. **Required** for `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |

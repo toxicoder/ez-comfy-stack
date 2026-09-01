@@ -308,6 +308,18 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **flux-to-ltx-lab-example** | Flux txt2img + handoff → **ltx-i2v-lab-example** (~10 s) |
     | **flux-to-ltx-30s-lab-example** | Flux handoff aimed at **ltx-i2v-30s-lab-example** |
 
+=== "H3 90s film"
+
+    Opt-in MiniMax H3 path (does **not** replace Flux→LTX). Weights: `./scripts/manage.sh download-h3`. Needs Comfy **v0.34.0+** (`MiniMaxH3AddGuide`). Output is **2160 frames / 90.00s** with native H3 audio — [H3 90s films](h3-films.md).
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **h3-go-see-90s-lab-example** | First-person parkour-as-travel (contest entry) |
+    | **h3-still-here-90s-lab-example** | Third-person household morning |
+    | **h3-switchyard-90s-lab-example** | Night freight yard |
+
+    Queue: `./scripts/manage.sh queue-h3 --film go-see`. Three Sparks: [Spark farm](spark-farm.md).
+
 Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain MP4 output and long-run VRAM expectations.
 
 ### Prompting these models
