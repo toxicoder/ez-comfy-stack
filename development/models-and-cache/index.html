@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/models-and-cache/">
       
       
-        <link rel="prev" href="../visual-generative-ai/">
+        <link rel="prev" href="../spark-farm/">
       
       
         <link rel="next" href="../download-limit/">
@@ -284,6 +284,44 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../h3-films/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  H3 90s films
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../spark-farm/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Spark farm
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -507,6 +545,60 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../h3-films/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    H3 90s films
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-farm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark farm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -636,6 +728,17 @@
     <span class="md-ellipsis">
       
         Example graphs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minimax-h3-opt-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MiniMax H3 (opt-in)
       
     </span>
   </a>
@@ -985,6 +1088,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#minimax-h3-opt-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MiniMax H3 (opt-in)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#gated-models-hf_token" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1165,7 +1279,7 @@
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/models
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">&quot;</span><span class="w"> </span>/mnt/models
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span>/mnt/models
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -1218,7 +1332,7 @@
 </code></pre></div>
 <p>Downloads use the modern <strong><code>hf download</code></strong> CLI (not deprecated <code>huggingface-cli</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>hf<span class="w"> </span><span class="o">||</span><span class="w"> </span>pipx<span class="w"> </span>install<span class="w"> </span>huggingface_hub
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># or: pip install -U &#39;huggingface_hub[cli]&#39;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># or: pip install -U 'huggingface_hub[cli]'</span>
 </code></pre></div>
 <p>Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. <code>HF_PROGRESS=0</code> turns progress lines off; <code>HF_PROGRESS_INTERVAL=10</code> sets the tick (seconds).</p>
 <h3 id="expected-basenames-after-download-models-lab-workflows">Expected basenames after <code>download-models</code> (lab workflows)<a class="headerlink" href="#expected-basenames-after-download-models-lab-workflows" title="Permanent link">&para;</a></h3>
@@ -1353,7 +1467,41 @@
 </tr>
 </tbody>
 </table>
-<p>Lab video graphs write <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write <strong>frames</strong> via <code>SaveImage</code>. All LTX lab examples are <strong>≥ ~10 s</strong>; 30 s / 60 s graphs are intentional long-run demos (high VRAM/time). Watch the <strong>Save video (MP4)</strong> node preview after Queue — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a>. They still <strong>must</strong> wire the audio VAE + <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas <strong>Note</strong> with models, prompting, and video-output steps.</p>
+<p>Lab LTX video graphs write <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write <strong>frames</strong> via <code>SaveImage</code>. All LTX lab examples are <strong>≥ ~10 s</strong>; 30 s / 60 s graphs are intentional long-run demos (high VRAM/time). Watch the <strong>Save video (MP4)</strong> node preview after Queue — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a>. They still <strong>must</strong> wire the audio VAE + <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas <strong>Note</strong> (H3 graphs use <strong>MarkdownNote</strong>) with models, prompting, and video-output steps.</p>
+<h3 id="minimax-h3-opt-in">MiniMax H3 (opt-in)<a class="headerlink" href="#minimax-h3-opt-in" title="Permanent link">&para;</a></h3>
+<p><code>download-models</code> does <strong>not</strong> pull H3. Use <code>./scripts/manage.sh download-h3</code> or <code>download-models --with-h3</code>. See <a href="../h3-films/">H3 90s films</a>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Comfy folder</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>minimax_h3_fl2va_pruned_int8_convrot.safetensors</code></td>
+<td><code>diffusion_models/</code></td>
+<td>FL2VA pruned INT8 (~19.5 GB)</td>
+</tr>
+<tr>
+<td><code>qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors</code></td>
+<td><code>text_encoders/</code></td>
+<td>Qwen3-VL-32B NVFP4 (CLIP type <strong><code>minimax</code></strong>)</td>
+</tr>
+<tr>
+<td><code>minimax_h3_video_vae_fp16.safetensors</code></td>
+<td><code>vae/</code></td>
+<td>Video VAE</td>
+</tr>
+<tr>
+<td><code>minimax_h3_audio_vae_fp32.safetensors</code></td>
+<td><code>vae/</code></td>
+<td>Audio VAE (native stereo)</td>
+</tr>
+</tbody>
+</table>
+<p>Graphs: <code>h3-go-see-90s-lab-example.json</code>, <code>h3-still-here-90s-lab-example.json</code>, <code>h3-switchyard-90s-lab-example.json</code>. Output <strong>2160 frames / 90.00s</strong> (not 90.17s). <code>LAB_PIPELINE=h3</code> makes <code>doctor</code> also check these four files.</p>
 <h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
 <p>FLUX and some LTX assets may require accepting the license on Hugging Face and a token:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># .env</span>
@@ -1606,8 +1754,8 @@
 <tbody>
 <tr>
 <td><code>COMFYUI_REF</code></td>
-<td><code>v0.29.0</code></td>
-<td>Latest ComfyUI release (2026-07-29). Official README recommends <strong>torch cu130</strong>. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use <strong>core</strong> nodes only (<code>UNETLoader</code>, <code>EmptyFlux2LatentImage</code>, <code>LTXV*</code>, …). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
+<td><code>v0.34.0</code></td>
+<td>First release with <strong><code>MiniMaxH3AddGuide</code></strong> (needed for the 90s six-column chain). Native H3 nodes landed in 0.30.0; AddGuide is <code>#15439</code> in 0.34.0. Flux + LTX + VHS remain. Torch cu130. Rebuild the <strong>comfy</strong> image phase after this bump (torch phase stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
 </tr>
 <tr>
 <td><code>COMFYUI_MANAGER_REF</code></td>

@@ -288,6 +288,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../h3-films/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  H3 90s films
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../spark-farm/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Spark farm
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../models-and-cache/" class="md-tabs__link">
         
   
@@ -726,6 +764,60 @@
     
   
     Visual Generative AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../h3-films/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    H3 90s films
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-farm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark farm
   
 
     
@@ -1209,11 +1301,11 @@
 </tbody>
 </table>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Model cache (or let setup create it)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/models<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">&quot;</span><span class="w"> </span>/mnt/models
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/models<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span>/mnt/models
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># HF CLI</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>hf<span class="w"> </span><span class="o">||</span><span class="w"> </span>pipx<span class="w"> </span>install<span class="w"> </span>huggingface_hub
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># or: pip install -U &#39;huggingface_hub[cli]&#39;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># or: pip install -U 'huggingface_hub[cli]'</span>
 </code></pre></div>
 <pre class="mermaid"><code>flowchart LR
   subgraph Required["Required on host"]
@@ -1289,7 +1381,7 @@
 <hr />
 <h2 id="download-models">Download models<a class="headerlink" href="#download-models" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Ensure HF token for gated repos (FLUX):</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># echo &#39;HF_TOKEN=hf_...&#39; &gt;&gt; .env   # or: hf auth login</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># echo 'HF_TOKEN=hf_...' &gt;&gt; .env   # or: hf auth login</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>./scripts/manage.sh<span class="w"> </span>download-models
 </code></pre></div>
@@ -1489,7 +1581,7 @@
 <p class="admonition-title">Img2img uses Comfy’s default doodle</p>
 <p>I2I graphs keep <strong>LoadImage = example.png</strong> (the crude pink-dress / yellow wing-hair stick figure that ships with ComfyUI). Positives deliberately turn that bad sketch into something incredible—swap in your own sketch anytime.</p>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Video (LTX, ≥ ~10 s)</label><label for="__tabbed_4_2">Combined</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Video (LTX, ≥ ~10 s)</label><label for="__tabbed_4_2">Combined</label><label for="__tabbed_4_3">H3 90s film</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1554,6 +1646,32 @@
 </tr>
 </tbody>
 </table>
+</div>
+<div class="tabbed-block">
+<p>Opt-in MiniMax H3 path (does <strong>not</strong> replace Flux→LTX). Weights: <code>./scripts/manage.sh download-h3</code>. Needs Comfy <strong>v0.34.0+</strong> (<code>MiniMaxH3AddGuide</code>). Output is <strong>2160 frames / 90.00s</strong> with native H3 audio — <a href="../h3-films/">H3 90s films</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>h3-go-see-90s-lab-example</strong></td>
+<td>First-person parkour-as-travel (contest entry)</td>
+</tr>
+<tr>
+<td><strong>h3-still-here-90s-lab-example</strong></td>
+<td>Third-person household morning</td>
+</tr>
+<tr>
+<td><strong>h3-switchyard-90s-lab-example</strong></td>
+<td>Night freight yard</td>
+</tr>
+</tbody>
+</table>
+<p>Queue: <code>./scripts/manage.sh queue-h3 --film go-see</code>. Three Sparks: <a href="../spark-farm/">Spark farm</a>.</p>
 </div>
 </div>
 </div>
@@ -1622,7 +1740,7 @@
 <p>Longer latents need more VRAM and wall-clock time (often multi-minute). Prefer <strong>~10 s</strong> base graphs for smoke tests; keep headroom preflight green before queuing 30 s / 60 s demos.</p>
 </div>
 <p>Optional offline stitch of PNG frames only (if you need a host-side re-encode):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;ez_ltx_*_*.png&#39;</span><span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">'ez_ltx_*_*.png'</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
 </code></pre></div>
 <p>If <strong><code>VHS_VideoCombine</code> is missing</strong>, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see <a href="../troubleshooting/">Troubleshooting</a>.</p>

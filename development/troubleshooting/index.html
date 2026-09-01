@@ -286,6 +286,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../h3-films/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  H3 90s films
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../spark-farm/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Spark farm
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../models-and-cache/" class="md-tabs__link">
         
   
@@ -491,6 +529,60 @@
     
   
     Visual Generative AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../h3-films/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    H3 90s films
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-farm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark farm
   
 
     
@@ -1062,7 +1154,7 @@
 </code></pre></div>
 <p>Manual equivalent:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/models
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">&quot;</span><span class="w"> </span>/mnt/models
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span>/mnt/models
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># or in .env:</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># MODELS_DIR=$HOME/models</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
@@ -1296,6 +1388,26 @@
 <td>OOM / multi-minute hang on <strong>ltx-<em>-30s-</em></strong> / <strong><em>-60s-</em></strong></td>
 <td>Long latents (721 / 1441 frames) are heavy</td>
 <td>Prefer base <strong>~10 s</strong> graphs for smoke tests. Confirm headroom preflight; close other GPU jobs; start with <code>ltx-i2v-lab-example</code> / <code>ltx-t2v-lab-example</code> before long-run demos</td>
+</tr>
+<tr>
+<td>Missing <code>MiniMaxH3ImageToVideo</code> / <code>MiniMaxH3AddGuide</code></td>
+<td>Comfy pin older than <strong>v0.34.0</strong> (AddGuide is not in 0.30–0.33.1)</td>
+<td>Rebuild/pull image with <code>COMFYUI_REF=v0.34.0</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx grep -l MiniMaxH3AddGuide /comfy-state/ComfyUI/comfy_extras/nodes_minimax_h3.py</code></td>
+</tr>
+<tr>
+<td>H3 OOM at 1344×768×379</td>
+<td>Unified-memory pressure on GB10</td>
+<td><code>./scripts/manage.sh queue-h3 --film go-see --size 864x480</code>. Do <strong>not</strong> raise <code>MEM_LIMIT</code></td>
+</tr>
+<tr>
+<td>H3 download / generation geo or license error</td>
+<td>MiniMax H3 Community License excluded territories (US/EU/UK/KR) for local open weights</td>
+<td>Read <a href="../h3-films/">H3 films — license</a>. This stack does not geo-block the downloader</td>
+</tr>
+<tr>
+<td>Stitched H3 MP4 longer than 90s</td>
+<td>Concat kept 2164 unique frames (90.17s)</td>
+<td>Graphs keep <strong>2160</strong> frames; <code>stitch-h3</code> uses <code>ffmpeg -t 90</code> and fails if probe <code>&gt; 90</code></td>
 </tr>
 </tbody>
 </table>

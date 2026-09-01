@@ -16,7 +16,7 @@
         <link rel="prev" href="../getting-started/">
       
       
-        <link rel="next" href="../models-and-cache/">
+        <link rel="next" href="../h3-films/">
       
       
         
@@ -276,6 +276,44 @@
     
   
   Visual Generative AI
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../h3-films/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  H3 90s films
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../spark-farm/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Spark farm
 
       </a>
     </li>
@@ -640,6 +678,60 @@
   
   
     <li class="md-nav__item">
+      <a href="../h3-films/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    H3 90s films
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-farm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark farm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../models-and-cache/" class="md-nav__link">
         
   
@@ -983,6 +1075,7 @@
 <hr />
 <h2 id="combined-pipeline-flux-ltx">Combined pipeline (Flux → LTX)<a class="headerlink" href="#combined-pipeline-flux-ltx" title="Permanent link">&para;</a></h2>
 <p>Text → image → <strong>video frames</strong> in one ComfyUI stack. Lab graphs use <code>SaveImage</code> for frames. LTX-2.3 is a <strong>joint audio/video</strong> transformer: seeded LTX graphs load the <strong>audio VAE</strong>, create matching empty audio latents, and concat them with video latents before <code>KSampler</code> (audio is not saved). LTX text conditioning uses <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>) — not the projection file alone.</p>
+<p>A <strong>second video path</strong> is MiniMax H3 (opt-in weights, Comfy <strong>v0.34.0+</strong>): six FL2VA columns chained to a <strong>90.00s</strong> stereo MP4 with native H3 audio — see <a href="../h3-films/">H3 90s films</a>. Default <code>LAB_PIPELINE</code> remains <code>flux-to-ltx</code>.</p>
 <pre class="mermaid"><code>flowchart LR
   Prompt["Text prompt"] --&gt; Flux["Flux T2I&lt;br/&gt;fast · Klein 9B NVFP4"]
   Flux --&gt; Image["Still image"]

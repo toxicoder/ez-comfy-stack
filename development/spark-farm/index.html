@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Stop the ComfyUI stack before rebooting a remotely managed DGX Spark.">
+        <meta name="description" content="Three DGX Sparks as independent Comfy workers plus a shared model cache — farm and relay, no NCCL.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/reboot-safety/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/spark-farm/">
       
       
-        <link rel="prev" href="../download-limit/">
+        <link rel="prev" href="../h3-films/">
       
       
-        <link rel="next" href="../troubleshooting/">
+        <link rel="next" href="../models-and-cache/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Reboot Safety - ez-comfy-stack</title>
+        <title>Spark farm - ez-comfy-stack</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#reboot-safety" class="md-skip">
+        <a href="#spark-farm" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Reboot Safety
+              Spark farm
             
           </span>
         </div>
@@ -303,9 +303,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../spark-farm/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -360,11 +362,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../reboot-safety/" class="md-tabs__link">
         
   
   
@@ -572,10 +572,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../spark-farm/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark farm
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -591,6 +618,70 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#farm-vs-relay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Farm vs relay
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#networking-docs-only-no-iac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Networking (docs only — no IaC)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-node-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-node process
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -653,37 +744,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reboot Safety
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../reboot-safety/" class="md-nav__link">
         
   
   
@@ -699,70 +763,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#golden-rule" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Golden rule
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sequence" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sequence
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-containers-do-not-return" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why containers do not return
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#if-ssh-is-already-unresponsive" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        If SSH is already unresponsive
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -848,10 +848,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#golden-rule" class="md-nav__link">
+  <a href="#farm-vs-relay" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Golden rule
+        Farm vs relay
       
     </span>
   </a>
@@ -859,10 +859,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sequence" class="md-nav__link">
+  <a href="#networking-docs-only-no-iac" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sequence
+        Networking (docs only — no IaC)
       
     </span>
   </a>
@@ -870,10 +870,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-containers-do-not-return" class="md-nav__link">
+  <a href="#per-node-process" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why containers do not return
+        Per-node process
       
     </span>
   </a>
@@ -881,10 +881,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#if-ssh-is-already-unresponsive" class="md-nav__link">
+  <a href="#commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        If SSH is already unresponsive
+        Commands
       
     </span>
   </a>
@@ -911,111 +911,86 @@
   
 
 
-<h1 id="reboot-safety">Reboot Safety<a class="headerlink" href="#reboot-safety" title="Permanent link">&para;</a></h1>
+<h1 id="spark-farm">Spark farm<a class="headerlink" href="#spark-farm" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>Golden rule and recommended sequence</li>
-<li>Why containers do not auto-return after reboot</li>
-<li>Recovery when SSH is already unresponsive</li>
+<li>How three Sparks are used (farm vs relay)</li>
+<li>Fabric NFS / rsync vs management SSH</li>
+<li>Operator commands (<code>farm-h3</code>, <code>sync-models</code>)</li>
+<li>What this sample stack refuses (NCCL, K3s)</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Rebooting a Spark without losing SSH recoverability or corrupting long downloads</li>
+<li>Three concurrent 90.00s MiniMax H3 films with <strong>one weight copy</strong></li>
+<li>Shot-relay copies on the 200 GbE fabric, not the 10 GbE mgmt NIC</li>
+<li>Unchanged <code>restart: "no"</code> and local heavy confirm on <code>start</code></li>
 </ul>
-<hr />
-<h2 id="golden-rule">Golden rule<a class="headerlink" href="#golden-rule" title="Permanent link">&para;</a></h2>
-<div class="admonition danger">
-<p class="admonition-title">Never reboot with the heavy ComfyUI stack still running</p>
-<p>Always <code>stop</code> first. Compose uses <code>restart: "no"</code> so the stack will <strong>not</strong> come back by itself — that is intentional, but a live GPU load during reboot still risks painful recovery. Three Spark farm containers still use <code>restart: "no"</code>; <code>farm-h3</code> never starts compose on a remote node.</p>
-</div>
-<pre class="mermaid"><code>flowchart LR
-  subgraph Unsafe["Anti-pattern"]
-    R1["Stack still running"] --&gt; R2["reboot"]
-    R2 --&gt; R3["Risk: load / recovery pain"]
-  end
-  subgraph Safe["Golden path"]
-    S1["manage.sh stop"] --&gt; S2["status"]
-    S2 --&gt; S3["reboot"]
-    S3 --&gt; S4["doctor → start"]
-  end</code></pre>
-<hr />
-<h2 id="sequence">Sequence<a class="headerlink" href="#sequence" title="Permanent link">&para;</a></h2>
+<p>This remains a <strong>per-node Comfy demo</strong>. Tensor-parallel LLMs belong in <a href="https://github.com/toxicoder/nvidia-dgx-spark-lab">nvidia-dgx-spark-lab</a>.</p>
+<h2 id="farm-vs-relay">Farm vs relay<a class="headerlink" href="#farm-vs-relay" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>What the 3 Sparks do</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Farm (default)</strong></td>
+<td>Each Spark runs one full 6-shot film (different film / seed). Shared <code>/mnt/models</code>.</td>
+<td>GO SEE + STILL HERE + SWITCHYARD, or 3 seeds of GO SEE</td>
+</tr>
+<tr>
+<td><strong>Relay (optional)</strong></td>
+<td>Spark-0 samples shot N, writes last-frame PNG + WAV to the share; Spark-1 samples shot N+1.</td>
+<td>One film, if weight-load dominates wall-clock</td>
+</tr>
+<tr>
+<td><strong>Do not implement</strong></td>
+<td>NCCL split of a single H3 denoise across 3 GB10s</td>
+<td>Out of scope</td>
+</tr>
+</tbody>
+</table>
+<p>GB10 128 GB unified memory holds INT8 FL2VA + NVFP4 Qwen3-VL-32B + both VAEs. Clustering is <strong>throughput + one weight copy</strong>, not slicing one sampler.</p>
+<h2 id="networking-docs-only-no-iac">Networking (docs only — no IaC)<a class="headerlink" href="#networking-docs-only-no-iac" title="Permanent link">&para;</a></h2>
+<p>Physical: 3 Sparks, high-bandwidth already up.</p>
+<ul>
+<li><strong>3-node ring:</strong> 3× QSFP DAC, both CX-7 ports live. NVIDIA Sync → Cluster Assistant. No switch.</li>
+<li><strong>Star via QSFP switch:</strong> each Spark one or two 200 GbE links.</li>
+</ul>
+<p>Management SSH stays on 10 GbE / RJ45. Model sync and shot-relay use <strong><code>SPARK_FABRIC_IPS</code> only</strong>. Do not rsync multi-gig weights over the management NIC.</p>
+<p>Shared <code>MODELS_DIR</code> (pick one):</p>
 <ol>
-<li>From your workstation / SSH session:</li>
+<li><strong>NFS over the fabric subnet (preferred):</strong> Spark-0 exports <code>/mnt/models</code>; Sparks 1–2 mount it. Compose already bind-mounts <code>${MODELS_DIR}:/models</code>.</li>
+<li><strong>Replica:</strong> <code>./scripts/utilities/spark-farm.sh sync-models</code> rsyncs the H3 tree over fabric IPs.</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>status
+<p>See <code>config/spark-farm.example.env</code>.</p>
+<h2 id="per-node-process">Per-node process<a class="headerlink" href="#per-node-process" title="Permanent link">&para;</a></h2>
+<p>On <strong>each</strong> Spark (operator, with confirm):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>setup
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># set MODELS_DIR=/mnt/models and HF_TOKEN in .env</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>./scripts/manage.sh<span class="w"> </span>download-h3<span class="w">          </span><span class="c1"># cache owner, or after NFS is up</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
 </code></pre></div>
-<ol>
-<li>
-<p>Reboot the node (<code>sudo reboot</code> or out-of-band BMC).</p>
-</li>
-<li>
-<p>After boot, verify Docker and GPU:</p>
-</li>
-</ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>doctor
+<p>Three UIs: <code>http://spark-0:8188</code>, <code>http://spark-1:8188</code>, <code>http://spark-2:8188</code>.</p>
+<p><code>farm-h3</code> <strong>never</strong> starts compose remotely. It prints the exact <code>./scripts/manage.sh start</code> you must run locally (heavy confirm stays on that node). Three containers still use <code>restart: "no"</code>.</p>
+<p>From a laptop or Spark-0:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_COMFY_URLS</span><span class="o">=</span>http://spark-0:8188,http://spark-1:8188,http://spark-2:8188
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>farm-h3<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--seeds<span class="w"> </span><span class="m">509201</span>,509211,509221
 </code></pre></div>
-<ol>
-<li>Only then start again:</li>
-</ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>start
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># type: yes</span>
+<p>Memory: keep <code>MEM_LIMIT=90g</code>, <code>MEM_RESERVATION=80g</code>, <code>MIN_HOST_FREE_GIB=28</code>, <code>shm_size: 16gb</code>. If a node OOMs at 1344×768×379, use <code>--size 864x480</code> rather than raising mem limits.</p>
+<h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>./scripts/manage.sh<span class="w"> </span>farm-h3<span class="w"> </span>--film<span class="w"> </span>go-see
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>./scripts/manage.sh<span class="w"> </span>queue-h3<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--relay
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>./scripts/manage.sh<span class="w"> </span>stitch-h3<span class="w"> </span>--dir<span class="w"> </span>&lt;shots&gt;<span class="w">   </span><span class="c1"># H3-native concat only; -t 90</span>
 </code></pre></div>
-<pre class="mermaid"><code>sequenceDiagram
-  actor Op as Operator
-  participant M as manage.sh
-  participant H as Spark host
-  participant D as Docker / ComfyUI
-
-  Op-&gt;&gt;M: stop
-  M-&gt;&gt;D: compose down keep models + volume
-  Op-&gt;&gt;M: status
-  M--&gt;&gt;Op: stopped
-  Op-&gt;&gt;H: reboot / BMC
-  H--&gt;&gt;Op: back up
-  Op-&gt;&gt;M: doctor
-  M--&gt;&gt;Op: preflight OK
-  Op-&gt;&gt;M: start type yes
-  M-&gt;&gt;D: compose up</code></pre>
-<hr />
-<h2 id="why-containers-do-not-return">Why containers do not return<a class="headerlink" href="#why-containers-do-not-return" title="Permanent link">&para;</a></h2>
-<p>Compose uses <code>restart: "no"</code>. There is no systemd unit that auto-starts this demo. That is intentional.</p>
-<pre class="mermaid"><code>stateDiagram-v2
-  [*] --&gt; Stopped
-  Stopped --&gt; Running: manage.sh start type yes
-  Running --&gt; Stopped: manage.sh stop
-  Running --&gt; Stopped: host reboot restart no
-  Stopped --&gt; Stopped: host reboot stays off
-  note right of Stopped
-    Manual start only.
-    No systemd auto-start.
-  end note</code></pre>
-<div class="admonition tip">
-<p class="admonition-title">Safety impact</p>
-<p>Manual start + headroom preflight + heavy confirmation keep remote SSH recoverable. Do not add auto-start units for this demo stack.</p>
-</div>
-<hr />
-<h2 id="if-ssh-is-already-unresponsive">If SSH is already unresponsive<a class="headerlink" href="#if-ssh-is-already-unresponsive" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Use <strong>BMC / serial console</strong></li>
-<li><strong>Hard power cycle</strong> only as last resort</li>
-<li>After recovery:</li>
-</ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>download-limit<span class="w"> </span>clear
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>./scripts/manage.sh<span class="w"> </span>doctor
-</code></pre></div>
-<pre class="mermaid"><code>flowchart TB
-  Dead["SSH unresponsive"] --&gt; BMC["BMC / serial console"]
-  BMC --&gt; Power{"hard power cycle&lt;br/&gt;last resort?"}
-  Power --&gt;|only if needed| Cycle["Power cycle"]
-  Power --&gt;|console works| Shell["Host shell"]
-  Cycle --&gt; Shell
-  Shell --&gt; Clear["download-limit clear"]
-  Clear --&gt; Stop["manage.sh stop"]
-  Stop --&gt; Doctor["manage.sh doctor"]
-  Doctor --&gt; Start["manage.sh start when ready"]</code></pre>
 
 
 
