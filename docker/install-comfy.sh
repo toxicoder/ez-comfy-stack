@@ -22,7 +22,7 @@
 #
 # Environment:
 #   COMFY_HOME, COMFY_USER, MODELS_ROOT — defaults in install-comfy/common.sh
-#   COMFYUI_REF — ComfyUI git pin (default v0.29.0; empty = default branch)
+#   COMFYUI_REF — ComfyUI git pin (default v0.34.0; empty = default branch)
 #   COMFYUI_MANAGER_REF — Manager pin (default 4.2.2)
 #   COMFYUI_NUNCHAKU_NODE_REF — nunchaku node pin (default v1.2.1)
 #   COMFYUI_VHS_REF — VideoHelperSuite git ref (default empty = main; required for LTX MP4)
