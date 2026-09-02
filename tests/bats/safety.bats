@@ -124,6 +124,7 @@ teardown() {
 
 @test "compose bind-mounts ops scripts for zero-rebuild iteration" {
   local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  local ref_count
   run grep -E 'entrypoint\.sh:/opt/ez-comfy/entrypoint\.sh' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'install-comfy\.sh:/opt/ez-comfy/install-comfy\.sh' "${compose}"
@@ -140,6 +141,9 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'COMFYUI_REF:.*v0\.' "${compose}"
   [ "$status" -eq 0 ]
+  # Build-arg AND runtime env (stamp-present pin refresh on the named volume)
+  ref_count="$(grep -cE 'COMFYUI_REF:' "${compose}" || true)"
+  [ "${ref_count}" -ge 2 ]
 }
 
 @test "workflow mount is outside COMFY_HOME tree" {

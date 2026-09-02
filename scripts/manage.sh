@@ -284,6 +284,13 @@ cmd_doctor() {
   fi
   # Soft: show which GHCR channel start would pull (branch-aligned; no network)
   log "default image: $(stack_default_image) (branch=$(stack_git_branch))"
+  if stack_port_open "${COMFY_PORT:-8188}"; then
+    if comfy_h3_object_info_ok; then
+      log "Native MiniMaxH3AddGuide registered"
+    else
+      warn "MiniMaxH3* missing (core v0.34.0). Do not pip install comfyui-manager. git pull, stop, start"
+    fi
+  fi
   if [[ ${ok} -ne 0 ]]; then
     if [[ ${docker_failed} -eq 1 ]]; then
       err "Doctor found problems — try: $(doctor_next_step_hint "${docker_st}")"
@@ -326,6 +333,11 @@ cmd_status() {
       warn "container running but :${COMFY_PORT:-8188} not open yet (cold install?). ./scripts/manage.sh logs"
     else
       log "ComfyUI port open — http://localhost:${COMFY_PORT:-8188}"
+      if comfy_h3_object_info_ok; then
+        log "Native MiniMaxH3AddGuide registered"
+      else
+        warn "MiniMaxH3* not in /object_info (core v0.34.0, not a pack). Do not pip install comfyui-manager. stop + start after git pull"
+      fi
     fi
   else
     warn "docker not available"

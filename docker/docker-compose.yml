@@ -52,6 +52,8 @@ services:
       HF_TOKEN: ${HF_TOKEN:-}
       LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
       LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
+      # Runtime pin (must match build-arg). Stamp-present refresh syncs the volume when this changes.
+      COMFYUI_REF: ${COMFYUI_REF:-v0.34.0}
       PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
       CUDA_MODULE_LOADING: LAZY
       LAB_VISUAL_ENABLE_NVFP4: "1"

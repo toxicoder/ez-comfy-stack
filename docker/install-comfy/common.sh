@@ -39,6 +39,98 @@ log() {
 }
 
 #######################################
+# Path of the volume ComfyUI pin stamp.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Absolute path
+# Returns:
+#   0
+#######################################
+comfy_pin_file() {
+  echo "${COMFY_HOME}/.lab-comfyui-ref"
+}
+
+#######################################
+# Record COMFYUI_REF on the volume.
+# Globals:
+#   COMFYUI_REF, COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log
+# Returns:
+#   0
+#######################################
+write_comfy_pin() {
+  local f dest
+  f="$(comfy_pin_file)"
+  dest="$(dirname "${f}")"
+  mkdir -p "${dest}"
+  printf '%s\n' "${COMFYUI_REF:-}" >"${f}"
+  log "Wrote Comfy pin ${COMFYUI_REF:-} → ${f}"
+}
+
+#######################################
+# Read volume ComfyUI pin (empty if missing).
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Pin string without trailing newline
+# Returns:
+#   0
+#######################################
+read_comfy_pin() {
+  local f
+  f="$(comfy_pin_file)"
+  if [[ -f ${f} ]]; then
+    tr -d '\n' <"${f}"
+  fi
+}
+
+#######################################
+# True if volume pin matches COMFYUI_REF.
+# Globals:
+#   COMFYUI_REF
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 match; 1 mismatch or missing
+#######################################
+comfy_pin_matches() {
+  [[ "$(read_comfy_pin)" == "${COMFYUI_REF:-}" ]]
+}
+
+#######################################
+# True if a Comfy tree will actually *load* MiniMaxH3AddGuide.
+# The extras file is not enough: init_builtin_extra_nodes() uses an explicit
+# list in nodes.py. A v0.29.0 tree with only the extras file copied in still
+# shows Missing Node Packs / Unknown pack in the UI.
+# Globals:
+#   None
+# Arguments:
+#   $1 - ComfyUI root
+# Outputs:
+#   None
+# Returns:
+#   0 if extras file and nodes.py loader are both present
+#######################################
+comfy_tree_has_h3_addguide() {
+  local root="${1:-}"
+  local f="${root}/comfy_extras/nodes_minimax_h3.py"
+  local nodes="${root}/nodes.py"
+  [[ -n ${root} && -f ${f} && -f ${nodes} ]] &&
+    grep -q 'MiniMaxH3AddGuide' "${f}" &&
+    grep -q 'nodes_minimax_h3.py' "${nodes}"
+}
+
+#######################################
 # Log an install warning to stderr.
 # Globals:
 #   None

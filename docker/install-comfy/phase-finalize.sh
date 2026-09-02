@@ -63,6 +63,7 @@ phase_finalize() {
   activate_venv
   touch "${STAMP}"
   log "Wrote install stamp ${STAMP}"
+  write_comfy_pin
   strip_prebuilt "${COMFY_HOME}"
   link_all_models
   apply_free_memory_patch

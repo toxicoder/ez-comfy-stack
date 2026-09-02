@@ -11,6 +11,7 @@ tags: [h3, minimax, comfyui, video, challenge]
 - Challenge duration cap (90.00s, never 90.17s)
 - GO SEE / STILL HERE / SWITCHYARD theses and shot maps
 - Native node graph, weights, and opt-in download
+- Missing Node Packs / Unknown pack (core v0.34.0 — not Manager)
 - License warning (geo / Community License)
 
 **What this enables**
@@ -40,11 +41,15 @@ H3 cannot quality-sample 90s in one denoise. Do **not** set `length=2164` or `le
 
 ```bash
 ./scripts/manage.sh download-h3          # opt-in; default download-models stays flux+ltx
-./scripts/manage.sh start                # type yes
+./scripts/manage.sh start                # type yes; volume reseeds to v0.34.0 if /object_info lacks MiniMaxH3AddGuide
 # open http://<spark-ip>:8188
 ```
 
 In the UI: **Workflows** → `h3-go-see-90s-lab-example` (seeded from host `workflows/` into `user/default/workflows/`). Drag-drop of the same JSON still works. Review the six shot prompts, **Queue**, watch **SaveVideo**. That MP4 plus this JSON are the contest submission.
+
+!!! warning "Missing Node Packs / Unknown pack for MiniMaxH3*"
+
+    `MiniMaxH3AddGuide`, `MiniMaxH3ImageToVideo`, and `MiniMaxH3SigmaShift` are **native ComfyUI v0.34.0** nodes (`comfy_extras/nodes_minimax_h3.py`, listed in `nodes.py`, `cnr_id: comfy-core`) — not a custom pack. Do **not** `pip install comfyui-manager` and do **not** restart with `--enable-manager`. After `git pull`, `./scripts/manage.sh stop` then `start` so the volume pin (`.lab-comfyui-ref`) and extras loader sync to `v0.34.0`. Hard-refresh the browser. Details: [Troubleshooting](troubleshooting.md).
 
 OOM at 1344×768×379: on each `MiniMaxH3ImageToVideo` set width/height to **864×480** (0.4 MP table). Do **not** raise `MEM_LIMIT`.
 

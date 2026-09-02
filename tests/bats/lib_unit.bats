@@ -533,6 +533,69 @@ line3" "org/x"
   run stack_port_open 9
   # port 9 unlikely open; status non-zero is fine
   [ "${status}" -ne 0 ] || true
+
+  export LAB_MOCK_H3_OBJECT_INFO=1
+  run comfy_h3_object_info_ok
+  [ "${status}" -eq 0 ]
+  export LAB_MOCK_H3_OBJECT_INFO=0
+  run comfy_h3_object_info_ok
+  [ "${status}" -ne 0 ]
+  unset LAB_MOCK_H3_OBJECT_INFO
+  export LAB_HERMETIC=1
+  run comfy_h3_object_info_ok
+  [ "${status}" -eq 0 ]
+
+  export LAB_STACK_FOLLOW=0
+  run ensure_comfy_h3_native_nodes
+  [ "${status}" -eq 0 ]
+
+  export LAB_FORCE_H3_NODE_PROBE=1
+  export LAB_STACK_FOLLOW=1
+  export LAB_HERMETIC=0
+  export LAB_SKIP_H3_NODE_PROBE=0
+  stack_port_open() { return 0; }
+  comfy_h3_object_info_ok() { return 0; }
+  run ensure_comfy_h3_native_nodes
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"MiniMaxH3AddGuide registered"* ]]
+
+  unset -f comfy_h3_object_info_ok
+  unset -f stack_port_open
+  # Repair: missing in object_info, image has loader, restart registers
+  stack_port_open() { return 0; }
+  comfy_h3_object_info_ok() {
+    if [[ ${LAB_MOCK_H3_AFTER_REPAIR:-0} == "1" ]]; then
+      return 0
+    fi
+    return 1
+  }
+  comfy_prebuilt_has_h3_loader() { return 0; }
+  comfy_volume_clear_install_stamp() { echo "stamp-cleared"; return 0; }
+  compose_run() {
+    if [[ ${1} == "restart" ]]; then
+      export LAB_MOCK_H3_AFTER_REPAIR=1
+    fi
+    echo "compose $*"
+    return 0
+  }
+  export LAB_MOCK_H3_AFTER_REPAIR=0
+  run ensure_comfy_h3_native_nodes
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"reseed"* || "${output}" == *"registered after"* ]]
+  unset -f comfy_h3_object_info_ok compose_run comfy_prebuilt_has_h3_loader \
+    comfy_volume_clear_install_stamp stack_port_open
+  unset LAB_FORCE_H3_NODE_PROBE LAB_MOCK_H3_AFTER_REPAIR
+  export LAB_STACK_FOLLOW=0
+  export LAB_HERMETIC=1
+  # Restore production helpers after test overrides
+  # shellcheck disable=SC1091
+  source "${REPO_ROOT}/scripts/lib/compose.sh"
+
+  run comfy_prebuilt_has_h3_loader
+  # mock compose exec grep typically fails in hermetic docker mock
+  [ "${status}" -eq 0 ] || [ "${status}" -ne 0 ]
+  run comfy_volume_clear_install_stamp
+  [ "${status}" -eq 0 ]
   run stack_stop
   [ "${status}" -eq 0 ]
   run stack_cleanup_state
