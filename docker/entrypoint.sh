@@ -262,6 +262,41 @@ configure_torch_native_triton() {
 }
 
 #######################################
+# Copy host lab JSON graphs into Comfy user workflows.
+# Includes top-level *.json and shorts/*.json (90s film bibles + bridges).
+# Globals:
+#   None
+# Arguments:
+#   $1  source workflows root (default /opt/ez-comfy/workflows)
+#   $2  destination user/default/workflows
+# Outputs:
+#   ep_log lines
+# Returns:
+#   0
+#######################################
+install_lab_workflows() {
+  local src="${1:-/opt/ez-comfy/workflows}"
+  local dest="${2:?}"
+  local wf n_wf=0
+  mkdir -p "${dest}"
+  if [[ ! -d ${src} ]]; then
+    ep_log "no workflows under ${src} (optional mount)"
+    return 0
+  fi
+  for wf in "${src}"/*.json "${src}"/shorts/*.json; do
+    [[ -f ${wf} ]] || continue
+    cp -f "${wf}" "${dest}/"
+    n_wf=$((n_wf + 1))
+    ep_log "installed workflow $(basename "${wf}")"
+  done
+  if [[ ${n_wf} -eq 0 ]]; then
+    ep_log "no workflows under ${src} (optional mount)"
+  else
+    ep_log "installed ${n_wf} workflow(s)"
+  fi
+}
+
+#######################################
 # Run install, seed, patch, and exec ComfyUI.
 # Globals:
 #   COMFY_HOME, VENV, LAB_*
@@ -332,21 +367,7 @@ main() {
   fi
 
   ep_log "phase 3/4: install lab workflows into user workflows"
-  mkdir -p "${comfy_home}/user/default/workflows"
-  local wf n_wf=0
-  if [[ -d /opt/ez-comfy/workflows ]]; then
-    for wf in /opt/ez-comfy/workflows/*.json; do
-      [[ -f ${wf} ]] || continue
-      cp -f "${wf}" "${comfy_home}/user/default/workflows/"
-      n_wf=$((n_wf + 1))
-      ep_log "installed workflow $(basename "${wf}")"
-    done
-  fi
-  if [[ ${n_wf} -eq 0 ]]; then
-    ep_log "no workflows under /opt/ez-comfy/workflows (optional mount)"
-  else
-    ep_log "installed ${n_wf} workflow(s)"
-  fi
+  install_lab_workflows /opt/ez-comfy/workflows "${comfy_home}/user/default/workflows"
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
   ensure_triton_build_env

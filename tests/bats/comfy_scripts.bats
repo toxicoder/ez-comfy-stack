@@ -149,6 +149,25 @@ teardown() {
   [[ "$(readlink "${TEST_TMP_DIR}/ComfyUI/output")" == "${mount}" ]]
 }
 
+@test "install_lab_workflows copies top-level and shorts JSON" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/wf"
+  dest="${TEST_TMP_DIR}/user_wf"
+  mkdir -p "${src}/shorts"
+  echo '{}' >"${src}/still-draft-lab-example.json"
+  echo '{}' >"${src}/shorts/go-see-90s-lab-example.json"
+  echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/still-draft-lab-example.json ]]
+  [[ -f ${dest}/go-see-90s-lab-example.json ]]
+  [[ ! -f ${dest}/go-see.shots.yaml ]]
+  run install_lab_workflows "${TEST_TMP_DIR}/missing-wf" "${TEST_TMP_DIR}/user_wf2"
+  [ "${status}" -eq 0 ]
+}
+
 @test "main with mocked install and NO_EXEC" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
