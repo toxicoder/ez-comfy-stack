@@ -1382,7 +1382,12 @@
 <tr>
 <td>LTX finished but I only see PNGs / no MP4 preview</td>
 <td>Old workflow JSON without VHS, or looking only at SaveImage</td>
-<td>Re-open current <strong>ltx-*-lab-example</strong> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open <strong>Save video (MP4)</strong> node for preview; MP4 is under Comfy <code>output/</code> as <code>ez_ltx_*_video_*.mp4</code>. Frames via SaveImage are secondary — <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a></td>
+<td>Re-open current <strong>ltx-*-lab-example</strong> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open <strong>Save video (MP4)</strong> node for preview; MP4 is on the host at <code>$COMFY_OUTPUT_DIR</code> (default <code>/mnt/comfy-output</code>) as <code>ez_ltx_*_video_*.mp4</code>. Confirm: <code>ls /mnt/comfy-output</code> and <code>docker exec ez-comfy-flux-to-ltx ls /outputs</code>. Frames via SaveImage are secondary — <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a></td>
+</tr>
+<tr>
+<td>Cannot find generated PNG/MP4 on the Spark host</td>
+<td>Looking in the git repo or only inside <code>ez-comfy-state</code></td>
+<td>Media is bind-mounted to <strong><code>COMFY_OUTPUT_DIR</code></strong> (default <code>/mnt/comfy-output</code>). <code>./scripts/manage.sh setup</code> creates it. <code>status</code> prints the path. <code>cleanup</code> does not delete it</td>
 </tr>
 <tr>
 <td>OOM / multi-minute hang on <strong>ltx-<em>-30s-</em></strong> / <strong><em>-60s-</em></strong></td>
