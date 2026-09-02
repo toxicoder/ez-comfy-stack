@@ -43,6 +43,9 @@ teardown() {
   [[ "${output}" == *"docker-compose.yml"* ]]
   run lab_models_dir
   [ "${status}" -eq 0 ]
+  run lab_comfy_output_dir
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"comfy-output"* ]]
 }
 
 @test "common: doctor_next_step_hint for docker group vs missing CLI" {
@@ -240,6 +243,17 @@ teardown() {
   run prepare_models_dir "${TEST_TMP_DIR}/prepared_models"
   [ "${status}" -eq 0 ]
   [ -d "${TEST_TMP_DIR}/prepared_models" ]
+  run ensure_comfy_output_dir "${TEST_TMP_DIR}/comfy-out-ok"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/comfy-out-ok" ]
+  run ensure_writable_host_dir COMFY_OUTPUT_DIR "${TEST_TMP_DIR}/comfy-out-ok"
+  [ "${status}" -eq 0 ]
+  run prepare_comfy_output_dir "${TEST_TMP_DIR}/prepared_output"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/prepared_output" ]
+  run prepare_writable_host_dir COMFY_OUTPUT_DIR "${TEST_TMP_DIR}/prepared_output2"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/prepared_output2" ]
   chmod 755 "${ro}"
 
   run run_with_signal_forwarding true

@@ -18,7 +18,8 @@ setup() {
   export MODELS_ROOT="${TEST_TMP_DIR}/models"
   export STAMP="${COMFY_HOME}/.lab-install-complete"
   export VENV="${COMFY_HOME}/.venv"
-  mkdir -p "${MODELS_ROOT}"
+  export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs"
+  mkdir -p "${MODELS_ROOT}" "${LAB_OUTPUTS_MOUNT}"
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"
 }
@@ -131,6 +132,23 @@ teardown() {
   [[ -f ${strip_root}/pkg/mod.py ]]
 }
 
+@test "link_comfy_output_dir migrates volume output and symlinks to mount" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local vol_out mount
+  vol_out="${TEST_TMP_DIR}/ComfyUI/output"
+  mount="${TEST_TMP_DIR}/host_outputs"
+  mkdir -p "${vol_out}"
+  echo oldpng >"${vol_out}/legacy.png"
+  export LAB_OUTPUTS_MOUNT="${mount}"
+  export COMFY_HOME="${TEST_TMP_DIR}/ComfyUI"
+  run link_comfy_output_dir "${vol_out}"
+  [ "${status}" -eq 0 ]
+  [[ -L ${TEST_TMP_DIR}/ComfyUI/output ]]
+  [[ -f ${mount}/legacy.png ]]
+  [[ "$(readlink "${TEST_TMP_DIR}/ComfyUI/output")" == "${mount}" ]]
+}
+
 @test "main with mocked install and NO_EXEC" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
@@ -142,9 +160,11 @@ teardown() {
   : >"${STAMP}"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
+  export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs_main"
   run main
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"phase"* || "${output}" == *"refresh"* ]]
+  [[ -L ${COMFY_HOME}/output ]]
 }
 
 @test "entrypoint reseeds prebuilt when volume pin lags and image has H3" {

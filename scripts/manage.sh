@@ -50,6 +50,8 @@ source "${REPO_ROOT}/scripts/lib/compose.sh"
 load_dotenv "${REPO_ROOT}"
 MODELS_DIR=${MODELS_DIR:-/mnt/models}
 export MODELS_DIR
+COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output}
+export COMFY_OUTPUT_DIR
 DOWNLOAD_LIMIT=${DOWNLOAD_LIMIT:-auto}
 
 #######################################
@@ -70,11 +72,11 @@ ez-comfy-stack manage — unified Visual Generative AI (Flux → LTX via ComfyUI
 Commands:
   help              Show this help
   setup [--install-docker] [--yes]
-                    Host bootstrap: .env, MODELS_DIR (sudo), Docker CE install, doctor
-  doctor            Preflight: docker, GPU, free RAM/disk, models
+                    Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, doctor
+  doctor            Preflight: docker, GPU, free RAM/disk, models, output dir
   status [--json]   Stack status
   start             Start flux-to-ltx (requires yes)
-  stop              Stop stack (keep models + comfy volume)
+  stop              Stop stack (keep models, outputs, and comfy volume)
   restart           stop + start
   logs              Follow compose logs
   download-models   Download flux-fast + ltx-balanced (bandwidth limited)
@@ -86,9 +88,9 @@ Commands:
   stitch-h3         Optional ffmpeg mux of H3-native shots; hard-cap 90.00s
   download-limit    Proxy to utilities/download-limit.sh
   clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
-  cleanup           Remove comfy-state volume (type DELETE)
+  cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
 
-Environment: see .env.example (MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
+Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
 }
 
@@ -158,6 +160,14 @@ EOF
   log "MODELS_DIR=${MODELS_DIR}"
   if prepare_models_dir "${MODELS_DIR}"; then
     log "models dir ready: ${MODELS_DIR}"
+  else
+    ok=1
+  fi
+  COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output}
+  export COMFY_OUTPUT_DIR
+  log "COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR}"
+  if prepare_comfy_output_dir "${COMFY_OUTPUT_DIR}"; then
+    log "output dir ready: ${COMFY_OUTPUT_DIR}"
   else
     ok=1
   fi
@@ -266,6 +276,12 @@ cmd_doctor() {
   else
     ok=1
   fi
+  log "COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+  if ensure_comfy_output_dir "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"; then
+    log "output dir exists and is writable"
+  else
+    ok=1
+  fi
   local flux_json ltx_json
   flux_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-flux.sh" status --tier fast --json 2>/dev/null || echo '{}')
   ltx_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" status --tier balanced --json 2>/dev/null || echo '{}')
@@ -295,7 +311,7 @@ cmd_doctor() {
     if [[ ${docker_failed} -eq 1 ]]; then
       err "Doctor found problems — try: $(doctor_next_step_hint "${docker_st}")"
     else
-      err "Doctor found problems — see errors above (headroom, MODELS_DIR, or compose)"
+      err "Doctor found problems — see errors above (headroom, MODELS_DIR, COMFY_OUTPUT_DIR, or compose)"
     fi
     return 1
   fi
@@ -342,7 +358,7 @@ cmd_status() {
   else
     warn "docker not available"
   fi
-  log "MODELS_DIR=${MODELS_DIR} COMFY_PORT=${COMFY_PORT:-8188} MEM_LIMIT=${MEM_LIMIT:-90g}"
+  log "MODELS_DIR=${MODELS_DIR} COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output} COMFY_PORT=${COMFY_PORT:-8188} MEM_LIMIT=${MEM_LIMIT:-90g}"
 }
 
 #######################################

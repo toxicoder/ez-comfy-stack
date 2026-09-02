@@ -612,6 +612,7 @@ stack_pull_image() {
 stack_start() {
   require_docker
   export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+  export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
   export COMFY_PORT="${COMFY_PORT:-8188}"
   export MEM_LIMIT="${MEM_LIMIT:-90g}"
   export MEM_RESERVATION="${MEM_RESERVATION:-80g}"
@@ -621,8 +622,10 @@ stack_start() {
   EZ_COMFY_IMAGE="$(stack_default_image)"
   ensure_models_dir "${MODELS_DIR}" || return 1
   mkdir -p "${MODELS_DIR}/comfy"
+  ensure_comfy_output_dir "${COMFY_OUTPUT_DIR}" || return 1
   log "══ start ══ unified flux-to-ltx (mem_limit=${MEM_LIMIT})"
   log "Image: ${EZ_COMFY_IMAGE} (branch=${branch})"
+  log "Outputs: ${COMFY_OUTPUT_DIR} → /outputs"
 
   local up_args=(up -d)
   if [[ ${LAB_STACK_FORCE_BUILD:-0} == "1" ]]; then
@@ -691,7 +694,7 @@ stack_logs() {
 
 #######################################
 # Stop the stack and delete Compose-managed volumes (Comfy install state).
-# Does **not** delete host MODELS_DIR. Caller must obtain DELETE confirmation first.
+# Does **not** delete host MODELS_DIR or COMFY_OUTPUT_DIR. Caller must obtain DELETE confirmation first.
 # Side effects: Irreversible removal of the ez-comfy-state volume contents.
 # Globals:
 #   See file header / caller environment.
@@ -704,7 +707,7 @@ stack_logs() {
 #######################################
 stack_cleanup_state() {
   require_docker
-  log "Removing project volumes (models host path is NOT deleted)..."
+  log "Removing project volumes (MODELS_DIR and COMFY_OUTPUT_DIR are NOT deleted)..."
   compose_run down -v --remove-orphans
   log "Comfy state volume removed."
 }

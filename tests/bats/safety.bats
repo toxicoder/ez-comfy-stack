@@ -154,6 +154,18 @@ teardown() {
   [ "$status" -ne 0 ]
 }
 
+@test "compose bind-mounts generated media to host COMFY_OUTPUT_DIR" {
+  local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'output-directory|/outputs' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -eq 0 ]
+  run grep -E 'down -v' "${REPO_ROOT}/scripts/lib/compose.sh"
+  [ "$status" -eq 0 ]
+  run grep -E 'COMFY_OUTPUT_DIR are NOT deleted' "${REPO_ROOT}/scripts/lib/compose.sh"
+  [ "$status" -eq 0 ]
+}
+
 @test "prebuilt image defaults to GHCR and never bakes HF_TOKEN in Dockerfile" {
   run grep -E 'ghcr.io/.*/ez-comfy:flux-to-ltx' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]

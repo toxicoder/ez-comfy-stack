@@ -186,6 +186,42 @@ triton_build_deps_ok() {
 }
 
 #######################################
+# Point ComfyUI/output at the host bind-mount (/outputs).
+# Migrates leftover files from a real output/ dir on the named volume.
+# Globals:
+#   COMFY_HOME, LAB_OUTPUTS_MOUNT
+# Arguments:
+#   $1 - Optional Comfy output path (default COMFY_HOME/output)
+# Outputs:
+#   Progress logs
+# Returns:
+#   0
+#######################################
+link_comfy_output_dir() {
+  local dest="${1:-}"
+  local mount="${LAB_OUTPUTS_MOUNT:-/outputs}"
+  if [[ -z ${dest} ]]; then
+    dest="${COMFY_HOME:-/comfy-state/ComfyUI}/output"
+  fi
+  mkdir -p "${mount}"
+  if [[ -d ${dest} && ! -L ${dest} ]]; then
+    if [[ -n "$(ls -A "${dest}" 2>/dev/null || true)" ]]; then
+      ep_log "Migrating existing Comfy output/ into ${mount}"
+      if command -v rsync >/dev/null 2>&1; then
+        rsync -a "${dest}/" "${mount}/"
+      else
+        cp -a "${dest}/." "${mount}/"
+      fi
+    fi
+    rm -rf "${dest}"
+  elif [[ -L ${dest} || -e ${dest} ]]; then
+    rm -f "${dest}"
+  fi
+  ln -sfn "${mount}" "${dest}"
+  ep_log "Comfy output → ${mount} (host COMFY_OUTPUT_DIR bind-mount)"
+}
+
+#######################################
 # Prefer working Triton; disable torch python_native Triton when deps missing.
 # Globals:
 #   LAB_DISABLE_TORCH_NATIVE_TRITON, PYTHONPATH
@@ -321,12 +357,14 @@ main() {
   ensure_triton_build_env
   configure_torch_native_triton
   cd "${comfy_home}"
-  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188"
+  link_comfy_output_dir "${comfy_home}/output"
+  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs})"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then
     ep_log "LAB_ENTRYPOINT_NO_EXEC=1; skipping exec"
     return 0
   fi
-  exec python main.py --listen 0.0.0.0 --port 8188
+  exec python main.py --listen 0.0.0.0 --port 8188 \
+    --output-directory "${LAB_OUTPUTS_MOUNT:-/outputs}"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then

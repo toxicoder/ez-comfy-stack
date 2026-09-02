@@ -598,6 +598,36 @@ check_docker_preflight() {
 }
 
 #######################################
+# Ensure a host directory exists and is writable (mkdir as current user, no sudo).
+# Globals:
+#   None
+# Arguments:
+#   $1 - Label for errors (e.g. MODELS_DIR)
+#   $2 - Directory path
+# Outputs:
+#   Actionable error text on stderr when not writable
+# Returns:
+#   0 when the directory exists and is writable; 1 otherwise
+#######################################
+ensure_writable_host_dir() {
+  local label="${1:?ensure_writable_host_dir requires label}"
+  local dir="${2:?ensure_writable_host_dir requires directory}"
+  local user group
+  user="$(id -un)"
+  group="$(id -gn)"
+  if [[ ! -d ${dir} ]]; then
+    mkdir -p "${dir}" 2>/dev/null || true
+  fi
+  if [[ -d ${dir} && -w ${dir} ]]; then
+    return 0
+  fi
+  err "${label}=${dir} is not writable."
+  err "  ./scripts/manage.sh setup"
+  err "  # or: sudo mkdir -p '${dir}' && sudo chown ${user}:${group} '${dir}'"
+  return 1
+}
+
+#######################################
 # Ensure MODELS_DIR exists and is writable by the current user.
 # Tries mkdir -p as the current user; never uses sudo.
 # Globals:
@@ -611,20 +641,58 @@ check_docker_preflight() {
 #######################################
 ensure_models_dir() {
   local dir="${1:-${MODELS_DIR:-/mnt/models}}"
-  local user group
-  user="$(id -un)"
-  group="$(id -gn)"
-  if [[ ! -d ${dir} ]]; then
-    mkdir -p "${dir}" 2>/dev/null || true
-  fi
-  if [[ -d ${dir} && -w ${dir} ]]; then
+  ensure_writable_host_dir MODELS_DIR "${dir}"
+}
+
+#######################################
+# Ensure COMFY_OUTPUT_DIR exists and is writable (generated PNG/MP4).
+# Globals:
+#   COMFY_OUTPUT_DIR (read when $1 omitted)
+# Arguments:
+#   $1 - Directory path (default COMFY_OUTPUT_DIR or /mnt/comfy-output)
+# Outputs:
+#   Actionable error text on stderr when not writable
+# Returns:
+#   0 when writable; 1 otherwise
+#######################################
+ensure_comfy_output_dir() {
+  local dir="${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
+  ensure_writable_host_dir COMFY_OUTPUT_DIR "${dir}"
+}
+
+#######################################
+# Create a host directory with sudo and chown when needed.
+# Skips sudo when LAB_NO_SUDO=1 (tests / restricted environments).
+# Globals:
+#   LAB_NO_SUDO
+# Arguments:
+#   $1 - Label for logs/errors
+#   $2 - Directory path
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 when writable afterward; 1 on failure
+#######################################
+prepare_writable_host_dir() {
+  local label="${1:?prepare_writable_host_dir requires label}"
+  local dir="${2:?prepare_writable_host_dir requires directory}"
+  if ensure_writable_host_dir "${label}" "${dir}" 2>/dev/null; then
     return 0
   fi
-  err "MODELS_DIR=${dir} is not writable."
-  err "  ./scripts/manage.sh setup"
-  err "  # or: sudo mkdir -p '${dir}' && sudo chown ${user}:${group} '${dir}'"
-  err "or set MODELS_DIR to a path you own in .env (e.g. ~/models)."
-  return 1
+  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
+    err "${label}=${dir} not writable and LAB_NO_SUDO=1 (cannot sudo)"
+    return 1
+  fi
+  log "Creating ${label} with sudo: ${dir}"
+  if ! sudo mkdir -p "${dir}"; then
+    err "sudo mkdir -p '${dir}' failed"
+    return 1
+  fi
+  if ! sudo chown "$(id -u):$(id -g)" "${dir}"; then
+    err "sudo chown failed for '${dir}'"
+    return 1
+  fi
+  ensure_writable_host_dir "${label}" "${dir}"
 }
 
 #######################################
@@ -640,25 +708,22 @@ ensure_models_dir() {
 #   0 when writable afterward; 1 on failure
 #######################################
 prepare_models_dir() {
-  local dir="${1:-${MODELS_DIR:-/mnt/models}}"
-  if ensure_models_dir "${dir}" 2>/dev/null; then
-    return 0
-  fi
-  # ensure_models_dir already printed errors; clear intent for setup path
-  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
-    err "MODELS_DIR=${dir} not writable and LAB_NO_SUDO=1 (cannot sudo)"
-    return 1
-  fi
-  log "Creating MODELS_DIR with sudo: ${dir}"
-  if ! sudo mkdir -p "${dir}"; then
-    err "sudo mkdir -p '${dir}' failed"
-    return 1
-  fi
-  if ! sudo chown "$(id -u):$(id -g)" "${dir}"; then
-    err "sudo chown failed for '${dir}'"
-    return 1
-  fi
-  ensure_models_dir "${dir}"
+  prepare_writable_host_dir MODELS_DIR "${1:-${MODELS_DIR:-/mnt/models}}"
+}
+
+#######################################
+# Create COMFY_OUTPUT_DIR with sudo/chown when needed.
+# Globals:
+#   LAB_NO_SUDO, COMFY_OUTPUT_DIR
+# Arguments:
+#   $1 - Directory path (default COMFY_OUTPUT_DIR or /mnt/comfy-output)
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 when writable afterward; 1 on failure
+#######################################
+prepare_comfy_output_dir() {
+  prepare_writable_host_dir COMFY_OUTPUT_DIR "${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
 }
 
 #######################################

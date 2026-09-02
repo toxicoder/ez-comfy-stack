@@ -45,7 +45,7 @@ H3 cannot quality-sample 90s in one denoise. Do **not** set `length=2164` or `le
 # open http://<spark-ip>:8188
 ```
 
-In the UI: **Workflows** → `h3-go-see-90s-lab-example` (seeded from host `workflows/` into `user/default/workflows/`). Drag-drop of the same JSON still works. Review the six shot prompts, **Queue**, watch **SaveVideo**. That MP4 plus this JSON are the contest submission.
+In the UI: **Workflows** → `h3-go-see-90s-lab-example` (seeded from host `workflows/` into `user/default/workflows/`). Drag-drop of the same JSON still works. Review the six shot prompts, **Queue**, watch **SaveVideo**. The MP4 is on the host at `COMFY_OUTPUT_DIR` (default `/mnt/comfy-output`), typically `video/GO_SEE_90s_H3*.mp4`. That file plus this JSON are the contest submission.
 
 !!! warning "Missing Node Packs / Unknown pack for MiniMaxH3*"
 
