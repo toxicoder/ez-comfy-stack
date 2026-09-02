@@ -64,12 +64,12 @@ teardown() {
 @test "common: lab_expected_model_relpaths and check_lab_models_ready" {
   run lab_expected_model_relpaths
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"flux-2-klein-9b-nvfp4.safetensors"* ]]
-  [[ "${output}" == *"qwen_3_8b_fp4mixed.safetensors"* ]]
-  [[ "${output}" == *"gemma_3_12B_it_fp4_mixed.safetensors"* ]]
-  [[ "${output}" == *"ltx-2.3_text_projection_bf16.safetensors"* ]]
+  [[ "${output}" == *"flux-2-klein-4b-fp8.safetensors"* ]]
+  [[ "${output}" == *"qwen_3_4b.safetensors"* ]]
+  [[ "${output}" == *"wan2.2_ti2v_5B_fp16.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"* ]]
   [[ "${output}" == *"flux2-vae.safetensors"* ]]
-  [[ "${output}" == *"LTX23_video_vae_bf16.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-video-vae-bf16.safetensors"* ]]
 
   local root="${TEST_TMP_DIR}/lab_models_root"
   mkdir -p "${root}/comfy"

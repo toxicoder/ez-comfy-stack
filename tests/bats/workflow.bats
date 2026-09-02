@@ -384,26 +384,20 @@ assert 'SaveImage' in body or 'frames' in body.lower(), f'{base}: Note should st
   done
 }
 
-@test "download-flux companions tier and includes" {
+@test "download-image default pack includes Klein 4B Apache companions" {
   # shellcheck disable=SC1090
-  source "${REPO_ROOT}/scripts/utilities/download-flux.sh"
-  run tier_repo companions
-  [[ "${output}" == *"Comfy-Org/flux2-klein-9B"* ]]
-  run tier_include_patterns companions
-  [[ "${output}" == *"qwen_3_8b_fp4mixed"* ]]
+  source "${REPO_ROOT}/scripts/utilities/download-image.sh"
+  run tier_repo fast
+  [[ "${output}" == *"FLUX.2-klein-4b-fp8"* ]]
+  run tier_include_patterns te
+  [[ "${output}" == *"qwen_3_4b"* ]]
+  run tier_include_patterns vae
   [[ "${output}" == *"flux2-vae"* ]]
   TIER=fast
-  INCLUDE_NUNCHAKU=0
   run tiers_to_process
-  [[ "${output}" == *"companions"* ]]
   [[ "${output}" == *"fast"* ]]
-  # TE-only dir is not ready (regression: size floor skipped VAE)
-  local cdir
-  cdir="$(tier_dir companions)"
-  mkdir -p "${cdir}/split_files/text_encoders"
-  echo te >"${cdir}/split_files/text_encoders/qwen_3_8b_fp4mixed.safetensors"
-  run tier_files_ready companions
-  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"te"* ]]
+  [[ "${output}" == *"vae"* ]]
 }
 
 @test "lab_expected_model_relpaths matches download-models pack" {
@@ -411,12 +405,15 @@ assert 'SaveImage' in body or 'frames' in body.lower(), f'{base}: Note should st
   source "${REPO_ROOT}/scripts/lib/common.sh"
   run lab_expected_model_relpaths
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"flux-2-klein-9b-nvfp4.safetensors"* ]]
-  [[ "${output}" == *"qwen_3_8b_fp4mixed.safetensors"* ]]
+  [[ "${output}" == *"flux-2-klein-4b-fp8.safetensors"* ]]
+  [[ "${output}" == *"qwen_3_4b.safetensors"* ]]
   [[ "${output}" == *"flux2-vae.safetensors"* ]]
-  [[ "${output}" == *"fp8_input_scaled_v3"* ]]
-  [[ "${output}" == *"ltx-2.3_text_projection_bf16"* ]]
-  [[ "${output}" == *"gemma_3_12B_it_fp4_mixed"* ]]
-  [[ "${output}" == *"LTX23_video_vae_bf16"* ]]
-  [[ "${output}" == *"LTX23_audio_vae_bf16"* ]]
+  [[ "${output}" == *"wan2.2_ti2v_5B_fp16.safetensors"* ]]
+  [[ "${output}" == *"wan2.2_vae.safetensors"* ]]
+  [[ "${output}" == *"umt5_xxl_fp8_e4m3fn_scaled.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"* ]]
+  [[ "${output}" == *"gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-video-vae-bf16.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-audio-vae-bf16.safetensors"* ]]
+  [[ "${output}" != *"klein-9b"* ]]
 }

@@ -70,7 +70,7 @@ sequenceDiagram
 docker/           Dockerfile + compose (flux-to-ltx)
 scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
-scripts/utilities download-flux, download-ltx, download-limit, spark-farm
+scripts/utilities download-image, download-wan, download-ltx, download-limit, spark-farm
 config/           Resource / headroom policy
 workflows/        Seeded lab ComfyUI example graphs
 docs/             MkDocs site

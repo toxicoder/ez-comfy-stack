@@ -1006,14 +1006,16 @@ ln_sfn_relative() {
 #######################################
 lab_expected_model_relpaths() {
   cat <<'EOF'
-diffusion_models/flux-2-klein-9b-nvfp4.safetensors
-diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors
-text_encoders/qwen_3_8b_fp4mixed.safetensors
-text_encoders/gemma_3_12B_it_fp4_mixed.safetensors
-text_encoders/ltx-2.3_text_projection_bf16.safetensors
+diffusion_models/flux-2-klein-4b-fp8.safetensors
+diffusion_models/wan2.2_ti2v_5B_fp16.safetensors
+diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors
+text_encoders/qwen_3_4b.safetensors
+text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors
+text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors
 vae/flux2-vae.safetensors
-vae/LTX23_video_vae_bf16.safetensors
-vae/LTX23_audio_vae_bf16.safetensors
+vae/wan2.2_vae.safetensors
+vae/ltx-2.5-video-vae-bf16.safetensors
+vae/ltx-2.5-audio-vae-bf16.safetensors
 EOF
 }
 
@@ -1334,6 +1336,12 @@ hf_download() {
     # Full-repo mock: drop a weight basename matching lab UNET when known
     if [[ ${has_inc} -eq 0 ]]; then
       case "${repo}" in
+        *FLUX.2-klein-4b-fp8*)
+          echo "mock" >"${dest}/flux-2-klein-4b-fp8.safetensors"
+          ;;
+        *FLUX.2-klein-4b-nvfp4*)
+          echo "mock" >"${dest}/flux-2-klein-4b-nvfp4.safetensors"
+          ;;
         *FLUX.2-klein-9b-nvfp4* | *FLUX.2-klein-9B-nvfp4*)
           echo "mock" >"${dest}/flux-2-klein-9b-nvfp4.safetensors"
           ;;

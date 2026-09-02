@@ -198,7 +198,7 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'MODELS_DIR:-/mnt/models|MODELS_DIR:-"/mnt/models"' \
     "${REPO_ROOT}/scripts/manage.sh" \
-    "${REPO_ROOT}/scripts/utilities/download-flux.sh" \
+    "${REPO_ROOT}/scripts/utilities/download-image.sh" \
     "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
 }

@@ -178,10 +178,12 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
   # Gate fails when downloads fail and lab files are gone
-  rm -rf "${MODELS_DIR}/comfy" "${MODELS_DIR}/Comfy-Org__flux2-klein-9B" \
-    "${MODELS_DIR}/black-forest-labs__FLUX.2-klein-9b-nvfp4" \
-    "${MODELS_DIR}/Kijai__LTX2.3_comfy_balanced" \
-    "${MODELS_DIR}/tonera__FLUX.2-klein-9B-Nunchaku"
+  rm -rf "${MODELS_DIR}/comfy" \
+    "${MODELS_DIR}/black-forest-labs__FLUX.2-klein-4b-fp8_fast" \
+    "${MODELS_DIR}/Comfy-Org__z_image_turbo_te" \
+    "${MODELS_DIR}/Comfy-Org__flux2-dev_vae" \
+    "${MODELS_DIR}/Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b" \
+    "${MODELS_DIR}/Lightricks__LTX-2.5_2.5"
   export LAB_MOCK_HF_DOWNLOAD=fail
   run cmd_download_models
   [ "${status}" -ne 0 ]
