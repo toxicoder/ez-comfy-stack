@@ -24,6 +24,41 @@ teardown() {
   [[ ! -f ${REPO_ROOT}/docs/h3-films.md ]]
 }
 
+@test "shorts lab graphs are 120-frame US-safe I2V with last-frame prefix" {
+  local dir="${REPO_ROOT}/workflows/shorts"
+  local wf
+  [[ -f ${dir}/go-see-90s-lab-example.json ]]
+  [[ -f ${dir}/still-here-90s-lab-example.json ]]
+  [[ -f ${dir}/switchyard-90s-lab-example.json ]]
+  [[ -f ${dir}/bridge-wan-lab-example.json ]]
+  [[ -f ${dir}/bridge-ltx-lab-example.json ]]
+  run grep -R -E 'z_image_turbo|FLUX\.2-dev|klein-9b|flux-2-klein-9b|MiniMax|Seedance|Kling' "${dir}"
+  [ "${status}" -ne 0 ]
+  for wf in "${dir}"/*-lab-example.json; do
+    run python3 -c "import json,os; p='${wf}'; d=json.load(open(p)); assert d.get('id')==os.path.splitext(os.path.basename(p))[0]"
+    [ "${status}" -eq 0 ]
+  done
+  run python3 -c "
+import json
+w=json.load(open('${dir}/bridge-wan-lab-example.json'))
+l=json.load(open('${dir}/bridge-ltx-lab-example.json'))
+assert any(n.get('type')=='Wan22ImageToVideoLatent' and n['widgets_values'][2]==120 for n in w['nodes'])
+assert any(n.get('type')=='LTXVImgToVideo' and n['widgets_values'][2]==120 for n in l['nodes'])
+assert any(n.get('type')=='LTXVEmptyLatentAudio' and n['widgets_values'][0]==120 for n in l['nodes'])
+for g in (w, l):
+    vhs=next(n for n in g['nodes'] if n.get('type')=='VHS_VideoCombine')
+    assert float(vhs['widgets_values']['frame_rate'])==24
+    last=next(n for n in g['nodes'] if n.get('title')=='Save last frame')
+    assert str(last['widgets_values'][0]).endswith('_last')
+    assert not any(
+        n.get('type') in ('Wan22ImageToVideoLatent','LTXVImgToVideo','EmptyLTXVLatentVideo','LTXVEmptyLatentAudio')
+        and int(n['widgets_values'][2] if n['type']!='LTXVEmptyLatentAudio' else n['widgets_values'][0])>=241
+        for n in g['nodes']
+    )
+"
+  [ "${status}" -eq 0 ]
+}
+
 @test "lab-example workflows parse, name pattern, banned strings, no overlaps" {
   local wf dir="${REPO_ROOT}/workflows"
   local n=0
