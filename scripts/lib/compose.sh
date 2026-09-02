@@ -197,6 +197,112 @@ stack_port_open() {
 }
 
 #######################################
+# True if ComfyUI /object_info lists MiniMaxH3AddGuide (native v0.34.0).
+# Globals:
+#   COMFY_PORT, LAB_MOCK_H3_OBJECT_INFO, LAB_HERMETIC
+# Arguments:
+#   $1  Optional port (default COMFY_PORT or 8188)
+# Returns:
+#   0 if registered; 1 if missing
+#######################################
+comfy_h3_object_info_ok() {
+  local port="${1:-${COMFY_PORT:-8188}}"
+  local url="http://127.0.0.1:${port}/object_info/MiniMaxH3AddGuide"
+  case "${LAB_MOCK_H3_OBJECT_INFO:-}" in
+    1 | ok | yes) return 0 ;;
+    0 | missing | no) return 1 ;;
+  esac
+  if [[ ${LAB_HERMETIC:-0} == "1" ]]; then
+    return 0
+  fi
+  curl -sf --connect-timeout 2 --max-time 8 "${url}" 2>/dev/null | grep -q 'MiniMaxH3AddGuide'
+}
+
+#######################################
+# True if the image prebuilt tree will load MiniMaxH3 extras (nodes.py list).
+# Globals:
+#   None
+# Returns:
+#   0 if prebuilt has the loader
+#######################################
+comfy_prebuilt_has_h3_loader() {
+  compose_run exec -T comfyui grep -q 'nodes_minimax_h3.py' /opt/comfy-prebuilt/nodes.py &&
+    compose_run exec -T comfyui grep -q 'MiniMaxH3AddGuide' \
+      /opt/comfy-prebuilt/comfy_extras/nodes_minimax_h3.py
+}
+
+#######################################
+# Remove volume install stamp + pin so the next entrypoint reseeds Comfy.
+# Globals:
+#   None
+# Returns:
+#   0 (stamp removal is best-effort)
+#######################################
+comfy_volume_clear_install_stamp() {
+  compose_run exec -T comfyui rm -f \
+    /comfy-state/ComfyUI/.lab-install-complete \
+    /comfy-state/ComfyUI/.lab-comfyui-ref || true
+}
+
+#######################################
+# After the UI is up, confirm native MiniMaxH3 nodes are registered.
+# If /object_info lacks MiniMaxH3AddGuide and the image has v0.34 extras,
+# clear the volume stamp and restart once so entrypoint reseeds. Never
+# suggests pip install comfyui-manager — these are core nodes.
+# Globals:
+#   COMFY_PORT, LAB_SKIP_H3_NODE_PROBE, LAB_STACK_FOLLOW, LAB_HERMETIC,
+#   LAB_FORCE_H3_NODE_PROBE
+# Returns:
+#   0 if registered or probe skipped; 1 if still missing after one repair
+#######################################
+ensure_comfy_h3_native_nodes() {
+  local waited=0
+  if [[ ${LAB_SKIP_H3_NODE_PROBE:-0} == "1" ]]; then
+    return 0
+  fi
+  if [[ ${LAB_FORCE_H3_NODE_PROBE:-0} != "1" ]]; then
+    if [[ ${LAB_STACK_FOLLOW:-} == "0" || ${LAB_HERMETIC:-0} == "1" ]]; then
+      return 0
+    fi
+  fi
+  if ! stack_port_open "${COMFY_PORT:-8188}"; then
+    warn "Comfy UI not up — skip MiniMaxH3 node probe"
+    return 0
+  fi
+  if comfy_h3_object_info_ok; then
+    log "Native MiniMaxH3AddGuide registered (core v0.34.0 — not a custom pack)"
+    return 0
+  fi
+  warn "MiniMaxH3* missing from /object_info (volume Comfy is too old)"
+  warn "These are core v0.34.0 nodes. Do not pip install comfyui-manager"
+  warn "Do not restart with --enable-manager"
+  if comfy_prebuilt_has_h3_loader; then
+    log "Image has H3 extras — clearing volume stamp and restarting to reseed v0.34.0"
+    comfy_volume_clear_install_stamp
+    compose_run restart || {
+      err "compose restart failed while reseeding native H3 nodes"
+      return 1
+    }
+    while [[ ${waited} -lt 120 ]]; do
+      if stack_port_open "${COMFY_PORT:-8188}"; then
+        break
+      fi
+      sleep 2
+      waited=$((waited + 2))
+    done
+    if comfy_h3_object_info_ok; then
+      log "Native MiniMaxH3AddGuide registered after volume reseed"
+      return 0
+    fi
+  fi
+  err "MiniMaxH3AddGuide still not registered. git pull, stop, start."
+  err "If GHCR is still 0.29: LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start"
+  err "Confirm: docker exec ez-comfy-flux-to-ltx grep nodes_minimax_h3.py /comfy-state/ComfyUI/nodes.py"
+  err "Do not pip install comfyui-manager"
+  return 1
+}
+
+#######################################
 # Stream compose logs and poll until UI port is open (or timeout / detach).
 # Ctrl+C detaches follower only — container keeps running.
 # Globals:
@@ -229,6 +335,7 @@ stack_follow_until_ready() {
 
   if stack_port_open "${port}"; then
     log "ComfyUI already responding on http://localhost:${port}"
+    ensure_comfy_h3_native_nodes || return 1
     return 0
   fi
 
@@ -265,6 +372,7 @@ stack_follow_until_ready() {
       _stack_follow_cleanup
       trap - INT TERM
       log "✓ ComfyUI is up — http://localhost:${port}"
+      ensure_comfy_h3_native_nodes || return 1
       return 0
     fi
     if ! compose_is_running; then
