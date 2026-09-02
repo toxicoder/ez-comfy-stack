@@ -561,8 +561,32 @@ line3" "org/x"
 
   unset -f comfy_h3_object_info_ok
   unset -f stack_port_open
-  # Repair: missing in object_info, image has loader, restart registers
+
+  export LAB_H3_RESEED_TIMEOUT=0
+  export LAB_H3_OBJECT_INFO_TIMEOUT=0
+  stack_port_open() { return 1; }
+  run stack_wait_for_port closed 0
+  [ "${status}" -eq 0 ]
   stack_port_open() { return 0; }
+  run stack_wait_for_port open 0
+  [ "${status}" -eq 0 ]
+  run stack_wait_for_port closed 0
+  [ "${status}" -ne 0 ]
+  run stack_wait_for_port bogus 0
+  [ "${status}" -ne 0 ]
+
+  comfy_h3_object_info_ok() { return 0; }
+  run comfy_h3_wait_object_info
+  [ "${status}" -eq 0 ]
+  comfy_h3_object_info_ok() { return 1; }
+  run comfy_h3_wait_object_info
+  [ "${status}" -ne 0 ]
+
+  # Repair: missing in object_info, image has loader, stop+up registers
+  export LAB_MOCK_COMPOSE_PHASE=running
+  stack_port_open() {
+    [[ ${LAB_MOCK_COMPOSE_PHASE} != "stopped" ]]
+  }
   comfy_h3_object_info_ok() {
     if [[ ${LAB_MOCK_H3_AFTER_REPAIR:-0} == "1" ]]; then
       return 0
@@ -572,19 +596,31 @@ line3" "org/x"
   comfy_prebuilt_has_h3_loader() { return 0; }
   comfy_volume_clear_install_stamp() { echo "stamp-cleared"; return 0; }
   compose_run() {
-    if [[ ${1} == "restart" ]]; then
-      export LAB_MOCK_H3_AFTER_REPAIR=1
-    fi
     echo "compose $*"
+    case "${1}" in
+      restart)
+        echo "unexpected-restart"
+        return 1
+        ;;
+      stop)
+        export LAB_MOCK_COMPOSE_PHASE=stopped
+        ;;
+      up)
+        export LAB_MOCK_COMPOSE_PHASE=running
+        export LAB_MOCK_H3_AFTER_REPAIR=1
+        ;;
+    esac
     return 0
   }
   export LAB_MOCK_H3_AFTER_REPAIR=0
   run ensure_comfy_h3_native_nodes
   [ "${status}" -eq 0 ]
+  [[ "${output}" != *"unexpected-restart"* ]]
   [[ "${output}" == *"reseed"* || "${output}" == *"registered after"* ]]
   unset -f comfy_h3_object_info_ok compose_run comfy_prebuilt_has_h3_loader \
     comfy_volume_clear_install_stamp stack_port_open
-  unset LAB_FORCE_H3_NODE_PROBE LAB_MOCK_H3_AFTER_REPAIR
+  unset LAB_FORCE_H3_NODE_PROBE LAB_MOCK_H3_AFTER_REPAIR LAB_MOCK_COMPOSE_PHASE \
+    LAB_H3_RESEED_TIMEOUT LAB_H3_OBJECT_INFO_TIMEOUT
   export LAB_STACK_FOLLOW=0
   export LAB_HERMETIC=1
   # Restore production helpers after test overrides
