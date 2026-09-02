@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ## compose
 #
-# Docker Compose wrappers for the unified ComfyUI flux-to-ltx stack.
+# Docker Compose wrappers for the unified ComfyUI US-safe studio stack.
 #
 # Purpose:
 #   Isolate every docker/compose invocation behind helpers that pin the project
@@ -83,7 +83,7 @@ require_docker() {
 }
 
 #######################################
-# Emit a minimal JSON object describing the flux-to-ltx stack state on stdout.
+# Emit a minimal JSON object describing the studio stack state on stdout.
 # State values:
 #   stopped  — no containers / empty ps output
 #   running  — ps JSON mentions running
@@ -111,7 +111,7 @@ compose_status_json() {
   else
     state="unknown"
   fi
-  printf '{"stack":"flux-to-ltx","state":"%s"}\n' "${state}"
+  printf '{"stack":"studio","state":"%s"}\n' "${state}"
 }
 
 #######################################
@@ -385,8 +385,8 @@ stack_git_branch() {
 
 #######################################
 # Map a git branch name to the published GHCR image tag channel.
-# Aligns with publish-image.yml: main → flux-to-ltx; development →
-# flux-to-ltx-development; feature/other → development channel.
+# Aligns with publish-image.yml: main → us-safe-studio; development →
+# us-safe-studio-development; feature/other → development channel.
 # Globals:
 #   None
 # Arguments:
@@ -400,11 +400,11 @@ stack_image_tag_for_branch() {
   local branch="${1:-unknown}"
   case "${branch}" in
     main)
-      echo "flux-to-ltx"
+      echo "us-safe-studio"
       ;;
     *)
       # development, feature/*, detached/unknown → integration channel
-      echo "flux-to-ltx-development"
+      echo "us-safe-studio-development"
       ;;
   esac
 }
@@ -484,7 +484,7 @@ stack_start() {
   ensure_models_dir "${MODELS_DIR}" || return 1
   mkdir -p "${MODELS_DIR}/comfy"
   ensure_comfy_output_dir "${COMFY_OUTPUT_DIR}" || return 1
-  log "══ start ══ unified flux-to-ltx (mem_limit=${MEM_LIMIT})"
+  log "══ start ══ unified us-safe-studio (mem_limit=${MEM_LIMIT})"
   log "Image: ${EZ_COMFY_IMAGE} (branch=${branch})"
   log "Outputs: ${COMFY_OUTPUT_DIR} → /outputs"
 

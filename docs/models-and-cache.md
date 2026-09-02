@@ -129,14 +129,16 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 
 | File | Comfy folder | Role |
 | --- | --- | --- |
-| `flux-2-klein-9b-nvfp4.safetensors` | `diffusion_models/` | Flux fast UNET (BFL) |
-| `qwen_3_8b_fp4mixed.safetensors` | `text_encoders/` | Flux TE (Comfy-Org companions; CLIP type **`flux2`**) |
-| `flux2-vae.safetensors` | `vae/` | Flux VAE (Comfy-Org companions) |
-| `ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors` | `diffusion_models/` | LTX balanced UNET |
-| `gemma_3_12B_it_fp4_mixed.safetensors` | `text_encoders/` | LTX Gemma 3 TE (DualCLIP type **`ltxv`**, with projection) |
-| `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection (DualCLIP second clip) |
-| `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE (used by lab I2V/T2V) |
-| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (required by lab LTX graphs for joint AV empty audio latents) |
+| `flux-2-klein-4b-fp8.safetensors` | `diffusion_models/` | Apache Klein 4B distilled still UNET |
+| `qwen_3_4b.safetensors` | `text_encoders/` | Klein 4B TE (CLIP type **`flux2`**) |
+| `flux2-vae.safetensors` | `vae/` | Flux.2 VAE |
+| `wan2.2_ti2v_5B_fp16.safetensors` | `diffusion_models/` | Apache Wan 2.2 TI2V-5B |
+| `umt5_xxl_fp8_e4m3fn_scaled.safetensors` | `text_encoders/` | Wan CLIP (type **`wan`**) |
+| `wan2.2_vae.safetensors` | `vae/` | Wan 2.2 VAE |
+| `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors` | `diffusion_models/` | LTX-2.5 distilled AV UNET (Community License) |
+| `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors` | `text_encoders/` | LTX-2.5 Gemma4-with-proj (CLIP type **`ltxv`**) |
+| `ltx-2.5-video-vae-bf16.safetensors` | `vae/` | LTX-2.5 video VAE |
+| `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
 
 ### Example graphs
 
@@ -144,23 +146,14 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern
 
 | Graph | Notes |
 | --- | --- |
-| `flux-txt2img-lab-example.json` | 1024² T2I |
-| `flux-txt2img-portrait-lab-example.json` | 768×1024 |
-| `flux-txt2img-landscape-lab-example.json` | 1280×720 |
-| `flux-txt2img-ultrawide-lab-example.json` | 1536×640 |
-| `flux-txt2img-512-lab-example.json` | 512² draft |
-| `flux-txt2img-quick-lab-example.json` | 768² / 4 steps smoke |
-| `flux-txt2img-batch2-lab-example.json` | batch 2 @ 768² |
-| `flux-txt2img-high-steps-lab-example.json` | 1024² / 16 steps |
-| `flux-txt2img-product-lab-example.json` | product / catalog prompt |
-| `flux-img2img-lab-example.json` | I2I denoise 0.65; default **example.png** sketch→hero |
-| `flux-img2img-subtle-lab-example.json` / `flux-img2img-strong-lab-example.json` | denoise 0.35 / 0.85 on **example.png** |
-| `ltx-i2v-lab-example.json` | I2V ~10 s (241 @ 24 fps); default **example.png** |
-| `ltx-t2v-lab-example.json` | T2V ~10 s (241 @ 24 fps) |
-| `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide T2V ~10 s |
-| `ltx-*-30s-*-lab-example.json` (5 graphs) | ~30 s long-run I2V/T2V demos (721 frames) |
-| `ltx-*-60s-*-lab-example.json` (5 graphs) | ~60 s very heavy I2V/T2V demos (1441 frames) |
-| `flux-to-ltx-lab-example.json` / `flux-to-ltx-30s-lab-example.json` | Flux T2I + handoff → LTX I2V (~10 s / ~30 s) |
+| `still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
+| `still-hero-lab-example.json` | Same prompt/seed, 1280×720 |
+| `still-studio-lab-example.json` | DRAFT on, HERO bypassed |
+| `wan-i2v-draft-lab-example.json` | Wan 5B I2V ~5 s (121 @ 24 fps) |
+| `wan-t2v-draft-lab-example.json` | Wan 5B T2V ~5 s |
+| `wan-shot-lab-example.json` | One 5 s shot for concat-shots.sh |
+| `ltx-i2v-hero-lab-example.json` | LTX-2.5 I2V ~5 s with audio |
+| `ltx-t2v-hero-lab-example.json` | LTX-2.5 T2V ~5 s with audio |
 
 Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. Watch the **Save video (MP4)** node preview after Queue — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx). They still **must** wire the audio VAE because LTX is a joint AV model. Every lab graph includes an on-canvas **Note** with models, prompting, and video-output steps.
 

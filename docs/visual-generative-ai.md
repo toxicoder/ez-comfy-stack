@@ -37,7 +37,7 @@ flowchart TB
     Policy["config/resource-policy.yaml<br/>headroom · mem limits"]
   end
 
-  subgraph Ctr["Container: ez-comfy-flux-to-ltx"]
+  subgraph Ctr["Container: ez-comfy-studio"]
     EP["entrypoint.sh"]
     Install["install-comfy.sh"]
     Patch["patch_get_free_memory.py"]
@@ -62,7 +62,7 @@ flowchart TB
 
 | Setting | Value |
 | --- | --- |
-| Profile | `flux-to-ltx` |
+| Profile | `us-safe-studio` |
 | Memory limit / reservation | 90g / 80g |
 | GPU | all (1× GB10) |
 | restart | `"no"` |
@@ -86,7 +86,7 @@ flowchart LR
   LTX --> Mp4["MP4 preview<br/>VHS_VideoCombine"]
 ```
 
-**Handoff:** load **flux-to-ltx-lab-example** (or any Flux T2I) → save still → open **ltx-i2v-lab-example** (~10 s) or **ltx-i2v-30s-lab-example** / **ltx-i2v-60s-lab-example** and set `LoadImage` to that file → Queue → watch **Save video (MP4)** on the LTX graph. I2V graphs also queue out of the box on Comfy’s default **example.png** (sketch→living character demos).
+**Handoff:** load **still-draft-lab-example** → Queue → set **wan-i2v-draft-lab-example** LoadImage to `ez_still_draft_*.png` → Queue 5 s silent → optional **ltx-i2v-hero-lab-example** for native audio. I2V graphs also Queue on Comfy’s default **example.png**. See [Getting Started — iteration loop](getting-started.md#iteration-loop-youtube-169).
 
 !!! example "Pipeline tips"
 

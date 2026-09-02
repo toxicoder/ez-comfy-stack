@@ -1,6 +1,6 @@
 ---
 title: ez-comfy-stack
-description: Lean Visual Generative AI demo stack (ComfyUI flux-to-ltx) for a single NVIDIA DGX Spark.
+description: Lean Visual Generative AI demo stack (ComfyUI US-safe local studio) for a single NVIDIA DGX Spark.
 tags: [comfyui, flux, ltx, dgx-spark, docker]
 ---
 
@@ -15,7 +15,7 @@ tags: [comfyui, flux, ltx, dgx-spark, docker]
 
 **What this enables**
 
-- Spinning up a **unified Flux → LTX** ComfyUI demo on one Spark quickly
+- Spinning up a **US-safe local studio** (Klein 4B + Wan 2.2 + LTX-2.5) on one Spark quickly
 - Sharing model weights with other stacks via `/mnt/models`
 - Operating the stack safely over SSH without locking yourself out
 
@@ -23,7 +23,7 @@ tags: [comfyui, flux, ltx, dgx-spark, docker]
 
     New to this repo? Follow **[Getting Started](getting-started.md)** for setup → doctor → download → start → stop.
 
-    Contributors and shell style: [Conventions](project-conventions.md).
+    Licenses (US self-host): [Model licenses](licenses.md). Contributors: [Conventions](project-conventions.md).
 
 ---
 
@@ -40,7 +40,7 @@ flowchart TB
   subgraph EZ["ez-comfy-stack"]
     direction TB
     E1["Docker Compose"]
-    E2["One profile: flux-to-ltx"]
+    E2["One profile: us-safe-studio"]
     E3["manage.sh operator CLI"]
     E4["Shared /mnt/models"]
     E1 --> E2 --> E3
@@ -63,7 +63,7 @@ flowchart TB
 | Item | Value |
 | --- | --- |
 | Runtime | ComfyUI (Docker) |
-| Pipeline | **flux-to-ltx** (text → image → video frames; LTX-2.3 joint AV empty audio latents) |
+| Pipeline | **studio** (Klein 4B still → Wan 2.2 5s silent → LTX-2.5 AV; see [licenses](licenses.md)) |
 | Flux tier | fast — FLUX.2 Klein 9B NVFP4 + Nunchaku |
 | LTX tier | balanced — LTX-2.3 distilled FP8 |
 | Models | host `/mnt/models` |

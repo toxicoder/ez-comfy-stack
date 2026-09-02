@@ -173,7 +173,7 @@ flowchart LR
   - Validated pins: `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see models-and-cache.md)
   - BuildKit `# syntax=docker/dockerfile:1`, `COPY --chmod`, `RUN --mount=type=cache,target=/root/.cache/pip`
   - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
-- GHCR channel by long-lived branch: publish tags `flux-to-ltx` (`main`) and `flux-to-ltx-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel)  
+- GHCR channel by long-lived branch: publish tags `us-safe-studio` (`main`) and `us-safe-studio-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel). Old `flux-to-ltx*` tags freeze on the previous image.  
 - Scripts as real files (not inline ConfigMap YAML)  
 - Host model cache + named volume for Comfy state  
 - Compose `restart: "no"`; explicit `mem_limit` / `mem_reservation`  

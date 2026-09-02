@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-description: Install prerequisites, download models, and start the unified ComfyUI flux-to-ltx stack on DGX Spark.
+description: Install prerequisites, download models, and start the US-safe ComfyUI studio on DGX Spark.
 tags: [getting-started, docker, comfyui]
 ---
 
@@ -20,7 +20,7 @@ tags: [getting-started, docker, comfyui]
 - A first successful open of ComfyUI at port **8188**
 - Safe model downloads that leave bandwidth for SSH
 - Choosing prebuilt GHCR pull (default) or a local Dockerfile build
-- Correct Flux / LTX prompting and easy LTX video preview (VHS MP4)
+- Correct Klein / Wan / LTX prompting and easy VHS MP4 preview
 
 ---
 
@@ -30,7 +30,7 @@ tags: [getting-started, docker, comfyui]
 | --- | --- |
 | **UI** | ComfyUI at `http://<spark-ip>:8188` |
 | **Workflow** | A seeded **\*-lab-example** graph (image and/or video frames) |
-| **Weights** | Flux **fast** + LTX **balanced** under `MODELS_DIR` (default `/mnt/models`) |
+| **Weights** | Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under `MODELS_DIR` (default `/mnt/models`) |
 
 **Expect** multi‑GB Hugging Face pulls (throttled by default). First start usually **seeds** from a prebuilt GHCR image; without that image, cold pip can take **10–30+ minutes**.
 
@@ -41,7 +41,7 @@ tags: [getting-started, docker, comfyui]
 1. **Clone** this repo (branch that matches these docs)
 2. **`setup`** — `.env`, model dir, Docker if needed
 3. **`doctor`** — fix hard failures before multi‑GB downloads
-4. **`download-models`** — flux-fast + ltx-balanced (throttled)
+4. **`download-models`** — Klein 4B + Wan 5B + LTX-2.5 (throttled; LTX gated)
 5. **`start`** — type `yes`, then open **:8188**
 6. **`stop`** — always, before reboot
 
@@ -268,72 +268,72 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 
 After `download-models` + `start`, open ComfyUI and load from `user/default/workflows/` (seeded from host `workflows/`). Filenames end with **`-lab-example`**.
 
-=== "Image (Flux)"
+=== "Still (Klein 4B)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **flux-txt2img-lab-example** | Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE) |
-    | **flux-txt2img-portrait-lab-example** | Text → image **768×1024** portrait |
-    | **flux-txt2img-landscape-lab-example** | Text → image **1280×720** landscape |
-    | **flux-txt2img-ultrawide-lab-example** | Text → image **1536×640** cinematic wide |
-    | **flux-txt2img-512-lab-example** | Fast draft: **512²** |
-    | **flux-txt2img-quick-lab-example** | Smoke test: **768²**, **4** steps |
-    | **flux-txt2img-batch2-lab-example** | Batch size **2** at 768² |
-    | **flux-txt2img-high-steps-lab-example** | 1024² with **16** steps |
-    | **flux-txt2img-product-lab-example** | Product / catalog prompt + square |
-    | **flux-img2img-lab-example** | Sketch→hero from Comfy **example.png**, denoise **0.65** |
-    | **flux-img2img-subtle-lab-example** | Light polish of **example.png**, denoise **0.35** |
-    | **flux-img2img-strong-lab-example** | Cinematic remaster of **example.png**, denoise **0.85** |
+    | **still-draft-lab-example** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
+    | **still-hero-lab-example** | Same prompt + seed, **1280×720**, more steps, prefix `ez_still_hero` |
+    | **still-studio-lab-example** | DRAFT group on, HERO bypassed — un-bypass after you like the draft |
 
-!!! tip "Img2img uses Comfy’s default doodle"
-
-    I2I graphs keep **LoadImage = example.png** (the crude pink-dress / yellow wing-hair stick figure that ships with ComfyUI). Positives deliberately turn that bad sketch into something incredible—swap in your own sketch anytime.
-
-=== "Video (LTX, ≥ ~10 s)"
+=== "Motion (Wan 2.2 5B)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **ltx-i2v-lab-example** | Image → video **~10 s** (241 @ 24 fps; default **example.png**) |
-    | **ltx-t2v-lab-example** | Text → video **~10 s** (241 @ 24 fps) |
-    | **ltx-t2v-portrait-lab-example** | Vertical T2V **512×768**, **~10 s** |
-    | **ltx-t2v-landscape-lab-example** | Wide T2V **1024×576**, **~10 s** |
-    | **ltx-i2v-30s-lab-example** / **ltx-i2v-orbit-30s-lab-example** | I2V **~30 s** long-run demos |
-    | **ltx-t2v-30s-lab-example** / **portrait-30s** / **landscape-30s** | T2V **~30 s** long-run demos |
-    | **ltx-i2v-60s-lab-example** | I2V **~60 s** very heavy long-run demo |
-    | **ltx-t2v-60s-lab-example** / **portrait-60s** / **landscape-60s** / **story-60s** | T2V **~60 s** very heavy long-run demos |
+    | **wan-i2v-draft-lab-example** | 5 s I2V from `example.png` / draft still, 832×480, 121 frames, silent Apache |
+    | **wan-t2v-draft-lab-example** | 5 s T2V (LoadImage bypassed) |
+    | **wan-shot-lab-example** | One 5 s shot, prefix `ez_shot_01` — Queue 01–06 then concat |
 
-=== "Combined"
+=== "AV hero (LTX-2.5)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **flux-to-ltx-lab-example** | Flux txt2img + handoff → **ltx-i2v-lab-example** (~10 s) |
-    | **flux-to-ltx-30s-lab-example** | Flux handoff aimed at **ltx-i2v-30s-lab-example** |
+    | **ltx-i2v-hero-lab-example** | ~5 s I2V with native audio (Community License, $10M cap) |
+    | **ltx-t2v-hero-lab-example** | ~5 s T2V AV |
 
 === "License"
 
-    MiniMax H3 is **banned** (US Excluded Territory for weights and outputs). See [Model licenses](licenses.md). Default path: Apache Klein 4B still → Wan 2.2 5B silent motion → LTX distilled AV.
+    MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).
 
-Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain MP4 output and long-run VRAM expectations.
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS.
+
+### Iteration loop (YouTube 16:9)
+
+Do **not** edit raw JSON. Change widgets on the canvas.
+
+1. Load **still-draft-lab-example** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
+2. Pick a frame under `COMFY_OUTPUT_DIR` (`ez_still_draft_*.png`).
+3. Load **wan-i2v-draft-lab-example** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
+4. Optional audio: **ltx-i2v-hero-lab-example**, same first frame, same seed note, Queue ~5 s AV.
+5. Short film: Queue **wan-shot-lab-example** six times (`ez_shot_01` … `06`) then:
+
+```bash
+./scripts/utilities/concat-shots.sh --dir /mnt/comfy-output --yes
+```
+
+Spark will melt on 30–60 s / 90 s graphs — those are gone. Default graphs iterate in minutes.
 
 ### Prompting these models
 
 Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.
 
-=== "Flux.2 Klein (image)"
+=== "Klein 4B (still)"
 
-    - Text encoder is **Qwen3** (CLIP type **`flux2`**): write **natural-language sentences**, subject first, then place, materials, lighting, camera
-    - Ideal length is roughly **40–120 words** for hero shots; smoke graphs stay shorter
-    - Highest impact: materials/textures, light source + direction, lens language, foreground/midground/background
-    - Avoid: comma tag lists, `(weight:1.4)` emphasis (not applied), “masterpiece / best quality” spam
-    - Official FLUX.2 style: **describe what you want**, not long “no X” lists. Lab negatives are residual lists for experimenters; graphs ship at **CFG 1.0**, so quality is almost entirely the Positive prompt
+    - Text encoder is **Qwen3-4B** (CLIP type **`flux2`**): write **natural-language sentences**, subject first, then place, materials, lighting, camera
+    - Distilled graphs ship at **CFG 1.0** / **4 steps** — quality is almost entirely the Positive prompt
+    - Copy prompt + seed from draft to hero; do not restyle in the hero graph
 
-=== "LTX-2.3 (video frames)"
+=== "Wan 2.2 (silent motion)"
 
-    - Text encoder is **Gemma 3 DualCLIP** (type **`ltxv`**): describe **actions over time**
-    - **I2V:** restate the still (lab default is Comfy **example.png**), then camera move + micro-motion; keep identity stable
-    - **T2V:** chronological shot (establish → move → environment motion); for 30 s / 60 s graphs write a beginning → middle → end timeline
-    - Negatives should target **temporal** artifacts (morphing, flicker, jitter, stutter), not generic SD junk
-    - Light ambient-audio language is optional; lab does **not** save audio tracks
+    - CLIP type **`wan`**. Look prompt vs **Motion / prompt** are separate on I2V graphs
+    - ~5 s (121 frames @ 24 fps). No native audio — that is LTX’s job
+    - Apache 2.0
+
+=== "LTX-2.5 (AV)"
+
+    - CLIP type **`ltxv`** (Gemma4-with-proj). Describe motion, camera, and **sounds**
+    - **Not Apache.** LTX Community License: free commercial under **$10M COMPANY** annual revenue (affiliates count); disclose AI-generated media; do not strip provenance; do not distill
+    - Gated Hugging Face: accept [Lightricks/LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5) before `download-models`
 
 ### Watch the video (LTX)
 
@@ -394,8 +394,8 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
     | Git branch | Image tag |
     | --- | --- |
-    | `main` | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` |
-    | `development` (and feature branches) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development` |
+    | `main` | `ghcr.io/toxicoder/ez-comfy:us-safe-studio` |
+    | `development` (and feature branches) | `ghcr.io/toxicoder/ez-comfy:us-safe-studio-development` |
 
     Override with `EZ_COMFY_IMAGE` in `.env` if needed.
 
@@ -459,7 +459,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
     ```mermaid
     flowchart TB
-      A["manage.sh start<br/>type yes"] --> B["Docker build image<br/>ez-comfy:flux-to-ltx"]
+      A["manage.sh start<br/>type yes"] --> B["Docker build image<br/>ez-comfy:us-safe-studio"]
       B --> C["Create volume comfy-state"]
       C --> D["entrypoint: install-comfy.sh<br/>pip + git · 10–30+ min"]
       D --> E["patch_get_free_memory.py"]

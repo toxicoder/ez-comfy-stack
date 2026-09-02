@@ -3,7 +3,7 @@
 # ## manage
 #
 # Operator CLI for the ez-comfy-stack unified Visual Generative AI demo
-# (ComfyUI flux-to-ltx on a single NVIDIA DGX Spark).
+# (ComfyUI US-safe local studio on a single NVIDIA DGX Spark).
 #
 # Purpose:
 #   Single entrypoint for day-to-day stack lifecycle: preflight (doctor), status,
@@ -286,7 +286,7 @@ cmd_doctor() {
   log "ltx status: ${ltx_json}"
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
-  log "License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, <\$10M company). Not legal advice. See docs/licenses.md"
+  log "License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md"
   if [[ ! -f $(lab_compose_file) ]]; then
     err "compose file missing: $(lab_compose_file)"
     ok=1
@@ -345,7 +345,7 @@ cmd_status() {
 }
 
 #######################################
-# Confirm, check headroom, then start the unified flux-to-ltx Compose stack.
+# Confirm, check headroom, then start the unified studio Compose stack.
 # Side effects: May build/start containers; requires operator confirmation.
 # Globals:
 #   See file header / caller environment.
@@ -357,7 +357,7 @@ cmd_status() {
 #   0 on success or interactive abort; 1 on failed confirm/headroom/compose.
 #######################################
 cmd_start() {
-  require_heavy_confirm "flux-to-ltx (ComfyUI unified stack)" \
+  require_heavy_confirm "us-safe-studio (ComfyUI unified stack)" \
     "90Gi-class memory limit; exclusive GPU; manual start only." || {
     local rc=$?
     if [[ ${rc} -eq 2 ]]; then
