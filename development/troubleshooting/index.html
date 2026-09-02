@@ -1390,9 +1390,9 @@
 <td>Prefer base <strong>~10 s</strong> graphs for smoke tests. Confirm headroom preflight; close other GPU jobs; start with <code>ltx-i2v-lab-example</code> / <code>ltx-t2v-lab-example</code> before long-run demos</td>
 </tr>
 <tr>
-<td>Missing <code>MiniMaxH3ImageToVideo</code> / <code>MiniMaxH3AddGuide</code></td>
-<td>Comfy pin older than <strong>v0.34.0</strong> (AddGuide is not in 0.30–0.33.1)</td>
-<td>Rebuild/pull image with <code>COMFYUI_REF=v0.34.0</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx grep -l MiniMaxH3AddGuide /comfy-state/ComfyUI/comfy_extras/nodes_minimax_h3.py</code></td>
+<td>Missing <code>MiniMaxH3*</code> / <strong>Unknown pack</strong> / UI says install Manager</td>
+<td>Volume still on Comfy <strong>v0.29.0</strong>. <code>nodes.py</code> only loads extras from an explicit list — copying <code>nodes_minimax_h3.py</code> onto 0.29 is not enough. These are <strong>core</strong> nodes in <strong>v0.34.0</strong>, not a custom pack</td>
+<td>Do <strong>not</strong> <code>pip install comfyui-manager</code> and do <strong>not</strong> use <code>--enable-manager</code>. <code>git pull</code> <strong>this repo</strong> (the pin-refresh fix is not in an old <code>development</code> checkout), then <code>stop</code> + <code>start</code>. Start probes <code>/object_info/MiniMaxH3AddGuide</code> and reseeds the volume from the image when the image has v0.34 extras. Logs: “Comfy pin/H3 extras need sync” / “Native MiniMaxH3AddGuide registered”. Confirm both: <code>docker exec ez-comfy-flux-to-ltx grep MiniMaxH3AddGuide /comfy-state/ComfyUI/comfy_extras/nodes_minimax_h3.py</code> and <code>docker exec ez-comfy-flux-to-ltx grep nodes_minimax_h3.py /comfy-state/ComfyUI/nodes.py</code>. Hard-refresh the browser. If GHCR is still 0.29: <code>LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start</code>. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or <code>cleanup</code> then start</td>
 </tr>
 <tr>
 <td>H3 OOM at 1344×768×379</td>

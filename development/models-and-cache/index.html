@@ -1251,6 +1251,7 @@
 <li>Default cache location and layout</li>
 <li>Download utilities and readiness checks</li>
 <li>Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)</li>
+<li>Volume Comfy pin (<code>.lab-comfyui-ref</code>) vs image <code>COMFYUI_REF</code></li>
 <li>Sharing with nvidia-dgx-spark-lab</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1668,6 +1669,10 @@
 <tr>
 <td>First start</td>
 <td>Seeds <code>comfy-state</code> volume from <code>/opt/comfy-prebuilt</code> (local rsync/cp)</td>
+</tr>
+<tr>
+<td>Volume pin</td>
+<td><code>COMFY_HOME/.lab-comfyui-ref</code> — stamp-present refresh reseeds from prebuilt (or git-clones <code>COMFYUI_REF</code>) when this lags the runtime pin <strong>or</strong> <code>MiniMaxH3AddGuide</code> is missing. Compose passes <code>COMFYUI_REF</code> at <strong>runtime</strong>, not only as a build-arg</td>
 </tr>
 <tr>
 <td>Weights</td>

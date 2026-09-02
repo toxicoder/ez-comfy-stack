@@ -939,6 +939,7 @@
 <li>Challenge duration cap (90.00s, never 90.17s)</li>
 <li>GO SEE / STILL HERE / SWITCHYARD theses and shot maps</li>
 <li>Native node graph, weights, and opt-in download</li>
+<li>Missing Node Packs / Unknown pack (core v0.34.0 — not Manager)</li>
 <li>License warning (geo / Community License)</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -987,10 +988,14 @@
 <p><code>CreateVideo</code> fps=24. <code>TrimAudioDuration</code> to <strong>90.00s</strong>. <code>stitch-h3</code> applies <code>ffmpeg -t 90</code> and <strong>fails</strong> if probed duration <code>&gt; 90</code>.</p>
 <h2 id="operator-path-comfyui-like-flux-ltx">Operator path (ComfyUI, like Flux / LTX)<a class="headerlink" href="#operator-path-comfyui-like-flux-ltx" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-h3<span class="w">          </span><span class="c1"># opt-in; default download-models stays flux+ltx</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes; volume reseeds to v0.34.0 if /object_info lacks MiniMaxH3AddGuide</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># open http://&lt;spark-ip&gt;:8188</span>
 </code></pre></div>
 <p>In the UI: <strong>Workflows</strong> → <code>h3-go-see-90s-lab-example</code> (seeded from host <code>workflows/</code> into <code>user/default/workflows/</code>). Drag-drop of the same JSON still works. Review the six shot prompts, <strong>Queue</strong>, watch <strong>SaveVideo</strong>. That MP4 plus this JSON are the contest submission.</p>
+<div class="admonition warning">
+<p class="admonition-title">Missing Node Packs / Unknown pack for MiniMaxH3*</p>
+<p><code>MiniMaxH3AddGuide</code>, <code>MiniMaxH3ImageToVideo</code>, and <code>MiniMaxH3SigmaShift</code> are <strong>native ComfyUI v0.34.0</strong> nodes (<code>comfy_extras/nodes_minimax_h3.py</code>, listed in <code>nodes.py</code>, <code>cnr_id: comfy-core</code>) — not a custom pack. Do <strong>not</strong> <code>pip install comfyui-manager</code> and do <strong>not</strong> restart with <code>--enable-manager</code>. After <code>git pull</code>, <code>./scripts/manage.sh stop</code> then <code>start</code> so the volume pin (<code>.lab-comfyui-ref</code>) and extras loader sync to <code>v0.34.0</code>. Hard-refresh the browser. Details: <a href="../troubleshooting/">Troubleshooting</a>.</p>
+</div>
 <p>OOM at 1344×768×379: on each <code>MiniMaxH3ImageToVideo</code> set width/height to <strong>864×480</strong> (0.4 MP table). Do <strong>not</strong> raise <code>MEM_LIMIT</code>.</p>
 <details class="note">
 <summary>Optional: POST the same graph (not the contest UX)</summary>
