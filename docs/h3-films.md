@@ -41,7 +41,7 @@ H3 cannot quality-sample 90s in one denoise. Do **not** set `length=2164` or `le
 
 ```bash
 ./scripts/manage.sh download-h3          # opt-in; default download-models stays flux+ltx
-./scripts/manage.sh start                # type yes; volume reseeds to v0.34.0 if /object_info lacks MiniMaxH3AddGuide
+./scripts/manage.sh start                # type yes; if /object_info lacks MiniMaxH3AddGuide, stop + up reseeds v0.34.0 (rsync may take minutes)
 # open http://<spark-ip>:8188
 ```
 
