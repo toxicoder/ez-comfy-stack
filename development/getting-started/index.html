@@ -16,7 +16,7 @@
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="../shorts/">
+        <link rel="next" href="../prompting/">
       
       
         
@@ -257,6 +257,25 @@
     
   
   Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../prompting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prompting
 
       </a>
     </li>
@@ -786,6 +805,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../prompting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prompting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../shorts/" class="md-nav__link">
         
   
@@ -1274,7 +1320,7 @@
 <li>Prerequisites checklist</li>
 <li>Setup, doctor, download, start, stop</li>
 <li>Optional: build the Docker image locally instead of pulling GHCR</li>
-<li>Example workflows, 90s shorts, prompting tips, watching LTX MP4, and host <code>COMFY_OUTPUT_DIR</code></li>
+<li>Example workflows, 90s shorts, <a href="../prompting/">model-native prompting</a>, watching LTX MP4, and host <code>COMFY_OUTPUT_DIR</code></li>
 <li>Optional deep-dives</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1282,7 +1328,7 @@
 <li>A first successful open of ComfyUI at port <strong>8188</strong></li>
 <li>Safe model downloads that leave bandwidth for SSH</li>
 <li>Choosing prebuilt GHCR pull (default) or a local Dockerfile build</li>
-<li>Correct Klein / Wan / LTX prompting and easy VHS MP4 preview</li>
+<li>Correct Klein / Wan / LTX prompting (and optional Prompt Enhance nodes) and easy VHS MP4 preview</li>
 </ul>
 <hr />
 <h2 id="you-will-end-here">You will end here<a class="headerlink" href="#you-will-end-here" title="Permanent link">&para;</a></h2>
@@ -1695,28 +1741,31 @@
 </ol>
 <p>Do not Queue a 90s denoise. Default graphs iterate in minutes.</p>
 <h3 id="prompting-these-models">Prompting these models<a class="headerlink" href="#prompting-these-models" title="Permanent link">&para;</a></h3>
-<p>Lab graphs ship research-backed <strong>Positive</strong> / <strong>Negative</strong> prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.</p>
+<p>Lab graphs ship research-backed <strong>Positive</strong> / <strong>Motion</strong> prompts and a <strong>Prompt Enhance</strong> node (Enhance <strong>off</strong> by default). Full recipes: <a href="../prompting/">Prompting</a>. Prefer those prose blocks over SD1.5 tag soups.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Klein 4B (still)</label><label for="__tabbed_4_2">Wan 2.2 (silent motion)</label><label for="__tabbed_4_3">LTX-2.5 (AV)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
-<li>Text encoder is <strong>Qwen3-4B</strong> (CLIP type <strong><code>flux2</code></strong>): write <strong>natural-language sentences</strong>, subject first, then place, materials, lighting, camera</li>
+<li>Text encoder is <strong>Qwen3-4B</strong> (CLIP type <strong><code>flux2</code></strong>): <strong>sentences</strong>, subject first, then place, materials, lighting, camera</li>
 <li>Distilled graphs ship at <strong>CFG 1.0</strong> / <strong>4 steps</strong> — quality is almost entirely the Positive prompt</li>
+<li>Write exclusions as positive opposites (<code>unmarked facades</code>, not <code>no logos</code>)</li>
 <li>Copy prompt + seed from draft to hero; do not restyle in the hero graph</li>
+<li>Lazy: <strong>Klein Prompt Enhance</strong> → set Enhance true (<code>XAI_API_KEY</code>)</li>
 </ul>
 </div>
 <div class="tabbed-block">
 <ul>
-<li>CLIP type <strong><code>wan</code></strong>. Look prompt vs <strong>Motion / prompt</strong> are separate on I2V graphs</li>
-<li>~5 s (121 frames @ 24 fps). No native audio — that is LTX’s job</li>
-<li>Apache 2.0</li>
+<li>CLIP type <strong><code>wan</code></strong>. T2V = entity + scene + motion + <strong>one</strong> camera move. I2V = <strong>motion + camera only</strong> (the start image owns look)</li>
+<li>~5 s (121 frames @ 24 fps). No native audio — that is LTX’s job; do not prompt a score</li>
+<li>Apache 2.0. Lazy: <strong>Wan Prompt Enhance</strong></li>
 </ul>
 </div>
 <div class="tabbed-block">
 <ul>
-<li>CLIP type <strong><code>ltxv</code></strong> (Gemma4-with-proj). Describe motion, camera, and <strong>sounds</strong></li>
+<li>CLIP type <strong><code>ltxv</code></strong> (Gemma4-with-proj). One flowing present-tense paragraph with <strong>audio interleaved</strong></li>
 <li><strong>Not Apache.</strong> LTX Community License: free commercial under <strong>$10M COMPANY</strong> annual revenue (affiliates count); disclose AI-generated media; do not strip provenance; do not distill</li>
 <li>Gated Hugging Face: accept <a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> before <code>download-models</code></li>
+<li>Lazy: <strong>LTX Prompt Enhance</strong> (optional Audio notes widget)</li>
 </ul>
 </div>
 </div>

@@ -267,6 +267,25 @@
   
   
     <li class="md-tabs__item">
+      <a href="../prompting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prompting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../shorts/" class="md-tabs__link">
         
   
@@ -521,6 +540,33 @@
     
   
     Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prompting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prompting
   
 
     
@@ -1424,6 +1470,21 @@
 <td>Missing <code>VHS_VideoCombine</code> node on <strong>ltx-*-lab-example</strong></td>
 <td>Image/volume predates VideoHelperSuite, or refresh clone failed</td>
 <td>Pull/rebuild GHCR image (VHS is prebuilt). Restart container so stamp-present refresh runs <code>ensure_lab_video_nodes</code>. Confirm: <code>docker exec ez-comfy-studio test -d /comfy-state/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite</code>. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or volume cleanup, then re-open seeded workflows</td>
+</tr>
+<tr>
+<td>Missing <strong>Klein/Wan/LTX Prompt Enhance</strong> node</td>
+<td>Host pack not mounted or entrypoint copy skipped</td>
+<td>Confirm compose bind-mount <code>../custom_nodes:/opt/ez-comfy/custom_nodes</code>. Restart so <code>install_lab_custom_nodes</code> copies into <code>/comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/__init__.py</code></td>
+</tr>
+<tr>
+<td>Enhance on but prompt unchanged</td>
+<td><code>XAI_API_KEY</code> unset, timeout, or HTTP error (fail-soft passthrough)</td>
+<td>Set <code>XAI_API_KEY</code> in <code>.env</code>, <code>stop</code> + <code>start</code>. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 20s (<code>XAI_TIMEOUT_S</code>). Leave Enhance <strong>off</strong> to use the canned prompt with no API</td>
+</tr>
+<tr>
+<td>Enhance rewrites a locked shorts identity</td>
+<td>Enhance left on for a bible/bridge Queue</td>
+<td>Set Enhance <strong>false</strong>. Canned identity/motion text is already model-native</td>
 </tr>
 <tr>
 <td>LTX finished but I only see PNGs / no MP4 preview</td>
