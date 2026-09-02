@@ -1,5 +1,5 @@
 {
-  "id": "flux-txt2img-portrait-lab-example",
+  "id": "still-draft-lab-example",
   "revision": 3,
   "last_node_id": 10,
   "last_link_id": 9,
@@ -33,10 +33,10 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "flux-2-klein-9b-nvfp4.safetensors",
+        "flux-2-klein-4b-fp8.safetensors",
         "default"
       ],
-      "title": "Flux Klein 9B NVFP4"
+      "title": "Klein 4B distilled FP8"
     },
     {
       "id": 2,
@@ -68,11 +68,11 @@
         "Node name for S&R": "CLIPLoader"
       },
       "widgets_values": [
-        "qwen_3_8b_fp4mixed.safetensors",
+        "qwen_3_4b.safetensors",
         "flux2",
         "default"
       ],
-      "title": "Qwen3-8B TE (fp4)"
+      "title": "Qwen3-4B TE"
     },
     {
       "id": 3,
@@ -142,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Vertical fashion portrait of a violinist in their early thirties, three-quarter pose beside a rain-streaked tram window. A deep indigo wool coat, a spruce violin case slung over one shoulder, soft amber cabin light on one cheek and cold city cyan on the other. Condensation beads on glass; streetlights smear into bokeh. Photoreal editorial, 85mm portrait, natural skin texture, no logos."
+        "YouTube 16:9 still: a small-town main street at golden hour, one red bicycle leaning on a brick storefront, warm sidelight, photoreal, 24mm, no logos, no text."
       ],
       "title": "Positive"
     },
@@ -215,10 +215,10 @@
       },
       "widgets_values": [
         768,
-        1024,
-        1
+        432,
+        2
       ],
-      "title": "Latent 768x1024"
+      "title": "Latent 768x432 batch 2"
     },
     {
       "id": 7,
@@ -272,7 +272,7 @@
       "widgets_values": [
         42,
         "fixed",
-        8,
+        4,
         1.0,
         "euler",
         "simple",
@@ -348,7 +348,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_flux_portrait"
+        "ez_still_draft"
       ],
       "title": "Save"
     },
@@ -372,9 +372,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Flux txt2img portrait 768×1024 (lab)\n\nWhat this graph does: Vertical text→image portrait at 768×1024.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · 768×1024 · batch 1\nSaveImage prefix: ez_flux_portrait.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n• Prefer positive constraints (“sharp focus”, “empty street”, “seamless white”) over “no X”.\n• Comfy (weight:1.4) emphasis is not applied by this text encoder.\n• At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue."
+        "## still-draft-lab-example\n\nSTILL DRAFT/HERO \u2014 Apache FLUX.2 Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 (distilled) \u00b7 4 steps \u00b7 768x432 \u00b7 batch 2.\nSaveImage prefix: ez_still_draft.\nCopy prompt + seed from draft, do not restyle here.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nQueue this first. Then still-hero with the same seed.\n"
       ],
-      "title": "Flux portrait 768×1024 (lab) — operator note"
+      "title": "Operator note"
     }
   ],
   "links": [
@@ -454,7 +454,7 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "flux-txt2img-portrait",
+    "lab_profile": "still-draft-lab-example",
     "lab_flux_tier": "fast",
     "ds": {
       "scale": 1,
@@ -463,8 +463,8 @@
         0
       ]
     },
-    "lab_note": "## Flux txt2img portrait 768×1024 (lab)\n\nWhat this graph does: Vertical text→image portrait at 768×1024.\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · 768×1024 · batch 1\nSaveImage prefix: ez_flux_portrait.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Write natural-language prose, not SD tag soup. Subject first, then place, materials, lighting, camera.\n• Prefer positive constraints (“sharp focus”, “empty street”, “seamless white”) over “no X”.\n• Comfy (weight:1.4) emphasis is not applied by this text encoder.\n• At CFG 1.0 the Negative node is largely inert; quality is almost entirely the Positive prompt.\n\nHow to run:\n1. Review Positive prompt; queue.",
-    "lab_description": "Vertical text→image portrait at 768×1024."
+    "lab_note": "## still-draft-lab-example\n\nSTILL DRAFT/HERO \u2014 Apache FLUX.2 Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 (distilled) \u00b7 4 steps \u00b7 768x432 \u00b7 batch 2.\nSaveImage prefix: ez_still_draft.\nCopy prompt + seed from draft, do not restyle here.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nQueue this first. Then still-hero with the same seed.\n",
+    "lab_description": "Klein 4B still 768x432 4 steps"
   },
   "version": 0.4
 }

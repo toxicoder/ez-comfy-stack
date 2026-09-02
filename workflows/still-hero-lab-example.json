@@ -1,8 +1,8 @@
 {
-  "id": "flux-img2img-strong-lab-example",
+  "id": "still-hero-lab-example",
   "revision": 3,
   "last_node_id": 11,
-  "last_link_id": 10,
+  "last_link_id": 9,
   "nodes": [
     {
       "id": 1,
@@ -33,10 +33,10 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "flux-2-klein-9b-nvfp4.safetensors",
+        "flux-2-klein-4b-fp8.safetensors",
         "default"
       ],
-      "title": "Flux Klein 9B NVFP4"
+      "title": "Klein 4B distilled FP8"
     },
     {
       "id": 2,
@@ -68,11 +68,11 @@
         "Node name for S&R": "CLIPLoader"
       },
       "widgets_values": [
-        "qwen_3_8b_fp4mixed.safetensors",
+        "qwen_3_4b.safetensors",
         "flux2",
         "default"
       ],
-      "title": "Qwen3-8B TE (fp4)"
+      "title": "Qwen3-4B TE"
     },
     {
       "id": 3,
@@ -94,8 +94,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            7,
-            10
+            7
           ],
           "slot_index": 0
         }
@@ -109,88 +108,6 @@
       "title": "Flux2 VAE"
     },
     {
-      "id": 10,
-      "type": "LoadImage",
-      "pos": [
-        480,
-        440
-      ],
-      "size": [
-        320,
-        314
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            11
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "example.png",
-        "image"
-      ],
-      "title": "Input image"
-    },
-    {
-      "id": 11,
-      "type": "VAEEncode",
-      "pos": [
-        980,
-        400
-      ],
-      "size": [
-        240,
-        46
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "pixels",
-          "type": "IMAGE",
-          "link": 11
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 10
-        }
-      ],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            6
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEEncode"
-      },
-      "widgets_values": [],
-      "title": "Encode"
-    },
-    {
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
@@ -202,7 +119,7 @@
         160
       ],
       "flags": {},
-      "order": 5,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -225,7 +142,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Hero remaster of the crude pink-dress doodle into a cinematic fantasy portrait: same recognisable subject—open-armed figure, pink dress, enormous golden wing-like hair, green hillside, blue sky with clouds—but now photoreal materials, volumetric hair, soft golden-hour rim light, detailed embroidery on the dress, living grass, and atmospheric depth. Keep the playful pose and color blocks readable so the origin sketch is still obvious at a glance."
+        "YouTube 16:9 still: a small-town main street at golden hour, one red bicycle leaning on a brick storefront, warm sidelight, photoreal, 24mm, no logos, no text."
       ],
       "title": "Positive"
     },
@@ -238,10 +155,10 @@
       ],
       "size": [
         420,
-        100
+        120
       ],
       "flags": {},
-      "order": 6,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
@@ -269,6 +186,41 @@
       "title": "Negative"
     },
     {
+      "id": 6,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        480,
+        460
+      ],
+      "size": [
+        280,
+        106
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        1280,
+        720,
+        1
+      ],
+      "title": "Latent 1280x720 batch 1"
+    },
+    {
       "id": 7,
       "type": "KSampler",
       "pos": [
@@ -280,7 +232,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -318,15 +270,15 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        7,
+        42,
         "fixed",
         8,
         1.0,
         "euler",
         "simple",
-        0.85
+        1.0
       ],
-      "title": "KSampler denoise 0.85"
+      "title": "KSampler"
     },
     {
       "id": 8,
@@ -340,7 +292,7 @@
         46
       ],
       "flags": {},
-      "order": 8,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -382,7 +334,7 @@
         270
       ],
       "flags": {},
-      "order": 9,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -396,23 +348,23 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_flux_img2img_strong"
+        "ez_still_hero"
       ],
       "title": "Save"
     },
     {
-      "id": 11,
+      "id": 10,
       "type": "Note",
       "pos": [
         40,
-        794.0
+        606.0
       ],
       "size": [
         960,
         280
       ],
       "flags": {},
-      "order": 11,
+      "order": 10,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -420,9 +372,47 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Flux img2img strong denoise 0.85 (lab)\n\nWhat this graph does: Creative **sketch → cinematic hero** from Comfy **example.png** (denoise 0.85).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · denoise 0.85.\nSaveImage prefix: ez_flux_img2img_strong.\nDefault LoadImage: **example.png**.\n\nDemo thesis: freer transform, but still obviously the pink-dress / wing-hair hill figure.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Name the sketch anchors, then push materials, light, and atmosphere hard.\n• At CFG 1.0 Positive dominates.\n\nHow to run:\n1. LoadImage defaults to example.png.\n2. Queue for a showcase remaster; lower denoise if identity drifts too far."
+        "## still-hero-lab-example\n\nSTILL DRAFT/HERO \u2014 Apache FLUX.2 Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 (distilled) \u00b7 8 steps \u00b7 1280x720 \u00b7 batch 1.\nSaveImage prefix: ez_still_hero.\nCopy prompt + seed from draft, do not restyle here.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nLock seed 42 from draft. Distilled is 4-step-optimized; extra steps are optional.\nAfter draft, set LoadImage to ez_still_draft_00001_.png if you I2I later.\n"
       ],
-      "title": "Flux img2img strong denoise 0.85 (lab) — operator note"
+      "title": "Operator note"
+    },
+    {
+      "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        1720,
+        80
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": null,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Draft still (set to ez_still_draft_00001_.png)"
     }
   ],
   "links": [
@@ -468,7 +458,7 @@
     ],
     [
       6,
-      11,
+      6,
       0,
       7,
       3,
@@ -495,22 +485,6 @@
       8,
       0,
       9,
-      0,
-      "IMAGE"
-    ],
-    [
-      10,
-      3,
-      0,
-      11,
-      1,
-      "VAE"
-    ],
-    [
-      11,
-      10,
-      0,
-      11,
       0,
       "IMAGE"
     ]
@@ -518,10 +492,17 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "flux-img2img-strong",
+    "lab_profile": "still-hero-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## Flux img2img strong denoise 0.85 (lab)\n\nWhat this graph does: Creative **sketch → cinematic hero** from Comfy **example.png** (denoise 0.85).\nModels: flux-2-klein-9b-nvfp4 + qwen_3_8b_fp4mixed (CLIP type flux2) + flux2-vae.\nSampler: euler · simple · CFG 1.0 · 8 steps · denoise 0.85.\nSaveImage prefix: ez_flux_img2img_strong.\nDefault LoadImage: **example.png**.\n\nDemo thesis: freer transform, but still obviously the pink-dress / wing-hair hill figure.\n\nPrompting (Flux.2 Klein + Qwen3 TE):\n• Name the sketch anchors, then push materials, light, and atmosphere hard.\n• At CFG 1.0 Positive dominates.\n\nHow to run:\n1. LoadImage defaults to example.png.\n2. Queue for a showcase remaster; lower denoise if identity drifts too far.",
-    "lab_description": "Creative **sketch → cinematic hero** from Comfy **example.png** (denoise 0.85)."
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_note": "## still-hero-lab-example\n\nSTILL DRAFT/HERO \u2014 Apache FLUX.2 Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 (distilled) \u00b7 8 steps \u00b7 1280x720 \u00b7 batch 1.\nSaveImage prefix: ez_still_hero.\nCopy prompt + seed from draft, do not restyle here.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nLock seed 42 from draft. Distilled is 4-step-optimized; extra steps are optional.\nAfter draft, set LoadImage to ez_still_draft_00001_.png if you I2I later.\n",
+    "lab_description": "Klein 4B still 1280x720 8 steps"
   },
   "version": 0.4
 }
