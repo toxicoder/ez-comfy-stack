@@ -309,17 +309,9 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **flux-to-ltx-lab-example** | Flux txt2img + handoff → **ltx-i2v-lab-example** (~10 s) |
     | **flux-to-ltx-30s-lab-example** | Flux handoff aimed at **ltx-i2v-30s-lab-example** |
 
-=== "H3 90s film"
+=== "License"
 
-    Opt-in MiniMax H3 path (does **not** replace Flux→LTX). Weights: `./scripts/manage.sh download-h3`. Needs Comfy **v0.34.0+** (`MiniMaxH3AddGuide`). Output is **2160 frames / 90.00s** with native H3 audio — [H3 90s films](h3-films.md). If the UI says **Unknown pack** / install Manager, those nodes are **core** in 0.34 — do **not** `pip install comfyui-manager`; [Troubleshooting](troubleshooting.md).
-
-    | Workflow | What it does |
-    | --- | --- |
-    | **h3-go-see-90s-lab-example** | First-person parkour-as-travel (contest entry) |
-    | **h3-still-here-90s-lab-example** | Third-person household morning |
-    | **h3-switchyard-90s-lab-example** | Night freight yard |
-
-    Same UX as Flux/LTX: after `start`, open **:8188**, load **h3-go-see-90s-lab-example**, **Queue** in ComfyUI. Optional three-Spark UIs: [Spark farm](spark-farm.md).
+    MiniMax H3 is **banned** (US Excluded Territory for weights and outputs). See [Model licenses](licenses.md). Default path: Apache Klein 4B still → Wan 2.2 5B silent motion → LTX distilled AV.
 
 Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain MP4 output and long-run VRAM expectations.
 

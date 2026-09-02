@@ -2,12 +2,13 @@
 #
 # ## spark-farm
 #
-# Coordinate MiniMax H3 90s films across independent Comfy workers (no NCCL).
+# Probe independent Comfy workers on multiple Sparks (no NCCL, no H3 farm).
 #
 # Purpose:
 #   status: SSH each SPARK_HOSTS entry (docker ps, disk, nvidia-smi, fabric ping).
-#   sync-models: rsync H3 weights over SPARK_FABRIC_IPS only (not mgmt NIC).
-#   run: assign one (film, seed) per SPARK_COMFY_URLS entry; queue-h3-film.sh.
+#   sync-models: rsync MODELS_DIR/comfy over SPARK_FABRIC_IPS only (not mgmt NIC).
+#   run: refuses MiniMax H3 films; operators Queue wan-shot graphs per host,
+#   then concat-shots.sh locally.
 #   Never starts compose on a remote node — prints the local manage.sh start.
 #
 # Usage:
@@ -42,10 +43,10 @@ SPARK_USER="${SPARK_USER:-nvidia}"
 SPARK_COMFY_URLS="${SPARK_COMFY_URLS:-}"
 SPARK_FABRIC_IPS="${SPARK_FABRIC_IPS:-}"
 MODELS_DIR="${MODELS_DIR:-/mnt/models}"
-FARM_SHARE="${FARM_SHARE:-/mnt/models/h3-farm}"
+FARM_SHARE="${FARM_SHARE:-/mnt/comfy-output/shots}"
 JSON_FLAG=""
 CMD="status"
-FILM="go-see"
+FILM="wan-shot"
 SEEDS="509201,509211,509221"
 
 #######################################
@@ -116,7 +117,7 @@ cmd_status() {
   while IFS= read -r host; do
     [[ -z ${host} ]] && continue
     local docker_ps disk smi ping_ok="false"
-    docker_ps="$(ssh_host "${host}" "docker ps -a --filter name=ez-comfy-flux-to-ltx --format '{{.Status}}'" 2>/dev/null || echo "ssh-failed")"
+    docker_ps="$(ssh_host "${host}" "docker ps -a --filter name=ez-comfy --format '{{.Status}}'" 2>/dev/null || echo "ssh-failed")"
     disk="$(ssh_host "${host}" "df -h ${MODELS_DIR}" 2>/dev/null || echo "n/a")"
     smi="$(ssh_host "${host}" "nvidia-smi -L" 2>/dev/null || echo "n/a")"
     ping_ok="false"
@@ -145,7 +146,7 @@ cmd_status() {
 }
 
 #######################################
-# rsync H3 tree from fabric IP 0 to 1..n (not the mgmt NIC).
+# rsync MODELS_DIR/comfy from fabric IP 0 to 1..n (not the mgmt NIC).
 # Globals:
 #   SPARK_FABRIC_IPS, SPARK_USER, MODELS_DIR
 # Returns:
@@ -162,47 +163,48 @@ cmd_sync_models() {
     return 1
   fi
   local src="${ips[0]}"
-  local h3_tree="${MODELS_DIR}/Comfy-Org__MiniMax-H3_pruned"
+  local tree="${MODELS_DIR}/comfy"
   local dest
   for dest in "${ips[@]:1}"; do
-    log "rsync H3 weights ${src} → ${dest} over fabric (not mgmt NIC)"
+    log "rsync comfy weights ${src} → ${dest} over fabric (not mgmt NIC)"
     rsync -a --inplace -e "ssh -o BatchMode=yes" \
-      "${SPARK_USER}@${src}:${h3_tree}/" \
-      "${SPARK_USER}@${dest}:${h3_tree}/"
+      "${SPARK_USER}@${src}:${tree}/" \
+      "${SPARK_USER}@${dest}:${tree}/"
   done
 }
 
 #######################################
-# Assign (film, seed) per Comfy URL and queue.
+# Independent shot reminder (does not POST graphs; MiniMax H3 is banned).
 # Globals:
-#   SPARK_COMFY_URLS, FILM, SEEDS, FARM_SHARE
+#   SPARK_COMFY_URLS, FILM, FARM_SHARE
 # Returns:
-#   0; 1 if a queue fails
+#   1 for banned H3 film names; 0 after printing the Queue hint
 #######################################
 cmd_run() {
-  local -a urls=() seeds=()
+  case "${FILM}" in
+    go-see | still-here | switchyard | *h3* | *H3* | *MiniMax*)
+      refuse_minimax_h3
+      return 1
+      ;;
+  esac
+  local -a urls=()
   local line
   while IFS= read -r line; do
     [[ -n ${line} ]] && urls+=("${line}")
   done < <(csv_lines "${SPARK_COMFY_URLS}")
-  while IFS= read -r line; do
-    [[ -n ${line} ]] && seeds+=("${line}")
-  done < <(csv_lines "${SEEDS}")
   if [[ ${#urls[@]} -eq 0 ]]; then
     err "SPARK_COMFY_URLS is empty"
     return 1
   fi
   print_remote_start_hint
   mkdir -p "${FARM_SHARE}/out"
-  local i url seed rc=0
-  for i in "${!urls[@]}"; do
-    url="${urls[$i]}"
-    seed="${seeds[$i]:-${seeds[0]:-509201}}"
-    log "farm ${FILM} seed=${seed} → ${url}"
-    FARM_SHARE="${FARM_SHARE}" bash "${REPO_ROOT}/scripts/utilities/queue-h3-film.sh" \
-      --film "${FILM}" --url "${url}" --seed "${seed}" || rc=$?
+  log "H3 films are banned. On each host, open Comfy, Queue wan-shot-lab-example.json"
+  log "Then run scripts/utilities/concat-shots.sh against ${FARM_SHARE}"
+  local url
+  for url in "${urls[@]}"; do
+    log "worker ${url}"
   done
-  return "${rc}"
+  return 0
 }
 
 #######################################
@@ -224,7 +226,7 @@ parse_args() {
         ;;
       status | sync-models | run) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status [--json] | sync-models | run [--film go-see] [--seeds a,b,c]" >&2
+        echo "Usage: $0 status [--json] | sync-models | run [--film wan-shot] [--seeds a,b,c]" >&2
         exit 0
         ;;
       *)

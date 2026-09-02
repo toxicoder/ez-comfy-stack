@@ -76,7 +76,7 @@ jobs:
             COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
             COMFYUI_VHS_REF=
           # Do not pass HF_TOKEN or any host secrets as build-args
-          # Pins: ComfyUI v0.34.0 (MiniMaxH3AddGuide) + Manager + nunchaku node + VHS main
+          # Pins: ComfyUI v0.34.0 (native Klein 4B + Wan 2.2 + LTX-2.5) + Manager + VHS main
           provenance: false
           sbom: false
           cache-from: type=gha,scope=ez-comfy-arm64

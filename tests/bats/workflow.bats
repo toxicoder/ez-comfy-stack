@@ -21,6 +21,15 @@ teardown() {
   teardown_repo_env
 }
 
+@test "lab workflows forbid MiniMax H3 nodes and filenames" {
+  local dir="${REPO_ROOT}/workflows"
+  run grep -R -E 'MiniMaxH3|minimax_h3|h3-go-see|h3-still-here|h3-switchyard|GO_SEE_90s_H3' "${dir}"
+  [ "${status}" -ne 0 ]
+  [[ ! -f ${REPO_ROOT}/scripts/utilities/download-h3.sh ]]
+  [[ ! -f ${REPO_ROOT}/scripts/utilities/queue-h3-film.sh ]]
+  [[ ! -f ${REPO_ROOT}/docs/h3-films.md ]]
+}
+
 @test "lab-example workflows parse, name pattern, no Z-Image, no overlaps" {
   local wf dir="${REPO_ROOT}/workflows"
   local n=0
@@ -329,13 +338,12 @@ assert any(
     and len(n['widgets_values'][0].strip()) > 40
     for n in notes
 ), f'{p}: empty Note'
-if not base.startswith('h3-'):
-    clips = [n for n in d['nodes'] if n.get('type') == 'CLIPTextEncode']
-    assert len(clips) >= 2, f'{p}: expected Positive+Negative CLIPTextEncode'
-    for n in clips:
-        title = (n.get('title') or '').lower()
-        text = (n.get('widgets_values') or [''])[0]
-        assert isinstance(text, str) and text.strip(), f'{p}: empty prompt on {title!r}'
+clips = [n for n in d['nodes'] if n.get('type') == 'CLIPTextEncode']
+assert len(clips) >= 2, f'{p}: expected Positive+Negative CLIPTextEncode'
+for n in clips:
+    title = (n.get('title') or '').lower()
+    text = (n.get('widgets_values') or [''])[0]
+    assert isinstance(text, str) and text.strip(), f'{p}: empty prompt on {title!r}'
 # Hidden parity with on-canvas note
 assert isinstance(d.get('extra', {}).get('lab_note'), str) and d['extra']['lab_note'].strip()
 "

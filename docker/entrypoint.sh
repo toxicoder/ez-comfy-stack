@@ -274,7 +274,7 @@ configure_torch_native_triton() {
 #######################################
 main() {
   local install_cmd="${LAB_ENTRYPOINT_INSTALL_CMD:-bash /opt/ez-comfy/install-comfy.sh}"
-  local comfy_home venv stamp vol_pin want pre_h3
+  local comfy_home venv stamp vol_pin want
   # Read outer COMFY_HOME env before assigning locals
   comfy_home="${COMFY_HOME:-/comfy-state/ComfyUI}"
   venv="${comfy_home}/.venv"
@@ -293,18 +293,13 @@ main() {
   elif [[ -f ${stamp} && -x ${venv}/bin/python ]]; then
     vol_pin="$(tr -d '\n' <"${comfy_home}/.lab-comfyui-ref" 2>/dev/null || true)"
     want="${COMFYUI_REF:-v0.34.0}"
-    pre_h3="${LAB_PREBUILT_ROOT}/comfy_extras/nodes_minimax_h3.py"
-    if [[ ${vol_pin} != "${want}" ]] ||
-      ! grep -q 'MiniMaxH3AddGuide' "${comfy_home}/comfy_extras/nodes_minimax_h3.py" 2>/dev/null ||
-      ! grep -q 'nodes_minimax_h3.py' "${comfy_home}/nodes.py" 2>/dev/null; then
-      ep_log "Comfy pin/H3 extras need sync (${vol_pin:-unset} → ${want})"
-      if prebuilt_ready &&
-        grep -q 'MiniMaxH3AddGuide' "${pre_h3}" 2>/dev/null &&
-        grep -q 'nodes_minimax_h3.py' "${LAB_PREBUILT_ROOT}/nodes.py" 2>/dev/null; then
-        ep_log "Re-seeding volume from prebuilt so native H3 nodes are present"
+    if [[ ${vol_pin} != "${want}" ]]; then
+      ep_log "Comfy pin needs sync (${vol_pin:-unset} → ${want})"
+      if prebuilt_ready; then
+        ep_log "Re-seeding volume from prebuilt"
         seed_from_prebuilt
       else
-        ep_log "Prebuilt lacks MiniMaxH3AddGuide loader — install refresh will clone COMFYUI_REF"
+        ep_log "Prebuilt missing — install refresh will clone COMFYUI_REF"
       fi
     fi
     ep_log "Install stamp present — refresh (pin sync + links + patch)"

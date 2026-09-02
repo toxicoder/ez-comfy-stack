@@ -84,7 +84,12 @@ teardown() {
   FILM=go-see
   SEEDS="509201,509211"
   run cmd_run
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"US Excluded Territory"* ]]
+  FILM=wan-shot
+  run cmd_run
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"wan-shot"* || "${output}" == *"concat-shots"* || "${output}" == *"worker"* ]]
 }
 
 @test "spark-farm CLI status and empty hosts fail" {

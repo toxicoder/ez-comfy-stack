@@ -163,23 +163,15 @@ teardown() {
   [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
   [[ ! -e "${MODELS_DIR}/comfy/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors" ]]
   run cmd_help
-  [[ "${output}" == *"download-h3"* ]]
-  [[ "${output}" == *"farm-h3"* ]]
-  [[ "${output}" == *"h3-go-see-90s-lab-example"* ]]
-  [[ "${output}" == *"not the contest UX"* ]]
-  run cmd_download_h3
-  [ "${status}" -eq 0 ]
-  [[ -e "${MODELS_DIR}/comfy/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors" ]]
+  [[ "${output}" != *"download-h3"* ]]
+  [[ "${output}" != *"farm-h3"* ]]
+  [[ "${output}" == *"Refuses MiniMax H3"* ]]
   run cmd_download_models --with-h3
-  [ "${status}" -eq 0 ]
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"US Excluded Territory"* ]]
   run cmd_download_models --help
   [ "${status}" -eq 0 ]
-  run cmd_queue_h3 --help
-  [ "${status}" -eq 0 ]
-  run cmd_farm_h3 --help
-  [ "${status}" -eq 0 ]
-  run cmd_stitch_h3 --help
-  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"banned"* || "${output}" == *"US Excluded"* ]]
   # Wipe comfy links only — cache hit + link_into_comfy should restore
   rm -f "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"
   run cmd_download_models
