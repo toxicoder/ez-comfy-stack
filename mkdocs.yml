@@ -70,7 +70,7 @@ nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Visual Generative AI: visual-generative-ai.md
-  - H3 90s films: h3-films.md
+  - Model licenses: licenses.md
   - Spark farm: spark-farm.md
   - Models & Cache: models-and-cache.md
   - Download Limit: download-limit.md
