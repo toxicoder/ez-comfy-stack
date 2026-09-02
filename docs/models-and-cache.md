@@ -11,6 +11,7 @@ tags: [models, huggingface, cache]
 - Default cache location and layout
 - Download utilities and readiness checks
 - Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
+- Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
 - Sharing with nvidia-dgx-spark-lab
 
 **What this enables**
@@ -308,6 +309,7 @@ flowchart TB
 | Contains | CUDA runtime, ComfyUI, Python venv, PyTorch/CUDA wheels (`.git`/caches stripped) |
 | Does **not** contain | `HF_TOKEN`, `.env`, host PII, or FLUX/LTX weights |
 | First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
+| Volume pin | `COMFY_HOME/.lab-comfyui-ref` — stamp-present refresh reseeds from prebuilt (or git-clones `COMFYUI_REF`) when this lags the runtime pin **or** `MiniMaxH3AddGuide` is missing. Compose passes `COMFYUI_REF` at **runtime**, not only as a build-arg |
 | Weights | Still under `MODELS_DIR` via `download-models` |
 | Publish | `publish-image` on `main` / `development` (docker/**); Buildx GHA layer cache |
 | Local build | Optional: `LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start` builds `docker/Dockerfile` instead of pulling — see [Getting Started](getting-started.md#build-the-image-locally-optional) |

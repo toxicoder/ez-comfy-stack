@@ -310,7 +310,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
 === "H3 90s film"
 
-    Opt-in MiniMax H3 path (does **not** replace Flux→LTX). Weights: `./scripts/manage.sh download-h3`. Needs Comfy **v0.34.0+** (`MiniMaxH3AddGuide`). Output is **2160 frames / 90.00s** with native H3 audio — [H3 90s films](h3-films.md).
+    Opt-in MiniMax H3 path (does **not** replace Flux→LTX). Weights: `./scripts/manage.sh download-h3`. Needs Comfy **v0.34.0+** (`MiniMaxH3AddGuide`). Output is **2160 frames / 90.00s** with native H3 audio — [H3 90s films](h3-films.md). If the UI says **Unknown pack** / install Manager, those nodes are **core** in 0.34 — do **not** `pip install comfyui-manager`; [Troubleshooting](troubleshooting.md).
 
     | Workflow | What it does |
     | --- | --- |

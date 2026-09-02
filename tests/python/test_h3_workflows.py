@@ -87,6 +87,12 @@ def test_h3_lab_graph_challenge_contract(filename: str, prefix: str) -> None:
         idx = named.get("frame_idx", wv[0] if wv else None)
         assert idx == 0, (filename, node.get("id"), idx)
 
+    for ntype in ("MiniMaxH3ImageToVideo", "MiniMaxH3AddGuide", "MiniMaxH3SigmaShift"):
+        for node in _nodes_of(data, ntype):
+            props = node.get("properties") or {}
+            assert props.get("cnr_id") == "comfy-core", (filename, ntype, node.get("id"))
+            assert str(props.get("ver", "")).startswith("0.34"), (filename, ntype)
+
     blob = json.dumps(data)
     for weight in WEIGHTS:
         assert weight in blob, weight
