@@ -138,10 +138,14 @@ import json
 d=json.load(open('${dir}/still-draft-lab-example.json'))
 h=json.load(open('${dir}/still-hero-lab-example.json'))
 def pos(g):
-    return next(n['widgets_values'][0] for n in g['nodes'] if n.get('type')=='CLIPTextEncode' and n.get('title')=='Positive')
+    enh=next(n for n in g['nodes'] if n.get('type')=='EZKleinPromptEnhance')
+    return enh['widgets_values'][0]
 assert pos(d)==pos(h)
+assert 'photoreal still photograph' in pos(d)
+assert 'no logos, no text' not in pos(d)
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 for n in d['nodes'])
+assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is False for n in d['nodes'])
 "
   [ "${status}" -eq 0 ]
   run python3 -c "
@@ -191,9 +195,20 @@ d=json.load(open('${dir}/wan-i2v-draft-lab-example.json'))
 loads=[n for n in d['nodes'] if n.get('type')=='LoadImage']
 assert loads and loads[0]['widgets_values'][0]=='example.png'
 assert loads[0].get('mode')==0
+look=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode' and n.get('title')=='Positive']
+assert not look
+enh=next(n for n in d['nodes'] if n.get('type')=='EZWanPromptEnhance')
+assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][2]=='i2v'
+assert 'dollies' in enh['widgets_values'][0].lower() or 'dolly' in enh['widgets_values'][0].lower() or 'push' in enh['widgets_values'][0].lower()
 t=json.load(open('${dir}/wan-t2v-draft-lab-example.json'))
 tl=[n for n in t['nodes'] if n.get('type')=='LoadImage']
 assert tl and tl[0].get('mode')==4
+tenh=next(n for n in t['nodes'] if n.get('type')=='EZWanPromptEnhance')
+assert tenh['widgets_values'][2]=='t2v'
+assert 'dollies' in tenh['widgets_values'][0].lower() or 'dolly' in tenh['widgets_values'][0].lower() or 'camera' in tenh['widgets_values'][0].lower()
+assert 'YouTube 16:9 still:' not in tenh['widgets_values'][0]
+assert 'score' not in tenh['widgets_values'][0].lower()
 "
   [ "${status}" -eq 0 ]
 }
@@ -236,6 +251,16 @@ import json
 d=json.load(open('${dir}/ltx-i2v-hero-lab-example.json'))
 loads=[n for n in d['nodes'] if n.get('type')=='LoadImage']
 assert loads and loads[0]['widgets_values'][0]=='example.png'
+enh=next(n for n in d['nodes'] if n.get('type')=='EZLTXPromptEnhance')
+assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][2]=='i2v'
+text=enh['widgets_values'][0].lower()
+assert 'footsteps' in text or 'wind' in text
+assert 'no score' in text or 'no music' in text
+t=json.load(open('${dir}/ltx-t2v-hero-lab-example.json'))
+tenh=next(n for n in t['nodes'] if n.get('type')=='EZLTXPromptEnhance')
+assert 'YouTube 16:9 still:' not in tenh['widgets_values'][0]
+assert 'shop bell' in tenh['widgets_values'][0].lower() or 'footsteps' in tenh['widgets_values'][0].lower()
 "
   [ "${status}" -eq 0 ]
 }

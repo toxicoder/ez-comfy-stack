@@ -154,6 +154,18 @@ teardown() {
   [ "$status" -ne 0 ]
 }
 
+@test "prompt-enhance nodes mount outside COMFY_HOME and XAI key is runtime-only" {
+  local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -E 'custom_nodes:/opt/ez-comfy/custom_nodes' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'custom_nodes:.*/comfy-state/ComfyUI/' "${compose}"
+  [ "$status" -ne 0 ]
+  run grep -E 'XAI_API_KEY:' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -iE '^(ENV|ARG).*XAI_API_KEY' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -ne 0 ]
+}
+
 @test "compose bind-mounts generated media to host COMFY_OUTPUT_DIR" {
   local compose="${REPO_ROOT}/docker/docker-compose.yml"
   run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs' "${compose}"

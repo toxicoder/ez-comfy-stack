@@ -69,6 +69,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - Prompting: prompting.md
   - 90s shorts: shorts.md
   - Visual Generative AI: visual-generative-ai.md
   - Model licenses: licenses.md

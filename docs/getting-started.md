@@ -12,7 +12,7 @@ tags: [getting-started, docker, comfyui]
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- Example workflows, 90s shorts, prompting tips, watching LTX MP4, and host `COMFY_OUTPUT_DIR`
+- Example workflows, 90s shorts, [model-native prompting](prompting.md), watching LTX MP4, and host `COMFY_OUTPUT_DIR`
 - Optional deep-dives
 
 **What this enables**
@@ -20,7 +20,7 @@ tags: [getting-started, docker, comfyui]
 - A first successful open of ComfyUI at port **8188**
 - Safe model downloads that leave bandwidth for SSH
 - Choosing prebuilt GHCR pull (default) or a local Dockerfile build
-- Correct Klein / Wan / LTX prompting and easy VHS MP4 preview
+- Correct Klein / Wan / LTX prompting (and optional Prompt Enhance nodes) and easy VHS MP4 preview
 
 ---
 
@@ -322,25 +322,28 @@ Do not Queue a 90s denoise. Default graphs iterate in minutes.
 
 ### Prompting these models
 
-Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.
+Lab graphs ship research-backed **Positive** / **Motion** prompts and a **Prompt Enhance** node (Enhance **off** by default). Full recipes: [Prompting](prompting.md). Prefer those prose blocks over SD1.5 tag soups.
 
 === "Klein 4B (still)"
 
-    - Text encoder is **Qwen3-4B** (CLIP type **`flux2`**): write **natural-language sentences**, subject first, then place, materials, lighting, camera
+    - Text encoder is **Qwen3-4B** (CLIP type **`flux2`**): **sentences**, subject first, then place, materials, lighting, camera
     - Distilled graphs ship at **CFG 1.0** / **4 steps** — quality is almost entirely the Positive prompt
+    - Write exclusions as positive opposites (`unmarked facades`, not `no logos`)
     - Copy prompt + seed from draft to hero; do not restyle in the hero graph
+    - Lazy: **Klein Prompt Enhance** → set Enhance true (`XAI_API_KEY`)
 
 === "Wan 2.2 (silent motion)"
 
-    - CLIP type **`wan`**. Look prompt vs **Motion / prompt** are separate on I2V graphs
-    - ~5 s (121 frames @ 24 fps). No native audio — that is LTX’s job
-    - Apache 2.0
+    - CLIP type **`wan`**. T2V = entity + scene + motion + **one** camera move. I2V = **motion + camera only** (the start image owns look)
+    - ~5 s (121 frames @ 24 fps). No native audio — that is LTX’s job; do not prompt a score
+    - Apache 2.0. Lazy: **Wan Prompt Enhance**
 
 === "LTX-2.5 (AV)"
 
-    - CLIP type **`ltxv`** (Gemma4-with-proj). Describe motion, camera, and **sounds**
+    - CLIP type **`ltxv`** (Gemma4-with-proj). One flowing present-tense paragraph with **audio interleaved**
     - **Not Apache.** LTX Community License: free commercial under **$10M COMPANY** annual revenue (affiliates count); disclose AI-generated media; do not strip provenance; do not distill
     - Gated Hugging Face: accept [Lightricks/LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5) before `download-models`
+    - Lazy: **LTX Prompt Enhance** (optional Audio notes widget)
 
 ### Watch the video (LTX)
 

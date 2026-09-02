@@ -149,6 +149,24 @@ teardown() {
   [[ "$(readlink "${TEST_TMP_DIR}/ComfyUI/output")" == "${mount}" ]]
 }
 
+@test "install_lab_custom_nodes copies pack and no-ops when missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/ez_prompt_enhance"
+  dest="${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance"
+  mkdir -p "${src}/prompts"
+  echo 'ok' >"${src}/__init__.py"
+  echo 'sys' >"${src}/prompts/klein_t2i.txt"
+  run install_lab_custom_nodes "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/__init__.py ]]
+  [[ -f ${dest}/prompts/klein_t2i.txt ]]
+  run install_lab_custom_nodes "${TEST_TMP_DIR}/missing-nodes" "${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance2"
+  [ "${status}" -eq 0 ]
+  [[ ! -d ${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance2 ]]
+}
+
 @test "install_lab_workflows copies top-level and shorts JSON" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"

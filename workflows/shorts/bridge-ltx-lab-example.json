@@ -1,8 +1,8 @@
 {
   "id": "bridge-ltx-lab-example",
-  "revision": 6,
-  "last_node_id": 20,
-  "last_link_id": 27,
+  "revision": 7,
+  "last_node_id": 21,
+  "last_link_id": 28,
   "nodes": [
     {
       "id": 1,
@@ -112,7 +112,7 @@
       "id": 4,
       "type": "LoadImage",
       "pos": [
-        620,
+        1080,
         80
       ],
       "size": [
@@ -152,7 +152,7 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        620,
+        1080,
         444
       ],
       "size": [
@@ -167,6 +167,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 16
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 28,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -183,7 +191,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Shot 1 of 18, beat 1 enter. First-person travel camera. Olive windbreaker, worn black gloves; hands plant on wet tar. Dawn rooftop, city still sleeping, pigeon scatter. Vault the parapet. Parkour is transportation. No logos, no violence. Audio: breath close to the lens, wind in the hood, tar grit. No score, no music, no licensed songs. 5.00 seconds, 24 fps."
+        "The start image holds as the first frame. First-person travel camera as gloved hands plant on wet tar at dawn. The view pushes toward the parapet while pigeons scatter, then vaults it. Parkour is transportation. Breath sits close to the lens, wind in the hood, tar grit under gloves. No score, no music, no licensed songs."
       ],
       "title": "Motion + audio"
     },
@@ -191,7 +199,7 @@
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        620,
+        1080,
         634
       ],
       "size": [
@@ -230,7 +238,7 @@
       "id": 7,
       "type": "LTXVImgToVideo",
       "pos": [
-        1120,
+        1580,
         80
       ],
       "size": [
@@ -303,7 +311,7 @@
       "id": 8,
       "type": "LTXVConditioning",
       "pos": [
-        1120,
+        1580,
         330
       ],
       "size": [
@@ -355,7 +363,7 @@
       "id": 9,
       "type": "KSampler",
       "pos": [
-        1480,
+        1940,
         80
       ],
       "size": [
@@ -415,7 +423,7 @@
       "id": 10,
       "type": "VAEDecode",
       "pos": [
-        2200,
+        2660,
         80
       ],
       "size": [
@@ -459,7 +467,7 @@
       "id": 12,
       "type": "SaveImage",
       "pos": [
-        2200,
+        2660,
         176
       ],
       "size": [
@@ -522,7 +530,7 @@
       "id": 14,
       "type": "LTXVEmptyLatentAudio",
       "pos": [
-        1120,
+        1580,
         460
       ],
       "size": [
@@ -563,7 +571,7 @@
       "id": 15,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        1480,
+        1940,
         400
       ],
       "size": [
@@ -605,7 +613,7 @@
       "id": 16,
       "type": "LTXVSeparateAVLatent",
       "pos": [
-        1880,
+        2340,
         80
       ],
       "size": [
@@ -649,7 +657,7 @@
       "type": "Note",
       "pos": [
         40,
-        774.0
+        854.0
       ],
       "size": [
         960,
@@ -664,7 +672,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## shorts bridge \u2014 LTX print (5.00s AV)\n\nDeliverable clip for concat. LTX Community License (not Apache): under 10M company USD, disclose AI, no distill, no US geo-ban.\nModels: ltx-2.5 distilled INT8-convrot + gemma4-with-proj (CLIP ltxv) + 2.5 video/audio VAEs.\n120 frames @ 24 fps = 5.00s. Paste motion+audio from the shot bible. Same LoadImage as the Wan draft.\nVHS prefix ez_<slug>_bN_sM_ltx_video. Last-frame prefix ez_<slug>_bN_sM_last for the next shot.\nNo score \u2014 breath and world objects only. Then concat-shots.sh --film \u2026 --yes (cap 90s).\n"
+        "## shorts bridge \u2014 LTX print (5.00s AV)\n\nDeliverable clip for concat. LTX Community License (not Apache): under 10M company USD, disclose AI, no distill, no US geo-ban.\nModels: ltx-2.5 distilled INT8-convrot + gemma4-with-proj (CLIP ltxv) + 2.5 video/audio VAEs.\n120 frames @ 24 fps = 5.00s. Paste motion+audio from the shot bible. Same LoadImage as the Wan draft.\nVHS prefix ez_<slug>_bN_sM_ltx_video. Last-frame prefix ez_<slug>_bN_sM_last for the next shot.\nNo score \u2014 breath and world objects only. Then concat-shots.sh --film \u2026 --yes (cap 90s).\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
@@ -672,7 +680,7 @@
       "id": 18,
       "type": "VHS_VideoCombine",
       "pos": [
-        2520.0,
+        2980.0,
         80
       ],
       "size": [
@@ -736,7 +744,7 @@
       "id": 19,
       "type": "ImageFromBatch",
       "pos": [
-        2520,
+        2980,
         560
       ],
       "size": [
@@ -777,7 +785,7 @@
       "id": 20,
       "type": "SaveImage",
       "pos": [
-        2520,
+        2980,
         680
       ],
       "size": [
@@ -802,6 +810,43 @@
         "ez_gosee_b1_s1_last"
       ],
       "title": "Save last frame"
+    },
+    {
+      "id": 21,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        620,
+        444
+      ],
+      "size": [
+        420,
+        340
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            28
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. First-person travel camera as gloved hands plant on wet tar at dawn. The view pushes toward the parapet while pigeons scatter, then vaults it. Parkour is transportation. Breath sits close to the lens, wind in the hood, tar grit under gloves. No score, no music, no licensed songs.",
+        false,
+        "i2v",
+        "5 seconds, 24 fps",
+        "breath close to the lens, wind in the hood, tar grit. No score, no music, no licensed songs."
+      ],
+      "title": "LTX Prompt Enhance"
     }
   ],
   "links": [
@@ -980,6 +1025,14 @@
       20,
       0,
       "IMAGE"
+    ],
+    [
+      28,
+      21,
+      0,
+      5,
+      1,
+      "STRING"
     ]
   ],
   "groups": [],
@@ -987,7 +1040,7 @@
   "extra": {
     "lab_profile": "bridge-ltx",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## shorts bridge \u2014 LTX print (5.00s AV)\n\nDeliverable clip for concat. LTX Community License (not Apache): under 10M company USD, disclose AI, no distill, no US geo-ban.\nModels: ltx-2.5 distilled INT8-convrot + gemma4-with-proj (CLIP ltxv) + 2.5 video/audio VAEs.\n120 frames @ 24 fps = 5.00s. Paste motion+audio from the shot bible. Same LoadImage as the Wan draft.\nVHS prefix ez_<slug>_bN_sM_ltx_video. Last-frame prefix ez_<slug>_bN_sM_last for the next shot.\nNo score \u2014 breath and world objects only. Then concat-shots.sh --film \u2026 --yes (cap 90s).\n",
+    "lab_note": "## shorts bridge \u2014 LTX print (5.00s AV)\n\nDeliverable clip for concat. LTX Community License (not Apache): under 10M company USD, disclose AI, no distill, no US geo-ban.\nModels: ltx-2.5 distilled INT8-convrot + gemma4-with-proj (CLIP ltxv) + 2.5 video/audio VAEs.\n120 frames @ 24 fps = 5.00s. Paste motion+audio from the shot bible. Same LoadImage as the Wan draft.\nVHS prefix ez_<slug>_bN_sM_ltx_video. Last-frame prefix ez_<slug>_bN_sM_last for the next shot.\nNo score \u2014 breath and world objects only. Then concat-shots.sh --film \u2026 --yes (cap 90s).\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
     "lab_ltx_av": true,
     "lab_description": "Image\u2192video (~10 s) from Comfy **example.png** (sketch\u2192living character). Swap LoadImage for your still anytime."
   },

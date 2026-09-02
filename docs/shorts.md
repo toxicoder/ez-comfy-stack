@@ -12,6 +12,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Which US-safe models do identity, rehearsal, and print
 - Shot maps for go-see, still-here, and switchyard
 - Operator loop: Klein still → Wan draft → LTX print → concat
+- Model-native look / motion / audio prompts ([Prompting](prompting.md))
 - Spark farm: parallel 5s Queues, local concat
 
 **What this enables**
