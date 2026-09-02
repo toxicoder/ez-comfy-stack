@@ -541,6 +541,23 @@ EOF
 # Returns:
 #   0 ready; 1 not ready
 #######################################
+#######################################
+# Next-step string after a docker_daemon_status code.
+# Arguments:
+#   $1 - status from docker_daemon_status (0/1/2/3)
+# Outputs:
+#   Operator command on stdout
+# Returns:
+#   0
+#######################################
+doctor_next_step_hint() {
+  case "${1:-0}" in
+    1) echo "newgrp docker   # or disconnect/reconnect SSH" ;;
+    2) echo "sudo systemctl start docker" ;;
+    *) echo "./scripts/manage.sh setup --install-docker" ;;
+  esac
+}
+
 check_docker_preflight() {
   if ! resolve_docker_on_path; then
     print_docker_install_hints

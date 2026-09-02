@@ -15,9 +15,9 @@ tags: [h3, minimax, comfyui, video, challenge]
 
 **What this enables**
 
-- Drag-drop `h3-*-90s-lab-example.json` onto ComfyUI `:8188` after `download-h3` + Comfy **v0.34.0**
+- The same ComfyUI UX as Flux/LTX: open `:8188`, load a `*-lab-example` graph, **Queue**
 - A Sync Sound–legal mux: native H3 audio, **2160 frames @ 24 fps = 90.00s**
-- Farm three films on three Sparks without NCCL (see [Spark farm](spark-farm.md))
+- The workflow JSON you Queue is the file the challenge asks you to submit
 
 !!! warning "Comfy H3 Sync Sound — 90 seconds maximum"
 
@@ -36,16 +36,21 @@ H3 cannot quality-sample 90s in one denoise. Do **not** set `length=2164` or `le
 
 `CreateVideo` fps=24. `TrimAudioDuration` to **90.00s**. `stitch-h3` applies `ffmpeg -t 90` and **fails** if probed duration `> 90`.
 
-## Operator path
+## Operator path (ComfyUI, like Flux / LTX)
 
 ```bash
 ./scripts/manage.sh download-h3          # opt-in; default download-models stays flux+ltx
 ./scripts/manage.sh start                # type yes
-# load workflows/h3-go-see-90s-lab-example.json in the UI
-./scripts/manage.sh queue-h3 --film go-see
+# open http://<spark-ip>:8188
 ```
 
-OOM at 1344×768×379: `./scripts/manage.sh queue-h3 --film go-see --size 864x480` (0.4 MP table). Do **not** raise `MEM_LIMIT`.
+In the UI: **Workflows** → `h3-go-see-90s-lab-example` (seeded from host `workflows/` into `user/default/workflows/`). Drag-drop of the same JSON still works. Review the six shot prompts, **Queue**, watch **SaveVideo**. That MP4 plus this JSON are the contest submission.
+
+OOM at 1344×768×379: on each `MiniMaxH3ImageToVideo` set width/height to **864×480** (0.4 MP table). Do **not** raise `MEM_LIMIT`.
+
+??? note "Optional: POST the same graph (not the contest UX)"
+
+    `./scripts/manage.sh queue-h3 --film go-see` posts the lab-example JSON to local `:8188`. Use it for automation; generating the film for the challenge is still **Queue in ComfyUI**. `--size 864x480` is the CLI equivalent of the UI resize.
 
 ## Weights (CLIP type `minimax`)
 

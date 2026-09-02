@@ -318,7 +318,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **h3-still-here-90s-lab-example** | Third-person household morning |
     | **h3-switchyard-90s-lab-example** | Night freight yard |
 
-    Queue: `./scripts/manage.sh queue-h3 --film go-see`. Three Sparks: [Spark farm](spark-farm.md).
+    Same UX as Flux/LTX: after `start`, open **:8188**, load **h3-go-see-90s-lab-example**, **Queue** in ComfyUI. Optional three-Spark UIs: [Spark farm](spark-farm.md).
 
 Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain MP4 output and long-run VRAM expectations.
 

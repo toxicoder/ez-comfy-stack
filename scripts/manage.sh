@@ -80,9 +80,10 @@ Commands:
   download-models   Download flux-fast + ltx-balanced (bandwidth limited)
                     --with-h3 also pulls MiniMax H3 pruned INT8 (~40 GB)
   download-h3       Download MiniMax H3 only (opt-in; bandwidth limited)
-  queue-h3          POST a 90s H3 film graph to local ComfyUI :8188
-  farm-h3           Queue films across SPARK_COMFY_URLS (never starts compose)
-  stitch-h3         ffmpeg mux of H3-native shots; hard-cap 90.00s
+                    Then open :8188 and Queue h3-go-see-90s-lab-example in the UI
+  queue-h3          Optional: POST that same lab graph to local :8188 (not the contest UX)
+  farm-h3           Optional: POST the same graphs across SPARK_COMFY_URLS
+  stitch-h3         Optional ffmpeg mux of H3-native shots; hard-cap 90.00s
   download-limit    Proxy to utilities/download-limit.sh
   clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
   cleanup           Remove comfy-state volume (type DELETE)
@@ -209,6 +210,12 @@ EOF
     ok=1
   fi
   if [[ ${ok} -ne 0 ]]; then
+    local st=0
+    docker_daemon_status || st=$?
+    if [[ ${st} -eq 1 ]]; then
+      err "Setup incomplete — run: newgrp docker   # then ./scripts/manage.sh doctor"
+      return 1
+    fi
     err "Setup incomplete — fix errors above, then re-run: ./scripts/manage.sh setup --install-docker"
     return 1
   fi
@@ -234,7 +241,10 @@ EOF
 cmd_doctor() {
   log "Doctor / preflight"
   local ok=0
+  local docker_failed=0 docker_st=0
   if ! check_docker_preflight; then
+    docker_failed=1
+    docker_daemon_status || docker_st=$?
     if command -v sudo >/dev/null 2>&1 && sudo -n docker --version >/dev/null 2>&1; then
       warn "sudo docker works — add your user to the docker group and re-login (newgrp docker)"
     fi
@@ -275,7 +285,11 @@ cmd_doctor() {
   # Soft: show which GHCR channel start would pull (branch-aligned; no network)
   log "default image: $(stack_default_image) (branch=$(stack_git_branch))"
   if [[ ${ok} -ne 0 ]]; then
-    err "Doctor found problems — try: ./scripts/manage.sh setup --install-docker"
+    if [[ ${docker_failed} -eq 1 ]]; then
+      err "Doctor found problems — try: $(doctor_next_step_hint "${docker_st}")"
+    else
+      err "Doctor found problems — see errors above (headroom, MODELS_DIR, or compose)"
+    fi
     return 1
   fi
   log "Doctor OK"

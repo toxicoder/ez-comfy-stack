@@ -10,7 +10,8 @@ tags: [spark, farm, fabric, h3, comfyui]
 
 - How three Sparks are used (farm vs relay)
 - Fabric NFS / rsync vs management SSH
-- Operator commands (`farm-h3`, `sync-models`)
+- Three ComfyUI UIs (Queue the lab-example graph on each)
+- Optional `farm-h3` / `sync-models` (same graphs, not a separate renderer)
 - What this sample stack refuses (NCCL, K3s)
 
 **What this enables**
@@ -61,11 +62,11 @@ cd ez-comfy-stack
 ./scripts/manage.sh start                # type yes
 ```
 
-Three UIs: `http://spark-0:8188`, `http://spark-1:8188`, `http://spark-2:8188`.
+Three UIs: `http://spark-0:8188`, `http://spark-1:8188`, `http://spark-2:8188`. On each, load **h3-go-see-90s-lab-example** (or STILL HERE / SWITCHYARD) and **Queue** in ComfyUI — same as a single-node demo.
 
 `farm-h3` **never** starts compose remotely. It prints the exact `./scripts/manage.sh start` you must run locally (heavy confirm stays on that node). Three containers still use `restart: "no"`.
 
-From a laptop or Spark-0:
+Optional convenience (POSTs those same lab graphs; not a second product):
 
 ```bash
 export SPARK_COMFY_URLS=http://spark-0:8188,http://spark-1:8188,http://spark-2:8188

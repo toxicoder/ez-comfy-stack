@@ -45,6 +45,19 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "common: doctor_next_step_hint for docker group vs missing CLI" {
+  run doctor_next_step_hint 1
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"newgrp docker"* ]]
+  [[ "${output}" != *"setup --install-docker"* ]]
+  run doctor_next_step_hint 2
+  [[ "${output}" == *"systemctl start docker"* ]]
+  run doctor_next_step_hint 3
+  [[ "${output}" == *"setup --install-docker"* ]]
+  run doctor_next_step_hint 0
+  [[ "${output}" == *"setup --install-docker"* ]]
+}
+
 @test "common: lab_expected_model_relpaths and check_lab_models_ready" {
   run lab_expected_model_relpaths
   [ "${status}" -eq 0 ]
