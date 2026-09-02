@@ -284,13 +284,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../h3-films/" class="md-tabs__link">
+      <a href="../licenses/" class="md-tabs__link">
         
   
   
     
   
-  H3 90s films
+  Model licenses
 
       </a>
     </li>
@@ -546,14 +546,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../h3-films/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    H3 90s films
+    Model licenses
   
 
     
@@ -1190,7 +1190,7 @@
   Root["ez-comfy-stack"]
   Root --&gt; Manage["scripts/manage.sh&lt;br/&gt;operator CLI"]
   Root --&gt; Lib["scripts/lib/*&lt;br/&gt;common · compose · paths · safety"]
-  Root --&gt; Util["scripts/utilities/*&lt;br/&gt;download-flux · download-ltx · download-h3 · download-limit"]
+  Root --&gt; Util["scripts/utilities/*&lt;br/&gt;download-image · download-wan · download-ltx · download-limit"]
   Root --&gt; Docker["docker/*&lt;br/&gt;compose · Dockerfile · entrypoint · patch"]
   Root --&gt; Cfg["config/resource-policy.yaml"]
   Root --&gt; Docs["docs/ · MkDocs"]
@@ -1420,7 +1420,7 @@
 <li>Validated pins: <code>COMFYUI_REF</code>, <code>COMFYUI_MANAGER_REF</code>, <code>COMFYUI_NUNCHAKU_NODE_REF</code> (see models-and-cache.md)</li>
 <li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --chmod</code>, <code>RUN --mount=type=cache,target=/root/.cache/pip</code></li>
 <li>Compose bind-mounts ops scripts + <code>install-comfy/</code> for zero-rebuild iteration</li>
-<li>GHCR channel by long-lived branch: publish tags <code>flux-to-ltx</code> (<code>main</code>) and <code>flux-to-ltx-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel)  </li>
+<li>GHCR channel by long-lived branch: publish tags <code>us-safe-studio</code> (<code>main</code>) and <code>us-safe-studio-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel). Old <code>flux-to-ltx*</code> tags freeze on the previous image.  </li>
 <li>Scripts as real files (not inline ConfigMap YAML)  </li>
 <li>Host model cache + named volume for Comfy state  </li>
 <li>Compose <code>restart: "no"</code>; explicit <code>mem_limit</code> / <code>mem_reservation</code>  </li>

@@ -286,13 +286,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../h3-films/" class="md-tabs__link">
+      <a href="../licenses/" class="md-tabs__link">
         
   
   
     
   
-  H3 90s films
+  Model licenses
 
       </a>
     </li>
@@ -548,14 +548,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../h3-films/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    H3 90s films
+    Model licenses
   
 
     
@@ -926,7 +926,7 @@
 <h2 id="golden-rule">Golden rule<a class="headerlink" href="#golden-rule" title="Permanent link">&para;</a></h2>
 <div class="admonition danger">
 <p class="admonition-title">Never reboot with the heavy ComfyUI stack still running</p>
-<p>Always <code>stop</code> first. Compose uses <code>restart: "no"</code> so the stack will <strong>not</strong> come back by itself — that is intentional, but a live GPU load during reboot still risks painful recovery. Three Spark farm containers still use <code>restart: "no"</code>; <code>farm-h3</code> never starts compose on a remote node.</p>
+<p>Always <code>stop</code> first. Compose uses <code>restart: "no"</code> so the stack will <strong>not</strong> come back by itself — that is intentional, but a live GPU load during reboot still risks painful recovery. Independent Spark farm containers still use <code>restart: "no"</code>; <code>spark-farm.sh</code> never starts compose on a remote node.</p>
 </div>
 <pre class="mermaid"><code>flowchart LR
   subgraph Unsafe["Anti-pattern"]

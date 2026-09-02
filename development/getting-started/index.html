@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Install prerequisites, download models, and start the unified ComfyUI flux-to-ltx stack on DGX Spark.">
+        <meta name="description" content="Install prerequisites, download models, and start the US-safe ComfyUI studio on DGX Spark.">
       
       
       
@@ -288,13 +288,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../h3-films/" class="md-tabs__link">
+      <a href="../licenses/" class="md-tabs__link">
         
   
   
     
   
-  H3 90s films
+  Model licenses
 
       </a>
     </li>
@@ -682,6 +682,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#iteration-loop-youtube-169" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iteration loop (YouTube 16:9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#prompting-these-models" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -783,14 +794,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../h3-films/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    H3 90s films
+    Model licenses
   
 
     
@@ -1120,6 +1131,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#iteration-loop-youtube-169" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iteration loop (YouTube 16:9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#prompting-these-models" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1214,7 +1236,7 @@
 <li>A first successful open of ComfyUI at port <strong>8188</strong></li>
 <li>Safe model downloads that leave bandwidth for SSH</li>
 <li>Choosing prebuilt GHCR pull (default) or a local Dockerfile build</li>
-<li>Correct Flux / LTX prompting and easy LTX video preview (VHS MP4)</li>
+<li>Correct Klein / Wan / LTX prompting and easy VHS MP4 preview</li>
 </ul>
 <hr />
 <h2 id="you-will-end-here">You will end here<a class="headerlink" href="#you-will-end-here" title="Permanent link">&para;</a></h2>
@@ -1236,7 +1258,7 @@
 </tr>
 <tr>
 <td><strong>Weights</strong></td>
-<td>Flux <strong>fast</strong> + LTX <strong>balanced</strong> under <code>MODELS_DIR</code> (default <code>/mnt/models</code>)</td>
+<td>Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under <code>MODELS_DIR</code> (default <code>/mnt/models</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -1247,7 +1269,7 @@
 <li><strong>Clone</strong> this repo (branch that matches these docs)</li>
 <li><strong><code>setup</code></strong> — <code>.env</code>, model dir, Docker if needed</li>
 <li><strong><code>doctor</code></strong> — fix hard failures before multi‑GB downloads</li>
-<li><strong><code>download-models</code></strong> — flux-fast + ltx-balanced (throttled)</li>
+<li><strong><code>download-models</code></strong> — Klein 4B + Wan 5B + LTX-2.5 (throttled; LTX gated)</li>
 <li><strong><code>start</code></strong> — type <code>yes</code>, then open <strong>:8188</strong></li>
 <li><strong><code>stop</code></strong> — always, before reboot</li>
 </ol>
@@ -1514,7 +1536,7 @@
 <p>Layer invalidation and pin bumps: <a href="../models-and-cache/#prebuilt-container-image-ghcr">Models &amp; Cache</a>. Recovery rows: <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <h3 id="example-workflows">Example workflows<a class="headerlink" href="#example-workflows" title="Permanent link">&para;</a></h3>
 <p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Image (Flux)</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:4"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Still (Klein 4B)</label><label for="__tabbed_3_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_3_3">AV hero (LTX-2.5)</label><label for="__tabbed_3_4">License</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1526,104 +1548,16 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>flux-txt2img-lab-example</strong></td>
-<td>Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE)</td>
+<td><strong>still-draft-lab-example</strong></td>
+<td>Apache Klein 4B distilled, <strong>768×432</strong>, <strong>4</strong> steps, batch 2, prefix <code>ez_still_draft</code></td>
 </tr>
 <tr>
-<td><strong>flux-txt2img-portrait-lab-example</strong></td>
-<td>Text → image <strong>768×1024</strong> portrait</td>
+<td><strong>still-hero-lab-example</strong></td>
+<td>Same prompt + seed, <strong>1280×720</strong>, more steps, prefix <code>ez_still_hero</code></td>
 </tr>
 <tr>
-<td><strong>flux-txt2img-landscape-lab-example</strong></td>
-<td>Text → image <strong>1280×720</strong> landscape</td>
-</tr>
-<tr>
-<td><strong>flux-txt2img-ultrawide-lab-example</strong></td>
-<td>Text → image <strong>1536×640</strong> cinematic wide</td>
-</tr>
-<tr>
-<td><strong>flux-txt2img-512-lab-example</strong></td>
-<td>Fast draft: <strong>512²</strong></td>
-</tr>
-<tr>
-<td><strong>flux-txt2img-quick-lab-example</strong></td>
-<td>Smoke test: <strong>768²</strong>, <strong>4</strong> steps</td>
-</tr>
-<tr>
-<td><strong>flux-txt2img-batch2-lab-example</strong></td>
-<td>Batch size <strong>2</strong> at 768²</td>
-</tr>
-<tr>
-<td><strong>flux-txt2img-high-steps-lab-example</strong></td>
-<td>1024² with <strong>16</strong> steps</td>
-</tr>
-<tr>
-<td><strong>flux-txt2img-product-lab-example</strong></td>
-<td>Product / catalog prompt + square</td>
-</tr>
-<tr>
-<td><strong>flux-img2img-lab-example</strong></td>
-<td>Sketch→hero from Comfy <strong>example.png</strong>, denoise <strong>0.65</strong></td>
-</tr>
-<tr>
-<td><strong>flux-img2img-subtle-lab-example</strong></td>
-<td>Light polish of <strong>example.png</strong>, denoise <strong>0.35</strong></td>
-</tr>
-<tr>
-<td><strong>flux-img2img-strong-lab-example</strong></td>
-<td>Cinematic remaster of <strong>example.png</strong>, denoise <strong>0.85</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Img2img uses Comfy’s default doodle</p>
-<p>I2I graphs keep <strong>LoadImage = example.png</strong> (the crude pink-dress / yellow wing-hair stick figure that ships with ComfyUI). Positives deliberately turn that bad sketch into something incredible—swap in your own sketch anytime.</p>
-</div>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Video (LTX, ≥ ~10 s)</label><label for="__tabbed_4_2">Combined</label><label for="__tabbed_4_3">H3 90s film</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<table>
-<thead>
-<tr>
-<th>Workflow</th>
-<th>What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>ltx-i2v-lab-example</strong></td>
-<td>Image → video <strong>~10 s</strong> (241 @ 24 fps; default <strong>example.png</strong>)</td>
-</tr>
-<tr>
-<td><strong>ltx-t2v-lab-example</strong></td>
-<td>Text → video <strong>~10 s</strong> (241 @ 24 fps)</td>
-</tr>
-<tr>
-<td><strong>ltx-t2v-portrait-lab-example</strong></td>
-<td>Vertical T2V <strong>512×768</strong>, <strong>~10 s</strong></td>
-</tr>
-<tr>
-<td><strong>ltx-t2v-landscape-lab-example</strong></td>
-<td>Wide T2V <strong>1024×576</strong>, <strong>~10 s</strong></td>
-</tr>
-<tr>
-<td><strong>ltx-i2v-30s-lab-example</strong> / <strong>ltx-i2v-orbit-30s-lab-example</strong></td>
-<td>I2V <strong>~30 s</strong> long-run demos</td>
-</tr>
-<tr>
-<td><strong>ltx-t2v-30s-lab-example</strong> / <strong>portrait-30s</strong> / <strong>landscape-30s</strong></td>
-<td>T2V <strong>~30 s</strong> long-run demos</td>
-</tr>
-<tr>
-<td><strong>ltx-i2v-60s-lab-example</strong></td>
-<td>I2V <strong>~60 s</strong> very heavy long-run demo</td>
-</tr>
-<tr>
-<td><strong>ltx-t2v-60s-lab-example</strong> / <strong>portrait-60s</strong> / <strong>landscape-60s</strong> / <strong>story-60s</strong></td>
-<td>T2V <strong>~60 s</strong> very heavy long-run demos</td>
+<td><strong>still-studio-lab-example</strong></td>
+<td>DRAFT group on, HERO bypassed — un-bypass after you like the draft</td>
 </tr>
 </tbody>
 </table>
@@ -1638,18 +1572,21 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>flux-to-ltx-lab-example</strong></td>
-<td>Flux txt2img + handoff → <strong>ltx-i2v-lab-example</strong> (~10 s)</td>
+<td><strong>wan-i2v-draft-lab-example</strong></td>
+<td>5 s I2V from <code>example.png</code> / draft still, 832×480, 121 frames, silent Apache</td>
 </tr>
 <tr>
-<td><strong>flux-to-ltx-30s-lab-example</strong></td>
-<td>Flux handoff aimed at <strong>ltx-i2v-30s-lab-example</strong></td>
+<td><strong>wan-t2v-draft-lab-example</strong></td>
+<td>5 s T2V (LoadImage bypassed)</td>
+</tr>
+<tr>
+<td><strong>wan-shot-lab-example</strong></td>
+<td>One 5 s shot, prefix <code>ez_shot_01</code> — Queue 01–06 then concat</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="tabbed-block">
-<p>Opt-in MiniMax H3 path (does <strong>not</strong> replace Flux→LTX). Weights: <code>./scripts/manage.sh download-h3</code>. Needs Comfy <strong>v0.34.0+</strong> (<code>MiniMaxH3AddGuide</code>). Output is <strong>2160 frames / 90.00s</strong> with native H3 audio — <a href="../h3-films/">H3 90s films</a>. If the UI says <strong>Unknown pack</strong> / install Manager, those nodes are <strong>core</strong> in 0.34 — do <strong>not</strong> <code>pip install comfyui-manager</code>; <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <table>
 <thead>
 <tr>
@@ -1659,44 +1596,57 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>h3-go-see-90s-lab-example</strong></td>
-<td>First-person parkour-as-travel (contest entry)</td>
+<td><strong>ltx-i2v-hero-lab-example</strong></td>
+<td>~5 s I2V with native audio (Community License, $10M cap)</td>
 </tr>
 <tr>
-<td><strong>h3-still-here-90s-lab-example</strong></td>
-<td>Third-person household morning</td>
-</tr>
-<tr>
-<td><strong>h3-switchyard-90s-lab-example</strong></td>
-<td>Night freight yard</td>
+<td><strong>ltx-t2v-hero-lab-example</strong></td>
+<td>~5 s T2V AV</td>
 </tr>
 </tbody>
 </table>
-<p>Same UX as Flux/LTX: after <code>start</code>, open <strong>:8188</strong>, load <strong>h3-go-see-90s-lab-example</strong>, <strong>Queue</strong> in ComfyUI. Optional three-Spark UIs: <a href="../spark-farm/">Spark farm</a>.</p>
+</div>
+<div class="tabbed-block">
+<p>MiniMax H3 is <strong>banned</strong> (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See <a href="../licenses/">Model licenses</a>.</p>
 </div>
 </div>
 </div>
-<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). LTX notes also explain MP4 output and long-run VRAM expectations.</p>
+<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS.</p>
+<h3 id="iteration-loop-youtube-169">Iteration loop (YouTube 16:9)<a class="headerlink" href="#iteration-loop-youtube-169" title="Permanent link">&para;</a></h3>
+<p>Do <strong>not</strong> edit raw JSON. Change widgets on the canvas.</p>
+<ol>
+<li>Load <strong>still-draft-lab-example</strong> → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).</li>
+<li>Pick a frame under <code>COMFY_OUTPUT_DIR</code> (<code>ez_still_draft_*.png</code>).</li>
+<li>Load <strong>wan-i2v-draft-lab-example</strong> → set LoadImage to that PNG (or leave <code>example.png</code> to smoke-test) → edit <strong>Motion / prompt</strong> only → Queue ~5 s silent.</li>
+<li>Optional audio: <strong>ltx-i2v-hero-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV.</li>
+<li>Short film: Queue <strong>wan-shot-lab-example</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--dir<span class="w"> </span>/mnt/comfy-output<span class="w"> </span>--yes
+</code></pre></div>
+<p>Spark will melt on 30–60 s / 90 s graphs — those are gone. Default graphs iterate in minutes.</p>
 <h3 id="prompting-these-models">Prompting these models<a class="headerlink" href="#prompting-these-models" title="Permanent link">&para;</a></h3>
 <p>Lab graphs ship research-backed <strong>Positive</strong> / <strong>Negative</strong> prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Flux.2 Klein (image)</label><label for="__tabbed_5_2">LTX-2.3 (video frames)</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Klein 4B (still)</label><label for="__tabbed_4_2">Wan 2.2 (silent motion)</label><label for="__tabbed_4_3">LTX-2.5 (AV)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
-<li>Text encoder is <strong>Qwen3</strong> (CLIP type <strong><code>flux2</code></strong>): write <strong>natural-language sentences</strong>, subject first, then place, materials, lighting, camera</li>
-<li>Ideal length is roughly <strong>40–120 words</strong> for hero shots; smoke graphs stay shorter</li>
-<li>Highest impact: materials/textures, light source + direction, lens language, foreground/midground/background</li>
-<li>Avoid: comma tag lists, <code>(weight:1.4)</code> emphasis (not applied), “masterpiece / best quality” spam</li>
-<li>Official FLUX.2 style: <strong>describe what you want</strong>, not long “no X” lists. Lab negatives are residual lists for experimenters; graphs ship at <strong>CFG 1.0</strong>, so quality is almost entirely the Positive prompt</li>
+<li>Text encoder is <strong>Qwen3-4B</strong> (CLIP type <strong><code>flux2</code></strong>): write <strong>natural-language sentences</strong>, subject first, then place, materials, lighting, camera</li>
+<li>Distilled graphs ship at <strong>CFG 1.0</strong> / <strong>4 steps</strong> — quality is almost entirely the Positive prompt</li>
+<li>Copy prompt + seed from draft to hero; do not restyle in the hero graph</li>
 </ul>
 </div>
 <div class="tabbed-block">
 <ul>
-<li>Text encoder is <strong>Gemma 3 DualCLIP</strong> (type <strong><code>ltxv</code></strong>): describe <strong>actions over time</strong></li>
-<li><strong>I2V:</strong> restate the still (lab default is Comfy <strong>example.png</strong>), then camera move + micro-motion; keep identity stable</li>
-<li><strong>T2V:</strong> chronological shot (establish → move → environment motion); for 30 s / 60 s graphs write a beginning → middle → end timeline</li>
-<li>Negatives should target <strong>temporal</strong> artifacts (morphing, flicker, jitter, stutter), not generic SD junk</li>
-<li>Light ambient-audio language is optional; lab does <strong>not</strong> save audio tracks</li>
+<li>CLIP type <strong><code>wan</code></strong>. Look prompt vs <strong>Motion / prompt</strong> are separate on I2V graphs</li>
+<li>~5 s (121 frames @ 24 fps). No native audio — that is LTX’s job</li>
+<li>Apache 2.0</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>CLIP type <strong><code>ltxv</code></strong> (Gemma4-with-proj). Describe motion, camera, and <strong>sounds</strong></li>
+<li><strong>Not Apache.</strong> LTX Community License: free commercial under <strong>$10M COMPANY</strong> annual revenue (affiliates count); disclose AI-generated media; do not strip provenance; do not distill</li>
+<li>Gated Hugging Face: accept <a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> before <code>download-models</code></li>
 </ul>
 </div>
 </div>
@@ -1741,8 +1691,8 @@
 <p>Longer latents need more VRAM and wall-clock time (often multi-minute). Prefer <strong>~10 s</strong> base graphs for smoke tests; keep headroom preflight green before queuing 30 s / 60 s demos.</p>
 </div>
 <p>Optional offline stitch of PNG frames only (if you need a host-side re-encode):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">'ez_ltx_*_*.png'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">'ez_ltx_*_*.png'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
 </code></pre></div>
 <p>If <strong><code>VHS_VideoCombine</code> is missing</strong>, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <details class="abstract">
@@ -1765,7 +1715,7 @@
 <p class="admonition-title">Golden rule</p>
 <p><strong>Never reboot with the heavy ComfyUI stack still running.</strong> Always stop first. See <a href="../reboot-safety/">Reboot Safety</a>.</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>./scripts/manage.sh<span class="w"> </span>stop
 </code></pre></div>
 <hr />
 <h2 id="optional-deep-dives">Optional deep-dives<a class="headerlink" href="#optional-deep-dives" title="Permanent link">&para;</a></h2>
@@ -1782,11 +1732,11 @@
 <tbody>
 <tr>
 <td><code>main</code></td>
-<td><code>ghcr.io/toxicoder/ez-comfy:flux-to-ltx</code></td>
+<td><code>ghcr.io/toxicoder/ez-comfy:us-safe-studio</code></td>
 </tr>
 <tr>
 <td><code>development</code> (and feature branches)</td>
-<td><code>ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development</code></td>
+<td><code>ghcr.io/toxicoder/ez-comfy:us-safe-studio-development</code></td>
 </tr>
 </tbody>
 </table>
@@ -1839,7 +1789,7 @@
 <details class="abstract">
 <summary>Cold-start phases (first start without prebuilt)</summary>
 <pre class="mermaid"><code>flowchart TB
-  A["manage.sh start&lt;br/&gt;type yes"] --&gt; B["Docker build image&lt;br/&gt;ez-comfy:flux-to-ltx"]
+  A["manage.sh start&lt;br/&gt;type yes"] --&gt; B["Docker build image&lt;br/&gt;ez-comfy:us-safe-studio"]
   B --&gt; C["Create volume comfy-state"]
   C --&gt; D["entrypoint: install-comfy.sh&lt;br/&gt;pip + git · 10–30+ min"]
   D --&gt; E["patch_get_free_memory.py"]

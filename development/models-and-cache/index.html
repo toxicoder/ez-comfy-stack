@@ -286,13 +286,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../h3-films/" class="md-tabs__link">
+      <a href="../licenses/" class="md-tabs__link">
         
   
   
     
   
-  H3 90s films
+  Model licenses
 
       </a>
     </li>
@@ -548,14 +548,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../h3-films/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    H3 90s films
+    Model licenses
   
 
     
@@ -728,17 +728,6 @@
     <span class="md-ellipsis">
       
         Example graphs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#minimax-h3-opt-in" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MiniMax H3 (opt-in)
       
     </span>
   </a>
@@ -1088,17 +1077,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#minimax-h3-opt-in" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MiniMax H3 (opt-in)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#gated-models-hf_token" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1347,44 +1325,54 @@
 </thead>
 <tbody>
 <tr>
-<td><code>flux-2-klein-9b-nvfp4.safetensors</code></td>
+<td><code>flux-2-klein-4b-fp8.safetensors</code></td>
 <td><code>diffusion_models/</code></td>
-<td>Flux fast UNET (BFL)</td>
+<td>Apache Klein 4B distilled still UNET</td>
 </tr>
 <tr>
-<td><code>qwen_3_8b_fp4mixed.safetensors</code></td>
+<td><code>qwen_3_4b.safetensors</code></td>
 <td><code>text_encoders/</code></td>
-<td>Flux TE (Comfy-Org companions; CLIP type <strong><code>flux2</code></strong>)</td>
+<td>Klein 4B TE (CLIP type <strong><code>flux2</code></strong>)</td>
 </tr>
 <tr>
 <td><code>flux2-vae.safetensors</code></td>
 <td><code>vae/</code></td>
-<td>Flux VAE (Comfy-Org companions)</td>
+<td>Flux.2 VAE</td>
 </tr>
 <tr>
-<td><code>ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors</code></td>
+<td><code>wan2.2_ti2v_5B_fp16.safetensors</code></td>
 <td><code>diffusion_models/</code></td>
-<td>LTX balanced UNET</td>
+<td>Apache Wan 2.2 TI2V-5B</td>
 </tr>
 <tr>
-<td><code>gemma_3_12B_it_fp4_mixed.safetensors</code></td>
+<td><code>umt5_xxl_fp8_e4m3fn_scaled.safetensors</code></td>
 <td><code>text_encoders/</code></td>
-<td>LTX Gemma 3 TE (DualCLIP type <strong><code>ltxv</code></strong>, with projection)</td>
+<td>Wan CLIP (type <strong><code>wan</code></strong>)</td>
 </tr>
 <tr>
-<td><code>ltx-2.3_text_projection_bf16.safetensors</code></td>
+<td><code>wan2.2_vae.safetensors</code></td>
+<td><code>vae/</code></td>
+<td>Wan 2.2 VAE</td>
+</tr>
+<tr>
+<td><code>ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors</code></td>
+<td><code>diffusion_models/</code></td>
+<td>LTX-2.5 distilled AV UNET (Community License)</td>
+</tr>
+<tr>
+<td><code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors</code></td>
 <td><code>text_encoders/</code></td>
-<td>LTX text projection (DualCLIP second clip)</td>
+<td>LTX-2.5 Gemma4-with-proj (CLIP type <strong><code>ltxv</code></strong>)</td>
 </tr>
 <tr>
-<td><code>LTX23_video_vae_bf16.safetensors</code></td>
+<td><code>ltx-2.5-video-vae-bf16.safetensors</code></td>
 <td><code>vae/</code></td>
-<td>LTX video VAE (used by lab I2V/T2V)</td>
+<td>LTX-2.5 video VAE</td>
 </tr>
 <tr>
-<td><code>LTX23_audio_vae_bf16.safetensors</code></td>
+<td><code>ltx-2.5-audio-vae-bf16.safetensors</code></td>
 <td><code>vae/</code></td>
-<td>LTX audio VAE (required by lab LTX graphs for joint AV empty audio latents)</td>
+<td>LTX-2.5 audio VAE</td>
 </tr>
 </tbody>
 </table>
@@ -1399,110 +1387,41 @@
 </thead>
 <tbody>
 <tr>
-<td><code>flux-txt2img-lab-example.json</code></td>
-<td>1024² T2I</td>
+<td><code>still-draft-lab-example.json</code></td>
+<td>Klein 4B 768×432, 4 steps, batch 2</td>
 </tr>
 <tr>
-<td><code>flux-txt2img-portrait-lab-example.json</code></td>
-<td>768×1024</td>
+<td><code>still-hero-lab-example.json</code></td>
+<td>Same prompt/seed, 1280×720</td>
 </tr>
 <tr>
-<td><code>flux-txt2img-landscape-lab-example.json</code></td>
-<td>1280×720</td>
+<td><code>still-studio-lab-example.json</code></td>
+<td>DRAFT on, HERO bypassed</td>
 </tr>
 <tr>
-<td><code>flux-txt2img-ultrawide-lab-example.json</code></td>
-<td>1536×640</td>
+<td><code>wan-i2v-draft-lab-example.json</code></td>
+<td>Wan 5B I2V ~5 s (121 @ 24 fps)</td>
 </tr>
 <tr>
-<td><code>flux-txt2img-512-lab-example.json</code></td>
-<td>512² draft</td>
+<td><code>wan-t2v-draft-lab-example.json</code></td>
+<td>Wan 5B T2V ~5 s</td>
 </tr>
 <tr>
-<td><code>flux-txt2img-quick-lab-example.json</code></td>
-<td>768² / 4 steps smoke</td>
+<td><code>wan-shot-lab-example.json</code></td>
+<td>One 5 s shot for concat-shots.sh</td>
 </tr>
 <tr>
-<td><code>flux-txt2img-batch2-lab-example.json</code></td>
-<td>batch 2 @ 768²</td>
+<td><code>ltx-i2v-hero-lab-example.json</code></td>
+<td>LTX-2.5 I2V ~5 s with audio</td>
 </tr>
 <tr>
-<td><code>flux-txt2img-high-steps-lab-example.json</code></td>
-<td>1024² / 16 steps</td>
-</tr>
-<tr>
-<td><code>flux-txt2img-product-lab-example.json</code></td>
-<td>product / catalog prompt</td>
-</tr>
-<tr>
-<td><code>flux-img2img-lab-example.json</code></td>
-<td>I2I denoise 0.65; default <strong>example.png</strong> sketch→hero</td>
-</tr>
-<tr>
-<td><code>flux-img2img-subtle-lab-example.json</code> / <code>flux-img2img-strong-lab-example.json</code></td>
-<td>denoise 0.35 / 0.85 on <strong>example.png</strong></td>
-</tr>
-<tr>
-<td><code>ltx-i2v-lab-example.json</code></td>
-<td>I2V ~10 s (241 @ 24 fps); default <strong>example.png</strong></td>
-</tr>
-<tr>
-<td><code>ltx-t2v-lab-example.json</code></td>
-<td>T2V ~10 s (241 @ 24 fps)</td>
-</tr>
-<tr>
-<td><code>ltx-t2v-portrait-lab-example.json</code> / <code>ltx-t2v-landscape-lab-example.json</code></td>
-<td>vertical / wide T2V ~10 s</td>
-</tr>
-<tr>
-<td><code>ltx-*-30s-*-lab-example.json</code> (5 graphs)</td>
-<td>~30 s long-run I2V/T2V demos (721 frames)</td>
-</tr>
-<tr>
-<td><code>ltx-*-60s-*-lab-example.json</code> (5 graphs)</td>
-<td>~60 s very heavy I2V/T2V demos (1441 frames)</td>
-</tr>
-<tr>
-<td><code>flux-to-ltx-lab-example.json</code> / <code>flux-to-ltx-30s-lab-example.json</code></td>
-<td>Flux T2I + handoff → LTX I2V (~10 s / ~30 s)</td>
+<td><code>ltx-t2v-hero-lab-example.json</code></td>
+<td>LTX-2.5 T2V ~5 s with audio</td>
 </tr>
 </tbody>
 </table>
-<p>Lab LTX video graphs write <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write <strong>frames</strong> via <code>SaveImage</code>. All LTX lab examples are <strong>≥ ~10 s</strong>; 30 s / 60 s graphs are intentional long-run demos (high VRAM/time). Watch the <strong>Save video (MP4)</strong> node preview after Queue — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a>. They still <strong>must</strong> wire the audio VAE + <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas <strong>Note</strong> (H3 graphs use <strong>MarkdownNote</strong>) with models, prompting, and video-output steps.</p>
-<h3 id="minimax-h3-opt-in">MiniMax H3 (opt-in)<a class="headerlink" href="#minimax-h3-opt-in" title="Permanent link">&para;</a></h3>
-<p><code>download-models</code> does <strong>not</strong> pull H3. Use <code>./scripts/manage.sh download-h3</code> or <code>download-models --with-h3</code>. See <a href="../h3-films/">H3 90s films</a>.</p>
-<table>
-<thead>
-<tr>
-<th>File</th>
-<th>Comfy folder</th>
-<th>Role</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>minimax_h3_fl2va_pruned_int8_convrot.safetensors</code></td>
-<td><code>diffusion_models/</code></td>
-<td>FL2VA pruned INT8 (~19.5 GB)</td>
-</tr>
-<tr>
-<td><code>qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors</code></td>
-<td><code>text_encoders/</code></td>
-<td>Qwen3-VL-32B NVFP4 (CLIP type <strong><code>minimax</code></strong>)</td>
-</tr>
-<tr>
-<td><code>minimax_h3_video_vae_fp16.safetensors</code></td>
-<td><code>vae/</code></td>
-<td>Video VAE</td>
-</tr>
-<tr>
-<td><code>minimax_h3_audio_vae_fp32.safetensors</code></td>
-<td><code>vae/</code></td>
-<td>Audio VAE (native stereo)</td>
-</tr>
-</tbody>
-</table>
-<p>Graphs: <code>h3-go-see-90s-lab-example.json</code>, <code>h3-still-here-90s-lab-example.json</code>, <code>h3-switchyard-90s-lab-example.json</code>. Output <strong>2160 frames / 90.00s</strong> (not 90.17s). <code>LAB_PIPELINE=h3</code> makes <code>doctor</code> also check these four files.</p>
+<p>Lab LTX video graphs write <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write <strong>frames</strong> via <code>SaveImage</code>. Watch the <strong>Save video (MP4)</strong> node preview after Queue — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a>. They still <strong>must</strong> wire the audio VAE because LTX is a joint AV model. Every lab graph includes an on-canvas <strong>Note</strong> with models, prompting, and video-output steps.</p>
+<p>MiniMax H3 is <strong>banned</strong> (US Excluded Territory). See <a href="../licenses/">Model licenses</a>. <code>download-models</code> refuses <code>--with-h3</code>.</p>
 <h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
 <p>FLUX and some LTX assets may require accepting the license on Hugging Face and a token:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># .env</span>
@@ -1672,7 +1591,7 @@
 </tr>
 <tr>
 <td>Volume pin</td>
-<td><code>COMFY_HOME/.lab-comfyui-ref</code> — stamp-present refresh reseeds from prebuilt (or git-clones <code>COMFYUI_REF</code>) when this lags the runtime pin <strong>or</strong> <code>MiniMaxH3AddGuide</code> is missing. Compose passes <code>COMFYUI_REF</code> at <strong>runtime</strong>, not only as a build-arg</td>
+<td><code>COMFY_HOME/.lab-comfyui-ref</code> — stamp-present refresh reseeds from prebuilt (or git-clones <code>COMFYUI_REF</code>) when this lags the runtime pin. Compose passes <code>COMFYUI_REF</code> at <strong>runtime</strong>, not only as a build-arg</td>
 </tr>
 <tr>
 <td>Weights</td>
@@ -1760,7 +1679,7 @@
 <tr>
 <td><code>COMFYUI_REF</code></td>
 <td><code>v0.34.0</code></td>
-<td>First release with <strong><code>MiniMaxH3AddGuide</code></strong> (needed for the 90s six-column chain). Native H3 nodes landed in 0.30.0; AddGuide is <code>#15439</code> in 0.34.0. Flux + LTX + VHS remain. Torch cu130. Rebuild the <strong>comfy</strong> image phase after this bump (torch phase stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
+<td>Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the <strong>comfy</strong> image phase after this bump (torch phase stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
 </tr>
 <tr>
 <td><code>COMFYUI_MANAGER_REF</code></td>

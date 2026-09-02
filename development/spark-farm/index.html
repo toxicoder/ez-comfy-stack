@@ -6,14 +6,14 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Three DGX Sparks as independent Comfy workers plus a shared model cache — farm and relay, no NCCL.">
+        <meta name="description" content="Three DGX Sparks as independent Comfy workers plus a shared model cache — no NCCL, no MiniMax H3.">
       
       
       
         <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/spark-farm/">
       
       
-        <link rel="prev" href="../h3-films/">
+        <link rel="prev" href="../licenses/">
       
       
         <link rel="next" href="../models-and-cache/">
@@ -286,13 +286,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../h3-films/" class="md-tabs__link">
+      <a href="../licenses/" class="md-tabs__link">
         
   
   
     
   
-  H3 90s films
+  Model licenses
 
       </a>
     </li>
@@ -548,14 +548,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../h3-films/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    H3 90s films
+    Model licenses
   
 
     
@@ -917,13 +917,13 @@
 <li>How three Sparks are used (farm vs relay)</li>
 <li>Fabric NFS / rsync vs management SSH</li>
 <li>Three ComfyUI UIs (Queue the lab-example graph on each)</li>
-<li>Optional <code>farm-h3</code> / <code>sync-models</code> (same graphs, not a separate renderer)</li>
-<li>What this sample stack refuses (NCCL, K3s)</li>
+<li>Optional <code>sync-models</code> (rsync <code>MODELS_DIR/comfy</code> over fabric)</li>
+<li>What this sample stack refuses (NCCL, K3s, MiniMax H3)</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Three concurrent 90.00s MiniMax H3 films with <strong>one weight copy</strong></li>
-<li>Shot-relay copies on the 200 GbE fabric, not the 10 GbE mgmt NIC</li>
+<li>Three concurrent 5 s Wan/LTX shots with <strong>one weight copy</strong></li>
+<li>Copies on the 200 GbE fabric, not the 10 GbE mgmt NIC</li>
 <li>Unchanged <code>restart: "no"</code> and local heavy confirm on <code>start</code></li>
 </ul>
 <p>This remains a <strong>per-node Comfy demo</strong>. Tensor-parallel LLMs belong in <a href="https://github.com/toxicoder/nvidia-dgx-spark-lab">nvidia-dgx-spark-lab</a>.</p>
@@ -939,22 +939,17 @@
 <tbody>
 <tr>
 <td><strong>Farm (default)</strong></td>
-<td>Each Spark runs one full 6-shot film (different film / seed). Shared <code>/mnt/models</code>.</td>
-<td>GO SEE + STILL HERE + SWITCHYARD, or 3 seeds of GO SEE</td>
-</tr>
-<tr>
-<td><strong>Relay (optional)</strong></td>
-<td>Spark-0 samples shot N, writes last-frame PNG + WAV to the share; Spark-1 samples shot N+1.</td>
-<td>One film, if weight-load dominates wall-clock</td>
+<td>Each Spark Queues an independent 5 s Wan or LTX shot. Shared <code>/mnt/models</code>.</td>
+<td>Parallel shorts / concat-shots</td>
 </tr>
 <tr>
 <td><strong>Do not implement</strong></td>
-<td>NCCL split of a single H3 denoise across 3 GB10s</td>
+<td>NCCL split of a single denoise across 3 GB10s</td>
 <td>Out of scope</td>
 </tr>
 </tbody>
 </table>
-<p>GB10 128 GB unified memory holds INT8 FL2VA + NVFP4 Qwen3-VL-32B + both VAEs. Clustering is <strong>throughput + one weight copy</strong>, not slicing one sampler.</p>
+<p>Clustering is <strong>throughput + one weight copy</strong>, not slicing one sampler. MiniMax H3 is banned — see <a href="../licenses/">licenses</a>.</p>
 <h2 id="networking-docs-only-no-iac">Networking (docs only — no IaC)<a class="headerlink" href="#networking-docs-only-no-iac" title="Permanent link">&para;</a></h2>
 <p>Physical: 3 Sparks, high-bandwidth already up.</p>
 <ul>
@@ -965,7 +960,7 @@
 <p>Shared <code>MODELS_DIR</code> (pick one):</p>
 <ol>
 <li><strong>NFS over the fabric subnet (preferred):</strong> Spark-0 exports <code>/mnt/models</code>; Sparks 1–2 mount it. Compose already bind-mounts <code>${MODELS_DIR}:/models</code>.</li>
-<li><strong>Replica:</strong> <code>./scripts/utilities/spark-farm.sh sync-models</code> rsyncs the H3 tree over fabric IPs.</li>
+<li><strong>Replica:</strong> <code>./scripts/utilities/spark-farm.sh sync-models</code> rsyncs <code>MODELS_DIR/comfy</code> over fabric IPs.</li>
 </ol>
 <p>See <code>config/spark-farm.example.env</code>.</p>
 <h2 id="per-node-process">Per-node process<a class="headerlink" href="#per-node-process" title="Permanent link">&para;</a></h2>
@@ -975,22 +970,15 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>setup
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># set MODELS_DIR=/mnt/models and HF_TOKEN in .env</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>./scripts/manage.sh<span class="w"> </span>download-h3<span class="w">          </span><span class="c1"># cache owner, or after NFS is up</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">      </span><span class="c1"># cache owner, or after NFS is up</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
 </code></pre></div>
-<p>Three UIs: <code>http://spark-0:8188</code>, <code>http://spark-1:8188</code>, <code>http://spark-2:8188</code>. On each, load <strong>h3-go-see-90s-lab-example</strong> (or STILL HERE / SWITCHYARD) and <strong>Queue</strong> in ComfyUI — same as a single-node demo.</p>
-<p><code>farm-h3</code> <strong>never</strong> starts compose remotely. It prints the exact <code>./scripts/manage.sh start</code> you must run locally (heavy confirm stays on that node). Three containers still use <code>restart: "no"</code>.</p>
-<p>Optional convenience (POSTs those same lab graphs; not a second product):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_COMFY_URLS</span><span class="o">=</span>http://spark-0:8188,http://spark-1:8188,http://spark-2:8188
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>farm-h3<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--seeds<span class="w"> </span><span class="m">509201</span>,509211,509221
-</code></pre></div>
-<p>Memory: keep <code>MEM_LIMIT=90g</code>, <code>MEM_RESERVATION=80g</code>, <code>MIN_HOST_FREE_GIB=28</code>, <code>shm_size: 16gb</code>. If a node OOMs at 1344×768×379, use <code>--size 864x480</code> rather than raising mem limits.</p>
+<p>Three UIs: <code>http://spark-0:8188</code>, <code>http://spark-1:8188</code>, <code>http://spark-2:8188</code>. On each, load <strong>wan-shot-lab-example</strong> and <strong>Queue</strong> independently. Concat after approval — MiniMax H3 films are banned (see <a href="../licenses/">licenses</a>).</p>
+<p><code>spark-farm.sh</code> <strong>never</strong> starts compose remotely. It prints the exact <code>./scripts/manage.sh start</code> you must run locally (heavy confirm stays on that node). Containers still use <code>restart: "no"</code>.</p>
+<p>Memory: keep <code>MEM_LIMIT=90g</code>, <code>MEM_RESERVATION=80g</code>, <code>MIN_HOST_FREE_GIB=28</code>, <code>shm_size: 16gb</code>.</p>
 <h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>./scripts/manage.sh<span class="w"> </span>farm-h3<span class="w"> </span>--film<span class="w"> </span>go-see
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>./scripts/manage.sh<span class="w"> </span>queue-h3<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--relay
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>./scripts/manage.sh<span class="w"> </span>stitch-h3<span class="w"> </span>--dir<span class="w"> </span>&lt;shots&gt;<span class="w">   </span><span class="c1"># H3-native concat only; -t 90</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
 </code></pre></div>
 
 

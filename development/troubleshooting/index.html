@@ -286,13 +286,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../h3-films/" class="md-tabs__link">
+      <a href="../licenses/" class="md-tabs__link">
         
   
   
     
   
-  H3 90s films
+  Model licenses
 
       </a>
     </li>
@@ -548,14 +548,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../h3-films/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    H3 90s films
+    Model licenses
   
 
     
@@ -1249,7 +1249,7 @@
 <tr>
 <td>Build OK, <code>status</code> empty / not in <code>docker ps</code></td>
 <td>Container exited immediately (<code>restart: "no"</code>)</td>
-<td>Pull latest (workflow no longer mounts into <code>ComfyUI/</code> before clone). <code>./scripts/manage.sh logs</code> or <code>docker logs ez-comfy-flux-to-ltx</code>. Reset poisoned volume: <code>./scripts/manage.sh stop &amp;&amp; docker volume rm ez-comfy-state</code> then <code>start</code> again. Stop other GPU containers if needed</td>
+<td>Pull latest (workflow no longer mounts into <code>ComfyUI/</code> before clone). <code>./scripts/manage.sh logs</code> or <code>docker logs ez-comfy-studio</code>. Reset poisoned volume: <code>./scripts/manage.sh stop &amp;&amp; docker volume rm ez-comfy-state</code> then <code>start</code> again. Stop other GPU containers if needed</td>
 </tr>
 <tr>
 <td><code>start</code> returns while logs still downloading torch</td>
@@ -1264,7 +1264,7 @@
 <tr>
 <td><code>docker pull ghcr.io/...</code> denied / not found</td>
 <td>Wrong branch tag, package not published, or private</td>
-<td>Confirm tag matches branch (<code>:flux-to-ltx</code> on <code>main</code>, <code>:flux-to-ltx-development</code> on <code>development</code>/feature — see <code>doctor</code>). Run <code>publish-image</code> on that long-lived branch; make GHCR package public; or <code>EZ_COMFY_IMAGE=…</code> / force local build: <a href="../getting-started/#build-the-image-locally-optional">Getting Started — build locally</a></td>
+<td>Confirm tag matches branch (<code>:us-safe-studio</code> on <code>main</code>, <code>:us-safe-studio-development</code> on <code>development</code>/feature — see <code>doctor</code>). Run <code>publish-image</code> on that long-lived branch; make GHCR package public; or <code>EZ_COMFY_IMAGE=…</code> / force local build: <a href="../getting-started/#build-the-image-locally-optional">Getting Started — build locally</a></td>
 </tr>
 <tr>
 <td>First start still runs multi-GB pip</td>
@@ -1320,14 +1320,14 @@
 <td><code>download-flux</code> / <code>download-ltx</code> status; check <code>MODELS_DIR</code> mount</td>
 </tr>
 <tr>
-<td>Missing <code>ae.safetensors</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*.safetensors</code></td>
-<td><strong>Z-Image</strong> template, not this stack</td>
-<td>Load a <strong>*-lab-example</strong> workflow (e.g. <strong>flux-txt2img-lab-example</strong> / <strong>flux-to-ltx-lab-example</strong>). Stack models are Flux Klein NVFP4 + LTX-2.3 (see <a href="../models-and-cache/">Models &amp; Cache</a>). Run <code>download-models</code> if those files are missing under <code>MODELS_DIR/comfy/</code></td>
+<td>Missing <code>ae.safetensors</code> / <code>z_image_turbo_*.safetensors</code></td>
+<td><strong>Z-Image</strong> template, not the default stack</td>
+<td>Load <strong>still-draft-lab-example</strong>. Default still is Klein 4B Apache (see <a href="../licenses/">licenses</a>). Optional <code>download-image --tier zimage</code></td>
 </tr>
 <tr>
-<td>Missing <code>flux-2-klein-9b-nvfp4</code> or LTX <code>*.safetensors</code> in <strong>*-lab-example</strong> graphs</td>
+<td>Missing <code>flux-2-klein-4b-fp8</code> / Wan / LTX-2.5 in <strong>*-lab-example</strong> graphs</td>
 <td>Weights not on host and/or Comfy <code>models/*</code> not symlinked to host</td>
-<td>1) <code>./scripts/manage.sh download-models</code> (exits non-zero until lab basenames exist) 2) <code>ls $MODELS_DIR/comfy/diffusion_models</code> 3) <code>docker exec ez-comfy-flux-to-ltx ls -la /comfy-state/ComfyUI/models/diffusion_models</code> — should be a <strong>symlink</strong> to <code>/models/comfy/diffusion_models</code>. Restart after pull so <code>link_models</code> retargets. Flux is gated: set <code>HF_TOKEN</code> and accept the BFL license</td>
+<td>1) <code>./scripts/manage.sh download-models</code> 2) <code>ls $MODELS_DIR/comfy/diffusion_models</code> 3) <code>docker exec ez-comfy-studio ls -la /comfy-state/ComfyUI/models/diffusion_models</code> — should be a <strong>symlink</strong> to <code>/models/comfy/diffusion_models</code>. LTX-2.5 is gated: set <code>HF_TOKEN</code> and accept the Lightricks license</td>
 </tr>
 <tr>
 <td>Missing <code>flux2-vae.safetensors</code> (VAELoader) while Qwen TE is present</td>
@@ -1337,7 +1337,7 @@
 <tr>
 <td>Comfy log: path <code>…/models/vae/*.safetensors</code> <strong>exists but doesn't link anywhere</strong>; UI missing <code>flux2-vae</code> / <code>LTX23_*_vae</code> while host <code>ls</code> looks fine</td>
 <td>Absolute host symlinks under <code>MODELS_DIR/comfy/*</code> (e.g. → <code>/mnt/models/…</code>) break inside the container where the cache is mounted at <code>/models</code></td>
-<td>Pull latest; re-run <code>./scripts/manage.sh download-models</code> (cache hit rewrites <strong>relative</strong> links — no full re-download). Check <code>readlink $MODELS_DIR/comfy/vae/flux2-vae.safetensors</code> starts with <code>../</code>, not <code>/</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx test -e /models/comfy/vae/flux2-vae.safetensors</code>. <strong>Do not</strong> wipe <code>ez-comfy-state</code> for this</td>
+<td>Pull latest; re-run <code>./scripts/manage.sh download-models</code> (cache hit rewrites <strong>relative</strong> links — no full re-download). Check <code>readlink $MODELS_DIR/comfy/vae/flux2-vae.safetensors</code> starts with <code>../</code>, not <code>/</code>. Confirm: <code>docker exec ez-comfy-studio test -e /models/comfy/vae/flux2-vae.safetensors</code>. <strong>Do not</strong> wipe <code>ez-comfy-state</code> for this</td>
 </tr>
 <tr>
 <td>Missing <code>LTX23_video_vae_bf16</code> / LTX distilled FP8 in <strong>ltx-*-lab-example</strong></td>
@@ -1352,12 +1352,12 @@
 <tr>
 <td><code>Failed to find C compiler</code> / Triton on <strong>CLIPTextEncode</strong></td>
 <td>Runtime image missing <code>gcc</code>/<code>g++</code>; PyTorch 2.13 Triton JIT needs CC for <code>cuda_utils</code> / <code>bmm_outer_product</code></td>
-<td>Pull/rebuild image (runtime installs <code>gcc</code> <code>g++</code> + <code>python3-dev</code>) and restart. Confirm: <code>docker exec ez-comfy-flux-to-ltx which gcc</code></td>
+<td>Pull/rebuild image (runtime installs <code>gcc</code> <code>g++</code> + <code>python3-dev</code>) and restart. Confirm: <code>docker exec ez-comfy-studio which gcc</code></td>
 </tr>
 <tr>
 <td><code>CalledProcessError</code> compiling <code>cuda_utils*.so</code> / <code>bmm_outer_product</code> on <strong>CLIPTextEncode</strong> (LTX Gemma or Flux)</td>
 <td>Triton JIT has <code>gcc</code> but fails the compile (missing <code>Python.h</code> / <code>python3-dev</code>, or <code>libcuda.so.1</code> not on gcc <code>LIBRARY_PATH</code>). stderr is swallowed by Triton</td>
-<td>Pull/rebuild image so runtime has <strong><code>python3-dev</code></strong> + <code>gcc</code>/<code>g++</code>. Restart. Confirm: <code>docker exec ez-comfy-flux-to-ltx test -f /usr/include/python3.*/Python.h &amp;&amp; echo ok</code>. Logs should show <code>Triton JIT deps OK</code> (or auto-disable). Escape hatch: <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> then restart (eager/cuBLAS fallback; CLIP still works)</td>
+<td>Pull/rebuild image so runtime has <strong><code>python3-dev</code></strong> + <code>gcc</code>/<code>g++</code>. Restart. Confirm: <code>docker exec ez-comfy-studio test -f /usr/include/python3.*/Python.h &amp;&amp; echo ok</code>. Logs should show <code>Triton JIT deps OK</code> (or auto-disable). Escape hatch: <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> then restart (eager/cuBLAS fallback; CLIP still works)</td>
 </tr>
 <tr>
 <td>KSampler LTX: <code>Expected size 768 but got size 4096</code> / <code>embeddings_connector</code></td>
@@ -1377,12 +1377,12 @@
 <tr>
 <td>Missing <code>VHS_VideoCombine</code> node on <strong>ltx-*-lab-example</strong></td>
 <td>Image/volume predates VideoHelperSuite, or refresh clone failed</td>
-<td>Pull/rebuild GHCR image (VHS is prebuilt). Restart container so stamp-present refresh runs <code>ensure_lab_video_nodes</code>. Confirm: <code>docker exec ez-comfy-flux-to-ltx test -d /comfy-state/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite</code>. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or volume cleanup, then re-open seeded workflows</td>
+<td>Pull/rebuild GHCR image (VHS is prebuilt). Restart container so stamp-present refresh runs <code>ensure_lab_video_nodes</code>. Confirm: <code>docker exec ez-comfy-studio test -d /comfy-state/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite</code>. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or volume cleanup, then re-open seeded workflows</td>
 </tr>
 <tr>
 <td>LTX finished but I only see PNGs / no MP4 preview</td>
 <td>Old workflow JSON without VHS, or looking only at SaveImage</td>
-<td>Re-open current <strong>ltx-*-lab-example</strong> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open <strong>Save video (MP4)</strong> node for preview; MP4 is on the host at <code>$COMFY_OUTPUT_DIR</code> (default <code>/mnt/comfy-output</code>) as <code>ez_ltx_*_video_*.mp4</code>. Confirm: <code>ls /mnt/comfy-output</code> and <code>docker exec ez-comfy-flux-to-ltx ls /outputs</code>. Frames via SaveImage are secondary — <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a></td>
+<td>Re-open current <strong>ltx-*-lab-example</strong> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open <strong>Save video (MP4)</strong> node for preview; MP4 is on the host at <code>$COMFY_OUTPUT_DIR</code> (default <code>/mnt/comfy-output</code>) as <code>ez_ltx_*_video_*.mp4</code>. Confirm: <code>ls /mnt/comfy-output</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. Frames via SaveImage are secondary — <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a></td>
 </tr>
 <tr>
 <td>Cannot find generated PNG/MP4 on the Spark host</td>
@@ -1395,24 +1395,9 @@
 <td>Prefer base <strong>~10 s</strong> graphs for smoke tests. Confirm headroom preflight; close other GPU jobs; start with <code>ltx-i2v-lab-example</code> / <code>ltx-t2v-lab-example</code> before long-run demos</td>
 </tr>
 <tr>
-<td>Missing <code>MiniMaxH3*</code> / <strong>Unknown pack</strong> / UI says install Manager</td>
-<td>Volume still on Comfy <strong>v0.29.0</strong>. <code>nodes.py</code> only loads extras from an explicit list — copying <code>nodes_minimax_h3.py</code> onto 0.29 is not enough. These are <strong>core</strong> nodes in <strong>v0.34.0</strong>, not a custom pack</td>
-<td>Do <strong>not</strong> <code>pip install comfyui-manager</code> and do <strong>not</strong> use <code>--enable-manager</code>. <code>git pull</code>, <code>stop</code> + <code>start</code>. If the UI is already up on old Comfy, start <strong>stops</strong> (60s timeout) until <code>:8188</code> is down, then <code>up -d</code> so entrypoint reseeds from the image (rsync can take minutes). Wait for “Native MiniMaxH3AddGuide registered after volume reseed”. Do <strong>not</strong> treat a 10s <code>compose restart</code> as done. Confirm: <code>docker exec ez-comfy-flux-to-ltx grep nodes_minimax_h3.py /comfy-state/ComfyUI/nodes.py</code>. Hard-refresh the browser. If GHCR is still 0.29: <code>LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start</code>. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or <code>cleanup</code> then start</td>
-</tr>
-<tr>
-<td>H3 OOM at 1344×768×379</td>
-<td>Unified-memory pressure on GB10</td>
-<td>In the UI, set the six <code>MiniMaxH3ImageToVideo</code> nodes to <strong>864×480</strong>. Do <strong>not</strong> raise <code>MEM_LIMIT</code></td>
-</tr>
-<tr>
-<td>H3 download / generation geo or license error</td>
-<td>MiniMax H3 Community License excluded territories (US/EU/UK/KR) for local open weights</td>
-<td>Read <a href="../h3-films/">H3 films — license</a>. This stack does not geo-block the downloader</td>
-</tr>
-<tr>
-<td>Stitched H3 MP4 longer than 90s</td>
-<td>Concat kept 2164 unique frames (90.17s)</td>
-<td>Graphs keep <strong>2160</strong> frames; <code>stitch-h3</code> uses <code>ffmpeg -t 90</code> and fails if probe <code>&gt; 90</code></td>
+<td>Pin mismatch / old volume Comfy</td>
+<td><code>.lab-comfyui-ref</code> lags <code>COMFYUI_REF</code></td>
+<td><code>git pull</code>, <code>stop</code> + <code>start</code> so entrypoint reseeds from the image. Do <strong>not</strong> treat a 10s <code>compose restart</code> as done. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or <code>cleanup</code> then start</td>
 </tr>
 </tbody>
 </table>
@@ -1442,11 +1427,11 @@
 <hr />
 <h2 id="logs">Logs<a class="headerlink" href="#logs" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>logs
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>logs<span class="w"> </span>ez-comfy-flux-to-ltx
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>logs<span class="w"> </span>ez-comfy-studio
 </code></pre></div>
 <pre class="mermaid"><code>flowchart LR
   Op["Operator"] --&gt; M["manage.sh logs"]
-  Op --&gt; D["docker logs&lt;br/&gt;ez-comfy-flux-to-ltx"]
+  Op --&gt; D["docker logs&lt;br/&gt;ez-comfy-studio"]
   M --&gt; Out["Compose / service logs"]
   D --&gt; Out</code></pre>
 <hr />

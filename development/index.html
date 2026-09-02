@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Lean Visual Generative AI demo stack (ComfyUI flux-to-ltx) for a single NVIDIA DGX Spark.">
+        <meta name="description" content="Lean Visual Generative AI demo stack (ComfyUI US-safe local studio) for a single NVIDIA DGX Spark.">
       
       
       
@@ -286,13 +286,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="h3-films/" class="md-tabs__link">
+      <a href="licenses/" class="md-tabs__link">
         
   
   
     
   
-  H3 90s films
+  Model licenses
 
       </a>
     </li>
@@ -665,14 +665,14 @@
   
   
     <li class="md-nav__item">
-      <a href="h3-films/" class="md-nav__link">
+      <a href="licenses/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    H3 90s films
+    Model licenses
   
 
     
@@ -975,14 +975,14 @@
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Spinning up a <strong>unified Flux → LTX</strong> ComfyUI demo on one Spark quickly</li>
+<li>Spinning up a <strong>US-safe local studio</strong> (Klein 4B + Wan 2.2 + LTX-2.5) on one Spark quickly</li>
 <li>Sharing model weights with other stacks via <code>/mnt/models</code></li>
 <li>Operating the stack safely over SSH without locking yourself out</li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Start here</p>
 <p>New to this repo? Follow <strong><a href="getting-started/">Getting Started</a></strong> for setup → doctor → download → start → stop.</p>
-<p>Contributors and shell style: <a href="project-conventions/">Conventions</a>.</p>
+<p>Licenses (US self-host): <a href="licenses/">Model licenses</a>. Contributors: <a href="project-conventions/">Conventions</a>.</p>
 </div>
 <hr />
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
@@ -993,7 +993,7 @@
   subgraph EZ["ez-comfy-stack"]
     direction TB
     E1["Docker Compose"]
-    E2["One profile: flux-to-ltx"]
+    E2["One profile: us-safe-studio"]
     E3["manage.sh operator CLI"]
     E4["Shared /mnt/models"]
     E1 --&gt; E2 --&gt; E3
@@ -1023,7 +1023,7 @@
 </tr>
 <tr>
 <td>Pipeline</td>
-<td><strong>flux-to-ltx</strong> (text → image → video frames; LTX-2.3 joint AV empty audio latents)</td>
+<td><strong>studio</strong> (Klein 4B still → Wan 2.2 5s silent → LTX-2.5 AV; see <a href="licenses/">licenses</a>)</td>
 </tr>
 <tr>
 <td>Flux tier</td>

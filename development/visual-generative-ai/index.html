@@ -16,7 +16,7 @@
         <link rel="prev" href="../getting-started/">
       
       
-        <link rel="next" href="../h3-films/">
+        <link rel="next" href="../licenses/">
       
       
         
@@ -288,13 +288,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../h3-films/" class="md-tabs__link">
+      <a href="../licenses/" class="md-tabs__link">
         
   
   
     
   
-  H3 90s films
+  Model licenses
 
       </a>
     </li>
@@ -678,14 +678,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../h3-films/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    H3 90s films
+    Model licenses
   
 
     
@@ -1017,7 +1017,7 @@
     Policy["config/resource-policy.yaml&lt;br/&gt;headroom · mem limits"]
   end
 
-  subgraph Ctr["Container: ez-comfy-flux-to-ltx"]
+  subgraph Ctr["Container: ez-comfy-studio"]
     EP["entrypoint.sh"]
     Install["install-comfy.sh"]
     Patch["patch_get_free_memory.py"]
@@ -1048,7 +1048,7 @@
 <tbody>
 <tr>
 <td>Profile</td>
-<td><code>flux-to-ltx</code></td>
+<td><code>us-safe-studio</code></td>
 </tr>
 <tr>
 <td>Memory limit / reservation</td>
@@ -1075,14 +1075,14 @@
 <hr />
 <h2 id="combined-pipeline-flux-ltx">Combined pipeline (Flux → LTX)<a class="headerlink" href="#combined-pipeline-flux-ltx" title="Permanent link">&para;</a></h2>
 <p>Text → image → <strong>video frames</strong> in one ComfyUI stack. Lab graphs use <code>SaveImage</code> for frames. LTX-2.3 is a <strong>joint audio/video</strong> transformer: seeded LTX graphs load the <strong>audio VAE</strong>, create matching empty audio latents, and concat them with video latents before <code>KSampler</code> (audio is not saved). LTX text conditioning uses <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>) — not the projection file alone.</p>
-<p>A <strong>second video path</strong> is MiniMax H3 (opt-in weights, Comfy <strong>v0.34.0+</strong>): six FL2VA columns chained to a <strong>90.00s</strong> stereo MP4 with native H3 audio — see <a href="../h3-films/">H3 90s films</a>. Default <code>LAB_PIPELINE</code> remains <code>flux-to-ltx</code>.</p>
+<p>MiniMax H3 is <strong>not</strong> in this stack (US Excluded Territory). See <a href="../licenses/">Model licenses</a>.</p>
 <pre class="mermaid"><code>flowchart LR
   Prompt["Text prompt"] --&gt; Flux["Flux T2I&lt;br/&gt;fast · Klein 9B NVFP4"]
   Flux --&gt; Image["Still image"]
   Image --&gt; LTX["LTX I2V&lt;br/&gt;balanced · distilled FP8"]
   LTX --&gt; Frames["Video frames&lt;br/&gt;SaveImage"]
   LTX --&gt; Mp4["MP4 preview&lt;br/&gt;VHS_VideoCombine"]</code></pre>
-<p><strong>Handoff:</strong> load <strong>flux-to-ltx-lab-example</strong> (or any Flux T2I) → save still → open <strong>ltx-i2v-lab-example</strong> (~10 s) or <strong>ltx-i2v-30s-lab-example</strong> / <strong>ltx-i2v-60s-lab-example</strong> and set <code>LoadImage</code> to that file → Queue → watch <strong>Save video (MP4)</strong> on the LTX graph. I2V graphs also queue out of the box on Comfy’s default <strong>example.png</strong> (sketch→living character demos).</p>
+<p><strong>Handoff:</strong> load <strong>still-draft-lab-example</strong> → Queue → set <strong>wan-i2v-draft-lab-example</strong> LoadImage to <code>ez_still_draft_*.png</code> → Queue 5 s silent → optional <strong>ltx-i2v-hero-lab-example</strong> for native audio. I2V graphs also Queue on Comfy’s default <strong>example.png</strong>. See <a href="../getting-started/#iteration-loop-youtube-169">Getting Started — iteration loop</a>.</p>
 <div class="admonition example">
 <p class="admonition-title">Pipeline tips</p>
 <ol>
