@@ -1,37 +1,32 @@
 #!/usr/bin/env bash
 #
-# ## download-ltx
+# ## download-image
 #
-# Download LTX-2.5 distilled INT8-convrot (default) or LTX-2.3 fallback.
+# Download Apache FLUX.2 Klein 4B (and optional Apache stills) into MODELS_DIR.
 #
 # Purpose:
-#   Fetch the small distilled AV set for lab graphs (not the 400 GB monorepo).
-#   Default 2.5: Lightricks/LTX-2.5 INT8-convrot + Gemma4-with-proj + VAEs.
-#   Fallback 2.3: Kijai/LTX2.3_comfy distilled FP8 + Gemma 3 DualCLIP.
-#   LTX Community License ($10M company-revenue cap) — not Apache. Gated HF.
+#   Selective Hugging Face pull for the US-safe studio still generator.
+#   Default: Klein 4B distilled FP8 + Qwen3-4B TE + flux2 VAE.
+#   Does not download Klein 9B or FLUX.2-dev.
 #
 # Audience:
-#   Operators preparing a Spark host for manage.sh start. Prefer
-#   manage.sh download-models for throttled sequential flux+ltx pulls.
+#   Operators on the Spark host. Prefer manage.sh download-models.
 #
 # Usage:
-#   ./scripts/utilities/download-ltx.sh status [--tier 2.5|2.3|balanced|quality|gemma|all] [--json]
-#   ./scripts/utilities/download-ltx.sh run [--tier ...]
-#   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
+#   ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all] [--json]
+#   ./scripts/utilities/download-image.sh run [--tier ...]
+#   ./scripts/utilities/download-image.sh cleanup [--tier ...] [--dry-run|--yes]
 #
 # Environment:
-#   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD — same semantics as download-flux.
-#   LTX_FULL_REPO=1 — download entire Kijai/LTX2.3_comfy snapshot (all variants).
+#   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD
 #
 # Safety:
-#   Multi‑GB transfer — use download-limit when on remote SSH.
-#   cleanup defaults to --dry-run; --yes deletes only non-selective files under
-#   the tier local-dir (never other MODELS_DIR trees like FLUX).
+#   Large downloads — use download-limit wrap on remote SSH.
 #
 # Exit codes:
 #   0 success; 1 usage/tier/CLI errors.
 #
-# @command download-ltx
+# @command download-image
 
 set -euo pipefail
 
@@ -43,10 +38,9 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/common.sh"
 
 MODELS_DIR=${MODELS_DIR:-"/mnt/models"}
-TIER="2.5"
+TIER="fast"
 JSON_FLAG=""
 CMD="status"
-# cleanup: dry-run unless --yes (explicit delete)
 CLEANUP_YES=0
 
 #######################################
@@ -62,9 +56,12 @@ CLEANUP_YES=0
 #######################################
 tier_repo() {
   case "${1}" in
-    2.5) echo "Lightricks/LTX-2.5" ;;
-    2.3 | balanced | quality) echo "Kijai/LTX2.3_comfy" ;;
-    gemma) echo "Comfy-Org/ltx-2" ;;
+    fast) echo "black-forest-labs/FLUX.2-klein-4b-fp8" ;;
+    nvfp4) echo "black-forest-labs/FLUX.2-klein-4b-nvfp4" ;;
+    base) echo "black-forest-labs/FLUX.2-klein-base-4b-fp8" ;;
+    te) echo "Comfy-Org/z_image_turbo" ;;
+    vae) echo "Comfy-Org/flux2-dev" ;;
+    zimage) echo "Comfy-Org/z_image_turbo" ;;
     *) echo "" ;;
   esac
 }
@@ -82,13 +79,12 @@ tier_repo() {
 #######################################
 tier_min_gb() {
   case "${1}" in
-    2.5) echo 30 ;;
-    # distilled fp8 transformer (~25 GB) + projection + VAEs ≈ 28–30 GB
-    2.3 | balanced) echo 20 ;;
-    # distilled bf16 transformer (~42 GB) + projection + VAEs ≈ 45–48 GB
-    quality) echo 35 ;;
-    # gemma_3_12B_it_fp4_mixed ≈ 9.45 GB
-    gemma) echo 8 ;;
+    fast) echo 3 ;;
+    nvfp4) echo 2 ;;
+    base) echo 3 ;;
+    te) echo 2 ;;
+    vae) echo 0 ;;
+    zimage) echo 4 ;;
     *) echo 0 ;;
   esac
 }
@@ -105,36 +101,26 @@ tier_min_gb() {
 #   0
 #######################################
 tier_include_patterns() {
-  # Shared projection + VAEs for Comfy split loaders (not full monorepo).
-  local -a shared=(
-    "text_encoders/ltx-2.3_text_projection_bf16.safetensors"
-    "vae/LTX23_video_vae_bf16.safetensors"
-    "vae/LTX23_audio_vae_bf16.safetensors"
-  )
   case "${1}" in
-    2.5)
-      printf '%s\n' \
-        "diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors" \
-        "text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors" \
-        "vae/ltx-2.5-video-vae-bf16.safetensors" \
-        "vae/ltx-2.5-audio-vae-bf16.safetensors"
+    fast)
+      printf '%s\n' "flux-2-klein-4b-fp8.safetensors"
       ;;
-    2.3 | balanced)
-      # Distilled FP8 with calibrated input scales (Spark / modern NVIDIA FP8 matmul).
-      printf '%s\n' \
-        "diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors" \
-        "${shared[@]}"
+    nvfp4)
+      printf '%s\n' "flux-2-klein-4b-nvfp4.safetensors"
       ;;
-    quality)
-      # Distilled BF16 transformer for higher fidelity (much larger).
-      printf '%s\n' \
-        "diffusion_models/ltx-2.3-22b-distilled_transformer_only_bf16.safetensors" \
-        "${shared[@]}"
+    base)
+      printf '%s\n' "flux-2-klein-base-4b-fp8.safetensors"
       ;;
-    gemma)
-      # Official Comfy-Org LTX-2 Gemma 3 TE (DualCLIP pair with Kijai text_projection).
+    te)
+      printf '%s\n' "split_files/text_encoders/qwen_3_4b.safetensors"
+      ;;
+    vae)
+      printf '%s\n' "split_files/vae/flux2-vae.safetensors"
+      ;;
+    zimage)
       printf '%s\n' \
-        "split_files/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors"
+        "split_files/diffusion_models/z_image_turbo_bf16.safetensors" \
+        "split_files/text_encoders/qwen_3_4b.safetensors"
       ;;
     *)
       return 0
@@ -194,12 +180,12 @@ tier_size_gb() {
 #######################################
 tiers_to_process() {
   case "$TIER" in
-    all) echo "2.5 2.3 gemma" ;;
-    2.5) echo "2.5" ;;
-    2.3) echo "2.3 gemma" ;;
-    balanced) echo "balanced gemma" ;;
-    quality) echo "quality gemma" ;;
-    gemma) echo "gemma" ;;
+    all) echo "fast te vae nvfp4 base zimage" ;;
+    fast) echo "fast te vae" ;;
+    nvfp4) echo "nvfp4 te vae" ;;
+    base) echo "base te vae" ;;
+    zimage) echo "zimage" ;;
+    te | vae) echo "${TIER}" ;;
     *) echo "${TIER}" ;;
   esac
 }
@@ -221,15 +207,29 @@ parse_args() {
       --json) JSON_FLAG="--json" ;;
       --tier)
         TIER="${2:?}"
+        case "${TIER}" in
+          quality | *dev* | *9b* | *9B* | *nunchaku*)
+            err "Banned image tier: ${TIER}. See docs/licenses.md"
+            exit 1
+            ;;
+        esac
         shift
         ;;
       --dry-run) CLEANUP_YES=0 ;;
       --yes | -y) CLEANUP_YES=1 ;;
       status | run | cleanup) CMD="${1}" ;;
+      quality | --tier-quality)
+        err "FLUX.2-dev / quality tier is banned. See docs/licenses.md"
+        exit 1
+        ;;
+      *9b* | *9B* | *nunchaku*)
+        err "FLUX.2 Klein 9B / Nunchaku 9B is banned (FLUX Non-Commercial). See docs/licenses.md"
+        exit 1
+        ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--tier balanced|quality|gemma|all] [--json]" >&2
-        echo "  cleanup options: --dry-run (default) | --yes  delete non-selective weights" >&2
-        echo "  balanced/quality auto-include gemma (Comfy-Org/ltx-2 TE for DualCLIP)" >&2
+        echo "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all] [--json]" >&2
+        echo "  Default fast = Klein 4B distilled FP8 + qwen_3_4b + flux2-vae (Apache 2.0)" >&2
+        echo "  cleanup options: --dry-run (default) | --yes" >&2
         exit 0
         ;;
       *)
@@ -471,25 +471,16 @@ cmd_run() {
       continue
     fi
     include_args=()
-    # Full monorepo escape hatch is only for Kijai/LTX2.3_comfy, not Gemma companion
-    if [[ ${LTX_FULL_REPO:-0} == "1" && ${tier} != "gemma" ]]; then
-      log "Downloading full ${repo} snapshot (tier: ${tier}; LTX_FULL_REPO=1)…"
-      log "Full monorepo is ~400 GB (every precision/variant). Prefer selective default."
-    else
-      log "Downloading ${repo} selective subset (tier: ${tier})…"
-      while IFS= read -r pat; do
-        [[ -z ${pat} ]] && continue
-        include_args+=(--include "${pat}")
-        log "  include: ${pat}"
-      done < <(tier_include_patterns "${tier}")
-      if [[ ${#include_args[@]} -eq 0 ]]; then
-        err "No include patterns for tier ${tier}; refusing full monorepo pull."
-        fail=$((fail + 1))
-        continue
-      fi
-      if [[ ${tier} != "gemma" ]]; then
-        log "Tip: LTX_FULL_REPO=1 pulls the entire ~400 GB Kijai monorepo (not recommended)"
-      fi
+    log "Downloading ${repo} selective subset (tier: ${tier})…"
+    while IFS= read -r pat; do
+      [[ -z ${pat} ]] && continue
+      include_args+=(--include "${pat}")
+      log "  include: ${pat}"
+    done < <(tier_include_patterns "${tier}")
+    if [[ ${#include_args[@]} -eq 0 ]]; then
+      err "No include patterns for tier ${tier}; refusing full-repo pull."
+      fail=$((fail + 1))
+      continue
     fi
     # Empty include_args must not expand under set -u (bash unbound array).
     local dl_rc=0
@@ -510,11 +501,11 @@ cmd_run() {
   done
   cmd_status
   if [[ ${ok} -eq 0 ]]; then
-    err "No LTX tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
+    err "No image tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
     exit 1
   fi
   if [[ ${fail} -gt 0 ]]; then
-    warn "Partial LTX download: ${ok} ok, ${fail} failed"
+    warn "Partial image download: ${ok} ok, ${fail} failed"
   fi
 }
 
@@ -590,7 +581,7 @@ main() {
     run) cmd_run ;;
     cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run|cleanup [--tier balanced|quality|all] [--json] [--yes]"
+      err "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all] [--json] [--yes]"
       exit 1
       ;;
   esac

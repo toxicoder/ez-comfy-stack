@@ -39,7 +39,7 @@ flowchart TB
   Root["ez-comfy-stack"]
   Root --> Manage["scripts/manage.sh<br/>operator CLI"]
   Root --> Lib["scripts/lib/*<br/>common · compose · paths · safety"]
-  Root --> Util["scripts/utilities/*<br/>download-flux · download-ltx · download-limit"]
+  Root --> Util["scripts/utilities/*<br/>download-image · download-wan · download-ltx · download-limit"]
   Root --> Docker["docker/*<br/>compose · Dockerfile · entrypoint · patch"]
   Root --> Cfg["config/resource-policy.yaml"]
   Root --> Docs["docs/ · MkDocs"]
