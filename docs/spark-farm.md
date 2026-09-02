@@ -61,7 +61,7 @@ cd ez-comfy-stack
 ./scripts/manage.sh start                # type yes
 ```
 
-Three UIs: `http://spark-0:8188`, `http://spark-1:8188`, `http://spark-2:8188`. On each, load **wan-shot-lab-example** and **Queue** independently. Concat after approval — MiniMax H3 films are banned (see [licenses](licenses.md)).
+Three UIs: `http://spark-0:8188`, `http://spark-1:8188`, `http://spark-2:8188`. On each, load **bridge-wan-lab-example** / **bridge-ltx-lab-example** (or **wan-shot-lab-example**) and **Queue** independent **5 s** shots — different beats in parallel for the 90s films. Concat locally: `./scripts/utilities/concat-shots.sh --film go-see --yes`. See [90s shorts](shorts.md). MiniMax H3 films are banned (see [licenses](licenses.md)).
 
 `spark-farm.sh` **never** starts compose remotely. It prints the exact `./scripts/manage.sh start` you must run locally (heavy confirm stays on that node). Containers still use `restart: "no"`.
 

@@ -46,7 +46,7 @@ flowchart TB
   end
 
   Vol["named volume<br/>comfy-state"]
-  WF["workflows/*.json<br/>lab examples"]
+  WF["workflows/*.json + shorts/<br/>lab examples"]
   GPU["GPU · all · 1× GB10"]
   UI["UI :8188"]
 

@@ -12,7 +12,7 @@ tags: [getting-started, docker, comfyui]
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- Example workflows, prompting tips, watching LTX MP4, and host `COMFY_OUTPUT_DIR`
+- Example workflows, 90s shorts, prompting tips, watching LTX MP4, and host `COMFY_OUTPUT_DIR`
 - Optional deep-dives
 
 **What this enables**
@@ -291,6 +291,16 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **ltx-i2v-hero-lab-example** | ~5 s I2V with native audio (Community License, $10M cap) |
     | **ltx-t2v-hero-lab-example** | ~5 s T2V AV |
 
+=== "90s shorts"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **go-see-90s / still-here-90s / switchyard-90s** | Klein identity still + 18-shot map (`workflows/shorts/`) |
+    | **bridge-wan-lab-example** | One 5.00 s silent I2V (120 frames); last-frame SaveImage |
+    | **bridge-ltx-lab-example** | One 5.00 s AV print; concat uses these MP4s |
+
+    Full loop: [90s shorts](shorts.md).
+
 === "License"
 
     MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).
@@ -305,13 +315,10 @@ Do **not** edit raw JSON. Change widgets on the canvas.
 2. Pick a frame under `COMFY_OUTPUT_DIR` (`ez_still_draft_*.png`).
 3. Load **wan-i2v-draft-lab-example** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
 4. Optional audio: **ltx-i2v-hero-lab-example**, same first frame, same seed note, Queue ~5 s AV.
-5. Short film: Queue **wan-shot-lab-example** six times (`ez_shot_01` … `06`) then:
+5. Short six-shot demo: Queue **wan-shot-lab-example** six times (`ez_shot_01` … `06`) then `./scripts/utilities/concat-shots.sh --dir /mnt/comfy-output --yes`.
+6. **90s films** (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then `./scripts/utilities/concat-shots.sh --film go-see --yes`. See [90s shorts](shorts.md).
 
-```bash
-./scripts/utilities/concat-shots.sh --dir /mnt/comfy-output --yes
-```
-
-Spark will melt on 30–60 s / 90 s graphs — those are gone. Default graphs iterate in minutes.
+Do not Queue a 90s denoise. Default graphs iterate in minutes.
 
 ### Prompting these models
 
@@ -341,15 +348,15 @@ Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer edit
 
     Seeded **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**. Files are on the **host** at `COMFY_OUTPUT_DIR` (default **`/mnt/comfy-output`**, container `/outputs`): `ls /mnt/comfy-output/ez_ltx_*_video_*.mp4`. PNG frames from `SaveImage` land in the same directory. `cleanup` does **not** delete this folder.
 
-| Tier | Frames (`8n+1`) | FPS | ≈ duration |
+| Graph | Frames | FPS | ≈ duration |
 | --- | --- | --- | --- |
-| base (`ltx-*-lab-example` without duration suffix) | 241 | 24 | ~10.0 s |
-| **`*-30s-*`** long-run demos | 721 | 24 | ~30.0 s |
-| **`*-60s-*`** very heavy demos | 1441 | 24 | ~60.0 s |
+| `wan-*-lab-example` / `ltx-*-lab-example` | 121 | 24 | ~5.04 s |
+| `workflows/shorts/bridge-*-lab-example` | 120 | 24 | **5.00 s** |
+| 90s film (18 LTX prints + concat) | — | 24 | **90.00 s** cap |
 
-!!! warning "30 s / 60 s graphs are heavy"
+!!! warning "Do not Queue 30 s / 60 s / 90 s in one graph"
 
-    Longer latents need more VRAM and wall-clock time (often multi-minute). Prefer **~10 s** base graphs for smoke tests; keep headroom preflight green before queuing 30 s / 60 s demos.
+    Long latents melt Spark. Prefer **~5 s** graphs; stitch with [concat-shots](shorts.md). Keep headroom preflight green.
 
 Optional offline stitch of PNG frames only (if you need a host-side re-encode):
 
@@ -362,7 +369,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
 ??? abstract "Lab workflow details"
 
-    - Name pattern: host files `workflows/*-lab-example.json` (legacy `lab-*` names removed)
+    - Name pattern: host files `workflows/*-lab-example.json` and `workflows/shorts/*-lab-example.json` (entrypoint copies both)
     - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
     - Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
     - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps), and still save **frames** via `SaveImage`

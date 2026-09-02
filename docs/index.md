@@ -130,6 +130,7 @@ flowchart TB
 | When | Read |
 | --- | --- |
 | **First run** | [Getting Started](getting-started.md) |
+| **90s films (go-see / still-here / switchyard)** | [90s shorts](shorts.md) |
 | **How the pipeline works** | [Visual Generative AI](visual-generative-ai.md) |
 | **Weights, cache, image pins** | [Models & Cache](models-and-cache.md) |
 | **Throttled downloads** | [Download Limit](download-limit.md) |
