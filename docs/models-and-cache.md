@@ -142,7 +142,7 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern **`*-lab-example.json`**):
+Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `workflows/shorts/*.json` (name pattern **`*-lab-example.json`**):
 
 | Graph | Notes |
 | --- | --- |
@@ -154,6 +154,9 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern
 | `wan-shot-lab-example.json` | One 5 s shot for concat-shots.sh |
 | `ltx-i2v-hero-lab-example.json` | LTX-2.5 I2V ~5 s with audio |
 | `ltx-t2v-hero-lab-example.json` | LTX-2.5 T2V ~5 s with audio |
+| `shorts/*-90s-lab-example.json` | Klein identity still + 18-shot map ([90s shorts](shorts.md)) |
+| `shorts/bridge-wan-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |
+| `shorts/bridge-ltx-lab-example.json` | 5.00 s LTX I2V print + last-frame SaveImage |
 
 Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. Watch the **Save video (MP4)** node preview after Queue — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx). They still **must** wire the audio VAE because LTX is a joint AV model. Every lab graph includes an on-canvas **Note** with models, prompting, and video-output steps.
 
