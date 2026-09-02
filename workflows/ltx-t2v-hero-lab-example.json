@@ -1,8 +1,8 @@
 {
   "id": "ltx-t2v-hero-lab-example",
-  "revision": 5,
-  "last_node_id": 16,
-  "last_link_id": 18,
+  "revision": 6,
+  "last_node_id": 17,
+  "last_link_id": 19,
   "nodes": [
     {
       "id": 1,
@@ -111,7 +111,7 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        620,
+        1080,
         80
       ],
       "size": [
@@ -126,6 +126,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 3
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 19,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -142,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "YouTube 16:9 still: a small-town main street at golden hour, one red bicycle leaning on a brick storefront, warm sidelight, photoreal, 24mm, no logos, no text."
+        "A wide photoreal shot of a small-town main street at golden hour. A red bicycle leans against a brick storefront as warm sidelight rakes the brick and chrome. Leaves and a shop flag stir in a light breeze while a pedestrian crosses in the background. The camera dollies in slowly toward the bicycle. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. Unmarked facades sit empty of signage. No music and no score."
       ],
       "title": "Positive"
     },
@@ -150,7 +158,7 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        620,
+        1080,
         290
       ],
       "size": [
@@ -189,7 +197,7 @@
       "id": 6,
       "type": "EmptyLTXVLatentVideo",
       "pos": [
-        620,
+        1080,
         440
       ],
       "size": [
@@ -224,7 +232,7 @@
       "id": 7,
       "type": "LTXVConditioning",
       "pos": [
-        1120,
+        1580,
         80
       ],
       "size": [
@@ -275,7 +283,7 @@
       "id": 8,
       "type": "KSampler",
       "pos": [
-        1480,
+        1940,
         80
       ],
       "size": [
@@ -335,7 +343,7 @@
       "id": 9,
       "type": "VAEDecode",
       "pos": [
-        1880,
+        2340,
         80
       ],
       "size": [
@@ -377,7 +385,7 @@
       "id": 10,
       "type": "SaveImage",
       "pos": [
-        1880,
+        2340,
         176
       ],
       "size": [
@@ -440,7 +448,7 @@
       "id": 12,
       "type": "LTXVEmptyLatentAudio",
       "pos": [
-        620,
+        1080,
         610
       ],
       "size": [
@@ -481,7 +489,7 @@
       "id": 13,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        1120,
+        1580,
         220
       ],
       "size": [
@@ -523,7 +531,7 @@
       "id": 14,
       "type": "LTXVSeparateAVLatent",
       "pos": [
-        1480,
+        1940,
         400
       ],
       "size": [
@@ -582,7 +590,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-t2v-hero-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps \u2248 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT \u2014 MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\n"
+        "## ltx-t2v-hero-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps \u2248 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT \u2014 MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -590,7 +598,7 @@
       "id": 16,
       "type": "VHS_VideoCombine",
       "pos": [
-        2200.0,
+        2660.0,
         80
       ],
       "size": [
@@ -649,6 +657,43 @@
         "save_output": true
       },
       "title": "Save video (MP4)"
+    },
+    {
+      "id": 17,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        620,
+        80
+      ],
+      "size": [
+        420,
+        340
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "A wide photoreal shot of a small-town main street at golden hour. A red bicycle leans against a brick storefront as warm sidelight rakes the brick and chrome. Leaves and a shop flag stir in a light breeze while a pedestrian crosses in the background. The camera dollies in slowly toward the bicycle. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. Unmarked facades sit empty of signage. No music and no score.",
+        false,
+        "t2v",
+        "5 seconds, 24 fps",
+        "soft wind, distant footsteps, shop bell, no score"
+      ],
+      "title": "LTX Prompt Enhance"
     }
   ],
   "links": [
@@ -779,6 +824,14 @@
       16,
       0,
       "IMAGE"
+    ],
+    [
+      19,
+      17,
+      0,
+      4,
+      1,
+      "STRING"
     ]
   ],
   "groups": [],
@@ -786,7 +839,7 @@
   "extra": {
     "lab_profile": "ltx-t2v-hero-lab-example",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-t2v-hero-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps \u2248 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT \u2014 MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\n",
+    "lab_note": "## ltx-t2v-hero-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps \u2248 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT \u2014 MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
     "lab_ltx_av": true,
     "lab_description": "Text\u2192video (~10 s) cinematic drone over a frost-rimmed tea house."
   },

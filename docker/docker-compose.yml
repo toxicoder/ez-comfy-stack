@@ -50,6 +50,11 @@ services:
       HUGGINGFACE_HUB_CACHE: /models/hub
       # Runtime only — not baked into image layers
       HF_TOKEN: ${HF_TOKEN:-}
+      # Optional prompt-enhance (off-box Grok). Never bake into the image.
+      XAI_API_KEY: ${XAI_API_KEY:-}
+      XAI_BASE_URL: ${XAI_BASE_URL:-https://api.x.ai/v1}
+      XAI_MODEL: ${XAI_MODEL:-grok-4.6}
+      XAI_TIMEOUT_S: ${XAI_TIMEOUT_S:-20}
       LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
       LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
       # Runtime pin (must match build-arg). Stamp-present refresh syncs the volume when this changes.
@@ -77,6 +82,8 @@ services:
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs
       # All example workflows (host tree); entrypoint copies into user workflows
       - ../workflows:/opt/ez-comfy/workflows:ro
+      # In-tree prompt-enhance nodes; entrypoint copies into custom_nodes
+      - ../custom_nodes:/opt/ez-comfy/custom_nodes:ro
       # Host ops scripts — iterate without image rebuild (image still embeds for GHCR)
       - ./entrypoint.sh:/opt/ez-comfy/entrypoint.sh:ro
       - ./install-comfy.sh:/opt/ez-comfy/install-comfy.sh:ro

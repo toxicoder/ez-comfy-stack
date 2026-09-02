@@ -21,7 +21,7 @@ tags: [comfyui, flux, ltx, dgx-spark, docker]
 
 !!! tip "Start here"
 
-    New to this repo? Follow **[Getting Started](getting-started.md)** for setup → doctor → download → start → stop.
+    New to this repo? Follow **[Getting Started](getting-started.md)** for setup → doctor → download → start → stop. Prompt recipes: [Prompting](prompting.md).
 
     Licenses (US self-host): [Model licenses](licenses.md). Contributors: [Conventions](project-conventions.md).
 

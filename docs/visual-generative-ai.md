@@ -94,7 +94,7 @@ flowchart LR
     2. Prefer keeping both model sets loaded between T2I and I2V
     3. Avoid concurrent large LLM containers on the same Spark
     4. LTX lab graphs emit **MP4** via **VideoHelperSuite** (`VHS_VideoCombine`, 24 fps) plus optional PNG frames — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx)
-    5. Prompting: Flux wants Qwen-style prose (subject → light → camera); LTX wants chronological motion. Every **\*-lab-example** canvas has an operator **Note**
+    5. Prompting: Klein wants Qwen-style prose (subject → light → camera); Wan wants motion + one camera move (no audio); LTX wants a present-tense paragraph with sound interleaved. See [Prompting](prompting.md). Every **\*-lab-example** canvas has an operator **Note**
 
 ---
 

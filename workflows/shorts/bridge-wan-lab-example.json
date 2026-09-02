@@ -1,8 +1,8 @@
 {
   "id": "bridge-wan-lab-example",
-  "revision": 1,
-  "last_node_id": 16,
-  "last_link_id": 17,
+  "revision": 2,
+  "last_node_id": 17,
+  "last_link_id": 18,
   "nodes": [
     {
       "id": 1,
@@ -59,7 +59,6 @@
           "name": "CLIP",
           "type": "CLIP",
           "links": [
-            2,
             3,
             15
           ],
@@ -154,50 +153,10 @@
       "title": "First frame"
     },
     {
-      "id": 5,
-      "type": "CLIPTextEncode",
-      "pos": [
-        480,
-        80
-      ],
-      "size": [
-        420,
-        160
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 2
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            7
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode",
-        "cnr_id": "comfy-core"
-      },
-      "widgets_values": [
-        "First-person POV travel still: olive windbreaker, worn black gloves, hands in frame, photoreal dawn light, no logos, no violence, no text. Identity lock for the whole short."
-      ],
-      "title": "Positive"
-    },
-    {
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        480,
+        940,
         280
       ],
       "size": [
@@ -212,6 +171,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 3
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 18,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -229,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Shot 1 of 18, beat 1 enter. First-person travel camera. Olive windbreaker, worn black gloves; hands plant on wet tar. Dawn rooftop, city still sleeping, pigeon scatter. Vault the parapet. Parkour is transportation. No logos, no violence. 5.00 seconds, 24 fps."
+        "First-person travel camera. Hands in an olive windbreaker and worn black gloves plant on wet tar. Slow push toward the parapet; pigeons scatter. Vault the parapet. Parkour is transportation. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps."
       ],
       "title": "Motion / prompt"
     },
@@ -237,7 +204,7 @@
       "id": 7,
       "type": "CLIPTextEncode",
       "pos": [
-        480,
+        940,
         460
       ],
       "size": [
@@ -277,7 +244,7 @@
       "id": 8,
       "type": "Wan22ImageToVideoLatent",
       "pos": [
-        960,
+        1420,
         520
       ],
       "size": [
@@ -326,7 +293,7 @@
       "id": 9,
       "type": "ModelSamplingSD3",
       "pos": [
-        960,
+        1420,
         80
       ],
       "size": [
@@ -366,7 +333,7 @@
       "id": 10,
       "type": "KSampler",
       "pos": [
-        1240,
+        1700,
         80
       ],
       "size": [
@@ -427,7 +394,7 @@
       "id": 11,
       "type": "VAEDecode",
       "pos": [
-        1620,
+        2080,
         80
       ],
       "size": [
@@ -472,7 +439,7 @@
       "id": 12,
       "type": "SaveImage",
       "pos": [
-        1620,
+        2080,
         176
       ],
       "size": [
@@ -502,7 +469,7 @@
       "id": 13,
       "type": "VHS_VideoCombine",
       "pos": [
-        1960,
+        2420,
         80
       ],
       "size": [
@@ -582,7 +549,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## shorts bridge \u2014 Wan draft (5.00s)\n\nUS-safe 90s shorts: 18\u00d7120 frames @ 24 fps. This graph is ONE micro-shot.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n1. Open the film bible (go-see-90s / still-here-90s / switchyard-90s) and copy shot N motion.\n2. Set LoadImage to example.png (smoke) or the previous ez_<film>_bN_sM_last PNG.\n3. Set VHS prefix to ez_<slug>_bN_sM_wan_video and last-frame SaveImage to ez_<slug>_bN_sM_last.\n4. Queue. Approve. Then Queue bridge-ltx with the SAME first frame for the print+audio.\n5. After 18 LTX prints: ./scripts/utilities/concat-shots.sh --film go-see --yes\nDo not Queue 90s in one graph. US-safe local pack only. No score.\n"
+        "## shorts bridge \u2014 Wan draft (5.00s)\n\nUS-safe 90s shorts: 18\u00d7120 frames @ 24 fps. This graph is ONE micro-shot.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n1. Open the film bible (go-see-90s / still-here-90s / switchyard-90s) and copy shot N motion.\n2. Set LoadImage to example.png (smoke) or the previous ez_<film>_bN_sM_last PNG.\n3. Set VHS prefix to ez_<slug>_bN_sM_wan_video and last-frame SaveImage to ez_<slug>_bN_sM_last.\n4. Queue. Approve. Then Queue bridge-ltx with the SAME first frame for the print+audio.\n5. After 18 LTX prints: ./scripts/utilities/concat-shots.sh --film go-see --yes\nDo not Queue 90s in one graph. US-safe local pack only. No score.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
@@ -590,7 +557,7 @@
       "id": 15,
       "type": "ImageFromBatch",
       "pos": [
-        1960,
+        2420,
         560
       ],
       "size": [
@@ -631,7 +598,7 @@
       "id": 16,
       "type": "SaveImage",
       "pos": [
-        1960,
+        2420,
         680
       ],
       "size": [
@@ -656,6 +623,42 @@
         "ez_gosee_b1_s1_last"
       ],
       "title": "Save last frame"
+    },
+    {
+      "id": 17,
+      "type": "EZWanPromptEnhance",
+      "pos": [
+        480,
+        280
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            18
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZWanPromptEnhance"
+      },
+      "widgets_values": [
+        "First-person travel camera. Hands in an olive windbreaker and worn black gloves plant on wet tar. Slow push toward the parapet; pigeons scatter. Vault the parapet. Parkour is transportation. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps.",
+        false,
+        "i2v",
+        "5 seconds, 24 fps"
+      ],
+      "title": "Wan Prompt Enhance"
     }
   ],
   "links": [
@@ -666,14 +669,6 @@
       9,
       0,
       "MODEL"
-    ],
-    [
-      2,
-      2,
-      0,
-      5,
-      0,
-      "CLIP"
     ],
     [
       3,
@@ -786,6 +781,14 @@
       16,
       0,
       "IMAGE"
+    ],
+    [
+      18,
+      17,
+      0,
+      6,
+      1,
+      "STRING"
     ]
   ],
   "groups": [
@@ -795,7 +798,7 @@
       "bounding": [
         20,
         20,
-        2300,
+        2760,
         1300
       ],
       "color": "#3f789e",
@@ -805,7 +808,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## shorts bridge \u2014 Wan draft (5.00s)\n\nUS-safe 90s shorts: 18\u00d7120 frames @ 24 fps. This graph is ONE micro-shot.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n1. Open the film bible (go-see-90s / still-here-90s / switchyard-90s) and copy shot N motion.\n2. Set LoadImage to example.png (smoke) or the previous ez_<film>_bN_sM_last PNG.\n3. Set VHS prefix to ez_<slug>_bN_sM_wan_video and last-frame SaveImage to ez_<slug>_bN_sM_last.\n4. Queue. Approve. Then Queue bridge-ltx with the SAME first frame for the print+audio.\n5. After 18 LTX prints: ./scripts/utilities/concat-shots.sh --film go-see --yes\nDo not Queue 90s in one graph. US-safe local pack only. No score.\n",
+    "lab_note": "## shorts bridge \u2014 Wan draft (5.00s)\n\nUS-safe 90s shorts: 18\u00d7120 frames @ 24 fps. This graph is ONE micro-shot.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n1. Open the film bible (go-see-90s / still-here-90s / switchyard-90s) and copy shot N motion.\n2. Set LoadImage to example.png (smoke) or the previous ez_<film>_bN_sM_last PNG.\n3. Set VHS prefix to ez_<slug>_bN_sM_wan_video and last-frame SaveImage to ez_<slug>_bN_sM_last.\n4. Queue. Approve. Then Queue bridge-ltx with the SAME first frame for the print+audio.\n5. After 18 LTX prints: ./scripts/utilities/concat-shots.sh --film go-see --yes\nDo not Queue 90s in one graph. US-safe local pack only. No score.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
     "lab_profile": "bridge-wan",
     "lab_description": "Wan 2.2 5B 5s",
     "ds": {

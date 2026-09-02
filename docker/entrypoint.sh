@@ -297,6 +297,33 @@ install_lab_workflows() {
 }
 
 #######################################
+# Copy host in-tree prompt-enhance nodes into Comfy custom_nodes.
+# Stdlib-only pack; bind-mounted like workflows so node edits skip image rebuild.
+# Globals:
+#   None
+# Arguments:
+#   $1  source pack (default /opt/ez-comfy/custom_nodes/ez_prompt_enhance)
+#   $2  destination custom_nodes/ez_prompt_enhance
+# Outputs:
+#   ep_log lines
+# Returns:
+#   0
+#######################################
+install_lab_custom_nodes() {
+  local src="${1:-/opt/ez-comfy/custom_nodes/ez_prompt_enhance}"
+  local dest="${2:?}"
+  if [[ ! -d ${src} || ! -f ${src}/__init__.py ]]; then
+    ep_log "no prompt-enhance nodes under ${src} (optional mount)"
+    return 0
+  fi
+  mkdir -p "$(dirname "${dest}")"
+  rm -rf "${dest}"
+  cp -a "${src}" "${dest}"
+  rm -rf "${dest}/__pycache__" "${dest}/.pytest_cache"
+  ep_log "installed custom node ez_prompt_enhance"
+}
+
+#######################################
 # Run install, seed, patch, and exec ComfyUI.
 # Globals:
 #   COMFY_HOME, VENV, LAB_*
@@ -366,8 +393,10 @@ main() {
     python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
   fi
 
-  ep_log "phase 3/4: install lab workflows into user workflows"
+  ep_log "phase 3/4: install lab workflows and prompt-enhance nodes"
   install_lab_workflows /opt/ez-comfy/workflows "${comfy_home}/user/default/workflows"
+  install_lab_custom_nodes /opt/ez-comfy/custom_nodes/ez_prompt_enhance \
+    "${comfy_home}/custom_nodes/ez_prompt_enhance"
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
   ensure_triton_build_env
