@@ -13,6 +13,7 @@ setup() {
   install_mock_bin ffmpeg 'echo "ffmpeg $*" >>"${TEST_TMP_DIR}/ffmpeg.log"; exit 0'
   # shellcheck disable=SC1090
   source "${CS}"
+  FILM=""
 }
 
 teardown() {
