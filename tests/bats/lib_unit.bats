@@ -87,28 +87,11 @@ teardown() {
   [[ "${output}" == *"all expected"* || "${output}" == *"lab model ok"* ]]
 }
 
-@test "common: h3_expected_model_relpaths and check_h3_models_ready" {
-  run h3_expected_model_relpaths
-  [ "${status}" -eq 0 ]
-  [[ "${output}" == *"minimax_h3_fl2va_pruned_int8_convrot.safetensors"* ]]
-  [[ "${output}" == *"qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"* ]]
-  [[ "${output}" == *"minimax_h3_video_vae_fp16.safetensors"* ]]
-  [[ "${output}" == *"minimax_h3_audio_vae_fp32.safetensors"* ]]
-
-  local root="${TEST_TMP_DIR}/h3_models_root"
-  mkdir -p "${root}/comfy"
-  run check_h3_models_ready "${root}"
+@test "common: refuse_minimax_h3 names US exclusion" {
+  run refuse_minimax_h3
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"MISSING"* || "${output}" == *"Missing"* || "${output}" == *"missing"* ]]
-
-  while IFS= read -r rel; do
-    [[ -z ${rel} ]] && continue
-    mkdir -p "${root}/comfy/$(dirname "${rel}")"
-    : >"${root}/comfy/${rel}"
-  done < <(h3_expected_model_relpaths)
-  run check_h3_models_ready "${root}"
-  [ "${status}" -eq 0 ]
-  [[ "${output}" == *"H3 models"* || "${output}" == *"H3 model ok"* ]]
+  [[ "${output}" == *"US Excluded Territory"* ]]
+  [[ "${output}" == *"docs/licenses.md"* ]]
 }
 
 @test "common: ln_sfn_relative creates resolvable relative symlink" {
@@ -548,36 +531,6 @@ line3" "org/x"
   # port 9 unlikely open; status non-zero is fine
   [ "${status}" -ne 0 ] || true
 
-  export LAB_MOCK_H3_OBJECT_INFO=1
-  run comfy_h3_object_info_ok
-  [ "${status}" -eq 0 ]
-  export LAB_MOCK_H3_OBJECT_INFO=0
-  run comfy_h3_object_info_ok
-  [ "${status}" -ne 0 ]
-  unset LAB_MOCK_H3_OBJECT_INFO
-  export LAB_HERMETIC=1
-  run comfy_h3_object_info_ok
-  [ "${status}" -eq 0 ]
-
-  export LAB_STACK_FOLLOW=0
-  run ensure_comfy_h3_native_nodes
-  [ "${status}" -eq 0 ]
-
-  export LAB_FORCE_H3_NODE_PROBE=1
-  export LAB_STACK_FOLLOW=1
-  export LAB_HERMETIC=0
-  export LAB_SKIP_H3_NODE_PROBE=0
-  stack_port_open() { return 0; }
-  comfy_h3_object_info_ok() { return 0; }
-  run ensure_comfy_h3_native_nodes
-  [ "${status}" -eq 0 ]
-  [[ "${output}" == *"MiniMaxH3AddGuide registered"* ]]
-
-  unset -f comfy_h3_object_info_ok
-  unset -f stack_port_open
-
-  export LAB_H3_RESEED_TIMEOUT=0
-  export LAB_H3_OBJECT_INFO_TIMEOUT=0
   stack_port_open() { return 1; }
   run stack_wait_for_port closed 0
   [ "${status}" -eq 0 ]
@@ -588,62 +541,13 @@ line3" "org/x"
   [ "${status}" -ne 0 ]
   run stack_wait_for_port bogus 0
   [ "${status}" -ne 0 ]
-
-  comfy_h3_object_info_ok() { return 0; }
-  run comfy_h3_wait_object_info
-  [ "${status}" -eq 0 ]
-  comfy_h3_object_info_ok() { return 1; }
-  run comfy_h3_wait_object_info
-  [ "${status}" -ne 0 ]
-
-  # Repair: missing in object_info, image has loader, stop+up registers
-  export LAB_MOCK_COMPOSE_PHASE=running
-  stack_port_open() {
-    [[ ${LAB_MOCK_COMPOSE_PHASE} != "stopped" ]]
-  }
-  comfy_h3_object_info_ok() {
-    if [[ ${LAB_MOCK_H3_AFTER_REPAIR:-0} == "1" ]]; then
-      return 0
-    fi
-    return 1
-  }
-  comfy_prebuilt_has_h3_loader() { return 0; }
-  comfy_volume_clear_install_stamp() { echo "stamp-cleared"; return 0; }
-  compose_run() {
-    echo "compose $*"
-    case "${1}" in
-      restart)
-        echo "unexpected-restart"
-        return 1
-        ;;
-      stop)
-        export LAB_MOCK_COMPOSE_PHASE=stopped
-        ;;
-      up)
-        export LAB_MOCK_COMPOSE_PHASE=running
-        export LAB_MOCK_H3_AFTER_REPAIR=1
-        ;;
-    esac
-    return 0
-  }
-  export LAB_MOCK_H3_AFTER_REPAIR=0
-  run ensure_comfy_h3_native_nodes
-  [ "${status}" -eq 0 ]
-  [[ "${output}" != *"unexpected-restart"* ]]
-  [[ "${output}" == *"reseed"* || "${output}" == *"registered after"* ]]
-  unset -f comfy_h3_object_info_ok compose_run comfy_prebuilt_has_h3_loader \
-    comfy_volume_clear_install_stamp stack_port_open
-  unset LAB_FORCE_H3_NODE_PROBE LAB_MOCK_H3_AFTER_REPAIR LAB_MOCK_COMPOSE_PHASE \
-    LAB_H3_RESEED_TIMEOUT LAB_H3_OBJECT_INFO_TIMEOUT
+  unset -f stack_port_open
   export LAB_STACK_FOLLOW=0
   export LAB_HERMETIC=1
   # Restore production helpers after test overrides
   # shellcheck disable=SC1091
   source "${REPO_ROOT}/scripts/lib/compose.sh"
 
-  run comfy_prebuilt_has_h3_loader
-  # mock compose exec grep typically fails in hermetic docker mock
-  [ "${status}" -eq 0 ] || [ "${status}" -ne 0 ]
   run comfy_volume_clear_install_stamp
   [ "${status}" -eq 0 ]
   run stack_stop

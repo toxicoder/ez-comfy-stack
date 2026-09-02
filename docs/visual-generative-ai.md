@@ -75,7 +75,7 @@ flowchart TB
 
 Text → image → **video frames** in one ComfyUI stack. Lab graphs use `SaveImage` for frames. LTX-2.3 is a **joint audio/video** transformer: seeded LTX graphs load the **audio VAE**, create matching empty audio latents, and concat them with video latents before `KSampler` (audio is not saved). LTX text conditioning uses **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) — not the projection file alone.
 
-A **second video path** is MiniMax H3 (opt-in weights, Comfy **v0.34.0+**): six FL2VA columns chained to a **90.00s** stereo MP4 with native H3 audio — see [H3 90s films](h3-films.md). Default `LAB_PIPELINE` remains `flux-to-ltx`.
+MiniMax H3 is **not** in this stack (US Excluded Territory). See [Model licenses](licenses.md).
 
 ```mermaid
 flowchart LR

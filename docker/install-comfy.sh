@@ -125,18 +125,14 @@ refresh_comfy_pin_if_needed() {
   local want="${COMFYUI_REF:-}"
   local have pre
   have="$(read_comfy_pin)"
-  if [[ ${have} == "${want}" ]] && comfy_tree_has_h3_addguide "${COMFY_HOME}"; then
-    log "Comfy pin ${want} already on volume (H3 AddGuide present)"
+  if [[ ${have} == "${want}" ]]; then
+    log "Comfy pin ${want} already on volume"
     return 0
   fi
-  if ! comfy_tree_has_h3_addguide "${COMFY_HOME}"; then
-    log "Syncing ComfyUI to pin ${want} (MiniMaxH3AddGuide missing; volume pin ${have:-none})"
-  else
-    log "Syncing ComfyUI to pin ${want} (volume had ${have:-none})"
-  fi
+  log "Syncing ComfyUI to pin ${want} (volume had ${have:-none})"
   pre="${LAB_PREBUILT_ROOT:-/opt/comfy-prebuilt}"
-  if comfy_tree_has_h3_addguide "${pre}"; then
-    log "Re-seeding ${COMFY_HOME} from prebuilt (H3 nodes in image)"
+  if [[ -x ${pre}/.venv/bin/python || -f ${pre}/main.py ]]; then
+    log "Re-seeding ${COMFY_HOME} from prebuilt"
     mkdir -p "${COMFY_HOME}"
     if command -v rsync >/dev/null 2>&1; then
       rsync -a "${pre}/" "${COMFY_HOME}/"
@@ -145,17 +141,12 @@ refresh_comfy_pin_if_needed() {
     fi
     activate_venv
   else
-    log "Prebuilt lacks MiniMaxH3AddGuide — cloning COMFYUI_REF=${want}"
+    log "Prebuilt missing — cloning COMFYUI_REF=${want}"
     phase_clone_comfy
     activate_venv
     if [[ -f ${COMFY_HOME}/requirements.txt ]]; then
       pip_install -r "${COMFY_HOME}/requirements.txt"
     fi
-  fi
-  if ! comfy_tree_has_h3_addguide "${COMFY_HOME}"; then
-    warn "MiniMaxH3AddGuide still not loadable after sync (need nodes.py extras list + comfy_extras/nodes_minimax_h3.py)"
-    warn "Not writing pin — next start will retry. Do not pip install comfyui-manager; these are core v0.34.0 nodes"
-    return 0
   fi
   write_comfy_pin
 }
