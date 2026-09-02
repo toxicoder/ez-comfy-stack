@@ -165,6 +165,8 @@ teardown() {
   run cmd_help
   [[ "${output}" == *"download-h3"* ]]
   [[ "${output}" == *"farm-h3"* ]]
+  [[ "${output}" == *"h3-go-see-90s-lab-example"* ]]
+  [[ "${output}" == *"not the contest UX"* ]]
   run cmd_download_h3
   [ "${status}" -eq 0 ]
   [[ -e "${MODELS_DIR}/comfy/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors" ]]
