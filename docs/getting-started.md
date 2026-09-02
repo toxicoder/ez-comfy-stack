@@ -12,7 +12,7 @@ tags: [getting-started, docker, comfyui]
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- Example workflows, prompting tips, and watching LTX MP4 output
+- Example workflows, prompting tips, watching LTX MP4, and host `COMFY_OUTPUT_DIR`
 - Optional deep-dives
 
 **What this enables**
@@ -68,6 +68,7 @@ Sections below unpack each step. Feature work still branches from `development` 
 - [ ] **NVIDIA DGX Spark** (or compatible GB10) with drivers + **NVIDIA Container Toolkit**
 - [ ] **Docker** with Compose v2 (prefer apt `docker-ce`, not snap; user in `docker` group)
 - [ ] **Writable model cache** — default `/mnt/models`, or set `MODELS_DIR` in `.env`
+- [ ] **Writable media output dir** — default `/mnt/comfy-output`, or set `COMFY_OUTPUT_DIR` in `.env`
 - [ ] **git**, **python3**, **pip** / **pipx**
 - [ ] **Hugging Face CLI** — modern `hf` from `huggingface_hub` (**not** the deprecated `huggingface-cli` stub)
 - [ ] **HF account** — licenses accepted for FLUX / LTX; `HF_TOKEN` in `.env` or `hf auth login` if gated
@@ -83,7 +84,7 @@ Sections below unpack each step. Feature work still branches from `development` 
 
 ```bash
 # Model cache (or let setup create it)
-sudo mkdir -p /mnt/models && sudo chown "$USER:$USER" /mnt/models
+sudo mkdir -p /mnt/models /mnt/comfy-output && sudo chown "$USER:$USER" /mnt/models /mnt/comfy-output
 
 # HF CLI
 command -v hf || pipx install huggingface_hub
@@ -346,7 +347,7 @@ Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer edit
 
 !!! tip "Primary output is MP4"
 
-    Seeded **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**, and find `ez_ltx_*_video_*.mp4` under Comfy’s **output/** folder (on the `ez-comfy-state` volume). PNG frames are still written via `SaveImage` for inspection.
+    Seeded **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**. Files are on the **host** at `COMFY_OUTPUT_DIR` (default **`/mnt/comfy-output`**, container `/outputs`): `ls /mnt/comfy-output/ez_ltx_*_video_*.mp4`. PNG frames from `SaveImage` land in the same directory. `cleanup` does **not** delete this folder.
 
 | Tier | Frames (`8n+1`) | FPS | ≈ duration |
 | --- | --- | --- | --- |

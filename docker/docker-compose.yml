@@ -7,7 +7,7 @@
 # Safety:
 #   - restart: "no" — never auto-start after host reboot (remote SSH safety)
 #   - mem_limit / mem_reservation leave host headroom for OS and interactive SSH
-#   - host models at MODELS_DIR; Comfy install state on named volume only
+#   - host models at MODELS_DIR; generated media at COMFY_OUTPUT_DIR; Comfy install on named volume only
 #   - gpus: all (exclusive GPU demo — stop other GPU workloads first)
 
 name: ez-comfy
@@ -65,11 +65,15 @@ services:
       # 1 = force-disable torch.backends.python_native.triton (CLIP still works via eager)
       # Entrypoint may also set this when Triton JIT deps are missing.
       LAB_DISABLE_TORCH_NATIVE_TRITON: ${LAB_DISABLE_TORCH_NATIVE_TRITON:-0}
+      # Host media bind-mount (SaveImage / SaveVideo / VHS). Default /mnt/comfy-output.
+      COMFY_OUTPUT_DIR: ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
     volumes:
       - ${MODELS_DIR:-/mnt/models}:/models
       - comfy-state:/comfy-state
+      # Generated PNG/MP4 — host path, not the named volume
+      - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs
       # All example workflows (host tree); entrypoint copies into user workflows
       - ../workflows:/opt/ez-comfy/workflows:ro
       # Host ops scripts — iterate without image rebuild (image still embeds for GHCR)

@@ -95,3 +95,18 @@ lab_compose_file() {
 lab_models_dir() {
   echo "${MODELS_DIR:-/mnt/models}"
 }
+
+#######################################
+# Host directory for ComfyUI generated media (PNG, MP4).
+# Globals:
+#   COMFY_OUTPUT_DIR (read, optional; default /mnt/comfy-output)
+# Arguments:
+#   None
+# Outputs:
+#   Writes output directory path to stdout
+# Returns:
+#   0
+#######################################
+lab_comfy_output_dir() {
+  echo "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+}

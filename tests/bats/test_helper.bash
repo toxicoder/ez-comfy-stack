@@ -57,6 +57,8 @@ setup_repo_env() {
   export PATH="${TEST_TMP_DIR}/bin:${PATH}"
   mkdir -p "${TEST_TMP_DIR}/bin" "${TEST_TMP_DIR}/models"
   export MODELS_DIR="${TEST_TMP_DIR}/models"
+  export COMFY_OUTPUT_DIR="${TEST_TMP_DIR}/comfy-output"
+  mkdir -p "${COMFY_OUTPUT_DIR}"
   export LAB_MOCK_FREE_MEM_GIB=64
   export LAB_MOCK_DISK_FREE_GIB=100
   export LAB_MOCK_IFACE=eth0
