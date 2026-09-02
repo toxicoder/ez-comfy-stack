@@ -258,13 +258,17 @@ main() {
     vol_pin="$(tr -d '\n' <"${comfy_home}/.lab-comfyui-ref" 2>/dev/null || true)"
     want="${COMFYUI_REF:-v0.34.0}"
     pre_h3="${LAB_PREBUILT_ROOT}/comfy_extras/nodes_minimax_h3.py"
-    if [[ ${vol_pin} != "${want}" ]]; then
-      ep_log "Comfy pin changed (${vol_pin:-unset} → ${want})"
-      if prebuilt_ready && grep -q 'MiniMaxH3AddGuide' "${pre_h3}" 2>/dev/null; then
+    if [[ ${vol_pin} != "${want}" ]] ||
+      ! grep -q 'MiniMaxH3AddGuide' "${comfy_home}/comfy_extras/nodes_minimax_h3.py" 2>/dev/null ||
+      ! grep -q 'nodes_minimax_h3.py' "${comfy_home}/nodes.py" 2>/dev/null; then
+      ep_log "Comfy pin/H3 extras need sync (${vol_pin:-unset} → ${want})"
+      if prebuilt_ready &&
+        grep -q 'MiniMaxH3AddGuide' "${pre_h3}" 2>/dev/null &&
+        grep -q 'nodes_minimax_h3.py' "${LAB_PREBUILT_ROOT}/nodes.py" 2>/dev/null; then
         ep_log "Re-seeding volume from prebuilt so native H3 nodes are present"
         seed_from_prebuilt
       else
-        ep_log "Prebuilt lacks MiniMaxH3AddGuide — install refresh will clone COMFYUI_REF"
+        ep_log "Prebuilt lacks MiniMaxH3AddGuide loader — install refresh will clone COMFYUI_REF"
       fi
     fi
     ep_log "Install stamp present — refresh (pin sync + links + patch)"

@@ -164,6 +164,7 @@ teardown() {
   echo stamp >"${STAMP}"
   echo v0.29.0 >"${COMFY_HOME}/.lab-comfyui-ref"
   echo 'class MiniMaxH3AddGuide' >"${pre}/comfy_extras/nodes_minimax_h3.py"
+  echo '        "nodes_minimax_h3.py",' >"${pre}/nodes.py"
   echo fromimg >"${pre}/marker_h3.txt"
   export COMFYUI_REF="v0.34.0"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
@@ -324,10 +325,36 @@ teardown() {
   [[ "${output}" == *".lab-comfyui-ref"* ]]
   mkdir -p "${COMFY_HOME}/comfy_extras"
   echo 'class MiniMaxH3AddGuide' >"${COMFY_HOME}/comfy_extras/nodes_minimax_h3.py"
+  # extras file alone is not enough — v0.29.0 nodes.py never loads it
+  run comfy_tree_has_h3_addguide "${COMFY_HOME}"
+  [ "${status}" -ne 0 ]
+  echo '        "nodes_minimax_h3.py",' >"${COMFY_HOME}/nodes.py"
   run comfy_tree_has_h3_addguide "${COMFY_HOME}"
   [ "${status}" -eq 0 ]
   run comfy_tree_has_h3_addguide "${TEST_TMP_DIR}/missing"
   [ "${status}" -ne 0 ]
+}
+
+@test "refresh_comfy_pin_if_needed does not skip extras file without nodes.py loader" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  mkdir -p "${COMFY_HOME}/comfy_extras" "${VENV}/bin"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  echo 'class MiniMaxH3AddGuide' >"${COMFY_HOME}/comfy_extras/nodes_minimax_h3.py"
+  COMFYUI_REF="v0.34.0"
+  write_comfy_pin
+  local pre="${TEST_TMP_DIR}/pre_loader"
+  export LAB_PREBUILT_ROOT="${pre}"
+  mkdir -p "${pre}/comfy_extras"
+  echo 'class MiniMaxH3AddGuide' >"${pre}/comfy_extras/nodes_minimax_h3.py"
+  echo '        "nodes_minimax_h3.py",' >"${pre}/nodes.py"
+  echo loader >"${pre}/loader_ok.txt"
+  run refresh_comfy_pin_if_needed
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"already on volume"* ]]
+  [[ -f ${COMFY_HOME}/loader_ok.txt ]]
+  run comfy_tree_has_h3_addguide "${COMFY_HOME}"
+  [ "${status}" -eq 0 ]
 }
 
 @test "refresh_comfy_pin_if_needed skips when pin matches and AddGuide exists" {
@@ -336,6 +363,7 @@ teardown() {
   mkdir -p "${COMFY_HOME}/comfy_extras" "${VENV}/bin"
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
   echo 'class MiniMaxH3AddGuide' >"${COMFY_HOME}/comfy_extras/nodes_minimax_h3.py"
+  echo '        "nodes_minimax_h3.py",' >"${COMFY_HOME}/nodes.py"
   COMFYUI_REF="v0.34.0"
   write_comfy_pin
   run refresh_comfy_pin_if_needed
@@ -354,13 +382,31 @@ teardown() {
   export LAB_PREBUILT_ROOT="${TEST_TMP_DIR}/empty_pre"
   mkdir -p "${LAB_PREBUILT_ROOT}"
   install_mock_bin pip 'echo pip; exit 0'
-  install_mock_bin git 'echo "git $*"; dest="${@: -1}"; mkdir -p "${dest}/comfy_extras" "${COMFY_HOME}/.git" 2>/dev/null || true; echo "class MiniMaxH3AddGuide" >"${COMFY_HOME}/comfy_extras/nodes_minimax_h3.py"; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
+  install_mock_bin git 'echo "git $*"; dest="${@: -1}"; mkdir -p "${dest}/comfy_extras" "${COMFY_HOME}/.git" "${COMFY_HOME}/comfy_extras" 2>/dev/null || true; echo "class MiniMaxH3AddGuide" >"${COMFY_HOME}/comfy_extras/nodes_minimax_h3.py"; echo "        \"nodes_minimax_h3.py\"," >"${COMFY_HOME}/nodes.py"; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
   COMFYUI_REF="v0.34.0"
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"cloning"* || "${output}" == *"Syncing"* ]]
   run read_comfy_pin
   [ "${output}" = "v0.34.0" ]
+}
+
+@test "refresh_comfy_pin_if_needed does not write pin when loader still missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  mkdir -p "${VENV}/bin" "${COMFY_HOME}"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  echo v0.29.0 >"${COMFY_HOME}/.lab-comfyui-ref"
+  export LAB_PREBUILT_ROOT="${TEST_TMP_DIR}/empty_pre2"
+  mkdir -p "${LAB_PREBUILT_ROOT}"
+  install_mock_bin pip 'echo pip; exit 0'
+  install_mock_bin git 'echo "git $*"; mkdir -p "${COMFY_HOME}/comfy_extras"; echo "class MiniMaxH3AddGuide" >"${COMFY_HOME}/comfy_extras/nodes_minimax_h3.py"; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
+  COMFYUI_REF="v0.34.0"
+  run refresh_comfy_pin_if_needed
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"still not loadable"* ]]
+  run read_comfy_pin
+  [ "${output}" = "v0.29.0" ]
 }
 
 @test "refresh_comfy_pin_if_needed reseeds from prebuilt when image has AddGuide" {
@@ -373,6 +419,7 @@ teardown() {
   export LAB_PREBUILT_ROOT="${pre}"
   mkdir -p "${pre}/comfy_extras"
   echo 'class MiniMaxH3AddGuide' >"${pre}/comfy_extras/nodes_minimax_h3.py"
+  echo '        "nodes_minimax_h3.py",' >"${pre}/nodes.py"
   echo seeded >"${pre}/from_image.txt"
   COMFYUI_REF="v0.34.0"
   run refresh_comfy_pin_if_needed
@@ -392,6 +439,7 @@ teardown() {
   export LAB_PREBUILT_ROOT="${pre}"
   mkdir -p "${pre}/comfy_extras"
   echo 'class MiniMaxH3AddGuide' >"${pre}/comfy_extras/nodes_minimax_h3.py"
+  echo '        "nodes_minimax_h3.py",' >"${pre}/nodes.py"
   echo recovered >"${pre}/recovered_h3.txt"
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
@@ -411,6 +459,7 @@ teardown() {
   chmod +x "${VENV}/bin/python"
   : >"${STAMP}"
   echo 'class MiniMaxH3AddGuide' >"${COMFY_HOME}/comfy_extras/nodes_minimax_h3.py"
+  echo '        "nodes_minimax_h3.py",' >"${COMFY_HOME}/nodes.py"
   install_mock_bin git 'echo "git $*"; exit 0'
   install_mock_bin pip 'echo "pip $*"; exit 0'
   COMFYUI_REF="v0.34.0"

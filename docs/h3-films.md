@@ -49,7 +49,7 @@ In the UI: **Workflows** → `h3-go-see-90s-lab-example` (seeded from host `work
 
 !!! warning "Missing Node Packs / Unknown pack for MiniMaxH3*"
 
-    `MiniMaxH3AddGuide`, `MiniMaxH3ImageToVideo`, and `MiniMaxH3SigmaShift` are **native ComfyUI v0.34.0** nodes (`comfy_extras/nodes_minimax_h3.py`, `cnr_id: comfy-core`) — not a custom pack. Do **not** `pip install comfyui-manager`. After `git pull`, `./scripts/manage.sh stop` then `start` so the volume pin (`.lab-comfyui-ref`) syncs to `v0.34.0`. Details: [Troubleshooting](troubleshooting.md).
+    `MiniMaxH3AddGuide`, `MiniMaxH3ImageToVideo`, and `MiniMaxH3SigmaShift` are **native ComfyUI v0.34.0** nodes (`comfy_extras/nodes_minimax_h3.py`, listed in `nodes.py`, `cnr_id: comfy-core`) — not a custom pack. Do **not** `pip install comfyui-manager` and do **not** restart with `--enable-manager`. After `git pull`, `./scripts/manage.sh stop` then `start` so the volume pin (`.lab-comfyui-ref`) and extras loader sync to `v0.34.0`. Hard-refresh the browser. Details: [Troubleshooting](troubleshooting.md).
 
 OOM at 1344×768×379: on each `MiniMaxH3ImageToVideo` set width/height to **864×480** (0.4 MP table). Do **not** raise `MEM_LIMIT`.
 

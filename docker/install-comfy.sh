@@ -152,6 +152,11 @@ refresh_comfy_pin_if_needed() {
       pip_install -r "${COMFY_HOME}/requirements.txt"
     fi
   fi
+  if ! comfy_tree_has_h3_addguide "${COMFY_HOME}"; then
+    warn "MiniMaxH3AddGuide still not loadable after sync (need nodes.py extras list + comfy_extras/nodes_minimax_h3.py)"
+    warn "Not writing pin — next start will retry. Do not pip install comfyui-manager; these are core v0.34.0 nodes"
+    return 0
+  fi
   write_comfy_pin
 }
 
