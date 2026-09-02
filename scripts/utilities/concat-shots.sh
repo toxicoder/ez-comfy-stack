@@ -246,7 +246,8 @@ write_concat_list() {
 #######################################
 cmd_run() {
   local -a files=()
-  local line slug
+  # slug="" so bash 4.4+ set -u is safe when FILM is empty (CI).
+  local line slug=""
   if [[ -n ${FILM} ]] && ! slug="$(film_slug "${FILM}")"; then
     err "Unknown film: ${FILM} (go-see|still-here|switchyard)"
     return 1
