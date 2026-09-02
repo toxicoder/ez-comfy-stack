@@ -202,7 +202,7 @@ cmd_run() {
   log "Then run scripts/utilities/concat-shots.sh against ${FARM_SHARE}"
   local url
   for url in "${urls[@]}"; do
-    log "worker ${url}"
+    log "worker ${url} seeds=${SEEDS}"
   done
   return 0
 }

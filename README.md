@@ -5,7 +5,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/toxicoder/ez-comfy-stack/ci.yml?branch=development&style=for-the-badge&logo=github&label=CI)](https://github.com/toxicoder/ez-comfy-stack/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/toxicoder/ez-comfy-stack?style=for-the-badge)](LICENSE)
 
-**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with the unified **Flux → LTX** pipeline (image + video), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling.
+**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with a **US-safe local studio** (Apache Klein 4B stills, Apache Wan 2.2 silent motion, LTX distilled AV), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling.
 
 **Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) — MkDocs Material, published per branch via GitHub Pages.
 
@@ -13,7 +13,8 @@ Inspired by [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark
 
 ## Goals
 
-- One command path to a working ComfyUI flux-to-ltx stack on one Spark  
+- One command path to a working ComfyUI US-safe studio on one Spark  
+
 - Shared model cache compatible with other stacks (`/mnt/models`)  
 - Operator CLI (`manage.sh`) for start / stop / status / doctor  
 - Bandwidth-limited downloads with **auto = 85% of speedtest**  
@@ -41,7 +42,7 @@ Full walkthrough (prerequisites, setup, workflows): **[Getting Started](https://
 ./scripts/manage.sh setup --install-docker   # .env, MODELS_DIR, Docker if needed
 # set HF_TOKEN in .env if models are gated
 ./scripts/manage.sh doctor
-./scripts/manage.sh download-models   # throttled flux-fast + ltx-balanced
+./scripts/manage.sh download-models   # throttled Klein 4B + Wan 5B + LTX-2.5
 ./scripts/manage.sh start             # type yes
 ./scripts/manage.sh status
 # open http://<spark-ip>:8188
@@ -67,7 +68,7 @@ sequenceDiagram
 ## Layout
 
 ```text
-docker/           Dockerfile + compose (flux-to-ltx)
+docker/           Dockerfile + compose (us-safe-studio)
 scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
 scripts/utilities download-image, download-wan, download-ltx, download-limit, spark-farm

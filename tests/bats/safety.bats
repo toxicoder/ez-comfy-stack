@@ -167,7 +167,7 @@ teardown() {
 }
 
 @test "prebuilt image defaults to GHCR and never bakes HF_TOKEN in Dockerfile" {
-  run grep -E 'ghcr.io/.*/ez-comfy:flux-to-ltx' "${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -E 'ghcr.io/.*/ez-comfy:us-safe-studio' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
   run grep -E 'comfy-prebuilt|EZ_COMFY_PREBUILD' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -eq 0 ]
@@ -276,7 +276,7 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
-@test "resource policy documents flux-to-ltx" {
-  run grep -E 'flux-to-ltx|90g' "${REPO_ROOT}/config/resource-policy.yaml"
+@test "resource policy documents studio memory limits" {
+  run grep -E 'studio|flux-to-ltx|90g' "${REPO_ROOT}/config/resource-policy.yaml"
   [ "$status" -eq 0 ]
 }

@@ -438,19 +438,19 @@ line3" "org/x"
   # stack_image_tag_for_branch: long-lived channels + feature fallback
   run stack_image_tag_for_branch main
   [ "${status}" -eq 0 ]
-  [ "${output}" = "flux-to-ltx" ]
+  [ "${output}" = "us-safe-studio" ]
 
   run stack_image_tag_for_branch development
   [ "${status}" -eq 0 ]
-  [ "${output}" = "flux-to-ltx-development" ]
+  [ "${output}" = "us-safe-studio-development" ]
 
   run stack_image_tag_for_branch feature/foo
   [ "${status}" -eq 0 ]
-  [ "${output}" = "flux-to-ltx-development" ]
+  [ "${output}" = "us-safe-studio-development" ]
 
   run stack_image_tag_for_branch unknown
   [ "${status}" -eq 0 ]
-  [ "${output}" = "flux-to-ltx-development" ]
+  [ "${output}" = "us-safe-studio-development" ]
 
   # stack_git_branch respects LAB_GIT_BRANCH override (hermetic)
   export LAB_GIT_BRANCH=development
@@ -463,17 +463,17 @@ line3" "org/x"
   export LAB_GIT_BRANCH=main
   run stack_default_image
   [ "${status}" -eq 0 ]
-  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:flux-to-ltx" ]
+  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:us-safe-studio" ]
 
   export LAB_GIT_BRANCH=development
   run stack_default_image
   [ "${status}" -eq 0 ]
-  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development" ]
+  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:us-safe-studio-development" ]
 
   export LAB_GIT_BRANCH=feature/branch-aligned-ghcr-image
   run stack_default_image
   [ "${status}" -eq 0 ]
-  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development" ]
+  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:us-safe-studio-development" ]
 
   export EZ_COMFY_IMAGE="ghcr.io/example/custom:tag"
   export LAB_GIT_BRANCH=main
@@ -498,7 +498,7 @@ line3" "org/x"
 
   run compose_status_json
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"flux-to-ltx"* ]]
+  [[ "${output}" == *'"stack":"studio"'* ]]
 
   run compose_is_running
   [ "${status}" -ne 0 ]
@@ -515,7 +515,7 @@ line3" "org/x"
   unset EZ_COMFY_IMAGE
   export LAB_GIT_BRANCH=development
   run stack_default_image
-  [[ "${output}" == *ghcr.io* && "${output}" == *ez-comfy* && "${output}" == *flux-to-ltx-development* ]]
+  [[ "${output}" == *ghcr.io* && "${output}" == *ez-comfy* && "${output}" == *us-safe-studio-development* ]]
   # inventory + behavior: pull path when not skipped
   unset LAB_STACK_SKIP_PULL
   run stack_pull_image "ghcr.io/example/ez-comfy:test"

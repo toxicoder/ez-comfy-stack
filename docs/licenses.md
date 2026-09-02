@@ -92,4 +92,4 @@ LTX AV (not Apache): `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safet
 
 `manage.sh doctor` prints:
 
-`License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, <$10M company). Not legal advice. See docs/licenses.md`
+`License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md`

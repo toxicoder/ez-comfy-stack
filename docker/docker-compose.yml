@@ -1,7 +1,7 @@
 # Purpose:
 #   Docker Compose definition for the unified Visual Generative AI demo on a
-#   single NVIDIA DGX Spark: one ComfyUI service configured for Flux (fast) +
-#   LTX (balanced) text-to-image-to-video workflows.
+#   single NVIDIA DGX Spark: one ComfyUI service configured for Klein 4B stills,
+#   Wan 2.2 silent motion, and LTX distilled AV.
 # Source of truth: this file (operator entry via scripts/manage.sh)
 # Regenerate: n/a
 # Safety:
@@ -32,13 +32,13 @@ services:
         COMFYUI_VHS_REF: ${COMFYUI_VHS_REF:-}
       # Reuse pulled GHCR layers as local build cache when rebuilding
       cache_from:
-        - ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development}
+        - ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:us-safe-studio-development}
     # Prefer GHCR prebuilt (arm64). manage.sh sets EZ_COMFY_IMAGE from git branch:
-    #   main → :flux-to-ltx ; development/feature → :flux-to-ltx-development
+    #   main → :us-safe-studio ; development/feature → :us-safe-studio-development
     # Static fallback matches primary integration branch (development).
     # Never put tokens in this file; HF_TOKEN comes from host env/.env at runtime only.
-    image: ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development}
-    container_name: ez-comfy-flux-to-ltx
+    image: ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:us-safe-studio-development}
+    container_name: ez-comfy-studio
     # Manual lifecycle only — operator uses manage.sh start/stop
     restart: "no"
     ports:
@@ -57,11 +57,12 @@ services:
       PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
       CUDA_MODULE_LOADING: LAZY
       LAB_VISUAL_ENABLE_NVFP4: "1"
-      LAB_VISUAL_PROFILE: flux-to-ltx
-      LAB_PIPELINE: ${LAB_PIPELINE:-flux-to-ltx}
-      LAB_FLUX_TIER: fast
-      LAB_LTX_TIER: balanced
-      LAB_VISUAL_ENABLE_NUNCHAKU: "1"
+      LAB_VISUAL_PROFILE: us-safe-studio
+      LAB_PIPELINE: ${LAB_PIPELINE:-studio}
+      LAB_IMAGE_TIER: fast
+      LAB_WAN_TIER: 5b
+      LAB_LTX_TIER: "2.5"
+      LAB_VISUAL_ENABLE_NUNCHAKU: "0"
       # 1 = force-disable torch.backends.python_native.triton (CLIP still works via eager)
       # Entrypoint may also set this when Triton JIT deps are missing.
       LAB_DISABLE_TORCH_NATIVE_TRITON: ${LAB_DISABLE_TORCH_NATIVE_TRITON:-0}

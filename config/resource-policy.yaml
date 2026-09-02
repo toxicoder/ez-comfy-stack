@@ -1,5 +1,5 @@
 # Purpose:
-#   Human-readable resource and headroom policy for the unified flux-to-ltx
+#   Human-readable resource and headroom policy for the unified us-safe-studio
 #   Visual Generative AI stack on a single DGX Spark (GB10). Consumed by operators
 #   and mirrored by manage.sh defaults (MIN_HOST_FREE_GIB, MEM_LIMIT, model tiers).
 # Source of truth: this file
@@ -23,16 +23,17 @@ headroom:
   min_disk_free_gib: 40
 
 stack:
-  id: flux-to-ltx
-  label: Unified Flux → LTX (ComfyUI)
+  id: studio
+  label: Unified US-safe studio (Klein 4B + Wan 2.2 + LTX)
   heavy: true
   gpus: 1
   memory_limit: 90g
   memory_reservation: 80g
   cpu: "12"
   models:
-    flux_tier: fast
-    ltx_tier: balanced
+    image_tier: fast
+    wan_tier: 5b
+    ltx_tier: "2.5"
   ports:
     comfyui: 8188
 
