@@ -267,6 +267,25 @@
   
   
     <li class="md-tabs__item">
+      <a href="../shorts/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  90s shorts
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../visual-generative-ai/" class="md-tabs__link">
         
   
@@ -502,6 +521,33 @@
     
   
     Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shorts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    90s shorts
   
 
     
@@ -1377,7 +1423,7 @@
 </tbody>
 </table>
 <h3 id="example-graphs">Example graphs<a class="headerlink" href="#example-graphs" title="Permanent link">&para;</a></h3>
-<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/</code> (name pattern <strong><code>*-lab-example.json</code></strong>):</p>
+<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> (name pattern <strong><code>*-lab-example.json</code></strong>):</p>
 <table>
 <thead>
 <tr>
@@ -1417,6 +1463,18 @@
 <tr>
 <td><code>ltx-t2v-hero-lab-example.json</code></td>
 <td>LTX-2.5 T2V ~5 s with audio</td>
+</tr>
+<tr>
+<td><code>shorts/*-90s-lab-example.json</code></td>
+<td>Klein identity still + 18-shot map (<a href="../shorts/">90s shorts</a>)</td>
+</tr>
+<tr>
+<td><code>shorts/bridge-wan-lab-example.json</code></td>
+<td>5.00 s Wan I2V + last-frame SaveImage</td>
+</tr>
+<tr>
+<td><code>shorts/bridge-ltx-lab-example.json</code></td>
+<td>5.00 s LTX I2V print + last-frame SaveImage</td>
 </tr>
 </tbody>
 </table>

@@ -267,6 +267,25 @@
   
   
     <li class="md-tabs__item">
+      <a href="../shorts/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  90s shorts
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../visual-generative-ai/" class="md-tabs__link">
         
   
@@ -502,6 +521,33 @@
     
   
     Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shorts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    90s shorts
   
 
     
@@ -973,7 +1019,7 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">      </span><span class="c1"># cache owner, or after NFS is up</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
 </code></pre></div>
-<p>Three UIs: <code>http://spark-0:8188</code>, <code>http://spark-1:8188</code>, <code>http://spark-2:8188</code>. On each, load <strong>wan-shot-lab-example</strong> and <strong>Queue</strong> independently. Concat after approval — MiniMax H3 films are banned (see <a href="../licenses/">licenses</a>).</p>
+<p>Three UIs: <code>http://spark-0:8188</code>, <code>http://spark-1:8188</code>, <code>http://spark-2:8188</code>. On each, load <strong>bridge-wan-lab-example</strong> / <strong>bridge-ltx-lab-example</strong> (or <strong>wan-shot-lab-example</strong>) and <strong>Queue</strong> independent <strong>5 s</strong> shots — different beats in parallel for the 90s films. Concat locally: <code>./scripts/utilities/concat-shots.sh --film go-see --yes</code>. See <a href="../shorts/">90s shorts</a>. MiniMax H3 films are banned (see <a href="../licenses/">licenses</a>).</p>
 <p><code>spark-farm.sh</code> <strong>never</strong> starts compose remotely. It prints the exact <code>./scripts/manage.sh start</code> you must run locally (heavy confirm stays on that node). Containers still use <code>restart: "no"</code>.</p>
 <p>Memory: keep <code>MEM_LIMIT=90g</code>, <code>MEM_RESERVATION=80g</code>, <code>MIN_HOST_FREE_GIB=28</code>, <code>shm_size: 16gb</code>.</p>
 <h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>

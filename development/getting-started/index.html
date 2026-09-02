@@ -16,7 +16,7 @@
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="../visual-generative-ai/">
+        <link rel="next" href="../shorts/">
       
       
         
@@ -257,6 +257,25 @@
     
   
   Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../shorts/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  90s shorts
 
       </a>
     </li>
@@ -767,6 +786,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../shorts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    90s shorts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../visual-generative-ai/" class="md-nav__link">
         
   
@@ -1228,7 +1274,7 @@
 <li>Prerequisites checklist</li>
 <li>Setup, doctor, download, start, stop</li>
 <li>Optional: build the Docker image locally instead of pulling GHCR</li>
-<li>Example workflows, prompting tips, watching LTX MP4, and host <code>COMFY_OUTPUT_DIR</code></li>
+<li>Example workflows, 90s shorts, prompting tips, watching LTX MP4, and host <code>COMFY_OUTPUT_DIR</code></li>
 <li>Optional deep-dives</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1536,7 +1582,7 @@
 <p>Layer invalidation and pin bumps: <a href="../models-and-cache/#prebuilt-container-image-ghcr">Models &amp; Cache</a>. Recovery rows: <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <h3 id="example-workflows">Example workflows<a class="headerlink" href="#example-workflows" title="Permanent link">&para;</a></h3>
 <p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:4"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Still (Klein 4B)</label><label for="__tabbed_3_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_3_3">AV hero (LTX-2.5)</label><label for="__tabbed_3_4">License</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:5"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><input id="__tabbed_3_5" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Still (Klein 4B)</label><label for="__tabbed_3_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_3_3">AV hero (LTX-2.5)</label><label for="__tabbed_3_4">90s shorts</label><label for="__tabbed_3_5">License</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1607,6 +1653,31 @@
 </table>
 </div>
 <div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>go-see-90s / still-here-90s / switchyard-90s</strong></td>
+<td>Klein identity still + 18-shot map (<code>workflows/shorts/</code>)</td>
+</tr>
+<tr>
+<td><strong>bridge-wan-lab-example</strong></td>
+<td>One 5.00 s silent I2V (120 frames); last-frame SaveImage</td>
+</tr>
+<tr>
+<td><strong>bridge-ltx-lab-example</strong></td>
+<td>One 5.00 s AV print; concat uses these MP4s</td>
+</tr>
+</tbody>
+</table>
+<p>Full loop: <a href="../shorts/">90s shorts</a>.</p>
+</div>
+<div class="tabbed-block">
 <p>MiniMax H3 is <strong>banned</strong> (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See <a href="../licenses/">Model licenses</a>.</p>
 </div>
 </div>
@@ -1619,11 +1690,10 @@
 <li>Pick a frame under <code>COMFY_OUTPUT_DIR</code> (<code>ez_still_draft_*.png</code>).</li>
 <li>Load <strong>wan-i2v-draft-lab-example</strong> → set LoadImage to that PNG (or leave <code>example.png</code> to smoke-test) → edit <strong>Motion / prompt</strong> only → Queue ~5 s silent.</li>
 <li>Optional audio: <strong>ltx-i2v-hero-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV.</li>
-<li>Short film: Queue <strong>wan-shot-lab-example</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then:</li>
+<li>Short six-shot demo: Queue <strong>wan-shot-lab-example</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then <code>./scripts/utilities/concat-shots.sh --dir /mnt/comfy-output --yes</code>.</li>
+<li><strong>90s films</strong> (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then <code>./scripts/utilities/concat-shots.sh --film go-see --yes</code>. See <a href="../shorts/">90s shorts</a>.</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--dir<span class="w"> </span>/mnt/comfy-output<span class="w"> </span>--yes
-</code></pre></div>
-<p>Spark will melt on 30–60 s / 90 s graphs — those are gone. Default graphs iterate in minutes.</p>
+<p>Do not Queue a 90s denoise. Default graphs iterate in minutes.</p>
 <h3 id="prompting-these-models">Prompting these models<a class="headerlink" href="#prompting-these-models" title="Permanent link">&para;</a></h3>
 <p>Lab graphs ship research-backed <strong>Positive</strong> / <strong>Negative</strong> prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Klein 4B (still)</label><label for="__tabbed_4_2">Wan 2.2 (silent motion)</label><label for="__tabbed_4_3">LTX-2.5 (AV)</label></div>
@@ -1659,46 +1729,46 @@
 <table>
 <thead>
 <tr>
-<th>Tier</th>
-<th>Frames (<code>8n+1</code>)</th>
+<th>Graph</th>
+<th>Frames</th>
 <th>FPS</th>
 <th>≈ duration</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>base (<code>ltx-*-lab-example</code> without duration suffix)</td>
-<td>241</td>
+<td><code>wan-*-lab-example</code> / <code>ltx-*-lab-example</code></td>
+<td>121</td>
 <td>24</td>
-<td>~10.0 s</td>
+<td>~5.04 s</td>
 </tr>
 <tr>
-<td><strong><code>*-30s-*</code></strong> long-run demos</td>
-<td>721</td>
+<td><code>workflows/shorts/bridge-*-lab-example</code></td>
+<td>120</td>
 <td>24</td>
-<td>~30.0 s</td>
+<td><strong>5.00 s</strong></td>
 </tr>
 <tr>
-<td><strong><code>*-60s-*</code></strong> very heavy demos</td>
-<td>1441</td>
+<td>90s film (18 LTX prints + concat)</td>
+<td>—</td>
 <td>24</td>
-<td>~60.0 s</td>
+<td><strong>90.00 s</strong> cap</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition warning">
-<p class="admonition-title">30 s / 60 s graphs are heavy</p>
-<p>Longer latents need more VRAM and wall-clock time (often multi-minute). Prefer <strong>~10 s</strong> base graphs for smoke tests; keep headroom preflight green before queuing 30 s / 60 s demos.</p>
+<p class="admonition-title">Do not Queue 30 s / 60 s / 90 s in one graph</p>
+<p>Long latents melt Spark. Prefer <strong>~5 s</strong> graphs; stitch with <a href="../shorts/">concat-shots</a>. Keep headroom preflight green.</p>
 </div>
 <p>Optional offline stitch of PNG frames only (if you need a host-side re-encode):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">'ez_ltx_*_*.png'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">'ez_ltx_*_*.png'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
 </code></pre></div>
 <p>If <strong><code>VHS_VideoCombine</code> is missing</strong>, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <details class="abstract">
 <summary>Lab workflow details</summary>
 <ul>
-<li>Name pattern: host files <code>workflows/*-lab-example.json</code> (legacy <code>lab-*</code> names removed)</li>
+<li>Name pattern: host files <code>workflows/*-lab-example.json</code> and <code>workflows/shorts/*-lab-example.json</code> (entrypoint copies both)</li>
 <li>Every graph has a ComfyUI <strong>Note</strong> node + <code>extra.lab_note</code> with the same operator guidance</li>
 <li>Flux CLIP loader type is <strong><code>flux2</code></strong> with <code>qwen_3_8b_fp4mixed</code> + <code>EmptyFlux2LatentImage</code> (simplified <code>KSampler</code>, not the full official advanced sampler subgraph)</li>
 <li>LTX graphs use <strong>DualCLIPLoader</strong> (<code>gemma_3_12B_it_fp4_mixed</code> + <code>ltx-2.3_text_projection_bf16</code>, type <strong><code>ltxv</code></strong>), save <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (h264, 24 fps), and still save <strong>frames</strong> via <code>SaveImage</code></li>
@@ -1715,7 +1785,7 @@
 <p class="admonition-title">Golden rule</p>
 <p><strong>Never reboot with the heavy ComfyUI stack still running.</strong> Always stop first. See <a href="../reboot-safety/">Reboot Safety</a>.</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>./scripts/manage.sh<span class="w"> </span>stop
 </code></pre></div>
 <hr />
 <h2 id="optional-deep-dives">Optional deep-dives<a class="headerlink" href="#optional-deep-dives" title="Permanent link">&para;</a></h2>
