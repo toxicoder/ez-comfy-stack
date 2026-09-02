@@ -619,10 +619,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#operator-path" class="md-nav__link">
+  <a href="#operator-path-comfyui-like-flux-ltx" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Operator path
+        Operator path (ComfyUI, like Flux / LTX)
       
     </span>
   </a>
@@ -870,10 +870,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#operator-path" class="md-nav__link">
+  <a href="#operator-path-comfyui-like-flux-ltx" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Operator path
+        Operator path (ComfyUI, like Flux / LTX)
       
     </span>
   </a>
@@ -943,9 +943,9 @@
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Drag-drop <code>h3-*-90s-lab-example.json</code> onto ComfyUI <code>:8188</code> after <code>download-h3</code> + Comfy <strong>v0.34.0</strong></li>
+<li>The same ComfyUI UX as Flux/LTX: open <code>:8188</code>, load a <code>*-lab-example</code> graph, <strong>Queue</strong></li>
 <li>A Sync Sound–legal mux: native H3 audio, <strong>2160 frames @ 24 fps = 90.00s</strong></li>
-<li>Farm three films on three Sparks without NCCL (see <a href="../spark-farm/">Spark farm</a>)</li>
+<li>The workflow JSON you Queue is the file the challenge asks you to submit</li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Comfy H3 Sync Sound — 90 seconds maximum</p>
@@ -985,13 +985,17 @@
 </tbody>
 </table>
 <p><code>CreateVideo</code> fps=24. <code>TrimAudioDuration</code> to <strong>90.00s</strong>. <code>stitch-h3</code> applies <code>ffmpeg -t 90</code> and <strong>fails</strong> if probed duration <code>&gt; 90</code>.</p>
-<h2 id="operator-path">Operator path<a class="headerlink" href="#operator-path" title="Permanent link">&para;</a></h2>
+<h2 id="operator-path-comfyui-like-flux-ltx">Operator path (ComfyUI, like Flux / LTX)<a class="headerlink" href="#operator-path-comfyui-like-flux-ltx" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-h3<span class="w">          </span><span class="c1"># opt-in; default download-models stays flux+ltx</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># load workflows/h3-go-see-90s-lab-example.json in the UI</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>queue-h3<span class="w"> </span>--film<span class="w"> </span>go-see
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># open http://&lt;spark-ip&gt;:8188</span>
 </code></pre></div>
-<p>OOM at 1344×768×379: <code>./scripts/manage.sh queue-h3 --film go-see --size 864x480</code> (0.4 MP table). Do <strong>not</strong> raise <code>MEM_LIMIT</code>.</p>
+<p>In the UI: <strong>Workflows</strong> → <code>h3-go-see-90s-lab-example</code> (seeded from host <code>workflows/</code> into <code>user/default/workflows/</code>). Drag-drop of the same JSON still works. Review the six shot prompts, <strong>Queue</strong>, watch <strong>SaveVideo</strong>. That MP4 plus this JSON are the contest submission.</p>
+<p>OOM at 1344×768×379: on each <code>MiniMaxH3ImageToVideo</code> set width/height to <strong>864×480</strong> (0.4 MP table). Do <strong>not</strong> raise <code>MEM_LIMIT</code>.</p>
+<details class="note">
+<summary>Optional: POST the same graph (not the contest UX)</summary>
+<p><code>./scripts/manage.sh queue-h3 --film go-see</code> posts the lab-example JSON to local <code>:8188</code>. Use it for automation; generating the film for the challenge is still <strong>Queue in ComfyUI</strong>. <code>--size 864x480</code> is the CLI equivalent of the UI resize.</p>
+</details>
 <h2 id="weights-clip-type-minimax">Weights (CLIP type <code>minimax</code>)<a class="headerlink" href="#weights-clip-type-minimax" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
