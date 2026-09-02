@@ -201,12 +201,14 @@ stack_port_open() {
 # Globals:
 #   COMFY_PORT, LAB_MOCK_H3_OBJECT_INFO, LAB_HERMETIC
 # Arguments:
-#   $1  Optional port (default COMFY_PORT or 8188)
+#   None
+# Outputs:
+#   None
 # Returns:
 #   0 if registered; 1 if missing
 #######################################
 comfy_h3_object_info_ok() {
-  local port="${1:-${COMFY_PORT:-8188}}"
+  local port="${COMFY_PORT:-8188}"
   local url="http://127.0.0.1:${port}/object_info/MiniMaxH3AddGuide"
   case "${LAB_MOCK_H3_OBJECT_INFO:-}" in
     1 | ok | yes) return 0 ;;
