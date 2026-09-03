@@ -290,6 +290,88 @@ assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_no
   done
 }
 
+@test "operator app graphs: still settings, gif ping-pong loop, dream-house pack" {
+  local dir="${REPO_ROOT}/workflows"
+  [[ -f ${dir}/still-app-lab-example.json ]]
+  [[ -f ${dir}/gif-loop-lab-example.json ]]
+  [[ -f ${dir}/dream-house-lab-example.json ]]
+  run python3 -c "
+import json
+s=json.load(open('${dir}/still-app-lab-example.json'))
+assert s.get('id')=='still-app-lab-example'
+assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='flux-2-klein-4b-fp8.safetensors' for n in s['nodes'])
+assert any(n.get('type')=='CLIPLoader' and 'qwen_3_4b.safetensors' in n['widgets_values'] and 'flux2' in n['widgets_values'] for n in s['nodes'])
+assert any(n.get('type')=='VAELoader' and n['widgets_values'][0]=='flux2-vae.safetensors' for n in s['nodes'])
+assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1024, 576] for n in s['nodes'])
+assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 and float(n['widgets_values'][3])==1.0 for n in s['nodes'])
+assert any(n.get('type')=='SaveImage' and n['widgets_values'][0]=='ez_still_app' for n in s['nodes'])
+enh=next(n for n in s['nodes'] if n.get('type')=='EZKleinPromptEnhance')
+assert enh['widgets_values'][1] is False
+unet=next(n for n in s['nodes'] if n.get('type')=='UNETLoader')
+assert 'swap' in (unet.get('title') or '').lower()
+note=next(n for n in s['nodes'] if n.get('type') in ('Note','MarkdownNote'))
+ntext=str(note['widgets_values'][0]).lower()
+assert 'swap' in ntext and 'steps' in ntext and 'cfg' in ntext
+assert 'flux-2-klein-base-4b-fp8' in ntext or 'base' in ntext
+assert any(g.get('title','').upper().startswith('MODEL') for g in s.get('groups',[]))
+assert any('SETTING' in g.get('title','').upper() for g in s.get('groups',[]))
+"
+  [ "${status}" -eq 0 ]
+  run python3 -c "
+import json
+g=json.load(open('${dir}/gif-loop-lab-example.json'))
+assert g.get('id')=='gif-loop-lab-example'
+assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='wan2.2_ti2v_5B_fp16.safetensors' for n in g['nodes'])
+assert any(n.get('type')=='VAELoader' and n['widgets_values'][0]=='wan2.2_vae.safetensors' for n in g['nodes'])
+lat=next(n for n in g['nodes'] if n.get('type')=='Wan22ImageToVideoLatent')
+assert int(lat['widgets_values'][2])==49
+assert int(lat['widgets_values'][2])<241
+load=next(n for n in g['nodes'] if n.get('type')=='LoadImage')
+assert load['widgets_values'][0]=='example.png'
+assert load.get('mode')==0
+vhs=[n for n in g['nodes'] if n.get('type')=='VHS_VideoCombine']
+assert vhs
+loop=next(n for n in vhs if n.get('mode',0)==0)
+wv=loop['widgets_values']
+assert wv['format']=='image/gif'
+assert wv['pingpong'] is True
+assert int(wv['loop_count'])==0
+assert float(wv['frame_rate'])==12
+assert wv['save_output'] is True
+assert 'ez_gif_loop' in str(wv['filename_prefix'])
+enh=next(n for n in g['nodes'] if n.get('type')=='EZWanPromptEnhance')
+assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][2]=='i2v'
+motion=enh['widgets_values'][0].lower()
+assert 'locked' in motion or 'lock' in motion
+assert 'dolly' not in motion and 'walk' not in motion
+assert 'breeze' in motion or 'curtain' in motion or 'leaves' in motion
+"
+  [ "${status}" -eq 0 ]
+  run python3 -c "
+import json
+d=json.load(open('${dir}/dream-house-lab-example.json'))
+assert d.get('id')=='dream-house-lab-example'
+assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='flux-2-klein-4b-fp8.safetensors' for n in d['nodes'])
+assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1024, 1280] for n in d['nodes'])
+joins=[n for n in d['nodes'] if n.get('type')=='EZPromptJoin']
+assert len(joins)==10
+saves=[n for n in d['nodes'] if n.get('type')=='SaveImage']
+prefs=sorted(n['widgets_values'][0] for n in saves)
+assert prefs==[f'ez_dream_house_{i:02d}' for i in range(1,11)]
+samplers=[n for n in d['nodes'] if n.get('type')=='KSampler']
+assert len(samplers)==10
+assert all(n['widgets_values'][0]==42 and n['widgets_values'][2]==4 for n in samplers)
+enh=[n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance']
+assert len(enh)==1
+assert enh[0]['widgets_values'][1] is False
+ident=enh[0]['widgets_values'][0].lower()
+assert 'cedar' in ident and 'lake' in ident
+assert 'no logos, no text' not in ident
+"
+  [ "${status}" -eq 0 ]
+}
+
 @test "download-image default pack includes Klein 4B Apache companions" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/scripts/utilities/download-image.sh"

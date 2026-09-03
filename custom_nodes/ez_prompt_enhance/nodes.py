@@ -133,14 +133,55 @@ class EZLTXPromptEnhance:
         return _run(name, prompt, enhance, duration_hint, audio_notes)
 
 
+class EZPromptJoin:
+    """Join a shared identity paragraph with a shot-specific camera line."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "identity": (
+                    "STRING",
+                    {
+                        "multiline": True,
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                    },
+                ),
+                "shot": (
+                    "STRING",
+                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                ),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("prompt",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    DESCRIPTION = (
+        "Joins a shared identity paragraph with a shot-specific camera line "
+        "so one Queue can vary views without duplicating the subject bible."
+    )
+
+    def run(self, identity, shot):
+        a = (identity if isinstance(identity, str) else str(identity)).strip()
+        b = (shot if isinstance(shot, str) else str(shot)).strip()
+        if a and b:
+            return (f"{a} {b}",)
+        return (a or b,)
+
+
 NODE_CLASS_MAPPINGS = {
     "EZKleinPromptEnhance": EZKleinPromptEnhance,
     "EZWanPromptEnhance": EZWanPromptEnhance,
     "EZLTXPromptEnhance": EZLTXPromptEnhance,
+    "EZPromptJoin": EZPromptJoin,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "EZKleinPromptEnhance": "Klein Prompt Enhance",
     "EZWanPromptEnhance": "Wan Prompt Enhance",
     "EZLTXPromptEnhance": "LTX Prompt Enhance",
+    "EZPromptJoin": "Prompt Join",
 }

@@ -1,0 +1,3462 @@
+{
+  "id": "dream-house-lab-example",
+  "revision": 1,
+  "last_node_id": 59,
+  "last_link_id": 101,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        360,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            5,
+            15,
+            25,
+            35,
+            45,
+            55,
+            65,
+            75,
+            85,
+            95
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "default"
+      ],
+      "title": "Klein 4B distilled FP8"
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        212
+      ],
+      "size": [
+        360,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            1,
+            4,
+            14,
+            24,
+            34,
+            44,
+            54,
+            64,
+            74,
+            84,
+            94
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen_3_4b.safetensors",
+        "flux2",
+        "default"
+      ],
+      "title": "Qwen3-4B TE"
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        368
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            10,
+            20,
+            30,
+            40,
+            50,
+            60,
+            70,
+            80,
+            90,
+            100
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ],
+      "title": "Flux2 VAE"
+    },
+    {
+      "id": 4,
+      "type": "EZKleinPromptEnhance",
+      "pos": [
+        40,
+        480
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            2,
+            12,
+            22,
+            32,
+            42,
+            52,
+            62,
+            72,
+            82,
+            92
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZKleinPromptEnhance"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces.",
+        false,
+        "t2i",
+        "Instagram 4:5 still"
+      ],
+      "title": "HOUSE IDENTITY"
+    },
+    {
+      "id": 5,
+      "type": "CLIPTextEncode",
+      "pos": [
+        40,
+        800
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            7,
+            17,
+            27,
+            37,
+            47,
+            57,
+            67,
+            77,
+            87,
+            97
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative"
+    },
+    {
+      "id": 6,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        40,
+        960
+      ],
+      "size": [
+        280,
+        106
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8,
+            18,
+            28,
+            38,
+            48,
+            58,
+            68,
+            78,
+            88,
+            98
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        1024,
+        1280,
+        1
+      ],
+      "title": "Instagram 4:5 1024x1280"
+    },
+    {
+      "id": 7,
+      "type": "Note",
+      "pos": [
+        40,
+        1120
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset. All ten on is the carousel pack.\nDo not restyle the identity per shot \u2014 change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 10,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Golden-hour curb appeal from the gravel drive, 24mm at eye level, Instagram 4:5 portrait. Warm sidelight rakes the cedar. Empty drive."
+      ],
+      "title": "SHOT 01 curb appeal"
+    },
+    {
+      "id": 11,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        80
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 4
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 3,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Golden-hour curb appeal from the gravel drive, 24mm at eye level, Instagram 4:5 portrait. Warm sidelight rakes the cedar. Empty drive."
+      ],
+      "title": "Positive 01"
+    },
+    {
+      "id": 12,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        80
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 5
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 7
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 01"
+    },
+    {
+      "id": 13,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        80
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 01"
+    },
+    {
+      "id": 14,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        80
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 11
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_01"
+      ],
+      "title": "Save 01"
+    },
+    {
+      "id": 15,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        440
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Front entry with a tall black-framed glass door, 35mm, Instagram 4:5. Soft morning light on cedar and stone. Empty porch, unmarked door."
+      ],
+      "title": "SHOT 02 entry"
+    },
+    {
+      "id": 16,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        440
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 14
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 13,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            16
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Front entry with a tall black-framed glass door, 35mm, Instagram 4:5. Soft morning light on cedar and stone. Empty porch, unmarked door."
+      ],
+      "title": "Positive 02"
+    },
+    {
+      "id": 17,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        440
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 15
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 16
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 17
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 02"
+    },
+    {
+      "id": 18,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        440
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 28,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 19
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            21
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 02"
+    },
+    {
+      "id": 19,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        440
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 29,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 21
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_02"
+      ],
+      "title": "Save 02"
+    },
+    {
+      "id": 20,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        800
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            23
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Living room looking through the glass wall toward the still lake, 24mm, Instagram 4:5. Oak floors, linen sofa, late-day sun. Empty of occupants."
+      ],
+      "title": "SHOT 03 living room"
+    },
+    {
+      "id": 21,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        800
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 24
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 23,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            26
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Living room looking through the glass wall toward the still lake, 24mm, Instagram 4:5. Oak floors, linen sofa, late-day sun. Empty of occupants."
+      ],
+      "title": "Positive 03"
+    },
+    {
+      "id": 22,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        800
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 25
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 26
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 27
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 28
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            29
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 03"
+    },
+    {
+      "id": 23,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        800
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 29
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 30
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            31
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 03"
+    },
+    {
+      "id": 24,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        800
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 31
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_03"
+      ],
+      "title": "Save 03"
+    },
+    {
+      "id": 25,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        1160
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 32
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            33
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Kitchen island in pale stone, morning sidelight, 35mm, Instagram 4:5. Cedar cabinets, black hardware, unmarked surfaces."
+      ],
+      "title": "SHOT 04 kitchen"
+    },
+    {
+      "id": 26,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        1160
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 34
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 33,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            36
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Kitchen island in pale stone, morning sidelight, 35mm, Instagram 4:5. Cedar cabinets, black hardware, unmarked surfaces."
+      ],
+      "title": "Positive 04"
+    },
+    {
+      "id": 27,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        1160
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 35
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 36
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 37
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 38
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            39
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 04"
+    },
+    {
+      "id": 28,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        1160
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 38,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 39
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 40
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            41
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 04"
+    },
+    {
+      "id": 29,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        1160
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 39,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 41
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_04"
+      ],
+      "title": "Save 04"
+    },
+    {
+      "id": 30,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        1520
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 42
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            43
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Dining table by the window at evening, lamps lit, 35mm, Instagram 4:5. Oak table, simple ceramic, lake twilight beyond the glass."
+      ],
+      "title": "SHOT 05 dining"
+    },
+    {
+      "id": 31,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        1520
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 41,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 44
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 43,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            46
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Dining table by the window at evening, lamps lit, 35mm, Instagram 4:5. Oak table, simple ceramic, lake twilight beyond the glass."
+      ],
+      "title": "Positive 05"
+    },
+    {
+      "id": 32,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        1520
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 42,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 45
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 46
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 47
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 48
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            49
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 05"
+    },
+    {
+      "id": 33,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        1520
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 43,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 49
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 50
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            51
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 05"
+    },
+    {
+      "id": 34,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        1520
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 44,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 51
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_05"
+      ],
+      "title": "Save 05"
+    },
+    {
+      "id": 35,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        1880
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 45,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 52
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            53
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Primary bedroom with linen bedding and a lake window, 35mm, Instagram 4:5. Soft dawn light, cedar wall, solitary room."
+      ],
+      "title": "SHOT 06 bedroom"
+    },
+    {
+      "id": 36,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        1880
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 46,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 54
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 53,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            56
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Primary bedroom with linen bedding and a lake window, 35mm, Instagram 4:5. Soft dawn light, cedar wall, solitary room."
+      ],
+      "title": "Positive 06"
+    },
+    {
+      "id": 37,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        1880
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 47,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 55
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 56
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 57
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 58
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            59
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 06"
+    },
+    {
+      "id": 38,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        1880
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 48,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 59
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 60
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            61
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 06"
+    },
+    {
+      "id": 39,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        1880
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 49,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 61
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_06"
+      ],
+      "title": "Save 06"
+    },
+    {
+      "id": 40,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        2240
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 50,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 62
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            63
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Spa bath in pale stone and cedar, 35mm, Instagram 4:5. A freestanding tub faces frosted glass. Quiet, unmarked fixtures."
+      ],
+      "title": "SHOT 07 bath"
+    },
+    {
+      "id": 41,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        2240
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 51,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 64
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 63,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            66
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Spa bath in pale stone and cedar, 35mm, Instagram 4:5. A freestanding tub faces frosted glass. Quiet, unmarked fixtures."
+      ],
+      "title": "Positive 07"
+    },
+    {
+      "id": 42,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        2240
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 52,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 65
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 66
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 67
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 68
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            69
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 07"
+    },
+    {
+      "id": 43,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        2240
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 53,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 69
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 70
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            71
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 07"
+    },
+    {
+      "id": 44,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        2240
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 54,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 71
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_07"
+      ],
+      "title": "Save 07"
+    },
+    {
+      "id": 45,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        2600
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 55,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 72
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            73
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Lakeside deck at dusk, 24mm, Instagram 4:5. Cedar boards, simple chairs, still water, evergreen ridge."
+      ],
+      "title": "SHOT 08 deck"
+    },
+    {
+      "id": 46,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        2600
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 56,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 74
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 73,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            76
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Lakeside deck at dusk, 24mm, Instagram 4:5. Cedar boards, simple chairs, still water, evergreen ridge."
+      ],
+      "title": "Positive 08"
+    },
+    {
+      "id": 47,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        2600
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 57,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 75
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 76
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 77
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 78
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            79
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 08"
+    },
+    {
+      "id": 48,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        2600
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 58,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 79
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 80
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            81
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 08"
+    },
+    {
+      "id": 49,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        2600
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 59,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 81
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_08"
+      ],
+      "title": "Save 08"
+    },
+    {
+      "id": 50,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        2960
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 60,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 82
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            83
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Twilight exterior, interior lamps glowing through black-framed glass, 24mm, Instagram 4:5. Solitary house on the lake."
+      ],
+      "title": "SHOT 09 twilight"
+    },
+    {
+      "id": 51,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        2960
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 61,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 84
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 83,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            86
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Twilight exterior, interior lamps glowing through black-framed glass, 24mm, Instagram 4:5. Solitary house on the lake."
+      ],
+      "title": "Positive 09"
+    },
+    {
+      "id": 52,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        2960
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 62,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 85
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 86
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 87
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 88
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            89
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 09"
+    },
+    {
+      "id": 53,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        2960
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 63,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 89
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 90
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            91
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 09"
+    },
+    {
+      "id": 54,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        2960
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 64,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 91
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_09"
+      ],
+      "title": "Save 09"
+    },
+    {
+      "id": 55,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        3320
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 65,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 92
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            93
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Elevated wide view of the property from the ridge, 24mm, Instagram 4:5. The cedar-and-glass house sits above the still lake among evergreens."
+      ],
+      "title": "SHOT 10 ridge view"
+    },
+    {
+      "id": 56,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        3320
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 66,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 94
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 93,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            96
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Elevated wide view of the property from the ridge, 24mm, Instagram 4:5. The cedar-and-glass house sits above the still lake among evergreens."
+      ],
+      "title": "Positive 10"
+    },
+    {
+      "id": 57,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        3320
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 67,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 95
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 96
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 97
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 98
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            99
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 10"
+    },
+    {
+      "id": 58,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        3320
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 68,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 99
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 100
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            101
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 10"
+    },
+    {
+      "id": 59,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        3320
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 69,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 101
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_10"
+      ],
+      "title": "Save 10"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      2,
+      4,
+      0,
+      10,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      10,
+      0,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      4,
+      2,
+      0,
+      11,
+      0,
+      "CLIP"
+    ],
+    [
+      5,
+      1,
+      0,
+      12,
+      0,
+      "MODEL"
+    ],
+    [
+      6,
+      11,
+      0,
+      12,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      5,
+      0,
+      12,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      6,
+      0,
+      12,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      12,
+      0,
+      13,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      3,
+      0,
+      13,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      13,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      4,
+      0,
+      15,
+      0,
+      "STRING"
+    ],
+    [
+      13,
+      15,
+      0,
+      16,
+      1,
+      "STRING"
+    ],
+    [
+      14,
+      2,
+      0,
+      16,
+      0,
+      "CLIP"
+    ],
+    [
+      15,
+      1,
+      0,
+      17,
+      0,
+      "MODEL"
+    ],
+    [
+      16,
+      16,
+      0,
+      17,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      17,
+      5,
+      0,
+      17,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      18,
+      6,
+      0,
+      17,
+      3,
+      "LATENT"
+    ],
+    [
+      19,
+      17,
+      0,
+      18,
+      0,
+      "LATENT"
+    ],
+    [
+      20,
+      3,
+      0,
+      18,
+      1,
+      "VAE"
+    ],
+    [
+      21,
+      18,
+      0,
+      19,
+      0,
+      "IMAGE"
+    ],
+    [
+      22,
+      4,
+      0,
+      20,
+      0,
+      "STRING"
+    ],
+    [
+      23,
+      20,
+      0,
+      21,
+      1,
+      "STRING"
+    ],
+    [
+      24,
+      2,
+      0,
+      21,
+      0,
+      "CLIP"
+    ],
+    [
+      25,
+      1,
+      0,
+      22,
+      0,
+      "MODEL"
+    ],
+    [
+      26,
+      21,
+      0,
+      22,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      27,
+      5,
+      0,
+      22,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      28,
+      6,
+      0,
+      22,
+      3,
+      "LATENT"
+    ],
+    [
+      29,
+      22,
+      0,
+      23,
+      0,
+      "LATENT"
+    ],
+    [
+      30,
+      3,
+      0,
+      23,
+      1,
+      "VAE"
+    ],
+    [
+      31,
+      23,
+      0,
+      24,
+      0,
+      "IMAGE"
+    ],
+    [
+      32,
+      4,
+      0,
+      25,
+      0,
+      "STRING"
+    ],
+    [
+      33,
+      25,
+      0,
+      26,
+      1,
+      "STRING"
+    ],
+    [
+      34,
+      2,
+      0,
+      26,
+      0,
+      "CLIP"
+    ],
+    [
+      35,
+      1,
+      0,
+      27,
+      0,
+      "MODEL"
+    ],
+    [
+      36,
+      26,
+      0,
+      27,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      37,
+      5,
+      0,
+      27,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      38,
+      6,
+      0,
+      27,
+      3,
+      "LATENT"
+    ],
+    [
+      39,
+      27,
+      0,
+      28,
+      0,
+      "LATENT"
+    ],
+    [
+      40,
+      3,
+      0,
+      28,
+      1,
+      "VAE"
+    ],
+    [
+      41,
+      28,
+      0,
+      29,
+      0,
+      "IMAGE"
+    ],
+    [
+      42,
+      4,
+      0,
+      30,
+      0,
+      "STRING"
+    ],
+    [
+      43,
+      30,
+      0,
+      31,
+      1,
+      "STRING"
+    ],
+    [
+      44,
+      2,
+      0,
+      31,
+      0,
+      "CLIP"
+    ],
+    [
+      45,
+      1,
+      0,
+      32,
+      0,
+      "MODEL"
+    ],
+    [
+      46,
+      31,
+      0,
+      32,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      47,
+      5,
+      0,
+      32,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      48,
+      6,
+      0,
+      32,
+      3,
+      "LATENT"
+    ],
+    [
+      49,
+      32,
+      0,
+      33,
+      0,
+      "LATENT"
+    ],
+    [
+      50,
+      3,
+      0,
+      33,
+      1,
+      "VAE"
+    ],
+    [
+      51,
+      33,
+      0,
+      34,
+      0,
+      "IMAGE"
+    ],
+    [
+      52,
+      4,
+      0,
+      35,
+      0,
+      "STRING"
+    ],
+    [
+      53,
+      35,
+      0,
+      36,
+      1,
+      "STRING"
+    ],
+    [
+      54,
+      2,
+      0,
+      36,
+      0,
+      "CLIP"
+    ],
+    [
+      55,
+      1,
+      0,
+      37,
+      0,
+      "MODEL"
+    ],
+    [
+      56,
+      36,
+      0,
+      37,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      57,
+      5,
+      0,
+      37,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      58,
+      6,
+      0,
+      37,
+      3,
+      "LATENT"
+    ],
+    [
+      59,
+      37,
+      0,
+      38,
+      0,
+      "LATENT"
+    ],
+    [
+      60,
+      3,
+      0,
+      38,
+      1,
+      "VAE"
+    ],
+    [
+      61,
+      38,
+      0,
+      39,
+      0,
+      "IMAGE"
+    ],
+    [
+      62,
+      4,
+      0,
+      40,
+      0,
+      "STRING"
+    ],
+    [
+      63,
+      40,
+      0,
+      41,
+      1,
+      "STRING"
+    ],
+    [
+      64,
+      2,
+      0,
+      41,
+      0,
+      "CLIP"
+    ],
+    [
+      65,
+      1,
+      0,
+      42,
+      0,
+      "MODEL"
+    ],
+    [
+      66,
+      41,
+      0,
+      42,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      67,
+      5,
+      0,
+      42,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      68,
+      6,
+      0,
+      42,
+      3,
+      "LATENT"
+    ],
+    [
+      69,
+      42,
+      0,
+      43,
+      0,
+      "LATENT"
+    ],
+    [
+      70,
+      3,
+      0,
+      43,
+      1,
+      "VAE"
+    ],
+    [
+      71,
+      43,
+      0,
+      44,
+      0,
+      "IMAGE"
+    ],
+    [
+      72,
+      4,
+      0,
+      45,
+      0,
+      "STRING"
+    ],
+    [
+      73,
+      45,
+      0,
+      46,
+      1,
+      "STRING"
+    ],
+    [
+      74,
+      2,
+      0,
+      46,
+      0,
+      "CLIP"
+    ],
+    [
+      75,
+      1,
+      0,
+      47,
+      0,
+      "MODEL"
+    ],
+    [
+      76,
+      46,
+      0,
+      47,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      77,
+      5,
+      0,
+      47,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      78,
+      6,
+      0,
+      47,
+      3,
+      "LATENT"
+    ],
+    [
+      79,
+      47,
+      0,
+      48,
+      0,
+      "LATENT"
+    ],
+    [
+      80,
+      3,
+      0,
+      48,
+      1,
+      "VAE"
+    ],
+    [
+      81,
+      48,
+      0,
+      49,
+      0,
+      "IMAGE"
+    ],
+    [
+      82,
+      4,
+      0,
+      50,
+      0,
+      "STRING"
+    ],
+    [
+      83,
+      50,
+      0,
+      51,
+      1,
+      "STRING"
+    ],
+    [
+      84,
+      2,
+      0,
+      51,
+      0,
+      "CLIP"
+    ],
+    [
+      85,
+      1,
+      0,
+      52,
+      0,
+      "MODEL"
+    ],
+    [
+      86,
+      51,
+      0,
+      52,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      87,
+      5,
+      0,
+      52,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      88,
+      6,
+      0,
+      52,
+      3,
+      "LATENT"
+    ],
+    [
+      89,
+      52,
+      0,
+      53,
+      0,
+      "LATENT"
+    ],
+    [
+      90,
+      3,
+      0,
+      53,
+      1,
+      "VAE"
+    ],
+    [
+      91,
+      53,
+      0,
+      54,
+      0,
+      "IMAGE"
+    ],
+    [
+      92,
+      4,
+      0,
+      55,
+      0,
+      "STRING"
+    ],
+    [
+      93,
+      55,
+      0,
+      56,
+      1,
+      "STRING"
+    ],
+    [
+      94,
+      2,
+      0,
+      56,
+      0,
+      "CLIP"
+    ],
+    [
+      95,
+      1,
+      0,
+      57,
+      0,
+      "MODEL"
+    ],
+    [
+      96,
+      56,
+      0,
+      57,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      97,
+      5,
+      0,
+      57,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      98,
+      6,
+      0,
+      57,
+      3,
+      "LATENT"
+    ],
+    [
+      99,
+      57,
+      0,
+      58,
+      0,
+      "LATENT"
+    ],
+    [
+      100,
+      3,
+      0,
+      58,
+      1,
+      "VAE"
+    ],
+    [
+      101,
+      58,
+      0,
+      59,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        40,
+        430,
+        430
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "HOUSE IDENTITY",
+      "bounding": [
+        20,
+        450,
+        460,
+        340
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 10,
+      "title": "SHOT 01 curb appeal",
+      "bounding": [
+        500,
+        60,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 11,
+      "title": "SHOT 02 entry",
+      "bounding": [
+        500,
+        420,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 12,
+      "title": "SHOT 03 living room",
+      "bounding": [
+        500,
+        780,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 13,
+      "title": "SHOT 04 kitchen",
+      "bounding": [
+        500,
+        1140,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 14,
+      "title": "SHOT 05 dining",
+      "bounding": [
+        500,
+        1500,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 15,
+      "title": "SHOT 06 bedroom",
+      "bounding": [
+        500,
+        1860,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 16,
+      "title": "SHOT 07 bath",
+      "bounding": [
+        500,
+        2220,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 17,
+      "title": "SHOT 08 deck",
+      "bounding": [
+        500,
+        2580,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 18,
+      "title": "SHOT 09 twilight",
+      "bounding": [
+        500,
+        2940,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 19,
+      "title": "SHOT 10 ridge view",
+      "bounding": [
+        500,
+        3300,
+        1840,
+        340
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "dream-house-lab-example",
+    "lab_flux_tier": "fast",
+    "lab_note": "## dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset. All ten on is the carousel pack.\nDo not restyle the identity per shot \u2014 change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n",
+    "lab_description": "Ten Instagram 4:5 Klein stills of one lake house",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

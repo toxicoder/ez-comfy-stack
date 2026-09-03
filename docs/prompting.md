@@ -10,6 +10,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 - How each lab model actually reads a prompt
 - Canned lab-example text (already rewritten)
+- GIF loop motion and dream-house identity (Prompt Join)
 - Lazy path: Prompt Enhance nodes + `XAI_API_KEY`
 
 **What this enables**
@@ -56,6 +57,14 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     The start image owns look. Prompt only motion and camera. Keep identity locked. Lab I2V graphs no longer encode a separate look CLIP into the sampler.
 
+=== "Looping GIF (Wan I2V)"
+
+    Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do **not** prompt a walk or a one-way dolly — **gif-loop-lab-example** plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.
+
+=== "Dream-house pack (Klein)"
+
+    One identity paragraph (materials, architecture, place) plus a short camera line per shot. **dream-house-lab-example** uses **Prompt Join** so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.
+
 === "LTX-2.5 AV"
 
     Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged.
@@ -68,9 +77,10 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 
 | Node | Modes | Use on |
 | --- | --- | --- |
-| **Klein Prompt Enhance** | `t2i`, `edit` | still-draft / still-hero / 90s identity |
-| **Wan Prompt Enhance** | `t2v`, `i2v` | wan-*-lab-example, bridge-wan |
+| **Klein Prompt Enhance** | `t2i`, `edit` | still-draft / still-hero / still-app / dream-house identity / 90s identity |
+| **Wan Prompt Enhance** | `t2v`, `i2v` | wan-*-lab-example, gif-loop, bridge-wan |
 | **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-*-lab-example, bridge-ltx |
+| **Prompt Join** | identity + shot → one STRING | dream-house shot cards |
 
 STRING out → CLIPTextEncode `text` input.
 
