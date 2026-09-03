@@ -281,9 +281,7 @@ def test_bible_graphs_are_unified_klein_plus_ltx() -> None:
         latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
         assert latent["widgets_values"][0] == 1280
         assert latent["widgets_values"][1] == 720
-        ltx_len = next(
-            n["widgets_values"][2]
-            for n in graph["nodes"]
-            if n.get("type") == "LTXVImgToVideo"
-        )
-        assert ltx_len == 120
+        ltx = next(n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo")
+        assert ltx["widgets_values"][0] == 1280
+        assert ltx["widgets_values"][1] == 704
+        assert ltx["widgets_values"][2] == 120
