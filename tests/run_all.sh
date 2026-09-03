@@ -68,10 +68,10 @@ else
 fi
 
 echo "==> Python"
-export PYTHONPATH="${ROOT}/docker${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH="${ROOT}/docker:${ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}"
 if python3 -c 'import pytest, pytest_cov' 2>/dev/null; then
   python3 -m pytest tests/python -q --cov=patch_get_free_memory \
-    --cov-report=term-missing --cov-fail-under=100
+    --cov=ez_ltx_spatial --cov-report=term-missing --cov-fail-under=100
 else
   python3 -m pytest tests/python -q
 fi

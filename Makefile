@@ -39,7 +39,7 @@ bats:
 
 # @target python — patch module unit tests with 100% coverage fail-under
 python:
-	PYTHONPATH=docker python3 -m pytest tests/python -q --cov=patch_get_free_memory --cov-fail-under=100
+	PYTHONPATH=docker:custom_nodes python3 -m pytest tests/python -q --cov=patch_get_free_memory --cov=ez_ltx_spatial --cov-fail-under=100
 
 # @target coverage — Python 100% + shell function inventory + BATS
 coverage:
