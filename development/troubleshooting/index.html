@@ -1620,6 +1620,11 @@
 <td>After Queue the Enhance node shows <code>[passthrough: …]</code>. Run <code>download-models</code> (needs <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). Rebuild the image if llama-cpp-python failed to install. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 60s (<code>EZ_LLM_TIMEOUT_S</code>). Turn Enhance <strong>off</strong> to pin the widget text</td>
 </tr>
 <tr>
+<td>Style selected but rewrite still photoreal / still names the old medium</td>
+<td>Enhance off, style <code>none</code>, I2V mode (style ignored), or GGUF passthrough skipped the weave</td>
+<td>Confirm <strong>Enhance</strong> is on, <strong>style</strong> is not <code>none</code>, and mode is t2i / t2v / Klein edit (not I2V). Read the node preview after Queue. If you see <code>[passthrough: …]</code>, fix the GGUF path first — passthrough keeps the widget text. The dropdown retunes existing style language; it does not stack a second style</td>
+</tr>
+<tr>
 <td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
 <td>Shot 01 identity plate bypassed, or old independent T2I graph</td>
 <td>Queue the whole graph; do <strong>not</strong> bypass SHOT 01 / KEY / DUSK / MEDIUM / WARM / BEFORE / CURB on a cold canvas. 02–N Klein-edit from 01 via <code>VAEEncode</code> + <code>ReferenceLatent</code></td>
