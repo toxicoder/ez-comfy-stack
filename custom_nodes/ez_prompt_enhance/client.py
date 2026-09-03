@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
@@ -50,6 +51,24 @@ _LLM_PATH = ""
 _STYLES: dict[str, dict[str, Any]] | None = None
 
 _STYLE_LOOK_FIELDS = ("medium", "light", "color", "texture", "camera")
+_LAB_LOOK_PHRASES = (
+    "HD 3D game-engine pre-rendered cutscene still",
+    "HD 3D game-engine pre-rendered cutscene",
+    "3D game-engine pre-rendered cutscene still",
+    "3D game-engine pre-rendered cutscene",
+    "game-engine pre-rendered cutscene",
+    "game-engine pre-rendered",
+    "game-engine",
+)
+STYLE_SYSTEM_ADDENDUM = (
+    "The user message contains a Visual style block. That style is the only look. "
+    "Rewrite the whole prompt as that medium. Drop any other medium, 3D-render, "
+    "photoreal, or lens language that fights it. Output only the CLIP prompt."
+)
+_THINK_BLOCKS = (
+    re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE),
+    re.compile(r"<\|think\|>.*?<\|/think\|>", re.DOTALL | re.IGNORECASE),
+)
 _WEAVE_BY_FLAVOR = {
     FLAVOR_KLEIN: (
         "Front-load the subject, then state this medium in the first two sentences. "
@@ -206,6 +225,98 @@ def style_suffix(style_id: str) -> str:
     return str(entry.get("suffix") or "").strip()
 
 
+def with_style_system(system: str, style_id: str) -> str:
+    """Append the dropdown-wins addendum when a style is selected."""
+    if style_id == STYLE_NONE:
+        return system
+    return f"{system.rstrip()}\n\n{STYLE_SYSTEM_ADDENDUM}"
+
+
+def _collapse_spaces(text: str) -> str:
+    cleaned = re.sub(r"[ \t]+", " ", text)
+    cleaned = re.sub(r" +([,.;:])", r"\1", cleaned)
+    cleaned = re.sub(r"\s+\n", "\n", cleaned)
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
+    return cleaned.strip()
+
+
+def _drop_phrase(text: str, phrase: str) -> str:
+    token = (phrase or "").strip()
+    if len(token) < 5:
+        return text
+    pattern = re.compile(re.escape(token), re.IGNORECASE)
+    return pattern.sub("", text)
+
+
+def _own_look_blob(style_id: str) -> str:
+    entry = _style_entry(style_id)
+    parts = [str(entry.get(field) or "") for field in _STYLE_LOOK_FIELDS]
+    parts.extend(style_must_include(style_id))
+    parts.append(style_suffix(style_id))
+    return " ".join(parts).lower()
+
+
+def _strip_phrases(style_id: str) -> list[str]:
+    own = _own_look_blob(style_id)
+    phrases = list(style_conflicts(style_id))
+    for extra in _LAB_LOOK_PHRASES:
+        if extra.lower() not in own:
+            phrases.append(extra)
+    for sid, other in load_styles().items():
+        if sid == style_id:
+            continue
+        head = str(other.get("medium") or "").split(".")[0].strip()
+        if len(head) >= 8 and head.lower() not in own:
+            phrases.append(head)
+        for item in _string_list(other, "must_include"):
+            if len(item) >= 8 and item.lower() not in own:
+                phrases.append(item)
+    phrases.sort(key=len, reverse=True)
+    return phrases
+
+
+def apply_style_to_prompt(text: str, style_id: str) -> str:
+    """Force the dropdown style into CLIP text: strip fights, front-load medium.
+
+    Arguments:
+      text: rewriter or source prompt
+      style_id: catalog id or none
+    Returns:
+      text unchanged when style is none; otherwise a restyled CLIP prompt.
+    """
+    if style_id == STYLE_NONE:
+        return text
+    entry = _style_entry(style_id)
+    if not entry:
+        return text
+    body = (text or "").strip()
+    for phrase in _strip_phrases(style_id):
+        body = _drop_phrase(body, phrase)
+    body = _collapse_spaces(body)
+    medium = str(entry.get("medium") or "").strip().rstrip(".")
+    light = str(entry.get("light") or "").strip().rstrip(".")
+    heads: list[str] = []
+    if medium and medium.lower() not in body.lower():
+        heads.append(medium)
+    if light and light.lower() not in body.lower():
+        heads.append(light)
+    if heads:
+        lead = ". ".join(heads) + "."
+        body = f"{lead} {body}".strip() if body else lead
+    for phrase in style_must_include(style_id):
+        if phrase.lower() not in body.lower():
+            body = f"{body} {phrase}." if body else f"{phrase}."
+    suffix = style_suffix(style_id)
+    if suffix and suffix.rstrip(".").lower() not in body.lower():
+        body = f"{body} {suffix}".strip() if body else suffix
+    return _collapse_spaces(body)
+
+
+def ensure_style_details(text: str, style_id: str) -> str:
+    """Apply the selected style to CLIP text (alias of apply_style_to_prompt)."""
+    return apply_style_to_prompt(text, style_id)
+
+
 def flavor_for_system(name: str) -> str:
     """Map a system-prompt stem to a style-instruction flavor."""
     if name == "klein_edit":
@@ -258,36 +369,12 @@ def format_style_instruction(style_id: str, flavor: str) -> str:
     return "\n".join(lines)
 
 
-def ensure_style_details(text: str, style_id: str) -> str:
-    """Append the style suffix when the rewrite omitted every must_include phrase.
-
-    Arguments:
-      text: CLIP prompt from the rewriter
-      style_id: catalog id or none
-    Returns:
-      text unchanged when any must_include phrase is present; otherwise
-      text plus suffix.
-    """
-    if style_id == STYLE_NONE:
-        return text
-    must = style_must_include(style_id)
-    if not must:
-        return text
-    lowered = text.lower()
-    if any(phrase.lower() in lowered for phrase in must):
-        return text
-    suffix = style_suffix(style_id)
-    if not suffix:
-        return text
-    base = text.rstrip()
-    if not base:
-        return suffix
-    return f"{base} {suffix}"
-
-
 def strip_model_wrapping(text: str) -> str:
-    """Remove markdown fences or wrapping quotes from a model reply."""
+    """Remove think tags, markdown fences, or wrapping quotes from a model reply."""
     cleaned = (text or "").strip()
+    for pattern in _THINK_BLOCKS:
+        cleaned = pattern.sub("", cleaned)
+    cleaned = cleaned.strip()
     if cleaned.startswith("```"):
         lines = cleaned.splitlines()
         if lines and lines[0].startswith("```"):
