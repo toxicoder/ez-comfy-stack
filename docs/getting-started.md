@@ -12,7 +12,7 @@ tags: [getting-started, docker, comfyui]
 - Prerequisites checklist
 - Setup, doctor, download, start, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- Example workflows, 90s shorts, [model-native prompting](prompting.md), watching LTX MP4, and host `COMFY_OUTPUT_DIR`
+- Example workflows, operator apps (still / GIF / dream house), 90s shorts, [model-native prompting](prompting.md), watching LTX MP4, and host `COMFY_OUTPUT_DIR`
 - Optional deep-dives
 
 **What this enables**
@@ -291,6 +291,14 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **ltx-i2v-hero-lab-example** | ~5 s I2V with native audio (Community License, $10M cap) |
     | **ltx-t2v-hero-lab-example** | ~5 s T2V AV |
 
+=== "Apps (still / GIF / IG)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **still-app-lab-example** | Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix `ez_still_app` |
+    | **gif-loop-lab-example** | Wan 5B I2V GIF (49 frames @ 12 fps). **Ping-pong ON** so first and last frames meet for infinite looping. Prefix `ez_gif_loop` |
+    | **dream-house-lab-example** | Ten Instagram 4:5 stills of one lake house. Edit **HOUSE IDENTITY** once; Queue writes `ez_dream_house_01`…`10` |
+
 === "90s shorts"
 
     | Workflow | What it does |
@@ -305,7 +313,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).
 
-Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS.
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; **gif-loop-lab-example** emits `image/gif`.
 
 ### Iteration loop (YouTube 16:9)
 
@@ -317,6 +325,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
 4. Optional audio: **ltx-i2v-hero-lab-example**, same first frame, same seed note, Queue ~5 s AV.
 5. Short six-shot demo: Queue **wan-shot-lab-example** six times (`ez_shot_01` … `06`) then `./scripts/utilities/concat-shots.sh --dir /mnt/comfy-output --yes`.
 6. **90s films** (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then `./scripts/utilities/concat-shots.sh --film go-see --yes`. See [90s shorts](shorts.md).
+7. Daily still / GIF / IG pack: **still-app-lab-example** → optional **gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **dream-house-lab-example** for a 10-photo carousel.
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes.
 

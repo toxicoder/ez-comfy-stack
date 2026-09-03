@@ -19,6 +19,7 @@ from ez_prompt_enhance import client  # noqa: E402
 from ez_prompt_enhance.nodes import (  # noqa: E402
     EZKleinPromptEnhance,
     EZLTXPromptEnhance,
+    EZPromptJoin,
     EZWanPromptEnhance,
     NODE_CLASS_MAPPINGS,
 )
@@ -148,11 +149,42 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
     )
 
 
+def test_ez_prompt_join_identity_and_shot() -> None:
+    join = EZPromptJoin()
+    assert join.run("Cedar house on a still lake.", "Golden-hour facade, 24mm.") == (
+        "Cedar house on a still lake. Golden-hour facade, 24mm.",
+    )
+    assert join.run("  House.  ", "  Dusk deck.  ") == ("House. Dusk deck.",)
+    assert join.run("Identity only.", "") == ("Identity only.",)
+    assert join.run("", "Shot only.") == ("Shot only.",)
+    assert join.run("  ", "  ") == ("",)
+
+
+def test_app_lab_graphs_wire_join_and_enhance() -> None:
+    wf = ROOT / "workflows"
+    still = json.loads((wf / "still-app-lab-example.json").read_text(encoding="utf-8"))
+    gif = json.loads((wf / "gif-loop-lab-example.json").read_text(encoding="utf-8"))
+    house = json.loads((wf / "dream-house-lab-example.json").read_text(encoding="utf-8"))
+    klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+    assert klein["widgets_values"][1] is False
+    assert "photoreal still photograph" in klein["widgets_values"][0]
+    wan = next(n for n in gif["nodes"] if n.get("type") == "EZWanPromptEnhance")
+    assert wan["widgets_values"][2] == "i2v"
+    motion = wan["widgets_values"][0].lower()
+    assert "dolly" not in motion
+    assert "walk" not in motion
+    ident = next(n for n in house["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+    assert "cedar" in ident["widgets_values"][0].lower()
+    assert ident["widgets_values"][3] == "Instagram 4:5 still"
+    assert sum(1 for n in house["nodes"] if n.get("type") == "EZPromptJoin") == 10
+
+
 def test_node_mappings_and_modes() -> None:
     assert set(NODE_CLASS_MAPPINGS) == {
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
+        "EZPromptJoin",
     }
     klein = EZKleinPromptEnhance()
     wan = EZWanPromptEnhance()
