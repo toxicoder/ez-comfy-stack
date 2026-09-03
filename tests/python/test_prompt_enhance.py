@@ -174,9 +174,65 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert "dolly" not in motion
     assert "walk" not in motion
     ident = next(n for n in house["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert "cedar" in ident["widgets_values"][0].lower()
+    ident_text = ident["widgets_values"][0]
+    ident_l = ident_text.lower()
+    assert "cedar" in ident_l
+    assert "lake" in ident_l
+    assert "compact" in ident_l
+    assert "single-story" in ident_l
+    assert "hip" in ident_l
+    assert "chimney" in ident_l
+    assert "two-bay" in ident_l
+    assert "decks" in ident_l
+    assert "gravel" in ident_l
+    assert "no logos, no text" not in ident_text
+    assert ident["widgets_values"][1] is False
+    assert ident["widgets_values"][2] == "t2i"
     assert ident["widgets_values"][3] == "Instagram 4:5 still"
-    assert sum(1 for n in house["nodes"] if n.get("type") == "EZPromptJoin") == 10
+    joins = [n for n in house["nodes"] if n.get("type") == "EZPromptJoin"]
+    assert len(joins) == 10
+    positives = {
+        n["title"]: n["widgets_values"][0]
+        for n in house["nodes"]
+        if n.get("type") == "CLIPTextEncode" and str(n.get("title", "")).startswith("Positive")
+    }
+    banned = (
+        "pier",
+        "courtyard",
+        "pavilion",
+        "two-story",
+        "a-frame",
+        "glass box",
+        "outdoor kitchen",
+        "outdoor tub",
+    )
+    for join in sorted(joins, key=lambda n: n["id"]):
+        shot = join["widgets_values"][0]
+        assert "same" in shot.lower() and "cabin" in shot.lower()
+        joined = f"{ident_text} {shot}"
+        assert len(joined.split()) <= 155
+        title = join.get("title") or ""
+        if any(k in title for k in ("03", "04", "05", "06", "07")):
+            assert shot.startswith("Photographed from inside")
+        assert not any(b in shot.lower() for b in banned)
+    for text in positives.values():
+        assert text.startswith(ident_text)
+        assert len(text.split()) <= 155
+    assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 1
+    assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 10
+    by_id = {n["id"]: n for n in house["nodes"]}
+    incoming: dict[tuple[int, int], list] = {}
+    for link in house["links"]:
+        incoming.setdefault((link[3], link[4]), []).append(link)
+    for i in range(10):
+        ks_id = 12 + i * 5
+        pos_src = by_id[incoming[(ks_id, 1)][0][1]]["type"]
+        lat_src = by_id[incoming[(ks_id, 3)][0][1]]["type"]
+        assert lat_src == "EmptyFlux2LatentImage"
+        if i == 0:
+            assert pos_src == "CLIPTextEncode"
+        else:
+            assert pos_src == "ReferenceLatent"
 
 
 def test_node_mappings_and_modes() -> None:

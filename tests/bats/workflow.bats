@@ -466,7 +466,10 @@ assert 'breeze' in motion or 'curtain' in motion or 'leaves' in motion
 import json
 d=json.load(open('${dir}/klein-dream-house-lab-example.json'))
 assert d.get('id')=='klein-dream-house-lab-example'
+assert d.get('extra',{}).get('lab_flux_tier')=='fast'
 assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='flux-2-klein-4b-fp8.safetensors' for n in d['nodes'])
+assert any(n.get('type')=='CLIPLoader' and 'qwen_3_4b.safetensors' in n['widgets_values'] and 'flux2' in n['widgets_values'] for n in d['nodes'])
+assert any(n.get('type')=='VAELoader' and n['widgets_values'][0]=='flux2-vae.safetensors' for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1024, 1280] for n in d['nodes'])
 joins=[n for n in d['nodes'] if n.get('type')=='EZPromptJoin']
 assert len(joins)==10
@@ -475,13 +478,56 @@ prefs=sorted(n['widgets_values'][0] for n in saves)
 assert prefs==[f'ez_dream_house_{i:02d}' for i in range(1,11)]
 samplers=[n for n in d['nodes'] if n.get('type')=='KSampler']
 assert len(samplers)==10
-assert all(n['widgets_values'][0]==42 and n['widgets_values'][2]==4 for n in samplers)
+assert all(
+    n['widgets_values'][0]==42
+    and n['widgets_values'][1]=='fixed'
+    and n['widgets_values'][2]==4
+    and float(n['widgets_values'][3])==1.0
+    and n['widgets_values'][4]=='euler'
+    and n['widgets_values'][5]=='simple'
+    and float(n['widgets_values'][6])==1.0
+    for n in samplers
+)
 enh=[n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance']
 assert len(enh)==1
 assert enh[0]['widgets_values'][1] is False
-ident=enh[0]['widgets_values'][0].lower()
-assert 'cedar' in ident and 'lake' in ident
+assert enh[0]['widgets_values'][2]=='t2i'
+assert enh[0]['widgets_values'][3]=='Instagram 4:5 still'
+ident=enh[0]['widgets_values'][0]
+ident_l=ident.lower()
+assert 'cedar' in ident_l and 'lake' in ident_l
+assert 'single-story' in ident_l and 'hip' in ident_l
 assert 'no logos, no text' not in ident
+assert sum(1 for n in d['nodes'] if n.get('type')=='VAEEncode')==1
+refs=[n for n in d['nodes'] if n.get('type')=='ReferenceLatent']
+assert len(refs)==10
+by_id={n['id']:n for n in d['nodes']}
+incoming={}
+for l in d['links']:
+    incoming.setdefault((l[3], l[4]), []).append(l)
+banned=('pier','courtyard','pavilion','two-story','a-frame','glass box','outdoor kitchen','outdoor tub')
+for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
+    shot=join['widgets_values'][0]
+    full=f'{ident} {shot}'
+    assert len(full.split())<=155, (join.get('title'), len(full.split()))
+    sl=shot.lower()
+    assert 'same' in sl and 'cabin' in sl
+    if i>=2 and i<=6:
+        assert shot.startswith('Photographed from inside')
+    assert not any(b in sl for b in banned)
+    ks_id=12+i*5
+    pos_src=by_id[incoming[(ks_id,1)][0][1]]['type']
+    lat_src=by_id[incoming[(ks_id,3)][0][1]]['type']
+    assert lat_src=='EmptyFlux2LatentImage'
+    if i==0:
+        assert pos_src=='CLIPTextEncode'
+    else:
+        assert pos_src=='ReferenceLatent'
+note=next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))
+ntext=str(note['widgets_values'][0]).lower()
+assert 'identity plate' in ntext
+assert 'do not bypass 01' in ntext or 'do not bypass 01' in d['extra']['lab_note'].lower()
+assert 'queue' in ntext and 'shot 01' in ntext
 "
   [ "${status}" -eq 0 ]
 }

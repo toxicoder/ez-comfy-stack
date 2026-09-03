@@ -1,8 +1,8 @@
 {
   "id": "klein-dream-house-lab-example",
   "revision": 1,
-  "last_node_id": 59,
-  "last_link_id": 101,
+  "last_node_id": 68,
+  "last_link_id": 123,
   "nodes": [
     {
       "id": 1,
@@ -24,16 +24,16 @@
           "name": "MODEL",
           "type": "MODEL",
           "links": [
-            5,
-            15,
-            25,
-            35,
-            45,
+            8,
+            19,
+            31,
+            43,
             55,
-            65,
-            75,
-            85,
-            95
+            67,
+            79,
+            91,
+            103,
+            115
           ],
           "slot_index": 0
         }
@@ -68,16 +68,16 @@
           "type": "CLIP",
           "links": [
             1,
-            4,
-            14,
-            24,
-            34,
-            44,
+            7,
+            18,
+            30,
+            42,
             54,
-            64,
-            74,
-            84,
-            94
+            66,
+            78,
+            90,
+            102,
+            114
           ],
           "slot_index": 0
         }
@@ -112,16 +112,17 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            10,
-            20,
-            30,
-            40,
+            2,
+            13,
+            26,
+            38,
             50,
-            60,
-            70,
-            80,
-            90,
-            100
+            62,
+            74,
+            86,
+            98,
+            110,
+            122
           ],
           "slot_index": 0
         }
@@ -154,16 +155,16 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            2,
-            12,
-            22,
-            32,
-            42,
+            5,
+            16,
+            28,
+            40,
             52,
-            62,
-            72,
-            82,
-            92
+            64,
+            76,
+            88,
+            100,
+            112
           ],
           "slot_index": 0
         }
@@ -172,7 +173,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces.",
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot.",
         false,
         "t2i",
         "Instagram 4:5 still"
@@ -205,16 +206,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            7,
-            17,
-            27,
-            37,
-            47,
-            57,
-            67,
-            77,
-            87,
-            97
+            3,
+            10
           ],
           "slot_index": 0
         }
@@ -247,16 +240,16 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            8,
-            18,
-            28,
-            38,
+            11,
+            24,
+            36,
             48,
-            58,
-            68,
-            78,
-            88,
-            98
+            60,
+            72,
+            84,
+            96,
+            108,
+            120
           ],
           "slot_index": 0
         }
@@ -291,9 +284,111 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset.\nDo not restyle the identity per shot — change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n"
+        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nSHOT 01 is the identity plate (T2I). Queue SHOT 01 first. Do not bypass 01 when generating 02-10 \u2014 they edit from 01's image (VAEEncode + ReferenceLatent). Unused SHOT groups 02-10 may still be bypassed (Ctrl+B) after 01 exists.\nEdit HOUSE IDENTITY once. Each SHOT card is only camera, room, time of day, and season of the same cabin; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nSeason may change foliage, sky, and snow on the ridge; it must not change the building.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n"
       ],
       "title": "Operator note"
+    },
+    {
+      "id": 8,
+      "type": "VAEEncode",
+      "pos": [
+        1740,
+        170
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 15
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            4,
+            21,
+            33,
+            45,
+            57,
+            69,
+            81,
+            93,
+            105,
+            117
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode plate 01"
+    },
+    {
+      "id": 9,
+      "type": "ReferenceLatent",
+      "pos": [
+        40,
+        1520
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 3
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 4,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            23,
+            35,
+            47,
+            59,
+            71,
+            83,
+            95,
+            107,
+            119
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Negative + identity plate"
     },
     {
       "id": 10,
@@ -313,7 +408,7 @@
         {
           "name": "identity",
           "type": "STRING",
-          "link": 2
+          "link": 5
         }
       ],
       "outputs": [
@@ -321,7 +416,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            3
+            6
           ],
           "slot_index": 0
         }
@@ -330,7 +425,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Golden-hour curb appeal from the gravel drive, 24mm at eye level, Instagram 4:5 portrait. Warm sidelight rakes the cedar. Empty drive."
+        "Golden-hour late-summer curb of the same single-story cabin from the empty gravel drive, 24mm at eye level, Instagram 4:5. Warm sidelight rakes the cedar. Empty unmarked drive."
       ],
       "title": "SHOT 01 curb appeal"
     },
@@ -352,12 +447,12 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 4
+          "link": 7
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 3,
+          "link": 6,
           "widget": {
             "name": "text"
           }
@@ -368,7 +463,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            6
+            9
           ],
           "slot_index": 0
         }
@@ -377,7 +472,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Golden-hour curb appeal from the gravel drive, 24mm at eye level, Instagram 4:5 portrait. Warm sidelight rakes the cedar. Empty drive."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Golden-hour late-summer curb of the same single-story cabin from the empty gravel drive, 24mm at eye level, Instagram 4:5. Warm sidelight rakes the cedar. Empty unmarked drive."
       ],
       "title": "Positive 01"
     },
@@ -399,22 +494,22 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 5
+          "link": 8
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 6
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 7
+          "link": 10
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 8
+          "link": 11
         }
       ],
       "outputs": [
@@ -422,7 +517,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            9
+            12
           ],
           "slot_index": 0
         }
@@ -459,12 +554,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 9
+          "link": 12
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 10
+          "link": 13
         }
       ],
       "outputs": [
@@ -472,7 +567,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            11
+            14,
+            15
           ],
           "slot_index": 0
         }
@@ -501,7 +597,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 11
+          "link": 14
         }
       ],
       "outputs": [],
@@ -531,7 +627,7 @@
         {
           "name": "identity",
           "type": "STRING",
-          "link": 12
+          "link": 16
         }
       ],
       "outputs": [
@@ -539,7 +635,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            13
+            17
           ],
           "slot_index": 0
         }
@@ -548,7 +644,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Front entry with a tall black-framed glass door, 35mm, Instagram 4:5. Soft morning light on cedar and stone. Empty porch, unmarked door."
+        "Front porch of the same single-story cabin, 35mm, Instagram 4:5. One tall black-framed glass door in the cedar wall, spring morning. Empty unmarked porch."
       ],
       "title": "SHOT 02 entry"
     },
@@ -570,12 +666,12 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 14
+          "link": 18
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 13,
+          "link": 17,
           "widget": {
             "name": "text"
           }
@@ -586,7 +682,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            16
+            20
           ],
           "slot_index": 0
         }
@@ -595,7 +691,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Front entry with a tall black-framed glass door, 35mm, Instagram 4:5. Soft morning light on cedar and stone. Empty porch, unmarked door."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Front porch of the same single-story cabin, 35mm, Instagram 4:5. One tall black-framed glass door in the cedar wall, spring morning. Empty unmarked porch."
       ],
       "title": "Positive 02"
     },
@@ -617,22 +713,22 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 15
+          "link": 19
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 16
+          "link": 22
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 17
+          "link": 23
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 18
+          "link": 24
         }
       ],
       "outputs": [
@@ -640,7 +736,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            19
+            25
           ],
           "slot_index": 0
         }
@@ -677,12 +773,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 19
+          "link": 25
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 20
+          "link": 26
         }
       ],
       "outputs": [
@@ -690,7 +786,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            21
+            27
           ],
           "slot_index": 0
         }
@@ -719,7 +815,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 21
+          "link": 27
         }
       ],
       "outputs": [],
@@ -730,6 +826,49 @@
         "ez_dream_house_02"
       ],
       "title": "Save 02"
+    },
+    {
+      "id": 60,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        660
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 20
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 21,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            22
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (02)"
     },
     {
       "id": 20,
@@ -749,7 +888,7 @@
         {
           "name": "identity",
           "type": "STRING",
-          "link": 22
+          "link": 28
         }
       ],
       "outputs": [
@@ -757,7 +896,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            23
+            29
           ],
           "slot_index": 0
         }
@@ -766,7 +905,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Living room looking through the glass wall toward the still lake, 24mm, Instagram 4:5. Oak floors, linen sofa, late-day sun. Empty of occupants."
+        "Photographed from inside the living room of the same cabin, looking out the two-bay four-lite glass wall to the lake, 24mm, Instagram 4:5. One linen sofa, late-summer afternoon, oak floors."
       ],
       "title": "SHOT 03 living room"
     },
@@ -788,12 +927,12 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 24
+          "link": 30
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 23,
+          "link": 29,
           "widget": {
             "name": "text"
           }
@@ -804,7 +943,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            26
+            32
           ],
           "slot_index": 0
         }
@@ -813,7 +952,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Living room looking through the glass wall toward the still lake, 24mm, Instagram 4:5. Oak floors, linen sofa, late-day sun. Empty of occupants."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Photographed from inside the living room of the same cabin, looking out the two-bay four-lite glass wall to the lake, 24mm, Instagram 4:5. One linen sofa, late-summer afternoon, oak floors."
       ],
       "title": "Positive 03"
     },
@@ -835,22 +974,22 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 25
+          "link": 31
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 26
+          "link": 34
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 27
+          "link": 35
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 28
+          "link": 36
         }
       ],
       "outputs": [
@@ -858,7 +997,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            29
+            37
           ],
           "slot_index": 0
         }
@@ -895,12 +1034,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 29
+          "link": 37
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 30
+          "link": 38
         }
       ],
       "outputs": [
@@ -908,7 +1047,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            31
+            39
           ],
           "slot_index": 0
         }
@@ -937,7 +1076,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 31
+          "link": 39
         }
       ],
       "outputs": [],
@@ -948,6 +1087,49 @@
         "ez_dream_house_03"
       ],
       "title": "Save 03"
+    },
+    {
+      "id": 61,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        1020
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 32
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 33,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            34
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (03)"
     },
     {
       "id": 25,
@@ -967,7 +1149,7 @@
         {
           "name": "identity",
           "type": "STRING",
-          "link": 32
+          "link": 40
         }
       ],
       "outputs": [
@@ -975,7 +1157,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            33
+            41
           ],
           "slot_index": 0
         }
@@ -984,7 +1166,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Kitchen island in pale stone, morning sidelight, 35mm, Instagram 4:5. Cedar cabinets, black hardware, unmarked surfaces."
+        "Photographed from inside the kitchen of the same cabin, 35mm, Instagram 4:5. One pale-stone island, cedar cabinets, black hardware, morning sidelight through the glass wall."
       ],
       "title": "SHOT 04 kitchen"
     },
@@ -1006,12 +1188,12 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 34
+          "link": 42
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 33,
+          "link": 41,
           "widget": {
             "name": "text"
           }
@@ -1022,7 +1204,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            36
+            44
           ],
           "slot_index": 0
         }
@@ -1031,7 +1213,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Kitchen island in pale stone, morning sidelight, 35mm, Instagram 4:5. Cedar cabinets, black hardware, unmarked surfaces."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Photographed from inside the kitchen of the same cabin, 35mm, Instagram 4:5. One pale-stone island, cedar cabinets, black hardware, morning sidelight through the glass wall."
       ],
       "title": "Positive 04"
     },
@@ -1053,225 +1235,7 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 35
-        },
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 36
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 37
-        },
-        {
-          "name": "latent_image",
-          "type": "LATENT",
-          "link": 38
-        }
-      ],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            39
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "KSampler"
-      },
-      "widgets_values": [
-        42,
-        "fixed",
-        4,
-        1.0,
-        "euler",
-        "simple",
-        1.0
-      ],
-      "title": "Sampler 04"
-    },
-    {
-      "id": 28,
-      "type": "VAEDecode",
-      "pos": [
-        1740,
-        1160
-      ],
-      "size": [
-        240,
-        46
-      ],
-      "flags": {},
-      "order": 38,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 39
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 40
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            41
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEDecode"
-      },
-      "widgets_values": [],
-      "title": "Decode 04"
-    },
-    {
-      "id": 29,
-      "type": "SaveImage",
-      "pos": [
-        2020,
-        1160
-      ],
-      "size": [
-        280,
-        270
-      ],
-      "flags": {},
-      "order": 39,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 41
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "SaveImage"
-      },
-      "widgets_values": [
-        "ez_dream_house_04"
-      ],
-      "title": "Save 04"
-    },
-    {
-      "id": 30,
-      "type": "EZPromptJoin",
-      "pos": [
-        520,
-        1520
-      ],
-      "size": [
-        420,
-        180
-      ],
-      "flags": {},
-      "order": 40,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "identity",
-          "type": "STRING",
-          "link": 42
-        }
-      ],
-      "outputs": [
-        {
-          "name": "prompt",
-          "type": "STRING",
-          "links": [
-            43
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZPromptJoin"
-      },
-      "widgets_values": [
-        "Dining table by the window at evening, lamps lit, 35mm, Instagram 4:5. Oak table, simple ceramic, lake twilight beyond the glass."
-      ],
-      "title": "SHOT 05 dining"
-    },
-    {
-      "id": 31,
-      "type": "CLIPTextEncode",
-      "pos": [
-        980,
-        1520
-      ],
-      "size": [
-        360,
-        140
-      ],
-      "flags": {},
-      "order": 41,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 44
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 43,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            46
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Dining table by the window at evening, lamps lit, 35mm, Instagram 4:5. Oak table, simple ceramic, lake twilight beyond the glass."
-      ],
-      "title": "Positive 05"
-    },
-    {
-      "id": 32,
-      "type": "KSampler",
-      "pos": [
-        1380,
-        1520
-      ],
-      "size": [
-        320,
-        262
-      ],
-      "flags": {},
-      "order": 42,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 45
+          "link": 43
         },
         {
           "name": "positive",
@@ -1311,21 +1275,21 @@
         "simple",
         1.0
       ],
-      "title": "Sampler 05"
+      "title": "Sampler 04"
     },
     {
-      "id": 33,
+      "id": 28,
       "type": "VAEDecode",
       "pos": [
         1740,
-        1520
+        1160
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 43,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -1353,21 +1317,21 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "Decode 05"
+      "title": "Decode 04"
     },
     {
-      "id": 34,
+      "id": 29,
       "type": "SaveImage",
       "pos": [
         2020,
-        1520
+        1160
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 44,
+      "order": 39,
       "mode": 0,
       "inputs": [
         {
@@ -1381,23 +1345,66 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_dream_house_05"
+        "ez_dream_house_04"
       ],
-      "title": "Save 05"
+      "title": "Save 04"
     },
     {
-      "id": 35,
+      "id": 62,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        1380
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 44
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 45,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            46
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (04)"
+    },
+    {
+      "id": 30,
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1880
+        1520
       ],
       "size": [
         420,
         180
       ],
       "flags": {},
-      "order": 45,
+      "order": 40,
       "mode": 0,
       "inputs": [
         {
@@ -1420,23 +1427,23 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Primary bedroom with linen bedding and a lake window, 35mm, Instagram 4:5. Soft dawn light, cedar wall, solitary room."
+        "Photographed from inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak table, lamps lit, autumn lake twilight through the two-bay glass."
       ],
-      "title": "SHOT 06 bedroom"
+      "title": "SHOT 05 dining"
     },
     {
-      "id": 36,
+      "id": 31,
       "type": "CLIPTextEncode",
       "pos": [
         980,
-        1880
+        1520
       ],
       "size": [
         360,
         140
       ],
       "flags": {},
-      "order": 46,
+      "order": 41,
       "mode": 0,
       "inputs": [
         {
@@ -1467,7 +1474,268 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Primary bedroom with linen bedding and a lake window, 35mm, Instagram 4:5. Soft dawn light, cedar wall, solitary room."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Photographed from inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak table, lamps lit, autumn lake twilight through the two-bay glass."
+      ],
+      "title": "Positive 05"
+    },
+    {
+      "id": 32,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        1520
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 42,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 55
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 58
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 59
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 60
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            61
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Sampler 05"
+    },
+    {
+      "id": 33,
+      "type": "VAEDecode",
+      "pos": [
+        1740,
+        1520
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 43,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 61
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 62
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            63
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Decode 05"
+    },
+    {
+      "id": 34,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        1520
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 44,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 63
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_dream_house_05"
+      ],
+      "title": "Save 05"
+    },
+    {
+      "id": 63,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        1740
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 45,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 56
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 57,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            58
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (05)"
+    },
+    {
+      "id": 35,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        1880
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 45,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 64
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            65
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Photographed from inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. Linen bedding, cedar wall, lake window, dawn."
+      ],
+      "title": "SHOT 06 bedroom"
+    },
+    {
+      "id": 36,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        1880
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 46,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 66
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 65,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            68
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Photographed from inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. Linen bedding, cedar wall, lake window, dawn."
       ],
       "title": "Positive 06"
     },
@@ -1489,22 +1757,22 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 55
+          "link": 67
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 56
+          "link": 70
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 57
+          "link": 71
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 58
+          "link": 72
         }
       ],
       "outputs": [
@@ -1512,7 +1780,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            59
+            73
           ],
           "slot_index": 0
         }
@@ -1549,12 +1817,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 59
+          "link": 73
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 60
+          "link": 74
         }
       ],
       "outputs": [
@@ -1562,7 +1830,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            61
+            75
           ],
           "slot_index": 0
         }
@@ -1591,7 +1859,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 61
+          "link": 75
         }
       ],
       "outputs": [],
@@ -1602,6 +1870,49 @@
         "ez_dream_house_06"
       ],
       "title": "Save 06"
+    },
+    {
+      "id": 64,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        2100
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 50,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 68
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 69,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            70
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (06)"
     },
     {
       "id": 40,
@@ -1621,7 +1932,7 @@
         {
           "name": "identity",
           "type": "STRING",
-          "link": 62
+          "link": 76
         }
       ],
       "outputs": [
@@ -1629,7 +1940,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            63
+            77
           ],
           "slot_index": 0
         }
@@ -1638,7 +1949,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Spa bath in pale stone and cedar, 35mm, Instagram 4:5. A freestanding tub faces frosted glass. Quiet, unmarked fixtures."
+        "Photographed from inside the spa bath of the same cabin, 35mm, Instagram 4:5. One freestanding stone tub indoors facing frosted glass. Quiet unmarked fixtures."
       ],
       "title": "SHOT 07 bath"
     },
@@ -1660,12 +1971,12 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 64
+          "link": 78
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 63,
+          "link": 77,
           "widget": {
             "name": "text"
           }
@@ -1676,7 +1987,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            66
+            80
           ],
           "slot_index": 0
         }
@@ -1685,7 +1996,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Spa bath in pale stone and cedar, 35mm, Instagram 4:5. A freestanding tub faces frosted glass. Quiet, unmarked fixtures."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Photographed from inside the spa bath of the same cabin, 35mm, Instagram 4:5. One freestanding stone tub indoors facing frosted glass. Quiet unmarked fixtures."
       ],
       "title": "Positive 07"
     },
@@ -1707,22 +2018,22 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 65
+          "link": 79
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 66
+          "link": 82
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 67
+          "link": 83
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 68
+          "link": 84
         }
       ],
       "outputs": [
@@ -1730,7 +2041,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            69
+            85
           ],
           "slot_index": 0
         }
@@ -1767,12 +2078,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 69
+          "link": 85
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 70
+          "link": 86
         }
       ],
       "outputs": [
@@ -1780,7 +2091,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            71
+            87
           ],
           "slot_index": 0
         }
@@ -1809,7 +2120,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 71
+          "link": 87
         }
       ],
       "outputs": [],
@@ -1820,6 +2131,49 @@
         "ez_dream_house_07"
       ],
       "title": "Save 07"
+    },
+    {
+      "id": 65,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        2460
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 55,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 80
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 81,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            82
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (07)"
     },
     {
       "id": 45,
@@ -1839,7 +2193,7 @@
         {
           "name": "identity",
           "type": "STRING",
-          "link": 72
+          "link": 88
         }
       ],
       "outputs": [
@@ -1847,7 +2201,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            73
+            89
           ],
           "slot_index": 0
         }
@@ -1856,7 +2210,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Lakeside deck at dusk, 24mm, Instagram 4:5. Cedar boards, simple chairs, still water, evergreen ridge."
+        "The same two modest shore decks of the same single-story cabin at dusk, 24mm, Instagram 4:5. Two simple chairs on gravel, still water, evergreen ridge."
       ],
       "title": "SHOT 08 deck"
     },
@@ -1878,12 +2232,12 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 74
+          "link": 90
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 73,
+          "link": 89,
           "widget": {
             "name": "text"
           }
@@ -1894,7 +2248,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            76
+            92
           ],
           "slot_index": 0
         }
@@ -1903,7 +2257,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Lakeside deck at dusk, 24mm, Instagram 4:5. Cedar boards, simple chairs, still water, evergreen ridge."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. The same two modest shore decks of the same single-story cabin at dusk, 24mm, Instagram 4:5. Two simple chairs on gravel, still water, evergreen ridge."
       ],
       "title": "Positive 08"
     },
@@ -1925,22 +2279,22 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 75
+          "link": 91
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 76
+          "link": 94
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 77
+          "link": 95
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 78
+          "link": 96
         }
       ],
       "outputs": [
@@ -1948,7 +2302,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            79
+            97
           ],
           "slot_index": 0
         }
@@ -1985,12 +2339,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 79
+          "link": 97
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 80
+          "link": 98
         }
       ],
       "outputs": [
@@ -1998,7 +2352,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            81
+            99
           ],
           "slot_index": 0
         }
@@ -2027,7 +2381,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 81
+          "link": 99
         }
       ],
       "outputs": [],
@@ -2038,6 +2392,49 @@
         "ez_dream_house_08"
       ],
       "title": "Save 08"
+    },
+    {
+      "id": 66,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        2820
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 60,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 92
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 93,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            94
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (08)"
     },
     {
       "id": 50,
@@ -2057,7 +2454,7 @@
         {
           "name": "identity",
           "type": "STRING",
-          "link": 82
+          "link": 100
         }
       ],
       "outputs": [
@@ -2065,7 +2462,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            83
+            101
           ],
           "slot_index": 0
         }
@@ -2074,7 +2471,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Twilight exterior, interior lamps glowing through black-framed glass, 24mm, Instagram 4:5. Solitary house on the lake."
+        "Winter twilight exterior of the same single-story cabin, 24mm, Instagram 4:5. Interior lamps glow through the two-bay glass. Thin snow on the ridge; the cabin volume is unchanged."
       ],
       "title": "SHOT 09 twilight"
     },
@@ -2096,12 +2493,12 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 84
+          "link": 102
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 83,
+          "link": 101,
           "widget": {
             "name": "text"
           }
@@ -2112,7 +2509,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            86
+            104
           ],
           "slot_index": 0
         }
@@ -2121,7 +2518,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Twilight exterior, interior lamps glowing through black-framed glass, 24mm, Instagram 4:5. Solitary house on the lake."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Winter twilight exterior of the same single-story cabin, 24mm, Instagram 4:5. Interior lamps glow through the two-bay glass. Thin snow on the ridge; the cabin volume is unchanged."
       ],
       "title": "Positive 09"
     },
@@ -2143,22 +2540,22 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 85
+          "link": 103
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 86
+          "link": 106
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 87
+          "link": 107
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 88
+          "link": 108
         }
       ],
       "outputs": [
@@ -2166,7 +2563,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            89
+            109
           ],
           "slot_index": 0
         }
@@ -2203,12 +2600,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 89
+          "link": 109
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 90
+          "link": 110
         }
       ],
       "outputs": [
@@ -2216,7 +2613,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            91
+            111
           ],
           "slot_index": 0
         }
@@ -2245,7 +2642,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 91
+          "link": 111
         }
       ],
       "outputs": [],
@@ -2256,6 +2653,49 @@
         "ez_dream_house_09"
       ],
       "title": "Save 09"
+    },
+    {
+      "id": 67,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        3180
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 65,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 104
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 105,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            106
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (09)"
     },
     {
       "id": 55,
@@ -2275,7 +2715,7 @@
         {
           "name": "identity",
           "type": "STRING",
-          "link": 92
+          "link": 112
         }
       ],
       "outputs": [
@@ -2283,7 +2723,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            93
+            113
           ],
           "slot_index": 0
         }
@@ -2292,7 +2732,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Elevated wide view of the property from the ridge, 24mm, Instagram 4:5. The cedar-and-glass house sits above the still lake among evergreens."
+        "Midsummer ridge view of the same compact single-story cabin above the lake among evergreens, 24mm, Instagram 4:5."
       ],
       "title": "SHOT 10 ridge view"
     },
@@ -2314,12 +2754,12 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 94
+          "link": 114
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 93,
+          "link": 113,
           "widget": {
             "name": "text"
           }
@@ -2330,7 +2770,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            96
+            116
           ],
           "slot_index": 0
         }
@@ -2339,7 +2779,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Elevated wide view of the property from the ridge, 24mm, Instagram 4:5. The cedar-and-glass house sits above the still lake among evergreens."
+        "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot. Midsummer ridge view of the same compact single-story cabin above the lake among evergreens, 24mm, Instagram 4:5."
       ],
       "title": "Positive 10"
     },
@@ -2361,22 +2801,22 @@
         {
           "name": "model",
           "type": "MODEL",
-          "link": 95
+          "link": 115
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 96
+          "link": 118
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 97
+          "link": 119
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 98
+          "link": 120
         }
       ],
       "outputs": [
@@ -2384,7 +2824,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            99
+            121
           ],
           "slot_index": 0
         }
@@ -2421,12 +2861,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 99
+          "link": 121
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 100
+          "link": 122
         }
       ],
       "outputs": [
@@ -2434,7 +2874,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            101
+            123
           ],
           "slot_index": 0
         }
@@ -2463,7 +2903,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 101
+          "link": 123
         }
       ],
       "outputs": [],
@@ -2474,6 +2914,49 @@
         "ez_dream_house_10"
       ],
       "title": "Save 10"
+    },
+    {
+      "id": 68,
+      "type": "ReferenceLatent",
+      "pos": [
+        980,
+        3540
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 70,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 116
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 117,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            118
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (10)"
     }
   ],
   "links": [
@@ -2487,110 +2970,142 @@
     ],
     [
       2,
-      4,
+      3,
       0,
-      10,
-      0,
-      "STRING"
+      8,
+      1,
+      "VAE"
     ],
     [
       3,
+      5,
+      0,
+      9,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      4,
+      8,
+      0,
+      9,
+      1,
+      "LATENT"
+    ],
+    [
+      5,
+      4,
+      0,
+      10,
+      0,
+      "STRING"
+    ],
+    [
+      6,
       10,
       0,
       11,
       1,
       "STRING"
-    ],
-    [
-      4,
-      2,
-      0,
-      11,
-      0,
-      "CLIP"
-    ],
-    [
-      5,
-      1,
-      0,
-      12,
-      0,
-      "MODEL"
-    ],
-    [
-      6,
-      11,
-      0,
-      12,
-      1,
-      "CONDITIONING"
     ],
     [
       7,
-      5,
-      0,
-      12,
       2,
-      "CONDITIONING"
+      0,
+      11,
+      0,
+      "CLIP"
     ],
     [
       8,
-      6,
+      1,
       0,
       12,
-      3,
-      "LATENT"
+      0,
+      "MODEL"
     ],
     [
       9,
+      11,
+      0,
       12,
-      0,
-      13,
-      0,
-      "LATENT"
+      1,
+      "CONDITIONING"
     ],
     [
       10,
-      3,
+      5,
       0,
-      13,
-      1,
-      "VAE"
+      12,
+      2,
+      "CONDITIONING"
     ],
     [
       11,
-      13,
+      6,
       0,
-      14,
-      0,
-      "IMAGE"
+      12,
+      3,
+      "LATENT"
     ],
     [
       12,
-      4,
+      12,
       0,
-      15,
+      13,
       0,
-      "STRING"
+      "LATENT"
     ],
     [
       13,
-      15,
+      3,
       0,
-      16,
+      13,
       1,
-      "STRING"
+      "VAE"
     ],
     [
       14,
-      2,
+      13,
       0,
-      16,
+      14,
       0,
-      "CLIP"
+      "IMAGE"
     ],
     [
       15,
+      13,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      16,
+      4,
+      0,
+      15,
+      0,
+      "STRING"
+    ],
+    [
+      17,
+      15,
+      0,
+      16,
+      1,
+      "STRING"
+    ],
+    [
+      18,
+      2,
+      0,
+      16,
+      0,
+      "CLIP"
+    ],
+    [
+      19,
       1,
       0,
       17,
@@ -2598,23 +3113,39 @@
       "MODEL"
     ],
     [
+      20,
       16,
-      16,
+      0,
+      60,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      21,
+      8,
+      0,
+      60,
+      1,
+      "LATENT"
+    ],
+    [
+      22,
+      60,
       0,
       17,
       1,
       "CONDITIONING"
     ],
     [
-      17,
-      5,
+      23,
+      9,
       0,
       17,
       2,
       "CONDITIONING"
     ],
     [
-      18,
+      24,
       6,
       0,
       17,
@@ -2622,7 +3153,7 @@
       "LATENT"
     ],
     [
-      19,
+      25,
       17,
       0,
       18,
@@ -2630,7 +3161,7 @@
       "LATENT"
     ],
     [
-      20,
+      26,
       3,
       0,
       18,
@@ -2638,7 +3169,7 @@
       "VAE"
     ],
     [
-      21,
+      27,
       18,
       0,
       19,
@@ -2646,7 +3177,7 @@
       "IMAGE"
     ],
     [
-      22,
+      28,
       4,
       0,
       20,
@@ -2654,7 +3185,7 @@
       "STRING"
     ],
     [
-      23,
+      29,
       20,
       0,
       21,
@@ -2662,7 +3193,7 @@
       "STRING"
     ],
     [
-      24,
+      30,
       2,
       0,
       21,
@@ -2670,7 +3201,7 @@
       "CLIP"
     ],
     [
-      25,
+      31,
       1,
       0,
       22,
@@ -2678,63 +3209,79 @@
       "MODEL"
     ],
     [
-      26,
+      32,
       21,
       0,
-      22,
-      1,
+      61,
+      0,
       "CONDITIONING"
-    ],
-    [
-      27,
-      5,
-      0,
-      22,
-      2,
-      "CONDITIONING"
-    ],
-    [
-      28,
-      6,
-      0,
-      22,
-      3,
-      "LATENT"
-    ],
-    [
-      29,
-      22,
-      0,
-      23,
-      0,
-      "LATENT"
-    ],
-    [
-      30,
-      3,
-      0,
-      23,
-      1,
-      "VAE"
-    ],
-    [
-      31,
-      23,
-      0,
-      24,
-      0,
-      "IMAGE"
-    ],
-    [
-      32,
-      4,
-      0,
-      25,
-      0,
-      "STRING"
     ],
     [
       33,
+      8,
+      0,
+      61,
+      1,
+      "LATENT"
+    ],
+    [
+      34,
+      61,
+      0,
+      22,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      35,
+      9,
+      0,
+      22,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      36,
+      6,
+      0,
+      22,
+      3,
+      "LATENT"
+    ],
+    [
+      37,
+      22,
+      0,
+      23,
+      0,
+      "LATENT"
+    ],
+    [
+      38,
+      3,
+      0,
+      23,
+      1,
+      "VAE"
+    ],
+    [
+      39,
+      23,
+      0,
+      24,
+      0,
+      "IMAGE"
+    ],
+    [
+      40,
+      4,
+      0,
+      25,
+      0,
+      "STRING"
+    ],
+    [
+      41,
       25,
       0,
       26,
@@ -2742,114 +3289,50 @@
       "STRING"
     ],
     [
-      34,
+      42,
       2,
       0,
       26,
       0,
       "CLIP"
-    ],
-    [
-      35,
-      1,
-      0,
-      27,
-      0,
-      "MODEL"
-    ],
-    [
-      36,
-      26,
-      0,
-      27,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      37,
-      5,
-      0,
-      27,
-      2,
-      "CONDITIONING"
-    ],
-    [
-      38,
-      6,
-      0,
-      27,
-      3,
-      "LATENT"
-    ],
-    [
-      39,
-      27,
-      0,
-      28,
-      0,
-      "LATENT"
-    ],
-    [
-      40,
-      3,
-      0,
-      28,
-      1,
-      "VAE"
-    ],
-    [
-      41,
-      28,
-      0,
-      29,
-      0,
-      "IMAGE"
-    ],
-    [
-      42,
-      4,
-      0,
-      30,
-      0,
-      "STRING"
     ],
     [
       43,
-      30,
-      0,
-      31,
-      1,
-      "STRING"
-    ],
-    [
-      44,
-      2,
-      0,
-      31,
-      0,
-      "CLIP"
-    ],
-    [
-      45,
       1,
       0,
-      32,
+      27,
       0,
       "MODEL"
     ],
     [
-      46,
-      31,
+      44,
+      26,
       0,
-      32,
+      62,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      45,
+      8,
+      0,
+      62,
+      1,
+      "LATENT"
+    ],
+    [
+      46,
+      62,
+      0,
+      27,
       1,
       "CONDITIONING"
     ],
     [
       47,
-      5,
+      9,
       0,
-      32,
+      27,
       2,
       "CONDITIONING"
     ],
@@ -2857,15 +3340,15 @@
       48,
       6,
       0,
-      32,
+      27,
       3,
       "LATENT"
     ],
     [
       49,
-      32,
+      27,
       0,
-      33,
+      28,
       0,
       "LATENT"
     ],
@@ -2873,15 +3356,15 @@
       50,
       3,
       0,
-      33,
+      28,
       1,
       "VAE"
     ],
     [
       51,
-      33,
+      28,
       0,
-      34,
+      29,
       0,
       "IMAGE"
     ],
@@ -2889,15 +3372,15 @@
       52,
       4,
       0,
-      35,
+      30,
       0,
       "STRING"
     ],
     [
       53,
-      35,
+      30,
       0,
-      36,
+      31,
       1,
       "STRING"
     ],
@@ -2905,7 +3388,7 @@
       54,
       2,
       0,
-      36,
+      31,
       0,
       "CLIP"
     ],
@@ -2913,124 +3396,252 @@
       55,
       1,
       0,
-      37,
+      32,
       0,
       "MODEL"
     ],
     [
       56,
-      36,
+      31,
       0,
-      37,
-      1,
+      63,
+      0,
       "CONDITIONING"
     ],
     [
       57,
-      5,
+      8,
       0,
-      37,
+      63,
+      1,
+      "LATENT"
+    ],
+    [
+      58,
+      63,
+      0,
+      32,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      59,
+      9,
+      0,
+      32,
       2,
       "CONDITIONING"
     ],
     [
-      58,
+      60,
       6,
       0,
-      37,
+      32,
       3,
       "LATENT"
     ],
     [
-      59,
-      37,
+      61,
+      32,
       0,
-      38,
+      33,
       0,
       "LATENT"
     ],
     [
-      60,
+      62,
       3,
       0,
-      38,
+      33,
       1,
       "VAE"
     ],
     [
-      61,
-      38,
+      63,
+      33,
       0,
-      39,
+      34,
       0,
       "IMAGE"
     ],
     [
-      62,
+      64,
       4,
       0,
-      40,
+      35,
       0,
       "STRING"
     ],
     [
-      63,
-      40,
+      65,
+      35,
       0,
-      41,
+      36,
       1,
       "STRING"
     ],
     [
-      64,
+      66,
       2,
       0,
-      41,
+      36,
       0,
       "CLIP"
     ],
     [
-      65,
+      67,
       1,
       0,
-      42,
+      37,
       0,
       "MODEL"
     ],
     [
-      66,
-      41,
-      0,
-      42,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      67,
-      5,
-      0,
-      42,
-      2,
-      "CONDITIONING"
-    ],
-    [
       68,
-      6,
+      36,
       0,
-      42,
-      3,
-      "LATENT"
+      64,
+      0,
+      "CONDITIONING"
     ],
     [
       69,
-      42,
+      8,
       0,
-      43,
-      0,
+      64,
+      1,
       "LATENT"
     ],
     [
       70,
+      64,
+      0,
+      37,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      71,
+      9,
+      0,
+      37,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      72,
+      6,
+      0,
+      37,
+      3,
+      "LATENT"
+    ],
+    [
+      73,
+      37,
+      0,
+      38,
+      0,
+      "LATENT"
+    ],
+    [
+      74,
+      3,
+      0,
+      38,
+      1,
+      "VAE"
+    ],
+    [
+      75,
+      38,
+      0,
+      39,
+      0,
+      "IMAGE"
+    ],
+    [
+      76,
+      4,
+      0,
+      40,
+      0,
+      "STRING"
+    ],
+    [
+      77,
+      40,
+      0,
+      41,
+      1,
+      "STRING"
+    ],
+    [
+      78,
+      2,
+      0,
+      41,
+      0,
+      "CLIP"
+    ],
+    [
+      79,
+      1,
+      0,
+      42,
+      0,
+      "MODEL"
+    ],
+    [
+      80,
+      41,
+      0,
+      65,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      81,
+      8,
+      0,
+      65,
+      1,
+      "LATENT"
+    ],
+    [
+      82,
+      65,
+      0,
+      42,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      83,
+      9,
+      0,
+      42,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      84,
+      6,
+      0,
+      42,
+      3,
+      "LATENT"
+    ],
+    [
+      85,
+      42,
+      0,
+      43,
+      0,
+      "LATENT"
+    ],
+    [
+      86,
       3,
       0,
       43,
@@ -3038,7 +3649,7 @@
       "VAE"
     ],
     [
-      71,
+      87,
       43,
       0,
       44,
@@ -3046,7 +3657,7 @@
       "IMAGE"
     ],
     [
-      72,
+      88,
       4,
       0,
       45,
@@ -3054,7 +3665,7 @@
       "STRING"
     ],
     [
-      73,
+      89,
       45,
       0,
       46,
@@ -3062,7 +3673,7 @@
       "STRING"
     ],
     [
-      74,
+      90,
       2,
       0,
       46,
@@ -3070,7 +3681,7 @@
       "CLIP"
     ],
     [
-      75,
+      91,
       1,
       0,
       47,
@@ -3078,23 +3689,39 @@
       "MODEL"
     ],
     [
-      76,
+      92,
       46,
+      0,
+      66,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      93,
+      8,
+      0,
+      66,
+      1,
+      "LATENT"
+    ],
+    [
+      94,
+      66,
       0,
       47,
       1,
       "CONDITIONING"
     ],
     [
-      77,
-      5,
+      95,
+      9,
       0,
       47,
       2,
       "CONDITIONING"
     ],
     [
-      78,
+      96,
       6,
       0,
       47,
@@ -3102,7 +3729,7 @@
       "LATENT"
     ],
     [
-      79,
+      97,
       47,
       0,
       48,
@@ -3110,7 +3737,7 @@
       "LATENT"
     ],
     [
-      80,
+      98,
       3,
       0,
       48,
@@ -3118,7 +3745,7 @@
       "VAE"
     ],
     [
-      81,
+      99,
       48,
       0,
       49,
@@ -3126,7 +3753,7 @@
       "IMAGE"
     ],
     [
-      82,
+      100,
       4,
       0,
       50,
@@ -3134,7 +3761,7 @@
       "STRING"
     ],
     [
-      83,
+      101,
       50,
       0,
       51,
@@ -3142,7 +3769,7 @@
       "STRING"
     ],
     [
-      84,
+      102,
       2,
       0,
       51,
@@ -3150,7 +3777,7 @@
       "CLIP"
     ],
     [
-      85,
+      103,
       1,
       0,
       52,
@@ -3158,23 +3785,39 @@
       "MODEL"
     ],
     [
-      86,
+      104,
       51,
+      0,
+      67,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      105,
+      8,
+      0,
+      67,
+      1,
+      "LATENT"
+    ],
+    [
+      106,
+      67,
       0,
       52,
       1,
       "CONDITIONING"
     ],
     [
-      87,
-      5,
+      107,
+      9,
       0,
       52,
       2,
       "CONDITIONING"
     ],
     [
-      88,
+      108,
       6,
       0,
       52,
@@ -3182,7 +3825,7 @@
       "LATENT"
     ],
     [
-      89,
+      109,
       52,
       0,
       53,
@@ -3190,7 +3833,7 @@
       "LATENT"
     ],
     [
-      90,
+      110,
       3,
       0,
       53,
@@ -3198,7 +3841,7 @@
       "VAE"
     ],
     [
-      91,
+      111,
       53,
       0,
       54,
@@ -3206,7 +3849,7 @@
       "IMAGE"
     ],
     [
-      92,
+      112,
       4,
       0,
       55,
@@ -3214,7 +3857,7 @@
       "STRING"
     ],
     [
-      93,
+      113,
       55,
       0,
       56,
@@ -3222,7 +3865,7 @@
       "STRING"
     ],
     [
-      94,
+      114,
       2,
       0,
       56,
@@ -3230,7 +3873,7 @@
       "CLIP"
     ],
     [
-      95,
+      115,
       1,
       0,
       57,
@@ -3238,23 +3881,39 @@
       "MODEL"
     ],
     [
-      96,
+      116,
       56,
+      0,
+      68,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      117,
+      8,
+      0,
+      68,
+      1,
+      "LATENT"
+    ],
+    [
+      118,
+      68,
       0,
       57,
       1,
       "CONDITIONING"
     ],
     [
-      97,
-      5,
+      119,
+      9,
       0,
       57,
       2,
       "CONDITIONING"
     ],
     [
-      98,
+      120,
       6,
       0,
       57,
@@ -3262,7 +3921,7 @@
       "LATENT"
     ],
     [
-      99,
+      121,
       57,
       0,
       58,
@@ -3270,7 +3929,7 @@
       "LATENT"
     ],
     [
-      100,
+      122,
       3,
       0,
       58,
@@ -3278,7 +3937,7 @@
       "VAE"
     ],
     [
-      101,
+      123,
       58,
       0,
       59,
@@ -3448,8 +4107,8 @@
   "extra": {
     "lab_profile": "klein-dream-house-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset.\nDo not restyle the identity per shot — change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n",
-    "lab_description": "Ten Instagram 4:5 Klein stills of one lake house",
+    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nSHOT 01 is the identity plate (T2I). Queue SHOT 01 first. Do not bypass 01 when generating 02-10 \u2014 they edit from 01's image (VAEEncode + ReferenceLatent). Unused SHOT groups 02-10 may still be bypassed (Ctrl+B) after 01 exists.\nEdit HOUSE IDENTITY once. Each SHOT card is only camera, room, time of day, and season of the same cabin; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nSeason may change foliage, sky, and snow on the ridge; it must not change the building.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n",
+    "lab_description": "Ten Instagram 4:5 Klein stills of one compact cedar cabin; 01 is the identity plate",
     "ds": {
       "scale": 1,
       "offset": [
