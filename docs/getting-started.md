@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-description: Install prerequisites, download models, and start the unified ComfyUI flux-to-ltx stack on DGX Spark.
+description: Install prerequisites, download models, and start the US-safe ComfyUI studio on DGX Spark.
 tags: [getting-started, docker, comfyui]
 ---
 
@@ -9,18 +9,18 @@ tags: [getting-started, docker, comfyui]
 **What's on this page**
 
 - What success looks like
+- Session variables (copy-paste)
 - Prerequisites checklist
-- Setup, doctor, download, start, stop
+- Setup, doctor, download, start, first still, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- Example workflows, prompting tips, and watching LTX MP4 output
-- Optional deep-dives
+- `manage.sh` command catalog
 
 **What this enables**
 
-- A first successful open of ComfyUI at port **8188**
+- A first successful open of ComfyUI at `${COMFY_PORT}` (default **8188**)
 - Safe model downloads that leave bandwidth for SSH
 - Choosing prebuilt GHCR pull (default) or a local Dockerfile build
-- Correct Flux / LTX prompting and easy LTX video preview (VHS MP4)
+- One queued **still-draft** before you move to the [studio playbook](visual-generative-ai.md)
 
 ---
 
@@ -28,32 +28,62 @@ tags: [getting-started, docker, comfyui]
 
 | Goal | Detail |
 | --- | --- |
-| **UI** | ComfyUI at `http://<spark-ip>:8188` |
-| **Workflow** | A seeded **\*-lab-example** graph (image and/or video frames) |
-| **Weights** | Flux **fast** + LTX **balanced** under `MODELS_DIR` (default `/mnt/models`) |
+| **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` |
+| **Workflow** | **klein-still-draft-lab-example** queued without missing-weight errors |
+| **Weights** | Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under `${MODELS_DIR}` (default `/mnt/models`) |
+| **Output** | `ez_still_draft_*.png` under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 
 **Expect** multi‑GB Hugging Face pulls (throttled by default). First start usually **seeds** from a prebuilt GHCR image; without that image, cold pip can take **10–30+ minutes**.
+
+---
+
+## Session variables
+
+Run these from the **repo root** on the Spark. Defaults match `.env.example`. Change `SPARK_HOST` to this machine’s LAN IP or DNS if you will open the UI from another computer.
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"   # auto | off | integer Mbps
+```
+
+Later command blocks assume these exports. After `setup`, the same keys live in `.env` (`manage.sh` loads `.env` automatically; the exports are for **your** shell — `ls`, `ssh -L`, the browser URL).
 
 ---
 
 ## Path at a glance
 
 1. **Clone** this repo (branch that matches these docs)
-2. **`setup`** — `.env`, model dir, Docker if needed
+2. **`setup`** — `.env`, model dir, output dir, Docker if needed
 3. **`doctor`** — fix hard failures before multi‑GB downloads
-4. **`download-models`** — flux-fast + ltx-balanced (throttled)
-5. **`start`** — type `yes`, then open **:8188**
-6. **`stop`** — always, before reboot
+4. **Accept LTX-2.5** on Hugging Face (gated) and set `HF_TOKEN`
+5. **`download-models`** — Klein 4B + Wan 5B + LTX-2.5 (throttled)
+6. **`start`** — type `yes`, then open the UI
+7. **Queue klein-still-draft-lab-example**
+8. **`stop`** — always, before reboot
 
 ```bash
 git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
 cd ez-comfy-stack
-./scripts/manage.sh setup --install-docker   # approve sudo; edit .env for HF_TOKEN if gated
+
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
+
+./scripts/manage.sh setup --install-docker   # approve sudo; edit .env for HF_TOKEN
 ./scripts/manage.sh doctor
 ./scripts/manage.sh download-models
 ./scripts/manage.sh start                    # type: yes
 ./scripts/manage.sh status
-# open http://<spark-ip>:8188
+# LAN / on-box:  open http://${SPARK_HOST}:${COMFY_PORT}
+# Laptop:        ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
+#                then open http://127.0.0.1:${COMFY_PORT}
 ./scripts/manage.sh stop                     # before reboot
 ```
 
@@ -68,9 +98,10 @@ Sections below unpack each step. Feature work still branches from `development` 
 - [ ] **NVIDIA DGX Spark** (or compatible GB10) with drivers + **NVIDIA Container Toolkit**
 - [ ] **Docker** with Compose v2 (prefer apt `docker-ce`, not snap; user in `docker` group)
 - [ ] **Writable model cache** — default `/mnt/models`, or set `MODELS_DIR` in `.env`
+- [ ] **Writable media output dir** — default `/mnt/comfy-output`, or set `COMFY_OUTPUT_DIR` in `.env`
 - [ ] **git**, **python3**, **pip** / **pipx**
 - [ ] **Hugging Face CLI** — modern `hf` from `huggingface_hub` (**not** the deprecated `huggingface-cli` stub)
-- [ ] **HF account** — licenses accepted for FLUX / LTX; `HF_TOKEN` in `.env` or `hf auth login` if gated
+- [ ] **HF account** — accept the LTX-2.5 license; `HF_TOKEN` in `.env` or `hf auth login`
 
 ### At a glance
 
@@ -78,14 +109,14 @@ Sections below unpack each step. Feature work still branches from `development` 
 | --- | --- |
 | **Required on host** | NVIDIA drivers, Container Toolkit, Docker + Compose v2, git, python3, pip/pipx |
 | **Optional / auto** | `wondershaper`, `speedtest-cli` (used by download-limit; HTB/`sch_htb` when shaping is available) |
-| **Accounts** | HF licenses + `HF_TOKEN` for gated models |
+| **Accounts** | LTX-2.5 license click + `HF_TOKEN` (Klein 4B and Wan 5B are Apache) |
 | **Image base** | Public Docker Hub `nvidia/cuda` — **no** NGC / `nvcr.io` login required |
 
 ```bash
-# Model cache (or let setup create it)
-sudo mkdir -p /mnt/models && sudo chown "$USER:$USER" /mnt/models
+# Prefer: ./scripts/manage.sh setup  (creates and chowns both dirs)
+sudo mkdir -p "${MODELS_DIR}" "${COMFY_OUTPUT_DIR}"
+sudo chown "$USER:$USER" "${MODELS_DIR}" "${COMFY_OUTPUT_DIR}"
 
-# HF CLI
 command -v hf || pipx install huggingface_hub
 # or: pip install -U 'huggingface_hub[cli]'
 ```
@@ -103,7 +134,7 @@ flowchart LR
     ST["speedtest-cli"]
   end
   subgraph Accounts["Accounts"]
-    HF["HF licenses + HF_TOKEN"]
+    HF["LTX license + HF_TOKEN"]
   end
   Required --> Ready["Ready for doctor"]
   Optional --> Ready
@@ -122,9 +153,8 @@ Clone the **same long-lived branch these docs describe** (`main` for [latest](ht
     git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
     cd ez-comfy-stack
 
-    # One-shot host bootstrap: .env, MODELS_DIR (sudo), Docker CE if missing, doctor
     ./scripts/manage.sh setup --install-docker
-    # approve sudo + type yes if prompted; edit .env for HF_TOKEN if models are gated
+    # approve sudo + type yes if prompted; edit .env for HF_TOKEN
     ```
 
 === "Non-interactive"
@@ -140,7 +170,7 @@ Clone the **same long-lived branch these docs describe** (`main` for [latest](ht
 `setup` will:
 
 1. Create `.env` from `.env.example` if missing
-2. Create and own `MODELS_DIR` (default `/mnt/models`) via sudo when needed
+2. Create and own `MODELS_DIR` and `COMFY_OUTPUT_DIR` via sudo when needed
 3. **Install Docker CE + compose plugin** when missing (`--install-docker` or interactive yes; apt preferred, not snap)
 4. Add your user to the `docker` group; configure `nvidia-ctk` when present
 5. Re-run `doctor`
@@ -162,43 +192,74 @@ Clone the **same long-lived branch these docs describe** (`main` for [latest](ht
 ./scripts/manage.sh doctor
 ```
 
-Fix any errors **before** downloading multi‑GB models.
+Fix any errors **before** downloading multi‑GB models. Missing lab weights are a **warning**, not a hard doctor failure (download next).
 
 !!! warning "Hard failures to clear first"
 
     - **docker missing**
     - **docker compose missing**
     - **host headroom** (RAM/disk)
-    - **MODELS_DIR not writable**
+    - **MODELS_DIR or COMFY_OUTPUT_DIR not writable**
 
     Prefer `./scripts/manage.sh setup` first. Copy-paste fixes: [Troubleshooting](troubleshooting.md).
+
+`doctor` also prints the **license policy one-liner**, image tag for this git branch, and JSON status from `download-image` / `download-wan` / `download-ltx`.
 
 ---
 
 ## Download models
 
+LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache — a token in `.env` is **not** the same as accepting the Lightricks license. Policy: [Model licenses](licenses.md).
+
 ```bash
-# Ensure HF token for gated repos (FLUX):
-# echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
+# 1. echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
+# 2. Open https://huggingface.co/Lightricks/LTX-2.5 as THAT user and click Agree
+# 3. Fine-grained tokens need gated-repo read
+hf auth whoami
 
 ./scripts/manage.sh download-models
+# Manual cap (Mbps; 40 ≈ 5 MB/s). Overrides DOWNLOAD_LIMIT for this run:
+# ./scripts/manage.sh download-models --limit 40
 ```
 
 | What | Detail |
 | --- | --- |
-| **Tiers** | **flux-fast** + **ltx-balanced** |
-| **Throttle** | `download-limit wrap --limit auto` → speedtest → **85%** cap (when HTB works) |
+| **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` |
+| **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
 | **CLI** | Modern **`hf download`** |
-| **Layout** | Weights under `MODELS_DIR` (default `/mnt/models`), compatible with nvidia-dgx-spark-lab |
-| **LTX size** | Selective subset of `Kijai/LTX2.3_comfy` (~**30 GB**), not the full monorepo (~400 GB) |
+| **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks |
+| **LTX size** | Selective `Lightricks/LTX-2.5` distilled set (status floor ~**30 GB**), not the Kijai 2.3 monorepo (~400 GB) |
 
-`download-models` **exits non-zero** until every lab basename is present under `MODELS_DIR/comfy/` (Flux UNET + Qwen TE + `flux2-vae` + LTX distilled FP8 + Gemma TE + text projection + video/audio VAEs).
+`download-models` **exits non-zero** until every lab basename is present under `${MODELS_DIR}/comfy/`:
+
+| File | Folder |
+| --- | --- |
+| `flux-2-klein-4b-fp8.safetensors` | `diffusion_models/` |
+| `wan2.2_ti2v_5B_fp16.safetensors` | `diffusion_models/` |
+| `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors` | `diffusion_models/` |
+| `qwen_3_4b.safetensors` | `text_encoders/` |
+| `umt5_xxl_fp8_e4m3fn_scaled.safetensors` | `text_encoders/` |
+| `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors` | `text_encoders/` |
+| `flux2-vae.safetensors` | `vae/` |
+| `wan2.2_vae.safetensors` | `vae/` |
+| `ltx-2.5-video-vae-bf16.safetensors` | `vae/` |
+| `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` |
 
 !!! tip "Bandwidth shaping soft-fail"
 
     If kernel HTB is missing (common on DGX Spark), downloads continue with gentle HF workers and a warning. Use `DOWNLOAD_LIMIT=off` only when you accept SSH risk. See [Download Limit](download-limit.md).
 
-If Comfy shows **Missing Models** on **\*-lab-example** graphs, re-run download and `doctor`. Full basename table: [Models & Cache](models-and-cache.md).
+!!! tip "Stuck resume (0 MiB/s, incomplete file)"
+
+    Heartbeats showing `found N incomplete` and `0 MiB/s` mean `hf` is alive but the partial is not growing. **Do not** `HF_LOCK_CLEAR_FORCE=1` while it runs. ++ctrl+c++, then:
+
+    ```bash
+    ./scripts/manage.sh download-models --drop-incomplete --limit 1000
+    ```
+
+    That deletes `*.incomplete` (finished weights stay) and re-pulls. See [Models & Cache](models-and-cache.md#resume-cache).
+
+If Comfy shows **Missing Models** on **klein-still-draft-lab-example**, re-run download and `doctor`. Full cache layout: [Models & Cache](models-and-cache.md).
 
 ---
 
@@ -210,15 +271,24 @@ If Comfy shows **Missing Models** on **\*-lab-example** graphs, re-run download 
 ./scripts/manage.sh status
 ```
 
-Open **`http://<spark-ip>:8188`** (or SSH port-forward if needed).
+Open **`http://${SPARK_HOST}:${COMFY_PORT}`**.
 
-!!! success "Done when"
+From a laptop (Spark is remote):
 
-    Port **8188** responds and you can load a **\*-lab-example** workflow without missing-weight errors.
+```bash
+ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
+# then open http://127.0.0.1:${COMFY_PORT}
+```
+
+!!! success "First Queue"
+
+    In ComfyUI, load **klein-still-draft-lab-example** from `user/default/workflows/` (seeded from host `workflows/`). Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
+
+    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Visual Generative AI](visual-generative-ai.md).
 
 ### Build the image locally (optional)
 
-By default, `manage.sh start` **pulls** a branch-aligned prebuilt image from GHCR (ComfyUI + PyTorch baked in; **not** FLUX/LTX weights). You can instead **build** `docker/Dockerfile` on the host and still use the same start path.
+By default, `manage.sh start` **pulls** a branch-aligned prebuilt image from GHCR (ComfyUI + PyTorch baked in; **not** Klein/Wan/LTX weights). You can instead **build** `docker/Dockerfile` on the host and still use the same start path.
 
 === "One-shot env"
 
@@ -263,110 +333,6 @@ Pull failures already fall back to local build automatically. Force-build is for
 
 Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-container-image-ghcr). Recovery rows: [Troubleshooting](troubleshooting.md).
 
-### Example workflows
-
-After `download-models` + `start`, open ComfyUI and load from `user/default/workflows/` (seeded from host `workflows/`). Filenames end with **`-lab-example`**.
-
-=== "Image (Flux)"
-
-    | Workflow | What it does |
-    | --- | --- |
-    | **flux-txt2img-lab-example** | Text → image 1024² (Flux.2 Klein NVFP4 + Qwen TE + flux2 VAE) |
-    | **flux-txt2img-portrait-lab-example** | Text → image **768×1024** portrait |
-    | **flux-txt2img-landscape-lab-example** | Text → image **1280×720** landscape |
-    | **flux-txt2img-ultrawide-lab-example** | Text → image **1536×640** cinematic wide |
-    | **flux-txt2img-512-lab-example** | Fast draft: **512²** |
-    | **flux-txt2img-quick-lab-example** | Smoke test: **768²**, **4** steps |
-    | **flux-txt2img-batch2-lab-example** | Batch size **2** at 768² |
-    | **flux-txt2img-high-steps-lab-example** | 1024² with **16** steps |
-    | **flux-txt2img-product-lab-example** | Product / catalog prompt + square |
-    | **flux-img2img-lab-example** | Sketch→hero from Comfy **example.png**, denoise **0.65** |
-    | **flux-img2img-subtle-lab-example** | Light polish of **example.png**, denoise **0.35** |
-    | **flux-img2img-strong-lab-example** | Cinematic remaster of **example.png**, denoise **0.85** |
-
-!!! tip "Img2img uses Comfy’s default doodle"
-
-    I2I graphs keep **LoadImage = example.png** (the crude pink-dress / yellow wing-hair stick figure that ships with ComfyUI). Positives deliberately turn that bad sketch into something incredible—swap in your own sketch anytime.
-
-=== "Video (LTX, ≥ ~10 s)"
-
-    | Workflow | What it does |
-    | --- | --- |
-    | **ltx-i2v-lab-example** | Image → video **~10 s** (241 @ 24 fps; default **example.png**) |
-    | **ltx-t2v-lab-example** | Text → video **~10 s** (241 @ 24 fps) |
-    | **ltx-t2v-portrait-lab-example** | Vertical T2V **512×768**, **~10 s** |
-    | **ltx-t2v-landscape-lab-example** | Wide T2V **1024×576**, **~10 s** |
-    | **ltx-i2v-30s-lab-example** / **ltx-i2v-orbit-30s-lab-example** | I2V **~30 s** long-run demos |
-    | **ltx-t2v-30s-lab-example** / **portrait-30s** / **landscape-30s** | T2V **~30 s** long-run demos |
-    | **ltx-i2v-60s-lab-example** | I2V **~60 s** very heavy long-run demo |
-    | **ltx-t2v-60s-lab-example** / **portrait-60s** / **landscape-60s** / **story-60s** | T2V **~60 s** very heavy long-run demos |
-
-=== "Combined"
-
-    | Workflow | What it does |
-    | --- | --- |
-    | **flux-to-ltx-lab-example** | Flux txt2img + handoff → **ltx-i2v-lab-example** (~10 s) |
-    | **flux-to-ltx-30s-lab-example** | Flux handoff aimed at **ltx-i2v-30s-lab-example** |
-
-Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). LTX notes also explain MP4 output and long-run VRAM expectations.
-
-### Prompting these models
-
-Lab graphs ship research-backed **Positive** / **Negative** prompts. Prefer editing those prose blocks over pasting SD1.5 tag soups.
-
-=== "Flux.2 Klein (image)"
-
-    - Text encoder is **Qwen3** (CLIP type **`flux2`**): write **natural-language sentences**, subject first, then place, materials, lighting, camera
-    - Ideal length is roughly **40–120 words** for hero shots; smoke graphs stay shorter
-    - Highest impact: materials/textures, light source + direction, lens language, foreground/midground/background
-    - Avoid: comma tag lists, `(weight:1.4)` emphasis (not applied), “masterpiece / best quality” spam
-    - Official FLUX.2 style: **describe what you want**, not long “no X” lists. Lab negatives are residual lists for experimenters; graphs ship at **CFG 1.0**, so quality is almost entirely the Positive prompt
-
-=== "LTX-2.3 (video frames)"
-
-    - Text encoder is **Gemma 3 DualCLIP** (type **`ltxv`**): describe **actions over time**
-    - **I2V:** restate the still (lab default is Comfy **example.png**), then camera move + micro-motion; keep identity stable
-    - **T2V:** chronological shot (establish → move → environment motion); for 30 s / 60 s graphs write a beginning → middle → end timeline
-    - Negatives should target **temporal** artifacts (morphing, flicker, jitter, stutter), not generic SD junk
-    - Light ambient-audio language is optional; lab does **not** save audio tracks
-
-### Watch the video (LTX)
-
-!!! tip "Primary output is MP4"
-
-    Seeded **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**, and find `ez_ltx_*_video_*.mp4` under Comfy’s **output/** folder (on the `ez-comfy-state` volume). PNG frames are still written via `SaveImage` for inspection.
-
-| Tier | Frames (`8n+1`) | FPS | ≈ duration |
-| --- | --- | --- | --- |
-| base (`ltx-*-lab-example` without duration suffix) | 241 | 24 | ~10.0 s |
-| **`*-30s-*`** long-run demos | 721 | 24 | ~30.0 s |
-| **`*-60s-*`** very heavy demos | 1441 | 24 | ~60.0 s |
-
-!!! warning "30 s / 60 s graphs are heavy"
-
-    Longer latents need more VRAM and wall-clock time (often multi-minute). Prefer **~10 s** base graphs for smoke tests; keep headroom preflight green before queuing 30 s / 60 s demos.
-
-Optional offline stitch of PNG frames only (if you need a host-side re-encode):
-
-```bash
-ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_*_*.png' \
-  -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4
-```
-
-If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see [Troubleshooting](troubleshooting.md).
-
-??? abstract "Lab workflow details"
-
-    - Name pattern: host files `workflows/*-lab-example.json` (legacy `lab-*` names removed)
-    - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
-    - Flux CLIP loader type is **`flux2`** with `qwen_3_8b_fp4mixed` + `EmptyFlux2LatentImage` (simplified `KSampler`, not the full official advanced sampler subgraph)
-    - LTX graphs use **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps), and still save **frames** via `SaveImage`
-    - Stack installs **ComfyUI-VideoHelperSuite** (required) plus runtime **`ffmpeg`** (imageio-ffmpeg pip is fallback)
-    - LTX-2.3 is **joint AV**: lab graphs load `LTX23_audio_vae_bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`, then **separate** for video `VAEDecode`. Audio is sampled as empty noise (not saved into VHS); omitting empty audio causes `reshape … [1, 0, 32, -1]`
-    - Lab Flux graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
-    - Runtime image includes **`gcc`/`g++`** and **`python3-dev`** so PyTorch 2.13 Triton can JIT `cuda_utils` on first CLIP encode (fallback: `LAB_DISABLE_TORCH_NATIVE_TRITON=1`)
-    - **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)
-
 ---
 
 ## Stop (always before reboot)
@@ -379,6 +345,29 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 ./scripts/manage.sh stop
 ```
 
+`stop` keeps `${MODELS_DIR}`, `${COMFY_OUTPUT_DIR}`, and the `ez-comfy-state` volume.
+
+---
+
+## manage.sh catalog
+
+| Command | Purpose |
+| --- | --- |
+| `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, then doctor |
+| `doctor` | Preflight (docker, GPU, RAM/disk, dirs, license one-liner) |
+| `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port |
+| `start` | Type `yes`; headroom; compose up |
+| `stop` | Stop containers; keep models, outputs, volume |
+| `restart` | `stop` + `start` (full confirm again) |
+| `logs` | Follow compose logs (`logs --tail 100` works) |
+| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap |
+| `download-limit …` | Proxy to `scripts/utilities/download-limit.sh` |
+| `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` |
+| `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) |
+| `cleanup` | Type `DELETE`; remove `ez-comfy-state` only |
+
+`download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3).
+
 ---
 
 ## Optional deep-dives
@@ -389,14 +378,14 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
     | Git branch | Image tag |
     | --- | --- |
-    | `main` | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` |
-    | `development` (and feature branches) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development` |
+    | `main` | `ghcr.io/toxicoder/ez-comfy:us-safe-studio` |
+    | `development` (and feature branches) | `ghcr.io/toxicoder/ez-comfy:us-safe-studio-development` |
 
-    Override with `EZ_COMFY_IMAGE` in `.env` if needed.
+    Override with `EZ_COMFY_IMAGE` in `.env` if needed. Old `flux-to-ltx*` tags freeze on the previous image.
 
     Multi-stage: **devel** builder installs Comfy+torch in **phased modules** (torch separate from custom nodes); final stage is **CUDA runtime** (no nvcc) with **split layers** (venv vs app) so pulls reuse multi‑GB torch when only app bits change.
 
-    It includes ComfyUI + PyTorch (pinned refs — see [Models & Cache](models-and-cache.md#prebuild-version-pins-validated)); **not** FLUX/LTX weights (those stay on `MODELS_DIR`).
+    It includes ComfyUI + PyTorch (pinned refs — see [Models & Cache](models-and-cache.md#prebuild-version-pins-validated)); **not** Klein/Wan/LTX weights (those stay on `MODELS_DIR`).
 
     First start **seeds** the volume from `/opt/comfy-prebuilt` (local copy) instead of multi‑GB pip.
 
@@ -418,7 +407,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
     If GHCR pull fails or you force a thin/local build without prebuild, first start can take **10–30+ minutes** of pip.
 
-    `manage.sh start` streams logs until port 8188 responds (++ctrl+c++ detaches only).
+    `manage.sh start` streams logs until port `${COMFY_PORT}` responds (++ctrl+c++ detaches only).
 
     `LAB_STACK_FOLLOW=0` returns immediately after the container is up.
 
@@ -437,8 +426,8 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
       Op->>M: doctor
       M-->>Op: preflight OK
       Op->>M: download-models
-      M->>DL: wrap --limit auto
-      DL->>HF: throttled pull (flux-fast + ltx-balanced)
+      M->>DL: wrap --limit auto or N Mbps
+      DL->>HF: image fast + wan 5b + ltx 2.5
       HF-->>DL: weights → MODELS_DIR
       DL-->>M: clear limit on exit
       Op->>M: start
@@ -446,7 +435,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
       Op->>M: yes
       M->>D: compose up -d
       D-->>Op: seed prebuilt or cold install
-      Op->>B: open :8188
+      Op->>B: open SPARK_HOST:COMFY_PORT
       Op->>M: stop (before reboot)
     ```
 
@@ -454,7 +443,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
     ```mermaid
     flowchart TB
-      A["manage.sh start<br/>type yes"] --> B["Docker build image<br/>ez-comfy:flux-to-ltx"]
+      A["manage.sh start<br/>type yes"] --> B["Docker build image<br/>ez-comfy:us-safe-studio"]
       B --> C["Create volume comfy-state"]
       C --> D["entrypoint: install-comfy.sh<br/>pip + git · 10–30+ min"]
       D --> E["patch_get_free_memory.py"]
@@ -468,7 +457,10 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
 | Need | Page |
 | --- | --- |
-| Pipeline architecture & memory budget | [Visual Generative AI](visual-generative-ai.md) |
+| How to write Klein / Wan / LTX prompts | [Prompting](prompting.md) |
+| Licenses, $10M LTX cap, banned models | [Model licenses](licenses.md) |
+| Still → Wan 5 s → LTX 5 s AV playbook | [Visual Generative AI](visual-generative-ai.md) |
+| 90s films | [90s shorts](shorts.md) |
 | Cache layout, basenames, layer pins | [Models & Cache](models-and-cache.md) |
 | Bandwidth throttle details | [Download Limit](download-limit.md) |
 | Reboot / recovery | [Reboot Safety](reboot-safety.md) |

@@ -25,9 +25,10 @@
 #   Runtime default: public Docker Hub nvidia/cuda runtime (no nvcc).
 #   Override: CUDA_BASE_IMAGE / CUDA_RUNTIME_IMAGE (NGC after docker login nvcr.io).
 #
-# Pins (validated 2026-07-29 — bump deliberately; see docs/models-and-cache.md):
-#   COMFYUI_REF=v0.29.0  COMFYUI_MANAGER_REF=4.2.2  COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
+# Pins (validated 2026-07-29; Comfy bump 2026-08-26 — see docs/models-and-cache.md):
+#   COMFYUI_REF=v0.34.0  COMFYUI_MANAGER_REF=4.2.2  COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
 #   COMFYUI_VHS_REF= (empty = VideoHelperSuite main; required for LTX lab MP4)
+#   v0.34.0 is the current ComfyUI pin for native LTX / Wan lab graphs and VHS MP4.
 
 ARG CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-devel-ubuntu24.04
 ARG CUDA_RUNTIME_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
@@ -54,7 +55,7 @@ WORKDIR /opt/ez-comfy
 # Set EZ_COMFY_PREBUILD=0 to skip (thin image; cold pip at runtime).
 # Pins default to validated tags; override build-args to bump or float.
 ARG EZ_COMFY_PREBUILD=1
-ARG COMFYUI_REF=v0.29.0
+ARG COMFYUI_REF=v0.34.0
 ARG COMFYUI_MANAGER_REF=4.2.2
 ARG COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
 ARG COMFYUI_VHS_REF=

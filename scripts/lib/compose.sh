@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ## compose
 #
-# Docker Compose wrappers for the unified ComfyUI flux-to-ltx stack.
+# Docker Compose wrappers for the unified ComfyUI US-safe studio stack.
 #
 # Purpose:
 #   Isolate every docker/compose invocation behind helpers that pin the project
@@ -83,7 +83,7 @@ require_docker() {
 }
 
 #######################################
-# Emit a minimal JSON object describing the flux-to-ltx stack state on stdout.
+# Emit a minimal JSON object describing the studio stack state on stdout.
 # State values:
 #   stopped  — no containers / empty ps output
 #   running  — ps JSON mentions running
@@ -111,7 +111,7 @@ compose_status_json() {
   else
     state="unknown"
   fi
-  printf '{"stack":"flux-to-ltx","state":"%s"}\n' "${state}"
+  printf '{"stack":"studio","state":"%s"}\n' "${state}"
 }
 
 #######################################
@@ -194,6 +194,57 @@ stack_port_open() {
   # Bash /dev/tcp fallback
   (echo >/dev/tcp/127.0.0.1/"${port}") >/dev/null 2>&1 && return 0
   return 1
+}
+
+#######################################
+# Remove volume install stamp + pin so the next entrypoint reseeds Comfy.
+# Globals:
+#   None
+# Returns:
+#   0 (stamp removal is best-effort)
+#######################################
+comfy_volume_clear_install_stamp() {
+  compose_run exec -T comfyui rm -f \
+    /comfy-state/ComfyUI/.lab-install-complete \
+    /comfy-state/ComfyUI/.lab-comfyui-ref || true
+}
+
+#######################################
+# Wait until the Comfy UI port is open or closed.
+# Globals:
+#   COMFY_PORT
+# Arguments:
+#   $1  open|closed
+#   $2  Timeout seconds (0 = one check, no sleep)
+# Outputs:
+#   Heartbeat logs on stderr via log
+# Returns:
+#   0 when the port matches; 1 on timeout
+#######################################
+stack_wait_for_port() {
+  local state="${1:?stack_wait_for_port requires open|closed}"
+  local timeout_s="${2:-0}"
+  local waited=0
+  while true; do
+    if [[ ${state} == "open" ]]; then
+      stack_port_open && return 0
+    elif [[ ${state} == "closed" ]]; then
+      if ! stack_port_open; then
+        return 0
+      fi
+    else
+      warn "stack_wait_for_port: unknown state ${state}"
+      return 1
+    fi
+    if [[ ${waited} -ge ${timeout_s} ]]; then
+      return 1
+    fi
+    sleep 1
+    waited=$((waited + 1))
+    if [[ $((waited % 15)) -eq 0 ]]; then
+      log "… waiting for UI port ${state} (elapsed ${waited}s)"
+    fi
+  done
 }
 
 #######################################
@@ -334,8 +385,8 @@ stack_git_branch() {
 
 #######################################
 # Map a git branch name to the published GHCR image tag channel.
-# Aligns with publish-image.yml: main → flux-to-ltx; development →
-# flux-to-ltx-development; feature/other → development channel.
+# Aligns with publish-image.yml: main → us-safe-studio; development →
+# us-safe-studio-development; feature/other → development channel.
 # Globals:
 #   None
 # Arguments:
@@ -349,11 +400,11 @@ stack_image_tag_for_branch() {
   local branch="${1:-unknown}"
   case "${branch}" in
     main)
-      echo "flux-to-ltx"
+      echo "us-safe-studio"
       ;;
     *)
       # development, feature/*, detached/unknown → integration channel
-      echo "flux-to-ltx-development"
+      echo "us-safe-studio-development"
       ;;
   esac
 }
@@ -422,6 +473,7 @@ stack_pull_image() {
 stack_start() {
   require_docker
   export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+  export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
   export COMFY_PORT="${COMFY_PORT:-8188}"
   export MEM_LIMIT="${MEM_LIMIT:-90g}"
   export MEM_RESERVATION="${MEM_RESERVATION:-80g}"
@@ -431,8 +483,10 @@ stack_start() {
   EZ_COMFY_IMAGE="$(stack_default_image)"
   ensure_models_dir "${MODELS_DIR}" || return 1
   mkdir -p "${MODELS_DIR}/comfy"
-  log "══ start ══ unified flux-to-ltx (mem_limit=${MEM_LIMIT})"
+  ensure_comfy_output_dir "${COMFY_OUTPUT_DIR}" || return 1
+  log "══ start ══ unified us-safe-studio (mem_limit=${MEM_LIMIT})"
   log "Image: ${EZ_COMFY_IMAGE} (branch=${branch})"
+  log "Outputs: ${COMFY_OUTPUT_DIR} → /outputs"
 
   local up_args=(up -d)
   if [[ ${LAB_STACK_FORCE_BUILD:-0} == "1" ]]; then
@@ -501,7 +555,7 @@ stack_logs() {
 
 #######################################
 # Stop the stack and delete Compose-managed volumes (Comfy install state).
-# Does **not** delete host MODELS_DIR. Caller must obtain DELETE confirmation first.
+# Does **not** delete host MODELS_DIR or COMFY_OUTPUT_DIR. Caller must obtain DELETE confirmation first.
 # Side effects: Irreversible removal of the ez-comfy-state volume contents.
 # Globals:
 #   See file header / caller environment.
@@ -514,7 +568,7 @@ stack_logs() {
 #######################################
 stack_cleanup_state() {
   require_docker
-  log "Removing project volumes (models host path is NOT deleted)..."
+  log "Removing project volumes (MODELS_DIR and COMFY_OUTPUT_DIR are NOT deleted)..."
   compose_run down -v --remove-orphans
   log "Comfy state volume removed."
 }

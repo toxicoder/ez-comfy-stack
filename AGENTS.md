@@ -120,4 +120,4 @@ Public site publishes after merge via `.github/workflows/deploy-docs.yml` (mike)
 
 ## Scope
 
-This is a **sample** stack. Do not pull in K3s, Bazel, full dashboard, or multi-node NCCL. Point long-term users at nvidia-dgx-spark-lab.
+This is a **sample** stack. Do not pull in K3s, Bazel, full dashboard, or multi-node NCCL. Point long-term users at nvidia-dgx-spark-lab. Independent Sparks share `MODELS_DIR`; still no in-tree NCCL.

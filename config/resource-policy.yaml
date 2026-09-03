@@ -1,5 +1,5 @@
 # Purpose:
-#   Human-readable resource and headroom policy for the unified flux-to-ltx
+#   Human-readable resource and headroom policy for the unified us-safe-studio
 #   Visual Generative AI stack on a single DGX Spark (GB10). Consumed by operators
 #   and mirrored by manage.sh defaults (MIN_HOST_FREE_GIB, MEM_LIMIT, model tiers).
 # Source of truth: this file
@@ -23,28 +23,35 @@ headroom:
   min_disk_free_gib: 40
 
 stack:
-  id: flux-to-ltx
-  label: Unified Flux → LTX (ComfyUI)
+  id: studio
+  label: Unified US-safe studio (Klein 4B + Wan 2.2 + LTX)
   heavy: true
   gpus: 1
   memory_limit: 90g
   memory_reservation: 80g
   cpu: "12"
   models:
-    flux_tier: fast
-    ltx_tier: balanced
+    image_tier: fast
+    wan_tier: 5b
+    ltx_tier: "2.5"
   ports:
     comfyui: 8188
 
+# Default download-models pack (image fast + wan 5b + ltx 2.5).
+# Optional fallbacks (zimage, wan a14b, ltx 2.3) are not listed here.
 models:
-  flux_fast:
+  image_fast:
     repos:
-      - black-forest-labs/FLUX.2-klein-9b-nvfp4
-      - tonera/FLUX.2-klein-9B-Nunchaku
+      - black-forest-labs/FLUX.2-klein-4b-fp8
+      - Comfy-Org/z_image_turbo # qwen_3_4b TE
+      - Comfy-Org/flux2-dev # flux2-vae
+    min_gb: 3
+  wan_5b:
+    repos:
+      - Comfy-Org/Wan_2.2_ComfyUI_Repackaged
     min_gb: 12
-  ltx_balanced:
+  ltx_2_5:
     repos:
-      - Kijai/LTX2.3_comfy
-      - Comfy-Org/ltx-2
-    # Kijai selective (~28–30 GB) + Gemma fp4 TE (~9.5 GB)
+      - Lightricks/LTX-2.5
+    # Selective distilled INT8-convrot + Gemma4-with-proj + VAEs
     min_gb: 30

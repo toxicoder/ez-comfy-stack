@@ -5,15 +5,16 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/toxicoder/ez-comfy-stack/ci.yml?branch=development&style=for-the-badge&logo=github&label=CI)](https://github.com/toxicoder/ez-comfy-stack/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/toxicoder/ez-comfy-stack?style=for-the-badge)](LICENSE)
 
-**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with the unified **Flux → LTX** pipeline (image + video), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling.
+**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with a **US-safe local studio** (Apache Klein 4B stills, Apache Wan 2.2 silent motion, LTX distilled AV), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling.
 
 **Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) — MkDocs Material, published per branch via GitHub Pages.
 
-Inspired by [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) visual workloads — without K3s, Ansible, or the full lab dashboard. Use the lab for production multi-stack operations; use this repo for faster demos.
+Inspired by [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) visual workloads — without K3s, Ansible, or the full lab dashboard. Use the lab for production multi-stack operations; use this repo for faster demos. Local US-safe models only: [licenses](docs/licenses.md) · optional independent Sparks: [Spark farm](docs/spark-farm.md).
 
 ## Goals
 
-- One command path to a working ComfyUI flux-to-ltx stack on one Spark  
+- One command path to a working ComfyUI US-safe studio on one Spark  
+
 - Shared model cache compatible with other stacks (`/mnt/models`)  
 - Operator CLI (`manage.sh`) for start / stop / status / doctor  
 - Bandwidth-limited downloads with **auto = 85% of speedtest**  
@@ -38,13 +39,20 @@ flowchart TB
 Full walkthrough (prerequisites, setup, workflows): **[Getting Started](https://toxicoder.github.io/ez-comfy-stack/latest/getting-started/)** (or the [development](https://toxicoder.github.io/ez-comfy-stack/development/getting-started/) docs if you track that branch).
 
 ```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+
 ./scripts/manage.sh setup --install-docker   # .env, MODELS_DIR, Docker if needed
-# set HF_TOKEN in .env if models are gated
+# set HF_TOKEN in .env if models are gated (LTX-2.5)
 ./scripts/manage.sh doctor
-./scripts/manage.sh download-models   # throttled flux-fast + ltx-balanced
+./scripts/manage.sh download-models   # throttled Klein 4B + Wan 5B + LTX-2.5
 ./scripts/manage.sh start             # type yes
 ./scripts/manage.sh status
-# open http://<spark-ip>:8188
+# open http://${SPARK_HOST}:${COMFY_PORT}
+# laptop: ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 ./scripts/manage.sh stop              # before reboot
 ```
 
@@ -57,7 +65,7 @@ sequenceDiagram
 
   Op->>M: doctor
   Op->>M: download-models
-  Note over M: wrap --limit auto · 85% of speedtest
+  Note over M: wrap --limit auto or --limit N Mbps
   Op->>M: start type yes
   M->>D: compose up
   Op->>B: open :8188
@@ -67,12 +75,12 @@ sequenceDiagram
 ## Layout
 
 ```text
-docker/           Dockerfile + compose (flux-to-ltx)
+docker/           Dockerfile + compose (us-safe-studio)
 scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
-scripts/utilities download-flux, download-ltx, download-limit
+scripts/utilities download-image, download-wan, download-ltx, download-limit, concat-shots, spark-farm
 config/           Resource / headroom policy
-workflows/        Seeded lab ComfyUI example graphs
+workflows/        Seeded lab ComfyUI example graphs (Klein / Wan / LTX; unified 90s films under workflows/shorts/; creator toolkit)
 docs/             MkDocs site
 tests/            BATS + pytest + coverage gate
 ```
@@ -99,7 +107,7 @@ make docs          # site/ (strict MkDocs build)
 # or: mkdocs serve
 ```
 
-Key pages (branch-relative source): [Getting Started](docs/getting-started.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
+Key pages (branch-relative source): [Getting Started](docs/getting-started.md) · [Prompting](docs/prompting.md) · [Model licenses](docs/licenses.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [90s shorts](docs/shorts.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
 
 ## Development
 

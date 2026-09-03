@@ -10,11 +10,12 @@ tags: [bandwidth, wondershaper, speedtest, safety]
 
 - Why bandwidth limits matter on remote Sparks
 - CLI usage (`status`, `run`, `clear`, `wrap`)
+- Manual Mbps cap (`download-models --limit N`) vs auto
 - Auto mode (85% of speedtest) and wrap lifecycle
 
 **What this enables**
 
-- Downloading multi‑GB FLUX/LTX weights without saturating the uplink and freezing SSH
+- Downloading multi‑GB Klein/Wan/LTX weights without saturating the uplink and freezing SSH
 
 ---
 
@@ -46,7 +47,8 @@ flowchart LR
 | `run --limit 50` | Apply a fixed Mbps cap |
 | `run --limit auto` | Measure line rate, apply 85% |
 | `clear` | Remove wondershaper limit |
-| `wrap --limit auto -- <cmd…>` | Apply → run command → **always clear on exit** |
+| `wrap --limit auto` or `--limit N` | Apply → run command → **always clear on exit** |
+| `manage.sh download-models --limit N` | Same wrap; **N** is a standing Mbps cap for this download |
 
 ```bash
 ./scripts/utilities/download-limit.sh status [--json]
@@ -60,8 +62,12 @@ Via manage:
 
 ```bash
 ./scripts/manage.sh download-limit clear
-./scripts/manage.sh download-models   # wrap --limit ${DOWNLOAD_LIMIT:-auto}
+./scripts/manage.sh download-models                 # wrap --limit "${DOWNLOAD_LIMIT:-auto}"
+./scripts/manage.sh download-models --limit 40      # fixed 40 Mbps; overrides .env for this run
+./scripts/manage.sh download-models --limit off     # no throttle (SSH risk)
 ```
+
+`--limit N` is integer **Mbps** (not MB/s). 40 Mbps ≈ 5 MB/s. `.env` `DOWNLOAD_LIMIT=40` is the persistent default; the flag wins for one invocation. Wrap still **clears on exit**.
 
 ```mermaid
 flowchart TB
@@ -163,7 +169,7 @@ sequenceDiagram
   participant Op as Operator / manage.sh
   participant W as download-limit wrap
   participant WS as wondershaper
-  participant Cmd as command e.g. download-flux
+  participant Cmd as command e.g. download-models
 
   Op->>W: wrap --limit auto -- command
   W->>WS: apply limit + verify qdisc

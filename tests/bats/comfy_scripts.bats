@@ -18,7 +18,8 @@ setup() {
   export MODELS_ROOT="${TEST_TMP_DIR}/models"
   export STAMP="${COMFY_HOME}/.lab-install-complete"
   export VENV="${COMFY_HOME}/.venv"
-  mkdir -p "${MODELS_ROOT}"
+  export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs"
+  mkdir -p "${MODELS_ROOT}" "${LAB_OUTPUTS_MOUNT}"
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"
 }
@@ -131,6 +132,60 @@ teardown() {
   [[ -f ${strip_root}/pkg/mod.py ]]
 }
 
+@test "link_comfy_output_dir migrates volume output and symlinks to mount" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local vol_out mount
+  vol_out="${TEST_TMP_DIR}/ComfyUI/output"
+  mount="${TEST_TMP_DIR}/host_outputs"
+  mkdir -p "${vol_out}"
+  echo oldpng >"${vol_out}/legacy.png"
+  export LAB_OUTPUTS_MOUNT="${mount}"
+  export COMFY_HOME="${TEST_TMP_DIR}/ComfyUI"
+  run link_comfy_output_dir "${vol_out}"
+  [ "${status}" -eq 0 ]
+  [[ -L ${TEST_TMP_DIR}/ComfyUI/output ]]
+  [[ -f ${mount}/legacy.png ]]
+  [[ "$(readlink "${TEST_TMP_DIR}/ComfyUI/output")" == "${mount}" ]]
+}
+
+@test "install_lab_custom_nodes copies pack and no-ops when missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/ez_prompt_enhance"
+  dest="${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance"
+  mkdir -p "${src}/prompts"
+  echo 'ok' >"${src}/__init__.py"
+  echo 'sys' >"${src}/prompts/klein_t2i.txt"
+  run install_lab_custom_nodes "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/__init__.py ]]
+  [[ -f ${dest}/prompts/klein_t2i.txt ]]
+  run install_lab_custom_nodes "${TEST_TMP_DIR}/missing-nodes" "${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance2"
+  [ "${status}" -eq 0 ]
+  [[ ! -d ${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance2 ]]
+}
+
+@test "install_lab_workflows copies top-level and shorts JSON" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/wf"
+  dest="${TEST_TMP_DIR}/user_wf"
+  mkdir -p "${src}/shorts"
+  echo '{}' >"${src}/klein-still-draft-lab-example.json"
+  echo '{}' >"${src}/shorts/film-go-see-90s-run-lab-example.json"
+  echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/klein-still-draft-lab-example.json ]]
+  [[ -f ${dest}/film-go-see-90s-run-lab-example.json ]]
+  [[ ! -f ${dest}/go-see.shots.yaml ]]
+  run install_lab_workflows "${TEST_TMP_DIR}/missing-wf" "${TEST_TMP_DIR}/user_wf2"
+  [ "${status}" -eq 0 ]
+}
+
 @test "main with mocked install and NO_EXEC" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
@@ -142,9 +197,38 @@ teardown() {
   : >"${STAMP}"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
+  export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs_main"
   run main
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"phase"* || "${output}" == *"refresh"* ]]
+  [[ -L ${COMFY_HOME}/output ]]
+}
+
+@test "entrypoint reseeds prebuilt when volume pin lags" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local pre="${TEST_TMP_DIR}/prebuilt_pin"
+  export LAB_PREBUILT_ROOT="${pre}"
+  export COMFY_HOME="${TEST_TMP_DIR}/old_vol"
+  export VENV="${COMFY_HOME}/.venv"
+  export STAMP="${COMFY_HOME}/.lab-install-complete"
+  mkdir -p "${pre}/.venv/bin" "${COMFY_HOME}/.venv/bin"
+  printf '#!/usr/bin/env bash\necho ok\n' >"${pre}/.venv/bin/python"
+  chmod +x "${pre}/.venv/bin/python"
+  cp "${pre}/.venv/bin/python" "${COMFY_HOME}/.venv/bin/python"
+  printf 'export VIRTUAL_ENV=1\n' >"${pre}/.venv/bin/activate"
+  printf 'export VIRTUAL_ENV=1\n' >"${COMFY_HOME}/.venv/bin/activate"
+  echo stamp >"${STAMP}"
+  echo v0.29.0 >"${COMFY_HOME}/.lab-comfyui-ref"
+  echo fromimg >"${pre}/marker_pin.txt"
+  export COMFYUI_REF="v0.34.0"
+  export LAB_ENTRYPOINT_INSTALL_CMD="true"
+  export LAB_ENTRYPOINT_NO_EXEC=1
+  unset LAB_FORCE_COLD_INSTALL
+  run main
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"pin"* || "${output}" == *"Re-seeding"* ]]
+  [[ -f ${COMFY_HOME}/marker_pin.txt ]]
 }
 
 @test "entrypoint seeds from prebuilt when stamp missing" {
@@ -275,6 +359,94 @@ teardown() {
   run phase_finalize
   [ "${status}" -eq 0 ]
   [[ -f ${STAMP} ]]
+  [[ -f ${COMFY_HOME}/.lab-comfyui-ref ]]
+}
+
+@test "comfy pin file write read match" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  mkdir -p "${COMFY_HOME}"
+  COMFYUI_REF="v0.34.0"
+  run write_comfy_pin
+  [ "${status}" -eq 0 ]
+  run read_comfy_pin
+  [ "${output}" = "v0.34.0" ]
+  run comfy_pin_matches
+  [ "${status}" -eq 0 ]
+  COMFYUI_REF="v0.29.0"
+  run comfy_pin_matches
+  [ "${status}" -ne 0 ]
+  run comfy_pin_file
+  [[ "${output}" == *".lab-comfyui-ref"* ]]
+}
+
+@test "refresh_comfy_pin_if_needed skips when pin matches" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  mkdir -p "${COMFY_HOME}" "${VENV}/bin"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  COMFYUI_REF="v0.34.0"
+  write_comfy_pin
+  run refresh_comfy_pin_if_needed
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"already on volume"* ]]
+}
+
+@test "refresh_comfy_pin_if_needed clones when volume pin lags and prebuilt missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  mkdir -p "${VENV}/bin"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  printf '#!/bin/sh\n' >"${VENV}/bin/python"
+  chmod +x "${VENV}/bin/python"
+  echo v0.29.0 >"${COMFY_HOME}/.lab-comfyui-ref"
+  export LAB_PREBUILT_ROOT="${TEST_TMP_DIR}/empty_pre"
+  mkdir -p "${LAB_PREBUILT_ROOT}"
+  install_mock_bin pip 'echo pip; exit 0'
+  install_mock_bin git 'echo "git $*"; dest="${@: -1}"; mkdir -p "${dest}" "${COMFY_HOME}/.git" 2>/dev/null || true; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
+  COMFYUI_REF="v0.34.0"
+  run refresh_comfy_pin_if_needed
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"cloning"* || "${output}" == *"Syncing"* ]]
+  run read_comfy_pin
+  [ "${output}" = "v0.34.0" ]
+}
+
+@test "refresh_comfy_pin_if_needed reseeds from prebuilt when pin lags" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  mkdir -p "${VENV}/bin"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  echo v0.29.0 >"${COMFY_HOME}/.lab-comfyui-ref"
+  local pre="${TEST_TMP_DIR}/pre_pin"
+  export LAB_PREBUILT_ROOT="${pre}"
+  mkdir -p "${pre}"
+  echo seeded >"${pre}/from_image.txt"
+  echo 'print("ok")' >"${pre}/main.py"
+  COMFYUI_REF="v0.34.0"
+  run refresh_comfy_pin_if_needed
+  [ "${status}" -eq 0 ]
+  [[ -f ${COMFY_HOME}/from_image.txt ]]
+  [[ "${output}" == *"Re-seeding"* || "${output}" == *"prebuilt"* ]]
+}
+
+@test "install-comfy main stamp-present refresh invokes pin sync" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  mkdir -p "${VENV}/bin" "${COMFY_HOME}/comfy_extras" \
+    "${COMFY_HOME}/custom_nodes/ComfyUI-VideoHelperSuite/.git"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  printf '#!/bin/sh\n' >"${VENV}/bin/python"
+  chmod +x "${VENV}/bin/python"
+  : >"${STAMP}"
+  install_mock_bin git 'echo "git $*"; exit 0'
+  install_mock_bin pip 'echo "pip $*"; exit 0'
+  COMFYUI_REF="v0.34.0"
+  write_comfy_pin
+  run main
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"fast refresh"* || "${output}" == *"already on volume"* ]]
+  [[ "${output}" == *"Install complete"* ]]
 }
 
 @test "install-comfy main --phase dispatches without full cold install" {

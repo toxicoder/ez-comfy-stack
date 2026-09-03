@@ -27,10 +27,10 @@ teardown() {
 @test "download-ltx CLI help status all unknown" {
   run bash "${DL}" --help
   [ "${status}" -eq 0 ]
-  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --tier balanced --json"
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --tier 2.5 --json"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"tiers"* ]]
-  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --tier balanced"
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --tier 2.5"
   [ "${status}" -eq 0 ]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --tier all --json"
   [ "${status}" -eq 0 ]
@@ -39,6 +39,8 @@ teardown() {
 }
 
 @test "download-ltx helpers tier_repo min dir size tiers parse check_hf hf_download" {
+  run tier_repo 2.5
+  [[ "${output}" == *"Lightricks/LTX-2.5"* ]]
   run tier_repo balanced
   [[ "${output}" == *"LTX"* || "${output}" == *"Kijai"* ]]
   run tier_repo quality
@@ -59,7 +61,8 @@ teardown() {
   [[ "${output}" == *"${MODELS_DIR}"* ]]
   TIER=all
   run tiers_to_process
-  [[ "${output}" == *"quality"* ]]
+  [[ "${output}" == *"2.5"* ]]
+  [[ "${output}" == *"2.3"* ]]
   [[ "${output}" == *"gemma"* ]]
   TIER=balanced
   run tiers_to_process
@@ -76,6 +79,16 @@ teardown() {
   [ "${status}" -eq 0 ]
   run tier_size_gb "${MODELS_DIR}/nope"
   [ "${output}" = "0" ]
+}
+
+@test "download-ltx 2.5 distilled includes INT8-convrot pack" {
+  run tier_include_patterns 2.5
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"* ]]
+  [[ "${output}" == *"gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-video-vae-bf16.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-audio-vae-bf16.safetensors"* ]]
+  [[ "${output}" != *"400 GB"* ]]
 }
 
 @test "download-ltx tier_include_patterns selective balanced quality gemma" {

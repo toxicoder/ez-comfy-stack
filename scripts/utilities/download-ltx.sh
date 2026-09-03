@@ -2,24 +2,20 @@
 #
 # ## download-ltx
 #
-# Download LTX-2.3 ComfyUI components (Kijai split checkpoints) into MODELS_DIR.
+# Download LTX-2.5 distilled INT8-convrot (default) or LTX-2.3 fallback.
 #
 # Purpose:
-#   Fetch weights required for the balanced video tier of the unified flux-to-ltx
-#   pipeline and link them into ComfyUI model subfolders (diffusion_models,
-#   text_encoders, vae) under $MODELS_DIR/comfy.
-#
-#   By default each tier pulls a selective subset of Kijai/LTX2.3_comfy
-#   (one transformer + text projection + VAEs) plus the Gemma 3 TE companion
-#   from Comfy-Org/ltx-2 (DualCLIP with type ltxv). Not the full monorepo
-#   (~400 GB of every precision/variant). Set LTX_FULL_REPO=1 to pull everything.
+#   Fetch the small distilled AV set for lab graphs (not the 400 GB monorepo).
+#   Default 2.5: Lightricks/LTX-2.5 INT8-convrot + Gemma4-with-proj + VAEs.
+#   Fallback 2.3: Kijai/LTX2.3_comfy distilled FP8 + Gemma 3 DualCLIP.
+#   LTX Community License ($10M company-revenue cap) — not Apache. Gated HF.
 #
 # Audience:
 #   Operators preparing a Spark host for manage.sh start. Prefer
 #   manage.sh download-models for throttled sequential flux+ltx pulls.
 #
 # Usage:
-#   ./scripts/utilities/download-ltx.sh status [--tier balanced|quality|gemma|all] [--json]
+#   ./scripts/utilities/download-ltx.sh status [--tier 2.5|2.3|balanced|quality|gemma|all] [--json]
 #   ./scripts/utilities/download-ltx.sh run [--tier ...]
 #   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
 #
@@ -47,7 +43,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/common.sh"
 
 MODELS_DIR=${MODELS_DIR:-"/mnt/models"}
-TIER="balanced"
+TIER="2.5"
 JSON_FLAG=""
 CMD="status"
 # cleanup: dry-run unless --yes (explicit delete)
@@ -66,8 +62,8 @@ CLEANUP_YES=0
 #######################################
 tier_repo() {
   case "${1}" in
-    balanced | quality) echo "Kijai/LTX2.3_comfy" ;;
-    # Gemma 3 TE for DualCLIPLoader type=ltxv (required with text_projection)
+    2.5) echo "Lightricks/LTX-2.5" ;;
+    2.3 | balanced | quality) echo "Kijai/LTX2.3_comfy" ;;
     gemma) echo "Comfy-Org/ltx-2" ;;
     *) echo "" ;;
   esac
@@ -86,8 +82,9 @@ tier_repo() {
 #######################################
 tier_min_gb() {
   case "${1}" in
+    2.5) echo 30 ;;
     # distilled fp8 transformer (~25 GB) + projection + VAEs ≈ 28–30 GB
-    balanced) echo 20 ;;
+    2.3 | balanced) echo 20 ;;
     # distilled bf16 transformer (~42 GB) + projection + VAEs ≈ 45–48 GB
     quality) echo 35 ;;
     # gemma_3_12B_it_fp4_mixed ≈ 9.45 GB
@@ -115,7 +112,14 @@ tier_include_patterns() {
     "vae/LTX23_audio_vae_bf16.safetensors"
   )
   case "${1}" in
-    balanced)
+    2.5)
+      printf '%s\n' \
+        "diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors" \
+        "text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors" \
+        "vae/ltx-2.5-video-vae-bf16.safetensors" \
+        "vae/ltx-2.5-audio-vae-bf16.safetensors"
+      ;;
+    2.3 | balanced)
       # Distilled FP8 with calibrated input scales (Spark / modern NVIDIA FP8 matmul).
       printf '%s\n' \
         "diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors" \
@@ -190,8 +194,9 @@ tier_size_gb() {
 #######################################
 tiers_to_process() {
   case "$TIER" in
-    # Gemma TE is required for runnable LTX lab graphs (DualCLIP type ltxv)
-    all) echo "balanced quality gemma" ;;
+    all) echo "2.5 2.3 gemma" ;;
+    2.5) echo "2.5" ;;
+    2.3) echo "2.3 gemma" ;;
     balanced) echo "balanced gemma" ;;
     quality) echo "quality gemma" ;;
     gemma) echo "gemma" ;;
@@ -505,7 +510,8 @@ cmd_run() {
   done
   cmd_status
   if [[ ${ok} -eq 0 ]]; then
-    err "No LTX tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
+    err "No LTX tiers downloaded successfully (${fail} failed)."
+    err "If 403/gated: accept https://huggingface.co/Lightricks/LTX-2.5 as the HF_TOKEN account (hf auth whoami)."
     exit 1
   fi
   if [[ ${fail} -gt 0 ]]; then

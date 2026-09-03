@@ -186,6 +186,42 @@ triton_build_deps_ok() {
 }
 
 #######################################
+# Point ComfyUI/output at the host bind-mount (/outputs).
+# Migrates leftover files from a real output/ dir on the named volume.
+# Globals:
+#   COMFY_HOME, LAB_OUTPUTS_MOUNT
+# Arguments:
+#   $1 - Optional Comfy output path (default COMFY_HOME/output)
+# Outputs:
+#   Progress logs
+# Returns:
+#   0
+#######################################
+link_comfy_output_dir() {
+  local dest="${1:-}"
+  local mount="${LAB_OUTPUTS_MOUNT:-/outputs}"
+  if [[ -z ${dest} ]]; then
+    dest="${COMFY_HOME:-/comfy-state/ComfyUI}/output"
+  fi
+  mkdir -p "${mount}"
+  if [[ -d ${dest} && ! -L ${dest} ]]; then
+    if [[ -n "$(ls -A "${dest}" 2>/dev/null || true)" ]]; then
+      ep_log "Migrating existing Comfy output/ into ${mount}"
+      if command -v rsync >/dev/null 2>&1; then
+        rsync -a "${dest}/" "${mount}/"
+      else
+        cp -a "${dest}/." "${mount}/"
+      fi
+    fi
+    rm -rf "${dest}"
+  elif [[ -L ${dest} || -e ${dest} ]]; then
+    rm -f "${dest}"
+  fi
+  ln -sfn "${mount}" "${dest}"
+  ep_log "Comfy output → ${mount} (host COMFY_OUTPUT_DIR bind-mount)"
+}
+
+#######################################
 # Prefer working Triton; disable torch python_native Triton when deps missing.
 # Globals:
 #   LAB_DISABLE_TORCH_NATIVE_TRITON, PYTHONPATH
@@ -226,6 +262,68 @@ configure_torch_native_triton() {
 }
 
 #######################################
+# Copy host lab JSON graphs into Comfy user workflows.
+# Includes top-level *.json and shorts/*.json (90s film bibles).
+# Globals:
+#   None
+# Arguments:
+#   $1  source workflows root (default /opt/ez-comfy/workflows)
+#   $2  destination user/default/workflows
+# Outputs:
+#   ep_log lines
+# Returns:
+#   0
+#######################################
+install_lab_workflows() {
+  local src="${1:-/opt/ez-comfy/workflows}"
+  local dest="${2:?}"
+  local wf n_wf=0
+  mkdir -p "${dest}"
+  if [[ ! -d ${src} ]]; then
+    ep_log "no workflows under ${src} (optional mount)"
+    return 0
+  fi
+  for wf in "${src}"/*.json "${src}"/shorts/*.json; do
+    [[ -f ${wf} ]] || continue
+    cp -f "${wf}" "${dest}/"
+    n_wf=$((n_wf + 1))
+    ep_log "installed workflow $(basename "${wf}")"
+  done
+  if [[ ${n_wf} -eq 0 ]]; then
+    ep_log "no workflows under ${src} (optional mount)"
+  else
+    ep_log "installed ${n_wf} workflow(s)"
+  fi
+}
+
+#######################################
+# Copy host in-tree prompt-enhance nodes into Comfy custom_nodes.
+# Stdlib-only pack; bind-mounted like workflows so node edits skip image rebuild.
+# Globals:
+#   None
+# Arguments:
+#   $1  source pack (default /opt/ez-comfy/custom_nodes/ez_prompt_enhance)
+#   $2  destination custom_nodes/ez_prompt_enhance
+# Outputs:
+#   ep_log lines
+# Returns:
+#   0
+#######################################
+install_lab_custom_nodes() {
+  local src="${1:-/opt/ez-comfy/custom_nodes/ez_prompt_enhance}"
+  local dest="${2:?}"
+  if [[ ! -d ${src} || ! -f ${src}/__init__.py ]]; then
+    ep_log "no prompt-enhance nodes under ${src} (optional mount)"
+    return 0
+  fi
+  mkdir -p "$(dirname "${dest}")"
+  rm -rf "${dest}"
+  cp -a "${src}" "${dest}"
+  rm -rf "${dest}/__pycache__" "${dest}/.pytest_cache"
+  ep_log "installed custom node ez_prompt_enhance"
+}
+
+#######################################
 # Run install, seed, patch, and exec ComfyUI.
 # Globals:
 #   COMFY_HOME, VENV, LAB_*
@@ -238,7 +336,7 @@ configure_torch_native_triton() {
 #######################################
 main() {
   local install_cmd="${LAB_ENTRYPOINT_INSTALL_CMD:-bash /opt/ez-comfy/install-comfy.sh}"
-  local comfy_home venv stamp
+  local comfy_home venv stamp vol_pin want
   # Read outer COMFY_HOME env before assigning locals
   comfy_home="${COMFY_HOME:-/comfy-state/ComfyUI}"
   venv="${comfy_home}/.venv"
@@ -255,7 +353,18 @@ main() {
     # shellcheck disable=SC2086
     ${install_cmd}
   elif [[ -f ${stamp} && -x ${venv}/bin/python ]]; then
-    ep_log "Install stamp present — refresh only (links + patch)"
+    vol_pin="$(tr -d '\n' <"${comfy_home}/.lab-comfyui-ref" 2>/dev/null || true)"
+    want="${COMFYUI_REF:-v0.34.0}"
+    if [[ ${vol_pin} != "${want}" ]]; then
+      ep_log "Comfy pin needs sync (${vol_pin:-unset} → ${want})"
+      if prebuilt_ready; then
+        ep_log "Re-seeding volume from prebuilt"
+        seed_from_prebuilt
+      else
+        ep_log "Prebuilt missing — install refresh will clone COMFYUI_REF"
+      fi
+    fi
+    ep_log "Install stamp present — refresh (pin sync + links + patch)"
     # shellcheck disable=SC2086
     ${install_cmd}
   elif prebuilt_ready; then
@@ -284,33 +393,23 @@ main() {
     python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
   fi
 
-  ep_log "phase 3/4: install lab workflows into user workflows"
-  mkdir -p "${comfy_home}/user/default/workflows"
-  local wf n_wf=0
-  if [[ -d /opt/ez-comfy/workflows ]]; then
-    for wf in /opt/ez-comfy/workflows/*.json; do
-      [[ -f ${wf} ]] || continue
-      cp -f "${wf}" "${comfy_home}/user/default/workflows/"
-      n_wf=$((n_wf + 1))
-      ep_log "installed workflow $(basename "${wf}")"
-    done
-  fi
-  if [[ ${n_wf} -eq 0 ]]; then
-    ep_log "no workflows under /opt/ez-comfy/workflows (optional mount)"
-  else
-    ep_log "installed ${n_wf} workflow(s)"
-  fi
+  ep_log "phase 3/4: install lab workflows and prompt-enhance nodes"
+  install_lab_workflows /opt/ez-comfy/workflows "${comfy_home}/user/default/workflows"
+  install_lab_custom_nodes /opt/ez-comfy/custom_nodes/ez_prompt_enhance \
+    "${comfy_home}/custom_nodes/ez_prompt_enhance"
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
   ensure_triton_build_env
   configure_torch_native_triton
   cd "${comfy_home}"
-  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188"
+  link_comfy_output_dir "${comfy_home}/output"
+  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs})"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then
     ep_log "LAB_ENTRYPOINT_NO_EXEC=1; skipping exec"
     return 0
   fi
-  exec python main.py --listen 0.0.0.0 --port 8188
+  exec python main.py --listen 0.0.0.0 --port 8188 \
+    --output-directory "${LAB_OUTPUTS_MOUNT:-/outputs}"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then

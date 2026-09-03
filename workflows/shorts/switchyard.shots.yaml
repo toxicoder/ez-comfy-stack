@@ -1,0 +1,156 @@
+film: switchyard
+slug: switchyard
+frames: 120
+fps: 24
+duration_s: 5.00
+beats: 6
+shots_per_beat: 3
+total_shots: 18
+publish_cap_s: 90.00
+identity_look: |
+  Night freight-yard still in rain. Generic unmarked boxcars sit on wet ballast under a yard lamp. Photoreal, empty of railroad company marks. Identity lock for the short.
+shots:
+  - beat: 1
+    shot: 1
+    prefix: ez_switchyard_b1_s1
+    load_from: example.png
+    motion: |
+      Shot 1 of 18, beat 1 enter. Night freight yard, generic, no railroad company marks. Rain on ballast. Yard lamps. Camera walks the gravel.
+    audio: |
+      Rain, ballast crunch, breath. No score, no licensed horns from real carriers.
+  - beat: 1
+    shot: 2
+    prefix: ez_switchyard_b1_s2
+    load_from: ez_switchyard_b1_s1_last
+    motion: |
+      Shot 2 of 18, beat 1 traverse. Breath in cold air. Puddles. Generic lamps.
+    audio: |
+      Rain, distant coupling, breath. No score.
+  - beat: 1
+    shot: 3
+    prefix: ez_switchyard_b1_s3
+    load_from: ez_switchyard_b1_s2_last
+    motion: |
+      Shot 3 of 18, beat 1 exit. Stop between the first unmarked cars.
+    audio: |
+      Rain, gravel, breath. No score.
+  - beat: 2
+    shot: 1
+    prefix: ez_switchyard_b2_s1
+    load_from: ez_switchyard_b1_s3_last
+    motion: |
+      Shot 4 of 18, beat 2 enter. Between unmarked boxcars. Gloves on a rusty ladder rail.
+    audio: |
+      Rain, metal, breath. No score.
+  - beat: 2
+    shot: 2
+    prefix: ez_switchyard_b2_s2
+    load_from: ez_switchyard_b2_s1_last
+    motion: |
+      Shot 5 of 18, beat 2 traverse. Gravel, puddles, a coupling clank.
+    audio: |
+      Coupling clank, rain, breath.
+  - beat: 2
+    shot: 3
+    prefix: ez_switchyard_b2_s3
+    load_from: ez_switchyard_b2_s2_last
+    motion: |
+      Shot 6 of 18, beat 2 exit. Look up the ladder. No logos on the car.
+    audio: |
+      Rain on steel, breath. No score.
+  - beat: 3
+    shot: 1
+    prefix: ez_switchyard_b3_s1
+    load_from: ez_switchyard_b2_s3_last
+    motion: |
+      Shot 7 of 18, beat 3 enter. Climb a generic boxcar ladder in the rain. Gloves wet.
+    audio: |
+      Rungs, rain on steel, breath.
+  - beat: 3
+    shot: 2
+    prefix: ez_switchyard_b3_s2
+    load_from: ez_switchyard_b3_s1_last
+    motion: |
+      Shot 8 of 18, beat 3 traverse. Climb continues. No logos.
+    audio: |
+      Rungs, rain, breath.
+  - beat: 3
+    shot: 3
+    prefix: ez_switchyard_b3_s3
+    load_from: ez_switchyard_b3_s2_last
+    motion: |
+      Shot 9 of 18, beat 3 exit. Reach the roof edge.
+    audio: |
+      Wind, rain, breath. No score.
+  - beat: 4
+    shot: 1
+    prefix: ez_switchyard_b4_s1
+    load_from: ez_switchyard_b3_s3_last
+    motion: |
+      Shot 10 of 18, beat 4 enter. Roof walk along the string of dark cars. Rain.
+    audio: |
+      Rain, wind, breath. No score.
+  - beat: 4
+    shot: 2
+    prefix: ez_switchyard_b4_s2
+    load_from: ez_switchyard_b4_s1_last
+    motion: |
+      Shot 11 of 18, beat 4 traverse. A distant generic horn, not a real railroad identity.
+    audio: |
+      Horn far off, rain, breath. No licensed carrier identity.
+  - beat: 4
+    shot: 3
+    prefix: ez_switchyard_b4_s3
+    load_from: ez_switchyard_b4_s2_last
+    motion: |
+      Shot 12 of 18, beat 4 exit. End of the roof walk. Look down.
+    audio: |
+      Wind, rain, breath. No score.
+  - beat: 5
+    shot: 1
+    prefix: ez_switchyard_b5_s1
+    load_from: ez_switchyard_b4_s3_last
+    motion: |
+      Shot 13 of 18, beat 5 enter. Drop back to gravel, splash a puddle.
+    audio: |
+      Splash, gravel, rain, breath.
+  - beat: 5
+    shot: 2
+    prefix: ez_switchyard_b5_s2
+    load_from: ez_switchyard_b5_s1_last
+    motion: |
+      Shot 14 of 18, beat 5 traverse. Walk toward yard-office window glow without readable signage.
+    audio: |
+      Gravel, rain, breath.
+  - beat: 5
+    shot: 3
+    prefix: ez_switchyard_b5_s3
+    load_from: ez_switchyard_b5_s2_last
+    motion: |
+      Shot 15 of 18, beat 5 exit. Window glow, no readable sign. Keep walking.
+    audio: |
+      Rain, breath. No score.
+  - beat: 6
+    shot: 1
+    prefix: ez_switchyard_b6_s1
+    load_from: ez_switchyard_b5_s3_last
+    motion: |
+      Shot 16 of 18, beat 6 enter. Stop under a lamp.
+    audio: |
+      Rain ticking the lamp, breath.
+  - beat: 6
+    shot: 2
+    prefix: ez_switchyard_b6_s2
+    load_from: ez_switchyard_b6_s1_last
+    motion: |
+      Shot 17 of 18, beat 6 traverse. Look down the dark string of cars.
+    audio: |
+      Rain, distant metal, breath. No score.
+  - beat: 6
+    shot: 3
+    prefix: ez_switchyard_b6_s3
+    load_from: ez_switchyard_b6_s2_last
+    motion: |
+      Shot 18 of 18, beat 6 exit. A quiet, short laugh. Hold.
+    audio: |
+      Rain ticking the lamp, breath. No score.

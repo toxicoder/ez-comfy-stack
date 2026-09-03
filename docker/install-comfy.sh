@@ -22,7 +22,7 @@
 #
 # Environment:
 #   COMFY_HOME, COMFY_USER, MODELS_ROOT — defaults in install-comfy/common.sh
-#   COMFYUI_REF — ComfyUI git pin (default v0.29.0; empty = default branch)
+#   COMFYUI_REF — ComfyUI git pin (default v0.34.0; empty = default branch)
 #   COMFYUI_MANAGER_REF — Manager pin (default 4.2.2)
 #   COMFYUI_NUNCHAKU_NODE_REF — nunchaku node pin (default v1.2.1)
 #   COMFYUI_VHS_REF — VideoHelperSuite git ref (default empty = main; required for LTX MP4)
@@ -111,6 +111,47 @@ parse_install_args() {
 }
 
 #######################################
+# When the volume Comfy pin lags COMFYUI_REF, sync sources (prebuilt rsync or git).
+# Globals:
+#   COMFY_HOME, COMFYUI_REF, LAB_PREBUILT_ROOT, VENV
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log
+# Returns:
+#   0
+#######################################
+refresh_comfy_pin_if_needed() {
+  local want="${COMFYUI_REF:-}"
+  local have pre
+  have="$(read_comfy_pin)"
+  if [[ ${have} == "${want}" ]]; then
+    log "Comfy pin ${want} already on volume"
+    return 0
+  fi
+  log "Syncing ComfyUI to pin ${want} (volume had ${have:-none})"
+  pre="${LAB_PREBUILT_ROOT:-/opt/comfy-prebuilt}"
+  if [[ -x ${pre}/.venv/bin/python || -f ${pre}/main.py ]]; then
+    log "Re-seeding ${COMFY_HOME} from prebuilt"
+    mkdir -p "${COMFY_HOME}"
+    if command -v rsync >/dev/null 2>&1; then
+      rsync -a "${pre}/" "${COMFY_HOME}/"
+    else
+      cp -a "${pre}/." "${COMFY_HOME}/"
+    fi
+    activate_venv
+  else
+    log "Prebuilt missing — cloning COMFYUI_REF=${want}"
+    phase_clone_comfy
+    activate_venv
+    if [[ -f ${COMFY_HOME}/requirements.txt ]]; then
+      pip_install -r "${COMFY_HOME}/requirements.txt"
+    fi
+  fi
+  write_comfy_pin
+}
+
+#######################################
 # Full install or refresh path for ComfyUI on the comfy-state volume.
 # Globals:
 #   COMFY_HOME, COMFY_USER, MODELS_ROOT, STAMP, VENV, INSTALL_PHASE
@@ -144,8 +185,8 @@ main() {
 
   if [[ -f ${STAMP} && -x "${VENV}/bin/python" ]]; then
     refresh=1
-    total=3
-    log "Install stamp present — fast refresh (3 steps; cold install skipped)"
+    total=6
+    log "Install stamp present — fast refresh (pin sync + links + patch)"
   else
     log "Cold install path (~10–30+ min common on first start)"
   fi
@@ -180,15 +221,17 @@ main() {
     log "step 9–12 done"
   else
     activate_venv
-    step 1 "${total}" "Refresh model directory links"
+    step 1 "${total}" "Sync ComfyUI pin if the volume lags COMFYUI_REF"
+    refresh_comfy_pin_if_needed
+    step 2 "${total}" "Refresh model directory links"
     link_all_models
-    step 2 "${total}" "Ensure VideoHelperSuite (LTX lab MP4)"
+    step 3 "${total}" "Ensure VideoHelperSuite (LTX lab MP4)"
     ensure_lab_video_nodes || warn "VideoHelperSuite refresh failed — LTX lab MP4 may be unavailable"
-    step 3 "${total}" "Remove wrong PyPI nunchaku if present"
+    step 4 "${total}" "Remove wrong PyPI nunchaku if present"
     cleanup_wrong_nunchaku
-    step 4 "${total}" "Apply Spark free-memory patch"
+    step 5 "${total}" "Apply Spark free-memory patch"
     apply_free_memory_patch
-    step 5 "${total}" "Refresh complete"
+    step 6 "${total}" "Refresh complete"
   fi
 
   log "══ Install complete ══ total elapsed $(install_format_elapsed "$(install_elapsed_s)")"

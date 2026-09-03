@@ -161,16 +161,29 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"lab workflow weights ready"* || "${output}" == *"lab model ok"* ]]
   [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
+  [[ ! -e "${MODELS_DIR}/comfy/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors" ]]
+  run cmd_help
+  [[ "${output}" != *"download-h3"* ]]
+  [[ "${output}" != *"farm-h3"* ]]
+  [[ "${output}" == *"Refuses MiniMax H3"* ]]
+  run cmd_download_models --with-h3
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"US Excluded Territory"* ]]
+  run cmd_download_models --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"banned"* || "${output}" == *"US Excluded"* ]]
   # Wipe comfy links only — cache hit + link_into_comfy should restore
   rm -f "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"
   run cmd_download_models
   [ "${status}" -eq 0 ]
   [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
   # Gate fails when downloads fail and lab files are gone
-  rm -rf "${MODELS_DIR}/comfy" "${MODELS_DIR}/Comfy-Org__flux2-klein-9B" \
-    "${MODELS_DIR}/black-forest-labs__FLUX.2-klein-9b-nvfp4" \
-    "${MODELS_DIR}/Kijai__LTX2.3_comfy_balanced" \
-    "${MODELS_DIR}/tonera__FLUX.2-klein-9B-Nunchaku"
+  rm -rf "${MODELS_DIR}/comfy" \
+    "${MODELS_DIR}/black-forest-labs__FLUX.2-klein-4b-fp8_fast" \
+    "${MODELS_DIR}/Comfy-Org__z_image_turbo_te" \
+    "${MODELS_DIR}/Comfy-Org__flux2-dev_vae" \
+    "${MODELS_DIR}/Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b" \
+    "${MODELS_DIR}/Lightricks__LTX-2.5_2.5"
   export LAB_MOCK_HF_DOWNLOAD=fail
   run cmd_download_models
   [ "${status}" -ne 0 ]
@@ -180,4 +193,75 @@ teardown() {
   export LAB_CONFIRM_TOKEN=DELETE
   run cmd_cleanup
   [ "${status}" -eq 0 ]
+}
+
+@test "download-models --limit accepts manual Mbps and overrides env" {
+  export LAB_MOCK_HF_DOWNLOAD=1
+  export DOWNLOAD_LIMIT=auto
+
+  run cmd_download_models --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"--limit"* ]]
+  [[ "${output}" == *"Mbps"* ]]
+
+  run cmd_help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"--limit"* ]]
+
+  run cmd_download_models --limit
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"limit"* ]]
+
+  run cmd_download_models --limit nope
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"Invalid"* || "${output}" == *"invalid"* || "${output}" == *"limit"* ]]
+
+  run cmd_download_models --limit=-1
+  [ "${status}" -ne 0 ]
+
+  run cmd_download_models --limit off
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"DOWNLOAD_LIMIT=off"* || "${output}" == *"saturating"* ]]
+  [[ "${output}" == *"lab workflow weights ready"* || "${output}" == *"lab model ok"* ]]
+
+  export DOWNLOAD_LIMIT=auto
+  run cmd_download_models --limit 40
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"lab workflow weights ready"* || "${output}" == *"lab model ok"* ]]
+}
+
+@test "reset-hf-partials and download-models --drop-incomplete" {
+  export LAB_MOCK_HF_DOWNLOAD=1
+  mkdir -p "${MODELS_DIR}/.cache/huggingface/download"
+  : >"${MODELS_DIR}/.cache/huggingface/download/blob.incomplete"
+  : >"${MODELS_DIR}/keep.safetensors"
+
+  run cmd_reset_hf_partials --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"incomplete"* ]]
+
+  export LAB_MOCK_HF_RUNNING=1
+  run cmd_reset_hf_partials --yes
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"still running"* ]]
+  [[ -f "${MODELS_DIR}/.cache/huggingface/download/blob.incomplete" ]]
+  unset LAB_MOCK_HF_RUNNING
+
+  run cmd_reset_hf_partials --yes
+  [ "${status}" -eq 0 ]
+  [[ ! -f "${MODELS_DIR}/.cache/huggingface/download/blob.incomplete" ]]
+  [[ -f "${MODELS_DIR}/keep.safetensors" ]]
+
+  : >"${MODELS_DIR}/.cache/huggingface/download/blob.incomplete"
+  run cmd_download_models --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"--drop-incomplete"* ]]
+  run cmd_help
+  [[ "${output}" == *"reset-hf-partials"* ]]
+
+  export DOWNLOAD_LIMIT=off
+  run cmd_download_models --drop-incomplete
+  [ "${status}" -eq 0 ]
+  [[ ! -f "${MODELS_DIR}/.cache/huggingface/download/blob.incomplete" ]]
+  [[ "${output}" == *"drop"* || "${output}" == *"incomplete"* || "${output}" == *"lab workflow weights ready"* ]]
 }

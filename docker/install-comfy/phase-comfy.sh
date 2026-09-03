@@ -9,7 +9,7 @@
 # Defaults when shellcheck/lint analyze this file without common.sh sourced first.
 # Runtime always sources common.sh; ENV/Dockerfile may override.
 COMFYUI_REPO="${COMFYUI_REPO:-https://github.com/comfyanonymous/ComfyUI.git}"
-COMFYUI_REF="${COMFYUI_REF:-v0.29.0}"
+COMFYUI_REF="${COMFYUI_REF:-v0.34.0}"
 
 #######################################
 # Clone or update ComfyUI into COMFY_HOME (honours COMFYUI_REF pin).

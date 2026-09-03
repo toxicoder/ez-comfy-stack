@@ -1,0 +1,156 @@
+film: still-here
+slug: stillhere
+frames: 120
+fps: 24
+duration_s: 5.00
+beats: 6
+shots_per_beat: 3
+total_shots: 18
+publish_cap_s: 90.00
+identity_look: |
+  Third-person household morning still. A plain ceramic mug sits on a wooden table in first light. Unmarked kitchen, empty of brands. The mug is the identity lock. SFW, no real likenesses.
+shots:
+  - beat: 1
+    shot: 1
+    prefix: ez_stillhere_b1_s1
+    load_from: example.png
+    motion: |
+      Shot 1 of 18, beat 1 enter. Third-person household morning, SFW. Kitchen at first light. A kettle clicks off. No real likenesses, no brands.
+    audio: |
+      Kettle click, no score.
+  - beat: 1
+    shot: 2
+    prefix: ez_stillhere_b1_s2
+    load_from: ez_stillhere_b1_s1_last
+    motion: |
+      Shot 2 of 18, beat 1 traverse. Someone pours into a plain ceramic mug. Camera stays on the pour.
+    audio: |
+      Pour, steam, no score.
+  - beat: 1
+    shot: 3
+    prefix: ez_stillhere_b1_s3
+    load_from: ez_stillhere_b1_s2_last
+    motion: |
+      Shot 3 of 18, beat 1 exit. Mug full. From the next room, a small child hums a made-up two-note motif — generated, no identifiable face.
+    audio: |
+      Floorboard, the invented hum, no licensed music.
+  - beat: 2
+    shot: 1
+    prefix: ez_stillhere_b2_s1
+    load_from: ez_stillhere_b1_s3_last
+    motion: |
+      Shot 4 of 18, beat 2 enter. Mug on a wooden table, steam. Third-person.
+    audio: |
+      Steam tick, fridge hum, no score.
+  - beat: 2
+    shot: 2
+    prefix: ez_stillhere_b2_s2
+    load_from: ez_stillhere_b2_s1_last
+    motion: |
+      Shot 5 of 18, beat 2 traverse. The humming continues from the hallway, closer. Camera tracks the mug.
+    audio: |
+      Hum motif closer, no licensed music.
+  - beat: 2
+    shot: 3
+    prefix: ez_stillhere_b2_s3
+    load_from: ez_stillhere_b2_s2_last
+    motion: |
+      Shot 6 of 18, beat 2 exit. Camera finds the doorway. Mug still in frame.
+    audio: |
+      Hum, wood, no score.
+  - beat: 3
+    shot: 1
+    prefix: ez_stillhere_b3_s1
+    load_from: ez_stillhere_b2_s3_last
+    motion: |
+      Shot 7 of 18, beat 3 enter. Adult hands wrap the mug. No celebrity faces.
+    audio: |
+      Ceramic, breath, no score.
+  - beat: 3
+    shot: 2
+    prefix: ez_stillhere_b3_s2
+    load_from: ez_stillhere_b3_s1_last
+    motion: |
+      Shot 8 of 18, beat 3 traverse. The child motif answers from off-screen. House creaks.
+    audio: |
+      The hum, house creak, no score.
+  - beat: 3
+    shot: 3
+    prefix: ez_stillhere_b3_s3
+    load_from: ez_stillhere_b3_s2_last
+    motion: |
+      Shot 9 of 18, beat 3 exit. Hands and mug, steam. Hold identity of the mug.
+    audio: |
+      Breath, ceramic, no score.
+  - beat: 4
+    shot: 1
+    prefix: ez_stillhere_b4_s1
+    load_from: ez_stillhere_b3_s3_last
+    motion: |
+      Shot 10 of 18, beat 4 enter. Third-person follow into a living room. Dust in a sun bar.
+    audio: |
+      Footsteps on wood, no score.
+  - beat: 4
+    shot: 2
+    prefix: ez_stillhere_b4_s2
+    load_from: ez_stillhere_b4_s1_last
+    motion: |
+      Shot 11 of 18, beat 4 traverse. The humming is closer, still a silhouette in the next doorway — no identifiable child face.
+    audio: |
+      The motif, curtain, no score.
+  - beat: 4
+    shot: 3
+    prefix: ez_stillhere_b4_s3
+    load_from: ez_stillhere_b4_s2_last
+    motion: |
+      Shot 12 of 18, beat 4 exit. Sun bar, doorway silhouette. SFW.
+    audio: |
+      Hum, cloth, no score.
+  - beat: 5
+    shot: 1
+    prefix: ez_stillhere_b5_s1
+    load_from: ez_stillhere_b4_s3_last
+    motion: |
+      Shot 13 of 18, beat 5 enter. Third-person doorway. A small silhouetted figure. No close-up identity.
+    audio: |
+      The hum, breath.
+  - beat: 5
+    shot: 2
+    prefix: ez_stillhere_b5_s2
+    load_from: ez_stillhere_b5_s1_last
+    motion: |
+      Shot 14 of 18, beat 5 traverse. Silhouette looks at morning light and hums the same invented motif.
+    audio: |
+      The hum, a toy wood-block tap.
+  - beat: 5
+    shot: 3
+    prefix: ez_stillhere_b5_s3
+    load_from: ez_stillhere_b5_s2_last
+    motion: |
+      Shot 15 of 18, beat 5 exit. Pull back toward the table. SFW.
+    audio: |
+      Hum fading, wood, no score.
+  - beat: 6
+    shot: 1
+    prefix: ez_stillhere_b6_s1
+    load_from: ez_stillhere_b5_s3_last
+    motion: |
+      Shot 16 of 18, beat 6 enter. Mug on the table, empty chair.
+    audio: |
+      House quiet, no score.
+  - beat: 6
+    shot: 2
+    prefix: ez_stillhere_b6_s2
+    load_from: ez_stillhere_b6_s1_last
+    motion: |
+      Shot 17 of 18, beat 6 traverse. The hum fades to one last note.
+    audio: |
+      Last hummed note, no licensed music.
+  - beat: 6
+    shot: 3
+    prefix: ez_stillhere_b6_s3
+    load_from: ez_stillhere_b6_s2_last
+    motion: |
+      Shot 18 of 18, beat 6 exit. Hold. Only the house. Quiet. No logos.
+    audio: |
+      Only the house. No score.

@@ -43,17 +43,33 @@ teardown() {
   [[ "${output}" == *"docker-compose.yml"* ]]
   run lab_models_dir
   [ "${status}" -eq 0 ]
+  run lab_comfy_output_dir
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"comfy-output"* ]]
+}
+
+@test "common: doctor_next_step_hint for docker group vs missing CLI" {
+  run doctor_next_step_hint 1
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"newgrp docker"* ]]
+  [[ "${output}" != *"setup --install-docker"* ]]
+  run doctor_next_step_hint 2
+  [[ "${output}" == *"systemctl start docker"* ]]
+  run doctor_next_step_hint 3
+  [[ "${output}" == *"setup --install-docker"* ]]
+  run doctor_next_step_hint 0
+  [[ "${output}" == *"setup --install-docker"* ]]
 }
 
 @test "common: lab_expected_model_relpaths and check_lab_models_ready" {
   run lab_expected_model_relpaths
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"flux-2-klein-9b-nvfp4.safetensors"* ]]
-  [[ "${output}" == *"qwen_3_8b_fp4mixed.safetensors"* ]]
-  [[ "${output}" == *"gemma_3_12B_it_fp4_mixed.safetensors"* ]]
-  [[ "${output}" == *"ltx-2.3_text_projection_bf16.safetensors"* ]]
+  [[ "${output}" == *"flux-2-klein-4b-fp8.safetensors"* ]]
+  [[ "${output}" == *"qwen_3_4b.safetensors"* ]]
+  [[ "${output}" == *"wan2.2_ti2v_5B_fp16.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"* ]]
   [[ "${output}" == *"flux2-vae.safetensors"* ]]
-  [[ "${output}" == *"LTX23_video_vae_bf16.safetensors"* ]]
+  [[ "${output}" == *"ltx-2.5-video-vae-bf16.safetensors"* ]]
 
   local root="${TEST_TMP_DIR}/lab_models_root"
   mkdir -p "${root}/comfy"
@@ -69,6 +85,26 @@ teardown() {
   run check_lab_models_ready "${root}"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"all expected"* || "${output}" == *"lab model ok"* ]]
+}
+
+@test "common: refuse_minimax_h3 names US exclusion" {
+  run refuse_minimax_h3
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"US Excluded Territory"* ]]
+  [[ "${output}" == *"docs/licenses.md"* ]]
+}
+
+@test "common: warn_banned_minimax_weights flags leftover files" {
+  local root="${TEST_TMP_DIR}/models"
+  mkdir -p "${root}/comfy/diffusion_models"
+  run warn_banned_minimax_weights "${root}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"banned MiniMax"* ]]
+  : >"${root}/comfy/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+  run warn_banned_minimax_weights "${root}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"banned MiniMax"* ]]
+  [[ "${output}" == *"minimax_h3_fl2va"* ]]
 }
 
 @test "common: ln_sfn_relative creates resolvable relative symlink" {
@@ -203,6 +239,17 @@ teardown() {
   run prepare_models_dir "${TEST_TMP_DIR}/prepared_models"
   [ "${status}" -eq 0 ]
   [ -d "${TEST_TMP_DIR}/prepared_models" ]
+  run ensure_comfy_output_dir "${TEST_TMP_DIR}/comfy-out-ok"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/comfy-out-ok" ]
+  run ensure_writable_host_dir COMFY_OUTPUT_DIR "${TEST_TMP_DIR}/comfy-out-ok"
+  [ "${status}" -eq 0 ]
+  run prepare_comfy_output_dir "${TEST_TMP_DIR}/prepared_output"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/prepared_output" ]
+  run prepare_writable_host_dir COMFY_OUTPUT_DIR "${TEST_TMP_DIR}/prepared_output2"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/prepared_output2" ]
   chmod 755 "${ro}"
 
   run run_with_signal_forwarding true
@@ -270,9 +317,14 @@ teardown() {
   run hf_download "org/private" --local-dir "${TEST_TMP_DIR}/auth"
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"HF_TOKEN"* || "${output}" == *"auth"* || "${output}" == *"token"* ]]
+  export LAB_MOCK_HF_IDENTITY=spark-test-user
   run explain_hf_download_error "GatedRepoError not in the authorized list https://huggingface.co/org/model/resolve/x" "org/model"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"Agree"* ]]
+  [[ "${output}" == *"spark-test-user"* ]]
+  unset LAB_MOCK_HF_IDENTITY
+  run hf_auth_identity
+  [ "${status}" -eq 0 ]
   export LAB_DEBUG=1
   run explain_hf_download_error "some obscure failure line1
 line2
@@ -281,6 +333,48 @@ line3" "org/x"
   [[ "${output}" == *"raw hf download log"* || "${output}" == *"obscure"* ]]
   unset LAB_DEBUG
   unset LAB_MOCK_HF_DOWNLOAD
+}
+
+@test "common: hf_download hides Traceback and passes --token" {
+  unset LAB_MOCK_HF_DOWNLOAD
+  export HF_PROGRESS=0
+  unset HF_DOWNLOAD_MAX_WORKERS
+  export HF_TOKEN="hf_testsecret"
+  export LAB_MOCK_HF_IDENTITY="alice"
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  install_mock_bin hf '
+if [[ " $* " == *" --help "* ]] || [[ ${2:-} == "--help" ]]; then
+  echo "Usage: hf download"
+  echo "  --token TEXT"
+  echo "  --max-workers INT"
+  echo "  --local-dir PATH"
+  exit 0
+fi
+if [[ ${1:-} == "auth" && ${2:-} == "whoami" ]]; then
+  echo "user: alice"
+  exit 0
+fi
+echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
+echo "Traceback (most recent call last):" >&2
+echo "huggingface_hub.errors.GatedRepoError: Cannot access gated repo" >&2
+echo "Access to model Lightricks/LTX-2.5 is restricted and you are not in the authorized list." >&2
+exit 1
+'
+  run hf_download "Lightricks/LTX-2.5" --local-dir "${TEST_TMP_DIR}/ltx_gated"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"gated"* || "${output}" == *"Gated"* || "${output}" == *"Agree"* ]]
+  [[ "${output}" == *"alice"* ]]
+  [[ "${output}" != *"Traceback"* ]]
+  [[ "${output}" != *"hf_testsecret"* ]]
+  grep -q -- '--token' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'hf_testsecret' "${TEST_TMP_DIR}/hf_calls.log"
+  export LAB_DEBUG=1
+  run hf_download "Lightricks/LTX-2.5" --local-dir "${TEST_TMP_DIR}/ltx_gated2"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"raw hf download log"* || "${output}" == *"GatedRepoError"* ]]
+  unset LAB_DEBUG
+  unset HF_TOKEN
+  unset LAB_MOCK_HF_IDENTITY
 }
 
 @test "common: count_hf_incomplete for resume state" {
@@ -294,6 +388,85 @@ line3" "org/x"
   [ "${output}" = "2" ]
   run count_hf_incomplete "${TEST_TMP_DIR}/missing_dir"
   [ "${output}" = "0" ]
+  run list_hf_incomplete "${d}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"blob.incomplete"* ]]
+  : >"${d}/keep.safetensors"
+  run remove_hf_incomplete "${d}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"2"* ]]
+  [[ ! -f "${d}/other.incomplete" ]]
+  [[ ! -f "${d}/.cache/huggingface/download/blob.incomplete" ]]
+  [[ -f "${d}/keep.safetensors" ]]
+  run hf_download_pids_running
+  [ "${status}" -ne 0 ]
+  export LAB_MOCK_HF_RUNNING=1
+  run hf_download_pids_running
+  [ "${status}" -eq 0 ]
+  unset LAB_MOCK_HF_RUNNING
+  run warn_hf_resume_stall "${d}" 30
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"resume stall"* ]]
+  [[ "${output}" == *"reset-hf-partials"* ]]
+  [[ "${output}" != *"HF_LOCK_CLEAR_FORCE=1"* ]]
+  run wait_hf_download_or_stall ""
+  [ "${status}" -ne 0 ]
+}
+
+@test "common: locks_only held lock does not suggest FORCE" {
+  local lock_root="${TEST_TMP_DIR}/held_locks"
+  mkdir -p "${lock_root}"
+  : >"${lock_root}/held.lock"
+  install_mock_bin fuser 'exit 0'
+  run clear_stale_hf_locks "${lock_root}" "locks_only"
+  [ "${status}" -eq 0 ]
+  [[ -f "${lock_root}/held.lock" ]]
+  [[ "${output}" == *"still holds"* ]]
+  [[ "${output}" != *"HF_LOCK_CLEAR_FORCE=1"* ]]
+}
+
+@test "common: hf_download retries once after resume stall" {
+  local dest="${TEST_TMP_DIR}/stall_dest"
+  mkdir -p "${dest}/.cache/huggingface/download"
+  : >"${dest}/.cache/huggingface/download/blob.incomplete"
+  unset LAB_MOCK_HF_DOWNLOAD
+  unset HF_TOKEN
+  export HF_PROGRESS=0
+  export HF_RESUME_STALL_S=2
+  export HF_PROGRESS_INTERVAL=1
+  unset HF_DOWNLOAD_MAX_WORKERS
+  : >"${TEST_TMP_DIR}/hf_n"
+  echo 0 >"${TEST_TMP_DIR}/hf_n"
+  install_mock_bin hf '
+if [[ " $* " == *" --help "* ]] || [[ ${2:-} == "--help" ]]; then
+  echo "Usage: hf download"
+  exit 0
+fi
+echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
+n=$(cat "${TEST_TMP_DIR}/hf_n" 2>/dev/null || echo 0)
+n=$((n + 1))
+echo "${n}" >"${TEST_TMP_DIR}/hf_n"
+if [[ ${n} -eq 1 ]]; then
+  sleep 30
+  exit 1
+fi
+prev=""
+for a in "$@"; do
+  if [[ ${prev} == "--local-dir" ]]; then
+    mkdir -p "${a}"
+    echo ok >"${a}/done.bin"
+    exit 0
+  fi
+  prev="${a}"
+done
+exit 0
+'
+  run hf_download "org/stall" --local-dir "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ ! -f "${dest}/.cache/huggingface/download/blob.incomplete" ]]
+  [[ -f "${dest}/done.bin" ]]
+  [[ "$(cat "${TEST_TMP_DIR}/hf_n")" == "2" ]]
+  [[ "${output}" == *"dropping"* || "${output}" == *"retrying"* || "${output}" == *"resume stall"* ]]
 }
 
 @test "common: hf progress formatters and emit helpers" {
@@ -404,19 +577,19 @@ line3" "org/x"
   # stack_image_tag_for_branch: long-lived channels + feature fallback
   run stack_image_tag_for_branch main
   [ "${status}" -eq 0 ]
-  [ "${output}" = "flux-to-ltx" ]
+  [ "${output}" = "us-safe-studio" ]
 
   run stack_image_tag_for_branch development
   [ "${status}" -eq 0 ]
-  [ "${output}" = "flux-to-ltx-development" ]
+  [ "${output}" = "us-safe-studio-development" ]
 
   run stack_image_tag_for_branch feature/foo
   [ "${status}" -eq 0 ]
-  [ "${output}" = "flux-to-ltx-development" ]
+  [ "${output}" = "us-safe-studio-development" ]
 
   run stack_image_tag_for_branch unknown
   [ "${status}" -eq 0 ]
-  [ "${output}" = "flux-to-ltx-development" ]
+  [ "${output}" = "us-safe-studio-development" ]
 
   # stack_git_branch respects LAB_GIT_BRANCH override (hermetic)
   export LAB_GIT_BRANCH=development
@@ -429,17 +602,17 @@ line3" "org/x"
   export LAB_GIT_BRANCH=main
   run stack_default_image
   [ "${status}" -eq 0 ]
-  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:flux-to-ltx" ]
+  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:us-safe-studio" ]
 
   export LAB_GIT_BRANCH=development
   run stack_default_image
   [ "${status}" -eq 0 ]
-  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development" ]
+  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:us-safe-studio-development" ]
 
   export LAB_GIT_BRANCH=feature/branch-aligned-ghcr-image
   run stack_default_image
   [ "${status}" -eq 0 ]
-  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development" ]
+  [ "${output}" = "ghcr.io/toxicoder/ez-comfy:us-safe-studio-development" ]
 
   export EZ_COMFY_IMAGE="ghcr.io/example/custom:tag"
   export LAB_GIT_BRANCH=main
@@ -464,7 +637,7 @@ line3" "org/x"
 
   run compose_status_json
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"flux-to-ltx"* ]]
+  [[ "${output}" == *'"stack":"studio"'* ]]
 
   run compose_is_running
   [ "${status}" -ne 0 ]
@@ -481,7 +654,7 @@ line3" "org/x"
   unset EZ_COMFY_IMAGE
   export LAB_GIT_BRANCH=development
   run stack_default_image
-  [[ "${output}" == *ghcr.io* && "${output}" == *ez-comfy* && "${output}" == *flux-to-ltx-development* ]]
+  [[ "${output}" == *ghcr.io* && "${output}" == *ez-comfy* && "${output}" == *us-safe-studio-development* ]]
   # inventory + behavior: pull path when not skipped
   unset LAB_STACK_SKIP_PULL
   run stack_pull_image "ghcr.io/example/ez-comfy:test"
@@ -496,6 +669,26 @@ line3" "org/x"
   run stack_port_open 9
   # port 9 unlikely open; status non-zero is fine
   [ "${status}" -ne 0 ] || true
+
+  stack_port_open() { return 1; }
+  run stack_wait_for_port closed 0
+  [ "${status}" -eq 0 ]
+  stack_port_open() { return 0; }
+  run stack_wait_for_port open 0
+  [ "${status}" -eq 0 ]
+  run stack_wait_for_port closed 0
+  [ "${status}" -ne 0 ]
+  run stack_wait_for_port bogus 0
+  [ "${status}" -ne 0 ]
+  unset -f stack_port_open
+  export LAB_STACK_FOLLOW=0
+  export LAB_HERMETIC=1
+  # Restore production helpers after test overrides
+  # shellcheck disable=SC1091
+  source "${REPO_ROOT}/scripts/lib/compose.sh"
+
+  run comfy_volume_clear_install_stamp
+  [ "${status}" -eq 0 ]
   run stack_stop
   [ "${status}" -eq 0 ]
   run stack_cleanup_state

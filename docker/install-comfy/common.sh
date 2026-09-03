@@ -17,7 +17,7 @@ VENV="${VENV:-${COMFY_HOME}/.venv}"
 INSTALL_T0="${INSTALL_T0:-}"
 COMFYUI_REPO="${COMFYUI_REPO:-https://github.com/comfyanonymous/ComfyUI.git}"
 # Validated pins (see docs/models-and-cache.md). Empty COMFYUI_REF floats default branch.
-COMFYUI_REF="${COMFYUI_REF:-v0.29.0}"
+COMFYUI_REF="${COMFYUI_REF:-v0.34.0}"
 COMFYUI_MANAGER_REF="${COMFYUI_MANAGER_REF:-4.2.2}"
 COMFYUI_NUNCHAKU_NODE_REF="${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}"
 # Empty = clone default branch (main). Set to a tag/branch/SHA branch name when available.
@@ -36,6 +36,75 @@ COMFYUI_VHS_REF="${COMFYUI_VHS_REF:-}"
 #######################################
 log() {
   echo "[comfy-install] $*"
+}
+
+#######################################
+# Path of the volume ComfyUI pin stamp.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Absolute path
+# Returns:
+#   0
+#######################################
+comfy_pin_file() {
+  echo "${COMFY_HOME}/.lab-comfyui-ref"
+}
+
+#######################################
+# Record COMFYUI_REF on the volume.
+# Globals:
+#   COMFYUI_REF, COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log
+# Returns:
+#   0
+#######################################
+write_comfy_pin() {
+  local f dest
+  f="$(comfy_pin_file)"
+  dest="$(dirname "${f}")"
+  mkdir -p "${dest}"
+  printf '%s\n' "${COMFYUI_REF:-}" >"${f}"
+  log "Wrote Comfy pin ${COMFYUI_REF:-} → ${f}"
+}
+
+#######################################
+# Read volume ComfyUI pin (empty if missing).
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Pin string without trailing newline
+# Returns:
+#   0
+#######################################
+read_comfy_pin() {
+  local f
+  f="$(comfy_pin_file)"
+  if [[ -f ${f} ]]; then
+    tr -d '\n' <"${f}"
+  fi
+}
+
+#######################################
+# True if volume pin matches COMFYUI_REF.
+# Globals:
+#   COMFYUI_REF
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 match; 1 mismatch or missing
+#######################################
+comfy_pin_matches() {
+  [[ "$(read_comfy_pin)" == "${COMFYUI_REF:-}" ]]
 }
 
 #######################################

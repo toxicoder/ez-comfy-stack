@@ -2,8 +2,8 @@
 # Privacy: no HF_TOKEN, no .env, no model weights — public git/pip in Dockerfile only.
 #
 # Tag matrix (keep in sync with scripts/lib/compose.sh stack_image_tag_for_branch):
-#   main (default branch) → flux-to-ltx + flux-to-ltx-main + sha-*
-#   development           → flux-to-ltx-development + sha-*
+#   main (default branch) → us-safe-studio + us-safe-studio-main + sha-*
+#   development           → us-safe-studio-development + sha-*
 # Operators pull via manage.sh stack_default_image (branch-aligned).
 name: publish-image
 
@@ -44,8 +44,8 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/ez-comfy
           tags: |
-            type=raw,value=flux-to-ltx,enable={{is_default_branch}}
-            type=raw,value=flux-to-ltx-${{ github.ref_name }}
+            type=raw,value=us-safe-studio,enable={{is_default_branch}}
+            type=raw,value=us-safe-studio-${{ github.ref_name }}
             type=sha,prefix=sha-,format=short
 
       - name: Set up Docker Buildx
@@ -71,12 +71,12 @@ jobs:
             EZ_COMFY_PREBUILD=${{ github.event.inputs.prebuild || '1' }}
             CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-devel-ubuntu24.04
             CUDA_RUNTIME_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
-            COMFYUI_REF=v0.29.0
+            COMFYUI_REF=v0.34.0
             COMFYUI_MANAGER_REF=4.2.2
             COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
             COMFYUI_VHS_REF=
           # Do not pass HF_TOKEN or any host secrets as build-args
-          # Pins validated 2026-07-29 (ComfyUI + Manager + nunchaku node + VHS main)
+          # Pins: ComfyUI v0.34.0 (native Klein 4B + Wan 2.2 + LTX-2.5) + Manager + VHS main
           provenance: false
           sbom: false
           cache-from: type=gha,scope=ez-comfy-arm64

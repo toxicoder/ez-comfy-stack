@@ -1,0 +1,1641 @@
+{
+  "id": "film-go-see-90s-run-lab-example",
+  "revision": 5,
+  "last_node_id": 45,
+  "last_link_id": 51,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        360,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "default"
+      ],
+      "title": "Klein 4B distilled FP8"
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        212
+      ],
+      "size": [
+        360,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2,
+            3
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen_3_4b.safetensors",
+        "flux2",
+        "default"
+      ],
+      "title": "Qwen3-4B TE"
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        368
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            7
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ],
+      "title": "Flux2 VAE"
+    },
+    {
+      "id": 4,
+      "type": "CLIPTextEncode",
+      "pos": [
+        940,
+        80
+      ],
+      "size": [
+        420,
+        160
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 10,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "First-person photoreal dawn running still. An olive windbreaker and worn black gloves stay in frame, hands pumping at the edges as wet tar and unmarked rooftops fill the view. Identity lock for the whole short. No violence."
+      ],
+      "title": "Positive"
+    },
+    {
+      "id": 5,
+      "type": "CLIPTextEncode",
+      "pos": [
+        940,
+        290
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative"
+    },
+    {
+      "id": 6,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        940,
+        460
+      ],
+      "size": [
+        280,
+        106
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        1280,
+        720,
+        1
+      ],
+      "title": "Latent 1280x720 batch 1"
+    },
+    {
+      "id": 7,
+      "type": "KSampler",
+      "pos": [
+        1440,
+        80
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 4
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 5
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        8,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "KSampler"
+    },
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [
+        1840,
+        80
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 8
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 9,
+      "type": "SaveImage",
+      "pos": [
+        1840,
+        176
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 9
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_gosee_identity"
+      ],
+      "title": "Save identity PNG"
+    },
+    {
+      "id": 10,
+      "type": "Note",
+      "pos": [
+        40,
+        640
+      ],
+      "size": [
+        960,
+        360
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## film-go-see-90s-run-lab-example\n\nUnified 90s film graph (first-person running): Klein identity still + LTX 5.00s AV shot printer + shot map.\nModels: Klein 4B distilled FP8 (identity) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\n1. Leave **Shot print (LTX)** bypassed (Ctrl+B). Queue **Identity (Klein)** \u2192 `ez_gosee_identity_*.png`.\n2. Bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or previous `*_last`.\n3. Paste Motion + Audio from the on-canvas shot map. Set VHS prefix `ez_gosee_bN_sM_ltx_video` and last-frame `ez_gosee_bN_sM_last`. Queue **5.00s** AV.\n4. Repeat 18 times. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\nPrompt enhance: leave Enhance off for canned prompts. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+      ],
+      "title": "Operator note \u2014 unified 90s film"
+    },
+    {
+      "id": 12,
+      "type": "MarkdownNote",
+      "pos": [
+        2200,
+        80
+      ],
+      "size": [
+        960,
+        1600.0
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "## go-see 90s shot map (first-person running)\n\nUnified graph: Queue **Identity (Klein)** once (LTX group starts bypassed).\nThen Ctrl+B to bypass Identity and enable **Shot print (LTX)**. Retarget LoadImage,\nMotion+Audio, and prefixes for each of 18 shots. Optional Wan rehearsal:\n**wan-i2v-shot-lab-example**.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. Last frame of shot N is LoadImage of shot N+1.\nConcat: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise in one graph. US-safe local pack only. No score (breath and world only).\n\n**Identity look:** First-person photoreal dawn running still. An olive windbreaker and worn black gloves stay in frame, hands pumping at the edges as wet tar and unmarked rooftops fill the view. Identity lock for the whole short. No violence.\n\n### b1 s1 `ez_gosee_b1_s1`\n- LoadImage: `example.png`\n- VHS LTX: `ez_gosee_b1_s1_ltx_video` \u00b7 last: `ez_gosee_b1_s1_last` \u00b7 optional Wan: `ez_gosee_b1_s1_wan_video`\n- Motion: Shot 1 of 18, beat 1 enter. First-person running camera. Olive windbreaker, worn black gloves; arms pump at the edges of the frame. Dawn rooftop, city still sleeping, pigeon scatter. Footfalls on wet tar. Continuous forward run. No logos, no violence.\n- Audio: Breath close to the lens, wind in the hood, tar grit under shoes, footfalls. No score, no music, no licensed songs.\n\n### b1 s2 `ez_gosee_b1_s2`\n- LoadImage: `ez_gosee_b1_s1_last`\n- VHS LTX: `ez_gosee_b1_s2_ltx_video` \u00b7 last: `ez_gosee_b1_s2_last` \u00b7 optional Wan: `ez_gosee_b1_s2_wan_video`\n- Motion: Shot 2 of 18, beat 1 traverse. Same olive windbreaker and gloves. First-person run across the next rooftop. Arms pump, gloves flash in and out of frame. Continuous dawn light, no cuts.\n- Audio: Wind roar, fabric snap, breath, running footfalls. No score.\n\n### b1 s3 `ez_gosee_b1_s3`\n- LoadImage: `ez_gosee_b1_s2_last`\n- VHS LTX: `ez_gosee_b1_s3_ltx_video` \u00b7 last: `ez_gosee_b1_s3_last` \u00b7 optional Wan: `ez_gosee_b1_s3_wan_video`\n- Motion: Shot 3 of 18, beat 1 exit. Keep running onto a warehouse roof. Gloves at the edges. End on a stable first-person view of the roof edge still moving forward.\n- Audio: Tar grit, footfalls, breath. No score.\n\n### b2 s1 `ez_gosee_b2_s1`\n- LoadImage: `ez_gosee_b1_s3_last`\n- VHS LTX: `ez_gosee_b2_s1_ltx_video` \u00b7 last: `ez_gosee_b2_s1_last` \u00b7 optional Wan: `ez_gosee_b2_s1_wan_video`\n- Motion: Shot 4 of 18, beat 2 enter. First-person run down the warehouse stair, gloves on the rail then pumping again. Continuous descent, not a drop.\n- Audio: Stair treads, breath, footfalls. No score.\n\n### b2 s2 `ez_gosee_b2_s2`\n- LoadImage: `ez_gosee_b2_s1_last`\n- VHS LTX: `ez_gosee_b2_s2_ltx_video` \u00b7 last: `ez_gosee_b2_s2_last` \u00b7 optional Wan: `ez_gosee_b2_s2_wan_video`\n- Motion: Shot 5 of 18, beat 2 traverse. Market alley at street level. First-person running. Duck under a canvas awning without stopping. Gloves in frame. No brand names.\n- Audio: Canvas slap, distant market chatter without brand names, breath, footfalls. No score.\n\n### b2 s3 `ez_gosee_b2_s3`\n- LoadImage: `ez_gosee_b2_s2_last`\n- VHS LTX: `ez_gosee_b2_s3_ltx_video` \u00b7 last: `ez_gosee_b2_s3_last` \u00b7 optional Wan: `ez_gosee_b2_s3_wan_video`\n- Motion: Shot 6 of 18, beat 2 exit. Run out toward a river. Location change is the running camera. Gloves in frame. Footfalls open into air.\n- Audio: Footfalls, open air, breath. No score.\n\n### b3 s1 `ez_gosee_b3_s1`\n- LoadImage: `ez_gosee_b2_s3_last`\n- VHS LTX: `ez_gosee_b3_s1_ltx_video` \u00b7 last: `ez_gosee_b3_s1_last` \u00b7 optional Wan: `ez_gosee_b3_s1_wan_video`\n- Motion: Shot 7 of 18, beat 3 enter. First-person run across river stones. Gloves splash at the edges. Keep running.\n- Audio: Water, splash, breath, wet footfalls. No score.\n\n### b3 s2 `ez_gosee_b3_s2`\n- LoadImage: `ez_gosee_b3_s1_last`\n- VHS LTX: `ez_gosee_b3_s2_ltx_video` \u00b7 last: `ez_gosee_b3_s2_last` \u00b7 optional Wan: `ez_gosee_b3_s2_wan_video`\n- Motion: Shot 8 of 18, beat 3 traverse. Run through a stone bridge arch. First-person, gloves pumping. Wet rock on both sides.\n- Audio: Water under the arch, breath, footfalls. No score.\n\n### b3 s3 `ez_gosee_b3_s3`\n- LoadImage: `ez_gosee_b3_s2_last`\n- VHS LTX: `ez_gosee_b3_s3_ltx_video` \u00b7 last: `ez_gosee_b3_s3_last` \u00b7 optional Wan: `ez_gosee_b3_s3_wan_video`\n- Motion: Shot 9 of 18, beat 3 exit. Beech forest creek path. First-person running along the bank, gloves visible. Forward travel, not a stunt.\n- Audio: Beech leaves, creek, breath, footfalls. No score, no violence.\n\n### b4 s1 `ez_gosee_b4_s1`\n- LoadImage: `ez_gosee_b3_s3_last`\n- VHS LTX: `ez_gosee_b4_s1_ltx_video` \u00b7 last: `ez_gosee_b4_s1_last` \u00b7 optional Wan: `ez_gosee_b4_s1_wan_video`\n- Motion: Shot 10 of 18, beat 4 enter. Trees thin. Same olive windbreaker. First-person run into open light.\n- Audio: Wind in thinning trees, breath, footfalls. No score.\n\n### b4 s2 `ez_gosee_b4_s2`\n- LoadImage: `ez_gosee_b4_s1_last`\n- VHS LTX: `ez_gosee_b4_s2_ltx_video` \u00b7 last: `ez_gosee_b4_s2_last` \u00b7 optional Wan: `ez_gosee_b4_s2_wan_video`\n- Motion: Shot 11 of 18, beat 4 traverse. Run past a boulder, gloves graze granite then pump again. First-person forward run.\n- Audio: Granite scrape, breath, footfalls. No score.\n\n### b4 s3 `ez_gosee_b4_s3`\n- LoadImage: `ez_gosee_b4_s2_last`\n- VHS LTX: `ez_gosee_b4_s3_ltx_video` \u00b7 last: `ez_gosee_b4_s3_last` \u00b7 optional Wan: `ez_gosee_b4_s3_wan_video`\n- Motion: Shot 12 of 18, beat 4 exit. Run out onto a headland with a generic white lighthouse \u2014 no logos, no real place name. Windbreaker snaps in sea wind. Keep running.\n- Audio: Surf, gulls, breath, fabric, footfalls. No score.\n\n### b5 s1 `ez_gosee_b5_s1`\n- LoadImage: `ez_gosee_b4_s3_last`\n- VHS LTX: `ez_gosee_b5_s1_ltx_video` \u00b7 last: `ez_gosee_b5_s1_last` \u00b7 optional Wan: `ez_gosee_b5_s1_wan_video`\n- Motion: Shot 13 of 18, beat 5 enter. First-person run up granite steps. Gloves visible, arms pumping.\n- Audio: Boot grit, breath, footfalls. No score.\n\n### b5 s2 `ez_gosee_b5_s2`\n- LoadImage: `ez_gosee_b5_s1_last`\n- VHS LTX: `ez_gosee_b5_s2_ltx_video` \u00b7 last: `ez_gosee_b5_s2_last` \u00b7 optional Wan: `ez_gosee_b5_s2_wan_video`\n- Motion: Shot 14 of 18, beat 5 traverse. Run through a gap in a dry-stone wall. First-person, gloves brush the stones, keep the run.\n- Audio: Stone scrape, breath, footfalls. No score.\n\n### b5 s3 `ez_gosee_b5_s3`\n- LoadImage: `ez_gosee_b5_s2_last`\n- VHS LTX: `ez_gosee_b5_s3_ltx_video` \u00b7 last: `ez_gosee_b5_s3_last` \u00b7 optional Wan: `ez_gosee_b5_s3_wan_video`\n- Motion: Shot 15 of 18, beat 5 exit. Burst running into a mountain meadow. First-person, olive windbreaker, gloves at the edges.\n- Audio: Wind in grass, sheep bell far off, breath, footfalls. No score.\n\n### b6 s1 `ez_gosee_b6_s1`\n- LoadImage: `ez_gosee_b5_s3_last`\n- VHS LTX: `ez_gosee_b6_s1_ltx_video` \u00b7 last: `ez_gosee_b6_s1_last` \u00b7 optional Wan: `ez_gosee_b6_s1_wan_video`\n- Motion: Shot 16 of 18, beat 6 enter. Ridge. First-person run slows. Both worn-black-gloved hands find a weathered wooden rail.\n- Audio: Rail creak, distant wind, slowing footfalls, breath. No score.\n\n### b6 s2 `ez_gosee_b6_s2`\n- LoadImage: `ez_gosee_b6_s1_last`\n- VHS LTX: `ez_gosee_b6_s2_ltx_video` \u00b7 last: `ez_gosee_b6_s2_last` \u00b7 optional Wan: `ez_gosee_b6_s2_wan_video`\n- Motion: Shot 17 of 18, beat 6 traverse. Look along the ridge. Hold identity: olive windbreaker, gloves on the rail. First-person, no run.\n- Audio: Wind, breath. No score.\n\n### b6 s3 `ez_gosee_b6_s3`\n- LoadImage: `ez_gosee_b6_s2_last`\n- VHS LTX: `ez_gosee_b6_s3_ltx_video` \u00b7 last: `ez_gosee_b6_s3_last` \u00b7 optional Wan: `ez_gosee_b6_s3_wan_video`\n- Motion: Shot 18 of 18, beat 6 exit. A quiet, short laugh. Hold. End still. First-person, gloves on the rail.\n- Audio: Only breath, a creak of the rail, and distant wind. No score.\n"
+      ],
+      "title": "go-see 90s shot map"
+    },
+    {
+      "id": 13,
+      "type": "EZKleinPromptEnhance",
+      "pos": [
+        480,
+        80
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZKleinPromptEnhance"
+      },
+      "widgets_values": [
+        "First-person photoreal dawn running still. An olive windbreaker and worn black gloves stay in frame, hands pumping at the edges as wet tar and unmarked rooftops fill the view. Identity lock for the whole short. No violence.",
+        false,
+        "t2i",
+        "YouTube 16:9 still"
+      ],
+      "title": "Klein Prompt Enhance"
+    },
+    {
+      "id": 24,
+      "type": "UNETLoader",
+      "pos": [
+        3240,
+        80
+      ],
+      "size": [
+        520,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            21
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+        "default"
+      ],
+      "title": "LTX-2.5 distilled INT8-convrot"
+    },
+    {
+      "id": 25,
+      "type": "VAELoader",
+      "pos": [
+        3240,
+        212
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            22,
+            23
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-video-vae-bf16.safetensors"
+      ],
+      "title": "LTX-2.5 video VAE"
+    },
+    {
+      "id": 26,
+      "type": "CLIPLoader",
+      "pos": [
+        3240,
+        320
+      ],
+      "size": [
+        400,
+        110
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            36,
+            37
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+        "ltxv",
+        "default"
+      ],
+      "title": "Gemma4-with-proj (ltxv)"
+    },
+    {
+      "id": 27,
+      "type": "LoadImage",
+      "pos": [
+        4280,
+        80
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            25
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Start frame"
+    },
+    {
+      "id": 28,
+      "type": "CLIPTextEncode",
+      "pos": [
+        4280,
+        444
+      ],
+      "size": [
+        420,
+        140
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 36
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 48,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            26
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. First-person running camera as gloved hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, pigeons scatter, continuous forward run. Breath sits close to the lens, wind in the hood, tar grit under shoes. No score, no music, no licensed songs."
+      ],
+      "title": "Motion + audio"
+    },
+    {
+      "id": 29,
+      "type": "CLIPTextEncode",
+      "pos": [
+        4280,
+        634
+      ],
+      "size": [
+        420,
+        100
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 37
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            27
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
+      ],
+      "title": "Negative"
+    },
+    {
+      "id": 30,
+      "type": "LTXVImgToVideo",
+      "pos": [
+        4780,
+        80
+      ],
+      "size": [
+        320,
+        200
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 26
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 27
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 22
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            28
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            29
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            40
+          ],
+          "slot_index": 2
+        }
+      ],
+      "title": "LTX Img\u2192Video condition",
+      "properties": {
+        "Node name for S&R": "LTXVImgToVideo"
+      },
+      "widgets_values": [
+        1280,
+        720,
+        120,
+        1
+      ]
+    },
+    {
+      "id": 31,
+      "type": "LTXVConditioning",
+      "pos": [
+        4780,
+        330
+      ],
+      "size": [
+        280,
+        82
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 28
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 29
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            31
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            32
+          ],
+          "slot_index": 0
+        }
+      ],
+      "title": "LTX frame rate cond",
+      "properties": {
+        "Node name for S&R": "LTXVConditioning"
+      },
+      "widgets_values": [
+        24.0
+      ]
+    },
+    {
+      "id": 32,
+      "type": "KSampler",
+      "pos": [
+        5140,
+        80
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 21
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 31
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 32
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 42
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            43
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "KSampler"
+    },
+    {
+      "id": 33,
+      "type": "VAEDecode",
+      "pos": [
+        5860,
+        80
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 44
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            38,
+            45,
+            46
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 35,
+      "type": "SaveImage",
+      "pos": [
+        5860,
+        176
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 38
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_gosee_b1_s1_ltx_frames"
+      ],
+      "title": "Save frames (secondary)"
+    },
+    {
+      "id": 36,
+      "type": "VAELoader",
+      "pos": [
+        3240,
+        490
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            39,
+            50
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-audio-vae-bf16.safetensors"
+      ],
+      "title": "LTX-2.5 audio VAE"
+    },
+    {
+      "id": 37,
+      "type": "LTXVEmptyLatentAudio",
+      "pos": [
+        4780,
+        460
+      ],
+      "size": [
+        300,
+        130
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 39
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Latent",
+          "type": "LATENT",
+          "links": [
+            41
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVEmptyLatentAudio"
+      },
+      "widgets_values": [
+        120,
+        24.0,
+        1
+      ],
+      "title": "Empty LTX audio latent"
+    },
+    {
+      "id": 38,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        5140,
+        400
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 40
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 41
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            42
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 39,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        5540,
+        80
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 43
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            44
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": [
+            49
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Separate AV latents"
+    },
+    {
+      "id": 41,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        6180.0,
+        80
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 45
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 51,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "ez_gosee_b1_s1_ltx_video",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 18,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "title": "Save video (MP4) \u2014 open node for preview"
+    },
+    {
+      "id": 42,
+      "type": "ImageFromBatch",
+      "pos": [
+        6180,
+        560
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 50,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 46
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            47
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        119,
+        1
+      ],
+      "title": "Last frame"
+    },
+    {
+      "id": 43,
+      "type": "SaveImage",
+      "pos": [
+        6180,
+        680
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 51,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 47
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_gosee_b1_s1_last"
+      ],
+      "title": "Save last frame"
+    },
+    {
+      "id": 44,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        3820,
+        444
+      ],
+      "size": [
+        420,
+        340
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            48
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. First-person running camera as gloved hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, pigeons scatter, continuous forward run. Breath sits close to the lens, wind in the hood, tar grit under shoes. No score, no music, no licensed songs.",
+        false,
+        "i2v",
+        "5 seconds, 24 fps",
+        "breath close to the lens, wind in the hood, tar grit. No score, no music, no licensed songs."
+      ],
+      "title": "LTX Prompt Enhance"
+    },
+    {
+      "id": 45,
+      "type": "LTXVAudioVAEDecode",
+      "pos": [
+        6540.0,
+        80
+      ],
+      "size": [
+        320,
+        66
+      ],
+      "flags": {},
+      "order": 52,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 49
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 50
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Audio",
+          "type": "AUDIO",
+          "links": [
+            51
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVAudioVAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Audio VAE Decode"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      7,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      0,
+      "CLIP"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      4,
+      0,
+      7,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      5,
+      5,
+      0,
+      7,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      6,
+      6,
+      0,
+      7,
+      3,
+      "LATENT"
+    ],
+    [
+      7,
+      3,
+      0,
+      8,
+      1,
+      "VAE"
+    ],
+    [
+      8,
+      7,
+      0,
+      8,
+      0,
+      "LATENT"
+    ],
+    [
+      9,
+      8,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      10,
+      13,
+      0,
+      4,
+      1,
+      "STRING"
+    ],
+    [
+      21,
+      24,
+      0,
+      32,
+      0,
+      "MODEL"
+    ],
+    [
+      22,
+      25,
+      0,
+      30,
+      2,
+      "VAE"
+    ],
+    [
+      23,
+      25,
+      0,
+      33,
+      1,
+      "VAE"
+    ],
+    [
+      25,
+      27,
+      0,
+      30,
+      3,
+      "IMAGE"
+    ],
+    [
+      26,
+      28,
+      0,
+      30,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      27,
+      29,
+      0,
+      30,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      28,
+      30,
+      0,
+      31,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      29,
+      30,
+      1,
+      31,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      31,
+      31,
+      0,
+      32,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      32,
+      31,
+      1,
+      32,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      36,
+      26,
+      0,
+      28,
+      0,
+      "CLIP"
+    ],
+    [
+      37,
+      26,
+      0,
+      29,
+      0,
+      "CLIP"
+    ],
+    [
+      38,
+      33,
+      0,
+      35,
+      0,
+      "IMAGE"
+    ],
+    [
+      39,
+      36,
+      0,
+      37,
+      0,
+      "VAE"
+    ],
+    [
+      40,
+      30,
+      2,
+      38,
+      0,
+      "LATENT"
+    ],
+    [
+      41,
+      37,
+      0,
+      38,
+      1,
+      "LATENT"
+    ],
+    [
+      42,
+      38,
+      0,
+      32,
+      3,
+      "LATENT"
+    ],
+    [
+      43,
+      32,
+      0,
+      39,
+      0,
+      "LATENT"
+    ],
+    [
+      44,
+      39,
+      0,
+      33,
+      0,
+      "LATENT"
+    ],
+    [
+      45,
+      33,
+      0,
+      41,
+      0,
+      "IMAGE"
+    ],
+    [
+      46,
+      33,
+      0,
+      42,
+      0,
+      "IMAGE"
+    ],
+    [
+      47,
+      42,
+      0,
+      43,
+      0,
+      "IMAGE"
+    ],
+    [
+      48,
+      44,
+      0,
+      28,
+      1,
+      "STRING"
+    ],
+    [
+      49,
+      39,
+      1,
+      45,
+      0,
+      "LATENT"
+    ],
+    [
+      50,
+      36,
+      0,
+      45,
+      1,
+      "VAE"
+    ],
+    [
+      51,
+      45,
+      0,
+      41,
+      1,
+      "AUDIO"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1. Identity (Klein) \u2014 Queue first",
+      "bounding": [
+        20,
+        20,
+        2000,
+        1200
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2. Shot print (LTX) \u2014 starts bypassed; Ctrl+B to enable",
+      "bounding": [
+        3180,
+        20,
+        2800,
+        1400
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "film-go-see-90s-run-lab-example",
+    "lab_note": "## film-go-see-90s-run-lab-example\n\nUnified 90s film graph (first-person running): Klein identity still + LTX 5.00s AV shot printer + shot map.\nModels: Klein 4B distilled FP8 (identity) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\n1. Leave **Shot print (LTX)** bypassed (Ctrl+B). Queue **Identity (Klein)** \u2192 `ez_gosee_identity_*.png`.\n2. Bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or previous `*_last`.\n3. Paste Motion + Audio from the on-canvas shot map. Set VHS prefix `ez_gosee_bN_sM_ltx_video` and last-frame `ez_gosee_bN_sM_last`. Queue **5.00s** AV.\n4. Repeat 18 times. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\nPrompt enhance: leave Enhance off for canned prompts. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_description": "Unified 90s first-person running: Klein identity + LTX 5.00s AV shots",
+    "lab_film": "go-see",
+    "lab_slug": "gosee",
+    "lab_ltx_av": true
+  },
+  "version": 0.4
+}

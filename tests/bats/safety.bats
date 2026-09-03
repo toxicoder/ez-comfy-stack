@@ -124,6 +124,7 @@ teardown() {
 
 @test "compose bind-mounts ops scripts for zero-rebuild iteration" {
   local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  local ref_count
   run grep -E 'entrypoint\.sh:/opt/ez-comfy/entrypoint\.sh' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'install-comfy\.sh:/opt/ez-comfy/install-comfy\.sh' "${compose}"
@@ -140,6 +141,9 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'COMFYUI_REF:.*v0\.' "${compose}"
   [ "$status" -eq 0 ]
+  # Build-arg AND runtime env (stamp-present pin refresh on the named volume)
+  ref_count="$(grep -cE 'COMFYUI_REF:' "${compose}" || true)"
+  [ "${ref_count}" -ge 2 ]
 }
 
 @test "workflow mount is outside COMFY_HOME tree" {
@@ -150,8 +154,32 @@ teardown() {
   [ "$status" -ne 0 ]
 }
 
+@test "prompt-enhance nodes mount outside COMFY_HOME and XAI key is runtime-only" {
+  local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -E 'custom_nodes:/opt/ez-comfy/custom_nodes' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'custom_nodes:.*/comfy-state/ComfyUI/' "${compose}"
+  [ "$status" -ne 0 ]
+  run grep -E 'XAI_API_KEY:' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -iE '^(ENV|ARG).*XAI_API_KEY' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -ne 0 ]
+}
+
+@test "compose bind-mounts generated media to host COMFY_OUTPUT_DIR" {
+  local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'output-directory|/outputs' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -eq 0 ]
+  run grep -E 'down -v' "${REPO_ROOT}/scripts/lib/compose.sh"
+  [ "$status" -eq 0 ]
+  run grep -E 'COMFY_OUTPUT_DIR are NOT deleted' "${REPO_ROOT}/scripts/lib/compose.sh"
+  [ "$status" -eq 0 ]
+}
+
 @test "prebuilt image defaults to GHCR and never bakes HF_TOKEN in Dockerfile" {
-  run grep -E 'ghcr.io/.*/ez-comfy:flux-to-ltx' "${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -E 'ghcr.io/.*/ez-comfy:us-safe-studio' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
   run grep -E 'comfy-prebuilt|EZ_COMFY_PREBUILD' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -eq 0 ]
@@ -182,7 +210,7 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'MODELS_DIR:-/mnt/models|MODELS_DIR:-"/mnt/models"' \
     "${REPO_ROOT}/scripts/manage.sh" \
-    "${REPO_ROOT}/scripts/utilities/download-flux.sh" \
+    "${REPO_ROOT}/scripts/utilities/download-image.sh" \
     "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
 }
@@ -260,7 +288,7 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
-@test "resource policy documents flux-to-ltx" {
-  run grep -E 'flux-to-ltx|90g' "${REPO_ROOT}/config/resource-policy.yaml"
+@test "resource policy documents studio memory limits" {
+  run grep -E 'studio|flux-to-ltx|90g' "${REPO_ROOT}/config/resource-policy.yaml"
   [ "$status" -eq 0 ]
 }

@@ -1,5 +1,5 @@
 site_name: ez-comfy-stack
-site_description: Simplified Visual Generative AI (ComfyUI flux-to-ltx) for a single NVIDIA DGX Spark
+site_description: Simplified Visual Generative AI (ComfyUI US-safe local studio) for a single NVIDIA DGX Spark
 site_url: https://toxicoder.github.io/ez-comfy-stack
 repo_url: https://github.com/toxicoder/ez-comfy-stack
 # Default edit target; docs/hooks.py on_config stamps this from EZ_DOCS_VERSION
@@ -68,10 +68,18 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - Visual Generative AI: visual-generative-ai.md
-  - Models & Cache: models-and-cache.md
-  - Download Limit: download-limit.md
-  - Reboot Safety: reboot-safety.md
-  - Troubleshooting: troubleshooting.md
-  - Conventions: project-conventions.md
+  - Start:
+      - Getting Started: getting-started.md
+      - Prompting: prompting.md
+      - Model licenses: licenses.md
+  - Create:
+      - Visual Generative AI: visual-generative-ai.md
+      - 90s shorts: shorts.md
+      - Spark farm: spark-farm.md
+  - Operate:
+      - Models & Cache: models-and-cache.md
+      - Download Limit: download-limit.md
+      - Reboot Safety: reboot-safety.md
+      - Troubleshooting: troubleshooting.md
+  - Contribute:
+      - Conventions: project-conventions.md

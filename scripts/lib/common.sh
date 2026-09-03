@@ -541,6 +541,23 @@ EOF
 # Returns:
 #   0 ready; 1 not ready
 #######################################
+#######################################
+# Next-step string after a docker_daemon_status code.
+# Arguments:
+#   $1 - status from docker_daemon_status (0/1/2/3)
+# Outputs:
+#   Operator command on stdout
+# Returns:
+#   0
+#######################################
+doctor_next_step_hint() {
+  case "${1:-0}" in
+    1) echo "newgrp docker   # or disconnect/reconnect SSH" ;;
+    2) echo "sudo systemctl start docker" ;;
+    *) echo "./scripts/manage.sh setup --install-docker" ;;
+  esac
+}
+
 check_docker_preflight() {
   if ! resolve_docker_on_path; then
     print_docker_install_hints
@@ -581,6 +598,36 @@ check_docker_preflight() {
 }
 
 #######################################
+# Ensure a host directory exists and is writable (mkdir as current user, no sudo).
+# Globals:
+#   None
+# Arguments:
+#   $1 - Label for errors (e.g. MODELS_DIR)
+#   $2 - Directory path
+# Outputs:
+#   Actionable error text on stderr when not writable
+# Returns:
+#   0 when the directory exists and is writable; 1 otherwise
+#######################################
+ensure_writable_host_dir() {
+  local label="${1:?ensure_writable_host_dir requires label}"
+  local dir="${2:?ensure_writable_host_dir requires directory}"
+  local user group
+  user="$(id -un)"
+  group="$(id -gn)"
+  if [[ ! -d ${dir} ]]; then
+    mkdir -p "${dir}" 2>/dev/null || true
+  fi
+  if [[ -d ${dir} && -w ${dir} ]]; then
+    return 0
+  fi
+  err "${label}=${dir} is not writable."
+  err "  ./scripts/manage.sh setup"
+  err "  # or: sudo mkdir -p '${dir}' && sudo chown ${user}:${group} '${dir}'"
+  return 1
+}
+
+#######################################
 # Ensure MODELS_DIR exists and is writable by the current user.
 # Tries mkdir -p as the current user; never uses sudo.
 # Globals:
@@ -594,20 +641,58 @@ check_docker_preflight() {
 #######################################
 ensure_models_dir() {
   local dir="${1:-${MODELS_DIR:-/mnt/models}}"
-  local user group
-  user="$(id -un)"
-  group="$(id -gn)"
-  if [[ ! -d ${dir} ]]; then
-    mkdir -p "${dir}" 2>/dev/null || true
-  fi
-  if [[ -d ${dir} && -w ${dir} ]]; then
+  ensure_writable_host_dir MODELS_DIR "${dir}"
+}
+
+#######################################
+# Ensure COMFY_OUTPUT_DIR exists and is writable (generated PNG/MP4).
+# Globals:
+#   COMFY_OUTPUT_DIR (read when $1 omitted)
+# Arguments:
+#   $1 - Directory path (default COMFY_OUTPUT_DIR or /mnt/comfy-output)
+# Outputs:
+#   Actionable error text on stderr when not writable
+# Returns:
+#   0 when writable; 1 otherwise
+#######################################
+ensure_comfy_output_dir() {
+  local dir="${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
+  ensure_writable_host_dir COMFY_OUTPUT_DIR "${dir}"
+}
+
+#######################################
+# Create a host directory with sudo and chown when needed.
+# Skips sudo when LAB_NO_SUDO=1 (tests / restricted environments).
+# Globals:
+#   LAB_NO_SUDO
+# Arguments:
+#   $1 - Label for logs/errors
+#   $2 - Directory path
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 when writable afterward; 1 on failure
+#######################################
+prepare_writable_host_dir() {
+  local label="${1:?prepare_writable_host_dir requires label}"
+  local dir="${2:?prepare_writable_host_dir requires directory}"
+  if ensure_writable_host_dir "${label}" "${dir}" 2>/dev/null; then
     return 0
   fi
-  err "MODELS_DIR=${dir} is not writable."
-  err "  ./scripts/manage.sh setup"
-  err "  # or: sudo mkdir -p '${dir}' && sudo chown ${user}:${group} '${dir}'"
-  err "or set MODELS_DIR to a path you own in .env (e.g. ~/models)."
-  return 1
+  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
+    err "${label}=${dir} not writable and LAB_NO_SUDO=1 (cannot sudo)"
+    return 1
+  fi
+  log "Creating ${label} with sudo: ${dir}"
+  if ! sudo mkdir -p "${dir}"; then
+    err "sudo mkdir -p '${dir}' failed"
+    return 1
+  fi
+  if ! sudo chown "$(id -u):$(id -g)" "${dir}"; then
+    err "sudo chown failed for '${dir}'"
+    return 1
+  fi
+  ensure_writable_host_dir "${label}" "${dir}"
 }
 
 #######################################
@@ -623,25 +708,22 @@ ensure_models_dir() {
 #   0 when writable afterward; 1 on failure
 #######################################
 prepare_models_dir() {
-  local dir="${1:-${MODELS_DIR:-/mnt/models}}"
-  if ensure_models_dir "${dir}" 2>/dev/null; then
-    return 0
-  fi
-  # ensure_models_dir already printed errors; clear intent for setup path
-  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
-    err "MODELS_DIR=${dir} not writable and LAB_NO_SUDO=1 (cannot sudo)"
-    return 1
-  fi
-  log "Creating MODELS_DIR with sudo: ${dir}"
-  if ! sudo mkdir -p "${dir}"; then
-    err "sudo mkdir -p '${dir}' failed"
-    return 1
-  fi
-  if ! sudo chown "$(id -u):$(id -g)" "${dir}"; then
-    err "sudo chown failed for '${dir}'"
-    return 1
-  fi
-  ensure_models_dir "${dir}"
+  prepare_writable_host_dir MODELS_DIR "${1:-${MODELS_DIR:-/mnt/models}}"
+}
+
+#######################################
+# Create COMFY_OUTPUT_DIR with sudo/chown when needed.
+# Globals:
+#   LAB_NO_SUDO, COMFY_OUTPUT_DIR
+# Arguments:
+#   $1 - Directory path (default COMFY_OUTPUT_DIR or /mnt/comfy-output)
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 when writable afterward; 1 on failure
+#######################################
+prepare_comfy_output_dir() {
+  prepare_writable_host_dir COMFY_OUTPUT_DIR "${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
 }
 
 #######################################
@@ -795,7 +877,11 @@ clear_stale_hf_locks() {
     log "Removed ${removed} stale HF lock file(s) under ${root}"
   fi
   if [[ ${active} -gt 0 ]]; then
-    warn "${active} lock(s) still held by live processes — wait or HF_LOCK_CLEAR_FORCE=1"
+    if [[ ${locks_only} -eq 1 ]]; then
+      log "download still holds ${active} lock(s) (normal while hf runs)"
+    else
+      warn "${active} lock(s) still held by live processes — wait or HF_LOCK_CLEAR_FORCE=1"
+    fi
   fi
   if [[ ${removed} -eq 0 && ${active} -eq 0 ]]; then
     log "HF lock check clean under ${root}"
@@ -839,6 +925,7 @@ explain_hf_download_error() {
 
   if [[ ${text} =~ GatedRepoError|not\ in\ the\ authorized\ list|restricted\ and\ you\ are\ not|Cannot\ access\ gated\ repo ]]; then
     err "Hugging Face gated model — access not granted for: ${repo}"
+    err "  Token identity: $(hf_auth_identity)"
     err "  1. Open https://huggingface.co/${repo}"
     err "  2. Log in as the SAME account that owns HF_TOKEN and click Agree / accept the license"
     err "  3. Token needs gated-repo read: https://huggingface.co/settings/tokens"
@@ -872,6 +959,37 @@ explain_hf_download_error() {
     fi
     warn "--- end raw log ---"
   fi
+}
+
+#######################################
+# Best-effort Hugging Face username for gated-error checklists.
+# Never prints token values. Fail-soft when hf/whoami is missing.
+# Globals:
+#   LAB_MOCK_HF_IDENTITY (optional test override)
+# Arguments:
+#   None
+# Outputs:
+#   Identity string on stdout (or "unknown")
+# Returns:
+#   0
+#######################################
+hf_auth_identity() {
+  local out user
+  if [[ -n ${LAB_MOCK_HF_IDENTITY:-} ]]; then
+    printf '%s\n' "${LAB_MOCK_HF_IDENTITY}"
+    return 0
+  fi
+  if ! command -v hf >/dev/null 2>&1; then
+    printf '%s\n' "unknown"
+    return 0
+  fi
+  out="$(hf auth whoami 2>/dev/null || true)"
+  out="$(printf '%s\n' "${out}" | grep -v -E 'hf_[A-Za-z0-9]+' || true)"
+  user="$(printf '%s\n' "${out}" | sed -n 's/^[[:space:]]*user:[[:space:]]*//p' | head -1)"
+  if [[ -z ${user} ]]; then
+    user="$(printf '%s\n' "${out}" | awk 'NF { print $1; exit }')"
+  fi
+  printf '%s\n' "${user:-unknown}"
 }
 
 #######################################
@@ -924,15 +1042,64 @@ ln_sfn_relative() {
 #######################################
 lab_expected_model_relpaths() {
   cat <<'EOF'
-diffusion_models/flux-2-klein-9b-nvfp4.safetensors
-diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors
-text_encoders/qwen_3_8b_fp4mixed.safetensors
-text_encoders/gemma_3_12B_it_fp4_mixed.safetensors
-text_encoders/ltx-2.3_text_projection_bf16.safetensors
+diffusion_models/flux-2-klein-4b-fp8.safetensors
+diffusion_models/wan2.2_ti2v_5B_fp16.safetensors
+diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors
+text_encoders/qwen_3_4b.safetensors
+text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors
+text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors
 vae/flux2-vae.safetensors
-vae/LTX23_video_vae_bf16.safetensors
-vae/LTX23_audio_vae_bf16.safetensors
+vae/wan2.2_vae.safetensors
+vae/ltx-2.5-video-vae-bf16.safetensors
+vae/ltx-2.5-audio-vae-bf16.safetensors
 EOF
+}
+
+#######################################
+# Refuse MiniMax H3 (US Excluded Territory for weights and outputs).
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Error on stderr
+# Returns:
+#   1
+#######################################
+refuse_minimax_h3() {
+  err "MiniMax H3 is banned (US Excluded Territory for weights AND outputs). See docs/licenses.md"
+  return 1
+}
+
+#######################################
+# Warn if leftover MiniMax H3 weights are on disk (do not delete).
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   $1  Optional models root (default MODELS_DIR)
+# Outputs:
+#   warn lines when banned files exist
+# Returns:
+#   0
+#######################################
+warn_banned_minimax_weights() {
+  local root="${1:-${MODELS_DIR:-/mnt/models}}"
+  local comfy="${root}/comfy"
+  local rel path
+  local -a banned=(
+    diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
+    text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
+    vae/minimax_h3_video_vae_fp16.safetensors
+    vae/minimax_h3_audio_vae_fp32.safetensors
+  )
+  for rel in "${banned[@]}"; do
+    path="${comfy}/${rel}"
+    if [[ -e ${path} || -L ${path} ]]; then
+      warn "banned MiniMax H3 weight present (do not use): ${path}"
+      warn "  Remove after ./scripts/manage.sh stop. See docs/troubleshooting.md"
+    fi
+  done
+  return 0
 }
 
 #######################################
@@ -981,6 +1148,9 @@ check_lab_models_ready() {
   if [[ ${missing} -gt 0 ]]; then
     warn "Missing ${missing} lab model(s) under ${comfy} — run ./scripts/manage.sh download-models"
     warn "Then restart so Comfy models/* re-link to /models/comfy/*"
+    if [[ ! -e ${comfy}/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors ]]; then
+      warn "LTX-2.5 is gated: accept the license as the HF_TOKEN user at https://huggingface.co/Lightricks/LTX-2.5"
+    fi
     return 1
   fi
   log "lab models: all expected files present under ${comfy}"
@@ -1007,6 +1177,160 @@ count_hf_incomplete() {
   fi
   n="$(find "${dest}" -type f -name '*.incomplete' 2>/dev/null | wc -l | tr -d ' ')"
   echo "${n:-0}"
+}
+
+#######################################
+# List HF *.incomplete paths under a local-dir (capped).
+# Globals:
+#   None
+# Arguments:
+#   $1  Destination directory path
+#   $2  Optional max paths (default 8)
+# Outputs:
+#   Paths on stdout, one per line
+# Returns:
+#   0
+#######################################
+list_hf_incomplete() {
+  local dest="${1:-}"
+  local max_n="${2:-8}"
+  if [[ -z ${dest} || ! -d ${dest} ]]; then
+    return 0
+  fi
+  find "${dest}" -type f -name '*.incomplete' 2>/dev/null | head -n "${max_n}"
+}
+
+#######################################
+# Delete HF *.incomplete partials under a root; keep finished weights.
+# Globals:
+#   None
+# Arguments:
+#   $1  Root directory (MODELS_DIR or a --local-dir)
+# Outputs:
+#   Count removed on stdout; status via log on stderr
+# Returns:
+#   0
+#######################################
+remove_hf_incomplete() {
+  local root="${1:-}"
+  local n=0
+  local f
+  if [[ -z ${root} || ! -d ${root} ]]; then
+    echo 0
+    return 0
+  fi
+  while IFS= read -r -d '' f; do
+    if rm -f "${f}" 2>/dev/null; then
+      n=$((n + 1))
+    fi
+  done < <(find "${root}" -type f -name '*.incomplete' -print0 2>/dev/null || true)
+  if [[ ${n} -gt 0 ]]; then
+    log "Removed ${n} incomplete HF partial(s) under ${root}"
+  else
+    log "No incomplete HF partials under ${root}"
+  fi
+  echo "${n}"
+}
+
+#######################################
+# True if an hf / huggingface-cli download process is running.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 if a matching PID exists; 1 otherwise
+#######################################
+hf_download_pids_running() {
+  if [[ ${LAB_MOCK_HF_RUNNING:-0} == "1" ]]; then
+    return 0
+  fi
+  # Parallel BATS files share a host PID namespace; do not pgrep siblings.
+  if [[ ${LAB_HERMETIC:-0} == "1" ]]; then
+    return 1
+  fi
+  command -v pgrep >/dev/null 2>&1 || return 1
+  pgrep -f 'hf download|huggingface-cli download' >/dev/null 2>&1
+}
+
+#######################################
+# Operator recovery text for a hung resume (0 MiB/s + *.incomplete).
+# Globals:
+#   None
+# Arguments:
+#   $1  Dest directory
+#   $2  Stall seconds (for the message)
+# Outputs:
+#   Warnings on stderr
+# Returns:
+#   0
+#######################################
+warn_hf_resume_stall() {
+  local dest="${1:-}"
+  local secs="${2:-30}"
+  local n
+  n="$(count_hf_incomplete "${dest}")"
+  warn "resume stall: ${n} incomplete, 0 MiB/s for ${secs}s — live hf holds the lock."
+  warn "FORCE-clearing locks will not unstick this. Ctrl+C, then:"
+  warn "  ./scripts/manage.sh reset-hf-partials --yes"
+  warn "  ./scripts/manage.sh download-models"
+  warn "or: ./scripts/manage.sh download-models --drop-incomplete"
+}
+
+#######################################
+# Wait for a background hf PID; return 2 on resume stall (0 growth + incompletes).
+# Globals:
+#   HF_RESUME_STALL_S (default 90; 0 disables stall detect)
+#   HF_PROGRESS_INTERVAL (default 10)
+# Arguments:
+#   $1  hf PID
+#   $2  Destination directory (optional)
+# Outputs:
+#   None
+# Returns:
+#   hf exit status, or 2 on stall, or 130 if the PID is gone after a signal
+#######################################
+wait_hf_download_or_stall() {
+  local hpid="${1:-}"
+  local dest="${2:-}"
+  local stall_s="${HF_RESUME_STALL_S:-90}"
+  local interval="${HF_PROGRESS_INTERVAL:-10}"
+  local last_kib last_ts cur now inc
+  if [[ -z ${hpid} || ! ${hpid} =~ ^[0-9]+$ ]]; then
+    return 1
+  fi
+  if [[ ${interval} -lt 1 ]]; then
+    interval=10
+  fi
+  if [[ -z ${dest} || ! -d ${dest} || ${stall_s} -le 0 ]]; then
+    wait "${hpid}"
+    return $?
+  fi
+  last_kib="$(du -sk "${dest}" 2>/dev/null | awk '{print $1}')" || last_kib=0
+  last_ts="$(date +%s)"
+  while kill -0 "${hpid}" 2>/dev/null; do
+    sleep "${interval}"
+    if ! kill -0 "${hpid}" 2>/dev/null; then
+      break
+    fi
+    cur="$(du -sk "${dest}" 2>/dev/null | awk '{print $1}')" || cur=0
+    if [[ ${cur} -gt ${last_kib} ]]; then
+      last_kib="${cur}"
+      last_ts="$(date +%s)"
+      continue
+    fi
+    now="$(date +%s)"
+    if ((now - last_ts >= stall_s)); then
+      inc="$(count_hf_incomplete "${dest}")"
+      if [[ ${inc} -gt 0 ]]; then
+        return 2
+      fi
+    fi
+  done
+  wait "${hpid}"
+  return $?
 }
 
 #######################################
@@ -1183,7 +1507,8 @@ hf_progress_newline() {
 #   LAB_MOCK_HF_DOWNLOAD, HF_TOKEN (read by hub), HF_HOME (caller may set),
 #   LAB_DEBUG, HF_DOWNLOAD_DEBUG, CI, HF_HUB_DISABLE_TELEMETRY,
 #   HF_DOWNLOAD_MAX_WORKERS, HF_PROGRESS (0 disables progress lines),
-#   HF_PROGRESS_INTERVAL (seconds, default 10), HF_LOCK_CLEAR_MID
+#   HF_PROGRESS_INTERVAL (seconds, default 10), HF_LOCK_CLEAR_MID,
+#   HF_RESUME_STALL_S (default 90), HF_RESUME_RETRY (default 1)
 # Arguments:
 #   $@ - Passed to `hf download` / `huggingface-cli download`
 #        (typically REPO --local-dir PATH)
@@ -1236,6 +1561,12 @@ hf_download() {
     # Full-repo mock: drop a weight basename matching lab UNET when known
     if [[ ${has_inc} -eq 0 ]]; then
       case "${repo}" in
+        *FLUX.2-klein-4b-fp8*)
+          echo "mock" >"${dest}/flux-2-klein-4b-fp8.safetensors"
+          ;;
+        *FLUX.2-klein-4b-nvfp4*)
+          echo "mock" >"${dest}/flux-2-klein-4b-nvfp4.safetensors"
+          ;;
         *FLUX.2-klein-9b-nvfp4* | *FLUX.2-klein-9B-nvfp4*)
           echo "mock" >"${dest}/flux-2-klein-9b-nvfp4.safetensors"
           ;;
@@ -1270,6 +1601,7 @@ hf_download() {
   local dest_dir="" prev_a="" a
   local progress_label="" progress_interval start_ts final_kib final_elapsed
   local incomplete_n=0
+  local hf_help=""
   for a in "$@"; do
     if [[ ${prev_a} == "--local-dir" ]]; then
       dest_dir="${a}"
@@ -1281,12 +1613,17 @@ hf_download() {
   if [[ ${progress_interval} -lt 1 ]]; then
     progress_interval=10
   fi
+  if [[ -n ${HF_TOKEN:-} || -n ${HF_DOWNLOAD_MAX_WORKERS:-} ]] && command -v hf >/dev/null 2>&1; then
+    hf_help="$(hf download --help 2>&1 || true)"
+  fi
+  # Pin .env token so it wins over a leftover hf auth login. Never log the value.
+  if [[ -n ${HF_TOKEN:-} && ${hf_help} == *"--token"* ]]; then
+    hf_args+=(--token "${HF_TOKEN}")
+  fi
   # Gentle mode / operator override: limit parallel HF connections when set
-  if [[ -n ${HF_DOWNLOAD_MAX_WORKERS:-} ]]; then
-    if command -v hf >/dev/null 2>&1 && hf download --help 2>&1 | grep -q -- '--max-workers'; then
-      hf_args+=(--max-workers "${HF_DOWNLOAD_MAX_WORKERS}")
-      log "hf download  max-workers=${HF_DOWNLOAD_MAX_WORKERS}"
-    fi
+  if [[ -n ${HF_DOWNLOAD_MAX_WORKERS:-} && ${hf_help} == *"--max-workers"* ]]; then
+    hf_args+=(--max-workers "${HF_DOWNLOAD_MAX_WORKERS}")
+    log "hf download  max-workers=${HF_DOWNLOAD_MAX_WORKERS}"
   fi
   if [[ -n ${dest_dir} ]]; then
     mkdir -p "${dest_dir}" 2>/dev/null || true
@@ -1338,11 +1675,15 @@ hf_download() {
         hf_progress_emit "${body}"
         if [[ ${delta} -le 0 ]]; then
           zero_streak=$((zero_streak + 1))
-          if [[ ${zero_streak} -ge 3 && ${HF_LOCK_CLEAR_MID:-1} == "1" ]]; then
-            # locks_only: NEVER pkill — that was killing the active hf download
+          if [[ ${zero_streak} -ge 3 ]]; then
             hf_progress_newline
-            warn "no disk growth for $((progress_interval * 3))s — clearing unheld HF locks (download still running)"
-            clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" "locks_only" || true
+            if [[ "$(count_hf_incomplete "${dest_dir}")" -gt 0 ]]; then
+              warn_hf_resume_stall "${dest_dir}" "$((progress_interval * 3))"
+            elif [[ ${HF_LOCK_CLEAR_MID:-1} == "1" ]]; then
+              # locks_only: NEVER pkill — that was killing the active hf download
+              warn "no disk growth for $((progress_interval * 3))s — clearing unheld HF locks (download still running)"
+              clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" "locks_only" || true
+            fi
             zero_streak=0
           fi
         else
@@ -1356,35 +1697,15 @@ hf_download() {
   fi
 
   set -m 2>/dev/null || true
+  local attempt=0
+  local max_attempts=1
+  if [[ ${HF_RESUME_RETRY:-1} != "0" ]]; then
+    max_attempts=2
+  fi
   if command -v hf >/dev/null 2>&1; then
-    set +e
-    # Always capture CLI output for error explain; bars disabled above so no smash
-    (
-      set -o pipefail
-      hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
-      exit "${PIPESTATUS[0]}"
-    ) &
-    hpid=$!
-    # Protect active download from clear_stale_hf_locks process sweep
-    _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
-    export _HF_PROTECTED_PIDS
-    wait "${hpid}"
-    rc=$?
-    set -e
+    :
   elif command -v huggingface-cli >/dev/null 2>&1; then
     warn "Using deprecated huggingface-cli; install modern hf: pipx install huggingface_hub"
-    set +e
-    (
-      set -o pipefail
-      huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
-      exit "${PIPESTATUS[0]}"
-    ) &
-    hpid=$!
-    _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
-    export _HF_PROTECTED_PIDS
-    wait "${hpid}"
-    rc=$?
-    set -e
   else
     [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
     hf_progress_newline
@@ -1394,6 +1715,45 @@ hf_download() {
     err "No hf or huggingface-cli on PATH"
     return 1
   fi
+  while [[ ${attempt} -lt ${max_attempts} ]]; do
+    : >"${hf_log}"
+    set +e
+    if command -v hf >/dev/null 2>&1; then
+      (
+        hf download "${hf_args[@]}" >>"${hf_log}" 2>&1
+        exit $?
+      ) &
+    else
+      (
+        huggingface-cli download "${hf_args[@]}" >>"${hf_log}" 2>&1
+        exit $?
+      ) &
+    fi
+    hpid=$!
+    _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
+    export _HF_PROTECTED_PIDS
+    wait_hf_download_or_stall "${hpid}" "${dest_dir}"
+    rc=$?
+    set -e
+    if [[ ${rc} -eq 2 ]]; then
+      warn_hf_resume_stall "${dest_dir}" "${HF_RESUME_STALL_S:-90}"
+      kill_pid_tree "${hpid}" "stalled hf download"
+      wait "${hpid}" 2>/dev/null || true
+      hpid=""
+      if [[ ${attempt} -eq 0 && ${max_attempts} -gt 1 ]]; then
+        warn "dropping *.incomplete under ${dest_dir} and retrying once"
+        remove_hf_incomplete "${dest_dir}" >/dev/null
+        attempt=$((attempt + 1))
+        continue
+      fi
+      err "resume still stalled. Stop if needed, then:"
+      err "  ./scripts/manage.sh reset-hf-partials --yes"
+      err "  ./scripts/manage.sh download-models --drop-incomplete"
+      rc=1
+      break
+    fi
+    break
+  done
   set +m 2>/dev/null || true
   [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
   _RWSF_EXTRA_PIDS=""

@@ -1,7 +1,7 @@
 ---
 title: Models & Cache
-description: Shared /mnt/models layout for FLUX and LTX weights, Hugging Face tokens, and multi-stack sharing.
-tags: [models, huggingface, cache]
+description: Shared MODELS_DIR layout for Klein 4B, Wan 2.2, and LTX-2.5 weights, Hugging Face tokens, and multi-stack sharing.
+tags: [models, huggingface, cache, klein, wan, ltx]
 ---
 
 # Models & Cache
@@ -9,8 +9,9 @@ tags: [models, huggingface, cache]
 **What's on this page**
 
 - Default cache location and layout
-- Download utilities and readiness checks
+- Download utilities, resume / stuck-partial recovery, and readiness checks
 - Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
+- Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
 - Sharing with nvidia-dgx-spark-lab
 
 **What this enables**
@@ -27,8 +28,8 @@ tags: [models, huggingface, cache]
 
 ## Default location
 
-```text
-MODELS_DIR=/mnt/models
+```bash
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
 ```
 
 Override in `.env` if needed. Prefer a large, durable disk on the Spark.
@@ -47,8 +48,8 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 === "Manual"
 
     ```bash
-    sudo mkdir -p /mnt/models
-    sudo chown "$USER:$USER" /mnt/models
+    sudo mkdir -p "${MODELS_DIR}"
+    sudo chown "$USER:$USER" "${MODELS_DIR}"
     ```
 
 === "Home path"
@@ -62,13 +63,15 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
 ## Layout
 
+Each utility writes to `${MODELS_DIR}/<org__repo>_<tier>` (`tier_dir`), then **relative** symlinks into `comfy/`:
+
 ```text
-/mnt/models/
-  black-forest-labs__FLUX.2-klein-9b-nvfp4/   # flux fast UNET
-  Comfy-Org__flux2-klein-9B/                  # companions: Qwen TE + flux2 VAE
-  tonera__FLUX.2-klein-9B-Nunchaku/           # optional (INCLUDE_NUNCHAKU)
-  Kijai__LTX2.3_comfy_balanced/               # ltx balanced selective
-  Comfy-Org__ltx-2_gemma/                     # LTX Gemma 3 TE (DualCLIP)
+${MODELS_DIR}/
+  black-forest-labs__FLUX.2-klein-4b-fp8_fast/
+  Comfy-Org__z_image_turbo_te/                # qwen_3_4b
+  Comfy-Org__flux2-dev_vae/                   # flux2-vae
+  Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b/
+  Lightricks__LTX-2.5_2.5/
   comfy/
     diffusion_models/   # relative symlinks into tier repos above
     text_encoders/
@@ -76,23 +79,23 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
   hub/                  # HF cache (optional)
 ```
 
-`download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-klein-9B/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/…` file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.
+`download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/…` file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.
 
 This matches the lab hostPath pattern so K8s and Docker demos can share weights.
 
 ```mermaid
 flowchart TB
-  Root["/mnt/models · MODELS_DIR"]
-  Root --> Flux1["black-forest-labs__FLUX.2-klein-9b-nvfp4"]
-  Root --> Comp["Comfy-Org__flux2-klein-9B"]
-  Root --> Flux2["tonera__FLUX.2-klein-9B-Nunchaku"]
-  Root --> Ltx["Kijai__LTX2.3_comfy_balanced"]
-  Root --> Gemma["Comfy-Org__ltx-2_gemma"]
+  Root["MODELS_DIR"]
+  Root --> Klein["black-forest-labs__FLUX.2-klein-4b-fp8_fast"]
+  Root --> TE["Comfy-Org__z_image_turbo_te"]
+  Root --> VAE["Comfy-Org__flux2-dev_vae"]
+  Root --> Wan["Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b"]
+  Root --> Ltx["Lightricks__LTX-2.5_2.5"]
   Root --> Comfy["comfy/"]
   Root --> Hub["hub/ · optional HF cache"]
   Comfy --> DM["diffusion_models/ · symlinks"]
-  Comfy --> TE["text_encoders/"]
-  Comfy --> VAE["vae/"]
+  Comfy --> TEd["text_encoders/"]
+  Comfy --> VAEd["vae/"]
 ```
 
 ---
@@ -102,18 +105,22 @@ flowchart TB
 ```bash
 ./scripts/manage.sh download-models
 # Exits non-zero until every lab basename under MODELS_DIR/comfy is present
-# Companions (Qwen TE + flux2-vae) use file-level readiness so a TE-only
+# Klein TE + flux2-vae use file-level readiness so a TE-only
 # partial cannot cache-hit skip the VAE.
 ```
 
 Or per utility:
 
 ```bash
-./scripts/utilities/download-flux.sh status --tier fast --json
-./scripts/utilities/download-ltx.sh status --tier balanced --json
-./scripts/utilities/download-flux.sh run --tier fast
-./scripts/utilities/download-ltx.sh run --tier balanced
+./scripts/utilities/download-image.sh status --tier fast --json
+./scripts/utilities/download-wan.sh status --tier 5b --json
+./scripts/utilities/download-ltx.sh status --tier 2.5 --json
+./scripts/utilities/download-image.sh run --tier fast
+./scripts/utilities/download-wan.sh run --tier 5b
+./scripts/utilities/download-ltx.sh run --tier 2.5
 ```
+
+`--tier fast` also pulls Klein companions (`te` + `vae`). Optional stills: `--tier nvfp4` / `--tier base` / `--tier zimage`. Optional motion: `download-wan.sh run --tier a14b`. Optional LTX fallback: `download-ltx.sh run --tier 2.3`.
 
 Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`):
 
@@ -128,50 +135,83 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 
 | File | Comfy folder | Role |
 | --- | --- | --- |
-| `flux-2-klein-9b-nvfp4.safetensors` | `diffusion_models/` | Flux fast UNET (BFL) |
-| `qwen_3_8b_fp4mixed.safetensors` | `text_encoders/` | Flux TE (Comfy-Org companions; CLIP type **`flux2`**) |
-| `flux2-vae.safetensors` | `vae/` | Flux VAE (Comfy-Org companions) |
-| `ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors` | `diffusion_models/` | LTX balanced UNET |
-| `gemma_3_12B_it_fp4_mixed.safetensors` | `text_encoders/` | LTX Gemma 3 TE (DualCLIP type **`ltxv`**, with projection) |
-| `ltx-2.3_text_projection_bf16.safetensors` | `text_encoders/` | LTX text projection (DualCLIP second clip) |
-| `LTX23_video_vae_bf16.safetensors` | `vae/` | LTX video VAE (used by lab I2V/T2V) |
-| `LTX23_audio_vae_bf16.safetensors` | `vae/` | LTX audio VAE (required by lab LTX graphs for joint AV empty audio latents) |
+| `flux-2-klein-4b-fp8.safetensors` | `diffusion_models/` | Apache Klein 4B distilled still UNET |
+| `qwen_3_4b.safetensors` | `text_encoders/` | Klein 4B TE (CLIP type **`flux2`**) |
+| `flux2-vae.safetensors` | `vae/` | Flux.2 VAE |
+| `wan2.2_ti2v_5B_fp16.safetensors` | `diffusion_models/` | Apache Wan 2.2 TI2V-5B |
+| `umt5_xxl_fp8_e4m3fn_scaled.safetensors` | `text_encoders/` | Wan CLIP (type **`wan`**) |
+| `wan2.2_vae.safetensors` | `vae/` | Wan 2.2 VAE |
+| `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors` | `diffusion_models/` | LTX-2.5 distilled AV UNET (Community License) |
+| `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors` | `text_encoders/` | LTX-2.5 Gemma4-with-proj (CLIP type **`ltxv`**) |
+| `ltx-2.5-video-vae-bf16.safetensors` | `vae/` | LTX-2.5 video VAE |
+| `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/` from host `workflows/` (name pattern **`*-lab-example.json`**):
+Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `workflows/shorts/*.json` (name pattern **`*-lab-example.json`**). Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
 
 | Graph | Notes |
 | --- | --- |
-| `flux-txt2img-lab-example.json` | 1024² T2I |
-| `flux-txt2img-portrait-lab-example.json` | 768×1024 |
-| `flux-txt2img-landscape-lab-example.json` | 1280×720 |
-| `flux-txt2img-ultrawide-lab-example.json` | 1536×640 |
-| `flux-txt2img-512-lab-example.json` | 512² draft |
-| `flux-txt2img-quick-lab-example.json` | 768² / 4 steps smoke |
-| `flux-txt2img-batch2-lab-example.json` | batch 2 @ 768² |
-| `flux-txt2img-high-steps-lab-example.json` | 1024² / 16 steps |
-| `flux-txt2img-product-lab-example.json` | product / catalog prompt |
-| `flux-img2img-lab-example.json` | I2I denoise 0.65; default **example.png** sketch→hero |
-| `flux-img2img-subtle-lab-example.json` / `flux-img2img-strong-lab-example.json` | denoise 0.35 / 0.85 on **example.png** |
-| `ltx-i2v-lab-example.json` | I2V ~10 s (241 @ 24 fps); default **example.png** |
-| `ltx-t2v-lab-example.json` | T2V ~10 s (241 @ 24 fps) |
-| `ltx-t2v-portrait-lab-example.json` / `ltx-t2v-landscape-lab-example.json` | vertical / wide T2V ~10 s |
-| `ltx-*-30s-*-lab-example.json` (5 graphs) | ~30 s long-run I2V/T2V demos (721 frames) |
-| `ltx-*-60s-*-lab-example.json` (5 graphs) | ~60 s very heavy I2V/T2V demos (1441 frames) |
-| `flux-to-ltx-lab-example.json` / `flux-to-ltx-30s-lab-example.json` | Flux T2I + handoff → LTX I2V (~10 s / ~30 s) |
+| `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
+| `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×720 |
+| `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
+| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills, one identity |
+| `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |
+| `wan-t2v-5s-lab-example.json` | Wan 5B T2V smoke |
+| `wan-i2v-shot-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |
+| `wan-gif-loop-lab-example.json` | Ping-pong GIF, 49 @ 12 fps |
+| `ltx-i2v-5s-lab-example.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
+| `ltx-t2v-5s-lab-example.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
+| `ltx-i2v-shot-lab-example.json` | 5.00 s LTX I2V print + last-frame SaveImage |
+| `shorts/film-*-90s-*-lab-example.json` | **Unified** Klein identity + LTX 5.00s AV printer + 18-shot map ([90s shorts](shorts.md)) |
+| `klein-shorts-still-lab-example.json` | Vertical 9:16 Shorts still |
+| `wan-shorts-i2v-lab-example.json` | Vertical silent Shorts I2V |
+| `ltx-shorts-i2v-lab-example.json` | Vertical AV Shorts I2V |
+| `klein-thumbnail-lab-example.json` | YouTube thumbnail still |
+| `klein-product-packshot-lab-example.json` | Product packshot 1:1 |
+| `klein-before-after-lab-example.json` | Before/after still pair |
+| `klein-style-lock-lab-example.json` | Four style-locked stills |
+| `wan-bumper-loop-lab-example.json` | Loopable MP4 bumper |
+| `ltx-broll-ambient-lab-example.json` | Ambient B-roll AV ~5 s |
+| `klein-storyboard-6up-lab-example.json` | Six storyboard frames |
+| `klein-endcard-cta-lab-example.json` | End-card / CTA plate 16:9 |
+| `klein-quote-bg-lab-example.json` | Quote-card background 1:1 |
+| `klein-og-blog-lab-example.json` | Blog / OG hero |
+| `klein-podcast-cover-lab-example.json` | Podcast cover 1:1 |
+| `klein-banner-wide-lab-example.json` | Wide channel banner |
+| `klein-ig-square-lab-example.json` | Instagram 1:1 still |
+| `klein-hook-still-lab-example.json` | 9:16 hook still |
+| `klein-lower-third-bg-lab-example.json` | Lower-third-safe 16:9 |
+| `klein-food-tabletop-lab-example.json` | Food tabletop 4:5 |
+| `klein-lighting-trio-lab-example.json` | Three-light study |
+| `klein-time-of-day-lab-example.json` | Dawn / noon / dusk / night |
+| `klein-camera-angles-lab-example.json` | Wide / medium / close |
+| `klein-color-moods-lab-example.json` | Four color moods |
+| `wan-orbit-i2v-lab-example.json` | Slow orbit I2V ~5 s |
+| `wan-push-in-i2v-lab-example.json` | Hero push-in I2V ~5 s |
+| `wan-parallax-i2v-lab-example.json` | Parallax I2V ~5 s |
+| `wan-sticker-loop-lab-example.json` | Looping sticker MP4 |
+| `ltx-weather-broll-lab-example.json` | Weather B-roll AV ~5 s |
+| `ltx-interior-ambience-lab-example.json` | Interior ambience AV ~5 s |
+| `ltx-hook-av-lab-example.json` | AV hook / cold open ~5 s |
 
-Lab video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. All LTX lab examples are **≥ ~10 s**; 30 s / 60 s graphs are intentional long-run demos (high VRAM/time). Watch the **Save video (MP4)** node preview after Queue — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx). They still **must** wire the audio VAE + `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` because LTX-2.3 is a joint AV model; audio decode/save into VHS is not included in lab examples. Every lab graph includes an on-canvas **Note** with models, prompting, and video-output steps.
+Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. They still **must** wire the audio VAE because LTX is a joint AV model.
+
+MiniMax H3 is **banned** (US Excluded Territory). See [Model licenses](licenses.md). `download-models` refuses `--with-h3`.
 
 ### Gated models / HF_TOKEN
 
-FLUX and some LTX assets may require accepting the license on Hugging Face and a token:
+**LTX-2.5** (`Lightricks/LTX-2.5`) is gated. Klein 4B distilled and Wan 2.2 5B are Apache and do not need a license click. A token in `.env` is **not** the same as accepting the Lightricks license.
 
 ```bash
 # .env
 HF_TOKEN=hf_...
+# Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree
 # or: hf auth login
+hf auth whoami
 ```
+
+Fine-grained tokens need **gated repo** read. `download-models` passes `--token` from `HF_TOKEN` so it wins over a leftover `hf auth login`.
 
 ### Disk headroom
 
@@ -181,38 +221,41 @@ HF_TOKEN=hf_...
 
 ## LTX selective download
 
-`Kijai/LTX2.3_comfy` is a multi-variant hub repo (~**400 GB** if you pull everything). This stack defaults to a **selective** subset via `hf download --include`:
+Default **2.5** is the small distilled set from `Lightricks/LTX-2.5` (status `min_gb` 30).
+
+`Kijai/LTX2.3_comfy` is a multi-variant hub repo (~**400 GB** if you pull everything). Use it only as a **2.3 fallback**:
 
 | Tier | Transformer (approx) | Plus | Total (approx) |
 | --- | --- | --- | --- |
-| **balanced** | distilled FP8 `…fp8_input_scaled_v3` (~25 GB) | text projection + video/audio VAE | ~28–30 GB |
-| **quality** | distilled BF16 (~42 GB) | same projection + VAEs | ~45–48 GB |
-| **gemma** (auto with balanced/quality) | — | `gemma_3_12B_it_fp4_mixed` from `Comfy-Org/ltx-2` | ~9.5 GB |
+| **2.5** (default) | LTX-2.5 distilled INT8-convrot | Gemma4-with-proj + video/audio VAEs | status floor ~30 GB |
+| **2.3** / **balanced** | distilled FP8 `…fp8_input_scaled_v3` (~25 GB) | text projection + video/audio VAE + Gemma 3 TE | ~28–30 GB + ~9.5 GB TE |
+| **quality** | distilled BF16 (~42 GB) | same projection + VAEs + Gemma 3 | ~45–48 GB + TE |
+| **gemma** (auto with 2.3/balanced/quality) | — | `gemma_3_12B_it_fp4_mixed` from `Comfy-Org/ltx-2` | ~9.5 GB |
 
-Lab LTX graphs use **DualCLIPLoader** (`gemma` + `text_projection`, type **`ltxv`**). Projection alone is not a text encoder.
+Lab LTX-2.5 graphs use **CLIPLoader** (Gemma4-with-proj, type **`ltxv`**). LTX-2.3 DualCLIP is fallback only — seeded lab JSON still names 2.5 files.
 
-`status --json` readiness uses `min_gb` 20 (balanced) / 35 (quality) / 8 (gemma) as a floor, not the full monorepo size.
+`status --json` readiness uses `min_gb` 30 (2.5) / 20 (2.3/balanced) / 35 (quality) / 8 (gemma) as a floor, not the full monorepo size.
 
 ??? tip "Cleanup extra LTX monorepo files"
 
-    If an older run pulled the full `Kijai/LTX2.3_comfy` snapshot into the balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:
+    If an older run pulled the full `Kijai/LTX2.3_comfy` snapshot into a 2.3/balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:
 
     ```bash
     # Preview (default)
-    ./scripts/utilities/download-ltx.sh cleanup --tier balanced
+    ./scripts/utilities/download-ltx.sh cleanup --tier 2.3
 
     # Delete extras (keeps FP8 transformer + TE + VAEs only)
-    ./scripts/utilities/download-ltx.sh cleanup --tier balanced --yes
+    ./scripts/utilities/download-ltx.sh cleanup --tier 2.3 --yes
     ```
 
-    Does **not** touch FLUX, nunchaku, or other trees under `MODELS_DIR`.
+    Does **not** touch Klein, Wan, or other trees under `MODELS_DIR`.
 
 ??? warning "Full monorepo escape hatch"
 
     Operators who really want every precision/lora:
 
     ```bash
-    LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier balanced
+    LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier 2.3
     ```
 
     After a full-repo mistake, use `cleanup --yes` instead of wiping all of `MODELS_DIR`.
@@ -226,7 +269,8 @@ Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
 | Behavior | Detail |
 | --- | --- |
 | Resume after interrupt | ++ctrl+c++ / crash leaves `*.incomplete` under each tier’s `.cache/huggingface/`; re-run the same command to continue |
-| Skip when ready | `download-flux` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
+| Resume stall (0 MiB/s) | Live `hf` holding a lock with no disk growth. FORCE-clearing locks will not unstick it. ++ctrl+c++, then `./scripts/manage.sh reset-hf-partials --yes` and re-run, or `download-models --drop-incomplete`. After 90s the downloader drops that dest’s partials and retries **once**. |
+| Skip when ready | `download-image` / `download-wan` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
 | `HF_HOME` | Set to `MODELS_DIR` so hub metadata lives on the durable model disk |
 | Cleanup | `download-ltx.sh cleanup --yes` removes non-selective monorepo weights but **keeps** `.cache/`, `*.incomplete`, and selective keep-set files |
 
@@ -241,7 +285,7 @@ Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
 ```mermaid
 flowchart LR
   EZ["ez-comfy-stack<br/>Docker bind mount"]
-  Cache["/mnt/models<br/>shared host path"]
+  Cache["MODELS_DIR<br/>shared host path"]
   Lab["nvidia-dgx-spark-lab<br/>K8s hostPath"]
   EZ <--> Cache
   Lab <--> Cache
@@ -254,18 +298,22 @@ sequenceDiagram
   actor Op as Operator
   participant M as manage.sh
   participant W as download-limit wrap
-  participant F as download-flux.sh
+  participant I as download-image.sh
+  participant Wa as download-wan.sh
   participant L as download-ltx.sh
   participant HF as Hugging Face
   participant Disk as MODELS_DIR
 
   Op->>M: download-models
   M->>W: --limit auto (default)
-  W->>F: run --tier fast
-  F->>HF: pull FLUX repos
-  HF-->>Disk: flux weights + symlinks
-  W->>L: run --tier balanced
-  L->>HF: pull LTX repos
+  W->>I: run --tier fast
+  I->>HF: pull Klein 4B + TE + VAE
+  HF-->>Disk: still weights + symlinks
+  W->>Wa: run --tier 5b
+  Wa->>HF: pull Wan 5B
+  HF-->>Disk: wan weights + symlinks
+  W->>L: run --tier 2.5
+  L->>HF: pull LTX-2.5
   HF-->>Disk: ltx weights + symlinks
   W-->>M: clear limit on EXIT/INT/TERM
 ```
@@ -274,9 +322,9 @@ sequenceDiagram
 
 ```mermaid
 flowchart TB
-  Status["download-flux / download-ltx<br/>status --json"]
+  Status["download-image / download-wan / download-ltx<br/>status --json"]
   Doctor["manage.sh doctor"]
-  Status --> Check{"tiers present<br/>under MODELS_DIR?"}
+  Status --> Check{"lab files present<br/>under MODELS_DIR/comfy?"}
   Doctor --> Check
   Check -->|yes| Ready["Ready for start"]
   Check -->|no| Missing["Run download-models<br/>or fix MODELS_DIR mount"]
@@ -288,13 +336,15 @@ flowchart TB
 
 | Item | Detail |
 | --- | --- |
-| Image (`main`) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx` (arm64) |
-| Image (`development` / feature) | `ghcr.io/toxicoder/ez-comfy:flux-to-ltx-development` (arm64) |
+| Image (`main`) | `ghcr.io/toxicoder/ez-comfy:us-safe-studio` (arm64) |
+| Image (`development` / feature) | `ghcr.io/toxicoder/ez-comfy:us-safe-studio-development` (arm64) |
 | Selection | `manage.sh` maps current git branch → tag (override: `EZ_COMFY_IMAGE`) |
+| Frozen tags | Old `flux-to-ltx*` tags freeze on the previous image |
 | Final base | `nvidia/cuda` **runtime** (builder uses **devel** only during image build) |
 | Contains | CUDA runtime, ComfyUI, Python venv, PyTorch/CUDA wheels (`.git`/caches stripped) |
-| Does **not** contain | `HF_TOKEN`, `.env`, host PII, or FLUX/LTX weights |
+| Does **not** contain | `HF_TOKEN`, `.env`, host PII, or Klein/Wan/LTX weights |
 | First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
+| Volume pin | `COMFY_HOME/.lab-comfyui-ref` — stamp-present refresh reseeds from prebuilt (or git-clones `COMFYUI_REF`) when this lags the runtime pin. Compose passes `COMFYUI_REF` at **runtime**, not only as a build-arg |
 | Weights | Still under `MODELS_DIR` via `download-models` |
 | Publish | `publish-image` on `main` / `development` (docker/**); Buildx GHA layer cache |
 | Local build | Optional: `LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start` builds `docker/Dockerfile` instead of pulling — see [Getting Started](getting-started.md#build-the-image-locally-optional) |
@@ -328,9 +378,9 @@ flowchart TB
 
     | Pin | Default | Why this value |
     | --- | --- | --- |
-    | `COMFYUI_REF` | `v0.29.0` | Latest ComfyUI release (2026-07-29). Official README recommends **torch cu130**. Includes native Flux nodes + LTX kitchen-rope / LTXV fixes. Lab graphs use **core** nodes only (`UNETLoader`, `EmptyFlux2LatentImage`, `LTXV*`, …). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
+    | `COMFYUI_REF` | `v0.34.0` | Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the **comfy** image phase after this bump (torch phase stays cached). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
     | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
-    | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for LTX lab **`VHS_VideoCombine`** MP4. **Required** for `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |
+    | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for lab **`VHS_VideoCombine`** MP4. **Required** for `wan-*-lab-example` / `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |
 
     **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, and `docker/install-comfy/common.sh`, then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).
