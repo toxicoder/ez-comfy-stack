@@ -328,6 +328,80 @@ line3" "org/x"
   [ "${output}" = "2" ]
   run count_hf_incomplete "${TEST_TMP_DIR}/missing_dir"
   [ "${output}" = "0" ]
+  run list_hf_incomplete "${d}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"blob.incomplete"* ]]
+  : >"${d}/keep.safetensors"
+  run remove_hf_incomplete "${d}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"2"* ]]
+  [[ ! -f "${d}/other.incomplete" ]]
+  [[ ! -f "${d}/.cache/huggingface/download/blob.incomplete" ]]
+  [[ -f "${d}/keep.safetensors" ]]
+  run hf_download_pids_running
+  [ "${status}" -ne 0 ]
+  export LAB_MOCK_HF_RUNNING=1
+  run hf_download_pids_running
+  [ "${status}" -eq 0 ]
+  unset LAB_MOCK_HF_RUNNING
+  run warn_hf_resume_stall "${d}" 30
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"resume stall"* ]]
+  [[ "${output}" == *"reset-hf-partials"* ]]
+  [[ "${output}" != *"HF_LOCK_CLEAR_FORCE=1"* ]]
+  run wait_hf_download_or_stall ""
+  [ "${status}" -ne 0 ]
+}
+
+@test "common: locks_only held lock does not suggest FORCE" {
+  local lock_root="${TEST_TMP_DIR}/held_locks"
+  mkdir -p "${lock_root}"
+  : >"${lock_root}/held.lock"
+  install_mock_bin fuser 'exit 0'
+  run clear_stale_hf_locks "${lock_root}" "locks_only"
+  [ "${status}" -eq 0 ]
+  [[ -f "${lock_root}/held.lock" ]]
+  [[ "${output}" == *"still holds"* ]]
+  [[ "${output}" != *"HF_LOCK_CLEAR_FORCE=1"* ]]
+}
+
+@test "common: hf_download retries once after resume stall" {
+  local dest="${TEST_TMP_DIR}/stall_dest"
+  mkdir -p "${dest}/.cache/huggingface/download"
+  : >"${dest}/.cache/huggingface/download/blob.incomplete"
+  unset LAB_MOCK_HF_DOWNLOAD
+  export HF_PROGRESS=0
+  export HF_RESUME_STALL_S=2
+  export HF_PROGRESS_INTERVAL=1
+  unset HF_DOWNLOAD_MAX_WORKERS
+  : >"${TEST_TMP_DIR}/hf_n"
+  echo 0 >"${TEST_TMP_DIR}/hf_n"
+  install_mock_bin hf '
+echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
+n=$(cat "${TEST_TMP_DIR}/hf_n" 2>/dev/null || echo 0)
+n=$((n + 1))
+echo "${n}" >"${TEST_TMP_DIR}/hf_n"
+if [[ ${n} -eq 1 ]]; then
+  sleep 30
+  exit 1
+fi
+prev=""
+for a in "$@"; do
+  if [[ ${prev} == "--local-dir" ]]; then
+    mkdir -p "${a}"
+    echo ok >"${a}/done.bin"
+    exit 0
+  fi
+  prev="${a}"
+done
+exit 0
+'
+  run hf_download "org/stall" --local-dir "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ ! -f "${dest}/.cache/huggingface/download/blob.incomplete" ]]
+  [[ -f "${dest}/done.bin" ]]
+  [[ "$(cat "${TEST_TMP_DIR}/hf_n")" == "2" ]]
+  [[ "${output}" == *"dropping"* || "${output}" == *"retrying"* || "${output}" == *"resume stall"* ]]
 }
 
 @test "common: hf progress formatters and emit helpers" {

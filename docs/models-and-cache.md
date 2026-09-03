@@ -9,7 +9,7 @@ tags: [models, huggingface, cache]
 **What's on this page**
 
 - Default cache location and layout
-- Download utilities and readiness checks
+- Download utilities, resume / stuck-partial recovery, and readiness checks
 - Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
 - Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
 - Sharing with nvidia-dgx-spark-lab
@@ -225,6 +225,7 @@ Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
 | Behavior | Detail |
 | --- | --- |
 | Resume after interrupt | ++ctrl+c++ / crash leaves `*.incomplete` under each tier’s `.cache/huggingface/`; re-run the same command to continue |
+| Resume stall (0 MiB/s) | Live `hf` holding a lock with no disk growth. FORCE-clearing locks will not unstick it. ++ctrl+c++, then `./scripts/manage.sh reset-hf-partials --yes` and re-run, or `download-models --drop-incomplete`. After 90s the downloader drops that dest’s partials and retries **once**. |
 | Skip when ready | `download-flux` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
 | `HF_HOME` | Set to `MODELS_DIR` so hub metadata lives on the durable model disk |
 | Cleanup | `download-ltx.sh cleanup --yes` removes non-selective monorepo weights but **keeps** `.cache/`, `*.incomplete`, and selective keep-set files |

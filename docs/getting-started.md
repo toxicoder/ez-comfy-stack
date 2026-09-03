@@ -201,6 +201,16 @@ Fix any errors **before** downloading multi‑GB models.
 
     If kernel HTB is missing (common on DGX Spark), downloads continue with gentle HF workers and a warning. Use `DOWNLOAD_LIMIT=off` only when you accept SSH risk. See [Download Limit](download-limit.md).
 
+!!! tip "Stuck resume (0 MiB/s, incomplete file)"
+
+    Heartbeats showing `found N incomplete` and `0 MiB/s` mean `hf` is alive but the partial is not growing. **Do not** `HF_LOCK_CLEAR_FORCE=1` while it runs. ++ctrl+c++, then:
+
+    ```bash
+    ./scripts/manage.sh download-models --drop-incomplete --limit 1000
+    ```
+
+    That deletes `*.incomplete` (finished weights stay) and re-pulls. See [Models & Cache](models-and-cache.md#resume-cache).
+
 If Comfy shows **Missing Models** on **\*-lab-example** graphs, re-run download and `doctor`. Full basename table: [Models & Cache](models-and-cache.md).
 
 ---
