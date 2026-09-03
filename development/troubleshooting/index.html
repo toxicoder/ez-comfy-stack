@@ -1270,7 +1270,12 @@
 <tr>
 <td>Speedtest failed / always 50 Mbps</td>
 <td>CLI missing or probe blocked</td>
-<td>Auto-installs <code>speedtest-cli</code> when possible; <strong>clears limits before measure</strong>; then HTTP probe / live RX. Check outbound HTTPS if all fail</td>
+<td>Auto-installs <code>speedtest-cli</code> when possible; <strong>clears limits before measure</strong>; then HTTP probe / live RX. Or skip the probe: <code>./scripts/manage.sh download-models --limit 40</code></td>
+</tr>
+<tr>
+<td>Auto cap too high / SSH still sluggish</td>
+<td>Speedtest over-reads the path you share with SSH</td>
+<td><code>./scripts/manage.sh download-models --limit N</code> with a lower Mbps (e.g. 20–40). Persistent: <code>DOWNLOAD_LIMIT=40</code> in <code>.env</code></td>
 </tr>
 <tr>
 <td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span> does not stop download</td>
@@ -1313,8 +1318,8 @@
 <p><code>download-models</code> wraps downloads under wondershaper. If the kernel rejects HTB (<code>qdisc kind is unknown</code>) or illegal rates, <strong>wrap soft-fails</strong>: it warns and continues <strong>unthrottled</strong> (SSH risk). Persistent <code>download-limit run</code> still hard-fails. Set <code>DOWNLOAD_LIMIT_REQUIRE=1</code> to hard-fail wrap too.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/manage.sh<span class="w"> </span>download-limit<span class="w"> </span>clear
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># optional: sudo modprobe sch_htb sch_ingress sch_sfq</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>./scripts/manage.sh<span class="w"> </span>download-models
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># or explicitly:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w"> </span>--limit<span class="w"> </span><span class="m">40</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># or skip throttle entirely (SSH risk):</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># DOWNLOAD_LIMIT=off ./scripts/manage.sh download-models</span>
 </code></pre></div>
 <hr />

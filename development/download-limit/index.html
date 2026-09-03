@@ -1140,6 +1140,7 @@
 <ul>
 <li>Why bandwidth limits matter on remote Sparks</li>
 <li>CLI usage (<code>status</code>, <code>run</code>, <code>clear</code>, <code>wrap</code>)</li>
+<li>Manual Mbps cap (<code>download-models --limit N</code>) vs auto</li>
 <li>Auto mode (85% of speedtest) and wrap lifecycle</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1186,8 +1187,12 @@
 <td>Remove wondershaper limit</td>
 </tr>
 <tr>
-<td><code>wrap --limit auto -- &lt;cmd…&gt;</code></td>
+<td><code>wrap --limit auto</code> or <code>--limit N</code></td>
 <td>Apply → run command → <strong>always clear on exit</strong></td>
+</tr>
+<tr>
+<td><code>manage.sh download-models --limit N</code></td>
+<td>Same wrap; <strong>N</strong> is a standing Mbps cap for this download</td>
 </tr>
 </tbody>
 </table>
@@ -1199,8 +1204,11 @@
 </code></pre></div>
 <p>Via manage:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>download-limit<span class="w"> </span>clear
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">   </span><span class="c1"># wrap --limit ${DOWNLOAD_LIMIT:-auto}</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">                 </span><span class="c1"># wrap --limit ${DOWNLOAD_LIMIT:-auto}</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w"> </span>--limit<span class="w"> </span><span class="m">40</span><span class="w">      </span><span class="c1"># fixed 40 Mbps; overrides .env for this run</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w"> </span>--limit<span class="w"> </span>off<span class="w">     </span><span class="c1"># no throttle (SSH risk)</span>
 </code></pre></div>
+<p><code>--limit N</code> is integer <strong>Mbps</strong> (not MB/s). 40 Mbps ≈ 5 MB/s. <code>.env</code> <code>DOWNLOAD_LIMIT=40</code> is the persistent default; the flag wins for one invocation. Wrap still <strong>clears on exit</strong>.</p>
 <pre class="mermaid"><code>flowchart TB
   Start["download-limit.sh"] --&gt; Cmd{"subcommand"}
   Cmd --&gt;|status| Status["Report iface + limit&lt;br/&gt;optional --json"]
