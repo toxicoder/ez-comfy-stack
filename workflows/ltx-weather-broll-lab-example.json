@@ -691,10 +691,11 @@
       },
       "widgets_values": [
         "Locked-camera weather B-roll. Rain streaks across a rooftop helipad and a teal-and-copper flight suit at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds.",
-        false,
+        true,
         "t2v",
         "5 seconds, 24 fps",
-        "rain, wind, drip, no score"
+        "rain, wind, drip, no score",
+        "none"
       ],
       "title": "LTX Prompt Enhance"
     },

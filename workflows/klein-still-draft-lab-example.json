@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-still-draft-lab-example\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 \u00b7 4 steps \u00b7 768x432 \u00b7 batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open klein-still-hero-lab-example with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## klein-still-draft-lab-example\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 \u00b7 4 steps \u00b7 768x432 \u00b7 batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open klein-still-hero-lab-example with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -414,9 +414,10 @@
       },
       "widgets_values": [
         "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad, unmarked circular starburst chest plate catching a warm key, a short unmarked capelet at rest. Rounded towers recede into volumetric haze. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
-        false,
+        true,
         "t2i",
-        "YouTube 16:9 still"
+        "YouTube 16:9 still",
+        "none"
       ],
       "title": "Klein Prompt Enhance"
     }
@@ -515,7 +516,7 @@
         0
       ]
     },
-    "lab_note": "## klein-still-draft-lab-example\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 \u00b7 4 steps \u00b7 768x432 \u00b7 batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open klein-still-hero-lab-example with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_note": "## klein-still-draft-lab-example\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 \u00b7 4 steps \u00b7 768x432 \u00b7 batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open klein-still-hero-lab-example with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Klein 4B draft still, 768x432, 4 steps, batch 2"
   },
   "version": 0.4

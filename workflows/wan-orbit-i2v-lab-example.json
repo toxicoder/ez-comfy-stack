@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Slow orbit around the start-image subject. Camera arcs a few degrees right while keeping the product or hero identity locked. One continuous ~5 s take, no cuts."
+        "Slow orbit around the start-image subject. Camera arcs a few degrees right while keeping the product or hero identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
       ],
       "title": "Motion / prompt"
     },
@@ -581,10 +581,11 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Slow orbit around the start-image subject. Camera arcs a few degrees right while keeping the product or hero identity locked. One continuous ~5 s take, no cuts.",
-        false,
+        "Slow orbit around the start-image subject. Camera arcs a few degrees right while keeping the product or hero identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts.",
+        true,
         "i2v",
-        "5 seconds, 24 fps"
+        "5 seconds, 24 fps",
+        "none"
       ],
       "title": "Wan Prompt Enhance"
     }

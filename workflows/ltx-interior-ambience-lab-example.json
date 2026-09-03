@@ -691,10 +691,11 @@
       },
       "widgets_values": [
         "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Five seconds.",
-        false,
+        true,
         "t2v",
         "5 seconds, 24 fps",
-        "kettle, house creak, no score"
+        "kettle, house creak, no score",
+        "none"
       ],
       "title": "LTX Prompt Enhance"
     },

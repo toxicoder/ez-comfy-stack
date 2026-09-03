@@ -1,12 +1,11 @@
-"""Hermetic tests for ez_prompt_enhance (no Comfy, no network)."""
+"""Hermetic tests for ez_prompt_enhance (no Comfy, no network, no GGUF)."""
 
 from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch
-from urllib.error import HTTPError, URLError
+from unittest.mock import patch
 
 import pytest
 
@@ -25,37 +24,22 @@ from ez_prompt_enhance.nodes import (  # noqa: E402
 )
 
 
-class _FakeResponse:
-    def __init__(self, payload: dict) -> None:
-        self._raw = json.dumps(payload).encode("utf-8")
-
-    def read(self) -> bytes:
-        return self._raw
-
-    def __enter__(self) -> _FakeResponse:
-        return self
-
-    def __exit__(self, *args: object) -> bool:
-        return False
-
-
-def _completion(text: str) -> dict:
-    return {"choices": [{"message": {"content": text}}]}
-
-
 def test_system_prompts_encode_model_rules() -> None:
     klein = client.load_system_prompt("klein_t2i")
     assert "Qwen3-4B" in klein
     assert "<|im_start|>" in klein
     assert "sentences" in klein.lower()
+    assert "inventory" in klein.lower()
     edit = client.load_system_prompt("klein_edit")
     assert "identity" in edit.lower()
+    assert "massing" in edit.lower() or "do not add" in edit.lower()
     wan_t2v = client.load_system_prompt("wan_t2v")
     assert "80" in wan_t2v and "120" in wan_t2v
     assert "audio" in wan_t2v.lower()
     wan_i2v = client.load_system_prompt("wan_i2v")
     assert "Motion + Camera" in wan_i2v
     assert "audio" in wan_i2v.lower()
+    assert "new objects" in wan_i2v.lower()
     ltx_t2v = client.load_system_prompt("ltx_t2v")
     assert "present" in ltx_t2v.lower()
     assert "quotation" in ltx_t2v.lower()
@@ -63,6 +47,24 @@ def test_system_prompts_encode_model_rules() -> None:
     ltx_i2v = client.load_system_prompt("ltx_i2v")
     assert "first frame" in ltx_i2v.lower()
     assert "camera motion" in ltx_i2v.lower()
+    assert "new objects" in ltx_i2v.lower()
+
+
+def test_style_catalog_is_fifty_unique() -> None:
+    styles = client.load_styles()
+    assert len(styles) == 50
+    assert len(set(styles)) == 50
+    assert "none" not in styles
+    ids = client.style_ids()
+    assert ids[0] == "none"
+    assert len(ids) == 51
+    for sid, entry in styles.items():
+        assert entry["label"].strip()
+        assert entry["llm_block"].strip()
+        assert entry["suffix"].strip()
+        assert "no photoreal" not in entry["llm_block"].lower()
+    assert client.style_llm_block("none") == ""
+    assert client.style_suffix("photorealistic")
 
 
 def test_strip_fences_and_quotes() -> None:
@@ -71,53 +73,73 @@ def test_strip_fences_and_quotes() -> None:
     assert client.strip_model_wrapping('"A teal-and-copper superhero."') == "A teal-and-copper superhero."
 
 
-def test_enhance_false_skips_api(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("XAI_API_KEY", "xai-test")
-    with patch.object(client.urllib.request, "urlopen") as opener:
-        out = client.enhance_prompt("sys", "lazy bike", enhance=False)
-    assert out == "lazy bike"
-    opener.assert_not_called()
+def test_enhance_false_skips_llm() -> None:
+    with patch.object(client, "complete") as complete:
+        out = client.enhance_prompt("sys", "user", enhance=False, fallback="lazy bike")
+    assert out.text == "lazy bike"
+    assert out.reason == client.REASON_ENHANCE_OFF
+    assert out.preview.startswith("[passthrough: enhance off]")
+    complete.assert_not_called()
 
 
-def test_missing_key_passthrough(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("XAI_API_KEY", raising=False)
-    with patch.object(client.urllib.request, "urlopen") as opener:
-        out = client.enhance_prompt("sys", "lazy bike", enhance=True)
-    assert out == "lazy bike"
-    opener.assert_not_called()
+def test_missing_gguf_passthrough(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.setenv("EZ_LLM_GGUF", str(tmp_path / "missing.gguf"))
+    client._close_llm()
+    with patch.object(client, "_generate") as gen:
+        out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
+    assert out.text == "lazy bike"
+    assert out.reason == client.REASON_GGUF_MISSING
+    gen.assert_not_called()
 
 
-def test_http_error_passthrough(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("XAI_API_KEY", "xai-test")
-
-    def boom(*_args: object, **_kwargs: object) -> object:
-        raise HTTPError("https://api.x.ai/v1/chat/completions", 401, "nope", hdrs=None, fp=MagicMock(read=lambda: b"denied"))
-
-    with patch.object(client.urllib.request, "urlopen", side_effect=boom):
-        out = client.enhance_prompt("sys", "lazy bike", enhance=True)
-    assert out == "lazy bike"
-
-
-def test_timeout_passthrough(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("XAI_API_KEY", "xai-test")
-    with patch.object(client.urllib.request, "urlopen", side_effect=URLError("timed out")):
-        out = client.enhance_prompt("sys", "lazy bike", enhance=True)
-    assert out == "lazy bike"
+def test_missing_llama_import_passthrough(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    gguf = tmp_path / "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    gguf.write_bytes(b"fake")
+    monkeypatch.setenv("EZ_LLM_GGUF", str(gguf))
+    client._close_llm()
+    with patch.dict(sys.modules, {"llama_cpp": None}):
+        out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
+    assert out.text == "lazy bike"
+    assert out.reason == client.REASON_LLAMA_UNAVAILABLE
 
 
-def test_success_strips_fences(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("XAI_API_KEY", "xai-test")
-    monkeypatch.setenv("XAI_MODEL", "grok-4.6")
-    fake = _FakeResponse(_completion("```\nA 3D feature-animation still of a teal-and-copper superhero.\n```"))
-    with patch.object(client.urllib.request, "urlopen", return_value=fake) as opener:
-        out = client.enhance_prompt("sys", "hero still", enhance=True)
-    assert out == "A 3D feature-animation still of a teal-and-copper superhero."
-    opener.assert_called_once()
-    request = opener.call_args[0][0]
-    assert request.full_url.endswith("/chat/completions")
-    body = json.loads(request.data.decode("utf-8"))
-    assert body["model"] == "grok-4.6"
-    assert body["temperature"] == 0
+def test_empty_model_output_passthrough(monkeypatch: pytest.MonkeyPatch) -> None:
+    with patch.object(client, "complete", return_value=("", client.REASON_EMPTY)):
+        out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
+    assert out.text == "lazy bike"
+    assert out.reason == client.REASON_EMPTY
+    assert "timeout or empty" in out.preview
+
+
+def test_success_strips_fences() -> None:
+    with patch.object(
+        client,
+        "complete",
+        return_value=("A 3D feature-animation still of a teal-and-copper superhero.", None),
+    ) as complete:
+        out = client.enhance_prompt("sys", "hero still", enhance=True, fallback="hero still")
+    assert out.text == "A 3D feature-animation still of a teal-and-copper superhero."
+    assert out.reason is None
+    assert out.preview == out.text
+    complete.assert_called_once()
+
+
+def test_generate_uses_temperature_zero() -> None:
+    class _FakeLlama:
+        def create_chat_completion(self, **kwargs: object) -> dict:
+            assert kwargs["temperature"] == 0
+            assert kwargs["max_tokens"] == 800
+            return {"choices": [{"message": {"content": "```\nrewritten\n```"}}]}
+
+    assert client._generate(_FakeLlama(), "sys", "user") == "rewritten"
+
+
+def test_n_gpu_layers_refused_without_allow(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("EZ_LLM_N_GPU_LAYERS", "99")
+    monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
+    assert client._n_gpu_layers() == 0
+    monkeypatch.setenv("EZ_LLM_ALLOW_GPU", "1")
+    assert client._n_gpu_layers() == 99
 
 
 def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
@@ -127,7 +149,8 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
     klein_d = next(n for n in draft["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     klein_h = next(n for n in hero["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein_d["widgets_values"][0] == klein_h["widgets_values"][0]
-    assert klein_d["widgets_values"][1] is False
+    assert klein_d["widgets_values"][1] is True
+    assert klein_d["widgets_values"][-1] == "none"
     wan_t = json.loads((wf / "wan-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
     wan_i = json.loads((wf / "wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
     ltx_t = json.loads((wf / "ltx-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
@@ -158,6 +181,10 @@ def test_ez_prompt_join_identity_and_shot() -> None:
     assert join.run("Identity only.", "") == ("Identity only.",)
     assert join.run("", "Shot only.") == ("Shot only.",)
     assert join.run("  ", "  ") == ("",)
+    locked = join.run("Cabin.", "Dawn deck.", "cedar siding, hip roof")
+    assert locked == (
+        "Cabin. Locked inventory (do not change): cedar siding, hip roof Dawn deck.",
+    )
 
 
 def test_app_lab_graphs_wire_join_and_enhance() -> None:
@@ -166,7 +193,8 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     gif = json.loads((wf / "wan-gif-loop-lab-example.json").read_text(encoding="utf-8"))
     house = json.loads((wf / "klein-dream-house-lab-example.json").read_text(encoding="utf-8"))
     klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert klein["widgets_values"][1] is False
+    assert klein["widgets_values"][1] is True
+    assert klein["widgets_values"][-1] == "none"
     assert "3D feature-animation still" in klein["widgets_values"][0]
     assert "teal-and-copper" in klein["widgets_values"][0]
     wan = next(n for n in gif["nodes"] if n.get("type") == "EZWanPromptEnhance")
@@ -187,9 +215,10 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert "decks" in ident_l
     assert "gravel" in ident_l
     assert "no logos, no text" not in ident_text
-    assert ident["widgets_values"][1] is False
+    assert ident["widgets_values"][1] is True
     assert ident["widgets_values"][2] == "t2i"
     assert ident["widgets_values"][3] == "Instagram 4:5 still"
+    assert ident["widgets_values"][4] == "none"
     joins = [n for n in house["nodes"] if n.get("type") == "EZPromptJoin"]
     assert len(joins) == 10
     positives = {
@@ -236,7 +265,7 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
             assert pos_src == "ReferenceLatent"
 
 
-def test_node_mappings_and_modes() -> None:
+def test_node_mappings_modes_preview_and_style() -> None:
     assert set(NODE_CLASS_MAPPINGS) == {
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
@@ -246,18 +275,39 @@ def test_node_mappings_and_modes() -> None:
     klein = EZKleinPromptEnhance()
     wan = EZWanPromptEnhance()
     ltx = EZLTXPromptEnhance()
+    assert klein.OUTPUT_NODE is True
+    assert klein.INPUT_TYPES()["required"]["enhance"][1]["default"] is True
+    styles = klein.INPUT_TYPES()["required"]["style"][0]
+    assert styles[0] == "none"
+    assert len(styles) == 51
     off = klein.run("A teal-and-copper superhero.", False, "t2i", "YouTube 16:9 still")
     assert off["result"] == ("A teal-and-copper superhero.",)
-    with patch.object(client, "chat_complete", return_value="rewritten-klein") as mock:
-        on = klein.run("bike", True, "edit", "")
+    assert off["ui"]["text"][0].startswith("[passthrough: enhance off]")
+    styled_off = klein.run("A rooftop.", False, "t2i", "", "photorealistic")
+    assert "Photoreal photograph" in styled_off["result"][0]
+    assert "[passthrough:" not in styled_off["result"][0]
+    with patch.object(
+        client,
+        "complete",
+        return_value=("rewritten-klein", None),
+    ) as mock:
+        on = klein.run("bike", True, "edit", "", "none")
     assert on["result"] == ("rewritten-klein",)
+    assert on["ui"]["text"] == ["rewritten-klein"]
     system = mock.call_args[0][0]
     assert "identity" in system.lower()
-    with patch.object(client, "chat_complete", return_value="rewritten-wan") as mock:
-        wan.run("push in", True, "i2v", "5 seconds, 24 fps")
+    with patch.object(client, "complete", return_value=("rewritten-style", None)) as mock:
+        klein.run("bike", True, "t2i", "", "anime")
+    user = mock.call_args[0][1]
+    assert "Visual style (mandatory):" in user
+    assert "Japanese anime" in user
+    with patch.object(client, "complete", return_value=("rewritten-wan", None)) as mock:
+        wan.run("push in", True, "i2v", "5 seconds, 24 fps", "anime")
+    wan_user = mock.call_args[0][1]
     assert "Motion + Camera" in mock.call_args[0][0]
-    with patch.object(client, "chat_complete", return_value="rewritten-ltx") as mock:
-        ltx.run("bike moves", True, "t2v", "5 seconds, 24 fps", audio_notes="wind, no score")
+    assert "Visual style" not in wan_user
+    with patch.object(client, "complete", return_value=("rewritten-ltx", None)) as mock:
+        ltx.run("bike moves", True, "t2v", "5 seconds, 24 fps", "wind, no score")
     user = mock.call_args[0][1]
     assert "Audio notes: wind, no score" in user
     assert "Duration / framing: 5 seconds, 24 fps" in user

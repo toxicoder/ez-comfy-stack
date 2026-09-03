@@ -452,9 +452,10 @@
       },
       "widgets_values": [
         "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Wide blog / Open Graph hero. Subject left-weighted, quiet right third for a headline later. Clean of burned-in text. Feature-film 3D animation ~1.9:1.",
-        false,
+        true,
         "t2i",
-        "YouTube 16:9 still"
+        "YouTube 16:9 still",
+        "none"
       ],
       "title": "Klein Prompt Enhance"
     }

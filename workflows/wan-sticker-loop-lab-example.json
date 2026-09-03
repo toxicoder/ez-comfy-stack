@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Tight looping sticker motion. A small cyclic bounce or shimmer on the subject. Ping-pong friendly. Keep start-image identity locked. No walk, no dolly."
+        "Tight looping sticker motion. A small cyclic bounce or shimmer on the subject. Ping-pong friendly. Keep start-image identity locked. No walk, no dolly. Keep every object and surface from the start image; do not redesign."
       ],
       "title": "Motion / prompt"
     },
@@ -581,10 +581,11 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Tight looping sticker motion. A small cyclic bounce or shimmer on the subject. Ping-pong friendly. Keep start-image identity locked. No walk, no dolly.",
-        false,
+        "Tight looping sticker motion. A small cyclic bounce or shimmer on the subject. Ping-pong friendly. Keep start-image identity locked. No walk, no dolly. Keep every object and surface from the start image; do not redesign.",
+        true,
         "i2v",
-        "looping sticker, 12 fps"
+        "looping sticker, 12 fps",
+        "none"
       ],
       "title": "Wan Prompt Enhance"
     }

@@ -1,0 +1,252 @@
+{
+  "photorealistic": {
+    "label": "photorealistic",
+    "llm_block": "Photoreal still photography. Natural skin and material microdetail, physically plausible light, real lens falloff and mild grain.",
+    "suffix": "Photoreal photograph, natural materials, physically plausible light."
+  },
+  "cinematic_film_still": {
+    "label": "cinematic film still",
+    "llm_block": "A cinematic feature-film still. Anamorphic-adjacent widescreen, motivated practicals, rich contrast, color-graded drama.",
+    "suffix": "Cinematic feature-film still, widescreen, motivated practicals."
+  },
+  "documentary_photography": {
+    "label": "documentary photography",
+    "llm_block": "Observational documentary photography. Available light, honest color, lived-in spaces, unposed framing.",
+    "suffix": "Observational documentary photograph, available light."
+  },
+  "analog_35mm_film": {
+    "label": "analog 35mm film",
+    "llm_block": "Shot on analog 35mm color negative. Fine film grain, slight halation, organic color, mild gate weave.",
+    "suffix": "Analog 35mm color-negative film grain and organic color."
+  },
+  "analog_120_medium_format": {
+    "label": "analog 120 medium format",
+    "llm_block": "Medium-format 120 film. Square-to-4x5 feel, creamy tones, shallow plane, fine grain, high resolving power.",
+    "suffix": "Medium-format 120 film, creamy tones, fine grain."
+  },
+  "polaroid_instant": {
+    "label": "Polaroid instant",
+    "llm_block": "Instant Polaroid print. Soft contrast, creamy highlights, slight color shift, white frame implied by the look not burned-in text.",
+    "suffix": "Instant Polaroid print look, soft contrast, creamy highlights."
+  },
+  "golden_hour_photography": {
+    "label": "golden-hour photography",
+    "llm_block": "Golden-hour photography. Long warm sidelight, long shadows, amber rim, clear air.",
+    "suffix": "Golden-hour photograph, warm sidelight, long shadows."
+  },
+  "overcast_natural_light": {
+    "label": "overcast natural light",
+    "llm_block": "Overcast natural light. Soft sky-fill, gentle falloff, cool neutrals, open shadows.",
+    "suffix": "Overcast natural light, soft sky-fill, open shadows."
+  },
+  "studio_product_photography": {
+    "label": "studio product photography",
+    "llm_block": "Studio product photography. Seamless cyclorama, soft key, controlled speculars, clean contact shadow.",
+    "suffix": "Studio product photograph, seamless backdrop, soft key."
+  },
+  "editorial_fashion_photography": {
+    "label": "editorial fashion photography",
+    "llm_block": "Editorial fashion photography. Stylized posing, precise styling, magazine lighting, polished color.",
+    "suffix": "Editorial fashion photograph, precise styling, magazine light."
+  },
+  "street_photography": {
+    "label": "street photography",
+    "llm_block": "Street photography. Candid timing, mixed city light, layered depth, lived pavement and storefronts.",
+    "suffix": "Candid street photograph, mixed city light, layered depth."
+  },
+  "architectural_photography": {
+    "label": "architectural photography",
+    "llm_block": "Architectural photography. Corrected verticals, material texture, dusk or daylight structure, empty of people unless asked.",
+    "suffix": "Architectural photograph, corrected verticals, material texture."
+  },
+  "anime": {
+    "label": "anime",
+    "llm_block": "Japanese anime still. Clean cel color, sharp line, expressive eyes, cel-shaded planes, feature-film anime lighting.",
+    "suffix": "Japanese anime still, clean cel color, sharp line."
+  },
+  "manga_screentone": {
+    "label": "manga screentone",
+    "llm_block": "Black-and-white manga panel. Ink line, screentone gradients, speed lines only if motion is asked, high-contrast blacks.",
+    "suffix": "Black-and-white manga ink and screentone."
+  },
+  "cartoon": {
+    "label": "cartoon",
+    "llm_block": "Bold cartoon illustration. Simple shapes, thick outline, flat cheerful color, readable silhouettes.",
+    "suffix": "Bold cartoon illustration, thick outline, flat color."
+  },
+  "western_comic_book": {
+    "label": "western comic book",
+    "llm_block": "Western comic-book still. Inked contour, Ben-Day dots, heroic posing, saturated print color.",
+    "suffix": "Western comic-book inks, Ben-Day dots, saturated print color."
+  },
+  "saturday_morning_cartoon": {
+    "label": "Saturday-morning cartoon",
+    "llm_block": "Saturday-morning cartoon still. Limited palette, bouncing shapes, painted cel backgrounds, friendly proportions.",
+    "suffix": "Saturday-morning cartoon cel, limited palette, painted background."
+  },
+  "storybook_illustration": {
+    "label": "storybook illustration",
+    "llm_block": "Children's storybook illustration. Soft watercolor-adjacent paint, gentle faces, narrative composition, warm paper.",
+    "suffix": "Storybook illustration, soft paint, narrative composition."
+  },
+  "watercolor_illustration": {
+    "label": "watercolor illustration",
+    "llm_block": "Transparent watercolor. Paper tooth, wet-into-wet blooms, granulation, luminous washes.",
+    "suffix": "Transparent watercolor on paper, wet-into-wet blooms."
+  },
+  "gouache_illustration": {
+    "label": "gouache illustration",
+    "llm_block": "Opaque gouache painting. Matte velvety pigment, graphic shapes, poster-like flats, hand-painted edges.",
+    "suffix": "Opaque gouache painting, matte pigment, graphic shapes."
+  },
+  "ink_and_wash": {
+    "label": "ink-and-wash",
+    "llm_block": "Ink-and-wash drawing. Confident black ink, diluted grey washes, spare composition, paper white as light.",
+    "suffix": "Ink-and-wash drawing, black ink and grey washes."
+  },
+  "colored_pencil": {
+    "label": "colored pencil",
+    "llm_block": "Colored-pencil drawing. Layered strokes, paper grain, wax bloom, careful edges.",
+    "suffix": "Colored-pencil drawing, layered strokes, paper grain."
+  },
+  "charcoal_sketch": {
+    "label": "charcoal sketch",
+    "llm_block": "Charcoal sketch. Soft vine blacks, kneaded-eraser lights, smudged midtones, raw paper.",
+    "suffix": "Charcoal sketch, vine blacks and kneaded-eraser lights."
+  },
+  "line_art": {
+    "label": "line art",
+    "llm_block": "Clean line art. Even black contour, minimal fill, design-drawing clarity, no color unless asked.",
+    "suffix": "Clean black line art, minimal fill."
+  },
+  "cel_shaded": {
+    "label": "cel-shaded",
+    "llm_block": "Cel-shaded illustration. Hard shadow bands, few value steps, graphic highlights, poster color.",
+    "suffix": "Cel-shaded illustration, hard shadow bands, graphic highlights."
+  },
+  "risograph_print": {
+    "label": "risograph print",
+    "llm_block": "Risograph print. Limited spot inks, slight misregistration, grainy stipple, matte paper.",
+    "suffix": "Risograph print, limited spot inks, grainy stipple."
+  },
+  "3d_feature_animation": {
+    "label": "3D feature animation",
+    "llm_block": "3D feature-animation still. Rounded forms, physically based materials, cinematic three-point light, subsurface skin or fabric.",
+    "suffix": "3D feature-animation still, rounded forms, physically based materials."
+  },
+  "pixar_like_3d": {
+    "label": "Pixar-like 3D",
+    "llm_block": "Stylized feature 3D. Appealing proportions, soft global illumination, tactile shaders, storybook clarity.",
+    "suffix": "Stylized feature 3D, appealing proportions, soft GI."
+  },
+  "claymation": {
+    "label": "claymation",
+    "llm_block": "Claymation still. Fingerprint clay, armature joints, practical miniature set, studio stop-motion light.",
+    "suffix": "Claymation still, fingerprint clay, miniature set."
+  },
+  "stop_motion": {
+    "label": "stop-motion",
+    "llm_block": "Stop-motion puppet still. Fabric and foam latex, visible craft, practical scale set, tungsten key.",
+    "suffix": "Stop-motion puppet still, practical miniature set."
+  },
+  "unreal_engine_cinematic": {
+    "label": "Unreal Engine cinematic",
+    "llm_block": "Real-time cinematic 3D. Lumen-like bounce, sharp materials, cinematic camera, high-contrast grade.",
+    "suffix": "Real-time cinematic 3D, sharp materials, cinematic camera."
+  },
+  "isometric_3d": {
+    "label": "isometric 3D",
+    "llm_block": "Isometric 3D view. 30-degree axonometric, even light, readable volumes, diorama scale.",
+    "suffix": "Isometric 3D diorama, even light, readable volumes."
+  },
+  "low_poly": {
+    "label": "low-poly",
+    "llm_block": "Low-poly 3D. Faceted geometry, flat vertex color, simple shaders, toy-like volumes.",
+    "suffix": "Low-poly 3D, faceted geometry, flat vertex color."
+  },
+  "voxel": {
+    "label": "voxel",
+    "llm_block": "Voxel art. Cubic voxels, limited palette, chunky silhouettes, even lighting.",
+    "suffix": "Voxel art, cubic voxels, limited palette."
+  },
+  "oil_painting": {
+    "label": "oil painting",
+    "llm_block": "Oil painting. Visible brushwork, fat-over-lean glaze, canvas weave, rich impasto highlights.",
+    "suffix": "Oil painting, visible brushwork, canvas weave."
+  },
+  "impressionist_painting": {
+    "label": "impressionist painting",
+    "llm_block": "Impressionist oil. Broken color, outdoor light, loose strokes, vibrating complements.",
+    "suffix": "Impressionist oil, broken color, outdoor light."
+  },
+  "cubist": {
+    "label": "cubist",
+    "llm_block": "Cubist painting. Faceted simultaneous viewpoints, geometric planes, muted earth and accent color.",
+    "suffix": "Cubist painting, faceted planes, simultaneous viewpoints."
+  },
+  "art_nouveau": {
+    "label": "art nouveau",
+    "llm_block": "Art Nouveau illustration. Whiplash curves, botanical ornament, flat decorative color, elegant contour.",
+    "suffix": "Art Nouveau illustration, whiplash curves, botanical ornament."
+  },
+  "ukiyo_e_woodblock": {
+    "label": "ukiyo-e woodblock",
+    "llm_block": "Ukiyo-e woodblock print. Flat mineral pigments, keyblock line, patterned kimono or landscape, empty of modern logos.",
+    "suffix": "Ukiyo-e woodblock print, mineral pigments, keyblock line."
+  },
+  "baroque_oil": {
+    "label": "baroque oil",
+    "llm_block": "Baroque oil. Dramatic chiaroscuro, deep umbers, theatrical spotlight, rich fabric.",
+    "suffix": "Baroque oil, dramatic chiaroscuro, theatrical spotlight."
+  },
+  "digital_matte_painting": {
+    "label": "digital matte painting",
+    "llm_block": "Digital matte painting. Epic environment, photographic integration, atmospheric perspective, filmic grade.",
+    "suffix": "Digital matte painting, epic environment, atmospheric perspective."
+  },
+  "concept_art": {
+    "label": "concept art",
+    "llm_block": "Production concept art. Readable design, paintover finish, clear materials, cinematic key light.",
+    "suffix": "Production concept art, readable design, cinematic key light."
+  },
+  "cyberpunk": {
+    "label": "cyberpunk",
+    "llm_block": "Cyberpunk night. Wet asphalt, neon magenta and cyan, dense signage as abstract glow (empty of readable brands), rain haze.",
+    "suffix": "Cyberpunk night, wet asphalt, neon magenta and cyan."
+  },
+  "solarpunk": {
+    "label": "solarpunk",
+    "llm_block": "Solarpunk day. Greenery on architecture, warm sun, clean materials, hopeful civic space, unmarked facades.",
+    "suffix": "Solarpunk day, greenery on architecture, warm sun."
+  },
+  "film_noir": {
+    "label": "film noir",
+    "llm_block": "Film-noir still. High-contrast black and white, venetian-blind shafts, wet streets, hard key.",
+    "suffix": "Film-noir still, high-contrast black and white, hard key."
+  },
+  "1970s_grain": {
+    "label": "1970s grain",
+    "llm_block": "1970s film still. Warm print, heavy grain, slightly desaturated primaries, zoom-lens period feel.",
+    "suffix": "1970s film still, warm print, heavy grain."
+  },
+  "vaporwave": {
+    "label": "vaporwave",
+    "llm_block": "Vaporwave still. Sunset grid, pastel neon, chrome, VHS softness, empty of readable logos.",
+    "suffix": "Vaporwave still, pastel neon, chrome, VHS softness."
+  },
+  "pixel_art": {
+    "label": "pixel art",
+    "llm_block": "Pixel art. Limited palette, visible pixels, cluster shading, 16-bit-era sprites and tiles.",
+    "suffix": "Pixel art, limited palette, visible pixels, cluster shading."
+  },
+  "papercraft": {
+    "label": "papercraft",
+    "llm_block": "Papercraft diorama. Cut paper layers, visible edges, construction-paper color, studio light.",
+    "suffix": "Papercraft diorama, cut paper layers, studio light."
+  },
+  "blueprint_technical_drawing": {
+    "label": "blueprint technical drawing",
+    "llm_block": "Blueprint technical drawing. White line on cyan ground, orthographic callouts as graphic marks (empty of readable type), precise geometry.",
+    "suffix": "Blueprint technical drawing, white line on cyan ground."
+  }
+}

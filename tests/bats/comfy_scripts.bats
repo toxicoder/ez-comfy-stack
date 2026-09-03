@@ -28,6 +28,20 @@ teardown() {
   teardown_repo_env
 }
 
+@test "install_llama_cpp_cpu is fail-soft and disables CUDA" {
+  run grep -F 'install_llama_cpp_cpu' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'GGML_CUDA=OFF' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  pip_install() { return 1; }
+  run install_llama_cpp_cpu
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"pass through"* || "${output}" == *"failed"* ]]
+  pip_install() { return 0; }
+  run install_llama_cpp_cpu
+  [ "${status}" -eq 0 ]
+}
+
 @test "install-comfy phase_nodes and ensure_lab_video_nodes require VideoHelperSuite" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"

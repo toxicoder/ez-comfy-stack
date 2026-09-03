@@ -452,9 +452,10 @@
       },
       "widgets_values": [
         "A photoreal food tabletop still, Instagram 4:5. A ceramic bowl of soup and a linen napkin on oak, soft window sidelight. Unmarked crockery, no logos, no lettering.",
-        false,
+        true,
         "t2i",
-        "YouTube 16:9 still"
+        "YouTube 16:9 still",
+        "none"
       ],
       "title": "Klein Prompt Enhance"
     }

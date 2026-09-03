@@ -101,7 +101,7 @@ LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **aud
 
     1. Download the default pack first (`download-models` = image fast + wan 5b + ltx 2.5)
     2. Prefer keeping both model sets loaded between T2I and I2V
-    3. Avoid concurrent large LLM containers on the same Spark
+    3. Do not GPU-offload a 30B+ llama.cpp next to LTX; Prompt Enhance is CPU-only (~2.5 GiB GGUF)
     4. Video graphs emit **MP4** via **VideoHelperSuite** (`VHS_VideoCombine`, 24 fps) plus optional PNG frames
     5. Prompting: Klein wants Qwen-style prose (subject → light → camera); Wan wants motion + one camera move (no audio); LTX wants a present-tense paragraph with sound interleaved. See [Prompting](prompting.md). Every **\*-lab-example** canvas has an operator **Note**
 
@@ -168,11 +168,11 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **ltx-shorts-i2v-lab-example** | Vertical AV I2V (~5 s) with world audio |
     | **klein-thumbnail-lab-example** | YouTube thumbnail still 1280×720 |
     | **klein-product-packshot-lab-example** | Clean product packshot 1:1 |
-    | **klein-before-after-lab-example** | Before/after still pair |
-    | **klein-style-lock-lab-example** | Four style-locked stills |
+    | **klein-before-after-lab-example** | Before plate, after Klein-edit of the same mug |
+    | **klein-style-lock-lab-example** | One lake house, four views (CURB is the identity plate) |
     | **wan-bumper-loop-lab-example** | Loopable MP4 bumper (ping-pong) |
     | **ltx-broll-ambient-lab-example** | Ambient B-roll AV plate (~5 s) |
-    | **klein-storyboard-6up-lab-example** | Six storyboard frames in one Queue |
+    | **klein-storyboard-6up-lab-example** | Six storyboard frames of one rooftop (01 is the identity plate) |
 
     Pack 2 — stills and plates
 
@@ -187,10 +187,10 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **klein-hook-still-lab-example** | 9:16 first-frame hook |
     | **klein-lower-third-bg-lab-example** | Lower-third-safe 16:9 plate |
     | **klein-food-tabletop-lab-example** | Food / tabletop 4:5 |
-    | **klein-lighting-trio-lab-example** | Same subject, three lights |
-    | **klein-time-of-day-lab-example** | Dawn / noon / dusk / night |
-    | **klein-camera-angles-lab-example** | Wide / medium / close |
-    | **klein-color-moods-lab-example** | Four color moods |
+    | **klein-lighting-trio-lab-example** | Same subject, three lights (SHOT KEY is the identity plate) |
+    | **klein-time-of-day-lab-example** | Dusk plate, then dawn / noon / night edits |
+    | **klein-camera-angles-lab-example** | Medium plate, then wide / close edits |
+    | **klein-color-moods-lab-example** | Warm plate, then three grade edits |
 
     Pack 2 — motion / AV
 

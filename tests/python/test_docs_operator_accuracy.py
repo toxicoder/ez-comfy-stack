@@ -104,6 +104,7 @@ def test_models_and_cache_uses_download_image_not_flux() -> None:
     assert "download-image.sh" in text
     assert "download-wan.sh" in text
     assert "download-ltx.sh" in text
+    assert "download-llm.sh" in text
     assert "--tier 2.5" in text
     assert "us-safe-studio" in text
 

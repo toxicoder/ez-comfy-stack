@@ -11,6 +11,15 @@ from __future__ import annotations
 
 STYLE_LOCK = "3D feature-animation still"
 
+ROOFTOP_INVENTORY = (
+    "teal-and-copper flight suit, unmarked circular starburst chest plate, "
+    "short unmarked capelet, circular helipad, rounded towers in volumetric haze"
+)
+
+I2V_LOCK = (
+    "Keep every object and surface from the start image; do not redesign."
+)
+
 KLEIN_NEG_STILL = (
     "live-action photoreal, muddy textures, melted geometry, duplicate limbs, "
     "watermarks, oversharpen halos, muddy blacks"
@@ -49,7 +58,8 @@ WAN_T2V = (
 WAN_I2V = (
     "Slow cinematic dolly-in toward the superhero. Suit fabric and a short capelet "
     "stir in a high-altitude breeze. Distant air traffic glides between rounded "
-    "towers. Keep the start-image identity locked. One continuous five-second take "
+    "towers. Keep the start-image identity locked. Keep every object and surface "
+    "from the start image; do not redesign. One continuous five-second take "
     "at 24 fps."
 )
 
@@ -68,12 +78,14 @@ LTX_I2V = (
     "the superhero while suit fabric and a short capelet stir in a high-altitude "
     "breeze and distant air traffic glides between rounded towers. Rooftop wind "
     "snaps the fabric as a distant traffic hum rolls between the towers. The rooftop "
-    "and hero identity stay locked. No music and no score."
+    "and hero identity stay locked. Keep every object and surface from the start "
+    "image; do not redesign. No music and no score."
 )
 
 GIF_MOTION = (
     "Locked camera. A high-altitude breeze cycles the capelet and suit fabric. "
     "City lights shimmer, then settle. Keep the start-image identity locked. "
+    "Keep every object and surface from the start image; do not redesign. "
     "Gentle cyclic motion for a looping GIF."
 )
 
@@ -99,18 +111,21 @@ KLEIN_HOOK = (
 WAN_SHORTS_I2V = (
     "Locked vertical framing for Shorts. Capelet and suit fabric flutter. City lights "
     "hold. Camera holds, then a slow push-in. Keep the start-image identity locked. "
+    "Keep every object and surface from the start image; do not redesign. "
     "One continuous ~5 s take at 24 fps. No audio."
 )
 WAN_ORBIT = (
     "Slow orbit around the start-image subject. Camera arcs a few degrees right while "
-    "keeping the product or hero identity locked. One continuous ~5 s take, no cuts."
+    "keeping the product or hero identity locked. Keep every object and surface from "
+    "the start image; do not redesign. One continuous ~5 s take, no cuts."
 )
 
 LTX_SHORTS_AUDIO = "rooftop wind, fabric snap, distant traffic hum, no score"
 LTX_SHORTS_I2V = (
     "The start image holds as the first frame in vertical Shorts framing. Rooftop "
     "wind snaps a capelet as a distant traffic hum rolls between towers. Slow "
-    "push-in. No music and no score."
+    "push-in. Keep every object and surface from the start image; do not redesign. "
+    "No music and no score."
 )
 LTX_BROLL_AUDIO = "rooftop wind, fabric snap, distant traffic hum, no score"
 LTX_BROLL = (

@@ -155,7 +155,7 @@ assert '3D feature-animation still' in pos(d)
 assert 'no logos, no text' not in pos(d)
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 for n in d['nodes'])
-assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is False for n in d['nodes'])
+assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is True for n in d['nodes'])
 "
   [ "${status}" -eq 0 ]
 }
@@ -200,7 +200,7 @@ assert loads[0].get('mode')==0
 look=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode' and n.get('title')=='Positive']
 assert not look
 enh=next(n for n in d['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][1] is True
 assert enh['widgets_values'][2]=='i2v'
 assert 'dollies' in enh['widgets_values'][0].lower() or 'dolly' in enh['widgets_values'][0].lower() or 'push' in enh['widgets_values'][0].lower()
 t=json.load(open('${dir}/wan-t2v-5s-lab-example.json'))
@@ -259,7 +259,7 @@ d=json.load(open('${dir}/ltx-i2v-5s-lab-example.json'))
 loads=[n for n in d['nodes'] if n.get('type')=='LoadImage']
 assert loads and loads[0]['widgets_values'][0]=='example.png'
 enh=next(n for n in d['nodes'] if n.get('type')=='EZLTXPromptEnhance')
-assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][1] is True
 assert enh['widgets_values'][2]=='i2v'
 text=enh['widgets_values'][0].lower()
 assert 'footsteps' in text or 'wind' in text
@@ -420,7 +420,7 @@ assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 and float(n['widgets_values'][3])==1.0 for n in s['nodes'])
 assert any(n.get('type')=='SaveImage' and n['widgets_values'][0]=='ez_still_app' for n in s['nodes'])
 enh=next(n for n in s['nodes'] if n.get('type')=='EZKleinPromptEnhance')
-assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][1] is True
 unet=next(n for n in s['nodes'] if n.get('type')=='UNETLoader')
 assert 'swap' in (unet.get('title') or '').lower()
 note=next(n for n in s['nodes'] if n.get('type') in ('Note','MarkdownNote'))
@@ -454,7 +454,7 @@ assert float(wv['frame_rate'])==12
 assert wv['save_output'] is True
 assert 'ez_gif_loop' in str(wv['filename_prefix'])
 enh=next(n for n in g['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][1] is True
 assert enh['widgets_values'][2]=='i2v'
 motion=enh['widgets_values'][0].lower()
 assert 'locked' in motion or 'lock' in motion
@@ -490,7 +490,7 @@ assert all(
 )
 enh=[n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance']
 assert len(enh)==1
-assert enh[0]['widgets_values'][1] is False
+assert enh[0]['widgets_values'][1] is True
 assert enh[0]['widgets_values'][2]=='t2i'
 assert enh[0]['widgets_values'][3]=='Instagram 4:5 still'
 ident=enh[0]['widgets_values'][0]

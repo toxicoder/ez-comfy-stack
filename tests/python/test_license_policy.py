@@ -56,6 +56,9 @@ REQUIRED_SNIPPETS = (
     "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
     "ltx-2.5-video-vae-bf16.safetensors",
     "ltx-2.5-audio-vae-bf16.safetensors",
+    "Qwen3-4B-Instruct-2507",
+    "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "unsloth/Qwen3-4B-Instruct-2507-GGUF",
     "Not legal advice",
 )
 
@@ -64,6 +67,7 @@ DEFAULT_YES_MODELS = (
     "FLUX.2 Klein 4B distilled FP8",
     "Wan 2.2 TI2V-5B",
     "LTX-2.5 distilled INT8-convrot",
+    "Qwen3-4B-Instruct-2507 Q4_K_M GGUF",
 )
 
 DEFAULT_NO_MODELS = (

@@ -691,10 +691,11 @@
       },
       "widgets_values": [
         "Locked-camera ambient B-roll of a dusk city rooftop helipad. Capelet fabric stirs, city lights shimmer, distant traffic hum and rooftop wind, a fabric snap once. Feature-film 3D animation, unmarked surfaces, empty of lettering. No music and no score. Five seconds.",
-        false,
+        true,
         "t2v",
         "5 seconds, 24 fps, locked camera B-roll",
-        "rooftop wind, fabric snap, distant traffic hum, no score"
+        "rooftop wind, fabric snap, distant traffic hum, no score",
+        "none"
       ],
       "title": "LTX Prompt Enhance"
     },
