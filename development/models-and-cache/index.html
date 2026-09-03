@@ -1319,7 +1319,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>Default cache location and layout</li>
-<li>Download utilities and readiness checks</li>
+<li>Download utilities, resume / stuck-partial recovery, and readiness checks</li>
 <li>Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)</li>
 <li>Volume Comfy pin (<code>.lab-comfyui-ref</code>) vs image <code>COMFYUI_REF</code></li>
 <li>Sharing with nvidia-dgx-spark-lab</li>
@@ -1601,6 +1601,10 @@
 <tr>
 <td>Resume after interrupt</td>
 <td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span> / crash leaves <code>*.incomplete</code> under each tier’s <code>.cache/huggingface/</code>; re-run the same command to continue</td>
+</tr>
+<tr>
+<td>Resume stall (0 MiB/s)</td>
+<td>Live <code>hf</code> holding a lock with no disk growth. FORCE-clearing locks will not unstick it. <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span>, then <code>./scripts/manage.sh reset-hf-partials --yes</code> and re-run, or <code>download-models --drop-incomplete</code>. After 90s the downloader drops that dest’s partials and retries <strong>once</strong>.</td>
 </tr>
 <tr>
 <td>Skip when ready</td>

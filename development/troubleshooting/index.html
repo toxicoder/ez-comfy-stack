@@ -1285,7 +1285,12 @@
 <tr>
 <td><code>Still waiting to acquire lock</code> on <code>*.lock</code></td>
 <td>Stale HF locks from killed downloads</td>
-<td><code>./scripts/manage.sh clear-hf-locks</code> or auto-clear on download-models; if stuck: <code>HF_LOCK_CLEAR_FORCE=1 ./scripts/manage.sh clear-hf-locks</code></td>
+<td><code>./scripts/manage.sh clear-hf-locks</code> or auto-clear on download-models; if stuck <strong>and no hf is running</strong>: <code>HF_LOCK_CLEAR_FORCE=1 ./scripts/manage.sh clear-hf-locks</code></td>
+</tr>
+<tr>
+<td><code>↓ … 0 MiB/s</code> + <code>found N incomplete</code> + lock still held</td>
+<td>Hung <strong>resume</strong> — live <code>hf</code> holds the lock, partial not growing</td>
+<td><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span>. Do <strong>not</strong> FORCE-clear locks while it runs. Then <code>./scripts/manage.sh reset-hf-partials --yes</code> and re-run, or <code>./scripts/manage.sh download-models --drop-incomplete</code>. Finished <code>.safetensors</code> are kept</td>
 </tr>
 <tr>
 <td>SSH freezes during download</td>

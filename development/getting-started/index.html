@@ -1537,12 +1537,19 @@
 <p class="admonition-title">Bandwidth shaping soft-fail</p>
 <p>If kernel HTB is missing (common on DGX Spark), downloads continue with gentle HF workers and a warning. Use <code>DOWNLOAD_LIMIT=off</code> only when you accept SSH risk. See <a href="../download-limit/">Download Limit</a>.</p>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Stuck resume (0 MiB/s, incomplete file)</p>
+<p>Heartbeats showing <code>found N incomplete</code> and <code>0 MiB/s</code> mean <code>hf</code> is alive but the partial is not growing. <strong>Do not</strong> <code>HF_LOCK_CLEAR_FORCE=1</code> while it runs. <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span>, then:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w"> </span>--drop-incomplete<span class="w"> </span>--limit<span class="w"> </span><span class="m">1000</span>
+</code></pre></div>
+<p>That deletes <code>*.incomplete</code> (finished weights stay) and re-pulls. See <a href="../models-and-cache/#resume-cache">Models &amp; Cache</a>.</p>
+</div>
 <p>If Comfy shows <strong>Missing Models</strong> on <strong>*-lab-example</strong> graphs, re-run download and <code>doctor</code>. Full basename table: <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
 <hr />
 <h2 id="start-the-stack">Start the stack<a class="headerlink" href="#start-the-stack" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>start
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># type: yes</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>./scripts/manage.sh<span class="w"> </span>status
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>./scripts/manage.sh<span class="w"> </span>start
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># type: yes</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>./scripts/manage.sh<span class="w"> </span>status
 </code></pre></div>
 <p>Open <strong><code>http://&lt;spark-ip&gt;:8188</code></strong> (or SSH port-forward if needed).</p>
 <div class="admonition success">
@@ -1554,16 +1561,16 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">One-shot env</label><label for="__tabbed_2_2">Persist in .env</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/manage.sh<span class="w"> </span>start
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># type: yes</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/manage.sh<span class="w"> </span>start
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># type: yes</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># in .env (see .env.example)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>./scripts/manage.sh<span class="w"> </span>start
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># type: yes</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># in .env (see .env.example)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>./scripts/manage.sh<span class="w"> </span>start
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># type: yes</span>
 </code></pre></div>
 </div>
 </div>
@@ -1837,8 +1844,8 @@
 <p>Long latents melt Spark. Prefer <strong>~5 s</strong> graphs; stitch with <a href="../shorts/">concat-shots</a>. Keep headroom preflight green.</p>
 </div>
 <p>Optional offline stitch of PNG frames only (if you need a host-side re-encode):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">'ez_ltx_*_*.png'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ffmpeg<span class="w"> </span>-y<span class="w"> </span>-framerate<span class="w"> </span><span class="m">24</span><span class="w"> </span>-pattern_type<span class="w"> </span>glob<span class="w"> </span>-i<span class="w"> </span><span class="s1">'ez_ltx_*_*.png'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-pix_fmt<span class="w"> </span>yuv420p<span class="w"> </span>-crf<span class="w"> </span><span class="m">18</span><span class="w"> </span>out.mp4
 </code></pre></div>
 <p>If <strong><code>VHS_VideoCombine</code> is missing</strong>, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <details class="abstract">
@@ -1861,7 +1868,7 @@
 <p class="admonition-title">Golden rule</p>
 <p><strong>Never reboot with the heavy ComfyUI stack still running.</strong> Always stop first. See <a href="../reboot-safety/">Reboot Safety</a>.</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>./scripts/manage.sh<span class="w"> </span>stop
 </code></pre></div>
 <hr />
 <h2 id="optional-deep-dives">Optional deep-dives<a class="headerlink" href="#optional-deep-dives" title="Permanent link">&para;</a></h2>
