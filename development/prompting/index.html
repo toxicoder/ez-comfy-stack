@@ -1248,7 +1248,7 @@
 <li><code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>).</li>
 <li>Type a lazy sentence (or leave the canned paragraph). <strong>Enhance</strong> defaults <strong>on</strong>.</li>
 <li>Optional: pick a <strong>style</strong> (photorealistic, anime, cartoon, … — 50 ids, or <code>none</code>).</li>
-<li>Queue. On the Enhance node, read the dim <strong>CLIP prompt</strong> box — that is the text CLIP encoded (or <code>[passthrough: …]</code> plus a styled prompt if the GGUF failed). The top prompt widget stays as you typed it. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.</li>
+<li>Queue. On the Enhance node, read the dim <strong>CLIP prompt</strong> box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, <strong>Enhance status</strong> says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.</li>
 </ol>
 <p><strong>Enhance defaults to true.</strong> Turn it <strong>off</strong> to pin the source widget (frozen identity bibles). A selected style is still applied to the CLIP string. Style is ignored on I2V (the start image owns look).</p>
 <p>When Enhance is <strong>on</strong> and a style is selected (t2i / t2v / Klein edit):</p>
@@ -1259,8 +1259,8 @@
 <li>The dropdown wins in the CLIP string even if the 4B rewriter ignores the hint or the GGUF passthroughs: conflicting medium words are dropped and the catalog medium is front-loaded.</li>
 <li>After Queue, the <strong>CLIP prompt</strong> box on the node is the preview. First deploy: restart the container so <code>js/</code> is copied, then hard-refresh the Comfy tab.</li>
 </ul>
-<p>After Queue the node is an output: the <strong>CLIP prompt</strong> widget shows the rewrite, or a <code>[passthrough: …]</code> reason plus the styled CLIP text if the GGUF / llama.cpp is missing.</p>
-<p>Fail-soft: missing GGUF, missing <code>llama-cpp-python</code>, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs.</p>
+<p>After Queue the node is an output: the <strong>CLIP prompt</strong> widget is the CLIP string (no <code>[passthrough:</code> prefix). <strong>Enhance status</strong> is empty when the rewriter ran, or a next step when it did not.</p>
+<p>Fail-soft: missing GGUF, missing <code>llama-cpp-python</code>, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand — <code>./scripts/manage.sh download-models</code> plus a restart heals <code>comfy/llm/</code> and <code>doctor</code>/<code>start</code> relink a snapshot that is already on disk.</p>
 <div class="admonition warning">
 <p class="admonition-title">CPU-only local LLM</p>
 <p>Prompt Enhance runs <strong>Qwen3-4B-Instruct-2507 Q4_K_M</strong> (~2.5 GiB) through llama.cpp with <strong><code>n_gpu_layers=0</code></strong>. Do not GPU-offload it next to LTX-2.5. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same Spark while Comfy is generating.</p>

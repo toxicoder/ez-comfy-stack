@@ -1619,9 +1619,9 @@
 <td>Confirm compose bind-mount <code>../custom_nodes:/opt/ez-comfy/custom_nodes</code>. Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_prompt_enhance</code> (and <code>ez_ltx_spatial</code>) into <code>/comfy-state/ComfyUI/custom_nodes/</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/__init__.py</code></td>
 </tr>
 <tr>
-<td>Enhance on but prompt unchanged</td>
-<td>GGUF missing, <code>llama-cpp-python</code> missing, timeout, or empty model output (fail-soft passthrough)</td>
-<td>After Queue the Enhance node <strong>CLIP prompt</strong> box shows <code>[passthrough: …]</code>. The top prompt widget is the source and will not change. Run <code>download-models</code> (needs <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). Rebuild the image if llama-cpp-python failed to install. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 60s (<code>EZ_LLM_TIMEOUT_S</code>). Turn Enhance <strong>off</strong> to pin the widget text</td>
+<td>Enhance on but prompt unchanged / <strong>Enhance status</strong> says GGUF missing</td>
+<td>Snapshot not downloaded, or <code>comfy/llm/</code> link missing/broken. Fail-soft: style still applies, generation still runs; the 4B rewriter did not</td>
+<td>Not an error in the CLIP string. <strong>CLIP prompt</strong> is what CLIP encoded; <strong>Enhance status</strong> is the reason. Run <code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). <code>doctor</code>/<code>start</code> relink a snapshot already under <code>MODELS_DIR/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/</code>. Restart the container after the pull. Rebuild the image if llama-cpp-python failed. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 60s (<code>EZ_LLM_TIMEOUT_S</code>). Do not drop a GGUF into Comfy Manager</td>
 </tr>
 <tr>
 <td>Enhance CLIP prompt box stays empty after Queue</td>
