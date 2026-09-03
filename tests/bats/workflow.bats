@@ -490,17 +490,17 @@ assert all(
 )
 enh=[n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance']
 assert len(enh)==1
-assert enh[0]['widgets_values'][1] is True
+assert enh[0]['widgets_values'][1] is False
 assert enh[0]['widgets_values'][2]=='t2i'
 assert enh[0]['widgets_values'][3]=='Instagram 4:5 still'
 ident=enh[0]['widgets_values'][0]
 ident_l=ident.lower()
 assert 'cedar' in ident_l and 'lake' in ident_l
 assert 'single-story' in ident_l and 'hip' in ident_l
+assert '24mm' not in ident_l
 assert 'no logos, no text' not in ident
-assert sum(1 for n in d['nodes'] if n.get('type')=='VAEEncode')==1
-refs=[n for n in d['nodes'] if n.get('type')=='ReferenceLatent']
-assert len(refs)==10
+assert sum(1 for n in d['nodes'] if n.get('type')=='VAEEncode')==0
+assert sum(1 for n in d['nodes'] if n.get('type')=='ReferenceLatent')==0
 by_id={n['id']:n for n in d['nodes']}
 incoming={}
 for l in d['links']:
@@ -508,26 +508,28 @@ for l in d['links']:
 banned=('pier','courtyard','pavilion','two-story','a-frame','glass box','outdoor kitchen','outdoor tub')
 for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     shot=join['widgets_values'][0]
-    full=f'{ident} {shot}'
-    assert len(full.split())<=155, (join.get('title'), len(full.split()))
+    inv=join['widgets_values'][1]
+    lock=join['widgets_values'][2]
+    assert lock=='view'
+    assert 'linen sofa' in inv
+    full=ident+' '+shot
+    assert len(full.split())<=170, (join.get('title'), len(full.split()))
     sl=shot.lower()
     assert 'same' in sl and 'cabin' in sl
-    if i>=2 and i<=6:
-        assert shot.startswith('Photographed from inside')
+    if i==0:
+        assert 'shows the linen sofa' in sl or 'through' in sl
+    if 2<=i<=6:
+        assert 'from inside' in sl
     assert not any(b in sl for b in banned)
     ks_id=12+i*5
     pos_src=by_id[incoming[(ks_id,1)][0][1]]['type']
     lat_src=by_id[incoming[(ks_id,3)][0][1]]['type']
     assert lat_src=='EmptyFlux2LatentImage'
-    if i==0:
-        assert pos_src=='CLIPTextEncode'
-    else:
-        assert pos_src=='ReferenceLatent'
+    assert pos_src=='CLIPTextEncode'
 note=next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))
 ntext=str(note['widgets_values'][0]).lower()
-assert 'identity plate' in ntext
-assert 'do not bypass 01' in ntext or 'do not bypass 01' in d['extra']['lab_note'].lower()
-assert 'queue' in ntext and 'shot 01' in ntext
+assert 'world bible' in ntext or 'locked inventory' in ntext
+assert 'referencelatent' in ntext or 'new views' in ntext
 "
   [ "${status}" -eq 0 ]
 }

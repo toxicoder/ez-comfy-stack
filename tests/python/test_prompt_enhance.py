@@ -51,6 +51,7 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "massing" in edit.lower() or "do not add" in edit.lower()
     assert "visual-style" in edit.lower()
     assert "medium" in edit.lower() and "grade" in edit.lower()
+    assert "camera" in edit.lower() and "framing" in edit.lower()
     wan_t2v = client.load_system_prompt("wan_t2v")
     assert "80" in wan_t2v and "120" in wan_t2v
     assert "audio" in wan_t2v.lower()
@@ -245,17 +246,27 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
 
 def test_ez_prompt_join_identity_and_shot() -> None:
     join = EZPromptJoin()
-    assert join.run("Cedar house on a still lake.", "Golden-hour facade, 24mm.") == (
-        "Cedar house on a still lake. Golden-hour facade, 24mm.",
-    )
-    assert join.run("  House.  ", "  Dusk deck.  ") == ("House. Dusk deck.",)
-    assert join.run("Identity only.", "") == ("Identity only.",)
-    assert join.run("", "Shot only.") == ("Shot only.",)
+    view = join.run("Cedar house on a still lake.", "Golden-hour facade, 24mm.")
+    assert view[0].startswith("Cedar house on a still lake.")
+    assert "different camera" in view[0]
+    assert view[0].endswith("Golden-hour facade, 24mm.")
+    assert join.run("  House.  ", "  Dusk deck.  ")[0].endswith("Dusk deck.")
+    only = join.run("Identity only.", "")
+    assert "Identity only." in only[0]
+    assert "different camera" in only[0]
+    assert join.run("", "Shot only.")[0].endswith("Shot only.")
     assert join.run("  ", "  ") == ("",)
     locked = join.run("Cabin.", "Dawn deck.", "cedar siding, hip roof")
-    assert locked == (
-        "Cabin. Locked inventory (do not change): cedar siding, hip roof Dawn deck.",
-    )
+    assert "Locked inventory (do not change): cedar siding, hip roof." in locked[0]
+    assert "different camera" in locked[0]
+    assert locked[0].endswith("Dawn deck.")
+    state = join.run("Cabin.", "Warm key.", "mug", "state")
+    assert "camera framing" in state[0]
+    assert "The shot names the only change." in state[0]
+    assert "mug" in state[0]
+    types = EZPromptJoin.INPUT_TYPES()["required"]["lock"][0]
+    assert types[0] == "view"
+    assert "state" in types
 
 
 def test_app_lab_graphs_wire_join_and_enhance() -> None:
@@ -285,8 +296,10 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert "two-bay" in ident_l
     assert "decks" in ident_l
     assert "gravel" in ident_l
+    assert "24mm" not in ident_l
+    assert "golden-hour" not in ident_l and "golden hour" not in ident_l
     assert "no logos, no text" not in ident_text
-    assert ident["widgets_values"][1] is True
+    assert ident["widgets_values"][1] is False
     assert ident["widgets_values"][2] == "t2i"
     assert ident["widgets_values"][3] == "Instagram 4:5 still"
     assert ident["widgets_values"][4] == "none"
@@ -307,20 +320,38 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         "outdoor kitchen",
         "outdoor tub",
     )
+    inventories = set()
     for join in sorted(joins, key=lambda n: n["id"]):
         shot = join["widgets_values"][0]
+        inventory = join["widgets_values"][1]
+        lock = join["widgets_values"][2]
+        inventories.add(inventory)
+        assert lock == "view"
+        assert "linen sofa" in inventory
+        assert "island" in inventory
+        assert "dining table" in inventory
+        assert "bedding" in inventory
+        assert "tub" in inventory
+        assert "deck chairs" in inventory or "cedar deck" in inventory
         assert "same" in shot.lower() and "cabin" in shot.lower()
-        joined = f"{ident_text} {shot}"
-        assert len(joined.split()) <= 155
+        joined = client.join_prompt(ident_text, shot, inventory, lock)
+        assert len(joined.split()) <= 170
         title = join.get("title") or ""
-        if any(k in title for k in ("03", "04", "05", "06", "07")):
-            assert shot.startswith("Photographed from inside")
+        if "01" in title:
+            assert "through" in shot.lower() or "shows the linen sofa" in shot.lower()
+        if any(k in title for k in ("03 living", "04 kitchen", "05 dining", "06 bedroom", "07 bath")):
+            assert "from inside" in shot.lower()
+        if "03 living" in title:
+            assert "sofa" in shot.lower()
         assert not any(b in shot.lower() for b in banned)
+    assert len(inventories) == 1
     for text in positives.values():
         assert text.startswith(ident_text)
-        assert len(text.split()) <= 155
-    assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 1
-    assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 10
+        assert "different camera" in text
+        assert "linen sofa" in text
+        assert len(text.split()) <= 170
+    assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 0
+    assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 0
     by_id = {n["id"]: n for n in house["nodes"]}
     incoming: dict[tuple[int, int], list] = {}
     for link in house["links"]:
@@ -330,10 +361,7 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         pos_src = by_id[incoming[(ks_id, 1)][0][1]]["type"]
         lat_src = by_id[incoming[(ks_id, 3)][0][1]]["type"]
         assert lat_src == "EmptyFlux2LatentImage"
-        if i == 0:
-            assert pos_src == "CLIPTextEncode"
-        else:
-            assert pos_src == "ReferenceLatent"
+        assert pos_src == "CLIPTextEncode"
 
 
 def test_node_mappings_modes_preview_and_style() -> None:

@@ -23,6 +23,17 @@ DEFAULT_N_THREADS = 4
 DEFAULT_N_CTX = 4096
 DEFAULT_MAX_TOKENS = 800
 STYLE_NONE = "none"
+LOCK_VIEW = "view"
+LOCK_STATE = "state"
+LOCK_IDS = (LOCK_VIEW, LOCK_STATE)
+LOCK_VIEW_LINE = (
+    "Keep this exact place and inventory. New photograph from a different camera "
+    "and framing."
+)
+LOCK_STATE_LINE = (
+    "Keep this exact place, inventory, and camera framing. The shot names the only "
+    "change."
+)
 FLAVOR_KLEIN = "klein"
 FLAVOR_KLEIN_EDIT = "klein_edit"
 FLAVOR_WAN = "wan"
@@ -77,6 +88,41 @@ class EnhanceResult:
         if self.reason:
             return f"[passthrough: {self.reason}]\n{self.text}"
         return self.text
+
+
+def join_prompt(
+    identity: str,
+    shot: str,
+    inventory: str = "",
+    lock: str = LOCK_VIEW,
+) -> str:
+    """Join a world bible, locked inventory, persist lock, and shot line.
+
+    Arguments:
+      identity: camera-free place/subject bible
+      shot: camera, light, or action line for this still
+      inventory: object list that must repeat across views
+      lock: view (new camera) or state (same camera)
+    Returns:
+      One CLIP string, or empty when every field is blank.
+    """
+    bible = identity.strip() if isinstance(identity, str) else str(identity or "").strip()
+    card = shot.strip() if isinstance(shot, str) else str(shot or "").strip()
+    inv = inventory.strip() if isinstance(inventory, str) else str(inventory or "").strip()
+    mode = lock.strip().lower() if isinstance(lock, str) else LOCK_VIEW
+    if mode not in LOCK_IDS:
+        mode = LOCK_VIEW
+    if not bible and not card and not inv:
+        return ""
+    parts: list[str] = []
+    if bible:
+        parts.append(bible)
+    if inv:
+        parts.append(f"Locked inventory (do not change): {inv}.")
+    parts.append(LOCK_STATE_LINE if mode == LOCK_STATE else LOCK_VIEW_LINE)
+    if card:
+        parts.append(card)
+    return " ".join(parts)
 
 
 def load_system_prompt(name: str) -> str:

@@ -164,26 +164,38 @@ def _rewrite_enhance_blurb(body: str) -> str:
     return text + "\n"
 
 
+def _as_enhance_flag(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "on"}
+    return True
+
+
 def normalize_enhance_widgets(graph: dict) -> None:
-    """Ensure enhance=true and style=none on every enhance node."""
+    """Pad enhance-node widgets. Keep an existing enhance flag; default true if missing."""
     for node in graph["nodes"]:
         ntype = node.get("type")
         values = list(node.get("widgets_values") or [])
         if ntype in ("EZKleinPromptEnhance", "EZWanPromptEnhance"):
             prompt = values[0] if values else ""
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
             mode = values[2] if len(values) > 2 else ("t2i" if ntype == "EZKleinPromptEnhance" else "t2v")
             hint = values[3] if len(values) > 3 else ""
             style = values[4] if len(values) > 4 else "none"
             if style != "none" and len(values) < 5:
                 style = "none"
-            node["widgets_values"] = [prompt, True, mode, hint, style if style else "none"]
+            node["widgets_values"] = [prompt, enhance, mode, hint, style if style else "none"]
         elif ntype == "EZLTXPromptEnhance":
             prompt = values[0] if values else ""
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
             mode = values[2] if len(values) > 2 else "t2v"
             hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
             audio = values[4] if len(values) > 4 else ""
             style = values[5] if len(values) > 5 else "none"
-            node["widgets_values"] = [prompt, True, mode, hint, audio, style if style else "none"]
+            node["widgets_values"] = [prompt, enhance, mode, hint, audio, style if style else "none"]
 
 
 def append_note(graph: dict) -> None:

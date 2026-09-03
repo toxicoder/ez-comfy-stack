@@ -371,7 +371,8 @@
       },
       "widgets_values": [
         "Canonical plate. Empty mug, cool blue window light, same 35mm camera.",
-        "cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain"
+        "cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain",
+        "state"
       ],
       "title": "SHOT BEFORE"
     },
@@ -418,7 +419,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small kitchen table at first light. One cream ceramic mug with a hairline chip on the rim sits empty on honey-oak beside a dark window. White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces. Locked inventory (do not change): cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain Canonical plate. Empty mug, cool blue window light, same 35mm camera."
+        "A photoreal still of a small kitchen table at first light. One cream ceramic mug with a hairline chip on the rim sits empty on honey-oak beside a dark window. White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces. Locked inventory (do not change): cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain. Keep this exact place, inventory, and camera framing. The shot names the only change. Canonical plate. Empty mug, cool blue window light, same 35mm camera."
       ],
       "title": "Positive BEFORE"
     },
@@ -591,7 +592,8 @@
       },
       "widgets_values": [
         "Same kitchen, mug, and camera. Mug filled with coffee, warm morning sun, soft steam.",
-        "cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain"
+        "cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain",
+        "state"
       ],
       "title": "SHOT AFTER"
     },
@@ -638,7 +640,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small kitchen table at first light. One cream ceramic mug with a hairline chip on the rim sits empty on honey-oak beside a dark window. White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces. Locked inventory (do not change): cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain Same kitchen, mug, and camera. Mug filled with coffee, warm morning sun, soft steam."
+        "A photoreal still of a small kitchen table at first light. One cream ceramic mug with a hairline chip on the rim sits empty on honey-oak beside a dark window. White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces. Locked inventory (do not change): cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain. Keep this exact place, inventory, and camera framing. The shot names the only change. Same kitchen, mug, and camera. Mug filled with coffee, warm morning sun, soft steam."
       ],
       "title": "Positive AFTER"
     },

@@ -10,7 +10,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 - How each lab model actually reads a prompt
 - Canned lab-example text (already rewritten)
-- GIF loop motion and dream-house identity plate (Prompt Join)
+- GIF loop motion and dream-house world bible (Prompt Join, lock=view)
 - Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance on by default)
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
 
@@ -64,7 +64,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Dream-house pack (Klein)"
 
-    One identity paragraph locks **massing + materials + place** (one compact single-story rectangular cedar cabin, hip roof, two-bay glass, decks on gravel, alpine lake). Each SHOT card is only camera, room, time of day, and season of **that same cabin** — not a new building. **klein-dream-house-lab-example** uses **Prompt Join** so you edit the house once. SHOT 01 is the T2I identity plate; Queue 01 first and do not bypass it when generating 02–10 (they Klein-edit from 01 via `VAEEncode` + `ReferenceLatent`). Unused shots 02–10 may still be bypassed after 01 exists. Keep the ten Instagram 4:5 stills as photographs of one cabin.
+    One **world bible** locks massing + materials + place (compact single-story cedar cabin, hip roof, two-bay glass, decks on gravel, alpine lake) with **no camera**. Locked inventory (linen sofa facing the glass, island, dining table, bedding, tub, deck chairs) must appear through the two-bay glass **and** in the matching interiors. Each SHOT card is a new camera of that cabin. **Prompt Join** `lock=view` stitches bible + inventory + “new photograph from a different camera”. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01, or every still copies the facade. `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Pin Enhance **off** on the bible. Unused shots may be bypassed.
 
 === "LTX-2.5 AV"
 
@@ -81,7 +81,7 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 | **Klein Prompt Enhance** | `t2i`, `edit` | klein-still-draft / klein-still-hero / klein-still-daily / klein-dream-house identity / film-*-90s identity |
 | **Wan Prompt Enhance** | `t2v`, `i2v` | wan-i2v-5s / wan-t2v-5s / wan-i2v-shot / wan-gif-loop |
 | **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / ltx-i2v-shot |
-| **Prompt Join** | identity + optional inventory + shot → one STRING | dream-house and identity-plate packs |
+| **Prompt Join** | bible + inventory + shot + `lock` (view/state) → one STRING | dream-house (view) and lighting/before-after (state) |
 
 STRING out → CLIPTextEncode `text` input.
 

@@ -116,16 +116,21 @@ def test_hook_still_is_vertical() -> None:
     assert latent["widgets_values"][1] == 768
 
 
-def _identity_plate_contract(stem: str, prefixes: set[str]) -> None:
+def _identity_plate_contract(stem: str, prefixes: set[str], persist: str = "state") -> None:
     graph = json.loads((WF / f"{stem}.json").read_text(encoding="utf-8"))
-    assert sum(1 for n in graph["nodes"] if n.get("type") == "VAEEncode") == 1
+    encode_n = sum(1 for n in graph["nodes"] if n.get("type") == "VAEEncode")
+    ref_n = sum(1 for n in graph["nodes"] if n.get("type") == "ReferenceLatent")
     enhance = [n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"]
     assert len(enhance) == 1
-    assert enhance[0]["widgets_values"][1] is True
+    assert enhance[0]["widgets_values"][1] is (persist == "state")
     assert enhance[0]["widgets_values"][2] == "t2i"
     assert enhance[0]["widgets_values"][-1] == "none"
     joins = [n for n in graph["nodes"] if n.get("type") == "EZPromptJoin"]
     assert len(joins) == len(prefixes)
+    for join in joins:
+        values = join["widgets_values"]
+        assert values[1].strip(), stem
+        assert values[2] == persist, stem
     seeds = {
         n["widgets_values"][0]
         for n in graph["nodes"]
@@ -146,12 +151,21 @@ def _identity_plate_contract(stem: str, prefixes: set[str]) -> None:
         (n for n in graph["nodes"] if n.get("type") == "KSampler"),
         key=lambda n: n["pos"][1],
     )
-    for i, ks in enumerate(samplers):
-        pos_src = by_id[incoming[(ks["id"], 1)][0][1]]["type"]
-        if i == 0:
-            assert pos_src == "CLIPTextEncode"
-        else:
-            assert pos_src == "ReferenceLatent"
+    if persist == "state":
+        assert encode_n == 1, stem
+        assert ref_n >= 1, stem
+        for i, ks in enumerate(samplers):
+            pos_src = by_id[incoming[(ks["id"], 1)][0][1]]["type"]
+            if i == 0:
+                assert pos_src == "CLIPTextEncode"
+            else:
+                assert pos_src == "ReferenceLatent"
+    else:
+        assert encode_n == 0, stem
+        assert ref_n == 0, stem
+        for ks in samplers:
+            pos_src = by_id[incoming[(ks["id"], 1)][0][1]]["type"]
+            assert pos_src == "CLIPTextEncode", stem
 
 
 def test_pack_v2_prefixes() -> None:
@@ -182,6 +196,7 @@ def test_pack_v2_prefixes() -> None:
     _identity_plate_contract(
         "klein-camera-angles-lab-example",
         {"ez_angle_wide", "ez_angle_med", "ez_angle_close"},
+        persist="view",
     )
     _identity_plate_contract(
         "klein-color-moods-lab-example",
@@ -194,8 +209,10 @@ def test_pack_v2_prefixes() -> None:
     _identity_plate_contract(
         "klein-style-lock-lab-example",
         {f"ez_style_{i:02d}" for i in range(1, 5)},
+        persist="view",
     )
     _identity_plate_contract(
         "klein-storyboard-6up-lab-example",
         {f"ez_board_{i:02d}" for i in range(1, 7)},
+        persist="view",
     )
