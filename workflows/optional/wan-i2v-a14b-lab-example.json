@@ -33,8 +33,9 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_note": "optional Wan A14B — download-wan --tier a14b first",
-    "lab_profile": "wan-i2v-a14b-lab-example"
+    "lab_note": "## optional Wan A14B\n\nNot part of default download-models. Run: ./scripts/utilities/download-wan.sh run --tier a14b\nFiles: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + wan_2.1_vae.safetensors.\nCopy wan-i2v-5s-lab-example and swap UNET/VAE after download. Apache 2.0. No native audio.\nThis placeholder is not a Queue graph — use the 5B 5s graph until A14B weights exist.\n",
+    "lab_profile": "wan-i2v-a14b-lab-example",
+    "lab_description": "Placeholder — download-wan --tier a14b first (not a Queue graph)"
   },
   "version": 0.4
 }

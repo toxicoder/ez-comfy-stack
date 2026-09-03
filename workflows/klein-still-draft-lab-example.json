@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-still-draft-lab-example\n\nSTILL DRAFT/HERO — Apache FLUX.2 Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 (distilled) · 4 steps · 768x432 · batch 2.\nSaveImage prefix: ez_still_draft.\nCopy prompt + seed from draft, do not restyle here.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nQueue this first. Then still-hero with the same seed.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## klein-still-draft-lab-example\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 · 4 steps · 768x432 · batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open klein-still-hero-lab-example with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
@@ -515,8 +515,8 @@
         0
       ]
     },
-    "lab_note": "## klein-still-draft-lab-example\n\nSTILL DRAFT/HERO — Apache FLUX.2 Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 (distilled) · 4 steps · 768x432 · batch 2.\nSaveImage prefix: ez_still_draft.\nCopy prompt + seed from draft, do not restyle here.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nQueue this first. Then still-hero with the same seed.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
-    "lab_description": "Klein 4B still 768x432 4 steps"
+    "lab_note": "## klein-still-draft-lab-example\n\nFirst-run Klein 4B still (Apache 2.0 distilled FP8).\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 · 4 steps · 768x432 · batch 2.\nSaveImage prefix: ez_still_draft.\n\nQueue this first. Then open klein-still-hero-lab-example with the same seed for 1280x720.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_description": "Klein 4B draft still, 768x432, 4 steps, batch 2"
   },
   "version": 0.4
 }

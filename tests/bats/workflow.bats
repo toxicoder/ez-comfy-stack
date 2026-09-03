@@ -267,6 +267,44 @@ assert 'shop bell' in tenh['widgets_values'][0].lower() or 'footsteps' in tenh['
   [ "${status}" -eq 0 ]
 }
 
+@test "lab graph descriptions and notes are graph-specific" {
+  run python3 -c "
+import json
+from pathlib import Path
+root = Path('${REPO_ROOT}/workflows')
+stale = ('~10 s', 'tea house', 'sketch', 'STILL DRAFT/HERO', 'bridge-wan', 'still-studio')
+seen = []
+for p in sorted(root.rglob('*-lab-example.json')):
+    d = json.loads(p.read_text())
+    desc = d.get('extra', {}).get('lab_description') or ''
+    note = d.get('extra', {}).get('lab_note') or ''
+    blob = desc + '\n' + note
+    assert desc.strip(), p.name
+    assert note.strip(), p.name
+    for s in stale:
+        assert s not in blob, (p.name, s)
+    seen.append(p.stem)
+    if p.stem == 'wan-i2v-5s-lab-example':
+        assert '121' in desc
+        assert 'wan-i2v-shot-lab-example' in note
+    if p.stem == 'wan-t2v-5s-lab-example':
+        assert 'T2V' in desc
+        assert 'bypassed' in note.lower()
+    if p.stem == 'wan-i2v-shot-lab-example':
+        assert '120' in desc
+        assert 'ez_shot_01' in note
+    if p.stem == 'ltx-i2v-shot-lab-example':
+        assert '120' in desc
+    if p.stem == 'klein-still-draft-lab-example':
+        assert 'klein-still-hero-lab-example' in note
+    if p.stem == 'film-go-see-90s-run-lab-example':
+        assert 'running' in desc
+assert 'klein-still-draft-lab-example' in seen
+assert 'film-go-see-90s-run-lab-example' in seen
+"
+  [ "${status}" -eq 0 ]
+}
+
 @test "lab examples have operator Notes, prompts, extra.lab_note" {
   local dir="${REPO_ROOT}/workflows"
   local wf
