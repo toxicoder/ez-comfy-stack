@@ -1617,12 +1617,17 @@
 <tr>
 <td>Enhance on but prompt unchanged</td>
 <td>GGUF missing, <code>llama-cpp-python</code> missing, timeout, or empty model output (fail-soft passthrough)</td>
-<td>After Queue the Enhance node shows <code>[passthrough: …]</code>. Run <code>download-models</code> (needs <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). Rebuild the image if llama-cpp-python failed to install. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 60s (<code>EZ_LLM_TIMEOUT_S</code>). Turn Enhance <strong>off</strong> to pin the widget text</td>
+<td>After Queue the Enhance node <strong>CLIP prompt</strong> box shows <code>[passthrough: …]</code>. The top prompt widget is the source and will not change. Run <code>download-models</code> (needs <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). Rebuild the image if llama-cpp-python failed to install. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 60s (<code>EZ_LLM_TIMEOUT_S</code>). Turn Enhance <strong>off</strong> to pin the widget text</td>
 </tr>
 <tr>
-<td>Style selected but rewrite still photoreal / still names the old medium</td>
-<td>Enhance off, style <code>none</code>, I2V mode (style ignored), or GGUF passthrough skipped the weave</td>
-<td>Confirm <strong>Enhance</strong> is on, <strong>style</strong> is not <code>none</code>, and mode is t2i / t2v / Klein edit (not I2V). Read the node preview after Queue. If you see <code>[passthrough: …]</code>, fix the GGUF path first — passthrough keeps the widget text. The dropdown retunes existing style language; it does not stack a second style</td>
+<td>Enhance CLIP prompt box stays empty after Queue</td>
+<td>Pack JS not copied, or the browser is holding an old frontend</td>
+<td>Restart the container so entrypoint copies <code>ez_prompt_enhance/js/</code>. Hard-refresh the Comfy tab. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/js/ez_prompt_enhance.js</code></td>
+</tr>
+<tr>
+<td>Style selected but still looks like the lab 3D/photo prompt</td>
+<td>Style is <code>none</code>, mode is I2V, or reading the source widget instead of <strong>CLIP prompt</strong></td>
+<td>Set <strong>style</strong> to a preset (not <code>none</code>). Mode must be t2i / t2v / Klein edit. Read the <strong>CLIP prompt</strong> box — it should front-load the medium and drop <code>game-engine</code> / photoreal fights. I2V ignores style (start image owns look)</td>
 </tr>
 <tr>
 <td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
