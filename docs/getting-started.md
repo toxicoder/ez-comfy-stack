@@ -183,12 +183,14 @@ Fix any errors **before** downloading multi‑GB models.
 # echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
 
 ./scripts/manage.sh download-models
+# Manual cap (Mbps; 40 ≈ 5 MB/s). Overrides DOWNLOAD_LIMIT for this run:
+# ./scripts/manage.sh download-models --limit 40
 ```
 
 | What | Detail |
 | --- | --- |
 | **Tiers** | **flux-fast** + **ltx-balanced** |
-| **Throttle** | `download-limit wrap --limit auto` → speedtest → **85%** cap (when HTB works) |
+| **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
 | **CLI** | Modern **`hf download`** |
 | **Layout** | Weights under `MODELS_DIR` (default `/mnt/models`), compatible with nvidia-dgx-spark-lab |
 | **LTX size** | Selective subset of `Kijai/LTX2.3_comfy` (~**30 GB**), not the full monorepo (~400 GB) |
@@ -461,7 +463,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
       Op->>M: doctor
       M-->>Op: preflight OK
       Op->>M: download-models
-      M->>DL: wrap --limit auto
+      M->>DL: wrap --limit auto or N Mbps
       DL->>HF: throttled pull (flux-fast + ltx-balanced)
       HF-->>DL: weights → MODELS_DIR
       DL-->>M: clear limit on exit

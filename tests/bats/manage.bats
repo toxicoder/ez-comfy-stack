@@ -194,3 +194,38 @@ teardown() {
   run cmd_cleanup
   [ "${status}" -eq 0 ]
 }
+
+@test "download-models --limit accepts manual Mbps and overrides env" {
+  export LAB_MOCK_HF_DOWNLOAD=1
+  export DOWNLOAD_LIMIT=auto
+
+  run cmd_download_models --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"--limit"* ]]
+  [[ "${output}" == *"Mbps"* ]]
+
+  run cmd_help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"--limit"* ]]
+
+  run cmd_download_models --limit
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"limit"* ]]
+
+  run cmd_download_models --limit nope
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"Invalid"* || "${output}" == *"invalid"* || "${output}" == *"limit"* ]]
+
+  run cmd_download_models --limit=-1
+  [ "${status}" -ne 0 ]
+
+  run cmd_download_models --limit off
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"DOWNLOAD_LIMIT=off"* || "${output}" == *"saturating"* ]]
+  [[ "${output}" == *"lab workflow weights ready"* || "${output}" == *"lab model ok"* ]]
+
+  export DOWNLOAD_LIMIT=auto
+  run cmd_download_models --limit 40
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"lab workflow weights ready"* || "${output}" == *"lab model ok"* ]]
+}

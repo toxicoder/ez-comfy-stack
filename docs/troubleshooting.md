@@ -87,7 +87,8 @@ sudo chown "$USER:$USER" /mnt/models
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | wondershaper `qdisc kind is unknown` / RTNETLINK | No HTB/IFB (common on DGX Spark) | Expected; wrap uses **gentle HF max-workers** from measured speed (HTTP probe). Not a hard Mbps cap. `DOWNLOAD_LIMIT=off` for full blast |
-| Speedtest failed / always 50 Mbps | CLI missing or probe blocked | Auto-installs `speedtest-cli` when possible; **clears limits before measure**; then HTTP probe / live RX. Check outbound HTTPS if all fail |
+| Speedtest failed / always 50 Mbps | CLI missing or probe blocked | Auto-installs `speedtest-cli` when possible; **clears limits before measure**; then HTTP probe / live RX. Or skip the probe: `./scripts/manage.sh download-models --limit 40` |
+| Auto cap too high / SSH still sluggish | Speedtest over-reads the path you share with SSH | `./scripts/manage.sh download-models --limit N` with a lower Mbps (e.g. 20–40). Persistent: `DOWNLOAD_LIMIT=40` in `.env` |
 | ++ctrl+c++ does not stop download | Old tee pipeline orphan | Pull latest; wrap/hf use process groups — Ctrl+C should stop `hf` within seconds |
 | `Still waiting to acquire lock` on `*.lock` | Stale HF locks from killed downloads | `./scripts/manage.sh clear-hf-locks` or auto-clear on download-models; if stuck: `HF_LOCK_CLEAR_FORCE=1 ./scripts/manage.sh clear-hf-locks` |
 | SSH freezes during download | Full-rate HF pull (limit off or soft-fail) | Prefer working `download-limit`; lower fixed Mbps; `download-limit clear` if half-applied |
@@ -103,8 +104,8 @@ sudo chown "$USER:$USER" /mnt/models
 ```bash
 ./scripts/manage.sh download-limit clear
 # optional: sudo modprobe sch_htb sch_ingress sch_sfq
-./scripts/manage.sh download-models
-# or explicitly:
+./scripts/manage.sh download-models --limit 40
+# or skip throttle entirely (SSH risk):
 # DOWNLOAD_LIMIT=off ./scripts/manage.sh download-models
 ```
 
