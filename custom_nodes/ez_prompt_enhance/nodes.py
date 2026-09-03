@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from .client import (
+    LOCK_IDS,
+    LOCK_VIEW,
     REASON_STYLE_IGNORED_I2V,
     STYLE_NONE,
     EnhanceResult,
@@ -11,6 +13,7 @@ from .client import (
     ensure_style_details,
     flavor_for_system,
     format_style_instruction,
+    join_prompt,
     load_system_prompt,
     style_ids,
     style_suffix,
@@ -249,6 +252,7 @@ class EZPromptJoin:
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
+                "lock": (list(LOCK_IDS), {"default": LOCK_VIEW}),
             }
         }
 
@@ -257,21 +261,13 @@ class EZPromptJoin:
     FUNCTION = "run"
     CATEGORY = "ez-comfy/prompt"
     DESCRIPTION = (
-        "Joins a shared identity paragraph with a shot-specific camera line "
-        "so one Queue can vary views without duplicating the subject bible. "
-        "Optional inventory is a locked object list the model must not change."
+        "Joins a shared world bible with a shot card. lock=view is a new camera "
+        "of the same place; lock=state keeps framing and changes only light, "
+        "grade, or the named action. Inventory is a locked object list."
     )
 
-    def run(self, identity, shot, inventory=""):
-        a = (identity if isinstance(identity, str) else str(identity)).strip()
-        b = (shot if isinstance(shot, str) else str(shot)).strip()
-        inv = (inventory if isinstance(inventory, str) else str(inventory)).strip()
-        parts = [p for p in (a, ) if p]
-        if inv:
-            parts.append(f"Locked inventory (do not change): {inv}")
-        if b:
-            parts.append(b)
-        return (" ".join(parts),)
+    def run(self, identity, shot, inventory="", lock=LOCK_VIEW):
+        return (join_prompt(identity, shot, inventory, lock),)
 
 
 NODE_CLASS_MAPPINGS = {

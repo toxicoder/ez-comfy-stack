@@ -12,6 +12,7 @@ import copy
 import json
 import re
 from pathlib import Path
+import sys
 
 from _wire_prompt_enhance import _rewrite_enhance_blurb, normalize_enhance_widgets
 from _lab_theme import (
@@ -41,6 +42,11 @@ ENHANCE_NOTE = (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
+CUSTOM = ROOT / "custom_nodes"
+if str(CUSTOM) not in sys.path:
+    sys.path.insert(0, str(CUSTOM))
+from ez_prompt_enhance.client import join_prompt  # noqa: E402
+
 WF = ROOT / "workflows"
 SHORTS = WF / "shorts"
 
@@ -882,46 +888,54 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
     )
 
     house_lock = (
-        "A photoreal still photograph of one contemporary cedar-and-glass lake house. "
-        "Vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, "
-        "unmarked surfaces, solitary, empty of people."
+        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal "
+        "standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, "
+        "empty of people."
     )
     _klein_pack(
         stem="klein-style-lock-lab-example",
         size=(768, 960),
         identity=house_lock,
-        inventory="vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows",
+        inventory=(
+            "vertical cedar siding, charcoal standing-seam hip roof, tall black-framed "
+            "windows, linen sofa facing the lake glass, oak floors"
+        ),
+        persist="view",
         shots=[
             (
                 "ez_style_01",
                 "CURB",
-                "Canonical plate. Golden-hour curb appeal from the gravel drive, 24mm, warm sidelight. Instagram 4:5.",
+                "Three-quarter lake facade of the same house, 24mm, golden-hour, Instagram "
+                "4:5. Glass shows the linen sofa and oak floors inside.",
             ),
             (
                 "ez_style_02",
                 "LIVING",
-                "Same house. Living room looking through glass toward a still lake, late-day sun.",
+                "From inside the living room of the same house, looking out the glass to "
+                "the lake, late-day sun. Linen sofa in the foreground.",
             ),
             (
                 "ez_style_03",
                 "DECK",
-                "Same house. Lakeside deck at dusk, cedar boards, quiet water, evergreen ridge.",
+                "Lakeside deck of the same house at dusk, cedar boards, quiet water, "
+                "evergreen ridge.",
             ),
             (
                 "ez_style_04",
                 "TWILIGHT",
-                "Same house. Twilight exterior with interior lamps glowing through black-framed glass.",
+                "Twilight exterior of the same house. Lamps on; sofa silhouette through "
+                "black-framed glass.",
             ),
         ],
         hint="Instagram 4:5 still",
         neg=KLEIN_NEG_PHOTO,
         note=f"""## klein-style-lock-lab-example
 
-Four Klein 4B stills of one lake house. SHOT CURB is the identity plate; 02–04 Klein-edit from it. Prefixes `ez_style_01`…`04`. Do not bypass CURB on a cold canvas.
+Four Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.
 
-{ENHANCE_NOTE}
+Turn Enhance off on IDENTITY to pin the bible.
 """,
-        description="Klein 4B four-still style-lock pack",
+        description="Klein 4B four-still lake-house views, locked inventory",
     )
 
     # 8. Wan bumper loop MP4
@@ -1009,14 +1023,13 @@ Disclose AI-generated media. No score.
         size=(768, 432),
         identity=CREATOR_IDENTITY,
         inventory=ROOFTOP_INVENTORY,
+        persist="view",
         shots=board_shots,
         note=f"""## klein-storyboard-6up-lab-example
 
-Six Klein 4B storyboard frames of one rooftop. SHOT 01 is the identity plate; 02–06 Klein-edit from it. Prefixes `ez_board_01`…`06`. Do not bypass 01 on a cold canvas.
-
-{ENHANCE_NOTE}
+Six Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`…`06`. Independent T2I, same seed, locked inventory. Turn Enhance off on IDENTITY to pin the bible.
 """,
-        description="Klein 4B six-frame storyboard pack",
+        description="Klein 4B six-frame storyboard pack, new cameras",
     )
 
 
@@ -1095,10 +1108,18 @@ def _klein_pack(
     inventory: str = ROOFTOP_INVENTORY,
     hint: str = "YouTube 16:9 still",
     neg: str | None = None,
+    persist: str = "state",
 ) -> None:
-    """One identity plate (T2I) plus Klein-edit shots via ReferenceLatent."""
+    """Multi-shot Klein pack.
+
+    persist=state: shot 01 T2I, 02–N ReferenceLatent of 01 (same camera).
+    persist=view: every shot independent T2I with a locked world bible (new camera).
+    """
     del cols  # layout is a vertical shot stack, shared loaders
+    if persist not in ("view", "state"):
+        raise SystemExit(f"persist must be view or state, got {persist}")
     negative = neg if neg is not None else KLEIN_NEG_STILL
+    enhance_on = persist != "view"
     nodes: list[dict] = []
     links: list[list] = []
     link_id = 0
@@ -1164,7 +1185,7 @@ def _klein_pack(
             [40, 480],
             [420, 420],
             "IDENTITY",
-            [identity, True, "t2i", hint, "none"],
+            [identity, enhance_on, "t2i", hint, "none"],
             3,
             outputs=[out("prompt", "STRING", ident_links)],
         )
@@ -1205,51 +1226,55 @@ def _klein_pack(
             6,
         )
     )
-    nodes.append(
-        _base_node(
-            8,
-            "VAEEncode",
-            [1740, 170],
-            [240, 80],
-            "Encode plate 01",
-            [],
-            7,
-            inputs=[
-                {"name": "pixels", "type": "IMAGE", "link": None},
-                {"name": "vae", "type": "VAE", "link": None},
-            ],
-            outputs=[out("LATENT", "LATENT", vae_enc_links)],
+    use_ref = persist == "state"
+    if use_ref:
+        nodes.append(
+            _base_node(
+                8,
+                "VAEEncode",
+                [1740, 170],
+                [240, 80],
+                "Encode plate 01",
+                [],
+                7,
+                inputs=[
+                    {"name": "pixels", "type": "IMAGE", "link": None},
+                    {"name": "vae", "type": "VAE", "link": None},
+                ],
+                outputs=[out("LATENT", "LATENT", vae_enc_links)],
+            )
         )
-    )
-    nodes.append(
-        _base_node(
-            9,
-            "ReferenceLatent",
-            [40, 1680],
-            [280, 80],
-            "Negative + identity plate",
-            [],
-            8,
-            inputs=[
-                {"name": "conditioning", "type": "CONDITIONING", "link": None},
-                {"name": "latent", "type": "LATENT", "link": None, "shape": 7},
-            ],
-            outputs=[out("CONDITIONING", "CONDITIONING", ref_neg_out)],
+        nodes.append(
+            _base_node(
+                9,
+                "ReferenceLatent",
+                [40, 1680],
+                [280, 80],
+                "Negative + identity plate",
+                [],
+                8,
+                inputs=[
+                    {"name": "conditioning", "type": "CONDITIONING", "link": None},
+                    {"name": "latent", "type": "LATENT", "link": None, "shape": 7},
+                ],
+                outputs=[out("CONDITIONING", "CONDITIONING", ref_neg_out)],
+            )
         )
-    )
 
     lid = add_link(2, 0, 5, 0, "CLIP")
     nodes[4]["inputs"][0]["link"] = lid
     clip_links.append(lid)
-    lid = add_link(3, 0, 8, 1, "VAE")
-    nodes[7]["inputs"][1]["link"] = lid
-    vae_links.append(lid)
-    lid = add_link(5, 0, 9, 0, "CONDITIONING")
-    nodes[8]["inputs"][0]["link"] = lid
-    neg_links.append(lid)
-    lid = add_link(8, 0, 9, 1, "LATENT")
-    nodes[8]["inputs"][1]["link"] = lid
-    vae_enc_links.append(lid)
+    if use_ref:
+        by_shared = {n["id"]: n for n in nodes}
+        lid = add_link(3, 0, 8, 1, "VAE")
+        by_shared[8]["inputs"][1]["link"] = lid
+        vae_links.append(lid)
+        lid = add_link(5, 0, 9, 0, "CONDITIONING")
+        by_shared[9]["inputs"][0]["link"] = lid
+        neg_links.append(lid)
+        lid = add_link(8, 0, 9, 1, "LATENT")
+        by_shared[9]["inputs"][1]["link"] = lid
+        vae_enc_links.append(lid)
 
     row_h = 380
     shot_y0 = 80
@@ -1261,7 +1286,7 @@ def _klein_pack(
         dec_id = 13 + i * 6
         save_id = 14 + i * 6
         n = 20 + i * 6
-        joined = f"{identity} Locked inventory (do not change): {inventory} {shot}" if inventory else f"{identity} {shot}"
+        joined = join_prompt(identity, shot, inventory, persist)
         join_out: list[int] = []
         clip_out: list[int] = []
         ks_out: list[int] = []
@@ -1273,7 +1298,7 @@ def _klein_pack(
                 [520, y],
                 [420, 180],
                 f"SHOT {title}",
-                [shot, inventory],
+                [shot, inventory, persist],
                 n,
                 inputs=[{"name": "identity", "type": "STRING", "link": None}],
                 outputs=[out("prompt", "STRING", join_out)],
@@ -1354,14 +1379,7 @@ def _klein_pack(
         lid = add_link(1, 0, ks_id, 0, "MODEL")
         by_id[ks_id]["inputs"][0]["link"] = lid
         unet_links.append(lid)
-        if i == 0:
-            lid = add_link(clip_id, 0, ks_id, 1, "CONDITIONING")
-            by_id[ks_id]["inputs"][1]["link"] = lid
-            clip_out.append(lid)
-            lid = add_link(5, 0, ks_id, 2, "CONDITIONING")
-            by_id[ks_id]["inputs"][2]["link"] = lid
-            neg_links.append(lid)
-        else:
+        if use_ref and i > 0:
             ref_id = 15 + i * 6
             ref_out: list[int] = []
             nodes.append(
@@ -1393,6 +1411,13 @@ def _klein_pack(
             lid = add_link(9, 0, ks_id, 2, "CONDITIONING")
             by_id[ks_id]["inputs"][2]["link"] = lid
             ref_neg_out.append(lid)
+        else:
+            lid = add_link(clip_id, 0, ks_id, 1, "CONDITIONING")
+            by_id[ks_id]["inputs"][1]["link"] = lid
+            clip_out.append(lid)
+            lid = add_link(5, 0, ks_id, 2, "CONDITIONING")
+            by_id[ks_id]["inputs"][2]["link"] = lid
+            neg_links.append(lid)
         lid = add_link(6, 0, ks_id, 3, "LATENT")
         by_id[ks_id]["inputs"][3]["link"] = lid
         latent_links.append(lid)
@@ -1405,7 +1430,7 @@ def _klein_pack(
         lid = add_link(dec_id, 0, save_id, 0, "IMAGE")
         by_id[save_id]["inputs"][0]["link"] = lid
         dec_out.append(lid)
-        if i == 0:
+        if use_ref and i == 0:
             lid = add_link(dec_id, 0, 8, 0, "IMAGE")
             by_id[8]["inputs"][0]["link"] = lid
             dec_out.append(lid)
@@ -1756,31 +1781,31 @@ Prefixes `ez_tod_01`…`04`. Change only time of day.
         size=(768, 432),
         identity=identity,
         inventory=ROOFTOP_INVENTORY,
+        persist="view",
         shots=[
             (
                 "ez_angle_med",
                 "MEDIUM",
-                "Canonical plate. 35mm medium, wizard fills the middle third. YouTube 16:9.",
+                "35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9.",
             ),
             (
                 "ez_angle_wide",
                 "WIDE",
-                "Same rooftop and wizard. 24mm wide establishing, lots of city and sky.",
+                "24mm wide establishing of the same rooftop and wizard, lots of city and sky.",
             ),
             (
                 "ez_angle_close",
                 "CLOSE",
-                "Same rooftop and wizard. 50mm close on the data-staff, glyph rings, and coat materials.",
+                "50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials.",
             ),
         ],
         note=f"""## klein-camera-angles-lab-example
 
-Wide / medium / close of one subject (Klein 4B). SHOT MEDIUM is the identity plate. Queue the whole graph; wide and close Klein-edit from 01. Do not bypass MEDIUM on a cold canvas.
-Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Change only lens and framing.
+Wide / medium / close of one subject (Klein 4B, lock=view). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed, locked inventory — new lens and framing, not copies of MEDIUM.
 
-{ENHANCE_NOTE}
+Turn Enhance off on IDENTITY to pin the bible.
 """,
-        description="Klein 4B wide/medium/close angle pack",
+        description="Klein 4B wide/medium/close angle pack, new cameras",
     )
     _klein_pack(
         stem="klein-color-moods-lab-example",

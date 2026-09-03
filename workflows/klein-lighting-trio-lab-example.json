@@ -378,7 +378,8 @@
       },
       "widgets_values": [
         "Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9.",
-        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
+        "state"
       ],
       "title": "SHOT KEY"
     },
@@ -425,7 +426,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9."
       ],
       "title": "Positive KEY"
     },
@@ -598,7 +599,8 @@
       },
       "widgets_values": [
         "Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera.",
-        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
+        "state"
       ],
       "title": "SHOT WINDOW"
     },
@@ -645,7 +647,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera."
       ],
       "title": "Positive WINDOW"
     },
@@ -860,7 +862,8 @@
       },
       "widgets_values": [
         "Same rooftop and wizard at night under rooftop sodium and city neon. Same camera.",
-        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
+        "state"
       ],
       "title": "SHOT NIGHT LAMP"
     },
@@ -907,7 +910,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Same rooftop and wizard at night under rooftop sodium and city neon. Same camera."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard at night under rooftop sodium and city neon. Same camera."
       ],
       "title": "Positive NIGHT LAMP"
     },
