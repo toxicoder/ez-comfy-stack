@@ -22,9 +22,9 @@ KLEIN_NEG = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
 KLEIN_GOSEE = (
-    "First-person photoreal dawn travel still. An olive windbreaker and worn black "
-    "gloves stay in frame, hands visible against wet tar. Unmarked rooftops, empty "
-    "of signage. Identity lock for the whole short. No violence."
+    "First-person photoreal dawn running still. An olive windbreaker and worn black "
+    "gloves stay in frame, hands pumping at the edges as wet tar and unmarked rooftops "
+    "fill the view. Identity lock for the whole short. No violence."
 )
 KLEIN_STILLHERE = (
     "Third-person household morning still. A plain ceramic mug sits on a wooden table "
@@ -49,10 +49,10 @@ WAN_I2V = (
     "One continuous five-second take at 24 fps."
 )
 WAN_GOSEE_I2V = (
-    "First-person travel camera. Hands in an olive windbreaker and worn black gloves plant "
-    "on wet tar. Slow push toward the parapet; pigeons scatter. Vault the parapet. Parkour "
-    "is transportation. Keep the start-image identity locked. One continuous 5.00 second take "
-    "at 24 fps."
+    "First-person running camera. Olive windbreaker and worn black gloves; arms pump "
+    "at the edges of the frame. Dawn rooftop, pigeon scatter. Footfalls on wet tar. "
+    "Continuous forward run. Keep the start-image identity locked. One continuous "
+    "5.00 second take at 24 fps."
 )
 WAN_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, "
@@ -73,10 +73,10 @@ LTX_I2V = (
     "shop bell clinks once. The storefront and bicycle identity stay locked. No music and no score."
 )
 LTX_GOSEE_I2V = (
-    "The start image holds as the first frame. First-person travel camera as gloved hands plant "
-    "on wet tar at dawn. The view pushes toward the parapet while pigeons scatter, then vaults "
-    "it. Parkour is transportation. Breath sits close to the lens, wind in the hood, tar grit "
-    "under gloves. No score, no music, no licensed songs."
+    "The start image holds as the first frame. First-person running camera as gloved "
+    "hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, "
+    "pigeons scatter, continuous forward run. Breath sits close to the lens, wind in "
+    "the hood, tar grit under shoes. No score, no music, no licensed songs."
 )
 BLURB = (
     "Prompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. "
@@ -364,29 +364,27 @@ def ltx_t2v(path: Path) -> None:
 
 
 def main() -> None:
-    klein(WF / "still-draft-lab-example.json", KLEIN_STILL)
-    klein(WF / "still-hero-lab-example.json", KLEIN_STILL)
-    klein(WF / "still-studio-lab-example.json", KLEIN_STILL)
-    klein(WF / "shorts" / "go-see-90s-lab-example.json", KLEIN_GOSEE)
-    klein(WF / "shorts" / "still-here-90s-lab-example.json", KLEIN_STILLHERE)
-    klein(WF / "shorts" / "switchyard-90s-lab-example.json", KLEIN_SWITCHYARD)
-    wan_i2v(WF / "wan-i2v-draft-lab-example.json", WAN_I2V)
-    wan_i2v(WF / "wan-shot-lab-example.json", WAN_I2V)
-    wan_i2v(WF / "shorts" / "bridge-wan-lab-example.json", WAN_GOSEE_I2V)
-    wan_t2v(WF / "wan-t2v-draft-lab-example.json")
+    klein(WF / "klein-still-draft-lab-example.json", KLEIN_STILL)
+    klein(WF / "klein-still-hero-lab-example.json", KLEIN_STILL)
+    klein(WF / "shorts" / "film-go-see-90s-run-lab-example.json", KLEIN_GOSEE)
+    klein(WF / "shorts" / "film-still-here-90s-lab-example.json", KLEIN_STILLHERE)
+    klein(WF / "shorts" / "film-switchyard-90s-lab-example.json", KLEIN_SWITCHYARD)
+    wan_i2v(WF / "wan-i2v-5s-lab-example.json", WAN_I2V)
+    wan_i2v(WF / "wan-i2v-shot-lab-example.json", WAN_GOSEE_I2V)
+    wan_t2v(WF / "wan-t2v-5s-lab-example.json")
     ltx_i2v(
-        WF / "ltx-i2v-hero-lab-example.json",
+        WF / "ltx-i2v-5s-lab-example.json",
         LTX_I2V,
         "soft wind, distant footsteps, shop bell, no score",
         "Motion / prompt",
     )
     ltx_i2v(
-        WF / "shorts" / "bridge-ltx-lab-example.json",
+        WF / "ltx-i2v-shot-lab-example.json",
         LTX_GOSEE_I2V,
-        "breath close to the lens, wind in the hood, tar grit. No score, no music, no licensed songs.",
+        "breath close to the lens, wind in the hood, tar grit under shoes. No score, no music, no licensed songs.",
         "Motion + audio",
     )
-    ltx_t2v(WF / "ltx-t2v-hero-lab-example.json")
+    ltx_t2v(WF / "ltx-t2v-5s-lab-example.json")
     print("wired prompt-enhance nodes")
 
 

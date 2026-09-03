@@ -152,17 +152,18 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 
 | Graph | Notes |
 | --- | --- |
-| `still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
-| `still-hero-lab-example.json` | Same prompt/seed, 1280×720 |
-| `still-studio-lab-example.json` | DRAFT on, HERO bypassed |
-| `wan-i2v-draft-lab-example.json` | Wan 5B I2V ~5 s (121 @ 24 fps) |
-| `wan-t2v-draft-lab-example.json` | Wan 5B T2V ~5 s |
-| `wan-shot-lab-example.json` | One 5 s shot for concat-shots.sh |
-| `ltx-i2v-hero-lab-example.json` | LTX-2.5 I2V ~5 s with audio |
-| `ltx-t2v-hero-lab-example.json` | LTX-2.5 T2V ~5 s with audio |
-| `shorts/*-90s-lab-example.json` | Klein identity still + 18-shot map ([90s shorts](shorts.md)) |
-| `shorts/bridge-wan-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |
-| `shorts/bridge-ltx-lab-example.json` | 5.00 s LTX I2V print + last-frame SaveImage |
+| `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
+| `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×720 |
+| `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
+| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills, one identity |
+| `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |
+| `wan-t2v-5s-lab-example.json` | Wan 5B T2V smoke |
+| `wan-i2v-shot-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |
+| `wan-gif-loop-lab-example.json` | Ping-pong GIF, 49 @ 12 fps |
+| `ltx-i2v-5s-lab-example.json` | LTX-2.5 I2V ~5 s with audio (121) |
+| `ltx-t2v-5s-lab-example.json` | LTX-2.5 T2V ~5 s with audio |
+| `ltx-i2v-shot-lab-example.json` | 5.00 s LTX I2V print + last-frame SaveImage |
+| `shorts/film-*-90s-*-lab-example.json` | Klein identity still + 18-shot map ([90s shorts](shorts.md)) |
 
 Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. They still **must** wire the audio VAE because LTX is a joint AV model.
 

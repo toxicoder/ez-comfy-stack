@@ -292,6 +292,7 @@ cmd_doctor() {
   log "ltx status: ${ltx_json}"
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
+  warn_banned_minimax_weights "${MODELS_DIR}"
   log "License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md"
   if [[ ! -f $(lab_compose_file) ]]; then
     err "compose file missing: $(lab_compose_file)"

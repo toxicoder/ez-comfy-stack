@@ -1,5 +1,5 @@
 {
-  "id": "dream-house-lab-example",
+  "id": "klein-dream-house-lab-example",
   "revision": 1,
   "last_node_id": 59,
   "last_link_id": 101,
@@ -291,7 +291,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset. All ten on is the carousel pack.\nDo not restyle the identity per shot \u2014 change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n"
+        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset. All ten on is the carousel pack.\nDo not restyle the identity per shot — change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n"
       ],
       "title": "Operator note"
     },
@@ -3446,9 +3446,9 @@
   ],
   "config": {},
   "extra": {
-    "lab_profile": "dream-house-lab-example",
+    "lab_profile": "klein-dream-house-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset. All ten on is the carousel pack.\nDo not restyle the identity per shot \u2014 change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n",
+    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset. All ten on is the carousel pack.\nDo not restyle the identity per shot — change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n",
     "lab_description": "Ten Instagram 4:5 Klein stills of one lake house",
     "ds": {
       "scale": 1,

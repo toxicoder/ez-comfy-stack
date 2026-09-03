@@ -1,8 +1,8 @@
 {
-  "id": "bridge-ltx-lab-example",
+  "id": "ltx-i2v-5s-lab-example",
   "revision": 7,
-  "last_node_id": 21,
-  "last_link_id": 28,
+  "last_node_id": 19,
+  "last_link_id": 26,
   "nodes": [
     {
       "id": 1,
@@ -171,7 +171,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "link": 28,
+          "link": 26,
           "widget": {
             "name": "text"
           }
@@ -191,9 +191,9 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. First-person travel camera as gloved hands plant on wet tar at dawn. The view pushes toward the parapet while pigeons scatter, then vaults it. Parkour is transportation. Breath sits close to the lens, wind in the hood, tar grit under gloves. No score, no music, no licensed songs."
+        "The start image holds as the first frame. The camera dollies in slowly toward the bicycle while leaves and a shop flag stir in a light breeze and a pedestrian crosses in the background. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. The storefront and bicycle identity stay locked. No music and no score."
       ],
-      "title": "Motion + audio"
+      "title": "Motion / prompt"
     },
     {
       "id": 6,
@@ -296,14 +296,14 @@
           "slot_index": 2
         }
       ],
-      "title": "LTX Img\u2192Video condition",
+      "title": "LTX Img→Video condition",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
       "widgets_values": [
         1280,
         720,
-        120,
+        121,
         1
       ]
     },
@@ -451,8 +451,7 @@
           "type": "IMAGE",
           "links": [
             18,
-            25,
-            26
+            25
           ],
           "slot_index": 0
         }
@@ -489,7 +488,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_ltx_frames"
+        "ez_ltx_hero_frames"
       ],
       "title": "Save frames"
     },
@@ -561,7 +560,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        120,
+        121,
         24.0,
         1
       ],
@@ -661,7 +660,7 @@
       ],
       "size": [
         960,
-        420
+        360
       ],
       "flags": {},
       "order": 17,
@@ -672,9 +671,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## shorts bridge \u2014 LTX print (5.00s AV)\n\nDeliverable clip for concat. LTX Community License (not Apache): under 10M company USD, disclose AI, no distill, no US geo-ban.\nModels: ltx-2.5 distilled INT8-convrot + gemma4-with-proj (CLIP ltxv) + 2.5 video/audio VAEs.\n120 frames @ 24 fps = 5.00s. Paste motion+audio from the shot bible. Same LoadImage as the Wan draft.\nVHS prefix ez_<slug>_bN_sM_ltx_video. Last-frame prefix ez_<slug>_bN_sM_last for the next shot.\nNo score \u2014 breath and world objects only. Then concat-shots.sh --film \u2026 --yes (cap 90s).\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## ltx-i2v-5s-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License — not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps ≈ 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT — MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
-      "title": "Operator note"
+      "title": "Operator note — video output"
     },
     {
       "id": 18,
@@ -729,7 +728,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_gosee_b1_s1_ltx_video",
+        "filename_prefix": "ez_ltx_hero_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -742,77 +741,6 @@
     },
     {
       "id": 19,
-      "type": "ImageFromBatch",
-      "pos": [
-        2980,
-        560
-      ],
-      "size": [
-        240,
-        80
-      ],
-      "flags": {},
-      "order": 50,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 26
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            27
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "ImageFromBatch",
-        "cnr_id": "comfy-core"
-      },
-      "widgets_values": [
-        119,
-        1
-      ],
-      "title": "Last frame"
-    },
-    {
-      "id": 20,
-      "type": "SaveImage",
-      "pos": [
-        2980,
-        680
-      ],
-      "size": [
-        280,
-        270
-      ],
-      "flags": {},
-      "order": 51,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 27
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "SaveImage"
-      },
-      "widgets_values": [
-        "ez_gosee_b1_s1_last"
-      ],
-      "title": "Save last frame"
-    },
-    {
-      "id": 21,
       "type": "EZLTXPromptEnhance",
       "pos": [
         620,
@@ -831,7 +759,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            28
+            26
           ],
           "slot_index": 0
         }
@@ -840,11 +768,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. First-person travel camera as gloved hands plant on wet tar at dawn. The view pushes toward the parapet while pigeons scatter, then vaults it. Parkour is transportation. Breath sits close to the lens, wind in the hood, tar grit under gloves. No score, no music, no licensed songs.",
+        "The start image holds as the first frame. The camera dollies in slowly toward the bicycle while leaves and a shop flag stir in a light breeze and a pedestrian crosses in the background. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. The storefront and bicycle identity stay locked. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
-        "breath close to the lens, wind in the hood, tar grit. No score, no music, no licensed songs."
+        "soft wind, distant footsteps, shop bell, no score"
       ],
       "title": "LTX Prompt Enhance"
     }
@@ -1012,23 +940,7 @@
     ],
     [
       26,
-      10,
-      0,
       19,
-      0,
-      "IMAGE"
-    ],
-    [
-      27,
-      19,
-      0,
-      20,
-      0,
-      "IMAGE"
-    ],
-    [
-      28,
-      21,
       0,
       5,
       1,
@@ -1038,11 +950,11 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "bridge-ltx",
+    "lab_profile": "ltx-i2v-5s-lab-example",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## shorts bridge \u2014 LTX print (5.00s AV)\n\nDeliverable clip for concat. LTX Community License (not Apache): under 10M company USD, disclose AI, no distill, no US geo-ban.\nModels: ltx-2.5 distilled INT8-convrot + gemma4-with-proj (CLIP ltxv) + 2.5 video/audio VAEs.\n120 frames @ 24 fps = 5.00s. Paste motion+audio from the shot bible. Same LoadImage as the Wan draft.\nVHS prefix ez_<slug>_bN_sM_ltx_video. Last-frame prefix ez_<slug>_bN_sM_last for the next shot.\nNo score \u2014 breath and world objects only. Then concat-shots.sh --film \u2026 --yes (cap 90s).\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_note": "## ltx-i2v-5s-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License — not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps ≈ 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT — MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
     "lab_ltx_av": true,
-    "lab_description": "Image\u2192video (~10 s) from Comfy **example.png** (sketch\u2192living character). Swap LoadImage for your still anytime."
+    "lab_description": "Image→video (~10 s) from Comfy **example.png** (sketch→living character). Swap LoadImage for your still anytime."
   },
   "version": 0.4
 }

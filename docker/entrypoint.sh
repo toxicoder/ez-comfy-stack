@@ -263,7 +263,7 @@ configure_torch_native_triton() {
 
 #######################################
 # Copy host lab JSON graphs into Comfy user workflows.
-# Includes top-level *.json and shorts/*.json (90s film bibles + bridges).
+# Includes top-level *.json and shorts/*.json (90s film bibles).
 # Globals:
 #   None
 # Arguments:

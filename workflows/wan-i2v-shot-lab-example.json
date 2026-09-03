@@ -1,8 +1,8 @@
 {
-  "id": "wan-t2v-draft-lab-example",
+  "id": "wan-i2v-shot-lab-example",
   "revision": 2,
-  "last_node_id": 15,
-  "last_link_id": 16,
+  "last_node_id": 17,
+  "last_link_id": 18,
   "nodes": [
     {
       "id": 1,
@@ -124,7 +124,7 @@
       ],
       "flags": {},
       "order": 3,
-      "mode": 4,
+      "mode": 0,
       "inputs": [],
       "outputs": [
         {
@@ -175,7 +175,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "link": 16,
+          "link": 18,
           "widget": {
             "name": "text"
           }
@@ -196,9 +196,9 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "A red bicycle leans against a brick storefront on a small-town main street at golden hour, unmarked facades empty of signage. Warm sidelight rakes the brick and chrome. Leaves and a shop flag stir slowly in a light breeze while a pedestrian crosses the street in the far background. The camera dollies in slowly toward the bicycle over five seconds. Photoreal cinematic motion, 24mm, shallow depth of field, YouTube 16:9."
+        "First-person running camera. Olive windbreaker and worn black gloves; arms pump at the edges of the frame. Dawn rooftop, pigeon scatter. Footfalls on wet tar. Continuous forward run. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps."
       ],
-      "title": "Positive"
+      "title": "Motion / prompt"
     },
     {
       "id": 7,
@@ -264,7 +264,7 @@
           "name": "start_image",
           "shape": 7,
           "type": "IMAGE",
-          "link": null
+          "link": 6
         }
       ],
       "outputs": [
@@ -284,7 +284,7 @@
       "widgets_values": [
         832,
         480,
-        121,
+        120,
         1
       ],
       "title": "Video size & length"
@@ -352,7 +352,7 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": null
+          "link": 8
         },
         {
           "name": "negative",
@@ -422,7 +422,8 @@
           "type": "IMAGE",
           "links": [
             13,
-            14
+            14,
+            16
           ],
           "slot_index": 0
         }
@@ -460,7 +461,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_wan_t2v_frames"
+        "ez_gosee_b1_s1_wan_frames"
       ],
       "title": "Save frames"
     },
@@ -517,7 +518,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_wan_t2v_video",
+        "filename_prefix": "ez_gosee_b1_s1_wan_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -537,7 +538,7 @@
       ],
       "size": [
         960,
-        320
+        420
       ],
       "flags": {},
       "order": 13,
@@ -548,12 +549,83 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-t2v-draft-lab-example\n\nWan 2.2 TI2V-5B Apache 2.0 silent motion (~5 s @ 24 fps).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nWidgets: seed 42 fixed \u00b7 121 frames \u00b7 832x480 \u00b7 24 fps. Denoise 1.0.\nLook prompt vs motion prompt: edit Motion / prompt for camera; keep look identity from the still.\nLoadImage default example.png so Queue works; after still-draft set ez_still_draft_00001_.png.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. copy prompt + seed from draft, do not restyle here.\nFor a short film: Queue this six times with prefix ez_shot_01..06 then concat-shots.sh.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## wan-i2v-shot-lab-example\n\nUS-safe 5.00s silent I2V shot (120 frames @ 24 fps) with last-frame SaveImage.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n\n90s films: open a film-*-90s bible, copy shot N motion, set LoadImage to the previous last PNG, set VHS prefix ez_<slug>_bN_sM_wan_video and last-frame SaveImage ez_<slug>_bN_sM_last. Queue 5.00s silent. Then Queue ltx-i2v-shot-lab-example with the SAME first frame.\n\nSix-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then ./scripts/utilities/concat-shots.sh --yes\n\nDo not Queue 90s in one graph. US-safe local pack only. No score.\nPrompt enhance: leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
     {
       "id": 15,
+      "type": "ImageFromBatch",
+      "pos": [
+        2420,
+        560
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 50,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            17
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        119,
+        1
+      ],
+      "title": "Last frame"
+    },
+    {
+      "id": 16,
+      "type": "SaveImage",
+      "pos": [
+        2420,
+        680
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 51,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 17
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_gosee_b1_s1_last"
+      ],
+      "title": "Save last frame"
+    },
+    {
+      "id": 17,
       "type": "EZWanPromptEnhance",
       "pos": [
         480,
@@ -572,7 +644,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            16
+            18
           ],
           "slot_index": 0
         }
@@ -581,9 +653,9 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "A red bicycle leans against a brick storefront on a small-town main street at golden hour, unmarked facades empty of signage. Warm sidelight rakes the brick and chrome. Leaves and a shop flag stir slowly in a light breeze while a pedestrian crosses the street in the far background. The camera dollies in slowly toward the bicycle over five seconds. Photoreal cinematic motion, 24mm, shallow depth of field, YouTube 16:9.",
+        "First-person running camera. Olive windbreaker and worn black gloves; arms pump at the edges of the frame. Dawn rooftop, pigeon scatter. Footfalls on wet tar. Continuous forward run. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps.",
         false,
-        "t2v",
+        "i2v",
         "5 seconds, 24 fps"
       ],
       "title": "Wan Prompt Enhance"
@@ -696,7 +768,23 @@
     ],
     [
       16,
+      11,
+      0,
       15,
+      0,
+      "IMAGE"
+    ],
+    [
+      17,
+      15,
+      0,
+      16,
+      0,
+      "IMAGE"
+    ],
+    [
+      18,
+      17,
       0,
       6,
       1,
@@ -706,25 +794,12 @@
   "groups": [
     {
       "id": 1,
-      "title": "Load models",
+      "title": "DRAFT Wan 5s",
       "bounding": [
         20,
-        40,
-        400,
-        430
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 2,
-      "title": "For i2v, LoadImage enabled (bypass for t2v)",
-      "bounding": [
         20,
-        480,
-        400,
-        380
+        2760,
+        1300
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -733,8 +808,8 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-t2v-draft-lab-example\n\nWan 2.2 TI2V-5B Apache 2.0 silent motion (~5 s @ 24 fps).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nWidgets: seed 42 fixed \u00b7 121 frames \u00b7 832x480 \u00b7 24 fps. Denoise 1.0.\nLook prompt vs motion prompt: edit Motion / prompt for camera; keep look identity from the still.\nLoadImage default example.png so Queue works; after still-draft set ez_still_draft_00001_.png.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. copy prompt + seed from draft, do not restyle here.\nFor a short film: Queue this six times with prefix ez_shot_01..06 then concat-shots.sh.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
-    "lab_profile": "wan-t2v-draft-lab-example",
+    "lab_note": "## wan-i2v-shot-lab-example\n\nUS-safe 5.00s silent I2V shot (120 frames @ 24 fps) with last-frame SaveImage.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n\n90s films: open a film-*-90s bible, copy shot N motion, set LoadImage to the previous last PNG, set VHS prefix ez_<slug>_bN_sM_wan_video and last-frame SaveImage ez_<slug>_bN_sM_last. Queue 5.00s silent. Then Queue ltx-i2v-shot-lab-example with the SAME first frame.\n\nSix-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then ./scripts/utilities/concat-shots.sh --yes\n\nDo not Queue 90s in one graph. US-safe local pack only. No score.\nPrompt enhance: leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_profile": "wan-i2v-shot-lab-example",
     "lab_description": "Wan 2.2 5B 5s",
     "ds": {
       "scale": 1,

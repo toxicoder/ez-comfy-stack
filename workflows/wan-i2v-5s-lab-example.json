@@ -1,5 +1,5 @@
 {
-  "id": "wan-shot-lab-example",
+  "id": "wan-i2v-5s-lab-example",
   "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
@@ -460,7 +460,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_shot_01_frames"
+        "ez_wan_draft_frames"
       ],
       "title": "Save frames"
     },
@@ -517,7 +517,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_shot_01_video",
+        "filename_prefix": "ez_wan_draft_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -548,7 +548,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-shot-lab-example\n\nWan 2.2 TI2V-5B Apache 2.0 silent motion (~5 s @ 24 fps).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nWidgets: seed 42 fixed \u00b7 121 frames \u00b7 832x480 \u00b7 24 fps. Denoise 1.0.\nLook prompt vs motion prompt: edit Motion / prompt for camera; keep look identity from the still.\nLoadImage default example.png so Queue works; after still-draft set ez_still_draft_00001_.png.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. copy prompt + seed from draft, do not restyle here.\nFor a short film: Queue this six times with prefix ez_shot_01..06 then concat-shots.sh.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## wan-i2v-5s-lab-example\n\nWan 2.2 TI2V-5B Apache 2.0 silent motion (~5 s @ 24 fps).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nWidgets: seed 42 fixed · 121 frames · 832x480 · 24 fps. Denoise 1.0.\nLook prompt vs motion prompt: edit Motion / prompt for camera; keep look identity from the still.\nLoadImage default example.png so Queue works; after still-draft set ez_still_draft_00001_.png.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. copy prompt + seed from draft, do not restyle here.\nFor a short film: Queue this six times with prefix ez_shot_01..06 then concat-shots.sh.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
@@ -733,8 +733,8 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-shot-lab-example\n\nWan 2.2 TI2V-5B Apache 2.0 silent motion (~5 s @ 24 fps).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nWidgets: seed 42 fixed \u00b7 121 frames \u00b7 832x480 \u00b7 24 fps. Denoise 1.0.\nLook prompt vs motion prompt: edit Motion / prompt for camera; keep look identity from the still.\nLoadImage default example.png so Queue works; after still-draft set ez_still_draft_00001_.png.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. copy prompt + seed from draft, do not restyle here.\nFor a short film: Queue this six times with prefix ez_shot_01..06 then concat-shots.sh.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
-    "lab_profile": "wan-shot-lab-example",
+    "lab_note": "## wan-i2v-5s-lab-example\n\nWan 2.2 TI2V-5B Apache 2.0 silent motion (~5 s @ 24 fps).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nWidgets: seed 42 fixed · 121 frames · 832x480 · 24 fps. Denoise 1.0.\nLook prompt vs motion prompt: edit Motion / prompt for camera; keep look identity from the still.\nLoadImage default example.png so Queue works; after still-draft set ez_still_draft_00001_.png.\nPRIMARY OUTPUT: VHS_VideoCombine MP4 24 fps. copy prompt + seed from draft, do not restyle here.\nFor a short film: Queue this six times with prefix ez_shot_01..06 then concat-shots.sh.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_profile": "wan-i2v-5s-lab-example",
     "lab_description": "Wan 2.2 5B 5s",
     "ds": {
       "scale": 1,

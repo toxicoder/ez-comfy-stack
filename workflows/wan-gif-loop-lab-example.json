@@ -1,8 +1,8 @@
 {
-  "id": "bridge-wan-lab-example",
-  "revision": 2,
-  "last_node_id": 17,
-  "last_link_id": 18,
+  "id": "wan-gif-loop-lab-example",
+  "revision": 1,
+  "last_node_id": 15,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
@@ -175,7 +175,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "link": 18,
+          "link": 16,
           "widget": {
             "name": "text"
           }
@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "First-person travel camera. Hands in an olive windbreaker and worn black gloves plant on wet tar. Slow push toward the parapet; pigeons scatter. Vault the parapet. Parkour is transportation. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps."
+        "Locked camera. A light breeze moves leaves and a thin curtain. Water and fabric drift, then settle. Keep the start-image identity locked. Gentle cyclic motion for a looping GIF."
       ],
       "title": "Motion / prompt"
     },
@@ -284,10 +284,10 @@
       "widgets_values": [
         832,
         480,
-        120,
+        49,
         1
       ],
-      "title": "Video size & length"
+      "title": "GIF size and length (49 frames)"
     },
     {
       "id": 9,
@@ -422,8 +422,7 @@
           "type": "IMAGE",
           "links": [
             13,
-            14,
-            16
+            14
           ],
           "slot_index": 0
         }
@@ -461,7 +460,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_wan_frames"
+        "ez_gif_loop_frames"
       ],
       "title": "Save frames"
     },
@@ -516,18 +515,18 @@
         "Node name for S&R": "VHS_VideoCombine"
       },
       "widgets_values": {
-        "frame_rate": 24,
+        "frame_rate": 12,
         "loop_count": 0,
-        "filename_prefix": "ez_gosee_b1_s1_wan_video",
-        "format": "video/h264-mp4",
+        "filename_prefix": "ez_gif_loop",
+        "format": "image/gif",
         "pix_fmt": "yuv420p",
         "crf": 18,
         "save_metadata": true,
         "trim_to_audio": false,
-        "pingpong": false,
+        "pingpong": true,
         "save_output": true
       },
-      "title": "Save video (MP4)"
+      "title": "Infinite loop (ping-pong)"
     },
     {
       "id": 14,
@@ -538,7 +537,7 @@
       ],
       "size": [
         960,
-        420
+        320
       ],
       "flags": {},
       "order": 13,
@@ -549,83 +548,12 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## shorts bridge \u2014 Wan draft (5.00s)\n\nUS-safe 90s shorts: 18\u00d7120 frames @ 24 fps. This graph is ONE micro-shot.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n1. Open the film bible (go-see-90s / still-here-90s / switchyard-90s) and copy shot N motion.\n2. Set LoadImage to example.png (smoke) or the previous ez_<film>_bN_sM_last PNG.\n3. Set VHS prefix to ez_<slug>_bN_sM_wan_video and last-frame SaveImage to ez_<slug>_bN_sM_last.\n4. Queue. Approve. Then Queue bridge-ltx with the SAME first frame for the print+audio.\n5. After 18 LTX prints: ./scripts/utilities/concat-shots.sh --film go-see --yes\nDo not Queue 90s in one graph. US-safe local pack only. No score.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## wan-gif-loop-lab-example\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse — first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
     {
       "id": 15,
-      "type": "ImageFromBatch",
-      "pos": [
-        2420,
-        560
-      ],
-      "size": [
-        240,
-        80
-      ],
-      "flags": {},
-      "order": 50,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 16
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            17
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "ImageFromBatch",
-        "cnr_id": "comfy-core"
-      },
-      "widgets_values": [
-        119,
-        1
-      ],
-      "title": "Last frame"
-    },
-    {
-      "id": 16,
-      "type": "SaveImage",
-      "pos": [
-        2420,
-        680
-      ],
-      "size": [
-        280,
-        270
-      ],
-      "flags": {},
-      "order": 51,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 17
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "SaveImage"
-      },
-      "widgets_values": [
-        "ez_gosee_b1_s1_last"
-      ],
-      "title": "Save last frame"
-    },
-    {
-      "id": 17,
       "type": "EZWanPromptEnhance",
       "pos": [
         480,
@@ -644,7 +572,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            18
+            16
           ],
           "slot_index": 0
         }
@@ -653,10 +581,10 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "First-person travel camera. Hands in an olive windbreaker and worn black gloves plant on wet tar. Slow push toward the parapet; pigeons scatter. Vault the parapet. Parkour is transportation. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps.",
+        "Locked camera. A light breeze moves leaves and a thin curtain. Water and fabric drift, then settle. Keep the start-image identity locked. Gentle cyclic motion for a looping GIF.",
         false,
         "i2v",
-        "5 seconds, 24 fps"
+        "4 seconds, 12 fps, looping GIF"
       ],
       "title": "Wan Prompt Enhance"
     }
@@ -768,23 +696,7 @@
     ],
     [
       16,
-      11,
-      0,
       15,
-      0,
-      "IMAGE"
-    ],
-    [
-      17,
-      15,
-      0,
-      16,
-      0,
-      "IMAGE"
-    ],
-    [
-      18,
-      17,
       0,
       6,
       1,
@@ -794,12 +706,51 @@
   "groups": [
     {
       "id": 1,
-      "title": "DRAFT Wan 5s",
+      "title": "Load models",
       "bounding": [
         20,
+        40,
+        400,
+        430
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "For i2v, LoadImage enabled (bypass for t2v)",
+      "bounding": [
         20,
-        2760,
-        1300
+        480,
+        400,
+        380
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "SETTINGS",
+      "bounding": [
+        1400,
+        40,
+        640,
+        660
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "OUTPUT",
+      "bounding": [
+        2400,
+        40,
+        360,
+        480
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -808,9 +759,9 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## shorts bridge \u2014 Wan draft (5.00s)\n\nUS-safe 90s shorts: 18\u00d7120 frames @ 24 fps. This graph is ONE micro-shot.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n1. Open the film bible (go-see-90s / still-here-90s / switchyard-90s) and copy shot N motion.\n2. Set LoadImage to example.png (smoke) or the previous ez_<film>_bN_sM_last PNG.\n3. Set VHS prefix to ez_<slug>_bN_sM_wan_video and last-frame SaveImage to ez_<slug>_bN_sM_last.\n4. Queue. Approve. Then Queue bridge-ltx with the SAME first frame for the print+audio.\n5. After 18 LTX prints: ./scripts/utilities/concat-shots.sh --film go-see --yes\nDo not Queue 90s in one graph. US-safe local pack only. No score.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
-    "lab_profile": "bridge-wan",
-    "lab_description": "Wan 2.2 5B 5s",
+    "lab_note": "## wan-gif-loop-lab-example\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse — first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_profile": "wan-gif-loop-lab-example",
+    "lab_description": "Wan 5B looping GIF 49 frames ping-pong",
     "ds": {
       "scale": 1,
       "offset": [

@@ -74,7 +74,7 @@ Three UIs (replace hostnames from `SPARK_COMFY_URLS`):
 # http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188
 ```
 
-On each UI, load **bridge-wan-lab-example** / **bridge-ltx-lab-example** (or **wan-shot-lab-example**) and **Queue** independent **5 s** shots — different beats in parallel for the 90s films. Concat locally:
+On each UI, load **wan-i2v-shot-lab-example** / **ltx-i2v-shot-lab-example** and **Queue** independent **5 s** shots — different beats in parallel for the 90s films. Concat locally:
 
 ```bash
 FILM=go-see   # or still-here | switchyard
@@ -85,7 +85,7 @@ See [90s shorts](shorts.md). MiniMax H3 films are banned (see [licenses](license
 
 `spark-farm.sh` **never** starts compose remotely. It prints the exact `./scripts/manage.sh start` you must run locally (heavy confirm stays on that node). Containers still use `restart: "no"`.
 
-The `run` subcommand only prints a **wan-shot** Queue reminder. It does **not** POST graphs, and it refuses the 90s film names (`go-see` / `still-here` / `switchyard`). Use the manual Queue path above.
+The `run` subcommand prints a **wan-i2v-shot / ltx-i2v-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
 
 Memory: keep `MEM_LIMIT=90g`, `MEM_RESERVATION=80g`, `MIN_HOST_FREE_GIB=28`, `shm_size: 16gb`.
 
@@ -94,4 +94,5 @@ Memory: keep `MEM_LIMIT=90g`, `MEM_RESERVATION=80g`, `MIN_HOST_FREE_GIB=28`, `sh
 ```bash
 ./scripts/utilities/spark-farm.sh status [--json]
 ./scripts/utilities/spark-farm.sh sync-models
+./scripts/utilities/spark-farm.sh run --film go-see
 ```

@@ -158,7 +158,7 @@ flowchart TB
 | **How to prompt Klein / Wan / LTX** | [Prompting](prompting.md) |
 | **Licenses before a 30 GB pull** | [Model licenses](licenses.md) |
 | **Still → silent 5 s → AV 5 s** | [Visual Generative AI](visual-generative-ai.md) |
-| **90s films (go-see / still-here / switchyard)** | [90s shorts](shorts.md) |
+| **90s films (first-person running go-see / still-here / switchyard)** | [90s shorts](shorts.md) |
 | **Three Sparks, one weight copy** | [Spark farm](spark-farm.md) |
 | **Weights, cache, image pins** | [Models & Cache](models-and-cache.md) |
 | **Throttled downloads** | [Download Limit](download-limit.md) |

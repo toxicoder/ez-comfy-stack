@@ -22,7 +22,7 @@ tags: [comfyui, klein, wan, ltx, visual]
 
 !!! tip "First run?"
 
-    For install and first UI open, use [Getting Started](getting-started.md). This page is the **studio playbook** after `still-draft-lab-example` has queued once.
+    For install and first UI open, use [Getting Started](getting-started.md). This page is the **studio playbook** after `klein-still-draft-lab-example` has queued once.
 
 ---
 
@@ -93,7 +93,7 @@ flowchart LR
   LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff:** load **still-draft-lab-example** → Queue → set **wan-i2v-draft-lab-example** LoadImage to `ez_still_draft_*.png` → Queue ~5 s silent → optional **ltx-i2v-hero-lab-example** for native audio. I2V graphs also Queue on Comfy’s default **example.png**.
+**Handoff:** load **klein-still-draft-lab-example** → Queue → set **wan-i2v-5s-lab-example** LoadImage to `ez_still_draft_*.png` → Queue ~5 s silent → optional **ltx-i2v-5s-lab-example** for native audio. I2V graphs also Queue on Comfy’s default **example.png**.
 
 LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, and concat them with video latents before `KSampler`. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
@@ -115,40 +115,41 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     | Workflow | What it does |
     | --- | --- |
-    | **still-draft-lab-example** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
-    | **still-hero-lab-example** | Same prompt + seed, **1280×720**, more steps, prefix `ez_still_hero` |
-    | **still-studio-lab-example** | DRAFT group on, HERO bypassed — un-bypass after you like the draft |
+    | **klein-still-draft-lab-example** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
+    | **klein-still-hero-lab-example** | Same prompt + seed, **1280×720**, more steps, prefix `ez_still_hero` |
 
 === "Motion (Wan 2.2 5B)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **wan-i2v-draft-lab-example** | 5 s I2V from `example.png` / draft still, 832×480, 121 frames, silent Apache |
-    | **wan-t2v-draft-lab-example** | 5 s T2V (LoadImage bypassed) |
-    | **wan-shot-lab-example** | One 5 s shot, prefix `ez_shot_01` — Queue 01–06 then concat |
+    | **wan-i2v-5s-lab-example** | Silent I2V smoke, 832×480, **121** frames @ 24 fps |
+    | **wan-t2v-5s-lab-example** | Silent T2V smoke, 121 frames (LoadImage bypassed) |
+    | **wan-i2v-shot-lab-example** | Concat-safe **120** frames + last-frame SaveImage. 90s shots, or prefix `ez_shot_01..06` |
 
 === "AV hero (LTX-2.5)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **ltx-i2v-hero-lab-example** | ~5 s I2V with native audio (Community License, $10M cap) |
-    | **ltx-t2v-hero-lab-example** | ~5 s T2V AV |
+    | **ltx-i2v-5s-lab-example** | ~5 s I2V with native audio (Community License, $10M cap) |
+    | **ltx-t2v-5s-lab-example** | ~5 s T2V AV |
 
 === "Apps (still / GIF / IG)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **still-app-lab-example** | Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix `ez_still_app` |
-    | **gif-loop-lab-example** | Wan 5B I2V GIF (49 frames @ 12 fps). **Ping-pong ON** so first and last frames meet for infinite looping. Prefix `ez_gif_loop` |
-    | **dream-house-lab-example** | Ten Instagram 4:5 stills of one lake house. Edit **HOUSE IDENTITY** once; Queue writes `ez_dream_house_01`…`10` |
+    | **klein-still-daily-lab-example** | Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix `ez_still_app` |
+    | **wan-gif-loop-lab-example** | Wan 5B I2V GIF (49 frames @ 12 fps). **Ping-pong ON** so first and last frames meet for infinite looping. Prefix `ez_gif_loop` |
+    | **klein-dream-house-lab-example** | Ten Instagram 4:5 stills of one lake house. Edit **HOUSE IDENTITY** once; Queue writes `ez_dream_house_01`…`10` |
 
 === "90s shorts"
 
     | Workflow | What it does |
     | --- | --- |
-    | **go-see-90s / still-here-90s / switchyard-90s** | Klein identity still + 18-shot map (`workflows/shorts/`) |
-    | **bridge-wan-lab-example** | One 5.00 s silent I2V (120 frames); last-frame SaveImage |
-    | **bridge-ltx-lab-example** | One 5.00 s AV print; concat uses these MP4s |
+    | **film-go-see-90s-run-lab-example** | First-person **running** 90s bible (Klein identity + 18-shot map) |
+    | **film-still-here-90s-lab-example** | Household morning 90s bible |
+    | **film-switchyard-90s-lab-example** | Night freight-yard 90s bible |
+    | **wan-i2v-shot-lab-example** | One 5.00 s silent I2V (120 frames) + last-frame SaveImage |
+    | **ltx-i2v-shot-lab-example** | One 5.00 s AV print; concat uses these MP4s |
 
     Full loop: [90s shorts](shorts.md).
 
@@ -156,9 +157,9 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).
 
-Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; **gif-loop-lab-example** emits `image/gif`.
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; **wan-gif-loop-lab-example** emits `image/gif`.
 
-Optional Wan A14B is a **placeholder note** only (`workflows/optional/wan-i2v-a14b-hero-lab-example.json`) — download `download-wan.sh run --tier a14b` first; it is not a Queue graph.
+Optional Wan A14B is a **placeholder note** only (`workflows/optional/wan-i2v-a14b-lab-example.json`) — download `download-wan.sh run --tier a14b` first; it is not a Queue graph.
 
 ---
 
@@ -166,11 +167,11 @@ Optional Wan A14B is a **placeholder note** only (`workflows/optional/wan-i2v-a1
 
 Do **not** edit raw JSON. Change widgets on the canvas.
 
-1. Load **still-draft-lab-example** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
+1. Load **klein-still-draft-lab-example** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
-3. Load **wan-i2v-draft-lab-example** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
-4. Optional audio: **ltx-i2v-hero-lab-example**, same first frame, same seed note, Queue ~5 s AV.
-5. Short six-shot demo: Queue **wan-shot-lab-example** six times (`ez_shot_01` … `06`) then:
+3. Load **wan-i2v-5s-lab-example** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
+4. Optional audio: **ltx-i2v-5s-lab-example**, same first frame, same seed note, Queue ~5 s AV.
+5. Short six-shot demo: Queue **wan-i2v-shot-lab-example** six times (`ez_shot_01` … `06`) then:
 
     ```bash
     ./scripts/utilities/concat-shots.sh --yes
@@ -178,7 +179,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     ```
 
 6. **90s films** (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then concat with `--film`. See [90s shorts](shorts.md).
-7. Daily still / GIF / IG pack: **still-app-lab-example** → optional **gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **dream-house-lab-example** for a 10-photo carousel.
+7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel.
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes.
 
@@ -197,8 +198,8 @@ ls "${COMFY_OUTPUT_DIR}"/ez_ltx_*_video_*.mp4
 
 | Graph | Frames | FPS | ≈ duration |
 | --- | --- | --- | --- |
-| `wan-*-lab-example` / `ltx-*-lab-example` | 121 | 24 | ~5.04 s |
-| `workflows/shorts/bridge-*-lab-example` | 120 | 24 | **5.00 s** |
+| `wan-i2v-5s` / `wan-t2v-5s` / `ltx-*-5s` | 121 | 24 | ~5.04 s |
+| `wan-i2v-shot` / `ltx-i2v-shot` | 120 | 24 | **5.00 s** |
 | 90s film (18 LTX prints + concat) | — | 24 | **90.00 s** cap |
 
 !!! warning "Do not Queue 30 s / 60 s / 90 s in one graph"

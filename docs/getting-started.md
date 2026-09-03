@@ -29,7 +29,7 @@ tags: [getting-started, docker, comfyui]
 | Goal | Detail |
 | --- | --- |
 | **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` |
-| **Workflow** | **still-draft-lab-example** queued without missing-weight errors |
+| **Workflow** | **klein-still-draft-lab-example** queued without missing-weight errors |
 | **Weights** | Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under `${MODELS_DIR}` (default `/mnt/models`) |
 | **Output** | `ez_still_draft_*.png` under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 
@@ -62,7 +62,7 @@ Later command blocks assume these exports. After `setup`, the same keys live in 
 4. **Accept LTX-2.5** on Hugging Face (gated) and set `HF_TOKEN`
 5. **`download-models`** — Klein 4B + Wan 5B + LTX-2.5 (throttled)
 6. **`start`** — type `yes`, then open the UI
-7. **Queue still-draft-lab-example**
+7. **Queue klein-still-draft-lab-example**
 8. **`stop`** — always, before reboot
 
 ```bash
@@ -259,7 +259,7 @@ hf auth whoami
 
     That deletes `*.incomplete` (finished weights stay) and re-pulls. See [Models & Cache](models-and-cache.md#resume-cache).
 
-If Comfy shows **Missing Models** on **still-draft-lab-example**, re-run download and `doctor`. Full cache layout: [Models & Cache](models-and-cache.md).
+If Comfy shows **Missing Models** on **klein-still-draft-lab-example**, re-run download and `doctor`. Full cache layout: [Models & Cache](models-and-cache.md).
 
 ---
 
@@ -282,7 +282,7 @@ ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 
 !!! success "First Queue"
 
-    In ComfyUI, load **still-draft-lab-example** from `user/default/workflows/` (seeded from host `workflows/`). Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
+    In ComfyUI, load **klein-still-draft-lab-example** from `user/default/workflows/` (seeded from host `workflows/`). Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
 
     Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Visual Generative AI](visual-generative-ai.md).
 

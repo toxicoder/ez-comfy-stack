@@ -94,6 +94,19 @@ teardown() {
   [[ "${output}" == *"docs/licenses.md"* ]]
 }
 
+@test "common: warn_banned_minimax_weights flags leftover files" {
+  local root="${TEST_TMP_DIR}/models"
+  mkdir -p "${root}/comfy/diffusion_models"
+  run warn_banned_minimax_weights "${root}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"banned MiniMax"* ]]
+  : >"${root}/comfy/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+  run warn_banned_minimax_weights "${root}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"banned MiniMax"* ]]
+  [[ "${output}" == *"minimax_h3_fl2va"* ]]
+}
+
 @test "common: ln_sfn_relative creates resolvable relative symlink" {
   local base="${TEST_TMP_DIR}/ln_rel"
   local target="${base}/tier/split_files/vae/flux2-vae.safetensors"
