@@ -1626,8 +1626,8 @@
 </tr>
 <tr>
 <td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
-<td>Shot 01 identity plate bypassed, or old independent T2I graph</td>
-<td>Queue the whole graph; do <strong>not</strong> bypass SHOT 01 / KEY / DUSK / MEDIUM / WARM / BEFORE / CURB on a cold canvas. 02–N Klein-edit from 01 via <code>VAEEncode</code> + <code>ReferenceLatent</code></td>
+<td>World bible or locked inventory edited per shot, or an old graph</td>
+<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> and inventory once. View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code>. State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / DUSK / WARM / BEFORE on a cold canvas</td>
 </tr>
 <tr>
 <td>Enhance rewrites a locked shorts identity</td>
@@ -1662,12 +1662,22 @@
 <tr>
 <td>Dream-house Queue too slow / only need a few rooms</td>
 <td>All ten SHOT groups enabled</td>
-<td>Bypass unused SHOT groups <strong>02–10</strong> (Ctrl+B). Do <strong>not</strong> bypass SHOT 01 if those shots should persist — 01 is the identity plate. Identity + seed stay shared</td>
+<td>Bypass unused SHOT groups (Ctrl+B). Identity + inventory + seed stay shared; 02–10 do not consume shot 01’s pixels</td>
 </tr>
 <tr>
-<td>Dream-house 02–10 look like different houses</td>
-<td>SHOT 01 bypassed, or a shot card restyles massing</td>
-<td>Re-open <strong>klein-dream-house-lab-example</strong>. Queue <strong>SHOT 01</strong> first; leave 01 un-bypassed when generating 02–10. Edit <strong>HOUSE IDENTITY</strong> once; each SHOT card is only camera / room / time / season of the same cabin</td>
+<td>Dream-house 02–10 look like the same photo as 01</td>
+<td>Old graph still wraps 02–10 in <code>ReferenceLatent</code>, or the world bible still names a camera</td>
+<td>Pull latest, re-open <strong>klein-dream-house-lab-example</strong>. Confirm Prompt Join <code>lock=view</code> and no <code>Ref from 01</code> nodes. HOUSE IDENTITY must be camera-free; shot cards own the camera</td>
+</tr>
+<tr>
+<td>Dream-house interiors do not match the sofa seen through the glass</td>
+<td>Inventory edited on one shot, or a shot card invents new furniture</td>
+<td>Edit locked inventory once on every SHOT join (same sofa, island, table, bedding, tub, deck chairs). Shot 01 should show that sofa through the two-bay glass; living looks out the same glass</td>
+</tr>
+<tr>
+<td>Dream-house rooms look like different cabins</td>
+<td>Shot card restyles massing, or Enhance rewrote the bible</td>
+<td>Pin Enhance <strong>off</strong> on HOUSE IDENTITY. Shot cards are camera / room / time / season only</td>
 </tr>
 <tr>
 <td>OOM / multi-minute hang on a 90s (or 30s / 60s) Queue</td>
