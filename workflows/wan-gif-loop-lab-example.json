@@ -462,7 +462,7 @@
       "widgets_values": [
         "ez_gif_loop_frames"
       ],
-      "title": "Save frames"
+      "title": "Save frames (secondary)"
     },
     {
       "id": 13,
@@ -526,7 +526,7 @@
         "pingpong": true,
         "save_output": true
       },
-      "title": "Infinite loop (ping-pong)"
+      "title": "Infinite loop (ping-pong) \u2014 open for preview"
     },
     {
       "id": 14,
@@ -548,7 +548,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-gif-loop-lab-example\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse — first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png; after klein-still-daily set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## wan-gif-loop-lab-example\n\nAfter Queue, click **Infinite loop (ping-pong) \u2014 open for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_gif_loop_*.gif`.\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse \u2014 first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png; after klein-still-daily set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
@@ -759,7 +759,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-gif-loop-lab-example\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse — first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png; after klein-still-daily set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_note": "## wan-gif-loop-lab-example\n\nAfter Queue, click **Infinite loop (ping-pong) \u2014 open for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_gif_loop_*.gif`.\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse \u2014 first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png; after klein-still-daily set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
     "lab_profile": "wan-gif-loop-lab-example",
     "lab_description": "Wan 5B looping GIF, 49 frames ping-pong @ 12 fps",
     "ds": {

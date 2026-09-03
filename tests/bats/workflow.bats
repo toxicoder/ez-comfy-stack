@@ -70,7 +70,7 @@ for g in (w, l):
   local -a files=("${dir}"/*-lab-example.json)
   shopt -u nullglob
   [[ ${#files[@]} -ge 8 ]]
-  [[ ${#files[@]} -le 16 ]]
+  [[ ${#files[@]} -le 32 ]]
 
   for gone in \
     ltx-i2v-30s-lab-example.json \
@@ -245,6 +245,11 @@ assert int(ea['widgets_values'][0])==121
 vhs=[n for n in d['nodes'] if n.get('type')=='VHS_VideoCombine']
 assert len(vhs)==1
 assert vhs[0]['widgets_values']['format']=='video/h264-mp4'
+assert vhs[0]['widgets_values']['save_output'] is True
+assert any(n.get('type')=='LTXVAudioVAEDecode' for n in d['nodes'])
+audio=next(i for i in vhs[0]['inputs'] if i.get('name')=='audio')
+assert audio.get('link') is not None
+assert 'preview' in (vhs[0].get('title') or '').lower()
 "
     [ "${status}" -eq 0 ]
   done
@@ -299,10 +304,59 @@ for p in sorted(root.rglob('*-lab-example.json')):
         assert 'klein-still-hero-lab-example' in note
     if p.stem == 'film-go-see-90s-run-lab-example':
         assert 'running' in desc
+        assert 'Unified' in desc or 'unified' in note.lower()
 assert 'klein-still-draft-lab-example' in seen
 assert 'film-go-see-90s-run-lab-example' in seen
+assert 'klein-shorts-still-lab-example' in seen
+assert 'ltx-broll-ambient-lab-example' in seen
 "
   [ "${status}" -eq 0 ]
+}
+
+@test "video graphs save VHS output and LTX muxes audio" {
+  run python3 -c "
+import json
+from pathlib import Path
+root = Path('${REPO_ROOT}/workflows')
+video = 0
+for p in sorted(root.rglob('*-lab-example.json')):
+    d = json.loads(p.read_text())
+    vhs_nodes = [n for n in d['nodes'] if n.get('type')=='VHS_VideoCombine']
+    if not vhs_nodes:
+        continue
+    video += 1
+    for vhs in vhs_nodes:
+        wv = vhs['widgets_values']
+        assert wv.get('save_output') is True, p.name
+        prefix = wv.get('filename_prefix') or ''
+        assert prefix.startswith('ez_'), (p.name, prefix)
+        assert 'preview' in (vhs.get('title') or '').lower(), p.name
+    if any(n.get('type')=='LTXVSeparateAVLatent' for n in d['nodes']):
+        assert any(n.get('type')=='LTXVAudioVAEDecode' for n in d['nodes']), p.name
+        for vhs in vhs_nodes:
+            audio = next(i for i in vhs['inputs'] if i.get('name')=='audio')
+            assert audio.get('link') is not None, p.name
+assert video >= 7, video
+"
+  [ "${status}" -eq 0 ]
+}
+
+@test "creator toolkit lab graphs exist" {
+  local dir="${REPO_ROOT}/workflows"
+  local wf
+  for wf in \
+    klein-shorts-still-lab-example.json \
+    wan-shorts-i2v-lab-example.json \
+    ltx-shorts-i2v-lab-example.json \
+    klein-thumbnail-lab-example.json \
+    klein-product-packshot-lab-example.json \
+    klein-before-after-lab-example.json \
+    klein-style-lock-lab-example.json \
+    wan-bumper-loop-lab-example.json \
+    ltx-broll-ambient-lab-example.json \
+    klein-storyboard-6up-lab-example.json; do
+    [[ -f ${dir}/${wf} ]]
+  done
 }
 
 @test "lab examples have operator Notes, prompts, extra.lab_note" {

@@ -1,8 +1,8 @@
 {
   "id": "film-still-here-90s-lab-example",
-  "revision": 4,
-  "last_node_id": 13,
-  "last_link_id": 10,
+  "revision": 5,
+  "last_node_id": 45,
+  "last_link_id": 51,
   "nodes": [
     {
       "id": 1,
@@ -358,7 +358,7 @@
       "widgets_values": [
         "ez_stillhere_identity"
       ],
-      "title": "Save"
+      "title": "Save identity PNG"
     },
     {
       "id": 10,
@@ -380,9 +380,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## film-still-here-90s-lab-example\n\nIdentity still for the still-here 90s short (household morning). Apache Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 (distilled) · 8 steps · 1280x720 · batch 1.\nSaveImage prefix: ez_stillhere_identity.\n\n1. Queue this graph. Use ez_stillhere_identity_00001_.png as LoadImage on shot 1 (or leave example.png to smoke-test).\n2. Open wan-i2v-shot-lab-example. Paste motion from the shot map (or still-here.shots.yaml). Set prefixes ez_stillhere_bN_sM_wan_video and ez_stillhere_bN_sM_last. Queue 5.00s silent.\n3. Open ltx-i2v-shot-lab-example. Same first frame. Paste motion+audio. Prefix ez_stillhere_bN_sM_ltx_video. Queue 5.00s AV.\n4. Repeat 18 times. Last frame of shot N is LoadImage of shot N+1.\n5. ./scripts/utilities/concat-shots.sh --film still-here --yes\n\nDo not Queue a 90s denoise. US-safe local pack only. No score (breath and world only).\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## film-still-here-90s-lab-example\n\nUnified 90s film graph (household morning): Klein identity still + LTX 5.00s AV shot printer + shot map.\nModels: Klein 4B distilled FP8 (identity) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\n1. Leave **Shot print (LTX)** bypassed (Ctrl+B). Queue **Identity (Klein)** \u2192 `ez_stillhere_identity_*.png`.\n2. Bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or previous `*_last`.\n3. Paste Motion + Audio from the on-canvas shot map. Set VHS prefix `ez_stillhere_bN_sM_ltx_video` and last-frame `ez_stillhere_bN_sM_last`. Queue **5.00s** AV.\n4. Repeat 18 times. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. `./scripts/utilities/concat-shots.sh --film still-here --yes`\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\nPrompt enhance: leave Enhance off for canned prompts. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
-      "title": "Operator note"
+      "title": "Operator note \u2014 unified 90s film"
     },
     {
       "id": 12,
@@ -392,8 +392,8 @@
         80
       ],
       "size": [
-        720,
-        1600
+        960,
+        1600.0
       ],
       "flags": {},
       "order": 12,
@@ -404,9 +404,9 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## still-here 90s shot map\n\nKlein identity still: Queue this graph. SaveImage prefix is on the SaveImage node.\nThen retarget **wan-i2v-shot-lab-example** (silent draft) and **ltx-i2v-shot-lab-example** (print + world audio).\n\n18 × 120 frames @ 24 fps = 90.00s. Last frame of shot N is LoadImage of shot N+1.\nConcat: `./scripts/utilities/concat-shots.sh --film still-here --yes`\n\nDo not Queue a 90s denoise in one graph. US-safe local pack only. No score (breath and world only).\n\n**Identity look:** Third-person household morning still. A plain ceramic mug sits on a wooden table in first light. Unmarked kitchen, empty of brands. The mug is the identity lock. SFW, no real likenesses.\n\n### b1 s1 `ez_stillhere_b1_s1`\n- LoadImage: `example.png`\n- VHS Wan: `ez_stillhere_b1_s1_wan_video` · VHS LTX: `ez_stillhere_b1_s1_ltx_video` · last: `ez_stillhere_b1_s1_last`\n- Motion: Shot 1 of 18, beat 1 enter. Third-person household morning, SFW. Kitchen at first light. A kettle clicks off. No real likenesses, no brands.\n- Audio: \n\n### b1 s2 `ez_stillhere_b1_s2`\n- LoadImage: `ez_stillhere_b1_s1_last`\n- VHS Wan: `ez_stillhere_b1_s2_wan_video` · VHS LTX: `ez_stillhere_b1_s2_ltx_video` · last: `ez_stillhere_b1_s2_last`\n- Motion: Shot 2 of 18, beat 1 traverse. Someone pours into a plain ceramic mug. Camera stays on the pour.\n- Audio: \n\n### b1 s3 `ez_stillhere_b1_s3`\n- LoadImage: `ez_stillhere_b1_s2_last`\n- VHS Wan: `ez_stillhere_b1_s3_wan_video` · VHS LTX: `ez_stillhere_b1_s3_ltx_video` · last: `ez_stillhere_b1_s3_last`\n- Motion: Shot 3 of 18, beat 1 exit. Mug full. From the next room, a small child hums a made-up two-note motif — generated, no identifiable face.\n- Audio: \n\n### b2 s1 `ez_stillhere_b2_s1`\n- LoadImage: `ez_stillhere_b1_s3_last`\n- VHS Wan: `ez_stillhere_b2_s1_wan_video` · VHS LTX: `ez_stillhere_b2_s1_ltx_video` · last: `ez_stillhere_b2_s1_last`\n- Motion: Shot 4 of 18, beat 2 enter. Mug on a wooden table, steam. Third-person.\n- Audio: \n\n### b2 s2 `ez_stillhere_b2_s2`\n- LoadImage: `ez_stillhere_b2_s1_last`\n- VHS Wan: `ez_stillhere_b2_s2_wan_video` · VHS LTX: `ez_stillhere_b2_s2_ltx_video` · last: `ez_stillhere_b2_s2_last`\n- Motion: Shot 5 of 18, beat 2 traverse. The humming continues from the hallway, closer. Camera tracks the mug.\n- Audio: \n\n### b2 s3 `ez_stillhere_b2_s3`\n- LoadImage: `ez_stillhere_b2_s2_last`\n- VHS Wan: `ez_stillhere_b2_s3_wan_video` · VHS LTX: `ez_stillhere_b2_s3_ltx_video` · last: `ez_stillhere_b2_s3_last`\n- Motion: Shot 6 of 18, beat 2 exit. Camera finds the doorway. Mug still in frame.\n- Audio: \n\n### b3 s1 `ez_stillhere_b3_s1`\n- LoadImage: `ez_stillhere_b2_s3_last`\n- VHS Wan: `ez_stillhere_b3_s1_wan_video` · VHS LTX: `ez_stillhere_b3_s1_ltx_video` · last: `ez_stillhere_b3_s1_last`\n- Motion: Shot 7 of 18, beat 3 enter. Adult hands wrap the mug. No celebrity faces.\n- Audio: \n\n### b3 s2 `ez_stillhere_b3_s2`\n- LoadImage: `ez_stillhere_b3_s1_last`\n- VHS Wan: `ez_stillhere_b3_s2_wan_video` · VHS LTX: `ez_stillhere_b3_s2_ltx_video` · last: `ez_stillhere_b3_s2_last`\n- Motion: Shot 8 of 18, beat 3 traverse. The child motif answers from off-screen. House creaks.\n- Audio: \n\n### b3 s3 `ez_stillhere_b3_s3`\n- LoadImage: `ez_stillhere_b3_s2_last`\n- VHS Wan: `ez_stillhere_b3_s3_wan_video` · VHS LTX: `ez_stillhere_b3_s3_ltx_video` · last: `ez_stillhere_b3_s3_last`\n- Motion: Shot 9 of 18, beat 3 exit. Hands and mug, steam. Hold identity of the mug.\n- Audio: \n\n### b4 s1 `ez_stillhere_b4_s1`\n- LoadImage: `ez_stillhere_b3_s3_last`\n- VHS Wan: `ez_stillhere_b4_s1_wan_video` · VHS LTX: `ez_stillhere_b4_s1_ltx_video` · last: `ez_stillhere_b4_s1_last`\n- Motion: Shot 10 of 18, beat 4 enter. Third-person follow into a living room. Dust in a sun bar.\n- Audio: \n\n### b4 s2 `ez_stillhere_b4_s2`\n- LoadImage: `ez_stillhere_b4_s1_last`\n- VHS Wan: `ez_stillhere_b4_s2_wan_video` · VHS LTX: `ez_stillhere_b4_s2_ltx_video` · last: `ez_stillhere_b4_s2_last`\n- Motion: Shot 11 of 18, beat 4 traverse. The humming is closer, still a silhouette in the next doorway — no identifiable child face.\n- Audio: \n\n### b4 s3 `ez_stillhere_b4_s3`\n- LoadImage: `ez_stillhere_b4_s2_last`\n- VHS Wan: `ez_stillhere_b4_s3_wan_video` · VHS LTX: `ez_stillhere_b4_s3_ltx_video` · last: `ez_stillhere_b4_s3_last`\n- Motion: Shot 12 of 18, beat 4 exit. Sun bar, doorway silhouette. SFW.\n- Audio: \n\n### b5 s1 `ez_stillhere_b5_s1`\n- LoadImage: `ez_stillhere_b4_s3_last`\n- VHS Wan: `ez_stillhere_b5_s1_wan_video` · VHS LTX: `ez_stillhere_b5_s1_ltx_video` · last: `ez_stillhere_b5_s1_last`\n- Motion: Shot 13 of 18, beat 5 enter. Third-person doorway. A small silhouetted figure. No close-up identity.\n- Audio: \n\n### b5 s2 `ez_stillhere_b5_s2`\n- LoadImage: `ez_stillhere_b5_s1_last`\n- VHS Wan: `ez_stillhere_b5_s2_wan_video` · VHS LTX: `ez_stillhere_b5_s2_ltx_video` · last: `ez_stillhere_b5_s2_last`\n- Motion: Shot 14 of 18, beat 5 traverse. Silhouette looks at morning light and hums the same invented motif.\n- Audio: \n\n### b5 s3 `ez_stillhere_b5_s3`\n- LoadImage: `ez_stillhere_b5_s2_last`\n- VHS Wan: `ez_stillhere_b5_s3_wan_video` · VHS LTX: `ez_stillhere_b5_s3_ltx_video` · last: `ez_stillhere_b5_s3_last`\n- Motion: Shot 15 of 18, beat 5 exit. Pull back toward the table. SFW.\n- Audio: \n\n### b6 s1 `ez_stillhere_b6_s1`\n- LoadImage: `ez_stillhere_b5_s3_last`\n- VHS Wan: `ez_stillhere_b6_s1_wan_video` · VHS LTX: `ez_stillhere_b6_s1_ltx_video` · last: `ez_stillhere_b6_s1_last`\n- Motion: Shot 16 of 18, beat 6 enter. Mug on the table, empty chair.\n- Audio: \n\n### b6 s2 `ez_stillhere_b6_s2`\n- LoadImage: `ez_stillhere_b6_s1_last`\n- VHS Wan: `ez_stillhere_b6_s2_wan_video` · VHS LTX: `ez_stillhere_b6_s2_ltx_video` · last: `ez_stillhere_b6_s2_last`\n- Motion: Shot 17 of 18, beat 6 traverse. The hum fades to one last note.\n- Audio: \n\n### b6 s3 `ez_stillhere_b6_s3`\n- LoadImage: `ez_stillhere_b6_s2_last`\n- VHS Wan: `ez_stillhere_b6_s3_wan_video` · VHS LTX: `ez_stillhere_b6_s3_ltx_video` · last: `ez_stillhere_b6_s3_last`\n- Motion: Shot 18 of 18, beat 6 exit. Hold. Only the house. Quiet. No logos.\n- Audio: Only the house. No score.\n\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## still-here 90s shot map (household morning)\n\nUnified graph: Queue **Identity (Klein)** once (LTX group starts bypassed).\nThen Ctrl+B to bypass Identity and enable **Shot print (LTX)**. Retarget LoadImage,\nMotion+Audio, and prefixes for each of 18 shots. Optional Wan rehearsal:\n**wan-i2v-shot-lab-example**.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. Last frame of shot N is LoadImage of shot N+1.\nConcat: `./scripts/utilities/concat-shots.sh --film still-here --yes`\n\nDo not Queue a 90s denoise in one graph. US-safe local pack only. No score (breath and world only).\n\n**Identity look:** Third-person household morning still. A plain ceramic mug sits on a wooden table in first light. Unmarked kitchen, empty of brands. The mug is the identity lock. SFW, no real likenesses.\n\n### b1 s1 `ez_stillhere_b1_s1`\n- LoadImage: `example.png`\n- VHS LTX: `ez_stillhere_b1_s1_ltx_video` \u00b7 last: `ez_stillhere_b1_s1_last` \u00b7 optional Wan: `ez_stillhere_b1_s1_wan_video`\n- Motion: Shot 1 of 18, beat 1 enter. Third-person household morning, SFW. Kitchen at first light. A kettle clicks off. No real likenesses, no brands.\n- Audio: Kettle click, no score.\n\n### b1 s2 `ez_stillhere_b1_s2`\n- LoadImage: `ez_stillhere_b1_s1_last`\n- VHS LTX: `ez_stillhere_b1_s2_ltx_video` \u00b7 last: `ez_stillhere_b1_s2_last` \u00b7 optional Wan: `ez_stillhere_b1_s2_wan_video`\n- Motion: Shot 2 of 18, beat 1 traverse. Someone pours into a plain ceramic mug. Camera stays on the pour.\n- Audio: Pour, steam, no score.\n\n### b1 s3 `ez_stillhere_b1_s3`\n- LoadImage: `ez_stillhere_b1_s2_last`\n- VHS LTX: `ez_stillhere_b1_s3_ltx_video` \u00b7 last: `ez_stillhere_b1_s3_last` \u00b7 optional Wan: `ez_stillhere_b1_s3_wan_video`\n- Motion: Shot 3 of 18, beat 1 exit. Mug full. From the next room, a small child hums a made-up two-note motif \u2014 generated, no identifiable face.\n- Audio: Floorboard, the invented hum, no licensed music.\n\n### b2 s1 `ez_stillhere_b2_s1`\n- LoadImage: `ez_stillhere_b1_s3_last`\n- VHS LTX: `ez_stillhere_b2_s1_ltx_video` \u00b7 last: `ez_stillhere_b2_s1_last` \u00b7 optional Wan: `ez_stillhere_b2_s1_wan_video`\n- Motion: Shot 4 of 18, beat 2 enter. Mug on a wooden table, steam. Third-person.\n- Audio: Steam tick, fridge hum, no score.\n\n### b2 s2 `ez_stillhere_b2_s2`\n- LoadImage: `ez_stillhere_b2_s1_last`\n- VHS LTX: `ez_stillhere_b2_s2_ltx_video` \u00b7 last: `ez_stillhere_b2_s2_last` \u00b7 optional Wan: `ez_stillhere_b2_s2_wan_video`\n- Motion: Shot 5 of 18, beat 2 traverse. The humming continues from the hallway, closer. Camera tracks the mug.\n- Audio: Hum motif closer, no licensed music.\n\n### b2 s3 `ez_stillhere_b2_s3`\n- LoadImage: `ez_stillhere_b2_s2_last`\n- VHS LTX: `ez_stillhere_b2_s3_ltx_video` \u00b7 last: `ez_stillhere_b2_s3_last` \u00b7 optional Wan: `ez_stillhere_b2_s3_wan_video`\n- Motion: Shot 6 of 18, beat 2 exit. Camera finds the doorway. Mug still in frame.\n- Audio: Hum, wood, no score.\n\n### b3 s1 `ez_stillhere_b3_s1`\n- LoadImage: `ez_stillhere_b2_s3_last`\n- VHS LTX: `ez_stillhere_b3_s1_ltx_video` \u00b7 last: `ez_stillhere_b3_s1_last` \u00b7 optional Wan: `ez_stillhere_b3_s1_wan_video`\n- Motion: Shot 7 of 18, beat 3 enter. Adult hands wrap the mug. No celebrity faces.\n- Audio: Ceramic, breath, no score.\n\n### b3 s2 `ez_stillhere_b3_s2`\n- LoadImage: `ez_stillhere_b3_s1_last`\n- VHS LTX: `ez_stillhere_b3_s2_ltx_video` \u00b7 last: `ez_stillhere_b3_s2_last` \u00b7 optional Wan: `ez_stillhere_b3_s2_wan_video`\n- Motion: Shot 8 of 18, beat 3 traverse. The child motif answers from off-screen. House creaks.\n- Audio: The hum, house creak, no score.\n\n### b3 s3 `ez_stillhere_b3_s3`\n- LoadImage: `ez_stillhere_b3_s2_last`\n- VHS LTX: `ez_stillhere_b3_s3_ltx_video` \u00b7 last: `ez_stillhere_b3_s3_last` \u00b7 optional Wan: `ez_stillhere_b3_s3_wan_video`\n- Motion: Shot 9 of 18, beat 3 exit. Hands and mug, steam. Hold identity of the mug.\n- Audio: Breath, ceramic, no score.\n\n### b4 s1 `ez_stillhere_b4_s1`\n- LoadImage: `ez_stillhere_b3_s3_last`\n- VHS LTX: `ez_stillhere_b4_s1_ltx_video` \u00b7 last: `ez_stillhere_b4_s1_last` \u00b7 optional Wan: `ez_stillhere_b4_s1_wan_video`\n- Motion: Shot 10 of 18, beat 4 enter. Third-person follow into a living room. Dust in a sun bar.\n- Audio: Footsteps on wood, no score.\n\n### b4 s2 `ez_stillhere_b4_s2`\n- LoadImage: `ez_stillhere_b4_s1_last`\n- VHS LTX: `ez_stillhere_b4_s2_ltx_video` \u00b7 last: `ez_stillhere_b4_s2_last` \u00b7 optional Wan: `ez_stillhere_b4_s2_wan_video`\n- Motion: Shot 11 of 18, beat 4 traverse. The humming is closer, still a silhouette in the next doorway \u2014 no identifiable child face.\n- Audio: The motif, curtain, no score.\n\n### b4 s3 `ez_stillhere_b4_s3`\n- LoadImage: `ez_stillhere_b4_s2_last`\n- VHS LTX: `ez_stillhere_b4_s3_ltx_video` \u00b7 last: `ez_stillhere_b4_s3_last` \u00b7 optional Wan: `ez_stillhere_b4_s3_wan_video`\n- Motion: Shot 12 of 18, beat 4 exit. Sun bar, doorway silhouette. SFW.\n- Audio: Hum, cloth, no score.\n\n### b5 s1 `ez_stillhere_b5_s1`\n- LoadImage: `ez_stillhere_b4_s3_last`\n- VHS LTX: `ez_stillhere_b5_s1_ltx_video` \u00b7 last: `ez_stillhere_b5_s1_last` \u00b7 optional Wan: `ez_stillhere_b5_s1_wan_video`\n- Motion: Shot 13 of 18, beat 5 enter. Third-person doorway. A small silhouetted figure. No close-up identity.\n- Audio: The hum, breath.\n\n### b5 s2 `ez_stillhere_b5_s2`\n- LoadImage: `ez_stillhere_b5_s1_last`\n- VHS LTX: `ez_stillhere_b5_s2_ltx_video` \u00b7 last: `ez_stillhere_b5_s2_last` \u00b7 optional Wan: `ez_stillhere_b5_s2_wan_video`\n- Motion: Shot 14 of 18, beat 5 traverse. Silhouette looks at morning light and hums the same invented motif.\n- Audio: The hum, a toy wood-block tap.\n\n### b5 s3 `ez_stillhere_b5_s3`\n- LoadImage: `ez_stillhere_b5_s2_last`\n- VHS LTX: `ez_stillhere_b5_s3_ltx_video` \u00b7 last: `ez_stillhere_b5_s3_last` \u00b7 optional Wan: `ez_stillhere_b5_s3_wan_video`\n- Motion: Shot 15 of 18, beat 5 exit. Pull back toward the table. SFW.\n- Audio: Hum fading, wood, no score.\n\n### b6 s1 `ez_stillhere_b6_s1`\n- LoadImage: `ez_stillhere_b5_s3_last`\n- VHS LTX: `ez_stillhere_b6_s1_ltx_video` \u00b7 last: `ez_stillhere_b6_s1_last` \u00b7 optional Wan: `ez_stillhere_b6_s1_wan_video`\n- Motion: Shot 16 of 18, beat 6 enter. Mug on the table, empty chair.\n- Audio: House quiet, no score.\n\n### b6 s2 `ez_stillhere_b6_s2`\n- LoadImage: `ez_stillhere_b6_s1_last`\n- VHS LTX: `ez_stillhere_b6_s2_ltx_video` \u00b7 last: `ez_stillhere_b6_s2_last` \u00b7 optional Wan: `ez_stillhere_b6_s2_wan_video`\n- Motion: Shot 17 of 18, beat 6 traverse. The hum fades to one last note.\n- Audio: Last hummed note, no licensed music.\n\n### b6 s3 `ez_stillhere_b6_s3`\n- LoadImage: `ez_stillhere_b6_s2_last`\n- VHS LTX: `ez_stillhere_b6_s3_ltx_video` \u00b7 last: `ez_stillhere_b6_s3_last` \u00b7 optional Wan: `ez_stillhere_b6_s3_wan_video`\n- Motion: Shot 18 of 18, beat 6 exit. Hold. Only the house. Quiet. No logos.\n- Audio: Only the house. No score.\n"
       ],
-      "title": "Shot map"
+      "title": "still-here 90s shot map"
     },
     {
       "id": 13,
@@ -443,6 +443,871 @@
         "YouTube 16:9 still"
       ],
       "title": "Klein Prompt Enhance"
+    },
+    {
+      "id": 24,
+      "type": "UNETLoader",
+      "pos": [
+        3240,
+        80
+      ],
+      "size": [
+        520,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            21
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+        "default"
+      ],
+      "title": "LTX-2.5 distilled INT8-convrot"
+    },
+    {
+      "id": 25,
+      "type": "VAELoader",
+      "pos": [
+        3240,
+        212
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            22,
+            23
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-video-vae-bf16.safetensors"
+      ],
+      "title": "LTX-2.5 video VAE"
+    },
+    {
+      "id": 26,
+      "type": "CLIPLoader",
+      "pos": [
+        3240,
+        320
+      ],
+      "size": [
+        400,
+        110
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            36,
+            37
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+        "ltxv",
+        "default"
+      ],
+      "title": "Gemma4-with-proj (ltxv)"
+    },
+    {
+      "id": 27,
+      "type": "LoadImage",
+      "pos": [
+        4280,
+        80
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            25
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Start frame"
+    },
+    {
+      "id": 28,
+      "type": "CLIPTextEncode",
+      "pos": [
+        4280,
+        444
+      ],
+      "size": [
+        420,
+        140
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 36
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 48,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            26
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. First-person running camera as gloved hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, pigeons scatter, continuous forward run. Breath sits close to the lens, wind in the hood, tar grit under shoes. No score, no music, no licensed songs."
+      ],
+      "title": "Motion + audio"
+    },
+    {
+      "id": 29,
+      "type": "CLIPTextEncode",
+      "pos": [
+        4280,
+        634
+      ],
+      "size": [
+        420,
+        100
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 37
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            27
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
+      ],
+      "title": "Negative"
+    },
+    {
+      "id": 30,
+      "type": "LTXVImgToVideo",
+      "pos": [
+        4780,
+        80
+      ],
+      "size": [
+        320,
+        200
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 26
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 27
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 22
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            28
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            29
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            40
+          ],
+          "slot_index": 2
+        }
+      ],
+      "title": "LTX Img\u2192Video condition",
+      "properties": {
+        "Node name for S&R": "LTXVImgToVideo"
+      },
+      "widgets_values": [
+        1280,
+        720,
+        120,
+        1
+      ]
+    },
+    {
+      "id": 31,
+      "type": "LTXVConditioning",
+      "pos": [
+        4780,
+        330
+      ],
+      "size": [
+        280,
+        82
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 28
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 29
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            31
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            32
+          ],
+          "slot_index": 0
+        }
+      ],
+      "title": "LTX frame rate cond",
+      "properties": {
+        "Node name for S&R": "LTXVConditioning"
+      },
+      "widgets_values": [
+        24.0
+      ]
+    },
+    {
+      "id": 32,
+      "type": "KSampler",
+      "pos": [
+        5140,
+        80
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 21
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 31
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 32
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 42
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            43
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "KSampler"
+    },
+    {
+      "id": 33,
+      "type": "VAEDecode",
+      "pos": [
+        5860,
+        80
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 44
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            38,
+            45,
+            46
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 35,
+      "type": "SaveImage",
+      "pos": [
+        5860,
+        176
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 38
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_stillhere_b1_s1_ltx_frames"
+      ],
+      "title": "Save frames (secondary)"
+    },
+    {
+      "id": 36,
+      "type": "VAELoader",
+      "pos": [
+        3240,
+        490
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            39,
+            50
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-audio-vae-bf16.safetensors"
+      ],
+      "title": "LTX-2.5 audio VAE"
+    },
+    {
+      "id": 37,
+      "type": "LTXVEmptyLatentAudio",
+      "pos": [
+        4780,
+        460
+      ],
+      "size": [
+        300,
+        130
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 39
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Latent",
+          "type": "LATENT",
+          "links": [
+            41
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVEmptyLatentAudio"
+      },
+      "widgets_values": [
+        120,
+        24.0,
+        1
+      ],
+      "title": "Empty LTX audio latent"
+    },
+    {
+      "id": 38,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        5140,
+        400
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 40
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 41
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            42
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 39,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        5540,
+        80
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 43
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            44
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": [
+            49
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Separate AV latents"
+    },
+    {
+      "id": 41,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        6180.0,
+        80
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 45
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 51,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "ez_stillhere_b1_s1_ltx_video",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 18,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "title": "Save video (MP4) \u2014 open node for preview"
+    },
+    {
+      "id": 42,
+      "type": "ImageFromBatch",
+      "pos": [
+        6180,
+        560
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 50,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 46
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            47
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        119,
+        1
+      ],
+      "title": "Last frame"
+    },
+    {
+      "id": 43,
+      "type": "SaveImage",
+      "pos": [
+        6180,
+        680
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 51,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 47
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_stillhere_b1_s1_last"
+      ],
+      "title": "Save last frame"
+    },
+    {
+      "id": 44,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        3820,
+        444
+      ],
+      "size": [
+        420,
+        340
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            48
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. First-person running camera as gloved hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, pigeons scatter, continuous forward run. Breath sits close to the lens, wind in the hood, tar grit under shoes. No score, no music, no licensed songs.",
+        false,
+        "i2v",
+        "5 seconds, 24 fps",
+        "breath close to the lens, wind in the hood, tar grit. No score, no music, no licensed songs."
+      ],
+      "title": "LTX Prompt Enhance"
+    },
+    {
+      "id": 45,
+      "type": "LTXVAudioVAEDecode",
+      "pos": [
+        6540.0,
+        80
+      ],
+      "size": [
+        320,
+        66
+      ],
+      "flags": {},
+      "order": 52,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 49
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 50
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Audio",
+          "type": "AUDIO",
+          "links": [
+            51
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVAudioVAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Audio VAE Decode"
     }
   ],
   "links": [
@@ -525,22 +1390,252 @@
       4,
       1,
       "STRING"
+    ],
+    [
+      21,
+      24,
+      0,
+      32,
+      0,
+      "MODEL"
+    ],
+    [
+      22,
+      25,
+      0,
+      30,
+      2,
+      "VAE"
+    ],
+    [
+      23,
+      25,
+      0,
+      33,
+      1,
+      "VAE"
+    ],
+    [
+      25,
+      27,
+      0,
+      30,
+      3,
+      "IMAGE"
+    ],
+    [
+      26,
+      28,
+      0,
+      30,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      27,
+      29,
+      0,
+      30,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      28,
+      30,
+      0,
+      31,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      29,
+      30,
+      1,
+      31,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      31,
+      31,
+      0,
+      32,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      32,
+      31,
+      1,
+      32,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      36,
+      26,
+      0,
+      28,
+      0,
+      "CLIP"
+    ],
+    [
+      37,
+      26,
+      0,
+      29,
+      0,
+      "CLIP"
+    ],
+    [
+      38,
+      33,
+      0,
+      35,
+      0,
+      "IMAGE"
+    ],
+    [
+      39,
+      36,
+      0,
+      37,
+      0,
+      "VAE"
+    ],
+    [
+      40,
+      30,
+      2,
+      38,
+      0,
+      "LATENT"
+    ],
+    [
+      41,
+      37,
+      0,
+      38,
+      1,
+      "LATENT"
+    ],
+    [
+      42,
+      38,
+      0,
+      32,
+      3,
+      "LATENT"
+    ],
+    [
+      43,
+      32,
+      0,
+      39,
+      0,
+      "LATENT"
+    ],
+    [
+      44,
+      39,
+      0,
+      33,
+      0,
+      "LATENT"
+    ],
+    [
+      45,
+      33,
+      0,
+      41,
+      0,
+      "IMAGE"
+    ],
+    [
+      46,
+      33,
+      0,
+      42,
+      0,
+      "IMAGE"
+    ],
+    [
+      47,
+      42,
+      0,
+      43,
+      0,
+      "IMAGE"
+    ],
+    [
+      48,
+      44,
+      0,
+      28,
+      1,
+      "STRING"
+    ],
+    [
+      49,
+      39,
+      1,
+      45,
+      0,
+      "LATENT"
+    ],
+    [
+      50,
+      36,
+      0,
+      45,
+      1,
+      "VAE"
+    ],
+    [
+      51,
+      45,
+      0,
+      41,
+      1,
+      "AUDIO"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1. Identity (Klein) \u2014 Queue first",
+      "bounding": [
+        20,
+        20,
+        2000,
+        1200
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2. Shot print (LTX) \u2014 starts bypassed; Ctrl+B to enable",
+      "bounding": [
+        3180,
+        20,
+        2800,
+        1400
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "lab_profile": "film-still-here-90s-lab-example",
-    "lab_flux_tier": "fast",
-    "ds": {
-      "scale": 1,
-      "offset": [
-        0,
-        0
-      ]
-    },
-    "lab_note": "## film-still-here-90s-lab-example\n\nIdentity still for the still-here 90s short (household morning). Apache Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 (distilled) · 8 steps · 1280x720 · batch 1.\nSaveImage prefix: ez_stillhere_identity.\n\n1. Queue this graph. Use ez_stillhere_identity_00001_.png as LoadImage on shot 1 (or leave example.png to smoke-test).\n2. Open wan-i2v-shot-lab-example. Paste motion from the shot map (or still-here.shots.yaml). Set prefixes ez_stillhere_bN_sM_wan_video and ez_stillhere_bN_sM_last. Queue 5.00s silent.\n3. Open ltx-i2v-shot-lab-example. Same first frame. Paste motion+audio. Prefix ez_stillhere_bN_sM_ltx_video. Queue 5.00s AV.\n4. Repeat 18 times. Last frame of shot N is LoadImage of shot N+1.\n5. ./scripts/utilities/concat-shots.sh --film still-here --yes\n\nDo not Queue a 90s denoise. US-safe local pack only. No score (breath and world only).\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
-    "lab_description": "Klein identity + 18-shot map: household morning 90s"
+    "lab_note": "## film-still-here-90s-lab-example\n\nUnified 90s film graph (household morning): Klein identity still + LTX 5.00s AV shot printer + shot map.\nModels: Klein 4B distilled FP8 (identity) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\n1. Leave **Shot print (LTX)** bypassed (Ctrl+B). Queue **Identity (Klein)** \u2192 `ez_stillhere_identity_*.png`.\n2. Bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or previous `*_last`.\n3. Paste Motion + Audio from the on-canvas shot map. Set VHS prefix `ez_stillhere_bN_sM_ltx_video` and last-frame `ez_stillhere_bN_sM_last`. Queue **5.00s** AV.\n4. Repeat 18 times. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. `./scripts/utilities/concat-shots.sh --film still-here --yes`\n\nDo not Queue a 90s denoise. US-safe local pack only. No score.\nPrompt enhance: leave Enhance off for canned prompts. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_description": "Unified 90s household morning: Klein identity + LTX 5.00s AV shots",
+    "lab_film": "still-here",
+    "lab_slug": "stillhere",
+    "lab_ltx_av": true
   },
   "version": 0.4
 }
