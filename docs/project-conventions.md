@@ -39,7 +39,7 @@ flowchart TB
   Root["ez-comfy-stack"]
   Root --> Manage["scripts/manage.sh<br/>operator CLI"]
   Root --> Lib["scripts/lib/*<br/>common · compose · paths · safety"]
-  Root --> Util["scripts/utilities/*<br/>download-image · download-wan · download-ltx · download-limit"]
+  Root --> Util["scripts/utilities/*<br/>download-image · download-wan · download-ltx · download-limit · concat-shots · spark-farm"]
   Root --> Docker["docker/*<br/>compose · Dockerfile · entrypoint · patch"]
   Root --> Cfg["config/resource-policy.yaml"]
   Root --> Docs["docs/ · MkDocs"]
@@ -270,6 +270,10 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 | Bold first phrase in list items | Scan anchors |
 
 **Getting Started** is the primary operator path: keep the happy path short; park image-layer, cold-start, and lab-internals content in collapsible blocks.
+
+**Session variables:** operator command fences should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`.
+
+**Default stack vocabulary:** Klein 4B + Wan 2.2 5B + LTX-2.5. Lab CLIP is `qwen_3_4b` (type `flux2`) and LTX-2.5 `CLIPLoader` Gemma4-with-proj. Klein 9B and old `flux-to-ltx*` GHCR tags are banned/frozen mentions only.
 
 ```bash
 make docs   # strict build must stay green

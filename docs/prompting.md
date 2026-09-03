@@ -97,3 +97,9 @@ Fail-soft: missing key, timeout, or HTTP error logs a warning and passes the ori
     Do not run Gemma 4 E2B (the official LTX enhancer) or any other GPU LLM beside this stack. LTX-2.5 is already a 22B joint AV transformer; extra weights steal GB10 headroom and threaten SSH. The rewrite is **off-box** (`api.x.ai`).
 
 Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit are unchanged. The key is runtime env only — never baked into the image.
+
+---
+
+## Next steps
+
+Queue **still-draft-lab-example** first ([Getting Started](getting-started.md)), then the still → Wan 5 s → LTX 5 s loop on [Visual Generative AI](visual-generative-ai.md).

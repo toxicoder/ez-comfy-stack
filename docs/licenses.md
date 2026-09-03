@@ -56,6 +56,17 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 
 The same table is in repo-root `LICENSE-MODELS.md` so tests can grep either file.
 
+## Before `download-models`
+
+LTX-2.5 is gated. Klein 4B and Wan 5B are Apache and do not need a license click.
+
+1. Create or edit `.env` with `HF_TOKEN=hf_...` (or `hf auth login`)
+2. In a browser, as **that same user**, open https://huggingface.co/Lightricks/LTX-2.5 and click **Agree**
+3. Fine-grained tokens need **gated repo** read
+4. `hf auth whoami` then `./scripts/manage.sh download-models`
+
+A token in `.env` is **not** the same as accepting the Lightricks license. First-run path: [Getting Started](getting-started.md).
+
 ## Why these defaults
 
 **Still (Apache 2.0):** FLUX.2 Klein **4B distilled FP8** is the official ComfyUI Klein 4B path (`flux-2-klein-4b-fp8.safetensors`, `qwen_3_4b.safetensors`, `flux2-vae.safetensors`). Distilled = 4 steps, CFG 1.0. Klein **9B** is FLUX Non-Commercial — **not** fine for monetized YouTube as a lab default. FLUX.2 [dev] is not a casual-commercial default.

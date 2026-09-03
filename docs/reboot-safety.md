@@ -63,6 +63,8 @@ flowchart LR
    # type: yes
    ```
 
+   Independent Spark farm containers still use `restart: "no"`; start each node locally with confirm.
+
 ```mermaid
 sequenceDiagram
   actor Op as Operator

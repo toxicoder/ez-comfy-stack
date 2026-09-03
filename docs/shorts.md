@@ -77,14 +77,15 @@ Host JSON lives under `workflows/shorts/`. The container entrypoint copies `*.js
 2. Load **bridge-wan-lab-example**. Set LoadImage to that PNG (shot 1) or the previous `ez_<slug>_bN_sM_last`. Paste **Motion** from the on-canvas shot map (source of truth: `{film}.shots.yaml`). Set VHS prefix `ez_<slug>_bN_sM_wan_video` and last-frame SaveImage `ez_<slug>_bN_sM_last`. Queue **5.00s** silent.
 3. Load **bridge-ltx-lab-example**. Same first frame. Paste **Motion + audio**. VHS prefix `ez_<slug>_bN_sM_ltx_video`. Queue **5.00s** AV.
 4. Repeat 18 times. Last frame of shot N is LoadImage of shot N+1.
-5. Concat (dry-run first; `--yes` writes the cap):
+5. Concat (dry-run first; `--yes` writes the cap). Default dir is `${COMFY_OUTPUT_DIR}`:
 
 ```bash
-./scripts/utilities/concat-shots.sh --film go-see --dry-run
-./scripts/utilities/concat-shots.sh --film go-see --yes
+FILM=go-see   # or still-here | switchyard
+./scripts/utilities/concat-shots.sh --film "${FILM}" --dry-run
+./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
 ```
 
-Publish names under `COMFY_OUTPUT_DIR` (default `/mnt/comfy-output`): `ez_gosee_90s.mp4`, `ez_stillhere_90s.mp4`, `ez_switchyard_90s.mp4`.
+Publish names under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`): `ez_gosee_90s.mp4`, `ez_stillhere_90s.mp4`, `ez_switchyard_90s.mp4`.
 
 YouTube: disclose AI-generated media (LTX term). Do not strip provenance.
 
@@ -139,7 +140,7 @@ Prefixes: `ez_gosee_b{1..6}_s{1..3}`, `ez_stillhere_…`, `ez_switchyard_…`. M
 
 ## Spark farm
 
-Three Sparks can Queue **different beats** in parallel (independent 5s jobs, shared `/mnt/models`). Concat stays on one host. No NCCL. See [Spark farm](spark-farm.md).
+Three Sparks can Queue **different beats** in parallel (independent 5s jobs, shared `${MODELS_DIR}`). On each UI load **bridge-wan-lab-example** / **bridge-ltx-lab-example** and Queue; concat stays on one host. Do not use `spark-farm.sh run --film go-see` (that subcommand is a wan-shot reminder and refuses the 90s film names). No NCCL. See [Spark farm](spark-farm.md).
 
 ---
 
