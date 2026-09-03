@@ -1527,11 +1527,14 @@
 <p>Lab LTX video graphs write <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write <strong>frames</strong> via <code>SaveImage</code>. Watch the <strong>Save video (MP4)</strong> node preview after Queue — see <a href="../getting-started/#watch-the-video-ltx">Getting Started → Watch the video</a>. They still <strong>must</strong> wire the audio VAE because LTX is a joint AV model. Every lab graph includes an on-canvas <strong>Note</strong> with models, prompting, and video-output steps.</p>
 <p>MiniMax H3 is <strong>banned</strong> (US Excluded Territory). See <a href="../licenses/">Model licenses</a>. <code>download-models</code> refuses <code>--with-h3</code>.</p>
 <h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
-<p>FLUX and some LTX assets may require accepting the license on Hugging Face and a token:</p>
+<p><strong>LTX-2.5</strong> (<code>Lightricks/LTX-2.5</code>) is gated. Klein 4B distilled and Wan 2.2 5B are Apache and do not need a license click. A token in <code>.env</code> is <strong>not</strong> the same as accepting the Lightricks license.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># .env</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_...
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># or: hf auth login</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># or: hf auth login</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>hf<span class="w"> </span>auth<span class="w"> </span>whoami
 </code></pre></div>
+<p>Fine-grained tokens need <strong>gated repo</strong> read. <code>download-models</code> passes <code>--token</code> from <code>HF_TOKEN</code> so it wins over a leftover <code>hf auth login</code>.</p>
 <h3 id="disk-headroom">Disk headroom<a class="headerlink" href="#disk-headroom" title="Permanent link">&para;</a></h3>
 <p><code>manage.sh doctor</code> / <code>start</code> require free disk ≥ <code>MIN_DISK_FREE_GIB</code> (default 40).</p>
 <hr />

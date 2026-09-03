@@ -1304,13 +1304,13 @@
 </tr>
 <tr>
 <td>Download failed / gated license</td>
-<td>No token or license not accepted</td>
-<td>Accept model license on HF; set <code>HF_TOKEN</code> in <code>.env</code> or <code>hf auth login</code></td>
+<td>No token or <strong>LTX-2.5 license not accepted</strong> for that token</td>
+<td><code>HF_TOKEN</code> set is not enough. Open https://huggingface.co/Lightricks/LTX-2.5 as the <strong>same</strong> user (<code>hf auth whoami</code>), click Agree, then re-run <code>download-models</code>. Klein/Wan can cache-hit while LTX is still missing</td>
 </tr>
 <tr>
 <td>Long Python <code>GatedRepoError</code> traceback</td>
-<td>Older CLI path / unparsed hub error</td>
-<td>Current stack prints a short checklist; open the model URL, Agree as the token’s user, re-run download. Debug: <code>LAB_DEBUG=1</code></td>
+<td>CLI stderr was leaking (should be a short checklist)</td>
+<td>Pull latest; traceback is captured to a log. <code>LAB_DEBUG=1</code> still dumps the last 40 lines</td>
 </tr>
 <tr>
 <td>Limits stuck after kill</td>
