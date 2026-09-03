@@ -8,9 +8,10 @@ const NODE_CLASSES = new Set([
 ]);
 
 const PREVIEW = "CLIP prompt";
+const STATUS = "Enhance status";
 
-function textFromMessage(message) {
-  const raw = message?.text;
+function textFromMessage(message, key) {
+  const raw = message?.[key];
   if (raw == null) {
     return "";
   }
@@ -20,16 +21,16 @@ function textFromMessage(message) {
   return String(raw);
 }
 
-function populate(node, text) {
+function upsertWidget(node, name, text, multiline) {
   if (!node.widgets) {
     return;
   }
-  let widget = node.widgets.find((w) => w.name === PREVIEW);
+  let widget = node.widgets.find((w) => w.name === name);
   if (!widget) {
     const made = ComfyWidgets.STRING(
       node,
-      PREVIEW,
-      ["STRING", { multiline: true }],
+      name,
+      ["STRING", { multiline }],
       app,
     );
     widget = made.widget;
@@ -41,6 +42,11 @@ function populate(node, text) {
     }
   }
   widget.value = text;
+}
+
+function populate(node, text, status) {
+  upsertWidget(node, PREVIEW, text, true);
+  upsertWidget(node, STATUS, status, false);
   requestAnimationFrame(() => {
     node.onResize?.(node.size);
   });
@@ -55,7 +61,11 @@ app.registerExtension({
     const onExecuted = nodeType.prototype.onExecuted;
     nodeType.prototype.onExecuted = function (message) {
       onExecuted?.apply(this, arguments);
-      populate(this, textFromMessage(message));
+      populate(
+        this,
+        textFromMessage(message, "text"),
+        textFromMessage(message, "passthrough"),
+      );
     };
   },
 });

@@ -14,6 +14,7 @@
 # Usage:
 #   ./scripts/utilities/download-llm.sh status [--json]
 #   ./scripts/utilities/download-llm.sh run
+#   ./scripts/utilities/download-llm.sh link
 #   ./scripts/utilities/download-llm.sh cleanup [--dry-run|--yes]
 #
 # Environment:
@@ -204,9 +205,9 @@ parse_args() {
       --json) JSON_FLAG="--json" ;;
       --dry-run) CLEANUP_YES=0 ;;
       --yes | -y) CLEANUP_YES=1 ;;
-      status | run | cleanup) CMD="${1}" ;;
+      status | run | cleanup | link) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--json] [--yes]" >&2
+        echo "Usage: $0 status|run|cleanup|link [--json] [--yes]" >&2
         echo "  Default = ${LLM_FILE} from ${LLM_REPO} (Apache 2.0)" >&2
         exit 0
         ;;
@@ -283,6 +284,21 @@ cmd_run() {
 }
 
 #######################################
+# Relink the snapshot GGUF into MODELS_DIR/comfy/llm/ (no download).
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0
+#######################################
+cmd_link() {
+  link_llm_into_comfy
+}
+
+#######################################
 # Remove extra files in the GGUF local-dir (keep the Q4_K_M file).
 # Globals:
 #   CLEANUP_YES
@@ -328,9 +344,10 @@ main() {
   case "${CMD}" in
     status) cmd_status ;;
     run) cmd_run ;;
+    link) cmd_link ;;
     cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run|cleanup [--json] [--yes]"
+      err "Usage: $0 status|run|cleanup|link [--json] [--yes]"
       exit 1
       ;;
   esac

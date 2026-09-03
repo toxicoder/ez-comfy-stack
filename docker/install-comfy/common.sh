@@ -335,7 +335,7 @@ link_models() {
 link_all_models() {
   local sub
   for sub in checkpoints diffusion_models text_encoders vae loras clip clip_vision \
-    unet controlnet embeddings upscale_models audio_encoders; do
+    unet controlnet embeddings upscale_models audio_encoders llm; do
     link_models "${sub}"
   done
   log "model links done"

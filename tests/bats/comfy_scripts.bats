@@ -397,6 +397,7 @@ teardown() {
   run link_all_models
   [ "${status}" -eq 0 ]
   [[ -L ${COMFY_HOME}/models/diffusion_models ]]
+  [[ -L ${COMFY_HOME}/models/llm ]]
 
   run apply_free_memory_patch
   [ "${status}" -eq 0 ]

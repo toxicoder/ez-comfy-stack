@@ -126,6 +126,23 @@ teardown() {
   unset LAB_MOCK_DOCKER_BIN_DIR
 }
 
+@test "manage doctor and start heal llm comfy link from snapshot" {
+  export MODELS_DIR="${TEST_TMP_DIR}/models"
+  local snap dest
+  snap="${MODELS_DIR}/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"
+  dest="${MODELS_DIR}/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  mkdir -p "${snap}"
+  echo x >"${snap}/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  run ensure_prompt_enhance_gguf
+  [ "${status}" -eq 0 ]
+  [[ -L ${dest} ]]
+  [[ $(readlink "${dest}") != /* ]]
+  rm -f "${dest}"
+  run cmd_doctor
+  [ "${status}" -eq 0 ]
+  [[ -L ${dest} ]]
+}
+
 @test "manage cmd_* direct: help setup doctor status start stop restart logs download cleanup" {
   run cmd_help
   [ "${status}" -eq 0 ]

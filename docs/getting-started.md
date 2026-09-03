@@ -244,6 +244,7 @@ hf auth whoami
 | `wan2.2_vae.safetensors` | `vae/` |
 | `ltx-2.5-video-vae-bf16.safetensors` | `vae/` |
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` |
+| `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` |
 
 !!! tip "Bandwidth shaping soft-fail"
 

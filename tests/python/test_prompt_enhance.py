@@ -170,7 +170,60 @@ def test_web_directory_and_preview_js() -> None:
     assert "EZWanPromptEnhance" in body
     assert "EZLTXPromptEnhance" in body
     assert "CLIP prompt" in body
+    assert "Enhance status" in body
+    assert "passthrough" in body
     assert "serialize" in body
+    assert "[passthrough:" not in body
+
+
+def _isolate_gguf_roots(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Path:
+    """Point every GGUF search root at an empty temp tree.
+
+    Args:
+        monkeypatch: Pytest env helper.
+        tmp_path: Isolated directory.
+
+    Returns:
+        The models root used for snapshot / comfy/llm candidates.
+    """
+    models = tmp_path / "models"
+    models.mkdir()
+    monkeypatch.setenv("MODELS_ROOT", str(models))
+    monkeypatch.setenv("MODELS_DIR", str(models))
+    monkeypatch.setenv("COMFY_HOME", str(tmp_path / "ComfyUI"))
+    monkeypatch.delenv("EZ_LLM_GGUF", raising=False)
+    return models
+
+
+def test_resolve_gguf_path_prefers_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    models = _isolate_gguf_roots(monkeypatch, tmp_path)
+    snap = models / client.SNAPSHOT_DIR / client.GGUF_FILENAME
+    snap.parent.mkdir(parents=True)
+    snap.write_bytes(b"snap")
+    custom = tmp_path / "custom.gguf"
+    custom.write_bytes(b"env")
+    monkeypatch.setenv("EZ_LLM_GGUF", str(custom))
+    assert client.resolve_gguf_path() == str(custom)
+
+
+def test_resolve_gguf_path_uses_snapshot_when_link_missing(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    models = _isolate_gguf_roots(monkeypatch, tmp_path)
+    snap = models / client.SNAPSHOT_DIR / client.GGUF_FILENAME
+    snap.parent.mkdir(parents=True)
+    snap.write_bytes(b"snap")
+    assert Path(client.resolve_gguf_path()) == snap
+
+
+def test_resolve_gguf_path_uses_comfy_llm_link(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    models = _isolate_gguf_roots(monkeypatch, tmp_path)
+    linked = models / "comfy" / "llm" / client.GGUF_FILENAME
+    linked.parent.mkdir(parents=True)
+    linked.write_bytes(b"link")
+    assert Path(client.resolve_gguf_path()) == linked
 
 
 def test_enhance_false_skips_llm() -> None:
@@ -178,17 +231,22 @@ def test_enhance_false_skips_llm() -> None:
         out = client.enhance_prompt("sys", "user", enhance=False, fallback="lazy bike")
     assert out.text == "lazy bike"
     assert out.reason == client.REASON_ENHANCE_OFF
-    assert out.preview.startswith("[passthrough: enhance off]")
+    assert out.preview == "lazy bike"
+    assert out.status == "enhance off"
     complete.assert_not_called()
 
 
 def test_missing_gguf_passthrough(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    _isolate_gguf_roots(monkeypatch, tmp_path)
     monkeypatch.setenv("EZ_LLM_GGUF", str(tmp_path / "missing.gguf"))
     client._close_llm()
     with patch.object(client, "_generate") as gen:
         out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
     assert out.text == "lazy bike"
     assert out.reason == client.REASON_GGUF_MISSING
+    assert out.preview == "lazy bike"
+    assert "download-models" in out.status
+    assert "[passthrough:" not in out.preview
     gen.assert_not_called()
 
 
@@ -208,7 +266,8 @@ def test_empty_model_output_passthrough(monkeypatch: pytest.MonkeyPatch) -> None
         out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
     assert out.text == "lazy bike"
     assert out.reason == client.REASON_EMPTY
-    assert "timeout or empty" in out.preview
+    assert out.preview == "lazy bike"
+    assert "timeout or empty" in out.status
 
 
 def test_success_strips_fences() -> None:
@@ -409,10 +468,13 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert len(styles) == 51
     off = klein.run("A cyberpunk tech wizard.", False, "t2i", "YouTube 16:9 still")
     assert off["result"] == ("A cyberpunk tech wizard.",)
-    assert off["ui"]["text"][0].startswith("[passthrough: enhance off]")
+    assert off["ui"]["text"][0] == "A cyberpunk tech wizard."
+    assert "[passthrough:" not in off["ui"]["text"][0]
+    assert off["ui"]["passthrough"][0] == "enhance off"
     styled_off = klein.run("A rooftop.", False, "t2i", "", "photorealistic")
     assert "Photoreal photograph" in styled_off["result"][0]
     assert "[passthrough:" not in styled_off["result"][0]
+    assert "[passthrough:" not in styled_off["ui"]["text"][0]
     with patch.object(
         client,
         "complete",
@@ -446,7 +508,8 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert "photoreal" in passthrough["result"][0].lower() or "still photograph" in passthrough[
         "result"
     ][0].lower()
-    assert passthrough["ui"]["text"][0].startswith("[passthrough:")
+    assert "[passthrough:" not in passthrough["ui"]["text"][0]
+    assert "download-models" in passthrough["ui"]["passthrough"][0]
     with patch.object(
         client,
         "complete",
