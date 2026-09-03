@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "An original superhero in a teal-and-copper flight suit stands on a rooftop helipad above a stylized dusk city of rounded towers, unmarked circular starburst chest plate catching a warm key. Suit fabric and a short capelet stir in a high-altitude breeze while distant air traffic glides between the towers. The camera dollies in slowly toward the hero over five seconds. Feature-film 3D animation, rounded forms, physically based materials, cinematic three-point light, volumetric dusk haze, 24mm, YouTube 16:9."
+        "An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a neon-wet dusk megacity rooftop terrace, holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a high-altitude breeze while distant maglev glides between unmarked spires. The camera dollies in slowly toward the wizard over five seconds. HD 3D game-engine pre-rendered cutscene, physically based materials, cinematic three-point light, volumetric neon haze, 24mm, YouTube 16:9."
       ],
       "title": "Positive"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "An original superhero in a teal-and-copper flight suit stands on a rooftop helipad above a stylized dusk city of rounded towers, unmarked circular starburst chest plate catching a warm key. Suit fabric and a short capelet stir in a high-altitude breeze while distant air traffic glides between the towers. The camera dollies in slowly toward the hero over five seconds. Feature-film 3D animation, rounded forms, physically based materials, cinematic three-point light, volumetric dusk haze, 24mm, YouTube 16:9.",
+        "An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a neon-wet dusk megacity rooftop terrace, holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a high-altitude breeze while distant maglev glides between unmarked spires. The camera dollies in slowly toward the wizard over five seconds. HD 3D game-engine pre-rendered cutscene, physically based materials, cinematic three-point light, volumetric neon haze, 24mm, YouTube 16:9.",
         true,
         "t2v",
         "5 seconds, 24 fps",

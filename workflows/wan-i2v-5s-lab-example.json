@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Slow cinematic dolly-in toward the superhero. Suit fabric and a short capelet stir in a high-altitude breeze. Distant air traffic glides between rounded towers. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps."
+        "Slow cinematic dolly-in toward the tech wizard. Coat hem and holographic glyph motes drift in a high-altitude breeze. Distant maglev glides between unmarked spires. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps."
       ],
       "title": "Motion / prompt"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Slow cinematic dolly-in toward the superhero. Suit fabric and a short capelet stir in a high-altitude breeze. Distant air traffic glides between rounded towers. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.",
+        "Slow cinematic dolly-in toward the tech wizard. Coat hem and holographic glyph motes drift in a high-altitude breeze. Distant maglev glides between unmarked spires. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.",
         true,
         "i2v",
         "5 seconds, 24 fps",

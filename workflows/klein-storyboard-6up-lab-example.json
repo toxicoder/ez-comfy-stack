@@ -157,7 +157,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering.",
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering.",
         true,
         "t2i",
         "YouTube 16:9 still",
@@ -201,7 +201,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, Pixar rounded cartoon, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -398,8 +398,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Canonical plate. Wide establishing shot of a stylized dusk city of rounded towers from a rooftop, 24mm. Unmarked surfaces, empty of lettering.",
-        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
+        "Canonical plate. Wide establishing shot of a neon-wet dusk megacity of unmarked spires from a rooftop, 24mm. Unmarked surfaces, empty of lettering.",
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
       ],
       "title": "SHOT 01"
     },
@@ -446,7 +446,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Canonical plate. Wide establishing shot of a stylized dusk city of rounded towers from a rooftop, 24mm. Unmarked surfaces, empty of lettering."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Canonical plate. Wide establishing shot of a neon-wet dusk megacity of unmarked spires from a rooftop, 24mm. Unmarked surfaces, empty of lettering."
       ],
       "title": "Positive 01"
     },
@@ -618,8 +618,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and hero. Medium shot of an original teal-and-copper superhero on a helipad, 35mm. Unmarked surfaces, empty of lettering.",
-        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
+        "Same rooftop and wizard. Medium shot of an original cyberpunk tech wizard on a rooftop terrace, 35mm. Unmarked surfaces, empty of lettering.",
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
       ],
       "title": "SHOT 02"
     },
@@ -666,7 +666,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Medium shot of an original teal-and-copper superhero on a helipad, 35mm. Unmarked surfaces, empty of lettering."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Same rooftop and wizard. Medium shot of an original cyberpunk tech wizard on a rooftop terrace, 35mm. Unmarked surfaces, empty of lettering."
       ],
       "title": "Positive 02"
     },
@@ -880,8 +880,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and hero. Detail of the unmarked circular copper starburst chest plate, 50mm. Unmarked surfaces, empty of lettering.",
-        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
+        "Same rooftop and wizard. Detail of the compact unmarked data-staff and holographic glyph rings, 50mm. Unmarked surfaces, empty of lettering.",
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
       ],
       "title": "SHOT 03"
     },
@@ -928,7 +928,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Detail of the unmarked circular copper starburst chest plate, 50mm. Unmarked surfaces, empty of lettering."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Same rooftop and wizard. Detail of the compact unmarked data-staff and holographic glyph rings, 50mm. Unmarked surfaces, empty of lettering."
       ],
       "title": "Positive 03"
     },
@@ -1142,8 +1142,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and hero. Rooftop tracking angle as distant air traffic glides between towers, 35mm. Unmarked surfaces, empty of lettering.",
-        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
+        "Same rooftop and wizard. Rooftop tracking angle as distant maglev glides between spires, 35mm. Unmarked surfaces, empty of lettering.",
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
       ],
       "title": "SHOT 04"
     },
@@ -1190,7 +1190,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Rooftop tracking angle as distant air traffic glides between towers, 35mm. Unmarked surfaces, empty of lettering."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Same rooftop and wizard. Rooftop tracking angle as distant maglev glides between spires, 35mm. Unmarked surfaces, empty of lettering."
       ],
       "title": "Positive 04"
     },
@@ -1404,8 +1404,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and hero. Over-the-shoulder toward the unmarked city skyline, dusk haze. Unmarked surfaces, empty of lettering.",
-        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
+        "Same rooftop and wizard. Over-the-shoulder toward the unmarked city skyline, neon dusk haze. Unmarked surfaces, empty of lettering.",
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
       ],
       "title": "SHOT 05"
     },
@@ -1452,7 +1452,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Over-the-shoulder toward the unmarked city skyline, dusk haze. Unmarked surfaces, empty of lettering."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Same rooftop and wizard. Over-the-shoulder toward the unmarked city skyline, neon dusk haze. Unmarked surfaces, empty of lettering."
       ],
       "title": "Positive 05"
     },
@@ -1666,8 +1666,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and hero. Closing wide as city lights warm in the towers, quiet helipad, 24mm. Unmarked surfaces, empty of lettering.",
-        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
+        "Same rooftop and wizard. Closing wide as neon city lights warm in the spires, quiet terrace, 24mm. Unmarked surfaces, empty of lettering.",
+        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze"
       ],
       "title": "SHOT 06"
     },
@@ -1714,7 +1714,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Closing wide as city lights warm in the towers, quiet helipad, 24mm. Unmarked surfaces, empty of lettering."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze Same rooftop and wizard. Closing wide as neon city lights warm in the spires, quiet terrace, 24mm. Unmarked surfaces, empty of lettering."
       ],
       "title": "Positive 06"
     },

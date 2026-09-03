@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A wide 3D feature-animation shot of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad as a warm key rakes the unmarked circular starburst chest plate. Suit fabric and a short capelet stir in a high-altitude breeze while distant air traffic glides between rounded towers. The camera dollies in slowly toward the hero. Rooftop wind snaps the fabric as a distant traffic hum rolls between the towers. Clean unmarked surfaces sit empty of lettering. No music and no score."
+        "A wide HD 3D game-engine pre-rendered cutscene shot of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace as holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a high-altitude breeze while distant maglev glides between unmarked spires. The camera dollies in slowly toward the wizard. Rooftop wind and an electrical hum sit under a distant maglev, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score."
       ],
       "title": "Positive"
     },
@@ -690,11 +690,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "A wide 3D feature-animation shot of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad as a warm key rakes the unmarked circular starburst chest plate. Suit fabric and a short capelet stir in a high-altitude breeze while distant air traffic glides between rounded towers. The camera dollies in slowly toward the hero. Rooftop wind snaps the fabric as a distant traffic hum rolls between the towers. Clean unmarked surfaces sit empty of lettering. No music and no score.",
+        "A wide HD 3D game-engine pre-rendered cutscene shot of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace as holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a high-altitude breeze while distant maglev glides between unmarked spires. The camera dollies in slowly toward the wizard. Rooftop wind and an electrical hum sit under a distant maglev, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score.",
         true,
         "t2v",
         "5 seconds, 24 fps",
-        "rooftop wind, fabric snap, distant traffic hum, no score",
+        "rooftop wind, electrical hum, distant maglev, glyph chime, no score",
         "none"
       ],
       "title": "LTX Prompt Enhance"

@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation vertical hook still for Shorts. First-frame energy: an original teal-and-copper superhero fills the lower third on a dusk rooftop helipad. Tight 9:16, caption headroom at the top. Unmarked chest plate, empty of lettering."
+        "A HD 3D game-engine pre-rendered cutscene vertical hook still for Shorts. First-frame energy: an original cyberpunk tech wizard fills the lower third on a neon-wet dusk rooftop terrace. Tight 9:16, caption headroom at the top. Holographic glyph rings, empty of lettering."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, Pixar rounded cartoon, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -413,7 +413,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A 3D feature-animation vertical hook still for Shorts. First-frame energy: an original teal-and-copper superhero fills the lower third on a dusk rooftop helipad. Tight 9:16, caption headroom at the top. Unmarked chest plate, empty of lettering.",
+        "A HD 3D game-engine pre-rendered cutscene vertical hook still for Shorts. First-frame energy: an original cyberpunk tech wizard fills the lower third on a neon-wet dusk rooftop terrace. Tight 9:16, caption headroom at the top. Holographic glyph rings, empty of lettering.",
         true,
         "t2i",
         "YouTube 16:9 still",

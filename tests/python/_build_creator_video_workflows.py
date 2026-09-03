@@ -1002,7 +1002,7 @@ Disclose AI-generated media. No score.
         if i == 0:
             line = f"Canonical plate. {camera} Unmarked surfaces, empty of lettering."
         else:
-            line = f"Same rooftop and hero. {camera} Unmarked surfaces, empty of lettering."
+            line = f"Same rooftop and wizard. {camera} Unmarked surfaces, empty of lettering."
         board_shots.append((prefix, f"{i + 1:02d}", line))
     _klein_pack(
         stem="klein-storyboard-6up-lab-example",
@@ -1539,7 +1539,7 @@ def build_creator_toolkit_v2() -> None:
         prompt=(
             f"{identity} Framed as a YouTube end-card plate: generous empty lower-right "
             "for a subscribe button later. Clean of burned-in text, logos, or UI chrome. "
-            "Feature-film 3D animation 16:9."
+            "HD 3D game-engine pre-rendered cutscene 16:9."
         ),
         note="""## klein-endcard-cta-lab-example
 
@@ -1556,7 +1556,7 @@ Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
         prefix="ez_quote_bg",
         prompt=(
             f"{identity} Square 1:1. Soft bokeh, quiet center so overlay text can sit later. "
-            "Empty of lettering. Feature-film 3D animation quote-card background."
+            "Empty of lettering. HD 3D game-engine pre-rendered cutscene quote-card background."
         ),
         note="""## klein-quote-bg-lab-example
 
@@ -1573,7 +1573,7 @@ Keep the center empty of detail; add the quote in your editor.
         prefix="ez_og",
         prompt=(
             f"{identity} Wide blog / Open Graph hero. Subject left-weighted, quiet right third "
-            "for a headline later. Clean of burned-in text. Feature-film 3D animation ~1.9:1."
+            "for a headline later. Clean of burned-in text. HD 3D game-engine pre-rendered cutscene ~1.9:1."
         ),
         note="""## klein-og-blog-lab-example
 
@@ -1608,7 +1608,7 @@ Swap the props in the prompt. Add show title in your editor.
         prefix="ez_banner",
         prompt=(
             f"{identity} Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band "
-            "for a name overlay. Empty of lettering. Feature-film 3D animation ~3:1."
+            "for a name overlay. Empty of lettering. HD 3D game-engine pre-rendered cutscene ~3:1."
         ),
         note="""## klein-banner-wide-lab-example
 
@@ -1698,12 +1698,12 @@ Swap the dish in the prompt; keep unmarked surfaces.
             (
                 "ez_light_02",
                 "WINDOW",
-                "Same rooftop and hero. Soft overcast skylight, gentle falloff, cool shadows. Same camera.",
+                "Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera.",
             ),
             (
                 "ez_light_03",
                 "NIGHT LAMP",
-                "Same rooftop and hero at night under rooftop sodium and city neon. Same camera.",
+                "Same rooftop and wizard at night under rooftop sodium and city neon. Same camera.",
             ),
         ],
         note=f"""## klein-lighting-trio-lab-example
@@ -1729,17 +1729,17 @@ Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light
             (
                 "ez_tod_02",
                 "DAWN",
-                "Same rooftop and hero. First blue dawn, cool air, empty helipad. Same camera.",
+                "Same rooftop and wizard. First blue dawn, cool air, empty terrace. Same camera.",
             ),
             (
                 "ez_tod_03",
                 "NOON",
-                "Same rooftop and hero. Hard noon sun, short shadows. Same camera.",
+                "Same rooftop and wizard. Hard noon sun, short shadows. Same camera.",
             ),
             (
                 "ez_tod_04",
                 "NIGHT",
-                "Same rooftop and hero at night. Warm tower glow. Same camera.",
+                "Same rooftop and wizard at night. Warm tower glow. Same camera.",
             ),
         ],
         note=f"""## klein-time-of-day-lab-example
@@ -1760,17 +1760,17 @@ Prefixes `ez_tod_01`…`04`. Change only time of day.
             (
                 "ez_angle_med",
                 "MEDIUM",
-                "Canonical plate. 35mm medium, hero fills the middle third. YouTube 16:9.",
+                "Canonical plate. 35mm medium, wizard fills the middle third. YouTube 16:9.",
             ),
             (
                 "ez_angle_wide",
                 "WIDE",
-                "Same rooftop and hero. 24mm wide establishing, lots of city and sky.",
+                "Same rooftop and wizard. 24mm wide establishing, lots of city and sky.",
             ),
             (
                 "ez_angle_close",
                 "CLOSE",
-                "Same rooftop and hero. 50mm close on the copper starburst chest plate and suit materials.",
+                "Same rooftop and wizard. 50mm close on the data-staff, glyph rings, and coat materials.",
             ),
         ],
         note=f"""## klein-camera-angles-lab-example
@@ -1796,17 +1796,17 @@ Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Change only lens and
             (
                 "ez_mood_02",
                 "COOL",
-                "Same rooftop and hero. Cool teal-and-steel grade, overcast. Same camera.",
+                "Same rooftop and wizard. Cool teal-and-steel grade, overcast. Same camera.",
             ),
             (
                 "ez_mood_03",
                 "MUTED",
-                "Same rooftop and hero. Muted filmic grade, desaturated copper, soft contrast. Same camera.",
+                "Same rooftop and wizard. Muted filmic grade, desaturated copper, soft contrast. Same camera.",
             ),
             (
                 "ez_mood_04",
                 "HIGH KEY",
-                "Same rooftop and hero. High-key bright daylight, lifted shadows, clean whites. Same camera.",
+                "Same rooftop and wizard. High-key bright daylight, lifted shadows, clean whites. Same camera.",
             ),
         ],
         note=f"""## klein-color-moods-lab-example

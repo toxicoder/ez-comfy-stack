@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Framed as a YouTube end-card plate: generous empty lower-right for a subscribe button later. Clean of burned-in text, logos, or UI chrome. Feature-film 3D animation 16:9."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Framed as a YouTube end-card plate: generous empty lower-right for a subscribe button later. Clean of burned-in text, logos, or UI chrome. HD 3D game-engine pre-rendered cutscene 16:9."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, Pixar rounded cartoon, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -451,7 +451,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Framed as a YouTube end-card plate: generous empty lower-right for a subscribe button later. Clean of burned-in text, logos, or UI chrome. Feature-film 3D animation 16:9.",
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Framed as a YouTube end-card plate: generous empty lower-right for a subscribe button later. Clean of burned-in text, logos, or UI chrome. HD 3D game-engine pre-rendered cutscene 16:9.",
         true,
         "t2i",
         "YouTube 16:9 still",
