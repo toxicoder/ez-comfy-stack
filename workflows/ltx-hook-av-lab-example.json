@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A five-second AV cold open. Camera snaps to an original teal-and-copper superhero on a dusk rooftop helipad as wind hits a capelet and distant traffic hums. Fast present-tense energy, unmarked surfaces. No music and no score."
+        "A five-second AV cold open. Camera snaps to an original cyberpunk tech wizard on a neon-wet dusk rooftop terrace as holographic glyph rings bloom and distant maglev hums. Fast present-tense energy, unmarked surfaces. No music and no score."
       ],
       "title": "Positive"
     },
@@ -690,11 +690,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "A five-second AV cold open. Camera snaps to an original teal-and-copper superhero on a dusk rooftop helipad as wind hits a capelet and distant traffic hums. Fast present-tense energy, unmarked surfaces. No music and no score.",
+        "A five-second AV cold open. Camera snaps to an original cyberpunk tech wizard on a neon-wet dusk rooftop terrace as holographic glyph rings bloom and distant maglev hums. Fast present-tense energy, unmarked surfaces. No music and no score.",
         true,
         "t2v",
         "5 seconds, 24 fps",
-        "rooftop wind, fabric snap, distant traffic hum, no score",
+        "rooftop wind, electrical hum, distant maglev, glyph chime, no score",
         "none"
       ],
       "title": "LTX Prompt Enhance"

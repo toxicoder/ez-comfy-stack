@@ -1,4 +1,4 @@
-"""Lab canned prompts share one original superhero 3D-animation identity."""
+"""Lab canned prompts share one original cyberpunk tech-wizard cutscene identity."""
 
 from __future__ import annotations
 
@@ -11,7 +11,15 @@ ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 
 BANNED = ("bicycle", "storefront", "main street")
-LOCK = ("3D feature-animation", "teal-and-copper")
+OLD_THEME = (
+    "superhero",
+    "capelet",
+    "flight suit",
+    "starburst",
+    "3D feature-animation",
+    "feature-film 3D animation",
+)
+LOCK = ("HD 3D game-engine pre-rendered cutscene", "tech wizard")
 
 # Packs that already use a different subject (house, mug, 90s films).
 EXEMPT = {
@@ -36,15 +44,16 @@ def _graphs() -> list[Path]:
 
 def test_theme_module_lens_split_and_lock() -> None:
     assert STYLE_LOCK in KLEIN_STILL
-    assert "teal-and-copper" in KLEIN_STILL
+    assert "tech wizard" in KLEIN_STILL
     assert "24mm" in KLEIN_STILL
     assert "35mm" in KLEIN_STILL_DAILY
     assert "24mm" not in KLEIN_STILL_DAILY
     assert "dollies" in WAN_T2V.lower() or "dolly" in WAN_T2V.lower()
     assert "bicycle" not in KLEIN_STILL.lower()
+    assert "superhero" not in KLEIN_STILL.lower()
 
 
-def test_klein_draft_and_hero_lock_superhero_3d_identity() -> None:
+def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
     draft = json.loads((WF / "klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
     hero = json.loads((WF / "klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
 
@@ -60,6 +69,7 @@ def test_klein_draft_and_hero_lock_superhero_3d_identity() -> None:
     assert "no logos, no text" not in text
     for banned in BANNED:
         assert banned not in text.lower()
+    assert "superhero" not in text.lower()
 
 
 def test_lab_example_graphs_drop_bicycle_theme() -> None:
@@ -72,6 +82,25 @@ def test_lab_example_graphs_drop_bicycle_theme() -> None:
             if banned in blob:
                 hits.append(f"{path.relative_to(ROOT)}: {banned!r}")
     assert hits == []
+
+
+def test_lab_example_graphs_drop_superhero_theme() -> None:
+    hits: list[str] = []
+    for path in _graphs():
+        if path.stem in EXEMPT:
+            continue
+        blob = path.read_text(encoding="utf-8")
+        lower = blob.lower()
+        for banned in OLD_THEME:
+            if banned.lower() in lower:
+                hits.append(f"{path.relative_to(ROOT)}: {banned!r}")
+    assert hits == []
+
+
+def test_lab_identity_graphs_lock_tech_wizard_cutscene() -> None:
+    draft = (WF / "klein-still-draft-lab-example.json").read_text(encoding="utf-8")
+    for needle in LOCK:
+        assert needle in draft
 
 
 def test_exempt_packs_keep_their_own_subjects() -> None:

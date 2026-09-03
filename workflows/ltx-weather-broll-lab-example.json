@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Locked-camera weather B-roll. Rain streaks across a rooftop helipad and a teal-and-copper flight suit at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds."
+        "Locked-camera weather B-roll. Rain streaks across a neon-wet rooftop terrace and an electric-cyan tech-mage coat at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds."
       ],
       "title": "Positive"
     },
@@ -690,7 +690,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "Locked-camera weather B-roll. Rain streaks across a rooftop helipad and a teal-and-copper flight suit at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds.",
+        "Locked-camera weather B-roll. Rain streaks across a neon-wet rooftop terrace and an electric-cyan tech-mage coat at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds.",
         true,
         "t2v",
         "5 seconds, 24 fps",

@@ -68,9 +68,9 @@ def test_style_catalog_is_fifty_unique() -> None:
 
 
 def test_strip_fences_and_quotes() -> None:
-    fenced = "```text\nA teal-and-copper superhero stands on a helipad.\n```"
-    assert client.strip_model_wrapping(fenced) == "A teal-and-copper superhero stands on a helipad."
-    assert client.strip_model_wrapping('"A teal-and-copper superhero."') == "A teal-and-copper superhero."
+    fenced = "```text\nA cyberpunk tech wizard stands on a rooftop terrace.\n```"
+    assert client.strip_model_wrapping(fenced) == "A cyberpunk tech wizard stands on a rooftop terrace."
+    assert client.strip_model_wrapping('"A cyberpunk tech wizard."') == "A cyberpunk tech wizard."
 
 
 def test_enhance_false_skips_llm() -> None:
@@ -115,10 +115,10 @@ def test_success_strips_fences() -> None:
     with patch.object(
         client,
         "complete",
-        return_value=("A 3D feature-animation still of a teal-and-copper superhero.", None),
+        return_value=("A HD 3D game-engine pre-rendered cutscene still of a cyberpunk tech wizard.", None),
     ) as complete:
         out = client.enhance_prompt("sys", "hero still", enhance=True, fallback="hero still")
-    assert out.text == "A 3D feature-animation still of a teal-and-copper superhero."
+    assert out.text == "A HD 3D game-engine pre-rendered cutscene still of a cyberpunk tech wizard."
     assert out.reason is None
     assert out.preview == out.text
     complete.assert_called_once()
@@ -195,8 +195,8 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein["widgets_values"][1] is True
     assert klein["widgets_values"][-1] == "none"
-    assert "3D feature-animation still" in klein["widgets_values"][0]
-    assert "teal-and-copper" in klein["widgets_values"][0]
+    assert "HD 3D game-engine pre-rendered cutscene still" in klein["widgets_values"][0]
+    assert "tech wizard" in klein["widgets_values"][0]
     wan = next(n for n in gif["nodes"] if n.get("type") == "EZWanPromptEnhance")
     assert wan["widgets_values"][2] == "i2v"
     motion = wan["widgets_values"][0].lower()
@@ -280,8 +280,8 @@ def test_node_mappings_modes_preview_and_style() -> None:
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
     assert len(styles) == 51
-    off = klein.run("A teal-and-copper superhero.", False, "t2i", "YouTube 16:9 still")
-    assert off["result"] == ("A teal-and-copper superhero.",)
+    off = klein.run("A cyberpunk tech wizard.", False, "t2i", "YouTube 16:9 still")
+    assert off["result"] == ("A cyberpunk tech wizard.",)
     assert off["ui"]["text"][0].startswith("[passthrough: enhance off]")
     styled_off = klein.run("A rooftop.", False, "t2i", "", "photorealistic")
     assert "Photoreal photograph" in styled_off["result"][0]

@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Locked camera. A high-altitude breeze cycles the capelet and suit fabric. City lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+        "Locked camera. A high-altitude breeze cycles the coat hem and holographic glyph motes. Neon city lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
       ],
       "title": "Motion / prompt"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Locked camera. A high-altitude breeze cycles the capelet and suit fabric. City lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF.",
+        "Locked camera. A high-altitude breeze cycles the coat hem and holographic glyph motes. Neon city lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF.",
         true,
         "i2v",
         "4 seconds, 12 fps, looping GIF",

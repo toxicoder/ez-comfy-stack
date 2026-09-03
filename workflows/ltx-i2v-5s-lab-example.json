@@ -191,7 +191,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The camera dollies in slowly toward the superhero while suit fabric and a short capelet stir in a high-altitude breeze and distant air traffic glides between rounded towers. Rooftop wind snaps the fabric as a distant traffic hum rolls between the towers. The rooftop and hero identity stay locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+        "The start image holds as the first frame. The camera dollies in slowly toward the tech wizard while coat hem and holographic glyph motes drift in a high-altitude breeze and distant maglev glides between unmarked spires. Rooftop wind and an electrical hum sit under a distant maglev, then a glyph chime. The rooftop and wizard identity stay locked. Keep every object and surface from the start image; do not redesign. No music and no score."
       ],
       "title": "Motion / prompt"
     },
@@ -771,11 +771,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The camera dollies in slowly toward the superhero while suit fabric and a short capelet stir in a high-altitude breeze and distant air traffic glides between rounded towers. Rooftop wind snaps the fabric as a distant traffic hum rolls between the towers. The rooftop and hero identity stay locked. Keep every object and surface from the start image; do not redesign. No music and no score.",
+        "The start image holds as the first frame. The camera dollies in slowly toward the tech wizard while coat hem and holographic glyph motes drift in a high-altitude breeze and distant maglev glides between unmarked spires. Rooftop wind and an electrical hum sit under a distant maglev, then a glyph chime. The rooftop and wizard identity stay locked. Keep every object and surface from the start image; do not redesign. No music and no score.",
         true,
         "i2v",
         "5 seconds, 24 fps",
-        "rooftop wind, fabric snap, distant traffic hum, no score",
+        "rooftop wind, electrical hum, distant maglev, glyph chime, no score",
         "none"
       ],
       "title": "LTX Prompt Enhance"

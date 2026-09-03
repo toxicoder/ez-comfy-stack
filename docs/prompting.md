@@ -45,9 +45,9 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Front-load the subject. Write prose.
 
-    **Do:** `A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Warm key rakes the unmarked chest plate…`
+    **Do:** `A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff…`
 
-    **Don’t:** `rooftop, superhero, 3D animation, 24mm, no logos, no text`
+    **Don’t:** `rooftop, tech wizard, 3D, 24mm, no logos, no text`
 
 === "Wan 2.2 T2V"
 
