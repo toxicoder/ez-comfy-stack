@@ -84,7 +84,7 @@ services:
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs
       # All example workflows (host tree); entrypoint copies into user workflows
       - ../workflows:/opt/ez-comfy/workflows:ro
-      # In-tree prompt-enhance nodes; entrypoint copies into custom_nodes
+      # In-tree custom nodes (prompt-enhance, LTX spatial snap); entrypoint copies packs
       - ../custom_nodes:/opt/ez-comfy/custom_nodes:ro
       # Host ops scripts — iterate without image rebuild (image still embeds for GHCR)
       - ./entrypoint.sh:/opt/ez-comfy/entrypoint.sh:ro

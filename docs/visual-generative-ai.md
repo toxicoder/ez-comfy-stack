@@ -135,7 +135,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     !!! warning "LTX width/height must be divisible by 32"
 
-        Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** valid for the LTX video VAE. Lab landscape graphs use **1280×704**. Klein stills may stay 1280×720; `LTXVImgToVideo` center-crops. Portrait shorts I2V is **768×1280**. Do not type 720 or 1080 on LTX latent widgets. See [Troubleshooting](troubleshooting.md).
+        Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** native LTX VAE sizes (720/16=45, then the next `/2` patch fails). Lab landscape graphs use **1280×704**. Klein stills may stay 1280×720; I2V center-crops. Typing 720 or 1080 on LTX widgets is **auto-snapped** (704 / 1056) by `ez_ltx_spatial` — prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**. See [Troubleshooting](troubleshooting.md).
 
 === "Apps (still / GIF / IG)"
 

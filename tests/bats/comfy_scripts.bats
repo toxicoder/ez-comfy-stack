@@ -181,6 +181,33 @@ teardown() {
   [[ ! -d ${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance2 ]]
 }
 
+@test "install_all_lab_custom_nodes copies packs and skips non-packs" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/custom_nodes_src"
+  dest="${TEST_TMP_DIR}/ComfyUI/custom_nodes_all"
+  mkdir -p "${src}/ez_prompt_enhance" "${src}/ez_ltx_spatial" "${src}/not_a_pack"
+  echo 'ok' >"${src}/ez_prompt_enhance/__init__.py"
+  echo 'ok' >"${src}/ez_ltx_spatial/__init__.py"
+  echo 'skip' >"${src}/not_a_pack/readme.txt"
+  echo 'file' >"${src}/stray.txt"
+  run install_all_lab_custom_nodes "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/ez_prompt_enhance/__init__.py ]]
+  [[ -f ${dest}/ez_ltx_spatial/__init__.py ]]
+  [[ ! -d ${dest}/not_a_pack ]]
+  [[ ! -f ${dest}/stray.txt ]]
+  [[ "${output}" == *"installed 2 custom node pack"* ]]
+  run install_all_lab_custom_nodes "${TEST_TMP_DIR}/missing-root" "${TEST_TMP_DIR}/ComfyUI/custom_nodes_missing"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"optional mount"* ]]
+  mkdir -p "${TEST_TMP_DIR}/empty_packs"
+  run install_all_lab_custom_nodes "${TEST_TMP_DIR}/empty_packs" "${TEST_TMP_DIR}/ComfyUI/custom_nodes_empty"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"no custom node packs under"* ]]
+}
+
 @test "install_lab_workflows copies top-level and shorts JSON" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
@@ -209,6 +236,9 @@ teardown() {
   # fake activate
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
   : >"${STAMP}"
+  mkdir -p "${TEST_TMP_DIR}/cn/ez_ltx_spatial"
+  echo 'ok' >"${TEST_TMP_DIR}/cn/ez_ltx_spatial/__init__.py"
+  export LAB_CUSTOM_NODES_SRC="${TEST_TMP_DIR}/cn"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
   export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs_main"
@@ -216,6 +246,7 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"phase"* || "${output}" == *"refresh"* ]]
   [[ -L ${COMFY_HOME}/output ]]
+  [[ -f ${COMFY_HOME}/custom_nodes/ez_ltx_spatial/__init__.py ]]
 }
 
 @test "entrypoint reseeds prebuilt when volume pin lags" {

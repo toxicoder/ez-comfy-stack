@@ -5,7 +5,7 @@
 # Enforce project coverage gates for CI (`make coverage`) and local pre-merge.
 #
 # Gates:
-#   1. Python — pytest-cov on patch_get_free_memory with --cov-fail-under=100
+#   1. Python — pytest-cov on patch_get_free_memory + ez_ltx_spatial with --cov-fail-under=100
 #   2. Shell function inventory — every function under scripts/ and docker/**/*.sh
 #      must be named under tests/ (strict; production-only refs do not count)
 #   3. Full BATS suite
@@ -54,8 +54,9 @@ main() {
     echo "Install pytest-cov: pip install pytest pytest-cov" >&2
     FAIL=1
   else
-    PYTHONPATH="${ROOT}/docker" python3 -m pytest tests/python -q \
+    PYTHONPATH="${ROOT}/docker:${ROOT}/custom_nodes" python3 -m pytest tests/python -q \
       --cov=patch_get_free_memory \
+      --cov=ez_ltx_spatial \
       --cov-report=term-missing \
       --cov-fail-under=100 || FAIL=1
   fi

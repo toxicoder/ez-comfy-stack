@@ -297,30 +297,66 @@ install_lab_workflows() {
 }
 
 #######################################
-# Copy host in-tree prompt-enhance nodes into Comfy custom_nodes.
-# Stdlib-only pack; bind-mounted like workflows so node edits skip image rebuild.
+# Copy one in-tree custom-node pack into Comfy custom_nodes.
+# Bind-mounted like workflows so node edits skip image rebuild.
 # Globals:
 #   None
 # Arguments:
-#   $1  source pack (default /opt/ez-comfy/custom_nodes/ez_prompt_enhance)
-#   $2  destination custom_nodes/ez_prompt_enhance
+#   $1  source pack directory (must contain __init__.py)
+#   $2  destination directory
 # Outputs:
 #   ep_log lines
 # Returns:
 #   0
 #######################################
 install_lab_custom_nodes() {
-  local src="${1:-/opt/ez-comfy/custom_nodes/ez_prompt_enhance}"
+  local src="${1:-}"
   local dest="${2:?}"
-  if [[ ! -d ${src} || ! -f ${src}/__init__.py ]]; then
-    ep_log "no prompt-enhance nodes under ${src} (optional mount)"
+  if [[ -z ${src} || ! -d ${src} || ! -f "${src}/__init__.py" ]]; then
+    ep_log "no custom node pack under ${src:-unset} (optional mount)"
     return 0
   fi
   mkdir -p "$(dirname "${dest}")"
   rm -rf "${dest}"
   cp -a "${src}" "${dest}"
   rm -rf "${dest}/__pycache__" "${dest}/.pytest_cache"
-  ep_log "installed custom node ez_prompt_enhance"
+  ep_log "installed custom node $(basename "${dest}")"
+}
+
+#######################################
+# Copy every in-tree pack under a root into Comfy custom_nodes.
+# Globals:
+#   None
+# Arguments:
+#   $1  source root (default /opt/ez-comfy/custom_nodes)
+#   $2  destination custom_nodes directory
+# Outputs:
+#   ep_log lines
+# Returns:
+#   0
+#######################################
+install_all_lab_custom_nodes() {
+  local src_root="${1:-/opt/ez-comfy/custom_nodes}"
+  local dest_root="${2:?}"
+  local src dest n pack
+  n=0
+  if [[ ! -d ${src_root} ]]; then
+    ep_log "no custom node packs under ${src_root} (optional mount)"
+    return 0
+  fi
+  mkdir -p "${dest_root}"
+  for src in "${src_root}"/*; do
+    [[ -d ${src} && -f "${src}/__init__.py" ]] || continue
+    pack="$(basename "${src}")"
+    dest="${dest_root}/${pack}"
+    install_lab_custom_nodes "${src}" "${dest}"
+    n=$((n + 1))
+  done
+  if [[ ${n} -eq 0 ]]; then
+    ep_log "no custom node packs under ${src_root}"
+  else
+    ep_log "installed ${n} custom node pack(s)"
+  fi
 }
 
 #######################################
@@ -393,10 +429,11 @@ main() {
     python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
   fi
 
-  ep_log "phase 3/4: install lab workflows and prompt-enhance nodes"
+  ep_log "phase 3/4: install lab workflows and custom nodes"
   install_lab_workflows /opt/ez-comfy/workflows "${comfy_home}/user/default/workflows"
-  install_lab_custom_nodes /opt/ez-comfy/custom_nodes/ez_prompt_enhance \
-    "${comfy_home}/custom_nodes/ez_prompt_enhance"
+  install_all_lab_custom_nodes \
+    "${LAB_CUSTOM_NODES_SRC:-/opt/ez-comfy/custom_nodes}" \
+    "${comfy_home}/custom_nodes"
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
   ensure_triton_build_env

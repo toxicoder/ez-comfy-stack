@@ -13,6 +13,10 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-DOCKER = Path(__file__).resolve().parents[2] / "docker"
+ROOT = Path(__file__).resolve().parents[2]
+DOCKER = ROOT / "docker"
+CUSTOM = ROOT / "custom_nodes"
 if str(DOCKER) not in sys.path:
     sys.path.insert(0, str(DOCKER))
+if str(CUSTOM) not in sys.path:
+    sys.path.insert(0, str(CUSTOM))
