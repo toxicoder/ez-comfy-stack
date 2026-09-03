@@ -1131,7 +1131,7 @@
 <ul>
 <li>How each lab model actually reads a prompt</li>
 <li>Canned lab-example text (already rewritten)</li>
-<li>GIF loop motion and dream-house identity (Prompt Join)</li>
+<li>GIF loop motion and dream-house identity plate (Prompt Join)</li>
 <li>Lazy path: Prompt Enhance nodes + <code>XAI_API_KEY</code></li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1197,7 +1197,7 @@
 <p>Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do <strong>not</strong> prompt a walk or a one-way dolly — <strong>wan-gif-loop-lab-example</strong> plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.</p>
 </div>
 <div class="tabbed-block">
-<p>One identity paragraph (materials, architecture, place) plus a short camera line per shot. <strong>klein-dream-house-lab-example</strong> uses <strong>Prompt Join</strong> so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.</p>
+<p>One identity paragraph locks <strong>massing + materials + place</strong> (one compact single-story rectangular cedar cabin, hip roof, two-bay glass, decks on gravel, alpine lake). Each SHOT card is only camera, room, time of day, and season of <strong>that same cabin</strong> — not a new building. <strong>klein-dream-house-lab-example</strong> uses <strong>Prompt Join</strong> so you edit the house once. SHOT 01 is the T2I identity plate; Queue 01 first and do not bypass it when generating 02–10 (they Klein-edit from 01 via <code>VAEEncode</code> + <code>ReferenceLatent</code>). Unused shots 02–10 may still be bypassed after 01 exists. Keep the ten Instagram 4:5 stills as photographs of one cabin.</p>
 </div>
 <div class="tabbed-block">
 <p>Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, <strong>no score</strong>. Do not paste a Wan or Kling shot list unchanged.</p>
