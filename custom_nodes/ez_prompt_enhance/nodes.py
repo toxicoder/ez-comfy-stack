@@ -9,14 +9,14 @@ from .client import (
     STYLE_NONE,
     EnhanceResult,
     _log,
+    apply_style_to_prompt,
     enhance_prompt,
-    ensure_style_details,
     flavor_for_system,
     format_style_instruction,
     join_prompt,
     load_system_prompt,
     style_ids,
-    style_suffix,
+    with_style_system,
 )
 
 
@@ -49,18 +49,8 @@ def _compose_user(prompt: str, duration_hint: str, audio_notes: str = "") -> str
     return "\n\n".join(parts)
 
 
-def _apply_style_suffix(prompt: str, style: str) -> str:
-    suffix = style_suffix(style)
-    if not suffix:
-        return prompt
-    base = prompt.rstrip()
-    if not base:
-        return suffix
-    return f"{base} {suffix}"
-
-
 def _pack(result: EnhanceResult) -> dict:
-    return {"ui": {"text": [result.preview]}, "result": (result.text,)}
+    return {"ui": {"text": (result.preview,)}, "result": (result.text,)}
 
 
 def _run(
@@ -83,22 +73,24 @@ def _run(
     if not do_enhance:
         text = original
         if apply_style:
-            text = _apply_style_suffix(original, style)
+            text = apply_style_to_prompt(original, style)
         return _pack(EnhanceResult(text, "enhance off"))
 
     user = _compose_user(original, duration_hint, audio_notes)
+    system = load_system_prompt(system_name)
     if apply_style:
         instruction = format_style_instruction(style, flavor_for_system(system_name))
         if instruction:
             user = f"{user}\n\n{instruction}"
+        system = with_style_system(system, style)
     out = enhance_prompt(
-        load_system_prompt(system_name),
+        system,
         user,
         enhance=True,
         fallback=original,
     )
-    if apply_style and out.reason is None:
-        out = EnhanceResult(ensure_style_details(out.text, style), None)
+    if apply_style:
+        out = EnhanceResult(apply_style_to_prompt(out.text, style), out.reason)
     return _pack(out)
 
 

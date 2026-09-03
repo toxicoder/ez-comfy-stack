@@ -14,6 +14,7 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
+import ez_prompt_enhance  # noqa: E402
 from ez_prompt_enhance import client  # noqa: E402
 from ez_prompt_enhance.nodes import (  # noqa: E402
     EZKleinPromptEnhance,
@@ -135,14 +136,41 @@ def test_ensure_style_details_appends_when_missing() -> None:
     filled = client.ensure_style_details(bare, "watercolor_illustration")
     assert "transparent watercolor" in filled.lower() or "wet-into-wet" in filled.lower()
     already = "A bicycle as transparent watercolor with paper tooth."
-    assert client.ensure_style_details(already, "watercolor_illustration") == already
+    kept = client.ensure_style_details(already, "watercolor_illustration")
+    assert "transparent watercolor" in kept.lower()
     assert client.ensure_style_details(bare, "none") == bare
 
 
-def test_strip_fences_and_quotes() -> None:
+def test_apply_style_to_prompt_overrides_lab_3d() -> None:
+    src = "A HD 3D game-engine pre-rendered cutscene still of a rooftop."
+    out = client.apply_style_to_prompt(src, "watercolor_illustration")
+    lower = out.lower()
+    assert "transparent watercolor" in lower
+    assert "game-engine" not in lower
+    anime = client.apply_style_to_prompt(src, "anime")
+    assert "japanese anime" in anime.lower() or "cel-shaded" in anime.lower()
+    assert "game-engine" not in anime.lower()
+    assert client.apply_style_to_prompt(src, "none") == src
+
+
+def test_strip_fences_quotes_and_think() -> None:
     fenced = "```text\nA cyberpunk tech wizard stands on a rooftop terrace.\n```"
     assert client.strip_model_wrapping(fenced) == "A cyberpunk tech wizard stands on a rooftop terrace."
     assert client.strip_model_wrapping('"A cyberpunk tech wizard."') == "A cyberpunk tech wizard."
+    think = "<think>plan the shot</think>\nA cyberpunk tech wizard stands on a rooftop terrace."
+    assert client.strip_model_wrapping(think) == "A cyberpunk tech wizard stands on a rooftop terrace."
+
+
+def test_web_directory_and_preview_js() -> None:
+    assert ez_prompt_enhance.WEB_DIRECTORY == "./js"
+    js = ROOT / "custom_nodes" / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    body = js.read_text(encoding="utf-8")
+    assert "onExecuted" in body
+    assert "EZKleinPromptEnhance" in body
+    assert "EZWanPromptEnhance" in body
+    assert "EZLTXPromptEnhance" in body
+    assert "CLIP prompt" in body
+    assert "serialize" in body
 
 
 def test_enhance_false_skips_llm() -> None:
@@ -392,12 +420,13 @@ def test_node_mappings_modes_preview_and_style() -> None:
     ) as mock:
         on = klein.run("bike", True, "edit", "", "none")
     assert on["result"] == ("rewritten-klein",)
-    assert on["ui"]["text"] == ["rewritten-klein"]
+    assert on["ui"]["text"][0] == "rewritten-klein"
     system = mock.call_args[0][0]
     assert "identity" in system.lower()
     with patch.object(client, "complete", return_value=("rewritten-style", None)) as mock:
         klein.run("photoreal 85mm portrait of a bike", True, "t2i", "", "anime")
     user = mock.call_args[0][1]
+    assert "only look" in mock.call_args[0][0].lower()
     assert "Visual style (mandatory" in user
     assert "Japanese anime" in user
     assert "wins" in user.lower()
@@ -406,10 +435,25 @@ def test_node_mappings_modes_preview_and_style() -> None:
     with patch.object(
         client,
         "complete",
-        return_value=("A red bicycle on a hill.", None),
+        return_value=("A HD 3D game-engine pre-rendered cutscene still of a rooftop.", None),
     ):
         missing = klein.run("bike", True, "t2i", "", "watercolor_illustration")
-    assert "transparent watercolor" in missing["result"][0].lower() or "wet-into-wet" in missing[
+    water = missing["result"][0].lower()
+    assert "transparent watercolor" in water or "wet-into-wet" in water
+    assert "game-engine" not in water
+    with patch.object(client, "complete", return_value=("", client.REASON_GGUF_MISSING)):
+        passthrough = klein.run("lazy bike", True, "t2i", "", "photorealistic")
+    assert "photoreal" in passthrough["result"][0].lower() or "still photograph" in passthrough[
+        "result"
+    ][0].lower()
+    assert passthrough["ui"]["text"][0].startswith("[passthrough:")
+    with patch.object(
+        client,
+        "complete",
+        return_value=("A red bicycle on a hill.", None),
+    ):
+        hill = klein.run("bike", True, "t2i", "", "watercolor_illustration")
+    assert "transparent watercolor" in hill["result"][0].lower() or "wet-into-wet" in hill[
         "result"
     ][0].lower()
     with patch.object(
@@ -418,7 +462,8 @@ def test_node_mappings_modes_preview_and_style() -> None:
         return_value=("A bicycle as transparent watercolor on paper tooth.", None),
     ):
         kept = klein.run("bike", True, "t2i", "", "watercolor_illustration")
-    assert kept["result"][0] == "A bicycle as transparent watercolor on paper tooth."
+    assert "transparent watercolor" in kept["result"][0].lower()
+    assert "bicycle" in kept["result"][0].lower()
     with patch.object(client, "complete", return_value=("same mug watercolor", None)) as mock:
         klein.run("photoreal product shot of the same mug", True, "edit", "", "watercolor_illustration")
     edit_system = mock.call_args[0][0]

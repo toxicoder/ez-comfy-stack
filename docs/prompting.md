@@ -88,20 +88,21 @@ STRING out → CLIPTextEncode `text` input.
 1. `./scripts/manage.sh download-models` (includes `comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`).
 2. Type a lazy sentence (or leave the canned paragraph). **Enhance** defaults **on**.
 3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
-4. Queue. Read the rewritten prompt **on the Enhance node** — that text is what CLIP encodes. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a photo paragraph with `in X style` tacked on.
+4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded (or `[passthrough: …]` plus a styled prompt if the GGUF failed). The top prompt widget stays as you typed it. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.
 
-**Enhance defaults to true.** Turn it **off** to pin the widget text (frozen identity bibles). Style still applies as a short suffix when Enhance is off. Style is ignored on I2V (the start image owns look).
+**Enhance defaults to true.** Turn it **off** to pin the source widget (frozen identity bibles). A selected style is still applied to the CLIP string. Style is ignored on I2V (the start image owns look).
 
 When Enhance is **on** and a style is selected (t2i / t2v / Klein edit):
 
 - The dropdown is look authority. If the source already names a medium, lighting, grade, lens, or art style, the rewriter **replaces** those clauses so they match the dropdown. It does not stack two styles.
 - Each preset is a short reference (medium, light, color, texture, camera or projection) tuned for Klein prose, Wan aesthetic+stylization, or LTX lighting/surface in the flowing paragraph.
 - CLIP text stays generic: no camera/film/studio brand names. Labels such as **Pixar-like 3D** still weave as “stylized feature 3D”.
-- If the 4B rewriter drops the look, the node appends the preset’s short suffix so the CLIP prompt still carries the style.
+- The dropdown wins in the CLIP string even if the 4B rewriter ignores the hint or the GGUF passthroughs: conflicting medium words are dropped and the catalog medium is front-loaded.
+- After Queue, the **CLIP prompt** box on the node is the preview. First deploy: restart the container so `js/` is copied, then hard-refresh the Comfy tab.
 
-After Queue the node is an output: the preview is the rewrite, or a `[passthrough: …]` reason plus the original if the GGUF / llama.cpp is missing.
+After Queue the node is an output: the **CLIP prompt** widget shows the rewrite, or a `[passthrough: …]` reason plus the styled CLIP text if the GGUF / llama.cpp is missing.
 
-Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the original prompt through. Generation still runs.
+Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs.
 
 !!! warning "CPU-only local LLM"
 
