@@ -986,6 +986,7 @@
 <ul>
 <li>How each lab model actually reads a prompt</li>
 <li>Canned lab-example text (already rewritten)</li>
+<li>GIF loop motion and dream-house identity (Prompt Join)</li>
 <li>Lazy path: Prompt Enhance nodes + <code>XAI_API_KEY</code></li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1034,7 +1035,7 @@
 <p>Distilled Klein is <strong>CFG 1.0 / 4 steps</strong> — quality is almost entirely the Positive prompt. FLUX-family models do not use negatives well; put constraints in the positive (“unmarked facades, empty of signage”).</p>
 <hr />
 <h2 id="recipes">Recipes<a class="headerlink" href="#recipes" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Klein 4B (still)</label><label for="__tabbed_1_2">Wan 2.2 T2V</label><label for="__tabbed_1_3">Wan 2.2 I2V</label><label for="__tabbed_1_4">LTX-2.5 AV</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Klein 4B (still)</label><label for="__tabbed_1_2">Wan 2.2 T2V</label><label for="__tabbed_1_3">Wan 2.2 I2V</label><label for="__tabbed_1_4">Looping GIF (Wan I2V)</label><label for="__tabbed_1_5">Dream-house pack (Klein)</label><label for="__tabbed_1_6">LTX-2.5 AV</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Front-load the subject. Write prose.</p>
@@ -1046,6 +1047,12 @@
 </div>
 <div class="tabbed-block">
 <p>The start image owns look. Prompt only motion and camera. Keep identity locked. Lab I2V graphs no longer encode a separate look CLIP into the sampler.</p>
+</div>
+<div class="tabbed-block">
+<p>Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do <strong>not</strong> prompt a walk or a one-way dolly — <strong>gif-loop-lab-example</strong> plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.</p>
+</div>
+<div class="tabbed-block">
+<p>One identity paragraph (materials, architecture, place) plus a short camera line per shot. <strong>dream-house-lab-example</strong> uses <strong>Prompt Join</strong> so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.</p>
 </div>
 <div class="tabbed-block">
 <p>Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, <strong>no score</strong>. Do not paste a Wan or Kling shot list unchanged.</p>
@@ -1067,17 +1074,22 @@
 <tr>
 <td><strong>Klein Prompt Enhance</strong></td>
 <td><code>t2i</code>, <code>edit</code></td>
-<td>still-draft / still-hero / 90s identity</td>
+<td>still-draft / still-hero / still-app / dream-house identity / 90s identity</td>
 </tr>
 <tr>
 <td><strong>Wan Prompt Enhance</strong></td>
 <td><code>t2v</code>, <code>i2v</code></td>
-<td>wan-*-lab-example, bridge-wan</td>
+<td>wan-*-lab-example, gif-loop, bridge-wan</td>
 </tr>
 <tr>
 <td><strong>LTX Prompt Enhance</strong></td>
 <td><code>t2v</code>, <code>i2v</code></td>
 <td>ltx-*-lab-example, bridge-ltx</td>
+</tr>
+<tr>
+<td><strong>Prompt Join</strong></td>
+<td>identity + shot → one STRING</td>
+<td>dream-house shot cards</td>
 </tr>
 </tbody>
 </table>

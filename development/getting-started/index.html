@@ -1320,7 +1320,7 @@
 <li>Prerequisites checklist</li>
 <li>Setup, doctor, download, start, stop</li>
 <li>Optional: build the Docker image locally instead of pulling GHCR</li>
-<li>Example workflows, 90s shorts, <a href="../prompting/">model-native prompting</a>, watching LTX MP4, and host <code>COMFY_OUTPUT_DIR</code></li>
+<li>Example workflows, operator apps (still / GIF / dream house), 90s shorts, <a href="../prompting/">model-native prompting</a>, watching LTX MP4, and host <code>COMFY_OUTPUT_DIR</code></li>
 <li>Optional deep-dives</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1628,7 +1628,7 @@
 <p>Layer invalidation and pin bumps: <a href="../models-and-cache/#prebuilt-container-image-ghcr">Models &amp; Cache</a>. Recovery rows: <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <h3 id="example-workflows">Example workflows<a class="headerlink" href="#example-workflows" title="Permanent link">&para;</a></h3>
 <p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:5"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><input id="__tabbed_3_5" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Still (Klein 4B)</label><label for="__tabbed_3_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_3_3">AV hero (LTX-2.5)</label><label for="__tabbed_3_4">90s shorts</label><label for="__tabbed_3_5">License</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:6"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><input id="__tabbed_3_5" name="__tabbed_3" type="radio" /><input id="__tabbed_3_6" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Still (Klein 4B)</label><label for="__tabbed_3_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_3_3">AV hero (LTX-2.5)</label><label for="__tabbed_3_4">Apps (still / GIF / IG)</label><label for="__tabbed_3_5">90s shorts</label><label for="__tabbed_3_6">License</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1708,6 +1708,30 @@
 </thead>
 <tbody>
 <tr>
+<td><strong>still-app-lab-example</strong></td>
+<td>Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix <code>ez_still_app</code></td>
+</tr>
+<tr>
+<td><strong>gif-loop-lab-example</strong></td>
+<td>Wan 5B I2V GIF (49 frames @ 12 fps). <strong>Ping-pong ON</strong> so first and last frames meet for infinite looping. Prefix <code>ez_gif_loop</code></td>
+</tr>
+<tr>
+<td><strong>dream-house-lab-example</strong></td>
+<td>Ten Instagram 4:5 stills of one lake house. Edit <strong>HOUSE IDENTITY</strong> once; Queue writes <code>ez_dream_house_01</code>…<code>10</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
 <td><strong>go-see-90s / still-here-90s / switchyard-90s</strong></td>
 <td>Klein identity still + 18-shot map (<code>workflows/shorts/</code>)</td>
 </tr>
@@ -1728,7 +1752,7 @@
 </div>
 </div>
 </div>
-<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS.</p>
+<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; <strong>gif-loop-lab-example</strong> emits <code>image/gif</code>.</p>
 <h3 id="iteration-loop-youtube-169">Iteration loop (YouTube 16:9)<a class="headerlink" href="#iteration-loop-youtube-169" title="Permanent link">&para;</a></h3>
 <p>Do <strong>not</strong> edit raw JSON. Change widgets on the canvas.</p>
 <ol>
@@ -1738,6 +1762,7 @@
 <li>Optional audio: <strong>ltx-i2v-hero-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV.</li>
 <li>Short six-shot demo: Queue <strong>wan-shot-lab-example</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then <code>./scripts/utilities/concat-shots.sh --dir /mnt/comfy-output --yes</code>.</li>
 <li><strong>90s films</strong> (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then <code>./scripts/utilities/concat-shots.sh --film go-see --yes</code>. See <a href="../shorts/">90s shorts</a>.</li>
+<li>Daily still / GIF / IG pack: <strong>still-app-lab-example</strong> → optional <strong>gif-loop-lab-example</strong> (LoadImage = <code>ez_still_app_*.png</code>, leave ping-pong on) or <strong>dream-house-lab-example</strong> for a 10-photo carousel.</li>
 </ol>
 <p>Do not Queue a 90s denoise. Default graphs iterate in minutes.</p>
 <h3 id="prompting-these-models">Prompting these models<a class="headerlink" href="#prompting-these-models" title="Permanent link">&para;</a></h3>
