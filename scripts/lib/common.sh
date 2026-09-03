@@ -925,6 +925,7 @@ explain_hf_download_error() {
 
   if [[ ${text} =~ GatedRepoError|not\ in\ the\ authorized\ list|restricted\ and\ you\ are\ not|Cannot\ access\ gated\ repo ]]; then
     err "Hugging Face gated model — access not granted for: ${repo}"
+    err "  Token identity: $(hf_auth_identity)"
     err "  1. Open https://huggingface.co/${repo}"
     err "  2. Log in as the SAME account that owns HF_TOKEN and click Agree / accept the license"
     err "  3. Token needs gated-repo read: https://huggingface.co/settings/tokens"
@@ -958,6 +959,37 @@ explain_hf_download_error() {
     fi
     warn "--- end raw log ---"
   fi
+}
+
+#######################################
+# Best-effort Hugging Face username for gated-error checklists.
+# Never prints token values. Fail-soft when hf/whoami is missing.
+# Globals:
+#   LAB_MOCK_HF_IDENTITY (optional test override)
+# Arguments:
+#   None
+# Outputs:
+#   Identity string on stdout (or "unknown")
+# Returns:
+#   0
+#######################################
+hf_auth_identity() {
+  local out user
+  if [[ -n ${LAB_MOCK_HF_IDENTITY:-} ]]; then
+    printf '%s\n' "${LAB_MOCK_HF_IDENTITY}"
+    return 0
+  fi
+  if ! command -v hf >/dev/null 2>&1; then
+    printf '%s\n' "unknown"
+    return 0
+  fi
+  out="$(hf auth whoami 2>/dev/null || true)"
+  out="$(printf '%s\n' "${out}" | grep -v -E 'hf_[A-Za-z0-9]+' || true)"
+  user="$(printf '%s\n' "${out}" | sed -n 's/^[[:space:]]*user:[[:space:]]*//p' | head -1)"
+  if [[ -z ${user} ]]; then
+    user="$(printf '%s\n' "${out}" | awk 'NF { print $1; exit }')"
+  fi
+  printf '%s\n' "${user:-unknown}"
 }
 
 #######################################
@@ -1085,6 +1117,9 @@ check_lab_models_ready() {
   if [[ ${missing} -gt 0 ]]; then
     warn "Missing ${missing} lab model(s) under ${comfy} — run ./scripts/manage.sh download-models"
     warn "Then restart so Comfy models/* re-link to /models/comfy/*"
+    if [[ ! -e ${comfy}/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors ]]; then
+      warn "LTX-2.5 is gated: accept the license as the HF_TOKEN user at https://huggingface.co/Lightricks/LTX-2.5"
+    fi
     return 1
   fi
   log "lab models: all expected files present under ${comfy}"
@@ -1535,6 +1570,7 @@ hf_download() {
   local dest_dir="" prev_a="" a
   local progress_label="" progress_interval start_ts final_kib final_elapsed
   local incomplete_n=0
+  local hf_help=""
   for a in "$@"; do
     if [[ ${prev_a} == "--local-dir" ]]; then
       dest_dir="${a}"
@@ -1546,12 +1582,17 @@ hf_download() {
   if [[ ${progress_interval} -lt 1 ]]; then
     progress_interval=10
   fi
+  if [[ -n ${HF_TOKEN:-} || -n ${HF_DOWNLOAD_MAX_WORKERS:-} ]] && command -v hf >/dev/null 2>&1; then
+    hf_help="$(hf download --help 2>&1 || true)"
+  fi
+  # Pin .env token so it wins over a leftover hf auth login. Never log the value.
+  if [[ -n ${HF_TOKEN:-} && ${hf_help} == *"--token"* ]]; then
+    hf_args+=(--token "${HF_TOKEN}")
+  fi
   # Gentle mode / operator override: limit parallel HF connections when set
-  if [[ -n ${HF_DOWNLOAD_MAX_WORKERS:-} ]]; then
-    if command -v hf >/dev/null 2>&1 && hf download --help 2>&1 | grep -q -- '--max-workers'; then
-      hf_args+=(--max-workers "${HF_DOWNLOAD_MAX_WORKERS}")
-      log "hf download  max-workers=${HF_DOWNLOAD_MAX_WORKERS}"
-    fi
+  if [[ -n ${HF_DOWNLOAD_MAX_WORKERS:-} && ${hf_help} == *"--max-workers"* ]]; then
+    hf_args+=(--max-workers "${HF_DOWNLOAD_MAX_WORKERS}")
+    log "hf download  max-workers=${HF_DOWNLOAD_MAX_WORKERS}"
   fi
   if [[ -n ${dest_dir} ]]; then
     mkdir -p "${dest_dir}" 2>/dev/null || true
@@ -1648,15 +1689,13 @@ hf_download() {
     set +e
     if command -v hf >/dev/null 2>&1; then
       (
-        set -o pipefail
-        hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
-        exit "${PIPESTATUS[0]}"
+        hf download "${hf_args[@]}" >>"${hf_log}" 2>&1
+        exit $?
       ) &
     else
       (
-        set -o pipefail
-        huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
-        exit "${PIPESTATUS[0]}"
+        huggingface-cli download "${hf_args[@]}" >>"${hf_log}" 2>&1
+        exit $?
       ) &
     fi
     hpid=$!

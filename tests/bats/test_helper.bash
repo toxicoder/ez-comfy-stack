@@ -72,6 +72,7 @@ setup_repo_env() {
   export LAB_HERMETIC="${LAB_HERMETIC:-1}"
   # Skip hf_download progress subshell + kill_pid_tree cost (~1.5s per call).
   export HF_PROGRESS="${HF_PROGRESS:-0}"
+  unset HF_TOKEN
   export MIN_HOST_FREE_GIB=28
   export MIN_DISK_FREE_GIB=40
   export MEM_LIMIT=90g

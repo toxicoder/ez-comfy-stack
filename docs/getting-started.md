@@ -179,8 +179,10 @@ Fix any errors **before** downloading multi‑GB models.
 ## Download models
 
 ```bash
-# Ensure HF token for gated repos (FLUX):
-# echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
+# LTX-2.5 is gated (Klein 4B / Wan 5B are Apache). Token set ≠ license accepted:
+# 1. echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
+# 2. Open https://huggingface.co/Lightricks/LTX-2.5 as THAT user and click Agree
+# 3. Fine-grained tokens need gated-repo read
 
 ./scripts/manage.sh download-models
 # Manual cap (Mbps; 40 ≈ 5 MB/s). Overrides DOWNLOAD_LIMIT for this run:

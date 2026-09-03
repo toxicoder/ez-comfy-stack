@@ -510,7 +510,8 @@ cmd_run() {
   done
   cmd_status
   if [[ ${ok} -eq 0 ]]; then
-    err "No LTX tiers downloaded successfully (${fail} failed). Check hf CLI and HF_TOKEN."
+    err "No LTX tiers downloaded successfully (${fail} failed)."
+    err "If 403/gated: accept https://huggingface.co/Lightricks/LTX-2.5 as the HF_TOKEN account (hf auth whoami)."
     exit 1
   fi
   if [[ ${fail} -gt 0 ]]; then
