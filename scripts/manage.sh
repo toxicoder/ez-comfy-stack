@@ -12,7 +12,8 @@
 #   remote-SSH operation.
 #
 # Usage:
-#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off]|cleanup
+#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|cleanup
+#   ./scripts/manage.sh reset-hf-partials [--yes] [--force]
 #   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 #
 # Safety:
@@ -79,12 +80,15 @@ Commands:
   stop              Stop stack (keep models, outputs, and comfy volume)
   restart           stop + start
   logs              Follow compose logs
-  download-models [--limit auto|N|off]
+  download-models [--limit auto|N|off] [--drop-incomplete]
                     Download Apache still + Wan 2.2 5B + LTX distilled (bandwidth limited)
                     --limit N is a fixed Mbps cap (overrides DOWNLOAD_LIMIT for this run)
+                    --drop-incomplete  delete *.incomplete then download (stuck resume)
                     Refuses MiniMax H3 (US Excluded Territory)
   download-limit    Proxy to utilities/download-limit.sh
   clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
+  reset-hf-partials [--yes] [--force]
+                    Delete *.incomplete under MODELS_DIR (finished weights kept)
   cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
 
 Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
@@ -435,6 +439,62 @@ cmd_clear_hf_locks() {
 }
 
 #######################################
+# Delete HF *.incomplete partials so a hung resume can start that file fresh.
+# Refuses while hf download is running unless --force.
+# Globals:
+#   MODELS_DIR, LAB_NON_INTERACTIVE, LAB_MOCK_HF_RUNNING
+# Arguments:
+#   Optional: --yes  skip confirm; --force  allow while hf is running
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 on success or abort; 1 on usage error or running hf without --force
+#######################################
+cmd_reset_hf_partials() {
+  local yes=0 force=0 reply
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
+      --yes | -y)
+        yes=1
+        shift
+        ;;
+      --force)
+        force=1
+        shift
+        ;;
+      -h | --help)
+        cat <<'EOF' >&2
+Usage: manage.sh reset-hf-partials [--yes] [--force]
+  Deletes *.incomplete under MODELS_DIR. Finished weights are kept.
+  Ctrl+C a hung download first. Then re-run download-models.
+  --force  allow while hf download is still running (unsafe)
+EOF
+        return 0
+        ;;
+      *)
+        err "Unknown reset-hf-partials flag: ${1}"
+        return 1
+        ;;
+    esac
+  done
+  ensure_models_dir "${MODELS_DIR}" || return 1
+  if hf_download_pids_running && [[ ${force} -eq 0 ]]; then
+    err "hf download is still running. Ctrl+C that job first, or pass --force (unsafe)."
+    return 1
+  fi
+  if [[ ${yes} -eq 0 && ${LAB_NON_INTERACTIVE:-0} != "1" ]]; then
+    log "Deletes *.incomplete under ${MODELS_DIR} (finished weights kept)."
+    read -r -p "Type yes to continue: " reply
+    if [[ ${reply} != "yes" ]]; then
+      log "Aborted"
+      return 0
+    fi
+  fi
+  remove_hf_incomplete "${MODELS_DIR}" >/dev/null
+  clear_stale_hf_locks "${MODELS_DIR}" "locks_only"
+}
+
+#######################################
 # Download lab weights under MODELS_DIR with bandwidth limits.
 # DOWNLOAD_LIMIT (auto|N|off) is the default; --limit overrides for this run.
 # wrap always clears shaping on exit. off|0 skips throttle (SSH risk).
@@ -450,11 +510,16 @@ cmd_clear_hf_locks() {
 cmd_download_models() {
   local limit="${DOWNLOAD_LIMIT}"
   local rc=0
+  local drop_incomplete=0
   while [[ $# -gt 0 ]]; do
     case "${1}" in
       --with-h3)
         refuse_minimax_h3
         return 1
+        ;;
+      --drop-incomplete)
+        drop_incomplete=1
+        shift
         ;;
       --limit)
         if [[ $# -lt 2 || -z ${2} || ${2} == -* ]]; then
@@ -474,11 +539,12 @@ cmd_download_models() {
         ;;
       -h | --help)
         cat <<'EOF' >&2
-Usage: manage.sh download-models [--limit auto|N|off]
+Usage: manage.sh download-models [--limit auto|N|off] [--drop-incomplete]
   Default: Apache still (Klein 4B) + Wan 2.2 5B + LTX distilled AV.
   --limit auto  speedtest then 85% (default, or DOWNLOAD_LIMIT in .env)
   --limit N     fixed cap in Mbps (e.g. 40 ≈ 5 MB/s); overrides DOWNLOAD_LIMIT
   --limit off   no throttle (not recommended over remote SSH)
+  --drop-incomplete  delete *.incomplete then download (stuck 0 MiB/s resume)
   MiniMax H3 is banned (US Excluded Territory). See docs/licenses.md
 EOF
         return 0
@@ -499,6 +565,10 @@ EOF
       ;;
   esac
   ensure_models_dir "${MODELS_DIR}" || return 1
+  if [[ ${drop_incomplete} -eq 1 ]]; then
+    log "dropping incomplete HF partials under ${MODELS_DIR} (--drop-incomplete)"
+    remove_hf_incomplete "${MODELS_DIR}" >/dev/null
+  fi
   clear_stale_hf_locks "${MODELS_DIR}"
   local image_cmd wan_cmd ltx_cmd
   image_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-image.sh" run --tier fast)
@@ -603,6 +673,7 @@ main() {
       ;;
     download-limit) cmd_download_limit "$@" ;;
     clear-hf-locks) cmd_clear_hf_locks ;;
+    reset-hf-partials) cmd_reset_hf_partials "$@" ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"

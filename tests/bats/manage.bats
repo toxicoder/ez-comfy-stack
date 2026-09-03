@@ -229,3 +229,39 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"lab workflow weights ready"* || "${output}" == *"lab model ok"* ]]
 }
+
+@test "reset-hf-partials and download-models --drop-incomplete" {
+  export LAB_MOCK_HF_DOWNLOAD=1
+  mkdir -p "${MODELS_DIR}/.cache/huggingface/download"
+  : >"${MODELS_DIR}/.cache/huggingface/download/blob.incomplete"
+  : >"${MODELS_DIR}/keep.safetensors"
+
+  run cmd_reset_hf_partials --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"incomplete"* ]]
+
+  export LAB_MOCK_HF_RUNNING=1
+  run cmd_reset_hf_partials --yes
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"still running"* ]]
+  [[ -f "${MODELS_DIR}/.cache/huggingface/download/blob.incomplete" ]]
+  unset LAB_MOCK_HF_RUNNING
+
+  run cmd_reset_hf_partials --yes
+  [ "${status}" -eq 0 ]
+  [[ ! -f "${MODELS_DIR}/.cache/huggingface/download/blob.incomplete" ]]
+  [[ -f "${MODELS_DIR}/keep.safetensors" ]]
+
+  : >"${MODELS_DIR}/.cache/huggingface/download/blob.incomplete"
+  run cmd_download_models --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"--drop-incomplete"* ]]
+  run cmd_help
+  [[ "${output}" == *"reset-hf-partials"* ]]
+
+  export DOWNLOAD_LIMIT=off
+  run cmd_download_models --drop-incomplete
+  [ "${status}" -eq 0 ]
+  [[ ! -f "${MODELS_DIR}/.cache/huggingface/download/blob.incomplete" ]]
+  [[ "${output}" == *"drop"* || "${output}" == *"incomplete"* || "${output}" == *"lab workflow weights ready"* ]]
+}

@@ -877,7 +877,11 @@ clear_stale_hf_locks() {
     log "Removed ${removed} stale HF lock file(s) under ${root}"
   fi
   if [[ ${active} -gt 0 ]]; then
-    warn "${active} lock(s) still held by live processes — wait or HF_LOCK_CLEAR_FORCE=1"
+    if [[ ${locks_only} -eq 1 ]]; then
+      log "download still holds ${active} lock(s) (normal while hf runs)"
+    else
+      warn "${active} lock(s) still held by live processes — wait or HF_LOCK_CLEAR_FORCE=1"
+    fi
   fi
   if [[ ${removed} -eq 0 && ${active} -eq 0 ]]; then
     log "HF lock check clean under ${root}"
@@ -1110,6 +1114,160 @@ count_hf_incomplete() {
 }
 
 #######################################
+# List HF *.incomplete paths under a local-dir (capped).
+# Globals:
+#   None
+# Arguments:
+#   $1  Destination directory path
+#   $2  Optional max paths (default 8)
+# Outputs:
+#   Paths on stdout, one per line
+# Returns:
+#   0
+#######################################
+list_hf_incomplete() {
+  local dest="${1:-}"
+  local max_n="${2:-8}"
+  if [[ -z ${dest} || ! -d ${dest} ]]; then
+    return 0
+  fi
+  find "${dest}" -type f -name '*.incomplete' 2>/dev/null | head -n "${max_n}"
+}
+
+#######################################
+# Delete HF *.incomplete partials under a root; keep finished weights.
+# Globals:
+#   None
+# Arguments:
+#   $1  Root directory (MODELS_DIR or a --local-dir)
+# Outputs:
+#   Count removed on stdout; status via log on stderr
+# Returns:
+#   0
+#######################################
+remove_hf_incomplete() {
+  local root="${1:-}"
+  local n=0
+  local f
+  if [[ -z ${root} || ! -d ${root} ]]; then
+    echo 0
+    return 0
+  fi
+  while IFS= read -r -d '' f; do
+    if rm -f "${f}" 2>/dev/null; then
+      n=$((n + 1))
+    fi
+  done < <(find "${root}" -type f -name '*.incomplete' -print0 2>/dev/null || true)
+  if [[ ${n} -gt 0 ]]; then
+    log "Removed ${n} incomplete HF partial(s) under ${root}"
+  else
+    log "No incomplete HF partials under ${root}"
+  fi
+  echo "${n}"
+}
+
+#######################################
+# True if an hf / huggingface-cli download process is running.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 if a matching PID exists; 1 otherwise
+#######################################
+hf_download_pids_running() {
+  if [[ ${LAB_MOCK_HF_RUNNING:-0} == "1" ]]; then
+    return 0
+  fi
+  # Parallel BATS files share a host PID namespace; do not pgrep siblings.
+  if [[ ${LAB_HERMETIC:-0} == "1" ]]; then
+    return 1
+  fi
+  command -v pgrep >/dev/null 2>&1 || return 1
+  pgrep -f 'hf download|huggingface-cli download' >/dev/null 2>&1
+}
+
+#######################################
+# Operator recovery text for a hung resume (0 MiB/s + *.incomplete).
+# Globals:
+#   None
+# Arguments:
+#   $1  Dest directory
+#   $2  Stall seconds (for the message)
+# Outputs:
+#   Warnings on stderr
+# Returns:
+#   0
+#######################################
+warn_hf_resume_stall() {
+  local dest="${1:-}"
+  local secs="${2:-30}"
+  local n
+  n="$(count_hf_incomplete "${dest}")"
+  warn "resume stall: ${n} incomplete, 0 MiB/s for ${secs}s — live hf holds the lock."
+  warn "FORCE-clearing locks will not unstick this. Ctrl+C, then:"
+  warn "  ./scripts/manage.sh reset-hf-partials --yes"
+  warn "  ./scripts/manage.sh download-models"
+  warn "or: ./scripts/manage.sh download-models --drop-incomplete"
+}
+
+#######################################
+# Wait for a background hf PID; return 2 on resume stall (0 growth + incompletes).
+# Globals:
+#   HF_RESUME_STALL_S (default 90; 0 disables stall detect)
+#   HF_PROGRESS_INTERVAL (default 10)
+# Arguments:
+#   $1  hf PID
+#   $2  Destination directory (optional)
+# Outputs:
+#   None
+# Returns:
+#   hf exit status, or 2 on stall, or 130 if the PID is gone after a signal
+#######################################
+wait_hf_download_or_stall() {
+  local hpid="${1:-}"
+  local dest="${2:-}"
+  local stall_s="${HF_RESUME_STALL_S:-90}"
+  local interval="${HF_PROGRESS_INTERVAL:-10}"
+  local last_kib last_ts cur now inc
+  if [[ -z ${hpid} || ! ${hpid} =~ ^[0-9]+$ ]]; then
+    return 1
+  fi
+  if [[ ${interval} -lt 1 ]]; then
+    interval=10
+  fi
+  if [[ -z ${dest} || ! -d ${dest} || ${stall_s} -le 0 ]]; then
+    wait "${hpid}"
+    return $?
+  fi
+  last_kib="$(du -sk "${dest}" 2>/dev/null | awk '{print $1}')" || last_kib=0
+  last_ts="$(date +%s)"
+  while kill -0 "${hpid}" 2>/dev/null; do
+    sleep "${interval}"
+    if ! kill -0 "${hpid}" 2>/dev/null; then
+      break
+    fi
+    cur="$(du -sk "${dest}" 2>/dev/null | awk '{print $1}')" || cur=0
+    if [[ ${cur} -gt ${last_kib} ]]; then
+      last_kib="${cur}"
+      last_ts="$(date +%s)"
+      continue
+    fi
+    now="$(date +%s)"
+    if ((now - last_ts >= stall_s)); then
+      inc="$(count_hf_incomplete "${dest}")"
+      if [[ ${inc} -gt 0 ]]; then
+        return 2
+      fi
+    fi
+  done
+  wait "${hpid}"
+  return $?
+}
+
+#######################################
 # Short label for a download dest (basename of local-dir).
 # Globals:
 #   None
@@ -1283,7 +1441,8 @@ hf_progress_newline() {
 #   LAB_MOCK_HF_DOWNLOAD, HF_TOKEN (read by hub), HF_HOME (caller may set),
 #   LAB_DEBUG, HF_DOWNLOAD_DEBUG, CI, HF_HUB_DISABLE_TELEMETRY,
 #   HF_DOWNLOAD_MAX_WORKERS, HF_PROGRESS (0 disables progress lines),
-#   HF_PROGRESS_INTERVAL (seconds, default 10), HF_LOCK_CLEAR_MID
+#   HF_PROGRESS_INTERVAL (seconds, default 10), HF_LOCK_CLEAR_MID,
+#   HF_RESUME_STALL_S (default 90), HF_RESUME_RETRY (default 1)
 # Arguments:
 #   $@ - Passed to `hf download` / `huggingface-cli download`
 #        (typically REPO --local-dir PATH)
@@ -1444,11 +1603,15 @@ hf_download() {
         hf_progress_emit "${body}"
         if [[ ${delta} -le 0 ]]; then
           zero_streak=$((zero_streak + 1))
-          if [[ ${zero_streak} -ge 3 && ${HF_LOCK_CLEAR_MID:-1} == "1" ]]; then
-            # locks_only: NEVER pkill — that was killing the active hf download
+          if [[ ${zero_streak} -ge 3 ]]; then
             hf_progress_newline
-            warn "no disk growth for $((progress_interval * 3))s — clearing unheld HF locks (download still running)"
-            clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" "locks_only" || true
+            if [[ "$(count_hf_incomplete "${dest_dir}")" -gt 0 ]]; then
+              warn_hf_resume_stall "${dest_dir}" "$((progress_interval * 3))"
+            elif [[ ${HF_LOCK_CLEAR_MID:-1} == "1" ]]; then
+              # locks_only: NEVER pkill — that was killing the active hf download
+              warn "no disk growth for $((progress_interval * 3))s — clearing unheld HF locks (download still running)"
+              clear_stale_hf_locks "${MODELS_DIR:-$(dirname "${dest_dir}")}" "locks_only" || true
+            fi
             zero_streak=0
           fi
         else
@@ -1462,35 +1625,15 @@ hf_download() {
   fi
 
   set -m 2>/dev/null || true
+  local attempt=0
+  local max_attempts=1
+  if [[ ${HF_RESUME_RETRY:-1} != "0" ]]; then
+    max_attempts=2
+  fi
   if command -v hf >/dev/null 2>&1; then
-    set +e
-    # Always capture CLI output for error explain; bars disabled above so no smash
-    (
-      set -o pipefail
-      hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
-      exit "${PIPESTATUS[0]}"
-    ) &
-    hpid=$!
-    # Protect active download from clear_stale_hf_locks process sweep
-    _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
-    export _HF_PROTECTED_PIDS
-    wait "${hpid}"
-    rc=$?
-    set -e
+    :
   elif command -v huggingface-cli >/dev/null 2>&1; then
     warn "Using deprecated huggingface-cli; install modern hf: pipx install huggingface_hub"
-    set +e
-    (
-      set -o pipefail
-      huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
-      exit "${PIPESTATUS[0]}"
-    ) &
-    hpid=$!
-    _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
-    export _HF_PROTECTED_PIDS
-    wait "${hpid}"
-    rc=$?
-    set -e
   else
     [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
     hf_progress_newline
@@ -1500,6 +1643,47 @@ hf_download() {
     err "No hf or huggingface-cli on PATH"
     return 1
   fi
+  while [[ ${attempt} -lt ${max_attempts} ]]; do
+    : >"${hf_log}"
+    set +e
+    if command -v hf >/dev/null 2>&1; then
+      (
+        set -o pipefail
+        hf download "${hf_args[@]}" > >(tee -a "${hf_log}" >/dev/null) 2> >(tee -a "${hf_log}" >&2)
+        exit "${PIPESTATUS[0]}"
+      ) &
+    else
+      (
+        set -o pipefail
+        huggingface-cli download "$@" 2>&1 | tee "${hf_log}"
+        exit "${PIPESTATUS[0]}"
+      ) &
+    fi
+    hpid=$!
+    _HF_PROTECTED_PIDS="${hpid} ${hb_pid}"
+    export _HF_PROTECTED_PIDS
+    wait_hf_download_or_stall "${hpid}" "${dest_dir}"
+    rc=$?
+    set -e
+    if [[ ${rc} -eq 2 ]]; then
+      warn_hf_resume_stall "${dest_dir}" "${HF_RESUME_STALL_S:-90}"
+      kill_pid_tree "${hpid}" "stalled hf download"
+      wait "${hpid}" 2>/dev/null || true
+      hpid=""
+      if [[ ${attempt} -eq 0 && ${max_attempts} -gt 1 ]]; then
+        warn "dropping *.incomplete under ${dest_dir} and retrying once"
+        remove_hf_incomplete "${dest_dir}" >/dev/null
+        attempt=$((attempt + 1))
+        continue
+      fi
+      err "resume still stalled. Stop if needed, then:"
+      err "  ./scripts/manage.sh reset-hf-partials --yes"
+      err "  ./scripts/manage.sh download-models --drop-incomplete"
+      rc=1
+      break
+    fi
+    break
+  done
   set +m 2>/dev/null || true
   [[ -n ${hb_pid} ]] && kill_pid_tree "${hb_pid}" "progress monitor"
   _RWSF_EXTRA_PIDS=""
