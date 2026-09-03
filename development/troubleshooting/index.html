@@ -1547,7 +1547,7 @@
 <tr>
 <td>Missing <code>ae.safetensors</code> / <code>z_image_turbo_*.safetensors</code></td>
 <td><strong>Z-Image</strong> template, not the default stack</td>
-<td>Load <strong>still-draft-lab-example</strong>. Default still is Klein 4B Apache (see <a href="../licenses/">licenses</a>). Optional <code>download-image --tier zimage</code></td>
+<td>Load <strong>klein-still-draft-lab-example</strong>. Default still is Klein 4B Apache (see <a href="../licenses/">licenses</a>). Optional <code>download-image --tier zimage</code></td>
 </tr>
 <tr>
 <td>Missing <code>flux-2-klein-4b-fp8</code> / Wan / LTX-2.5 in <strong>*-lab-example</strong> graphs</td>
@@ -1632,10 +1632,10 @@
 <tr>
 <td>GIF moonwalks / plays backwards unnaturally</td>
 <td>VHS <strong>ping-pong</strong> reversing a one-way move (walk, dolly)</td>
-<td>On <strong>gif-loop-lab-example</strong>, set <strong>Infinite loop (ping-pong)</strong> to false, or rewrite Motion for locked-camera cyclic motion (breeze, curtains). Ping-pong is the easy first=last loop</td>
+<td>On <strong>wan-gif-loop-lab-example</strong>, set <strong>Infinite loop (ping-pong)</strong> to false, or rewrite Motion for locked-camera cyclic motion (breeze, curtains). Ping-pong is the easy first=last loop</td>
 </tr>
 <tr>
-<td>UNET missing after swapping to Klein base / NVFP4 on <strong>still-app</strong></td>
+<td>UNET missing after swapping to Klein base / NVFP4 on <strong>klein-still-daily</strong></td>
 <td>Optional still not downloaded</td>
 <td>Stay on <code>flux-2-klein-4b-fp8.safetensors</code>, or <code>./scripts/utilities/download-image.sh run --tier base</code> / <code>--tier nvfp4</code> then restart Comfy so the filename appears</td>
 </tr>
@@ -1650,9 +1650,14 @@
 <td>Do not Queue 90s. Use 18 × <strong>5.00 s</strong> shorts + <code>concat-shots.sh --film</code>. See <a href="../shorts/">90s shorts</a>. Confirm headroom preflight; close other GPU jobs</td>
 </tr>
 <tr>
-<td>90s bible / bridge graph missing in the Comfy UI</td>
+<td>90s bible / shot graph missing in the Comfy UI</td>
 <td>Entrypoint only used to copy top-level <code>workflows/*.json</code></td>
-<td>Pull latest; restart so <code>install_lab_workflows</code> copies <code>workflows/shorts/*.json</code> into <code>user/default/workflows/</code>. YAML shot lists are not copied (edit on the host)</td>
+<td>Pull latest; restart so <code>install_lab_workflows</code> copies <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> into <code>user/default/workflows/</code>. YAML shot lists are not copied (edit on the host)</td>
+</tr>
+<tr>
+<td>Doctor warns <code>banned MiniMax H3 weight present</code></td>
+<td>Leftover files from an old <code>download-h3</code> run</td>
+<td>After <code>./scripts/manage.sh stop</code>, delete those files under <code>${MODELS_DIR}/comfy/</code> (<code>minimax_h3_*.safetensors</code>, <code>qwen3vl_32b_minimax_h3_*.safetensors</code>). Do not Queue MiniMaxH3 nodes. See <a href="../licenses/">Model licenses</a></td>
 </tr>
 <tr>
 <td>Pin mismatch / old volume Comfy</td>

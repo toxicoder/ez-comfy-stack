@@ -1175,14 +1175,14 @@
 <ul>
 <li>Why 18 × 5.00s shots instead of one 90s Queue</li>
 <li>Which US-safe models do identity, rehearsal, and print</li>
-<li>Shot maps for go-see, still-here, and switchyard</li>
-<li>Operator loop: Klein still → Wan draft → LTX print → concat</li>
+<li>Shot maps for go-see (first-person running), still-here, and switchyard</li>
+<li>Operator loop: Klein still → Wan shot → LTX print → concat</li>
 <li>Model-native look / motion / audio prompts (<a href="../prompting/">Prompting</a>)</li>
 <li>Spark farm: parallel 5s Queues, local concat</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Three continuous ~90s films (go-see, still-here, switchyard) on the <strong>US-safe local pack</strong></li>
+<li>Three continuous ~90s films (first-person running go-see, still-here, switchyard) on the <strong>US-safe local pack</strong></li>
 <li>Last-frame continuity without a 90s denoise</li>
 <li>A 90.00s publish cap (<code>ffmpeg -t 90</code>)</li>
 </ul>
@@ -1246,19 +1246,19 @@
 <tbody>
 <tr>
 <td>Identity still</td>
-<td><code>workflows/shorts/{film}-90s-lab-example.json</code></td>
+<td><code>workflows/shorts/film-{go-see-90s-run,still-here-90s,switchyard-90s}-lab-example.json</code></td>
 <td>Klein 4B distilled FP8</td>
 <td>Apache 2.0</td>
 </tr>
 <tr>
 <td>Motion rehearsal</td>
-<td><code>workflows/shorts/bridge-wan-lab-example.json</code></td>
+<td><code>workflows/wan-i2v-shot-lab-example.json</code></td>
 <td>Wan 2.2 TI2V-5B I2V</td>
 <td>Apache 2.0, silent</td>
 </tr>
 <tr>
 <td>Print + synced world audio</td>
-<td><code>workflows/shorts/bridge-ltx-lab-example.json</code></td>
+<td><code>workflows/ltx-i2v-shot-lab-example.json</code></td>
 <td>LTX-2.5 distilled I2V</td>
 <td>Community License (not Apache)</td>
 </tr>
@@ -1268,11 +1268,11 @@
 <p>LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional experiment <strong>inside</strong> a beat, not the 90s path.</p>
 <hr />
 <h2 id="operator-loop">Operator loop<a class="headerlink" href="#operator-loop" title="Permanent link">&para;</a></h2>
-<p>Host JSON lives under <code>workflows/shorts/</code>. The container entrypoint copies <code>*.json</code> and <code>shorts/*.json</code> into Comfy <code>user/default/workflows/</code>.</p>
+<p>Film bibles live under <code>workflows/shorts/</code>. Shot graphs live at <code>workflows/wan-i2v-shot-lab-example.json</code> and <code>workflows/ltx-i2v-shot-lab-example.json</code>. The container entrypoint copies <code>*.json</code> and <code>shorts/*.json</code> into Comfy <code>user/default/workflows/</code>.</p>
 <ol>
-<li>Load the film bible (<code>go-see-90s-lab-example</code> / <code>still-here-90s-lab-example</code> / <code>switchyard-90s-lab-example</code>). Queue the Klein identity still (<code>ez_&lt;slug&gt;_identity</code>).</li>
-<li>Load <strong>bridge-wan-lab-example</strong>. Set LoadImage to that PNG (shot 1) or the previous <code>ez_&lt;slug&gt;_bN_sM_last</code>. Paste <strong>Motion</strong> from the on-canvas shot map (source of truth: <code>{film}.shots.yaml</code>). Set VHS prefix <code>ez_&lt;slug&gt;_bN_sM_wan_video</code> and last-frame SaveImage <code>ez_&lt;slug&gt;_bN_sM_last</code>. Queue <strong>5.00s</strong> silent.</li>
-<li>Load <strong>bridge-ltx-lab-example</strong>. Same first frame. Paste <strong>Motion + audio</strong>. VHS prefix <code>ez_&lt;slug&gt;_bN_sM_ltx_video</code>. Queue <strong>5.00s</strong> AV.</li>
+<li>Load the film bible (<code>film-go-see-90s-run-lab-example</code> / <code>film-still-here-90s-lab-example</code> / <code>film-switchyard-90s-lab-example</code>). Queue the Klein identity still (<code>ez_&lt;slug&gt;_identity</code>).</li>
+<li>Load <strong>wan-i2v-shot-lab-example</strong>. Set LoadImage to that PNG (shot 1) or the previous <code>ez_&lt;slug&gt;_bN_sM_last</code>. Paste <strong>Motion</strong> from the on-canvas shot map (source of truth: <code>{film}.shots.yaml</code>). Set VHS prefix <code>ez_&lt;slug&gt;_bN_sM_wan_video</code> and last-frame SaveImage <code>ez_&lt;slug&gt;_bN_sM_last</code>. Queue <strong>5.00s</strong> silent.</li>
+<li>Load <strong>ltx-i2v-shot-lab-example</strong>. Same first frame. Paste <strong>Motion + audio</strong>. VHS prefix <code>ez_&lt;slug&gt;_bN_sM_ltx_video</code>. Queue <strong>5.00s</strong> AV.</li>
 <li>Repeat 18 times. Last frame of shot N is LoadImage of shot N+1.</li>
 <li>Concat (dry-run first; <code>--yes</code> writes the cap). Default dir is <code>${COMFY_OUTPUT_DIR}</code>:</li>
 </ol>
@@ -1288,7 +1288,7 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">go-see</label><label for="__tabbed_1_2">still-here</label><label for="__tabbed_1_3">switchyard</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>POV travel. Identity lock: olive windbreaker + worn black gloves in frame. Parkour is transportation. <strong>No score</strong> (breath + world).</p>
+<p>First-person <strong>running</strong>. Identity lock: olive windbreaker + worn black gloves in frame. Footfalls and arms, not parkour. <strong>No score</strong> (breath + world).</p>
 <table>
 <thead>
 <tr>
@@ -1303,42 +1303,42 @@
 <tr>
 <td>1</td>
 <td>Dawn rooftop</td>
-<td>Hands on wet tar, vault parapet</td>
-<td>Barrel-roll through sky</td>
-<td>Land-roll on warehouse roof</td>
+<td>Run on wet tar, gloves pumping</td>
+<td>Run across the next roof</td>
+<td>Run onto warehouse roof</td>
 </tr>
 <tr>
 <td>2</td>
 <td>Warehouse → market</td>
-<td>Ladder drop</td>
-<td>Pallet vault, awning</td>
+<td>Run down the stair</td>
+<td>Run the alley, duck awning</td>
 <td>Run out toward river</td>
 </tr>
 <tr>
 <td>3</td>
 <td>River / forest</td>
-<td>Stones, splash</td>
-<td>Through bridge arch</td>
-<td>Creek jump in beech</td>
+<td>Run across stones</td>
+<td>Run through bridge arch</td>
+<td>Run the creek path</td>
 </tr>
 <tr>
 <td>4</td>
 <td>Headland</td>
-<td>Trees thin</td>
-<td>Boulder plant</td>
-<td>Generic white lighthouse, no place name</td>
+<td>Trees thin, keep running</td>
+<td>Run past boulder</td>
+<td>Run toward generic lighthouse</td>
 </tr>
 <tr>
 <td>5</td>
 <td>Wall / meadow</td>
-<td>Granite steps</td>
-<td>Squeeze dry-stone gap</td>
-<td>Burst into meadow</td>
+<td>Run up granite steps</td>
+<td>Run through dry-stone gap</td>
+<td>Run into meadow</td>
 </tr>
 <tr>
 <td>6</td>
 <td>Ridge hold</td>
-<td>Hands on wooden rail</td>
+<td>Slow; hands on wooden rail</td>
 <td>Look</td>
 <td>Quiet laugh, hold</td>
 </tr>
@@ -1438,7 +1438,7 @@
 <p>Prefixes: <code>ez_gosee_b{1..6}_s{1..3}</code>, <code>ez_stillhere_…</code>, <code>ez_switchyard_…</code>. Machine-readable lists: <code>workflows/shorts/*.shots.yaml</code>.</p>
 <hr />
 <h2 id="spark-farm">Spark farm<a class="headerlink" href="#spark-farm" title="Permanent link">&para;</a></h2>
-<p>Three Sparks can Queue <strong>different beats</strong> in parallel (independent 5s jobs, shared <code>${MODELS_DIR}</code>). On each UI load <strong>bridge-wan-lab-example</strong> / <strong>bridge-ltx-lab-example</strong> and Queue; concat stays on one host. Do not use <code>spark-farm.sh run --film go-see</code> (that subcommand is a wan-shot reminder and refuses the 90s film names). No NCCL. See <a href="../spark-farm/">Spark farm</a>.</p>
+<p>Three Sparks can Queue <strong>different beats</strong> in parallel (independent 5s jobs, shared <code>${MODELS_DIR}</code>). On each UI load <strong>wan-i2v-shot-lab-example</strong> / <strong>ltx-i2v-shot-lab-example</strong> and Queue; concat stays on one host. <code>spark-farm.sh run --film go-see</code> prints that Queue reminder (it does not POST graphs). No NCCL. See <a href="../spark-farm/">Spark farm</a>.</p>
 <hr />
 <h2 id="safety">Safety<a class="headerlink" href="#safety" title="Permanent link">&para;</a></h2>
 <p>Unchanged: <code>restart: "no"</code>, heavy confirm on <code>start</code>, headroom preflight, download-limit wrap. This path does not start Docker; it only stitches files already under <code>COMFY_OUTPUT_DIR</code>.</p>

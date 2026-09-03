@@ -1287,7 +1287,7 @@
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">First run?</p>
-<p>For install and first UI open, use <a href="../getting-started/">Getting Started</a>. This page is the <strong>studio playbook</strong> after <code>still-draft-lab-example</code> has queued once.</p>
+<p>For install and first UI open, use <a href="../getting-started/">Getting Started</a>. This page is the <strong>studio playbook</strong> after <code>klein-still-draft-lab-example</code> has queued once.</p>
 </div>
 <hr />
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
@@ -1376,7 +1376,7 @@
   Wan --&gt; Silent["MP4 silent"]
   Image --&gt; LTX["LTX-2.5 I2V&lt;br/&gt;distilled · 5 s AV"]
   LTX --&gt; Mp4["MP4 + world audio&lt;br/&gt;VHS_VideoCombine"]</code></pre>
-<p><strong>Handoff:</strong> load <strong>still-draft-lab-example</strong> → Queue → set <strong>wan-i2v-draft-lab-example</strong> LoadImage to <code>ez_still_draft_*.png</code> → Queue ~5 s silent → optional <strong>ltx-i2v-hero-lab-example</strong> for native audio. I2V graphs also Queue on Comfy’s default <strong>example.png</strong>.</p>
+<p><strong>Handoff:</strong> load <strong>klein-still-draft-lab-example</strong> → Queue → set <strong>wan-i2v-5s-lab-example</strong> LoadImage to <code>ez_still_draft_*.png</code> → Queue ~5 s silent → optional <strong>ltx-i2v-5s-lab-example</strong> for native audio. I2V graphs also Queue on Comfy’s default <strong>example.png</strong>.</p>
 <p>LTX-2.5 is a <strong>joint audio/video</strong> transformer. Seeded LTX graphs load the <strong>audio VAE</strong>, create matching empty audio latents, and concat them with video latents before <code>KSampler</code>. Text conditioning is a single <strong>CLIPLoader</strong> (<code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code>, type <strong><code>ltxv</code></strong>).</p>
 <div class="admonition example">
 <p class="admonition-title">Pipeline tips</p>
@@ -1403,16 +1403,36 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>still-draft-lab-example</strong></td>
+<td><strong>klein-still-draft-lab-example</strong></td>
 <td>Apache Klein 4B distilled, <strong>768×432</strong>, <strong>4</strong> steps, batch 2, prefix <code>ez_still_draft</code></td>
 </tr>
 <tr>
-<td><strong>still-hero-lab-example</strong></td>
+<td><strong>klein-still-hero-lab-example</strong></td>
 <td>Same prompt + seed, <strong>1280×720</strong>, more steps, prefix <code>ez_still_hero</code></td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="tabbed-block">
+<table>
+<thead>
 <tr>
-<td><strong>still-studio-lab-example</strong></td>
-<td>DRAFT group on, HERO bypassed — un-bypass after you like the draft</td>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>wan-i2v-5s-lab-example</strong></td>
+<td>Silent I2V smoke, 832×480, <strong>121</strong> frames @ 24 fps</td>
+</tr>
+<tr>
+<td><strong>wan-t2v-5s-lab-example</strong></td>
+<td>Silent T2V smoke, 121 frames (LoadImage bypassed)</td>
+</tr>
+<tr>
+<td><strong>wan-i2v-shot-lab-example</strong></td>
+<td>Concat-safe <strong>120</strong> frames + last-frame SaveImage. 90s shots, or prefix <code>ez_shot_01..06</code></td>
 </tr>
 </tbody>
 </table>
@@ -1427,35 +1447,11 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>wan-i2v-draft-lab-example</strong></td>
-<td>5 s I2V from <code>example.png</code> / draft still, 832×480, 121 frames, silent Apache</td>
-</tr>
-<tr>
-<td><strong>wan-t2v-draft-lab-example</strong></td>
-<td>5 s T2V (LoadImage bypassed)</td>
-</tr>
-<tr>
-<td><strong>wan-shot-lab-example</strong></td>
-<td>One 5 s shot, prefix <code>ez_shot_01</code> — Queue 01–06 then concat</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="tabbed-block">
-<table>
-<thead>
-<tr>
-<th>Workflow</th>
-<th>What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>ltx-i2v-hero-lab-example</strong></td>
+<td><strong>ltx-i2v-5s-lab-example</strong></td>
 <td>~5 s I2V with native audio (Community License, $10M cap)</td>
 </tr>
 <tr>
-<td><strong>ltx-t2v-hero-lab-example</strong></td>
+<td><strong>ltx-t2v-5s-lab-example</strong></td>
 <td>~5 s T2V AV</td>
 </tr>
 </tbody>
@@ -1471,15 +1467,15 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>still-app-lab-example</strong></td>
+<td><strong>klein-still-daily-lab-example</strong></td>
 <td>Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix <code>ez_still_app</code></td>
 </tr>
 <tr>
-<td><strong>gif-loop-lab-example</strong></td>
+<td><strong>wan-gif-loop-lab-example</strong></td>
 <td>Wan 5B I2V GIF (49 frames @ 12 fps). <strong>Ping-pong ON</strong> so first and last frames meet for infinite looping. Prefix <code>ez_gif_loop</code></td>
 </tr>
 <tr>
-<td><strong>dream-house-lab-example</strong></td>
+<td><strong>klein-dream-house-lab-example</strong></td>
 <td>Ten Instagram 4:5 stills of one lake house. Edit <strong>HOUSE IDENTITY</strong> once; Queue writes <code>ez_dream_house_01</code>…<code>10</code></td>
 </tr>
 </tbody>
@@ -1495,15 +1491,23 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>go-see-90s / still-here-90s / switchyard-90s</strong></td>
-<td>Klein identity still + 18-shot map (<code>workflows/shorts/</code>)</td>
+<td><strong>film-go-see-90s-run-lab-example</strong></td>
+<td>First-person <strong>running</strong> 90s bible (Klein identity + 18-shot map)</td>
 </tr>
 <tr>
-<td><strong>bridge-wan-lab-example</strong></td>
-<td>One 5.00 s silent I2V (120 frames); last-frame SaveImage</td>
+<td><strong>film-still-here-90s-lab-example</strong></td>
+<td>Household morning 90s bible</td>
 </tr>
 <tr>
-<td><strong>bridge-ltx-lab-example</strong></td>
+<td><strong>film-switchyard-90s-lab-example</strong></td>
+<td>Night freight-yard 90s bible</td>
+</tr>
+<tr>
+<td><strong>wan-i2v-shot-lab-example</strong></td>
+<td>One 5.00 s silent I2V (120 frames) + last-frame SaveImage</td>
+</tr>
+<tr>
+<td><strong>ltx-i2v-shot-lab-example</strong></td>
 <td>One 5.00 s AV print; concat uses these MP4s</td>
 </tr>
 </tbody>
@@ -1515,18 +1519,18 @@
 </div>
 </div>
 </div>
-<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; <strong>gif-loop-lab-example</strong> emits <code>image/gif</code>.</p>
-<p>Optional Wan A14B is a <strong>placeholder note</strong> only (<code>workflows/optional/wan-i2v-a14b-hero-lab-example.json</code>) — download <code>download-wan.sh run --tier a14b</code> first; it is not a Queue graph.</p>
+<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; <strong>wan-gif-loop-lab-example</strong> emits <code>image/gif</code>.</p>
+<p>Optional Wan A14B is a <strong>placeholder note</strong> only (<code>workflows/optional/wan-i2v-a14b-lab-example.json</code>) — download <code>download-wan.sh run --tier a14b</code> first; it is not a Queue graph.</p>
 <hr />
 <h2 id="iteration-loop-youtube-169">Iteration loop (YouTube 16:9)<a class="headerlink" href="#iteration-loop-youtube-169" title="Permanent link">&para;</a></h2>
 <p>Do <strong>not</strong> edit raw JSON. Change widgets on the canvas.</p>
 <ol>
-<li>Load <strong>still-draft-lab-example</strong> → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).</li>
+<li>Load <strong>klein-still-draft-lab-example</strong> → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).</li>
 <li>Pick a frame under <code>${COMFY_OUTPUT_DIR}</code> (<code>ez_still_draft_*.png</code>).</li>
-<li>Load <strong>wan-i2v-draft-lab-example</strong> → set LoadImage to that PNG (or leave <code>example.png</code> to smoke-test) → edit <strong>Motion / prompt</strong> only → Queue ~5 s silent.</li>
-<li>Optional audio: <strong>ltx-i2v-hero-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV.</li>
+<li>Load <strong>wan-i2v-5s-lab-example</strong> → set LoadImage to that PNG (or leave <code>example.png</code> to smoke-test) → edit <strong>Motion / prompt</strong> only → Queue ~5 s silent.</li>
+<li>Optional audio: <strong>ltx-i2v-5s-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV.</li>
 <li>
-<p>Short six-shot demo: Queue <strong>wan-shot-lab-example</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then:</p>
+<p>Short six-shot demo: Queue <strong>wan-i2v-shot-lab-example</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--yes
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4</span>
 </code></pre></div>
@@ -1534,7 +1538,7 @@
 <li>
 <p><strong>90s films</strong> (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then concat with <code>--film</code>. See <a href="../shorts/">90s shorts</a>.</p>
 </li>
-<li>Daily still / GIF / IG pack: <strong>still-app-lab-example</strong> → optional <strong>gif-loop-lab-example</strong> (LoadImage = <code>ez_still_app_*.png</code>, leave ping-pong on) or <strong>dream-house-lab-example</strong> for a 10-photo carousel.</li>
+<li>Daily still / GIF / IG pack: <strong>klein-still-daily-lab-example</strong> → optional <strong>wan-gif-loop-lab-example</strong> (LoadImage = <code>ez_still_app_*.png</code>, leave ping-pong on) or <strong>klein-dream-house-lab-example</strong> for a 10-photo carousel.</li>
 </ol>
 <p>Do not Queue a 90s denoise. Default graphs iterate in minutes.</p>
 <hr />
@@ -1557,13 +1561,13 @@
 </thead>
 <tbody>
 <tr>
-<td><code>wan-*-lab-example</code> / <code>ltx-*-lab-example</code></td>
+<td><code>wan-i2v-5s</code> / <code>wan-t2v-5s</code> / <code>ltx-*-5s</code></td>
 <td>121</td>
 <td>24</td>
 <td>~5.04 s</td>
 </tr>
 <tr>
-<td><code>workflows/shorts/bridge-*-lab-example</code></td>
+<td><code>wan-i2v-shot</code> / <code>ltx-i2v-shot</code></td>
 <td>120</td>
 <td>24</td>
 <td><strong>5.00 s</strong></td>

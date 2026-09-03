@@ -1425,7 +1425,7 @@
 </tr>
 <tr>
 <td><strong>Workflow</strong></td>
-<td><strong>still-draft-lab-example</strong> queued without missing-weight errors</td>
+<td><strong>klein-still-draft-lab-example</strong> queued without missing-weight errors</td>
 </tr>
 <tr>
 <td><strong>Weights</strong></td>
@@ -1458,7 +1458,7 @@
 <li><strong>Accept LTX-2.5</strong> on Hugging Face (gated) and set <code>HF_TOKEN</code></li>
 <li><strong><code>download-models</code></strong> — Klein 4B + Wan 5B + LTX-2.5 (throttled)</li>
 <li><strong><code>start</code></strong> — type <code>yes</code>, then open the UI</li>
-<li><strong>Queue still-draft-lab-example</strong></li>
+<li><strong>Queue klein-still-draft-lab-example</strong></li>
 <li><strong><code>stop</code></strong> — always, before reboot</li>
 </ol>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
@@ -1703,7 +1703,7 @@
 </code></pre></div>
 <p>That deletes <code>*.incomplete</code> (finished weights stay) and re-pulls. See <a href="../models-and-cache/#resume-cache">Models &amp; Cache</a>.</p>
 </div>
-<p>If Comfy shows <strong>Missing Models</strong> on <strong>still-draft-lab-example</strong>, re-run download and <code>doctor</code>. Full cache layout: <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
+<p>If Comfy shows <strong>Missing Models</strong> on <strong>klein-still-draft-lab-example</strong>, re-run download and <code>doctor</code>. Full cache layout: <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
 <hr />
 <h2 id="start-the-stack">Start the stack<a class="headerlink" href="#start-the-stack" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>./scripts/manage.sh<span class="w"> </span>start
@@ -1717,7 +1717,7 @@
 </code></pre></div>
 <div class="admonition success">
 <p class="admonition-title">First Queue</p>
-<p>In ComfyUI, load <strong>still-draft-lab-example</strong> from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Leave <strong>Enhance</strong> off. Queue. PNG lands at <code>${COMFY_OUTPUT_DIR}/ez_still_draft_*.png</code>.</p>
+<p>In ComfyUI, load <strong>klein-still-draft-lab-example</strong> from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Leave <strong>Enhance</strong> off. Queue. PNG lands at <code>${COMFY_OUTPUT_DIR}/ez_still_draft_*.png</code>.</p>
 <p>Next: <a href="../prompting/">Prompting</a>, then the still → Wan → LTX loop on <a href="../visual-generative-ai/">Visual Generative AI</a>.</p>
 </div>
 <h3 id="build-the-image-locally-optional">Build the image locally (optional)<a class="headerlink" href="#build-the-image-locally-optional" title="Permanent link">&para;</a></h3>

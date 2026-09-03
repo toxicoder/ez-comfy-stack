@@ -1194,10 +1194,10 @@
 <p>The start image owns look. Prompt only motion and camera. Keep identity locked. Lab I2V graphs no longer encode a separate look CLIP into the sampler.</p>
 </div>
 <div class="tabbed-block">
-<p>Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do <strong>not</strong> prompt a walk or a one-way dolly — <strong>gif-loop-lab-example</strong> plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.</p>
+<p>Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do <strong>not</strong> prompt a walk or a one-way dolly — <strong>wan-gif-loop-lab-example</strong> plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.</p>
 </div>
 <div class="tabbed-block">
-<p>One identity paragraph (materials, architecture, place) plus a short camera line per shot. <strong>dream-house-lab-example</strong> uses <strong>Prompt Join</strong> so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.</p>
+<p>One identity paragraph (materials, architecture, place) plus a short camera line per shot. <strong>klein-dream-house-lab-example</strong> uses <strong>Prompt Join</strong> so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.</p>
 </div>
 <div class="tabbed-block">
 <p>Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, <strong>no score</strong>. Do not paste a Wan or Kling shot list unchanged.</p>
@@ -1219,22 +1219,22 @@
 <tr>
 <td><strong>Klein Prompt Enhance</strong></td>
 <td><code>t2i</code>, <code>edit</code></td>
-<td>still-draft / still-hero / still-app / dream-house identity / 90s identity</td>
+<td>klein-still-draft / klein-still-hero / klein-still-daily / klein-dream-house identity / film-*-90s identity</td>
 </tr>
 <tr>
 <td><strong>Wan Prompt Enhance</strong></td>
 <td><code>t2v</code>, <code>i2v</code></td>
-<td>wan-*-lab-example, gif-loop, bridge-wan</td>
+<td>wan-i2v-5s / wan-t2v-5s / wan-i2v-shot / wan-gif-loop</td>
 </tr>
 <tr>
 <td><strong>LTX Prompt Enhance</strong></td>
 <td><code>t2v</code>, <code>i2v</code></td>
-<td>ltx-*-lab-example, bridge-ltx</td>
+<td>ltx-i2v-5s / ltx-t2v-5s / ltx-i2v-shot</td>
 </tr>
 <tr>
 <td><strong>Prompt Join</strong></td>
 <td>identity + shot → one STRING</td>
-<td>dream-house shot cards</td>
+<td>klein-dream-house shot cards</td>
 </tr>
 </tbody>
 </table>
@@ -1253,7 +1253,7 @@
 <p>Safety: <code>restart: "no"</code>, headroom preflight, and download-limit clear-on-exit are unchanged. The key is runtime env only — never baked into the image.</p>
 <hr />
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<p>Queue <strong>still-draft-lab-example</strong> first (<a href="../getting-started/">Getting Started</a>), then the still → Wan 5 s → LTX 5 s loop on <a href="../visual-generative-ai/">Visual Generative AI</a>.</p>
+<p>Queue <strong>klein-still-draft-lab-example</strong> first (<a href="../getting-started/">Getting Started</a>), then the still → Wan 5 s → LTX 5 s loop on <a href="../visual-generative-ai/">Visual Generative AI</a>.</p>
 
 
 
