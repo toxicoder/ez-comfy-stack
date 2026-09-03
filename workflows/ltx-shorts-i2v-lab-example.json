@@ -674,7 +674,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-shorts-i2v-lab-example\n\nVertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License \u2014 not Apache. $10M cap.\nLoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media; do not strip provenance; do not distill. No score.\n"
+        "## ltx-shorts-i2v-lab-example\n\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nVertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License \u2014 not Apache. $10M cap.\nLoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media; do not strip provenance; do not distill. No score.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -1021,7 +1021,7 @@
   "extra": {
     "lab_profile": "ltx-shorts-i2v-lab-example",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-shorts-i2v-lab-example\n\nVertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License \u2014 not Apache. $10M cap.\nLoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media; do not strip provenance; do not distill. No score.\n",
+    "lab_note": "## ltx-shorts-i2v-lab-example\n\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nVertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License \u2014 not Apache. $10M cap.\nLoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media; do not strip provenance; do not distill. No score.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 vertical 9:16 AV I2V ~5s"
   },

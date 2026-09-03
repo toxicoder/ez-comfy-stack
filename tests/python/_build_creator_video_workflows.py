@@ -40,6 +40,12 @@ PREVIEW_BULLET = (
     "preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` "
     "(container `/outputs`). Save frames PNG is secondary."
 )
+LTX_CANVAS_LANDSCAPE = (
+    "LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid)."
+)
+LTX_CANVAS_PORTRAIT = (
+    "LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid)."
+)
 GIF_PREVIEW_BULLET = (
     "After Queue, click **Infinite loop (ping-pong) — open for preview** for an "
     "inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_gif_loop_*.gif`."
@@ -425,6 +431,8 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict) -> str:
 def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str:
     return f"""## {stem}
 
+{LTX_CANVAS_LANDSCAPE}
+
 Unified 90s film graph ({label}): Klein identity still + LTX 5.00s AV shot printer + shot map.
 Models: Klein 4B distilled FP8 (identity) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
 LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
@@ -486,6 +494,11 @@ def _refresh_film_notes(graph: dict, film: str, slug: str, stem: str, label: str
             n["widgets_values"] = [shot_md]
             n["title"] = f"{film} 90s shot map"
             n["size"] = [960, max(float(n["size"][1]), 1400)]
+    for n in graph["nodes"]:
+        if n.get("type") == "LTXVImgToVideo":
+            vals = n.get("widgets_values") or []
+            if len(vals) >= 2:
+                vals[0], vals[1] = 1280, 704
     # Ensure LTX audio + preview polish on embedded printer
     if not any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"]):
         # Only wire if a VHS exists (unified graph)
@@ -766,6 +779,8 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
         ):
             n["widgets_values"] = [prompt]
     note = f"""## ltx-shorts-i2v-lab-example
+
+{LTX_CANVAS_PORTRAIT}
 
 Vertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
 LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.
@@ -1050,6 +1065,8 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
         if n.get("type") == "CLIPTextEncode" and n.get("title") in ("Positive", "Motion / prompt"):
             n["widgets_values"] = [prompt]
     note = f"""## ltx-broll-ambient-lab-example
+
+{LTX_CANVAS_LANDSCAPE}
 
 Ambient B-roll AV plate (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
 Locked camera, world audio muxed into MP4. Prefix `ez_broll_video`.
@@ -1700,6 +1717,8 @@ LoadImage: a cutout-friendly still.
         mode="t2v",
         note=f"""## ltx-weather-broll-lab-example
 
+{LTX_CANVAS_LANDSCAPE}
+
 Weather B-roll AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
 Prefix `ez_weather_video`. World audio muxed into MP4.
 
@@ -1720,6 +1739,8 @@ Disclose AI-generated media. No score.
         mode="t2v",
         note=f"""## ltx-interior-ambience-lab-example
 
+{LTX_CANVAS_LANDSCAPE}
+
 Interior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
 Prefix `ez_interior_video`.
 
@@ -1735,6 +1756,8 @@ Disclose AI-generated media. No score.
         audio_hint=LTX_HOOK_AUDIO,
         mode="t2v",
         note=f"""## ltx-hook-av-lab-example
+
+{LTX_CANVAS_LANDSCAPE}
 
 ~5 s AV cold-open / hook (LTX-2.5 T2V). Community License — not Apache.
 Prefix `ez_hook_video`. Pair with **klein-hook-still-lab-example** if you want I2V instead.

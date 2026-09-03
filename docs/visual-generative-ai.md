@@ -130,8 +130,12 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     | Workflow | What it does |
     | --- | --- |
-    | **ltx-i2v-5s-lab-example** | ~5 s I2V with native audio (Community License, $10M cap) |
-    | **ltx-t2v-5s-lab-example** | ~5 s T2V AV |
+    | **ltx-i2v-5s-lab-example** | ~5 s I2V, **1280×704**, native audio (Community License, $10M cap) |
+    | **ltx-t2v-5s-lab-example** | ~5 s T2V AV, **1280×704** |
+
+    !!! warning "LTX width/height must be divisible by 32"
+
+        Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** valid for the LTX video VAE. Lab landscape graphs use **1280×704**. Klein stills may stay 1280×720; `LTXVImgToVideo` center-crops. Portrait shorts I2V is **768×1280**. Do not type 720 or 1080 on LTX latent widgets. See [Troubleshooting](troubleshooting.md).
 
 === "Apps (still / GIF / IG)"
 
@@ -217,7 +221,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
 1. Load **klein-still-draft-lab-example** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
 3. Load **wan-i2v-5s-lab-example** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
-4. Optional audio: **ltx-i2v-5s-lab-example**, same first frame, same seed note, Queue ~5 s AV.
+4. Optional audio: **ltx-i2v-5s-lab-example**, same first frame, same seed note, Queue ~5 s AV at **1280×704** (I2V center-crops a 1280×720 still).
 5. Short six-shot demo: Queue **wan-i2v-shot-lab-example** six times (`ez_shot_01` … `06`) then:
 
     ```bash
