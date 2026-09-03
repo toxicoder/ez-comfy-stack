@@ -233,7 +233,7 @@ BIBLES = {
 }
 
 
-def test_bible_graphs_are_klein_identity() -> None:
+def test_bible_graphs_are_unified_klein_plus_ltx() -> None:
     for film, slug in FILMS:
         path = SHORTS / BIBLES[film]
         graph = json.loads(path.read_text(encoding="utf-8"))
@@ -242,16 +242,48 @@ def test_bible_graphs_are_klein_identity() -> None:
         assert "qwen_3_4b.safetensors" in text
         assert "flux2-vae.safetensors" in text
         assert '"flux2"' in text
-        save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
-        assert save["widgets_values"][0] == f"ez_{slug}_identity"
+        assert "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors" in text
+        assert any(n.get("type") == "LTXVImgToVideo" for n in graph["nodes"])
+        assert any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"])
+        assert any(n.get("type") == "VHS_VideoCombine" for n in graph["nodes"])
+        identity = next(
+            n
+            for n in graph["nodes"]
+            if n.get("type") == "SaveImage"
+            and n["widgets_values"][0] == f"ez_{slug}_identity"
+        )
+        assert identity["widgets_values"][0] == f"ez_{slug}_identity"
+        vhs = next(n for n in graph["nodes"] if n.get("type") == "VHS_VideoCombine")
+        assert vhs["widgets_values"]["filename_prefix"] == f"ez_{slug}_b1_s1_ltx_video"
+        assert vhs["widgets_values"]["save_output"] is True
+        audio = next(i for i in vhs["inputs"] if i.get("name") == "audio")
+        assert audio.get("link") is not None
+        # LTX print starts bypassed so first Queue is identity-only
+        assert any(
+            n.get("type") == "LTXVImgToVideo" and n.get("mode") == 4 for n in graph["nodes"]
+        )
         mmap = next(n for n in graph["nodes"] if n.get("type") == "MarkdownNote")
         body = mmap["widgets_values"][0]
         yaml_text = _path(film).read_text(encoding="utf-8")
         for shot in _load_shots(yaml_text):
             assert shot["prefix"] in body
             assert shot["load_from"] in body
+            # Audio lines must be paste-ready (not empty)
+            assert f"- Audio:" in body
+        audio_lines = [
+            line for line in body.splitlines() if line.startswith("- Audio:")
+        ]
+        assert len(audio_lines) == 18, (film, len(audio_lines))
+        assert all(len(line) > 12 for line in audio_lines)
+        assert "No score" in body or "no score" in body
         assert "120" in body
         assert "90.00" in body or "90s" in body
         latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
         assert latent["widgets_values"][0] == 1280
         assert latent["widgets_values"][1] == 720
+        ltx_len = next(
+            n["widgets_values"][2]
+            for n in graph["nodes"]
+            if n.get("type") == "LTXVImgToVideo"
+        )
+        assert ltx_len == 120

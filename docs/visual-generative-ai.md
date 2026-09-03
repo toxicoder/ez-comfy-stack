@@ -95,7 +95,7 @@ flowchart LR
 
 **Handoff:** load **klein-still-draft-lab-example** → Queue → set **wan-i2v-5s-lab-example** LoadImage to `ez_still_draft_*.png` → Queue ~5 s silent → optional **ltx-i2v-5s-lab-example** for native audio. I2V graphs also Queue on Comfy’s default **example.png**.
 
-LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, and concat them with video latents before `KSampler`. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
+LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, concat them with video latents before `KSampler`, then decode audio with **`LTXVAudioVAEDecode`** into **`VHS_VideoCombine`** so the MP4 includes world audio. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
 !!! example "Pipeline tips"
 
@@ -145,19 +145,34 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     | Workflow | What it does |
     | --- | --- |
-    | **film-go-see-90s-run-lab-example** | First-person **running** 90s bible (Klein identity + 18-shot map) |
-    | **film-still-here-90s-lab-example** | Household morning 90s bible |
-    | **film-switchyard-90s-lab-example** | Night freight-yard 90s bible |
-    | **wan-i2v-shot-lab-example** | One 5.00 s silent I2V (120 frames) + last-frame SaveImage |
-    | **ltx-i2v-shot-lab-example** | One 5.00 s AV print; concat uses these MP4s |
+    | **film-go-see-90s-run-lab-example** | **Unified** first-person running 90s: Klein identity + LTX 5.00s AV printer + shot map |
+    | **film-still-here-90s-lab-example** | **Unified** household morning 90s (same shape) |
+    | **film-switchyard-90s-lab-example** | **Unified** night freight-yard 90s (same shape) |
+    | **wan-i2v-shot-lab-example** | Optional silent rehearsal / six-shot concat demo |
+    | **ltx-i2v-shot-lab-example** | Generic 5.00 s AV print (non-film) |
 
-    Full loop: [90s shorts](shorts.md).
+    Full loop: [90s shorts](shorts.md). One file per film — mute groups, do not switch graphs.
+
+=== "Creator toolkit"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **klein-shorts-still-lab-example** | Vertical 9:16 Shorts still (`ez_shorts_still`) |
+    | **wan-shorts-i2v-lab-example** | Vertical silent I2V from that still |
+    | **ltx-shorts-i2v-lab-example** | Vertical AV I2V (~5 s) with world audio |
+    | **klein-thumbnail-lab-example** | YouTube thumbnail still 1280×720 |
+    | **klein-product-packshot-lab-example** | Clean product packshot 1:1 |
+    | **klein-before-after-lab-example** | Before/after still pair |
+    | **klein-style-lock-lab-example** | Four style-locked stills |
+    | **wan-bumper-loop-lab-example** | Loopable MP4 bumper (ping-pong) |
+    | **ltx-broll-ambient-lab-example** | Ambient B-roll AV plate (~5 s) |
+    | **klein-storyboard-6up-lab-example** | Six storyboard frames in one Queue |
 
 === "License"
 
     MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).
 
-Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; **wan-gif-loop-lab-example** emits `image/gif`.
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **wan-gif-loop-lab-example** emits `image/gif`.
 
 Optional Wan A14B is a **placeholder note** only (`workflows/optional/wan-i2v-a14b-lab-example.json`) — download `download-wan.sh run --tier a14b` first; it is not a Queue graph.
 
@@ -178,8 +193,9 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     # default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4
     ```
 
-6. **90s films** (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then concat with `--film`. See [90s shorts](shorts.md).
+6. **90s films** (go-see / still-here / switchyard): load one **film-*-90s** graph → Queue identity → unmute LTX → 18 × 5.00s prints → concat with `--film`. See [90s shorts](shorts.md).
 7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel.
+8. Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up (see catalog tab above).
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes.
 
@@ -189,7 +205,7 @@ Do not Queue a 90s denoise. Default graphs iterate in minutes.
 
 !!! tip "Primary output is MP4"
 
-    Seeded **wan-*** and **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**. Files are on the **host** at `${COMFY_OUTPUT_DIR}` (container `/outputs`). `cleanup` does **not** delete this folder.
+    Seeded **wan-*** and **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode` (`save_output: true`). LTX graphs also run **`LTXVAudioVAEDecode`** into the VHS **audio** input so world audio is muxed into the MP4. After **Queue**, open **Save video (MP4) — open node for preview** for an **inline preview**. PNG **Save frames (secondary)** is optional. Files are on the **host** at `${COMFY_OUTPUT_DIR}` (container `/outputs`). `cleanup` does **not** delete this folder.
 
 ```bash
 ls "${COMFY_OUTPUT_DIR}"/ez_still_draft_*.png
@@ -273,7 +289,7 @@ sequenceDiagram
     - Klein CLIP loader type is **`flux2`** with `qwen_3_4b` + `EmptyFlux2LatentImage` (simplified `KSampler`)
     - LTX-2.5 graphs use **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps), and still save **frames** via `SaveImage`
     - Stack installs **ComfyUI-VideoHelperSuite** (required) plus runtime **`ffmpeg`** (imageio-ffmpeg pip is fallback)
-    - LTX is **joint AV**: lab graphs load `ltx-2.5-audio-vae-bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`. Omitting empty audio causes `reshape … [1, 0, 32, -1]`
+    - LTX is **joint AV**: lab graphs load `ltx-2.5-audio-vae-bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`, then **`LTXVSeparateAVLatent` → `LTXVAudioVAEDecode` → `VHS_VideoCombine.audio`**. Omitting empty audio causes `reshape … [1, 0, 32, -1]`
     - Lab Klein graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
     - Runtime image includes **`gcc`/`g++`** and **`python3-dev`** so PyTorch 2.13 Triton can JIT `cuda_utils` on first CLIP encode (fallback: `LAB_DISABLE_TORCH_NATIVE_TRITON=1`)
     - **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)

@@ -160,10 +160,20 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 | `wan-t2v-5s-lab-example.json` | Wan 5B T2V smoke |
 | `wan-i2v-shot-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |
 | `wan-gif-loop-lab-example.json` | Ping-pong GIF, 49 @ 12 fps |
-| `ltx-i2v-5s-lab-example.json` | LTX-2.5 I2V ~5 s with audio (121) |
-| `ltx-t2v-5s-lab-example.json` | LTX-2.5 T2V ~5 s with audio |
+| `ltx-i2v-5s-lab-example.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
+| `ltx-t2v-5s-lab-example.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
 | `ltx-i2v-shot-lab-example.json` | 5.00 s LTX I2V print + last-frame SaveImage |
-| `shorts/film-*-90s-*-lab-example.json` | Klein identity still + 18-shot map ([90s shorts](shorts.md)) |
+| `shorts/film-*-90s-*-lab-example.json` | **Unified** Klein identity + LTX 5.00s AV printer + 18-shot map ([90s shorts](shorts.md)) |
+| `klein-shorts-still-lab-example.json` | Vertical 9:16 Shorts still |
+| `wan-shorts-i2v-lab-example.json` | Vertical silent Shorts I2V |
+| `ltx-shorts-i2v-lab-example.json` | Vertical AV Shorts I2V |
+| `klein-thumbnail-lab-example.json` | YouTube thumbnail still |
+| `klein-product-packshot-lab-example.json` | Product packshot 1:1 |
+| `klein-before-after-lab-example.json` | Before/after still pair |
+| `klein-style-lock-lab-example.json` | Four style-locked stills |
+| `wan-bumper-loop-lab-example.json` | Loopable MP4 bumper |
+| `ltx-broll-ambient-lab-example.json` | Ambient B-roll AV ~5 s |
+| `klein-storyboard-6up-lab-example.json` | Six storyboard frames |
 
 Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. They still **must** wire the audio VAE because LTX is a joint AV model.
 
