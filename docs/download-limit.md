@@ -15,7 +15,7 @@ tags: [bandwidth, wondershaper, speedtest, safety]
 
 **What this enables**
 
-- Downloading multi‑GB FLUX/LTX weights without saturating the uplink and freezing SSH
+- Downloading multi‑GB Klein/Wan/LTX weights without saturating the uplink and freezing SSH
 
 ---
 
@@ -62,7 +62,7 @@ Via manage:
 
 ```bash
 ./scripts/manage.sh download-limit clear
-./scripts/manage.sh download-models                 # wrap --limit ${DOWNLOAD_LIMIT:-auto}
+./scripts/manage.sh download-models                 # wrap --limit "${DOWNLOAD_LIMIT:-auto}"
 ./scripts/manage.sh download-models --limit 40      # fixed 40 Mbps; overrides .env for this run
 ./scripts/manage.sh download-models --limit off     # no throttle (SSH risk)
 ```
@@ -169,7 +169,7 @@ sequenceDiagram
   participant Op as Operator / manage.sh
   participant W as download-limit wrap
   participant WS as wondershaper
-  participant Cmd as command e.g. download-flux
+  participant Cmd as command e.g. download-models
 
   Op->>W: wrap --limit auto -- command
   W->>WS: apply limit + verify qdisc

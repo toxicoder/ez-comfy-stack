@@ -68,14 +68,18 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - Prompting: prompting.md
-  - 90s shorts: shorts.md
-  - Visual Generative AI: visual-generative-ai.md
-  - Model licenses: licenses.md
-  - Spark farm: spark-farm.md
-  - Models & Cache: models-and-cache.md
-  - Download Limit: download-limit.md
-  - Reboot Safety: reboot-safety.md
-  - Troubleshooting: troubleshooting.md
-  - Conventions: project-conventions.md
+  - Start:
+      - Getting Started: getting-started.md
+      - Prompting: prompting.md
+      - Model licenses: licenses.md
+  - Create:
+      - Visual Generative AI: visual-generative-ai.md
+      - 90s shorts: shorts.md
+      - Spark farm: spark-farm.md
+  - Operate:
+      - Models & Cache: models-and-cache.md
+      - Download Limit: download-limit.md
+      - Reboot Safety: reboot-safety.md
+      - Troubleshooting: troubleshooting.md
+  - Contribute:
+      - Conventions: project-conventions.md

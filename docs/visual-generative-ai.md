@@ -1,26 +1,28 @@
 ---
 title: Visual Generative AI
-description: Architecture of the unified Flux → LTX ComfyUI stack on DGX Spark unified memory.
-tags: [comfyui, flux, ltx, visual, nvfp4]
+description: Klein 4B still → Wan 2.2 silent 5 s → LTX-2.5 AV playbook for the US-safe ComfyUI studio.
+tags: [comfyui, klein, wan, ltx, visual]
 ---
 
 # Visual Generative AI
 
 **What's on this page**
 
-- Architecture and resource profile (with diagrams)
-- Flux → LTX pipeline
+- Architecture and resource profile
+- Klein → Wan → LTX pipeline
+- Seeded lab workflows and the iteration loop
+- Watching VHS MP4 output
 - Spark unified-memory patch and entrypoint sequence
-- Operator commands
 
 **What this enables**
 
-- Running image + video generation tools in **one** Docker Compose stack
+- Running still + silent motion + AV tools in **one** Docker Compose stack
+- Iterating in minutes on ~5 s clips instead of a 90 s denoise
 - Understanding why memory headroom and the free-memory patch matter on GB10
 
 !!! tip "First run?"
 
-    For install and first UI open, use [Getting Started](getting-started.md). This page explains **how the stack is wired**.
+    For install and first UI open, use [Getting Started](getting-started.md). This page is the **studio playbook** after `still-draft-lab-example` has queued once.
 
 ---
 
@@ -34,6 +36,7 @@ flowchart TB
     CLI["manage.sh"]
     Compose["Docker Compose<br/>project: ez-comfy<br/>restart: no"]
     Models["MODELS_DIR<br/>/mnt/models"]
+    Out["COMFY_OUTPUT_DIR<br/>/mnt/comfy-output"]
     Policy["config/resource-policy.yaml<br/>headroom · mem limits"]
   end
 
@@ -48,11 +51,12 @@ flowchart TB
   Vol["named volume<br/>comfy-state"]
   WF["workflows/*.json + shorts/<br/>lab examples"]
   GPU["GPU · all · 1× GB10"]
-  UI["UI :8188"]
+  UI["UI :COMFY_PORT"]
 
   CLI --> Compose
   Compose --> EP
   Models -.->|bind /models| Ctr
+  Out -.->|bind /outputs| Ctr
   Vol -.->|/comfy-state| Ctr
   WF -.->|ro workflows| Ctr
   GPU --> Comfy
@@ -66,35 +70,150 @@ flowchart TB
 | Memory limit / reservation | 90g / 80g |
 | GPU | all (1× GB10) |
 | restart | `"no"` |
-| Flux | Klein 9B NVFP4 + Nunchaku |
-| LTX | distilled FP8 balanced + Gemma DualCLIP |
-
----
-
-## Combined pipeline (Flux → LTX)
-
-Text → image → **video frames** in one ComfyUI stack. Lab graphs use `SaveImage` for frames. LTX-2.3 is a **joint audio/video** transformer: seeded LTX graphs load the **audio VAE**, create matching empty audio latents, and concat them with video latents before `KSampler` (audio is not saved). LTX text conditioning uses **DualCLIPLoader** (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`, type **`ltxv`**) — not the projection file alone.
+| Image | Klein 4B distilled FP8 (`LAB_IMAGE_TIER=fast`) |
+| Wan | 2.2 TI2V-5B (`LAB_WAN_TIER=5b`), silent |
+| LTX | 2.5 distilled INT8-convrot (`LAB_LTX_TIER=2.5`) |
+| Nunchaku | **off** (`LAB_VISUAL_ENABLE_NUNCHAKU=0`) |
 
 MiniMax H3 is **not** in this stack (US Excluded Territory). See [Model licenses](licenses.md).
 
+---
+
+## Combined pipeline (Klein → Wan → LTX)
+
+Text → still → **silent 5 s** → **AV 5 s** in one ComfyUI stack.
+
 ```mermaid
 flowchart LR
-  Prompt["Text prompt"] --> Flux["Flux T2I<br/>fast · Klein 9B NVFP4"]
-  Flux --> Image["Still image"]
-  Image --> LTX["LTX I2V<br/>balanced · distilled FP8"]
-  LTX --> Frames["Video frames<br/>SaveImage"]
-  LTX --> Mp4["MP4 preview<br/>VHS_VideoCombine"]
+  Prompt["Text prompt"] --> Klein["Klein 4B T2I<br/>fast · distilled FP8"]
+  Klein --> Image["Still PNG"]
+  Image --> Wan["Wan 2.2 I2V<br/>5B · 5 s silent"]
+  Wan --> Silent["MP4 silent"]
+  Image --> LTX["LTX-2.5 I2V<br/>distilled · 5 s AV"]
+  LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff:** load **still-draft-lab-example** → Queue → set **wan-i2v-draft-lab-example** LoadImage to `ez_still_draft_*.png` → Queue 5 s silent → optional **ltx-i2v-hero-lab-example** for native audio. I2V graphs also Queue on Comfy’s default **example.png**. See [Getting Started — iteration loop](getting-started.md#iteration-loop-youtube-169).
+**Handoff:** load **still-draft-lab-example** → Queue → set **wan-i2v-draft-lab-example** LoadImage to `ez_still_draft_*.png` → Queue ~5 s silent → optional **ltx-i2v-hero-lab-example** for native audio. I2V graphs also Queue on Comfy’s default **example.png**.
+
+LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, and concat them with video latents before `KSampler`. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
 !!! example "Pipeline tips"
 
-    1. Download **flux fast** + **ltx balanced** first
+    1. Download the default pack first (`download-models` = image fast + wan 5b + ltx 2.5)
     2. Prefer keeping both model sets loaded between T2I and I2V
     3. Avoid concurrent large LLM containers on the same Spark
-    4. LTX lab graphs emit **MP4** via **VideoHelperSuite** (`VHS_VideoCombine`, 24 fps) plus optional PNG frames — see [Getting Started → Watch the video](getting-started.md#watch-the-video-ltx)
+    4. Video graphs emit **MP4** via **VideoHelperSuite** (`VHS_VideoCombine`, 24 fps) plus optional PNG frames
     5. Prompting: Klein wants Qwen-style prose (subject → light → camera); Wan wants motion + one camera move (no audio); LTX wants a present-tense paragraph with sound interleaved. See [Prompting](prompting.md). Every **\*-lab-example** canvas has an operator **Note**
+
+---
+
+## Example workflows
+
+After `download-models` + `start`, open ComfyUI and load from `user/default/workflows/` (seeded from host `workflows/`). Filenames end with **`-lab-example`**. Do **not** edit raw JSON — change widgets on the canvas.
+
+=== "Still (Klein 4B)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **still-draft-lab-example** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
+    | **still-hero-lab-example** | Same prompt + seed, **1280×720**, more steps, prefix `ez_still_hero` |
+    | **still-studio-lab-example** | DRAFT group on, HERO bypassed — un-bypass after you like the draft |
+
+=== "Motion (Wan 2.2 5B)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **wan-i2v-draft-lab-example** | 5 s I2V from `example.png` / draft still, 832×480, 121 frames, silent Apache |
+    | **wan-t2v-draft-lab-example** | 5 s T2V (LoadImage bypassed) |
+    | **wan-shot-lab-example** | One 5 s shot, prefix `ez_shot_01` — Queue 01–06 then concat |
+
+=== "AV hero (LTX-2.5)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **ltx-i2v-hero-lab-example** | ~5 s I2V with native audio (Community License, $10M cap) |
+    | **ltx-t2v-hero-lab-example** | ~5 s T2V AV |
+
+=== "Apps (still / GIF / IG)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **still-app-lab-example** | Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix `ez_still_app` |
+    | **gif-loop-lab-example** | Wan 5B I2V GIF (49 frames @ 12 fps). **Ping-pong ON** so first and last frames meet for infinite looping. Prefix `ez_gif_loop` |
+    | **dream-house-lab-example** | Ten Instagram 4:5 stills of one lake house. Edit **HOUSE IDENTITY** once; Queue writes `ez_dream_house_01`…`10` |
+
+=== "90s shorts"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **go-see-90s / still-here-90s / switchyard-90s** | Klein identity still + 18-shot map (`workflows/shorts/`) |
+    | **bridge-wan-lab-example** | One 5.00 s silent I2V (120 frames); last-frame SaveImage |
+    | **bridge-ltx-lab-example** | One 5.00 s AV print; concat uses these MP4s |
+
+    Full loop: [90s shorts](shorts.md).
+
+=== "License"
+
+    MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).
+
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; **gif-loop-lab-example** emits `image/gif`.
+
+Optional Wan A14B is a **placeholder note** only (`workflows/optional/wan-i2v-a14b-hero-lab-example.json`) — download `download-wan.sh run --tier a14b` first; it is not a Queue graph.
+
+---
+
+## Iteration loop (YouTube 16:9)
+
+Do **not** edit raw JSON. Change widgets on the canvas.
+
+1. Load **still-draft-lab-example** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
+2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
+3. Load **wan-i2v-draft-lab-example** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
+4. Optional audio: **ltx-i2v-hero-lab-example**, same first frame, same seed note, Queue ~5 s AV.
+5. Short six-shot demo: Queue **wan-shot-lab-example** six times (`ez_shot_01` … `06`) then:
+
+    ```bash
+    ./scripts/utilities/concat-shots.sh --yes
+    # default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4
+    ```
+
+6. **90s films** (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then concat with `--film`. See [90s shorts](shorts.md).
+7. Daily still / GIF / IG pack: **still-app-lab-example** → optional **gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **dream-house-lab-example** for a 10-photo carousel.
+
+Do not Queue a 90s denoise. Default graphs iterate in minutes.
+
+---
+
+## Watch the video (Wan / LTX)
+
+!!! tip "Primary output is MP4"
+
+    Seeded **wan-*** and **ltx-*** graphs install **ComfyUI-VideoHelperSuite** and wire **`VHS_VideoCombine`** after video `VAEDecode`. After **Queue**, open the **Save video (MP4)** node for an **inline preview**. Files are on the **host** at `${COMFY_OUTPUT_DIR}` (container `/outputs`). `cleanup` does **not** delete this folder.
+
+```bash
+ls "${COMFY_OUTPUT_DIR}"/ez_still_draft_*.png
+ls "${COMFY_OUTPUT_DIR}"/ez_ltx_*_video_*.mp4
+```
+
+| Graph | Frames | FPS | ≈ duration |
+| --- | --- | --- | --- |
+| `wan-*-lab-example` / `ltx-*-lab-example` | 121 | 24 | ~5.04 s |
+| `workflows/shorts/bridge-*-lab-example` | 120 | 24 | **5.00 s** |
+| 90s film (18 LTX prints + concat) | — | 24 | **90.00 s** cap |
+
+!!! warning "Do not Queue 30 s / 60 s / 90 s in one graph"
+
+    Long latents melt Spark. Prefer **~5 s** graphs; stitch with [concat-shots](shorts.md). Keep headroom preflight green.
+
+Optional offline stitch of PNG frames only (if you need a host-side re-encode):
+
+```bash
+cd "${COMFY_OUTPUT_DIR}"
+ffmpeg -y -framerate 24 -pattern_type glob -i 'ez_ltx_*_*.png' \
+  -c:v libx264 -pix_fmt yuv420p -crf 18 out.mp4
+```
+
+If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see [Troubleshooting](troubleshooting.md).
 
 ---
 
@@ -123,7 +242,8 @@ flowchart TB
 | --- | --- |
 | `patch_get_free_memory.py` | Use host free RAM instead of under-reporting `cudaMemGetInfo` |
 | `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` | Less allocator fragmentation |
-| `LAB_VISUAL_ENABLE_NVFP4=1` | Hint for NVFP4 / Nunchaku paths |
+| `LAB_VISUAL_ENABLE_NVFP4=1` | Hint only; default graphs use core FP8 Klein 4B, not Nunchaku |
+| `LAB_VISUAL_ENABLE_NUNCHAKU=0` | Lab examples do not require Nunchaku |
 | Fail-soft Nunchaku / SageAttention | aarch64 wheels may be missing |
 
 ### Container entrypoint sequence
@@ -145,22 +265,30 @@ sequenceDiagram
   Note over U: First cold start can take 10–30+ minutes
 ```
 
+??? abstract "Lab workflow internals"
+
+    - Name pattern: host files `workflows/*-lab-example.json` and `workflows/shorts/*-lab-example.json` (entrypoint copies both)
+    - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
+    - Klein CLIP loader type is **`flux2`** with `qwen_3_4b` + `EmptyFlux2LatentImage` (simplified `KSampler`)
+    - LTX-2.5 graphs use **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps), and still save **frames** via `SaveImage`
+    - Stack installs **ComfyUI-VideoHelperSuite** (required) plus runtime **`ffmpeg`** (imageio-ffmpeg pip is fallback)
+    - LTX is **joint AV**: lab graphs load `ltx-2.5-audio-vae-bf16`, build empty audio latents (`LTXVEmptyLatentAudio`), **concat** with video latents before `KSampler`. Omitting empty audio causes `reshape … [1, 0, 32, -1]`
+    - Lab Klein graphs use **core** loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples
+    - Runtime image includes **`gcc`/`g++`** and **`python3-dev`** so PyTorch 2.13 Triton can JIT `cuda_utils` on first CLIP encode (fallback: `LAB_DISABLE_TORCH_NATIVE_TRITON=1`)
+    - **Not Z-Image.** Community Z-Image templates need different weights (`ae` / `qwen_3_4b` / `z_image_turbo_*`)
+
+??? abstract "Optional LTX-2.3 fallback"
+
+    If LTX-2.5 access or INT8-convrot fails: `./scripts/utilities/download-ltx.sh run --tier 2.3` pulls Kijai distilled FP8 + Gemma 3 DualCLIP (`gemma_3_12B_it_fp4_mixed` + `ltx-2.3_text_projection_bf16`). **Seeded lab graphs still expect LTX-2.5 filenames** — do not treat 2.3 as the default playbook.
+
 ---
 
 ## Commands
 
-| Step | Command |
-| --- | --- |
-| 1. Preflight | `./scripts/manage.sh doctor` |
-| 2. Weights | `./scripts/manage.sh download-models` |
-| 3. Start | `./scripts/manage.sh start` (type `yes`) |
-| 4. Observe | `./scripts/manage.sh status` · `logs` |
-| 5. Stop | `./scripts/manage.sh stop` |
+First-run commands live on [Getting Started](getting-started.md). Day-to-day on a running host:
 
 ```bash
 ./scripts/manage.sh doctor
-./scripts/manage.sh download-models
-./scripts/manage.sh start
 ./scripts/manage.sh status
 ./scripts/manage.sh logs
 ./scripts/manage.sh stop

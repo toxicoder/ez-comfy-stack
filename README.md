@@ -39,13 +39,20 @@ flowchart TB
 Full walkthrough (prerequisites, setup, workflows): **[Getting Started](https://toxicoder.github.io/ez-comfy-stack/latest/getting-started/)** (or the [development](https://toxicoder.github.io/ez-comfy-stack/development/getting-started/) docs if you track that branch).
 
 ```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+
 ./scripts/manage.sh setup --install-docker   # .env, MODELS_DIR, Docker if needed
-# set HF_TOKEN in .env if models are gated
+# set HF_TOKEN in .env if models are gated (LTX-2.5)
 ./scripts/manage.sh doctor
 ./scripts/manage.sh download-models   # throttled Klein 4B + Wan 5B + LTX-2.5
 ./scripts/manage.sh start             # type yes
 ./scripts/manage.sh status
-# open http://<spark-ip>:8188
+# open http://${SPARK_HOST}:${COMFY_PORT}
+# laptop: ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 ./scripts/manage.sh stop              # before reboot
 ```
 
@@ -71,7 +78,7 @@ sequenceDiagram
 docker/           Dockerfile + compose (us-safe-studio)
 scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
-scripts/utilities download-image, download-wan, download-ltx, download-limit, spark-farm
+scripts/utilities download-image, download-wan, download-ltx, download-limit, concat-shots, spark-farm
 config/           Resource / headroom policy
 workflows/        Seeded lab ComfyUI example graphs (still/GIF/dream-house apps; 90s shorts under workflows/shorts/)
 docs/             MkDocs site
@@ -100,7 +107,7 @@ make docs          # site/ (strict MkDocs build)
 # or: mkdocs serve
 ```
 
-Key pages (branch-relative source): [Getting Started](docs/getting-started.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
+Key pages (branch-relative source): [Getting Started](docs/getting-started.md) · [Prompting](docs/prompting.md) · [Model licenses](docs/licenses.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [90s shorts](docs/shorts.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
 
 ## Development
 

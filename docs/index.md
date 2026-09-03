@@ -1,7 +1,7 @@
 ---
 title: ez-comfy-stack
 description: Lean Visual Generative AI demo stack (ComfyUI US-safe local studio) for a single NVIDIA DGX Spark.
-tags: [comfyui, flux, ltx, dgx-spark, docker]
+tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
 ---
 
 # ez-comfy-stack
@@ -16,14 +16,16 @@ tags: [comfyui, flux, ltx, dgx-spark, docker]
 **What this enables**
 
 - Spinning up a **US-safe local studio** (Klein 4B + Wan 2.2 + LTX-2.5) on one Spark quickly
-- Sharing model weights with other stacks via `/mnt/models`
+- Sharing model weights with other stacks via `${MODELS_DIR}` (default `/mnt/models`)
 - Operating the stack safely over SSH without locking yourself out
 
 !!! tip "Start here"
 
-    New to this repo? Follow **[Getting Started](getting-started.md)** for setup → doctor → download → start → stop. Prompt recipes: [Prompting](prompting.md).
+    New to this repo? Follow **[Getting Started](getting-started.md)** for setup → doctor → download → start → first still → stop.
 
-    Licenses (US self-host): [Model licenses](licenses.md). Contributors: [Conventions](project-conventions.md).
+    Then: [Prompting](prompting.md) · [Model licenses](licenses.md) · studio playbook [Visual Generative AI](visual-generative-ai.md).
+
+    Contributors: [Conventions](project-conventions.md).
 
 ---
 
@@ -42,7 +44,7 @@ flowchart TB
     E1["Docker Compose"]
     E2["One profile: us-safe-studio"]
     E3["manage.sh operator CLI"]
-    E4["Shared /mnt/models"]
+    E4["Shared MODELS_DIR"]
     E1 --> E2 --> E3
     E2 --> E4
   end
@@ -63,12 +65,33 @@ flowchart TB
 | Item | Value |
 | --- | --- |
 | Runtime | ComfyUI (Docker) |
-| Pipeline | **studio** (Klein 4B still → Wan 2.2 5s silent → LTX-2.5 AV; see [licenses](licenses.md)) |
-| Flux tier | fast — FLUX.2 Klein 9B NVFP4 + Nunchaku |
-| LTX tier | balanced — LTX-2.3 distilled FP8 |
-| Models | host `/mnt/models` |
-| UI | port **8188** |
+| Pipeline | **studio** — Klein 4B still → Wan 2.2 5 s silent → LTX-2.5 AV ([licenses](licenses.md)) |
+| Image tier | **fast** — FLUX.2 Klein 4B distilled FP8 (Apache) |
+| Wan tier | **5b** — Wan 2.2 TI2V-5B (Apache, silent) |
+| LTX tier | **2.5** — LTX-2.5 distilled INT8-convrot (Community License, gated) |
+| Models | host `${MODELS_DIR}` (default `/mnt/models`) |
+| Outputs | host `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
+| UI | port **`${COMFY_PORT}`** (default **8188**) |
 | Memory limit | **90g** (host headroom reserved for SSH) |
+
+Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are **not** defaults. Optional fallbacks (Z-Image, Wan A14B, LTX-2.3) are documented on [Models & Cache](models-and-cache.md).
+
+---
+
+## Session variables
+
+Set these once per SSH session (defaults match `.env.example`). Getting Started repeats them in the copy-paste path.
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"          # LAN IP or DNS of this Spark
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"        # auto | off | integer Mbps
+```
+
+UI: `http://${SPARK_HOST}:${COMFY_PORT}`. From a laptop, port-forward first (see [Getting Started](getting-started.md)).
 
 ---
 
@@ -112,13 +135,15 @@ flowchart TB
     subgraph Ctr["comfyui container"]
       Comfy["ComfyUI"]
     end
-    Models["/mnt/models<br/>shared cache"]
+    Models["MODELS_DIR<br/>shared cache"]
+    Out["COMFY_OUTPUT_DIR<br/>PNG / MP4"]
   end
-  UI["Browser · http://spark:8188"]
+  UI["Browser · SPARK_HOST:COMFY_PORT"]
 
   Op --> SSH --> Manage
   Manage --> Compose --> Comfy
   Models -.->|bind mount| Comfy
+  Out -.->|bind /outputs| Comfy
   Comfy --> UI
   Op --> UI
 ```
@@ -130,8 +155,11 @@ flowchart TB
 | When | Read |
 | --- | --- |
 | **First run** | [Getting Started](getting-started.md) |
+| **How to prompt Klein / Wan / LTX** | [Prompting](prompting.md) |
+| **Licenses before a 30 GB pull** | [Model licenses](licenses.md) |
+| **Still → silent 5 s → AV 5 s** | [Visual Generative AI](visual-generative-ai.md) |
 | **90s films (go-see / still-here / switchyard)** | [90s shorts](shorts.md) |
-| **How the pipeline works** | [Visual Generative AI](visual-generative-ai.md) |
+| **Three Sparks, one weight copy** | [Spark farm](spark-farm.md) |
 | **Weights, cache, image pins** | [Models & Cache](models-and-cache.md) |
 | **Throttled downloads** | [Download Limit](download-limit.md) |
 | **Before reboot** | [Reboot Safety](reboot-safety.md) |
@@ -139,10 +167,14 @@ flowchart TB
 | **Contributing** | [Conventions](project-conventions.md) |
 
 ```mermaid
-flowchart LR
+flowchart TB
   Home["Home"] --> GS["Getting Started"]
+  GS --> Prompt["Prompting"]
+  GS --> Lic["Licenses"]
   GS --> Vis["Visual Generative AI"]
-  Vis --> Mod["Models & Cache"]
+  Vis --> Shorts["90s shorts"]
+  Shorts --> Farm["Spark farm"]
+  GS --> Mod["Models & Cache"]
   Mod --> DL["Download Limit"]
   GS --> RS["Reboot Safety"]
   Vis --> TS["Troubleshooting"]
