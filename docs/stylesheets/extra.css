@@ -1,0 +1,34 @@
+/* Sticky header compact-on-scroll for Material navigation.tabs.sticky.
+   Tabs stay inside the header; do not hide logo, title, tabs, search,
+   palette, version selector, or repo. Do not enable header.autohide. */
+
+.md-header .md-header__title,
+.md-header .md-tabs__item,
+.md-header .md-tabs__link {
+  transition:
+    height 200ms ease,
+    line-height 200ms ease,
+    margin-top 200ms ease;
+}
+
+/* Material sets --active when the page h1 leaves the viewport. */
+.md-header:has(.md-header__title--active) .md-header__title {
+  height: 2.2rem;
+  line-height: 2.2rem;
+}
+
+.md-header:has(.md-header__title--active) .md-tabs__item {
+  height: 2rem;
+}
+
+.md-header:has(.md-header__title--active) .md-tabs__link {
+  margin-top: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-header .md-header__title,
+  .md-header .md-tabs__item,
+  .md-header .md-tabs__link {
+    transition: none;
+  }
+}
