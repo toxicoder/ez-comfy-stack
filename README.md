@@ -58,7 +58,7 @@ sequenceDiagram
 
   Op->>M: doctor
   Op->>M: download-models
-  Note over M: wrap --limit auto · 85% of speedtest
+  Note over M: wrap --limit auto or --limit N Mbps
   Op->>M: start type yes
   M->>D: compose up
   Op->>B: open :8188

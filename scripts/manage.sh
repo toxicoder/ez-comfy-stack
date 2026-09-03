@@ -12,7 +12,7 @@
 #   remote-SSH operation.
 #
 # Usage:
-#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models|cleanup
+#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off]|cleanup
 #   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 #
 # Safety:
@@ -79,7 +79,9 @@ Commands:
   stop              Stop stack (keep models, outputs, and comfy volume)
   restart           stop + start
   logs              Follow compose logs
-  download-models   Download Apache still + Wan 2.2 5B + LTX distilled (bandwidth limited)
+  download-models [--limit auto|N|off]
+                    Download Apache still + Wan 2.2 5B + LTX distilled (bandwidth limited)
+                    --limit N is a fixed Mbps cap (overrides DOWNLOAD_LIMIT for this run)
                     Refuses MiniMax H3 (US Excluded Territory)
   download-limit    Proxy to utilities/download-limit.sh
   clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
@@ -417,20 +419,6 @@ cmd_logs() {
 }
 
 #######################################
-# Download flux-fast and ltx-balanced weights under MODELS_DIR with bandwidth limits.
-# DOWNLOAD_LIMIT controls throttling:
-#   auto | N  — wrap both downloads under download-limit (default auto)
-#   off | 0   — no throttle (warns about remote SSH risk)
-# Side effects: Network HF downloads; may require sudo for wondershaper.
-# Globals:
-#   See file header / caller environment.
-# Arguments:
-#   None
-# Outputs:
-#   Status via log/warn/err on stderr unless noted.
-# Returns:
-#   Exit status of the download pipeline.
-#######################################
 # Clear stale Hugging Face download locks under MODELS_DIR.
 # Globals:
 #   MODELS_DIR
@@ -446,30 +434,70 @@ cmd_clear_hf_locks() {
   clear_stale_hf_locks "${MODELS_DIR}"
 }
 
+#######################################
+# Download lab weights under MODELS_DIR with bandwidth limits.
+# DOWNLOAD_LIMIT (auto|N|off) is the default; --limit overrides for this run.
+# wrap always clears shaping on exit. off|0 skips throttle (SSH risk).
+# Globals:
+#   DOWNLOAD_LIMIT, MODELS_DIR, REPO_ROOT
+# Arguments:
+#   Optional: --limit auto|N|off
+# Outputs:
+#   Status via log/warn/err on stderr
+# Returns:
+#   0 when lab files are ready; 1 on usage error or incomplete weights
+#######################################
 cmd_download_models() {
   local limit="${DOWNLOAD_LIMIT}"
   local rc=0
-  local arg
-  for arg in "$@"; do
-    case "${arg}" in
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
       --with-h3)
         refuse_minimax_h3
         return 1
         ;;
+      --limit)
+        if [[ $# -lt 2 || -z ${2} || ${2} == -* ]]; then
+          err "download-models --limit requires auto|N|off"
+          return 1
+        fi
+        limit="${2}"
+        shift 2
+        ;;
+      --limit=*)
+        limit="${1#--limit=}"
+        if [[ -z ${limit} ]]; then
+          err "download-models --limit requires auto|N|off"
+          return 1
+        fi
+        shift
+        ;;
       -h | --help)
         cat <<'EOF' >&2
-Usage: manage.sh download-models
+Usage: manage.sh download-models [--limit auto|N|off]
   Default: Apache still (Klein 4B) + Wan 2.2 5B + LTX distilled AV.
+  --limit auto  speedtest then 85% (default, or DOWNLOAD_LIMIT in .env)
+  --limit N     fixed cap in Mbps (e.g. 40 ≈ 5 MB/s); overrides DOWNLOAD_LIMIT
+  --limit off   no throttle (not recommended over remote SSH)
   MiniMax H3 is banned (US Excluded Territory). See docs/licenses.md
 EOF
         return 0
         ;;
       *)
-        err "Unknown download-models flag: ${arg}"
+        err "Unknown download-models flag: ${1}"
         return 1
         ;;
     esac
   done
+  case "${limit}" in
+    auto | off | 0) ;;
+    *)
+      if [[ ! ${limit} =~ ^[0-9]+$ || ${limit} -le 0 ]]; then
+        err "Invalid --limit '${limit}' (use auto, off, or a positive integer Mbps)"
+        return 1
+      fi
+      ;;
+  esac
   ensure_models_dir "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   local image_cmd wan_cmd ltx_cmd
