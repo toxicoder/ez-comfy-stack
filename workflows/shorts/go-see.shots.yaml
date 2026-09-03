@@ -8,54 +8,54 @@ shots_per_beat: 3
 total_shots: 18
 publish_cap_s: 90.00
 identity_look: |
-  First-person photoreal dawn travel still. An olive windbreaker and worn black gloves stay in frame, hands visible against wet tar. Unmarked rooftops, empty of signage. Identity lock for the whole short. No violence.
+  First-person photoreal dawn running still. An olive windbreaker and worn black gloves stay in frame, hands pumping at the edges as wet tar and unmarked rooftops fill the view. Identity lock for the whole short. No violence.
 shots:
   - beat: 1
     shot: 1
     prefix: ez_gosee_b1_s1
     load_from: example.png
     motion: |
-      Shot 1 of 18, beat 1 enter. First-person travel camera. Olive windbreaker, worn black gloves; hands plant on wet tar. Dawn rooftop, city still sleeping, pigeon scatter. Vault the parapet. Parkour is transportation. No logos, no violence.
+      Shot 1 of 18, beat 1 enter. First-person running camera. Olive windbreaker, worn black gloves; arms pump at the edges of the frame. Dawn rooftop, city still sleeping, pigeon scatter. Footfalls on wet tar. Continuous forward run. No logos, no violence.
     audio: |
-      Breath close to the lens, wind in the hood, tar grit. No score, no music, no licensed songs.
+      Breath close to the lens, wind in the hood, tar grit under shoes, footfalls. No score, no music, no licensed songs.
   - beat: 1
     shot: 2
     prefix: ez_gosee_b1_s2
     load_from: ez_gosee_b1_s1_last
     motion: |
-      Shot 2 of 18, beat 1 traverse. Same olive windbreaker and gloves. Barrel-roll through open sky between rooftops. Hands briefly out of frame then back. Continuous dawn light.
+      Shot 2 of 18, beat 1 traverse. Same olive windbreaker and gloves. First-person run across the next rooftop. Arms pump, gloves flash in and out of frame. Continuous dawn light, no cuts.
     audio: |
-      Wind roar, fabric snap, breath. No score.
+      Wind roar, fabric snap, breath, running footfalls. No score.
   - beat: 1
     shot: 3
     prefix: ez_gosee_b1_s3
     load_from: ez_gosee_b1_s2_last
     motion: |
-      Shot 3 of 18, beat 1 exit. Land rolling on a warehouse roof. Gloves scrape gravel. End on a stable POV of the roof edge.
+      Shot 3 of 18, beat 1 exit. Keep running onto a warehouse roof. Gloves at the edges. End on a stable first-person view of the roof edge still moving forward.
     audio: |
-      Tar grit, roll, breath. No score.
+      Tar grit, footfalls, breath. No score.
   - beat: 2
     shot: 1
     prefix: ez_gosee_b2_s1
     load_from: ez_gosee_b1_s3_last
     motion: |
-      Shot 4 of 18, beat 2 enter. Ladder drop down the warehouse wall. Gloves on rungs. First-person.
+      Shot 4 of 18, beat 2 enter. First-person run down the warehouse stair, gloves on the rail then pumping again. Continuous descent, not a drop.
     audio: |
-      Metal rungs, breath. No score.
+      Stair treads, breath, footfalls. No score.
   - beat: 2
     shot: 2
     prefix: ez_gosee_b2_s2
     load_from: ez_gosee_b2_s1_last
     motion: |
-      Shot 5 of 18, beat 2 traverse. Market alley at street level. Vault a wooden pallet, duck under a canvas awning. Hands plant on pallet then awning pole. No brand names.
+      Shot 5 of 18, beat 2 traverse. Market alley at street level. First-person running. Duck under a canvas awning without stopping. Gloves in frame. No brand names.
     audio: |
-      Canvas slap, distant market chatter without brand names, breath. No score.
+      Canvas slap, distant market chatter without brand names, breath, footfalls. No score.
   - beat: 2
     shot: 3
     prefix: ez_gosee_b2_s3
     load_from: ez_gosee_b2_s2_last
     motion: |
-      Shot 6 of 18, beat 2 exit. Run out toward a river. Location change is the camera motion. Gloves in frame.
+      Shot 6 of 18, beat 2 exit. Run out toward a river. Location change is the running camera. Gloves in frame. Footfalls open into air.
     audio: |
       Footfalls, open air, breath. No score.
   - beat: 3
@@ -63,87 +63,87 @@ shots:
     prefix: ez_gosee_b3_s1
     load_from: ez_gosee_b2_s3_last
     motion: |
-      Shot 7 of 18, beat 3 enter. River stones. Gloves splash. First-person.
+      Shot 7 of 18, beat 3 enter. First-person run across river stones. Gloves splash at the edges. Keep running.
     audio: |
-      Water, splash, breath. No score.
+      Water, splash, breath, wet footfalls. No score.
   - beat: 3
     shot: 2
     prefix: ez_gosee_b3_s2
     load_from: ez_gosee_b3_s1_last
     motion: |
-      Shot 8 of 18, beat 3 traverse. Through a stone bridge arch. Hands on wet rock.
+      Shot 8 of 18, beat 3 traverse. Run through a stone bridge arch. First-person, gloves pumping. Wet rock on both sides.
     audio: |
-      Water under the arch, breath. No score.
+      Water under the arch, breath, footfalls. No score.
   - beat: 3
     shot: 3
     prefix: ez_gosee_b3_s3
     load_from: ez_gosee_b3_s2_last
     motion: |
-      Shot 9 of 18, beat 3 exit. Beech forest creek jump. Hands on a low branch. Parkour as travel.
+      Shot 9 of 18, beat 3 exit. Beech forest creek path. First-person running along the bank, gloves visible. Forward travel, not a stunt.
     audio: |
-      Beech leaves, creek, breath. No score, no violence.
+      Beech leaves, creek, breath, footfalls. No score, no violence.
   - beat: 4
     shot: 1
     prefix: ez_gosee_b4_s1
     load_from: ez_gosee_b3_s3_last
     motion: |
-      Shot 10 of 18, beat 4 enter. Trees thin. Same olive windbreaker. First-person.
+      Shot 10 of 18, beat 4 enter. Trees thin. Same olive windbreaker. First-person run into open light.
     audio: |
-      Wind in thinning trees, breath. No score.
+      Wind in thinning trees, breath, footfalls. No score.
   - beat: 4
     shot: 2
     prefix: ez_gosee_b4_s2
     load_from: ez_gosee_b4_s1_last
     motion: |
-      Shot 11 of 18, beat 4 traverse. Boulder plant, gloves on granite. Forward travel, not a stunt show.
+      Shot 11 of 18, beat 4 traverse. Run past a boulder, gloves graze granite then pump again. First-person forward run.
     audio: |
-      Granite scrape, breath. No score.
+      Granite scrape, breath, footfalls. No score.
   - beat: 4
     shot: 3
     prefix: ez_gosee_b4_s3
     load_from: ez_gosee_b4_s2_last
     motion: |
-      Shot 12 of 18, beat 4 exit. Out onto a headland with a generic white lighthouse — no logos, no real place name. Windbreaker snaps in sea wind.
+      Shot 12 of 18, beat 4 exit. Run out onto a headland with a generic white lighthouse — no logos, no real place name. Windbreaker snaps in sea wind. Keep running.
     audio: |
-      Surf, gulls, breath, fabric. No score.
+      Surf, gulls, breath, fabric, footfalls. No score.
   - beat: 5
     shot: 1
     prefix: ez_gosee_b5_s1
     load_from: ez_gosee_b4_s3_last
     motion: |
-      Shot 13 of 18, beat 5 enter. Granite steps. First-person, gloves visible.
+      Shot 13 of 18, beat 5 enter. First-person run up granite steps. Gloves visible, arms pumping.
     audio: |
-      Boot grit, breath. No score.
+      Boot grit, breath, footfalls. No score.
   - beat: 5
     shot: 2
     prefix: ez_gosee_b5_s2
     load_from: ez_gosee_b5_s1_last
     motion: |
-      Shot 14 of 18, beat 5 traverse. Squeeze through a gap in a dry-stone wall. Hands on the wall stones.
+      Shot 14 of 18, beat 5 traverse. Run through a gap in a dry-stone wall. First-person, gloves brush the stones, keep the run.
     audio: |
-      Stone scrape, breath. No score.
+      Stone scrape, breath, footfalls. No score.
   - beat: 5
     shot: 3
     prefix: ez_gosee_b5_s3
     load_from: ez_gosee_b5_s2_last
     motion: |
-      Shot 15 of 18, beat 5 exit. Burst into a mountain meadow.
+      Shot 15 of 18, beat 5 exit. Burst running into a mountain meadow. First-person, olive windbreaker, gloves at the edges.
     audio: |
-      Wind in grass, sheep bell far off, breath. No score.
+      Wind in grass, sheep bell far off, breath, footfalls. No score.
   - beat: 6
     shot: 1
     prefix: ez_gosee_b6_s1
     load_from: ez_gosee_b5_s3_last
     motion: |
-      Shot 16 of 18, beat 6 enter. Ridge. Both worn-black-gloved hands on a weathered wooden rail. First-person.
+      Shot 16 of 18, beat 6 enter. Ridge. First-person run slows. Both worn-black-gloved hands find a weathered wooden rail.
     audio: |
-      Rail creak, distant wind, breath. No score.
+      Rail creak, distant wind, slowing footfalls, breath. No score.
   - beat: 6
     shot: 2
     prefix: ez_gosee_b6_s2
     load_from: ez_gosee_b6_s1_last
     motion: |
-      Shot 17 of 18, beat 6 traverse. Look along the ridge. Hold identity: olive windbreaker, gloves on the rail.
+      Shot 17 of 18, beat 6 traverse. Look along the ridge. Hold identity: olive windbreaker, gloves on the rail. First-person, no run.
     audio: |
       Wind, breath. No score.
   - beat: 6
@@ -151,6 +151,6 @@ shots:
     prefix: ez_gosee_b6_s3
     load_from: ez_gosee_b6_s2_last
     motion: |
-      Shot 18 of 18, beat 6 exit. A quiet, short laugh. Hold. End still.
+      Shot 18 of 18, beat 6 exit. A quiet, short laugh. Hold. End still. First-person, gloves on the rail.
     audio: |
       Only breath, a creak of the rail, and distant wind. No score.

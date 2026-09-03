@@ -1,7 +1,7 @@
 {
-  "id": "still-app-lab-example",
-  "revision": 1,
-  "last_node_id": 11,
+  "id": "klein-still-hero-lab-example",
+  "revision": 4,
+  "last_node_id": 12,
   "last_link_id": 10,
   "nodes": [
     {
@@ -36,7 +36,7 @@
         "flux-2-klein-4b-fp8.safetensors",
         "default"
       ],
-      "title": "Image model \u2014 click filename to swap"
+      "title": "Klein 4B distilled FP8"
     },
     {
       "id": 2,
@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick and the bicycle's chrome. Shot on a 35mm lens at eye level, framed for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering."
+        "A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick and the bicycle's chrome. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering."
       ],
       "title": "Positive"
     },
@@ -197,8 +197,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1440,
-        390
+        940,
+        460
       ],
       "size": [
         280,
@@ -222,11 +222,11 @@
         "Node name for S&R": "EmptyFlux2LatentImage"
       },
       "widgets_values": [
-        1024,
-        576,
+        1280,
+        720,
         1
       ],
-      "title": "Size (width x height x batch)"
+      "title": "Latent 1280x720 batch 1"
     },
     {
       "id": 7,
@@ -280,13 +280,13 @@
       "widgets_values": [
         42,
         "fixed",
-        4,
+        8,
         1.0,
         "euler",
         "simple",
         1.0
       ],
-      "title": "Sampler (seed / steps / CFG)"
+      "title": "KSampler"
     },
     {
       "id": 8,
@@ -356,9 +356,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_still_app"
+        "ez_still_hero"
       ],
-      "title": "Save PNG"
+      "title": "Save"
     },
     {
       "id": 10,
@@ -380,12 +380,50 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## still-app-lab-example\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## klein-still-hero-lab-example\n\nSTILL DRAFT/HERO — Apache FLUX.2 Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 (distilled) · 8 steps · 1280x720 · batch 1.\nSaveImage prefix: ez_still_hero.\nCopy prompt + seed from draft, do not restyle here.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nLock seed 42 from draft. Distilled is 4-step-optimized; extra steps are optional.\nAfter draft, set LoadImage to ez_still_draft_00001_.png if you I2I later.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
     {
       "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        2180,
+        80
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": null,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Draft still (set to ez_still_draft_00001_.png)"
+    },
+    {
+      "id": 12,
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
@@ -413,7 +451,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick and the bicycle's chrome. Shot on a 35mm lens at eye level, framed for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering.",
+        "A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick and the bicycle's chrome. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -496,70 +534,17 @@
     ],
     [
       10,
-      11,
+      12,
       0,
       4,
       1,
       "STRING"
     ]
   ],
-  "groups": [
-    {
-      "id": 1,
-      "title": "MODEL",
-      "bounding": [
-        20,
-        40,
-        430,
-        430
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 2,
-      "title": "PROMPT",
-      "bounding": [
-        460,
-        40,
-        920,
-        400
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 3,
-      "title": "SETTINGS",
-      "bounding": [
-        1420,
-        40,
-        380,
-        500
-      ],
-      "color": "#a1309b",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 4,
-      "title": "OUTPUT",
-      "bounding": [
-        1820,
-        40,
-        340,
-        430
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    }
-  ],
+  "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "still-app-lab-example",
+    "lab_profile": "klein-still-hero-lab-example",
     "lab_flux_tier": "fast",
     "ds": {
       "scale": 1,
@@ -568,8 +553,8 @@
         0
       ]
     },
-    "lab_note": "## still-app-lab-example\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
-    "lab_description": "Klein 4B still app 1024x576 4 steps"
+    "lab_note": "## klein-still-hero-lab-example\n\nSTILL DRAFT/HERO — Apache FLUX.2 Klein 4B distilled FP8.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 (distilled) · 8 steps · 1280x720 · batch 1.\nSaveImage prefix: ez_still_hero.\nCopy prompt + seed from draft, do not restyle here.\nAspect widgets: YouTube 16:9 default; Shorts 9:16 = 432x768; 1:1 = 768x768.\nLock seed 42 from draft. Distilled is 4-step-optimized; extra steps are optional.\nAfter draft, set LoadImage to ez_still_draft_00001_.png if you I2I later.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_description": "Klein 4B still 1280x720 8 steps"
   },
   "version": 0.4
 }

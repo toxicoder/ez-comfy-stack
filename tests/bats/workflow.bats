@@ -25,23 +25,27 @@ teardown() {
 }
 
 @test "shorts lab graphs are 120-frame US-safe I2V with last-frame prefix" {
-  local dir="${REPO_ROOT}/workflows/shorts"
+  local shorts="${REPO_ROOT}/workflows/shorts"
+  local dir="${REPO_ROOT}/workflows"
   local wf
-  [[ -f ${dir}/go-see-90s-lab-example.json ]]
-  [[ -f ${dir}/still-here-90s-lab-example.json ]]
-  [[ -f ${dir}/switchyard-90s-lab-example.json ]]
-  [[ -f ${dir}/bridge-wan-lab-example.json ]]
-  [[ -f ${dir}/bridge-ltx-lab-example.json ]]
+  [[ -f ${shorts}/film-go-see-90s-run-lab-example.json ]]
+  [[ -f ${shorts}/film-still-here-90s-lab-example.json ]]
+  [[ -f ${shorts}/film-switchyard-90s-lab-example.json ]]
+  [[ -f ${dir}/wan-i2v-shot-lab-example.json ]]
+  [[ -f ${dir}/ltx-i2v-shot-lab-example.json ]]
+  [[ ! -f ${dir}/still-studio-lab-example.json ]]
+  [[ ! -f ${dir}/wan-shot-lab-example.json ]]
+  [[ ! -f ${shorts}/bridge-wan-lab-example.json ]]
   run grep -R -E 'z_image_turbo|FLUX\.2-dev|klein-9b|flux-2-klein-9b|MiniMax|Seedance|Kling' "${dir}"
   [ "${status}" -ne 0 ]
-  for wf in "${dir}"/*-lab-example.json; do
+  for wf in "${shorts}"/*-lab-example.json; do
     run python3 -c "import json,os; p='${wf}'; d=json.load(open(p)); assert d.get('id')==os.path.splitext(os.path.basename(p))[0]"
     [ "${status}" -eq 0 ]
   done
   run python3 -c "
 import json
-w=json.load(open('${dir}/bridge-wan-lab-example.json'))
-l=json.load(open('${dir}/bridge-ltx-lab-example.json'))
+w=json.load(open('${dir}/wan-i2v-shot-lab-example.json'))
+l=json.load(open('${dir}/ltx-i2v-shot-lab-example.json'))
 assert any(n.get('type')=='Wan22ImageToVideoLatent' and n['widgets_values'][2]==120 for n in w['nodes'])
 assert any(n.get('type')=='LTXVImgToVideo' and n['widgets_values'][2]==120 for n in l['nodes'])
 assert any(n.get('type')=='LTXVEmptyLatentAudio' and n['widgets_values'][0]==120 for n in l['nodes'])
@@ -73,7 +77,13 @@ for g in (w, l):
     ltx-t2v-60s-lab-example.json \
     flux-txt2img-lab-example.json \
     h3-go-see-90s-lab-example.json \
-    flux-to-ltx-lab-example.json; do
+    flux-to-ltx-lab-example.json \
+    still-studio-lab-example.json \
+    wan-shot-lab-example.json \
+    still-draft-lab-example.json \
+    still-app-lab-example.json \
+    gif-loop-lab-example.json \
+    dream-house-lab-example.json; do
     [[ ! -f ${dir}/${gone} ]]
   done
 
@@ -112,7 +122,7 @@ for i in range(len(boxes)):
 @test "still lab graphs use Klein 4B Apache weights and flux2 CLIP" {
   local dir="${REPO_ROOT}/workflows"
   local wf
-  for wf in still-draft-lab-example.json still-hero-lab-example.json still-studio-lab-example.json; do
+  for wf in klein-still-draft-lab-example.json klein-still-hero-lab-example.json klein-still-daily-lab-example.json; do
     [[ -f ${dir}/${wf} ]]
     run grep -F 'flux-2-klein-4b-fp8.safetensors' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
@@ -127,16 +137,16 @@ for i in range(len(boxes)):
     run grep -F 'SaveImage' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
   done
-  run grep -F 'ez_still_draft' "${dir}/still-draft-lab-example.json"
+  run grep -F 'ez_still_draft' "${dir}/klein-still-draft-lab-example.json"
   [ "${status}" -eq 0 ]
-  run grep -F '768' "${dir}/still-draft-lab-example.json"
+  run grep -F '768' "${dir}/klein-still-draft-lab-example.json"
   [ "${status}" -eq 0 ]
-  run grep -F '1280' "${dir}/still-hero-lab-example.json"
+  run grep -F '1280' "${dir}/klein-still-hero-lab-example.json"
   [ "${status}" -eq 0 ]
   run python3 -c "
 import json
-d=json.load(open('${dir}/still-draft-lab-example.json'))
-h=json.load(open('${dir}/still-hero-lab-example.json'))
+d=json.load(open('${dir}/klein-still-draft-lab-example.json'))
+h=json.load(open('${dir}/klein-still-hero-lab-example.json'))
 def pos(g):
     enh=next(n for n in g['nodes'] if n.get('type')=='EZKleinPromptEnhance')
     return enh['widgets_values'][0]
@@ -148,20 +158,12 @@ assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 
 assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is False for n in d['nodes'])
 "
   [ "${status}" -eq 0 ]
-  run python3 -c "
-import json
-d=json.load(open('${dir}/still-studio-lab-example.json'))
-assert any(n.get('title')=='HERO KSampler' and n.get('mode')==4 for n in d['nodes'])
-assert any(n.get('title')=='KSampler' and n.get('mode')==0 for n in d['nodes'])
-assert any(g.get('title','').startswith('DRAFT') for g in d.get('groups',[]))
-"
-  [ "${status}" -eq 0 ]
 }
 
 @test "wan lab graphs use 5B Apache weights, 121 frames, VHS" {
   local dir="${REPO_ROOT}/workflows"
   local wf
-  for wf in wan-i2v-draft-lab-example.json wan-t2v-draft-lab-example.json wan-shot-lab-example.json; do
+  for wf in wan-i2v-5s-lab-example.json wan-t2v-5s-lab-example.json; do
     [[ -f ${dir}/${wf} ]]
     run grep -F 'wan2.2_ti2v_5B_fp16.safetensors' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
@@ -185,13 +187,13 @@ assert vhs[0]['widgets_values']['save_output'] is True
 "
     [ "${status}" -eq 0 ]
   done
-  run grep -F 'ez_shot_01' "${dir}/wan-shot-lab-example.json"
+  run grep -F 'ez_shot_01' "${dir}/wan-i2v-shot-lab-example.json"
   [ "${status}" -eq 0 ]
-  run grep -F 'Motion / prompt' "${dir}/wan-i2v-draft-lab-example.json"
+  run grep -F 'Motion / prompt' "${dir}/wan-i2v-5s-lab-example.json"
   [ "${status}" -eq 0 ]
   run python3 -c "
 import json
-d=json.load(open('${dir}/wan-i2v-draft-lab-example.json'))
+d=json.load(open('${dir}/wan-i2v-5s-lab-example.json'))
 loads=[n for n in d['nodes'] if n.get('type')=='LoadImage']
 assert loads and loads[0]['widgets_values'][0]=='example.png'
 assert loads[0].get('mode')==0
@@ -201,7 +203,7 @@ enh=next(n for n in d['nodes'] if n.get('type')=='EZWanPromptEnhance')
 assert enh['widgets_values'][1] is False
 assert enh['widgets_values'][2]=='i2v'
 assert 'dollies' in enh['widgets_values'][0].lower() or 'dolly' in enh['widgets_values'][0].lower() or 'push' in enh['widgets_values'][0].lower()
-t=json.load(open('${dir}/wan-t2v-draft-lab-example.json'))
+t=json.load(open('${dir}/wan-t2v-5s-lab-example.json'))
 tl=[n for n in t['nodes'] if n.get('type')=='LoadImage']
 assert tl and tl[0].get('mode')==4
 tenh=next(n for n in t['nodes'] if n.get('type')=='EZWanPromptEnhance')
@@ -216,7 +218,7 @@ assert 'score' not in tenh['widgets_values'][0].lower()
 @test "ltx hero graphs use 2.5 distilled pack, 121 frames, VHS, CLIP ltxv" {
   local dir="${REPO_ROOT}/workflows"
   local wf
-  for wf in ltx-i2v-hero-lab-example.json ltx-t2v-hero-lab-example.json; do
+  for wf in ltx-i2v-5s-lab-example.json ltx-t2v-5s-lab-example.json; do
     [[ -f ${dir}/${wf} ]]
     run grep -F 'ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors' "${dir}/${wf}"
     [ "${status}" -eq 0 ]
@@ -248,7 +250,7 @@ assert vhs[0]['widgets_values']['format']=='video/h264-mp4'
   done
   run python3 -c "
 import json
-d=json.load(open('${dir}/ltx-i2v-hero-lab-example.json'))
+d=json.load(open('${dir}/ltx-i2v-5s-lab-example.json'))
 loads=[n for n in d['nodes'] if n.get('type')=='LoadImage']
 assert loads and loads[0]['widgets_values'][0]=='example.png'
 enh=next(n for n in d['nodes'] if n.get('type')=='EZLTXPromptEnhance')
@@ -257,7 +259,7 @@ assert enh['widgets_values'][2]=='i2v'
 text=enh['widgets_values'][0].lower()
 assert 'footsteps' in text or 'wind' in text
 assert 'no score' in text or 'no music' in text
-t=json.load(open('${dir}/ltx-t2v-hero-lab-example.json'))
+t=json.load(open('${dir}/ltx-t2v-5s-lab-example.json'))
 tenh=next(n for n in t['nodes'] if n.get('type')=='EZLTXPromptEnhance')
 assert 'YouTube 16:9 still:' not in tenh['widgets_values'][0]
 assert 'shop bell' in tenh['widgets_values'][0].lower() or 'footsteps' in tenh['widgets_values'][0].lower()
@@ -292,13 +294,13 @@ assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_no
 
 @test "operator app graphs: still settings, gif ping-pong loop, dream-house pack" {
   local dir="${REPO_ROOT}/workflows"
-  [[ -f ${dir}/still-app-lab-example.json ]]
-  [[ -f ${dir}/gif-loop-lab-example.json ]]
-  [[ -f ${dir}/dream-house-lab-example.json ]]
+  [[ -f ${dir}/klein-still-daily-lab-example.json ]]
+  [[ -f ${dir}/wan-gif-loop-lab-example.json ]]
+  [[ -f ${dir}/klein-dream-house-lab-example.json ]]
   run python3 -c "
 import json
-s=json.load(open('${dir}/still-app-lab-example.json'))
-assert s.get('id')=='still-app-lab-example'
+s=json.load(open('${dir}/klein-still-daily-lab-example.json'))
+assert s.get('id')=='klein-still-daily-lab-example'
 assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='flux-2-klein-4b-fp8.safetensors' for n in s['nodes'])
 assert any(n.get('type')=='CLIPLoader' and 'qwen_3_4b.safetensors' in n['widgets_values'] and 'flux2' in n['widgets_values'] for n in s['nodes'])
 assert any(n.get('type')=='VAELoader' and n['widgets_values'][0]=='flux2-vae.safetensors' for n in s['nodes'])
@@ -319,8 +321,8 @@ assert any('SETTING' in g.get('title','').upper() for g in s.get('groups',[]))
   [ "${status}" -eq 0 ]
   run python3 -c "
 import json
-g=json.load(open('${dir}/gif-loop-lab-example.json'))
-assert g.get('id')=='gif-loop-lab-example'
+g=json.load(open('${dir}/wan-gif-loop-lab-example.json'))
+assert g.get('id')=='wan-gif-loop-lab-example'
 assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='wan2.2_ti2v_5B_fp16.safetensors' for n in g['nodes'])
 assert any(n.get('type')=='VAELoader' and n['widgets_values'][0]=='wan2.2_vae.safetensors' for n in g['nodes'])
 lat=next(n for n in g['nodes'] if n.get('type')=='Wan22ImageToVideoLatent')
@@ -350,8 +352,8 @@ assert 'breeze' in motion or 'curtain' in motion or 'leaves' in motion
   [ "${status}" -eq 0 ]
   run python3 -c "
 import json
-d=json.load(open('${dir}/dream-house-lab-example.json'))
-assert d.get('id')=='dream-house-lab-example'
+d=json.load(open('${dir}/klein-dream-house-lab-example.json'))
+assert d.get('id')=='klein-dream-house-lab-example'
 assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='flux-2-klein-4b-fp8.safetensors' for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1024, 1280] for n in d['nodes'])
 joins=[n for n in d['nodes'] if n.get('type')=='EZPromptJoin']

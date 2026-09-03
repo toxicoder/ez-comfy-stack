@@ -44,3 +44,9 @@ def test_workflow_json_has_no_h3_nodes() -> None:
             if needle in text:
                 hits.append(f"{path.relative_to(ROOT)}:{needle}")
     assert hits == [], hits
+
+
+def test_dockerfile_does_not_pin_for_minimax() -> None:
+    text = (ROOT / "docker" / "Dockerfile").read_text(encoding="utf-8")
+    assert "MiniMaxH3AddGuide" not in text
+    assert "native H3" not in text

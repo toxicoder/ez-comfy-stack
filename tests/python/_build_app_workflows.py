@@ -92,7 +92,7 @@ GIF_NEG = (
     "watermark, burned-in text"
 )
 
-STILL_NOTE = """## still-app-lab-example
+STILL_NOTE = """## klein-still-daily-lab-example
 
 Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.
 CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.
@@ -107,7 +107,7 @@ Save prefix: ez_still_app.
 Prompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.
 """
 
-GIF_NOTE = """## gif-loop-lab-example
+GIF_NOTE = """## wan-gif-loop-lab-example
 
 Wan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).
 Models: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.
@@ -119,7 +119,7 @@ Do not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.
 Prompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.
 """
 
-HOUSE_NOTE = """## dream-house-lab-example
+HOUSE_NOTE = """## klein-dream-house-lab-example
 
 Ten Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).
 Edit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.
@@ -172,8 +172,8 @@ def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: 
 
 
 def build_still_app() -> dict:
-    graph = json.loads((WF / "still-draft-lab-example.json").read_text(encoding="utf-8"))
-    graph["id"] = "still-app-lab-example"
+    graph = json.loads((WF / "klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
+    graph["id"] = "klein-still-daily-lab-example"
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
     unet["title"] = "Image model — click filename to swap"
@@ -188,7 +188,7 @@ def build_still_app() -> dict:
     save["title"] = "Save PNG"
     note = _node(graph, "Note")
     note["widgets_values"] = [STILL_NOTE]
-    graph["extra"]["lab_profile"] = "still-app-lab-example"
+    graph["extra"]["lab_profile"] = "klein-still-daily-lab-example"
     graph["extra"]["lab_note"] = STILL_NOTE
     graph["extra"]["lab_description"] = "Klein 4B still app 1024x576 4 steps"
     enh = _node(graph, "EZKleinPromptEnhance")
@@ -205,8 +205,8 @@ def build_still_app() -> dict:
 
 
 def build_gif_loop() -> dict:
-    graph = json.loads((WF / "wan-i2v-draft-lab-example.json").read_text(encoding="utf-8"))
-    graph["id"] = "gif-loop-lab-example"
+    graph = json.loads((WF / "wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    graph["id"] = "wan-gif-loop-lab-example"
     graph["revision"] = 1
     lat = _node(graph, "Wan22ImageToVideoLatent")
     lat["widgets_values"][2] = 49
@@ -228,7 +228,7 @@ def build_gif_loop() -> dict:
     neg["widgets_values"] = [GIF_NEG]
     note = _node(graph, "Note")
     note["widgets_values"] = [GIF_NOTE]
-    graph["extra"]["lab_profile"] = "gif-loop-lab-example"
+    graph["extra"]["lab_profile"] = "wan-gif-loop-lab-example"
     graph["extra"]["lab_note"] = GIF_NOTE
     graph["extra"]["lab_description"] = "Wan 5B looping GIF 49 frames ping-pong"
     groups = list(graph.get("groups") or [])
@@ -533,7 +533,7 @@ def build_dream_house() -> dict:
 
     last_id = 14 + 9 * 5
     return {
-        "id": "dream-house-lab-example",
+        "id": "klein-dream-house-lab-example",
         "revision": 1,
         "last_node_id": last_id,
         "last_link_id": link_id,
@@ -542,7 +542,7 @@ def build_dream_house() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "dream-house-lab-example",
+            "lab_profile": "klein-dream-house-lab-example",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
             "lab_description": "Ten Instagram 4:5 Klein stills of one lake house",
@@ -556,9 +556,9 @@ def main() -> None:
     still = build_still_app()
     gif = build_gif_loop()
     house = build_dream_house()
-    _dump(WF / "still-app-lab-example.json", still)
-    _dump(WF / "gif-loop-lab-example.json", gif)
-    _dump(WF / "dream-house-lab-example.json", house)
+    _dump(WF / "klein-still-daily-lab-example.json", still)
+    _dump(WF / "wan-gif-loop-lab-example.json", gif)
+    _dump(WF / "klein-dream-house-lab-example.json", house)
     print("wrote still-app, gif-loop, dream-house")
 
 

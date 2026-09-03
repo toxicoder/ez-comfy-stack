@@ -10,14 +10,14 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 - Why 18 × 5.00s shots instead of one 90s Queue
 - Which US-safe models do identity, rehearsal, and print
-- Shot maps for go-see, still-here, and switchyard
-- Operator loop: Klein still → Wan draft → LTX print → concat
+- Shot maps for go-see (first-person running), still-here, and switchyard
+- Operator loop: Klein still → Wan shot → LTX print → concat
 - Model-native look / motion / audio prompts ([Prompting](prompting.md))
 - Spark farm: parallel 5s Queues, local concat
 
 **What this enables**
 
-- Three continuous ~90s films (go-see, still-here, switchyard) on the **US-safe local pack**
+- Three continuous ~90s films (first-person running go-see, still-here, switchyard) on the **US-safe local pack**
 - Last-frame continuity without a 90s denoise
 - A 90.00s publish cap (`ffmpeg -t 90`)
 
@@ -59,9 +59,9 @@ flowchart LR
 
 | Job | Graph | Model | License |
 | --- | --- | --- | --- |
-| Identity still | `workflows/shorts/{film}-90s-lab-example.json` | Klein 4B distilled FP8 | Apache 2.0 |
-| Motion rehearsal | `workflows/shorts/bridge-wan-lab-example.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
-| Print + synced world audio | `workflows/shorts/bridge-ltx-lab-example.json` | LTX-2.5 distilled I2V | Community License (not Apache) |
+| Identity still | `workflows/shorts/film-{go-see-90s-run,still-here-90s,switchyard-90s}-lab-example.json` | Klein 4B distilled FP8 | Apache 2.0 |
+| Motion rehearsal | `workflows/wan-i2v-shot-lab-example.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
+| Print + synced world audio | `workflows/ltx-i2v-shot-lab-example.json` | LTX-2.5 distilled I2V | Community License (not Apache) |
 
 Deliverable MP4s are **LTX I2V heroes** (breath, world objects, **no score**). Wan is the cheap motion draft — skip it and Queue LTX only if you already like the camera.
 
@@ -71,11 +71,11 @@ LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional exper
 
 ## Operator loop
 
-Host JSON lives under `workflows/shorts/`. The container entrypoint copies `*.json` and `shorts/*.json` into Comfy `user/default/workflows/`.
+Film bibles live under `workflows/shorts/`. Shot graphs live at `workflows/wan-i2v-shot-lab-example.json` and `workflows/ltx-i2v-shot-lab-example.json`. The container entrypoint copies `*.json` and `shorts/*.json` into Comfy `user/default/workflows/`.
 
-1. Load the film bible (`go-see-90s-lab-example` / `still-here-90s-lab-example` / `switchyard-90s-lab-example`). Queue the Klein identity still (`ez_<slug>_identity`).
-2. Load **bridge-wan-lab-example**. Set LoadImage to that PNG (shot 1) or the previous `ez_<slug>_bN_sM_last`. Paste **Motion** from the on-canvas shot map (source of truth: `{film}.shots.yaml`). Set VHS prefix `ez_<slug>_bN_sM_wan_video` and last-frame SaveImage `ez_<slug>_bN_sM_last`. Queue **5.00s** silent.
-3. Load **bridge-ltx-lab-example**. Same first frame. Paste **Motion + audio**. VHS prefix `ez_<slug>_bN_sM_ltx_video`. Queue **5.00s** AV.
+1. Load the film bible (`film-go-see-90s-run-lab-example` / `film-still-here-90s-lab-example` / `film-switchyard-90s-lab-example`). Queue the Klein identity still (`ez_<slug>_identity`).
+2. Load **wan-i2v-shot-lab-example**. Set LoadImage to that PNG (shot 1) or the previous `ez_<slug>_bN_sM_last`. Paste **Motion** from the on-canvas shot map (source of truth: `{film}.shots.yaml`). Set VHS prefix `ez_<slug>_bN_sM_wan_video` and last-frame SaveImage `ez_<slug>_bN_sM_last`. Queue **5.00s** silent.
+3. Load **ltx-i2v-shot-lab-example**. Same first frame. Paste **Motion + audio**. VHS prefix `ez_<slug>_bN_sM_ltx_video`. Queue **5.00s** AV.
 4. Repeat 18 times. Last frame of shot N is LoadImage of shot N+1.
 5. Concat (dry-run first; `--yes` writes the cap). Default dir is `${COMFY_OUTPUT_DIR}`:
 
@@ -97,16 +97,16 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
 
 === "go-see"
 
-    POV travel. Identity lock: olive windbreaker + worn black gloves in frame. Parkour is transportation. **No score** (breath + world).
+    First-person **running**. Identity lock: olive windbreaker + worn black gloves in frame. Footfalls and arms, not parkour. **No score** (breath + world).
 
     | Beat | Place | s1 enter | s2 traverse | s3 exit |
     | --- | --- | --- | --- | --- |
-    | 1 | Dawn rooftop | Hands on wet tar, vault parapet | Barrel-roll through sky | Land-roll on warehouse roof |
-    | 2 | Warehouse → market | Ladder drop | Pallet vault, awning | Run out toward river |
-    | 3 | River / forest | Stones, splash | Through bridge arch | Creek jump in beech |
-    | 4 | Headland | Trees thin | Boulder plant | Generic white lighthouse, no place name |
-    | 5 | Wall / meadow | Granite steps | Squeeze dry-stone gap | Burst into meadow |
-    | 6 | Ridge hold | Hands on wooden rail | Look | Quiet laugh, hold |
+    | 1 | Dawn rooftop | Run on wet tar, gloves pumping | Run across the next roof | Run onto warehouse roof |
+    | 2 | Warehouse → market | Run down the stair | Run the alley, duck awning | Run out toward river |
+    | 3 | River / forest | Run across stones | Run through bridge arch | Run the creek path |
+    | 4 | Headland | Trees thin, keep running | Run past boulder | Run toward generic lighthouse |
+    | 5 | Wall / meadow | Run up granite steps | Run through dry-stone gap | Run into meadow |
+    | 6 | Ridge hold | Slow; hands on wooden rail | Look | Quiet laugh, hold |
 
 === "still-here"
 
@@ -140,7 +140,7 @@ Prefixes: `ez_gosee_b{1..6}_s{1..3}`, `ez_stillhere_…`, `ez_switchyard_…`. M
 
 ## Spark farm
 
-Three Sparks can Queue **different beats** in parallel (independent 5s jobs, shared `${MODELS_DIR}`). On each UI load **bridge-wan-lab-example** / **bridge-ltx-lab-example** and Queue; concat stays on one host. Do not use `spark-farm.sh run --film go-see` (that subcommand is a wan-shot reminder and refuses the 90s film names). No NCCL. See [Spark farm](spark-farm.md).
+Three Sparks can Queue **different beats** in parallel (independent 5s jobs, shared `${MODELS_DIR}`). On each UI load **wan-i2v-shot-lab-example** / **ltx-i2v-shot-lab-example** and Queue; concat stays on one host. `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
 
 ---
 

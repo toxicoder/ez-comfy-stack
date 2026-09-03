@@ -80,7 +80,7 @@ scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
 scripts/utilities download-image, download-wan, download-ltx, download-limit, concat-shots, spark-farm
 config/           Resource / headroom policy
-workflows/        Seeded lab ComfyUI example graphs (still/GIF/dream-house apps; 90s shorts under workflows/shorts/)
+workflows/        Seeded lab ComfyUI example graphs (Klein / Wan / LTX; 90s film bibles under workflows/shorts/)
 docs/             MkDocs site
 tests/            BATS + pytest + coverage gate
 ```

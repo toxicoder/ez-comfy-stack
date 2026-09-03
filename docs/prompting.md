@@ -59,11 +59,11 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Looping GIF (Wan I2V)"
 
-    Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do **not** prompt a walk or a one-way dolly — **gif-loop-lab-example** plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.
+    Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do **not** prompt a walk or a one-way dolly — **wan-gif-loop-lab-example** plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.
 
 === "Dream-house pack (Klein)"
 
-    One identity paragraph (materials, architecture, place) plus a short camera line per shot. **dream-house-lab-example** uses **Prompt Join** so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.
+    One identity paragraph (materials, architecture, place) plus a short camera line per shot. **klein-dream-house-lab-example** uses **Prompt Join** so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.
 
 === "LTX-2.5 AV"
 
@@ -77,10 +77,10 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 
 | Node | Modes | Use on |
 | --- | --- | --- |
-| **Klein Prompt Enhance** | `t2i`, `edit` | still-draft / still-hero / still-app / dream-house identity / 90s identity |
-| **Wan Prompt Enhance** | `t2v`, `i2v` | wan-*-lab-example, gif-loop, bridge-wan |
-| **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-*-lab-example, bridge-ltx |
-| **Prompt Join** | identity + shot → one STRING | dream-house shot cards |
+| **Klein Prompt Enhance** | `t2i`, `edit` | klein-still-draft / klein-still-hero / klein-still-daily / klein-dream-house identity / film-*-90s identity |
+| **Wan Prompt Enhance** | `t2v`, `i2v` | wan-i2v-5s / wan-t2v-5s / wan-i2v-shot / wan-gif-loop |
+| **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / ltx-i2v-shot |
+| **Prompt Join** | identity + shot → one STRING | klein-dream-house shot cards |
 
 STRING out → CLIPTextEncode `text` input.
 
@@ -102,4 +102,4 @@ Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit ar
 
 ## Next steps
 
-Queue **still-draft-lab-example** first ([Getting Started](getting-started.md)), then the still → Wan 5 s → LTX 5 s loop on [Visual Generative AI](visual-generative-ai.md).
+Queue **klein-still-draft-lab-example** first ([Getting Started](getting-started.md)), then the still → Wan 5 s → LTX 5 s loop on [Visual Generative AI](visual-generative-ai.md).

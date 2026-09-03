@@ -7,8 +7,8 @@
 # Purpose:
 #   status: SSH each SPARK_HOSTS entry (docker ps, disk, nvidia-smi, fabric ping).
 #   sync-models: rsync MODELS_DIR/comfy over SPARK_FABRIC_IPS only (not mgmt NIC).
-#   run: refuses MiniMax H3 films; operators Queue wan-shot graphs per host,
-#   then concat-shots.sh locally.
+#   run: refuses MiniMax H3 names; operators Queue wan-i2v-shot / ltx-i2v-shot
+#   graphs per host, then concat-shots.sh locally.
 #   Never starts compose on a remote node — prints the local manage.sh start.
 #
 # Usage:
@@ -46,7 +46,7 @@ MODELS_DIR="${MODELS_DIR:-/mnt/models}"
 FARM_SHARE="${FARM_SHARE:-/mnt/comfy-output/shots}"
 JSON_FLAG=""
 CMD="status"
-FILM="wan-shot"
+FILM="go-see"
 SEEDS="509201,509211,509221"
 
 #######################################
@@ -178,11 +178,11 @@ cmd_sync_models() {
 # Globals:
 #   SPARK_COMFY_URLS, FILM, FARM_SHARE
 # Returns:
-#   1 for banned H3 film names; 0 after printing the Queue hint
+#   1 for banned H3 names; 0 after printing the Queue hint
 #######################################
 cmd_run() {
   case "${FILM}" in
-    go-see | still-here | switchyard | *h3* | *H3* | *MiniMax*)
+    *h3* | *H3* | *MiniMax*)
       refuse_minimax_h3
       return 1
       ;;
@@ -198,8 +198,8 @@ cmd_run() {
   fi
   print_remote_start_hint
   mkdir -p "${FARM_SHARE}/out"
-  log "H3 films are banned. On each host, open Comfy, Queue wan-shot-lab-example.json"
-  log "Then run scripts/utilities/concat-shots.sh against ${FARM_SHARE}"
+  log "On each host, open Comfy, Queue wan-i2v-shot-lab-example.json then ltx-i2v-shot-lab-example.json (5.00s shots)"
+  log "Then run scripts/utilities/concat-shots.sh --film ${FILM:-go-see} against ${FARM_SHARE}"
   local url
   for url in "${urls[@]}"; do
     log "worker ${url} seeds=${SEEDS}"
@@ -226,7 +226,7 @@ parse_args() {
         ;;
       status | sync-models | run) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status [--json] | sync-models | run [--film wan-shot] [--seeds a,b,c]" >&2
+        echo "Usage: $0 status [--json] | sync-models | run [--film go-see] [--seeds a,b,c]" >&2
         exit 0
         ;;
       *)

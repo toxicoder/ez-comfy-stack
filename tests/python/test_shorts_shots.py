@@ -104,6 +104,10 @@ def test_creative_locks() -> None:
     go = _path("go-see").read_text(encoding="utf-8")
     assert "olive windbreaker" in go
     assert "worn black gloves" in go
+    assert "First-person" in go or "first-person" in go
+    assert "running" in go or "footfall" in go
+    for needle in ("vault", "barrel-roll", "parkour", "Parkour"):
+        assert needle not in go, needle
     here = _path("still-here").read_text(encoding="utf-8")
     assert "ceramic mug" in here
     assert "two-note" in here or "invented" in here
@@ -148,14 +152,12 @@ def _overlap_hits(graph: dict) -> list[str]:
 
 def test_shorts_json_parse_ids_and_banned_strings() -> None:
     expected = {
-        "bridge-wan-lab-example",
-        "bridge-ltx-lab-example",
-        "go-see-90s-lab-example",
-        "still-here-90s-lab-example",
-        "switchyard-90s-lab-example",
+        "film-go-see-90s-run-lab-example",
+        "film-still-here-90s-lab-example",
+        "film-switchyard-90s-lab-example",
     }
     names = {p.stem for p in _json_files()}
-    assert expected <= names
+    assert names == expected
     for path in _json_files():
         text = path.read_text(encoding="utf-8")
         for needle in BANNED:
@@ -179,9 +181,9 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
         assert isinstance(lab_note, str) and lab_note.strip()
 
 
-def test_bridge_graphs_are_five_second_i2v() -> None:
-    wan = json.loads((SHORTS / "bridge-wan-lab-example.json").read_text(encoding="utf-8"))
-    ltx = json.loads((SHORTS / "bridge-ltx-lab-example.json").read_text(encoding="utf-8"))
+def test_shot_graphs_are_five_second_i2v() -> None:
+    wan = json.loads((ROOT / "workflows" / "wan-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
+    ltx = json.loads((ROOT / "workflows" / "ltx-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
     wan_len = next(
         n["widgets_values"][2]
         for n in wan["nodes"]
@@ -224,9 +226,16 @@ def test_no_long_latents_in_shorts() -> None:
             assert length < 241
 
 
+BIBLES = {
+    "go-see": "film-go-see-90s-run-lab-example.json",
+    "still-here": "film-still-here-90s-lab-example.json",
+    "switchyard": "film-switchyard-90s-lab-example.json",
+}
+
+
 def test_bible_graphs_are_klein_identity() -> None:
     for film, slug in FILMS:
-        path = SHORTS / f"{film}-90s-lab-example.json"
+        path = SHORTS / BIBLES[film]
         graph = json.loads(path.read_text(encoding="utf-8"))
         text = path.read_text(encoding="utf-8")
         assert "flux-2-klein-4b-fp8.safetensors" in text

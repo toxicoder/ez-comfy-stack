@@ -24,6 +24,15 @@ FORBIDDEN_EVERYWHERE = (
     "flux-hero-lab-example",
     "flux-studio-lab-example",
     "--tier companions",
+    "still-studio-lab-example",
+    "still-app-lab-example",
+    "wan-shot-lab-example",
+    "wan-i2v-draft-lab-example",
+    "wan-t2v-draft-lab-example",
+    "bridge-wan-lab-example",
+    "bridge-ltx-lab-example",
+    "ltx-i2v-hero-lab-example",
+    "ltx-t2v-hero-lab-example",
 )
 
 # Current-tag form only. "Old flux-to-ltx* tags freeze" in conventions is allowed.

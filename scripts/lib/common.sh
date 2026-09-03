@@ -1072,6 +1072,37 @@ refuse_minimax_h3() {
 }
 
 #######################################
+# Warn if leftover MiniMax H3 weights are on disk (do not delete).
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   $1  Optional models root (default MODELS_DIR)
+# Outputs:
+#   warn lines when banned files exist
+# Returns:
+#   0
+#######################################
+warn_banned_minimax_weights() {
+  local root="${1:-${MODELS_DIR:-/mnt/models}}"
+  local comfy="${root}/comfy"
+  local rel path
+  local -a banned=(
+    diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
+    text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors
+    vae/minimax_h3_video_vae_fp16.safetensors
+    vae/minimax_h3_audio_vae_fp32.safetensors
+  )
+  for rel in "${banned[@]}"; do
+    path="${comfy}/${rel}"
+    if [[ -e ${path} || -L ${path} ]]; then
+      warn "banned MiniMax H3 weight present (do not use): ${path}"
+      warn "  Remove after ./scripts/manage.sh stop. See docs/troubleshooting.md"
+    fi
+  done
+  return 0
+}
+
+#######################################
 # Check host MODELS_DIR/comfy for lab workflow weights; warn on missing.
 # Requires resolvable paths (broken symlinks count as missing). Absolute
 # symlinks under comfy/ are container-fragile and produce a warn.

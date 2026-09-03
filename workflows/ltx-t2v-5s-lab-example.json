@@ -1,8 +1,8 @@
 {
-  "id": "ltx-i2v-hero-lab-example",
-  "revision": 7,
-  "last_node_id": 19,
-  "last_link_id": 26,
+  "id": "ltx-t2v-5s-lab-example",
+  "revision": 6,
+  "last_node_id": 17,
+  "last_link_id": 19,
   "nodes": [
     {
       "id": 1,
@@ -58,8 +58,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            2,
-            3
+            2
           ],
           "slot_index": 0
         }
@@ -92,8 +91,8 @@
           "name": "CLIP",
           "type": "CLIP",
           "links": [
-            16,
-            17
+            3,
+            4
           ],
           "slot_index": 0
         }
@@ -110,54 +109,61 @@
     },
     {
       "id": 4,
-      "type": "LoadImage",
+      "type": "CLIPTextEncode",
       "pos": [
         1080,
         80
       ],
       "size": [
-        320,
-        314
+        420,
+        160
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 19,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
       "outputs": [
         {
-          "name": "IMAGE",
-          "type": "IMAGE",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
           "links": [
             5
           ],
           "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null,
-          "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "example.png",
-        "image"
+        "A wide photoreal shot of a small-town main street at golden hour. A red bicycle leans against a brick storefront as warm sidelight rakes the brick and chrome. Leaves and a shop flag stir in a light breeze while a pedestrian crosses in the background. The camera dollies in slowly toward the bicycle. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. Unmarked facades sit empty of signage. No music and no score."
       ],
-      "title": "Start frame"
+      "title": "Positive"
     },
     {
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
         1080,
-        444
+        290
       ],
       "size": [
         420,
-        140
+        100
       ],
       "flags": {},
       "order": 5,
@@ -166,15 +172,7 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 16
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 26,
-          "widget": {
-            "name": "text"
-          }
+          "link": 4
         }
       ],
       "outputs": [
@@ -191,83 +189,69 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The camera dollies in slowly toward the bicycle while leaves and a shop flag stir in a light breeze and a pedestrian crosses in the background. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. The storefront and bicycle identity stay locked. No music and no score."
-      ],
-      "title": "Motion / prompt"
-    },
-    {
-      "id": 6,
-      "type": "CLIPTextEncode",
-      "pos": [
-        1080,
-        634
-      ],
-      "size": [
-        420,
-        100
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 17
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            7
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
         "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
       ],
       "title": "Negative"
     },
     {
+      "id": 6,
+      "type": "EmptyLTXVLatentVideo",
+      "pos": [
+        1080,
+        440
+      ],
+      "size": [
+        300,
+        130
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "title": "Empty LTX latent 768x512",
+      "properties": {
+        "Node name for S&R": "EmptyLTXVLatentVideo"
+      },
+      "widgets_values": [
+        1280,
+        720,
+        121
+      ]
+    },
+    {
       "id": 7,
-      "type": "LTXVImgToVideo",
+      "type": "LTXVConditioning",
       "pos": [
         1580,
         80
       ],
       "size": [
-        320,
-        200
+        280,
+        82
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 6
+          "link": 5
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 7
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 2
-        },
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 5
+          "link": 6
         }
       ],
       "outputs": [
@@ -286,72 +270,8 @@
             9
           ],
           "slot_index": 0
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            20
-          ],
-          "slot_index": 2
         }
       ],
-      "title": "LTX Img\u2192Video condition",
-      "properties": {
-        "Node name for S&R": "LTXVImgToVideo"
-      },
-      "widgets_values": [
-        1280,
-        720,
-        121,
-        1
-      ]
-    },
-    {
-      "id": 8,
-      "type": "LTXVConditioning",
-      "pos": [
-        1580,
-        330
-      ],
-      "size": [
-        280,
-        82
-      ],
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 8
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 9
-        }
-      ],
-      "outputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "links": [
-            11
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "links": [
-            12
-          ],
-          "slot_index": 0
-        }
-      ],
-      "title": "LTX frame rate cond",
       "properties": {
         "Node name for S&R": "LTXVConditioning"
       },
@@ -360,7 +280,7 @@
       ]
     },
     {
-      "id": 9,
+      "id": 8,
       "type": "KSampler",
       "pos": [
         1940,
@@ -382,17 +302,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 11
+          "link": 8
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 12
+          "link": 9
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 22
+          "link": 15
         }
       ],
       "outputs": [
@@ -400,7 +320,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            23
+            16
           ],
           "slot_index": 0
         }
@@ -411,7 +331,7 @@
       "widgets_values": [
         42,
         "fixed",
-        20,
+        25,
         1.0,
         "euler",
         "simple",
@@ -420,10 +340,10 @@
       "title": "KSampler"
     },
     {
-      "id": 10,
+      "id": 9,
       "type": "VAEDecode",
       "pos": [
-        2660,
+        2340,
         80
       ],
       "size": [
@@ -431,18 +351,18 @@
         46
       ],
       "flags": {},
-      "order": 13,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 24
+          "link": 17
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 3
+          "link": 2
         }
       ],
       "outputs": [
@@ -450,8 +370,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            18,
-            25
+            11,
+            18
           ],
           "slot_index": 0
         }
@@ -459,14 +379,13 @@
       "properties": {
         "Node name for S&R": "VAEDecode"
       },
-      "widgets_values": [],
-      "title": "VAE Decode"
+      "widgets_values": []
     },
     {
-      "id": 12,
+      "id": 10,
       "type": "SaveImage",
       "pos": [
-        2660,
+        2340,
         176
       ],
       "size": [
@@ -474,13 +393,13 @@
         270
       ],
       "flags": {},
-      "order": 14,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 18
+          "link": 11
         }
       ],
       "outputs": [],
@@ -488,12 +407,12 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_hero_frames"
+        "ez_ltx_t2v_frames"
       ],
       "title": "Save frames"
     },
     {
-      "id": 13,
+      "id": 11,
       "type": "VAELoader",
       "pos": [
         40,
@@ -512,7 +431,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            19
+            12
           ],
           "slot_index": 0
         }
@@ -526,24 +445,24 @@
       "title": "LTX-2.5 audio VAE"
     },
     {
-      "id": 14,
+      "id": 12,
       "type": "LTXVEmptyLatentAudio",
       "pos": [
-        1580,
-        460
+        1080,
+        610
       ],
       "size": [
         300,
         130
       ],
       "flags": {},
-      "order": 9,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "audio_vae",
           "type": "VAE",
-          "link": 19
+          "link": 12
         }
       ],
       "outputs": [
@@ -551,7 +470,7 @@
           "name": "Latent",
           "type": "LATENT",
           "links": [
-            21
+            14
           ],
           "slot_index": 0
         }
@@ -567,8 +486,50 @@
       "title": "Empty LTX audio latent"
     },
     {
-      "id": 15,
+      "id": 13,
       "type": "LTXVConcatAVLatent",
+      "pos": [
+        1580,
+        220
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 13
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            15
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 14,
+      "type": "LTXVSeparateAVLatent",
       "pos": [
         1940,
         400
@@ -582,51 +543,9 @@
       "mode": 0,
       "inputs": [
         {
-          "name": "video_latent",
-          "type": "LATENT",
-          "link": 20
-        },
-        {
-          "name": "audio_latent",
-          "type": "LATENT",
-          "link": 21
-        }
-      ],
-      "outputs": [
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            22
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVConcatAVLatent"
-      },
-      "widgets_values": [],
-      "title": "Concat AV latents"
-    },
-    {
-      "id": 16,
-      "type": "LTXVSeparateAVLatent",
-      "pos": [
-        2340,
-        80
-      ],
-      "size": [
-        280,
-        66
-      ],
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [
-        {
           "name": "av_latent",
           "type": "LATENT",
-          "link": 23
+          "link": 16
         }
       ],
       "outputs": [
@@ -634,7 +553,7 @@
           "name": "video_latent",
           "type": "LATENT",
           "links": [
-            24
+            17
           ],
           "slot_index": 0
         },
@@ -652,18 +571,18 @@
       "title": "Separate AV latents"
     },
     {
-      "id": 17,
+      "id": 15,
       "type": "Note",
       "pos": [
         40,
-        854.0
+        780.0
       ],
       "size": [
         960,
         360
       ],
       "flags": {},
-      "order": 17,
+      "order": 15,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -671,15 +590,15 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-i2v-hero-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps \u2248 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT \u2014 MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## ltx-t2v-5s-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License — not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps ≈ 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT — MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
-      "title": "Operator note \u2014 video output"
+      "title": "Operator note — video output"
     },
     {
-      "id": 18,
+      "id": 16,
       "type": "VHS_VideoCombine",
       "pos": [
-        2980.0,
+        2660.0,
         80
       ],
       "size": [
@@ -687,13 +606,13 @@
         420
       ],
       "flags": {},
-      "order": 18,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 25
+          "link": 18
         },
         {
           "name": "audio",
@@ -728,7 +647,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_ltx_hero_video",
+        "filename_prefix": "ez_ltx_t2v_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -740,18 +659,18 @@
       "title": "Save video (MP4)"
     },
     {
-      "id": 19,
+      "id": 17,
       "type": "EZLTXPromptEnhance",
       "pos": [
         620,
-        444
+        80
       ],
       "size": [
         420,
         340
       ],
       "flags": {},
-      "order": 4,
+      "order": 3,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -759,7 +678,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            26
+            19
           ],
           "slot_index": 0
         }
@@ -768,9 +687,9 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The camera dollies in slowly toward the bicycle while leaves and a shop flag stir in a light breeze and a pedestrian crosses in the background. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. The storefront and bicycle identity stay locked. No music and no score.",
+        "A wide photoreal shot of a small-town main street at golden hour. A red bicycle leans against a brick storefront as warm sidelight rakes the brick and chrome. Leaves and a shop flag stir in a light breeze while a pedestrian crosses in the background. The camera dollies in slowly toward the bicycle. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. Unmarked facades sit empty of signage. No music and no score.",
         false,
-        "i2v",
+        "t2v",
         "5 seconds, 24 fps",
         "soft wind, distant footsteps, shop bell, no score"
       ],
@@ -782,7 +701,7 @@
       1,
       1,
       0,
-      9,
+      8,
       0,
       "MODEL"
     ],
@@ -790,37 +709,37 @@
       2,
       2,
       0,
-      7,
-      2,
+      9,
+      1,
       "VAE"
     ],
     [
       3,
-      2,
+      3,
       0,
-      10,
-      1,
-      "VAE"
+      4,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      0,
+      "CLIP"
     ],
     [
       5,
       4,
       0,
       7,
-      3,
-      "IMAGE"
-    ],
-    [
-      6,
-      5,
-      0,
-      7,
       0,
       "CONDITIONING"
     ],
     [
-      7,
       6,
+      5,
       0,
       7,
       1,
@@ -831,7 +750,7 @@
       7,
       0,
       8,
-      0,
+      1,
       "CONDITIONING"
     ],
     [
@@ -839,110 +758,78 @@
       7,
       1,
       8,
-      1,
+      2,
       "CONDITIONING"
     ],
     [
       11,
-      8,
-      0,
       9,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      12,
-      8,
-      1,
-      9,
-      2,
-      "CONDITIONING"
-    ],
-    [
-      16,
-      3,
       0,
-      5,
-      0,
-      "CLIP"
-    ],
-    [
-      17,
-      3,
-      0,
-      6,
-      0,
-      "CLIP"
-    ],
-    [
-      18,
       10,
-      0,
-      12,
       0,
       "IMAGE"
     ],
     [
-      19,
-      13,
+      12,
+      11,
       0,
-      14,
+      12,
       0,
       "VAE"
     ],
     [
-      20,
-      7,
-      2,
-      15,
+      13,
+      6,
+      0,
+      13,
       0,
       "LATENT"
     ],
     [
-      21,
       14,
+      12,
       0,
-      15,
+      13,
       1,
       "LATENT"
     ],
     [
-      22,
       15,
+      13,
       0,
-      9,
+      8,
       3,
       "LATENT"
     ],
     [
-      23,
+      16,
+      8,
+      0,
+      14,
+      0,
+      "LATENT"
+    ],
+    [
+      17,
+      14,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      18,
       9,
       0,
       16,
       0,
-      "LATENT"
-    ],
-    [
-      24,
-      16,
-      0,
-      10,
-      0,
-      "LATENT"
-    ],
-    [
-      25,
-      10,
-      0,
-      18,
-      0,
       "IMAGE"
     ],
     [
-      26,
       19,
+      17,
       0,
-      5,
+      4,
       1,
       "STRING"
     ]
@@ -950,11 +837,11 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "ltx-i2v-hero-lab-example",
+    "lab_profile": "ltx-t2v-5s-lab-example",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-i2v-hero-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps \u2248 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT \u2014 MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_note": "## ltx-t2v-5s-lab-example\n\nLTX-2.5 distilled AV hero (~5 s). LTX Community License — not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps ≈ 5 s. LoadImage default example.png; after draft set ez_still_draft_00001_.png.\ncopy prompt + seed from draft, do not restyle here.\nPRIMARY OUTPUT — MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
     "lab_ltx_av": true,
-    "lab_description": "Image\u2192video (~10 s) from Comfy **example.png** (sketch\u2192living character). Swap LoadImage for your still anytime."
+    "lab_description": "Text→video (~10 s) cinematic drone over a frost-rimmed tea house."
   },
   "version": 0.4
 }
