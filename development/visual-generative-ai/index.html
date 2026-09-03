@@ -1377,7 +1377,7 @@
   Image --&gt; LTX["LTX-2.5 I2V&lt;br/&gt;distilled · 5 s AV"]
   LTX --&gt; Mp4["MP4 + world audio&lt;br/&gt;VHS_VideoCombine"]</code></pre>
 <p><strong>Handoff:</strong> load <strong>klein-still-draft-lab-example</strong> → Queue → set <strong>wan-i2v-5s-lab-example</strong> LoadImage to <code>ez_still_draft_*.png</code> → Queue ~5 s silent → optional <strong>ltx-i2v-5s-lab-example</strong> for native audio. I2V graphs also Queue on Comfy’s default <strong>example.png</strong>.</p>
-<p>LTX-2.5 is a <strong>joint audio/video</strong> transformer. Seeded LTX graphs load the <strong>audio VAE</strong>, create matching empty audio latents, and concat them with video latents before <code>KSampler</code>. Text conditioning is a single <strong>CLIPLoader</strong> (<code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code>, type <strong><code>ltxv</code></strong>).</p>
+<p>LTX-2.5 is a <strong>joint audio/video</strong> transformer. Seeded LTX graphs load the <strong>audio VAE</strong>, create matching empty audio latents, concat them with video latents before <code>KSampler</code>, then decode audio with <strong><code>LTXVAudioVAEDecode</code></strong> into <strong><code>VHS_VideoCombine</code></strong> so the MP4 includes world audio. Text conditioning is a single <strong>CLIPLoader</strong> (<code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code>, type <strong><code>ltxv</code></strong>).</p>
 <div class="admonition example">
 <p class="admonition-title">Pipeline tips</p>
 <ol>
@@ -1391,7 +1391,7 @@
 <hr />
 <h2 id="example-workflows">Example workflows<a class="headerlink" href="#example-workflows" title="Permanent link">&para;</a></h2>
 <p>After <code>download-models</code> + <code>start</code>, open ComfyUI and load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>. Do <strong>not</strong> edit raw JSON — change widgets on the canvas.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Still (Klein 4B)</label><label for="__tabbed_1_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_1_3">AV hero (LTX-2.5)</label><label for="__tabbed_1_4">Apps (still / GIF / IG)</label><label for="__tabbed_1_5">90s shorts</label><label for="__tabbed_1_6">License</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:7"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><input id="__tabbed_1_7" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Still (Klein 4B)</label><label for="__tabbed_1_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_1_3">AV hero (LTX-2.5)</label><label for="__tabbed_1_4">Apps (still / GIF / IG)</label><label for="__tabbed_1_5">90s shorts</label><label for="__tabbed_1_6">Creator toolkit</label><label for="__tabbed_1_7">License</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1492,34 +1492,189 @@
 <tbody>
 <tr>
 <td><strong>film-go-see-90s-run-lab-example</strong></td>
-<td>First-person <strong>running</strong> 90s bible (Klein identity + 18-shot map)</td>
+<td><strong>Unified</strong> first-person running 90s: Klein identity + LTX 5.00s AV printer + shot map</td>
 </tr>
 <tr>
 <td><strong>film-still-here-90s-lab-example</strong></td>
-<td>Household morning 90s bible</td>
+<td><strong>Unified</strong> household morning 90s (same shape)</td>
 </tr>
 <tr>
 <td><strong>film-switchyard-90s-lab-example</strong></td>
-<td>Night freight-yard 90s bible</td>
+<td><strong>Unified</strong> night freight-yard 90s (same shape)</td>
 </tr>
 <tr>
 <td><strong>wan-i2v-shot-lab-example</strong></td>
-<td>One 5.00 s silent I2V (120 frames) + last-frame SaveImage</td>
+<td>Optional silent rehearsal / six-shot concat demo</td>
 </tr>
 <tr>
 <td><strong>ltx-i2v-shot-lab-example</strong></td>
-<td>One 5.00 s AV print; concat uses these MP4s</td>
+<td>Generic 5.00 s AV print (non-film)</td>
 </tr>
 </tbody>
 </table>
-<p>Full loop: <a href="../shorts/">90s shorts</a>.</p>
+<p>Full loop: <a href="../shorts/">90s shorts</a>. One file per film — mute groups, do not switch graphs.</p>
+</div>
+<div class="tabbed-block">
+<p>Pack 1</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>klein-shorts-still-lab-example</strong></td>
+<td>Vertical 9:16 Shorts still (<code>ez_shorts_still</code>)</td>
+</tr>
+<tr>
+<td><strong>wan-shorts-i2v-lab-example</strong></td>
+<td>Vertical silent I2V from that still</td>
+</tr>
+<tr>
+<td><strong>ltx-shorts-i2v-lab-example</strong></td>
+<td>Vertical AV I2V (~5 s) with world audio</td>
+</tr>
+<tr>
+<td><strong>klein-thumbnail-lab-example</strong></td>
+<td>YouTube thumbnail still 1280×720</td>
+</tr>
+<tr>
+<td><strong>klein-product-packshot-lab-example</strong></td>
+<td>Clean product packshot 1:1</td>
+</tr>
+<tr>
+<td><strong>klein-before-after-lab-example</strong></td>
+<td>Before/after still pair</td>
+</tr>
+<tr>
+<td><strong>klein-style-lock-lab-example</strong></td>
+<td>Four style-locked stills</td>
+</tr>
+<tr>
+<td><strong>wan-bumper-loop-lab-example</strong></td>
+<td>Loopable MP4 bumper (ping-pong)</td>
+</tr>
+<tr>
+<td><strong>ltx-broll-ambient-lab-example</strong></td>
+<td>Ambient B-roll AV plate (~5 s)</td>
+</tr>
+<tr>
+<td><strong>klein-storyboard-6up-lab-example</strong></td>
+<td>Six storyboard frames in one Queue</td>
+</tr>
+</tbody>
+</table>
+<p>Pack 2 — stills and plates</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>klein-endcard-cta-lab-example</strong></td>
+<td>End-card / CTA plate 16:9</td>
+</tr>
+<tr>
+<td><strong>klein-quote-bg-lab-example</strong></td>
+<td>Quote-card background 1:1</td>
+</tr>
+<tr>
+<td><strong>klein-og-blog-lab-example</strong></td>
+<td>Blog / Open Graph hero</td>
+</tr>
+<tr>
+<td><strong>klein-podcast-cover-lab-example</strong></td>
+<td>Podcast cover 1:1</td>
+</tr>
+<tr>
+<td><strong>klein-banner-wide-lab-example</strong></td>
+<td>Channel / LinkedIn banner ~3:1</td>
+</tr>
+<tr>
+<td><strong>klein-ig-square-lab-example</strong></td>
+<td>Instagram 1:1 still</td>
+</tr>
+<tr>
+<td><strong>klein-hook-still-lab-example</strong></td>
+<td>9:16 first-frame hook</td>
+</tr>
+<tr>
+<td><strong>klein-lower-third-bg-lab-example</strong></td>
+<td>Lower-third-safe 16:9 plate</td>
+</tr>
+<tr>
+<td><strong>klein-food-tabletop-lab-example</strong></td>
+<td>Food / tabletop 4:5</td>
+</tr>
+<tr>
+<td><strong>klein-lighting-trio-lab-example</strong></td>
+<td>Same subject, three lights</td>
+</tr>
+<tr>
+<td><strong>klein-time-of-day-lab-example</strong></td>
+<td>Dawn / noon / dusk / night</td>
+</tr>
+<tr>
+<td><strong>klein-camera-angles-lab-example</strong></td>
+<td>Wide / medium / close</td>
+</tr>
+<tr>
+<td><strong>klein-color-moods-lab-example</strong></td>
+<td>Four color moods</td>
+</tr>
+</tbody>
+</table>
+<p>Pack 2 — motion / AV</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>wan-orbit-i2v-lab-example</strong></td>
+<td>Slow orbit I2V ~5 s</td>
+</tr>
+<tr>
+<td><strong>wan-push-in-i2v-lab-example</strong></td>
+<td>Hero push-in I2V ~5 s</td>
+</tr>
+<tr>
+<td><strong>wan-parallax-i2v-lab-example</strong></td>
+<td>Subtle parallax I2V ~5 s</td>
+</tr>
+<tr>
+<td><strong>wan-sticker-loop-lab-example</strong></td>
+<td>Looping sticker MP4</td>
+</tr>
+<tr>
+<td><strong>ltx-weather-broll-lab-example</strong></td>
+<td>Rain / wind B-roll AV</td>
+</tr>
+<tr>
+<td><strong>ltx-interior-ambience-lab-example</strong></td>
+<td>Interior room-tone AV</td>
+</tr>
+<tr>
+<td><strong>ltx-hook-av-lab-example</strong></td>
+<td>~5 s AV cold open</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="tabbed-block">
 <p>MiniMax H3 is <strong>banned</strong> (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See <a href="../licenses/">Model licenses</a>.</p>
 </div>
 </div>
 </div>
-<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS; <strong>wan-gif-loop-lab-example</strong> emits <code>image/gif</code>.</p>
+<p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with <strong><code>save_output: true</code></strong>; after Queue, open <strong>Save video (MP4) — open node for preview</strong>. LTX graphs decode audio (<code>LTXVAudioVAEDecode</code>) into the MP4. <strong>wan-gif-loop-lab-example</strong> emits <code>image/gif</code>.</p>
 <p>Optional Wan A14B is a <strong>placeholder note</strong> only (<code>workflows/optional/wan-i2v-a14b-lab-example.json</code>) — download <code>download-wan.sh run --tier a14b</code> first; it is not a Queue graph.</p>
 <hr />
 <h2 id="iteration-loop-youtube-169">Iteration loop (YouTube 16:9)<a class="headerlink" href="#iteration-loop-youtube-169" title="Permanent link">&para;</a></h2>
@@ -1536,16 +1691,17 @@
 </code></pre></div>
 </li>
 <li>
-<p><strong>90s films</strong> (go-see / still-here / switchyard): 18 × 5.00s LTX prints, then concat with <code>--film</code>. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>90s films</strong> (go-see / still-here / switchyard): load one <strong>film-*-90s</strong> graph → Queue identity → unmute LTX → 18 × 5.00s prints → concat with <code>--film</code>. See <a href="../shorts/">90s shorts</a>.</p>
 </li>
 <li>Daily still / GIF / IG pack: <strong>klein-still-daily-lab-example</strong> → optional <strong>wan-gif-loop-lab-example</strong> (LoadImage = <code>ez_still_app_*.png</code>, leave ping-pong on) or <strong>klein-dream-house-lab-example</strong> for a 10-photo carousel.</li>
+<li>Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up (see catalog tab above).</li>
 </ol>
 <p>Do not Queue a 90s denoise. Default graphs iterate in minutes.</p>
 <hr />
 <h2 id="watch-the-video-wan-ltx">Watch the video (Wan / LTX)<a class="headerlink" href="#watch-the-video-wan-ltx" title="Permanent link">&para;</a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Primary output is MP4</p>
-<p>Seeded <strong>wan-</strong><em> and </em><em>ltx-</em><strong> graphs install </strong>ComfyUI-VideoHelperSuite<strong> and wire </strong><code>VHS_VideoCombine</code><strong> after video <code>VAEDecode</code>. After </strong>Queue<strong>, open the </strong>Save video (MP4)<strong> node for an </strong>inline preview<strong>. Files are on the </strong>host<strong> at <code>${COMFY_OUTPUT_DIR}</code> (container <code>/outputs</code>). <code>cleanup</code> does </strong>not** delete this folder.</p>
+<p>Seeded <strong>wan-</strong><em> and </em><em>ltx-</em><strong> graphs install </strong>ComfyUI-VideoHelperSuite<strong> and wire </strong><code>VHS_VideoCombine</code><strong> after video <code>VAEDecode</code> (<code>save_output: true</code>). LTX graphs also run </strong><code>LTXVAudioVAEDecode</code><strong> into the VHS </strong>audio<strong> input so world audio is muxed into the MP4. After </strong>Queue<strong>, open </strong>Save video (MP4) — open node for preview<strong> for an </strong>inline preview<strong>. PNG </strong>Save frames (secondary)<strong> is optional. Files are on the </strong>host<strong> at <code>${COMFY_OUTPUT_DIR}</code> (container <code>/outputs</code>). <code>cleanup</code> does </strong>not** delete this folder.</p>
 </div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ls<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>/ez_still_draft_*.png
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ls<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>/ez_ltx_*_video_*.mp4
@@ -1658,7 +1814,7 @@
 <li>Klein CLIP loader type is <strong><code>flux2</code></strong> with <code>qwen_3_4b</code> + <code>EmptyFlux2LatentImage</code> (simplified <code>KSampler</code>)</li>
 <li>LTX-2.5 graphs use <strong>CLIPLoader</strong> (<code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code>, type <strong><code>ltxv</code></strong>), save <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (h264, 24 fps), and still save <strong>frames</strong> via <code>SaveImage</code></li>
 <li>Stack installs <strong>ComfyUI-VideoHelperSuite</strong> (required) plus runtime <strong><code>ffmpeg</code></strong> (imageio-ffmpeg pip is fallback)</li>
-<li>LTX is <strong>joint AV</strong>: lab graphs load <code>ltx-2.5-audio-vae-bf16</code>, build empty audio latents (<code>LTXVEmptyLatentAudio</code>), <strong>concat</strong> with video latents before <code>KSampler</code>. Omitting empty audio causes <code>reshape … [1, 0, 32, -1]</code></li>
+<li>LTX is <strong>joint AV</strong>: lab graphs load <code>ltx-2.5-audio-vae-bf16</code>, build empty audio latents (<code>LTXVEmptyLatentAudio</code>), <strong>concat</strong> with video latents before <code>KSampler</code>, then <strong><code>LTXVSeparateAVLatent</code> → <code>LTXVAudioVAEDecode</code> → <code>VHS_VideoCombine.audio</code></strong>. Omitting empty audio causes <code>reshape … [1, 0, 32, -1]</code></li>
 <li>Lab Klein graphs use <strong>core</strong> loaders only (not ComfyUI-nunchaku). Nunchaku import warnings on aarch64 are optional and do not block examples</li>
 <li>Runtime image includes <strong><code>gcc</code>/<code>g++</code></strong> and <strong><code>python3-dev</code></strong> so PyTorch 2.13 Triton can JIT <code>cuda_utils</code> on first CLIP encode (fallback: <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code>)</li>
 <li><strong>Not Z-Image.</strong> Community Z-Image templates need different weights (<code>ae</code> / <code>qwen_3_4b</code> / <code>z_image_turbo_*</code>)</li>

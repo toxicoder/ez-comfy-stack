@@ -1622,7 +1622,12 @@
 <tr>
 <td>LTX finished but I only see PNGs / no MP4 preview</td>
 <td>Old workflow JSON without VHS, or looking only at SaveImage</td>
-<td>Re-open current <strong>ltx-*-lab-example</strong> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open <strong>Save video (MP4)</strong> node for preview; MP4 is on the host at <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_ltx_*_video_*.mp4</code>. Confirm: <code>ls "${COMFY_OUTPUT_DIR}"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. Frames via SaveImage are secondary — <a href="../visual-generative-ai/#watch-the-video-wan-ltx">Visual Generative AI → Watch the video</a></td>
+<td>Re-open current <strong>ltx-*-lab-example</strong> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open <strong>Save video (MP4) — open node for preview</strong>; MP4 is on the host at <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_ltx_*_video_*.mp4</code>. Confirm: <code>ls "${COMFY_OUTPUT_DIR}"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. <strong>Save frames (secondary)</strong> PNGs are optional — <a href="../visual-generative-ai/#watch-the-video-wan-ltx">Visual Generative AI → Watch the video</a></td>
+</tr>
+<tr>
+<td>LTX MP4 plays but has no sound</td>
+<td>Graph missing <code>LTXVAudioVAEDecode</code> → VHS audio, or old seeded JSON</td>
+<td>Pull latest workflows; confirm the canvas has <strong>Audio VAE Decode</strong> linked into <strong>Save video (MP4)</strong>. Re-copy via container restart. World audio is muxed into the MP4 — there is no separate WAV by default</td>
 </tr>
 <tr>
 <td>Cannot find generated PNG/MP4 on the Spark host</td>
@@ -1650,9 +1655,14 @@
 <td>Do not Queue 90s. Use 18 × <strong>5.00 s</strong> shorts + <code>concat-shots.sh --film</code>. See <a href="../shorts/">90s shorts</a>. Confirm headroom preflight; close other GPU jobs</td>
 </tr>
 <tr>
-<td>90s bible / shot graph missing in the Comfy UI</td>
+<td>90s film / shot graph missing in the Comfy UI</td>
 <td>Entrypoint only used to copy top-level <code>workflows/*.json</code></td>
-<td>Pull latest; restart so <code>install_lab_workflows</code> copies <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> into <code>user/default/workflows/</code>. YAML shot lists are not copied (edit on the host)</td>
+<td>Pull latest; restart so <code>install_lab_workflows</code> copies <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> into <code>user/default/workflows/</code>. Load <strong>film-<em>-90s-</em>-lab-example</strong> (unified identity + LTX). YAML shot lists are not copied (edit on the host)</td>
+</tr>
+<tr>
+<td>Queuing a 90s film runs Klein and LTX together / OOM</td>
+<td>LTX group not bypassed</td>
+<td>Default canvas bypasses <strong>Shot print (LTX)</strong>. Queue identity first; then Ctrl+B to bypass Identity and enable LTX before the 18 prints — <a href="../shorts/">90s shorts</a></td>
 </tr>
 <tr>
 <td>Doctor warns <code>banned MiniMax H3 weight present</code></td>

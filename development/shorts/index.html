@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Build the three US-safe 90s shorts as 18 independent 5.00s shots, then concat with a 90s cap.">
+        <meta name="description" content="Build the three US-safe 90s shorts from one unified film graph per short (18 × 5.00s shots), then concat with a 90s cap.">
       
       
       
@@ -1174,9 +1174,9 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>Why 18 × 5.00s shots instead of one 90s Queue</li>
-<li>Which US-safe models do identity, rehearsal, and print</li>
+<li>One unified Comfy graph per film (Klein identity + LTX print + shot map)</li>
 <li>Shot maps for go-see (first-person running), still-here, and switchyard</li>
-<li>Operator loop: Klein still → Wan shot → LTX print → concat</li>
+<li>Operator loop: identity → unmute LTX → 18 prints → concat</li>
 <li>Model-native look / motion / audio prompts (<a href="../prompting/">Prompting</a>)</li>
 <li>Spark farm: parallel 5s Queues, local concat</li>
 </ul>
@@ -1185,6 +1185,7 @@
 <li>Three continuous ~90s films (first-person running go-see, still-here, switchyard) on the <strong>US-safe local pack</strong></li>
 <li>Last-frame continuity without a 90s denoise</li>
 <li>A 90.00s publish cap (<code>ffmpeg -t 90</code>)</li>
+<li>One workflow file per film — no switching between bible / wan-shot / ltx-shot graphs</li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Not legal advice</p>
@@ -1226,19 +1227,20 @@
 </table>
 <p>Do <strong>not</strong> Queue 90s, 241+ frames, or a single-graph film. If a latent widget errors on even length, you may set <strong>121</strong> (4n+1 / 8n+1) on that shot and still concat with the 90s cap.</p>
 <pre class="mermaid"><code>flowchart LR
-  Klein["Klein 4B identity still"] --&gt; Wan["Wan 5.00s silent draft"]
-  Wan --&gt; LTX["LTX-2.5 5.00s print + world audio"]
-  LTX --&gt; Last["Save last frame"]
+  Load["Load film-*-90s graph"] --&gt; Id["Queue Identity Klein"]
+  Id --&gt; Unmute["Bypass Identity · enable LTX"]
+  Unmute --&gt; Shot["Queue LTX 5.00s AV ×18"]
+  Shot --&gt; Last["Save last frame"]
   Last --&gt; Next["Next shot LoadImage"]
-  Next --&gt; Wan
-  LTX --&gt; Concat["concat-shots --film · cap 90s"]</code></pre>
+  Next --&gt; Shot
+  Shot --&gt; Concat["concat-shots --film · cap 90s"]</code></pre>
 <hr />
 <h2 id="models-us-safe-local-pack-only">Models (US-safe local pack only)<a class="headerlink" href="#models-us-safe-local-pack-only" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Job</th>
-<th>Graph</th>
+<th>Where</th>
 <th>Model</th>
 <th>License</th>
 </tr>
@@ -1246,34 +1248,42 @@
 <tbody>
 <tr>
 <td>Identity still</td>
-<td><code>workflows/shorts/film-{go-see-90s-run,still-here-90s,switchyard-90s}-lab-example.json</code></td>
+<td>Same file: group <strong>1. Identity (Klein)</strong></td>
 <td>Klein 4B distilled FP8</td>
 <td>Apache 2.0</td>
 </tr>
 <tr>
-<td>Motion rehearsal</td>
+<td>Print + synced world audio</td>
+<td>Same file: group <strong>2. Shot print (LTX)</strong></td>
+<td>LTX-2.5 distilled I2V</td>
+<td>Community License (not Apache)</td>
+</tr>
+<tr>
+<td>Optional silent rehearsal</td>
 <td><code>workflows/wan-i2v-shot-lab-example.json</code></td>
 <td>Wan 2.2 TI2V-5B I2V</td>
 <td>Apache 2.0, silent</td>
 </tr>
-<tr>
-<td>Print + synced world audio</td>
-<td><code>workflows/ltx-i2v-shot-lab-example.json</code></td>
-<td>LTX-2.5 distilled I2V</td>
-<td>Community License (not Apache)</td>
-</tr>
 </tbody>
 </table>
-<p>Deliverable MP4s are <strong>LTX I2V heroes</strong> (breath, world objects, <strong>no score</strong>). Wan is the cheap motion draft — skip it and Queue LTX only if you already like the camera.</p>
+<p>Unified film files:</p>
+<ul>
+<li><code>workflows/shorts/film-go-see-90s-run-lab-example.json</code></li>
+<li><code>workflows/shorts/film-still-here-90s-lab-example.json</code></li>
+<li><code>workflows/shorts/film-switchyard-90s-lab-example.json</code></li>
+</ul>
+<p>Deliverable MP4s are <strong>LTX I2V heroes</strong> (breath, world objects, <strong>no score</strong>) with audio muxed via <code>LTXVAudioVAEDecode</code> → <code>VHS_VideoCombine</code>. Wan is an optional cheap motion draft — skip it if you already like the camera.</p>
 <p>LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional experiment <strong>inside</strong> a beat, not the 90s path.</p>
 <hr />
 <h2 id="operator-loop">Operator loop<a class="headerlink" href="#operator-loop" title="Permanent link">&para;</a></h2>
-<p>Film bibles live under <code>workflows/shorts/</code>. Shot graphs live at <code>workflows/wan-i2v-shot-lab-example.json</code> and <code>workflows/ltx-i2v-shot-lab-example.json</code>. The container entrypoint copies <code>*.json</code> and <code>shorts/*.json</code> into Comfy <code>user/default/workflows/</code>.</p>
+<p>Each film graph ships <strong>Klein identity + LTX 5.00s printer + full shot map (Motion + Audio)</strong> in one file. The container entrypoint copies <code>*.json</code> and <code>shorts/*.json</code> into Comfy <code>user/default/workflows/</code>.</p>
 <ol>
-<li>Load the film bible (<code>film-go-see-90s-run-lab-example</code> / <code>film-still-here-90s-lab-example</code> / <code>film-switchyard-90s-lab-example</code>). Queue the Klein identity still (<code>ez_&lt;slug&gt;_identity</code>).</li>
-<li>Load <strong>wan-i2v-shot-lab-example</strong>. Set LoadImage to that PNG (shot 1) or the previous <code>ez_&lt;slug&gt;_bN_sM_last</code>. Paste <strong>Motion</strong> from the on-canvas shot map (source of truth: <code>{film}.shots.yaml</code>). Set VHS prefix <code>ez_&lt;slug&gt;_bN_sM_wan_video</code> and last-frame SaveImage <code>ez_&lt;slug&gt;_bN_sM_last</code>. Queue <strong>5.00s</strong> silent.</li>
-<li>Load <strong>ltx-i2v-shot-lab-example</strong>. Same first frame. Paste <strong>Motion + audio</strong>. VHS prefix <code>ez_&lt;slug&gt;_bN_sM_ltx_video</code>. Queue <strong>5.00s</strong> AV.</li>
-<li>Repeat 18 times. Last frame of shot N is LoadImage of shot N+1.</li>
+<li>Load one film graph (<code>film-go-see-90s-run-lab-example</code> / <code>film-still-here-90s-lab-example</code> / <code>film-switchyard-90s-lab-example</code>).</li>
+<li>Leave <strong>Shot print (LTX)</strong> bypassed (default). Queue <strong>Identity (Klein)</strong> → <code>ez_&lt;slug&gt;_identity_*.png</code>.</li>
+<li>Ctrl+B: bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or the previous <code>ez_&lt;slug&gt;_bN_sM_last</code>.</li>
+<li>Paste <strong>Motion + Audio</strong> from the on-canvas shot map (source of truth also in <code>{film}.shots.yaml</code>). Set VHS prefix <code>ez_&lt;slug&gt;_bN_sM_ltx_video</code> and last-frame SaveImage <code>ez_&lt;slug&gt;_bN_sM_last</code>. Queue <strong>5.00s</strong> AV.</li>
+<li>After Queue, click <strong>Save video (MP4) — open node for preview</strong> for an inline preview. File: <code>${COMFY_OUTPUT_DIR}/ez_&lt;slug&gt;_bN_sM_ltx_video_*.mp4</code>.</li>
+<li>Repeat for all 18 shots. Optional silent rehearsal: open <strong>wan-i2v-shot-lab-example</strong> with the same first frame.</li>
 <li>Concat (dry-run first; <code>--yes</code> writes the cap). Default dir is <code>${COMFY_OUTPUT_DIR}</code>:</li>
 </ol>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
@@ -1438,7 +1448,7 @@
 <p>Prefixes: <code>ez_gosee_b{1..6}_s{1..3}</code>, <code>ez_stillhere_…</code>, <code>ez_switchyard_…</code>. Machine-readable lists: <code>workflows/shorts/*.shots.yaml</code>.</p>
 <hr />
 <h2 id="spark-farm">Spark farm<a class="headerlink" href="#spark-farm" title="Permanent link">&para;</a></h2>
-<p>Three Sparks can Queue <strong>different beats</strong> in parallel (independent 5s jobs, shared <code>${MODELS_DIR}</code>). On each UI load <strong>wan-i2v-shot-lab-example</strong> / <strong>ltx-i2v-shot-lab-example</strong> and Queue; concat stays on one host. <code>spark-farm.sh run --film go-see</code> prints that Queue reminder (it does not POST graphs). No NCCL. See <a href="../spark-farm/">Spark farm</a>.</p>
+<p>Three Sparks can Queue <strong>different beats</strong> in parallel (independent 5s jobs, shared <code>${MODELS_DIR}</code>). On each UI load the same <strong>film-*-90s</strong> graph (or <strong>ltx-i2v-shot-lab-example</strong> for a generic printer) and Queue; concat stays on one host. <code>spark-farm.sh run --film go-see</code> prints that Queue reminder (it does not POST graphs). No NCCL. See <a href="../spark-farm/">Spark farm</a>.</p>
 <hr />
 <h2 id="safety">Safety<a class="headerlink" href="#safety" title="Permanent link">&para;</a></h2>
 <p>Unchanged: <code>restart: "no"</code>, heavy confirm on <code>start</code>, headroom preflight, download-limit wrap. This path does not start Docker; it only stitches files already under <code>COMFY_OUTPUT_DIR</code>.</p>

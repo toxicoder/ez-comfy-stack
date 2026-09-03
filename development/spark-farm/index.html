@@ -1196,13 +1196,13 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># After sourcing spark-farm.example.env</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188</span>
 </code></pre></div>
-<p>On each UI, load <strong>wan-i2v-shot-lab-example</strong> / <strong>ltx-i2v-shot-lab-example</strong> and <strong>Queue</strong> independent <strong>5 s</strong> shots — different beats in parallel for the 90s films. Concat locally:</p>
+<p>On each UI, load the unified <strong>film-<em>-90s-</em>-lab-example</strong> graph (or <strong>ltx-i2v-shot-lab-example</strong> / optional <strong>wan-i2v-shot-lab-example</strong>) and <strong>Queue</strong> independent <strong>5 s</strong> shots — different beats in parallel for the 90s films. Concat locally:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--yes
 </code></pre></div>
 <p>See <a href="../shorts/">90s shorts</a>. MiniMax H3 films are banned (see <a href="../licenses/">licenses</a>).</p>
 <p><code>spark-farm.sh</code> <strong>never</strong> starts compose remotely. It prints the exact <code>./scripts/manage.sh start</code> you must run locally (heavy confirm stays on that node). Containers still use <code>restart: "no"</code>.</p>
-<p>The <code>run</code> subcommand prints a <strong>wan-i2v-shot / ltx-i2v-shot</strong> Queue reminder for <code>--film go-see</code> (or still-here / switchyard). It does <strong>not</strong> POST graphs. It refuses MiniMax H3 names (<code>*h3*</code> / <code>*MiniMax*</code>).</p>
+<p>The <code>run</code> subcommand prints a <strong>film-*-90s / wan-i2v-shot / ltx-i2v-shot</strong> Queue reminder for <code>--film go-see</code> (or still-here / switchyard). It does <strong>not</strong> POST graphs. It refuses MiniMax H3 names (<code>*h3*</code> / <code>*MiniMax*</code>).</p>
 <p>Memory: keep <code>MEM_LIMIT=90g</code>, <code>MEM_RESERVATION=80g</code>, <code>MIN_HOST_FREE_GIB=28</code>, <code>shm_size: 16gb</code>.</p>
 <h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
