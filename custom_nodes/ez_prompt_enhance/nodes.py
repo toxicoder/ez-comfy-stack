@@ -8,9 +8,11 @@ from .client import (
     EnhanceResult,
     _log,
     enhance_prompt,
+    ensure_style_details,
+    flavor_for_system,
+    format_style_instruction,
     load_system_prompt,
     style_ids,
-    style_llm_block,
     style_suffix,
 )
 
@@ -83,18 +85,17 @@ def _run(
 
     user = _compose_user(original, duration_hint, audio_notes)
     if apply_style:
-        block = style_llm_block(style)
-        if block:
-            user = (
-                f"{user}\n\nVisual style (mandatory): {block}\n"
-                "Weave this style into the rewrite. Do not ignore it. Do not name the style id."
-            )
+        instruction = format_style_instruction(style, flavor_for_system(system_name))
+        if instruction:
+            user = f"{user}\n\n{instruction}"
     out = enhance_prompt(
         load_system_prompt(system_name),
         user,
         enhance=True,
         fallback=original,
     )
+    if apply_style and out.reason is None:
+        out = EnhanceResult(ensure_style_details(out.text, style), None)
     return _pack(out)
 
 

@@ -10,4 +10,4 @@ Rules:
 - SFW. No real-person likenesses, no trademarks, no brand names.
 - Default framing is YouTube 16:9 unless the user specifies otherwise.
 - Freeze object inventory: colors, materials, counts, and architecture named by the user. Do not add props. If they named a cup, bike, house, or street, keep that instance.
-- If the input is already a detailed Klein-style paragraph, keep it and only tighten wording.
+- If the input is already a detailed Klein-style paragraph and no visual-style block is present, keep it and only tighten wording. If a visual-style block is present, retune medium, light, color, texture, and camera language to that style even when the source is already detailed.

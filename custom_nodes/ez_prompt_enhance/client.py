@@ -23,6 +23,10 @@ DEFAULT_N_THREADS = 4
 DEFAULT_N_CTX = 4096
 DEFAULT_MAX_TOKENS = 800
 STYLE_NONE = "none"
+FLAVOR_KLEIN = "klein"
+FLAVOR_KLEIN_EDIT = "klein_edit"
+FLAVOR_WAN = "wan"
+FLAVOR_LTX = "ltx"
 
 REASON_ENHANCE_OFF = "enhance off"
 REASON_GGUF_MISSING = "GGUF missing"
@@ -32,7 +36,29 @@ REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
 
 _LLM: Any = None
 _LLM_PATH = ""
-_STYLES: dict[str, dict[str, str]] | None = None
+_STYLES: dict[str, dict[str, Any]] | None = None
+
+_STYLE_LOOK_FIELDS = ("medium", "light", "color", "texture", "camera")
+_WEAVE_BY_FLAVOR = {
+    FLAVOR_KLEIN: (
+        "Front-load the subject, then state this medium in the first two sentences. "
+        "Lighting next. Photographic styles may keep lens and depth of field; "
+        "graphic styles replace lens-and-sensor language with surface and tool marks. "
+        "Stay under 150 words including style."
+    ),
+    FLAVOR_KLEIN_EDIT: (
+        "Restyle medium, light, and grade only. Keep identity, inventory, "
+        "architecture, and counts locked."
+    ),
+    FLAVOR_WAN: (
+        "Put light and lens in Aesthetic control and the medium phrases in "
+        "Stylization at the end of the paragraph. Compact, not a second scene."
+    ),
+    FLAVOR_LTX: (
+        "Weave lighting, color palette, and surface texture into the flowing "
+        "present-tense paragraph. One coherent light logic. No style trailer."
+    ),
+}
 
 
 def _log(message: str) -> None:
@@ -67,14 +93,19 @@ def load_system_prompt(name: str) -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
-def load_styles() -> dict[str, dict[str, str]]:
-    """Load the style catalog (id -> label/llm_block/suffix)."""
+def load_styles() -> dict[str, dict[str, Any]]:
+    """Load the style catalog (id -> structured look fields)."""
     global _STYLES
     if _STYLES is None:
         raw = json.loads(STYLES_PATH.read_text(encoding="utf-8"))
         if not isinstance(raw, dict):
             raise ValueError("styles.json must be an object")
-        _STYLES = {str(k): dict(v) for k, v in raw.items()}
+        styles: dict[str, dict[str, Any]] = {}
+        for key, value in raw.items():
+            if not isinstance(value, dict):
+                raise ValueError(f"style {key} must be an object")
+            styles[str(key)] = dict(value)
+        _STYLES = styles
     return _STYLES
 
 
@@ -83,18 +114,129 @@ def style_ids() -> list[str]:
     return [STYLE_NONE, *load_styles().keys()]
 
 
-def style_llm_block(style_id: str) -> str:
+def _style_entry(style_id: str) -> dict[str, Any]:
     if style_id == STYLE_NONE:
-        return ""
-    entry = load_styles().get(style_id) or {}
-    return str(entry.get("llm_block") or "").strip()
+        return {}
+    return load_styles().get(style_id) or {}
+
+
+def _string_list(entry: dict[str, Any], field: str) -> list[str]:
+    raw = entry.get(field) or []
+    if isinstance(raw, str):
+        return [raw.strip()] if raw.strip() else []
+    if not isinstance(raw, list):
+        return []
+    out: list[str] = []
+    for item in raw:
+        text = str(item).strip()
+        if text:
+            out.append(text)
+    return out
+
+
+def style_must_include(style_id: str) -> list[str]:
+    return _string_list(_style_entry(style_id), "must_include")
+
+
+def style_conflicts(style_id: str) -> list[str]:
+    return _string_list(_style_entry(style_id), "conflicts")
+
+
+def style_llm_block(style_id: str) -> str:
+    """Dense look paragraph (medium through camera) for one catalog id."""
+    entry = _style_entry(style_id)
+    parts = []
+    for key in _STYLE_LOOK_FIELDS:
+        text = str(entry.get(key) or "").strip()
+        if text:
+            parts.append(text)
+    return " ".join(parts)
 
 
 def style_suffix(style_id: str) -> str:
     if style_id == STYLE_NONE:
         return ""
-    entry = load_styles().get(style_id) or {}
+    entry = _style_entry(style_id)
     return str(entry.get("suffix") or "").strip()
+
+
+def flavor_for_system(name: str) -> str:
+    """Map a system-prompt stem to a style-instruction flavor."""
+    if name == "klein_edit":
+        return FLAVOR_KLEIN_EDIT
+    if name.startswith("wan"):
+        return FLAVOR_WAN
+    if name.startswith("ltx"):
+        return FLAVOR_LTX
+    return FLAVOR_KLEIN
+
+
+def format_style_instruction(style_id: str, flavor: str) -> str:
+    """Compose the user-message style block for the local rewriter.
+
+    Arguments:
+      style_id: catalog id or none
+      flavor: klein, klein_edit, wan, or ltx
+    Returns:
+      Empty string when style is none or unknown; otherwise a mandatory
+      instruction the 4B model should weave into the rewrite.
+    """
+    block = style_llm_block(style_id)
+    if not block:
+        return ""
+    entry = _style_entry(style_id)
+    conflicts = style_conflicts(style_id)
+    must = style_must_include(style_id)
+    weave = _WEAVE_BY_FLAVOR.get(flavor, _WEAVE_BY_FLAVOR[FLAVOR_KLEIN])
+    wan_term = str(entry.get("wan_stylization") or "").strip()
+    lines = [
+        "Visual style (mandatory; dropdown wins):",
+        block,
+        (
+            "The selected visual style is mandatory and wins over any medium, lighting, "
+            "camera-sensor, grade, film-stock, or art-style language already in the source. "
+            "Rewrite those clauses so they match this style. Do not stack two styles. "
+            "Do not only append a style tag. Weave medium, light, color, and texture into "
+            "the rewrite. Keep subject, action, place, inventory, duration, audio notes, "
+            "and the requested camera move unless this style requires a different projection. "
+            "Do not name the style id. Do not emit brand names."
+        ),
+        f"Weave: {weave}",
+    ]
+    if conflicts:
+        lines.append("Replace clauses that describe: " + ", ".join(conflicts) + ".")
+    if must:
+        lines.append("Phrases that must appear in the output: " + "; ".join(must) + ".")
+    if flavor == FLAVOR_WAN and wan_term:
+        lines.append(f"Wan stylization slot: {wan_term}.")
+    return "\n".join(lines)
+
+
+def ensure_style_details(text: str, style_id: str) -> str:
+    """Append the style suffix when the rewrite omitted every must_include phrase.
+
+    Arguments:
+      text: CLIP prompt from the rewriter
+      style_id: catalog id or none
+    Returns:
+      text unchanged when any must_include phrase is present; otherwise
+      text plus suffix.
+    """
+    if style_id == STYLE_NONE:
+        return text
+    must = style_must_include(style_id)
+    if not must:
+        return text
+    lowered = text.lower()
+    if any(phrase.lower() in lowered for phrase in must):
+        return text
+    suffix = style_suffix(style_id)
+    if not suffix:
+        return text
+    base = text.rstrip()
+    if not base:
+        return suffix
+    return f"{base} {suffix}"
 
 
 def strip_model_wrapping(text: str) -> str:
