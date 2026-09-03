@@ -1458,7 +1458,7 @@
 </table>
 <div class="admonition warning">
 <p class="admonition-title">LTX width/height must be divisible by 32</p>
-<p>Broadcast 720p (<strong>1280×720</strong>) and 1080p (<strong>1920×1080</strong>) are <strong>not</strong> valid for the LTX video VAE. Lab landscape graphs use <strong>1280×704</strong>. Klein stills may stay 1280×720; <code>LTXVImgToVideo</code> center-crops. Portrait shorts I2V is <strong>768×1280</strong>. Do not type 720 or 1080 on LTX latent widgets. See <a href="../troubleshooting/">Troubleshooting</a>.</p>
+<p>Broadcast 720p (<strong>1280×720</strong>) and 1080p (<strong>1920×1080</strong>) are <strong>not</strong> native LTX VAE sizes (720/16=45, then the next <code>/2</code> patch fails). Lab landscape graphs use <strong>1280×704</strong>. Klein stills may stay 1280×720; I2V center-crops. Typing 720 or 1080 on LTX widgets is <strong>auto-snapped</strong> (704 / 1056) by <code>ez_ltx_spatial</code> — prefer 704 so you skip the extra crop. Portrait shorts I2V is <strong>768×1280</strong>. See <a href="../troubleshooting/">Troubleshooting</a>.</p>
 </div>
 </div>
 <div class="tabbed-block">

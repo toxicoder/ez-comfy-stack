@@ -1597,7 +1597,7 @@
 <tr>
 <td><code>LTXVImgToVideo</code> <code>einops.EinopsError</code> / <code>can't divide axis of length 45</code> (or 33)</td>
 <td>LTX video VAE is <strong>32×</strong> spatial. Broadcast <strong>720</strong> and <strong>1080</strong> are not divisible by 32 (720/16=45, then the next <code>/2</code> patch fails)</td>
-<td>Set <code>LTXVImgToVideo</code> / <code>EmptyLTXVLatentVideo</code> to <strong>1280×704</strong> (or any pair ÷32). Re-open current <strong>ltx-*-lab-example</strong>. Klein 1280×720 stills are fine — I2V center-crops. Do not type 720 or 1080. Portrait lab is <strong>768×1280</strong>, not 720×1280. T2V at 720 already decoded as 704 via <code>height//32</code></td>
+<td>Pull latest and restart so <code>ez_ltx_spatial</code> is installed — Queue <strong>auto-snaps</strong> 720→704 and 1080→1056 (stderr <code>[ez_ltx_spatial]</code>). Lab graphs stay <strong>1280×704</strong>. Klein 1280×720 stills are fine. Prefer not to type 720/1080 so you skip the extra crop. Portrait lab is <strong>768×1280</strong>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_ltx_spatial/__init__.py</code>. If the pack is missing, set widgets to a ÷32 pair and re-open <strong>ltx-*-lab-example</strong></td>
 </tr>
 <tr>
 <td>Missing <code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code> in LTX graphs</td>
@@ -1612,7 +1612,7 @@
 <tr>
 <td>Missing <strong>Klein/Wan/LTX Prompt Enhance</strong> node</td>
 <td>Host pack not mounted or entrypoint copy skipped</td>
-<td>Confirm compose bind-mount <code>../custom_nodes:/opt/ez-comfy/custom_nodes</code>. Restart so <code>install_lab_custom_nodes</code> copies into <code>/comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/__init__.py</code></td>
+<td>Confirm compose bind-mount <code>../custom_nodes:/opt/ez-comfy/custom_nodes</code>. Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_prompt_enhance</code> (and <code>ez_ltx_spatial</code>) into <code>/comfy-state/ComfyUI/custom_nodes/</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/__init__.py</code></td>
 </tr>
 <tr>
 <td>Enhance on but prompt unchanged</td>

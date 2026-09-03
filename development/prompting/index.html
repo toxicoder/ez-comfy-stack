@@ -1206,7 +1206,7 @@
 </div>
 <hr />
 <h2 id="prompt-enhance-nodes">Prompt Enhance nodes<a class="headerlink" href="#prompt-enhance-nodes" title="Permanent link">&para;</a></h2>
-<p>In-tree pack <code>custom_nodes/ez_prompt_enhance</code> (category <strong>ez-comfy/prompt</strong>). Entrypoint copies it into Comfy <code>custom_nodes/</code> on start (same pattern as lab workflows).</p>
+<p>In-tree pack <code>custom_nodes/ez_prompt_enhance</code> (category <strong>ez-comfy/prompt</strong>). Entrypoint copies every pack under <code>custom_nodes/</code> into Comfy on start (same pattern as lab workflows), including <code>ez_ltx_spatial</code> which snaps LTX canvases off 720/1080 so the video VAE does not einops-crash.</p>
 <table>
 <thead>
 <tr>
