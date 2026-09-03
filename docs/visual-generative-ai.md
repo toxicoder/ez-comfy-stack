@@ -155,6 +155,8 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
 === "Creator toolkit"
 
+    Pack 1
+
     | Workflow | What it does |
     | --- | --- |
     | **klein-shorts-still-lab-example** | Vertical 9:16 Shorts still (`ez_shorts_still`) |
@@ -167,6 +169,36 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **wan-bumper-loop-lab-example** | Loopable MP4 bumper (ping-pong) |
     | **ltx-broll-ambient-lab-example** | Ambient B-roll AV plate (~5 s) |
     | **klein-storyboard-6up-lab-example** | Six storyboard frames in one Queue |
+
+    Pack 2 — stills and plates
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **klein-endcard-cta-lab-example** | End-card / CTA plate 16:9 |
+    | **klein-quote-bg-lab-example** | Quote-card background 1:1 |
+    | **klein-og-blog-lab-example** | Blog / Open Graph hero |
+    | **klein-podcast-cover-lab-example** | Podcast cover 1:1 |
+    | **klein-banner-wide-lab-example** | Channel / LinkedIn banner ~3:1 |
+    | **klein-ig-square-lab-example** | Instagram 1:1 still |
+    | **klein-hook-still-lab-example** | 9:16 first-frame hook |
+    | **klein-lower-third-bg-lab-example** | Lower-third-safe 16:9 plate |
+    | **klein-food-tabletop-lab-example** | Food / tabletop 4:5 |
+    | **klein-lighting-trio-lab-example** | Same subject, three lights |
+    | **klein-time-of-day-lab-example** | Dawn / noon / dusk / night |
+    | **klein-camera-angles-lab-example** | Wide / medium / close |
+    | **klein-color-moods-lab-example** | Four color moods |
+
+    Pack 2 — motion / AV
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **wan-orbit-i2v-lab-example** | Slow orbit I2V ~5 s |
+    | **wan-push-in-i2v-lab-example** | Hero push-in I2V ~5 s |
+    | **wan-parallax-i2v-lab-example** | Subtle parallax I2V ~5 s |
+    | **wan-sticker-loop-lab-example** | Looping sticker MP4 |
+    | **ltx-weather-broll-lab-example** | Rain / wind B-roll AV |
+    | **ltx-interior-ambience-lab-example** | Interior room-tone AV |
+    | **ltx-hook-av-lab-example** | ~5 s AV cold open |
 
 === "License"
 

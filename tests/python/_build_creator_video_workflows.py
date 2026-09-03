@@ -40,6 +40,29 @@ CREATOR_STEMS = (
     "klein-storyboard-6up-lab-example",
 )
 
+CREATOR_STEMS_V2 = (
+    "klein-endcard-cta-lab-example",
+    "klein-quote-bg-lab-example",
+    "klein-og-blog-lab-example",
+    "klein-podcast-cover-lab-example",
+    "klein-banner-wide-lab-example",
+    "klein-ig-square-lab-example",
+    "klein-hook-still-lab-example",
+    "klein-lower-third-bg-lab-example",
+    "klein-food-tabletop-lab-example",
+    "klein-lighting-trio-lab-example",
+    "klein-time-of-day-lab-example",
+    "klein-camera-angles-lab-example",
+    "klein-color-moods-lab-example",
+    "wan-orbit-i2v-lab-example",
+    "wan-push-in-i2v-lab-example",
+    "wan-parallax-i2v-lab-example",
+    "wan-sticker-loop-lab-example",
+    "ltx-weather-broll-lab-example",
+    "ltx-interior-ambience-lab-example",
+    "ltx-hook-av-lab-example",
+)
+
 FILMS = (
     (
         "go-see",
@@ -1105,10 +1128,620 @@ Edit each Positive prompt for your beat sheet. Keep SFW / no unlicensed marks.
     _dump(WF / "klein-storyboard-6up-lab-example.json", g)
 
 
+def _klein_single(
+    *,
+    stem: str,
+    template: str,
+    size: tuple[int, int],
+    prefix: str,
+    prompt: str,
+    note: str,
+    description: str,
+    size_title: str | None = None,
+) -> None:
+    src = WF / "klein-still-hero-lab-example.json" if template == "hero" else WF / "klein-still-draft-lab-example.json"
+    g = _load(src)
+    g["id"] = stem
+    g["revision"] = 1
+    latent = _node(g, "EmptyFlux2LatentImage")
+    latent["widgets_values"] = [size[0], size[1], 1]
+    latent["title"] = size_title or f"Size {size[0]}x{size[1]}"
+    save = _node(g, "SaveImage")
+    save["widgets_values"] = [prefix]
+    save["title"] = "Save PNG"
+    _node(g, "EZKleinPromptEnhance")["widgets_values"][0] = prompt
+    _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
+    _set_note(g, note, description)
+    g["groups"] = [
+        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
+        _group(2, "PROMPT", 460, 40, 920, 400, "#3f789e"),
+        _group(3, "SETTINGS", 1420, 40, 380, 500, "#a1309b"),
+        _group(4, "OUTPUT", 1820, 40, 340, 430, "#3f789e"),
+    ]
+    _dump(WF / f"{stem}.json", g)
+
+
+def _klein_pack(
+    *,
+    stem: str,
+    shots: list[tuple[str, str, str]],
+    size: tuple[int, int],
+    note: str,
+    description: str,
+    cols: int = 2,
+) -> None:
+    nodes: list[dict] = []
+    links: list[list] = []
+    dx, dy = 2300, 920
+    for i, (prefix, title, prompt) in enumerate(shots):
+        src = _load(WF / "klein-still-draft-lab-example.json")
+        src_nodes = [n for n in src["nodes"] if n.get("type") != "Note"]
+        src_ids = {n["id"] for n in src_nodes}
+        src_links = [link for link in src["links"] if link[1] in src_ids and link[3] in src_ids]
+        rn, rl, _ = _remap_subgraph(
+            src_nodes,
+            src_links,
+            id_offset=i * 100,
+            link_offset=i * 100,
+            pos_dx=(i % cols) * dx,
+            pos_dy=(i // cols) * dy,
+        )
+        for n in rn:
+            if n.get("type") == "SaveImage":
+                n["widgets_values"] = [prefix]
+                n["title"] = f"Save {title}"
+            if n.get("type") == "EZKleinPromptEnhance":
+                n["widgets_values"][0] = prompt
+            if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
+                n["widgets_values"] = [prompt]
+            if n.get("type") == "EmptyFlux2LatentImage":
+                n["widgets_values"] = [size[0], size[1], 1]
+            if n.get("type") == "KSampler":
+                wv = list(n["widgets_values"])
+                if isinstance(wv[0], int):
+                    wv[0] = 42 + i
+                n["widgets_values"] = wv
+        nodes.extend(rn)
+        links.extend(rl)
+    rows = (len(shots) + cols - 1) // cols
+    note_node = {
+        "id": 999,
+        "type": "Note",
+        "pos": [40, rows * dy + 40],
+        "size": [960, 240],
+        "flags": {},
+        "order": 99,
+        "mode": 0,
+        "inputs": [],
+        "outputs": [],
+        "properties": {"Node name for S&R": "Note"},
+        "widgets_values": [note],
+        "title": "Operator note",
+    }
+    nodes.append(note_node)
+    g = {
+        "id": stem,
+        "revision": 1,
+        "last_node_id": max(n["id"] for n in nodes),
+        "last_link_id": max(link[0] for link in links),
+        "nodes": nodes,
+        "links": links,
+        "groups": [
+            _group(
+                i + 1,
+                shots[i][1],
+                (i % cols) * dx + 20,
+                (i // cols) * dy + 20,
+                dx - 100,
+                dy - 70,
+                "#3f789e" if i % 2 == 0 else "#a1309b",
+            )
+            for i in range(len(shots))
+        ],
+        "config": {},
+        "extra": {
+            "lab_profile": stem,
+            "lab_note": note,
+            "lab_description": description,
+        },
+        "version": 0.4,
+    }
+    _dump(WF / f"{stem}.json", g)
+
+
+def _wan_i2v(
+    *,
+    stem: str,
+    prefix: str,
+    motion: str,
+    note: str,
+    description: str,
+    size: tuple[int, int] = (832, 480),
+    length: int = 121,
+) -> None:
+    g = _load(WF / "wan-i2v-5s-lab-example.json")
+    g["id"] = stem
+    g["revision"] = 1
+    lat = _node(g, "Wan22ImageToVideoLatent")
+    vals = list(lat["widgets_values"])
+    vals[0], vals[1], vals[2] = size[0], size[1], length
+    lat["widgets_values"] = vals
+    lat["title"] = f"I2V size {size[0]}x{size[1]} x {length}"
+    vhs = _node(g, "VHS_VideoCombine")
+    vhs["widgets_values"]["filename_prefix"] = prefix
+    polish_video_graph(g)
+    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, False, "i2v", "5 seconds, 24 fps"]
+    _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
+    _set_note(g, note, description)
+    _dump(WF / f"{stem}.json", g)
+
+
+def _wan_loop(
+    *,
+    stem: str,
+    prefix: str,
+    motion: str,
+    note: str,
+    description: str,
+) -> None:
+    g = _load(WF / "wan-gif-loop-lab-example.json")
+    g["id"] = stem
+    g["revision"] = 1
+    vhs = _node(g, "VHS_VideoCombine")
+    vhs["widgets_values"]["format"] = "video/h264-mp4"
+    vhs["widgets_values"]["pingpong"] = True
+    vhs["widgets_values"]["frame_rate"] = 12
+    vhs["widgets_values"]["filename_prefix"] = prefix
+    vhs["widgets_values"]["save_output"] = True
+    polish_video_graph(g)
+    for n in g["nodes"]:
+        if n.get("type") == "SaveImage":
+            n["widgets_values"] = [f"{prefix}_frames"]
+            n["title"] = "Save frames (secondary)"
+    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, False, "i2v", "looping sticker, 12 fps"]
+    _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
+    _set_note(g, note, description)
+    _dump(WF / f"{stem}.json", g)
+
+
+def _ltx_av(
+    *,
+    stem: str,
+    prefix: str,
+    prompt: str,
+    note: str,
+    description: str,
+    mode: str,
+    audio_hint: str,
+) -> None:
+    src = WF / "ltx-i2v-5s-lab-example.json" if mode == "i2v" else WF / "ltx-t2v-5s-lab-example.json"
+    g = _load(src)
+    g["id"] = stem
+    g["revision"] = 1
+    wire_ltx_audio(g)
+    vhs = _node(g, "VHS_VideoCombine")
+    vhs["widgets_values"]["filename_prefix"] = prefix
+    polish_video_graph(g)
+    enh = _node(g, "EZLTXPromptEnhance")
+    enh["widgets_values"] = [prompt, False, mode, "5 seconds, 24 fps", audio_hint]
+    _set_note(g, note, description)
+    _dump(WF / f"{stem}.json", g)
+
+
+def build_creator_toolkit_v2() -> None:
+    identity = (
+        "A photoreal still of a small-town main street at golden hour. A single red bicycle "
+        "leans against a brick storefront. Unmarked facades, empty of signage."
+    )
+
+    _klein_single(
+        stem="klein-endcard-cta-lab-example",
+        template="hero",
+        size=(1280, 720),
+        prefix="ez_endcard",
+        prompt=(
+            f"{identity} Framed as a YouTube end-card plate: generous empty lower-right "
+            "for a subscribe button later. No burned-in text, logos, or UI chrome. Photoreal 16:9."
+        ),
+        note="""## klein-endcard-cta-lab-example
+
+YouTube/end-card still (Klein 4B). Default 1280×720. Prefix `ez_endcard`.
+Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
+""",
+        description="Klein 4B end-card / CTA plate 1280x720",
+        size_title="Size 16:9 end card",
+    )
+    _klein_single(
+        stem="klein-quote-bg-lab-example",
+        template="hero",
+        size=(1024, 1024),
+        prefix="ez_quote_bg",
+        prompt=(
+            f"{identity} Square 1:1. Soft bokeh, quiet center so overlay text can sit later. "
+            "No lettering, no logos. Photoreal quote-card background."
+        ),
+        note="""## klein-quote-bg-lab-example
+
+Quote-card background (Klein 4B). Default 1024×1024. Prefix `ez_quote_bg`.
+Keep the center empty of detail; add the quote in your editor.
+""",
+        description="Klein 4B quote-card background 1:1",
+        size_title="Size 1:1 quote background",
+    )
+    _klein_single(
+        stem="klein-og-blog-lab-example",
+        template="hero",
+        size=(1216, 640),
+        prefix="ez_og",
+        prompt=(
+            f"{identity} Wide blog / Open Graph hero. Subject left-weighted, quiet right third "
+            "for a headline later. No burned-in text. Photoreal ~1.9:1."
+        ),
+        note="""## klein-og-blog-lab-example
+
+Blog / Open Graph hero (Klein 4B). Default 1216×640. Prefix `ez_og`.
+Leave space for a title overlay. No burned-in words.
+""",
+        description="Klein 4B blog / OG hero ~1.9:1",
+        size_title="Size OG / blog hero",
+    )
+    _klein_single(
+        stem="klein-podcast-cover-lab-example",
+        template="hero",
+        size=(1024, 1024),
+        prefix="ez_podcast",
+        prompt=(
+            "A photoreal square podcast-cover still. A ceramic mug and a simple analog recorder "
+            "sit on a wooden table in warm sidelight. Unmarked, empty of logos and lettering. 1:1."
+        ),
+        note="""## klein-podcast-cover-lab-example
+
+Podcast / playlist cover (Klein 4B). Default 1024×1024. Prefix `ez_podcast`.
+Swap the props in the prompt. Add show title in your editor.
+""",
+        description="Klein 4B podcast cover 1:1",
+        size_title="Size 1:1 podcast cover",
+    )
+    _klein_single(
+        stem="klein-banner-wide-lab-example",
+        template="hero",
+        size=(1536, 512),
+        prefix="ez_banner",
+        prompt=(
+            f"{identity} Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band "
+            "for a name overlay. No text, no logos. Photoreal ~3:1."
+        ),
+        note="""## klein-banner-wide-lab-example
+
+Channel / LinkedIn banner (Klein 4B). Default 1536×512. Prefix `ez_banner`.
+Keep the upper band simple for a name overlay.
+""",
+        description="Klein 4B wide banner ~3:1",
+        size_title="Size wide banner 3:1",
+    )
+    _klein_single(
+        stem="klein-ig-square-lab-example",
+        template="hero",
+        size=(1024, 1024),
+        prefix="ez_ig_square",
+        prompt=(
+            f"{identity} Instagram 1:1 square. Subject centered, warm sidelight, unmarked facades."
+        ),
+        note="""## klein-ig-square-lab-example
+
+Generic Instagram 1:1 still (Klein 4B). Default 1024×1024. Prefix `ez_ig_square`.
+Edit the prompt for any feed post.
+""",
+        description="Klein 4B Instagram 1:1 still",
+        size_title="Size 1:1 Instagram",
+    )
+    _klein_single(
+        stem="klein-hook-still-lab-example",
+        template="draft",
+        size=(432, 768),
+        prefix="ez_hook_still",
+        prompt=(
+            "A photoreal vertical hook still for Shorts. First-frame energy: a red bicycle "
+            "fills the lower third against a brick storefront at golden hour. Tight 9:16, "
+            "caption headroom at the top. Unmarked, no text."
+        ),
+        note="""## klein-hook-still-lab-example
+
+First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`.
+Feed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.
+""",
+        description="Klein 4B 9:16 Shorts hook still",
+        size_title="Size 9:16 hook still",
+    )
+    _klein_single(
+        stem="klein-lower-third-bg-lab-example",
+        template="hero",
+        size=(1280, 720),
+        prefix="ez_lowerthird",
+        prompt=(
+            f"{identity} 16:9 plate with a clean, empty lower fifth for a lower-third graphic. "
+            "Subject sits in the upper two-thirds. No text, no logos."
+        ),
+        note="""## klein-lower-third-bg-lab-example
+
+Lower-third-safe 16:9 plate (Klein 4B). Default 1280×720. Prefix `ez_lowerthird`.
+Keep the bottom band empty; composite titles later.
+""",
+        description="Klein 4B lower-third-safe 16:9 plate",
+        size_title="Size 16:9 lower-third plate",
+    )
+    _klein_single(
+        stem="klein-food-tabletop-lab-example",
+        template="hero",
+        size=(1024, 1280),
+        prefix="ez_tabletop",
+        prompt=(
+            "A photoreal food tabletop still, Instagram 4:5. A ceramic bowl of soup and a linen "
+            "napkin on oak, soft window sidelight. Unmarked crockery, no logos, no lettering."
+        ),
+        note="""## klein-food-tabletop-lab-example
+
+Food / tabletop still (Klein 4B). Default 1024×1280 (4:5). Prefix `ez_tabletop`.
+Swap the dish in the prompt; keep unmarked surfaces.
+""",
+        description="Klein 4B food tabletop 4:5",
+        size_title="Size 4:5 tabletop",
+    )
+
+    _klein_pack(
+        stem="klein-lighting-trio-lab-example",
+        size=(768, 432),
+        shots=[
+            (
+                "ez_light_01",
+                "KEY",
+                f"{identity} Hard golden key light from camera left, deep contact shadows.",
+            ),
+            (
+                "ez_light_02",
+                "WINDOW",
+                f"{identity} Soft overcast window light, gentle falloff, cool shadows.",
+            ),
+            (
+                "ez_light_03",
+                "NIGHT LAMP",
+                "The same red bicycle and brick storefront at night under a warm street lamp. "
+                "Unmarked facades. Photoreal 16:9.",
+            ),
+        ],
+        cols=3,
+        note="""## klein-lighting-trio-lab-example
+
+Same subject under three lights (Klein 4B). Prefixes `ez_light_01`…`03` (key / window / night lamp).
+Keep the bicycle identity locked; change only the light.
+""",
+        description="Klein 4B three-light study of one subject",
+    )
+    _klein_pack(
+        stem="klein-time-of-day-lab-example",
+        size=(768, 432),
+        shots=[
+            (
+                "ez_tod_01",
+                "DAWN",
+                f"{identity} Replace golden hour with first blue dawn, empty street, cool air.",
+            ),
+            (
+                "ez_tod_02",
+                "NOON",
+                f"{identity} Replace golden hour with hard noon sun, short shadows.",
+            ),
+            (
+                "ez_tod_03",
+                "DUSK",
+                f"{identity} Replace golden hour with dusk, pink sky, shop lamps just on.",
+            ),
+            (
+                "ez_tod_04",
+                "NIGHT",
+                "The same red bicycle and brick storefront at night. Warm window glow, unmarked facades.",
+            ),
+        ],
+        note="""## klein-time-of-day-lab-example
+
+Same place at dawn / noon / dusk / night (Klein 4B). Prefixes `ez_tod_01`…`04`.
+Keep the street and bicycle locked; change only time of day.
+""",
+        description="Klein 4B time-of-day four-still pack",
+    )
+    _klein_pack(
+        stem="klein-camera-angles-lab-example",
+        size=(768, 432),
+        shots=[
+            (
+                "ez_angle_wide",
+                "WIDE",
+                f"{identity} 24mm wide establishing, lots of street and sky.",
+            ),
+            (
+                "ez_angle_med",
+                "MEDIUM",
+                f"{identity} 35mm medium, bicycle fills the middle third.",
+            ),
+            (
+                "ez_angle_close",
+                "CLOSE",
+                f"{identity} 50mm close on chrome handlebars and brick texture.",
+            ),
+        ],
+        cols=3,
+        note="""## klein-camera-angles-lab-example
+
+Wide / medium / close of one subject (Klein 4B). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`.
+Keep identity locked; change only lens and framing.
+""",
+        description="Klein 4B wide/medium/close angle pack",
+    )
+    _klein_pack(
+        stem="klein-color-moods-lab-example",
+        size=(768, 432),
+        shots=[
+            (
+                "ez_mood_01",
+                "WARM",
+                f"{identity} Warm amber grade, golden sidelight.",
+            ),
+            (
+                "ez_mood_02",
+                "COOL",
+                f"{identity} Cool teal-and-steel grade, overcast.",
+            ),
+            (
+                "ez_mood_03",
+                "MUTED",
+                f"{identity} Muted filmic grade, desaturated brick, soft contrast.",
+            ),
+            (
+                "ez_mood_04",
+                "HIGH KEY",
+                f"{identity} High-key bright daylight, lifted shadows, clean whites.",
+            ),
+        ],
+        note="""## klein-color-moods-lab-example
+
+Four color moods, shared identity (Klein 4B). Prefixes `ez_mood_01`…`04`.
+Keep the street and bicycle locked; change only grade / mood.
+""",
+        description="Klein 4B four-mood color pack",
+    )
+
+    _wan_i2v(
+        stem="wan-orbit-i2v-lab-example",
+        prefix="ez_orbit_video",
+        motion=(
+            "Slow orbit around the start-image subject. Camera arcs a few degrees right while "
+            "keeping the product or bicycle identity locked. One continuous ~5 s take, no cuts."
+        ),
+        note=f"""## wan-orbit-i2v-lab-example
+
+Silent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).
+Prefix `ez_orbit_video`.
+
+{PREVIEW_BULLET}
+""",
+        description="Wan 5B silent orbit I2V ~5s",
+    )
+    _wan_i2v(
+        stem="wan-push-in-i2v-lab-example",
+        prefix="ez_pushin_video",
+        motion=(
+            "Slow cinematic push-in toward the start-image subject. Keep identity locked. "
+            "One continuous ~5 s take at 24 fps. No orbit, no cut."
+        ),
+        note=f"""## wan-push-in-i2v-lab-example
+
+Silent Wan 5B I2V hero push-in (~5 s). LoadImage: a still or thumbnail.
+Prefix `ez_pushin_video`.
+
+{PREVIEW_BULLET}
+""",
+        description="Wan 5B silent push-in I2V ~5s",
+    )
+    _wan_i2v(
+        stem="wan-parallax-i2v-lab-example",
+        prefix="ez_parallax_video",
+        motion=(
+            "Subtle parallax from the start still. Foreground drifts a hair left, background holds. "
+            "Locked framing, Ken Burns-like depth, identity locked. One continuous ~5 s take."
+        ),
+        note=f"""## wan-parallax-i2v-lab-example
+
+Silent Wan 5B I2V subtle parallax (~5 s). LoadImage: a still.
+Prefix `ez_parallax_video`.
+
+{PREVIEW_BULLET}
+""",
+        description="Wan 5B silent parallax I2V ~5s",
+    )
+    _wan_loop(
+        stem="wan-sticker-loop-lab-example",
+        prefix="ez_sticker",
+        motion=(
+            "Tight looping sticker motion. A small cyclic bounce or shimmer on the subject. "
+            "Ping-pong friendly. Keep start-image identity locked. No walk, no dolly."
+        ),
+        note=f"""## wan-sticker-loop-lab-example
+
+Loopable sticker MP4 (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_sticker`.
+LoadImage: a cutout-friendly still.
+
+{PREVIEW_BULLET}
+""",
+        description="Wan 5B looping sticker MP4",
+    )
+
+    _ltx_av(
+        stem="ltx-weather-broll-lab-example",
+        prefix="ez_weather_video",
+        prompt=(
+            "Locked-camera weather B-roll. Rain streaks across a brick storefront and a red bicycle "
+            "at golden-hour leftovers. Soft wind, rain on pavement, distant drip. Unmarked facades. "
+            "No music and no score. Five seconds."
+        ),
+        audio_hint="rain, wind, drip, no score",
+        mode="t2v",
+        note=f"""## ltx-weather-broll-lab-example
+
+Weather B-roll AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
+Prefix `ez_weather_video`. World audio muxed into MP4.
+
+{PREVIEW_BULLET}
+Disclose AI-generated media. No score.
+""",
+        description="LTX-2.5 weather B-roll AV ~5s",
+    )
+    _ltx_av(
+        stem="ltx-interior-ambience-lab-example",
+        prefix="ez_interior_video",
+        prompt=(
+            "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a "
+            "kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and "
+            "no score. Five seconds."
+        ),
+        audio_hint="kettle, house creak, no score",
+        mode="t2v",
+        note=f"""## ltx-interior-ambience-lab-example
+
+Interior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
+Prefix `ez_interior_video`.
+
+{PREVIEW_BULLET}
+Disclose AI-generated media. No score.
+""",
+        description="LTX-2.5 interior ambience AV ~5s",
+    )
+    _ltx_av(
+        stem="ltx-hook-av-lab-example",
+        prefix="ez_hook_video",
+        prompt=(
+            "A five-second AV cold open. Camera snaps to a red bicycle against a brick storefront "
+            "as a shop bell clinks once and wind hits a flag. Fast present-tense energy, unmarked "
+            "facades. No music and no score."
+        ),
+        audio_hint="shop bell, wind, no score",
+        mode="t2v",
+        note=f"""## ltx-hook-av-lab-example
+
+~5 s AV cold-open / hook (LTX-2.5 T2V). Community License — not Apache.
+Prefix `ez_hook_video`. Pair with **klein-hook-still-lab-example** if you want I2V instead.
+
+{PREVIEW_BULLET}
+Disclose AI-generated media. No score.
+""",
+        description="LTX-2.5 AV hook / cold open ~5s",
+    )
+
+
 def main() -> None:
     patch_existing_video_graphs()
     build_all_films()
     build_creator_toolkit()
+    build_creator_toolkit_v2()
     print("done")
 
 

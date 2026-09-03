@@ -174,6 +174,26 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 | `wan-bumper-loop-lab-example.json` | Loopable MP4 bumper |
 | `ltx-broll-ambient-lab-example.json` | Ambient B-roll AV ~5 s |
 | `klein-storyboard-6up-lab-example.json` | Six storyboard frames |
+| `klein-endcard-cta-lab-example.json` | End-card / CTA plate 16:9 |
+| `klein-quote-bg-lab-example.json` | Quote-card background 1:1 |
+| `klein-og-blog-lab-example.json` | Blog / OG hero |
+| `klein-podcast-cover-lab-example.json` | Podcast cover 1:1 |
+| `klein-banner-wide-lab-example.json` | Wide channel banner |
+| `klein-ig-square-lab-example.json` | Instagram 1:1 still |
+| `klein-hook-still-lab-example.json` | 9:16 hook still |
+| `klein-lower-third-bg-lab-example.json` | Lower-third-safe 16:9 |
+| `klein-food-tabletop-lab-example.json` | Food tabletop 4:5 |
+| `klein-lighting-trio-lab-example.json` | Three-light study |
+| `klein-time-of-day-lab-example.json` | Dawn / noon / dusk / night |
+| `klein-camera-angles-lab-example.json` | Wide / medium / close |
+| `klein-color-moods-lab-example.json` | Four color moods |
+| `wan-orbit-i2v-lab-example.json` | Slow orbit I2V ~5 s |
+| `wan-push-in-i2v-lab-example.json` | Hero push-in I2V ~5 s |
+| `wan-parallax-i2v-lab-example.json` | Parallax I2V ~5 s |
+| `wan-sticker-loop-lab-example.json` | Looping sticker MP4 |
+| `ltx-weather-broll-lab-example.json` | Weather B-roll AV ~5 s |
+| `ltx-interior-ambience-lab-example.json` | Interior ambience AV ~5 s |
+| `ltx-hook-av-lab-example.json` | AV hook / cold open ~5 s |
 
 Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. They still **must** wire the audio VAE because LTX is a joint AV model.
 

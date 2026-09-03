@@ -70,7 +70,7 @@ for g in (w, l):
   local -a files=("${dir}"/*-lab-example.json)
   shopt -u nullglob
   [[ ${#files[@]} -ge 8 ]]
-  [[ ${#files[@]} -le 32 ]]
+  [[ ${#files[@]} -le 64 ]]
 
   for gone in \
     ltx-i2v-30s-lab-example.json \
@@ -354,7 +354,27 @@ assert video >= 7, video
     klein-style-lock-lab-example.json \
     wan-bumper-loop-lab-example.json \
     ltx-broll-ambient-lab-example.json \
-    klein-storyboard-6up-lab-example.json; do
+    klein-storyboard-6up-lab-example.json \
+    klein-endcard-cta-lab-example.json \
+    klein-quote-bg-lab-example.json \
+    klein-og-blog-lab-example.json \
+    klein-podcast-cover-lab-example.json \
+    klein-banner-wide-lab-example.json \
+    klein-ig-square-lab-example.json \
+    klein-hook-still-lab-example.json \
+    klein-lower-third-bg-lab-example.json \
+    klein-food-tabletop-lab-example.json \
+    klein-lighting-trio-lab-example.json \
+    klein-time-of-day-lab-example.json \
+    klein-camera-angles-lab-example.json \
+    klein-color-moods-lab-example.json \
+    wan-orbit-i2v-lab-example.json \
+    wan-push-in-i2v-lab-example.json \
+    wan-parallax-i2v-lab-example.json \
+    wan-sticker-loop-lab-example.json \
+    ltx-weather-broll-lab-example.json \
+    ltx-interior-ambience-lab-example.json \
+    ltx-hook-av-lab-example.json; do
     [[ -f ${dir}/${wf} ]]
   done
 }
