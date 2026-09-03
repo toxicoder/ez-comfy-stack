@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Slow cinematic dolly-in toward the bicycle. Leaves and a shop flag stir in a light breeze. A pedestrian crosses in the background. Keep the start-image identity locked. One continuous five-second take at 24 fps."
+        "Slow cinematic dolly-in toward the superhero. Suit fabric and a short capelet stir in a high-altitude breeze. Distant air traffic glides between rounded towers. Keep the start-image identity locked. One continuous five-second take at 24 fps."
       ],
       "title": "Motion / prompt"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Slow cinematic dolly-in toward the bicycle. Leaves and a shop flag stir in a light breeze. A pedestrian crosses in the background. Keep the start-image identity locked. One continuous five-second take at 24 fps.",
+        "Slow cinematic dolly-in toward the superhero. Suit fabric and a short capelet stir in a high-altitude breeze. Distant air traffic glides between rounded towers. Keep the start-image identity locked. One continuous five-second take at 24 fps.",
         false,
         "i2v",
         "5 seconds, 24 fps"

@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Hard golden key light from camera left, deep contact shadows."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Hard golden key light from camera left, deep contact shadows."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -389,7 +389,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Hard golden key light from camera left, deep contact shadows.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Hard golden key light from camera left, deep contact shadows.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -542,7 +542,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Soft overcast window light, gentle falloff, cool shadows."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Soft overcast skylight, gentle falloff, cool shadows."
       ],
       "title": "Positive"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -781,7 +781,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Soft overcast window light, gentle falloff, cool shadows.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Soft overcast skylight, gentle falloff, cool shadows.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -934,7 +934,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The same red bicycle and brick storefront at night under a warm street lamp. Unmarked facades. Photoreal 16:9."
+        "The same teal-and-copper superhero on the helipad at night under rooftop sodium and city neon. Unmarked surfaces. Feature-film 3D animation 16:9."
       ],
       "title": "Positive"
     },
@@ -973,7 +973,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -1173,7 +1173,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "The same red bicycle and brick storefront at night under a warm street lamp. Unmarked facades. Photoreal 16:9.",
+        "The same teal-and-copper superhero on the helipad at night under rooftop sodium and city neon. Unmarked surfaces. Feature-film 3D animation 16:9.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -1200,7 +1200,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). Prefixes `ez_light_01`\u2026`03` (key / window / night lamp).\nKeep the bicycle identity locked; change only the light.\n"
+        "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). Prefixes `ez_light_01`\u2026`03` (key / window / night lamp).\nKeep the hero identity locked; change only the light.\n"
       ],
       "title": "Operator note"
     }
@@ -1491,7 +1491,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-lighting-trio-lab-example",
-    "lab_note": "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). Prefixes `ez_light_01`\u2026`03` (key / window / night lamp).\nKeep the bicycle identity locked; change only the light.\n",
+    "lab_note": "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). Prefixes `ez_light_01`\u2026`03` (key / window / night lamp).\nKeep the hero identity locked; change only the light.\n",
     "lab_description": "Klein 4B three-light study of one subject"
   },
   "version": 0.4

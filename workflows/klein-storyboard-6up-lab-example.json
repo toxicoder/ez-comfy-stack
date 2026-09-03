@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Wide establishing shot of a small-town main street at dawn, 24mm. Unmarked facades, empty of signage. Clean cinematic frame."
+        "A 3D feature-animation storyboard still, YouTube 16:9. Wide establishing shot of a stylized dusk city of rounded towers from a rooftop, 24mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -389,7 +389,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Wide establishing shot of a small-town main street at dawn, 24mm. Unmarked facades, empty of signage. Clean cinematic frame.",
+        "A 3D feature-animation storyboard still, YouTube 16:9. Wide establishing shot of a stylized dusk city of rounded towers from a rooftop, 24mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -542,7 +542,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Medium shot of a red bicycle against a brick storefront, 35mm. Unmarked facades, empty of signage. Clean cinematic frame."
+        "A 3D feature-animation storyboard still, YouTube 16:9. Medium shot of an original teal-and-copper superhero on a helipad, 35mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
       ],
       "title": "Positive"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -781,7 +781,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Medium shot of a red bicycle against a brick storefront, 35mm. Unmarked facades, empty of signage. Clean cinematic frame.",
+        "A 3D feature-animation storyboard still, YouTube 16:9. Medium shot of an original teal-and-copper superhero on a helipad, 35mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -934,7 +934,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Detail of chrome handlebars and warm sidelight on brick, 50mm. Unmarked facades, empty of signage. Clean cinematic frame."
+        "A 3D feature-animation storyboard still, YouTube 16:9. Detail of the unmarked circular copper starburst chest plate, 50mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
       ],
       "title": "Positive"
     },
@@ -973,7 +973,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -1173,7 +1173,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Detail of chrome handlebars and warm sidelight on brick, 50mm. Unmarked facades, empty of signage. Clean cinematic frame.",
+        "A 3D feature-animation storyboard still, YouTube 16:9. Detail of the unmarked circular copper starburst chest plate, 50mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -1326,7 +1326,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Street-level tracking angle as a pedestrian passes in the distance, 35mm. Unmarked facades, empty of signage. Clean cinematic frame."
+        "A 3D feature-animation storyboard still, YouTube 16:9. Rooftop tracking angle as distant air traffic glides between towers, 35mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
       ],
       "title": "Positive"
     },
@@ -1365,7 +1365,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -1565,7 +1565,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Street-level tracking angle as a pedestrian passes in the distance, 35mm. Unmarked facades, empty of signage. Clean cinematic frame.",
+        "A 3D feature-animation storyboard still, YouTube 16:9. Rooftop tracking angle as distant air traffic glides between towers, 35mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -1718,7 +1718,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Over-the-shoulder toward the unmarked shop window, golden hour. Unmarked facades, empty of signage. Clean cinematic frame."
+        "A 3D feature-animation storyboard still, YouTube 16:9. Over-the-shoulder toward the unmarked city skyline, dusk haze. Unmarked surfaces, empty of lettering. Clean cinematic frame."
       ],
       "title": "Positive"
     },
@@ -1757,7 +1757,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -1957,7 +1957,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Over-the-shoulder toward the unmarked shop window, golden hour. Unmarked facades, empty of signage. Clean cinematic frame.",
+        "A 3D feature-animation storyboard still, YouTube 16:9. Over-the-shoulder toward the unmarked city skyline, dusk haze. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -2110,7 +2110,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Closing wide as lights warm in windows, quiet street, 24mm. Unmarked facades, empty of signage. Clean cinematic frame."
+        "A 3D feature-animation storyboard still, YouTube 16:9. Closing wide as city lights warm in the towers, quiet helipad, 24mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
       ],
       "title": "Positive"
     },
@@ -2149,7 +2149,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -2349,7 +2349,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal storyboard still, YouTube 16:9. Closing wide as lights warm in windows, quiet street, 24mm. Unmarked facades, empty of signage. Clean cinematic frame.",
+        "A 3D feature-animation storyboard still, YouTube 16:9. Closing wide as city lights warm in the towers, quiet helipad, 24mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
         false,
         "t2i",
         "YouTube 16:9 still"

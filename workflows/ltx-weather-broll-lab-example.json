@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A wide photoreal shot of a small-town main street at golden hour. A red bicycle leans against a brick storefront as warm sidelight rakes the brick and chrome. Leaves and a shop flag stir in a light breeze while a pedestrian crosses in the background. The camera dollies in slowly toward the bicycle. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. Unmarked facades sit empty of signage. No music and no score."
+        "Locked-camera weather B-roll. Rain streaks across a rooftop helipad and a teal-and-copper flight suit at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds."
       ],
       "title": "Positive"
     },
@@ -690,7 +690,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "Locked-camera weather B-roll. Rain streaks across a brick storefront and a red bicycle at golden-hour leftovers. Soft wind, rain on pavement, distant drip. Unmarked facades. No music and no score. Five seconds.",
+        "Locked-camera weather B-roll. Rain streaks across a rooftop helipad and a teal-and-copper flight suit at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds.",
         false,
         "t2v",
         "5 seconds, 24 fps",

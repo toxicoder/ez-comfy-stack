@@ -9,15 +9,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_theme import GIF_MOTION, KLEIN_NEG_STILL, KLEIN_STILL_DAILY
+
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 
-KLEIN_STILL = (
-    "A photoreal still photograph of a small-town main street at golden hour. "
-    "A single red bicycle leans against a brick storefront. Warm sidelight rakes "
-    "the brick and the bicycle's chrome. Shot on a 35mm lens at eye level, framed "
-    "for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering."
-)
 KLEIN_NEG = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
@@ -91,11 +87,6 @@ HOUSE_SHOTS = [
     ),
 ]
 JOINED_WORD_CAP = 155
-GIF_MOTION = (
-    "Locked camera. A light breeze moves leaves and a thin curtain. Water and "
-    "fabric drift, then settle. Keep the start-image identity locked. Gentle "
-    "cyclic motion for a looping GIF."
-)
 GIF_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
     "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
@@ -124,7 +115,7 @@ Models: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors
 PRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse — first and last frames meet for a seamless loop.
 Easy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).
 LoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.
-Motion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.
+Motion: locked camera plus breeze / fabric / city lights. Do not prompt a walk or a one-way dolly.
 Do not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.
 Prompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.
 """
@@ -209,9 +200,11 @@ def build_still_app() -> dict:
     graph["extra"]["lab_note"] = STILL_NOTE
     graph["extra"]["lab_description"] = "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
     enh = _node(graph, "EZKleinPromptEnhance")
-    enh["widgets_values"][0] = KLEIN_STILL
+    enh["widgets_values"][0] = KLEIN_STILL_DAILY
     pos = _node(graph, "CLIPTextEncode", "Positive")
-    pos["widgets_values"] = [KLEIN_STILL]
+    pos["widgets_values"] = [KLEIN_STILL_DAILY]
+    neg = _node(graph, "CLIPTextEncode", "Negative")
+    neg["widgets_values"] = [KLEIN_NEG_STILL]
     graph["groups"] = [
         _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
         _group(2, "PROMPT", 460, 40, 920, 400, "#3f789e"),

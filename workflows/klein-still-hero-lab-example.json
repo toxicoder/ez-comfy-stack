@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick and the bicycle's chrome. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad, unmarked circular starburst chest plate catching a warm key, a short unmarked capelet at rest. Rounded towers recede into volumetric haze. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-still-hero-lab-example\n\nHD Klein 4B still (Apache 2.0 distilled FP8). Same prompt and seed as klein-still-draft-lab-example.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 · 8 steps · 1280x720 · batch 1.\nSaveImage prefix: ez_still_hero.\n\nFeed ez_still_hero_*.png into wan-i2v-5s-lab-example or ltx-i2v-5s-lab-example.\nDistilled is 4-step-optimized; extra steps are optional.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## klein-still-hero-lab-example\n\nHD Klein 4B still (Apache 2.0 distilled FP8). Same prompt and seed as klein-still-draft-lab-example.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 1280x720 \u00b7 batch 1.\nSaveImage prefix: ez_still_hero.\n\nFeed ez_still_hero_*.png into wan-i2v-5s-lab-example or ltx-i2v-5s-lab-example.\nDistilled is 4-step-optimized; extra steps are optional.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
       ],
       "title": "Operator note"
     },
@@ -451,7 +451,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick and the bicycle's chrome. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad, unmarked circular starburst chest plate catching a warm key, a short unmarked capelet at rest. Rounded towers recede into volumetric haze. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -553,7 +553,7 @@
         0
       ]
     },
-    "lab_note": "## klein-still-hero-lab-example\n\nHD Klein 4B still (Apache 2.0 distilled FP8). Same prompt and seed as klein-still-draft-lab-example.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed · CFG 1.0 · 8 steps · 1280x720 · batch 1.\nSaveImage prefix: ez_still_hero.\n\nFeed ez_still_hero_*.png into wan-i2v-5s-lab-example or ltx-i2v-5s-lab-example.\nDistilled is 4-step-optimized; extra steps are optional.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_note": "## klein-still-hero-lab-example\n\nHD Klein 4B still (Apache 2.0 distilled FP8). Same prompt and seed as klein-still-draft-lab-example.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 1280x720 \u00b7 batch 1.\nSaveImage prefix: ez_still_hero.\n\nFeed ez_still_hero_*.png into wan-i2v-5s-lab-example or ltx-i2v-5s-lab-example.\nDistilled is 4-step-optimized; extra steps are optional.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
     "lab_description": "Klein 4B hero still, 1280x720, 8 steps"
   },
   "version": 0.4

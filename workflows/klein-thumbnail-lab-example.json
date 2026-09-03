@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A bold YouTube thumbnail still, 16:9. A single red bicycle fills the frame against a brick storefront at golden hour. High contrast sidelight, clear subject separation, unmarked facades, empty of text and logos. Photoreal, eye-catching, no burned-in words."
+        "A bold YouTube thumbnail still, 16:9. An original superhero in a teal-and-copper flight suit fills the frame on a dusk rooftop helipad. High contrast key light, clear subject separation, unmarked circular starburst chest plate, empty of lettering. Feature-film 3D animation, eye-catching, clean of burned-in words."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -451,7 +451,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A bold YouTube thumbnail still, 16:9. A single red bicycle fills the frame against a brick storefront at golden hour. High contrast sidelight, clear subject separation, unmarked facades, empty of text and logos. Photoreal, eye-catching, no burned-in words.",
+        "A bold YouTube thumbnail still, 16:9. An original superhero in a teal-and-copper flight suit fills the frame on a dusk rooftop helipad. High contrast key light, clear subject separation, unmarked circular starburst chest plate, empty of lettering. Feature-film 3D animation, eye-catching, clean of burned-in words.",
         false,
         "t2i",
         "YouTube 16:9 still"

@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. 24mm wide establishing, lots of street and sky."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. 24mm wide establishing, lots of city and sky."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -389,7 +389,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. 24mm wide establishing, lots of street and sky.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. 24mm wide establishing, lots of city and sky.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -542,7 +542,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. 35mm medium, bicycle fills the middle third."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. 35mm medium, hero fills the middle third."
       ],
       "title": "Positive"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -781,7 +781,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. 35mm medium, bicycle fills the middle third.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. 35mm medium, hero fills the middle third.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -934,7 +934,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. 50mm close on chrome handlebars and brick texture."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. 50mm close on copper starburst chest plate and suit materials."
       ],
       "title": "Positive"
     },
@@ -973,7 +973,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -1173,7 +1173,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. 50mm close on chrome handlebars and brick texture.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. 50mm close on copper starburst chest plate and suit materials.",
         false,
         "t2i",
         "YouTube 16:9 still"

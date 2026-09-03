@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band for a name overlay. No text, no logos. Photoreal ~3:1."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band for a name overlay. Empty of lettering. Feature-film 3D animation ~3:1."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -451,7 +451,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band for a name overlay. No text, no logos. Photoreal ~3:1.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band for a name overlay. Empty of lettering. Feature-film 3D animation ~3:1.",
         false,
         "t2i",
         "YouTube 16:9 still"

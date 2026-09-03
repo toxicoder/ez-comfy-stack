@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A wide photoreal shot of a small-town main street at golden hour. A red bicycle leans against a brick storefront as warm sidelight rakes the brick and chrome. Leaves and a shop flag stir in a light breeze while a pedestrian crosses in the background. The camera dollies in slowly toward the bicycle. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. Unmarked facades sit empty of signage. No music and no score."
+        "A five-second AV cold open. Camera snaps to an original teal-and-copper superhero on a dusk rooftop helipad as wind hits a capelet and distant traffic hums. Fast present-tense energy, unmarked surfaces. No music and no score."
       ],
       "title": "Positive"
     },
@@ -690,11 +690,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "A five-second AV cold open. Camera snaps to a red bicycle against a brick storefront as a shop bell clinks once and wind hits a flag. Fast present-tense energy, unmarked facades. No music and no score.",
+        "A five-second AV cold open. Camera snaps to an original teal-and-copper superhero on a dusk rooftop helipad as wind hits a capelet and distant traffic hums. Fast present-tense energy, unmarked surfaces. No music and no score.",
         false,
         "t2v",
         "5 seconds, 24 fps",
-        "shop bell, wind, no score"
+        "rooftop wind, fabric snap, distant traffic hum, no score"
       ],
       "title": "LTX Prompt Enhance"
     },
