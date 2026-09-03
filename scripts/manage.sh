@@ -56,6 +56,32 @@ export COMFY_OUTPUT_DIR
 DOWNLOAD_LIMIT=${DOWNLOAD_LIMIT:-auto}
 
 #######################################
+# Relink the prompt-enhance GGUF into MODELS_DIR/comfy/llm/ if the snapshot
+# is already on disk. Warns with download-models when the file is absent.
+# Does not download. Does not fail the caller.
+# Globals:
+#   MODELS_DIR, REPO_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0
+#######################################
+ensure_prompt_enhance_gguf() {
+  local dest
+  dest="${MODELS_DIR}/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" link || true
+  if [[ -e ${dest} ]]; then
+    log "Prompt Enhance GGUF ready: ${dest}"
+    return 0
+  fi
+  warn "Prompt Enhance GGUF missing at ${dest} — Enhance will pass through until:"
+  warn "  ./scripts/manage.sh download-models"
+  return 0
+}
+
+#######################################
 # Print the human-facing command list and environment pointer to stdout.
 # Globals:
 #   See file header / caller environment.
@@ -292,6 +318,7 @@ cmd_doctor() {
   log "wan status: ${wan_json}"
   log "ltx status: ${ltx_json}"
   log "llm status: ${llm_json}"
+  ensure_prompt_enhance_gguf
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
   warn_banned_minimax_weights "${MODELS_DIR}"
@@ -376,6 +403,7 @@ cmd_start() {
   }
   check_mem_limit_vs_headroom
   check_host_headroom || exit 1
+  ensure_prompt_enhance_gguf
   stack_start
 }
 

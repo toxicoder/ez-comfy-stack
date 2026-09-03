@@ -50,7 +50,13 @@ def _compose_user(prompt: str, duration_hint: str, audio_notes: str = "") -> str
 
 
 def _pack(result: EnhanceResult) -> dict:
-    return {"ui": {"text": (result.preview,)}, "result": (result.text,)}
+    return {
+        "ui": {
+            "text": (result.text,),
+            "passthrough": (result.status,),
+        },
+        "result": (result.text,),
+    }
 
 
 def _run(
@@ -120,7 +126,8 @@ class EZKleinPromptEnhance:
     DESCRIPTION = (
         "Rewrites a lazy prompt for Klein 4B / Qwen3-4B with the on-box "
         "Qwen3-4B-Instruct-2507 GGUF. Enhance defaults on. After Queue the "
-        "rewritten prompt is shown on this node. Fail-soft without a GGUF."
+        "CLIP prompt box is the CLIP string; Enhance status explains passthrough. "
+        "Fail-soft without a GGUF (run download-models)."
     )
 
     def run(self, prompt, enhance, mode, duration_hint, style=STYLE_NONE):

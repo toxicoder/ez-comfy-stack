@@ -66,6 +66,23 @@ teardown() {
   [ "${status}" -ne 0 ]
 }
 
+@test "download-llm link heals comfy/llm relative symlink" {
+  local tdir dest tgt
+  tdir="$(llm_dir)"
+  mkdir -p "${tdir}"
+  echo x >"${tdir}/$(llm_filename)"
+  dest="${MODELS_DIR}/comfy/llm/$(llm_filename)"
+  run cmd_link
+  [ "${status}" -eq 0 ]
+  [[ -L ${dest} ]]
+  tgt="$(readlink "${dest}")"
+  [[ ${tgt} != /* ]]
+  rm -f "${dest}"
+  run bash "${DL}" link
+  [ "${status}" -eq 0 ]
+  [[ -L ${dest} ]]
+}
+
 @test "download-llm cleanup keeps gguf" {
   local tdir extra
   tdir="$(llm_dir)"

@@ -18,7 +18,9 @@ from typing import Any
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 STYLES_PATH = Path(__file__).resolve().parent / "styles.json"
-DEFAULT_GGUF = "/models/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+GGUF_FILENAME = "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+SNAPSHOT_DIR = "unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"
+DEFAULT_GGUF = f"/models/comfy/llm/{GGUF_FILENAME}"
 DEFAULT_TIMEOUT_S = 60
 DEFAULT_N_THREADS = 4
 DEFAULT_N_CTX = 4096
@@ -95,18 +97,41 @@ def _log(message: str) -> None:
     print(f"[ez_prompt_enhance] {message}", file=sys.stderr)
 
 
+def status_for_reason(reason: str | None) -> str:
+    """Operator-facing Enhance status (never mixed into CLIP text).
+
+    Arguments:
+        reason: Internal passthrough token, or None when the rewriter ran.
+
+    Returns:
+        Empty string on success; a one-line next step otherwise.
+    """
+    if not reason:
+        return ""
+    if reason == REASON_GGUF_MISSING:
+        return "GGUF missing — run ./scripts/manage.sh download-models"
+    if reason == REASON_LLAMA_UNAVAILABLE:
+        return "llama.cpp unavailable — rebuild the image"
+    if reason == REASON_EMPTY:
+        return "timeout or empty model output"
+    return reason
+
+
 @dataclass(frozen=True)
 class EnhanceResult:
-    """CLIP text plus an optional passthrough reason for the node preview."""
+    """CLIP text plus an optional passthrough reason for the status widget."""
 
     text: str
     reason: str | None = None
 
     @property
     def preview(self) -> str:
-        if self.reason:
-            return f"[passthrough: {self.reason}]\n{self.text}"
+        """CLIP string only (the prefix used to confuse the CLIP prompt box)."""
         return self.text
+
+    @property
+    def status(self) -> str:
+        return status_for_reason(self.reason)
 
 
 def join_prompt(
@@ -435,8 +460,44 @@ def _n_gpu_layers() -> int:
     return value
 
 
+def resolve_gguf_path() -> str:
+    """First existing GGUF among env, comfy/llm, and the HF snapshot dir.
+
+    Operators should not set EZ_LLM_GGUF. Fallbacks cover a missing relative
+    ``comfy/llm/`` link after ``download-llm`` left the snapshot in place.
+
+    Returns:
+        Path to an existing file, or the env/default path for missing logs.
+    """
+    env_path = os.environ.get("EZ_LLM_GGUF", "").strip()
+    models_root = (os.environ.get("MODELS_ROOT") or "").strip()
+    models_dir = (os.environ.get("MODELS_DIR") or "").strip()
+    comfy_home = (os.environ.get("COMFY_HOME") or "").strip()
+    roots: list[str] = []
+    for root in (models_root, models_dir, "/models"):
+        if root and root not in roots:
+            roots.append(root)
+    candidates: list[str] = []
+    if env_path:
+        candidates.append(env_path)
+    candidates.append(DEFAULT_GGUF)
+    for root in roots:
+        candidates.append(f"{root}/comfy/llm/{GGUF_FILENAME}")
+        candidates.append(f"{root}/{SNAPSHOT_DIR}/{GGUF_FILENAME}")
+    if comfy_home:
+        candidates.append(f"{comfy_home}/models/llm/{GGUF_FILENAME}")
+    seen: set[str] = set()
+    for path in candidates:
+        if not path or path in seen:
+            continue
+        seen.add(path)
+        if os.path.isfile(path):
+            return path
+    return env_path or DEFAULT_GGUF
+
+
 def _gguf_path() -> str:
-    return os.environ.get("EZ_LLM_GGUF", DEFAULT_GGUF).strip() or DEFAULT_GGUF
+    return resolve_gguf_path()
 
 
 def _unload_after() -> bool:
