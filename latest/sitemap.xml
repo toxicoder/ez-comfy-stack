@@ -2,34 +2,50 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/</loc>
-         <lastmod>2026-07-29</lastmod>
+         <lastmod>2026-09-03</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/download-limit/</loc>
-         <lastmod>2026-07-29</lastmod>
+         <lastmod>2026-09-03</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/getting-started/</loc>
-         <lastmod>2026-07-29</lastmod>
+         <lastmod>2026-09-03</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/latest/licenses/</loc>
+         <lastmod>2026-09-03</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/models-and-cache/</loc>
-         <lastmod>2026-07-29</lastmod>
+         <lastmod>2026-09-03</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/project-conventions/</loc>
-         <lastmod>2026-07-29</lastmod>
+         <lastmod>2026-09-03</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/latest/prompting/</loc>
+         <lastmod>2026-09-03</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/reboot-safety/</loc>
-         <lastmod>2026-07-29</lastmod>
+         <lastmod>2026-09-03</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/latest/shorts/</loc>
+         <lastmod>2026-09-03</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/latest/spark-farm/</loc>
+         <lastmod>2026-09-03</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/troubleshooting/</loc>
-         <lastmod>2026-07-29</lastmod>
+         <lastmod>2026-09-03</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/visual-generative-ai/</loc>
-         <lastmod>2026-07-29</lastmod>
+         <lastmod>2026-09-03</lastmod>
     </url>
 </urlset>
