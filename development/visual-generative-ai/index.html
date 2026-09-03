@@ -1383,7 +1383,7 @@
 <ol>
 <li>Download the default pack first (<code>download-models</code> = image fast + wan 5b + ltx 2.5)</li>
 <li>Prefer keeping both model sets loaded between T2I and I2V</li>
-<li>Avoid concurrent large LLM containers on the same Spark</li>
+<li>Do not GPU-offload a 30B+ llama.cpp next to LTX; Prompt Enhance is CPU-only (~2.5 GiB GGUF)</li>
 <li>Video graphs emit <strong>MP4</strong> via <strong>VideoHelperSuite</strong> (<code>VHS_VideoCombine</code>, 24 fps) plus optional PNG frames</li>
 <li>Prompting: Klein wants Qwen-style prose (subject → light → camera); Wan wants motion + one camera move (no audio); LTX wants a present-tense paragraph with sound interleaved. See <a href="../prompting/">Prompting</a>. Every <strong>*-lab-example</strong> canvas has an operator <strong>Note</strong></li>
 </ol>
@@ -1550,11 +1550,11 @@
 </tr>
 <tr>
 <td><strong>klein-before-after-lab-example</strong></td>
-<td>Before/after still pair</td>
+<td>Before plate, after Klein-edit of the same mug</td>
 </tr>
 <tr>
 <td><strong>klein-style-lock-lab-example</strong></td>
-<td>Four style-locked stills</td>
+<td>One lake house, four views (CURB is the identity plate)</td>
 </tr>
 <tr>
 <td><strong>wan-bumper-loop-lab-example</strong></td>
@@ -1566,7 +1566,7 @@
 </tr>
 <tr>
 <td><strong>klein-storyboard-6up-lab-example</strong></td>
-<td>Six storyboard frames in one Queue</td>
+<td>Six storyboard frames of one rooftop (01 is the identity plate)</td>
 </tr>
 </tbody>
 </table>
@@ -1617,19 +1617,19 @@
 </tr>
 <tr>
 <td><strong>klein-lighting-trio-lab-example</strong></td>
-<td>Same subject, three lights</td>
+<td>Same subject, three lights (SHOT KEY is the identity plate)</td>
 </tr>
 <tr>
 <td><strong>klein-time-of-day-lab-example</strong></td>
-<td>Dawn / noon / dusk / night</td>
+<td>Dusk plate, then dawn / noon / night edits</td>
 </tr>
 <tr>
 <td><strong>klein-camera-angles-lab-example</strong></td>
-<td>Wide / medium / close</td>
+<td>Medium plate, then wide / close edits</td>
 </tr>
 <tr>
 <td><strong>klein-color-moods-lab-example</strong></td>
-<td>Four color moods</td>
+<td>Warm plate, then three grade edits</td>
 </tr>
 </tbody>
 </table>

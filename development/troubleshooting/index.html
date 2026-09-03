@@ -1616,8 +1616,13 @@
 </tr>
 <tr>
 <td>Enhance on but prompt unchanged</td>
-<td><code>XAI_API_KEY</code> unset, timeout, or HTTP error (fail-soft passthrough)</td>
-<td>Set <code>XAI_API_KEY</code> in <code>.env</code>, <code>stop</code> + <code>start</code>. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 20s (<code>XAI_TIMEOUT_S</code>). Leave Enhance <strong>off</strong> to use the canned prompt with no API</td>
+<td>GGUF missing, <code>llama-cpp-python</code> missing, timeout, or empty model output (fail-soft passthrough)</td>
+<td>After Queue the Enhance node shows <code>[passthrough: …]</code>. Run <code>download-models</code> (needs <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). Rebuild the image if llama-cpp-python failed to install. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 60s (<code>EZ_LLM_TIMEOUT_S</code>). Turn Enhance <strong>off</strong> to pin the widget text</td>
+</tr>
+<tr>
+<td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
+<td>Shot 01 identity plate bypassed, or old independent T2I graph</td>
+<td>Queue the whole graph; do <strong>not</strong> bypass SHOT 01 / KEY / DUSK / MEDIUM / WARM / BEFORE / CURB on a cold canvas. 02–N Klein-edit from 01 via <code>VAEEncode</code> + <code>ReferenceLatent</code></td>
 </tr>
 <tr>
 <td>Enhance rewrites a locked shorts identity</td>

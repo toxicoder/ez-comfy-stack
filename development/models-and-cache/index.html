@@ -1492,11 +1492,13 @@
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  Comfy-Org__flux2-dev_vae/                   # flux2-vae
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b/
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  Lightricks__LTX-2.5_2.5/
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  comfy/
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    diffusion_models/   # relative symlinks into tier repos above
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    text_encoders/
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    vae/
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  hub/                  # HF cache (optional)
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  comfy/
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    diffusion_models/   # relative symlinks into tier repos above
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    text_encoders/
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    vae/
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>  hub/                  # HF cache (optional)
 </code></pre></div>
 <p><code>download-models</code> links weights into <code>comfy/*</code> with <strong>relative</strong> symlinks (e.g. <code>../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors</code>). That way the same tree resolves on the host (<code>MODELS_DIR=/mnt/models</code>) and inside the container (bind-mounted at <code>/models</code>). Absolute <code>/mnt/models/…</code> file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.</p>
 <p>This matches the lab hostPath pattern so K8s and Docker demos can share weights.</p>
@@ -1507,11 +1509,13 @@
   Root --&gt; VAE["Comfy-Org__flux2-dev_vae"]
   Root --&gt; Wan["Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b"]
   Root --&gt; Ltx["Lightricks__LTX-2.5_2.5"]
+  Root --&gt; Llm["unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"]
   Root --&gt; Comfy["comfy/"]
   Root --&gt; Hub["hub/ · optional HF cache"]
   Comfy --&gt; DM["diffusion_models/ · symlinks"]
   Comfy --&gt; TEd["text_encoders/"]
-  Comfy --&gt; VAEd["vae/"]</code></pre>
+  Comfy --&gt; VAEd["vae/"]
+  Comfy --&gt; LlmDir["llm/"]</code></pre>
 <hr />
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/manage.sh<span class="w"> </span>download-models
@@ -1526,6 +1530,7 @@
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>./scripts/utilities/download-image.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>fast
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>5b
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>./scripts/utilities/download-llm.sh<span class="w"> </span>run
 </code></pre></div>
 <p><code>--tier fast</code> also pulls Klein companions (<code>te</code> + <code>vae</code>). Optional stills: <code>--tier nvfp4</code> / <code>--tier base</code> / <code>--tier zimage</code>. Optional motion: <code>download-wan.sh run --tier a14b</code>. Optional LTX fallback: <code>download-ltx.sh run --tier 2.3</code>.</p>
 <p>Downloads use the modern <strong><code>hf download</code></strong> CLI (not deprecated <code>huggingface-cli</code>):</p>
@@ -1592,6 +1597,11 @@
 <td><code>ltx-2.5-audio-vae-bf16.safetensors</code></td>
 <td><code>vae/</code></td>
 <td>LTX-2.5 audio VAE</td>
+</tr>
+<tr>
+<td><code>Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code></td>
+<td><code>llm/</code></td>
+<td>On-box prompt enhance (CPU llama.cpp)</td>
 </tr>
 </tbody>
 </table>
