@@ -414,9 +414,10 @@
       },
       "widgets_values": [
         "A 3D feature-animation vertical hook still for Shorts. First-frame energy: an original teal-and-copper superhero fills the lower third on a dusk rooftop helipad. Tight 9:16, caption headroom at the top. Unmarked chest plate, empty of lettering.",
-        false,
+        true,
         "t2i",
-        "YouTube 16:9 still"
+        "YouTube 16:9 still",
+        "none"
       ],
       "title": "Klein Prompt Enhance"
     }

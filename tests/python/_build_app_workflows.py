@@ -105,7 +105,7 @@ Swap table:
 
 SETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.
 Save prefix: ez_still_app.
-Prompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
 
 GIF_NOTE = """## wan-gif-loop-lab-example
@@ -117,7 +117,7 @@ Easy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-w
 LoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.
 Motion: locked camera plus breeze / fabric / city lights. Do not prompt a walk or a one-way dolly.
 Do not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.
-Prompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
@@ -127,7 +127,7 @@ SHOT 01 is the identity plate (T2I). Queue SHOT 01 first. Do not bypass 01 when 
 Edit HOUSE IDENTITY once. Each SHOT card is only camera, room, time of day, and season of the same cabin; Prompt Join stitches identity + shot.
 Same seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.
 Season may change foliage, sky, and snow on the ridge; it must not change the building.
-Prompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.
+Prompt enhance on identity is on by default. After Queue, the HOUSE IDENTITY node shows the rewrite CLIP used. Shot cards are Prompt Join only — they do not run a second rewrite. Turn Enhance off to pin this bible.
 """
 
 
@@ -231,7 +231,7 @@ def build_gif_loop() -> dict:
     save = _node(graph, "SaveImage")
     save["widgets_values"] = ["ez_gif_loop_frames"]
     enh = _node(graph, "EZWanPromptEnhance")
-    enh["widgets_values"] = [GIF_MOTION, False, "i2v", "4 seconds, 12 fps, looping GIF"]
+    enh["widgets_values"] = [GIF_MOTION, True, "i2v", "4 seconds, 12 fps, looping GIF", "none"]
     motion = _node(graph, "CLIPTextEncode", "Motion / prompt")
     motion["widgets_values"] = [GIF_MOTION]
     neg = _node(graph, "CLIPTextEncode", "Negative")
@@ -345,9 +345,9 @@ def build_dream_house() -> dict:
             4,
             "EZKleinPromptEnhance",
             [40, 480],
-            [420, 280],
+            [420, 420],
             "HOUSE IDENTITY",
-            [HOUSE_IDENTITY, False, "t2i", "Instagram 4:5 still"],
+            [HOUSE_IDENTITY, True, "t2i", "Instagram 4:5 still", "none"],
             3,
             outputs=[out("prompt", "STRING", ident_links)],
         )
@@ -356,7 +356,7 @@ def build_dream_house() -> dict:
         _base_node(
             5,
             "CLIPTextEncode",
-            [40, 800],
+            [40, 940],
             [420, 120],
             "Negative",
             [KLEIN_NEG],
@@ -369,7 +369,7 @@ def build_dream_house() -> dict:
         _base_node(
             6,
             "EmptyFlux2LatentImage",
-            [40, 960],
+            [40, 1120],
             [280, 106],
             "Instagram 4:5 1024x1280",
             [1024, 1280, 1],
@@ -381,7 +381,7 @@ def build_dream_house() -> dict:
         _base_node(
             7,
             "Note",
-            [40, 1120],
+            [40, 1280],
             [420, 360],
             "Operator note",
             [HOUSE_NOTE],
@@ -408,7 +408,7 @@ def build_dream_house() -> dict:
         _base_node(
             9,
             "ReferenceLatent",
-            [40, 1520],
+            [40, 1680],
             [280, 80],
             "Negative + identity plate",
             [],
@@ -468,7 +468,7 @@ def build_dream_house() -> dict:
                 [520, y],
                 [420, 180],
                 f"SHOT {label}",
-                [shot],
+                [shot, ""],
                 n,
                 inputs=[{"name": "identity", "type": "STRING", "link": None}],
                 outputs=[out("prompt", "STRING", join_out)],

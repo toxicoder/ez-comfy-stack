@@ -549,7 +549,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-i2v-shot-lab-example\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s silent I2V shot (120 frames @ 24 fps) with last-frame SaveImage.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n\n90s films: open a film-*-90s bible, copy shot N motion, set LoadImage to the previous last PNG, set VHS prefix ez_<slug>_bN_sM_wan_video and last-frame SaveImage ez_<slug>_bN_sM_last. Queue 5.00s silent. Then Queue ltx-i2v-shot-lab-example with the SAME first frame.\n\nSix-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then ./scripts/utilities/concat-shots.sh --yes\n\nDo not Queue 90s in one graph. US-safe local pack only. No score.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n90s films: prefer the unified **film-*-90s-*-lab-example** graphs (identity + LTX print + shot map in one file). This graph remains the generic 5.00s printer / Wan rehearsal.\n"
+        "## wan-i2v-shot-lab-example\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s silent I2V shot (120 frames @ 24 fps) with last-frame SaveImage.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n\n90s films: open a film-*-90s bible, copy shot N motion, set LoadImage to the previous last PNG, set VHS prefix ez_<slug>_bN_sM_wan_video and last-frame SaveImage ez_<slug>_bN_sM_last. Queue 5.00s silent. Then Queue ltx-i2v-shot-lab-example with the SAME first frame.\n\nSix-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then ./scripts/utilities/concat-shots.sh --yes\n\nDo not Queue 90s in one graph. US-safe local pack only. No score.\n90s films: prefer the unified **film-*-90s-*-lab-example** graphs (identity + LTX print + shot map in one file). This graph remains the generic 5.00s printer / Wan rehearsal.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -654,9 +654,10 @@
       },
       "widgets_values": [
         "First-person running camera. Olive windbreaker and worn black gloves; arms pump at the edges of the frame. Dawn rooftop, pigeon scatter. Footfalls on wet tar. Continuous forward run. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps.",
-        false,
+        true,
         "i2v",
-        "5 seconds, 24 fps"
+        "5 seconds, 24 fps",
+        "none"
       ],
       "title": "Wan Prompt Enhance"
     }
@@ -808,7 +809,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-i2v-shot-lab-example\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s silent I2V shot (120 frames @ 24 fps) with last-frame SaveImage.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n\n90s films: open a film-*-90s bible, copy shot N motion, set LoadImage to the previous last PNG, set VHS prefix ez_<slug>_bN_sM_wan_video and last-frame SaveImage ez_<slug>_bN_sM_last. Queue 5.00s silent. Then Queue ltx-i2v-shot-lab-example with the SAME first frame.\n\nSix-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then ./scripts/utilities/concat-shots.sh --yes\n\nDo not Queue 90s in one graph. US-safe local pack only. No score.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n90s films: prefer the unified **film-*-90s-*-lab-example** graphs (identity + LTX print + shot map in one file). This graph remains the generic 5.00s printer / Wan rehearsal.\n",
+    "lab_note": "## wan-i2v-shot-lab-example\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nUS-safe 5.00s silent I2V shot (120 frames @ 24 fps) with last-frame SaveImage.\nModels: wan2.2_ti2v_5B_fp16 + umt5_xxl_fp8_e4m3fn_scaled (CLIP wan) + wan2.2_vae. Apache 2.0. Silent.\n\n90s films: open a film-*-90s bible, copy shot N motion, set LoadImage to the previous last PNG, set VHS prefix ez_<slug>_bN_sM_wan_video and last-frame SaveImage ez_<slug>_bN_sM_last. Queue 5.00s silent. Then Queue ltx-i2v-shot-lab-example with the SAME first frame.\n\nSix-shot concat demo: Queue this six times with VHS prefix ez_shot_01 .. ez_shot_06, then ./scripts/utilities/concat-shots.sh --yes\n\nDo not Queue 90s in one graph. US-safe local pack only. No score.\n90s films: prefer the unified **film-*-90s-*-lab-example** graphs (identity + LTX print + shot map in one file). This graph remains the generic 5.00s printer / Wan rehearsal.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_profile": "wan-i2v-shot-lab-example",
     "lab_description": "Wan 2.2 5B concat-safe I2V shot, 120 frames + last frame",
     "ds": {

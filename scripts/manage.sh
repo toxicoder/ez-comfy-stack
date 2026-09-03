@@ -283,13 +283,15 @@ cmd_doctor() {
   else
     ok=1
   fi
-  local image_json wan_json ltx_json
+  local image_json wan_json ltx_json llm_json
   image_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-image.sh" status --tier fast --json 2>/dev/null || echo '{}')
   wan_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-wan.sh" status --tier 5b --json 2>/dev/null || echo '{}')
   ltx_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" status --tier 2.5 --json 2>/dev/null || echo '{}')
+  llm_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" status --json 2>/dev/null || echo '{}')
   log "image status: ${image_json}"
   log "wan status: ${wan_json}"
   log "ltx status: ${ltx_json}"
+  log "llm status: ${llm_json}"
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
   warn_banned_minimax_weights "${MODELS_DIR}"
@@ -571,10 +573,11 @@ EOF
     remove_hf_incomplete "${MODELS_DIR}" >/dev/null
   fi
   clear_stale_hf_locks "${MODELS_DIR}"
-  local image_cmd wan_cmd ltx_cmd
+  local image_cmd wan_cmd ltx_cmd llm_cmd
   image_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-image.sh" run --tier fast)
   wan_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-wan.sh" run --tier 5b)
   ltx_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" run --tier 2.5)
+  llm_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" run)
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
     warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
     "${image_cmd[@]}" || rc=$?
@@ -584,12 +587,16 @@ EOF
     if [[ ${rc} -eq 0 ]]; then
       "${ltx_cmd[@]}" || rc=$?
     fi
+    if [[ ${rc} -eq 0 ]]; then
+      "${llm_cmd[@]}" || rc=$?
+    fi
   else
     local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
     local inner
     inner="MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-image.sh' run --tier fast && \
        MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-wan.sh' run --tier 5b && \
-       MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-ltx.sh' run --tier 2.5"
+       MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-ltx.sh' run --tier 2.5 && \
+       MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-llm.sh' run"
     bash "${dl}" wrap --limit "${limit}" -- bash -c "${inner}" ||
       rc=$?
   fi

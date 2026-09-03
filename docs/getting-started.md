@@ -203,7 +203,7 @@ Fix any errors **before** downloading multi‑GB models. Missing lab weights are
 
     Prefer `./scripts/manage.sh setup` first. Copy-paste fixes: [Troubleshooting](troubleshooting.md).
 
-`doctor` also prints the **license policy one-liner**, image tag for this git branch, and JSON status from `download-image` / `download-wan` / `download-ltx`.
+`doctor` also prints the **license policy one-liner**, image tag for this git branch, and JSON status from `download-image` / `download-wan` / `download-ltx` / `download-llm`.
 
 ---
 
@@ -224,7 +224,7 @@ hf auth whoami
 
 | What | Detail |
 | --- | --- |
-| **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` |
+| **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` + `download-llm` |
 | **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
 | **CLI** | Modern **`hf download`** |
 | **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks |

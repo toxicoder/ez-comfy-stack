@@ -452,9 +452,10 @@
       },
       "widgets_values": [
         "A bold YouTube thumbnail still, 16:9. An original superhero in a teal-and-copper flight suit fills the frame on a dusk rooftop helipad. High contrast key light, clear subject separation, unmarked circular starburst chest plate, empty of lettering. Feature-film 3D animation, eye-catching, clean of burned-in words.",
-        false,
+        true,
         "t2i",
-        "YouTube 16:9 still"
+        "YouTube 16:9 still",
+        "none"
       ],
       "title": "Klein Prompt Enhance"
     }

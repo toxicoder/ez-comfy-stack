@@ -1052,6 +1052,7 @@ vae/flux2-vae.safetensors
 vae/wan2.2_vae.safetensors
 vae/ltx-2.5-video-vae-bf16.safetensors
 vae/ltx-2.5-audio-vae-bf16.safetensors
+llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf
 EOF
 }
 

@@ -116,6 +116,44 @@ def test_hook_still_is_vertical() -> None:
     assert latent["widgets_values"][1] == 768
 
 
+def _identity_plate_contract(stem: str, prefixes: set[str]) -> None:
+    graph = json.loads((WF / f"{stem}.json").read_text(encoding="utf-8"))
+    assert sum(1 for n in graph["nodes"] if n.get("type") == "VAEEncode") == 1
+    enhance = [n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"]
+    assert len(enhance) == 1
+    assert enhance[0]["widgets_values"][1] is True
+    assert enhance[0]["widgets_values"][2] == "t2i"
+    assert enhance[0]["widgets_values"][-1] == "none"
+    joins = [n for n in graph["nodes"] if n.get("type") == "EZPromptJoin"]
+    assert len(joins) == len(prefixes)
+    seeds = {
+        n["widgets_values"][0]
+        for n in graph["nodes"]
+        if n.get("type") == "KSampler"
+    }
+    assert seeds == {42}
+    saves = {
+        n["widgets_values"][0]
+        for n in graph["nodes"]
+        if n.get("type") == "SaveImage"
+    }
+    assert saves == prefixes
+    by_id = {n["id"]: n for n in graph["nodes"]}
+    incoming: dict[tuple[int, int], list] = {}
+    for link in graph["links"]:
+        incoming.setdefault((link[3], link[4]), []).append(link)
+    samplers = sorted(
+        (n for n in graph["nodes"] if n.get("type") == "KSampler"),
+        key=lambda n: n["pos"][1],
+    )
+    for i, ks in enumerate(samplers):
+        pos_src = by_id[incoming[(ks["id"], 1)][0][1]]["type"]
+        if i == 0:
+            assert pos_src == "CLIPTextEncode"
+        else:
+            assert pos_src == "ReferenceLatent"
+
+
 def test_pack_v2_prefixes() -> None:
     assert _save_prefixes("klein-lighting-trio-lab-example") == {
         "ez_light_01",
@@ -133,3 +171,31 @@ def test_pack_v2_prefixes() -> None:
     assert _save_prefixes("klein-color-moods-lab-example") == {
         f"ez_mood_{i:02d}" for i in range(1, 5)
     }
+    _identity_plate_contract(
+        "klein-lighting-trio-lab-example",
+        {"ez_light_01", "ez_light_02", "ez_light_03"},
+    )
+    _identity_plate_contract(
+        "klein-time-of-day-lab-example",
+        {f"ez_tod_{i:02d}" for i in range(1, 5)},
+    )
+    _identity_plate_contract(
+        "klein-camera-angles-lab-example",
+        {"ez_angle_wide", "ez_angle_med", "ez_angle_close"},
+    )
+    _identity_plate_contract(
+        "klein-color-moods-lab-example",
+        {f"ez_mood_{i:02d}" for i in range(1, 5)},
+    )
+    _identity_plate_contract(
+        "klein-before-after-lab-example",
+        {"ez_before", "ez_after"},
+    )
+    _identity_plate_contract(
+        "klein-style-lock-lab-example",
+        {f"ez_style_{i:02d}" for i in range(1, 5)},
+    )
+    _identity_plate_contract(
+        "klein-storyboard-6up-lab-example",
+        {f"ez_board_{i:02d}" for i in range(1, 7)},
+    )

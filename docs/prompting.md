@@ -11,13 +11,13 @@ tags: [prompting, klein, wan, ltx, comfyui]
 - How each lab model actually reads a prompt
 - Canned lab-example text (already rewritten)
 - GIF loop motion and dream-house identity plate (Prompt Join)
-- Lazy path: Prompt Enhance nodes + `XAI_API_KEY`
+- Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance on by default)
 
 **What this enables**
 
 - Writing (or pasting) a prompt that matches Klein 4B, Wan 2.2, or LTX-2.5 instead of SD1.5 tag soup
-- Typing a lazy sentence and letting Grok rewrite it for the model on the canvas
-- Queueing offline with Enhance off — no API key required
+- Typing a lazy sentence and letting the on-box Qwen3 rewriter expand it for Klein / Wan / LTX
+- Optional style dropdown (50 presets) and a visible rewrite on the Enhance node after Queue
 
 !!! tip "Lab graphs already ship model-native prompts"
 
@@ -80,23 +80,26 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 | **Klein Prompt Enhance** | `t2i`, `edit` | klein-still-draft / klein-still-hero / klein-still-daily / klein-dream-house identity / film-*-90s identity |
 | **Wan Prompt Enhance** | `t2v`, `i2v` | wan-i2v-5s / wan-t2v-5s / wan-i2v-shot / wan-gif-loop |
 | **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / ltx-i2v-shot |
-| **Prompt Join** | identity + shot → one STRING | klein-dream-house shot cards |
+| **Prompt Join** | identity + optional inventory + shot → one STRING | dream-house and identity-plate packs |
 
 STRING out → CLIPTextEncode `text` input.
 
-1. Set `XAI_API_KEY` in `.env` (see `.env.example`). Optional: `XAI_MODEL` (default `grok-4.6`), `XAI_BASE_URL`, `XAI_TIMEOUT_S`.
-2. Replace the canned prompt with a lazy sentence.
-3. Set **Enhance** to true. Queue.
+1. `./scripts/manage.sh download-models` (includes `comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`).
+2. Type a lazy sentence (or leave the canned paragraph). **Enhance** defaults **on**.
+3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
+4. Queue. Read the rewritten prompt **on the Enhance node** — that text is what CLIP encodes.
 
-**Enhance defaults to false.** Canned text is used as-is so shorts identity locks do not drift and hermetic Queue needs no key.
+**Enhance defaults to true.** Turn it **off** to pin the widget text (frozen identity bibles). Style still applies as a short suffix when Enhance is off. Style is ignored on I2V (the start image owns look).
 
-Fail-soft: missing key, timeout, or HTTP error logs a warning and passes the original prompt through. Generation still runs.
+After Queue the node is an output: the preview is the rewrite, or a `[passthrough: …]` reason plus the original if the GGUF / llama.cpp is missing.
 
-!!! warning "No local LLM on the Spark"
+Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the original prompt through. Generation still runs.
 
-    Do not run Gemma 4 E2B (the official LTX enhancer) or any other GPU LLM beside this stack. LTX-2.5 is already a 22B joint AV transformer; extra weights steal GB10 headroom and threaten SSH. The rewrite is **off-box** (`api.x.ai`).
+!!! warning "CPU-only local LLM"
 
-Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit are unchanged. The key is runtime env only — never baked into the image.
+    Prompt Enhance runs **Qwen3-4B-Instruct-2507 Q4_K_M** (~2.5 GiB) through llama.cpp with **`n_gpu_layers=0`**. Do not GPU-offload it next to LTX-2.5. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same Spark while Comfy is generating.
+
+Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit are unchanged. No API keys. The GGUF lives under `MODELS_DIR`, never in the image.
 
 ---
 

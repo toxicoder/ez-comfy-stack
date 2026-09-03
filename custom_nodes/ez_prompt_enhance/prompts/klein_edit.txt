@@ -9,4 +9,5 @@ Rules:
 - Never use negation; describe the positive opposite.
 - SFW. No real-person likenesses, no trademarks, no brand names.
 - Keep under 150 words.
+- Do not add, remove, or restyle objects, furniture, vehicles, facades, or vegetation unless the user explicitly asks. Season may change foliage and snow, not building massing.
 - If the input is already a precise edit instruction, keep it and only tighten wording.

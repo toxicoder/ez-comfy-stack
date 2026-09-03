@@ -1,8 +1,8 @@
 {
   "id": "klein-storyboard-6up-lab-example",
   "revision": 1,
-  "last_node_id": 999,
-  "last_link_id": 510,
+  "last_node_id": 45,
+  "last_link_id": 75,
   "nodes": [
     {
       "id": 1,
@@ -24,7 +24,12 @@
           "name": "MODEL",
           "type": "MODEL",
           "links": [
-            1
+            8,
+            19,
+            31,
+            43,
+            55,
+            67
           ],
           "slot_index": 0
         }
@@ -58,8 +63,13 @@
           "name": "CLIP",
           "type": "CLIP",
           "links": [
-            2,
-            3
+            1,
+            7,
+            18,
+            30,
+            42,
+            54,
+            66
           ],
           "slot_index": 0
         }
@@ -94,7 +104,13 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            7
+            2,
+            13,
+            26,
+            38,
+            50,
+            62,
+            74
           ],
           "slot_index": 0
         }
@@ -109,57 +125,52 @@
     },
     {
       "id": 4,
-      "type": "CLIPTextEncode",
+      "type": "EZKleinPromptEnhance",
       "pos": [
-        940,
-        80
+        40,
+        480
       ],
       "size": [
         420,
-        160
+        420
       ],
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 2
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 10,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
+      "inputs": [],
       "outputs": [
         {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
+          "name": "prompt",
+          "type": "STRING",
           "links": [
-            4
+            5,
+            16,
+            28,
+            40,
+            52,
+            64
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPTextEncode"
+        "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Wide establishing shot of a stylized dusk city of rounded towers from a rooftop, 24mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering.",
+        true,
+        "t2i",
+        "YouTube 16:9 still",
+        "none"
       ],
-      "title": "Positive"
+      "title": "IDENTITY"
     },
     {
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        290
+        40,
+        940
       ],
       "size": [
         420,
@@ -172,7 +183,7 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 3
+          "link": 1
         }
       ],
       "outputs": [
@@ -180,7 +191,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            5
+            3,
+            10
           ],
           "slot_index": 0
         }
@@ -197,8 +209,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        940,
-        460
+        40,
+        1120
       ],
       "size": [
         280,
@@ -213,7 +225,12 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            6
+            11,
+            24,
+            36,
+            48,
+            60,
+            72
           ],
           "slot_index": 0
         }
@@ -226,42 +243,56 @@
         432,
         1
       ],
-      "title": "Latent 768x432 batch 2"
+      "title": "Size 768x432"
     },
     {
       "id": 7,
-      "type": "KSampler",
+      "type": "Note",
       "pos": [
-        1440,
-        80
+        40,
+        1280
       ],
       "size": [
-        320,
-        262
+        420,
+        360
       ],
       "flags": {},
       "order": 6,
       "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## klein-storyboard-6up-lab-example\n\nSix Klein 4B storyboard frames of one rooftop. SHOT 01 is the identity plate; 02\u201306 Klein-edit from it. Prefixes `ez_board_01`\u2026`06`. Do not bypass 01 on a cold canvas.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 8,
+      "type": "VAEEncode",
+      "pos": [
+        1740,
+        170
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
       "inputs": [
         {
-          "name": "model",
-          "type": "MODEL",
-          "link": 1
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 15
         },
         {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 4
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 5
-        },
-        {
-          "name": "latent_image",
-          "type": "LATENT",
-          "link": 6
+          "name": "vae",
+          "type": "VAE",
+          "link": 2
         }
       ],
       "outputs": [
@@ -269,7 +300,198 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            8
+            4,
+            21,
+            33,
+            45,
+            57,
+            69
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode plate 01"
+    },
+    {
+      "id": 9,
+      "type": "ReferenceLatent",
+      "pos": [
+        40,
+        1680
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 3
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 4,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            23,
+            35,
+            47,
+            59,
+            71
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Negative + identity plate"
+    },
+    {
+      "id": 10,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Canonical plate. Wide establishing shot of a stylized dusk city of rounded towers from a rooftop, 24mm. Unmarked surfaces, empty of lettering.",
+        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
+      ],
+      "title": "SHOT 01"
+    },
+    {
+      "id": 11,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        80
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 7
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Canonical plate. Wide establishing shot of a stylized dusk city of rounded towers from a rooftop, 24mm. Unmarked surfaces, empty of lettering."
+      ],
+      "title": "Positive 01"
+    },
+    {
+      "id": 12,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        80
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 8
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 9
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 10
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            12
           ],
           "slot_index": 0
         }
@@ -286,13 +508,13 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 01"
     },
     {
-      "id": 8,
+      "id": 13,
       "type": "VAEDecode",
       "pos": [
-        1840,
+        1740,
         80
       ],
       "size": [
@@ -300,18 +522,18 @@
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 23,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 8
+          "link": 12
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 7
+          "link": 13
         }
       ],
       "outputs": [
@@ -319,7 +541,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            14,
+            15
           ],
           "slot_index": 0
         }
@@ -328,27 +551,27 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "Decode 01"
     },
     {
-      "id": 9,
+      "id": 14,
       "type": "SaveImage",
       "pos": [
-        1840,
-        176
+        2020,
+        80
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 14
         }
       ],
       "outputs": [],
@@ -358,171 +581,72 @@
       "widgets_values": [
         "ez_board_01"
       ],
-      "title": "Save ez_board_01"
+      "title": "Save 01"
     },
     {
-      "id": 11,
-      "type": "EZKleinPromptEnhance",
+      "id": 16,
+      "type": "EZPromptJoin",
       "pos": [
-        480,
-        80
+        520,
+        460
       ],
       "size": [
         420,
-        280
+        180
       ],
       "flags": {},
-      "order": 2,
+      "order": 26,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 16
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
           "links": [
-            10
+            17
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZKleinPromptEnhance"
+        "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Wide establishing shot of a stylized dusk city of rounded towers from a rooftop, 24mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
-        false,
-        "t2i",
-        "YouTube 16:9 still"
+        "Same rooftop and hero. Medium shot of an original teal-and-copper superhero on a helipad, 35mm. Unmarked surfaces, empty of lettering.",
+        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
       ],
-      "title": "Klein Prompt Enhance"
+      "title": "SHOT 02"
     },
     {
-      "id": 101,
-      "type": "UNETLoader",
-      "pos": [
-        2240,
-        80
-      ],
-      "size": [
-        360,
-        82
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            101
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "UNETLoader"
-      },
-      "widgets_values": [
-        "flux-2-klein-4b-fp8.safetensors",
-        "default"
-      ],
-      "title": "Klein 4B distilled FP8"
-    },
-    {
-      "id": 102,
-      "type": "CLIPLoader",
-      "pos": [
-        2240,
-        212
-      ],
-      "size": [
-        360,
-        106
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            102,
-            103
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "qwen_3_4b.safetensors",
-        "flux2",
-        "default"
-      ],
-      "title": "Qwen3-4B TE"
-    },
-    {
-      "id": 103,
-      "type": "VAELoader",
-      "pos": [
-        2240,
-        368
-      ],
-      "size": [
-        360,
-        58
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            107
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "flux2-vae.safetensors"
-      ],
-      "title": "Flux2 VAE"
-    },
-    {
-      "id": 104,
+      "id": 17,
       "type": "CLIPTextEncode",
       "pos": [
-        3140,
-        80
+        980,
+        460
       ],
       "size": [
-        420,
-        160
+        360,
+        140
       ],
       "flags": {},
-      "order": 3,
+      "order": 27,
       "mode": 0,
       "inputs": [
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 102
+          "link": 18
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 110,
+          "link": 17,
           "widget": {
             "name": "text"
           }
@@ -533,7 +657,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            104
+            20
           ],
           "slot_index": 0
         }
@@ -542,118 +666,44 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Medium shot of an original teal-and-copper superhero on a helipad, 35mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Medium shot of an original teal-and-copper superhero on a helipad, 35mm. Unmarked surfaces, empty of lettering."
       ],
-      "title": "Positive"
+      "title": "Positive 02"
     },
     {
-      "id": 105,
-      "type": "CLIPTextEncode",
-      "pos": [
-        3140,
-        290
-      ],
-      "size": [
-        420,
-        120
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 103
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            105
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
-      ],
-      "title": "Negative"
-    },
-    {
-      "id": 106,
-      "type": "EmptyFlux2LatentImage",
-      "pos": [
-        3140,
-        460
-      ],
-      "size": [
-        280,
-        106
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            106
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EmptyFlux2LatentImage"
-      },
-      "widgets_values": [
-        768,
-        432,
-        1
-      ],
-      "title": "Latent 768x432 batch 2"
-    },
-    {
-      "id": 107,
+      "id": 18,
       "type": "KSampler",
       "pos": [
-        3640,
-        80
+        1380,
+        460
       ],
       "size": [
         320,
         262
       ],
       "flags": {},
-      "order": 6,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
           "name": "model",
           "type": "MODEL",
-          "link": 101
+          "link": 19
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 104
+          "link": 22
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 105
+          "link": 23
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 106
+          "link": 24
         }
       ],
       "outputs": [
@@ -661,7 +711,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            108
+            25
           ],
           "slot_index": 0
         }
@@ -670,7 +720,7 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        43,
+        42,
         "fixed",
         4,
         1.0,
@@ -678,32 +728,32 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 02"
     },
     {
-      "id": 108,
+      "id": 19,
       "type": "VAEDecode",
       "pos": [
-        4040,
-        80
+        1740,
+        460
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 29,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 108
+          "link": 25
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 107
+          "link": 26
         }
       ],
       "outputs": [
@@ -711,7 +761,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            109
+            27
           ],
           "slot_index": 0
         }
@@ -720,27 +770,27 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "Decode 02"
     },
     {
-      "id": 109,
+      "id": 20,
       "type": "SaveImage",
       "pos": [
-        4040,
-        176
+        2020,
+        460
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 30,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 109
+          "link": 27
         }
       ],
       "outputs": [],
@@ -750,171 +800,115 @@
       "widgets_values": [
         "ez_board_02"
       ],
-      "title": "Save ez_board_02"
+      "title": "Save 02"
     },
     {
-      "id": 111,
-      "type": "EZKleinPromptEnhance",
+      "id": 21,
+      "type": "ReferenceLatent",
       "pos": [
-        2680,
+        980,
+        660
+      ],
+      "size": [
+        240,
         80
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 20
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 21,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            22
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (02)"
+    },
+    {
+      "id": 22,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        840
       ],
       "size": [
         420,
-        280
+        180
       ],
       "flags": {},
-      "order": 2,
+      "order": 32,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 28
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
           "links": [
-            110
+            29
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZKleinPromptEnhance"
+        "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Medium shot of an original teal-and-copper superhero on a helipad, 35mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
-        false,
-        "t2i",
-        "YouTube 16:9 still"
+        "Same rooftop and hero. Detail of the unmarked circular copper starburst chest plate, 50mm. Unmarked surfaces, empty of lettering.",
+        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
       ],
-      "title": "Klein Prompt Enhance"
+      "title": "SHOT 03"
     },
     {
-      "id": 201,
-      "type": "UNETLoader",
-      "pos": [
-        4440,
-        80
-      ],
-      "size": [
-        360,
-        82
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            201
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "UNETLoader"
-      },
-      "widgets_values": [
-        "flux-2-klein-4b-fp8.safetensors",
-        "default"
-      ],
-      "title": "Klein 4B distilled FP8"
-    },
-    {
-      "id": 202,
-      "type": "CLIPLoader",
-      "pos": [
-        4440,
-        212
-      ],
-      "size": [
-        360,
-        106
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            202,
-            203
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "qwen_3_4b.safetensors",
-        "flux2",
-        "default"
-      ],
-      "title": "Qwen3-4B TE"
-    },
-    {
-      "id": 203,
-      "type": "VAELoader",
-      "pos": [
-        4440,
-        368
-      ],
-      "size": [
-        360,
-        58
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            207
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "flux2-vae.safetensors"
-      ],
-      "title": "Flux2 VAE"
-    },
-    {
-      "id": 204,
+      "id": 23,
       "type": "CLIPTextEncode",
       "pos": [
-        5340,
-        80
+        980,
+        840
       ],
       "size": [
-        420,
-        160
+        360,
+        140
       ],
       "flags": {},
-      "order": 3,
+      "order": 33,
       "mode": 0,
       "inputs": [
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 202
+          "link": 30
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 210,
+          "link": 29,
           "widget": {
             "name": "text"
           }
@@ -925,7 +919,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            204
+            32
           ],
           "slot_index": 0
         }
@@ -934,118 +928,44 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Detail of the unmarked circular copper starburst chest plate, 50mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Detail of the unmarked circular copper starburst chest plate, 50mm. Unmarked surfaces, empty of lettering."
       ],
-      "title": "Positive"
+      "title": "Positive 03"
     },
     {
-      "id": 205,
-      "type": "CLIPTextEncode",
-      "pos": [
-        5340,
-        290
-      ],
-      "size": [
-        420,
-        120
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 203
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            205
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
-      ],
-      "title": "Negative"
-    },
-    {
-      "id": 206,
-      "type": "EmptyFlux2LatentImage",
-      "pos": [
-        5340,
-        460
-      ],
-      "size": [
-        280,
-        106
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            206
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EmptyFlux2LatentImage"
-      },
-      "widgets_values": [
-        768,
-        432,
-        1
-      ],
-      "title": "Latent 768x432 batch 2"
-    },
-    {
-      "id": 207,
+      "id": 24,
       "type": "KSampler",
       "pos": [
-        5840,
-        80
+        1380,
+        840
       ],
       "size": [
         320,
         262
       ],
       "flags": {},
-      "order": 6,
+      "order": 34,
       "mode": 0,
       "inputs": [
         {
           "name": "model",
           "type": "MODEL",
-          "link": 201
+          "link": 31
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 204
+          "link": 34
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 205
+          "link": 35
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 206
+          "link": 36
         }
       ],
       "outputs": [
@@ -1053,7 +973,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            208
+            37
           ],
           "slot_index": 0
         }
@@ -1062,7 +982,7 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        44,
+        42,
         "fixed",
         4,
         1.0,
@@ -1070,32 +990,32 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 03"
     },
     {
-      "id": 208,
+      "id": 25,
       "type": "VAEDecode",
       "pos": [
-        6240,
-        80
+        1740,
+        840
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 35,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 208
+          "link": 37
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 207
+          "link": 38
         }
       ],
       "outputs": [
@@ -1103,7 +1023,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            209
+            39
           ],
           "slot_index": 0
         }
@@ -1112,27 +1032,27 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "Decode 03"
     },
     {
-      "id": 209,
+      "id": 26,
       "type": "SaveImage",
       "pos": [
-        6240,
-        176
+        2020,
+        840
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 36,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 209
+          "link": 39
         }
       ],
       "outputs": [],
@@ -1142,171 +1062,115 @@
       "widgets_values": [
         "ez_board_03"
       ],
-      "title": "Save ez_board_03"
+      "title": "Save 03"
     },
     {
-      "id": 211,
-      "type": "EZKleinPromptEnhance",
+      "id": 27,
+      "type": "ReferenceLatent",
       "pos": [
-        4880,
+        980,
+        1040
+      ],
+      "size": [
+        240,
         80
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 32
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 33,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            34
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (03)"
+    },
+    {
+      "id": 28,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        1220
       ],
       "size": [
         420,
-        280
+        180
       ],
       "flags": {},
-      "order": 2,
+      "order": 38,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 40
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
           "links": [
-            210
+            41
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZKleinPromptEnhance"
+        "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Detail of the unmarked circular copper starburst chest plate, 50mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
-        false,
-        "t2i",
-        "YouTube 16:9 still"
+        "Same rooftop and hero. Rooftop tracking angle as distant air traffic glides between towers, 35mm. Unmarked surfaces, empty of lettering.",
+        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
       ],
-      "title": "Klein Prompt Enhance"
+      "title": "SHOT 04"
     },
     {
-      "id": 301,
-      "type": "UNETLoader",
-      "pos": [
-        40,
-        980
-      ],
-      "size": [
-        360,
-        82
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            301
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "UNETLoader"
-      },
-      "widgets_values": [
-        "flux-2-klein-4b-fp8.safetensors",
-        "default"
-      ],
-      "title": "Klein 4B distilled FP8"
-    },
-    {
-      "id": 302,
-      "type": "CLIPLoader",
-      "pos": [
-        40,
-        1112
-      ],
-      "size": [
-        360,
-        106
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            302,
-            303
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "qwen_3_4b.safetensors",
-        "flux2",
-        "default"
-      ],
-      "title": "Qwen3-4B TE"
-    },
-    {
-      "id": 303,
-      "type": "VAELoader",
-      "pos": [
-        40,
-        1268
-      ],
-      "size": [
-        360,
-        58
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            307
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "flux2-vae.safetensors"
-      ],
-      "title": "Flux2 VAE"
-    },
-    {
-      "id": 304,
+      "id": 29,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        980
+        980,
+        1220
       ],
       "size": [
-        420,
-        160
+        360,
+        140
       ],
       "flags": {},
-      "order": 3,
+      "order": 39,
       "mode": 0,
       "inputs": [
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 302
+          "link": 42
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 310,
+          "link": 41,
           "widget": {
             "name": "text"
           }
@@ -1317,7 +1181,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            304
+            44
           ],
           "slot_index": 0
         }
@@ -1326,118 +1190,44 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Rooftop tracking angle as distant air traffic glides between towers, 35mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Rooftop tracking angle as distant air traffic glides between towers, 35mm. Unmarked surfaces, empty of lettering."
       ],
-      "title": "Positive"
+      "title": "Positive 04"
     },
     {
-      "id": 305,
-      "type": "CLIPTextEncode",
-      "pos": [
-        940,
-        1190
-      ],
-      "size": [
-        420,
-        120
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 303
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            305
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
-      ],
-      "title": "Negative"
-    },
-    {
-      "id": 306,
-      "type": "EmptyFlux2LatentImage",
-      "pos": [
-        940,
-        1360
-      ],
-      "size": [
-        280,
-        106
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            306
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EmptyFlux2LatentImage"
-      },
-      "widgets_values": [
-        768,
-        432,
-        1
-      ],
-      "title": "Latent 768x432 batch 2"
-    },
-    {
-      "id": 307,
+      "id": 30,
       "type": "KSampler",
       "pos": [
-        1440,
-        980
+        1380,
+        1220
       ],
       "size": [
         320,
         262
       ],
       "flags": {},
-      "order": 6,
+      "order": 40,
       "mode": 0,
       "inputs": [
         {
           "name": "model",
           "type": "MODEL",
-          "link": 301
+          "link": 43
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 304
+          "link": 46
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 305
+          "link": 47
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 306
+          "link": 48
         }
       ],
       "outputs": [
@@ -1445,7 +1235,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            308
+            49
           ],
           "slot_index": 0
         }
@@ -1454,7 +1244,7 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        45,
+        42,
         "fixed",
         4,
         1.0,
@@ -1462,32 +1252,32 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 04"
     },
     {
-      "id": 308,
+      "id": 31,
       "type": "VAEDecode",
       "pos": [
-        1840,
-        980
+        1740,
+        1220
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 41,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 308
+          "link": 49
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 307
+          "link": 50
         }
       ],
       "outputs": [
@@ -1495,7 +1285,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            309
+            51
           ],
           "slot_index": 0
         }
@@ -1504,27 +1294,27 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "Decode 04"
     },
     {
-      "id": 309,
+      "id": 32,
       "type": "SaveImage",
       "pos": [
-        1840,
-        1076
+        2020,
+        1220
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 42,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 309
+          "link": 51
         }
       ],
       "outputs": [],
@@ -1534,171 +1324,115 @@
       "widgets_values": [
         "ez_board_04"
       ],
-      "title": "Save ez_board_04"
+      "title": "Save 04"
     },
     {
-      "id": 311,
-      "type": "EZKleinPromptEnhance",
+      "id": 33,
+      "type": "ReferenceLatent",
       "pos": [
-        480,
-        980
+        980,
+        1420
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 43,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 44
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 45,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            46
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (04)"
+    },
+    {
+      "id": 34,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        1600
       ],
       "size": [
         420,
-        280
+        180
       ],
       "flags": {},
-      "order": 2,
+      "order": 44,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 52
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
           "links": [
-            310
+            53
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZKleinPromptEnhance"
+        "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Rooftop tracking angle as distant air traffic glides between towers, 35mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
-        false,
-        "t2i",
-        "YouTube 16:9 still"
+        "Same rooftop and hero. Over-the-shoulder toward the unmarked city skyline, dusk haze. Unmarked surfaces, empty of lettering.",
+        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
       ],
-      "title": "Klein Prompt Enhance"
+      "title": "SHOT 05"
     },
     {
-      "id": 401,
-      "type": "UNETLoader",
-      "pos": [
-        2240,
-        980
-      ],
-      "size": [
-        360,
-        82
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            401
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "UNETLoader"
-      },
-      "widgets_values": [
-        "flux-2-klein-4b-fp8.safetensors",
-        "default"
-      ],
-      "title": "Klein 4B distilled FP8"
-    },
-    {
-      "id": 402,
-      "type": "CLIPLoader",
-      "pos": [
-        2240,
-        1112
-      ],
-      "size": [
-        360,
-        106
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            402,
-            403
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "qwen_3_4b.safetensors",
-        "flux2",
-        "default"
-      ],
-      "title": "Qwen3-4B TE"
-    },
-    {
-      "id": 403,
-      "type": "VAELoader",
-      "pos": [
-        2240,
-        1268
-      ],
-      "size": [
-        360,
-        58
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            407
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "flux2-vae.safetensors"
-      ],
-      "title": "Flux2 VAE"
-    },
-    {
-      "id": 404,
+      "id": 35,
       "type": "CLIPTextEncode",
       "pos": [
-        3140,
-        980
+        980,
+        1600
       ],
       "size": [
-        420,
-        160
+        360,
+        140
       ],
       "flags": {},
-      "order": 3,
+      "order": 45,
       "mode": 0,
       "inputs": [
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 402
+          "link": 54
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 410,
+          "link": 53,
           "widget": {
             "name": "text"
           }
@@ -1709,7 +1443,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            404
+            56
           ],
           "slot_index": 0
         }
@@ -1718,118 +1452,44 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Over-the-shoulder toward the unmarked city skyline, dusk haze. Unmarked surfaces, empty of lettering. Clean cinematic frame."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Over-the-shoulder toward the unmarked city skyline, dusk haze. Unmarked surfaces, empty of lettering."
       ],
-      "title": "Positive"
+      "title": "Positive 05"
     },
     {
-      "id": 405,
-      "type": "CLIPTextEncode",
-      "pos": [
-        3140,
-        1190
-      ],
-      "size": [
-        420,
-        120
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 403
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            405
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
-      ],
-      "title": "Negative"
-    },
-    {
-      "id": 406,
-      "type": "EmptyFlux2LatentImage",
-      "pos": [
-        3140,
-        1360
-      ],
-      "size": [
-        280,
-        106
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            406
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EmptyFlux2LatentImage"
-      },
-      "widgets_values": [
-        768,
-        432,
-        1
-      ],
-      "title": "Latent 768x432 batch 2"
-    },
-    {
-      "id": 407,
+      "id": 36,
       "type": "KSampler",
       "pos": [
-        3640,
-        980
+        1380,
+        1600
       ],
       "size": [
         320,
         262
       ],
       "flags": {},
-      "order": 6,
+      "order": 46,
       "mode": 0,
       "inputs": [
         {
           "name": "model",
           "type": "MODEL",
-          "link": 401
+          "link": 55
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 404
+          "link": 58
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 405
+          "link": 59
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 406
+          "link": 60
         }
       ],
       "outputs": [
@@ -1837,7 +1497,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            408
+            61
           ],
           "slot_index": 0
         }
@@ -1846,7 +1506,7 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        46,
+        42,
         "fixed",
         4,
         1.0,
@@ -1854,32 +1514,32 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 05"
     },
     {
-      "id": 408,
+      "id": 37,
       "type": "VAEDecode",
       "pos": [
-        4040,
-        980
+        1740,
+        1600
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 47,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 408
+          "link": 61
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 407
+          "link": 62
         }
       ],
       "outputs": [
@@ -1887,7 +1547,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            409
+            63
           ],
           "slot_index": 0
         }
@@ -1896,27 +1556,27 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "Decode 05"
     },
     {
-      "id": 409,
+      "id": 38,
       "type": "SaveImage",
       "pos": [
-        4040,
-        1076
+        2020,
+        1600
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 48,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 409
+          "link": 63
         }
       ],
       "outputs": [],
@@ -1926,171 +1586,115 @@
       "widgets_values": [
         "ez_board_05"
       ],
-      "title": "Save ez_board_05"
+      "title": "Save 05"
     },
     {
-      "id": 411,
-      "type": "EZKleinPromptEnhance",
+      "id": 39,
+      "type": "ReferenceLatent",
       "pos": [
-        2680,
-        980
+        980,
+        1800
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 49,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 56
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 57,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            58
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Ref from 01 (05)"
+    },
+    {
+      "id": 40,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        1980
       ],
       "size": [
         420,
-        280
+        180
       ],
       "flags": {},
-      "order": 2,
+      "order": 50,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 64
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
           "links": [
-            410
+            65
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZKleinPromptEnhance"
+        "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Over-the-shoulder toward the unmarked city skyline, dusk haze. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
-        false,
-        "t2i",
-        "YouTube 16:9 still"
+        "Same rooftop and hero. Closing wide as city lights warm in the towers, quiet helipad, 24mm. Unmarked surfaces, empty of lettering.",
+        "teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze"
       ],
-      "title": "Klein Prompt Enhance"
+      "title": "SHOT 06"
     },
     {
-      "id": 501,
-      "type": "UNETLoader",
-      "pos": [
-        4440,
-        980
-      ],
-      "size": [
-        360,
-        82
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            501
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "UNETLoader"
-      },
-      "widgets_values": [
-        "flux-2-klein-4b-fp8.safetensors",
-        "default"
-      ],
-      "title": "Klein 4B distilled FP8"
-    },
-    {
-      "id": 502,
-      "type": "CLIPLoader",
-      "pos": [
-        4440,
-        1112
-      ],
-      "size": [
-        360,
-        106
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            502,
-            503
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "qwen_3_4b.safetensors",
-        "flux2",
-        "default"
-      ],
-      "title": "Qwen3-4B TE"
-    },
-    {
-      "id": 503,
-      "type": "VAELoader",
-      "pos": [
-        4440,
-        1268
-      ],
-      "size": [
-        360,
-        58
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            507
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "flux2-vae.safetensors"
-      ],
-      "title": "Flux2 VAE"
-    },
-    {
-      "id": 504,
+      "id": 41,
       "type": "CLIPTextEncode",
       "pos": [
-        5340,
-        980
+        980,
+        1980
       ],
       "size": [
-        420,
-        160
+        360,
+        140
       ],
       "flags": {},
-      "order": 3,
+      "order": 51,
       "mode": 0,
       "inputs": [
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 502
+          "link": 66
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 510,
+          "link": 65,
           "widget": {
             "name": "text"
           }
@@ -2101,7 +1705,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            504
+            68
           ],
           "slot_index": 0
         }
@@ -2110,118 +1714,44 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Closing wide as city lights warm in the towers, quiet helipad, 24mm. Unmarked surfaces, empty of lettering. Clean cinematic frame."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Locked inventory (do not change): teal-and-copper flight suit, unmarked circular starburst chest plate, short unmarked capelet, circular helipad, rounded towers in volumetric haze Same rooftop and hero. Closing wide as city lights warm in the towers, quiet helipad, 24mm. Unmarked surfaces, empty of lettering."
       ],
-      "title": "Positive"
+      "title": "Positive 06"
     },
     {
-      "id": 505,
-      "type": "CLIPTextEncode",
-      "pos": [
-        5340,
-        1190
-      ],
-      "size": [
-        420,
-        120
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 503
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            505
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
-      ],
-      "title": "Negative"
-    },
-    {
-      "id": 506,
-      "type": "EmptyFlux2LatentImage",
-      "pos": [
-        5340,
-        1360
-      ],
-      "size": [
-        280,
-        106
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            506
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EmptyFlux2LatentImage"
-      },
-      "widgets_values": [
-        768,
-        432,
-        1
-      ],
-      "title": "Latent 768x432 batch 2"
-    },
-    {
-      "id": 507,
+      "id": 42,
       "type": "KSampler",
       "pos": [
-        5840,
-        980
+        1380,
+        1980
       ],
       "size": [
         320,
         262
       ],
       "flags": {},
-      "order": 6,
+      "order": 52,
       "mode": 0,
       "inputs": [
         {
           "name": "model",
           "type": "MODEL",
-          "link": 501
+          "link": 67
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 504
+          "link": 70
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 505
+          "link": 71
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 506
+          "link": 72
         }
       ],
       "outputs": [
@@ -2229,7 +1759,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            508
+            73
           ],
           "slot_index": 0
         }
@@ -2238,7 +1768,7 @@
         "Node name for S&R": "KSampler"
       },
       "widgets_values": [
-        47,
+        42,
         "fixed",
         4,
         1.0,
@@ -2246,32 +1776,32 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 06"
     },
     {
-      "id": 508,
+      "id": 43,
       "type": "VAEDecode",
       "pos": [
-        6240,
-        980
+        1740,
+        1980
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 53,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 508
+          "link": 73
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 507
+          "link": 74
         }
       ],
       "outputs": [
@@ -2279,7 +1809,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            509
+            75
           ],
           "slot_index": 0
         }
@@ -2288,27 +1818,27 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "Decode 06"
     },
     {
-      "id": 509,
+      "id": 44,
       "type": "SaveImage",
       "pos": [
-        6240,
-        1076
+        2020,
+        1980
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 54,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 509
+          "link": 75
         }
       ],
       "outputs": [],
@@ -2318,88 +1848,55 @@
       "widgets_values": [
         "ez_board_06"
       ],
-      "title": "Save ez_board_06"
+      "title": "Save 06"
     },
     {
-      "id": 511,
-      "type": "EZKleinPromptEnhance",
+      "id": 45,
+      "type": "ReferenceLatent",
       "pos": [
-        4880,
-        980
+        980,
+        2180
       ],
       "size": [
-        420,
-        280
+        240,
+        80
       ],
       "flags": {},
-      "order": 2,
+      "order": 55,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 68
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 69,
+          "shape": 7
+        }
+      ],
       "outputs": [
         {
-          "name": "prompt",
-          "type": "STRING",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
           "links": [
-            510
+            70
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZKleinPromptEnhance"
+        "Node name for S&R": "ReferenceLatent"
       },
-      "widgets_values": [
-        "A 3D feature-animation storyboard still, YouTube 16:9. Closing wide as city lights warm in the towers, quiet helipad, 24mm. Unmarked surfaces, empty of lettering. Clean cinematic frame.",
-        false,
-        "t2i",
-        "YouTube 16:9 still"
-      ],
-      "title": "Klein Prompt Enhance"
-    },
-    {
-      "id": 999,
-      "type": "Note",
-      "pos": [
-        40,
-        1850
-      ],
-      "size": [
-        960,
-        220
-      ],
-      "flags": {},
-      "order": 99,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "Note"
-      },
-      "widgets_values": [
-        "## klein-storyboard-6up-lab-example\n\nSix Klein 4B storyboard frames in one Queue. Prefixes `ez_board_01`\u2026`06`.\nEdit each Positive prompt for your beat sheet. Keep SFW / no unlicensed marks.\n"
-      ],
-      "title": "Operator note"
+      "widgets_values": [],
+      "title": "Ref from 01 (06)"
     }
   ],
   "links": [
     [
       1,
-      1,
-      0,
-      7,
-      0,
-      "MODEL"
-    ],
-    [
-      2,
-      2,
-      0,
-      4,
-      0,
-      "CLIP"
-    ],
-    [
-      3,
       2,
       0,
       5,
@@ -2407,31 +1904,7 @@
       "CLIP"
     ],
     [
-      4,
-      4,
-      0,
-      7,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      5,
-      5,
-      0,
-      7,
       2,
-      "CONDITIONING"
-    ],
-    [
-      6,
-      6,
-      0,
-      7,
-      3,
-      "LATENT"
-    ],
-    [
-      7,
       3,
       0,
       8,
@@ -2439,439 +1912,599 @@
       "VAE"
     ],
     [
-      8,
-      7,
+      3,
+      5,
       0,
+      9,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      4,
       8,
       0,
+      9,
+      1,
       "LATENT"
     ],
     [
-      9,
+      5,
+      4,
+      0,
+      10,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      10,
+      0,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      7,
+      2,
+      0,
+      11,
+      0,
+      "CLIP"
+    ],
+    [
       8,
+      1,
       0,
+      12,
+      0,
+      "MODEL"
+    ],
+    [
       9,
+      11,
       0,
-      "IMAGE"
+      12,
+      1,
+      "CONDITIONING"
     ],
     [
       10,
+      5,
+      0,
+      12,
+      2,
+      "CONDITIONING"
+    ],
+    [
       11,
+      6,
       0,
+      12,
+      3,
+      "LATENT"
+    ],
+    [
+      12,
+      12,
+      0,
+      13,
+      0,
+      "LATENT"
+    ],
+    [
+      13,
+      3,
+      0,
+      13,
+      1,
+      "VAE"
+    ],
+    [
+      14,
+      13,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      15,
+      13,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      16,
       4,
+      0,
+      16,
+      0,
+      "STRING"
+    ],
+    [
+      17,
+      16,
+      0,
+      17,
       1,
       "STRING"
     ],
     [
-      101,
-      101,
+      18,
+      2,
       0,
-      107,
+      17,
+      0,
+      "CLIP"
+    ],
+    [
+      19,
+      1,
+      0,
+      18,
       0,
       "MODEL"
     ],
     [
-      102,
-      102,
+      20,
+      17,
       0,
-      104,
+      21,
       0,
-      "CLIP"
+      "CONDITIONING"
     ],
     [
-      103,
-      102,
+      21,
+      8,
       0,
-      105,
-      0,
-      "CLIP"
+      21,
+      1,
+      "LATENT"
     ],
     [
-      104,
-      104,
+      22,
+      21,
       0,
-      107,
+      18,
       1,
       "CONDITIONING"
     ],
     [
-      105,
-      105,
+      23,
+      9,
       0,
-      107,
+      18,
       2,
       "CONDITIONING"
     ],
     [
-      106,
-      106,
+      24,
+      6,
       0,
-      107,
+      18,
       3,
       "LATENT"
     ],
     [
-      107,
-      103,
+      25,
+      18,
       0,
-      108,
-      1,
-      "VAE"
-    ],
-    [
-      108,
-      107,
-      0,
-      108,
+      19,
       0,
       "LATENT"
     ],
     [
-      109,
-      108,
+      26,
+      3,
       0,
-      109,
+      19,
+      1,
+      "VAE"
+    ],
+    [
+      27,
+      19,
+      0,
+      20,
       0,
       "IMAGE"
     ],
     [
-      110,
-      111,
+      28,
+      4,
       0,
-      104,
+      22,
+      0,
+      "STRING"
+    ],
+    [
+      29,
+      22,
+      0,
+      23,
       1,
       "STRING"
     ],
     [
-      201,
-      201,
+      30,
+      2,
       0,
-      207,
+      23,
+      0,
+      "CLIP"
+    ],
+    [
+      31,
+      1,
+      0,
+      24,
       0,
       "MODEL"
     ],
     [
-      202,
-      202,
+      32,
+      23,
       0,
-      204,
+      27,
       0,
-      "CLIP"
+      "CONDITIONING"
     ],
     [
-      203,
-      202,
+      33,
+      8,
       0,
-      205,
-      0,
-      "CLIP"
+      27,
+      1,
+      "LATENT"
     ],
     [
-      204,
-      204,
+      34,
+      27,
       0,
-      207,
+      24,
       1,
       "CONDITIONING"
     ],
     [
-      205,
-      205,
+      35,
+      9,
       0,
-      207,
+      24,
       2,
       "CONDITIONING"
     ],
     [
-      206,
-      206,
+      36,
+      6,
       0,
-      207,
+      24,
       3,
       "LATENT"
     ],
     [
-      207,
-      203,
+      37,
+      24,
       0,
-      208,
-      1,
-      "VAE"
-    ],
-    [
-      208,
-      207,
-      0,
-      208,
+      25,
       0,
       "LATENT"
     ],
     [
-      209,
-      208,
+      38,
+      3,
       0,
-      209,
+      25,
+      1,
+      "VAE"
+    ],
+    [
+      39,
+      25,
+      0,
+      26,
       0,
       "IMAGE"
     ],
     [
-      210,
-      211,
+      40,
+      4,
       0,
-      204,
+      28,
+      0,
+      "STRING"
+    ],
+    [
+      41,
+      28,
+      0,
+      29,
       1,
       "STRING"
     ],
     [
-      301,
-      301,
+      42,
+      2,
       0,
-      307,
+      29,
+      0,
+      "CLIP"
+    ],
+    [
+      43,
+      1,
+      0,
+      30,
       0,
       "MODEL"
     ],
     [
-      302,
-      302,
+      44,
+      29,
       0,
-      304,
+      33,
       0,
-      "CLIP"
+      "CONDITIONING"
     ],
     [
-      303,
-      302,
+      45,
+      8,
       0,
-      305,
-      0,
-      "CLIP"
+      33,
+      1,
+      "LATENT"
     ],
     [
-      304,
-      304,
+      46,
+      33,
       0,
-      307,
+      30,
       1,
       "CONDITIONING"
     ],
     [
-      305,
-      305,
+      47,
+      9,
       0,
-      307,
+      30,
       2,
       "CONDITIONING"
     ],
     [
-      306,
-      306,
+      48,
+      6,
       0,
-      307,
+      30,
       3,
       "LATENT"
     ],
     [
-      307,
-      303,
+      49,
+      30,
       0,
-      308,
-      1,
-      "VAE"
-    ],
-    [
-      308,
-      307,
-      0,
-      308,
+      31,
       0,
       "LATENT"
     ],
     [
-      309,
-      308,
+      50,
+      3,
       0,
-      309,
+      31,
+      1,
+      "VAE"
+    ],
+    [
+      51,
+      31,
+      0,
+      32,
       0,
       "IMAGE"
     ],
     [
-      310,
-      311,
+      52,
+      4,
       0,
-      304,
+      34,
+      0,
+      "STRING"
+    ],
+    [
+      53,
+      34,
+      0,
+      35,
       1,
       "STRING"
     ],
     [
-      401,
-      401,
+      54,
+      2,
       0,
-      407,
+      35,
+      0,
+      "CLIP"
+    ],
+    [
+      55,
+      1,
+      0,
+      36,
       0,
       "MODEL"
     ],
     [
-      402,
-      402,
+      56,
+      35,
       0,
-      404,
+      39,
       0,
-      "CLIP"
+      "CONDITIONING"
     ],
     [
-      403,
-      402,
+      57,
+      8,
       0,
-      405,
-      0,
-      "CLIP"
+      39,
+      1,
+      "LATENT"
     ],
     [
-      404,
-      404,
+      58,
+      39,
       0,
-      407,
+      36,
       1,
       "CONDITIONING"
     ],
     [
-      405,
-      405,
+      59,
+      9,
       0,
-      407,
+      36,
       2,
       "CONDITIONING"
     ],
     [
-      406,
-      406,
+      60,
+      6,
       0,
-      407,
+      36,
       3,
       "LATENT"
     ],
     [
-      407,
-      403,
+      61,
+      36,
       0,
-      408,
-      1,
-      "VAE"
-    ],
-    [
-      408,
-      407,
-      0,
-      408,
+      37,
       0,
       "LATENT"
     ],
     [
-      409,
-      408,
+      62,
+      3,
       0,
-      409,
+      37,
+      1,
+      "VAE"
+    ],
+    [
+      63,
+      37,
+      0,
+      38,
       0,
       "IMAGE"
     ],
     [
-      410,
-      411,
+      64,
+      4,
       0,
-      404,
+      40,
+      0,
+      "STRING"
+    ],
+    [
+      65,
+      40,
+      0,
+      41,
       1,
       "STRING"
     ],
     [
-      501,
-      501,
+      66,
+      2,
       0,
-      507,
+      41,
+      0,
+      "CLIP"
+    ],
+    [
+      67,
+      1,
+      0,
+      42,
       0,
       "MODEL"
     ],
     [
-      502,
-      502,
+      68,
+      41,
       0,
-      504,
+      45,
       0,
-      "CLIP"
+      "CONDITIONING"
     ],
     [
-      503,
-      502,
+      69,
+      8,
       0,
-      505,
-      0,
-      "CLIP"
+      45,
+      1,
+      "LATENT"
     ],
     [
-      504,
-      504,
+      70,
+      45,
       0,
-      507,
+      42,
       1,
       "CONDITIONING"
     ],
     [
-      505,
-      505,
+      71,
+      9,
       0,
-      507,
+      42,
       2,
       "CONDITIONING"
     ],
     [
-      506,
-      506,
+      72,
+      6,
       0,
-      507,
+      42,
       3,
       "LATENT"
     ],
     [
-      507,
-      503,
+      73,
+      42,
       0,
-      508,
-      1,
-      "VAE"
-    ],
-    [
-      508,
-      507,
-      0,
-      508,
+      43,
       0,
       "LATENT"
     ],
     [
-      509,
-      508,
+      74,
+      3,
       0,
-      509,
-      0,
-      "IMAGE"
+      43,
+      1,
+      "VAE"
     ],
     [
-      510,
-      511,
+      75,
+      43,
       0,
-      504,
-      1,
-      "STRING"
+      44,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [
     {
       "id": 1,
-      "title": "BOARD 01",
+      "title": "MODEL",
       "bounding": [
         20,
-        20,
-        2100,
-        850
+        40,
+        430,
+        430
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2879,64 +2512,90 @@
     },
     {
       "id": 2,
-      "title": "BOARD 02",
-      "bounding": [
-        2220,
-        20,
-        2100,
-        850
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 3,
-      "title": "BOARD 03",
-      "bounding": [
-        4420,
-        20,
-        2100,
-        850
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 4,
-      "title": "BOARD 04",
+      "title": "IDENTITY",
       "bounding": [
         20,
-        920,
-        2100,
-        850
+        450,
+        460,
+        500
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 10,
+      "title": "SHOT 01",
+      "bounding": [
+        500,
+        60,
+        1840,
+        360
       ],
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 5,
-      "title": "BOARD 05",
+      "id": 11,
+      "title": "SHOT 02",
       "bounding": [
-        2220,
-        920,
-        2100,
-        850
+        500,
+        440,
+        1840,
+        360
       ],
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 6,
-      "title": "BOARD 06",
+      "id": 12,
+      "title": "SHOT 03",
       "bounding": [
-        4420,
-        920,
-        2100,
-        850
+        500,
+        820,
+        1840,
+        360
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 13,
+      "title": "SHOT 04",
+      "bounding": [
+        500,
+        1200,
+        1840,
+        360
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 14,
+      "title": "SHOT 05",
+      "bounding": [
+        500,
+        1580,
+        1840,
+        360
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 15,
+      "title": "SHOT 06",
+      "bounding": [
+        500,
+        1960,
+        1840,
+        360
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2946,7 +2605,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-storyboard-6up-lab-example",
-    "lab_note": "## klein-storyboard-6up-lab-example\n\nSix Klein 4B storyboard frames in one Queue. Prefixes `ez_board_01`\u2026`06`.\nEdit each Positive prompt for your beat sheet. Keep SFW / no unlicensed marks.\n",
+    "lab_note": "## klein-storyboard-6up-lab-example\n\nSix Klein 4B storyboard frames of one rooftop. SHOT 01 is the identity plate; 02\u201306 Klein-edit from it. Prefixes `ez_board_01`\u2026`06`. Do not bypass 01 on a cold canvas.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
     "lab_description": "Klein 4B six-frame storyboard pack"
   },
   "version": 0.4

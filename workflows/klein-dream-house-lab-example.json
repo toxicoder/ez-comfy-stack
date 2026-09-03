@@ -144,7 +144,7 @@
       ],
       "size": [
         420,
-        280
+        420
       ],
       "flags": {},
       "order": 3,
@@ -174,9 +174,10 @@
       },
       "widgets_values": [
         "A photoreal still photograph of one compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. One rectangular volume only: the same compact cabin every shot.",
-        false,
+        true,
         "t2i",
-        "Instagram 4:5 still"
+        "Instagram 4:5 still",
+        "none"
       ],
       "title": "HOUSE IDENTITY"
     },
@@ -185,7 +186,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        800
+        940
       ],
       "size": [
         420,
@@ -225,7 +226,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        960
+        1120
       ],
       "size": [
         280,
@@ -269,7 +270,7 @@
       "type": "Note",
       "pos": [
         40,
-        1120
+        1280
       ],
       "size": [
         420,
@@ -284,7 +285,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nSHOT 01 is the identity plate (T2I). Queue SHOT 01 first. Do not bypass 01 when generating 02-10 \u2014 they edit from 01's image (VAEEncode + ReferenceLatent). Unused SHOT groups 02-10 may still be bypassed (Ctrl+B) after 01 exists.\nEdit HOUSE IDENTITY once. Each SHOT card is only camera, room, time of day, and season of the same cabin; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nSeason may change foliage, sky, and snow on the ridge; it must not change the building.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n"
+        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nSHOT 01 is the identity plate (T2I). Queue SHOT 01 first. Do not bypass 01 when generating 02-10 \u2014 they edit from 01's image (VAEEncode + ReferenceLatent). Unused SHOT groups 02-10 may still be bypassed (Ctrl+B) after 01 exists.\nEdit HOUSE IDENTITY once. Each SHOT card is only camera, room, time of day, and season of the same cabin; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nSeason may change foliage, sky, and snow on the ridge; it must not change the building.\nPrompt enhance on identity is on by default. After Queue, the HOUSE IDENTITY node shows the rewrite CLIP used. Shot cards are Prompt Join only \u2014 they do not run a second rewrite. Turn Enhance off to pin this bible.\n"
       ],
       "title": "Operator note"
     },
@@ -344,7 +345,7 @@
       "type": "ReferenceLatent",
       "pos": [
         40,
-        1520
+        1680
       ],
       "size": [
         280,
@@ -425,7 +426,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Golden-hour late-summer curb of the same single-story cabin from the empty gravel drive, 24mm at eye level, Instagram 4:5. Warm sidelight rakes the cedar. Empty unmarked drive."
+        "Golden-hour late-summer curb of the same single-story cabin from the empty gravel drive, 24mm at eye level, Instagram 4:5. Warm sidelight rakes the cedar. Empty unmarked drive.",
+        ""
       ],
       "title": "SHOT 01 curb appeal"
     },
@@ -644,7 +646,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Front porch of the same single-story cabin, 35mm, Instagram 4:5. One tall black-framed glass door in the cedar wall, spring morning. Empty unmarked porch."
+        "Front porch of the same single-story cabin, 35mm, Instagram 4:5. One tall black-framed glass door in the cedar wall, spring morning. Empty unmarked porch.",
+        ""
       ],
       "title": "SHOT 02 entry"
     },
@@ -905,7 +908,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Photographed from inside the living room of the same cabin, looking out the two-bay four-lite glass wall to the lake, 24mm, Instagram 4:5. One linen sofa, late-summer afternoon, oak floors."
+        "Photographed from inside the living room of the same cabin, looking out the two-bay four-lite glass wall to the lake, 24mm, Instagram 4:5. One linen sofa, late-summer afternoon, oak floors.",
+        ""
       ],
       "title": "SHOT 03 living room"
     },
@@ -1166,7 +1170,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Photographed from inside the kitchen of the same cabin, 35mm, Instagram 4:5. One pale-stone island, cedar cabinets, black hardware, morning sidelight through the glass wall."
+        "Photographed from inside the kitchen of the same cabin, 35mm, Instagram 4:5. One pale-stone island, cedar cabinets, black hardware, morning sidelight through the glass wall.",
+        ""
       ],
       "title": "SHOT 04 kitchen"
     },
@@ -1427,7 +1432,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Photographed from inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak table, lamps lit, autumn lake twilight through the two-bay glass."
+        "Photographed from inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak table, lamps lit, autumn lake twilight through the two-bay glass.",
+        ""
       ],
       "title": "SHOT 05 dining"
     },
@@ -1688,7 +1694,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Photographed from inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. Linen bedding, cedar wall, lake window, dawn."
+        "Photographed from inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. Linen bedding, cedar wall, lake window, dawn.",
+        ""
       ],
       "title": "SHOT 06 bedroom"
     },
@@ -1949,7 +1956,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Photographed from inside the spa bath of the same cabin, 35mm, Instagram 4:5. One freestanding stone tub indoors facing frosted glass. Quiet unmarked fixtures."
+        "Photographed from inside the spa bath of the same cabin, 35mm, Instagram 4:5. One freestanding stone tub indoors facing frosted glass. Quiet unmarked fixtures.",
+        ""
       ],
       "title": "SHOT 07 bath"
     },
@@ -2210,7 +2218,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "The same two modest shore decks of the same single-story cabin at dusk, 24mm, Instagram 4:5. Two simple chairs on gravel, still water, evergreen ridge."
+        "The same two modest shore decks of the same single-story cabin at dusk, 24mm, Instagram 4:5. Two simple chairs on gravel, still water, evergreen ridge.",
+        ""
       ],
       "title": "SHOT 08 deck"
     },
@@ -2471,7 +2480,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Winter twilight exterior of the same single-story cabin, 24mm, Instagram 4:5. Interior lamps glow through the two-bay glass. Thin snow on the ridge; the cabin volume is unchanged."
+        "Winter twilight exterior of the same single-story cabin, 24mm, Instagram 4:5. Interior lamps glow through the two-bay glass. Thin snow on the ridge; the cabin volume is unchanged.",
+        ""
       ],
       "title": "SHOT 09 twilight"
     },
@@ -2732,7 +2742,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Midsummer ridge view of the same compact single-story cabin above the lake among evergreens, 24mm, Instagram 4:5."
+        "Midsummer ridge view of the same compact single-story cabin above the lake among evergreens, 24mm, Instagram 4:5.",
+        ""
       ],
       "title": "SHOT 10 ridge view"
     },
@@ -4107,7 +4118,7 @@
   "extra": {
     "lab_profile": "klein-dream-house-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nSHOT 01 is the identity plate (T2I). Queue SHOT 01 first. Do not bypass 01 when generating 02-10 \u2014 they edit from 01's image (VAEEncode + ReferenceLatent). Unused SHOT groups 02-10 may still be bypassed (Ctrl+B) after 01 exists.\nEdit HOUSE IDENTITY once. Each SHOT card is only camera, room, time of day, and season of the same cabin; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nSeason may change foliage, sky, and snow on the ridge; it must not change the building.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n",
+    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nSHOT 01 is the identity plate (T2I). Queue SHOT 01 first. Do not bypass 01 when generating 02-10 \u2014 they edit from 01's image (VAEEncode + ReferenceLatent). Unused SHOT groups 02-10 may still be bypassed (Ctrl+B) after 01 exists.\nEdit HOUSE IDENTITY once. Each SHOT card is only camera, room, time of day, and season of the same cabin; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nSeason may change foliage, sky, and snow on the ridge; it must not change the building.\nPrompt enhance on identity is on by default. After Queue, the HOUSE IDENTITY node shows the rewrite CLIP used. Shot cards are Prompt Join only \u2014 they do not run a second rewrite. Turn Enhance off to pin this bible.\n",
     "lab_description": "Ten Instagram 4:5 Klein stills of one compact cedar cabin; 01 is the identity plate",
     "ds": {
       "scale": 1,

@@ -72,10 +72,12 @@ ${MODELS_DIR}/
   Comfy-Org__flux2-dev_vae/                   # flux2-vae
   Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b/
   Lightricks__LTX-2.5_2.5/
+  unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/
   comfy/
     diffusion_models/   # relative symlinks into tier repos above
     text_encoders/
     vae/
+    llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
   hub/                  # HF cache (optional)
 ```
 
@@ -91,11 +93,13 @@ flowchart TB
   Root --> VAE["Comfy-Org__flux2-dev_vae"]
   Root --> Wan["Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b"]
   Root --> Ltx["Lightricks__LTX-2.5_2.5"]
+  Root --> Llm["unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"]
   Root --> Comfy["comfy/"]
   Root --> Hub["hub/ · optional HF cache"]
   Comfy --> DM["diffusion_models/ · symlinks"]
   Comfy --> TEd["text_encoders/"]
   Comfy --> VAEd["vae/"]
+  Comfy --> LlmDir["llm/"]
 ```
 
 ---
@@ -118,6 +122,7 @@ Or per utility:
 ./scripts/utilities/download-image.sh run --tier fast
 ./scripts/utilities/download-wan.sh run --tier 5b
 ./scripts/utilities/download-ltx.sh run --tier 2.5
+./scripts/utilities/download-llm.sh run
 ```
 
 `--tier fast` also pulls Klein companions (`te` + `vae`). Optional stills: `--tier nvfp4` / `--tier base` / `--tier zimage`. Optional motion: `download-wan.sh run --tier a14b`. Optional LTX fallback: `download-ltx.sh run --tier 2.3`.
@@ -145,6 +150,7 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors` | `text_encoders/` | LTX-2.5 Gemma4-with-proj (CLIP type **`ltxv`**) |
 | `ltx-2.5-video-vae-bf16.safetensors` | `vae/` | LTX-2.5 video VAE |
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
+| `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` | On-box prompt enhance (CPU llama.cpp) |
 
 ### Example graphs
 

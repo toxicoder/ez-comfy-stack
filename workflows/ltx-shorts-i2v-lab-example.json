@@ -191,7 +191,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame in vertical Shorts framing. Rooftop wind snaps a capelet as a distant traffic hum rolls between towers. Slow push-in. No music and no score."
+        "The start image holds as the first frame in vertical Shorts framing. Rooftop wind snaps a capelet as a distant traffic hum rolls between towers. Slow push-in. Keep every object and surface from the start image; do not redesign. No music and no score."
       ],
       "title": "Motion / prompt"
     },
@@ -771,11 +771,12 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame in vertical Shorts framing. Rooftop wind snaps a capelet as a distant traffic hum rolls between towers. Slow push-in. No music and no score.",
-        false,
+        "The start image holds as the first frame in vertical Shorts framing. Rooftop wind snaps a capelet as a distant traffic hum rolls between towers. Slow push-in. Keep every object and surface from the start image; do not redesign. No music and no score.",
+        true,
         "i2v",
         "5 seconds, 24 fps, 9:16",
-        "rooftop wind, fabric snap, distant traffic hum, no score"
+        "rooftop wind, fabric snap, distant traffic hum, no score",
+        "none"
       ],
       "title": "LTX Prompt Enhance"
     },

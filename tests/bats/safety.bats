@@ -154,13 +154,15 @@ teardown() {
   [ "$status" -ne 0 ]
 }
 
-@test "prompt-enhance nodes mount outside COMFY_HOME and XAI key is runtime-only" {
+@test "prompt-enhance nodes mount outside COMFY_HOME and no xAI key" {
   local compose="${REPO_ROOT}/docker/docker-compose.yml"
   run grep -E 'custom_nodes:/opt/ez-comfy/custom_nodes' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'custom_nodes:.*/comfy-state/ComfyUI/' "${compose}"
   [ "$status" -ne 0 ]
   run grep -E 'XAI_API_KEY:' "${compose}"
+  [ "$status" -ne 0 ]
+  run grep -E 'EZ_LLM_GGUF:' "${compose}"
   [ "$status" -eq 0 ]
   run grep -iE '^(ENV|ARG).*XAI_API_KEY' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -ne 0 ]

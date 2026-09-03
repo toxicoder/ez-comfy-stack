@@ -1,8 +1,7 @@
-"""Off-box prompt rewrite client for ez-comfy enhance nodes.
+"""On-box prompt rewrite for ez-comfy enhance nodes.
 
-Hermetic: stdlib only. No torch, no comfy, no pip extras. Calls the xAI
-OpenAI-compatible Chat Completions API when a key is present; otherwise
-returns the original prompt (fail-soft).
+Hermetic: stdlib only at import. llama-cpp-python is optional; missing GGUF
+or import fails soft and the original prompt is passed through.
 """
 
 from __future__ import annotations
@@ -10,18 +9,48 @@ from __future__ import annotations
 import json
 import os
 import sys
-import urllib.error
-import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeout
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
-DEFAULT_BASE_URL = "https://api.x.ai/v1"
-DEFAULT_MODEL = "grok-4.6"
-DEFAULT_TIMEOUT_S = 20
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
+STYLES_PATH = Path(__file__).resolve().parent / "styles.json"
+DEFAULT_GGUF = "/models/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+DEFAULT_TIMEOUT_S = 60
+DEFAULT_N_THREADS = 4
+DEFAULT_N_CTX = 4096
+DEFAULT_MAX_TOKENS = 800
+STYLE_NONE = "none"
+
+REASON_ENHANCE_OFF = "enhance off"
+REASON_GGUF_MISSING = "GGUF missing"
+REASON_LLAMA_UNAVAILABLE = "llama.cpp unavailable"
+REASON_EMPTY = "timeout or empty model output"
+REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
+
+_LLM: Any = None
+_LLM_PATH = ""
+_STYLES: dict[str, dict[str, str]] | None = None
 
 
 def _log(message: str) -> None:
     print(f"[ez_prompt_enhance] {message}", file=sys.stderr)
+
+
+@dataclass(frozen=True)
+class EnhanceResult:
+    """CLIP text plus an optional passthrough reason for the node preview."""
+
+    text: str
+    reason: str | None = None
+
+    @property
+    def preview(self) -> str:
+        if self.reason:
+            return f"[passthrough: {self.reason}]\n{self.text}"
+        return self.text
 
 
 def load_system_prompt(name: str) -> str:
@@ -36,6 +65,36 @@ def load_system_prompt(name: str) -> str:
     """
     path = PROMPTS_DIR / f"{name}.txt"
     return path.read_text(encoding="utf-8").strip()
+
+
+def load_styles() -> dict[str, dict[str, str]]:
+    """Load the style catalog (id -> label/llm_block/suffix)."""
+    global _STYLES
+    if _STYLES is None:
+        raw = json.loads(STYLES_PATH.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict):
+            raise ValueError("styles.json must be an object")
+        _STYLES = {str(k): dict(v) for k, v in raw.items()}
+    return _STYLES
+
+
+def style_ids() -> list[str]:
+    """Combo choices: none first, then catalog ids in file order."""
+    return [STYLE_NONE, *load_styles().keys()]
+
+
+def style_llm_block(style_id: str) -> str:
+    if style_id == STYLE_NONE:
+        return ""
+    entry = load_styles().get(style_id) or {}
+    return str(entry.get("llm_block") or "").strip()
+
+
+def style_suffix(style_id: str) -> str:
+    if style_id == STYLE_NONE:
+        return ""
+    entry = load_styles().get(style_id) or {}
+    return str(entry.get("suffix") or "").strip()
 
 
 def strip_model_wrapping(text: str) -> str:
@@ -54,7 +113,7 @@ def strip_model_wrapping(text: str) -> str:
 
 
 def _timeout_s() -> int:
-    raw = os.environ.get("XAI_TIMEOUT_S", str(DEFAULT_TIMEOUT_S)).strip()
+    raw = os.environ.get("EZ_LLM_TIMEOUT_S", str(DEFAULT_TIMEOUT_S)).strip()
     try:
         value = int(raw)
     except ValueError:
@@ -64,71 +123,162 @@ def _timeout_s() -> int:
     return value
 
 
-def _api_key() -> str:
-    return os.environ.get("XAI_API_KEY", "").strip()
+def _n_threads() -> int:
+    raw = os.environ.get("EZ_LLM_N_THREADS", str(DEFAULT_N_THREADS)).strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return DEFAULT_N_THREADS
+    if value < 1:
+        return DEFAULT_N_THREADS
+    return value
 
 
-def _base_url() -> str:
-    return os.environ.get("XAI_BASE_URL", DEFAULT_BASE_URL).strip().rstrip("/")
+def _n_ctx() -> int:
+    raw = os.environ.get("EZ_LLM_N_CTX", str(DEFAULT_N_CTX)).strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return DEFAULT_N_CTX
+    if value < 512:
+        return DEFAULT_N_CTX
+    return value
 
 
-def _model() -> str:
-    return os.environ.get("XAI_MODEL", DEFAULT_MODEL).strip() or DEFAULT_MODEL
+def _n_gpu_layers() -> int:
+    raw = os.environ.get("EZ_LLM_N_GPU_LAYERS", "0").strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return 0
+    if value <= 0:
+        return 0
+    allow = os.environ.get("EZ_LLM_ALLOW_GPU", "").strip().lower()
+    if allow not in {"1", "true", "yes", "on"}:
+        _log("refusing GPU offload (set EZ_LLM_ALLOW_GPU=1 to override); n_gpu_layers=0")
+        return 0
+    return value
 
 
-def chat_complete(system: str, user: str) -> str:
-    """Call chat completions. Empty string on any failure (caller passthrough)."""
-    key = _api_key()
-    if not key:
-        _log("XAI_API_KEY unset — passing prompt through")
-        return ""
-    url = f"{_base_url()}/chat/completions"
-    payload = {
-        "model": _model(),
-        "temperature": 0,
-        "max_tokens": 800,
-        "messages": [
+def _gguf_path() -> str:
+    return os.environ.get("EZ_LLM_GGUF", DEFAULT_GGUF).strip() or DEFAULT_GGUF
+
+
+def _unload_after() -> bool:
+    return os.environ.get("EZ_LLM_UNLOAD", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def _close_llm() -> None:
+    global _LLM, _LLM_PATH
+    handle = _LLM
+    _LLM = None
+    _LLM_PATH = ""
+    if handle is None:
+        return
+    closer = getattr(handle, "close", None)
+    if callable(closer):
+        try:
+            closer()
+        except Exception as exc:  # noqa: BLE001 — fail-soft unload
+            _log(f"llama close failed: {exc}")
+
+
+def _get_llama() -> tuple[Any | None, str | None]:
+    """Load llama.cpp once. Returns (handle, fail_reason)."""
+    global _LLM, _LLM_PATH
+    path = _gguf_path()
+    if not path or not os.path.isfile(path):
+        _log(f"GGUF missing at {path or '(empty EZ_LLM_GGUF)'} — passing prompt through")
+        return None, REASON_GGUF_MISSING
+    if _LLM is not None and _LLM_PATH == path:
+        return _LLM, None
+    _close_llm()
+    try:
+        from llama_cpp import Llama
+    except ImportError:
+        _log("llama-cpp-python not installed — passing prompt through")
+        return None, REASON_LLAMA_UNAVAILABLE
+    try:
+        _LLM = Llama(
+            model_path=path,
+            n_ctx=_n_ctx(),
+            n_threads=_n_threads(),
+            n_gpu_layers=_n_gpu_layers(),
+            chat_format="chatml",
+            verbose=False,
+        )
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        _log(f"failed to load GGUF {path}: {exc}")
+        _LLM = None
+        _LLM_PATH = ""
+        return None, REASON_LLAMA_UNAVAILABLE
+    _LLM_PATH = path
+    _log(f"loaded local LLM {path} (cpu, n_threads={_n_threads()})")
+    return _LLM, None
+
+
+def _generate(llm: Any, system: str, user: str) -> str:
+    body = llm.create_chat_completion(
+        messages=[
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ],
-    }
-    request = urllib.request.Request(
-        url,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Authorization": f"Bearer {key}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
+        temperature=0,
+        max_tokens=DEFAULT_MAX_TOKENS,
     )
-    try:
-        with urllib.request.urlopen(request, timeout=_timeout_s()) as response:
-            body = json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:300]
-        _log(f"HTTP {exc.code} from prompt rewrite API: {detail}")
-        return ""
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
-        _log(f"prompt rewrite API failed: {exc}")
-        return ""
     try:
         content = body["choices"][0]["message"]["content"]
     except (KeyError, IndexError, TypeError):
-        _log("prompt rewrite API returned no message content")
         return ""
     if not isinstance(content, str):
         return ""
     return strip_model_wrapping(content)
 
 
-def enhance_prompt(system: str, prompt: str, *, enhance: bool) -> str:
-    """Rewrite prompt when enhance is true; otherwise return it unchanged."""
-    original = prompt if isinstance(prompt, str) else str(prompt)
+def complete(system: str, user: str) -> tuple[str, str | None]:
+    """Run one local chat completion. Empty text plus a reason on any failure."""
+    llm, reason = _get_llama()
+    if llm is None:
+        return "", reason or REASON_LLAMA_UNAVAILABLE
+    timeout = _timeout_s()
+    try:
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(_generate, llm, system, user)
+            text = future.result(timeout=timeout)
+    except FuturesTimeout:
+        _log(f"local LLM timed out after {timeout}s")
+        return "", REASON_EMPTY
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        _log(f"local LLM failed: {exc}")
+        return "", REASON_EMPTY
+    finally:
+        if _unload_after():
+            _close_llm()
+    if not (text or "").strip():
+        _log("local LLM returned no message content")
+        return "", REASON_EMPTY
+    return text, None
+
+
+def enhance_prompt(
+    system: str,
+    user: str,
+    *,
+    enhance: bool,
+    fallback: str,
+) -> EnhanceResult:
+    """Rewrite fallback via local LLM when enhance is true."""
+    original = fallback if isinstance(fallback, str) else str(fallback)
     if not enhance:
-        return original
+        return EnhanceResult(original, REASON_ENHANCE_OFF)
     if not original.strip():
-        return original
-    rewritten = chat_complete(system, original)
+        return EnhanceResult(original, None)
+    rewritten, reason = complete(system, user)
     if not rewritten.strip():
-        return original
-    return rewritten
+        return EnhanceResult(original, reason or REASON_EMPTY)
+    return EnhanceResult(rewritten, None)

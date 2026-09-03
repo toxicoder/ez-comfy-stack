@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Subtle parallax from the start still. Foreground drifts a hair left, background holds. Locked framing, Ken Burns-like depth, identity locked. One continuous ~5 s take."
+        "Subtle parallax from the start still. Foreground drifts a hair left, background holds. Locked framing, Ken Burns-like depth, identity locked. One continuous ~5 s take. Keep every object and surface from the start image; do not redesign."
       ],
       "title": "Motion / prompt"
     },
@@ -581,10 +581,11 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Subtle parallax from the start still. Foreground drifts a hair left, background holds. Locked framing, Ken Burns-like depth, identity locked. One continuous ~5 s take.",
-        false,
+        "Subtle parallax from the start still. Foreground drifts a hair left, background holds. Locked framing, Ken Burns-like depth, identity locked. One continuous ~5 s take. Keep every object and surface from the start image; do not redesign.",
+        true,
         "i2v",
-        "5 seconds, 24 fps"
+        "5 seconds, 24 fps",
+        "none"
       ],
       "title": "Wan Prompt Enhance"
     }

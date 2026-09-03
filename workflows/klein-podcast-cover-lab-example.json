@@ -452,9 +452,10 @@
       },
       "widgets_values": [
         "A photoreal square podcast-cover still. A ceramic mug and a simple analog recorder sit on a wooden table in warm sidelight. Unmarked, empty of logos and lettering. 1:1.",
-        false,
+        true,
         "t2i",
-        "YouTube 16:9 still"
+        "YouTube 16:9 still",
+        "none"
       ],
       "title": "Klein Prompt Enhance"
     }

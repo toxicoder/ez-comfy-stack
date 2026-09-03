@@ -691,10 +691,11 @@
       },
       "widgets_values": [
         "A five-second AV cold open. Camera snaps to an original teal-and-copper superhero on a dusk rooftop helipad as wind hits a capelet and distant traffic hums. Fast present-tense energy, unmarked surfaces. No music and no score.",
-        false,
+        true,
         "t2v",
         "5 seconds, 24 fps",
-        "rooftop wind, fabric snap, distant traffic hum, no score"
+        "rooftop wind, fabric snap, distant traffic hum, no score",
+        "none"
       ],
       "title": "LTX Prompt Enhance"
     },

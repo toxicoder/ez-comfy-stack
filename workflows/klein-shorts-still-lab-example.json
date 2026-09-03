@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-shorts-still-lab-example\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **wan-shorts-i2v-lab-example** or **ltx-shorts-i2v-lab-example**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance optional (XAI_API_KEY).\n"
+        "## klein-shorts-still-lab-example\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **wan-shorts-i2v-lab-example** or **ltx-shorts-i2v-lab-example**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n"
       ],
       "title": "Operator note"
     },
@@ -414,9 +414,10 @@
       },
       "widgets_values": [
         "A 3D feature-animation vertical still for Shorts. An original superhero in a teal-and-copper flight suit stands on a dusk rooftop helipad. Warm key, unmarked circular starburst chest plate, empty of lettering. Shot on a 35mm lens, framed for 9:16 with headroom for captions.",
-        false,
+        true,
         "t2i",
-        "YouTube 16:9 still"
+        "YouTube 16:9 still",
+        "none"
       ],
       "title": "Klein Prompt Enhance"
     }
@@ -568,7 +569,7 @@
         0
       ]
     },
-    "lab_note": "## klein-shorts-still-lab-example\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **wan-shorts-i2v-lab-example** or **ltx-shorts-i2v-lab-example**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance optional (XAI_API_KEY).\n",
+    "lab_note": "## klein-shorts-still-lab-example\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **wan-shorts-i2v-lab-example** or **ltx-shorts-i2v-lab-example**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n",
     "lab_description": "Klein 4B vertical 9:16 Shorts still"
   },
   "version": 0.4
