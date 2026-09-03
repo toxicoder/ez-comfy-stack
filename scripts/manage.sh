@@ -595,7 +595,11 @@ EOF
   # Lab workflows need the full basename set under MODELS_DIR/comfy (not size-only tiers)
   if ! check_lab_models_ready "${MODELS_DIR}"; then
     err "download-models: lab workflow weights incomplete under ${MODELS_DIR}/comfy"
-    err "Re-run after fixing HF_TOKEN / network, or download tiers individually."
+    if [[ ! -e ${MODELS_DIR}/comfy/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors ]]; then
+      err "LTX-2.5 is gated. HF_TOKEN set is not enough — Agree at https://huggingface.co/Lightricks/LTX-2.5 as that token's user."
+    else
+      err "Re-run after fixing HF_TOKEN / network, or download tiers individually."
+    fi
     return 1
   fi
   if [[ ${rc} -ne 0 ]]; then

@@ -304,9 +304,14 @@ teardown() {
   run hf_download "org/private" --local-dir "${TEST_TMP_DIR}/auth"
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"HF_TOKEN"* || "${output}" == *"auth"* || "${output}" == *"token"* ]]
+  export LAB_MOCK_HF_IDENTITY=spark-test-user
   run explain_hf_download_error "GatedRepoError not in the authorized list https://huggingface.co/org/model/resolve/x" "org/model"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"Agree"* ]]
+  [[ "${output}" == *"spark-test-user"* ]]
+  unset LAB_MOCK_HF_IDENTITY
+  run hf_auth_identity
+  [ "${status}" -eq 0 ]
   export LAB_DEBUG=1
   run explain_hf_download_error "some obscure failure line1
 line2
@@ -315,6 +320,48 @@ line3" "org/x"
   [[ "${output}" == *"raw hf download log"* || "${output}" == *"obscure"* ]]
   unset LAB_DEBUG
   unset LAB_MOCK_HF_DOWNLOAD
+}
+
+@test "common: hf_download hides Traceback and passes --token" {
+  unset LAB_MOCK_HF_DOWNLOAD
+  export HF_PROGRESS=0
+  unset HF_DOWNLOAD_MAX_WORKERS
+  export HF_TOKEN="hf_testsecret"
+  export LAB_MOCK_HF_IDENTITY="alice"
+  : >"${TEST_TMP_DIR}/hf_calls.log"
+  install_mock_bin hf '
+if [[ " $* " == *" --help "* ]] || [[ ${2:-} == "--help" ]]; then
+  echo "Usage: hf download"
+  echo "  --token TEXT"
+  echo "  --max-workers INT"
+  echo "  --local-dir PATH"
+  exit 0
+fi
+if [[ ${1:-} == "auth" && ${2:-} == "whoami" ]]; then
+  echo "user: alice"
+  exit 0
+fi
+echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
+echo "Traceback (most recent call last):" >&2
+echo "huggingface_hub.errors.GatedRepoError: Cannot access gated repo" >&2
+echo "Access to model Lightricks/LTX-2.5 is restricted and you are not in the authorized list." >&2
+exit 1
+'
+  run hf_download "Lightricks/LTX-2.5" --local-dir "${TEST_TMP_DIR}/ltx_gated"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"gated"* || "${output}" == *"Gated"* || "${output}" == *"Agree"* ]]
+  [[ "${output}" == *"alice"* ]]
+  [[ "${output}" != *"Traceback"* ]]
+  [[ "${output}" != *"hf_testsecret"* ]]
+  grep -q -- '--token' "${TEST_TMP_DIR}/hf_calls.log"
+  grep -q 'hf_testsecret' "${TEST_TMP_DIR}/hf_calls.log"
+  export LAB_DEBUG=1
+  run hf_download "Lightricks/LTX-2.5" --local-dir "${TEST_TMP_DIR}/ltx_gated2"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"raw hf download log"* || "${output}" == *"GatedRepoError"* ]]
+  unset LAB_DEBUG
+  unset HF_TOKEN
+  unset LAB_MOCK_HF_IDENTITY
 }
 
 @test "common: count_hf_incomplete for resume state" {
@@ -370,6 +417,7 @@ line3" "org/x"
   mkdir -p "${dest}/.cache/huggingface/download"
   : >"${dest}/.cache/huggingface/download/blob.incomplete"
   unset LAB_MOCK_HF_DOWNLOAD
+  unset HF_TOKEN
   export HF_PROGRESS=0
   export HF_RESUME_STALL_S=2
   export HF_PROGRESS_INTERVAL=1
@@ -377,6 +425,10 @@ line3" "org/x"
   : >"${TEST_TMP_DIR}/hf_n"
   echo 0 >"${TEST_TMP_DIR}/hf_n"
   install_mock_bin hf '
+if [[ " $* " == *" --help "* ]] || [[ ${2:-} == "--help" ]]; then
+  echo "Usage: hf download"
+  exit 0
+fi
 echo "hf $*" >>"${TEST_TMP_DIR}/hf_calls.log"
 n=$(cat "${TEST_TMP_DIR}/hf_n" 2>/dev/null || echo 0)
 n=$((n + 1))

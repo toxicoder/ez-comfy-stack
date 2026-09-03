@@ -164,13 +164,17 @@ MiniMax H3 is **banned** (US Excluded Territory). See [Model licenses](licenses.
 
 ### Gated models / HF_TOKEN
 
-FLUX and some LTX assets may require accepting the license on Hugging Face and a token:
+**LTX-2.5** (`Lightricks/LTX-2.5`) is gated. Klein 4B distilled and Wan 2.2 5B are Apache and do not need a license click. A token in `.env` is **not** the same as accepting the Lightricks license.
 
 ```bash
 # .env
 HF_TOKEN=hf_...
+# Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree
 # or: hf auth login
+hf auth whoami
 ```
+
+Fine-grained tokens need **gated repo** read. `download-models` passes `--token` from `HF_TOKEN` so it wins over a leftover `hf auth login`.
 
 ### Disk headroom
 
