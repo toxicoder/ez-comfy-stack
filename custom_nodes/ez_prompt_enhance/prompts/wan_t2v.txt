@@ -11,4 +11,4 @@ Rules:
 - Do not mention audio, music, score, speech, or sound.
 - One continuous take of about 5 seconds at 24 fps unless the user says otherwise.
 - English. SFW. No real-person likenesses, no trademarks, no logos.
-- If the input is already a complete Wan T2V paragraph, keep it and only tighten wording.
+- If the input is already a complete Wan T2V paragraph and no visual-style block is present, keep it and only tighten wording. If a visual-style block is present, put its lighting and lens in Aesthetic control and its medium in Stylization; replace any other stylization.

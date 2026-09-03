@@ -24,18 +24,37 @@ from ez_prompt_enhance.nodes import (  # noqa: E402
 )
 
 
+_STYLE_WOVEN_FIELDS = ("medium", "light", "color", "texture", "camera", "suffix")
+_BANNED_STYLE_BRANDS = (
+    "kodak",
+    "portra",
+    "sony",
+    "canon",
+    "leica",
+    "hasselblad",
+    "pixar",
+    "unreal",
+    "lumen",
+    "ghibli",
+)
+
+
 def test_system_prompts_encode_model_rules() -> None:
     klein = client.load_system_prompt("klein_t2i")
     assert "Qwen3-4B" in klein
     assert "<|im_start|>" in klein
     assert "sentences" in klein.lower()
     assert "inventory" in klein.lower()
+    assert "visual-style" in klein.lower()
     edit = client.load_system_prompt("klein_edit")
     assert "identity" in edit.lower()
     assert "massing" in edit.lower() or "do not add" in edit.lower()
+    assert "visual-style" in edit.lower()
+    assert "medium" in edit.lower() and "grade" in edit.lower()
     wan_t2v = client.load_system_prompt("wan_t2v")
     assert "80" in wan_t2v and "120" in wan_t2v
     assert "audio" in wan_t2v.lower()
+    assert "visual-style" in wan_t2v.lower()
     wan_i2v = client.load_system_prompt("wan_i2v")
     assert "Motion + Camera" in wan_i2v
     assert "audio" in wan_i2v.lower()
@@ -44,6 +63,7 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "present" in ltx_t2v.lower()
     assert "quotation" in ltx_t2v.lower()
     assert "interleaved" in ltx_t2v.lower()
+    assert "visual-style" in ltx_t2v.lower()
     ltx_i2v = client.load_system_prompt("ltx_i2v")
     assert "first frame" in ltx_i2v.lower()
     assert "camera motion" in ltx_i2v.lower()
@@ -60,11 +80,62 @@ def test_style_catalog_is_fifty_unique() -> None:
     assert len(ids) == 51
     for sid, entry in styles.items():
         assert entry["label"].strip()
-        assert entry["llm_block"].strip()
-        assert entry["suffix"].strip()
-        assert "no photoreal" not in entry["llm_block"].lower()
+        assert entry["family"].strip()
+        for field in _STYLE_WOVEN_FIELDS:
+            blob = str(entry[field]).strip()
+            assert blob, sid
+            lower = blob.lower()
+            assert "no photoreal" not in lower
+            for brand in _BANNED_STYLE_BRANDS:
+                assert brand not in lower, f"{sid}.{field} has {brand}"
+        must = entry["must_include"]
+        conflicts = entry["conflicts"]
+        assert isinstance(must, list) and len(must) >= 2, sid
+        assert isinstance(conflicts, list) and conflicts, sid
+        for phrase in must:
+            assert str(phrase).strip()
+            lower = str(phrase).lower()
+            for brand in _BANNED_STYLE_BRANDS:
+                assert brand not in lower, f"{sid} must_include has {brand}"
     assert client.style_llm_block("none") == ""
+    assert client.format_style_instruction("none", "klein") == ""
     assert client.style_suffix("photorealistic")
+    pixar_blob = " ".join(str(styles["pixar_like_3d"][k]) for k in _STYLE_WOVEN_FIELDS).lower()
+    unreal_blob = " ".join(
+        str(styles["unreal_engine_cinematic"][k]) for k in _STYLE_WOVEN_FIELDS
+    ).lower()
+    assert "pixar" not in pixar_blob
+    assert "unreal" not in unreal_blob
+    assert "stylized feature 3d" in pixar_blob
+    assert "real-time cinematic 3d" in unreal_blob
+
+
+def test_format_style_instruction_override_and_flavor() -> None:
+    klein = client.format_style_instruction("anime", "klein")
+    assert "Visual style (mandatory" in klein
+    assert "wins" in klein.lower()
+    assert "Japanese anime" in klein
+    assert "cel-shaded" in klein.lower() or "cel color" in klein.lower()
+    assert "150" in klein
+    edit = client.format_style_instruction("watercolor_illustration", "klein_edit")
+    assert "identity" in edit.lower()
+    assert "inventory" in edit.lower()
+    assert "transparent watercolor" in edit.lower()
+    wan = client.format_style_instruction("anime", "wan")
+    assert "Stylization" in wan
+    assert "2D anime" in wan
+    ltx = client.format_style_instruction("oil_painting", "ltx")
+    assert "coherent light" in ltx.lower()
+    assert "oil painting" in ltx.lower()
+
+
+def test_ensure_style_details_appends_when_missing() -> None:
+    bare = "A red bicycle on a hill."
+    filled = client.ensure_style_details(bare, "watercolor_illustration")
+    assert "transparent watercolor" in filled.lower() or "wet-into-wet" in filled.lower()
+    already = "A bicycle as transparent watercolor with paper tooth."
+    assert client.ensure_style_details(already, "watercolor_illustration") == already
+    assert client.ensure_style_details(bare, "none") == bare
 
 
 def test_strip_fences_and_quotes() -> None:
@@ -297,17 +368,54 @@ def test_node_mappings_modes_preview_and_style() -> None:
     system = mock.call_args[0][0]
     assert "identity" in system.lower()
     with patch.object(client, "complete", return_value=("rewritten-style", None)) as mock:
-        klein.run("bike", True, "t2i", "", "anime")
+        klein.run("photoreal 85mm portrait of a bike", True, "t2i", "", "anime")
     user = mock.call_args[0][1]
-    assert "Visual style (mandatory):" in user
+    assert "Visual style (mandatory" in user
     assert "Japanese anime" in user
+    assert "wins" in user.lower()
+    assert "photoreal 85mm portrait of a bike" in user
+    assert "Replace clauses" in user
+    with patch.object(
+        client,
+        "complete",
+        return_value=("A red bicycle on a hill.", None),
+    ):
+        missing = klein.run("bike", True, "t2i", "", "watercolor_illustration")
+    assert "transparent watercolor" in missing["result"][0].lower() or "wet-into-wet" in missing[
+        "result"
+    ][0].lower()
+    with patch.object(
+        client,
+        "complete",
+        return_value=("A bicycle as transparent watercolor on paper tooth.", None),
+    ):
+        kept = klein.run("bike", True, "t2i", "", "watercolor_illustration")
+    assert kept["result"][0] == "A bicycle as transparent watercolor on paper tooth."
+    with patch.object(client, "complete", return_value=("same mug watercolor", None)) as mock:
+        klein.run("photoreal product shot of the same mug", True, "edit", "", "watercolor_illustration")
+    edit_system = mock.call_args[0][0]
+    edit_user = mock.call_args[0][1]
+    assert "identity" in edit_system.lower()
+    assert "visual-style" in edit_system.lower()
+    assert "transparent watercolor" in edit_user.lower()
+    assert "inventory" in edit_user.lower()
     with patch.object(client, "complete", return_value=("rewritten-wan", None)) as mock:
         wan.run("push in", True, "i2v", "5 seconds, 24 fps", "anime")
     wan_user = mock.call_args[0][1]
     assert "Motion + Camera" in mock.call_args[0][0]
     assert "Visual style" not in wan_user
+    with patch.object(client, "complete", return_value=("rewritten-wan-t2v", None)) as mock:
+        wan.run("a cat walks", True, "t2v", "5 seconds, 24 fps", "anime")
+    wan_t2v_user = mock.call_args[0][1]
+    assert "Visual style (mandatory" in wan_t2v_user
+    assert "2D anime" in wan_t2v_user
     with patch.object(client, "complete", return_value=("rewritten-ltx", None)) as mock:
         ltx.run("bike moves", True, "t2v", "5 seconds, 24 fps", "wind, no score")
     user = mock.call_args[0][1]
     assert "Audio notes: wind, no score" in user
     assert "Duration / framing: 5 seconds, 24 fps" in user
+    with patch.object(client, "complete", return_value=("rewritten-ltx-style", None)) as mock:
+        ltx.run("bike moves", True, "t2v", "5 seconds, 24 fps", "wind", "oil_painting")
+    ltx_user = mock.call_args[0][1]
+    assert "oil painting" in ltx_user.lower()
+    assert "coherent light" in ltx_user.lower()

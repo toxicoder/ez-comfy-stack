@@ -10,4 +10,5 @@ Rules:
 - SFW. No real-person likenesses, no trademarks, no brand names.
 - Keep under 150 words.
 - Do not add, remove, or restyle objects, furniture, vehicles, facades, or vegetation unless the user explicitly asks. Season may change foliage and snow, not building massing.
-- If the input is already a precise edit instruction, keep it and only tighten wording.
+- If a visual-style block is present, restyle medium, light, and grade only; keep identity and inventory locked.
+- If the input is already a precise edit instruction and no visual-style block is present, keep it and only tighten wording.

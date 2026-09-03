@@ -12,12 +12,13 @@ tags: [prompting, klein, wan, ltx, comfyui]
 - Canned lab-example text (already rewritten)
 - GIF loop motion and dream-house identity plate (Prompt Join)
 - Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance on by default)
+- Style dropdown: research-backed look references; dropdown wins over style already in the source
 
 **What this enables**
 
 - Writing (or pasting) a prompt that matches Klein 4B, Wan 2.2, or LTX-2.5 instead of SD1.5 tag soup
 - Typing a lazy sentence and letting the on-box Qwen3 rewriter expand it for Klein / Wan / LTX
-- Optional style dropdown (50 presets) and a visible rewrite on the Enhance node after Queue
+- Optional style dropdown (50 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
 
 !!! tip "Lab graphs already ship model-native prompts"
 
@@ -87,9 +88,16 @@ STRING out → CLIPTextEncode `text` input.
 1. `./scripts/manage.sh download-models` (includes `comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`).
 2. Type a lazy sentence (or leave the canned paragraph). **Enhance** defaults **on**.
 3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
-4. Queue. Read the rewritten prompt **on the Enhance node** — that text is what CLIP encodes.
+4. Queue. Read the rewritten prompt **on the Enhance node** — that text is what CLIP encodes. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a photo paragraph with `in X style` tacked on.
 
 **Enhance defaults to true.** Turn it **off** to pin the widget text (frozen identity bibles). Style still applies as a short suffix when Enhance is off. Style is ignored on I2V (the start image owns look).
+
+When Enhance is **on** and a style is selected (t2i / t2v / Klein edit):
+
+- The dropdown is look authority. If the source already names a medium, lighting, grade, lens, or art style, the rewriter **replaces** those clauses so they match the dropdown. It does not stack two styles.
+- Each preset is a short reference (medium, light, color, texture, camera or projection) tuned for Klein prose, Wan aesthetic+stylization, or LTX lighting/surface in the flowing paragraph.
+- CLIP text stays generic: no camera/film/studio brand names. Labels such as **Pixar-like 3D** still weave as “stylized feature 3D”.
+- If the 4B rewriter drops the look, the node appends the preset’s short suffix so the CLIP prompt still carries the style.
 
 After Queue the node is an output: the preview is the rewrite, or a `[passthrough: …]` reason plus the original if the GGUF / llama.cpp is missing.
 

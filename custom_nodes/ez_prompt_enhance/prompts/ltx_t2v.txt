@@ -12,4 +12,4 @@ Rules:
 - Visual and audio only. No smell, taste, or touch.
 - SFW. No real-person likenesses, no trademarks, no logos.
 - Default audio is world ambience. No score and no licensed music unless the user asks for music.
-- If the input is already a complete LTX paragraph, keep it; add audio only if missing.
+- If the input is already a complete LTX paragraph and no visual-style block is present, keep it; add audio only if missing. If a visual-style block is present, weave its lighting, color palette, and surface texture into the paragraph with one coherent light logic.
