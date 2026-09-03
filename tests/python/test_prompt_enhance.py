@@ -66,9 +66,9 @@ def test_system_prompts_encode_model_rules() -> None:
 
 
 def test_strip_fences_and_quotes() -> None:
-    fenced = "```text\nA red bicycle leans on brick.\n```"
-    assert client.strip_model_wrapping(fenced) == "A red bicycle leans on brick."
-    assert client.strip_model_wrapping('"A red bicycle."') == "A red bicycle."
+    fenced = "```text\nA teal-and-copper superhero stands on a helipad.\n```"
+    assert client.strip_model_wrapping(fenced) == "A teal-and-copper superhero stands on a helipad."
+    assert client.strip_model_wrapping('"A teal-and-copper superhero."') == "A teal-and-copper superhero."
 
 
 def test_enhance_false_skips_api(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -108,10 +108,10 @@ def test_timeout_passthrough(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_success_strips_fences(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("XAI_API_KEY", "xai-test")
     monkeypatch.setenv("XAI_MODEL", "grok-4.6")
-    fake = _FakeResponse(_completion("```\nA photoreal still of a red bicycle.\n```"))
+    fake = _FakeResponse(_completion("```\nA 3D feature-animation still of a teal-and-copper superhero.\n```"))
     with patch.object(client.urllib.request, "urlopen", return_value=fake) as opener:
-        out = client.enhance_prompt("sys", "red bike", enhance=True)
-    assert out == "A photoreal still of a red bicycle."
+        out = client.enhance_prompt("sys", "hero still", enhance=True)
+    assert out == "A 3D feature-animation still of a teal-and-copper superhero."
     opener.assert_called_once()
     request = opener.call_args[0][0]
     assert request.full_url.endswith("/chat/completions")
@@ -141,7 +141,7 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
     assert "start-image" in wan_ip.lower() or "start image" in wan_ip.lower()
     assert "score" not in wan_ip.lower()
     assert "YouTube 16:9 still:" not in wan_tp
-    assert "footsteps" in ltx_tp.lower() or "bell" in ltx_tp.lower()
+    assert "wind" in ltx_tp.lower() or "traffic" in ltx_tp.lower()
     assert "no score" in ltx_ip.lower() or "no music" in ltx_ip.lower()
     assert not any(
         n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive"
@@ -167,7 +167,8 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     house = json.loads((wf / "klein-dream-house-lab-example.json").read_text(encoding="utf-8"))
     klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein["widgets_values"][1] is False
-    assert "photoreal still photograph" in klein["widgets_values"][0]
+    assert "3D feature-animation still" in klein["widgets_values"][0]
+    assert "teal-and-copper" in klein["widgets_values"][0]
     wan = next(n for n in gif["nodes"] if n.get("type") == "EZWanPromptEnhance")
     assert wan["widgets_values"][2] == "i2v"
     motion = wan["widgets_values"][0].lower()
@@ -245,8 +246,8 @@ def test_node_mappings_and_modes() -> None:
     klein = EZKleinPromptEnhance()
     wan = EZWanPromptEnhance()
     ltx = EZLTXPromptEnhance()
-    off = klein.run("A red bicycle.", False, "t2i", "YouTube 16:9 still")
-    assert off["result"] == ("A red bicycle.",)
+    off = klein.run("A teal-and-copper superhero.", False, "t2i", "YouTube 16:9 still")
+    assert off["result"] == ("A teal-and-copper superhero.",)
     with patch.object(client, "chat_complete", return_value="rewritten-klein") as mock:
         on = klein.run("bike", True, "edit", "")
     assert on["result"] == ("rewritten-klein",)

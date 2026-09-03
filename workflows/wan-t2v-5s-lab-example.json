@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "A red bicycle leans against a brick storefront on a small-town main street at golden hour, unmarked facades empty of signage. Warm sidelight rakes the brick and chrome. Leaves and a shop flag stir slowly in a light breeze while a pedestrian crosses the street in the far background. The camera dollies in slowly toward the bicycle over five seconds. Photoreal cinematic motion, 24mm, shallow depth of field, YouTube 16:9."
+        "An original superhero in a teal-and-copper flight suit stands on a rooftop helipad above a stylized dusk city of rounded towers, unmarked circular starburst chest plate catching a warm key. Suit fabric and a short capelet stir in a high-altitude breeze while distant air traffic glides between the towers. The camera dollies in slowly toward the hero over five seconds. Feature-film 3D animation, rounded forms, physically based materials, cinematic three-point light, volumetric dusk haze, 24mm, YouTube 16:9."
       ],
       "title": "Positive"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "A red bicycle leans against a brick storefront on a small-town main street at golden hour, unmarked facades empty of signage. Warm sidelight rakes the brick and chrome. Leaves and a shop flag stir slowly in a light breeze while a pedestrian crosses the street in the far background. The camera dollies in slowly toward the bicycle over five seconds. Photoreal cinematic motion, 24mm, shallow depth of field, YouTube 16:9.",
+        "An original superhero in a teal-and-copper flight suit stands on a rooftop helipad above a stylized dusk city of rounded towers, unmarked circular starburst chest plate catching a warm key. Suit fabric and a short capelet stir in a high-altitude breeze while distant air traffic glides between the towers. The camera dollies in slowly toward the hero over five seconds. Feature-film 3D animation, rounded forms, physically based materials, cinematic three-point light, volumetric dusk haze, 24mm, YouTube 16:9.",
         false,
         "t2v",
         "5 seconds, 24 fps"

@@ -45,9 +45,9 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Front-load the subject. Write prose.
 
-    **Do:** `A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick…`
+    **Do:** `A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Warm key rakes the unmarked chest plate…`
 
-    **Don’t:** `main street, bicycle, photoreal, 24mm, no logos, no text`
+    **Don’t:** `rooftop, superhero, 3D animation, 24mm, no logos, no text`
 
 === "Wan 2.2 T2V"
 

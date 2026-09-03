@@ -13,6 +13,24 @@ import json
 import re
 from pathlib import Path
 
+from _lab_theme import (
+    CREATOR_IDENTITY,
+    KLEIN_HOOK,
+    KLEIN_SHORTS,
+    KLEIN_THUMBNAIL,
+    LTX_BROLL,
+    LTX_BROLL_AUDIO,
+    LTX_HOOK_AUDIO,
+    LTX_HOOK_AV,
+    LTX_SHORTS_AUDIO,
+    LTX_SHORTS_I2V,
+    LTX_WEATHER,
+    LTX_WEATHER_AUDIO,
+    STORYBOARD,
+    WAN_ORBIT,
+    WAN_SHORTS_I2V,
+)
+
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 SHORTS = WF / "shorts"
@@ -636,6 +654,17 @@ def build_all_films() -> None:
 # --- Creator toolkit -------------------------------------------------------
 
 
+KLEIN_NEG_PHOTO = (
+    "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+)
+
+
+def _set_neg(graph: dict, text: str) -> None:
+    for n in graph["nodes"]:
+        if n.get("type") == "CLIPTextEncode" and n.get("title") == "Negative":
+            n["widgets_values"] = [text]
+
+
 def _set_note(graph: dict, note: str, description: str) -> None:
     graph["extra"]["lab_note"] = note
     graph["extra"]["lab_description"] = description
@@ -658,11 +687,7 @@ def build_creator_toolkit() -> None:
     save["widgets_values"] = ["ez_shorts_still"]
     save["title"] = "Save PNG"
     enh = _node(g, "EZKleinPromptEnhance")
-    prompt = (
-        "A photoreal vertical still for Shorts. A red bicycle leans against a brick "
-        "storefront at golden hour. Warm sidelight, unmarked facades, empty of signage. "
-        "Shot on a 35mm lens, framed for 9:16 with headroom for captions."
-    )
+    prompt = KLEIN_SHORTS
     enh["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     note = f"""## klein-shorts-still-lab-example
@@ -697,11 +722,7 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance optional (XAI_API_K
     vhs = _node(g, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = "ez_shorts_wan_video"
     polish_video_graph(g)
-    motion = (
-        "Locked vertical framing for Shorts. Gentle breeze moves leaves and a shop flag. "
-        "Camera holds, then a slow push-in. Keep the start-image identity locked. "
-        "One continuous ~5 s take at 24 fps. No audio."
-    )
+    motion = WAN_SHORTS_I2V
     enh = _node(g, "EZWanPromptEnhance")
     enh["widgets_values"] = [motion, False, "i2v", "5 seconds, 24 fps, 9:16"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
@@ -734,18 +755,16 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
     vhs = _node(g, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = "ez_shorts_ltx_video"
     polish_video_graph(g)
-    prompt = (
-        "The start image holds as the first frame in vertical Shorts framing. Soft wind "
-        "rustles a flag as distant footsteps tap the pavement and a faint shop bell clinks "
-        "once. Slow push-in. No music and no score."
-    )
+    prompt = LTX_SHORTS_I2V
     enh = _node(g, "EZLTXPromptEnhance")
-    enh["widgets_values"] = [prompt, False, "i2v", "5 seconds, 24 fps, 9:16", "soft wind, footsteps, shop bell, no score"]
+    enh["widgets_values"] = [prompt, False, "i2v", "5 seconds, 24 fps, 9:16", LTX_SHORTS_AUDIO]
     for n in g["nodes"]:
-        if n.get("type") == "CLIPTextEncode" and n.get("title") in (None, "Positive", "Motion / prompt"):
-            # LTX uses enhance → CLIP; still set if present
-            if n.get("title") == "Positive" or "Positive" in (n.get("title") or ""):
-                n["widgets_values"] = [prompt]
+        if n.get("type") == "CLIPTextEncode" and n.get("title") in (
+            "Positive",
+            "Motion / prompt",
+            "Motion + audio",
+        ):
+            n["widgets_values"] = [prompt]
     note = f"""## ltx-shorts-i2v-lab-example
 
 Vertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
@@ -763,11 +782,7 @@ Disclose AI-generated media; do not strip provenance; do not distill. No score.
     g["revision"] = 1
     save = _node(g, "SaveImage")
     save["widgets_values"] = ["ez_thumbnail"]
-    prompt = (
-        "A bold YouTube thumbnail still, 16:9. A single red bicycle fills the frame against "
-        "a brick storefront at golden hour. High contrast sidelight, clear subject separation, "
-        "unmarked facades, empty of text and logos. Photoreal, eye-catching, no burned-in words."
-    )
+    prompt = KLEIN_THUMBNAIL
     enh = _node(g, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
@@ -795,6 +810,7 @@ Keep the subject large and readable at small sizes. Do not burn in titles — ad
     enh = _node(g, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
+    _set_neg(g, KLEIN_NEG_PHOTO)
     note = """## klein-product-packshot-lab-example
 
 Clean product / packshot still (Klein 4B). Default 1024×1024. Prefix `ez_packshot`.
@@ -842,6 +858,8 @@ Swap the subject in the prompt; keep seamless background and soft studio light.
             n["widgets_values"][0] = before_prompt
         if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
             n["widgets_values"] = [before_prompt]
+        if n.get("type") == "CLIPTextEncode" and n.get("title") == "Negative":
+            n["widgets_values"] = [KLEIN_NEG_PHOTO]
         if n.get("type") == "EmptyFlux2LatentImage":
             n["widgets_values"] = [768, 432, 1]
     for n in remapped_b:
@@ -852,6 +870,8 @@ Swap the subject in the prompt; keep seamless background and soft studio light.
             n["widgets_values"][0] = after_prompt
         if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
             n["widgets_values"] = [after_prompt]
+        if n.get("type") == "CLIPTextEncode" and n.get("title") == "Negative":
+            n["widgets_values"] = [KLEIN_NEG_PHOTO]
         if n.get("type") == "EmptyFlux2LatentImage":
             n["widgets_values"] = [768, 432, 1]
         if n.get("type") == "Note":
@@ -927,6 +947,8 @@ Identity: {identity}
                 n["widgets_values"][0] = prompt
             if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
                 n["widgets_values"] = [prompt]
+            if n.get("type") == "CLIPTextEncode" and n.get("title") == "Negative":
+                n["widgets_values"] = [KLEIN_NEG_PHOTO]
             if n.get("type") == "EmptyFlux2LatentImage":
                 n["widgets_values"] = [768, 960, 1]  # 4:5-ish
         nodes.extend(rn)
@@ -1015,19 +1037,18 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
     vhs = _node(g, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = "ez_broll_video"
     polish_video_graph(g)
-    prompt = (
-        "Locked-camera ambient B-roll of a quiet small-town main street at golden hour. "
-        "Leaves drift, a shop flag stirs, distant footsteps and soft wind, a faint bell once. "
-        "Photoreal, unmarked facades, empty of logos. No music and no score. Five seconds."
-    )
+    prompt = LTX_BROLL
     enh = _node(g, "EZLTXPromptEnhance")
     enh["widgets_values"] = [
         prompt,
         False,
         "t2v",
         "5 seconds, 24 fps, locked camera B-roll",
-        "wind, footsteps, shop bell, no score",
+        LTX_BROLL_AUDIO,
     ]
+    for n in g["nodes"]:
+        if n.get("type") == "CLIPTextEncode" and n.get("title") in ("Positive", "Motion / prompt"):
+            n["widgets_values"] = [prompt]
     note = f"""## ltx-broll-ambient-lab-example
 
 Ambient B-roll AV plate (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
@@ -1040,14 +1061,7 @@ Disclose AI-generated media. No score.
     _dump(WF / "ltx-broll-ambient-lab-example.json", g)
 
     # 10. Storyboard 6-up
-    board = [
-        ("ez_board_01", "Wide establishing shot of a small-town main street at dawn, 24mm."),
-        ("ez_board_02", "Medium shot of a red bicycle against a brick storefront, 35mm."),
-        ("ez_board_03", "Detail of chrome handlebars and warm sidelight on brick, 50mm."),
-        ("ez_board_04", "Street-level tracking angle as a pedestrian passes in the distance, 35mm."),
-        ("ez_board_05", "Over-the-shoulder toward the unmarked shop window, golden hour."),
-        ("ez_board_06", "Closing wide as lights warm in windows, quiet street, 24mm."),
-    ]
+    board = list(STORYBOARD)
     nodes = []
     links = []
     note_text = """## klein-storyboard-6up-lab-example
@@ -1069,8 +1083,8 @@ Edit each Positive prompt for your beat sheet. Keep SFW / no unlicensed marks.
             pos_dy=(i // 3) * 900,
         )
         prompt = (
-            f"A photoreal storyboard still, YouTube 16:9. {camera} Unmarked facades, "
-            "empty of signage. Clean cinematic frame."
+            f"A 3D feature-animation storyboard still, YouTube 16:9. {camera} "
+            "Unmarked surfaces, empty of lettering. Clean cinematic frame."
         )
         for n in rn:
             if n.get("type") == "SaveImage":
@@ -1138,6 +1152,7 @@ def _klein_single(
     note: str,
     description: str,
     size_title: str | None = None,
+    neg: str | None = None,
 ) -> None:
     src = WF / "klein-still-hero-lab-example.json" if template == "hero" else WF / "klein-still-draft-lab-example.json"
     g = _load(src)
@@ -1151,6 +1166,8 @@ def _klein_single(
     save["title"] = "Save PNG"
     _node(g, "EZKleinPromptEnhance")["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
+    if neg is not None:
+        _set_neg(g, neg)
     _set_note(g, note, description)
     g["groups"] = [
         _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
@@ -1324,15 +1341,19 @@ def _ltx_av(
     polish_video_graph(g)
     enh = _node(g, "EZLTXPromptEnhance")
     enh["widgets_values"] = [prompt, False, mode, "5 seconds, 24 fps", audio_hint]
+    for n in g["nodes"]:
+        if n.get("type") == "CLIPTextEncode" and n.get("title") in (
+            "Positive",
+            "Motion / prompt",
+            "Motion + audio",
+        ):
+            n["widgets_values"] = [prompt]
     _set_note(g, note, description)
     _dump(WF / f"{stem}.json", g)
 
 
 def build_creator_toolkit_v2() -> None:
-    identity = (
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle "
-        "leans against a brick storefront. Unmarked facades, empty of signage."
-    )
+    identity = CREATOR_IDENTITY
 
     _klein_single(
         stem="klein-endcard-cta-lab-example",
@@ -1341,7 +1362,8 @@ def build_creator_toolkit_v2() -> None:
         prefix="ez_endcard",
         prompt=(
             f"{identity} Framed as a YouTube end-card plate: generous empty lower-right "
-            "for a subscribe button later. No burned-in text, logos, or UI chrome. Photoreal 16:9."
+            "for a subscribe button later. Clean of burned-in text, logos, or UI chrome. "
+            "Feature-film 3D animation 16:9."
         ),
         note="""## klein-endcard-cta-lab-example
 
@@ -1358,7 +1380,7 @@ Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
         prefix="ez_quote_bg",
         prompt=(
             f"{identity} Square 1:1. Soft bokeh, quiet center so overlay text can sit later. "
-            "No lettering, no logos. Photoreal quote-card background."
+            "Empty of lettering. Feature-film 3D animation quote-card background."
         ),
         note="""## klein-quote-bg-lab-example
 
@@ -1375,7 +1397,7 @@ Keep the center empty of detail; add the quote in your editor.
         prefix="ez_og",
         prompt=(
             f"{identity} Wide blog / Open Graph hero. Subject left-weighted, quiet right third "
-            "for a headline later. No burned-in text. Photoreal ~1.9:1."
+            "for a headline later. Clean of burned-in text. Feature-film 3D animation ~1.9:1."
         ),
         note="""## klein-og-blog-lab-example
 
@@ -1401,6 +1423,7 @@ Swap the props in the prompt. Add show title in your editor.
 """,
         description="Klein 4B podcast cover 1:1",
         size_title="Size 1:1 podcast cover",
+        neg=KLEIN_NEG_PHOTO,
     )
     _klein_single(
         stem="klein-banner-wide-lab-example",
@@ -1409,7 +1432,7 @@ Swap the props in the prompt. Add show title in your editor.
         prefix="ez_banner",
         prompt=(
             f"{identity} Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band "
-            "for a name overlay. No text, no logos. Photoreal ~3:1."
+            "for a name overlay. Empty of lettering. Feature-film 3D animation ~3:1."
         ),
         note="""## klein-banner-wide-lab-example
 
@@ -1425,7 +1448,7 @@ Keep the upper band simple for a name overlay.
         size=(1024, 1024),
         prefix="ez_ig_square",
         prompt=(
-            f"{identity} Instagram 1:1 square. Subject centered, warm sidelight, unmarked facades."
+            f"{identity} Instagram 1:1 square. Subject centered, warm key, unmarked surfaces."
         ),
         note="""## klein-ig-square-lab-example
 
@@ -1440,11 +1463,7 @@ Edit the prompt for any feed post.
         template="draft",
         size=(432, 768),
         prefix="ez_hook_still",
-        prompt=(
-            "A photoreal vertical hook still for Shorts. First-frame energy: a red bicycle "
-            "fills the lower third against a brick storefront at golden hour. Tight 9:16, "
-            "caption headroom at the top. Unmarked, no text."
-        ),
+        prompt=KLEIN_HOOK,
         note="""## klein-hook-still-lab-example
 
 First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`.
@@ -1460,7 +1479,7 @@ Feed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.
         prefix="ez_lowerthird",
         prompt=(
             f"{identity} 16:9 plate with a clean, empty lower fifth for a lower-third graphic. "
-            "Subject sits in the upper two-thirds. No text, no logos."
+            "Subject sits in the upper two-thirds. Empty of lettering."
         ),
         note="""## klein-lower-third-bg-lab-example
 
@@ -1486,6 +1505,7 @@ Swap the dish in the prompt; keep unmarked surfaces.
 """,
         description="Klein 4B food tabletop 4:5",
         size_title="Size 4:5 tabletop",
+        neg=KLEIN_NEG_PHOTO,
     )
 
     _klein_pack(
@@ -1500,20 +1520,20 @@ Swap the dish in the prompt; keep unmarked surfaces.
             (
                 "ez_light_02",
                 "WINDOW",
-                f"{identity} Soft overcast window light, gentle falloff, cool shadows.",
+                f"{identity} Soft overcast skylight, gentle falloff, cool shadows.",
             ),
             (
                 "ez_light_03",
                 "NIGHT LAMP",
-                "The same red bicycle and brick storefront at night under a warm street lamp. "
-                "Unmarked facades. Photoreal 16:9.",
+                "The same teal-and-copper superhero on the helipad at night under rooftop "
+                "sodium and city neon. Unmarked surfaces. Feature-film 3D animation 16:9.",
             ),
         ],
         cols=3,
         note="""## klein-lighting-trio-lab-example
 
 Same subject under three lights (Klein 4B). Prefixes `ez_light_01`…`03` (key / window / night lamp).
-Keep the bicycle identity locked; change only the light.
+Keep the hero identity locked; change only the light.
 """,
         description="Klein 4B three-light study of one subject",
     )
@@ -1524,28 +1544,28 @@ Keep the bicycle identity locked; change only the light.
             (
                 "ez_tod_01",
                 "DAWN",
-                f"{identity} Replace golden hour with first blue dawn, empty street, cool air.",
+                f"{identity} Replace dusk with first blue dawn, empty helipad, cool air.",
             ),
             (
                 "ez_tod_02",
                 "NOON",
-                f"{identity} Replace golden hour with hard noon sun, short shadows.",
+                f"{identity} Replace dusk with hard noon sun, short shadows.",
             ),
             (
                 "ez_tod_03",
                 "DUSK",
-                f"{identity} Replace golden hour with dusk, pink sky, shop lamps just on.",
+                f"{identity} Dusk, pink sky, city lamps just on.",
             ),
             (
                 "ez_tod_04",
                 "NIGHT",
-                "The same red bicycle and brick storefront at night. Warm window glow, unmarked facades.",
+                "The same teal-and-copper superhero on the helipad at night. Warm tower glow, unmarked surfaces.",
             ),
         ],
         note="""## klein-time-of-day-lab-example
 
 Same place at dawn / noon / dusk / night (Klein 4B). Prefixes `ez_tod_01`…`04`.
-Keep the street and bicycle locked; change only time of day.
+Keep the rooftop and hero locked; change only time of day.
 """,
         description="Klein 4B time-of-day four-still pack",
     )
@@ -1556,17 +1576,17 @@ Keep the street and bicycle locked; change only time of day.
             (
                 "ez_angle_wide",
                 "WIDE",
-                f"{identity} 24mm wide establishing, lots of street and sky.",
+                f"{identity} 24mm wide establishing, lots of city and sky.",
             ),
             (
                 "ez_angle_med",
                 "MEDIUM",
-                f"{identity} 35mm medium, bicycle fills the middle third.",
+                f"{identity} 35mm medium, hero fills the middle third.",
             ),
             (
                 "ez_angle_close",
                 "CLOSE",
-                f"{identity} 50mm close on chrome handlebars and brick texture.",
+                f"{identity} 50mm close on copper starburst chest plate and suit materials.",
             ),
         ],
         cols=3,
@@ -1594,7 +1614,7 @@ Keep identity locked; change only lens and framing.
             (
                 "ez_mood_03",
                 "MUTED",
-                f"{identity} Muted filmic grade, desaturated brick, soft contrast.",
+                f"{identity} Muted filmic grade, desaturated copper, soft contrast.",
             ),
             (
                 "ez_mood_04",
@@ -1605,7 +1625,7 @@ Keep identity locked; change only lens and framing.
         note="""## klein-color-moods-lab-example
 
 Four color moods, shared identity (Klein 4B). Prefixes `ez_mood_01`…`04`.
-Keep the street and bicycle locked; change only grade / mood.
+Keep the rooftop and hero locked; change only grade / mood.
 """,
         description="Klein 4B four-mood color pack",
     )
@@ -1613,10 +1633,7 @@ Keep the street and bicycle locked; change only grade / mood.
     _wan_i2v(
         stem="wan-orbit-i2v-lab-example",
         prefix="ez_orbit_video",
-        motion=(
-            "Slow orbit around the start-image subject. Camera arcs a few degrees right while "
-            "keeping the product or bicycle identity locked. One continuous ~5 s take, no cuts."
-        ),
+        motion=WAN_ORBIT,
         note=f"""## wan-orbit-i2v-lab-example
 
 Silent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).
@@ -1678,12 +1695,8 @@ LoadImage: a cutout-friendly still.
     _ltx_av(
         stem="ltx-weather-broll-lab-example",
         prefix="ez_weather_video",
-        prompt=(
-            "Locked-camera weather B-roll. Rain streaks across a brick storefront and a red bicycle "
-            "at golden-hour leftovers. Soft wind, rain on pavement, distant drip. Unmarked facades. "
-            "No music and no score. Five seconds."
-        ),
-        audio_hint="rain, wind, drip, no score",
+        prompt=LTX_WEATHER,
+        audio_hint=LTX_WEATHER_AUDIO,
         mode="t2v",
         note=f"""## ltx-weather-broll-lab-example
 
@@ -1718,12 +1731,8 @@ Disclose AI-generated media. No score.
     _ltx_av(
         stem="ltx-hook-av-lab-example",
         prefix="ez_hook_video",
-        prompt=(
-            "A five-second AV cold open. Camera snaps to a red bicycle against a brick storefront "
-            "as a shop bell clinks once and wind hits a flag. Fast present-tense energy, unmarked "
-            "facades. No music and no score."
-        ),
-        audio_hint="shop bell, wind, no score",
+        prompt=LTX_HOOK_AV,
+        audio_hint=LTX_HOOK_AUDIO,
         mode="t2v",
         note=f"""## ltx-hook-av-lab-example
 

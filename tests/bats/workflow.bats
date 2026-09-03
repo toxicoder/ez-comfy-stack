@@ -151,7 +151,7 @@ def pos(g):
     enh=next(n for n in g['nodes'] if n.get('type')=='EZKleinPromptEnhance')
     return enh['widgets_values'][0]
 assert pos(d)==pos(h)
-assert 'photoreal still photograph' in pos(d)
+assert '3D feature-animation still' in pos(d)
 assert 'no logos, no text' not in pos(d)
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 for n in d['nodes'])
@@ -267,7 +267,7 @@ assert 'no score' in text or 'no music' in text
 t=json.load(open('${dir}/ltx-t2v-5s-lab-example.json'))
 tenh=next(n for n in t['nodes'] if n.get('type')=='EZLTXPromptEnhance')
 assert 'YouTube 16:9 still:' not in tenh['widgets_values'][0]
-assert 'shop bell' in tenh['widgets_values'][0].lower() or 'footsteps' in tenh['widgets_values'][0].lower()
+assert 'wind' in tenh['widgets_values'][0].lower() or 'traffic' in tenh['widgets_values'][0].lower()
 "
   [ "${status}" -eq 0 ]
 }

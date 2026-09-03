@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Locked vertical framing for Shorts. Gentle breeze moves leaves and a shop flag. Camera holds, then a slow push-in. Keep the start-image identity locked. One continuous ~5 s take at 24 fps. No audio."
+        "Locked vertical framing for Shorts. Capelet and suit fabric flutter. City lights hold. Camera holds, then a slow push-in. Keep the start-image identity locked. One continuous ~5 s take at 24 fps. No audio."
       ],
       "title": "Motion / prompt"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Locked vertical framing for Shorts. Gentle breeze moves leaves and a shop flag. Camera holds, then a slow push-in. Keep the start-image identity locked. One continuous ~5 s take at 24 fps. No audio.",
+        "Locked vertical framing for Shorts. Capelet and suit fabric flutter. City lights hold. Camera holds, then a slow push-in. Keep the start-image identity locked. One continuous ~5 s take at 24 fps. No audio.",
         false,
         "i2v",
         "5 seconds, 24 fps, 9:16"

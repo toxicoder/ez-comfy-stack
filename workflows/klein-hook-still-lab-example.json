@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal vertical hook still for Shorts. First-frame energy: a red bicycle fills the lower third against a brick storefront at golden hour. Tight 9:16, caption headroom at the top. Unmarked, no text."
+        "A 3D feature-animation vertical hook still for Shorts. First-frame energy: an original teal-and-copper superhero fills the lower third on a dusk rooftop helipad. Tight 9:16, caption headroom at the top. Unmarked chest plate, empty of lettering."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -413,7 +413,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal vertical hook still for Shorts. First-frame energy: a red bicycle fills the lower third against a brick storefront at golden hour. Tight 9:16, caption headroom at the top. Unmarked, no text.",
+        "A 3D feature-animation vertical hook still for Shorts. First-frame energy: an original teal-and-copper superhero fills the lower third on a dusk rooftop helipad. Tight 9:16, caption headroom at the top. Unmarked chest plate, empty of lettering.",
         false,
         "t2i",
         "YouTube 16:9 still"

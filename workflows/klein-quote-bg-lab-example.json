@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Square 1:1. Soft bokeh, quiet center so overlay text can sit later. No lettering, no logos. Photoreal quote-card background."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Square 1:1. Soft bokeh, quiet center so overlay text can sit later. Empty of lettering. Feature-film 3D animation quote-card background."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -451,7 +451,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Square 1:1. Soft bokeh, quiet center so overlay text can sit later. No lettering, no logos. Photoreal quote-card background.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Square 1:1. Soft bokeh, quiet center so overlay text can sit later. Empty of lettering. Feature-film 3D animation quote-card background.",
         false,
         "t2i",
         "YouTube 16:9 still"

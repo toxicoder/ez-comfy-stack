@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal vertical still for Shorts. A red bicycle leans against a brick storefront at golden hour. Warm sidelight, unmarked facades, empty of signage. Shot on a 35mm lens, framed for 9:16 with headroom for captions."
+        "A 3D feature-animation vertical still for Shorts. An original superhero in a teal-and-copper flight suit stands on a dusk rooftop helipad. Warm key, unmarked circular starburst chest plate, empty of lettering. Shot on a 35mm lens, framed for 9:16 with headroom for captions."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -413,7 +413,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal vertical still for Shorts. A red bicycle leans against a brick storefront at golden hour. Warm sidelight, unmarked facades, empty of signage. Shot on a 35mm lens, framed for 9:16 with headroom for captions.",
+        "A 3D feature-animation vertical still for Shorts. An original superhero in a teal-and-copper flight suit stands on a dusk rooftop helipad. Warm key, unmarked circular starburst chest plate, empty of lettering. Shot on a 35mm lens, framed for 9:16 with headroom for captions.",
         false,
         "t2i",
         "YouTube 16:9 still"

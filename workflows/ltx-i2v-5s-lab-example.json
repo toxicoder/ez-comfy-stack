@@ -191,7 +191,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The camera dollies in slowly toward the bicycle while leaves and a shop flag stir in a light breeze and a pedestrian crosses in the background. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. The storefront and bicycle identity stay locked. No music and no score."
+        "The start image holds as the first frame. The camera dollies in slowly toward the superhero while suit fabric and a short capelet stir in a high-altitude breeze and distant air traffic glides between rounded towers. Rooftop wind snaps the fabric as a distant traffic hum rolls between the towers. The rooftop and hero identity stay locked. No music and no score."
       ],
       "title": "Motion / prompt"
     },
@@ -771,11 +771,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The camera dollies in slowly toward the bicycle while leaves and a shop flag stir in a light breeze and a pedestrian crosses in the background. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. The storefront and bicycle identity stay locked. No music and no score.",
+        "The start image holds as the first frame. The camera dollies in slowly toward the superhero while suit fabric and a short capelet stir in a high-altitude breeze and distant air traffic glides between rounded towers. Rooftop wind snaps the fabric as a distant traffic hum rolls between the towers. The rooftop and hero identity stay locked. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
-        "soft wind, distant footsteps, shop bell, no score"
+        "rooftop wind, fabric snap, distant traffic hum, no score"
       ],
       "title": "LTX Prompt Enhance"
     },

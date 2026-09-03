@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Replace golden hour with first blue dawn, empty street, cool air."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Replace dusk with first blue dawn, empty helipad, cool air."
       ],
       "title": "Positive"
     },
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -389,7 +389,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Replace golden hour with first blue dawn, empty street, cool air.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Replace dusk with first blue dawn, empty helipad, cool air.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -542,7 +542,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Replace golden hour with hard noon sun, short shadows."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Replace dusk with hard noon sun, short shadows."
       ],
       "title": "Positive"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -781,7 +781,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Replace golden hour with hard noon sun, short shadows.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Replace dusk with hard noon sun, short shadows.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -934,7 +934,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Replace golden hour with dusk, pink sky, shop lamps just on."
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Dusk, pink sky, city lamps just on."
       ],
       "title": "Positive"
     },
@@ -973,7 +973,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -1173,7 +1173,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Unmarked facades, empty of signage. Replace golden hour with dusk, pink sky, shop lamps just on.",
+        "A 3D feature-animation still of a dusk city rooftop. An original superhero in a teal-and-copper flight suit stands on a helipad. Unmarked circular starburst chest plate, empty of lettering. Dusk, pink sky, city lamps just on.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -1326,7 +1326,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The same red bicycle and brick storefront at night. Warm window glow, unmarked facades."
+        "The same teal-and-copper superhero on the helipad at night. Warm tower glow, unmarked surfaces."
       ],
       "title": "Positive"
     },
@@ -1365,7 +1365,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -1565,7 +1565,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "The same red bicycle and brick storefront at night. Warm window glow, unmarked facades.",
+        "The same teal-and-copper superhero on the helipad at night. Warm tower glow, unmarked surfaces.",
         false,
         "t2i",
         "YouTube 16:9 still"
@@ -1592,7 +1592,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-time-of-day-lab-example\n\nSame place at dawn / noon / dusk / night (Klein 4B). Prefixes `ez_tod_01`\u2026`04`.\nKeep the street and bicycle locked; change only time of day.\n"
+        "## klein-time-of-day-lab-example\n\nSame place at dawn / noon / dusk / night (Klein 4B). Prefixes `ez_tod_01`\u2026`04`.\nKeep the rooftop and hero locked; change only time of day.\n"
       ],
       "title": "Operator note"
     }
@@ -1976,7 +1976,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-time-of-day-lab-example",
-    "lab_note": "## klein-time-of-day-lab-example\n\nSame place at dawn / noon / dusk / night (Klein 4B). Prefixes `ez_tod_01`\u2026`04`.\nKeep the street and bicycle locked; change only time of day.\n",
+    "lab_note": "## klein-time-of-day-lab-example\n\nSame place at dawn / noon / dusk / night (Klein 4B). Prefixes `ez_tod_01`\u2026`04`.\nKeep the rooftop and hero locked; change only time of day.\n",
     "lab_description": "Klein 4B time-of-day four-still pack"
   },
   "version": 0.4
