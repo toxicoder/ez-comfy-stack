@@ -22,65 +22,75 @@ KLEIN_NEG = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
 HOUSE_IDENTITY = (
-    "A photoreal still photograph of a contemporary cedar-and-glass lake house. "
-    "Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed "
-    "windows face a still alpine lake. Warm oak floors run indoors. An evergreen "
-    "ridge rises behind the unmarked house. Golden wood grain, clean glass, and "
-    "quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, "
-    "unmarked surfaces."
+    "A photoreal still photograph of one compact single-story rectangular cedar "
+    "cabin on a still alpine lake. One low charcoal standing-seam hip roof with a "
+    "single black chimney, vertical knotty cedar siding, and a two-bay four-lite "
+    "black-framed glass wall on the lake facade. Two modest low cedar decks sit on "
+    "the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind "
+    "the solitary unmarked house. Golden wood grain, clean glass, and quiet water. "
+    "Framed for Instagram 4:5 portrait. One rectangular volume only: the same "
+    "compact cabin every shot."
 )
 HOUSE_SHOTS = [
     (
         "01 curb appeal",
-        "Golden-hour curb appeal from the gravel drive, 24mm at eye level, "
-        "Instagram 4:5 portrait. Warm sidelight rakes the cedar. Empty drive.",
+        "Golden-hour late-summer curb of the same single-story cabin from the empty "
+        "gravel drive, 24mm at eye level, Instagram 4:5. Warm sidelight rakes the "
+        "cedar. Empty unmarked drive.",
     ),
     (
         "02 entry",
-        "Front entry with a tall black-framed glass door, 35mm, Instagram 4:5. "
-        "Soft morning light on cedar and stone. Empty porch, unmarked door.",
+        "Front porch of the same single-story cabin, 35mm, Instagram 4:5. One tall "
+        "black-framed glass door in the cedar wall, spring morning. Empty unmarked "
+        "porch.",
     ),
     (
         "03 living room",
-        "Living room looking through the glass wall toward the still lake, 24mm, "
-        "Instagram 4:5. Oak floors, linen sofa, late-day sun. Empty of occupants.",
+        "Photographed from inside the living room of the same cabin, looking out the "
+        "two-bay four-lite glass wall to the lake, 24mm, Instagram 4:5. One linen "
+        "sofa, late-summer afternoon, oak floors.",
     ),
     (
         "04 kitchen",
-        "Kitchen island in pale stone, morning sidelight, 35mm, Instagram 4:5. "
-        "Cedar cabinets, black hardware, unmarked surfaces.",
+        "Photographed from inside the kitchen of the same cabin, 35mm, Instagram 4:5. "
+        "One pale-stone island, cedar cabinets, black hardware, morning sidelight "
+        "through the glass wall.",
     ),
     (
         "05 dining",
-        "Dining table by the window at evening, lamps lit, 35mm, Instagram 4:5. "
-        "Oak table, simple ceramic, lake twilight beyond the glass.",
+        "Photographed from inside the dining room of the same cabin, 35mm, Instagram "
+        "4:5. Oak table, lamps lit, autumn lake twilight through the two-bay glass.",
     ),
     (
         "06 bedroom",
-        "Primary bedroom with linen bedding and a lake window, 35mm, Instagram 4:5. "
-        "Soft dawn light, cedar wall, solitary room.",
+        "Photographed from inside the primary bedroom of the same cabin, 35mm, "
+        "Instagram 4:5. Linen bedding, cedar wall, lake window, dawn.",
     ),
     (
         "07 bath",
-        "Spa bath in pale stone and cedar, 35mm, Instagram 4:5. A freestanding tub "
-        "faces frosted glass. Quiet, unmarked fixtures.",
+        "Photographed from inside the spa bath of the same cabin, 35mm, Instagram "
+        "4:5. One freestanding stone tub indoors facing frosted glass. Quiet unmarked "
+        "fixtures.",
     ),
     (
         "08 deck",
-        "Lakeside deck at dusk, 24mm, Instagram 4:5. Cedar boards, simple chairs, "
-        "still water, evergreen ridge.",
+        "The same two modest shore decks of the same single-story cabin at dusk, "
+        "24mm, Instagram 4:5. Two simple chairs on gravel, still water, evergreen "
+        "ridge.",
     ),
     (
         "09 twilight",
-        "Twilight exterior, interior lamps glowing through black-framed glass, "
-        "24mm, Instagram 4:5. Solitary house on the lake.",
+        "Winter twilight exterior of the same single-story cabin, 24mm, Instagram "
+        "4:5. Interior lamps glow through the two-bay glass. Thin snow on the ridge; "
+        "the cabin volume is unchanged.",
     ),
     (
         "10 ridge view",
-        "Elevated wide view of the property from the ridge, 24mm, Instagram 4:5. "
-        "The cedar-and-glass house sits above the still lake among evergreens.",
+        "Midsummer ridge view of the same compact single-story cabin above the lake "
+        "among evergreens, 24mm, Instagram 4:5.",
     ),
 ]
+JOINED_WORD_CAP = 155
 GIF_MOTION = (
     "Locked camera. A light breeze moves leaves and a thin curtain. Water and "
     "fabric drift, then settle. Keep the start-image identity locked. Gentle "
@@ -121,11 +131,11 @@ Prompt enhance: leave Enhance off for this canned prompt. Set Enhance true and X
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
 
-Ten Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).
-Edit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.
+Ten Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).
+SHOT 01 is the identity plate (T2I). Queue SHOT 01 first. Do not bypass 01 when generating 02-10 — they edit from 01's image (VAEEncode + ReferenceLatent). Unused SHOT groups 02-10 may still be bypassed (Ctrl+B) after 01 exists.
+Edit HOUSE IDENTITY once. Each SHOT card is only camera, room, time of day, and season of the same cabin; Prompt Join stitches identity + shot.
 Same seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.
-Bypass unused SHOT groups (Ctrl+B) if you only want a subset. All ten on is the carousel pack.
-Do not restyle the identity per shot — change camera, time of day, and room only.
+Season may change foliage, sky, and snow on the ridge; it must not change the building.
 Prompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.
 """
 
@@ -142,6 +152,13 @@ def _node(graph: dict, ntype: str, title: str | None = None) -> dict:
 def _dump(path: Path, graph: dict) -> None:
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+
+
+def _assert_house_word_cap() -> None:
+    for label, shot in HOUSE_SHOTS:
+        n = len(f"{HOUSE_IDENTITY} {shot}".split())
+        if n > JOINED_WORD_CAP:
+            raise SystemExit(f"joined prompt too long for {label}: {n} words")
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
@@ -266,6 +283,7 @@ def _base_node(
 
 
 def build_dream_house() -> dict:
+    _assert_house_word_cap()
     nodes: list[dict] = []
     links: list[list] = []
     link_id = 0
@@ -290,6 +308,8 @@ def build_dream_house() -> dict:
     ident_links: list[int] = []
     neg_links: list[int] = []
     latent_links: list[int] = []
+    vae_enc_links: list[int] = []
+    ref_neg_out: list[int] = []
 
     nodes.append(
         _base_node(
@@ -375,10 +395,60 @@ def build_dream_house() -> dict:
             6,
         )
     )
+    nodes.append(
+        _base_node(
+            8,
+            "VAEEncode",
+            [1740, 170],
+            [240, 80],
+            "Encode plate 01",
+            [],
+            7,
+            inputs=[
+                {"name": "pixels", "type": "IMAGE", "link": None},
+                {"name": "vae", "type": "VAE", "link": None},
+            ],
+            outputs=[out("LATENT", "LATENT", vae_enc_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            9,
+            "ReferenceLatent",
+            [40, 1520],
+            [280, 80],
+            "Negative + identity plate",
+            [],
+            8,
+            inputs=[
+                {"name": "conditioning", "type": "CONDITIONING", "link": None},
+                {
+                    "name": "latent",
+                    "type": "LATENT",
+                    "link": None,
+                    "shape": 7,
+                },
+            ],
+            outputs=[out("CONDITIONING", "CONDITIONING", ref_neg_out)],
+        )
+    )
 
     lid = add_link(2, 0, 5, 0, "CLIP")
     nodes[4]["inputs"][0]["link"] = lid
     clip_links.append(lid)
+
+    by_shared = {n["id"]: n for n in nodes}
+    lid = add_link(3, 0, 8, 1, "VAE")
+    by_shared[8]["inputs"][1]["link"] = lid
+    vae_links.append(lid)
+
+    lid = add_link(5, 0, 9, 0, "CONDITIONING")
+    by_shared[9]["inputs"][0]["link"] = lid
+    neg_links.append(lid)
+
+    lid = add_link(8, 0, 9, 1, "LATENT")
+    by_shared[9]["inputs"][1]["link"] = lid
+    vae_enc_links.append(lid)
 
     row_h = 360
     shot_y0 = 80
@@ -497,13 +567,55 @@ def build_dream_house() -> dict:
         by_id[ks_id]["inputs"][0]["link"] = lid
         unet_links.append(lid)
 
-        lid = add_link(clip_id, 0, ks_id, 1, "CONDITIONING")
-        by_id[ks_id]["inputs"][1]["link"] = lid
-        clip_out.append(lid)
+        if i == 0:
+            lid = add_link(clip_id, 0, ks_id, 1, "CONDITIONING")
+            by_id[ks_id]["inputs"][1]["link"] = lid
+            clip_out.append(lid)
 
-        lid = add_link(5, 0, ks_id, 2, "CONDITIONING")
-        by_id[ks_id]["inputs"][2]["link"] = lid
-        neg_links.append(lid)
+            lid = add_link(5, 0, ks_id, 2, "CONDITIONING")
+            by_id[ks_id]["inputs"][2]["link"] = lid
+            neg_links.append(lid)
+        else:
+            ref_id = 60 + (i - 1)
+            ref_out: list[int] = []
+            nodes.append(
+                _base_node(
+                    ref_id,
+                    "ReferenceLatent",
+                    [980, y + 220],
+                    [240, 80],
+                    f"Ref from 01 ({i + 1:02d})",
+                    [],
+                    n + 5,
+                    inputs=[
+                        {"name": "conditioning", "type": "CONDITIONING", "link": None},
+                        {
+                            "name": "latent",
+                            "type": "LATENT",
+                            "link": None,
+                            "shape": 7,
+                        },
+                    ],
+                    outputs=[out("CONDITIONING", "CONDITIONING", ref_out)],
+                )
+            )
+            by_id = {n["id"]: n for n in nodes}
+
+            lid = add_link(clip_id, 0, ref_id, 0, "CONDITIONING")
+            by_id[ref_id]["inputs"][0]["link"] = lid
+            clip_out.append(lid)
+
+            lid = add_link(8, 0, ref_id, 1, "LATENT")
+            by_id[ref_id]["inputs"][1]["link"] = lid
+            vae_enc_links.append(lid)
+
+            lid = add_link(ref_id, 0, ks_id, 1, "CONDITIONING")
+            by_id[ks_id]["inputs"][1]["link"] = lid
+            ref_out.append(lid)
+
+            lid = add_link(9, 0, ks_id, 2, "CONDITIONING")
+            by_id[ks_id]["inputs"][2]["link"] = lid
+            ref_neg_out.append(lid)
 
         lid = add_link(6, 0, ks_id, 3, "LATENT")
         by_id[ks_id]["inputs"][3]["link"] = lid
@@ -521,6 +633,11 @@ def build_dream_house() -> dict:
         by_id[save_id]["inputs"][0]["link"] = lid
         dec_out.append(lid)
 
+        if i == 0:
+            lid = add_link(dec_id, 0, 8, 0, "IMAGE")
+            by_id[8]["inputs"][0]["link"] = lid
+            dec_out.append(lid)
+
     groups = [
         _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
         _group(2, "HOUSE IDENTITY", 20, 450, 460, 340, "#a1309b"),
@@ -531,7 +648,7 @@ def build_dream_house() -> dict:
             _group(10 + i, f"SHOT {label}", 500, y - 20, 1840, 340, "#3f789e")
         )
 
-    last_id = 14 + 9 * 5
+    last_id = max(n["id"] for n in nodes)
     return {
         "id": "klein-dream-house-lab-example",
         "revision": 1,
@@ -545,7 +662,7 @@ def build_dream_house() -> dict:
             "lab_profile": "klein-dream-house-lab-example",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
-            "lab_description": "Ten Instagram 4:5 Klein stills of one lake house",
+            "lab_description": "Ten Instagram 4:5 Klein stills of one compact cedar cabin; 01 is the identity plate",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,

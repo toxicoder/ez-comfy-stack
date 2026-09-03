@@ -155,7 +155,7 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 | `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×720 |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
-| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills, one identity |
+| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills of one cabin; SHOT 01 is the identity plate |
 | `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |
 | `wan-t2v-5s-lab-example.json` | Wan 5B T2V smoke |
 | `wan-i2v-shot-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |

@@ -139,7 +139,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | --- | --- |
     | **klein-still-daily-lab-example** | Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix `ez_still_app` |
     | **wan-gif-loop-lab-example** | Wan 5B I2V GIF (49 frames @ 12 fps). **Ping-pong ON** so first and last frames meet for infinite looping. Prefix `ez_gif_loop` |
-    | **klein-dream-house-lab-example** | Ten Instagram 4:5 stills of one lake house. Edit **HOUSE IDENTITY** once; Queue writes `ez_dream_house_01`…`10` |
+    | **klein-dream-house-lab-example** | Ten Instagram 4:5 stills of one compact cedar cabin. Edit **HOUSE IDENTITY** once. Queue **SHOT 01** first (identity plate); do not bypass 01 when generating 02–10. Prefix `ez_dream_house_01`…`10` |
 
 === "90s shorts"
 
@@ -226,7 +226,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     ```
 
 6. **90s films** (go-see / still-here / switchyard): load one **film-*-90s** graph → Queue identity → unmute LTX → 18 × 5.00s prints → concat with `--film`. See [90s shorts](shorts.md).
-7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel.
+7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel of one cabin (Queue SHOT 01 first).
 8. Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up (see catalog tab above).
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes.

@@ -10,7 +10,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 - How each lab model actually reads a prompt
 - Canned lab-example text (already rewritten)
-- GIF loop motion and dream-house identity (Prompt Join)
+- GIF loop motion and dream-house identity plate (Prompt Join)
 - Lazy path: Prompt Enhance nodes + `XAI_API_KEY`
 
 **What this enables**
@@ -63,7 +63,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Dream-house pack (Klein)"
 
-    One identity paragraph (materials, architecture, place) plus a short camera line per shot. **klein-dream-house-lab-example** uses **Prompt Join** so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.
+    One identity paragraph locks **massing + materials + place** (one compact single-story rectangular cedar cabin, hip roof, two-bay glass, decks on gravel, alpine lake). Each SHOT card is only camera, room, time of day, and season of **that same cabin** — not a new building. **klein-dream-house-lab-example** uses **Prompt Join** so you edit the house once. SHOT 01 is the T2I identity plate; Queue 01 first and do not bypass it when generating 02–10 (they Klein-edit from 01 via `VAEEncode` + `ReferenceLatent`). Unused shots 02–10 may still be bypassed after 01 exists. Keep the ten Instagram 4:5 stills as photographs of one cabin.
 
 === "LTX-2.5 AV"
 
