@@ -1595,6 +1595,11 @@
 <td>Re-open a current <strong>ltx-*-lab-example</strong> graph (has <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> + <code>ltx-2.5-audio-vae-bf16</code>). Do not feed <code>EmptyLTXVLatentVideo</code> / <code>LTXVImgToVideo</code> straight into <code>KSampler</code>. Confirm <code>ls "${MODELS_DIR}/comfy/vae/ltx-2.5-audio-vae-bf16.safetensors"</code></td>
 </tr>
 <tr>
+<td><code>LTXVImgToVideo</code> <code>einops.EinopsError</code> / <code>can't divide axis of length 45</code> (or 33)</td>
+<td>LTX video VAE is <strong>32×</strong> spatial. Broadcast <strong>720</strong> and <strong>1080</strong> are not divisible by 32 (720/16=45, then the next <code>/2</code> patch fails)</td>
+<td>Set <code>LTXVImgToVideo</code> / <code>EmptyLTXVLatentVideo</code> to <strong>1280×704</strong> (or any pair ÷32). Re-open current <strong>ltx-*-lab-example</strong>. Klein 1280×720 stills are fine — I2V center-crops. Do not type 720 or 1080. Portrait lab is <strong>768×1280</strong>, not 720×1280. T2V at 720 already decoded as 704 via <code>height//32</code></td>
+</tr>
+<tr>
 <td>Missing <code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code> in LTX graphs</td>
 <td>LTX-2.5 TE not downloaded</td>
 <td><code>./scripts/utilities/download-ltx.sh run --tier 2.5</code> or <code>download-models</code>; <code>ls "${MODELS_DIR}/comfy/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors"</code></td>

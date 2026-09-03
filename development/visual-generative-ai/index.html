@@ -1448,14 +1448,18 @@
 <tbody>
 <tr>
 <td><strong>ltx-i2v-5s-lab-example</strong></td>
-<td>~5 s I2V with native audio (Community License, $10M cap)</td>
+<td>~5 s I2V, <strong>1280×704</strong>, native audio (Community License, $10M cap)</td>
 </tr>
 <tr>
 <td><strong>ltx-t2v-5s-lab-example</strong></td>
-<td>~5 s T2V AV</td>
+<td>~5 s T2V AV, <strong>1280×704</strong></td>
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">LTX width/height must be divisible by 32</p>
+<p>Broadcast 720p (<strong>1280×720</strong>) and 1080p (<strong>1920×1080</strong>) are <strong>not</strong> valid for the LTX video VAE. Lab landscape graphs use <strong>1280×704</strong>. Klein stills may stay 1280×720; <code>LTXVImgToVideo</code> center-crops. Portrait shorts I2V is <strong>768×1280</strong>. Do not type 720 or 1080 on LTX latent widgets. See <a href="../troubleshooting/">Troubleshooting</a>.</p>
+</div>
 </div>
 <div class="tabbed-block">
 <table>
@@ -1683,7 +1687,7 @@
 <li>Load <strong>klein-still-draft-lab-example</strong> → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).</li>
 <li>Pick a frame under <code>${COMFY_OUTPUT_DIR}</code> (<code>ez_still_draft_*.png</code>).</li>
 <li>Load <strong>wan-i2v-5s-lab-example</strong> → set LoadImage to that PNG (or leave <code>example.png</code> to smoke-test) → edit <strong>Motion / prompt</strong> only → Queue ~5 s silent.</li>
-<li>Optional audio: <strong>ltx-i2v-5s-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV.</li>
+<li>Optional audio: <strong>ltx-i2v-5s-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV at <strong>1280×704</strong> (I2V center-crops a 1280×720 still).</li>
 <li>
 <p>Short six-shot demo: Queue <strong>wan-i2v-shot-lab-example</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--yes

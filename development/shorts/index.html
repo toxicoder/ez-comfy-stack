@@ -1208,6 +1208,14 @@
 <td><strong>120 frames @ 24 fps = 5.00 s</strong></td>
 </tr>
 <tr>
+<td>LTX print size</td>
+<td><strong>1280×704</strong> (VAE ÷32; not 1280×720)</td>
+</tr>
+<tr>
+<td>Klein identity</td>
+<td><strong>1280×720</strong> still OK; I2V center-crops ~16 px</td>
+</tr>
+<tr>
 <td>Beats</td>
 <td><strong>6</strong> (same places as the old six-column films)</td>
 </tr>
@@ -1281,7 +1289,7 @@
 <li>Load one film graph (<code>film-go-see-90s-run-lab-example</code> / <code>film-still-here-90s-lab-example</code> / <code>film-switchyard-90s-lab-example</code>).</li>
 <li>Leave <strong>Shot print (LTX)</strong> bypassed (default). Queue <strong>Identity (Klein)</strong> → <code>ez_&lt;slug&gt;_identity_*.png</code>.</li>
 <li>Ctrl+B: bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or the previous <code>ez_&lt;slug&gt;_bN_sM_last</code>.</li>
-<li>Paste <strong>Motion + Audio</strong> from the on-canvas shot map (source of truth also in <code>{film}.shots.yaml</code>). Set VHS prefix <code>ez_&lt;slug&gt;_bN_sM_ltx_video</code> and last-frame SaveImage <code>ez_&lt;slug&gt;_bN_sM_last</code>. Queue <strong>5.00s</strong> AV.</li>
+<li>Paste <strong>Motion + Audio</strong> from the on-canvas shot map (source of truth also in <code>{film}.shots.yaml</code>). Set VHS prefix <code>ez_&lt;slug&gt;_bN_sM_ltx_video</code> and last-frame SaveImage <code>ez_&lt;slug&gt;_bN_sM_last</code>. Leave LTX <strong>1280×704</strong> (do not type 720). Queue <strong>5.00s</strong> AV.</li>
 <li>After Queue, click <strong>Save video (MP4) — open node for preview</strong> for an inline preview. File: <code>${COMFY_OUTPUT_DIR}/ez_&lt;slug&gt;_bN_sM_ltx_video_*.mp4</code>.</li>
 <li>Repeat for all 18 shots. Optional silent rehearsal: open <strong>wan-i2v-shot-lab-example</strong> with the same first frame.</li>
 <li>Concat (dry-run first; <code>--yes</code> writes the cap). Default dir is <code>${COMFY_OUTPUT_DIR}</code>:</li>
