@@ -190,7 +190,7 @@ def build_still_app() -> dict:
     note["widgets_values"] = [STILL_NOTE]
     graph["extra"]["lab_profile"] = "klein-still-daily-lab-example"
     graph["extra"]["lab_note"] = STILL_NOTE
-    graph["extra"]["lab_description"] = "Klein 4B still app 1024x576 4 steps"
+    graph["extra"]["lab_description"] = "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
     enh = _node(graph, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = KLEIN_STILL
     pos = _node(graph, "CLIPTextEncode", "Positive")
@@ -230,7 +230,7 @@ def build_gif_loop() -> dict:
     note["widgets_values"] = [GIF_NOTE]
     graph["extra"]["lab_profile"] = "wan-gif-loop-lab-example"
     graph["extra"]["lab_note"] = GIF_NOTE
-    graph["extra"]["lab_description"] = "Wan 5B looping GIF 49 frames ping-pong"
+    graph["extra"]["lab_description"] = "Wan 5B looping GIF, 49 frames ping-pong @ 12 fps"
     groups = list(graph.get("groups") or [])
     groups.append(_group(3, "SETTINGS", 1400, 40, 640, 660, "#a1309b"))
     groups.append(_group(4, "OUTPUT", 2400, 40, 360, 480, "#3f789e"))
