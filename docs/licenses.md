@@ -12,7 +12,7 @@ tags: [license, apache, ltx, wan, klein, youtube, us]
 - Canonical table (same rows as repo-root `LICENSE-MODELS.md`)
 - What we download by default vs omit
 - LTX $10M company-revenue cap vs Wan Apache silent video
-- How 90s shorts split still / silent motion / AV print
+- How 90s shorts split Klein still / optional silent Wan / LTX AV print
 - What is banned (MiniMax H3, MiniMax Music 3, Suno/Udio, Klein 9B, FLUX.2-dev, API-only)
 
 **What this enables**
@@ -94,7 +94,7 @@ A token in `.env` is **not** the same as accepting the Lightricks license. First
 
 **LTX-2.3:** optional fallback (`download-ltx --tier 2.3`) if 2.5 access or INT8-convrot fails. Not advertised as 30 s / 60 s films.
 
-**90s films:** Klein identity still + Wan 5.00s silent rehearsal + LTX 5.00s print (world audio, no score), concat with a 90s cap. Do not Queue 90s in one graph. See [90s shorts](shorts.md).
+**90s films:** Klein identity still + 18 × LTX 5.00s print (world audio, no score), stitch with a 90s cap. Do not Queue a 90s latent. See [90s shorts](shorts.md).
 
 **Omitted:** LongCat-Video (custom-node risk). HunyuanVideo 1.5 (US-legal but territorial clause for other countries — not the one-stack default).
 

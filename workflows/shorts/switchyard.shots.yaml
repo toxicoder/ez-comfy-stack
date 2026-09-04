@@ -8,149 +8,149 @@ shots_per_beat: 3
 total_shots: 18
 publish_cap_s: 90.00
 identity_look: |
-  Night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Photoreal, empty of railroad company marks. Identity lock for the short.
+  A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.
 shots:
   - beat: 1
     shot: 1
     prefix: ez_switchyard_b1_s1
-    load_from: example.png
-    motion: |
-      Shot 1 of 18, beat 1 enter. Night freight yard, generic, no railroad company marks. Rain on ballast. Yard lamps. Camera walks the gravel.
-    audio: |
-      Rain, ballast crunch, breath. No score, no licensed horns from real carriers.
+    load_from: identity
+    ltx_i2v: |
+      The start image holds as the first frame. The camera walks wet gravel between unmarked cars, rain ticking ballast. Breath sits in cold air under the lamp. Continuous walk, not a chase. No music and no score.
+    wan_i2v: |
+      Camera walks wet gravel between unmarked boxcars. Rain in the lamp. Continuous slow walk.
   - beat: 1
     shot: 2
     prefix: ez_switchyard_b1_s2
     load_from: ez_switchyard_b1_s1_last
-    motion: |
-      Shot 2 of 18, beat 1 traverse. Breath in cold air. Puddles. Generic lamps.
-    audio: |
-      Rain, distant coupling, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. Breath fogs in cold air over puddles; generic lamps smear on black water. Rain, a distant coupling, and close breath continue. The camera keeps walking. No music and no score.
+    wan_i2v: |
+      Camera keeps walking. Puddles, generic lamps. Slow forward walk in rain.
   - beat: 1
     shot: 3
     prefix: ez_switchyard_b1_s3
     load_from: ez_switchyard_b1_s2_last
-    motion: |
-      Shot 3 of 18, beat 1 exit. Stop between the first unmarked cars.
-    audio: |
-      Rain, gravel, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. The walk stops between the first unmarked cars. Rain, gravel crunch dying out, breath. The camera holds the gap. No music and no score.
+    wan_i2v: |
+      Camera stops between the first unmarked cars. Hold the gap. Rain continues as texture.
   - beat: 2
     shot: 1
     prefix: ez_switchyard_b2_s1
     load_from: ez_switchyard_b1_s3_last
-    motion: |
-      Shot 4 of 18, beat 2 enter. Between unmarked boxcars. Gloves on a rusty ladder rail.
-    audio: |
-      Rain, metal, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. Between unmarked boxcars, gloves find a rusty ladder rail. Rain on steel and close breath. The camera eases toward the rail. No music and no score.
+    wan_i2v: |
+      Between unmarked boxcars, gloves find a rusty ladder rail. Camera eases toward the rail.
   - beat: 2
     shot: 2
     prefix: ez_switchyard_b2_s2
     load_from: ez_switchyard_b2_s1_last
-    motion: |
-      Shot 5 of 18, beat 2 traverse. Gravel, puddles, a coupling clank.
-    audio: |
-      Coupling clank, rain, breath.
+    ltx_i2v: |
+      The start image holds as the first frame. Gravel, puddles, then a coupling clank down the string of cars. Rain and breath sit under the metal. The camera holds the gap. No music and no score.
+    wan_i2v: |
+      Camera holds the gap between cars. Puddles. Tiny rain motion on steel.
   - beat: 2
     shot: 3
     prefix: ez_switchyard_b2_s3
     load_from: ez_switchyard_b2_s2_last
-    motion: |
-      Shot 6 of 18, beat 2 exit. Look up the ladder. No logos on the car.
-    audio: |
-      Rain on steel, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. The view tilts up the ladder; the car stays unmarked, empty of lettering. Rain on steel and breath. Slow tilt, continuous take. No music and no score.
+    wan_i2v: |
+      Slow tilt up the ladder. Unmarked car. Continuous take.
   - beat: 3
     shot: 1
     prefix: ez_switchyard_b3_s1
     load_from: ez_switchyard_b2_s3_last
-    motion: |
-      Shot 7 of 18, beat 3 enter. Climb a generic boxcar ladder in the rain. Gloves wet.
-    audio: |
-      Rungs, rain on steel, breath.
+    ltx_i2v: |
+      The start image holds as the first frame. Gloves climb a generic boxcar ladder in the rain, rungs wet. Rungs, rain on steel, breath. The camera climbs with the hands. No music and no score.
+    wan_i2v: |
+      Gloves climb a generic boxcar ladder in the rain. Camera climbs with the hands. Continuous take.
   - beat: 3
     shot: 2
     prefix: ez_switchyard_b3_s2
     load_from: ez_switchyard_b3_s1_last
-    motion: |
-      Shot 8 of 18, beat 3 traverse. Climb continues. No logos.
-    audio: |
-      Rungs, rain, breath.
+    ltx_i2v: |
+      The start image holds as the first frame. The climb continues, gloves wet, the car still unmarked. Rungs, rain, breath. Camera keeps climbing. No music and no score.
+    wan_i2v: |
+      Climb continues. Gloves wet. Camera keeps climbing the ladder.
   - beat: 3
     shot: 3
     prefix: ez_switchyard_b3_s3
     load_from: ez_switchyard_b3_s2_last
-    motion: |
-      Shot 9 of 18, beat 3 exit. Reach the roof edge.
-    audio: |
-      Wind, rain, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. Hands reach the roof edge in rain and wind. Wind, rain, breath. The camera arrives at the roof. No music and no score.
+    wan_i2v: |
+      Hands reach the roof edge. Camera arrives at the roof. Continuous climb-to-hold.
   - beat: 4
     shot: 1
     prefix: ez_switchyard_b4_s1
     load_from: ez_switchyard_b3_s3_last
-    motion: |
-      Shot 10 of 18, beat 4 enter. Roof walk along the string of dark cars. Rain.
-    audio: |
-      Rain, wind, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. A roof walk along the dark string of unmarked cars in rain. Rain, wind, breath. The camera walks the roof, slow. No music and no score.
+    wan_i2v: |
+      Roof walk along the dark string of unmarked cars. Slow forward walk in rain.
   - beat: 4
     shot: 2
     prefix: ez_switchyard_b4_s2
     load_from: ez_switchyard_b4_s1_last
-    motion: |
-      Shot 11 of 18, beat 4 traverse. A distant generic horn, not a real railroad identity.
-    audio: |
-      Horn far off, rain, breath. No licensed carrier identity.
+    ltx_i2v: |
+      The start image holds as the first frame. A distant generic horn answers far off the yard — not a carrier identity — while rain and breath stay close. The camera keeps the roof walk. No music and no score.
+    wan_i2v: |
+      Roof walk continues. Slow forward along unmarked cars. Rain as texture.
   - beat: 4
     shot: 3
     prefix: ez_switchyard_b4_s3
     load_from: ez_switchyard_b4_s2_last
-    motion: |
-      Shot 12 of 18, beat 4 exit. End of the roof walk. Look down.
-    audio: |
-      Wind, rain, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. The roof walk ends; the view looks down. Wind, rain, breath. The camera holds the look-down. No music and no score.
+    wan_i2v: |
+      Roof walk ends. Camera looks down and holds. Slow tilt down.
   - beat: 5
     shot: 1
     prefix: ez_switchyard_b5_s1
     load_from: ez_switchyard_b4_s3_last
-    motion: |
-      Shot 13 of 18, beat 5 enter. Drop back to gravel, splash a puddle.
-    audio: |
-      Splash, gravel, rain, breath.
+    ltx_i2v: |
+      The start image holds as the first frame. Drop back to gravel, a puddle splash. Splash, gravel, rain, breath. The camera lands and walks. No music and no score.
+    wan_i2v: |
+      Drop back to gravel, splash a puddle. Camera lands and begins a walk.
   - beat: 5
     shot: 2
     prefix: ez_switchyard_b5_s2
     load_from: ez_switchyard_b5_s1_last
-    motion: |
-      Shot 14 of 18, beat 5 traverse. Walk toward yard-office window glow without readable signage.
-    audio: |
-      Gravel, rain, breath.
+    ltx_i2v: |
+      The start image holds as the first frame. Walk toward a yard-office window glow, the wall empty of lettering. Gravel, rain, breath. Continuous walk. No music and no score.
+    wan_i2v: |
+      Walk toward yard-office window glow. Unmarked wall. Slow forward walk.
   - beat: 5
     shot: 3
     prefix: ez_switchyard_b5_s3
     load_from: ez_switchyard_b5_s2_last
-    motion: |
-      Shot 15 of 18, beat 5 exit. Window glow, no readable sign. Keep walking.
-    audio: |
-      Rain, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. Window glow, still no readable sign, keep walking. Rain and breath. Continuous take. No music and no score.
+    wan_i2v: |
+      Window glow, unmarked wall. Camera keeps walking. Continuous take.
   - beat: 6
     shot: 1
     prefix: ez_switchyard_b6_s1
     load_from: ez_switchyard_b5_s3_last
-    motion: |
-      Shot 16 of 18, beat 6 enter. Stop under a lamp.
-    audio: |
-      Rain ticking the lamp, breath.
+    ltx_i2v: |
+      The start image holds as the first frame. Stop under a lamp. Rain ticks the lamp housing; breath steadies. The camera holds. No music and no score.
+    wan_i2v: |
+      Stop under a lamp. Camera holds. Rain as texture on the lamp.
   - beat: 6
     shot: 2
     prefix: ez_switchyard_b6_s2
     load_from: ez_switchyard_b6_s1_last
-    motion: |
-      Shot 17 of 18, beat 6 traverse. Look down the dark string of cars.
-    audio: |
-      Rain, distant metal, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. Look down the dark string of unmarked cars. Rain, distant metal, breath. Slow pan along the string. No music and no score.
+    wan_i2v: |
+      Look down the dark string of unmarked cars. Slow pan. Camera on the gravel.
   - beat: 6
     shot: 3
     prefix: ez_switchyard_b6_s3
     load_from: ez_switchyard_b6_s2_last
-    motion: |
-      Shot 18 of 18, beat 6 exit. A quiet, short laugh. Hold.
-    audio: |
-      Rain ticking the lamp, breath. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. A quiet short laugh leaves the breath while rain keeps ticking the lamp. The camera holds the dark string of cars. No music and no score.
+    wan_i2v: |
+      Hold under the lamp. Quiet short laugh as a small head motion. Camera still.

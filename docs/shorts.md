@@ -1,6 +1,6 @@
 ---
 title: 90s shorts
-description: Build the three US-safe 90s shorts from one unified film graph per short (18 × 5.00s shots), then concat with a 90s cap.
+description: Queue one film graph per short to print 18 × 5.00s LTX shots, stitch in-graph, and preview a 90s MP4 with world audio.
 tags: [shorts, wan, ltx, klein, youtube, comfyui]
 ---
 
@@ -8,19 +8,18 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 **What's on this page**
 
-- Why 18 × 5.00s shots instead of one 90s Queue
-- One unified Comfy graph per film (Klein identity + LTX print + shot map)
+- Why 18 × 5.00s shots instead of one 90s denoise
+- One-click Comfy graph per film (Klein identity + 18 LTX prints + stitch)
 - Shot maps for go-see (first-person running), still-here, and switchyard
-- Operator loop: identity → unmute LTX → 18 prints → concat
-- Model-native look / motion / audio prompts ([Prompting](prompting.md))
-- Spark farm: parallel 5s Queues, local concat
+- Model-native Klein / LTX prompts ([Prompting](prompting.md))
+- Spark farm: optional parallel 5s Queues, local concat
 
 **What this enables**
 
 - Three continuous ~90s films (first-person running go-see, still-here, switchyard) on the **US-safe local pack**
 - Last-frame continuity without a 90s denoise
-- A 90.00s publish cap (`ffmpeg -t 90`)
-- One workflow file per film — no switching between bible / wan-shot / ltx-shot graphs
+- A 90.00s publish cap (in-graph `EZFilmConcat`, or host `ffmpeg -t 90`)
+- One Queue per film — identity, 18 prints, stitch, preview, save
 
 !!! warning "Not legal advice"
 
@@ -28,33 +27,32 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 ---
 
-## Why not one 90s graph
+## Why not one 90s latent
 
-Default lab graphs iterate in **minutes**. A 90s (or 30–60s) denoise on GB10 is the wrong default.
+Default lab graphs iterate in **minutes**. A 90s (or 30–60s) **denoise** on GB10 is the wrong default — keep widgets at **120 frames**.
 
-Continuity is **last frame of shot N → LoadImage of shot N+1**. Each micro-shot is independent:
+The one-click film graph still prints **18 independent 5.00s latents**. Continuity is **last frame of shot N → start image of shot N+1**. One Queue runs them in order because each printer depends on the previous last frame.
 
 | | |
 | --- | --- |
 | Micro-shot | **120 frames @ 24 fps = 5.00 s** |
 | LTX print size | **1280×704** (VAE ÷32; not 1280×720) |
 | Klein identity | **1280×720** still OK; I2V center-crops ~16 px |
-| Beats | **6** (same places as the old six-column films) |
+| Beats | **6** |
 | Micro-shots per beat | **3** (enter / traverse / exit) |
 | Picture | **18 × 5.00 s = 90.00 s** |
-| Publish | `concat-shots.sh --film … --yes` → ffmpeg **`-t 90`**; fail if probe `> 90` |
+| Publish | in-graph **EZFilmConcat** (or `concat-shots.sh --film … --yes`) → ffmpeg **`-t 90`**; fail if probe `> 90` |
 
-Do **not** Queue 90s, 241+ frames, or a single-graph film. If a latent widget errors on even length, you may set **121** (4n+1 / 8n+1) on that shot and still concat with the 90s cap.
+Do **not** set 241+ frames or a single 90s latent. If a latent widget errors on even length, you may set **121** (4n+1 / 8n+1) on that shot and still concat with the 90s cap.
 
 ```mermaid
 flowchart LR
-  Load["Load film-*-90s graph"] --> Id["Queue Identity Klein"]
-  Id --> Unmute["Bypass Identity · enable LTX"]
-  Unmute --> Shot["Queue LTX 5.00s AV ×18"]
-  Shot --> Last["Save last frame"]
-  Last --> Next["Next shot LoadImage"]
-  Next --> Shot
-  Shot --> Concat["concat-shots --film · cap 90s"]
+  Load["Load film-*-90s graph"] --> Q["Queue once"]
+  Q --> Klein["Klein identity 4-step"]
+  Klein --> Unload["Unload models"]
+  Unload --> Shot["LTX 5.00s AV ×18 last-frame chain"]
+  Shot --> Concat["EZFilmConcat · cap 90s"]
+  Concat --> Preview["Open 90s MP4 node for preview"]
 ```
 
 ---
@@ -63,17 +61,18 @@ flowchart LR
 
 | Job | Where | Model | License |
 | --- | --- | --- | --- |
-| Identity still | Same file: group **1. Identity (Klein)** | Klein 4B distilled FP8 | Apache 2.0 |
-| Print + synced world audio | Same file: group **2. Shot print (LTX)** | LTX-2.5 distilled I2V | Community License (not Apache) |
+| Identity still | Group **1. Identity (Klein)** | Klein 4B distilled FP8 | Apache 2.0 |
+| Print + synced world audio | Groups **3–8** (beats) | LTX-2.5 distilled I2V | Community License (not Apache) |
+| Stitch + preview | Group **9. Publish 90s MP4** | `EZFilmConcat` (ffmpeg AAC + YouTube loudnorm) | — |
 | Optional silent rehearsal | `workflows/wan-i2v-shot-lab-example.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
 
-Unified film files:
+One-click film files:
 
 - `workflows/shorts/film-go-see-90s-run-lab-example.json`
 - `workflows/shorts/film-still-here-90s-lab-example.json`
 - `workflows/shorts/film-switchyard-90s-lab-example.json`
 
-Deliverable MP4s are **LTX I2V heroes** (breath, world objects, **no score**) with audio muxed via `LTXVAudioVAEDecode` → `VHS_VideoCombine`. Wan is an optional cheap motion draft — skip it if you already like the camera.
+Deliverable MP4s are **LTX I2V heroes** (breath, world objects, **no score**) with audio muxed per shot via `LTXVAudioVAEDecode` → `VHS_VideoCombine`, then stitched. Wan is an optional cheap motion draft — skip it if you already like the camera.
 
 LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional experiment **inside** a beat, not the 90s path.
 
@@ -81,15 +80,14 @@ LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional exper
 
 ## Operator loop
 
-Each film graph ships **Klein identity + LTX 5.00s printer + full shot map (Motion + Audio)** in one file. The container entrypoint copies `*.json` and `shorts/*.json` into Comfy `user/default/workflows/`.
+Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). The container entrypoint copies `*.json` and `shorts/*.json` into Comfy `user/default/workflows/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
 
 1. Load one film graph (`film-go-see-90s-run-lab-example` / `film-still-here-90s-lab-example` / `film-switchyard-90s-lab-example`).
-2. Leave **Shot print (LTX)** bypassed (default). Queue **Identity (Klein)** → `ez_<slug>_identity_*.png`.
-3. Ctrl+B: bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or the previous `ez_<slug>_bN_sM_last`.
-4. Paste **Motion + Audio** from the on-canvas shot map (source of truth also in `{film}.shots.yaml`). Set VHS prefix `ez_<slug>_bN_sM_ltx_video` and last-frame SaveImage `ez_<slug>_bN_sM_last`. Leave LTX **1280×704** (do not type 720). Queue **5.00s** AV.
-5. After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File: `${COMFY_OUTPUT_DIR}/ez_<slug>_bN_sM_ltx_video_*.mp4`.
-6. Repeat for all 18 shots. Optional silent rehearsal: open **wan-i2v-shot-lab-example** with the same first frame.
-7. Concat (dry-run first; `--yes` writes the cap). Default dir is `${COMFY_OUTPUT_DIR}`:
+2. Queue **once**. Klein runs first (Enhance **off**, 4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start. Leave LTX **1280×704**.
+3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
+4. After Queue, click **Save 90s film (MP4) — open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4`. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`.
+5. Optional silent rehearsal of one frame: **wan-i2v-shot-lab-example**. Optional single-shot iterate: **ltx-i2v-shot-lab-example**.
+6. Host / spark-farm fallback (when you printed shots outside the one-click graph):
 
 ```bash
 FILM=go-see   # or still-here | switchyard
@@ -146,16 +144,16 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
     | 5 | Drop to gravel | Window glow, no readable sign |
     | 6 | Lamp hold | Look down the dark string of cars, quiet laugh |
 
-Prefixes: `ez_gosee_b{1..6}_s{1..3}`, `ez_stillhere_…`, `ez_switchyard_…`. Machine-readable lists: `workflows/shorts/*.shots.yaml`.
+Prefixes: `ez_gosee_b{1..6}_s{1..3}`, `ez_stillhere_…`, `ez_switchyard_…`. Machine-readable lists: `workflows/shorts/*.shots.yaml` (`identity_look` for Klein, `ltx_i2v` for each print).
 
 ---
 
 ## Spark farm
 
-Three Sparks can Queue **different beats** in parallel (independent 5s jobs, shared `${MODELS_DIR}`). On each UI load the same **film-*-90s** graph (or **ltx-i2v-shot-lab-example** for a generic printer) and Queue; concat stays on one host. `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
+The one-click film graph is **sequential on one host**. Three Sparks can still Queue **different beats** in parallel as independent 5s jobs (shared `${MODELS_DIR}`) on **ltx-i2v-shot-lab-example**. Concat stays on one host (`concat-shots.sh --film`). `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
 
 ---
 
 ## Safety
 
-Unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflight, download-limit wrap. This path does not start Docker; it only stitches files already under `COMFY_OUTPUT_DIR`.
+Unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflight, download-limit wrap. The film path does not start Docker. One Queue is long because it runs 18 × 5.00s prints, not because it allocated a 90s latent. Peak VRAM is one LTX 5s print after Klein unloads — do not weaken headroom preflight.

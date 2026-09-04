@@ -74,7 +74,7 @@ Three UIs (replace hostnames from `SPARK_COMFY_URLS`):
 # http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188
 ```
 
-On each UI, load the unified **film-*-90s-*-lab-example** graph (or **ltx-i2v-shot-lab-example** / optional **wan-i2v-shot-lab-example**) and **Queue** independent **5 s** shots — different beats in parallel for the 90s films. Concat locally:
+The one-click **film-*-90s-*-lab-example** graph is sequential on one host. For a farm, load **ltx-i2v-shot-lab-example** (or optional **wan-i2v-shot-lab-example**) on each UI and **Queue** independent **5 s** shots — different beats in parallel. Concat locally:
 
 ```bash
 FILM=go-see   # or still-here | switchyard

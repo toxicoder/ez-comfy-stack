@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build / patch lab workflows: LTX audio mux, preview UX, unified 90s films, creator toolkit.
+"""Build / patch lab workflows: LTX audio mux, preview UX, one-click 90s films, creator toolkit.
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -46,6 +46,7 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 from ez_prompt_enhance.client import join_prompt  # noqa: E402
+from _build_film_workflows import build_all_films  # noqa: E402
 
 WF = ROOT / "workflows"
 SHORTS = WF / "shorts"
@@ -335,9 +336,9 @@ def patch_existing_video_graphs() -> None:
             note = next(n for n in graph["nodes"] if n.get("type") == "Note")
             text = note["widgets_values"][0]
             tip = (
-                "\n90s films: prefer the unified **film-*-90s-*-lab-example** graphs "
-                "(identity + LTX print + shot map in one file). This graph remains the "
-                "generic 5.00s printer / Wan rehearsal.\n"
+                "\n90s films: prefer the one-click **film-*-90s-*-lab-example** graphs "
+                "(Queue once: identity + 18 LTX prints + stitch). This graph remains the "
+                "generic 5.00s printer / spark-farm shot / Wan rehearsal.\n"
             )
             if "unified" not in text:
                 note["widgets_values"][0] = text.rstrip() + tip
@@ -552,137 +553,14 @@ def build_unified_film(
     yaml_name: str,
     label: str,
 ) -> dict:
-    raw = _load(SHORTS / f"{stem}.json")
-    # Idempotent: already unified → refresh notes/maps/audio only.
-    if any(n.get("type") == "LTXVImgToVideo" for n in raw["nodes"]):
-        return _refresh_film_notes(raw, film, slug, stem, label, yaml_name)
+    from _build_film_workflows import FILMS as FILM_SPECS
+    from _build_film_workflows import build_one_click_film
 
-    klein = raw
-    ltx = _load(WF / "ltx-i2v-shot-lab-example.json")
-    # Ensure audio already wired in source
-    wire_ltx_audio(ltx)
-    polish_video_graph(ltx)
-
-    parsed = _parse_shots_yaml((SHORTS / yaml_name).read_text(encoding="utf-8"))
-    shot_md = build_shot_map_markdown(film, label, parsed)
-    op_note = build_film_operator_note(stem, film, slug, label)
-
-    # Strip LTX notes — film keeps one Note + MarkdownNote
-    ltx_nodes = [n for n in ltx["nodes"] if n.get("type") not in ("Note", "MarkdownNote")]
-    ltx_note_ids = {n["id"] for n in ltx["nodes"] if n.get("type") in ("Note", "MarkdownNote")}
-    ltx_links = [
-        link
-        for link in ltx["links"]
-        if link[1] not in ltx_note_ids and link[3] not in ltx_note_ids
-    ]
-
-    klein_max_id = max(n["id"] for n in klein["nodes"])
-    klein_max_link = max((link[0] for link in klein.get("links") or []), default=0)
-    # Place LTX to the right of Klein
-    remapped_nodes, remapped_links, id_map = _remap_subgraph(
-        ltx_nodes,
-        ltx_links,
-        id_offset=klein_max_id + 10,
-        link_offset=klein_max_link + 10,
-        pos_dx=3200,
-        pos_dy=0,
-    )
-
-    # Default: bypass LTX compute so first Queue is identity-only
-    bypass_types = {
-        "UNETLoader",
-        "VAELoader",
-        "CLIPLoader",
-        "LoadImage",
-        "CLIPTextEncode",
-        "EZLTXPromptEnhance",
-        "LTXVImgToVideo",
-        "LTXVConditioning",
-        "KSampler",
-        "LTXVEmptyLatentAudio",
-        "LTXVConcatAVLatent",
-        "LTXVSeparateAVLatent",
-        "VAEDecode",
-        "LTXVAudioVAEDecode",
-        "VHS_VideoCombine",
-        "SaveImage",
-        "ImageFromBatch",
-    }
-    for n in remapped_nodes:
-        if n["type"] in bypass_types:
-            n["mode"] = 4  # Bypass
-
-    # Retarget LTX prefixes for this film's b1s1
-    prefix = f"ez_{slug}_b1_s1"
-    for n in remapped_nodes:
-        if n.get("type") == "VHS_VideoCombine":
-            n["widgets_values"]["filename_prefix"] = f"{prefix}_ltx_video"
-            n["title"] = "Save video (MP4) — open node for preview"
-        if n.get("type") == "SaveImage":
-            w = n["widgets_values"][0]
-            if "last" in (n.get("title") or "").lower() or w.endswith("_last"):
-                n["widgets_values"] = [f"{prefix}_last"]
-                n["title"] = "Save last frame"
-            else:
-                n["widgets_values"] = [f"{prefix}_ltx_frames"]
-                n["title"] = "Save frames (secondary)"
-
-    # Update Klein note + markdown
-    for n in klein["nodes"]:
-        if n.get("type") == "Note":
-            n["widgets_values"] = [op_note]
-            n["title"] = "Operator note — unified 90s film"
-        if n.get("type") == "MarkdownNote":
-            n["widgets_values"] = [shot_md]
-            n["title"] = f"{film} 90s shot map"
-            # Widen for audio lines
-            n["size"] = [960, max(float(n["size"][1]), 1400)]
-
-    # Title Klein save
-    for n in klein["nodes"]:
-        if n.get("type") == "SaveImage":
-            n["title"] = "Save identity PNG"
-
-    graph: dict = {
-        "id": stem,
-        "revision": int(klein.get("revision", 1)) + 1,
-        "last_node_id": max(n["id"] for n in remapped_nodes + klein["nodes"]),
-        "last_link_id": max(
-            (link[0] for link in (klein.get("links") or []) + remapped_links),
-            default=0,
-        ),
-        "nodes": klein["nodes"] + remapped_nodes,
-        "links": list(klein.get("links") or []) + remapped_links,
-        "groups": [
-            _group(1, "1. Identity (Klein) — Queue first", 20, 20, 2000, 1200, "#3f789e"),
-            _group(
-                2,
-                "2. Shot print (LTX) — starts bypassed; Ctrl+B to enable",
-                3180,
-                20,
-                2800,
-                1400,
-                "#a1309b",
-            ),
-        ],
-        "config": {},
-        "extra": {
-            "lab_profile": stem,
-            "lab_note": op_note,
-            "lab_description": f"Unified 90s {label}: Klein identity + LTX 5.00s AV shots",
-            "lab_film": film,
-            "lab_slug": slug,
-            "lab_ltx_av": True,
-        },
-        "version": 0.4,
-    }
-    return graph
+    beats = next(item[5] for item in FILM_SPECS if item[0] == film)
+    return build_one_click_film(film, slug, stem, yaml_name, label, beats)
 
 
-def build_all_films() -> None:
-    for film, slug, stem, yaml_name, label in FILMS:
-        graph = build_unified_film(film, slug, stem, yaml_name, label)
-        _dump(SHORTS / f"{stem}.json", graph)
+# build_all_films imported from _build_film_workflows (one-click 18-shot graphs).
 
 
 # --- Creator toolkit -------------------------------------------------------

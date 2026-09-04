@@ -68,17 +68,17 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "LTX-2.5 AV"
 
-    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged.
+    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). Leave Enhance **off** on those graphs.
 
 ---
 
 ## Prompt Enhance nodes
 
-In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). Entrypoint copies every pack under `custom_nodes/` into Comfy on start (same pattern as lab workflows), including `ez_ltx_spatial` which snaps LTX canvases off 720/1080 so the video VAE does not einops-crash.
+In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). Entrypoint copies every pack under `custom_nodes/` into Comfy on start (same pattern as lab workflows), including `ez_ltx_spatial` which snaps LTX canvases off 720/1080 so the video VAE does not einops-crash, and `ez_film` which unloads Klein before LTX and stitches the 90s MP4.
 
 | Node | Modes | Use on |
 | --- | --- | --- |
-| **Klein Prompt Enhance** | `t2i`, `edit` | klein-still-draft / klein-still-hero / klein-still-daily / klein-dream-house identity / film-*-90s identity |
+| **Klein Prompt Enhance** | `t2i`, `edit` | klein-still-draft / klein-still-hero / klein-still-daily / klein-dream-house identity. Film-*-90s identity is canned — Enhance **off** |
 | **Wan Prompt Enhance** | `t2v`, `i2v` | wan-i2v-5s / wan-t2v-5s / wan-i2v-shot / wan-gif-loop |
 | **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / ltx-i2v-shot |
 | **Prompt Join** | bible + inventory + shot + `lock` (view/state) → one STRING | dream-house (view) and lighting/before-after (state) |
