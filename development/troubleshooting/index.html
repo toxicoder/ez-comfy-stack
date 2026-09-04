@@ -1398,7 +1398,7 @@
 <tr>
 <td><code>failed to fetch oauth token: denied</code> / <code>nvcr.io</code> Access Denied on <code>start</code></td>
 <td>NGC base image pull without login</td>
-<td>Pull latest (default bases are <strong>Docker Hub</strong> <code>nvidia/cuda</code> devel builder + runtime final). Rebuild: <code>./scripts/manage.sh start</code>. If you set <code>CUDA_BASE_IMAGE</code> / <code>CUDA_RUNTIME_IMAGE</code> to <code>nvcr.io/...</code>, run <code>docker login nvcr.io</code> (user <code>$oauthtoken</code>, password = NGC API key)</td>
+<td>Pull latest (default bases are <strong>Docker Hub</strong> <code>nvidia/cuda</code> <strong>runtime</strong> for builder and final). Rebuild: <code>./scripts/manage.sh start</code>. If you set <code>CUDA_BASE_IMAGE</code> / <code>CUDA_RUNTIME_IMAGE</code> to <code>nvcr.io/...</code>, run <code>docker login nvcr.io</code> (user <code>$oauthtoken</code>, password = NGC API key)</td>
 </tr>
 </tbody>
 </table>
@@ -1558,8 +1558,8 @@
 </tr>
 <tr>
 <td><code>docker pull</code> / rebuild re-downloads multi‑GB after tiny script edit</td>
-<td>Old image with monolithic prebuilt layer, or a real pip/torch change</td>
-<td>Pull latest split layout: runtime has separate <strong>venv</strong> (~multi‑GB) and <strong>app</strong> layers. Ops scripts are late thin layers + compose bind-mounts. Nodes/source-only changes should re-pull <strong>app</strong> only; any pip change still re-pulls venv. See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds-pulls">Models &amp; Cache</a></td>
+<td>Old image with monolithic prebuilt layer, or a real <strong>torch</strong> change</td>
+<td>Pull latest split layout: runtime has <strong>venv-torch</strong> (multi‑GB), <strong>venv-extra</strong> (Comfy/node pip), and <strong>app</strong>. Ops scripts are late thin layers + compose bind-mounts. Node/source-only changes re-pull <strong>app</strong>; extra pip re-pulls <strong>venv-extra</strong> only; torch pin/index changes re-pull torch. See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds-pulls">Models &amp; Cache</a></td>
 </tr>
 <tr>
 <td>Local script change has no effect</td>
@@ -1702,7 +1702,7 @@
 <tr>
 <td><code>kokoro-onnx</code> / <code>onnxruntime</code> import miss on aarch64</td>
 <td>Optional runtime wheel not installed (not baked in the image)</td>
-<td>Inside the container venv: <code>pip install kokoro-onnx onnxruntime</code> (CPU). Baking that into the image <strong>invalidates the multi-GB venv layer</strong>. Visual graphs still Queue without it</td>
+<td>Inside the container venv: <code>pip install kokoro-onnx onnxruntime</code> (CPU). Baking that into the image invalidates <strong>venv-extra</strong> (not the multi‑GB torch layer). Visual graphs still Queue without it</td>
 </tr>
 <tr>
 <td>Podcast script unchanged with Enhance on / GGUF fail-soft</td>

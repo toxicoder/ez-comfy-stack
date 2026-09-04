@@ -1687,13 +1687,13 @@
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h2>
 <ul>
 <li>One compose service for the unified stack  </li>
-<li>Multi-stage image: <strong>devel</strong> builder + <strong>runtime</strong> final (no secrets/models)  </li>
+<li>Multi-stage image: <strong>runtime</strong> builder stages + <strong>runtime</strong> final (no secrets/models; <code>CUDA_BASE_IMAGE=…devel</code> is an override)  </li>
 <li><strong>Layer cache contract</strong> (do not regress):</li>
-<li>Builder: <code>COPY</code> only the <code>install-comfy/</code> <strong>phase modules</strong> each prebuild <code>RUN</code> needs (not the full orchestrator before torch)</li>
-<li>Builder prebuild is <strong>phased</strong> (<code>venv+torch</code> → <code>comfy</code> → <code>nodes+finalize+package</code>) so torch survives node-only edits</li>
-<li>Runtime: <code>COPY --from=builder /opt/parts/venv</code> then <code>/opt/parts/app</code> <strong>before</strong> entrypoint/install/patch</li>
-<li>Validated pins: <code>COMFYUI_REF</code>, <code>COMFYUI_MANAGER_REF</code>, <code>COMFYUI_NUNCHAKU_NODE_REF</code> (see models-and-cache.md)</li>
-<li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --chmod</code>, <code>RUN --mount=type=cache,target=/root/.cache/pip</code></li>
+<li>Torch stage <code>COPY</code> is only <code>install-comfy/core.sh</code> + <code>phase-venv-torch.sh</code> (not <code>common.sh</code> / Comfy pins)</li>
+<li>Named stages <code>torch</code> → <code>comfy</code> → <code>nodes</code>; pin <code>ARG</code>s declared in the stage that uses them</li>
+<li>Runtime: <code>COPY --link</code> <code>/opt/parts/venv</code> then <code>venv-extra</code> then <code>app</code> <strong>before</strong> entrypoint/install/patch</li>
+<li>Validated pins: <code>TORCH_VERSION</code>, <code>COMFYUI_REF</code>, <code>COMFYUI_MANAGER_REF</code>, <code>COMFYUI_NUNCHAKU_NODE_REF</code> (see models-and-cache.md)</li>
+<li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --link</code>, <code>COPY --chmod</code>, pip + apt cache mounts</li>
 <li>Compose bind-mounts ops scripts + <code>install-comfy/</code> for zero-rebuild iteration</li>
 <li>GHCR channel by long-lived branch: publish tags <code>us-safe-studio</code> (<code>main</code>) and <code>us-safe-studio-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel). Old <code>flux-to-ltx*</code> tags freeze on the previous image.  </li>
 <li>Scripts as real files (not inline ConfigMap YAML)  </li>

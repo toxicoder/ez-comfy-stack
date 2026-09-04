@@ -1965,7 +1965,7 @@
 </tbody>
 </table>
 <p>Override with <code>EZ_COMFY_IMAGE</code> in <code>.env</code> if needed. Old <code>flux-to-ltx*</code> tags freeze on the previous image.</p>
-<p>Multi-stage: <strong>devel</strong> builder installs Comfy+torch in <strong>phased modules</strong> (torch separate from custom nodes); final stage is <strong>CUDA runtime</strong> (no nvcc) with <strong>split layers</strong> (venv vs app) so pulls reuse multi‑GB torch when only app bits change.</p>
+<p>Multi-stage: <strong>runtime</strong> builder stages install Comfy+torch in <strong>phased modules</strong> (torch separate from Comfy pins and custom nodes); final stage is <strong>CUDA runtime</strong> (no nvcc) with <strong>split layers</strong> (<code>venv</code> / <code>venv-extra</code> / <code>app</code>, <code>COPY --link</code>) so pulls reuse multi‑GB torch when only extra pip or app bits change. Override <code>CUDA_BASE_IMAGE</code> to a devel tag only if you compile CUDA extensions.</p>
 <p>It includes ComfyUI + PyTorch (pinned refs — see <a href="../models-and-cache/#prebuild-version-pins-validated">Models &amp; Cache</a>); <strong>not</strong> Klein/Wan/LTX weights (those stay on <code>MODELS_DIR</code>).</p>
 <p>First start <strong>seeds</strong> the volume from <code>/opt/comfy-prebuilt</code> (local copy) instead of multi‑GB pip.</p>
 <p>No tokens or host secrets are baked into the image. Pull is public for public packages.</p>

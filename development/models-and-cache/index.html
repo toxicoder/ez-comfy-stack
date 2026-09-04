@@ -2110,7 +2110,7 @@
 </tr>
 <tr>
 <td>Final base</td>
-<td><code>nvidia/cuda</code> <strong>runtime</strong> (builder uses <strong>devel</strong> only during image build)</td>
+<td><code>nvidia/cuda</code> <strong>runtime</strong> (builder defaults to the same runtime image; override <code>CUDA_BASE_IMAGE</code> to devel only if you compile CUDA extensions)</td>
 </tr>
 <tr>
 <td>Contains</td>
@@ -2134,7 +2134,7 @@
 </tr>
 <tr>
 <td>Publish</td>
-<td><code>publish-image</code> on <code>main</code> / <code>development</code> (docker/**); Buildx GHA layer cache</td>
+<td><code>publish-image</code> on <code>main</code> / <code>development</code> (docker/<strong>); Buildx </strong>registry** cache (<code>:buildcache-arm64</code>)</td>
 </tr>
 <tr>
 <td>Local build</td>
@@ -2145,14 +2145,15 @@
 <h3 id="image-layer-cache-high-velocity-rebuilds-pulls">Image layer cache (high-velocity rebuilds + pulls)<a class="headerlink" href="#image-layer-cache-high-velocity-rebuilds-pulls" title="Permanent link">&para;</a></h3>
 <details class="abstract">
 <summary>Layer invalidation matrix</summary>
-<p>Dockerfile order is intentional so <strong>ops-script edits do not re-download multi‑GB torch</strong>, and <strong>app-only prebuild churn does not re-pull the full venv blob</strong>:</p>
+<p>Dockerfile order is intentional so <strong>ops-script edits do not re-download multi‑GB torch</strong>, <strong>Comfy/node pip does not re-pull torch</strong>, and <strong>runtime apt changes rebase</strong> via <code>COPY --link</code>:</p>
 <table>
 <thead>
 <tr>
 <th>Change</th>
-<th>Rebuild multi‑GB torch phase?</th>
-<th>Re-pull multi‑GB <strong>venv</strong> layer?</th>
-<th>Re-pull <strong>app</strong> layer?</th>
+<th>Rebuild multi‑GB <strong>torch</strong> stage?</th>
+<th>Re-pull <strong>venv-torch</strong>?</th>
+<th>Re-pull <strong>venv-extra</strong>?</th>
+<th>Re-pull <strong>app</strong>?</th>
 </tr>
 </thead>
 <tbody>
@@ -2161,27 +2162,39 @@
 <td>No</td>
 <td>No</td>
 <td>No</td>
+<td>No</td>
 </tr>
 <tr>
-<td><code>install-comfy/phase-nodes.sh</code> or node sources only (no new pip)</td>
+<td><code>install-comfy/common.sh</code> (clone/link/strip only)</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Maybe (nodes/comfy stages)</td>
+</tr>
+<tr>
+<td><code>install-comfy/phase-nodes.sh</code> or node <strong>sources</strong> only</td>
+<td>No</td>
 <td>No</td>
 <td>No</td>
 <td>Yes (smaller)</td>
 </tr>
 <tr>
-<td>VideoHelperSuite / new node <strong>pip</strong> deps (e.g. opencv, imageio-ffmpeg)</td>
+<td>VideoHelperSuite / new node <strong>pip</strong> deps (opencv, llama-cpp, …)</td>
 <td>No</td>
-<td><strong>Yes</strong> (final venv includes node requirements)</td>
+<td>No</td>
+<td><strong>Yes</strong> (delta only)</td>
 <td>Yes</td>
 </tr>
 <tr>
-<td><code>install-comfy/phase-comfy.sh</code> / <code>COMFYUI_REF</code> bump (may change requirements)</td>
-<td>No (torch phase)</td>
-<td><strong>Yes if pip set changes</strong></td>
+<td><code>install-comfy/phase-comfy.sh</code> / <code>COMFYUI_REF</code> bump</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes</strong> if reqs change</td>
 <td>Yes</td>
 </tr>
 <tr>
-<td><code>install-comfy/phase-venv-torch.sh</code> / CUDA base / apt</td>
+<td><code>install-comfy/core.sh</code> / <code>phase-venv-torch.sh</code> / <code>TORCH_VERSION</code></td>
+<td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
@@ -2189,14 +2202,15 @@
 <tr>
 <td>Runtime <code>apt</code> only (<code>gcc</code>/<code>g++</code>/<code>python3-dev</code> for Triton JIT)</td>
 <td>No</td>
-<td>No (venv COPY still cacheable)</td>
+<td>No (<code>COPY --link</code>)</td>
+<td>No</td>
 <td>No</td>
 </tr>
 </tbody>
 </table>
-<p>Builder: <strong>COPY only phase modules each <code>RUN</code> needs</strong> (<code>common</code>+<code>phase-venv-torch</code> → <code>phase-comfy</code> → <code>phase-nodes</code>+<code>phase-finalize</code>) with BuildKit pip cache mounts. Runtime: <strong><code>COPY /opt/parts/venv</code> then <code>/opt/parts/app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, <code>pythonpath/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
-<p>Runtime installs <strong><code>gcc</code> + <code>g++</code> + <code>python3-dev</code></strong> (not full <code>build-essential</code>) so PyTorch 2.13 Triton can JIT-compile <code>cuda_utils</code> (needs <strong>CC + <code>Python.h</code></strong>) on first <code>CLIPTextEncode</code>. That is a small apt layer; it does <strong>not</strong> re-pull multi‑GB torch/venv. If JIT deps are still incomplete, the entrypoint sets <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> so torch falls back to eager/cuBLAS.</p>
-<p><strong>Caveat:</strong> the venv layer is the <strong>final</strong> <code>.venv</code> after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.</p>
+<p>Builder: <strong>named stages</strong> <code>torch</code> → <code>comfy</code> → <code>nodes</code>. Torch <code>COPY</code> is only <code>core.sh</code> + <code>phase-venv-torch.sh</code>. Pin <code>ARG</code>s are declared in the stage that uses them. Runtime: <strong><code>COPY --link</code> <code>/opt/parts/venv</code> then <code>venv-extra</code> then <code>app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, <code>pythonpath/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
+<p>Runtime installs <strong><code>gcc</code> + <code>g++</code> + <code>python3-dev</code></strong> (not full <code>build-essential</code>) so PyTorch 2.13+ Triton can JIT-compile <code>cuda_utils</code> (needs <strong>CC + <code>Python.h</code></strong>) on first <code>CLIPTextEncode</code>. That is a small apt layer; <code>COPY --link</code> keeps the multi‑GB torch blob. If JIT deps are still incomplete, the entrypoint sets <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> so torch falls back to eager/cuBLAS.</p>
+<p><strong>venv-extra</strong> is the pip delta after the torch snapshot (Comfy <code>requirements.txt</code>, Manager/VHS, llama-cpp). Baking a small optional wheel (e.g. <code>kokoro-onnx</code>) invalidates extra, not torch.</p>
 </details>
 <h3 id="prebuild-version-pins-validated">Prebuild version pins (validated)<a class="headerlink" href="#prebuild-version-pins-validated" title="Permanent link">&para;</a></h3>
 <details class="abstract">
@@ -2212,9 +2226,14 @@
 </thead>
 <tbody>
 <tr>
+<td><code>TORCH_VERSION</code></td>
+<td><code>2.14.0</code></td>
+<td>cu130 aarch64 wheel from <code>https://download.pytorch.org/whl/cu130</code>. Declared only in the <strong>torch</strong> stage. Bump here (and compose / publish-image / <code>install-comfy/core.sh</code>) when rebuilding the multi‑GB layer.</td>
+</tr>
+<tr>
 <td><code>COMFYUI_REF</code></td>
 <td><code>v0.34.0</code></td>
-<td>Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the <strong>comfy</strong> image phase after this bump (torch phase stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
+<td>Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the <strong>comfy</strong> image stage after this bump (torch stage stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
 </tr>
 <tr>
 <td><code>COMFYUI_MANAGER_REF</code></td>
@@ -2233,7 +2252,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>How to bump pins:</strong> change the defaults in <code>docker/Dockerfile</code> <code>ARG</code>s, <code>docker/docker-compose.yml</code> build-args, <code>.github/workflows/publish-image.yml</code>, and <code>docker/install-comfy/common.sh</code>, then rebuild/publish. Escape hatch: set <code>COMFYUI_REF=</code> empty to float the default branch (not recommended for GHCR).</p>
+<p><strong>How to bump pins:</strong> change the defaults in <code>docker/Dockerfile</code> <code>ARG</code>s, <code>docker/docker-compose.yml</code> build-args, <code>.github/workflows/publish-image.yml</code>, <code>docker/install-comfy/core.sh</code> (torch) and <code>docker/install-comfy/common.sh</code> (Comfy/node refs), then rebuild/publish. Escape hatch: set <code>COMFYUI_REF=</code> empty to float the default branch (not recommended for GHCR).</p>
 </details>
 
 

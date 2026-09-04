@@ -1436,7 +1436,7 @@
 </tbody>
 </table>
 <p>Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity WAVs into the graph.</p>
-<p><code>kokoro-onnx</code> / <code>onnxruntime</code> are <strong>optional runtime</strong> installs inside the container venv. They are <strong>not</strong> baked in <code>phase-nodes.sh</code> (a new pip would invalidate the multi-GB venv image layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and <code>download-podcast --tier analog</code>.</p>
+<p><code>kokoro-onnx</code> / <code>onnxruntime</code> are <strong>optional runtime</strong> installs inside the container venv. They are <strong>not</strong> baked in <code>phase-nodes.sh</code> (a new pip would invalidate <strong>venv-extra</strong>, not the multi‑GB torch layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and <code>download-podcast --tier analog</code>.</p>
 <hr />
 <h2 id="voice-consent-and-invented-characters">Voice consent and invented characters<a class="headerlink" href="#voice-consent-and-invented-characters" title="Permanent link">&para;</a></h2>
 <p>Hosts are <strong>original characters</strong>, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo.</p>
