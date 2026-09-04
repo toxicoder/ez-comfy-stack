@@ -1,0 +1,687 @@
+{
+  "id": "music-rap-full-lab-example",
+  "revision": 1,
+  "last_node_id": 12,
+  "last_link_id": 14,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        360,
+        100
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CheckpointLoaderSimple"
+      },
+      "widgets_values": [
+        "ace_step_1.5_turbo_aio.safetensors"
+      ],
+      "title": "ACE-Step 1.5 turbo AIO"
+    },
+    {
+      "id": 2,
+      "type": "ModelSamplingAuraFlow",
+      "pos": [
+        40,
+        220
+      ],
+      "size": [
+        330,
+        60
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ModelSamplingAuraFlow"
+      },
+      "widgets_values": [
+        3
+      ],
+      "title": "AuraFlow sampling"
+    },
+    {
+      "id": 3,
+      "type": "PrimitiveNode",
+      "pos": [
+        40,
+        380
+      ],
+      "size": [
+        280,
+        82
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "widget": {
+            "name": "seconds"
+          },
+          "links": [
+            5,
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        96.0,
+        "fixed"
+      ],
+      "title": "Song Duration"
+    },
+    {
+      "id": 4,
+      "type": "EmptyAceStep1.5LatentAudio",
+      "pos": [
+        40,
+        520
+      ],
+      "size": [
+        320,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "seconds",
+          "type": "FLOAT",
+          "link": 5,
+          "widget": {
+            "name": "seconds"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyAceStep1.5LatentAudio"
+      },
+      "widgets_values": [
+        96.0,
+        1
+      ],
+      "title": "Latent length (seconds)"
+    },
+    {
+      "id": 5,
+      "type": "EZRapLyrics",
+      "pos": [
+        500,
+        80
+      ],
+      "size": [
+        400,
+        280
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back\n\n[verse]\nRack light blinks on a solo take\nNo rented hook, no leased name\nBars stay tight, the booth stays mine\nStamp the master, keep the line\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back\n\n[outro]\nyeah\nlocal signal\ncut",
+        false
+      ],
+      "title": "ez_rap_lyrics"
+    },
+    {
+      "id": 6,
+      "type": "TextEncodeAceStepAudio1.5",
+      "pos": [
+        500,
+        400
+      ],
+      "size": [
+        400,
+        420
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "lyrics"
+          }
+        },
+        {
+          "name": "duration",
+          "type": "FLOAT",
+          "link": 6,
+          "widget": {
+            "name": "duration"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            7,
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextEncodeAceStepAudio1.5"
+      },
+      "widgets_values": [
+        "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+        "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back\n\n[verse]\nRack light blinks on a solo take\nNo rented hook, no leased name\nBars stay tight, the booth stays mine\nStamp the master, keep the line\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back\n\n[outro]\nyeah\nlocal signal\ncut",
+        42,
+        88,
+        96.0,
+        "4",
+        "en",
+        "C minor",
+        true,
+        2.0,
+        0.85,
+        0.9,
+        0,
+        0.0
+      ],
+      "title": "ACE tags + lyrics"
+    },
+    {
+      "id": 7,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        940,
+        80
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ConditioningZeroOut"
+      },
+      "widgets_values": [],
+      "title": "Negative (zero)"
+    },
+    {
+      "id": 8,
+      "type": "KSampler",
+      "pos": [
+        940,
+        180
+      ],
+      "size": [
+        330,
+        262
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 2
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 7
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 9
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        8,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "ACE sampler"
+    },
+    {
+      "id": 9,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        1340,
+        80
+      ],
+      "size": [
+        280,
+        60
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 11
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            13,
+            14
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecodeAudio"
+      },
+      "widgets_values": [],
+      "title": "ACE decode"
+    },
+    {
+      "id": 10,
+      "type": "SaveAudio",
+      "pos": [
+        1340,
+        180
+      ],
+      "size": [
+        320,
+        80
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 13
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudio"
+      },
+      "widgets_values": [
+        "ez_rap_full"
+      ],
+      "title": "FLAC master"
+    },
+    {
+      "id": 11,
+      "type": "SaveAudioMP3",
+      "pos": [
+        1340,
+        300
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 14
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudioMP3"
+      },
+      "widgets_values": [
+        "ez_rap_full",
+        "320k"
+      ],
+      "title": "MP3 320k"
+    },
+    {
+      "id": 12,
+      "type": "Note",
+      "pos": [
+        1340,
+        440
+      ],
+      "size": [
+        440,
+        500
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## music-rap-full-lab-example\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.\n\n1. Queue **music-rap-draft-lab-example** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Leave **Enhance** off. Edit lyrics before Queue. Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No \u201cin the style of <living artist>\u201d.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **klein-thumbnail-lab-example.json** / **klein-podcast-cover-lab-example.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n"
+      ],
+      "title": "Operator note"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      1,
+      1,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      5,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      5,
+      3,
+      0,
+      4,
+      0,
+      "FLOAT"
+    ],
+    [
+      6,
+      3,
+      0,
+      6,
+      2,
+      "FLOAT"
+    ],
+    [
+      7,
+      6,
+      0,
+      8,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      6,
+      0,
+      7,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      9,
+      7,
+      0,
+      8,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      10,
+      4,
+      0,
+      8,
+      3,
+      "LATENT"
+    ],
+    [
+      11,
+      8,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      12,
+      1,
+      2,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      13,
+      9,
+      0,
+      10,
+      0,
+      "AUDIO"
+    ],
+    [
+      14,
+      9,
+      0,
+      11,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        40,
+        420,
+        280
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "DURATION",
+      "bounding": [
+        20,
+        340,
+        420,
+        300
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "PROMPT",
+      "bounding": [
+        480,
+        40,
+        820,
+        900
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "OUTPUT",
+      "bounding": [
+        1320,
+        40,
+        500,
+        940
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "us-safe-music",
+    "lab_note": "## music-rap-full-lab-example\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.\n\n1. Queue **music-rap-draft-lab-example** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Leave **Enhance** off. Edit lyrics before Queue. Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No \u201cin the style of <living artist>\u201d.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **klein-thumbnail-lab-example.json** / **klein-podcast-cover-lab-example.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n",
+    "lab_description": "US-safe rap full track: ACE-Step 1.5 turbo AIO, 96s boom-bap, invented vocal",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

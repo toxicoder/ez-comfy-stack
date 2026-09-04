@@ -80,7 +80,7 @@ ${MODELS_DIR}/
     llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
     onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog)
     tts/                # opt-in Kokoro voices + optional Chatterbox/Qwen3-TTS
-    checkpoints/        # opt-in ACE-Step 1.5 AIO (download-podcast --tier acestep)
+    checkpoints/        # opt-in ACE-Step 1.5 AIO (download-music --tier turbo / download-podcast --tier acestep)
   hub/                  # HF cache (optional)
 ```
 
@@ -105,7 +105,7 @@ flowchart TB
   Comfy --> LlmDir["llm/"]
   Comfy --> Onnx["onnx/ · opt-in Kokoro"]
   Comfy --> Tts["tts/ · opt-in voices"]
-  Comfy --> Ckpt["checkpoints/ · opt-in ACE-Step"]
+  Comfy --> Ckpt["checkpoints/ · opt-in ACE-Step AIO"]
 ```
 
 ---
@@ -129,6 +129,8 @@ Or per utility:
 ./scripts/utilities/download-wan.sh run --tier 5b
 ./scripts/utilities/download-ltx.sh run --tier 2.5
 ./scripts/utilities/download-llm.sh run
+./scripts/utilities/download-music.sh status --tier turbo --json
+./scripts/utilities/download-music.sh run --tier turbo
 ```
 
 `--tier fast` also pulls Klein companions (`te` + `vae`). Optional stills: `--tier nvfp4` / `--tier base` / `--tier zimage`. Optional motion: `download-wan.sh run --tier a14b`. Optional LTX fallback: `download-ltx.sh run --tier 2.3`.
@@ -158,13 +160,27 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
 | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` | On-box prompt enhance (CPU llama.cpp) |
 
+Opt-in music (`./scripts/manage.sh download-music --tier turbo`, **not** `download-models`). Turbo **reuses** the podcast acestep snapshot — do not pull the ~10 GB AIO twice:
+
+```bash
+./scripts/manage.sh download-music --tier turbo
+./scripts/utilities/download-music.sh status --tier turbo --json
+```
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `ace_step_1.5_turbo_aio.safetensors` | `checkpoints/` | ACE-Step 1.5 rap + podcast AIO |
+| `acestep_v1.5_xl_turbo_bf16.safetensors` | `diffusion_models/` | Optional XL split (`--tier xl` only) |
+| `qwen_0.6b_ace15.safetensors` / `qwen_1.7b_ace15.safetensors` | `text_encoders/` | Optional XL text encoders |
+| `ace_1.5_vae.safetensors` | `vae/` | Optional XL VAE |
+
 Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models`):
 
 | File | Comfy folder | Role |
 | --- | --- | --- |
 | `kokoro-v1.0.onnx` | `onnx/` | Kokoro-82M ONNX (analog TTS) |
 | `voices-v1.0.bin` | `tts/` | Kokoro built-in voice pack |
-| `ace_step_1.5_turbo_aio.safetensors` | `checkpoints/` | ACE-Step 1.5 instrumental beds |
+| `ace_step_1.5_turbo_aio.safetensors` | `checkpoints/` | ACE-Step 1.5 turbo AIO (podcast beds + rap lane; shared dest) |
 | `t3_turbo_v1.safetensors` | `tts/` | Optional Chatterbox Turbo |
 | `model.safetensors` | `tts/` | Optional Qwen3-TTS 0.6B |
 
@@ -175,6 +191,8 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 | Graph | Notes |
 | --- | --- |
 | `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
+| `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
+| `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×720 |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
 | `klein-dream-house-lab-example.json` | Ten IG 4:5 stills of one cabin from new cameras; locked inventory |

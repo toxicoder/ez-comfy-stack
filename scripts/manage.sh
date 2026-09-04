@@ -12,7 +12,7 @@
 #   remote-SSH operation.
 #
 # Usage:
-#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|cleanup
+#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|cleanup
 #   ./scripts/manage.sh reset-hf-partials [--yes] [--force]
 #   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 #
@@ -111,10 +111,14 @@ Commands:
                     --limit N is a fixed Mbps cap (overrides DOWNLOAD_LIMIT for this run)
                     --drop-incomplete  delete *.incomplete then download (stuck resume)
                     Refuses MiniMax H3 (US Excluded Territory)
-                    Does not pull podcast weights (use download-podcast)
+                    Does not pull podcast or music weights (use download-podcast / download-music)
   download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]
                     Opt-in Kokoro / ACE-Step / optional TTS (bandwidth limited)
                     analog = Kokoro-82M ONNX only. Missing pack is not a doctor failure.
+  download-music [--tier turbo|xl|all] [--limit auto|N|off]
+                    Opt-in ACE-Step 1.5 music AIO (bandwidth limited)
+                    turbo = ace_step_1.5_turbo_aio.safetensors (~10 GB). Shares dest with download-podcast --tier acestep.
+                    Missing pack is not a doctor failure. Not part of download-models.
   download-limit    Proxy to utilities/download-limit.sh
   clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
   reset-hf-partials [--yes] [--force]
@@ -313,17 +317,19 @@ cmd_doctor() {
   else
     ok=1
   fi
-  local image_json wan_json ltx_json llm_json podcast_json
+  local image_json wan_json ltx_json llm_json podcast_json music_json
   image_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-image.sh" status --tier fast --json 2>/dev/null || echo '{}')
   wan_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-wan.sh" status --tier 5b --json 2>/dev/null || echo '{}')
   ltx_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" status --tier 2.5 --json 2>/dev/null || echo '{}')
   llm_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" status --json 2>/dev/null || echo '{}')
   podcast_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-podcast.sh" status --tier analog --json 2>/dev/null || echo '{}')
+  music_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-music.sh" status --tier turbo --json 2>/dev/null || echo '{}')
   log "image status: ${image_json}"
   log "wan status: ${wan_json}"
   log "ltx status: ${ltx_json}"
   log "llm status: ${llm_json}"
   log "podcast status: ${podcast_json} (opt-in; missing pack is not a doctor failure)"
+  log "music status: ${music_json} (opt-in; missing pack is not a doctor failure)"
   ensure_prompt_enhance_gguf
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
@@ -583,6 +589,7 @@ Usage: manage.sh download-models [--limit auto|N|off] [--drop-incomplete]
   --limit off   no throttle (not recommended over remote SSH)
   --drop-incomplete  delete *.incomplete then download (stuck 0 MiB/s resume)
   MiniMax H3 is banned (US Excluded Territory). See docs/licenses.md
+  Does not pull podcast or music weights (download-podcast / download-music).
 EOF
         return 0
         ;;
@@ -742,6 +749,98 @@ EOF
 }
 
 #######################################
+# Opt-in ACE-Step music weights under MODELS_DIR with the same download-limit wrap.
+# Missing turbo AIO is not a doctor failure. Does not change download-models.
+# turbo dest is the podcast acestep snapshot (do not pull the 10 GB AIO twice).
+# Globals:
+#   DOWNLOAD_LIMIT, MODELS_DIR, REPO_ROOT
+# Arguments:
+#   Optional: --tier turbo|xl|all
+#             --limit auto|N|off
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 on success; 1 on usage or download failure
+#######################################
+cmd_download_music() {
+  local limit="${DOWNLOAD_LIMIT}"
+  local tier="turbo"
+  local rc=0
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
+      --tier)
+        tier="${2:?}"
+        shift 2
+        ;;
+      --tier=*)
+        tier="${1#--tier=}"
+        shift
+        ;;
+      --limit)
+        if [[ $# -lt 2 || -z ${2} || ${2} == -* ]]; then
+          err "download-music --limit requires auto|N|off"
+          return 1
+        fi
+        limit="${2}"
+        shift 2
+        ;;
+      --limit=*)
+        limit="${1#--limit=}"
+        if [[ -z ${limit} ]]; then
+          err "download-music --limit requires auto|N|off"
+          return 1
+        fi
+        shift
+        ;;
+      turbo | xl | all)
+        tier="${1}"
+        shift
+        ;;
+      -h | --help)
+        cat <<'EOF' >&2
+Usage: manage.sh download-music [--tier turbo|xl|all] [--limit auto|N|off]
+  Opt-in. Default turbo = ACE-Step 1.5 turbo AIO (~10 GB).
+  Shares dest with download-podcast --tier acestep.
+  Does not run as part of download-models.
+  --limit auto|N|off  same wrap as download-models (always clears on exit)
+EOF
+        return 0
+        ;;
+      *)
+        err "Unknown download-music flag: ${1}"
+        return 1
+        ;;
+    esac
+  done
+  case "${limit}" in
+    auto | off | 0) ;;
+    *)
+      if [[ ! ${limit} =~ ^[0-9]+$ || ${limit} -le 0 ]]; then
+        err "Invalid --limit '${limit}' (use auto, off, or a positive integer Mbps)"
+        return 1
+      fi
+      ;;
+  esac
+  ensure_models_dir "${MODELS_DIR}" || return 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+  if [[ ${limit} == "off" || ${limit} == "0" ]]; then
+    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-music.sh" run --tier "${tier}" || rc=$?
+  else
+    local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
+    local inner
+    inner="MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-music.sh' run --tier '${tier}'"
+    bash "${dl}" wrap --limit "${limit}" -- bash -c "${inner}" || rc=$?
+  fi
+  if [[ ${rc} -ne 0 ]]; then
+    err "download-music: tier ${tier} incomplete under ${MODELS_DIR}"
+    return 1
+  fi
+  log "download-music: tier ${tier} ready under ${MODELS_DIR}/comfy"
+  return 0
+}
+
+#######################################
 # Proxy remaining argv to scripts/utilities/download-limit.sh.
 # Globals:
 #   See file header / caller environment.
@@ -804,6 +903,7 @@ main() {
     logs) cmd_logs "$@" ;;
     download-models) cmd_download_models "$@" ;;
     download-podcast) cmd_download_podcast "$@" ;;
+    download-music) cmd_download_music "$@" ;;
     download-h3 | queue-h3 | farm-h3 | stitch-h3)
       refuse_minimax_h3
       exit 1

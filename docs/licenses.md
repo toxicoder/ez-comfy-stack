@@ -13,7 +13,7 @@ tags: [license, apache, ltx, wan, klein, youtube, us]
 - What we download by default vs omit
 - LTX $10M company-revenue cap vs Wan Apache silent video
 - How 90s shorts split still / silent motion / AV print
-- What is banned (MiniMax H3, Klein 9B, FLUX.2-dev, API-only)
+- What is banned (MiniMax H3, MiniMax Music 3, Suno/Udio, Klein 9B, FLUX.2-dev, API-only)
 
 **What this enables**
 
@@ -55,7 +55,10 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | LongCat-Video | Meituan LongCat | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
 | Qwen3-4B-Instruct-2507 Q4_K_M GGUF | unsloth/Qwen3-4B-Instruct-2507-GGUF | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
 | Kokoro-82M | hexgrad/Kokoro-82M (ONNX pack: fastrtc/kokoro-onnx) | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
-| ACE-Step 1.5 / 1.5 XL | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| ACE-Step 1.5 turbo AIO | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT upstream / Apache companion pack | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| ACE-Step 1.5 XL | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| MiniMax Music 3 | (partner / not lab default) | MiniMax Music 3 | No — not a lab default | No | n/a | n/a | n/a | No |
+| Suno / Udio | (partner) | API-only / partner | No (not local weights) | No | n/a | n/a | n/a | No |
 | Chatterbox / Multilingual v3 / Turbo | ResembleAI/chatterbox | MIT | Yes | Yes | none | MIT; PerTh watermark stays on | No extra ban beyond MIT | No |
 | Qwen3-TTS 0.6B | Qwen/Qwen3-TTS-12Hz-0.6B-Base | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | F5-TTS official weights | SWivid/F5-TTS | CC-BY-NC-4.0 | No | No | n/a | n/a | n/a | No |
@@ -100,6 +103,8 @@ A token in `.env` is **not** the same as accepting the Lightricks license. First
 Do not download, do not reference in lab graphs, do not pin Comfy for them:
 
 - MiniMax H3 (US Excluded Territory for **weights and outputs**)
+- MiniMax Music 3 as a lab default
+- Suno / Udio partner APIs
 - FLUX.2 [dev] as any default or “quality” tier
 - FLUX.2 Klein 9B as the default image model
 - API-only models (Wan 2.5/2.6/2.7/3.0, Seedance, Kling, Veo, fal, Comfy Cloud, MiniMax API)
@@ -107,7 +112,7 @@ Do not download, do not reference in lab graphs, do not pin Comfy for them:
 - Fish Audio S2 (research/NC), Higgs Boson (community/commercial traps)
 - TTS-Audio-Suite as a pack; OldTimeRadio as a pack (H3 / FLUX-dev / NC optional lanes)
 
-Opt-in local podcast (not in `download-models`): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See [Local podcast](podcast.md).
+Opt-in local podcast (not in `download-models`): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See [Local podcast](podcast.md). Opt-in local rap: same ACE-Step 1.5 turbo AIO via `download-music --tier turbo` (shared dest with `download-podcast --tier acestep`). See [Local music](music.md).
 
 `./scripts/manage.sh download-models` **refuses** MiniMax H3.
 

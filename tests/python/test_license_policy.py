@@ -62,7 +62,12 @@ REQUIRED_SNIPPETS = (
     "Kokoro-82M",
     "hexgrad/Kokoro-82M",
     "ACE-Step 1.5",
+    "ACE-Step 1.5 turbo AIO",
+    "ACE-Step 1.5 XL",
+    "MIT upstream / Apache companion pack",
     "Comfy-Org/ace_step_1.5_ComfyUI_files",
+    "MiniMax Music 3",
+    "Suno / Udio",
     "Chatterbox",
     "ResembleAI/chatterbox",
     "Qwen3-TTS 0.6B",
@@ -98,7 +103,10 @@ DEFAULT_NO_MODELS = (
     "HunyuanVideo 1.5",
     "LongCat-Video",
     "Kokoro-82M",
-    "ACE-Step 1.5 / 1.5 XL",
+    "ACE-Step 1.5 turbo AIO",
+    "ACE-Step 1.5 XL",
+    "MiniMax Music 3",
+    "Suno / Udio",
     "Chatterbox / Multilingual v3 / Turbo",
     "Qwen3-TTS 0.6B",
     "F5-TTS official weights",
@@ -182,6 +190,8 @@ def test_banned_podcast_rows_us_not_ok() -> None:
         "Higgs Boson",
         "TTS-Audio-Suite",
         "OldTimeRadio",
+        "MiniMax Music 3",
+        "Suno / Udio",
     )
     for path in (LICENSE_ROOT, LICENSE_DOCS):
         rows = _table_rows(_read(path))

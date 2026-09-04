@@ -26,7 +26,10 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | LongCat-Video | Meituan LongCat | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
 | Qwen3-4B-Instruct-2507 Q4_K_M GGUF | unsloth/Qwen3-4B-Instruct-2507-GGUF | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
 | Kokoro-82M | hexgrad/Kokoro-82M (ONNX pack: fastrtc/kokoro-onnx) | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
-| ACE-Step 1.5 / 1.5 XL | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| ACE-Step 1.5 turbo AIO | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT upstream / Apache companion pack | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| ACE-Step 1.5 XL | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| MiniMax Music 3 | (partner / not lab default) | MiniMax Music 3 | No — not a lab default | No | n/a | n/a | n/a | No |
+| Suno / Udio | (partner) | API-only / partner | No (not local weights) | No | n/a | n/a | n/a | No |
 | Chatterbox / Multilingual v3 / Turbo | ResembleAI/chatterbox | MIT | Yes | Yes | none | MIT; PerTh watermark stays on | No extra ban beyond MIT | No |
 | Qwen3-TTS 0.6B | Qwen/Qwen3-TTS-12Hz-0.6B-Base | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | F5-TTS official weights | SWivid/F5-TTS | CC-BY-NC-4.0 | No | No | n/a | n/a | n/a | No |
@@ -40,6 +43,8 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 ## Banned from this stack (do not download, do not pin lab graphs)
 
 - MiniMax H3 and MiniMaxH3* nodes/workflows
+- MiniMax Music 3 as a lab default
+- Suno / Udio partner APIs
 - FLUX.2 [dev] as any default or “quality” tier
 - FLUX.2 Klein 9B (`flux-2-klein-9b`, `FLUX.2-klein-9b-nvfp4`, Nunchaku 9B) as the default image model
 - API-only / US-excluded / paid-self-host-required models (Wan 2.5+, Seedance, Kling, Veo, fal, Comfy Cloud, MiniMax API)

@@ -395,7 +395,10 @@ assert notes
 assert any(isinstance(n.get('widgets_values'), list) and n['widgets_values'] and len(str(n['widgets_values'][0]).strip())>40 for n in notes)
 clips=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode']
 ace=[n for n in d['nodes'] if n.get('type')=='TextEncodeAceStepAudio1.5']
-assert len(clips)>=2 or len(ace)>=2, p
+zero=[n for n in d['nodes'] if n.get('type')=='ConditioningZeroOut']
+# Visual graphs use two CLIP encodes. Podcast beds use two ACE encodes.
+# Rap graphs follow Comfy-Org ACE-Step 1.5: one encode + ConditioningZeroOut.
+assert len(clips)>=2 or len(ace)>=2 or (len(ace)>=1 and len(zero)>=1), p
 for n in clips:
     text=(n.get('widgets_values') or [''])[0]
     assert isinstance(text,str) and text.strip()
