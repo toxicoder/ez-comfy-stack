@@ -149,13 +149,13 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     | Workflow | What it does |
     | --- | --- |
-    | **film-go-see-90s-run-lab-example** | **Unified** first-person running 90s: Klein identity + LTX 5.00s AV printer + shot map |
-    | **film-still-here-90s-lab-example** | **Unified** household morning 90s (same shape) |
-    | **film-switchyard-90s-lab-example** | **Unified** night freight-yard 90s (same shape) |
+    | **film-go-see-90s-run-lab-example** | **One-click** first-person running 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
+    | **film-still-here-90s-lab-example** | **One-click** household morning 90s (same shape) |
+    | **film-switchyard-90s-lab-example** | **One-click** night freight-yard 90s (same shape) |
     | **wan-i2v-shot-lab-example** | Optional silent rehearsal / six-shot concat demo |
     | **ltx-i2v-shot-lab-example** | Generic 5.00 s AV print (non-film) |
 
-    Full loop: [90s shorts](shorts.md). One file per film — mute groups, do not switch graphs.
+    Full loop: [90s shorts](shorts.md). One file per film — Queue once.
 
 === "Creator toolkit"
 
@@ -229,11 +229,11 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     # default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4
     ```
 
-6. **90s films** (go-see / still-here / switchyard): load one **film-*-90s** graph → Queue identity → unmute LTX → 18 × 5.00s prints → concat with `--film`. See [90s shorts](shorts.md).
+6. **90s films** (go-see / still-here / switchyard): load one **film-*-90s** graph → Queue **once** → open **Save 90s film (MP4)**. See [90s shorts](shorts.md).
 7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel of one cabin (new cameras, locked inventory).
 8. Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up (see catalog tab above).
 
-Do not Queue a 90s denoise. Default graphs iterate in minutes.
+Do not Queue a 90s denoise. Default graphs iterate in minutes; one-click films are 18 × 5s prints.
 
 ---
 
@@ -254,9 +254,9 @@ ls "${COMFY_OUTPUT_DIR}"/ez_ltx_*_video_*.mp4
 | `wan-i2v-shot` / `ltx-i2v-shot` | 120 | 24 | **5.00 s** |
 | 90s film (18 LTX prints + concat) | — | 24 | **90.00 s** cap |
 
-!!! warning "Do not Queue 30 s / 60 s / 90 s in one graph"
+!!! warning "Do not Queue a 30 s / 60 s / 90 s latent"
 
-    Long latents melt Spark. Prefer **~5 s** graphs; stitch with [concat-shots](shorts.md). Keep headroom preflight green.
+    Long latents melt Spark. Film graphs still use **120-frame** printers (18 × 5.00 s) and stitch. Keep headroom preflight green. A one-click film Queue is **long wall-clock**, not a 90s denoise.
 
 Optional offline stitch of PNG frames only (if you need a host-side re-encode):
 

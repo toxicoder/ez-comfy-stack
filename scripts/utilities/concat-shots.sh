@@ -2,12 +2,13 @@
 #
 # ## concat-shots
 #
-# Concatenate approved 5 s lab MP4s with ffmpeg after the operator Queues each shot.
+# Concatenate approved 5 s lab MP4s with ffmpeg (host / spark-farm fallback).
 #
 # Purpose:
 #   Concatenate approved 5.00 s lab MP4s. Default glob is six ez_shot_01..06
 #   files. --film joins the 18-shot US-safe 90s shorts (go-see / still-here /
-#   switchyard) in beat/shot order and caps the result at 90 s.
+#   switchyard) in beat/shot order and caps the result at 90 s. Video is
+#   stream-copied; audio is AAC + YouTube loudnorm (same contract as EZFilmConcat).
 #
 # Usage:
 #   ./scripts/utilities/concat-shots.sh [--dir DIR] [--out FILE] [--dry-run|--yes]
@@ -286,7 +287,10 @@ cmd_run() {
   local list
   list="$(mktemp)"
   write_concat_list "${list}" "${files[@]}"
-  ffmpeg -y -f concat -safe 0 -i "${list}" -t "${CAP_SECONDS}" -c copy "${OUT_MP4}"
+  ffmpeg -y -f concat -safe 0 -i "${list}" -t "${CAP_SECONDS}" \
+    -c:v copy -c:a aac -ar 48000 -ac 2 -b:a 192k \
+    -af "loudnorm=I=-14:LRA=11:TP=-1.5" \
+    "${OUT_MP4}"
   rm -f "${list}"
   local dur
   dur="$(probe_mp4_seconds "${OUT_MP4}")"

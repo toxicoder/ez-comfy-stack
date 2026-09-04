@@ -8,149 +8,149 @@ shots_per_beat: 3
 total_shots: 18
 publish_cap_s: 90.00
 identity_look: |
-  Third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of brands. The mug is the identity lock. SFW, no real likenesses.
+  A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp in the foreground. Eye-level on a 35mm lens, framed for YouTube 16:9.
 shots:
   - beat: 1
     shot: 1
     prefix: ez_stillhere_b1_s1
-    load_from: example.png
-    motion: |
-      Shot 1 of 18, beat 1 enter. Third-person household morning, SFW. Kitchen at first light. A kettle clicks off. No real likenesses, no brands.
-    audio: |
-      Kettle click, no score.
+    load_from: identity
+    ltx_i2v: |
+      The start image holds as the first frame. In the unmarked kitchen at first light, a kettle clicks off while steam lifts. The third-person camera stays on the stove and table, locked on the chipped cream mug nearby. Quiet fridge hum sits under the click. No music and no score.
+    wan_i2v: |
+      Third-person kitchen at first light. A kettle clicks off. Camera holds the stove and the chipped cream mug. Slow locked framing.
   - beat: 1
     shot: 2
     prefix: ez_stillhere_b1_s2
     load_from: ez_stillhere_b1_s1_last
-    motion: |
-      Shot 2 of 18, beat 1 traverse. Someone pours into a plain ceramic mug. Camera stays on the pour.
-    audio: |
-      Pour, steam, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. Unmarked hands pour into the chipped cream mug; the third-person camera stays on the pour. Water and steam tick while ceramic rings once. Continuous take, mug identity locked. No music and no score.
+    wan_i2v: |
+      Third-person pour into the chipped cream mug. Camera stays on the pour. Continuous take.
   - beat: 1
     shot: 3
     prefix: ez_stillhere_b1_s3
     load_from: ez_stillhere_b1_s2_last
-    motion: |
-      Shot 3 of 18, beat 1 exit. Mug full. From the next room, a small child hums a made-up two-note motif — generated, no identifiable face.
-    audio: |
-      Floorboard, the invented hum, no licensed music.
+    ltx_i2v: |
+      The start image holds as the first frame. The mug sits full on honey oak. From the next room a small invented two-note child-hum arrives off-screen, no face in frame. A floorboard answers under the hum. Third-person camera holds the mug. No music and no score.
+    wan_i2v: |
+      Third-person hold on the full mug. Camera locked on honey oak. Gentle steam drift.
   - beat: 2
     shot: 1
     prefix: ez_stillhere_b2_s1
     load_from: ez_stillhere_b1_s3_last
-    motion: |
-      Shot 4 of 18, beat 2 enter. Mug on a wooden table, steam. Third-person.
-    audio: |
-      Steam tick, fridge hum, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. Steam climbs from the chipped mug on the wooden table while the third-person camera eases closer. Steam ticks and a fridge hum sit under the room. Mug identity locked. No music and no score.
+    wan_i2v: |
+      Third-person ease closer to the steaming mug on the wooden table. Slow push-in. Mug locked.
   - beat: 2
     shot: 2
     prefix: ez_stillhere_b2_s2
     load_from: ez_stillhere_b2_s1_last
-    motion: |
-      Shot 5 of 18, beat 2 traverse. The humming continues from the hallway, closer. Camera tracks the mug.
-    audio: |
-      Hum motif closer, no licensed music.
+    ltx_i2v: |
+      The start image holds as the first frame. The invented two-note hum comes closer from the hallway while the camera tracks the mug. Steam and the motif sit together, still no face. Continuous third-person track. No music and no score.
+    wan_i2v: |
+      Third-person camera tracks the mug on the table. Steam drifts. Slow lateral track.
   - beat: 2
     shot: 3
     prefix: ez_stillhere_b2_s3
     load_from: ez_stillhere_b2_s2_last
-    motion: |
-      Shot 6 of 18, beat 2 exit. Camera finds the doorway. Mug still in frame.
-    audio: |
-      Hum, wood, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. The camera finds the doorway while the mug stays in the foreground. Wood creak, the off-screen hum, and quiet house tone continue. Third-person, continuous take. No music and no score.
+    wan_i2v: |
+      Third-person camera finds the doorway. Mug stays in the foreground. Slow pan toward the hall.
   - beat: 3
     shot: 1
     prefix: ez_stillhere_b3_s1
     load_from: ez_stillhere_b2_s3_last
-    motion: |
-      Shot 7 of 18, beat 3 enter. Adult hands wrap the mug. No celebrity faces.
-    audio: |
-      Ceramic, breath, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. Adult hands wrap the chipped cream mug. Ceramic ticks against skin while close breath sits in the quiet kitchen. Third-person camera holds the hands and mug. No music and no score.
+    wan_i2v: |
+      Third-person close on adult hands wrapping the chipped cream mug. Camera holds. Slow, small motion.
   - beat: 3
     shot: 2
     prefix: ez_stillhere_b3_s2
     load_from: ez_stillhere_b3_s1_last
-    motion: |
-      Shot 8 of 18, beat 3 traverse. The child motif answers from off-screen. House creaks.
-    audio: |
-      The hum, house creak, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. Hands keep the mug while the off-screen two-note motif answers and the house creaks. The third-person camera stays on the mug. Continuous hold. No music and no score.
+    wan_i2v: |
+      Third-person hold on hands and mug. House-quiet. Camera locked.
   - beat: 3
     shot: 3
     prefix: ez_stillhere_b3_s3
     load_from: ez_stillhere_b3_s2_last
-    motion: |
-      Shot 9 of 18, beat 3 exit. Hands and mug, steam. Hold identity of the mug.
-    audio: |
-      Breath, ceramic, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. Hands and mug, steam thinning, identity locked on the chip in the rim. Breath and ceramic only. Third-person camera holds. No music and no score.
+    wan_i2v: |
+      Third-person hold on hands, mug, and thinning steam. Camera locked on the chipped rim.
   - beat: 4
     shot: 1
     prefix: ez_stillhere_b4_s1
     load_from: ez_stillhere_b3_s3_last
-    motion: |
-      Shot 10 of 18, beat 4 enter. Third-person follow into a living room. Dust in a sun bar.
-    audio: |
-      Footsteps on wood, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. The third-person camera follows into a living room; dust turns in a sun bar. Footsteps on wood sit under quiet house tone. Continuous follow. No music and no score.
+    wan_i2v: |
+      Third-person follow into a living room. Dust in a sun bar. Slow follow, locked interior.
   - beat: 4
     shot: 2
     prefix: ez_stillhere_b4_s2
     load_from: ez_stillhere_b4_s1_last
-    motion: |
-      Shot 11 of 18, beat 4 traverse. The humming is closer, still a silhouette in the next doorway — no identifiable child face.
-    audio: |
-      The motif, curtain, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. The invented motif is closer; a silhouette waits in the next doorway, face unreadable in backlight. Curtain cloth and the hum sit under the room. Third-person camera holds the doorway. No music and no score.
+    wan_i2v: |
+      Third-person hold on a backlit doorway silhouette. Curtain drift. Camera locked, face unreadable.
   - beat: 4
     shot: 3
     prefix: ez_stillhere_b4_s3
     load_from: ez_stillhere_b4_s2_last
-    motion: |
-      Shot 12 of 18, beat 4 exit. Sun bar, doorway silhouette. SFW.
-    audio: |
-      Hum, cloth, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. Sun bar, doorway silhouette, cloth shifting. The hum and a soft cloth rustle continue. Third-person camera holds. No music and no score.
+    wan_i2v: |
+      Third-person hold on sun bar and doorway silhouette. Slow curtain motion. Camera locked.
   - beat: 5
     shot: 1
     prefix: ez_stillhere_b5_s1
     load_from: ez_stillhere_b4_s3_last
-    motion: |
-      Shot 13 of 18, beat 5 enter. Third-person doorway. A small silhouetted figure. No close-up identity.
-    audio: |
-      The hum, breath.
+    ltx_i2v: |
+      The start image holds as the first frame. Third-person doorway: a small silhouetted figure, no close-up face. The invented hum and a breath in the hall. Camera stays at doorway distance. No music and no score.
+    wan_i2v: |
+      Third-person doorway. Small silhouetted figure. Camera stays at doorway distance. Slow hold.
   - beat: 5
     shot: 2
     prefix: ez_stillhere_b5_s2
     load_from: ez_stillhere_b5_s1_last
-    motion: |
-      Shot 14 of 18, beat 5 traverse. Silhouette looks at morning light and hums the same invented motif.
-    audio: |
-      The hum, a toy wood-block tap.
+    ltx_i2v: |
+      The start image holds as the first frame. The silhouette turns toward morning light and hums the same invented two-note motif. A toy wood-block tap answers once. Third-person camera holds, face still unread. No music and no score.
+    wan_i2v: |
+      Silhouette turns toward morning light. Third-person camera holds. Small head turn only.
   - beat: 5
     shot: 3
     prefix: ez_stillhere_b5_s3
     load_from: ez_stillhere_b5_s2_last
-    motion: |
-      Shot 15 of 18, beat 5 exit. Pull back toward the table. SFW.
-    audio: |
-      Hum fading, wood, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. The camera pulls back toward the table; the hum fades over wood. Third-person retreat, mug waiting in the next room. No music and no score.
+    wan_i2v: |
+      Third-person pull back toward the table. Slow dolly out from the doorway.
   - beat: 6
     shot: 1
     prefix: ez_stillhere_b6_s1
     load_from: ez_stillhere_b5_s3_last
-    motion: |
-      Shot 16 of 18, beat 6 enter. Mug on the table, empty chair.
-    audio: |
-      House quiet, no score.
+    ltx_i2v: |
+      The start image holds as the first frame. The chipped cream mug sits on the table beside an empty chair. The house is quiet: wood tick, distant fridge. Third-person camera holds the mug. No music and no score.
+    wan_i2v: |
+      Third-person hold: mug on the table, empty chair. Camera locked. Tiny steam if any.
   - beat: 6
     shot: 2
     prefix: ez_stillhere_b6_s2
     load_from: ez_stillhere_b6_s1_last
-    motion: |
-      Shot 17 of 18, beat 6 traverse. The hum fades to one last note.
-    audio: |
-      Last hummed note, no licensed music.
+    ltx_i2v: |
+      The start image holds as the first frame. The invented hum fades to one last off-screen note. The mug does not move. Third-person camera holds. No music and no score.
+    wan_i2v: |
+      Third-person hold on the mug. Camera locked. No new motion except fading steam.
   - beat: 6
     shot: 3
     prefix: ez_stillhere_b6_s3
     load_from: ez_stillhere_b6_s2_last
-    motion: |
-      Shot 18 of 18, beat 6 exit. Hold. Only the house. Quiet. No logos.
-    audio: |
-      Only the house. No score.
+    ltx_i2v: |
+      The start image holds as the first frame. Hold on the mug, the empty chair, and the unmarked kitchen. Only the house: a wood tick, then quiet. Third-person camera is still. No music and no score.
+    wan_i2v: |
+      Third-person still hold on mug, empty chair, unmarked kitchen. Camera locked.

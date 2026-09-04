@@ -90,6 +90,8 @@ teardown() {
   run cmd_run
   [ "${status}" -eq 0 ]
   grep -q -- '-t 90' "${TEST_TMP_DIR}/ffmpeg.log"
+  grep -q -- 'aac' "${TEST_TMP_DIR}/ffmpeg.log"
+  grep -q -- 'loudnorm' "${TEST_TMP_DIR}/ffmpeg.log"
   run first_glob "${COMFY_OUTPUT_DIR}/ez_gosee_b1_s1_ltx_video*.mp4"
   [[ "${output}" == *"ltx_video"* ]]
   run probe_mp4_seconds "${COMFY_OUTPUT_DIR}/cap.mp4"
