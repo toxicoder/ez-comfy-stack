@@ -285,7 +285,7 @@ ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 
     In ComfyUI, load **klein-still-draft-lab-example** from `user/default/workflows/` (seeded from host `workflows/`). Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
 
-    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Visual Generative AI](visual-generative-ai.md). After that first still, optional audio: [Local podcast](podcast.md) (`download-podcast --tier analog`, then **podcast-audio-first-lab-example**).
+    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Visual Generative AI](visual-generative-ai.md). After that first still, optional audio: [Local podcast](podcast.md) (`download-podcast --tier analog`, then **podcast-audio-first-lab-example**) or rap-first [Local music](music.md) (`download-music --tier turbo`, then **music-rap-draft-lab-example** — do not co-resident with LTX/Wan/Klein).
 
 ### Build the image locally (optional)
 
@@ -361,8 +361,9 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 | `stop` | Stop containers; keep models, outputs, volume |
 | `restart` | `stop` + `start` (full confirm again) |
 | `logs` | Follow compose logs (`logs --tail 100` works) |
-| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap (does **not** pull podcast weights) |
+| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap (does **not** pull podcast or music weights) |
 | `download-podcast [--tier analog\|…] [--limit auto\|N\|off]` | Opt-in Kokoro / ACE-Step / optional TTS |
+| `download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]` | Opt-in ACE-Step 1.5 rap AIO (~10 GB; shared dest with `download-podcast --tier acestep`) |
 | `download-limit …` | Proxy to `scripts/utilities/download-limit.sh` |
 | `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` |
 | `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) |

@@ -41,6 +41,8 @@ CREATORS = (
     ("ltx-hook-av-lab-example", "ez_hook_video", True),
     ("podcast-audio-first-lab-example", "ez_podcast_ep", False),
     ("podcast-radio-drama-lab-example", "ez_radio_ep", False),
+    ("music-rap-draft-lab-example", "ez_rap_draft", False),
+    ("music-rap-full-lab-example", "ez_rap_full", False),
 )
 
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev")

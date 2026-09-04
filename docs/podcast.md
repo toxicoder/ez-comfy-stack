@@ -66,7 +66,7 @@ This lab does **not** git-clone, pip-require, or default to:
 - **ComfyUI-OldTimeRadio** — optional lanes that pull US-excluded or non-commercial video models
 - Cloud ACE-Step forks, MiniMax Music, F5-TTS official weights, Coqui XTTS v2, Echo-TTS, Fish Audio S2, celebrity reference WAVs, ElevenLabs, or xAI TTS
 
-Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.0` (`TextEncodeAceStepAudio1.5`, `EmptyAceStep1.5LatentAudio`). Beds stay **instrumental** (`instrumental`, `no vocals` in tags; empty lyrics).
+Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.0` (`TextEncodeAceStepAudio1.5`, `EmptyAceStep1.5LatentAudio`). Beds stay **instrumental** (`instrumental`, `no vocals` in tags; empty lyrics). Rap vocals with original lyrics live on [Local music](music.md) and reuse this same AIO dest — do not download it twice.
 
 ---
 
@@ -109,6 +109,7 @@ Podcast weights are **opt-in**. `./scripts/manage.sh download-models` does **not
 ```bash
 ./scripts/manage.sh download-podcast --tier analog      # Kokoro ONNX + voices
 ./scripts/manage.sh download-podcast --tier acestep     # ace_step_1.5_turbo_aio.safetensors
+# same AIO dest as: ./scripts/manage.sh download-music --tier turbo
 ./scripts/manage.sh download-podcast --tier all         # analog + ACE + optional TTS
 # same --limit auto|N|off wrap as download-models (always clears on exit)
 ```
