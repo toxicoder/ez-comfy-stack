@@ -34,6 +34,7 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"doctor"* ]]
   [[ "${output}" == *"setup"* ]]
+  [[ "${output}" == *"download-podcast"* ]]
   run bash "${MANAGE_SH}" not-a-command
   [ "${status}" -ne 0 ]
   run bash "${MANAGE_SH}" doctor
@@ -189,6 +190,22 @@ teardown() {
   run cmd_download_models --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"banned"* || "${output}" == *"US Excluded"* ]]
+  run cmd_help
+  [[ "${output}" == *"download-podcast"* ]]
+  [[ "${output}" == *"Does not pull podcast"* ]]
+  run cmd_doctor
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"podcast status"* ]]
+  [[ "${output}" == *"not a doctor failure"* ]]
+  [[ ! -e "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" ]]
+  run cmd_download_podcast --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"analog"* ]]
+  run cmd_download_podcast --limit off --tier analog
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" ]]
+  tgt="$(readlink "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" || true)"
+  [[ -z ${tgt} || ${tgt} != /* ]]
   # Wipe comfy links only — cache hit + link_into_comfy should restore
   rm -f "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"
   run cmd_download_models

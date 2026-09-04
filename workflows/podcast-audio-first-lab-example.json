@@ -1,0 +1,775 @@
+{
+  "id": "podcast-audio-first-lab-example",
+  "revision": 1,
+  "last_node_id": 14,
+  "last_link_id": 15,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        360,
+        100
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            3,
+            4
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CheckpointLoaderSimple"
+      },
+      "widgets_values": [
+        "ace_step_1.5_turbo_aio.safetensors"
+      ],
+      "title": "ACE-Step 1.5 turbo AIO"
+    },
+    {
+      "id": 2,
+      "type": "EZPodcastScript",
+      "pos": [
+        500,
+        80
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "script",
+          "type": "STRING",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPodcastScript"
+      },
+      "widgets_values": [
+        "Speaker A: Welcome back to Local Signal. Today we stay on the machine in front of us.\nSpeaker B: No cloud voices. No rented music. If the card dies, the show dies with it.\nSpeaker A: That is the point. A small studio should own the weights and the cuts.\nSpeaker B: Edit the script before you generate speech. The edit is the human part.",
+        false,
+        "podcast_two_host"
+      ],
+      "title": "ez_podcast_script"
+    },
+    {
+      "id": 3,
+      "type": "EZPodcastDisclosure",
+      "pos": [
+        500,
+        400
+      ],
+      "size": [
+        420,
+        80
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "script",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "script",
+          "type": "STRING",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPodcastDisclosure"
+      },
+      "widgets_values": [],
+      "title": "Disclosure bumper"
+    },
+    {
+      "id": 4,
+      "type": "EZKokoroTTS",
+      "pos": [
+        500,
+        520
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "script",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZKokoroTTS"
+      },
+      "widgets_values": [
+        "af_heart",
+        "am_michael",
+        "bm_george",
+        false,
+        "kokoro",
+        "",
+        "",
+        1.0
+      ],
+      "title": "ez_podcast_voice"
+    },
+    {
+      "id": 5,
+      "type": "TextEncodeAceStepAudio1.5",
+      "pos": [
+        40,
+        220
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextEncodeAceStepAudio1.5"
+      },
+      "widgets_values": [
+        "instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental",
+        "",
+        42,
+        90,
+        30.0,
+        "4",
+        "en",
+        "C major",
+        false,
+        2.0,
+        0.85,
+        0.9,
+        0,
+        0.0
+      ],
+      "title": "ez_podcast_bed"
+    },
+    {
+      "id": 6,
+      "type": "TextEncodeAceStepAudio1.5",
+      "pos": [
+        40,
+        620
+      ],
+      "size": [
+        400,
+        280
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            7
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextEncodeAceStepAudio1.5"
+      },
+      "widgets_values": [
+        "vocals, singing, choir, rap",
+        "",
+        7,
+        90,
+        30.0,
+        "4",
+        "en",
+        "C major",
+        false,
+        2.0,
+        0.85,
+        0.9,
+        0,
+        0.0
+      ],
+      "title": "ACE negative"
+    },
+    {
+      "id": 7,
+      "type": "EmptyAceStep1.5LatentAudio",
+      "pos": [
+        1440,
+        80
+      ],
+      "size": [
+        320,
+        80
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyAceStep1.5LatentAudio"
+      },
+      "widgets_values": [
+        30.0,
+        1
+      ],
+      "title": "Bed length (seconds)"
+    },
+    {
+      "id": 8,
+      "type": "KSampler",
+      "pos": [
+        1440,
+        200
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 5
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 7
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        8,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "ACE sampler"
+    },
+    {
+      "id": 9,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        1440,
+        510
+      ],
+      "size": [
+        280,
+        60
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecodeAudio"
+      },
+      "widgets_values": [],
+      "title": "ACE decode"
+    },
+    {
+      "id": 10,
+      "type": "AudioAdjustVolume",
+      "pos": [
+        1440,
+        610
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AudioAdjustVolume"
+      },
+      "widgets_values": [
+        -15
+      ],
+      "title": "Duck bed \u221215 dB"
+    },
+    {
+      "id": 11,
+      "type": "AudioMerge",
+      "pos": [
+        1860,
+        80
+      ],
+      "size": [
+        320,
+        120
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio1",
+          "type": "AUDIO",
+          "link": 12
+        },
+        {
+          "name": "audio2",
+          "type": "AUDIO",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            14,
+            15
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AudioMerge"
+      },
+      "widgets_values": [
+        "overlay"
+      ],
+      "title": "ez_podcast_mix overlay"
+    },
+    {
+      "id": 12,
+      "type": "SaveAudio",
+      "pos": [
+        1860,
+        240
+      ],
+      "size": [
+        320,
+        80
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 14
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudio"
+      },
+      "widgets_values": [
+        "ez_podcast_ep"
+      ],
+      "title": "FLAC master"
+    },
+    {
+      "id": 13,
+      "type": "SaveAudioMP3",
+      "pos": [
+        1860,
+        360
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 15
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudioMP3"
+      },
+      "widgets_values": [
+        "ez_podcast_mix",
+        "320k"
+      ],
+      "title": "MP3 320k"
+    },
+    {
+      "id": 14,
+      "type": "Note",
+      "pos": [
+        1860,
+        500
+      ],
+      "size": [
+        400,
+        420
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## podcast-audio-first-lab-example\n\nUS-safe audio-first episode (Option A). Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Enhance defaults **off** so Queue works offline.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck \u221215 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **klein-podcast-cover-lab-example.json** (prefix `ez_podcast`, 1024\u00b2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (\u221216 LUFS podcast / `--youtube` \u221214). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n"
+      ],
+      "title": "Operator note"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      1,
+      1,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      1,
+      1,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      5,
+      1,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      6,
+      5,
+      0,
+      8,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      6,
+      0,
+      8,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      7,
+      0,
+      8,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      8,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      1,
+      2,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      9,
+      0,
+      10,
+      0,
+      "AUDIO"
+    ],
+    [
+      12,
+      4,
+      0,
+      11,
+      0,
+      "AUDIO"
+    ],
+    [
+      13,
+      10,
+      0,
+      11,
+      1,
+      "AUDIO"
+    ],
+    [
+      14,
+      11,
+      0,
+      12,
+      0,
+      "AUDIO"
+    ],
+    [
+      15,
+      11,
+      0,
+      13,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        40,
+        440,
+        900
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "PROMPT",
+      "bounding": [
+        480,
+        40,
+        460,
+        820
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "SETTINGS",
+      "bounding": [
+        1420,
+        40,
+        400,
+        700
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "OUTPUT",
+      "bounding": [
+        1840,
+        40,
+        440,
+        920
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "us-safe-podcast",
+    "lab_note": "## podcast-audio-first-lab-example\n\nUS-safe audio-first episode (Option A). Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Enhance defaults **off** so Queue works offline.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck \u221215 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **klein-podcast-cover-lab-example.json** (prefix `ez_podcast`, 1024\u00b2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (\u221216 LUFS podcast / `--youtube` \u221214). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n",
+    "lab_description": "US-safe audio-first episode: Kokoro TTS + ACE-Step instrumental bed + mix",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

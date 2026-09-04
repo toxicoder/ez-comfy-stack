@@ -78,6 +78,9 @@ ${MODELS_DIR}/
     text_encoders/
     vae/
     llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
+    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog)
+    tts/                # opt-in Kokoro voices + optional Chatterbox/Qwen3-TTS
+    checkpoints/        # opt-in ACE-Step 1.5 AIO (download-podcast --tier acestep)
   hub/                  # HF cache (optional)
 ```
 
@@ -100,6 +103,9 @@ flowchart TB
   Comfy --> TEd["text_encoders/"]
   Comfy --> VAEd["vae/"]
   Comfy --> LlmDir["llm/"]
+  Comfy --> Onnx["onnx/ · opt-in Kokoro"]
+  Comfy --> Tts["tts/ · opt-in voices"]
+  Comfy --> Ckpt["checkpoints/ · opt-in ACE-Step"]
 ```
 
 ---
@@ -151,6 +157,16 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `ltx-2.5-video-vae-bf16.safetensors` | `vae/` | LTX-2.5 video VAE |
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
 | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` | On-box prompt enhance (CPU llama.cpp) |
+
+Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models`):
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `kokoro-v1.0.onnx` | `onnx/` | Kokoro-82M ONNX (analog TTS) |
+| `voices-v1.0.bin` | `tts/` | Kokoro built-in voice pack |
+| `ace_step_1.5_turbo_aio.safetensors` | `checkpoints/` | ACE-Step 1.5 instrumental beds |
+| `t3_turbo_v1.safetensors` | `tts/` | Optional Chatterbox Turbo |
+| `model.safetensors` | `tts/` | Optional Qwen3-TTS 0.6B |
 
 ### Example graphs
 

@@ -23,7 +23,7 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
 
     New to this repo? Follow **[Getting Started](getting-started.md)** for setup → doctor → download → start → first still → stop.
 
-    Then: [Prompting](prompting.md) · [Model licenses](licenses.md) · studio playbook [Visual Generative AI](visual-generative-ai.md).
+    Then: [Prompting](prompting.md) · [Model licenses](licenses.md) · studio playbook [Visual Generative AI](visual-generative-ai.md) · opt-in [Local podcast](podcast.md).
 
     Contributors: [Conventions](project-conventions.md).
 
@@ -74,7 +74,7 @@ flowchart TB
 | UI | port **`${COMFY_PORT}`** (default **8188**) |
 | Memory limit | **90g** (host headroom reserved for SSH) |
 
-Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are **not** defaults. Optional fallbacks (Z-Image, Wan A14B, LTX-2.3) are documented on [Models & Cache](models-and-cache.md).
+Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are **not** defaults. Optional fallbacks (Z-Image, Wan A14B, LTX-2.3) are documented on [Models & Cache](models-and-cache.md). Opt-in audio: [Local podcast](podcast.md) (Kokoro + native ACE-Step; not part of `download-models`).
 
 ---
 

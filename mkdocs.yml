@@ -79,6 +79,7 @@ nav:
       - Model licenses: licenses.md
   - Create:
       - Visual Generative AI: visual-generative-ai.md
+      - Local podcast: podcast.md
       - 90s shorts: shorts.md
       - Spark farm: spark-farm.md
   - Operate:

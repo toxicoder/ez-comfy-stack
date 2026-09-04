@@ -59,6 +59,24 @@ REQUIRED_SNIPPETS = (
     "Qwen3-4B-Instruct-2507",
     "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
     "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+    "Kokoro-82M",
+    "hexgrad/Kokoro-82M",
+    "ACE-Step 1.5",
+    "Comfy-Org/ace_step_1.5_ComfyUI_files",
+    "Chatterbox",
+    "ResembleAI/chatterbox",
+    "Qwen3-TTS 0.6B",
+    "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
+    "F5-TTS official weights",
+    "CC-BY-NC-4.0",
+    "Coqui XTTS v2",
+    "CPML",
+    "Echo-TTS",
+    "CC-BY-NC-SA",
+    "Fish Audio S2",
+    "Higgs Boson",
+    "TTS-Audio-Suite",
+    "OldTimeRadio",
     "Not legal advice",
 )
 
@@ -79,6 +97,17 @@ DEFAULT_NO_MODELS = (
     "MiniMax H3",
     "HunyuanVideo 1.5",
     "LongCat-Video",
+    "Kokoro-82M",
+    "ACE-Step 1.5 / 1.5 XL",
+    "Chatterbox / Multilingual v3 / Turbo",
+    "Qwen3-TTS 0.6B",
+    "F5-TTS official weights",
+    "Coqui XTTS v2",
+    "Echo-TTS",
+    "Fish Audio S2",
+    "Higgs Boson",
+    "TTS-Audio-Suite",
+    "OldTimeRadio",
 )
 
 
@@ -142,6 +171,31 @@ def test_klein_9b_not_youtube_ok() -> None:
                 cells = [c.strip() for c in row.strip("|").split("|")]
                 assert cells[4] == "No", row
                 assert "FLUX Non-Commercial" in row
+
+
+def test_banned_podcast_rows_us_not_ok() -> None:
+    names = (
+        "F5-TTS official weights",
+        "Coqui XTTS v2",
+        "Echo-TTS",
+        "Fish Audio S2",
+        "Higgs Boson",
+        "TTS-Audio-Suite",
+        "OldTimeRadio",
+    )
+    for path in (LICENSE_ROOT, LICENSE_DOCS):
+        rows = _table_rows(_read(path))
+        by_model = {}
+        for row in rows:
+            cells = [c.strip() for c in row.strip("|").split("|")]
+            if len(cells) < 9:
+                continue
+            by_model[cells[0]] = cells
+        for name in names:
+            assert name in by_model, f"{path.name} missing row {name!r}"
+            assert by_model[name][3].startswith("No"), by_model[name]
+            assert by_model[name][4] == "No", by_model[name]
+            assert by_model[name][8] == "No", by_model[name]
 
 
 def test_minimax_h3_us_excluded() -> None:

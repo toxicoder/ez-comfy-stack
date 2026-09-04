@@ -5,7 +5,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/toxicoder/ez-comfy-stack/ci.yml?branch=development&style=for-the-badge&logo=github&label=CI)](https://github.com/toxicoder/ez-comfy-stack/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/toxicoder/ez-comfy-stack?style=for-the-badge)](LICENSE)
 
-**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with a **US-safe local studio** (Apache Klein 4B stills, Apache Wan 2.2 silent motion, LTX distilled AV), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling.
+**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with a **US-safe local studio** (Apache Klein 4B stills, Apache Wan 2.2 silent motion, LTX distilled AV), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling. Opt-in local podcast lanes (Kokoro + native ACE-Step) are documented in [Local podcast](docs/podcast.md) and are **not** part of `download-models`.
 
 **Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) — MkDocs Material, published per branch via GitHub Pages.
 
@@ -78,7 +78,7 @@ sequenceDiagram
 docker/           Dockerfile + compose (us-safe-studio)
 scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
-scripts/utilities download-image, download-wan, download-ltx, download-limit, concat-shots, spark-farm
+scripts/utilities download-image, download-wan, download-ltx, download-llm, download-podcast, download-limit, concat-shots, spark-farm
 config/           Resource / headroom policy
 workflows/        Seeded lab ComfyUI example graphs (Klein / Wan / LTX; unified 90s films under workflows/shorts/; creator toolkit)
 docs/             MkDocs site
@@ -107,7 +107,7 @@ make docs          # site/ (strict MkDocs build)
 # or: mkdocs serve
 ```
 
-Key pages (branch-relative source): [Getting Started](docs/getting-started.md) · [Prompting](docs/prompting.md) · [Model licenses](docs/licenses.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [90s shorts](docs/shorts.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
+Key pages (branch-relative source): [Getting Started](docs/getting-started.md) · [Prompting](docs/prompting.md) · [Model licenses](docs/licenses.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [Local podcast](docs/podcast.md) · [90s shorts](docs/shorts.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
 
 ## Development
 

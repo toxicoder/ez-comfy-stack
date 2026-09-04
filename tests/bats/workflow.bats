@@ -394,10 +394,14 @@ notes=[n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote')]
 assert notes
 assert any(isinstance(n.get('widgets_values'), list) and n['widgets_values'] and len(str(n['widgets_values'][0]).strip())>40 for n in notes)
 clips=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode']
-assert len(clips)>=2, p
+ace=[n for n in d['nodes'] if n.get('type')=='TextEncodeAceStepAudio1.5']
+assert len(clips)>=2 or len(ace)>=2, p
 for n in clips:
     text=(n.get('widgets_values') or [''])[0]
     assert isinstance(text,str) and text.strip()
+for n in ace:
+    tags=(n.get('widgets_values') or [''])[0]
+    assert isinstance(tags,str) and tags.strip()
 assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_note'].strip()
 "
     [ "${status}" -eq 0 ]
