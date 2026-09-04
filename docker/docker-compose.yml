@@ -18,13 +18,15 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        # Builder (devel) for optional compile; public Hub by default.
+        # Builder default is CUDA runtime (wheels; no nvcc). Set devel if compiling CUDA exts.
         # Set CUDA_BASE_IMAGE / CUDA_RUNTIME_IMAGE in .env for NGC after docker login nvcr.io
-        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvidia/cuda:13.0.0-devel-ubuntu24.04}
+        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvidia/cuda:13.0.0-runtime-ubuntu24.04}
         CUDA_RUNTIME_IMAGE: ${CUDA_RUNTIME_IMAGE:-nvidia/cuda:13.0.0-runtime-ubuntu24.04}
         # 1 = bake Comfy+torch into image (default). 0 = thin image (cold pip at runtime).
         EZ_COMFY_PREBUILD: ${EZ_COMFY_PREBUILD:-1}
         # Validated pins (see docs/models-and-cache.md). Override to bump or set empty to float.
+        TORCH_VERSION: ${TORCH_VERSION:-2.14.0}
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu130}
         COMFYUI_REF: ${COMFYUI_REF:-v0.34.0}
         COMFYUI_MANAGER_REF: ${COMFYUI_MANAGER_REF:-4.2.2}
         COMFYUI_NUNCHAKU_NODE_REF: ${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}

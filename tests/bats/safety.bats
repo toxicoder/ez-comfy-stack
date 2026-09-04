@@ -25,7 +25,8 @@ teardown() {
 }
 
 @test "Dockerfile defaults to public Docker Hub CUDA base not nvcr" {
-  run grep -E 'ARG CUDA_BASE_IMAGE=nvidia/cuda:.*devel' "${REPO_ROOT}/docker/Dockerfile"
+  # Builder default is runtime (wheels); devel is an override, not the ARG default.
+  run grep -E 'ARG CUDA_BASE_IMAGE=nvidia/cuda:.*runtime' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -eq 0 ]
   run grep -E 'ARG CUDA_RUNTIME_IMAGE=nvidia/cuda:.*runtime' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -eq 0 ]
@@ -33,8 +34,8 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'FROM \$\{CUDA_RUNTIME_IMAGE\}' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -eq 0 ]
-  # Multi-stage: builder prebuilds, runtime is the published stage
-  run grep -E 'AS builder|AS runtime' "${REPO_ROOT}/docker/Dockerfile"
+  # Multi-stage: torch/comfy/nodes prebuild, runtime is the published stage
+  run grep -E 'AS torch|AS comfy|AS nodes|AS runtime' "${REPO_ROOT}/docker/Dockerfile"
   [ "$status" -eq 0 ]
   # Hardcoded FROM nvcr.io as sole base would re-break unauthenticated builds
   run grep -E '^FROM nvcr\.io/' "${REPO_ROOT}/docker/Dockerfile"
@@ -43,6 +44,8 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'CUDA_RUNTIME_IMAGE' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
+  run grep -E 'nvidia/cuda:.*-devel' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -ne 0 ]
 }
 
 @test "Dockerfile runtime installs gcc g++ for Triton JIT" {
@@ -76,10 +79,14 @@ teardown() {
 
 @test "Dockerfile layer order keeps multi-GB prebuild cache stable" {
   local df="${REPO_ROOT}/docker/Dockerfile"
+  local torch_stage comfy_stage runtime_stage
+  local venv_line extra_line app_line entry_line
   # BuildKit syntax for COPY --chmod and cache mounts
   run grep -E '^# syntax=docker/dockerfile' "${df}"
   [ "$status" -eq 0 ]
   run grep -E 'mount=type=cache,target=/root/\.cache/pip' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'mount=type=cache,target=/var/cache/apt' "${df}"
   [ "$status" -eq 0 ]
   # Phased module sources (not monolithic install-comfy.sh before torch)
   run grep -E 'phase-venv-torch\.sh|phase_venv|phase_torch' "${df}"
@@ -88,24 +95,52 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E 'phase-nodes\.sh|phase_nodes' "${df}"
   [ "$status" -eq 0 ]
-
-  # Builder: first COPY is phase modules only (not entrypoint/patch/orchestrator)
-  run awk '/^COPY /{print; exit}' "${df}"
+  run grep -E 'install-comfy/core\.sh' "${df}"
   [ "$status" -eq 0 ]
-  [[ "${output}" == *phase-venv-torch* || "${output}" == *install-comfy/common* ]]
-  [[ "${output}" != *entrypoint* ]]
-  [[ "${output}" != *patch_get_free_memory* ]]
-  [[ "${output}" != *install-comfy.sh* ]]
 
-  # Runtime: split parts COPY (venv then app) before entrypoint
-  local venv_line app_line entry_line
-  venv_line="$(grep -n 'COPY --from=builder /opt/parts/venv' "${df}" | head -1 | cut -d: -f1)"
-  app_line="$(grep -n 'COPY --from=builder /opt/parts/app' "${df}" | head -1 | cut -d: -f1)"
+  torch_stage="$(awk '
+    /^FROM .* AS torch[[:space:]]*$/ {p=1; print; next}
+    p && /^FROM / {exit}
+    p {print}
+  ' "${df}")"
+  [[ "${torch_stage}" == *core.sh* ]]
+  [[ "${torch_stage}" == *phase-venv-torch* ]]
+  [[ "${torch_stage}" != *common.sh* ]]
+  [[ "${torch_stage}" != *phase-nodes* ]]
+  [[ "${torch_stage}" != *COMFYUI_REF* ]]
+  [[ "${torch_stage}" != *COMFYUI_MANAGER* ]]
+  [[ "${torch_stage}" != *entrypoint* ]]
+  [[ "${torch_stage}" != *patch_get_free_memory* ]]
+  [[ "${torch_stage}" != *install-comfy.sh* ]]
+  [[ "${torch_stage}" == *TORCH_VERSION* ]]
+
+  comfy_stage="$(awk '
+    /^FROM .* AS comfy[[:space:]]*$/ {p=1; print; next}
+    p && /^FROM / {exit}
+    p {print}
+  ' "${df}")"
+  [[ "${comfy_stage}" == *COMFYUI_REF* ]]
+  [[ "${comfy_stage}" != *COMFYUI_MANAGER_REF* ]]
+
+  runtime_stage="$(awk '
+    /^FROM .* AS runtime[[:space:]]*$/ {p=1; print; next}
+    p && /^FROM / {exit}
+    p {print}
+  ' "${df}")"
+  [[ "${runtime_stage}" == *"--link"* ]]
+  [[ "${runtime_stage}" == *"/opt/parts/venv-extra"* ]]
+
+  # Runtime: split parts COPY --link (torch venv, extra, app) before entrypoint
+  venv_line="$(grep -n 'COPY --link --from=torch /opt/parts/venv' "${df}" | head -1 | cut -d: -f1)"
+  extra_line="$(grep -n 'COPY --link --from=nodes /opt/parts/venv-extra' "${df}" | head -1 | cut -d: -f1)"
+  app_line="$(grep -n 'COPY --link --from=nodes /opt/parts/app' "${df}" | head -1 | cut -d: -f1)"
   entry_line="$(grep -n 'COPY.*entrypoint\.sh' "${df}" | head -1 | cut -d: -f1)"
   [ -n "${venv_line}" ]
+  [ -n "${extra_line}" ]
   [ -n "${app_line}" ]
   [ -n "${entry_line}" ]
-  [ "${venv_line}" -lt "${app_line}" ]
+  [ "${venv_line}" -lt "${extra_line}" ]
+  [ "${extra_line}" -lt "${app_line}" ]
   [ "${app_line}" -lt "${entry_line}" ]
 
   # Validated non-empty default pins
@@ -114,6 +149,8 @@ teardown() {
   run grep -E 'ARG COMFYUI_MANAGER_REF=' "${df}"
   [ "$status" -eq 0 ]
   run grep -E 'ARG COMFYUI_NUNCHAKU_NODE_REF=v' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'ARG TORCH_VERSION=' "${df}"
   [ "$status" -eq 0 ]
   # VideoHelperSuite pin surface + runtime ffmpeg for VHS
   run grep -E 'ARG COMFYUI_VHS_REF=' "${df}"
@@ -192,8 +229,10 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -iE 'dockerhub|docker\.io/.*push|DOCKERHUB' "${REPO_ROOT}/.github/workflows/publish-image.yml"
   [ "$status" -ne 0 ]
-  # Publish uses Buildx GHA cache (faster rebuilds)
-  run grep -E 'cache-from:.*type=gha|cache-to:.*type=gha' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  # Publish uses GHCR registry cache (GHA 10GB is too small for torch intermediates)
+  run grep -E 'cache-from:.*type=registry|type=registry,ref=.*buildcache' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'cache-to:.*type=registry' "${REPO_ROOT}/.github/workflows/publish-image.yml"
   [ "$status" -eq 0 ]
 }
 

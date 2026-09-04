@@ -13,6 +13,7 @@
 #
 #   Phase implementations live under install-comfy/ so Docker can COPY only the
 #   modules each prebuild RUN needs (torch survives nodes-only edits):
+#     core.sh + phase-venv-torch.sh  (torch stage; no Comfy pin ARGs)
 #     install-comfy.sh --phase venv|torch|comfy|nodes|finalize
 #   Default (no --phase): full cold install or stamp-based refresh.
 #
