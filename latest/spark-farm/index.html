@@ -1256,7 +1256,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># After sourcing spark-farm.example.env</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188</span>
 </code></pre></div>
-<p>On each UI, load the unified <strong>film-<em>-90s-</em>-lab-example</strong> graph (or <strong>ltx-i2v-shot-lab-example</strong> / optional <strong>wan-i2v-shot-lab-example</strong>) and <strong>Queue</strong> independent <strong>5 s</strong> shots — different beats in parallel for the 90s films. Concat locally:</p>
+<p>The one-click <strong>film-<em>-90s-</em>-lab-example</strong> graph is sequential on one host. For a farm, load <strong>ltx-i2v-shot-lab-example</strong> (or optional <strong>wan-i2v-shot-lab-example</strong>) on each UI and <strong>Queue</strong> independent <strong>5 s</strong> shots — different beats in parallel. Concat locally:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--yes
 </code></pre></div>

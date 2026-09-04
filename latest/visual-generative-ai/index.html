@@ -1556,15 +1556,15 @@
 <tbody>
 <tr>
 <td><strong>film-go-see-90s-run-lab-example</strong></td>
-<td><strong>Unified</strong> first-person running 90s: Klein identity + LTX 5.00s AV printer + shot map</td>
+<td><strong>One-click</strong> first-person running 90s: Klein identity + 18 LTX 5.00s AV prints + stitch</td>
 </tr>
 <tr>
 <td><strong>film-still-here-90s-lab-example</strong></td>
-<td><strong>Unified</strong> household morning 90s (same shape)</td>
+<td><strong>One-click</strong> household morning 90s (same shape)</td>
 </tr>
 <tr>
 <td><strong>film-switchyard-90s-lab-example</strong></td>
-<td><strong>Unified</strong> night freight-yard 90s (same shape)</td>
+<td><strong>One-click</strong> night freight-yard 90s (same shape)</td>
 </tr>
 <tr>
 <td><strong>wan-i2v-shot-lab-example</strong></td>
@@ -1576,7 +1576,7 @@
 </tr>
 </tbody>
 </table>
-<p>Full loop: <a href="../shorts/">90s shorts</a>. One file per film — mute groups, do not switch graphs.</p>
+<p>Full loop: <a href="../shorts/">90s shorts</a>. One file per film — Queue once.</p>
 </div>
 <div class="tabbed-block">
 <p>Pack 1</p>
@@ -1755,12 +1755,12 @@
 </code></pre></div>
 </li>
 <li>
-<p><strong>90s films</strong> (go-see / still-here / switchyard): load one <strong>film-*-90s</strong> graph → Queue identity → unmute LTX → 18 × 5.00s prints → concat with <code>--film</code>. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>90s films</strong> (go-see / still-here / switchyard): load one <strong>film-*-90s</strong> graph → Queue <strong>once</strong> → open <strong>Save 90s film (MP4)</strong>. See <a href="../shorts/">90s shorts</a>.</p>
 </li>
 <li>Daily still / GIF / IG pack: <strong>klein-still-daily-lab-example</strong> → optional <strong>wan-gif-loop-lab-example</strong> (LoadImage = <code>ez_still_app_*.png</code>, leave ping-pong on) or <strong>klein-dream-house-lab-example</strong> for a 10-photo carousel of one cabin (new cameras, locked inventory).</li>
 <li>Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up (see catalog tab above).</li>
 </ol>
-<p>Do not Queue a 90s denoise. Default graphs iterate in minutes.</p>
+<p>Do not Queue a 90s denoise. Default graphs iterate in minutes; one-click films are 18 × 5s prints.</p>
 <hr />
 <h2 id="watch-the-video-wan-ltx">Watch the video (Wan / LTX)<a class="headerlink" href="#watch-the-video-wan-ltx" title="Permanent link">&para;</a></h2>
 <div class="admonition tip">
@@ -1801,8 +1801,8 @@
 </tbody>
 </table>
 <div class="admonition warning">
-<p class="admonition-title">Do not Queue 30 s / 60 s / 90 s in one graph</p>
-<p>Long latents melt Spark. Prefer <strong>~5 s</strong> graphs; stitch with <a href="../shorts/">concat-shots</a>. Keep headroom preflight green.</p>
+<p class="admonition-title">Do not Queue a 30 s / 60 s / 90 s latent</p>
+<p>Long latents melt Spark. Film graphs still use <strong>120-frame</strong> printers (18 × 5.00 s) and stitch. Keep headroom preflight green. A one-click film Queue is <strong>long wall-clock</strong>, not a 90s denoise.</p>
 </div>
 <p>Optional offline stitch of PNG frames only (if you need a host-side re-encode):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>

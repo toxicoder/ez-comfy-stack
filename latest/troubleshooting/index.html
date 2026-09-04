@@ -1785,19 +1785,29 @@
 <td>Pin Enhance <strong>off</strong> on HOUSE IDENTITY. Shot cards are camera / room / time / season only</td>
 </tr>
 <tr>
-<td>OOM / multi-minute hang on a 90s (or 30s / 60s) Queue</td>
-<td>One-graph long latent</td>
-<td>Do not Queue 90s. Use 18 × <strong>5.00 s</strong> shorts + <code>concat-shots.sh --film</code>. See <a href="../shorts/">90s shorts</a>. Confirm headroom preflight; close other GPU jobs</td>
+<td>OOM / multi-minute hang on a 90s (or 30s / 60s) <strong>latent</strong></td>
+<td>241+ frame widget</td>
+<td>Do not Queue a 90s denoise. Film graphs are 18 × <strong>5.00 s</strong> (120 frames) + stitch. See <a href="../shorts/">90s shorts</a>. Confirm headroom preflight; close other GPU jobs</td>
+</tr>
+<tr>
+<td>One-click 90s film Queue runs for a long time</td>
+<td>18 sequential LTX 5s prints</td>
+<td>Expected. Open <strong>Save 90s film (MP4)</strong> when it finishes. A true hang is 0 GPU / 241+ frames</td>
 </tr>
 <tr>
 <td>90s film / shot graph missing in the Comfy UI</td>
 <td>Entrypoint only used to copy top-level <code>workflows/*.json</code></td>
-<td>Pull latest; restart so <code>install_lab_workflows</code> copies <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> into <code>user/default/workflows/</code>. Load <strong>film-<em>-90s-</em>-lab-example</strong> (unified identity + LTX). YAML shot lists are not copied (edit on the host)</td>
+<td>Pull latest; restart so <code>install_lab_workflows</code> copies <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> into <code>user/default/workflows/</code>. Load <strong>film-<em>-90s-</em>-lab-example</strong>. YAML shot lists are not copied (edit on the host)</td>
 </tr>
 <tr>
-<td>Queuing a 90s film runs Klein and LTX together / OOM</td>
-<td>LTX group not bypassed</td>
-<td>Default canvas bypasses <strong>Shot print (LTX)</strong>. Queue identity first; then Ctrl+B to bypass Identity and enable LTX before the 18 prints — <a href="../shorts/">90s shorts</a></td>
+<td>Queuing a 90s film OOMs with Klein and LTX both resident</td>
+<td><code>EZUnloadModels</code> missing on an old graph</td>
+<td>Pull latest film JSON; confirm <strong>Unload models (pass IMAGE)</strong> sits between Klein decode and LTX shot 1 — <a href="../shorts/">90s shorts</a></td>
+</tr>
+<tr>
+<td>Missing <strong>EZFilmConcat</strong> / Unload models node</td>
+<td>Host pack not mounted or entrypoint copy skipped</td>
+<td>Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_film</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_film/__init__.py</code></td>
 </tr>
 <tr>
 <td>Doctor warns <code>banned MiniMax H3 weight present</code></td>
