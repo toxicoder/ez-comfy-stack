@@ -51,6 +51,8 @@
       
     
     
+      <link rel="stylesheet" href="stylesheets/extra.css">
+    
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -92,7 +94,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
@@ -209,14 +213,8 @@
     
   </nav>
   
-</header>
     
-    <div class="md-container" data-md-component="container">
       
-      
-        
-          
-            
 <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
@@ -325,7 +323,13 @@
     </ul>
   </div>
 </nav>
-          
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
         
       
       <main class="md-main" data-md-component="main">
@@ -734,6 +738,62 @@
     
   
     Visual Generative AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
   
 
     
@@ -1214,7 +1274,7 @@
 <div class="admonition tip">
 <p class="admonition-title">Start here</p>
 <p>New to this repo? Follow <strong><a href="getting-started/">Getting Started</a></strong> for setup → doctor → download → start → first still → stop.</p>
-<p>Then: <a href="prompting/">Prompting</a> · <a href="licenses/">Model licenses</a> · studio playbook <a href="visual-generative-ai/">Visual Generative AI</a>.</p>
+<p>Then: <a href="prompting/">Prompting</a> · <a href="licenses/">Model licenses</a> · studio playbook <a href="visual-generative-ai/">Visual Generative AI</a> · opt-in <a href="podcast/">Local podcast</a> · opt-in <a href="music/">Local music</a>.</p>
 <p>Contributors: <a href="project-conventions/">Conventions</a>.</p>
 </div>
 <hr />
@@ -1288,7 +1348,7 @@
 </tr>
 </tbody>
 </table>
-<p>Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are <strong>not</strong> defaults. Optional fallbacks (Z-Image, Wan A14B, LTX-2.3) are documented on <a href="models-and-cache/">Models &amp; Cache</a>.</p>
+<p>Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are <strong>not</strong> defaults. Optional fallbacks (Z-Image, Wan A14B, LTX-2.3) are documented on <a href="models-and-cache/">Models &amp; Cache</a>. Opt-in audio: <a href="podcast/">Local podcast</a> (Kokoro + native ACE-Step) and <a href="music/">Local music</a> (rap-first ACE-Step; not part of <code>download-models</code>).</p>
 <hr />
 <h2 id="session-variables">Session variables<a class="headerlink" href="#session-variables" title="Permanent link">&para;</a></h2>
 <p>Set these once per SSH session (defaults match <code>.env.example</code>). Getting Started repeats them in the copy-paste path.</p>
@@ -1492,7 +1552,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="assets/javascripts/bundle.d7400e89.min.js"></script>

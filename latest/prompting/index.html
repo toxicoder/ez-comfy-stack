@@ -53,6 +53,8 @@
       
     
     
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -94,7 +96,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
@@ -211,14 +215,8 @@
     
   </nav>
   
-</header>
     
-    <div class="md-container" data-md-component="container">
       
-      
-        
-          
-            
 <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
@@ -327,7 +325,13 @@
     </ul>
   </div>
 </nav>
-          
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
         
       
       <main class="md-main" data-md-component="main">
@@ -702,6 +706,62 @@
     
   
     Visual Generative AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
   
 
     
@@ -1131,14 +1191,15 @@
 <ul>
 <li>How each lab model actually reads a prompt</li>
 <li>Canned lab-example text (already rewritten)</li>
-<li>GIF loop motion and dream-house identity (Prompt Join)</li>
-<li>Lazy path: Prompt Enhance nodes + <code>XAI_API_KEY</code></li>
+<li>GIF loop motion and dream-house world bible (Prompt Join, lock=view)</li>
+<li>Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance on by default)</li>
+<li>Style dropdown: research-backed look references; dropdown wins over style already in the source</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
 <li>Writing (or pasting) a prompt that matches Klein 4B, Wan 2.2, or LTX-2.5 instead of SD1.5 tag soup</li>
-<li>Typing a lazy sentence and letting Grok rewrite it for the model on the canvas</li>
-<li>Queueing offline with Enhance off — no API key required</li>
+<li>Typing a lazy sentence and letting the on-box Qwen3 rewriter expand it for Klein / Wan / LTX</li>
+<li>Optional style dropdown (50 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source</li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Lab graphs already ship model-native prompts</p>
@@ -1184,8 +1245,8 @@
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Front-load the subject. Write prose.</p>
-<p><strong>Do:</strong> <code>A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick…</code></p>
-<p><strong>Don’t:</strong> <code>main street, bicycle, photoreal, 24mm, no logos, no text</code></p>
+<p><strong>Do:</strong> <code>A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff…</code></p>
+<p><strong>Don’t:</strong> <code>rooftop, tech wizard, 3D, 24mm, no logos, no text</code></p>
 </div>
 <div class="tabbed-block">
 <p>Entity + scene + motion + <strong>one</strong> camera verb (<code>dolly in</code>, <code>pan</code>, <code>tracking</code>, <code>fixed camera</code>). About 80–120 words. No audio, no score.</p>
@@ -1197,7 +1258,7 @@
 <p>Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do <strong>not</strong> prompt a walk or a one-way dolly — <strong>wan-gif-loop-lab-example</strong> plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.</p>
 </div>
 <div class="tabbed-block">
-<p>One identity paragraph (materials, architecture, place) plus a short camera line per shot. <strong>klein-dream-house-lab-example</strong> uses <strong>Prompt Join</strong> so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.</p>
+<p>One <strong>world bible</strong> locks massing + materials + place (compact single-story cedar cabin, hip roof, two-bay glass, decks on gravel, alpine lake) with <strong>no camera</strong>. Locked inventory (linen sofa facing the glass, island, dining table, bedding, tub, deck chairs) must appear through the two-bay glass <strong>and</strong> in the matching interiors. Each SHOT card is a new camera of that cabin. <strong>Prompt Join</strong> <code>lock=view</code> stitches bible + inventory + “new photograph from a different camera”. Shots 02–10 are independent T2I (empty latent, same seed) — they do <strong>not</strong> <code>ReferenceLatent</code> shot 01, or every still copies the facade. <code>lock=state</code> is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Pin Enhance <strong>off</strong> on the bible. Unused shots may be bypassed.</p>
 </div>
 <div class="tabbed-block">
 <p>Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, <strong>no score</strong>. Do not paste a Wan or Kling shot list unchanged.</p>
@@ -1206,7 +1267,7 @@
 </div>
 <hr />
 <h2 id="prompt-enhance-nodes">Prompt Enhance nodes<a class="headerlink" href="#prompt-enhance-nodes" title="Permanent link">&para;</a></h2>
-<p>In-tree pack <code>custom_nodes/ez_prompt_enhance</code> (category <strong>ez-comfy/prompt</strong>). Entrypoint copies it into Comfy <code>custom_nodes/</code> on start (same pattern as lab workflows).</p>
+<p>In-tree pack <code>custom_nodes/ez_prompt_enhance</code> (category <strong>ez-comfy/prompt</strong>). Entrypoint copies every pack under <code>custom_nodes/</code> into Comfy on start (same pattern as lab workflows), including <code>ez_ltx_spatial</code> which snaps LTX canvases off 720/1080 so the video VAE does not einops-crash.</p>
 <table>
 <thead>
 <tr>
@@ -1233,24 +1294,34 @@
 </tr>
 <tr>
 <td><strong>Prompt Join</strong></td>
-<td>identity + shot → one STRING</td>
-<td>klein-dream-house shot cards</td>
+<td>bible + inventory + shot + <code>lock</code> (view/state) → one STRING</td>
+<td>dream-house (view) and lighting/before-after (state)</td>
 </tr>
 </tbody>
 </table>
 <p>STRING out → CLIPTextEncode <code>text</code> input.</p>
 <ol>
-<li>Set <code>XAI_API_KEY</code> in <code>.env</code> (see <code>.env.example</code>). Optional: <code>XAI_MODEL</code> (default <code>grok-4.6</code>), <code>XAI_BASE_URL</code>, <code>XAI_TIMEOUT_S</code>.</li>
-<li>Replace the canned prompt with a lazy sentence.</li>
-<li>Set <strong>Enhance</strong> to true. Queue.</li>
+<li><code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>).</li>
+<li>Type a lazy sentence (or leave the canned paragraph). <strong>Enhance</strong> defaults <strong>on</strong>.</li>
+<li>Optional: pick a <strong>style</strong> (photorealistic, anime, cartoon, … — 50 ids, or <code>none</code>).</li>
+<li>Queue. On the Enhance node, read the dim <strong>CLIP prompt</strong> box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, <strong>Enhance status</strong> says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.</li>
 </ol>
-<p><strong>Enhance defaults to false.</strong> Canned text is used as-is so shorts identity locks do not drift and hermetic Queue needs no key.</p>
-<p>Fail-soft: missing key, timeout, or HTTP error logs a warning and passes the original prompt through. Generation still runs.</p>
+<p><strong>Enhance defaults to true.</strong> Turn it <strong>off</strong> to pin the source widget (frozen identity bibles). A selected style is still applied to the CLIP string. Style is ignored on I2V (the start image owns look).</p>
+<p>When Enhance is <strong>on</strong> and a style is selected (t2i / t2v / Klein edit):</p>
+<ul>
+<li>The dropdown is look authority. If the source already names a medium, lighting, grade, lens, or art style, the rewriter <strong>replaces</strong> those clauses so they match the dropdown. It does not stack two styles.</li>
+<li>Each preset is a short reference (medium, light, color, texture, camera or projection) tuned for Klein prose, Wan aesthetic+stylization, or LTX lighting/surface in the flowing paragraph.</li>
+<li>CLIP text stays generic: no camera/film/studio brand names. Labels such as <strong>Pixar-like 3D</strong> still weave as “stylized feature 3D”.</li>
+<li>The dropdown wins in the CLIP string even if the 4B rewriter ignores the hint or the GGUF passthroughs: conflicting medium words are dropped and the catalog medium is front-loaded.</li>
+<li>After Queue, the <strong>CLIP prompt</strong> box on the node is the preview. First deploy: restart the container so <code>js/</code> is copied, then hard-refresh the Comfy tab.</li>
+</ul>
+<p>After Queue the node is an output: the <strong>CLIP prompt</strong> widget is the CLIP string (no <code>[passthrough:</code> prefix). <strong>Enhance status</strong> is empty when the rewriter ran, or a next step when it did not.</p>
+<p>Fail-soft: missing GGUF, missing <code>llama-cpp-python</code>, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand — <code>./scripts/manage.sh download-models</code> plus a restart heals <code>comfy/llm/</code> and <code>doctor</code>/<code>start</code> relink a snapshot that is already on disk.</p>
 <div class="admonition warning">
-<p class="admonition-title">No local LLM on the Spark</p>
-<p>Do not run Gemma 4 E2B (the official LTX enhancer) or any other GPU LLM beside this stack. LTX-2.5 is already a 22B joint AV transformer; extra weights steal GB10 headroom and threaten SSH. The rewrite is <strong>off-box</strong> (<code>api.x.ai</code>).</p>
+<p class="admonition-title">CPU-only local LLM</p>
+<p>Prompt Enhance runs <strong>Qwen3-4B-Instruct-2507 Q4_K_M</strong> (~2.5 GiB) through llama.cpp with <strong><code>n_gpu_layers=0</code></strong>. Do not GPU-offload it next to LTX-2.5. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same Spark while Comfy is generating.</p>
 </div>
-<p>Safety: <code>restart: "no"</code>, headroom preflight, and download-limit clear-on-exit are unchanged. The key is runtime env only — never baked into the image.</p>
+<p>Safety: <code>restart: "no"</code>, headroom preflight, and download-limit clear-on-exit are unchanged. No API keys. The GGUF lives under <code>MODELS_DIR</code>, never in the image.</p>
 <hr />
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p>Queue <strong>klein-still-draft-lab-example</strong> first (<a href="../getting-started/">Getting Started</a>), then the still → Wan 5 s → LTX 5 s loop on <a href="../visual-generative-ai/">Visual Generative AI</a>.</p>
@@ -1314,7 +1385,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>

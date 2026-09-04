@@ -51,6 +51,8 @@
       
     
     
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -92,7 +94,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
@@ -209,14 +213,8 @@
     
   </nav>
   
-</header>
     
-    <div class="md-container" data-md-component="container">
       
-      
-        
-          
-            
 <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
@@ -325,7 +323,13 @@
     </ul>
   </div>
 </nav>
-          
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
         
       
       <main class="md-main" data-md-component="main">
@@ -604,6 +608,62 @@
     
   
     Visual Generative AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
   
 
     
@@ -1627,13 +1687,13 @@
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h2>
 <ul>
 <li>One compose service for the unified stack  </li>
-<li>Multi-stage image: <strong>devel</strong> builder + <strong>runtime</strong> final (no secrets/models)  </li>
+<li>Multi-stage image: <strong>runtime</strong> builder stages + <strong>runtime</strong> final (no secrets/models; <code>CUDA_BASE_IMAGE=…devel</code> is an override)  </li>
 <li><strong>Layer cache contract</strong> (do not regress):</li>
-<li>Builder: <code>COPY</code> only the <code>install-comfy/</code> <strong>phase modules</strong> each prebuild <code>RUN</code> needs (not the full orchestrator before torch)</li>
-<li>Builder prebuild is <strong>phased</strong> (<code>venv+torch</code> → <code>comfy</code> → <code>nodes+finalize+package</code>) so torch survives node-only edits</li>
-<li>Runtime: <code>COPY --from=builder /opt/parts/venv</code> then <code>/opt/parts/app</code> <strong>before</strong> entrypoint/install/patch</li>
-<li>Validated pins: <code>COMFYUI_REF</code>, <code>COMFYUI_MANAGER_REF</code>, <code>COMFYUI_NUNCHAKU_NODE_REF</code> (see models-and-cache.md)</li>
-<li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --chmod</code>, <code>RUN --mount=type=cache,target=/root/.cache/pip</code></li>
+<li>Torch stage <code>COPY</code> is only <code>install-comfy/core.sh</code> + <code>phase-venv-torch.sh</code> (not <code>common.sh</code> / Comfy pins)</li>
+<li>Named stages <code>torch</code> → <code>comfy</code> → <code>nodes</code>; pin <code>ARG</code>s declared in the stage that uses them</li>
+<li>Runtime: <code>COPY --link</code> <code>/opt/parts/venv</code> then <code>venv-extra</code> then <code>app</code> <strong>before</strong> entrypoint/install/patch</li>
+<li>Validated pins: <code>TORCH_VERSION</code>, <code>COMFYUI_REF</code>, <code>COMFYUI_MANAGER_REF</code>, <code>COMFYUI_NUNCHAKU_NODE_REF</code> (see models-and-cache.md)</li>
+<li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --link</code>, <code>COPY --chmod</code>, pip + apt cache mounts</li>
 <li>Compose bind-mounts ops scripts + <code>install-comfy/</code> for zero-rebuild iteration</li>
 <li>GHCR channel by long-lived branch: publish tags <code>us-safe-studio</code> (<code>main</code>) and <code>us-safe-studio-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel). Old <code>flux-to-ltx*</code> tags freeze on the previous image.  </li>
 <li>Scripts as real files (not inline ConfigMap YAML)  </li>
@@ -1687,6 +1747,8 @@
 <li><code>development</code> → <a href="https://toxicoder.github.io/ez-comfy-stack/development/">development</a></li>
 <li>Workflow: <code>.github/workflows/deploy-docs.yml</code> (push to <code>main</code>/<code>development</code> with docs paths, or <code>workflow_dispatch</code>)</li>
 <li>Stack is <strong>MkDocs 1.x + Material</strong> (<code>docs/requirements.txt</code>). Do <strong>not</strong> upgrade to MkDocs 2.x (incompatible with Material plugins/theme; no migration path). CI and <code>make docs</code> set <code>NO_MKDOCS_2_WARNING=1</code> to suppress Material’s advisory. Revisit only if migrating tooling (e.g. Zensical evaluation).</li>
+<li>Keep the top nav on screen while scrolling: <code>navigation.tabs</code> <strong>and</strong> <code>navigation.tabs.sticky</code> in <code>mkdocs.yml</code>. Do <strong>not</strong> enable <code>header.autohide</code> (Material hides the tabs row on scroll without sticky).</li>
+<li>Header compact-on-scroll lives in <code>docs/stylesheets/extra.css</code> (wired via <code>extra_css</code>). Do not fork Material <code>header.html</code> / <code>tabs.html</code> for this. All header controls stay visible; only padding/height shrinks after the page title scrolls away.</li>
 <li>Prefer <strong>relative</strong> links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix</li>
 <li>Branch-stamped at build time via <code>docs/hooks.py</code> + <code>EZ_DOCS_VERSION</code> / <code>MIKE_DOCS_VERSION</code> (optional <code>EZ_DOCS_GIT_REF</code> override):</li>
 <li>Edit links (<code>edit/&lt;ref&gt;/docs/</code>)</li>
@@ -1814,7 +1876,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>

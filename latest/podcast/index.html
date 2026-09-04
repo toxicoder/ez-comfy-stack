@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Throttle model downloads with wondershaper; auto mode uses speedtest and caps at 85% of line rate.">
+        <meta name="description" content="US-safe audio-first episode and radio-drama lanes on one DGX Spark (Kokoro + native ACE-Step).">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/download-limit/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/podcast/">
       
       
-        <link rel="prev" href="../models-and-cache/">
+        <link rel="prev" href="../visual-generative-ai/">
       
       
-        <link rel="next" href="../reboot-safety/">
+        <link rel="next" href="../music/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Download Limit - ez-comfy-stack</title>
+        <title>Local podcast - ez-comfy-stack</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#download-limit" class="md-skip">
+        <a href="#local-podcast" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Download Limit
+              Local podcast
             
           </span>
         </div>
@@ -264,10 +264,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../visual-generative-ai/" class="md-tabs__link">
           
   
@@ -284,12 +286,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../models-and-cache/" class="md-tabs__link">
           
   
@@ -547,26 +547,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -584,7 +589,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -627,10 +632,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../podcast/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -646,6 +678,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#two-operator-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two operator paths
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two operator paths">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-audio-first-commercial-episode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — audio-first commercial episode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-one-graph-radio-drama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — one-graph radio drama
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-those-packs-are-not-vendored" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why those packs are not vendored
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#engines-on-spark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engines on Spark
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voice-consent-and-invented-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voice consent and invented characters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platform-and-us-rules-operator-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platform and US rules (operator checklist)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Download
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sequential-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequential Queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -746,31 +903,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -788,7 +940,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -831,37 +983,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Download Limit
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../download-limit/" class="md-nav__link">
         
   
   
@@ -877,136 +1002,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#why" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Commands
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#auto-mode-measure-real-mbps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Auto mode (measure real Mbps)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dgx-spark-no-htb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DGX Spark / no HTB
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#apply-verification-and-soft-fail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Apply verification and soft-fail
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ctrlc" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ctrl+C
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#wrap-lifecycle" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Wrap lifecycle
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#emergency-clear" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Emergency clear
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#units" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Units
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advanced" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Advanced
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1189,10 +1184,49 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why" class="md-nav__link">
+  <a href="#two-operator-paths" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why
+        Two operator paths
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two operator paths">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-audio-first-commercial-episode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — audio-first commercial episode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-one-graph-radio-drama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — one-graph radio drama
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-those-packs-are-not-vendored" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why those packs are not vendored
       
     </span>
   </a>
@@ -1200,10 +1234,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
+  <a href="#engines-on-spark" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Commands
+        Engines on Spark
       
     </span>
   </a>
@@ -1211,10 +1245,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#auto-mode-measure-real-mbps" class="md-nav__link">
+  <a href="#voice-consent-and-invented-characters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Auto mode (measure real Mbps)
+        Voice consent and invented characters
       
     </span>
   </a>
@@ -1222,10 +1256,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dgx-spark-no-htb" class="md-nav__link">
+  <a href="#platform-and-us-rules-operator-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DGX Spark / no HTB
+        Platform and US rules (operator checklist)
       
     </span>
   </a>
@@ -1233,10 +1267,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#apply-verification-and-soft-fail" class="md-nav__link">
+  <a href="#download" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Apply verification and soft-fail
+        Download
       
     </span>
   </a>
@@ -1244,54 +1278,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ctrlc" class="md-nav__link">
+  <a href="#sequential-queue" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ctrl+C
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#wrap-lifecycle" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Wrap lifecycle
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#emergency-clear" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Emergency clear
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#units" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Units
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advanced" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Advanced
+        Sequential Queue
       
     </span>
   </a>
@@ -1318,231 +1308,177 @@
   
 
 
-<h1 id="download-limit">Download Limit<a class="headerlink" href="#download-limit" title="Permanent link">&para;</a></h1>
+<h1 id="local-podcast">Local podcast<a class="headerlink" href="#local-podcast" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>Why bandwidth limits matter on remote Sparks</li>
-<li>CLI usage (<code>status</code>, <code>run</code>, <code>clear</code>, <code>wrap</code>)</li>
-<li>Manual Mbps cap (<code>download-models --limit N</code>) vs auto</li>
-<li>Auto mode (85% of speedtest) and wrap lifecycle</li>
+<li>Option A (audio-first commercial episode) vs Option B (one-graph radio drama)</li>
+<li>Why TTS-Audio-Suite and OldTimeRadio are not vendored</li>
+<li>Kokoro default on Spark; Chatterbox / Qwen3-TTS optional</li>
+<li>Native ACE-Step instrumental beds</li>
+<li>Voice consent, platform rules, and authorship</li>
+<li><code>download-podcast</code> usage, sequential Queue, and loudnorm</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Downloading multi‑GB Klein/Wan/LTX weights without saturating the uplink and freezing SSH</li>
+<li>Queue a local two-host episode without cloud TTS or rented music</li>
+<li>Keep the visual studio bootable when podcast extras are missing</li>
+<li>Disclose synthetic voices in the mix, not only in a description box</li>
 </ul>
-<hr />
-<h2 id="why">Why<a class="headerlink" href="#why" title="Permanent link">&para;</a></h2>
-<p>DGX Spark nodes are often operated <strong>over the internet</strong> without physical console access. A full-rate Hugging Face pull can starve interactive SSH. This utility applies kernel-level traffic shaping via <strong>wondershaper</strong> when HTB is available, and falls back to gentler HF client settings when it is not.</p>
-<p>Inspired by the throttled Ollama downloader in <code>dgx-spark-it-up</code>, generalized and improved with <strong>auto</strong> limiting.</p>
-<pre class="mermaid"><code>flowchart LR
-  subgraph Bad["Without limit"]
-    HF1["Full-rate HF pull"] --&gt; Sat["WAN saturated"]
-    Sat --&gt; Dead["SSH freezes"]
-  end
-  subgraph Good["With download-limit wrap"]
-    HF2["Throttled pull"] --&gt; Cap["≤ 85% of line rate"]
-    Cap --&gt; SSH["SSH stays usable"]
-  end</code></pre>
-<hr />
-<h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>status [--json]</code></td>
-<td>Report interface + current limit</td>
-</tr>
-<tr>
-<td><code>run --limit 50</code></td>
-<td>Apply a fixed Mbps cap</td>
-</tr>
-<tr>
-<td><code>run --limit auto</code></td>
-<td>Measure line rate, apply 85%</td>
-</tr>
-<tr>
-<td><code>clear</code></td>
-<td>Remove wondershaper limit</td>
-</tr>
-<tr>
-<td><code>wrap --limit auto</code> or <code>--limit N</code></td>
-<td>Apply → run command → <strong>always clear on exit</strong></td>
-</tr>
-<tr>
-<td><code>manage.sh download-models --limit N</code></td>
-<td>Same wrap; <strong>N</strong> is a standing Mbps cap for this download</td>
-</tr>
-</tbody>
-</table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>run<span class="w"> </span>--limit<span class="w"> </span><span class="m">50</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>run<span class="w"> </span>--limit<span class="w"> </span>auto
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>clear
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>wrap<span class="w"> </span>--limit<span class="w"> </span>auto<span class="w"> </span>--<span class="w"> </span>&lt;command...&gt;
-</code></pre></div>
-<p>Via manage:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>download-limit<span class="w"> </span>clear
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">                 </span><span class="c1"># wrap --limit "${DOWNLOAD_LIMIT:-auto}"</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w"> </span>--limit<span class="w"> </span><span class="m">40</span><span class="w">      </span><span class="c1"># fixed 40 Mbps; overrides .env for this run</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w"> </span>--limit<span class="w"> </span>off<span class="w">     </span><span class="c1"># no throttle (SSH risk)</span>
-</code></pre></div>
-<p><code>--limit N</code> is integer <strong>Mbps</strong> (not MB/s). 40 Mbps ≈ 5 MB/s. <code>.env</code> <code>DOWNLOAD_LIMIT=40</code> is the persistent default; the flag wins for one invocation. Wrap still <strong>clears on exit</strong>.</p>
-<pre class="mermaid"><code>flowchart TB
-  Start["download-limit.sh"] --&gt; Cmd{"subcommand"}
-  Cmd --&gt;|status| Status["Report iface + limit&lt;br/&gt;optional --json"]
-  Cmd --&gt;|run| Run["Apply fixed or auto limit"]
-  Cmd --&gt;|clear| Clear["Remove wondershaper limit"]
-  Cmd --&gt;|wrap| Wrap["Apply limit → run command&lt;br/&gt;always clear on exit"]</code></pre>
-<hr />
-<h2 id="auto-mode-measure-real-mbps">Auto mode (measure real Mbps)<a class="headerlink" href="#auto-mode-measure-real-mbps" title="Permanent link">&para;</a></h2>
-<p>When you pass <code>--limit auto</code>:</p>
-<ol>
-<li><strong>Clear</strong> any existing bandwidth limits on the default-route interface (wondershaper + best-effort <code>tc</code>) so residual caps do not skew the result</li>
-<li><strong>Install <code>speedtest-cli</code></strong> hard (<code>pip --user</code>, <code>--break-system-packages</code>, <code>pipx</code>, <code>apt</code>/<code>python3-speedtest-cli</code> with <code>sudo -n</code>)</li>
-<li>Try <code>speedtest-cli --simple</code></li>
-<li>Else Ookla <code>speedtest</code></li>
-<li>Else <strong>HTTP probe</strong> multi-URL (Cloudflare, OVH, GitHub, …) via <code>curl -4</code></li>
-<li>Apply <code>floor(0.85 × measured)</code> (minimum 1 Mbps) when the sample is <strong>trusted</strong></li>
-<li>If all probes fail: <strong>do not</strong> use idle NIC RX as line rate — use default <code>max-workers=4</code> and start download</li>
-</ol>
-<p><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span> kills the download process group, progress heartbeat, and HTTP probes (INT→TERM→KILL).</p>
-<p>Override HTTP probe: <code>SPEEDTEST_HTTP_URL</code>, <code>SPEEDTEST_HTTP_BYTES</code>.</p>
-<pre class="mermaid"><code>flowchart TB
-  A["--limit auto"] --&gt; B["speedtest-cli"]
-  B --&gt; C{"ok?"}
-  C --&gt;|no| D["Ookla speedtest"]
-  D --&gt; E{"ok?"}
-  E --&gt;|no| F["HTTP curl probe&lt;br/&gt;Cloudflare __down"]
-  F --&gt; G{"ok?"}
-  C --&gt;|yes| H["limit = floor 0.85 × Mbps"]
-  E --&gt;|yes| H
-  G --&gt;|yes| H
-  G --&gt;|no| I["DOWNLOAD_LIMIT_FALLBACK"]
-  H --&gt; J{"kernel HTB?"}
-  I --&gt; J
-  J --&gt;|yes| K["wondershaper Mbps cap"]
-  J --&gt;|no| L["gentle HF max-workers"]</code></pre>
-<p>Upload is set to a high <strong>legal</strong> “uncapped” rate (clamped for HTB). Extremely large historical defaults (e.g. 100000 Mbps) produced <code>Illegal "rate"</code> on some kernels.</p>
-<hr />
-<h2 id="dgx-spark-no-htb">DGX Spark / no HTB<a class="headerlink" href="#dgx-spark-no-htb" title="Permanent link">&para;</a></h2>
-<p>Many Spark kernels lack <code>sch_htb</code> / IFB (<code>qdisc kind is unknown</code>). The tool <strong>detects</strong> this and <strong>does not</strong> spam wondershaper/RTNETLINK.</p>
-<table>
-<thead>
-<tr>
-<th>Path</th>
-<th>Behavior</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>HTB available</td>
-<td>wondershaper hard Mbps cap at 85% of measured</td>
-</tr>
-<tr>
-<td>HTB missing (typical Spark)</td>
-<td><strong>Gentle HF mode</strong>: <code>HF_DOWNLOAD_MAX_WORKERS</code> from measured Mbps (floor <strong>2</strong>–4), <code>HF_HUB_ENABLE_HF_TRANSFER=0</code> — not a hard Mbps cap</td>
-</tr>
-<tr>
-<td><code>DOWNLOAD_LIMIT=off</code></td>
-<td>Full blast (<strong>SSH risk</strong>)</td>
-</tr>
-</tbody>
-</table>
-<p>Model downloads keep a <strong>real TTY</strong> for <code>hf</code>/<code>tqdm</code> progress (no <code>2&gt;&amp;1 | tee</code> on interactive sessions). Cache hits still flash <code>100%</code> in 0s. Heartbeats every 10s show <code>du</code> growth under the target dir if bars are quiet.</p>
-<hr />
-<h2 id="apply-verification-and-soft-fail">Apply verification and soft-fail<a class="headerlink" href="#apply-verification-and-soft-fail" title="Permanent link">&para;</a></h2>
-<p>After wondershaper runs, the utility checks that a shaping qdisc is active (<code>tc qdisc show</code>, or hermetic mocks). If apply fails or HTB is missing:</p>
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>Behavior</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>run</code></td>
-<td><strong>Hard-fail</strong> (operator asked for a standing limit)</td>
-</tr>
-<tr>
-<td><code>wrap</code></td>
-<td><strong>Soft path</strong>: gentle HF workers + clear on exit</td>
-</tr>
-<tr>
-<td><code>wrap</code> + <code>DOWNLOAD_LIMIT_REQUIRE=1</code></td>
-<td><strong>Hard-fail</strong> like <code>run</code></td>
-</tr>
-</tbody>
-</table>
 <div class="admonition warning">
-<p class="admonition-title">Safety impact</p>
-<p>Gentle mode reduces parallel download stampede but is <strong>not</strong> a kernel Mbps cap. Prefer HTB where available. <strong>Clear-on-exit remains mandatory</strong> for <code>wrap</code>.</p>
+<p class="admonition-title">Not legal advice</p>
+<p>Platform rules and copyright change. Read the current Apple, YouTube, Spotify, FTC, and USCO pages before you monetize.</p>
 </div>
 <hr />
-<h2 id="ctrlc">Ctrl+C<a class="headerlink" href="#ctrlc" title="Permanent link">&para;</a></h2>
-<p>Downloads run in a <strong>process group</strong>. <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span> (SIGINT) or SIGTERM:</p>
-<ol>
-<li>Forwards to <code>hf</code> / nested bash (not only <code>tee</code>)</li>
-<li>Clears wondershaper limits if any</li>
-<li>Exits promptly (status 130)</li>
-</ol>
-<p>You should not need <code>kill -9</code> on leftover download processes after a clean Ctrl+C.</p>
+<h2 id="two-operator-paths">Two operator paths<a class="headerlink" href="#two-operator-paths" title="Permanent link">&para;</a></h2>
+<p>Do <strong>not</strong> load Klein + Wan + LTX + ACE-Step + TTS in one session. Cover art is a separate graph.</p>
+<h3 id="option-a-audio-first-commercial-episode">Option A — audio-first commercial episode<a class="headerlink" href="#option-a-audio-first-commercial-episode" title="Permanent link">&para;</a></h3>
+<p>Graph: <strong>podcast-audio-first-lab-example</strong> (<code>extra.lab_profile</code> <code>us-safe-podcast</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>What runs</th>
+<th>Prefix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCRIPT</td>
+<td>In-tree <code>EZPodcastScript</code> (enhance <strong>off</strong>). Missing GGUF passes the widget through</td>
+<td><code>ez_podcast_script</code></td>
+</tr>
+<tr>
+<td>DISCLOSURE</td>
+<td><code>EZPodcastDisclosure</code> prepends the spoken bumper</td>
+<td>(string)</td>
+</tr>
+<tr>
+<td>VOICES</td>
+<td><code>EZKokoroTTS</code> — Kokoro-82M ONNX/CPU built-ins</td>
+<td><code>ez_podcast_voice</code></td>
+</tr>
+<tr>
+<td>BEDS</td>
+<td>Native Comfy ACE-Step 1.5, instrumental, empty lyrics</td>
+<td><code>ez_podcast_bed</code></td>
+</tr>
+<tr>
+<td>MIX</td>
+<td>Duck −15 dB + overlay. FLAC master + 320 kbps MP3</td>
+<td><code>ez_podcast_ep</code> / <code>ez_podcast_mix</code></td>
+</tr>
+<tr>
+<td>COVER</td>
+<td>Queue <strong>klein-podcast-cover-lab-example</strong> separately (1024², <code>ez_podcast</code>)</td>
+<td><code>ez_podcast</code></td>
+</tr>
+</tbody>
+</table>
+<p>First spoken line is always:</p>
+<blockquote>
+<p>Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.</p>
+</blockquote>
+<p>Do not type that line yourself. The disclosure node prepends it.</p>
+<h3 id="option-b-one-graph-radio-drama">Option B — one-graph radio drama<a class="headerlink" href="#option-b-one-graph-radio-drama" title="Permanent link">&para;</a></h3>
+<p>Graph: <strong>podcast-radio-drama-lab-example</strong> (<code>us-safe-radio</code>). Same legal engines. Writer prompt is lab-original fiction (<code>radio_drama.txt</code>), not a news rewrite. Announcer + two Kokoro stock voices. ACE-Step sting + bed. One master mix (<code>ez_radio_ep</code> / <code>ez_radio_mix</code>).</p>
+<p>Optional Wan silent bumper / LTX 5s hook <strong>groups default off</strong> (node mode never). Queue <strong>wan-bumper-loop-lab-example</strong> or <strong>ltx-hook-av-lab-example</strong> in a later session. Not a one-graph film.</p>
 <hr />
-<h2 id="wrap-lifecycle">Wrap lifecycle<a class="headerlink" href="#wrap-lifecycle" title="Permanent link">&para;</a></h2>
-<p><code>wrap</code> always clears on <code>EXIT</code> / <code>INT</code> / <code>TERM</code> so a killed download cannot leave the host permanently throttled.</p>
-<pre class="mermaid"><code>sequenceDiagram
-  participant Op as Operator / manage.sh
-  participant W as download-limit wrap
-  participant WS as wondershaper
-  participant Cmd as command e.g. download-models
-
-  Op-&gt;&gt;W: wrap --limit auto -- command
-  W-&gt;&gt;WS: apply limit + verify qdisc
-  alt apply ok
-    W-&gt;&gt;Cmd: run throttled
-  else apply fail and not REQUIRE
-    W--&gt;&gt;Op: warn unthrottled SSH risk
-    W-&gt;&gt;Cmd: run unthrottled
-  else apply fail and REQUIRE=1
-    W--&gt;&gt;Op: hard fail
-  end
-  alt success
-    Cmd--&gt;&gt;W: exit 0
-  else kill / fail
-    Cmd--&gt;&gt;W: INT / TERM / non-zero
-  end
-  W-&gt;&gt;WS: clear limit trap EXIT/INT/TERM
-  Note over W,WS: Always clear even when traps fire on kill</code></pre>
+<h2 id="why-those-packs-are-not-vendored">Why those packs are not vendored<a class="headerlink" href="#why-those-packs-are-not-vendored" title="Permanent link">&para;</a></h2>
+<p>This lab does <strong>not</strong> git-clone, pip-require, or default to:</p>
+<ul>
+<li><strong>TTS-Audio-Suite</strong> — many engines, including F5-TTS CC-BY-NC, Fish NC, Higgs commercial traps, VibeVoice research-only, and ARM wheel pain on GB10</li>
+<li><strong>ComfyUI-OldTimeRadio</strong> — optional lanes that pull US-excluded or non-commercial video models</li>
+<li>Cloud ACE-Step forks, MiniMax Music, F5-TTS official weights, Coqui XTTS v2, Echo-TTS, Fish Audio S2, celebrity reference WAVs, ElevenLabs, or xAI TTS</li>
+</ul>
+<p>Native ACE-Step 1.5 already ships in <code>COMFYUI_REF=v0.34.0</code> (<code>TextEncodeAceStepAudio1.5</code>, <code>EmptyAceStep1.5LatentAudio</code>). Beds stay <strong>instrumental</strong> (<code>instrumental</code>, <code>no vocals</code> in tags; empty lyrics). Rap vocals with original lyrics live on <a href="../music/">Local music</a> and reuse this same AIO dest — do not download it twice.</p>
 <hr />
-<h2 id="emergency-clear">Emergency clear<a class="headerlink" href="#emergency-clear" title="Permanent link">&para;</a></h2>
-<p>If the host feels “stuck” throttled after a crash:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>clear
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># or:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>./scripts/manage.sh<span class="w"> </span>download-limit<span class="w"> </span>clear
+<h2 id="engines-on-spark">Engines on Spark<a class="headerlink" href="#engines-on-spark" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>License</th>
+<th>Role</th>
+<th>Default download?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kokoro-82M ONNX</td>
+<td>Apache 2.0</td>
+<td>Default TTS, built-in voices, CPU/aarch64-safe</td>
+<td>No — <code>download-podcast --tier analog</code></td>
+</tr>
+<tr>
+<td>ACE-Step 1.5 turbo AIO</td>
+<td>MIT</td>
+<td>Instrumental beds</td>
+<td>No — <code>--tier acestep</code></td>
+</tr>
+<tr>
+<td>Chatterbox Turbo</td>
+<td>MIT</td>
+<td>Optional GPU TTS; PerTh watermark stays on</td>
+<td>No — <code>--tier chatterbox</code></td>
+</tr>
+<tr>
+<td>Qwen3-TTS 0.6B</td>
+<td>Apache 2.0</td>
+<td>Optional TTS + voice design</td>
+<td>No — <code>--tier qwen3tts</code></td>
+</tr>
+<tr>
+<td>Qwen3-4B-Instruct GGUF</td>
+<td>Apache 2.0</td>
+<td>Script draft, fail-soft</td>
+<td>Already in <code>download-models</code></td>
+</tr>
+</tbody>
+</table>
+<p>Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity WAVs into the graph.</p>
+<p><code>kokoro-onnx</code> / <code>onnxruntime</code> are <strong>optional runtime</strong> installs inside the container venv. They are <strong>not</strong> baked in <code>phase-nodes.sh</code> (a new pip would invalidate <strong>venv-extra</strong>, not the multi‑GB torch layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and <code>download-podcast --tier analog</code>.</p>
+<hr />
+<h2 id="voice-consent-and-invented-characters">Voice consent and invented characters<a class="headerlink" href="#voice-consent-and-invented-characters" title="Permanent link">&para;</a></h2>
+<p>Hosts are <strong>original characters</strong>, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo.</p>
+<hr />
+<h2 id="platform-and-us-rules-operator-checklist">Platform and US rules (operator checklist)<a class="headerlink" href="#platform-and-us-rules-operator-checklist" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Apple Podcasts 1.11</strong> — disclose material AI audio in the <strong>content</strong> and in <strong>metadata</strong></li>
+<li><strong>YouTube</strong> — use the synthetic/altered content toggle; July 2026 inauthentic-content rules (no template slop, no AI doctor / lawyer / finance-advisor persona)</li>
+<li><strong>Spotify</strong> — allowed if you own the rights, disclose, and do not use unconsented clones</li>
+<li><strong>FTC</strong> — spoken sponsor reads; synthetic persona endorsements need both a paid-connection disclosure and “this voice is AI”</li>
+<li><strong>USCO Part 2 / Thaler</strong> — prompts are not authorship. A human-edited script plus selection, arrangement, and mix <strong>can</strong> be. Raw generations are not registrable</li>
+</ul>
+<hr />
+<h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
+<p>Podcast weights are <strong>opt-in</strong>. <code>./scripts/manage.sh download-models</code> does <strong>not</strong> pull them. <code>doctor</code> prints analog JSON and still exits 0 when the pack is absent.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>analog<span class="w">      </span><span class="c1"># Kokoro ONNX + voices</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>acestep<span class="w">     </span><span class="c1"># ace_step_1.5_turbo_aio.safetensors</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># same AIO dest as: ./scripts/manage.sh download-music --tier turbo</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>all<span class="w">         </span><span class="c1"># analog + ACE + optional TTS</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># same --limit auto|N|off wrap as download-models (always clears on exit)</span>
 </code></pre></div>
-<pre class="mermaid"><code>flowchart TB
-  Stuck["Host feels stuck&lt;br/&gt;or trap skipped"] --&gt; Clear["download-limit clear&lt;br/&gt;or manage.sh download-limit clear"]
-  Clear --&gt; Resume["Resume SSH / downloads"]</code></pre>
+<p>Layout after analog + acestep:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>${MODELS_DIR}/comfy/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  onnx/kokoro-v1.0.onnx
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  tts/voices-v1.0.bin
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  checkpoints/ace_step_1.5_turbo_aio.safetensors
+</code></pre></div>
+<p>Relative symlinks only (host <code>/mnt/models</code> vs container <code>/models</code>).</p>
 <hr />
-<h2 id="units">Units<a class="headerlink" href="#units" title="Permanent link">&para;</a></h2>
-<p>Limits are in <strong>Mbps</strong> (megabits), not MB/s. Example: <strong>40 Mbps ≈ 5 MB/s</strong>.</p>
-<hr />
-<h2 id="advanced">Advanced<a class="headerlink" href="#advanced" title="Permanent link">&para;</a></h2>
-<details class="abstract">
-<summary>Live speed when preflight fails</summary>
-<p>If auto mode cannot measure speed <strong>before</strong> download:</p>
+<h2 id="sequential-queue">Sequential Queue<a class="headerlink" href="#sequential-queue" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Measure phase</strong> (~15s): sample NIC RX while a short HTTP download generates traffic (not the multi‑GB model pull — avoids HF locks and kill/restart hangs)</li>
-<li>Set target = 85% of live Mbps → gentle HF max-workers (or kernel HTB only if <code>sudo -n</code> works and qdisc applies)</li>
-<li><strong>Download phase</strong>: one <strong>foreground</strong> model download with live tqdm progress</li>
+<li><code>download-podcast --tier analog</code> (and <code>--tier acestep</code> for beds)</li>
+<li>Optional: <code>pip install kokoro-onnx onnxruntime</code> in the Comfy venv (runtime; see troubleshooting)</li>
+<li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
+<li>Load <strong>podcast-audio-first-lab-example</strong>. Enhance off. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_podcast_ep_*.flac</code> / <code>ez_podcast_mix_*.mp3</code></li>
+<li>Load <strong>klein-podcast-cover-lab-example</strong> in a <strong>later</strong> session. Queue <code>ez_podcast_*.png</code></li>
+<li>Loudness (ffmpeg; Comfy cannot LUFS):</li>
 </ol>
-<p>No interactive sudo during this path. Mock/tests: <code>LAB_MOCK_LIVE_RX_MBPS</code>.</p>
-</details>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>run<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_podcast_ep_00001_.flac"</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># --target youtube  → −14 LUFS; default podcast → −16 LUFS</span>
+</code></pre></div>
+<p>Start still requires typing <code>yes</code>. Compose <code>restart: "no"</code> is unchanged.</p>
 
 
 

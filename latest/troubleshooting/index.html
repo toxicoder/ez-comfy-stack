@@ -53,6 +53,8 @@
       
     
     
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -94,7 +96,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
@@ -211,14 +215,8 @@
     
   </nav>
   
-</header>
     
-    <div class="md-container" data-md-component="container">
       
-      
-        
-          
-            
 <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
@@ -327,7 +325,13 @@
     </ul>
   </div>
 </nav>
-          
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
         
       
       <main class="md-main" data-md-component="main">
@@ -606,6 +610,62 @@
     
   
     Visual Generative AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
   
 
     
@@ -1338,7 +1398,7 @@
 <tr>
 <td><code>failed to fetch oauth token: denied</code> / <code>nvcr.io</code> Access Denied on <code>start</code></td>
 <td>NGC base image pull without login</td>
-<td>Pull latest (default bases are <strong>Docker Hub</strong> <code>nvidia/cuda</code> devel builder + runtime final). Rebuild: <code>./scripts/manage.sh start</code>. If you set <code>CUDA_BASE_IMAGE</code> / <code>CUDA_RUNTIME_IMAGE</code> to <code>nvcr.io/...</code>, run <code>docker login nvcr.io</code> (user <code>$oauthtoken</code>, password = NGC API key)</td>
+<td>Pull latest (default bases are <strong>Docker Hub</strong> <code>nvidia/cuda</code> <strong>runtime</strong> for builder and final). Rebuild: <code>./scripts/manage.sh start</code>. If you set <code>CUDA_BASE_IMAGE</code> / <code>CUDA_RUNTIME_IMAGE</code> to <code>nvcr.io/...</code>, run <code>docker login nvcr.io</code> (user <code>$oauthtoken</code>, password = NGC API key)</td>
 </tr>
 </tbody>
 </table>
@@ -1498,8 +1558,8 @@
 </tr>
 <tr>
 <td><code>docker pull</code> / rebuild re-downloads multi‑GB after tiny script edit</td>
-<td>Old image with monolithic prebuilt layer, or a real pip/torch change</td>
-<td>Pull latest split layout: runtime has separate <strong>venv</strong> (~multi‑GB) and <strong>app</strong> layers. Ops scripts are late thin layers + compose bind-mounts. Nodes/source-only changes should re-pull <strong>app</strong> only; any pip change still re-pulls venv. See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds-pulls">Models &amp; Cache</a></td>
+<td>Old image with monolithic prebuilt layer, or a real <strong>torch</strong> change</td>
+<td>Pull latest split layout: runtime has <strong>venv-torch</strong> (multi‑GB), <strong>venv-extra</strong> (Comfy/node pip), and <strong>app</strong>. Ops scripts are late thin layers + compose bind-mounts. Node/source-only changes re-pull <strong>app</strong>; extra pip re-pulls <strong>venv-extra</strong> only; torch pin/index changes re-pull torch. See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds-pulls">Models &amp; Cache</a></td>
 </tr>
 <tr>
 <td>Local script change has no effect</td>
@@ -1595,6 +1655,11 @@
 <td>Re-open a current <strong>ltx-*-lab-example</strong> graph (has <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> + <code>ltx-2.5-audio-vae-bf16</code>). Do not feed <code>EmptyLTXVLatentVideo</code> / <code>LTXVImgToVideo</code> straight into <code>KSampler</code>. Confirm <code>ls "${MODELS_DIR}/comfy/vae/ltx-2.5-audio-vae-bf16.safetensors"</code></td>
 </tr>
 <tr>
+<td><code>LTXVImgToVideo</code> <code>einops.EinopsError</code> / <code>can't divide axis of length 45</code> (or 33)</td>
+<td>LTX video VAE is <strong>32×</strong> spatial. Broadcast <strong>720</strong> and <strong>1080</strong> are not divisible by 32 (720/16=45, then the next <code>/2</code> patch fails)</td>
+<td>Pull latest and restart so <code>ez_ltx_spatial</code> is installed — Queue <strong>auto-snaps</strong> 720→704 and 1080→1056 (stderr <code>[ez_ltx_spatial]</code>). Lab graphs stay <strong>1280×704</strong>. Klein 1280×720 stills are fine. Prefer not to type 720/1080 so you skip the extra crop. Portrait lab is <strong>768×1280</strong>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_ltx_spatial/__init__.py</code>. If the pack is missing, set widgets to a ÷32 pair and re-open <strong>ltx-*-lab-example</strong></td>
+</tr>
+<tr>
 <td>Missing <code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code> in LTX graphs</td>
 <td>LTX-2.5 TE not downloaded</td>
 <td><code>./scripts/utilities/download-ltx.sh run --tier 2.5</code> or <code>download-models</code>; <code>ls "${MODELS_DIR}/comfy/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors"</code></td>
@@ -1607,12 +1672,67 @@
 <tr>
 <td>Missing <strong>Klein/Wan/LTX Prompt Enhance</strong> node</td>
 <td>Host pack not mounted or entrypoint copy skipped</td>
-<td>Confirm compose bind-mount <code>../custom_nodes:/opt/ez-comfy/custom_nodes</code>. Restart so <code>install_lab_custom_nodes</code> copies into <code>/comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/__init__.py</code></td>
+<td>Confirm compose bind-mount <code>../custom_nodes:/opt/ez-comfy/custom_nodes</code>. Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_prompt_enhance</code> (and <code>ez_ltx_spatial</code>) into <code>/comfy-state/ComfyUI/custom_nodes/</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/__init__.py</code></td>
 </tr>
 <tr>
-<td>Enhance on but prompt unchanged</td>
-<td><code>XAI_API_KEY</code> unset, timeout, or HTTP error (fail-soft passthrough)</td>
-<td>Set <code>XAI_API_KEY</code> in <code>.env</code>, <code>stop</code> + <code>start</code>. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 20s (<code>XAI_TIMEOUT_S</code>). Leave Enhance <strong>off</strong> to use the canned prompt with no API</td>
+<td>Missing <strong>Podcast Script</strong> / <strong>Kokoro TTS</strong> node</td>
+<td>Host pack not mounted or entrypoint copy skipped</td>
+<td>Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_podcast</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_podcast/__init__.py</code></td>
+</tr>
+<tr>
+<td>Kokoro ONNX missing / empty speech</td>
+<td>Analog pack not downloaded</td>
+<td><code>./scripts/manage.sh download-podcast --tier analog</code>. Confirm <code>ls "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx"</code> and <code>comfy/tts/voices-v1.0.bin</code></td>
+</tr>
+<tr>
+<td>ACE checkpoint name missing on podcast or rap graphs</td>
+<td>ACE-Step AIO not downloaded</td>
+<td><code>./scripts/manage.sh download-music --tier turbo</code> <strong>or</strong> <code>download-podcast --tier acestep</code> (same dest). Lab file is <code>ace_step_1.5_turbo_aio.safetensors</code> under <code>comfy/checkpoints/</code></td>
+</tr>
+<tr>
+<td>Rap bars slur / mush</td>
+<td>Lines too long, or language not <code>en</code></td>
+<td>Shorten to ~6–10 syllables; keep <code>language=en</code> on <code>TextEncodeAceStepAudio1.5</code>. Re-open <strong>music-rap-draft-lab-example</strong></td>
+</tr>
+<tr>
+<td>Vocals leaking into an instrumental pass</td>
+<td>Tags still say male rap vocals; lyrics still have bars</td>
+<td>Keep boom-bap tags, append <code>instrumental, no vocals</code>, replace lyrics with <code>[inst]</code>. There is no third instrumental JSON</td>
+</tr>
+<tr>
+<td><code>kokoro-onnx</code> / <code>onnxruntime</code> import miss on aarch64</td>
+<td>Optional runtime wheel not installed (not baked in the image)</td>
+<td>Inside the container venv: <code>pip install kokoro-onnx onnxruntime</code> (CPU). Baking that into the image invalidates <strong>venv-extra</strong> (not the multi‑GB torch layer). Visual graphs still Queue without it</td>
+</tr>
+<tr>
+<td>Podcast script unchanged with Enhance on / GGUF fail-soft</td>
+<td>Same as prompt enhance: missing GGUF or llama.cpp</td>
+<td>Widget text is passed through. <code>./scripts/manage.sh download-models</code> for the Qwen3-4B-Instruct GGUF. Enhance defaults <strong>off</strong> on podcast graphs so Queue works offline</td>
+</tr>
+<tr>
+<td>Master is not −16 LUFS</td>
+<td>Comfy has no loudnorm node</td>
+<td><code>./scripts/utilities/podcast-loudnorm.sh run --in FILE</code> (ffmpeg). Missing ffmpeg is a hard failure — it will not skip</td>
+</tr>
+<tr>
+<td>Enhance on but prompt unchanged / <strong>Enhance status</strong> says GGUF missing</td>
+<td>Snapshot not downloaded, or <code>comfy/llm/</code> link missing/broken. Fail-soft: style still applies, generation still runs; the 4B rewriter did not</td>
+<td>Not an error in the CLIP string. <strong>CLIP prompt</strong> is what CLIP encoded; <strong>Enhance status</strong> is the reason. Run <code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). <code>doctor</code>/<code>start</code> relink a snapshot already under <code>MODELS_DIR/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/</code>. Restart the container after the pull. Rebuild the image if llama-cpp-python failed. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 60s (<code>EZ_LLM_TIMEOUT_S</code>). Do not drop a GGUF into Comfy Manager</td>
+</tr>
+<tr>
+<td>Enhance CLIP prompt box stays empty after Queue</td>
+<td>Pack JS not copied, or the browser is holding an old frontend</td>
+<td>Restart the container so entrypoint copies <code>ez_prompt_enhance/js/</code>. Hard-refresh the Comfy tab. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/js/ez_prompt_enhance.js</code></td>
+</tr>
+<tr>
+<td>Style selected but still looks like the lab 3D/photo prompt</td>
+<td>Style is <code>none</code>, mode is I2V, or reading the source widget instead of <strong>CLIP prompt</strong></td>
+<td>Set <strong>style</strong> to a preset (not <code>none</code>). Mode must be t2i / t2v / Klein edit. Read the <strong>CLIP prompt</strong> box — it should front-load the medium and drop <code>game-engine</code> / photoreal fights. I2V ignores style (start image owns look)</td>
+</tr>
+<tr>
+<td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
+<td>World bible or locked inventory edited per shot, or an old graph</td>
+<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> and inventory once. View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code>. State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / DUSK / WARM / BEFORE on a cold canvas</td>
 </tr>
 <tr>
 <td>Enhance rewrites a locked shorts identity</td>
@@ -1647,7 +1767,22 @@
 <tr>
 <td>Dream-house Queue too slow / only need a few rooms</td>
 <td>All ten SHOT groups enabled</td>
-<td>Bypass unused SHOT groups (Ctrl+B). Identity + seed stay shared</td>
+<td>Bypass unused SHOT groups (Ctrl+B). Identity + inventory + seed stay shared; 02–10 do not consume shot 01’s pixels</td>
+</tr>
+<tr>
+<td>Dream-house 02–10 look like the same photo as 01</td>
+<td>Old graph still wraps 02–10 in <code>ReferenceLatent</code>, or the world bible still names a camera</td>
+<td>Pull latest, re-open <strong>klein-dream-house-lab-example</strong>. Confirm Prompt Join <code>lock=view</code> and no <code>Ref from 01</code> nodes. HOUSE IDENTITY must be camera-free; shot cards own the camera</td>
+</tr>
+<tr>
+<td>Dream-house interiors do not match the sofa seen through the glass</td>
+<td>Inventory edited on one shot, or a shot card invents new furniture</td>
+<td>Edit locked inventory once on every SHOT join (same sofa, island, table, bedding, tub, deck chairs). Shot 01 should show that sofa through the two-bay glass; living looks out the same glass</td>
+</tr>
+<tr>
+<td>Dream-house rooms look like different cabins</td>
+<td>Shot card restyles massing, or Enhance rewrote the bible</td>
+<td>Pin Enhance <strong>off</strong> on HOUSE IDENTITY. Shot cards are camera / room / time / season only</td>
 </tr>
 <tr>
 <td>OOM / multi-minute hang on a 90s (or 30s / 60s) Queue</td>
@@ -1779,7 +1914,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>

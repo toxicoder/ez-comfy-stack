@@ -53,6 +53,8 @@
       
     
     
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -94,7 +96,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
@@ -211,14 +215,8 @@
     
   </nav>
   
-</header>
     
-    <div class="md-container" data-md-component="container">
       
-      
-        
-          
-            
 <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
@@ -327,7 +325,13 @@
     </ul>
   </div>
 </nav>
-          
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
         
       
       <main class="md-main" data-md-component="main">
@@ -606,6 +610,62 @@
     
   
     Visual Generative AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
   
 
     
@@ -1492,11 +1552,16 @@
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  Comfy-Org__flux2-dev_vae/                   # flux2-vae
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b/
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  Lightricks__LTX-2.5_2.5/
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  comfy/
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    diffusion_models/   # relative symlinks into tier repos above
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    text_encoders/
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    vae/
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  hub/                  # HF cache (optional)
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  comfy/
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    diffusion_models/   # relative symlinks into tier repos above
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    text_encoders/
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    vae/
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog)
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    tts/                # opt-in Kokoro voices + optional Chatterbox/Qwen3-TTS
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    checkpoints/        # opt-in ACE-Step 1.5 AIO (download-music --tier turbo / download-podcast --tier acestep)
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>  hub/                  # HF cache (optional)
 </code></pre></div>
 <p><code>download-models</code> links weights into <code>comfy/*</code> with <strong>relative</strong> symlinks (e.g. <code>../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors</code>). That way the same tree resolves on the host (<code>MODELS_DIR=/mnt/models</code>) and inside the container (bind-mounted at <code>/models</code>). Absolute <code>/mnt/models/…</code> file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.</p>
 <p>This matches the lab hostPath pattern so K8s and Docker demos can share weights.</p>
@@ -1507,11 +1572,16 @@
   Root --&gt; VAE["Comfy-Org__flux2-dev_vae"]
   Root --&gt; Wan["Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b"]
   Root --&gt; Ltx["Lightricks__LTX-2.5_2.5"]
+  Root --&gt; Llm["unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"]
   Root --&gt; Comfy["comfy/"]
   Root --&gt; Hub["hub/ · optional HF cache"]
   Comfy --&gt; DM["diffusion_models/ · symlinks"]
   Comfy --&gt; TEd["text_encoders/"]
-  Comfy --&gt; VAEd["vae/"]</code></pre>
+  Comfy --&gt; VAEd["vae/"]
+  Comfy --&gt; LlmDir["llm/"]
+  Comfy --&gt; Onnx["onnx/ · opt-in Kokoro"]
+  Comfy --&gt; Tts["tts/ · opt-in voices"]
+  Comfy --&gt; Ckpt["checkpoints/ · opt-in ACE-Step AIO"]</code></pre>
 <hr />
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/manage.sh<span class="w"> </span>download-models
@@ -1526,6 +1596,9 @@
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>./scripts/utilities/download-image.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>fast
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>5b
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>./scripts/utilities/download-llm.sh<span class="w"> </span>run
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w"> </span>--json
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>./scripts/utilities/download-music.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>turbo
 </code></pre></div>
 <p><code>--tier fast</code> also pulls Klein companions (<code>te</code> + <code>vae</code>). Optional stills: <code>--tier nvfp4</code> / <code>--tier base</code> / <code>--tier zimage</code>. Optional motion: <code>download-wan.sh run --tier a14b</code>. Optional LTX fallback: <code>download-ltx.sh run --tier 2.3</code>.</p>
 <p>Downloads use the modern <strong><code>hf download</code></strong> CLI (not deprecated <code>huggingface-cli</code>):</p>
@@ -1593,6 +1666,83 @@
 <td><code>vae/</code></td>
 <td>LTX-2.5 audio VAE</td>
 </tr>
+<tr>
+<td><code>Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code></td>
+<td><code>llm/</code></td>
+<td>On-box prompt enhance (CPU llama.cpp)</td>
+</tr>
+</tbody>
+</table>
+<p>Opt-in music (<code>./scripts/manage.sh download-music --tier turbo</code>, <strong>not</strong> <code>download-models</code>). Turbo <strong>reuses</strong> the podcast acestep snapshot — do not pull the ~10 GB AIO twice:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>./scripts/manage.sh<span class="w"> </span>download-music<span class="w"> </span>--tier<span class="w"> </span>turbo
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w"> </span>--json
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Comfy folder</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ace_step_1.5_turbo_aio.safetensors</code></td>
+<td><code>checkpoints/</code></td>
+<td>ACE-Step 1.5 rap + podcast AIO</td>
+</tr>
+<tr>
+<td><code>acestep_v1.5_xl_turbo_bf16.safetensors</code></td>
+<td><code>diffusion_models/</code></td>
+<td>Optional XL split (<code>--tier xl</code> only)</td>
+</tr>
+<tr>
+<td><code>qwen_0.6b_ace15.safetensors</code> / <code>qwen_1.7b_ace15.safetensors</code></td>
+<td><code>text_encoders/</code></td>
+<td>Optional XL text encoders</td>
+</tr>
+<tr>
+<td><code>ace_1.5_vae.safetensors</code></td>
+<td><code>vae/</code></td>
+<td>Optional XL VAE</td>
+</tr>
+</tbody>
+</table>
+<p>Opt-in podcast (<code>./scripts/manage.sh download-podcast</code>, <strong>not</strong> <code>download-models</code>):</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Comfy folder</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kokoro-v1.0.onnx</code></td>
+<td><code>onnx/</code></td>
+<td>Kokoro-82M ONNX (analog TTS)</td>
+</tr>
+<tr>
+<td><code>voices-v1.0.bin</code></td>
+<td><code>tts/</code></td>
+<td>Kokoro built-in voice pack</td>
+</tr>
+<tr>
+<td><code>ace_step_1.5_turbo_aio.safetensors</code></td>
+<td><code>checkpoints/</code></td>
+<td>ACE-Step 1.5 turbo AIO (podcast beds + rap lane; shared dest)</td>
+</tr>
+<tr>
+<td><code>t3_turbo_v1.safetensors</code></td>
+<td><code>tts/</code></td>
+<td>Optional Chatterbox Turbo</td>
+</tr>
+<tr>
+<td><code>model.safetensors</code></td>
+<td><code>tts/</code></td>
+<td>Optional Qwen3-TTS 0.6B</td>
+</tr>
 </tbody>
 </table>
 <h3 id="example-graphs">Example graphs<a class="headerlink" href="#example-graphs" title="Permanent link">&para;</a></h3>
@@ -1610,6 +1760,14 @@
 <td>Klein 4B 768×432, 4 steps, batch 2</td>
 </tr>
 <tr>
+<td><code>music-rap-draft-lab-example.json</code></td>
+<td>ACE-Step rap draft 32 s (<code>ez_rap_draft</code>; opt-in AIO)</td>
+</tr>
+<tr>
+<td><code>music-rap-full-lab-example.json</code></td>
+<td>ACE-Step rap full 96 s (<code>ez_rap_full</code>)</td>
+</tr>
+<tr>
 <td><code>klein-still-hero-lab-example.json</code></td>
 <td>Same prompt/seed, 1280×720</td>
 </tr>
@@ -1619,7 +1777,7 @@
 </tr>
 <tr>
 <td><code>klein-dream-house-lab-example.json</code></td>
-<td>Ten IG 4:5 stills, one identity</td>
+<td>Ten IG 4:5 stills of one cabin from new cameras; locked inventory</td>
 </tr>
 <tr>
 <td><code>wan-i2v-5s-lab-example.json</code></td>
@@ -1779,11 +1937,11 @@
 <p>MiniMax H3 is <strong>banned</strong> (US Excluded Territory). See <a href="../licenses/">Model licenses</a>. <code>download-models</code> refuses <code>--with-h3</code>.</p>
 <h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
 <p><strong>LTX-2.5</strong> (<code>Lightricks/LTX-2.5</code>) is gated. Klein 4B distilled and Wan 2.2 5B are Apache and do not need a license click. A token in <code>.env</code> is <strong>not</strong> the same as accepting the Lightricks license.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># .env</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_...
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># or: hf auth login</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>hf<span class="w"> </span>auth<span class="w"> </span>whoami
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># .env</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_...
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># or: hf auth login</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>hf<span class="w"> </span>auth<span class="w"> </span>whoami
 </code></pre></div>
 <p>Fine-grained tokens need <strong>gated repo</strong> read. <code>download-models</code> passes <code>--token</code> from <code>HF_TOKEN</code> so it wins over a leftover <code>hf auth login</code>.</p>
 <h3 id="disk-headroom">Disk headroom<a class="headerlink" href="#disk-headroom" title="Permanent link">&para;</a></h3>
@@ -1833,18 +1991,18 @@
 <details class="tip">
 <summary>Cleanup extra LTX monorepo files</summary>
 <p>If an older run pulled the full <code>Kijai/LTX2.3_comfy</code> snapshot into a 2.3/balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Preview (default)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Delete extras (keeps FP8 transformer + TE + VAEs only)</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3<span class="w"> </span>--yes
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Preview (default)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Delete extras (keeps FP8 transformer + TE + VAEs only)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3<span class="w"> </span>--yes
 </code></pre></div>
 <p>Does <strong>not</strong> touch Klein, Wan, or other trees under <code>MODELS_DIR</code>.</p>
 </details>
 <details class="warning">
 <summary>Full monorepo escape hatch</summary>
 <p>Operators who really want every precision/lora:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">LTX_FULL_REPO</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">LTX_FULL_REPO</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
 </code></pre></div>
 <p>After a full-repo mistake, use <code>cleanup --yes</code> instead of wiping all of <code>MODELS_DIR</code>.</p>
 </details>
@@ -1952,7 +2110,7 @@
 </tr>
 <tr>
 <td>Final base</td>
-<td><code>nvidia/cuda</code> <strong>runtime</strong> (builder uses <strong>devel</strong> only during image build)</td>
+<td><code>nvidia/cuda</code> <strong>runtime</strong> (builder defaults to the same runtime image; override <code>CUDA_BASE_IMAGE</code> to devel only if you compile CUDA extensions)</td>
 </tr>
 <tr>
 <td>Contains</td>
@@ -1976,7 +2134,7 @@
 </tr>
 <tr>
 <td>Publish</td>
-<td><code>publish-image</code> on <code>main</code> / <code>development</code> (docker/**); Buildx GHA layer cache</td>
+<td><code>publish-image</code> on <code>main</code> / <code>development</code> (docker/<strong>); Buildx </strong>registry** cache (<code>:buildcache-arm64</code>)</td>
 </tr>
 <tr>
 <td>Local build</td>
@@ -1987,14 +2145,15 @@
 <h3 id="image-layer-cache-high-velocity-rebuilds-pulls">Image layer cache (high-velocity rebuilds + pulls)<a class="headerlink" href="#image-layer-cache-high-velocity-rebuilds-pulls" title="Permanent link">&para;</a></h3>
 <details class="abstract">
 <summary>Layer invalidation matrix</summary>
-<p>Dockerfile order is intentional so <strong>ops-script edits do not re-download multi‑GB torch</strong>, and <strong>app-only prebuild churn does not re-pull the full venv blob</strong>:</p>
+<p>Dockerfile order is intentional so <strong>ops-script edits do not re-download multi‑GB torch</strong>, <strong>Comfy/node pip does not re-pull torch</strong>, and <strong>runtime apt changes rebase</strong> via <code>COPY --link</code>:</p>
 <table>
 <thead>
 <tr>
 <th>Change</th>
-<th>Rebuild multi‑GB torch phase?</th>
-<th>Re-pull multi‑GB <strong>venv</strong> layer?</th>
-<th>Re-pull <strong>app</strong> layer?</th>
+<th>Rebuild multi‑GB <strong>torch</strong> stage?</th>
+<th>Re-pull <strong>venv-torch</strong>?</th>
+<th>Re-pull <strong>venv-extra</strong>?</th>
+<th>Re-pull <strong>app</strong>?</th>
 </tr>
 </thead>
 <tbody>
@@ -2003,27 +2162,39 @@
 <td>No</td>
 <td>No</td>
 <td>No</td>
+<td>No</td>
 </tr>
 <tr>
-<td><code>install-comfy/phase-nodes.sh</code> or node sources only (no new pip)</td>
+<td><code>install-comfy/common.sh</code> (clone/link/strip only)</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Maybe (nodes/comfy stages)</td>
+</tr>
+<tr>
+<td><code>install-comfy/phase-nodes.sh</code> or node <strong>sources</strong> only</td>
+<td>No</td>
 <td>No</td>
 <td>No</td>
 <td>Yes (smaller)</td>
 </tr>
 <tr>
-<td>VideoHelperSuite / new node <strong>pip</strong> deps (e.g. opencv, imageio-ffmpeg)</td>
+<td>VideoHelperSuite / new node <strong>pip</strong> deps (opencv, llama-cpp, …)</td>
 <td>No</td>
-<td><strong>Yes</strong> (final venv includes node requirements)</td>
+<td>No</td>
+<td><strong>Yes</strong> (delta only)</td>
 <td>Yes</td>
 </tr>
 <tr>
-<td><code>install-comfy/phase-comfy.sh</code> / <code>COMFYUI_REF</code> bump (may change requirements)</td>
-<td>No (torch phase)</td>
-<td><strong>Yes if pip set changes</strong></td>
+<td><code>install-comfy/phase-comfy.sh</code> / <code>COMFYUI_REF</code> bump</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes</strong> if reqs change</td>
 <td>Yes</td>
 </tr>
 <tr>
-<td><code>install-comfy/phase-venv-torch.sh</code> / CUDA base / apt</td>
+<td><code>install-comfy/core.sh</code> / <code>phase-venv-torch.sh</code> / <code>TORCH_VERSION</code></td>
+<td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
@@ -2031,14 +2202,15 @@
 <tr>
 <td>Runtime <code>apt</code> only (<code>gcc</code>/<code>g++</code>/<code>python3-dev</code> for Triton JIT)</td>
 <td>No</td>
-<td>No (venv COPY still cacheable)</td>
+<td>No (<code>COPY --link</code>)</td>
+<td>No</td>
 <td>No</td>
 </tr>
 </tbody>
 </table>
-<p>Builder: <strong>COPY only phase modules each <code>RUN</code> needs</strong> (<code>common</code>+<code>phase-venv-torch</code> → <code>phase-comfy</code> → <code>phase-nodes</code>+<code>phase-finalize</code>) with BuildKit pip cache mounts. Runtime: <strong><code>COPY /opt/parts/venv</code> then <code>/opt/parts/app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, <code>pythonpath/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
-<p>Runtime installs <strong><code>gcc</code> + <code>g++</code> + <code>python3-dev</code></strong> (not full <code>build-essential</code>) so PyTorch 2.13 Triton can JIT-compile <code>cuda_utils</code> (needs <strong>CC + <code>Python.h</code></strong>) on first <code>CLIPTextEncode</code>. That is a small apt layer; it does <strong>not</strong> re-pull multi‑GB torch/venv. If JIT deps are still incomplete, the entrypoint sets <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> so torch falls back to eager/cuBLAS.</p>
-<p><strong>Caveat:</strong> the venv layer is the <strong>final</strong> <code>.venv</code> after comfy+nodes pip installs (not torch-only). Any new pip package still re-pulls multi‑GB.</p>
+<p>Builder: <strong>named stages</strong> <code>torch</code> → <code>comfy</code> → <code>nodes</code>. Torch <code>COPY</code> is only <code>core.sh</code> + <code>phase-venv-torch.sh</code>. Pin <code>ARG</code>s are declared in the stage that uses them. Runtime: <strong><code>COPY --link</code> <code>/opt/parts/venv</code> then <code>venv-extra</code> then <code>app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, <code>pythonpath/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
+<p>Runtime installs <strong><code>gcc</code> + <code>g++</code> + <code>python3-dev</code></strong> (not full <code>build-essential</code>) so PyTorch 2.13+ Triton can JIT-compile <code>cuda_utils</code> (needs <strong>CC + <code>Python.h</code></strong>) on first <code>CLIPTextEncode</code>. That is a small apt layer; <code>COPY --link</code> keeps the multi‑GB torch blob. If JIT deps are still incomplete, the entrypoint sets <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> so torch falls back to eager/cuBLAS.</p>
+<p><strong>venv-extra</strong> is the pip delta after the torch snapshot (Comfy <code>requirements.txt</code>, Manager/VHS, llama-cpp). Baking a small optional wheel (e.g. <code>kokoro-onnx</code>) invalidates extra, not torch.</p>
 </details>
 <h3 id="prebuild-version-pins-validated">Prebuild version pins (validated)<a class="headerlink" href="#prebuild-version-pins-validated" title="Permanent link">&para;</a></h3>
 <details class="abstract">
@@ -2054,9 +2226,14 @@
 </thead>
 <tbody>
 <tr>
+<td><code>TORCH_VERSION</code></td>
+<td><code>2.14.0</code></td>
+<td>cu130 aarch64 wheel from <code>https://download.pytorch.org/whl/cu130</code>. Declared only in the <strong>torch</strong> stage. Bump here (and compose / publish-image / <code>install-comfy/core.sh</code>) when rebuilding the multi‑GB layer.</td>
+</tr>
+<tr>
 <td><code>COMFYUI_REF</code></td>
 <td><code>v0.34.0</code></td>
-<td>Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the <strong>comfy</strong> image phase after this bump (torch phase stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
+<td>Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the <strong>comfy</strong> image stage after this bump (torch stage stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
 </tr>
 <tr>
 <td><code>COMFYUI_MANAGER_REF</code></td>
@@ -2075,7 +2252,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>How to bump pins:</strong> change the defaults in <code>docker/Dockerfile</code> <code>ARG</code>s, <code>docker/docker-compose.yml</code> build-args, <code>.github/workflows/publish-image.yml</code>, and <code>docker/install-comfy/common.sh</code>, then rebuild/publish. Escape hatch: set <code>COMFYUI_REF=</code> empty to float the default branch (not recommended for GHCR).</p>
+<p><strong>How to bump pins:</strong> change the defaults in <code>docker/Dockerfile</code> <code>ARG</code>s, <code>docker/docker-compose.yml</code> build-args, <code>.github/workflows/publish-image.yml</code>, <code>docker/install-comfy/core.sh</code> (torch) and <code>docker/install-comfy/common.sh</code> (Comfy/node refs), then rebuild/publish. Escape hatch: set <code>COMFYUI_REF=</code> empty to float the default branch (not recommended for GHCR).</p>
 </details>
 
 
@@ -2137,7 +2314,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>

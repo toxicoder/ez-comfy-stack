@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/shorts/">
       
       
-        <link rel="prev" href="../visual-generative-ai/">
+        <link rel="prev" href="../music/">
       
       
         <link rel="next" href="../spark-farm/">
@@ -52,6 +52,8 @@
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -94,7 +96,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
@@ -211,14 +215,8 @@
     
   </nav>
   
-</header>
     
-    <div class="md-container" data-md-component="container">
       
-      
-        
-          
-            
 <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
@@ -327,7 +325,13 @@
     </ul>
   </div>
 </nav>
-          
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
         
       
       <main class="md-main" data-md-component="main">
@@ -611,6 +615,62 @@
     
   
     Visual Generative AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
   
 
     
@@ -1208,6 +1268,14 @@
 <td><strong>120 frames @ 24 fps = 5.00 s</strong></td>
 </tr>
 <tr>
+<td>LTX print size</td>
+<td><strong>1280×704</strong> (VAE ÷32; not 1280×720)</td>
+</tr>
+<tr>
+<td>Klein identity</td>
+<td><strong>1280×720</strong> still OK; I2V center-crops ~16 px</td>
+</tr>
+<tr>
 <td>Beats</td>
 <td><strong>6</strong> (same places as the old six-column films)</td>
 </tr>
@@ -1281,7 +1349,7 @@
 <li>Load one film graph (<code>film-go-see-90s-run-lab-example</code> / <code>film-still-here-90s-lab-example</code> / <code>film-switchyard-90s-lab-example</code>).</li>
 <li>Leave <strong>Shot print (LTX)</strong> bypassed (default). Queue <strong>Identity (Klein)</strong> → <code>ez_&lt;slug&gt;_identity_*.png</code>.</li>
 <li>Ctrl+B: bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or the previous <code>ez_&lt;slug&gt;_bN_sM_last</code>.</li>
-<li>Paste <strong>Motion + Audio</strong> from the on-canvas shot map (source of truth also in <code>{film}.shots.yaml</code>). Set VHS prefix <code>ez_&lt;slug&gt;_bN_sM_ltx_video</code> and last-frame SaveImage <code>ez_&lt;slug&gt;_bN_sM_last</code>. Queue <strong>5.00s</strong> AV.</li>
+<li>Paste <strong>Motion + Audio</strong> from the on-canvas shot map (source of truth also in <code>{film}.shots.yaml</code>). Set VHS prefix <code>ez_&lt;slug&gt;_bN_sM_ltx_video</code> and last-frame SaveImage <code>ez_&lt;slug&gt;_bN_sM_last</code>. Leave LTX <strong>1280×704</strong> (do not type 720). Queue <strong>5.00s</strong> AV.</li>
 <li>After Queue, click <strong>Save video (MP4) — open node for preview</strong> for an inline preview. File: <code>${COMFY_OUTPUT_DIR}/ez_&lt;slug&gt;_bN_sM_ltx_video_*.mp4</code>.</li>
 <li>Repeat for all 18 shots. Optional silent rehearsal: open <strong>wan-i2v-shot-lab-example</strong> with the same first frame.</li>
 <li>Concat (dry-run first; <code>--yes</code> writes the cap). Default dir is <code>${COMFY_OUTPUT_DIR}</code>:</li>
@@ -1512,7 +1580,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
