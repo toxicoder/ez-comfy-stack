@@ -304,7 +304,7 @@ for p in sorted(root.rglob('*-lab-example.json')):
         assert 'klein-still-hero-lab-example' in note
     if p.stem == 'film-go-see-90s-run-lab-example':
         assert 'running' in desc
-        assert 'Unified' in desc or 'unified' in note.lower()
+        assert 'one-click' in desc.lower() or 'queue once' in note.lower()
 assert 'klein-still-draft-lab-example' in seen
 assert 'film-go-see-90s-run-lab-example' in seen
 assert 'klein-shorts-still-lab-example' in seen

@@ -1,15 +1,22 @@
 """Shot-bible contract for US-safe 90s shorts.
 
-Hermetic: stdlib only. YAML subset parsed without PyYAML.
+Hermetic: stdlib only. YAML parsed via ez_film.shots (no PyYAML).
 """
 
 from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+CUSTOM = ROOT / "custom_nodes"
+if str(CUSTOM) not in sys.path:
+    sys.path.insert(0, str(CUSTOM))
+
+from ez_film.shots import parse_shots_yaml  # noqa: E402
+
 SHORTS = ROOT / "workflows" / "shorts"
 
 FILMS = (
@@ -25,41 +32,19 @@ LONG_LATENT_TYPES = (
     "EmptyLTXVLatentVideo",
     "LTXVEmptyLatentAudio",
 )
+KLEIN_NEGATION = ("no logos", "no violence", "without text", "no people")
+SHOT_INDEX_RE = re.compile(r"Shot \d+ of 18")
+WAN_AUDIO_WORDS = ("score", "music", "audio", "sound", "breath")
+LTX_CLOSE = "No music and no score."
+BIBLES = {
+    "go-see": "film-go-see-90s-run-lab-example.json",
+    "still-here": "film-still-here-90s-lab-example.json",
+    "switchyard": "film-switchyard-90s-lab-example.json",
+}
 
 
 def _path(film: str) -> Path:
     return SHORTS / f"{film}.shots.yaml"
-
-
-def _load_meta(text: str) -> dict[str, str]:
-    meta = {}
-    for key in ("film", "slug", "frames", "fps", "duration_s", "beats", "shots_per_beat", "total_shots", "publish_cap_s"):
-        m = re.search(rf"^{key}:\s*(.+)$", text, re.M)
-        assert m, key
-        meta[key] = m.group(1).strip()
-    return meta
-
-
-def _load_shots(text: str) -> list[dict[str, str]]:
-    blocks = re.split(r"\n  - beat:", text)[1:]
-    shots = []
-    for block in blocks:
-        body = "beat:" + block
-        def field(name: str) -> str:
-            m = re.search(rf"^\s*{name}:\s*(.+)$", body, re.M)
-            assert m, name
-            return m.group(1).strip()
-        shots.append(
-            {
-                "beat": field("beat"),
-                "shot": field("shot"),
-                "prefix": field("prefix"),
-                "load_from": field("load_from"),
-                "motion": body,
-                "audio": body,
-            }
-        )
-    return shots
 
 
 def test_three_shot_bibles_exist() -> None:
@@ -70,7 +55,8 @@ def test_three_shot_bibles_exist() -> None:
 def test_eighteen_shots_and_chain() -> None:
     for film, slug in FILMS:
         text = _path(film).read_text(encoding="utf-8")
-        meta = _load_meta(text)
+        parsed = parse_shots_yaml(text)
+        meta = parsed["meta"]
         assert meta["film"] == film
         assert meta["slug"] == slug
         assert meta["frames"] == "120"
@@ -80,17 +66,68 @@ def test_eighteen_shots_and_chain() -> None:
         assert meta["shots_per_beat"] == "3"
         assert meta["total_shots"] == "18"
         assert meta["publish_cap_s"] == "90.00"
-        shots = _load_shots(text)
+        shots = parsed["shots"]
         assert len(shots) == 18, (film, len(shots))
         prefixes = [s["prefix"] for s in shots]
         assert len(set(prefixes)) == 18
-        assert shots[0]["load_from"] == "example.png"
-        for i, s in enumerate(shots):
-            assert s["prefix"] == f"ez_{slug}_b{s['beat']}_s{s['shot']}"
+        assert shots[0]["load_from"] == "identity"
+        for i, shot in enumerate(shots):
+            assert shot["prefix"] == f"ez_{slug}_b{shot['beat']}_s{shot['shot']}"
             if i:
-                assert s["load_from"] == f"{shots[i - 1]['prefix']}_last"
-        assert "identity_look:" in text
-        assert "No score" in text or "no score" in text
+                assert shot["load_from"] == f"{shots[i - 1]['prefix']}_last"
+        assert parsed["identity"].strip()
+        assert LTX_CLOSE in text
+
+
+def test_klein_identity_is_model_native() -> None:
+    for film, _slug in FILMS:
+        identity = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))["identity"]
+        lower = identity.lower()
+        assert "YouTube 16:9" in identity or "youtube 16:9" in lower
+        assert "mm" in lower
+        assert "unmarked" in lower or "empty of lettering" in lower
+        for needle in KLEIN_NEGATION:
+            assert needle not in lower, (film, needle)
+        words = identity.split()
+        assert len(words) < 150, (film, len(words))
+
+
+def test_ltx_i2v_prompts_are_model_native() -> None:
+    for film, _slug in FILMS:
+        parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))
+        for shot in parsed["shots"]:
+            ltx = shot["ltx_i2v"]
+            assert ltx.startswith("The start image holds as the first frame.")
+            assert not ltx.startswith("The scene opens with")
+            assert SHOT_INDEX_RE.search(ltx) is None, (film, shot["prefix"])
+            assert LTX_CLOSE in ltx
+            assert len(ltx.split()) <= 200, (film, shot["prefix"], len(ltx.split()))
+            foley = (
+                "breath",
+                "wind",
+                "rain",
+                "footfall",
+                "footstep",
+                "grit",
+                "kettle",
+                "hum",
+                "steam",
+                "gravel",
+                "creak",
+                "click",
+                "splash",
+                "horn",
+                "rung",
+                "pour",
+                "ceramic",
+                "cloth",
+                "tick",
+            )
+            assert any(word in ltx.lower() for word in foley), (film, shot["prefix"])
+            wan = shot["wan_i2v"]
+            wan_l = wan.lower()
+            for word in WAN_AUDIO_WORDS:
+                assert word not in wan_l, (film, shot["prefix"], word)
 
 
 def test_shorts_yaml_has_no_banned_models() -> None:
@@ -176,9 +213,10 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
             for n in notes
         )
         clips = [n for n in graph["nodes"] if n.get("type") == "CLIPTextEncode"]
-        assert len(clips) >= 2, path.name
+        assert len(clips) >= 20, path.name
         lab_note = graph.get("extra", {}).get("lab_note")
         assert isinstance(lab_note, str) and lab_note.strip()
+        assert "Queue once" in lab_note or "Queue **once**" in lab_note
 
 
 def test_shot_graphs_are_five_second_i2v() -> None:
@@ -226,26 +264,28 @@ def test_no_long_latents_in_shorts() -> None:
             assert length < 241
 
 
-BIBLES = {
-    "go-see": "film-go-see-90s-run-lab-example.json",
-    "still-here": "film-still-here-90s-lab-example.json",
-    "switchyard": "film-switchyard-90s-lab-example.json",
-}
-
-
-def test_bible_graphs_are_unified_klein_plus_ltx() -> None:
+def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
     for film, slug in FILMS:
         path = SHORTS / BIBLES[film]
         graph = json.loads(path.read_text(encoding="utf-8"))
         text = path.read_text(encoding="utf-8")
+        parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))
         assert "flux-2-klein-4b-fp8.safetensors" in text
         assert "qwen_3_4b.safetensors" in text
         assert "flux2-vae.safetensors" in text
         assert '"flux2"' in text
         assert "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors" in text
-        assert any(n.get("type") == "LTXVImgToVideo" for n in graph["nodes"])
+        printers = [n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo"]
+        assert len(printers) == 18, (path.name, len(printers))
+        assert all(n.get("mode") == 0 for n in printers)
+        assert all(n["widgets_values"][0] == 1280 for n in printers)
+        assert all(n["widgets_values"][1] == 704 for n in printers)
+        assert all(n["widgets_values"][2] == 120 for n in printers)
         assert any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"])
-        assert any(n.get("type") == "VHS_VideoCombine" for n in graph["nodes"])
+        assert any(n.get("type") == "EZUnloadModels" for n in graph["nodes"])
+        concat = next(n for n in graph["nodes"] if n.get("type") == "EZFilmConcat")
+        assert concat["widgets_values"][0] == film
+        assert "preview" in (concat.get("title") or "").lower()
         identity = next(
             n
             for n in graph["nodes"]
@@ -253,35 +293,51 @@ def test_bible_graphs_are_unified_klein_plus_ltx() -> None:
             and n["widgets_values"][0] == f"ez_{slug}_identity"
         )
         assert identity["widgets_values"][0] == f"ez_{slug}_identity"
-        vhs = next(n for n in graph["nodes"] if n.get("type") == "VHS_VideoCombine")
-        assert vhs["widgets_values"]["filename_prefix"] == f"ez_{slug}_b1_s1_ltx_video"
-        assert vhs["widgets_values"]["save_output"] is True
-        audio = next(i for i in vhs["inputs"] if i.get("name") == "audio")
-        assert audio.get("link") is not None
-        # LTX print starts bypassed so first Queue is identity-only
-        assert any(
-            n.get("type") == "LTXVImgToVideo" and n.get("mode") == 4 for n in graph["nodes"]
+        vhs_nodes = [n for n in graph["nodes"] if n.get("type") == "VHS_VideoCombine"]
+        assert len(vhs_nodes) == 18
+        prefixes = {n["widgets_values"]["filename_prefix"] for n in vhs_nodes}
+        expected_prefixes = {f"{s['prefix']}_ltx_video" for s in parsed["shots"]}
+        assert prefixes == expected_prefixes
+        for node in vhs_nodes:
+            assert node["widgets_values"]["save_output"] is True
+            audio = next(i for i in node["inputs"] if i.get("name") == "audio")
+            assert audio.get("link") is not None
+        assert not any(n.get("type") == "LoadImage" for n in graph["nodes"])
+        assert not any(n.get("type") == "EZLTXPromptEnhance" for n in graph["nodes"])
+        klein_sampler = next(
+            n
+            for n in graph["nodes"]
+            if n.get("type") == "KSampler" and n["widgets_values"][2] == 4
         )
-        mmap = next(n for n in graph["nodes"] if n.get("type") == "MarkdownNote")
-        body = mmap["widgets_values"][0]
-        yaml_text = _path(film).read_text(encoding="utf-8")
-        for shot in _load_shots(yaml_text):
-            assert shot["prefix"] in body
-            assert shot["load_from"] in body
-            # Audio lines must be paste-ready (not empty)
-            assert f"- Audio:" in body
-        audio_lines = [
-            line for line in body.splitlines() if line.startswith("- Audio:")
+        assert klein_sampler["widgets_values"][0] == 42
+        assert klein_sampler["widgets_values"][3] == 1.0
+        enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+        assert enhance["widgets_values"][1] is False
+        assert enhance["widgets_values"][0] == parsed["identity"]
+        ltx_pos = [
+            n
+            for n in graph["nodes"]
+            if n.get("type") == "CLIPTextEncode" and str(n.get("title") or "").endswith("LTX I2V")
         ]
-        assert len(audio_lines) == 18, (film, len(audio_lines))
-        assert all(len(line) > 12 for line in audio_lines)
-        assert "No score" in body or "no score" in body
-        assert "120" in body
-        assert "90.00" in body or "90s" in body
+        assert len(ltx_pos) == 18
+        baked = {n["widgets_values"][0] for n in ltx_pos}
+        expected_ltx = {s["ltx_i2v"] for s in parsed["shots"]}
+        assert baked == expected_ltx
         latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
         assert latent["widgets_values"][0] == 1280
         assert latent["widgets_values"][1] == 720
-        ltx = next(n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo")
-        assert ltx["widgets_values"][0] == 1280
-        assert ltx["widgets_values"][1] == 704
-        assert ltx["widgets_values"][2] == 120
+        assert latent["widgets_values"][2] == 1
+        last_saves = [
+            n
+            for n in graph["nodes"]
+            if n.get("type") == "SaveImage" and n.get("title") == "Save last frame"
+        ]
+        assert len(last_saves) == 18
+        note = next(n for n in graph["nodes"] if n.get("type") == "Note")
+        body = note["widgets_values"][0]
+        assert "Queue once" in body or "Queue **once**" in body
+        assert "concat-shots.sh" in body
+        mmap = next(n for n in graph["nodes"] if n.get("type") == "MarkdownNote")
+        table = mmap["widgets_values"][0]
+        assert "120" in table
+        assert "90" in table
