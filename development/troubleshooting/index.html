@@ -658,6 +658,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../shorts/" class="md-nav__link">
         
   
@@ -1657,9 +1685,19 @@
 <td><code>./scripts/manage.sh download-podcast --tier analog</code>. Confirm <code>ls "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx"</code> and <code>comfy/tts/voices-v1.0.bin</code></td>
 </tr>
 <tr>
-<td>ACE checkpoint name missing on podcast graphs</td>
+<td>ACE checkpoint name missing on podcast or rap graphs</td>
 <td>ACE-Step AIO not downloaded</td>
-<td><code>./scripts/manage.sh download-podcast --tier acestep</code>. Lab file is <code>ace_step_1.5_turbo_aio.safetensors</code> under <code>comfy/checkpoints/</code></td>
+<td><code>./scripts/manage.sh download-music --tier turbo</code> <strong>or</strong> <code>download-podcast --tier acestep</code> (same dest). Lab file is <code>ace_step_1.5_turbo_aio.safetensors</code> under <code>comfy/checkpoints/</code></td>
+</tr>
+<tr>
+<td>Rap bars slur / mush</td>
+<td>Lines too long, or language not <code>en</code></td>
+<td>Shorten to ~6–10 syllables; keep <code>language=en</code> on <code>TextEncodeAceStepAudio1.5</code>. Re-open <strong>music-rap-draft-lab-example</strong></td>
+</tr>
+<tr>
+<td>Vocals leaking into an instrumental pass</td>
+<td>Tags still say male rap vocals; lyrics still have bars</td>
+<td>Keep boom-bap tags, append <code>instrumental, no vocals</code>, replace lyrics with <code>[inst]</code>. There is no third instrumental JSON</td>
 </tr>
 <tr>
 <td><code>kokoro-onnx</code> / <code>onnxruntime</code> import miss on aarch64</td>

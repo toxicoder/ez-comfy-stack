@@ -16,7 +16,7 @@
         <link rel="prev" href="../visual-generative-ai/">
       
       
-        <link rel="next" href="../shorts/">
+        <link rel="next" href="../music/">
       
       
         
@@ -815,6 +815,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../shorts/" class="md-nav__link">
         
   
@@ -1362,7 +1390,7 @@
 <li><strong>ComfyUI-OldTimeRadio</strong> — optional lanes that pull US-excluded or non-commercial video models</li>
 <li>Cloud ACE-Step forks, MiniMax Music, F5-TTS official weights, Coqui XTTS v2, Echo-TTS, Fish Audio S2, celebrity reference WAVs, ElevenLabs, or xAI TTS</li>
 </ul>
-<p>Native ACE-Step 1.5 already ships in <code>COMFYUI_REF=v0.34.0</code> (<code>TextEncodeAceStepAudio1.5</code>, <code>EmptyAceStep1.5LatentAudio</code>). Beds stay <strong>instrumental</strong> (<code>instrumental</code>, <code>no vocals</code> in tags; empty lyrics).</p>
+<p>Native ACE-Step 1.5 already ships in <code>COMFYUI_REF=v0.34.0</code> (<code>TextEncodeAceStepAudio1.5</code>, <code>EmptyAceStep1.5LatentAudio</code>). Beds stay <strong>instrumental</strong> (<code>instrumental</code>, <code>no vocals</code> in tags; empty lyrics). Rap vocals with original lyrics live on <a href="../music/">Local music</a> and reuse this same AIO dest — do not download it twice.</p>
 <hr />
 <h2 id="engines-on-spark">Engines on Spark<a class="headerlink" href="#engines-on-spark" title="Permanent link">&para;</a></h2>
 <table>
@@ -1426,8 +1454,9 @@
 <p>Podcast weights are <strong>opt-in</strong>. <code>./scripts/manage.sh download-models</code> does <strong>not</strong> pull them. <code>doctor</code> prints analog JSON and still exits 0 when the pack is absent.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>analog<span class="w">      </span><span class="c1"># Kokoro ONNX + voices</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>acestep<span class="w">     </span><span class="c1"># ace_step_1.5_turbo_aio.safetensors</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>all<span class="w">         </span><span class="c1"># analog + ACE + optional TTS</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># same --limit auto|N|off wrap as download-models (always clears on exit)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># same AIO dest as: ./scripts/manage.sh download-music --tier turbo</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>all<span class="w">         </span><span class="c1"># analog + ACE + optional TTS</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># same --limit auto|N|off wrap as download-models (always clears on exit)</span>
 </code></pre></div>
 <p>Layout after analog + acestep:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>${MODELS_DIR}/comfy/

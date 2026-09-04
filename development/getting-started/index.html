@@ -887,6 +887,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../shorts/" class="md-nav__link">
         
   
@@ -1754,7 +1782,7 @@
 <div class="admonition success">
 <p class="admonition-title">First Queue</p>
 <p>In ComfyUI, load <strong>klein-still-draft-lab-example</strong> from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Leave <strong>Enhance</strong> off. Queue. PNG lands at <code>${COMFY_OUTPUT_DIR}/ez_still_draft_*.png</code>.</p>
-<p>Next: <a href="../prompting/">Prompting</a>, then the still → Wan → LTX loop on <a href="../visual-generative-ai/">Visual Generative AI</a>. After that first still, optional audio: <a href="../podcast/">Local podcast</a> (<code>download-podcast --tier analog</code>, then <strong>podcast-audio-first-lab-example</strong>).</p>
+<p>Next: <a href="../prompting/">Prompting</a>, then the still → Wan → LTX loop on <a href="../visual-generative-ai/">Visual Generative AI</a>. After that first still, optional audio: <a href="../podcast/">Local podcast</a> (<code>download-podcast --tier analog</code>, then <strong>podcast-audio-first-lab-example</strong>) or rap-first <a href="../music/">Local music</a> (<code>download-music --tier turbo</code>, then <strong>music-rap-draft-lab-example</strong> — do not co-resident with LTX/Wan/Klein).</p>
 </div>
 <h3 id="build-the-image-locally-optional">Build the image locally (optional)<a class="headerlink" href="#build-the-image-locally-optional" title="Permanent link">&para;</a></h3>
 <p>By default, <code>manage.sh start</code> <strong>pulls</strong> a branch-aligned prebuilt image from GHCR (ComfyUI + PyTorch baked in; <strong>not</strong> Klein/Wan/LTX weights). You can instead <strong>build</strong> <code>docker/Dockerfile</code> on the host and still use the same start path.</p>
@@ -1884,11 +1912,15 @@
 </tr>
 <tr>
 <td><code>download-models [--limit auto\|N\|off] [--drop-incomplete]</code></td>
-<td>Default pack, throttled wrap (does <strong>not</strong> pull podcast weights)</td>
+<td>Default pack, throttled wrap (does <strong>not</strong> pull podcast or music weights)</td>
 </tr>
 <tr>
 <td><code>download-podcast [--tier analog\|…] [--limit auto\|N\|off]</code></td>
 <td>Opt-in Kokoro / ACE-Step / optional TTS</td>
+</tr>
+<tr>
+<td><code>download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]</code></td>
+<td>Opt-in ACE-Step 1.5 rap AIO (~10 GB; shared dest with <code>download-podcast --tier acestep</code>)</td>
 </tr>
 <tr>
 <td><code>download-limit …</code></td>

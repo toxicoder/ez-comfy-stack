@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Three DGX Sparks as independent Comfy workers plus a shared model cache — no NCCL, no MiniMax H3.">
+        <meta name="description" content="US-safe RAP-FIRST ACE-Step draft and full-track lane on one DGX Spark.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/spark-farm/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/music/">
       
       
-        <link rel="prev" href="../shorts/">
+        <link rel="prev" href="../podcast/">
       
       
-        <link rel="next" href="../models-and-cache/">
+        <link rel="next" href="../shorts/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Spark farm - ez-comfy-stack</title>
+        <title>Local music - ez-comfy-stack</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#spark-farm" class="md-skip">
+        <a href="#local-music" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Spark farm
+              Local music
             
           </span>
         </div>
@@ -660,10 +660,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../music/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -679,6 +706,120 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#two-graphs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two graphs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two graphs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#draft-first-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft — first Queue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-track" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full track
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tags-vs-lyrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tags vs lyrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distrokid-spotify-youtube-authorship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DistroKid, Spotify, YouTube, authorship
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Download
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sequential-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequential Queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hard-no" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard no
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -716,37 +857,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Spark farm
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../spark-farm/" class="md-nav__link">
         
   
   
@@ -762,70 +876,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#farm-vs-relay" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Farm vs relay
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#networking-docs-only-no-iac" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Networking (docs only — no IaC)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#per-node-process" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Per-node process
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Commands
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1123,10 +1173,49 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#farm-vs-relay" class="md-nav__link">
+  <a href="#two-graphs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Farm vs relay
+        Two graphs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two graphs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#draft-first-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft — first Queue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-track" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full track
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tags-vs-lyrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tags vs lyrics
       
     </span>
   </a>
@@ -1134,10 +1223,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#networking-docs-only-no-iac" class="md-nav__link">
+  <a href="#distrokid-spotify-youtube-authorship" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Networking (docs only — no IaC)
+        DistroKid, Spotify, YouTube, authorship
       
     </span>
   </a>
@@ -1145,10 +1234,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#per-node-process" class="md-nav__link">
+  <a href="#download" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Per-node process
+        Download
       
     </span>
   </a>
@@ -1156,10 +1245,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
+  <a href="#sequential-queue" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Commands
+        Sequential Queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hard-no" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard no
       
     </span>
   </a>
@@ -1186,89 +1286,128 @@
   
 
 
-<h1 id="spark-farm">Spark farm<a class="headerlink" href="#spark-farm" title="Permanent link">&para;</a></h1>
+<h1 id="local-music">Local music<a class="headerlink" href="#local-music" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>How three Sparks are used (farm vs relay)</li>
-<li>Fabric NFS / rsync vs management SSH</li>
-<li>Three ComfyUI UIs (Queue lab-example graphs on each)</li>
-<li>Optional <code>sync-models</code> (rsync <code>MODELS_DIR/comfy</code> over fabric)</li>
-<li>What this sample stack refuses (NCCL, K3s, MiniMax H3)</li>
+<li>Queue the rap <strong>draft</strong> first, then the <strong>full</strong> track</li>
+<li>Tags vs lyrics; <code>[verse]</code> / <code>[chorus]</code> / <code>[spoken word]</code> as vocal hints</li>
+<li>Original lyrics only — no “in the style of \&lt;living artist&gt;”</li>
+<li>ACE-Step vocal = invented identity, not a clone</li>
+<li>DistroKid / Spotify / YouTube / USCO Part 2 disclosure</li>
+<li><code>download-music --tier turbo</code>; sequential Queue + existing Klein covers</li>
+<li>Spark: ~10 GB AIO; do not co-resident with LTX / Wan / Klein</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Three concurrent 5 s Wan/LTX shots with <strong>one weight copy</strong></li>
-<li>Copies on the 200 GbE fabric, not the 10 GbE mgmt NIC</li>
-<li>Unchanged <code>restart: "no"</code> and local heavy confirm on <code>start</code></li>
+<li>A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs</li>
+<li>Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice</li>
+<li>Keeping the visual studio bootable when the music pack is missing</li>
 </ul>
-<p>This remains a <strong>per-node Comfy demo</strong>. Tensor-parallel LLMs belong in <a href="https://github.com/toxicoder/nvidia-dgx-spark-lab">nvidia-dgx-spark-lab</a>.</p>
-<h2 id="farm-vs-relay">Farm vs relay<a class="headerlink" href="#farm-vs-relay" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Not legal advice</p>
+<p>Platform rules and copyright change. Read the current DistroKid, Spotify, YouTube, FTC, and USCO pages before you monetize.</p>
+</div>
+<hr />
+<h2 id="two-graphs">Two graphs<a class="headerlink" href="#two-graphs" title="Permanent link">&para;</a></h2>
+<p>Do <strong>not</strong> load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph.</p>
+<h3 id="draft-first-queue">Draft — first Queue<a class="headerlink" href="#draft-first-queue" title="Permanent link">&para;</a></h3>
+<p>Graph: <strong>music-rap-draft-lab-example</strong> (<code>extra.lab_profile</code> <code>us-safe-music</code>). Same role as <strong>klein-still-draft</strong>.</p>
 <table>
 <thead>
 <tr>
-<th>Mode</th>
-<th>What the 3 Sparks do</th>
-<th>When</th>
+<th>Stage</th>
+<th>What runs</th>
+<th>Prefix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Farm (default)</strong></td>
-<td>Each Spark Queues an independent 5 s Wan or LTX shot. Shared <code>${MODELS_DIR}</code>.</td>
-<td>Parallel shorts / concat-shots</td>
+<td>MODEL</td>
+<td><code>CheckpointLoaderSimple</code> <code>ace_step_1.5_turbo_aio.safetensors</code> + <code>ModelSamplingAuraFlow</code></td>
+<td>—</td>
 </tr>
 <tr>
-<td><strong>Do not implement</strong></td>
-<td>NCCL split of a single denoise across 3 GB10s</td>
-<td>Out of scope</td>
+<td>DURATION</td>
+<td>Primitive <strong>32</strong> s → <code>EmptyAceStep1.5LatentAudio</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>PROMPT</td>
+<td>Tags + lab-original lyrics. <code>EZRapLyrics</code> enhance <strong>off</strong>. <code>ConditioningZeroOut</code> negative. KSampler 8 / cfg 1 / euler / simple</td>
+<td><code>ez_rap_lyrics</code></td>
+</tr>
+<tr>
+<td>OUTPUT</td>
+<td><code>VAEDecodeAudio</code> → FLAC + 320 kbps MP3</td>
+<td><code>ez_rap_draft</code></td>
+</tr>
+<tr>
+<td>COVER</td>
+<td>Queue <strong>klein-thumbnail-lab-example</strong> or <strong>klein-podcast-cover-lab-example</strong> separately</td>
+<td><code>ez_thumbnail</code> / <code>ez_podcast</code></td>
 </tr>
 </tbody>
 </table>
-<p>Clustering is <strong>throughput + one weight copy</strong>, not slicing one sampler. MiniMax H3 is banned — see <a href="../licenses/">licenses</a>.</p>
-<h2 id="networking-docs-only-no-iac">Networking (docs only — no IaC)<a class="headerlink" href="#networking-docs-only-no-iac" title="Permanent link">&para;</a></h2>
-<p>Physical: 3 Sparks, high-bandwidth already up.</p>
+<p>Default tags (both graphs):</p>
+<p><code>boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm</code></p>
+<p><strong>Beat-only pass:</strong> keep boom-bap tags, append <code>instrumental, no vocals</code>, and replace lyrics with <code>[inst]</code>. There is no third instrumental JSON.</p>
+<p>Canned style swaps (tags widget only — not extra files):</p>
 <ul>
-<li><strong>3-node ring:</strong> 3× QSFP DAC, both CX-7 ports live. NVIDIA Sync → Cluster Assistant. No switch.</li>
-<li><strong>Star via QSFP switch:</strong> each Spark one or two 200 GbE links.</li>
+<li><strong>trap:</strong> <code>trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm</code></li>
+<li><strong>lo-fi:</strong> <code>lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm</code></li>
 </ul>
-<p>Management SSH stays on 10 GbE / RJ45. Model sync uses <strong><code>SPARK_FABRIC_IPS</code> only</strong>. Do not rsync multi-gig weights over the management NIC.</p>
-<p>Shared <code>MODELS_DIR</code> (pick one):</p>
+<h3 id="full-track">Full track<a class="headerlink" href="#full-track" title="Permanent link">&para;</a></h3>
+<p>Graph: <strong>music-rap-full-lab-example</strong>. Duration <strong>96</strong> s. Same sampler and model. Prefix <code>ez_rap_full</code>. Same voice + second verse + repeated chorus + <code>[outro]</code>. Human rewrite required before any release.</p>
+<hr />
+<h2 id="tags-vs-lyrics">Tags vs lyrics<a class="headerlink" href="#tags-vs-lyrics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Tags</strong> describe genre, drums, bass, booth, vocal character, and bpm.</li>
+<li><strong>Lyrics</strong> are the bars. Section labels <code>[intro]</code>, <code>[verse]</code>, <code>[chorus]</code>, <code>[outro]</code>, and <code>[spoken word]</code> are vocal <strong>hints</strong> operators may add — they are not a rights grant.</li>
+<li>Original lyrics only. Do not write “in the style of \&lt;living artist&gt;”. No living-MC names. No famous-hook paraphrases.</li>
+<li>Short percussive lines (about 6–10 syllables) slur less. Keep <code>language=en</code>.</li>
+</ul>
+<p>ACE-Step generates the vocal from lyrics + tags. That timbre is an <strong>invented identity</strong>, not a cloned MC. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs.</p>
+<hr />
+<h2 id="distrokid-spotify-youtube-authorship">DistroKid, Spotify, YouTube, authorship<a class="headerlink" href="#distrokid-spotify-youtube-authorship" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>DistroKid / Spotify:</strong> you must own the rights. Disclose AI lyrics + vocals + instrumental. If the artist identity is fake, Spotify may treat it as an “AI Persona” — prefer a <strong>human artist name</strong> with disclosed AI production.</li>
+<li><strong>YouTube:</strong> use the synthetic-audio / altered-content flag. Mass-upload of near-duplicates is inauthentic content.</li>
+<li><strong>USCO Part 2 / Thaler:</strong> edit the lyrics. Prompts are not authorship. A human rewrite plus selection and arrangement can be; raw generations are not registrable.</li>
+</ul>
+<hr />
+<h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
+<p>Music weights are <strong>opt-in</strong>. <code>./scripts/manage.sh download-models</code> does <strong>not</strong> pull them. <code>doctor</code> prints turbo JSON and still exits 0 when the pack is absent.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-music<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w">     </span><span class="c1"># ace_step_1.5_turbo_aio.safetensors (~10 GB)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-music<span class="w"> </span>--tier<span class="w"> </span>xl<span class="w">        </span><span class="c1"># optional XL split only</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># same --limit auto|N|off wrap as download-models (always clears on exit)</span>
+</code></pre></div>
+<p>Turbo uses the <strong>same snapshot</strong> as <code>download-podcast --tier acestep</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>${MODELS_DIR}/Comfy-Org__ace_step_1.5_ComfyUI_files_acestep/checkpoints/ace_step_1.5_turbo_aio.safetensors
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>${MODELS_DIR}/comfy/checkpoints/ace_step_1.5_turbo_aio.safetensors   # relative symlink
+</code></pre></div>
+<p>If you already ran <code>download-podcast --tier acestep</code>, <code>download-music --tier turbo</code> is a cache hit + relink. Do not download the 10 GB AIO twice.</p>
+<p>Relative symlinks only (host <code>/mnt/models</code> vs container <code>/models</code>).</p>
+<hr />
+<h2 id="sequential-queue">Sequential Queue<a class="headerlink" href="#sequential-queue" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>NFS over the fabric subnet (preferred):</strong> Spark-0 exports <code>${MODELS_DIR}</code> (default <code>/mnt/models</code>); Sparks 1–2 mount it. Compose already bind-mounts <code>${MODELS_DIR}:/models</code>.</li>
-<li><strong>Replica:</strong> <code>./scripts/utilities/spark-farm.sh sync-models</code> rsyncs <code>MODELS_DIR/comfy</code> over fabric IPs.</li>
+<li><code>./scripts/manage.sh download-music --tier turbo</code></li>
+<li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
+<li>Load <strong>music-rap-draft-lab-example</strong>. Enhance off. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_rap_draft_*.flac</code> / <code>ez_rap_draft_*.mp3</code></li>
+<li>Then load <strong>music-rap-full-lab-example</strong> (96 s)</li>
+<li>Cover in a <strong>later</strong> session: <strong>klein-thumbnail-lab-example</strong> or <strong>klein-podcast-cover-lab-example</strong></li>
 </ol>
-<p>Copy <code>config/spark-farm.example.env</code>, edit hostnames/IPs, then:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">set</span><span class="w"> </span>-a
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">source</span><span class="w"> </span>config/spark-farm.example.env<span class="w">   </span><span class="c1"># after you filled in real hosts</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">set</span><span class="w"> </span>+a
-</code></pre></div>
-<h2 id="per-node-process">Per-node process<a class="headerlink" href="#per-node-process" title="Permanent link">&para;</a></h2>
-<p>On <strong>each</strong> Spark (operator, with confirm):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>./scripts/manage.sh<span class="w"> </span>setup
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">      </span><span class="c1"># cache owner, or after NFS is up</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
-</code></pre></div>
-<p>Three UIs (replace hostnames from <code>SPARK_COMFY_URLS</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># After sourcing spark-farm.example.env</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188</span>
-</code></pre></div>
-<p>On each UI, load the unified <strong>film-<em>-90s-</em>-lab-example</strong> graph (or <strong>ltx-i2v-shot-lab-example</strong> / optional <strong>wan-i2v-shot-lab-example</strong>) and <strong>Queue</strong> independent <strong>5 s</strong> shots — different beats in parallel for the 90s films. Concat locally:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--yes
-</code></pre></div>
-<p>See <a href="../shorts/">90s shorts</a>. MiniMax H3 films are banned (see <a href="../licenses/">licenses</a>).</p>
-<p><code>spark-farm.sh</code> <strong>never</strong> starts compose remotely. It prints the exact <code>./scripts/manage.sh start</code> you must run locally (heavy confirm stays on that node). Containers still use <code>restart: "no"</code>.</p>
-<p>The <code>run</code> subcommand prints a <strong>film-*-90s / wan-i2v-shot / ltx-i2v-shot</strong> Queue reminder for <code>--film go-see</code> (or still-here / switchyard). It does <strong>not</strong> POST graphs. It refuses MiniMax H3 names (<code>*h3*</code> / <code>*MiniMax*</code>).</p>
-<p>Memory: keep <code>MEM_LIMIT=90g</code>, <code>MEM_RESERVATION=80g</code>, <code>MIN_HOST_FREE_GIB=28</code>, <code>shm_size: 16gb</code>.</p>
-<h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>run<span class="w"> </span>--film<span class="w"> </span>go-see
-</code></pre></div>
+<p>Spark: the AIO is ~10 GB VRAM-adjacent work. Do <strong>not</strong> co-resident with LTX / Wan / Klein.</p>
+<p>Start still requires typing <code>yes</code>. Compose <code>restart: "no"</code> is unchanged.</p>
+<hr />
+<h2 id="hard-no">Hard no<a class="headerlink" href="#hard-no" title="Permanent link">&para;</a></h2>
+<p>Do not vendor or default:</p>
+<ul>
+<li>TTS-Audio-Suite, OldTimeRadio, cloud <code>ace-step/ACE-Step-ComfyUI</code></li>
+<li>MiniMax Music 3 as a lab default, MiniMax H3, Suno / Udio, Stable Audio 2.5 partner</li>
+<li>Celebrity names in tags/lyrics, <code>LoadAudio</code> of copyrighted songs, “cover this Drake track”</li>
+<li>Required <code>XAI_API_KEY</code></li>
+</ul>
+<p>Native ACE-Step 1.5 already ships in <code>COMFYUI_REF=v0.34.0</code>.</p>
 
 
 
