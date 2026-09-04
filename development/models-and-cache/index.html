@@ -630,6 +630,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../shorts/" class="md-nav__link">
         
   
@@ -1502,7 +1530,10 @@
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    text_encoders/
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    vae/
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>  hub/                  # HF cache (optional)
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog)
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    tts/                # opt-in Kokoro voices + optional Chatterbox/Qwen3-TTS
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    checkpoints/        # opt-in ACE-Step 1.5 AIO (download-podcast --tier acestep)
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>  hub/                  # HF cache (optional)
 </code></pre></div>
 <p><code>download-models</code> links weights into <code>comfy/*</code> with <strong>relative</strong> symlinks (e.g. <code>../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors</code>). That way the same tree resolves on the host (<code>MODELS_DIR=/mnt/models</code>) and inside the container (bind-mounted at <code>/models</code>). Absolute <code>/mnt/models/…</code> file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.</p>
 <p>This matches the lab hostPath pattern so K8s and Docker demos can share weights.</p>
@@ -1519,7 +1550,10 @@
   Comfy --&gt; DM["diffusion_models/ · symlinks"]
   Comfy --&gt; TEd["text_encoders/"]
   Comfy --&gt; VAEd["vae/"]
-  Comfy --&gt; LlmDir["llm/"]</code></pre>
+  Comfy --&gt; LlmDir["llm/"]
+  Comfy --&gt; Onnx["onnx/ · opt-in Kokoro"]
+  Comfy --&gt; Tts["tts/ · opt-in voices"]
+  Comfy --&gt; Ckpt["checkpoints/ · opt-in ACE-Step"]</code></pre>
 <hr />
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/manage.sh<span class="w"> </span>download-models
@@ -1606,6 +1640,43 @@
 <td><code>Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code></td>
 <td><code>llm/</code></td>
 <td>On-box prompt enhance (CPU llama.cpp)</td>
+</tr>
+</tbody>
+</table>
+<p>Opt-in podcast (<code>./scripts/manage.sh download-podcast</code>, <strong>not</strong> <code>download-models</code>):</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Comfy folder</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kokoro-v1.0.onnx</code></td>
+<td><code>onnx/</code></td>
+<td>Kokoro-82M ONNX (analog TTS)</td>
+</tr>
+<tr>
+<td><code>voices-v1.0.bin</code></td>
+<td><code>tts/</code></td>
+<td>Kokoro built-in voice pack</td>
+</tr>
+<tr>
+<td><code>ace_step_1.5_turbo_aio.safetensors</code></td>
+<td><code>checkpoints/</code></td>
+<td>ACE-Step 1.5 instrumental beds</td>
+</tr>
+<tr>
+<td><code>t3_turbo_v1.safetensors</code></td>
+<td><code>tts/</code></td>
+<td>Optional Chatterbox Turbo</td>
+</tr>
+<tr>
+<td><code>model.safetensors</code></td>
+<td><code>tts/</code></td>
+<td>Optional Qwen3-TTS 0.6B</td>
 </tr>
 </tbody>
 </table>

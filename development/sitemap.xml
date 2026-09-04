@@ -2,50 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/download-limit/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/getting-started/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/licenses/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/models-and-cache/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/podcast/</loc>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/project-conventions/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/prompting/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/reboot-safety/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/shorts/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/spark-farm/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/troubleshooting/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/visual-generative-ai/</loc>
-         <lastmod>2026-09-03</lastmod>
+         <lastmod>2026-09-04</lastmod>
     </url>
 </urlset>

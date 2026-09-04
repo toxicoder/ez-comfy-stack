@@ -759,6 +759,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../shorts/" class="md-nav__link">
         
   
@@ -1444,6 +1472,127 @@
 <td>No extra ban beyond Apache</td>
 <td>Yes</td>
 </tr>
+<tr>
+<td>Kokoro-82M</td>
+<td>hexgrad/Kokoro-82M (ONNX pack: fastrtc/kokoro-onnx)</td>
+<td>Apache 2.0</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>none</td>
+<td>Apache NOTICE if you redistribute weights</td>
+<td>No extra ban beyond Apache</td>
+<td>No</td>
+</tr>
+<tr>
+<td>ACE-Step 1.5 / 1.5 XL</td>
+<td>Comfy-Org/ace_step_1.5_ComfyUI_files</td>
+<td>MIT</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>none</td>
+<td>MIT</td>
+<td>No extra ban beyond MIT</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Chatterbox / Multilingual v3 / Turbo</td>
+<td>ResembleAI/chatterbox</td>
+<td>MIT</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>none</td>
+<td>MIT; PerTh watermark stays on</td>
+<td>No extra ban beyond MIT</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Qwen3-TTS 0.6B</td>
+<td>Qwen/Qwen3-TTS-12Hz-0.6B-Base</td>
+<td>Apache 2.0</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>none</td>
+<td>Apache NOTICE if you redistribute weights</td>
+<td>No extra ban beyond Apache</td>
+<td>No</td>
+</tr>
+<tr>
+<td>F5-TTS official weights</td>
+<td>SWivid/F5-TTS</td>
+<td>CC-BY-NC-4.0</td>
+<td>No</td>
+<td>No</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Coqui XTTS v2</td>
+<td>coqui/XTTS-v2</td>
+<td>CPML</td>
+<td>No</td>
+<td>No</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Echo-TTS</td>
+<td>(Echo-TTS card)</td>
+<td>CC-BY-NC-SA</td>
+<td>No</td>
+<td>No</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Fish Audio S2</td>
+<td>Fish Audio S2</td>
+<td>research/NC</td>
+<td>No</td>
+<td>No</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Higgs Boson</td>
+<td>Higgs v2/v3</td>
+<td>community/commercial traps</td>
+<td>No</td>
+<td>No</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>No</td>
+</tr>
+<tr>
+<td>TTS-Audio-Suite</td>
+<td>diodiogod/TTS-Audio-Suite</td>
+<td>mixed NC / research pack</td>
+<td>No</td>
+<td>No</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>No</td>
+</tr>
+<tr>
+<td>OldTimeRadio</td>
+<td>jbrick2070/ComfyUI-OldTimeRadio</td>
+<td>H3 / FLUX-dev / NC optional lanes</td>
+<td>No</td>
+<td>No</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>No</td>
+</tr>
 </tbody>
 </table>
 <p>The same table is in repo-root <code>LICENSE-MODELS.md</code> so tests can grep either file.</p>
@@ -1471,7 +1620,11 @@
 <li>FLUX.2 [dev] as any default or “quality” tier</li>
 <li>FLUX.2 Klein 9B as the default image model</li>
 <li>API-only models (Wan 2.5/2.6/2.7/3.0, Seedance, Kling, Veo, fal, Comfy Cloud, MiniMax API)</li>
+<li>F5-TTS official weights (CC-BY-NC-4.0), Coqui XTTS v2 (CPML), Echo-TTS (CC-BY-NC-SA)</li>
+<li>Fish Audio S2 (research/NC), Higgs Boson (community/commercial traps)</li>
+<li>TTS-Audio-Suite as a pack; OldTimeRadio as a pack (H3 / FLUX-dev / NC optional lanes)</li>
 </ul>
+<p>Opt-in local podcast (not in <code>download-models</code>): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See <a href="../podcast/">Local podcast</a>.</p>
 <p><code>./scripts/manage.sh download-models</code> <strong>refuses</strong> MiniMax H3.</p>
 <h2 id="default-download-models-pack">Default <code>download-models</code> pack<a class="headerlink" href="#default-download-models-pack" title="Permanent link">&para;</a></h2>
 <p>Apache still: <code>flux-2-klein-4b-fp8.safetensors</code> + <code>qwen_3_4b.safetensors</code> + <code>flux2-vae.safetensors</code></p>

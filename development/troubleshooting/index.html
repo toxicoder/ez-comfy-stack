@@ -630,6 +630,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../shorts/" class="md-nav__link">
         
   
@@ -1617,6 +1645,36 @@
 <td>Missing <strong>Klein/Wan/LTX Prompt Enhance</strong> node</td>
 <td>Host pack not mounted or entrypoint copy skipped</td>
 <td>Confirm compose bind-mount <code>../custom_nodes:/opt/ez-comfy/custom_nodes</code>. Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_prompt_enhance</code> (and <code>ez_ltx_spatial</code>) into <code>/comfy-state/ComfyUI/custom_nodes/</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/__init__.py</code></td>
+</tr>
+<tr>
+<td>Missing <strong>Podcast Script</strong> / <strong>Kokoro TTS</strong> node</td>
+<td>Host pack not mounted or entrypoint copy skipped</td>
+<td>Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_podcast</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_podcast/__init__.py</code></td>
+</tr>
+<tr>
+<td>Kokoro ONNX missing / empty speech</td>
+<td>Analog pack not downloaded</td>
+<td><code>./scripts/manage.sh download-podcast --tier analog</code>. Confirm <code>ls "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx"</code> and <code>comfy/tts/voices-v1.0.bin</code></td>
+</tr>
+<tr>
+<td>ACE checkpoint name missing on podcast graphs</td>
+<td>ACE-Step AIO not downloaded</td>
+<td><code>./scripts/manage.sh download-podcast --tier acestep</code>. Lab file is <code>ace_step_1.5_turbo_aio.safetensors</code> under <code>comfy/checkpoints/</code></td>
+</tr>
+<tr>
+<td><code>kokoro-onnx</code> / <code>onnxruntime</code> import miss on aarch64</td>
+<td>Optional runtime wheel not installed (not baked in the image)</td>
+<td>Inside the container venv: <code>pip install kokoro-onnx onnxruntime</code> (CPU). Baking that into the image <strong>invalidates the multi-GB venv layer</strong>. Visual graphs still Queue without it</td>
+</tr>
+<tr>
+<td>Podcast script unchanged with Enhance on / GGUF fail-soft</td>
+<td>Same as prompt enhance: missing GGUF or llama.cpp</td>
+<td>Widget text is passed through. <code>./scripts/manage.sh download-models</code> for the Qwen3-4B-Instruct GGUF. Enhance defaults <strong>off</strong> on podcast graphs so Queue works offline</td>
+</tr>
+<tr>
+<td>Master is not −16 LUFS</td>
+<td>Comfy has no loudnorm node</td>
+<td><code>./scripts/utilities/podcast-loudnorm.sh run --in FILE</code> (ffmpeg). Missing ffmpeg is a hard failure — it will not skip</td>
 </tr>
 <tr>
 <td>Enhance on but prompt unchanged / <strong>Enhance status</strong> says GGUF missing</td>
