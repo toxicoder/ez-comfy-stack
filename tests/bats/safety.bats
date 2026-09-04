@@ -79,7 +79,7 @@ teardown() {
 
 @test "Dockerfile layer order keeps multi-GB prebuild cache stable" {
   local df="${REPO_ROOT}/docker/Dockerfile"
-  local torch_stage comfy_stage runtime_stage
+  local torch_stage comfy_stage runtime_stage torch_copy torch_pins
   local venv_line extra_line app_line entry_line
   # BuildKit syntax for COPY --chmod and cache mounts
   run grep -E '^# syntax=docker/dockerfile' "${df}"
@@ -103,16 +103,19 @@ teardown() {
     p && /^FROM / {exit}
     p {print}
   ' "${df}")"
-  [[ "${torch_stage}" == *core.sh* ]]
-  [[ "${torch_stage}" == *phase-venv-torch* ]]
-  [[ "${torch_stage}" != *common.sh* ]]
-  [[ "${torch_stage}" != *phase-nodes* ]]
-  [[ "${torch_stage}" != *COMFYUI_REF* ]]
-  [[ "${torch_stage}" != *COMFYUI_MANAGER* ]]
-  [[ "${torch_stage}" != *entrypoint* ]]
-  [[ "${torch_stage}" != *patch_get_free_memory* ]]
-  [[ "${torch_stage}" != *install-comfy.sh* ]]
-  [[ "${torch_stage}" == *TORCH_VERSION* ]]
+  # Instruction lines only — comments may mention files that must not be COPYed.
+  torch_copy="$(printf '%s\n' "${torch_stage}" | grep -E '^COPY ' || true)"
+  torch_pins="$(printf '%s\n' "${torch_stage}" | grep -E '^(ARG|ENV) ' || true)"
+  [[ "${torch_copy}" == *core.sh* ]]
+  [[ "${torch_copy}" == *phase-venv-torch* ]]
+  [[ "${torch_copy}" != *common.sh* ]]
+  [[ "${torch_copy}" != *phase-nodes* ]]
+  [[ "${torch_copy}" != *entrypoint* ]]
+  [[ "${torch_copy}" != *patch_get_free_memory* ]]
+  [[ "${torch_copy}" != *install-comfy.sh* ]]
+  [[ "${torch_pins}" == *TORCH_VERSION* ]]
+  [[ "${torch_pins}" != *COMFYUI_REF* ]]
+  [[ "${torch_pins}" != *COMFYUI_MANAGER* ]]
 
   comfy_stage="$(awk '
     /^FROM .* AS comfy[[:space:]]*$/ {p=1; print; next}

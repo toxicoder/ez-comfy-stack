@@ -72,7 +72,7 @@ ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
 ENV TORCH_VERSION=${TORCH_VERSION} \
     TORCH_INDEX_URL=${TORCH_INDEX_URL}
 
-# Only torch-stable inputs — common.sh (clone/link/strip) must not appear here.
+# Only torch-stable inputs — clone/link/strip helpers must not be COPYed here.
 COPY --chmod=755 install-comfy/core.sh install-comfy/phase-venv-torch.sh \
     /opt/ez-comfy/install-comfy/
 RUN --mount=type=cache,target=/root/.cache/pip \
