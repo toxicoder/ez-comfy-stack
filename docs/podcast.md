@@ -82,7 +82,7 @@ Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.0` (`TextEncodeAceStepAu
 
 Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity WAVs into the graph.
 
-`kokoro-onnx` / `onnxruntime` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh` (a new pip would invalidate the multi-GB venv image layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and `download-podcast --tier analog`.
+`kokoro-onnx` / `onnxruntime` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh` (a new pip would invalidate **venv-extra**, not the multi‑GB torch layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and `download-podcast --tier analog`.
 
 ---
 

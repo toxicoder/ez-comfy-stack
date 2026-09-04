@@ -386,7 +386,7 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 
     Override with `EZ_COMFY_IMAGE` in `.env` if needed. Old `flux-to-ltx*` tags freeze on the previous image.
 
-    Multi-stage: **devel** builder installs Comfy+torch in **phased modules** (torch separate from custom nodes); final stage is **CUDA runtime** (no nvcc) with **split layers** (venv vs app) so pulls reuse multi‑GB torch when only app bits change.
+    Multi-stage: **runtime** builder stages install Comfy+torch in **phased modules** (torch separate from Comfy pins and custom nodes); final stage is **CUDA runtime** (no nvcc) with **split layers** (`venv` / `venv-extra` / `app`, `COPY --link`) so pulls reuse multi‑GB torch when only extra pip or app bits change. Override `CUDA_BASE_IMAGE` to a devel tag only if you compile CUDA extensions.
 
     It includes ComfyUI + PyTorch (pinned refs — see [Models & Cache](models-and-cache.md#prebuild-version-pins-validated)); **not** Klein/Wan/LTX weights (those stay on `MODELS_DIR`).
 

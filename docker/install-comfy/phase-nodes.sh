@@ -215,6 +215,11 @@ ensure_lab_video_nodes() {
 #   0 always (soft-fail)
 #######################################
 install_llama_cpp_cpu() {
+  if pip_install --only-binary=:all: llama-cpp-python; then
+    log "llama-cpp-python (CPU wheel) installed for prompt enhance"
+    return 0
+  fi
+  log "No llama-cpp-python wheel; compiling with GGML_CUDA=OFF"
   if CMAKE_ARGS="-DGGML_CUDA=OFF" pip_install llama-cpp-python; then
     log "llama-cpp-python (CPU) installed for prompt enhance"
     return 0
