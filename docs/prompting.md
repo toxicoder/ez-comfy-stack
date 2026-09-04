@@ -10,14 +10,15 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 - How each lab model actually reads a prompt
 - Canned lab-example text (already rewritten)
-- GIF loop motion and dream-house identity (Prompt Join)
-- Lazy path: Prompt Enhance nodes + `XAI_API_KEY`
+- GIF loop motion and dream-house world bible (Prompt Join, lock=view)
+- Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance on by default)
+- Style dropdown: research-backed look references; dropdown wins over style already in the source
 
 **What this enables**
 
 - Writing (or pasting) a prompt that matches Klein 4B, Wan 2.2, or LTX-2.5 instead of SD1.5 tag soup
-- Typing a lazy sentence and letting Grok rewrite it for the model on the canvas
-- Queueing offline with Enhance off — no API key required
+- Typing a lazy sentence and letting the on-box Qwen3 rewriter expand it for Klein / Wan / LTX
+- Optional style dropdown (50 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
 
 !!! tip "Lab graphs already ship model-native prompts"
 
@@ -45,9 +46,9 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Front-load the subject. Write prose.
 
-    **Do:** `A photoreal still photograph of a small-town main street at golden hour. A single red bicycle leans against a brick storefront. Warm sidelight rakes the brick…`
+    **Do:** `A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff…`
 
-    **Don’t:** `main street, bicycle, photoreal, 24mm, no logos, no text`
+    **Don’t:** `rooftop, tech wizard, 3D, 24mm, no logos, no text`
 
 === "Wan 2.2 T2V"
 
@@ -63,7 +64,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Dream-house pack (Klein)"
 
-    One identity paragraph (materials, architecture, place) plus a short camera line per shot. **klein-dream-house-lab-example** uses **Prompt Join** so you edit the house once. Keep the identity identical across the ten Instagram 4:5 stills; change only room, time of day, and lens.
+    One **world bible** locks massing + materials + place (compact single-story cedar cabin, hip roof, two-bay glass, decks on gravel, alpine lake) with **no camera**. Locked inventory (linen sofa facing the glass, island, dining table, bedding, tub, deck chairs) must appear through the two-bay glass **and** in the matching interiors. Each SHOT card is a new camera of that cabin. **Prompt Join** `lock=view` stitches bible + inventory + “new photograph from a different camera”. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01, or every still copies the facade. `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Pin Enhance **off** on the bible. Unused shots may be bypassed.
 
 === "LTX-2.5 AV"
 
@@ -73,30 +74,41 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 ## Prompt Enhance nodes
 
-In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). Entrypoint copies it into Comfy `custom_nodes/` on start (same pattern as lab workflows).
+In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). Entrypoint copies every pack under `custom_nodes/` into Comfy on start (same pattern as lab workflows), including `ez_ltx_spatial` which snaps LTX canvases off 720/1080 so the video VAE does not einops-crash.
 
 | Node | Modes | Use on |
 | --- | --- | --- |
 | **Klein Prompt Enhance** | `t2i`, `edit` | klein-still-draft / klein-still-hero / klein-still-daily / klein-dream-house identity / film-*-90s identity |
 | **Wan Prompt Enhance** | `t2v`, `i2v` | wan-i2v-5s / wan-t2v-5s / wan-i2v-shot / wan-gif-loop |
 | **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / ltx-i2v-shot |
-| **Prompt Join** | identity + shot → one STRING | klein-dream-house shot cards |
+| **Prompt Join** | bible + inventory + shot + `lock` (view/state) → one STRING | dream-house (view) and lighting/before-after (state) |
 
 STRING out → CLIPTextEncode `text` input.
 
-1. Set `XAI_API_KEY` in `.env` (see `.env.example`). Optional: `XAI_MODEL` (default `grok-4.6`), `XAI_BASE_URL`, `XAI_TIMEOUT_S`.
-2. Replace the canned prompt with a lazy sentence.
-3. Set **Enhance** to true. Queue.
+1. `./scripts/manage.sh download-models` (includes `comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`).
+2. Type a lazy sentence (or leave the canned paragraph). **Enhance** defaults **on**.
+3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
+4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.
 
-**Enhance defaults to false.** Canned text is used as-is so shorts identity locks do not drift and hermetic Queue needs no key.
+**Enhance defaults to true.** Turn it **off** to pin the source widget (frozen identity bibles). A selected style is still applied to the CLIP string. Style is ignored on I2V (the start image owns look).
 
-Fail-soft: missing key, timeout, or HTTP error logs a warning and passes the original prompt through. Generation still runs.
+When Enhance is **on** and a style is selected (t2i / t2v / Klein edit):
 
-!!! warning "No local LLM on the Spark"
+- The dropdown is look authority. If the source already names a medium, lighting, grade, lens, or art style, the rewriter **replaces** those clauses so they match the dropdown. It does not stack two styles.
+- Each preset is a short reference (medium, light, color, texture, camera or projection) tuned for Klein prose, Wan aesthetic+stylization, or LTX lighting/surface in the flowing paragraph.
+- CLIP text stays generic: no camera/film/studio brand names. Labels such as **Pixar-like 3D** still weave as “stylized feature 3D”.
+- The dropdown wins in the CLIP string even if the 4B rewriter ignores the hint or the GGUF passthroughs: conflicting medium words are dropped and the catalog medium is front-loaded.
+- After Queue, the **CLIP prompt** box on the node is the preview. First deploy: restart the container so `js/` is copied, then hard-refresh the Comfy tab.
 
-    Do not run Gemma 4 E2B (the official LTX enhancer) or any other GPU LLM beside this stack. LTX-2.5 is already a 22B joint AV transformer; extra weights steal GB10 headroom and threaten SSH. The rewrite is **off-box** (`api.x.ai`).
+After Queue the node is an output: the **CLIP prompt** widget is the CLIP string (no `[passthrough:` prefix). **Enhance status** is empty when the rewriter ran, or a next step when it did not.
 
-Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit are unchanged. The key is runtime env only — never baked into the image.
+Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand — `./scripts/manage.sh download-models` plus a restart heals `comfy/llm/` and `doctor`/`start` relink a snapshot that is already on disk.
+
+!!! warning "CPU-only local LLM"
+
+    Prompt Enhance runs **Qwen3-4B-Instruct-2507 Q4_K_M** (~2.5 GiB) through llama.cpp with **`n_gpu_layers=0`**. Do not GPU-offload it next to LTX-2.5. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same Spark while Comfy is generating.
+
+Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit are unchanged. No API keys. The GGUF lives under `MODELS_DIR`, never in the image.
 
 ---
 

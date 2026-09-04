@@ -7,36 +7,22 @@
 #
 # Style: Google Shell Style Guide (project deviations in docs/project-conventions.md).
 #
+# Torch-stable helpers live in core.sh (Docker torch stage COPY). This file
+# adds clone/link/strip/pin helpers and sources core.sh.
 
-# Defaults when sourced standalone (Dockerfile phases set COMFY_HOME first).
-COMFY_HOME="${COMFY_HOME:-/comfy-state/ComfyUI}"
-COMFY_USER="${COMFY_USER:-0}"
-MODELS_ROOT="${MODELS_ROOT:-/models}"
-STAMP="${STAMP:-${COMFY_HOME}/.lab-install-complete}"
-VENV="${VENV:-${COMFY_HOME}/.venv}"
+_INSTALL_COMFY_COMMON_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1091
+source "${_INSTALL_COMFY_COMMON_DIR}/core.sh"
+
 INSTALL_T0="${INSTALL_T0:-}"
 COMFYUI_REPO="${COMFYUI_REPO:-https://github.com/comfyanonymous/ComfyUI.git}"
 # Validated pins (see docs/models-and-cache.md). Empty COMFYUI_REF floats default branch.
+# Not in core.sh: bumping these must not bust the torch COPY layer.
 COMFYUI_REF="${COMFYUI_REF:-v0.34.0}"
 COMFYUI_MANAGER_REF="${COMFYUI_MANAGER_REF:-4.2.2}"
 COMFYUI_NUNCHAKU_NODE_REF="${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}"
 # Empty = clone default branch (main). Set to a tag/branch/SHA branch name when available.
 COMFYUI_VHS_REF="${COMFYUI_VHS_REF:-}"
-
-#######################################
-# Log an install progress line to stdout (container logs).
-# Globals:
-#   None
-# Arguments:
-#   $@ - Message fragments
-# Outputs:
-#   Writes to stdout
-# Returns:
-#   0
-#######################################
-log() {
-  echo "[comfy-install] $*"
-}
 
 #######################################
 # Path of the volume ComfyUI pin stamp.
@@ -108,21 +94,6 @@ comfy_pin_matches() {
 }
 
 #######################################
-# Log an install warning to stderr.
-# Globals:
-#   None
-# Arguments:
-#   $@ - Warning fragments
-# Outputs:
-#   Writes to stderr
-# Returns:
-#   0
-#######################################
-warn() {
-  echo "[comfy-install] WARN: $*" >&2
-}
-
-#######################################
 # Elapsed seconds since INSTALL_T0 (or 0 if unset).
 # Globals:
 #   INSTALL_T0
@@ -187,48 +158,6 @@ step() {
   local total="${2:?}"
   shift 2
   log "══ step ${n}/${total} ══ $*  [elapsed $(install_format_elapsed "$(install_elapsed_s)")]"
-}
-
-#######################################
-# Run pip with unbuffered output and progress bar when available.
-# Globals:
-#   None
-# Arguments:
-#   $@  Passed to pip
-# Outputs:
-#   pip stdout/stderr; short log of the command
-# Returns:
-#   pip exit status
-#######################################
-pip_install() {
-  local -a cmd=(pip install)
-  export PYTHONUNBUFFERED=1
-  export PIP_DISABLE_PIP_VERSION_CHECK=1
-  # Prefer progress bar when this pip supports it
-  if pip install --help 2>&1 | grep -q -- '--progress-bar'; then
-    cmd+=(--progress-bar on)
-  fi
-  log "pip: ${*}"
-  "${cmd[@]}" "$@"
-}
-
-#######################################
-# Activate the ComfyUI venv if present.
-# Globals:
-#   VENV
-# Arguments:
-#   None
-# Outputs:
-#   None
-# Returns:
-#   0 if activated or activate missing (no-op)
-#######################################
-activate_venv() {
-  # shellcheck disable=SC1091
-  if [[ -f "${VENV}/bin/activate" ]]; then
-    # shellcheck disable=SC1091
-    source "${VENV}/bin/activate"
-  fi
 }
 
 #######################################
@@ -335,7 +264,7 @@ link_models() {
 link_all_models() {
   local sub
   for sub in checkpoints diffusion_models text_encoders vae loras clip clip_vision \
-    unet controlnet embeddings upscale_models audio_encoders; do
+    unet controlnet embeddings upscale_models audio_encoders llm; do
     link_models "${sub}"
   done
   log "model links done"
@@ -386,6 +315,15 @@ strip_prebuilt() {
   find "${root}" \( -type d -name '__pycache__' -o -type d -name '.pytest_cache' \
     -o -type d -name '.mypy_cache' \) -prune -exec rm -rf {} + 2>/dev/null || true
   find "${root}" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete 2>/dev/null || true
+  # VCS / CI / docs-only trees (not needed at runtime)
+  find "${root}" \( -type d -name 'tests' -o -type d -name '.github' \
+    -o -type d -name '.ci' -o -type d -name '.devcontainer' \) \
+    -prune -exec rm -rf {} + 2>/dev/null || true
+  find "${root}" -type f -name '*.ipynb' -delete 2>/dev/null || true
+  if [[ -d ${root}/input ]]; then
+    find "${root}/input" -type f \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' \
+      -o -name '*.webp' -o -name '*.gif' \) -delete 2>/dev/null || true
+  fi
   # Pip cache if install used a local cache under the tree
   rm -rf "${root}/.cache" 2>/dev/null || true
   if command -v pip >/dev/null 2>&1; then

@@ -1,27 +1,172 @@
-"""Off-box prompt rewrite client for ez-comfy enhance nodes.
+"""On-box prompt rewrite for ez-comfy enhance nodes.
 
-Hermetic: stdlib only. No torch, no comfy, no pip extras. Calls the xAI
-OpenAI-compatible Chat Completions API when a key is present; otherwise
-returns the original prompt (fail-soft).
+Hermetic: stdlib only at import. llama-cpp-python is optional; missing GGUF
+or import fails soft and the original prompt is passed through.
 """
 
 from __future__ import annotations
 
 import json
 import os
+import re
 import sys
-import urllib.error
-import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeout
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
-DEFAULT_BASE_URL = "https://api.x.ai/v1"
-DEFAULT_MODEL = "grok-4.6"
-DEFAULT_TIMEOUT_S = 20
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
+STYLES_PATH = Path(__file__).resolve().parent / "styles.json"
+GGUF_FILENAME = "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+SNAPSHOT_DIR = "unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"
+DEFAULT_GGUF = f"/models/comfy/llm/{GGUF_FILENAME}"
+DEFAULT_TIMEOUT_S = 60
+DEFAULT_N_THREADS = 4
+DEFAULT_N_CTX = 4096
+DEFAULT_MAX_TOKENS = 800
+STYLE_NONE = "none"
+LOCK_VIEW = "view"
+LOCK_STATE = "state"
+LOCK_IDS = (LOCK_VIEW, LOCK_STATE)
+LOCK_VIEW_LINE = (
+    "Keep this exact place and inventory. New photograph from a different camera "
+    "and framing."
+)
+LOCK_STATE_LINE = (
+    "Keep this exact place, inventory, and camera framing. The shot names the only "
+    "change."
+)
+FLAVOR_KLEIN = "klein"
+FLAVOR_KLEIN_EDIT = "klein_edit"
+FLAVOR_WAN = "wan"
+FLAVOR_LTX = "ltx"
+
+REASON_ENHANCE_OFF = "enhance off"
+REASON_GGUF_MISSING = "GGUF missing"
+REASON_LLAMA_UNAVAILABLE = "llama.cpp unavailable"
+REASON_EMPTY = "timeout or empty model output"
+REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
+
+_LLM: Any = None
+_LLM_PATH = ""
+_STYLES: dict[str, dict[str, Any]] | None = None
+
+_STYLE_LOOK_FIELDS = ("medium", "light", "color", "texture", "camera")
+_LAB_LOOK_PHRASES = (
+    "HD 3D game-engine pre-rendered cutscene still",
+    "HD 3D game-engine pre-rendered cutscene",
+    "3D game-engine pre-rendered cutscene still",
+    "3D game-engine pre-rendered cutscene",
+    "game-engine pre-rendered cutscene",
+    "game-engine pre-rendered",
+    "game-engine",
+)
+STYLE_SYSTEM_ADDENDUM = (
+    "The user message contains a Visual style block. That style is the only look. "
+    "Rewrite the whole prompt as that medium. Drop any other medium, 3D-render, "
+    "photoreal, or lens language that fights it. Output only the CLIP prompt."
+)
+_THINK_BLOCKS = (
+    re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE),
+    re.compile(r"<\|think\|>.*?<\|/think\|>", re.DOTALL | re.IGNORECASE),
+)
+_WEAVE_BY_FLAVOR = {
+    FLAVOR_KLEIN: (
+        "Front-load the subject, then state this medium in the first two sentences. "
+        "Lighting next. Photographic styles may keep lens and depth of field; "
+        "graphic styles replace lens-and-sensor language with surface and tool marks. "
+        "Stay under 150 words including style."
+    ),
+    FLAVOR_KLEIN_EDIT: (
+        "Restyle medium, light, and grade only. Keep identity, inventory, "
+        "architecture, and counts locked."
+    ),
+    FLAVOR_WAN: (
+        "Put light and lens in Aesthetic control and the medium phrases in "
+        "Stylization at the end of the paragraph. Compact, not a second scene."
+    ),
+    FLAVOR_LTX: (
+        "Weave lighting, color palette, and surface texture into the flowing "
+        "present-tense paragraph. One coherent light logic. No style trailer."
+    ),
+}
 
 
 def _log(message: str) -> None:
     print(f"[ez_prompt_enhance] {message}", file=sys.stderr)
+
+
+def status_for_reason(reason: str | None) -> str:
+    """Operator-facing Enhance status (never mixed into CLIP text).
+
+    Arguments:
+        reason: Internal passthrough token, or None when the rewriter ran.
+
+    Returns:
+        Empty string on success; a one-line next step otherwise.
+    """
+    if not reason:
+        return ""
+    if reason == REASON_GGUF_MISSING:
+        return "GGUF missing — run ./scripts/manage.sh download-models"
+    if reason == REASON_LLAMA_UNAVAILABLE:
+        return "llama.cpp unavailable — rebuild the image"
+    if reason == REASON_EMPTY:
+        return "timeout or empty model output"
+    return reason
+
+
+@dataclass(frozen=True)
+class EnhanceResult:
+    """CLIP text plus an optional passthrough reason for the status widget."""
+
+    text: str
+    reason: str | None = None
+
+    @property
+    def preview(self) -> str:
+        """CLIP string only (the prefix used to confuse the CLIP prompt box)."""
+        return self.text
+
+    @property
+    def status(self) -> str:
+        return status_for_reason(self.reason)
+
+
+def join_prompt(
+    identity: str,
+    shot: str,
+    inventory: str = "",
+    lock: str = LOCK_VIEW,
+) -> str:
+    """Join a world bible, locked inventory, persist lock, and shot line.
+
+    Arguments:
+      identity: camera-free place/subject bible
+      shot: camera, light, or action line for this still
+      inventory: object list that must repeat across views
+      lock: view (new camera) or state (same camera)
+    Returns:
+      One CLIP string, or empty when every field is blank.
+    """
+    bible = identity.strip() if isinstance(identity, str) else str(identity or "").strip()
+    card = shot.strip() if isinstance(shot, str) else str(shot or "").strip()
+    inv = inventory.strip() if isinstance(inventory, str) else str(inventory or "").strip()
+    mode = lock.strip().lower() if isinstance(lock, str) else LOCK_VIEW
+    if mode not in LOCK_IDS:
+        mode = LOCK_VIEW
+    if not bible and not card and not inv:
+        return ""
+    parts: list[str] = []
+    if bible:
+        parts.append(bible)
+    if inv:
+        parts.append(f"Locked inventory (do not change): {inv}.")
+    parts.append(LOCK_STATE_LINE if mode == LOCK_STATE else LOCK_VIEW_LINE)
+    if card:
+        parts.append(card)
+    return " ".join(parts)
 
 
 def load_system_prompt(name: str) -> str:
@@ -38,9 +183,223 @@ def load_system_prompt(name: str) -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
+def load_styles() -> dict[str, dict[str, Any]]:
+    """Load the style catalog (id -> structured look fields)."""
+    global _STYLES
+    if _STYLES is None:
+        raw = json.loads(STYLES_PATH.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict):
+            raise ValueError("styles.json must be an object")
+        styles: dict[str, dict[str, Any]] = {}
+        for key, value in raw.items():
+            if not isinstance(value, dict):
+                raise ValueError(f"style {key} must be an object")
+            styles[str(key)] = dict(value)
+        _STYLES = styles
+    return _STYLES
+
+
+def style_ids() -> list[str]:
+    """Combo choices: none first, then catalog ids in file order."""
+    return [STYLE_NONE, *load_styles().keys()]
+
+
+def _style_entry(style_id: str) -> dict[str, Any]:
+    if style_id == STYLE_NONE:
+        return {}
+    return load_styles().get(style_id) or {}
+
+
+def _string_list(entry: dict[str, Any], field: str) -> list[str]:
+    raw = entry.get(field) or []
+    if isinstance(raw, str):
+        return [raw.strip()] if raw.strip() else []
+    if not isinstance(raw, list):
+        return []
+    out: list[str] = []
+    for item in raw:
+        text = str(item).strip()
+        if text:
+            out.append(text)
+    return out
+
+
+def style_must_include(style_id: str) -> list[str]:
+    return _string_list(_style_entry(style_id), "must_include")
+
+
+def style_conflicts(style_id: str) -> list[str]:
+    return _string_list(_style_entry(style_id), "conflicts")
+
+
+def style_llm_block(style_id: str) -> str:
+    """Dense look paragraph (medium through camera) for one catalog id."""
+    entry = _style_entry(style_id)
+    parts = []
+    for key in _STYLE_LOOK_FIELDS:
+        text = str(entry.get(key) or "").strip()
+        if text:
+            parts.append(text)
+    return " ".join(parts)
+
+
+def style_suffix(style_id: str) -> str:
+    if style_id == STYLE_NONE:
+        return ""
+    entry = _style_entry(style_id)
+    return str(entry.get("suffix") or "").strip()
+
+
+def with_style_system(system: str, style_id: str) -> str:
+    """Append the dropdown-wins addendum when a style is selected."""
+    if style_id == STYLE_NONE:
+        return system
+    return f"{system.rstrip()}\n\n{STYLE_SYSTEM_ADDENDUM}"
+
+
+def _collapse_spaces(text: str) -> str:
+    cleaned = re.sub(r"[ \t]+", " ", text)
+    cleaned = re.sub(r" +([,.;:])", r"\1", cleaned)
+    cleaned = re.sub(r"\s+\n", "\n", cleaned)
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
+    return cleaned.strip()
+
+
+def _drop_phrase(text: str, phrase: str) -> str:
+    token = (phrase or "").strip()
+    if len(token) < 5:
+        return text
+    pattern = re.compile(re.escape(token), re.IGNORECASE)
+    return pattern.sub("", text)
+
+
+def _own_look_blob(style_id: str) -> str:
+    entry = _style_entry(style_id)
+    parts = [str(entry.get(field) or "") for field in _STYLE_LOOK_FIELDS]
+    parts.extend(style_must_include(style_id))
+    parts.append(style_suffix(style_id))
+    return " ".join(parts).lower()
+
+
+def _strip_phrases(style_id: str) -> list[str]:
+    own = _own_look_blob(style_id)
+    phrases = list(style_conflicts(style_id))
+    for extra in _LAB_LOOK_PHRASES:
+        if extra.lower() not in own:
+            phrases.append(extra)
+    for sid, other in load_styles().items():
+        if sid == style_id:
+            continue
+        head = str(other.get("medium") or "").split(".")[0].strip()
+        if len(head) >= 8 and head.lower() not in own:
+            phrases.append(head)
+        for item in _string_list(other, "must_include"):
+            if len(item) >= 8 and item.lower() not in own:
+                phrases.append(item)
+    phrases.sort(key=len, reverse=True)
+    return phrases
+
+
+def apply_style_to_prompt(text: str, style_id: str) -> str:
+    """Force the dropdown style into CLIP text: strip fights, front-load medium.
+
+    Arguments:
+      text: rewriter or source prompt
+      style_id: catalog id or none
+    Returns:
+      text unchanged when style is none; otherwise a restyled CLIP prompt.
+    """
+    if style_id == STYLE_NONE:
+        return text
+    entry = _style_entry(style_id)
+    if not entry:
+        return text
+    body = (text or "").strip()
+    for phrase in _strip_phrases(style_id):
+        body = _drop_phrase(body, phrase)
+    body = _collapse_spaces(body)
+    medium = str(entry.get("medium") or "").strip().rstrip(".")
+    light = str(entry.get("light") or "").strip().rstrip(".")
+    heads: list[str] = []
+    if medium and medium.lower() not in body.lower():
+        heads.append(medium)
+    if light and light.lower() not in body.lower():
+        heads.append(light)
+    if heads:
+        lead = ". ".join(heads) + "."
+        body = f"{lead} {body}".strip() if body else lead
+    for phrase in style_must_include(style_id):
+        if phrase.lower() not in body.lower():
+            body = f"{body} {phrase}." if body else f"{phrase}."
+    suffix = style_suffix(style_id)
+    if suffix and suffix.rstrip(".").lower() not in body.lower():
+        body = f"{body} {suffix}".strip() if body else suffix
+    return _collapse_spaces(body)
+
+
+def ensure_style_details(text: str, style_id: str) -> str:
+    """Apply the selected style to CLIP text (alias of apply_style_to_prompt)."""
+    return apply_style_to_prompt(text, style_id)
+
+
+def flavor_for_system(name: str) -> str:
+    """Map a system-prompt stem to a style-instruction flavor."""
+    if name == "klein_edit":
+        return FLAVOR_KLEIN_EDIT
+    if name.startswith("wan"):
+        return FLAVOR_WAN
+    if name.startswith("ltx"):
+        return FLAVOR_LTX
+    return FLAVOR_KLEIN
+
+
+def format_style_instruction(style_id: str, flavor: str) -> str:
+    """Compose the user-message style block for the local rewriter.
+
+    Arguments:
+      style_id: catalog id or none
+      flavor: klein, klein_edit, wan, or ltx
+    Returns:
+      Empty string when style is none or unknown; otherwise a mandatory
+      instruction the 4B model should weave into the rewrite.
+    """
+    block = style_llm_block(style_id)
+    if not block:
+        return ""
+    entry = _style_entry(style_id)
+    conflicts = style_conflicts(style_id)
+    must = style_must_include(style_id)
+    weave = _WEAVE_BY_FLAVOR.get(flavor, _WEAVE_BY_FLAVOR[FLAVOR_KLEIN])
+    wan_term = str(entry.get("wan_stylization") or "").strip()
+    lines = [
+        "Visual style (mandatory; dropdown wins):",
+        block,
+        (
+            "The selected visual style is mandatory and wins over any medium, lighting, "
+            "camera-sensor, grade, film-stock, or art-style language already in the source. "
+            "Rewrite those clauses so they match this style. Do not stack two styles. "
+            "Do not only append a style tag. Weave medium, light, color, and texture into "
+            "the rewrite. Keep subject, action, place, inventory, duration, audio notes, "
+            "and the requested camera move unless this style requires a different projection. "
+            "Do not name the style id. Do not emit brand names."
+        ),
+        f"Weave: {weave}",
+    ]
+    if conflicts:
+        lines.append("Replace clauses that describe: " + ", ".join(conflicts) + ".")
+    if must:
+        lines.append("Phrases that must appear in the output: " + "; ".join(must) + ".")
+    if flavor == FLAVOR_WAN and wan_term:
+        lines.append(f"Wan stylization slot: {wan_term}.")
+    return "\n".join(lines)
+
+
 def strip_model_wrapping(text: str) -> str:
-    """Remove markdown fences or wrapping quotes from a model reply."""
+    """Remove think tags, markdown fences, or wrapping quotes from a model reply."""
     cleaned = (text or "").strip()
+    for pattern in _THINK_BLOCKS:
+        cleaned = pattern.sub("", cleaned)
+    cleaned = cleaned.strip()
     if cleaned.startswith("```"):
         lines = cleaned.splitlines()
         if lines and lines[0].startswith("```"):
@@ -54,7 +413,7 @@ def strip_model_wrapping(text: str) -> str:
 
 
 def _timeout_s() -> int:
-    raw = os.environ.get("XAI_TIMEOUT_S", str(DEFAULT_TIMEOUT_S)).strip()
+    raw = os.environ.get("EZ_LLM_TIMEOUT_S", str(DEFAULT_TIMEOUT_S)).strip()
     try:
         value = int(raw)
     except ValueError:
@@ -64,71 +423,198 @@ def _timeout_s() -> int:
     return value
 
 
-def _api_key() -> str:
-    return os.environ.get("XAI_API_KEY", "").strip()
+def _n_threads() -> int:
+    raw = os.environ.get("EZ_LLM_N_THREADS", str(DEFAULT_N_THREADS)).strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return DEFAULT_N_THREADS
+    if value < 1:
+        return DEFAULT_N_THREADS
+    return value
 
 
-def _base_url() -> str:
-    return os.environ.get("XAI_BASE_URL", DEFAULT_BASE_URL).strip().rstrip("/")
+def _n_ctx() -> int:
+    raw = os.environ.get("EZ_LLM_N_CTX", str(DEFAULT_N_CTX)).strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return DEFAULT_N_CTX
+    if value < 512:
+        return DEFAULT_N_CTX
+    return value
 
 
-def _model() -> str:
-    return os.environ.get("XAI_MODEL", DEFAULT_MODEL).strip() or DEFAULT_MODEL
+def _n_gpu_layers() -> int:
+    raw = os.environ.get("EZ_LLM_N_GPU_LAYERS", "0").strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return 0
+    if value <= 0:
+        return 0
+    allow = os.environ.get("EZ_LLM_ALLOW_GPU", "").strip().lower()
+    if allow not in {"1", "true", "yes", "on"}:
+        _log("refusing GPU offload (set EZ_LLM_ALLOW_GPU=1 to override); n_gpu_layers=0")
+        return 0
+    return value
 
 
-def chat_complete(system: str, user: str) -> str:
-    """Call chat completions. Empty string on any failure (caller passthrough)."""
-    key = _api_key()
-    if not key:
-        _log("XAI_API_KEY unset — passing prompt through")
-        return ""
-    url = f"{_base_url()}/chat/completions"
-    payload = {
-        "model": _model(),
-        "temperature": 0,
-        "max_tokens": 800,
-        "messages": [
+def resolve_gguf_path() -> str:
+    """First existing GGUF among env, comfy/llm, and the HF snapshot dir.
+
+    Operators should not set EZ_LLM_GGUF. Fallbacks cover a missing relative
+    ``comfy/llm/`` link after ``download-llm`` left the snapshot in place.
+
+    Returns:
+        Path to an existing file, or the env/default path for missing logs.
+    """
+    env_path = os.environ.get("EZ_LLM_GGUF", "").strip()
+    models_root = (os.environ.get("MODELS_ROOT") or "").strip()
+    models_dir = (os.environ.get("MODELS_DIR") or "").strip()
+    comfy_home = (os.environ.get("COMFY_HOME") or "").strip()
+    roots: list[str] = []
+    for root in (models_root, models_dir, "/models"):
+        if root and root not in roots:
+            roots.append(root)
+    candidates: list[str] = []
+    if env_path:
+        candidates.append(env_path)
+    candidates.append(DEFAULT_GGUF)
+    for root in roots:
+        candidates.append(f"{root}/comfy/llm/{GGUF_FILENAME}")
+        candidates.append(f"{root}/{SNAPSHOT_DIR}/{GGUF_FILENAME}")
+    if comfy_home:
+        candidates.append(f"{comfy_home}/models/llm/{GGUF_FILENAME}")
+    seen: set[str] = set()
+    for path in candidates:
+        if not path or path in seen:
+            continue
+        seen.add(path)
+        if os.path.isfile(path):
+            return path
+    return env_path or DEFAULT_GGUF
+
+
+def _gguf_path() -> str:
+    return resolve_gguf_path()
+
+
+def _unload_after() -> bool:
+    return os.environ.get("EZ_LLM_UNLOAD", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def _close_llm() -> None:
+    global _LLM, _LLM_PATH
+    handle = _LLM
+    _LLM = None
+    _LLM_PATH = ""
+    if handle is None:
+        return
+    closer = getattr(handle, "close", None)
+    if callable(closer):
+        try:
+            closer()
+        except Exception as exc:  # noqa: BLE001 — fail-soft unload
+            _log(f"llama close failed: {exc}")
+
+
+def _get_llama() -> tuple[Any | None, str | None]:
+    """Load llama.cpp once. Returns (handle, fail_reason)."""
+    global _LLM, _LLM_PATH
+    path = _gguf_path()
+    if not path or not os.path.isfile(path):
+        _log(f"GGUF missing at {path or '(empty EZ_LLM_GGUF)'} — passing prompt through")
+        return None, REASON_GGUF_MISSING
+    if _LLM is not None and _LLM_PATH == path:
+        return _LLM, None
+    _close_llm()
+    try:
+        from llama_cpp import Llama
+    except ImportError:
+        _log("llama-cpp-python not installed — passing prompt through")
+        return None, REASON_LLAMA_UNAVAILABLE
+    try:
+        _LLM = Llama(
+            model_path=path,
+            n_ctx=_n_ctx(),
+            n_threads=_n_threads(),
+            n_gpu_layers=_n_gpu_layers(),
+            chat_format="chatml",
+            verbose=False,
+        )
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        _log(f"failed to load GGUF {path}: {exc}")
+        _LLM = None
+        _LLM_PATH = ""
+        return None, REASON_LLAMA_UNAVAILABLE
+    _LLM_PATH = path
+    _log(f"loaded local LLM {path} (cpu, n_threads={_n_threads()})")
+    return _LLM, None
+
+
+def _generate(llm: Any, system: str, user: str) -> str:
+    body = llm.create_chat_completion(
+        messages=[
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ],
-    }
-    request = urllib.request.Request(
-        url,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Authorization": f"Bearer {key}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
+        temperature=0,
+        max_tokens=DEFAULT_MAX_TOKENS,
     )
-    try:
-        with urllib.request.urlopen(request, timeout=_timeout_s()) as response:
-            body = json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:300]
-        _log(f"HTTP {exc.code} from prompt rewrite API: {detail}")
-        return ""
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
-        _log(f"prompt rewrite API failed: {exc}")
-        return ""
     try:
         content = body["choices"][0]["message"]["content"]
     except (KeyError, IndexError, TypeError):
-        _log("prompt rewrite API returned no message content")
         return ""
     if not isinstance(content, str):
         return ""
     return strip_model_wrapping(content)
 
 
-def enhance_prompt(system: str, prompt: str, *, enhance: bool) -> str:
-    """Rewrite prompt when enhance is true; otherwise return it unchanged."""
-    original = prompt if isinstance(prompt, str) else str(prompt)
+def complete(system: str, user: str) -> tuple[str, str | None]:
+    """Run one local chat completion. Empty text plus a reason on any failure."""
+    llm, reason = _get_llama()
+    if llm is None:
+        return "", reason or REASON_LLAMA_UNAVAILABLE
+    timeout = _timeout_s()
+    try:
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(_generate, llm, system, user)
+            text = future.result(timeout=timeout)
+    except FuturesTimeout:
+        _log(f"local LLM timed out after {timeout}s")
+        return "", REASON_EMPTY
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        _log(f"local LLM failed: {exc}")
+        return "", REASON_EMPTY
+    finally:
+        if _unload_after():
+            _close_llm()
+    if not (text or "").strip():
+        _log("local LLM returned no message content")
+        return "", REASON_EMPTY
+    return text, None
+
+
+def enhance_prompt(
+    system: str,
+    user: str,
+    *,
+    enhance: bool,
+    fallback: str,
+) -> EnhanceResult:
+    """Rewrite fallback via local LLM when enhance is true."""
+    original = fallback if isinstance(fallback, str) else str(fallback)
     if not enhance:
-        return original
+        return EnhanceResult(original, REASON_ENHANCE_OFF)
     if not original.strip():
-        return original
-    rewritten = chat_complete(system, original)
+        return EnhanceResult(original, None)
+    rewritten, reason = complete(system, user)
     if not rewritten.strip():
-        return original
-    return rewritten
+        return EnhanceResult(original, reason or REASON_EMPTY)
+    return EnhanceResult(rewritten, None)

@@ -151,11 +151,11 @@ def pos(g):
     enh=next(n for n in g['nodes'] if n.get('type')=='EZKleinPromptEnhance')
     return enh['widgets_values'][0]
 assert pos(d)==pos(h)
-assert 'photoreal still photograph' in pos(d)
+assert 'HD 3D game-engine pre-rendered cutscene still' in pos(d)
 assert 'no logos, no text' not in pos(d)
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 for n in d['nodes'])
-assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is False for n in d['nodes'])
+assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is True for n in d['nodes'])
 "
   [ "${status}" -eq 0 ]
 }
@@ -200,7 +200,7 @@ assert loads[0].get('mode')==0
 look=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode' and n.get('title')=='Positive']
 assert not look
 enh=next(n for n in d['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][1] is True
 assert enh['widgets_values'][2]=='i2v'
 assert 'dollies' in enh['widgets_values'][0].lower() or 'dolly' in enh['widgets_values'][0].lower() or 'push' in enh['widgets_values'][0].lower()
 t=json.load(open('${dir}/wan-t2v-5s-lab-example.json'))
@@ -259,7 +259,7 @@ d=json.load(open('${dir}/ltx-i2v-5s-lab-example.json'))
 loads=[n for n in d['nodes'] if n.get('type')=='LoadImage']
 assert loads and loads[0]['widgets_values'][0]=='example.png'
 enh=next(n for n in d['nodes'] if n.get('type')=='EZLTXPromptEnhance')
-assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][1] is True
 assert enh['widgets_values'][2]=='i2v'
 text=enh['widgets_values'][0].lower()
 assert 'footsteps' in text or 'wind' in text
@@ -267,7 +267,7 @@ assert 'no score' in text or 'no music' in text
 t=json.load(open('${dir}/ltx-t2v-5s-lab-example.json'))
 tenh=next(n for n in t['nodes'] if n.get('type')=='EZLTXPromptEnhance')
 assert 'YouTube 16:9 still:' not in tenh['widgets_values'][0]
-assert 'shop bell' in tenh['widgets_values'][0].lower() or 'footsteps' in tenh['widgets_values'][0].lower()
+assert 'wind' in tenh['widgets_values'][0].lower() or 'traffic' in tenh['widgets_values'][0].lower()
 "
   [ "${status}" -eq 0 ]
 }
@@ -394,10 +394,17 @@ notes=[n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote')]
 assert notes
 assert any(isinstance(n.get('widgets_values'), list) and n['widgets_values'] and len(str(n['widgets_values'][0]).strip())>40 for n in notes)
 clips=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode']
-assert len(clips)>=2, p
+ace=[n for n in d['nodes'] if n.get('type')=='TextEncodeAceStepAudio1.5']
+zero=[n for n in d['nodes'] if n.get('type')=='ConditioningZeroOut']
+# Visual graphs use two CLIP encodes. Podcast beds use two ACE encodes.
+# Rap graphs follow Comfy-Org ACE-Step 1.5: one encode + ConditioningZeroOut.
+assert len(clips)>=2 or len(ace)>=2 or (len(ace)>=1 and len(zero)>=1), p
 for n in clips:
     text=(n.get('widgets_values') or [''])[0]
     assert isinstance(text,str) and text.strip()
+for n in ace:
+    tags=(n.get('widgets_values') or [''])[0]
+    assert isinstance(tags,str) and tags.strip()
 assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_note'].strip()
 "
     [ "${status}" -eq 0 ]
@@ -420,7 +427,7 @@ assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 and float(n['widgets_values'][3])==1.0 for n in s['nodes'])
 assert any(n.get('type')=='SaveImage' and n['widgets_values'][0]=='ez_still_app' for n in s['nodes'])
 enh=next(n for n in s['nodes'] if n.get('type')=='EZKleinPromptEnhance')
-assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][1] is True
 unet=next(n for n in s['nodes'] if n.get('type')=='UNETLoader')
 assert 'swap' in (unet.get('title') or '').lower()
 note=next(n for n in s['nodes'] if n.get('type') in ('Note','MarkdownNote'))
@@ -454,7 +461,7 @@ assert float(wv['frame_rate'])==12
 assert wv['save_output'] is True
 assert 'ez_gif_loop' in str(wv['filename_prefix'])
 enh=next(n for n in g['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert enh['widgets_values'][1] is False
+assert enh['widgets_values'][1] is True
 assert enh['widgets_values'][2]=='i2v'
 motion=enh['widgets_values'][0].lower()
 assert 'locked' in motion or 'lock' in motion
@@ -466,7 +473,10 @@ assert 'breeze' in motion or 'curtain' in motion or 'leaves' in motion
 import json
 d=json.load(open('${dir}/klein-dream-house-lab-example.json'))
 assert d.get('id')=='klein-dream-house-lab-example'
+assert d.get('extra',{}).get('lab_flux_tier')=='fast'
 assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='flux-2-klein-4b-fp8.safetensors' for n in d['nodes'])
+assert any(n.get('type')=='CLIPLoader' and 'qwen_3_4b.safetensors' in n['widgets_values'] and 'flux2' in n['widgets_values'] for n in d['nodes'])
+assert any(n.get('type')=='VAELoader' and n['widgets_values'][0]=='flux2-vae.safetensors' for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1024, 1280] for n in d['nodes'])
 joins=[n for n in d['nodes'] if n.get('type')=='EZPromptJoin']
 assert len(joins)==10
@@ -475,13 +485,58 @@ prefs=sorted(n['widgets_values'][0] for n in saves)
 assert prefs==[f'ez_dream_house_{i:02d}' for i in range(1,11)]
 samplers=[n for n in d['nodes'] if n.get('type')=='KSampler']
 assert len(samplers)==10
-assert all(n['widgets_values'][0]==42 and n['widgets_values'][2]==4 for n in samplers)
+assert all(
+    n['widgets_values'][0]==42
+    and n['widgets_values'][1]=='fixed'
+    and n['widgets_values'][2]==4
+    and float(n['widgets_values'][3])==1.0
+    and n['widgets_values'][4]=='euler'
+    and n['widgets_values'][5]=='simple'
+    and float(n['widgets_values'][6])==1.0
+    for n in samplers
+)
 enh=[n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance']
 assert len(enh)==1
 assert enh[0]['widgets_values'][1] is False
-ident=enh[0]['widgets_values'][0].lower()
-assert 'cedar' in ident and 'lake' in ident
+assert enh[0]['widgets_values'][2]=='t2i'
+assert enh[0]['widgets_values'][3]=='Instagram 4:5 still'
+ident=enh[0]['widgets_values'][0]
+ident_l=ident.lower()
+assert 'cedar' in ident_l and 'lake' in ident_l
+assert 'single-story' in ident_l and 'hip' in ident_l
+assert '24mm' not in ident_l
 assert 'no logos, no text' not in ident
+assert sum(1 for n in d['nodes'] if n.get('type')=='VAEEncode')==0
+assert sum(1 for n in d['nodes'] if n.get('type')=='ReferenceLatent')==0
+by_id={n['id']:n for n in d['nodes']}
+incoming={}
+for l in d['links']:
+    incoming.setdefault((l[3], l[4]), []).append(l)
+banned=('pier','courtyard','pavilion','two-story','a-frame','glass box','outdoor kitchen','outdoor tub')
+for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
+    shot=join['widgets_values'][0]
+    inv=join['widgets_values'][1]
+    lock=join['widgets_values'][2]
+    assert lock=='view'
+    assert 'linen sofa' in inv
+    full=ident+' '+shot
+    assert len(full.split())<=170, (join.get('title'), len(full.split()))
+    sl=shot.lower()
+    assert 'same' in sl and 'cabin' in sl
+    if i==0:
+        assert 'shows the linen sofa' in sl or 'through' in sl
+    if 2<=i<=6:
+        assert 'from inside' in sl
+    assert not any(b in sl for b in banned)
+    ks_id=12+i*5
+    pos_src=by_id[incoming[(ks_id,1)][0][1]]['type']
+    lat_src=by_id[incoming[(ks_id,3)][0][1]]['type']
+    assert lat_src=='EmptyFlux2LatentImage'
+    assert pos_src=='CLIPTextEncode'
+note=next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))
+ntext=str(note['widgets_values'][0]).lower()
+assert 'world bible' in ntext or 'locked inventory' in ntext
+assert 'referencelatent' in ntext or 'new views' in ntext
 "
   [ "${status}" -eq 0 ]
 }

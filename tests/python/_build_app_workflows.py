@@ -7,85 +7,91 @@ Not imported by pytest (leading underscore). Run from repo root:
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
+from _lab_theme import GIF_MOTION, KLEIN_NEG_STILL, KLEIN_STILL_DAILY
+
 ROOT = Path(__file__).resolve().parents[2]
+CUSTOM = ROOT / "custom_nodes"
+if str(CUSTOM) not in sys.path:
+    sys.path.insert(0, str(CUSTOM))
+from ez_prompt_enhance.client import join_prompt  # noqa: E402
+
 WF = ROOT / "workflows"
 
-KLEIN_STILL = (
-    "A photoreal still photograph of a small-town main street at golden hour. "
-    "A single red bicycle leans against a brick storefront. Warm sidelight rakes "
-    "the brick and the bicycle's chrome. Shot on a 35mm lens at eye level, framed "
-    "for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering."
-)
 KLEIN_NEG = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
 HOUSE_IDENTITY = (
-    "A photoreal still photograph of a contemporary cedar-and-glass lake house. "
-    "Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed "
-    "windows face a still alpine lake. Warm oak floors run indoors. An evergreen "
-    "ridge rises behind the unmarked house. Golden wood grain, clean glass, and "
-    "quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, "
-    "unmarked surfaces."
+    "One compact single-story rectangular cedar cabin on a still alpine lake. "
+    "One low charcoal standing-seam hip roof with a single black chimney, vertical "
+    "knotty cedar siding, and a two-bay four-lite black-framed glass wall on the "
+    "lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak "
+    "floors run indoors. An evergreen ridge rises behind the solitary unmarked house."
+)
+HOUSE_INVENTORY = (
+    "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar "
+    "cabinets and black hardware, oak dining table, linen bedding at the lake-window "
+    "bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs"
 )
 HOUSE_SHOTS = [
     (
-        "01 curb appeal",
-        "Golden-hour curb appeal from the gravel drive, 24mm at eye level, "
-        "Instagram 4:5 portrait. Warm sidelight rakes the cedar. Empty drive.",
+        "01 lake facade",
+        "Three-quarter lake facade of the same cabin, 24mm at eye level, Instagram "
+        "4:5, golden-hour late summer. The two-bay glass shows the linen sofa and oak "
+        "floors inside.",
     ),
     (
-        "02 entry",
-        "Front entry with a tall black-framed glass door, 35mm, Instagram 4:5. "
-        "Soft morning light on cedar and stone. Empty porch, unmarked door.",
+        "02 curb",
+        "Curb of the same cabin from the empty gravel drive, 24mm, Instagram 4:5. Hip "
+        "roof and cedar gable; lake glass sits on the far side of the volume.",
     ),
     (
         "03 living room",
-        "Living room looking through the glass wall toward the still lake, 24mm, "
-        "Instagram 4:5. Oak floors, linen sofa, late-day sun. Empty of occupants.",
+        "From inside the living room of the same cabin, looking out the two-bay glass "
+        "to the lake, 24mm, Instagram 4:5. The linen sofa sits in the foreground on "
+        "oak floors, late-summer afternoon.",
     ),
     (
         "04 kitchen",
-        "Kitchen island in pale stone, morning sidelight, 35mm, Instagram 4:5. "
-        "Cedar cabinets, black hardware, unmarked surfaces.",
+        "From inside the kitchen of the same cabin, 35mm, Instagram 4:5. Pale-stone "
+        "island, cedar cabinets, black hardware, morning sidelight from the glass wall "
+        "beside the living room.",
     ),
     (
         "05 dining",
-        "Dining table by the window at evening, lamps lit, 35mm, Instagram 4:5. "
-        "Oak table, simple ceramic, lake twilight beyond the glass.",
+        "From inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak "
+        "table, lamps lit, autumn twilight through the two-bay glass.",
     ),
     (
         "06 bedroom",
-        "Primary bedroom with linen bedding and a lake window, 35mm, Instagram 4:5. "
-        "Soft dawn light, cedar wall, solitary room.",
+        "From inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. "
+        "Linen bedding, cedar wall, lake window, dawn.",
     ),
     (
         "07 bath",
-        "Spa bath in pale stone and cedar, 35mm, Instagram 4:5. A freestanding tub "
-        "faces frosted glass. Quiet, unmarked fixtures.",
+        "From inside the spa bath of the same cabin, 35mm, Instagram 4:5. Freestanding "
+        "stone tub facing frosted glass. Quiet unmarked fixtures.",
     ),
     (
         "08 deck",
-        "Lakeside deck at dusk, 24mm, Instagram 4:5. Cedar boards, simple chairs, "
-        "still water, evergreen ridge.",
+        "Lakeside decks of the same cabin at dusk, 24mm, Instagram 4:5. Two cedar "
+        "deck chairs on gravel, still water, evergreen ridge.",
     ),
     (
         "09 twilight",
-        "Twilight exterior, interior lamps glowing through black-framed glass, "
-        "24mm, Instagram 4:5. Solitary house on the lake.",
+        "Winter twilight exterior of the same cabin, 24mm, Instagram 4:5. Lamps glow; "
+        "the linen sofa reads as a silhouette through the two-bay glass. Thin snow on "
+        "the ridge; cabin volume unchanged.",
     ),
     (
         "10 ridge view",
-        "Elevated wide view of the property from the ridge, 24mm, Instagram 4:5. "
-        "The cedar-and-glass house sits above the still lake among evergreens.",
+        "Midsummer ridge view of the same compact cabin above the lake among "
+        "evergreens, 24mm, Instagram 4:5.",
     ),
 ]
-GIF_MOTION = (
-    "Locked camera. A light breeze moves leaves and a thin curtain. Water and "
-    "fabric drift, then settle. Keep the start-image identity locked. Gentle "
-    "cyclic motion for a looping GIF."
-)
+JOINED_WORD_CAP = 170
 GIF_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
     "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
@@ -104,7 +110,7 @@ Swap table:
 
 SETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.
 Save prefix: ez_still_app.
-Prompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
 
 GIF_NOTE = """## wan-gif-loop-lab-example
@@ -114,19 +120,18 @@ Models: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors
 PRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse — first and last frames meet for a seamless loop.
 Easy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).
 LoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.
-Motion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.
+Motion: locked camera plus breeze / fabric / city lights. Do not prompt a walk or a one-way dolly.
 Do not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.
-Prompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
 
-Ten Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).
-Edit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.
-Same seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.
-Bypass unused SHOT groups (Ctrl+B) if you only want a subset. All ten on is the carousel pack.
-Do not restyle the identity per shot — change camera, time of day, and room only.
-Prompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.
+Ten Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).
+HOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin — Prompt Join lock=view. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.
+Edit HOUSE IDENTITY and inventory once. Enhance is off on the bible so a rewrite cannot insert a camera. Shot cards are Prompt Join only.
+Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.
+If materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.
 """
 
 
@@ -142,6 +147,14 @@ def _node(graph: dict, ntype: str, title: str | None = None) -> dict:
 def _dump(path: Path, graph: dict) -> None:
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+
+
+def _assert_house_word_cap() -> None:
+    for label, shot in HOUSE_SHOTS:
+        text = join_prompt(HOUSE_IDENTITY, shot, HOUSE_INVENTORY, "view")
+        n = len(text.split())
+        if n > JOINED_WORD_CAP:
+            raise SystemExit(f"joined prompt too long for {label}: {n} words")
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
@@ -192,9 +205,11 @@ def build_still_app() -> dict:
     graph["extra"]["lab_note"] = STILL_NOTE
     graph["extra"]["lab_description"] = "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
     enh = _node(graph, "EZKleinPromptEnhance")
-    enh["widgets_values"][0] = KLEIN_STILL
+    enh["widgets_values"][0] = KLEIN_STILL_DAILY
     pos = _node(graph, "CLIPTextEncode", "Positive")
-    pos["widgets_values"] = [KLEIN_STILL]
+    pos["widgets_values"] = [KLEIN_STILL_DAILY]
+    neg = _node(graph, "CLIPTextEncode", "Negative")
+    neg["widgets_values"] = [KLEIN_NEG_STILL]
     graph["groups"] = [
         _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
         _group(2, "PROMPT", 460, 40, 920, 400, "#3f789e"),
@@ -221,7 +236,7 @@ def build_gif_loop() -> dict:
     save = _node(graph, "SaveImage")
     save["widgets_values"] = ["ez_gif_loop_frames"]
     enh = _node(graph, "EZWanPromptEnhance")
-    enh["widgets_values"] = [GIF_MOTION, False, "i2v", "4 seconds, 12 fps, looping GIF"]
+    enh["widgets_values"] = [GIF_MOTION, True, "i2v", "4 seconds, 12 fps, looping GIF", "none"]
     motion = _node(graph, "CLIPTextEncode", "Motion / prompt")
     motion["widgets_values"] = [GIF_MOTION]
     neg = _node(graph, "CLIPTextEncode", "Negative")
@@ -266,6 +281,7 @@ def _base_node(
 
 
 def build_dream_house() -> dict:
+    _assert_house_word_cap()
     nodes: list[dict] = []
     links: list[list] = []
     link_id = 0
@@ -332,9 +348,9 @@ def build_dream_house() -> dict:
             4,
             "EZKleinPromptEnhance",
             [40, 480],
-            [420, 280],
+            [420, 420],
             "HOUSE IDENTITY",
-            [HOUSE_IDENTITY, False, "t2i", "Instagram 4:5 still"],
+            [HOUSE_IDENTITY, False, "t2i", "Instagram 4:5 still", "none"],
             3,
             outputs=[out("prompt", "STRING", ident_links)],
         )
@@ -343,7 +359,7 @@ def build_dream_house() -> dict:
         _base_node(
             5,
             "CLIPTextEncode",
-            [40, 800],
+            [40, 940],
             [420, 120],
             "Negative",
             [KLEIN_NEG],
@@ -356,7 +372,7 @@ def build_dream_house() -> dict:
         _base_node(
             6,
             "EmptyFlux2LatentImage",
-            [40, 960],
+            [40, 1120],
             [280, 106],
             "Instagram 4:5 1024x1280",
             [1024, 1280, 1],
@@ -368,7 +384,7 @@ def build_dream_house() -> dict:
         _base_node(
             7,
             "Note",
-            [40, 1120],
+            [40, 1280],
             [420, 360],
             "Operator note",
             [HOUSE_NOTE],
@@ -390,7 +406,7 @@ def build_dream_house() -> dict:
         dec_id = 13 + i * 5
         save_id = 14 + i * 5
         prefix = f"ez_dream_house_{i + 1:02d}"
-        full = f"{HOUSE_IDENTITY} {shot}"
+        full = join_prompt(HOUSE_IDENTITY, shot, HOUSE_INVENTORY, "view")
         n = 20 + i * 5
 
         join_out: list[int] = []
@@ -405,7 +421,7 @@ def build_dream_house() -> dict:
                 [520, y],
                 [420, 180],
                 f"SHOT {label}",
-                [shot],
+                [shot, HOUSE_INVENTORY, "view"],
                 n,
                 inputs=[{"name": "identity", "type": "STRING", "link": None}],
                 outputs=[out("prompt", "STRING", join_out)],
@@ -531,7 +547,7 @@ def build_dream_house() -> dict:
             _group(10 + i, f"SHOT {label}", 500, y - 20, 1840, 340, "#3f789e")
         )
 
-    last_id = 14 + 9 * 5
+    last_id = max(n["id"] for n in nodes)
     return {
         "id": "klein-dream-house-lab-example",
         "revision": 1,
@@ -545,7 +561,7 @@ def build_dream_house() -> dict:
             "lab_profile": "klein-dream-house-lab-example",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
-            "lab_description": "Ten Instagram 4:5 Klein stills of one lake house",
+            "lab_description": "Ten Instagram 4:5 Klein stills of one compact cedar cabin; new cameras, locked inventory",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,

@@ -1,8 +1,8 @@
 {
   "id": "klein-before-after-lab-example",
   "revision": 1,
-  "last_node_id": 111,
-  "last_link_id": 110,
+  "last_node_id": 21,
+  "last_link_id": 27,
   "nodes": [
     {
       "id": 1,
@@ -24,7 +24,8 @@
           "name": "MODEL",
           "type": "MODEL",
           "links": [
-            1
+            8,
+            19
           ],
           "slot_index": 0
         }
@@ -58,8 +59,9 @@
           "name": "CLIP",
           "type": "CLIP",
           "links": [
-            2,
-            3
+            1,
+            7,
+            18
           ],
           "slot_index": 0
         }
@@ -94,7 +96,9 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            7
+            2,
+            13,
+            26
           ],
           "slot_index": 0
         }
@@ -109,57 +113,48 @@
     },
     {
       "id": 4,
-      "type": "CLIPTextEncode",
+      "type": "EZKleinPromptEnhance",
       "pos": [
-        940,
-        80
+        40,
+        480
       ],
       "size": [
         420,
-        160
+        420
       ],
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 2
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 10,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
+      "inputs": [],
       "outputs": [
         {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
+          "name": "prompt",
+          "type": "STRING",
           "links": [
-            4
+            5,
+            16
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPTextEncode"
+        "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a small kitchen table at first light. A plain ceramic mug sits empty beside a dark window. Cool blue shadows, unmarked surfaces."
+        "A photoreal still of a small kitchen table at first light. One cream ceramic mug with a hairline chip on the rim sits empty on honey-oak beside a dark window. White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces.",
+        true,
+        "t2i",
+        "YouTube 16:9 still",
+        "none"
       ],
-      "title": "Positive"
+      "title": "IDENTITY"
     },
     {
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        290
+        40,
+        940
       ],
       "size": [
         420,
@@ -172,7 +167,7 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 3
+          "link": 1
         }
       ],
       "outputs": [
@@ -180,7 +175,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            5
+            3,
+            10
           ],
           "slot_index": 0
         }
@@ -197,8 +193,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        940,
-        460
+        40,
+        1120
       ],
       "size": [
         280,
@@ -213,7 +209,8 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            6
+            11,
+            24
           ],
           "slot_index": 0
         }
@@ -226,42 +223,56 @@
         432,
         1
       ],
-      "title": "Latent 768x432 batch 2"
+      "title": "Size 768x432"
     },
     {
       "id": 7,
-      "type": "KSampler",
+      "type": "Note",
       "pos": [
-        1440,
-        80
+        40,
+        1280
       ],
       "size": [
-        320,
-        262
+        420,
+        360
       ],
       "flags": {},
       "order": 6,
       "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## klein-before-after-lab-example\n\nTwo Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-edits from it. Prefixes `ez_before` and `ez_after`. Do not bypass BEFORE on a cold canvas.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 8,
+      "type": "VAEEncode",
+      "pos": [
+        1740,
+        170
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
       "inputs": [
         {
-          "name": "model",
-          "type": "MODEL",
-          "link": 1
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 15
         },
         {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 4
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 5
-        },
-        {
-          "name": "latent_image",
-          "type": "LATENT",
-          "link": 6
+          "name": "vae",
+          "type": "VAE",
+          "link": 2
         }
       ],
       "outputs": [
@@ -269,7 +280,191 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            8
+            4,
+            21
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode plate 01"
+    },
+    {
+      "id": 9,
+      "type": "ReferenceLatent",
+      "pos": [
+        40,
+        1680
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 3
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 4,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            23
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Negative + identity plate"
+    },
+    {
+      "id": 10,
+      "type": "EZPromptJoin",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        420,
+        180
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptJoin"
+      },
+      "widgets_values": [
+        "Canonical plate. Empty mug, cool blue window light, same 35mm camera.",
+        "cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain",
+        "state"
+      ],
+      "title": "SHOT BEFORE"
+    },
+    {
+      "id": 11,
+      "type": "CLIPTextEncode",
+      "pos": [
+        980,
+        80
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 7
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A photoreal still of a small kitchen table at first light. One cream ceramic mug with a hairline chip on the rim sits empty on honey-oak beside a dark window. White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces. Locked inventory (do not change): cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain. Keep this exact place, inventory, and camera framing. The shot names the only change. Canonical plate. Empty mug, cool blue window light, same 35mm camera."
+      ],
+      "title": "Positive BEFORE"
+    },
+    {
+      "id": 12,
+      "type": "KSampler",
+      "pos": [
+        1380,
+        80
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 8
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 9
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 10
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            12
           ],
           "slot_index": 0
         }
@@ -286,13 +481,13 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler BEFORE"
     },
     {
-      "id": 8,
+      "id": 13,
       "type": "VAEDecode",
       "pos": [
-        1840,
+        1740,
         80
       ],
       "size": [
@@ -300,18 +495,18 @@
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 23,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 8
+          "link": 12
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 7
+          "link": 13
         }
       ],
       "outputs": [
@@ -319,7 +514,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            14,
+            15
           ],
           "slot_index": 0
         }
@@ -328,27 +524,27 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "Decode BEFORE"
     },
     {
-      "id": 9,
+      "id": 14,
       "type": "SaveImage",
       "pos": [
-        1840,
-        176
+        2020,
+        80
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 14
         }
       ],
       "outputs": [],
@@ -361,168 +557,70 @@
       "title": "Save BEFORE"
     },
     {
-      "id": 11,
-      "type": "EZKleinPromptEnhance",
+      "id": 16,
+      "type": "EZPromptJoin",
       "pos": [
-        480,
-        80
+        520,
+        460
       ],
       "size": [
         420,
-        280
+        180
       ],
       "flags": {},
-      "order": 2,
+      "order": 26,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "STRING",
+          "link": 16
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
           "links": [
-            10
+            17
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZKleinPromptEnhance"
+        "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "A photoreal still of a small kitchen table at first light. A plain ceramic mug sits empty beside a dark window. Cool blue shadows, unmarked surfaces.",
-        false,
-        "t2i",
-        "YouTube 16:9 still"
+        "Same kitchen, mug, and camera. Mug filled with coffee, warm morning sun, soft steam.",
+        "cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain",
+        "state"
       ],
-      "title": "Klein Prompt Enhance"
+      "title": "SHOT AFTER"
     },
     {
-      "id": 101,
-      "type": "UNETLoader",
-      "pos": [
-        40,
-        1000
-      ],
-      "size": [
-        360,
-        82
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            101
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "UNETLoader"
-      },
-      "widgets_values": [
-        "flux-2-klein-4b-fp8.safetensors",
-        "default"
-      ],
-      "title": "Klein 4B distilled FP8"
-    },
-    {
-      "id": 102,
-      "type": "CLIPLoader",
-      "pos": [
-        40,
-        1132
-      ],
-      "size": [
-        360,
-        106
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            102,
-            103
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "qwen_3_4b.safetensors",
-        "flux2",
-        "default"
-      ],
-      "title": "Qwen3-4B TE"
-    },
-    {
-      "id": 103,
-      "type": "VAELoader",
-      "pos": [
-        40,
-        1288
-      ],
-      "size": [
-        360,
-        58
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            107
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "flux2-vae.safetensors"
-      ],
-      "title": "Flux2 VAE"
-    },
-    {
-      "id": 104,
+      "id": 17,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        1000
+        980,
+        460
       ],
       "size": [
-        420,
-        160
+        360,
+        140
       ],
       "flags": {},
-      "order": 3,
+      "order": 27,
       "mode": 0,
       "inputs": [
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 102
+          "link": 18
         },
         {
           "name": "text",
           "type": "STRING",
-          "link": 110,
+          "link": 17,
           "widget": {
             "name": "text"
           }
@@ -533,7 +631,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            104
+            20
           ],
           "slot_index": 0
         }
@@ -542,118 +640,44 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The same kitchen table and ceramic mug identity, now filled with coffee and lit by warm morning sun through the window. Soft steam, unmarked surfaces. Same camera."
+        "A photoreal still of a small kitchen table at first light. One cream ceramic mug with a hairline chip on the rim sits empty on honey-oak beside a dark window. White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces. Locked inventory (do not change): cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain. Keep this exact place, inventory, and camera framing. The shot names the only change. Same kitchen, mug, and camera. Mug filled with coffee, warm morning sun, soft steam."
       ],
-      "title": "Positive"
+      "title": "Positive AFTER"
     },
     {
-      "id": 105,
-      "type": "CLIPTextEncode",
-      "pos": [
-        940,
-        1210
-      ],
-      "size": [
-        420,
-        120
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 103
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            105
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
-      ],
-      "title": "Negative"
-    },
-    {
-      "id": 106,
-      "type": "EmptyFlux2LatentImage",
-      "pos": [
-        940,
-        1380
-      ],
-      "size": [
-        280,
-        106
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            106
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EmptyFlux2LatentImage"
-      },
-      "widgets_values": [
-        768,
-        432,
-        1
-      ],
-      "title": "Latent 768x432 batch 2"
-    },
-    {
-      "id": 107,
+      "id": 18,
       "type": "KSampler",
       "pos": [
-        1440,
-        1000
+        1380,
+        460
       ],
       "size": [
         320,
         262
       ],
       "flags": {},
-      "order": 6,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
           "name": "model",
           "type": "MODEL",
-          "link": 101
+          "link": 19
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 104
+          "link": 22
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 105
+          "link": 23
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 106
+          "link": 24
         }
       ],
       "outputs": [
@@ -661,7 +685,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            108
+            25
           ],
           "slot_index": 0
         }
@@ -678,32 +702,32 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler AFTER"
     },
     {
-      "id": 108,
+      "id": 19,
       "type": "VAEDecode",
       "pos": [
-        1840,
-        1000
+        1740,
+        460
       ],
       "size": [
         240,
         46
       ],
       "flags": {},
-      "order": 7,
+      "order": 29,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 108
+          "link": 25
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 107
+          "link": 26
         }
       ],
       "outputs": [
@@ -711,7 +735,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            109
+            27
           ],
           "slot_index": 0
         }
@@ -720,27 +744,27 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "Decode AFTER"
     },
     {
-      "id": 109,
+      "id": 20,
       "type": "SaveImage",
       "pos": [
-        1840,
-        1096
+        2020,
+        460
       ],
       "size": [
         280,
         270
       ],
       "flags": {},
-      "order": 8,
+      "order": 30,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 109
+          "link": 27
         }
       ],
       "outputs": [],
@@ -753,85 +777,52 @@
       "title": "Save AFTER"
     },
     {
-      "id": 111,
-      "type": "EZKleinPromptEnhance",
+      "id": 21,
+      "type": "ReferenceLatent",
       "pos": [
-        480,
-        1000
+        980,
+        660
       ],
       "size": [
-        420,
-        280
+        240,
+        80
       ],
       "flags": {},
-      "order": 2,
+      "order": 31,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 20
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 21,
+          "shape": 7
+        }
+      ],
       "outputs": [
         {
-          "name": "prompt",
-          "type": "STRING",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
           "links": [
-            110
+            22
           ],
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZKleinPromptEnhance"
+        "Node name for S&R": "ReferenceLatent"
       },
-      "widgets_values": [
-        "The same kitchen table and ceramic mug identity, now filled with coffee and lit by warm morning sun through the window. Soft steam, unmarked surfaces. Same camera.",
-        false,
-        "t2i",
-        "YouTube 16:9 still"
-      ],
-      "title": "Klein Prompt Enhance"
-    },
-    {
-      "id": 10,
-      "type": "Note",
-      "pos": [
-        40,
-        1850
-      ],
-      "size": [
-        960,
-        220
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "Note"
-      },
-      "widgets_values": [
-        "## klein-before-after-lab-example\n\nTwo Klein 4B stills with a shared subject identity (before / after). Prefixes `ez_before` and `ez_after`.\nEdit both Positive prompts; keep the mug (or your subject) identical. Queue writes both PNGs.\n"
-      ],
-      "title": "Operator note"
+      "widgets_values": [],
+      "title": "Ref from 01 (AFTER)"
     }
   ],
   "links": [
     [
       1,
-      1,
-      0,
-      7,
-      0,
-      "MODEL"
-    ],
-    [
-      2,
-      2,
-      0,
-      4,
-      0,
-      "CLIP"
-    ],
-    [
-      3,
       2,
       0,
       5,
@@ -839,31 +830,7 @@
       "CLIP"
     ],
     [
-      4,
-      4,
-      0,
-      7,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      5,
-      5,
-      0,
-      7,
       2,
-      "CONDITIONING"
-    ],
-    [
-      6,
-      6,
-      0,
-      7,
-      3,
-      "LATENT"
-    ],
-    [
-      7,
       3,
       0,
       8,
@@ -871,119 +838,215 @@
       "VAE"
     ],
     [
-      8,
-      7,
+      3,
+      5,
       0,
+      9,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      4,
       8,
       0,
+      9,
+      1,
       "LATENT"
     ],
     [
-      9,
+      5,
+      4,
+      0,
+      10,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      10,
+      0,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      7,
+      2,
+      0,
+      11,
+      0,
+      "CLIP"
+    ],
+    [
       8,
+      1,
       0,
+      12,
+      0,
+      "MODEL"
+    ],
+    [
       9,
+      11,
       0,
-      "IMAGE"
+      12,
+      1,
+      "CONDITIONING"
     ],
     [
       10,
-      11,
+      5,
       0,
-      4,
-      1,
-      "STRING"
-    ],
-    [
-      101,
-      101,
-      0,
-      107,
-      0,
-      "MODEL"
-    ],
-    [
-      102,
-      102,
-      0,
-      104,
-      0,
-      "CLIP"
-    ],
-    [
-      103,
-      102,
-      0,
-      105,
-      0,
-      "CLIP"
-    ],
-    [
-      104,
-      104,
-      0,
-      107,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      105,
-      105,
-      0,
-      107,
+      12,
       2,
       "CONDITIONING"
     ],
     [
-      106,
-      106,
+      11,
+      6,
       0,
-      107,
+      12,
       3,
       "LATENT"
     ],
     [
-      107,
-      103,
+      12,
+      12,
       0,
-      108,
-      1,
-      "VAE"
-    ],
-    [
-      108,
-      107,
-      0,
-      108,
+      13,
       0,
       "LATENT"
     ],
     [
-      109,
-      108,
+      13,
+      3,
       0,
-      109,
+      13,
+      1,
+      "VAE"
+    ],
+    [
+      14,
+      13,
+      0,
+      14,
       0,
       "IMAGE"
     ],
     [
-      110,
-      111,
+      15,
+      13,
       0,
-      104,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      16,
+      4,
+      0,
+      16,
+      0,
+      "STRING"
+    ],
+    [
+      17,
+      16,
+      0,
+      17,
       1,
       "STRING"
+    ],
+    [
+      18,
+      2,
+      0,
+      17,
+      0,
+      "CLIP"
+    ],
+    [
+      19,
+      1,
+      0,
+      18,
+      0,
+      "MODEL"
+    ],
+    [
+      20,
+      17,
+      0,
+      21,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      21,
+      8,
+      0,
+      21,
+      1,
+      "LATENT"
+    ],
+    [
+      22,
+      21,
+      0,
+      18,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      23,
+      9,
+      0,
+      18,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      24,
+      6,
+      0,
+      18,
+      3,
+      "LATENT"
+    ],
+    [
+      25,
+      18,
+      0,
+      19,
+      0,
+      "LATENT"
+    ],
+    [
+      26,
+      3,
+      0,
+      19,
+      1,
+      "VAE"
+    ],
+    [
+      27,
+      19,
+      0,
+      20,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [
     {
       "id": 1,
-      "title": "BEFORE",
+      "title": "MODEL",
       "bounding": [
         20,
-        20,
-        2200,
-        850
+        40,
+        430,
+        430
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -991,14 +1054,40 @@
     },
     {
       "id": 2,
-      "title": "AFTER",
+      "title": "IDENTITY",
       "bounding": [
         20,
-        920,
-        2200,
-        850
+        450,
+        460,
+        500
       ],
       "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 10,
+      "title": "SHOT BEFORE",
+      "bounding": [
+        500,
+        60,
+        1840,
+        360
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 11,
+      "title": "SHOT AFTER",
+      "bounding": [
+        500,
+        440,
+        1840,
+        360
+      ],
+      "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     }
@@ -1006,7 +1095,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-before-after-lab-example",
-    "lab_note": "## klein-before-after-lab-example\n\nTwo Klein 4B stills with a shared subject identity (before / after). Prefixes `ez_before` and `ez_after`.\nEdit both Positive prompts; keep the mug (or your subject) identical. Queue writes both PNGs.\n",
+    "lab_note": "## klein-before-after-lab-example\n\nTwo Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-edits from it. Prefixes `ez_before` and `ez_after`. Do not bypass BEFORE on a cold canvas.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
     "lab_description": "Klein 4B before/after still pair"
   },
   "version": 0.4

@@ -9,16 +9,20 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_theme import (
+    KLEIN_NEG_STILL,
+    KLEIN_STILL,
+    LTX_AUDIO_HINT,
+    LTX_I2V,
+    LTX_T2V,
+    WAN_I2V,
+    WAN_T2V,
+)
+
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 
-KLEIN_STILL = (
-    "A photoreal still photograph of a small-town main street at golden hour. "
-    "A single red bicycle leans against a brick storefront. Warm sidelight rakes "
-    "the brick and the bicycle's chrome. Shot on a 24mm lens at eye level, framed "
-    "for YouTube 16:9. Unmarked facades, empty of signage, clean surfaces without lettering."
-)
-KLEIN_NEG = (
+KLEIN_NEG_FILM = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
 KLEIN_GOSEE = (
@@ -27,26 +31,14 @@ KLEIN_GOSEE = (
     "fill the view. Identity lock for the whole short. No violence."
 )
 KLEIN_STILLHERE = (
-    "Third-person household morning still. A plain ceramic mug sits on a wooden table "
-    "in first light. Unmarked kitchen, empty of brands. The mug is the identity lock. "
-    "SFW, no real likenesses."
+    "Third-person household morning still. One cream ceramic mug with a hairline chip "
+    "on the rim sits on a honey-oak table in first light. White subway tile backsplash, "
+    "one linen curtain at a single window. Unmarked kitchen, empty of brands. The mug "
+    "is the identity lock. SFW, no real likenesses."
 )
 KLEIN_SWITCHYARD = (
-    "Night freight-yard still in rain. Generic unmarked boxcars sit on wet ballast "
-    "under a yard lamp. Photoreal, empty of railroad company marks. Identity lock for the short."
-)
-WAN_T2V = (
-    "A red bicycle leans against a brick storefront on a small-town main street at "
-    "golden hour, unmarked facades empty of signage. Warm sidelight rakes the brick "
-    "and chrome. Leaves and a shop flag stir slowly in a light breeze while a pedestrian "
-    "crosses the street in the far background. The camera dollies in slowly toward the "
-    "bicycle over five seconds. Photoreal cinematic motion, 24mm, shallow depth of field, "
-    "YouTube 16:9."
-)
-WAN_I2V = (
-    "Slow cinematic dolly-in toward the bicycle. Leaves and a shop flag stir in a light "
-    "breeze. A pedestrian crosses in the background. Keep the start-image identity locked. "
-    "One continuous five-second take at 24 fps."
+    "Night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast "
+    "under one yard lamp. Photoreal, empty of railroad company marks. Identity lock for the short."
 )
 WAN_GOSEE_I2V = (
     "First-person running camera. Olive windbreaker and worn black gloves; arms pump "
@@ -58,20 +50,6 @@ WAN_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, "
     "rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
 )
-LTX_T2V = (
-    "A wide photoreal shot of a small-town main street at golden hour. A red bicycle leans "
-    "against a brick storefront as warm sidelight rakes the brick and chrome. Leaves and a "
-    "shop flag stir in a light breeze while a pedestrian crosses in the background. The camera "
-    "dollies in slowly toward the bicycle. Soft wind rustles the flag as distant footsteps tap "
-    "the pavement and a faint shop bell clinks once. Unmarked facades sit empty of signage. "
-    "No music and no score."
-)
-LTX_I2V = (
-    "The start image holds as the first frame. The camera dollies in slowly toward the bicycle "
-    "while leaves and a shop flag stir in a light breeze and a pedestrian crosses in the "
-    "background. Soft wind rustles the flag as distant footsteps tap the pavement and a faint "
-    "shop bell clinks once. The storefront and bicycle identity stay locked. No music and no score."
-)
 LTX_GOSEE_I2V = (
     "The start image holds as the first frame. First-person running camera as gloved "
     "hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, "
@@ -79,11 +57,12 @@ LTX_GOSEE_I2V = (
     "the hood, tar grit under shoes. No score, no music, no licensed songs."
 )
 BLURB = (
-    "Prompt enhance: a Klein/Wan/LTX Prompt Enhance node sits upstream of CLIP. "
-    "Leave Enhance off to use this canned prompt. Set Enhance true and XAI_API_KEY "
-    "to rewrite a lazy sentence."
+    "Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, "
+    "the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn "
+    "Enhance off to use the widget text as-is. Optional style dropdown."
 )
 SHIFT = 460
+ENHANCE_H = 420
 
 
 def overlap_hits(graph: dict) -> list[str]:
@@ -160,23 +139,98 @@ def clip_by_title(graph: dict, title: str) -> dict:
     raise SystemExit(f"missing CLIP {title} in {graph.get('id')}")
 
 
+def _node_of_type(graph: dict, ntype: str) -> dict | None:
+    for node in graph["nodes"]:
+        if node.get("type") == ntype:
+            return node
+    return None
+
+
 def set_neg(graph: dict, text: str) -> None:
     for node in graph["nodes"]:
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":
             node["widgets_values"] = [text]
 
 
+def _rewrite_enhance_blurb(body: str) -> str:
+    lines = [
+        line
+        for line in body.splitlines()
+        if "XAI_API_KEY" not in line and "leave Enhance off" not in line
+    ]
+    text = "\n".join(lines).rstrip()
+    if "Prompt enhance is on by default" not in text:
+        text = text + "\n" + BLURB
+    return text + "\n"
+
+
+def _as_enhance_flag(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "on"}
+    return True
+
+
+def normalize_enhance_widgets(graph: dict) -> None:
+    """Pad enhance-node widgets. Keep an existing enhance flag; default true if missing."""
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        values = list(node.get("widgets_values") or [])
+        if ntype in ("EZKleinPromptEnhance", "EZWanPromptEnhance"):
+            prompt = values[0] if values else ""
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+            mode = values[2] if len(values) > 2 else ("t2i" if ntype == "EZKleinPromptEnhance" else "t2v")
+            hint = values[3] if len(values) > 3 else ""
+            style = values[4] if len(values) > 4 else "none"
+            if style != "none" and len(values) < 5:
+                style = "none"
+            node["widgets_values"] = [prompt, enhance, mode, hint, style if style else "none"]
+        elif ntype == "EZLTXPromptEnhance":
+            prompt = values[0] if values else ""
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+            mode = values[2] if len(values) > 2 else "t2v"
+            hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
+            audio = values[4] if len(values) > 4 else ""
+            style = values[5] if len(values) > 5 else "none"
+            node["widgets_values"] = [prompt, enhance, mode, hint, audio, style if style else "none"]
+
+
 def append_note(graph: dict) -> None:
     for node in graph["nodes"]:
         if node.get("type") in ("Note", "MarkdownNote"):
             values = node.get("widgets_values") or [""]
-            body = str(values[0])
-            if "Prompt enhance:" not in body:
-                node["widgets_values"] = [body.rstrip() + "\n" + BLURB + "\n"]
+            node["widgets_values"] = [_rewrite_enhance_blurb(str(values[0]))]
     extra = graph.setdefault("extra", {})
     note = str(extra.get("lab_note") or "")
-    if note and "Prompt enhance:" not in note:
-        extra["lab_note"] = note.rstrip() + "\n" + BLURB + "\n"
+    if note:
+        extra["lab_note"] = _rewrite_enhance_blurb(note)
+
+
+def ensure_enhance(
+    graph: dict,
+    clip: dict,
+    *,
+    ntype: str,
+    title: str,
+    widgets: list,
+    size_h: int,
+) -> None:
+    existing = _node_of_type(graph, ntype)
+    if existing is not None:
+        existing["widgets_values"] = widgets
+        existing["title"] = title
+        return
+    wire_enhance(
+        graph,
+        clip,
+        ntype=ntype,
+        title=title,
+        widgets=widgets,
+        size_h=size_h,
+    )
 
 
 def wire_enhance(
@@ -263,69 +317,76 @@ def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def klein(path: Path, prompt: str) -> None:
+def klein(path: Path, prompt: str, *, neg: str) -> None:
     graph = load(path)
     clip = clip_by_title(graph, "Positive")
     clip["widgets_values"] = [prompt]
-    set_neg(graph, KLEIN_NEG)
-    wire_enhance(
+    set_neg(graph, neg)
+    ensure_enhance(
         graph,
         clip,
         ntype="EZKleinPromptEnhance",
         title="Klein Prompt Enhance",
-        widgets=[prompt, False, "t2i", "YouTube 16:9 still"],
-        size_h=280,
+        widgets=[prompt, True, "t2i", "YouTube 16:9 still", "none"],
+        size_h=ENHANCE_H,
     )
     append_note(graph)
+    normalize_enhance_widgets(graph)
     save(path, graph)
 
 
 def wan_i2v(path: Path, prompt: str) -> None:
     graph = load(path)
-    look = None
-    for node in graph["nodes"]:
-        if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
-            look = node
-            break
-    if look is not None:
-        remove_node(graph, int(look["id"]))
+    if _node_of_type(graph, "EZWanPromptEnhance") is None:
+        look = None
+        for node in graph["nodes"]:
+            if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
+                look = node
+                break
+        if look is not None:
+            remove_node(graph, int(look["id"]))
     clip = clip_by_title(graph, "Motion / prompt")
     clip["widgets_values"] = [prompt]
     set_neg(graph, WAN_NEG)
-    wire_enhance(
+    ensure_enhance(
         graph,
         clip,
         ntype="EZWanPromptEnhance",
         title="Wan Prompt Enhance",
-        widgets=[prompt, False, "i2v", "5 seconds, 24 fps"],
-        size_h=280,
+        widgets=[prompt, True, "i2v", "5 seconds, 24 fps", "none"],
+        size_h=ENHANCE_H,
     )
     append_note(graph)
+    normalize_enhance_widgets(graph)
     save(path, graph)
 
 
 def wan_t2v(path: Path) -> None:
     graph = load(path)
-    extra = None
-    for node in graph["nodes"]:
-        if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
-            extra = node
-            break
-    if extra is not None:
-        remove_node(graph, int(extra["id"]))
-    clip = clip_by_title(graph, "Positive motion")
-    clip["title"] = "Positive"
+    if _node_of_type(graph, "EZWanPromptEnhance") is None:
+        extra = None
+        for node in graph["nodes"]:
+            if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
+                extra = node
+                break
+        if extra is not None:
+            remove_node(graph, int(extra["id"]))
+        clip = clip_by_title(graph, "Positive motion")
+        clip["title"] = "Positive"
+    else:
+        clip = clip_by_title(graph, "Positive")
     clip["widgets_values"] = [WAN_T2V]
     set_neg(graph, WAN_NEG)
-    wire_enhance(
+    ensure_enhance(
         graph,
         clip,
         ntype="EZWanPromptEnhance",
         title="Wan Prompt Enhance",
-        widgets=[WAN_T2V, False, "t2v", "5 seconds, 24 fps"],
-        size_h=280,
+        widgets=[WAN_T2V, True, "t2v", "5 seconds, 24 fps", "none"],
+        size_h=ENHANCE_H,
     )
     append_note(graph)
+    normalize_enhance_widgets(graph)
     save(path, graph)
 
 
@@ -334,15 +395,16 @@ def ltx_i2v(path: Path, prompt: str, audio: str, title: str) -> None:
     clip = clip_by_title(graph, title)
     clip["widgets_values"] = [prompt]
     set_neg(graph, WAN_NEG)
-    wire_enhance(
+    ensure_enhance(
         graph,
         clip,
         ntype="EZLTXPromptEnhance",
         title="LTX Prompt Enhance",
-        widgets=[prompt, False, "i2v", "5 seconds, 24 fps", audio],
-        size_h=340,
+        widgets=[prompt, True, "i2v", "5 seconds, 24 fps", audio, "none"],
+        size_h=ENHANCE_H,
     )
     append_note(graph)
+    normalize_enhance_widgets(graph)
     save(path, graph)
 
 
@@ -351,38 +413,29 @@ def ltx_t2v(path: Path) -> None:
     clip = clip_by_title(graph, "Positive")
     clip["widgets_values"] = [LTX_T2V]
     set_neg(graph, WAN_NEG)
-    wire_enhance(
+    ensure_enhance(
         graph,
         clip,
         ntype="EZLTXPromptEnhance",
         title="LTX Prompt Enhance",
-        widgets=[LTX_T2V, False, "t2v", "5 seconds, 24 fps", "soft wind, distant footsteps, shop bell, no score"],
-        size_h=340,
+        widgets=[LTX_T2V, True, "t2v", "5 seconds, 24 fps", LTX_AUDIO_HINT, "none"],
+        size_h=ENHANCE_H,
     )
     append_note(graph)
+    normalize_enhance_widgets(graph)
     save(path, graph)
 
 
 def main() -> None:
-    klein(WF / "klein-still-draft-lab-example.json", KLEIN_STILL)
-    klein(WF / "klein-still-hero-lab-example.json", KLEIN_STILL)
-    klein(WF / "shorts" / "film-go-see-90s-run-lab-example.json", KLEIN_GOSEE)
-    klein(WF / "shorts" / "film-still-here-90s-lab-example.json", KLEIN_STILLHERE)
-    klein(WF / "shorts" / "film-switchyard-90s-lab-example.json", KLEIN_SWITCHYARD)
+    klein(WF / "klein-still-draft-lab-example.json", KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    klein(WF / "klein-still-hero-lab-example.json", KLEIN_STILL, neg=KLEIN_NEG_STILL)
     wan_i2v(WF / "wan-i2v-5s-lab-example.json", WAN_I2V)
-    wan_i2v(WF / "wan-i2v-shot-lab-example.json", WAN_GOSEE_I2V)
     wan_t2v(WF / "wan-t2v-5s-lab-example.json")
     ltx_i2v(
         WF / "ltx-i2v-5s-lab-example.json",
         LTX_I2V,
-        "soft wind, distant footsteps, shop bell, no score",
+        LTX_AUDIO_HINT,
         "Motion / prompt",
-    )
-    ltx_i2v(
-        WF / "ltx-i2v-shot-lab-example.json",
-        LTX_GOSEE_I2V,
-        "breath close to the lens, wind in the hood, tar grit under shoes. No score, no music, no licensed songs.",
-        "Motion + audio",
     )
     ltx_t2v(WF / "ltx-t2v-5s-lab-example.json")
     print("wired prompt-enhance nodes")

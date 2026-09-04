@@ -165,13 +165,13 @@ flowchart LR
 ## Docker
 
 - One compose service for the unified stack  
-- Multi-stage image: **devel** builder + **runtime** final (no secrets/models)  
+- Multi-stage image: **runtime** builder stages + **runtime** final (no secrets/models; `CUDA_BASE_IMAGE=…devel` is an override)  
 - **Layer cache contract** (do not regress):
-  - Builder: `COPY` only the `install-comfy/` **phase modules** each prebuild `RUN` needs (not the full orchestrator before torch)
-  - Builder prebuild is **phased** (`venv+torch` → `comfy` → `nodes+finalize+package`) so torch survives node-only edits
-  - Runtime: `COPY --from=builder /opt/parts/venv` then `/opt/parts/app` **before** entrypoint/install/patch
-  - Validated pins: `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see models-and-cache.md)
-  - BuildKit `# syntax=docker/dockerfile:1`, `COPY --chmod`, `RUN --mount=type=cache,target=/root/.cache/pip`
+  - Torch stage `COPY` is only `install-comfy/core.sh` + `phase-venv-torch.sh` (not `common.sh` / Comfy pins)
+  - Named stages `torch` → `comfy` → `nodes`; pin `ARG`s declared in the stage that uses them
+  - Runtime: `COPY --link` `/opt/parts/venv` then `venv-extra` then `app` **before** entrypoint/install/patch
+  - Validated pins: `TORCH_VERSION`, `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see models-and-cache.md)
+  - BuildKit `# syntax=docker/dockerfile:1`, `COPY --link`, `COPY --chmod`, pip + apt cache mounts
   - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
 - GHCR channel by long-lived branch: publish tags `us-safe-studio` (`main`) and `us-safe-studio-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel). Old `flux-to-ltx*` tags freeze on the previous image.  
 - Scripts as real files (not inline ConfigMap YAML)  
@@ -238,6 +238,8 @@ flowchart LR
   - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
 - Workflow: `.github/workflows/deploy-docs.yml` (push to `main`/`development` with docs paths, or `workflow_dispatch`)
 - Stack is **MkDocs 1.x + Material** (`docs/requirements.txt`). Do **not** upgrade to MkDocs 2.x (incompatible with Material plugins/theme; no migration path). CI and `make docs` set `NO_MKDOCS_2_WARNING=1` to suppress Material’s advisory. Revisit only if migrating tooling (e.g. Zensical evaluation).
+- Keep the top nav on screen while scrolling: `navigation.tabs` **and** `navigation.tabs.sticky` in `mkdocs.yml`. Do **not** enable `header.autohide` (Material hides the tabs row on scroll without sticky).
+- Header compact-on-scroll lives in `docs/stylesheets/extra.css` (wired via `extra_css`). Do not fork Material `header.html` / `tabs.html` for this. All header controls stay visible; only padding/height shrinks after the page title scrolls away.
 - Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
 - Branch-stamped at build time via `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION` (optional `EZ_DOCS_GIT_REF` override):
   - Edit links (`edit/<ref>/docs/`)

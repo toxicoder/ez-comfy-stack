@@ -12,8 +12,41 @@ import copy
 import json
 import re
 from pathlib import Path
+import sys
+
+from _wire_prompt_enhance import _rewrite_enhance_blurb, normalize_enhance_widgets
+from _lab_theme import (
+    CREATOR_IDENTITY,
+    I2V_LOCK,
+    KLEIN_HOOK,
+    KLEIN_NEG_STILL,
+    KLEIN_SHORTS,
+    KLEIN_THUMBNAIL,
+    LTX_BROLL,
+    LTX_BROLL_AUDIO,
+    LTX_HOOK_AUDIO,
+    LTX_HOOK_AV,
+    LTX_SHORTS_AUDIO,
+    LTX_SHORTS_I2V,
+    LTX_WEATHER,
+    LTX_WEATHER_AUDIO,
+    ROOFTOP_INVENTORY,
+    STORYBOARD,
+    WAN_ORBIT,
+    WAN_SHORTS_I2V,
+)
+
+ENHANCE_NOTE = (
+    "Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, "
+    "the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text."
+)
 
 ROOT = Path(__file__).resolve().parents[2]
+CUSTOM = ROOT / "custom_nodes"
+if str(CUSTOM) not in sys.path:
+    sys.path.insert(0, str(CUSTOM))
+from ez_prompt_enhance.client import join_prompt  # noqa: E402
+
 WF = ROOT / "workflows"
 SHORTS = WF / "shorts"
 
@@ -21,6 +54,12 @@ PREVIEW_BULLET = (
     "After Queue, click **Save video (MP4) — open node for preview** for an inline "
     "preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` "
     "(container `/outputs`). Save frames PNG is secondary."
+)
+LTX_CANVAS_LANDSCAPE = (
+    "LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid)."
+)
+LTX_CANVAS_PORTRAIT = (
+    "LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid)."
 )
 GIF_PREVIEW_BULLET = (
     "After Queue, click **Infinite loop (ping-pong) — open for preview** for an "
@@ -259,11 +298,15 @@ def polish_video_graph(graph: dict, *, gif: bool = False) -> dict:
         text = str(vals[0])
         if n.get("type") == "MarkdownNote" and "shot map" in text.lower():
             continue
-        n["widgets_values"][0] = _ensure_preview_line(text, gif=gif)
+        n["widgets_values"][0] = _rewrite_enhance_blurb(
+            _ensure_preview_line(text, gif=gif)
+        )
 
     extra = graph.setdefault("extra", {})
     if isinstance(extra.get("lab_note"), str):
-        extra["lab_note"] = _ensure_preview_line(extra["lab_note"], gif=gif)
+        extra["lab_note"] = _rewrite_enhance_blurb(
+            _ensure_preview_line(extra["lab_note"], gif=gif)
+        )
     return graph
 
 
@@ -283,6 +326,7 @@ def patch_existing_video_graphs() -> None:
         if path.name.startswith("ltx-"):
             wire_ltx_audio(graph)
         polish_video_graph(graph, gif=gif)
+        normalize_enhance_widgets(graph)
         # Point shot notes at unified films
         if path.name in (
             "wan-i2v-shot-lab-example.json",
@@ -407,6 +451,8 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict) -> str:
 def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str:
     return f"""## {stem}
 
+{LTX_CANVAS_LANDSCAPE}
+
 Unified 90s film graph ({label}): Klein identity still + LTX 5.00s AV shot printer + shot map.
 Models: Klein 4B distilled FP8 (identity) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
 LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
@@ -420,7 +466,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 5. `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
-Prompt enhance: leave Enhance off for canned prompts. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin canned identity.
 """
 
 
@@ -468,6 +514,11 @@ def _refresh_film_notes(graph: dict, film: str, slug: str, stem: str, label: str
             n["widgets_values"] = [shot_md]
             n["title"] = f"{film} 90s shot map"
             n["size"] = [960, max(float(n["size"][1]), 1400)]
+    for n in graph["nodes"]:
+        if n.get("type") == "LTXVImgToVideo":
+            vals = n.get("widgets_values") or []
+            if len(vals) >= 2:
+                vals[0], vals[1] = 1280, 704
     # Ensure LTX audio + preview polish on embedded printer
     if not any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"]):
         # Only wire if a VHS exists (unified graph)
@@ -490,6 +541,7 @@ def _refresh_film_notes(graph: dict, film: str, slug: str, stem: str, label: str
     graph["extra"]["lab_slug"] = slug
     graph["extra"]["lab_ltx_av"] = True
     graph["extra"]["lab_profile"] = stem
+    normalize_enhance_widgets(graph)
     return graph
 
 
@@ -636,6 +688,17 @@ def build_all_films() -> None:
 # --- Creator toolkit -------------------------------------------------------
 
 
+KLEIN_NEG_PHOTO = (
+    "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+)
+
+
+def _set_neg(graph: dict, text: str) -> None:
+    for n in graph["nodes"]:
+        if n.get("type") == "CLIPTextEncode" and n.get("title") == "Negative":
+            n["widgets_values"] = [text]
+
+
 def _set_note(graph: dict, note: str, description: str) -> None:
     graph["extra"]["lab_note"] = note
     graph["extra"]["lab_description"] = description
@@ -658,18 +721,14 @@ def build_creator_toolkit() -> None:
     save["widgets_values"] = ["ez_shorts_still"]
     save["title"] = "Save PNG"
     enh = _node(g, "EZKleinPromptEnhance")
-    prompt = (
-        "A photoreal vertical still for Shorts. A red bicycle leans against a brick "
-        "storefront at golden hour. Warm sidelight, unmarked facades, empty of signage. "
-        "Shot on a 35mm lens, framed for 9:16 with headroom for captions."
-    )
+    prompt = KLEIN_SHORTS
     enh["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     note = f"""## klein-shorts-still-lab-example
 
 Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
 Save prefix: `ez_shorts_still`. Feed into **wan-shorts-i2v-lab-example** or **ltx-shorts-i2v-lab-example**.
-Widgets: seed / steps / CFG / size on canvas. Prompt enhance optional (XAI_API_KEY).
+Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 """
     _set_note(g, note, "Klein 4B vertical 9:16 Shorts still")
     g["groups"] = [
@@ -697,13 +756,9 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance optional (XAI_API_K
     vhs = _node(g, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = "ez_shorts_wan_video"
     polish_video_graph(g)
-    motion = (
-        "Locked vertical framing for Shorts. Gentle breeze moves leaves and a shop flag. "
-        "Camera holds, then a slow push-in. Keep the start-image identity locked. "
-        "One continuous ~5 s take at 24 fps. No audio."
-    )
+    motion = WAN_SHORTS_I2V
     enh = _node(g, "EZWanPromptEnhance")
-    enh["widgets_values"] = [motion, False, "i2v", "5 seconds, 24 fps, 9:16"]
+    enh["widgets_values"] = [motion, True, "i2v", "5 seconds, 24 fps, 9:16", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     note = f"""## wan-shorts-i2v-lab-example
 
@@ -734,19 +789,19 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
     vhs = _node(g, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = "ez_shorts_ltx_video"
     polish_video_graph(g)
-    prompt = (
-        "The start image holds as the first frame in vertical Shorts framing. Soft wind "
-        "rustles a flag as distant footsteps tap the pavement and a faint shop bell clinks "
-        "once. Slow push-in. No music and no score."
-    )
+    prompt = LTX_SHORTS_I2V
     enh = _node(g, "EZLTXPromptEnhance")
-    enh["widgets_values"] = [prompt, False, "i2v", "5 seconds, 24 fps, 9:16", "soft wind, footsteps, shop bell, no score"]
+    enh["widgets_values"] = [prompt, True, "i2v", "5 seconds, 24 fps, 9:16", LTX_SHORTS_AUDIO, "none"]
     for n in g["nodes"]:
-        if n.get("type") == "CLIPTextEncode" and n.get("title") in (None, "Positive", "Motion / prompt"):
-            # LTX uses enhance → CLIP; still set if present
-            if n.get("title") == "Positive" or "Positive" in (n.get("title") or ""):
-                n["widgets_values"] = [prompt]
+        if n.get("type") == "CLIPTextEncode" and n.get("title") in (
+            "Positive",
+            "Motion / prompt",
+            "Motion + audio",
+        ):
+            n["widgets_values"] = [prompt]
     note = f"""## ltx-shorts-i2v-lab-example
+
+{LTX_CANVAS_PORTRAIT}
 
 Vertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
 LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.
@@ -763,11 +818,7 @@ Disclose AI-generated media; do not strip provenance; do not distill. No score.
     g["revision"] = 1
     save = _node(g, "SaveImage")
     save["widgets_values"] = ["ez_thumbnail"]
-    prompt = (
-        "A bold YouTube thumbnail still, 16:9. A single red bicycle fills the frame against "
-        "a brick storefront at golden hour. High contrast sidelight, clear subject separation, "
-        "unmarked facades, empty of text and logos. Photoreal, eye-catching, no burned-in words."
-    )
+    prompt = KLEIN_THUMBNAIL
     enh = _node(g, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
@@ -795,6 +846,7 @@ Keep the subject large and readable at small sizes. Do not burn in titles — ad
     enh = _node(g, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
+    _set_neg(g, KLEIN_NEG_PHOTO)
     note = """## klein-product-packshot-lab-example
 
 Clean product / packshot still (Klein 4B). Default 1024×1024. Prefix `ez_packshot`.
@@ -803,171 +855,88 @@ Swap the subject in the prompt; keep seamless background and soft studio light.
     _set_note(g, note, "Klein 4B product packshot 1:1")
     _dump(WF / "klein-product-packshot-lab-example.json", g)
 
-    # 6. Before / after — two SaveImage branches from dream-house style clone of draft×2
-    # Simpler: clone dream-house builder pattern with 2 shots
-    g = _load(WF / "klein-still-draft-lab-example.json")
-    # Build a minimal two-prompt graph by cloning draft and adding a second sampler chain
-    before_prompt = (
-        "A photoreal still of a small kitchen table at first light. A plain ceramic mug "
-        "sits empty beside a dark window. Cool blue shadows, unmarked surfaces."
+    mug_identity = (
+        "A photoreal still of a small kitchen table at first light. One cream ceramic mug "
+        "with a hairline chip on the rim sits empty on honey-oak beside a dark window. "
+        "White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces."
     )
-    after_prompt = (
-        "The same kitchen table and ceramic mug identity, now filled with coffee and lit by "
-        "warm morning sun through the window. Soft steam, unmarked surfaces. Same camera."
-    )
-    base = _load(WF / "klein-still-draft-lab-example.json")
-    # Use dream-house multi-shot approach: load dream house and strip to 2 — easier to clone draft twice via remap
-    a = _load(WF / "klein-still-draft-lab-example.json")
-    b = _load(WF / "klein-still-draft-lab-example.json")
-    # Remove notes from B; remap B
-    b_nodes = [n for n in b["nodes"] if n.get("type") != "Note"]
-    b_links = [
-        link
-        for link in b["links"]
-        if not any(n["id"] in (link[1], link[3]) and n.get("type") == "Note" for n in b["nodes"])
-    ]
-    # Actually filter links that reference only remaining nodes
-    b_ids = {n["id"] for n in b_nodes}
-    b_links = [link for link in b["links"] if link[1] in b_ids and link[3] in b_ids]
-    remapped_b, remapped_links, _ = _remap_subgraph(
-        b_nodes, b_links, id_offset=100, link_offset=100, pos_dx=0, pos_dy=920
-    )
-    # Shared models: keep A's loaders; bypass B's loaders and reconnect — too hard.
-    # Simpler approach: two independent full graphs stacked (VRAM heavy but clear).
-    for n in a["nodes"]:
-        if n.get("type") == "SaveImage":
-            n["widgets_values"] = ["ez_before"]
-            n["title"] = "Save BEFORE"
-        if n.get("type") == "EZKleinPromptEnhance":
-            n["widgets_values"][0] = before_prompt
-        if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
-            n["widgets_values"] = [before_prompt]
-        if n.get("type") == "EmptyFlux2LatentImage":
-            n["widgets_values"] = [768, 432, 1]
-    for n in remapped_b:
-        if n.get("type") == "SaveImage":
-            n["widgets_values"] = ["ez_after"]
-            n["title"] = "Save AFTER"
-        if n.get("type") == "EZKleinPromptEnhance":
-            n["widgets_values"][0] = after_prompt
-        if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
-            n["widgets_values"] = [after_prompt]
-        if n.get("type") == "EmptyFlux2LatentImage":
-            n["widgets_values"] = [768, 432, 1]
-        if n.get("type") == "Note":
-            continue
-    note_node = next(n for n in a["nodes"] if n.get("type") == "Note")
-    note = """## klein-before-after-lab-example
-
-Two Klein 4B stills with a shared subject identity (before / after). Prefixes `ez_before` and `ez_after`.
-Edit both Positive prompts; keep the mug (or your subject) identical. Queue writes both PNGs.
-"""
-    note_node["widgets_values"] = [note]
-    note_node["pos"] = [40, 1850]
-    note_node["size"] = [960, 220]
-    g = {
-        "id": "klein-before-after-lab-example",
-        "revision": 1,
-        "last_node_id": max(n["id"] for n in a["nodes"] + remapped_b),
-        "last_link_id": max(link[0] for link in (a.get("links") or []) + remapped_links),
-        "nodes": [n for n in a["nodes"] if n.get("type") != "Note"] + remapped_b + [note_node],
-        "links": list(a.get("links") or []) + remapped_links,
-        "groups": [
-            _group(1, "BEFORE", 20, 20, 2200, 850, "#3f789e"),
-            _group(2, "AFTER", 20, 920, 2200, 850, "#a1309b"),
+    _klein_pack(
+        stem="klein-before-after-lab-example",
+        size=(768, 432),
+        identity=mug_identity,
+        inventory="cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain",
+        shots=[
+            (
+                "ez_before",
+                "BEFORE",
+                "Canonical plate. Empty mug, cool blue window light, same 35mm camera.",
+            ),
+            (
+                "ez_after",
+                "AFTER",
+                "Same kitchen, mug, and camera. Mug filled with coffee, warm morning sun, soft steam.",
+            ),
         ],
-        "config": {},
-        "extra": {
-            "lab_profile": "klein-before-after-lab-example",
-            "lab_note": note,
-            "lab_description": "Klein 4B before/after still pair",
-        },
-        "version": 0.4,
-    }
-    _dump(WF / "klein-before-after-lab-example.json", g)
+        neg=KLEIN_NEG_PHOTO,
+        note=f"""## klein-before-after-lab-example
 
-    # 7. Style lock — 4 variants (reuse before-after pattern with 4 clones)
-    identity = (
-        "Identity lock: a contemporary cedar-and-glass lake house with vertical cedar siding, "
-        "charcoal standing-seam roof, tall black-framed windows, unmarked surfaces."
+Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-edits from it. Prefixes `ez_before` and `ez_after`. Do not bypass BEFORE on a cold canvas.
+
+{ENHANCE_NOTE}
+""",
+        description="Klein 4B before/after still pair",
     )
-    shots = [
-        ("ez_style_01", "Golden-hour curb appeal from the gravel drive, 24mm, warm sidelight."),
-        ("ez_style_02", "Living room looking through glass toward a still lake, late-day sun."),
-        ("ez_style_03", "Lakeside deck at dusk, cedar boards, quiet water, evergreen ridge."),
-        ("ez_style_04", "Twilight exterior with interior lamps glowing through black-framed glass."),
-    ]
-    nodes: list[dict] = []
-    links: list[list] = []
-    note_text = f"""## klein-style-lock-lab-example
 
-Four Klein 4B stills sharing one identity lock. Prefixes `ez_style_01`…`04`.
-Edit the identity once in each Positive prompt's first sentence; change only camera / time of day per card.
-Identity: {identity}
-"""
-    for i, (prefix, camera) in enumerate(shots):
-        src = _load(WF / "klein-still-draft-lab-example.json")
-        src_nodes = [n for n in src["nodes"] if n.get("type") != "Note"]
-        src_ids = {n["id"] for n in src_nodes}
-        src_links = [link for link in src["links"] if link[1] in src_ids and link[3] in src_ids]
-        rn, rl, _ = _remap_subgraph(
-            src_nodes,
-            src_links,
-            id_offset=i * 100,
-            link_offset=i * 100,
-            pos_dx=(i % 2) * 2300,
-            pos_dy=(i // 2) * 900,
-        )
-        prompt = f"A photoreal still photograph. {identity} {camera} Instagram-friendly framing. Solitary, empty of people."
-        for n in rn:
-            if n.get("type") == "SaveImage":
-                n["widgets_values"] = [prefix]
-                n["title"] = f"Save {prefix}"
-            if n.get("type") == "EZKleinPromptEnhance":
-                n["widgets_values"][0] = prompt
-            if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
-                n["widgets_values"] = [prompt]
-            if n.get("type") == "EmptyFlux2LatentImage":
-                n["widgets_values"] = [768, 960, 1]  # 4:5-ish
-        nodes.extend(rn)
-        links.extend(rl)
-    note_node = {
-        "id": 999,
-        "type": "Note",
-        "pos": [40, 1850],
-        "size": [960, 280],
-        "flags": {},
-        "order": 99,
-        "mode": 0,
-        "inputs": [],
-        "outputs": [],
-        "properties": {"Node name for S&R": "Note"},
-        "widgets_values": [note_text],
-        "title": "Operator note",
-    }
-    nodes.append(note_node)
-    g = {
-        "id": "klein-style-lock-lab-example",
-        "revision": 1,
-        "last_node_id": max(n["id"] for n in nodes),
-        "last_link_id": max(link[0] for link in links),
-        "nodes": nodes,
-        "links": links,
-        "groups": [
-            _group(1, "STYLE 01", 20, 20, 2200, 850, "#3f789e"),
-            _group(2, "STYLE 02", 2320, 20, 2200, 850, "#3f789e"),
-            _group(3, "STYLE 03", 20, 920, 2200, 850, "#a1309b"),
-            _group(4, "STYLE 04", 2320, 920, 2200, 850, "#a1309b"),
+    house_lock = (
+        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal "
+        "standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, "
+        "empty of people."
+    )
+    _klein_pack(
+        stem="klein-style-lock-lab-example",
+        size=(768, 960),
+        identity=house_lock,
+        inventory=(
+            "vertical cedar siding, charcoal standing-seam hip roof, tall black-framed "
+            "windows, linen sofa facing the lake glass, oak floors"
+        ),
+        persist="view",
+        shots=[
+            (
+                "ez_style_01",
+                "CURB",
+                "Three-quarter lake facade of the same house, 24mm, golden-hour, Instagram "
+                "4:5. Glass shows the linen sofa and oak floors inside.",
+            ),
+            (
+                "ez_style_02",
+                "LIVING",
+                "From inside the living room of the same house, looking out the glass to "
+                "the lake, late-day sun. Linen sofa in the foreground.",
+            ),
+            (
+                "ez_style_03",
+                "DECK",
+                "Lakeside deck of the same house at dusk, cedar boards, quiet water, "
+                "evergreen ridge.",
+            ),
+            (
+                "ez_style_04",
+                "TWILIGHT",
+                "Twilight exterior of the same house. Lamps on; sofa silhouette through "
+                "black-framed glass.",
+            ),
         ],
-        "config": {},
-        "extra": {
-            "lab_profile": "klein-style-lock-lab-example",
-            "lab_note": note_text,
-            "lab_description": "Klein 4B four-still style-lock pack",
-        },
-        "version": 0.4,
-    }
-    _dump(WF / "klein-style-lock-lab-example.json", g)
+        hint="Instagram 4:5 still",
+        neg=KLEIN_NEG_PHOTO,
+        note=f"""## klein-style-lock-lab-example
+
+Four Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.
+
+Turn Enhance off on IDENTITY to pin the bible.
+""",
+        description="Klein 4B four-still lake-house views, locked inventory",
+    )
 
     # 8. Wan bumper loop MP4
     g = _load(WF / "wan-gif-loop-lab-example.json")
@@ -994,7 +963,9 @@ Identity: {identity}
         "near the start pose for seamless ping-pong. Keep start-image identity locked. No walk, no dolly."
     )
     enh = _node(g, "EZWanPromptEnhance")
-    enh["widgets_values"] = [motion, False, "i2v", "looping bumper, 12 fps"]
+    if I2V_LOCK.lower() not in motion.lower():
+        motion = f"{motion.rstrip()} {I2V_LOCK}"
+    enh["widgets_values"] = [motion, True, "i2v", "looping bumper, 12 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     note = f"""## wan-bumper-loop-lab-example
 
@@ -1015,20 +986,21 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
     vhs = _node(g, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = "ez_broll_video"
     polish_video_graph(g)
-    prompt = (
-        "Locked-camera ambient B-roll of a quiet small-town main street at golden hour. "
-        "Leaves drift, a shop flag stirs, distant footsteps and soft wind, a faint bell once. "
-        "Photoreal, unmarked facades, empty of logos. No music and no score. Five seconds."
-    )
+    prompt = LTX_BROLL
     enh = _node(g, "EZLTXPromptEnhance")
     enh["widgets_values"] = [
         prompt,
         False,
         "t2v",
         "5 seconds, 24 fps, locked camera B-roll",
-        "wind, footsteps, shop bell, no score",
+        LTX_BROLL_AUDIO,
     ]
+    for n in g["nodes"]:
+        if n.get("type") == "CLIPTextEncode" and n.get("title") in ("Positive", "Motion / prompt"):
+            n["widgets_values"] = [prompt]
     note = f"""## ltx-broll-ambient-lab-example
+
+{LTX_CANVAS_LANDSCAPE}
 
 Ambient B-roll AV plate (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
 Locked camera, world audio muxed into MP4. Prefix `ez_broll_video`.
@@ -1039,93 +1011,26 @@ Disclose AI-generated media. No score.
     _set_note(g, note, "LTX-2.5 ambient B-roll AV ~5s")
     _dump(WF / "ltx-broll-ambient-lab-example.json", g)
 
-    # 10. Storyboard 6-up
-    board = [
-        ("ez_board_01", "Wide establishing shot of a small-town main street at dawn, 24mm."),
-        ("ez_board_02", "Medium shot of a red bicycle against a brick storefront, 35mm."),
-        ("ez_board_03", "Detail of chrome handlebars and warm sidelight on brick, 50mm."),
-        ("ez_board_04", "Street-level tracking angle as a pedestrian passes in the distance, 35mm."),
-        ("ez_board_05", "Over-the-shoulder toward the unmarked shop window, golden hour."),
-        ("ez_board_06", "Closing wide as lights warm in windows, quiet street, 24mm."),
-    ]
-    nodes = []
-    links = []
-    note_text = """## klein-storyboard-6up-lab-example
+    board_shots = []
+    for i, (prefix, camera) in enumerate(STORYBOARD):
+        if i == 0:
+            line = f"Canonical plate. {camera} Unmarked surfaces, empty of lettering."
+        else:
+            line = f"Same rooftop and wizard. {camera} Unmarked surfaces, empty of lettering."
+        board_shots.append((prefix, f"{i + 1:02d}", line))
+    _klein_pack(
+        stem="klein-storyboard-6up-lab-example",
+        size=(768, 432),
+        identity=CREATOR_IDENTITY,
+        inventory=ROOFTOP_INVENTORY,
+        persist="view",
+        shots=board_shots,
+        note=f"""## klein-storyboard-6up-lab-example
 
-Six Klein 4B storyboard frames in one Queue. Prefixes `ez_board_01`…`06`.
-Edit each Positive prompt for your beat sheet. Keep SFW / no unlicensed marks.
-"""
-    for i, (prefix, camera) in enumerate(board):
-        src = _load(WF / "klein-still-draft-lab-example.json")
-        src_nodes = [n for n in src["nodes"] if n.get("type") != "Note"]
-        src_ids = {n["id"] for n in src_nodes}
-        src_links = [link for link in src["links"] if link[1] in src_ids and link[3] in src_ids]
-        rn, rl, _ = _remap_subgraph(
-            src_nodes,
-            src_links,
-            id_offset=i * 100,
-            link_offset=i * 100,
-            pos_dx=(i % 3) * 2200,
-            pos_dy=(i // 3) * 900,
-        )
-        prompt = (
-            f"A photoreal storyboard still, YouTube 16:9. {camera} Unmarked facades, "
-            "empty of signage. Clean cinematic frame."
-        )
-        for n in rn:
-            if n.get("type") == "SaveImage":
-                n["widgets_values"] = [prefix]
-                n["title"] = f"Save {prefix}"
-            if n.get("type") == "EZKleinPromptEnhance":
-                n["widgets_values"][0] = prompt
-            if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
-                n["widgets_values"] = [prompt]
-            if n.get("type") == "EmptyFlux2LatentImage":
-                n["widgets_values"] = [768, 432, 1]
-            if n.get("type") == "KSampler":
-                # slightly different seeds per board frame
-                wv = list(n["widgets_values"])
-                # seed is typically index 0 or 1 depending on control_after_generate
-                if isinstance(wv[0], int):
-                    wv[0] = 42 + i
-                n["widgets_values"] = wv
-        nodes.extend(rn)
-        links.extend(rl)
-    note_node = {
-        "id": 999,
-        "type": "Note",
-        "pos": [40, 1850],
-        "size": [960, 220],
-        "flags": {},
-        "order": 99,
-        "mode": 0,
-        "inputs": [],
-        "outputs": [],
-        "properties": {"Node name for S&R": "Note"},
-        "widgets_values": [note_text],
-        "title": "Operator note",
-    }
-    nodes.append(note_node)
-    g = {
-        "id": "klein-storyboard-6up-lab-example",
-        "revision": 1,
-        "last_node_id": max(n["id"] for n in nodes),
-        "last_link_id": max(link[0] for link in links),
-        "nodes": nodes,
-        "links": links,
-        "groups": [
-            _group(i + 1, f"BOARD {i + 1:02d}", (i % 3) * 2200 + 20, (i // 3) * 900 + 20, 2100, 850, "#3f789e")
-            for i in range(6)
-        ],
-        "config": {},
-        "extra": {
-            "lab_profile": "klein-storyboard-6up-lab-example",
-            "lab_note": note_text,
-            "lab_description": "Klein 4B six-frame storyboard pack",
-        },
-        "version": 0.4,
-    }
-    _dump(WF / "klein-storyboard-6up-lab-example.json", g)
+Six Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`…`06`. Independent T2I, same seed, locked inventory. Turn Enhance off on IDENTITY to pin the bible.
+""",
+        description="Klein 4B six-frame storyboard pack, new cameras",
+    )
 
 
 def _klein_single(
@@ -1138,6 +1043,7 @@ def _klein_single(
     note: str,
     description: str,
     size_title: str | None = None,
+    neg: str | None = None,
 ) -> None:
     src = WF / "klein-still-hero-lab-example.json" if template == "hero" else WF / "klein-still-draft-lab-example.json"
     g = _load(src)
@@ -1151,6 +1057,8 @@ def _klein_single(
     save["title"] = "Save PNG"
     _node(g, "EZKleinPromptEnhance")["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
+    if neg is not None:
+        _set_neg(g, neg)
     _set_note(g, note, description)
     g["groups"] = [
         _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
@@ -1161,6 +1069,33 @@ def _klein_single(
     _dump(WF / f"{stem}.json", g)
 
 
+def _base_node(
+    nid: int,
+    ntype: str,
+    pos: list[float],
+    size: list[float],
+    title: str,
+    widgets: list | dict,
+    order: int,
+    inputs: list | None = None,
+    outputs: list | None = None,
+) -> dict:
+    return {
+        "id": nid,
+        "type": ntype,
+        "pos": pos,
+        "size": size,
+        "flags": {},
+        "order": order,
+        "mode": 0,
+        "inputs": inputs or [],
+        "outputs": outputs or [],
+        "properties": {"Node name for S&R": ntype},
+        "widgets_values": widgets,
+        "title": title,
+    }
+
+
 def _klein_pack(
     *,
     stem: str,
@@ -1169,56 +1104,344 @@ def _klein_pack(
     note: str,
     description: str,
     cols: int = 2,
+    identity: str = CREATOR_IDENTITY,
+    inventory: str = ROOFTOP_INVENTORY,
+    hint: str = "YouTube 16:9 still",
+    neg: str | None = None,
+    persist: str = "state",
 ) -> None:
+    """Multi-shot Klein pack.
+
+    persist=state: shot 01 T2I, 02–N ReferenceLatent of 01 (same camera).
+    persist=view: every shot independent T2I with a locked world bible (new camera).
+    """
+    del cols  # layout is a vertical shot stack, shared loaders
+    if persist not in ("view", "state"):
+        raise SystemExit(f"persist must be view or state, got {persist}")
+    negative = neg if neg is not None else KLEIN_NEG_STILL
+    enhance_on = persist != "view"
     nodes: list[dict] = []
     links: list[list] = []
-    dx, dy = 2300, 920
-    for i, (prefix, title, prompt) in enumerate(shots):
-        src = _load(WF / "klein-still-draft-lab-example.json")
-        src_nodes = [n for n in src["nodes"] if n.get("type") != "Note"]
-        src_ids = {n["id"] for n in src_nodes}
-        src_links = [link for link in src["links"] if link[1] in src_ids and link[3] in src_ids]
-        rn, rl, _ = _remap_subgraph(
-            src_nodes,
-            src_links,
-            id_offset=i * 100,
-            link_offset=i * 100,
-            pos_dx=(i % cols) * dx,
-            pos_dy=(i // cols) * dy,
+    link_id = 0
+
+    def add_link(src: int, src_slot: int, dst: int, dst_slot: int, ltype: str) -> int:
+        nonlocal link_id
+        link_id += 1
+        links.append([link_id, src, src_slot, dst, dst_slot, ltype])
+        return link_id
+
+    def out(name: str, ltype: str, link_ids: list[int]) -> dict:
+        return {"name": name, "type": ltype, "links": link_ids, "slot_index": 0}
+
+    unet_links: list[int] = []
+    clip_links: list[int] = []
+    vae_links: list[int] = []
+    ident_links: list[int] = []
+    neg_links: list[int] = []
+    latent_links: list[int] = []
+    vae_enc_links: list[int] = []
+    ref_neg_out: list[int] = []
+
+    nodes.append(
+        _base_node(
+            1,
+            "UNETLoader",
+            [40, 80],
+            [360, 82],
+            "Klein 4B distilled FP8",
+            ["flux-2-klein-4b-fp8.safetensors", "default"],
+            0,
+            outputs=[out("MODEL", "MODEL", unet_links)],
         )
-        for n in rn:
-            if n.get("type") == "SaveImage":
-                n["widgets_values"] = [prefix]
-                n["title"] = f"Save {title}"
-            if n.get("type") == "EZKleinPromptEnhance":
-                n["widgets_values"][0] = prompt
-            if n.get("type") == "CLIPTextEncode" and n.get("title") == "Positive":
-                n["widgets_values"] = [prompt]
-            if n.get("type") == "EmptyFlux2LatentImage":
-                n["widgets_values"] = [size[0], size[1], 1]
-            if n.get("type") == "KSampler":
-                wv = list(n["widgets_values"])
-                if isinstance(wv[0], int):
-                    wv[0] = 42 + i
-                n["widgets_values"] = wv
-        nodes.extend(rn)
-        links.extend(rl)
-    rows = (len(shots) + cols - 1) // cols
-    note_node = {
-        "id": 999,
-        "type": "Note",
-        "pos": [40, rows * dy + 40],
-        "size": [960, 240],
-        "flags": {},
-        "order": 99,
-        "mode": 0,
-        "inputs": [],
-        "outputs": [],
-        "properties": {"Node name for S&R": "Note"},
-        "widgets_values": [note],
-        "title": "Operator note",
-    }
-    nodes.append(note_node)
+    )
+    nodes.append(
+        _base_node(
+            2,
+            "CLIPLoader",
+            [40, 212],
+            [360, 106],
+            "Qwen3-4B TE",
+            ["qwen_3_4b.safetensors", "flux2", "default"],
+            1,
+            outputs=[out("CLIP", "CLIP", clip_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            3,
+            "VAELoader",
+            [40, 368],
+            [360, 58],
+            "Flux2 VAE",
+            ["flux2-vae.safetensors"],
+            2,
+            outputs=[out("VAE", "VAE", vae_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            4,
+            "EZKleinPromptEnhance",
+            [40, 480],
+            [420, 420],
+            "IDENTITY",
+            [identity, enhance_on, "t2i", hint, "none"],
+            3,
+            outputs=[out("prompt", "STRING", ident_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            5,
+            "CLIPTextEncode",
+            [40, 940],
+            [420, 120],
+            "Negative",
+            [negative],
+            4,
+            inputs=[{"name": "clip", "type": "CLIP", "link": None}],
+            outputs=[out("CONDITIONING", "CONDITIONING", neg_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            6,
+            "EmptyFlux2LatentImage",
+            [40, 1120],
+            [280, 106],
+            f"Size {size[0]}x{size[1]}",
+            [size[0], size[1], 1],
+            5,
+            outputs=[out("LATENT", "LATENT", latent_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            7,
+            "Note",
+            [40, 1280],
+            [420, 360],
+            "Operator note",
+            [note],
+            6,
+        )
+    )
+    use_ref = persist == "state"
+    if use_ref:
+        nodes.append(
+            _base_node(
+                8,
+                "VAEEncode",
+                [1740, 170],
+                [240, 80],
+                "Encode plate 01",
+                [],
+                7,
+                inputs=[
+                    {"name": "pixels", "type": "IMAGE", "link": None},
+                    {"name": "vae", "type": "VAE", "link": None},
+                ],
+                outputs=[out("LATENT", "LATENT", vae_enc_links)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                9,
+                "ReferenceLatent",
+                [40, 1680],
+                [280, 80],
+                "Negative + identity plate",
+                [],
+                8,
+                inputs=[
+                    {"name": "conditioning", "type": "CONDITIONING", "link": None},
+                    {"name": "latent", "type": "LATENT", "link": None, "shape": 7},
+                ],
+                outputs=[out("CONDITIONING", "CONDITIONING", ref_neg_out)],
+            )
+        )
+
+    lid = add_link(2, 0, 5, 0, "CLIP")
+    nodes[4]["inputs"][0]["link"] = lid
+    clip_links.append(lid)
+    if use_ref:
+        by_shared = {n["id"]: n for n in nodes}
+        lid = add_link(3, 0, 8, 1, "VAE")
+        by_shared[8]["inputs"][1]["link"] = lid
+        vae_links.append(lid)
+        lid = add_link(5, 0, 9, 0, "CONDITIONING")
+        by_shared[9]["inputs"][0]["link"] = lid
+        neg_links.append(lid)
+        lid = add_link(8, 0, 9, 1, "LATENT")
+        by_shared[9]["inputs"][1]["link"] = lid
+        vae_enc_links.append(lid)
+
+    row_h = 380
+    shot_y0 = 80
+    for i, (prefix, title, shot) in enumerate(shots):
+        y = shot_y0 + i * row_h
+        join_id = 10 + i * 6
+        clip_id = 11 + i * 6
+        ks_id = 12 + i * 6
+        dec_id = 13 + i * 6
+        save_id = 14 + i * 6
+        n = 20 + i * 6
+        joined = join_prompt(identity, shot, inventory, persist)
+        join_out: list[int] = []
+        clip_out: list[int] = []
+        ks_out: list[int] = []
+        dec_out: list[int] = []
+        nodes.append(
+            _base_node(
+                join_id,
+                "EZPromptJoin",
+                [520, y],
+                [420, 180],
+                f"SHOT {title}",
+                [shot, inventory, persist],
+                n,
+                inputs=[{"name": "identity", "type": "STRING", "link": None}],
+                outputs=[out("prompt", "STRING", join_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                clip_id,
+                "CLIPTextEncode",
+                [980, y],
+                [360, 140],
+                f"Positive {title}",
+                [joined],
+                n + 1,
+                inputs=[
+                    {"name": "clip", "type": "CLIP", "link": None},
+                    {"name": "text", "type": "STRING", "link": None, "widget": {"name": "text"}},
+                ],
+                outputs=[out("CONDITIONING", "CONDITIONING", clip_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                ks_id,
+                "KSampler",
+                [1380, y],
+                [320, 262],
+                f"Sampler {title}",
+                [42, "fixed", 4, 1.0, "euler", "simple", 1.0],
+                n + 2,
+                inputs=[
+                    {"name": "model", "type": "MODEL", "link": None},
+                    {"name": "positive", "type": "CONDITIONING", "link": None},
+                    {"name": "negative", "type": "CONDITIONING", "link": None},
+                    {"name": "latent_image", "type": "LATENT", "link": None},
+                ],
+                outputs=[out("LATENT", "LATENT", ks_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                dec_id,
+                "VAEDecode",
+                [1740, y],
+                [240, 46],
+                f"Decode {title}",
+                [],
+                n + 3,
+                inputs=[
+                    {"name": "samples", "type": "LATENT", "link": None},
+                    {"name": "vae", "type": "VAE", "link": None},
+                ],
+                outputs=[out("IMAGE", "IMAGE", dec_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                save_id,
+                "SaveImage",
+                [2020, y],
+                [280, 270],
+                f"Save {title}",
+                [prefix],
+                n + 4,
+                inputs=[{"name": "images", "type": "IMAGE", "link": None}],
+            )
+        )
+        by_id = {node["id"]: node for node in nodes}
+        lid = add_link(4, 0, join_id, 0, "STRING")
+        by_id[join_id]["inputs"][0]["link"] = lid
+        ident_links.append(lid)
+        lid = add_link(join_id, 0, clip_id, 1, "STRING")
+        by_id[clip_id]["inputs"][1]["link"] = lid
+        join_out.append(lid)
+        lid = add_link(2, 0, clip_id, 0, "CLIP")
+        by_id[clip_id]["inputs"][0]["link"] = lid
+        clip_links.append(lid)
+        lid = add_link(1, 0, ks_id, 0, "MODEL")
+        by_id[ks_id]["inputs"][0]["link"] = lid
+        unet_links.append(lid)
+        if use_ref and i > 0:
+            ref_id = 15 + i * 6
+            ref_out: list[int] = []
+            nodes.append(
+                _base_node(
+                    ref_id,
+                    "ReferenceLatent",
+                    [980, y + 200],
+                    [240, 80],
+                    f"Ref from 01 ({title})",
+                    [],
+                    n + 5,
+                    inputs=[
+                        {"name": "conditioning", "type": "CONDITIONING", "link": None},
+                        {"name": "latent", "type": "LATENT", "link": None, "shape": 7},
+                    ],
+                    outputs=[out("CONDITIONING", "CONDITIONING", ref_out)],
+                )
+            )
+            by_id = {node["id"]: node for node in nodes}
+            lid = add_link(clip_id, 0, ref_id, 0, "CONDITIONING")
+            by_id[ref_id]["inputs"][0]["link"] = lid
+            clip_out.append(lid)
+            lid = add_link(8, 0, ref_id, 1, "LATENT")
+            by_id[ref_id]["inputs"][1]["link"] = lid
+            vae_enc_links.append(lid)
+            lid = add_link(ref_id, 0, ks_id, 1, "CONDITIONING")
+            by_id[ks_id]["inputs"][1]["link"] = lid
+            ref_out.append(lid)
+            lid = add_link(9, 0, ks_id, 2, "CONDITIONING")
+            by_id[ks_id]["inputs"][2]["link"] = lid
+            ref_neg_out.append(lid)
+        else:
+            lid = add_link(clip_id, 0, ks_id, 1, "CONDITIONING")
+            by_id[ks_id]["inputs"][1]["link"] = lid
+            clip_out.append(lid)
+            lid = add_link(5, 0, ks_id, 2, "CONDITIONING")
+            by_id[ks_id]["inputs"][2]["link"] = lid
+            neg_links.append(lid)
+        lid = add_link(6, 0, ks_id, 3, "LATENT")
+        by_id[ks_id]["inputs"][3]["link"] = lid
+        latent_links.append(lid)
+        lid = add_link(ks_id, 0, dec_id, 0, "LATENT")
+        by_id[dec_id]["inputs"][0]["link"] = lid
+        ks_out.append(lid)
+        lid = add_link(3, 0, dec_id, 1, "VAE")
+        by_id[dec_id]["inputs"][1]["link"] = lid
+        vae_links.append(lid)
+        lid = add_link(dec_id, 0, save_id, 0, "IMAGE")
+        by_id[save_id]["inputs"][0]["link"] = lid
+        dec_out.append(lid)
+        if use_ref and i == 0:
+            lid = add_link(dec_id, 0, 8, 0, "IMAGE")
+            by_id[8]["inputs"][0]["link"] = lid
+            dec_out.append(lid)
+
+    groups = [
+        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
+        _group(2, "IDENTITY", 20, 450, 460, 500, "#a1309b"),
+    ]
+    for i, (_prefix, title, _shot) in enumerate(shots):
+        y = shot_y0 + i * row_h
+        groups.append(_group(10 + i, f"SHOT {title}", 500, y - 20, 1840, 360, "#3f789e"))
     g = {
         "id": stem,
         "revision": 1,
@@ -1226,18 +1449,7 @@ def _klein_pack(
         "last_link_id": max(link[0] for link in links),
         "nodes": nodes,
         "links": links,
-        "groups": [
-            _group(
-                i + 1,
-                shots[i][1],
-                (i % cols) * dx + 20,
-                (i // cols) * dy + 20,
-                dx - 100,
-                dy - 70,
-                "#3f789e" if i % 2 == 0 else "#a1309b",
-            )
-            for i in range(len(shots))
-        ],
+        "groups": groups,
         "config": {},
         "extra": {
             "lab_profile": stem,
@@ -1270,7 +1482,9 @@ def _wan_i2v(
     vhs = _node(g, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = prefix
     polish_video_graph(g)
-    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, False, "i2v", "5 seconds, 24 fps"]
+    if I2V_LOCK.lower() not in motion.lower():
+        motion = f"{motion.rstrip()} {I2V_LOCK}"
+    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, True, "i2v", "5 seconds, 24 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     _set_note(g, note, description)
     _dump(WF / f"{stem}.json", g)
@@ -1298,7 +1512,9 @@ def _wan_loop(
         if n.get("type") == "SaveImage":
             n["widgets_values"] = [f"{prefix}_frames"]
             n["title"] = "Save frames (secondary)"
-    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, False, "i2v", "looping sticker, 12 fps"]
+    if I2V_LOCK.lower() not in motion.lower():
+        motion = f"{motion.rstrip()} {I2V_LOCK}"
+    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, True, "i2v", "looping sticker, 12 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     _set_note(g, note, description)
     _dump(WF / f"{stem}.json", g)
@@ -1323,16 +1539,22 @@ def _ltx_av(
     vhs["widgets_values"]["filename_prefix"] = prefix
     polish_video_graph(g)
     enh = _node(g, "EZLTXPromptEnhance")
-    enh["widgets_values"] = [prompt, False, mode, "5 seconds, 24 fps", audio_hint]
+    if mode == "i2v" and I2V_LOCK.lower() not in prompt.lower():
+        prompt = f"{prompt.rstrip()} {I2V_LOCK}"
+    enh["widgets_values"] = [prompt, True, mode, "5 seconds, 24 fps", audio_hint, "none"]
+    for n in g["nodes"]:
+        if n.get("type") == "CLIPTextEncode" and n.get("title") in (
+            "Positive",
+            "Motion / prompt",
+            "Motion + audio",
+        ):
+            n["widgets_values"] = [prompt]
     _set_note(g, note, description)
     _dump(WF / f"{stem}.json", g)
 
 
 def build_creator_toolkit_v2() -> None:
-    identity = (
-        "A photoreal still of a small-town main street at golden hour. A single red bicycle "
-        "leans against a brick storefront. Unmarked facades, empty of signage."
-    )
+    identity = CREATOR_IDENTITY
 
     _klein_single(
         stem="klein-endcard-cta-lab-example",
@@ -1341,7 +1563,8 @@ def build_creator_toolkit_v2() -> None:
         prefix="ez_endcard",
         prompt=(
             f"{identity} Framed as a YouTube end-card plate: generous empty lower-right "
-            "for a subscribe button later. No burned-in text, logos, or UI chrome. Photoreal 16:9."
+            "for a subscribe button later. Clean of burned-in text, logos, or UI chrome. "
+            "HD 3D game-engine pre-rendered cutscene 16:9."
         ),
         note="""## klein-endcard-cta-lab-example
 
@@ -1358,7 +1581,7 @@ Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
         prefix="ez_quote_bg",
         prompt=(
             f"{identity} Square 1:1. Soft bokeh, quiet center so overlay text can sit later. "
-            "No lettering, no logos. Photoreal quote-card background."
+            "Empty of lettering. HD 3D game-engine pre-rendered cutscene quote-card background."
         ),
         note="""## klein-quote-bg-lab-example
 
@@ -1375,7 +1598,7 @@ Keep the center empty of detail; add the quote in your editor.
         prefix="ez_og",
         prompt=(
             f"{identity} Wide blog / Open Graph hero. Subject left-weighted, quiet right third "
-            "for a headline later. No burned-in text. Photoreal ~1.9:1."
+            "for a headline later. Clean of burned-in text. HD 3D game-engine pre-rendered cutscene ~1.9:1."
         ),
         note="""## klein-og-blog-lab-example
 
@@ -1401,6 +1624,7 @@ Swap the props in the prompt. Add show title in your editor.
 """,
         description="Klein 4B podcast cover 1:1",
         size_title="Size 1:1 podcast cover",
+        neg=KLEIN_NEG_PHOTO,
     )
     _klein_single(
         stem="klein-banner-wide-lab-example",
@@ -1409,7 +1633,7 @@ Swap the props in the prompt. Add show title in your editor.
         prefix="ez_banner",
         prompt=(
             f"{identity} Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band "
-            "for a name overlay. No text, no logos. Photoreal ~3:1."
+            "for a name overlay. Empty of lettering. HD 3D game-engine pre-rendered cutscene ~3:1."
         ),
         note="""## klein-banner-wide-lab-example
 
@@ -1425,7 +1649,7 @@ Keep the upper band simple for a name overlay.
         size=(1024, 1024),
         prefix="ez_ig_square",
         prompt=(
-            f"{identity} Instagram 1:1 square. Subject centered, warm sidelight, unmarked facades."
+            f"{identity} Instagram 1:1 square. Subject centered, warm key, unmarked surfaces."
         ),
         note="""## klein-ig-square-lab-example
 
@@ -1440,11 +1664,7 @@ Edit the prompt for any feed post.
         template="draft",
         size=(432, 768),
         prefix="ez_hook_still",
-        prompt=(
-            "A photoreal vertical hook still for Shorts. First-frame energy: a red bicycle "
-            "fills the lower third against a brick storefront at golden hour. Tight 9:16, "
-            "caption headroom at the top. Unmarked, no text."
-        ),
+        prompt=KLEIN_HOOK,
         note="""## klein-hook-still-lab-example
 
 First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`.
@@ -1460,7 +1680,7 @@ Feed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.
         prefix="ez_lowerthird",
         prompt=(
             f"{identity} 16:9 plate with a clean, empty lower fifth for a lower-third graphic. "
-            "Subject sits in the upper two-thirds. No text, no logos."
+            "Subject sits in the upper two-thirds. Empty of lettering."
         ),
         note="""## klein-lower-third-bg-lab-example
 
@@ -1486,126 +1706,140 @@ Swap the dish in the prompt; keep unmarked surfaces.
 """,
         description="Klein 4B food tabletop 4:5",
         size_title="Size 4:5 tabletop",
+        neg=KLEIN_NEG_PHOTO,
     )
 
     _klein_pack(
         stem="klein-lighting-trio-lab-example",
         size=(768, 432),
+        identity=identity,
+        inventory=ROOFTOP_INVENTORY,
         shots=[
             (
                 "ez_light_01",
                 "KEY",
-                f"{identity} Hard golden key light from camera left, deep contact shadows.",
+                "Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9.",
             ),
             (
                 "ez_light_02",
                 "WINDOW",
-                f"{identity} Soft overcast window light, gentle falloff, cool shadows.",
+                "Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera.",
             ),
             (
                 "ez_light_03",
                 "NIGHT LAMP",
-                "The same red bicycle and brick storefront at night under a warm street lamp. "
-                "Unmarked facades. Photoreal 16:9.",
+                "Same rooftop and wizard at night under rooftop sodium and city neon. Same camera.",
             ),
         ],
-        cols=3,
-        note="""## klein-lighting-trio-lab-example
+        note=f"""## klein-lighting-trio-lab-example
 
-Same subject under three lights (Klein 4B). Prefixes `ez_light_01`…`03` (key / window / night lamp).
-Keep the bicycle identity locked; change only the light.
+Same subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02–03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.
+Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light.
+
+{ENHANCE_NOTE}
 """,
         description="Klein 4B three-light study of one subject",
     )
     _klein_pack(
         stem="klein-time-of-day-lab-example",
         size=(768, 432),
+        identity=identity,
+        inventory=ROOFTOP_INVENTORY,
         shots=[
             (
                 "ez_tod_01",
-                "DAWN",
-                f"{identity} Replace golden hour with first blue dawn, empty street, cool air.",
+                "DUSK",
+                "Canonical dusk plate, pink sky, city lamps just on. 24mm eye-level, YouTube 16:9.",
             ),
             (
                 "ez_tod_02",
-                "NOON",
-                f"{identity} Replace golden hour with hard noon sun, short shadows.",
+                "DAWN",
+                "Same rooftop and wizard. First blue dawn, cool air, empty terrace. Same camera.",
             ),
             (
                 "ez_tod_03",
-                "DUSK",
-                f"{identity} Replace golden hour with dusk, pink sky, shop lamps just on.",
+                "NOON",
+                "Same rooftop and wizard. Hard noon sun, short shadows. Same camera.",
             ),
             (
                 "ez_tod_04",
                 "NIGHT",
-                "The same red bicycle and brick storefront at night. Warm window glow, unmarked facades.",
+                "Same rooftop and wizard at night. Warm tower glow. Same camera.",
             ),
         ],
-        note="""## klein-time-of-day-lab-example
+        note=f"""## klein-time-of-day-lab-example
 
-Same place at dawn / noon / dusk / night (Klein 4B). Prefixes `ez_tod_01`…`04`.
-Keep the street and bicycle locked; change only time of day.
+Same place at dusk / dawn / noon / night (Klein 4B). SHOT DUSK is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass DUSK on a cold canvas.
+Prefixes `ez_tod_01`…`04`. Change only time of day.
+
+{ENHANCE_NOTE}
 """,
         description="Klein 4B time-of-day four-still pack",
     )
     _klein_pack(
         stem="klein-camera-angles-lab-example",
         size=(768, 432),
+        identity=identity,
+        inventory=ROOFTOP_INVENTORY,
+        persist="view",
         shots=[
-            (
-                "ez_angle_wide",
-                "WIDE",
-                f"{identity} 24mm wide establishing, lots of street and sky.",
-            ),
             (
                 "ez_angle_med",
                 "MEDIUM",
-                f"{identity} 35mm medium, bicycle fills the middle third.",
+                "35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9.",
+            ),
+            (
+                "ez_angle_wide",
+                "WIDE",
+                "24mm wide establishing of the same rooftop and wizard, lots of city and sky.",
             ),
             (
                 "ez_angle_close",
                 "CLOSE",
-                f"{identity} 50mm close on chrome handlebars and brick texture.",
+                "50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials.",
             ),
         ],
-        cols=3,
-        note="""## klein-camera-angles-lab-example
+        note=f"""## klein-camera-angles-lab-example
 
-Wide / medium / close of one subject (Klein 4B). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`.
-Keep identity locked; change only lens and framing.
+Wide / medium / close of one subject (Klein 4B, lock=view). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed, locked inventory — new lens and framing, not copies of MEDIUM.
+
+Turn Enhance off on IDENTITY to pin the bible.
 """,
-        description="Klein 4B wide/medium/close angle pack",
+        description="Klein 4B wide/medium/close angle pack, new cameras",
     )
     _klein_pack(
         stem="klein-color-moods-lab-example",
         size=(768, 432),
+        identity=identity,
+        inventory=ROOFTOP_INVENTORY,
         shots=[
             (
                 "ez_mood_01",
                 "WARM",
-                f"{identity} Warm amber grade, golden sidelight.",
+                "Canonical plate. Warm amber grade, golden sidelight. 24mm, YouTube 16:9.",
             ),
             (
                 "ez_mood_02",
                 "COOL",
-                f"{identity} Cool teal-and-steel grade, overcast.",
+                "Same rooftop and wizard. Cool teal-and-steel grade, overcast. Same camera.",
             ),
             (
                 "ez_mood_03",
                 "MUTED",
-                f"{identity} Muted filmic grade, desaturated brick, soft contrast.",
+                "Same rooftop and wizard. Muted filmic grade, desaturated copper, soft contrast. Same camera.",
             ),
             (
                 "ez_mood_04",
                 "HIGH KEY",
-                f"{identity} High-key bright daylight, lifted shadows, clean whites.",
+                "Same rooftop and wizard. High-key bright daylight, lifted shadows, clean whites. Same camera.",
             ),
         ],
-        note="""## klein-color-moods-lab-example
+        note=f"""## klein-color-moods-lab-example
 
-Four color moods, shared identity (Klein 4B). Prefixes `ez_mood_01`…`04`.
-Keep the street and bicycle locked; change only grade / mood.
+Four color moods, shared identity (Klein 4B). SHOT WARM is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass WARM on a cold canvas.
+Prefixes `ez_mood_01`…`04`. Change only grade / mood.
+
+{ENHANCE_NOTE}
 """,
         description="Klein 4B four-mood color pack",
     )
@@ -1613,10 +1847,7 @@ Keep the street and bicycle locked; change only grade / mood.
     _wan_i2v(
         stem="wan-orbit-i2v-lab-example",
         prefix="ez_orbit_video",
-        motion=(
-            "Slow orbit around the start-image subject. Camera arcs a few degrees right while "
-            "keeping the product or bicycle identity locked. One continuous ~5 s take, no cuts."
-        ),
+        motion=WAN_ORBIT,
         note=f"""## wan-orbit-i2v-lab-example
 
 Silent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).
@@ -1678,14 +1909,12 @@ LoadImage: a cutout-friendly still.
     _ltx_av(
         stem="ltx-weather-broll-lab-example",
         prefix="ez_weather_video",
-        prompt=(
-            "Locked-camera weather B-roll. Rain streaks across a brick storefront and a red bicycle "
-            "at golden-hour leftovers. Soft wind, rain on pavement, distant drip. Unmarked facades. "
-            "No music and no score. Five seconds."
-        ),
-        audio_hint="rain, wind, drip, no score",
+        prompt=LTX_WEATHER,
+        audio_hint=LTX_WEATHER_AUDIO,
         mode="t2v",
         note=f"""## ltx-weather-broll-lab-example
+
+{LTX_CANVAS_LANDSCAPE}
 
 Weather B-roll AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
 Prefix `ez_weather_video`. World audio muxed into MP4.
@@ -1707,6 +1936,8 @@ Disclose AI-generated media. No score.
         mode="t2v",
         note=f"""## ltx-interior-ambience-lab-example
 
+{LTX_CANVAS_LANDSCAPE}
+
 Interior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
 Prefix `ez_interior_video`.
 
@@ -1718,14 +1949,12 @@ Disclose AI-generated media. No score.
     _ltx_av(
         stem="ltx-hook-av-lab-example",
         prefix="ez_hook_video",
-        prompt=(
-            "A five-second AV cold open. Camera snaps to a red bicycle against a brick storefront "
-            "as a shop bell clinks once and wind hits a flag. Fast present-tense energy, unmarked "
-            "facades. No music and no score."
-        ),
-        audio_hint="shop bell, wind, no score",
+        prompt=LTX_HOOK_AV,
+        audio_hint=LTX_HOOK_AUDIO,
         mode="t2v",
         note=f"""## ltx-hook-av-lab-example
+
+{LTX_CANVAS_LANDSCAPE}
 
 ~5 s AV cold-open / hook (LTX-2.5 T2V). Community License — not Apache.
 Prefix `ez_hook_video`. Pair with **klein-hook-still-lab-example** if you want I2V instead.
@@ -1742,6 +1971,10 @@ def main() -> None:
     build_all_films()
     build_creator_toolkit()
     build_creator_toolkit_v2()
+    for path in sorted(WF.rglob("*-lab-example.json")):
+        graph = _load(path)
+        normalize_enhance_widgets(graph)
+        _dump(path, graph)
     print("done")
 
 

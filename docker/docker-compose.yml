@@ -18,13 +18,15 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        # Builder (devel) for optional compile; public Hub by default.
+        # Builder default is CUDA runtime (wheels; no nvcc). Set devel if compiling CUDA exts.
         # Set CUDA_BASE_IMAGE / CUDA_RUNTIME_IMAGE in .env for NGC after docker login nvcr.io
-        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvidia/cuda:13.0.0-devel-ubuntu24.04}
+        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvidia/cuda:13.0.0-runtime-ubuntu24.04}
         CUDA_RUNTIME_IMAGE: ${CUDA_RUNTIME_IMAGE:-nvidia/cuda:13.0.0-runtime-ubuntu24.04}
         # 1 = bake Comfy+torch into image (default). 0 = thin image (cold pip at runtime).
         EZ_COMFY_PREBUILD: ${EZ_COMFY_PREBUILD:-1}
         # Validated pins (see docs/models-and-cache.md). Override to bump or set empty to float.
+        TORCH_VERSION: ${TORCH_VERSION:-2.14.0}
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu130}
         COMFYUI_REF: ${COMFYUI_REF:-v0.34.0}
         COMFYUI_MANAGER_REF: ${COMFYUI_MANAGER_REF:-4.2.2}
         COMFYUI_NUNCHAKU_NODE_REF: ${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}
@@ -50,11 +52,13 @@ services:
       HUGGINGFACE_HUB_CACHE: /models/hub
       # Runtime only — not baked into image layers
       HF_TOKEN: ${HF_TOKEN:-}
-      # Optional prompt-enhance (off-box Grok). Never bake into the image.
-      XAI_API_KEY: ${XAI_API_KEY:-}
-      XAI_BASE_URL: ${XAI_BASE_URL:-https://api.x.ai/v1}
-      XAI_MODEL: ${XAI_MODEL:-grok-4.6}
-      XAI_TIMEOUT_S: ${XAI_TIMEOUT_S:-20}
+      # On-box prompt-enhance GGUF (CPU llama.cpp). Never bake weights into the image.
+      EZ_LLM_GGUF: ${EZ_LLM_GGUF:-/models/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf}
+      EZ_LLM_N_THREADS: ${EZ_LLM_N_THREADS:-4}
+      EZ_LLM_N_CTX: ${EZ_LLM_N_CTX:-4096}
+      EZ_LLM_TIMEOUT_S: ${EZ_LLM_TIMEOUT_S:-60}
+      EZ_LLM_N_GPU_LAYERS: ${EZ_LLM_N_GPU_LAYERS:-0}
+      EZ_LLM_UNLOAD: ${EZ_LLM_UNLOAD:-0}
       LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
       LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
       # Runtime pin (must match build-arg). Stamp-present refresh syncs the volume when this changes.
@@ -82,7 +86,7 @@ services:
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs
       # All example workflows (host tree); entrypoint copies into user workflows
       - ../workflows:/opt/ez-comfy/workflows:ro
-      # In-tree prompt-enhance nodes; entrypoint copies into custom_nodes
+      # In-tree custom nodes (prompt-enhance, LTX spatial snap); entrypoint copies packs
       - ../custom_nodes:/opt/ez-comfy/custom_nodes:ro
       # Host ops scripts — iterate without image rebuild (image still embeds for GHCR)
       - ./entrypoint.sh:/opt/ez-comfy/entrypoint.sh:ro

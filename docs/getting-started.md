@@ -203,7 +203,7 @@ Fix any errors **before** downloading multi‑GB models. Missing lab weights are
 
     Prefer `./scripts/manage.sh setup` first. Copy-paste fixes: [Troubleshooting](troubleshooting.md).
 
-`doctor` also prints the **license policy one-liner**, image tag for this git branch, and JSON status from `download-image` / `download-wan` / `download-ltx`.
+`doctor` also prints the **license policy one-liner**, image tag for this git branch, and JSON status from `download-image` / `download-wan` / `download-ltx` / `download-llm`. Analog **podcast** JSON is printed as a soft line — a missing podcast pack is **not** a doctor failure.
 
 ---
 
@@ -224,7 +224,7 @@ hf auth whoami
 
 | What | Detail |
 | --- | --- |
-| **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` |
+| **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` + `download-llm` |
 | **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
 | **CLI** | Modern **`hf download`** |
 | **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks |
@@ -244,6 +244,7 @@ hf auth whoami
 | `wan2.2_vae.safetensors` | `vae/` |
 | `ltx-2.5-video-vae-bf16.safetensors` | `vae/` |
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` |
+| `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` |
 
 !!! tip "Bandwidth shaping soft-fail"
 
@@ -284,7 +285,7 @@ ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 
     In ComfyUI, load **klein-still-draft-lab-example** from `user/default/workflows/` (seeded from host `workflows/`). Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
 
-    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Visual Generative AI](visual-generative-ai.md).
+    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Visual Generative AI](visual-generative-ai.md). After that first still, optional audio: [Local podcast](podcast.md) (`download-podcast --tier analog`, then **podcast-audio-first-lab-example**) or rap-first [Local music](music.md) (`download-music --tier turbo`, then **music-rap-draft-lab-example** — do not co-resident with LTX/Wan/Klein).
 
 ### Build the image locally (optional)
 
@@ -360,7 +361,9 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 | `stop` | Stop containers; keep models, outputs, volume |
 | `restart` | `stop` + `start` (full confirm again) |
 | `logs` | Follow compose logs (`logs --tail 100` works) |
-| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap |
+| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap (does **not** pull podcast or music weights) |
+| `download-podcast [--tier analog\|…] [--limit auto\|N\|off]` | Opt-in Kokoro / ACE-Step / optional TTS |
+| `download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]` | Opt-in ACE-Step 1.5 rap AIO (~10 GB; shared dest with `download-podcast --tier acestep`) |
 | `download-limit …` | Proxy to `scripts/utilities/download-limit.sh` |
 | `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` |
 | `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) |
@@ -383,7 +386,7 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 
     Override with `EZ_COMFY_IMAGE` in `.env` if needed. Old `flux-to-ltx*` tags freeze on the previous image.
 
-    Multi-stage: **devel** builder installs Comfy+torch in **phased modules** (torch separate from custom nodes); final stage is **CUDA runtime** (no nvcc) with **split layers** (venv vs app) so pulls reuse multi‑GB torch when only app bits change.
+    Multi-stage: **runtime** builder stages install Comfy+torch in **phased modules** (torch separate from Comfy pins and custom nodes); final stage is **CUDA runtime** (no nvcc) with **split layers** (`venv` / `venv-extra` / `app`, `COPY --link`) so pulls reuse multi‑GB torch when only extra pip or app bits change. Override `CUDA_BASE_IMAGE` to a devel tag only if you compile CUDA extensions.
 
     It includes ComfyUI + PyTorch (pinned refs — see [Models & Cache](models-and-cache.md#prebuild-version-pins-validated)); **not** Klein/Wan/LTX weights (those stay on `MODELS_DIR`).
 

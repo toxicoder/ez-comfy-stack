@@ -34,6 +34,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"doctor"* ]]
   [[ "${output}" == *"setup"* ]]
+  [[ "${output}" == *"download-podcast"* ]]
+  [[ "${output}" == *"download-music"* ]]
   run bash "${MANAGE_SH}" not-a-command
   [ "${status}" -ne 0 ]
   run bash "${MANAGE_SH}" doctor
@@ -126,6 +128,23 @@ teardown() {
   unset LAB_MOCK_DOCKER_BIN_DIR
 }
 
+@test "manage doctor and start heal llm comfy link from snapshot" {
+  export MODELS_DIR="${TEST_TMP_DIR}/models"
+  local snap dest
+  snap="${MODELS_DIR}/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"
+  dest="${MODELS_DIR}/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  mkdir -p "${snap}"
+  echo x >"${snap}/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  run ensure_prompt_enhance_gguf
+  [ "${status}" -eq 0 ]
+  [[ -L ${dest} ]]
+  [[ $(readlink "${dest}") != /* ]]
+  rm -f "${dest}"
+  run cmd_doctor
+  [ "${status}" -eq 0 ]
+  [[ -L ${dest} ]]
+}
+
 @test "manage cmd_* direct: help setup doctor status start stop restart logs download cleanup" {
   run cmd_help
   [ "${status}" -eq 0 ]
@@ -172,6 +191,34 @@ teardown() {
   run cmd_download_models --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"banned"* || "${output}" == *"US Excluded"* ]]
+  run cmd_help
+  [[ "${output}" == *"download-podcast"* ]]
+  [[ "${output}" == *"download-music"* ]]
+  [[ "${output}" == *"Does not pull podcast"* ]]
+  run cmd_doctor
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"podcast status"* ]]
+  [[ "${output}" == *"music status"* ]]
+  [[ "${output}" == *"not a doctor failure"* ]]
+  [[ ! -e "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" ]]
+  [[ ! -e "${MODELS_DIR}/comfy/checkpoints/ace_step_1.5_turbo_aio.safetensors" ]]
+  run cmd_download_podcast --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"analog"* ]]
+  run cmd_download_podcast --limit off --tier analog
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" ]]
+  run cmd_download_music --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"turbo"* ]]
+  [[ "${output}" == *"Does not run as part of download-models"* ]]
+  run cmd_download_music --limit off --tier turbo
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/checkpoints/ace_step_1.5_turbo_aio.safetensors" ]]
+  tgt="$(readlink "${MODELS_DIR}/comfy/checkpoints/ace_step_1.5_turbo_aio.safetensors" || true)"
+  [[ -z ${tgt} || ${tgt} != /* ]]
+  tgt="$(readlink "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" || true)"
+  [[ -z ${tgt} || ${tgt} != /* ]]
   # Wipe comfy links only — cache hit + link_into_comfy should restore
   rm -f "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"
   run cmd_download_models

@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Slow cinematic push-in toward the start-image subject. Keep identity locked. One continuous ~5 s take at 24 fps. No orbit, no cut."
+        "Slow cinematic push-in toward the start-image subject. Keep identity locked. One continuous ~5 s take at 24 fps. No orbit, no cut. Keep every object and surface from the start image; do not redesign."
       ],
       "title": "Motion / prompt"
     },
@@ -581,10 +581,11 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Slow cinematic push-in toward the start-image subject. Keep identity locked. One continuous ~5 s take at 24 fps. No orbit, no cut.",
-        false,
+        "Slow cinematic push-in toward the start-image subject. Keep identity locked. One continuous ~5 s take at 24 fps. No orbit, no cut. Keep every object and surface from the start image; do not redesign.",
+        true,
         "i2v",
-        "5 seconds, 24 fps"
+        "5 seconds, 24 fps",
+        "none"
       ],
       "title": "Wan Prompt Enhance"
     }

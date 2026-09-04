@@ -55,3 +55,8 @@ models:
       - Lightricks/LTX-2.5
     # Selective distilled INT8-convrot + Gemma4-with-proj + VAEs
     min_gb: 30
+  llm:
+    repos:
+      - unsloth/Qwen3-4B-Instruct-2507-GGUF
+    # Q4_K_M GGUF only (prompt enhance)
+    min_gb: 3

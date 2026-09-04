@@ -14,6 +14,7 @@ theme:
   name: material
   features:
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
     - navigation.top
     - navigation.tracking
@@ -33,6 +34,10 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Light mode
+
+# Sticky header compact-on-scroll. Do not enable header.autohide.
+extra_css:
+  - stylesheets/extra.css
 
 plugins:
   - search
@@ -74,6 +79,8 @@ nav:
       - Model licenses: licenses.md
   - Create:
       - Visual Generative AI: visual-generative-ai.md
+      - Local podcast: podcast.md
+      - Local music: music.md
       - 90s shorts: shorts.md
       - Spark farm: spark-farm.md
   - Operate:

@@ -101,7 +101,7 @@ LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **aud
 
     1. Download the default pack first (`download-models` = image fast + wan 5b + ltx 2.5)
     2. Prefer keeping both model sets loaded between T2I and I2V
-    3. Avoid concurrent large LLM containers on the same Spark
+    3. Do not GPU-offload a 30B+ llama.cpp next to LTX; Prompt Enhance is CPU-only (~2.5 GiB GGUF)
     4. Video graphs emit **MP4** via **VideoHelperSuite** (`VHS_VideoCombine`, 24 fps) plus optional PNG frames
     5. Prompting: Klein wants Qwen-style prose (subject → light → camera); Wan wants motion + one camera move (no audio); LTX wants a present-tense paragraph with sound interleaved. See [Prompting](prompting.md). Every **\*-lab-example** canvas has an operator **Note**
 
@@ -130,8 +130,12 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
     | Workflow | What it does |
     | --- | --- |
-    | **ltx-i2v-5s-lab-example** | ~5 s I2V with native audio (Community License, $10M cap) |
-    | **ltx-t2v-5s-lab-example** | ~5 s T2V AV |
+    | **ltx-i2v-5s-lab-example** | ~5 s I2V, **1280×704**, native audio (Community License, $10M cap) |
+    | **ltx-t2v-5s-lab-example** | ~5 s T2V AV, **1280×704** |
+
+    !!! warning "LTX width/height must be divisible by 32"
+
+        Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** native LTX VAE sizes (720/16=45, then the next `/2` patch fails). Lab landscape graphs use **1280×704**. Klein stills may stay 1280×720; I2V center-crops. Typing 720 or 1080 on LTX widgets is **auto-snapped** (704 / 1056) by `ez_ltx_spatial` — prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**. See [Troubleshooting](troubleshooting.md).
 
 === "Apps (still / GIF / IG)"
 
@@ -139,7 +143,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | --- | --- |
     | **klein-still-daily-lab-example** | Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix `ez_still_app` |
     | **wan-gif-loop-lab-example** | Wan 5B I2V GIF (49 frames @ 12 fps). **Ping-pong ON** so first and last frames meet for infinite looping. Prefix `ez_gif_loop` |
-    | **klein-dream-house-lab-example** | Ten Instagram 4:5 stills of one lake house. Edit **HOUSE IDENTITY** once; Queue writes `ez_dream_house_01`…`10` |
+    | **klein-dream-house-lab-example** | Ten Instagram 4:5 stills of one compact cedar cabin from **new cameras**. Edit **HOUSE IDENTITY** (world bible) and inventory once. Prefix `ez_dream_house_01`…`10` |
 
 === "90s shorts"
 
@@ -164,11 +168,11 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **ltx-shorts-i2v-lab-example** | Vertical AV I2V (~5 s) with world audio |
     | **klein-thumbnail-lab-example** | YouTube thumbnail still 1280×720 |
     | **klein-product-packshot-lab-example** | Clean product packshot 1:1 |
-    | **klein-before-after-lab-example** | Before/after still pair |
-    | **klein-style-lock-lab-example** | Four style-locked stills |
+    | **klein-before-after-lab-example** | Before plate, after Klein-edit of the same mug |
+    | **klein-style-lock-lab-example** | One lake house, four cameras, locked inventory |
     | **wan-bumper-loop-lab-example** | Loopable MP4 bumper (ping-pong) |
     | **ltx-broll-ambient-lab-example** | Ambient B-roll AV plate (~5 s) |
-    | **klein-storyboard-6up-lab-example** | Six storyboard frames in one Queue |
+    | **klein-storyboard-6up-lab-example** | Six storyboard frames of one rooftop from new cameras |
 
     Pack 2 — stills and plates
 
@@ -183,10 +187,10 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **klein-hook-still-lab-example** | 9:16 first-frame hook |
     | **klein-lower-third-bg-lab-example** | Lower-third-safe 16:9 plate |
     | **klein-food-tabletop-lab-example** | Food / tabletop 4:5 |
-    | **klein-lighting-trio-lab-example** | Same subject, three lights |
-    | **klein-time-of-day-lab-example** | Dawn / noon / dusk / night |
-    | **klein-camera-angles-lab-example** | Wide / medium / close |
-    | **klein-color-moods-lab-example** | Four color moods |
+    | **klein-lighting-trio-lab-example** | Same subject, three lights (SHOT KEY is the identity plate) |
+    | **klein-time-of-day-lab-example** | Dusk plate, then dawn / noon / night edits |
+    | **klein-camera-angles-lab-example** | Wide / medium / close of one subject, new cameras |
+    | **klein-color-moods-lab-example** | Warm plate, then three grade edits |
 
     Pack 2 — motion / AV
 
@@ -217,7 +221,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
 1. Load **klein-still-draft-lab-example** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
 3. Load **wan-i2v-5s-lab-example** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
-4. Optional audio: **ltx-i2v-5s-lab-example**, same first frame, same seed note, Queue ~5 s AV.
+4. Optional audio: **ltx-i2v-5s-lab-example**, same first frame, same seed note, Queue ~5 s AV at **1280×704** (I2V center-crops a 1280×720 still).
 5. Short six-shot demo: Queue **wan-i2v-shot-lab-example** six times (`ez_shot_01` … `06`) then:
 
     ```bash
@@ -226,7 +230,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     ```
 
 6. **90s films** (go-see / still-here / switchyard): load one **film-*-90s** graph → Queue identity → unmute LTX → 18 × 5.00s prints → concat with `--film`. See [90s shorts](shorts.md).
-7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel.
+7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel of one cabin (new cameras, locked inventory).
 8. Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up (see catalog tab above).
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes.

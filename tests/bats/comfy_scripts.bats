@@ -28,6 +28,20 @@ teardown() {
   teardown_repo_env
 }
 
+@test "install_llama_cpp_cpu is fail-soft and disables CUDA" {
+  run grep -F 'install_llama_cpp_cpu' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'GGML_CUDA=OFF' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  pip_install() { return 1; }
+  run install_llama_cpp_cpu
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"pass through"* || "${output}" == *"failed"* ]]
+  pip_install() { return 0; }
+  run install_llama_cpp_cpu
+  [ "${status}" -eq 0 ]
+}
+
 @test "install-comfy phase_nodes and ensure_lab_video_nodes require VideoHelperSuite" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"
@@ -125,11 +139,20 @@ teardown() {
   mkdir -p "${strip_root}/.git" "${strip_root}/pkg/__pycache__" "${strip_root}/pkg"
   : >"${strip_root}/pkg/__pycache__/x.pyc"
   : >"${strip_root}/pkg/mod.py"
+  mkdir -p "${strip_root}/tests" "${strip_root}/.github" "${strip_root}/input"
+  echo t >"${strip_root}/tests/test_foo.py"
+  echo yml >"${strip_root}/.github/workflows.yml"
+  echo png >"${strip_root}/input/example.png"
+  echo keep >"${strip_root}/input/keep.txt"
   run strip_prebuilt "${strip_root}"
   [ "${status}" -eq 0 ]
   [[ ! -d ${strip_root}/.git ]]
   [[ ! -d ${strip_root}/pkg/__pycache__ ]]
   [[ -f ${strip_root}/pkg/mod.py ]]
+  [[ ! -d ${strip_root}/tests ]]
+  [[ ! -d ${strip_root}/.github ]]
+  [[ ! -f ${strip_root}/input/example.png ]]
+  [[ -f ${strip_root}/input/keep.txt ]]
 }
 
 @test "link_comfy_output_dir migrates volume output and symlinks to mount" {
@@ -155,16 +178,45 @@ teardown() {
   local src dest
   src="${TEST_TMP_DIR}/ez_prompt_enhance"
   dest="${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance"
-  mkdir -p "${src}/prompts"
+  mkdir -p "${src}/prompts" "${src}/js"
   echo 'ok' >"${src}/__init__.py"
   echo 'sys' >"${src}/prompts/klein_t2i.txt"
+  echo 'preview' >"${src}/js/ez_prompt_enhance.js"
   run install_lab_custom_nodes "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/__init__.py ]]
   [[ -f ${dest}/prompts/klein_t2i.txt ]]
+  [[ -f ${dest}/js/ez_prompt_enhance.js ]]
   run install_lab_custom_nodes "${TEST_TMP_DIR}/missing-nodes" "${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance2"
   [ "${status}" -eq 0 ]
   [[ ! -d ${TEST_TMP_DIR}/ComfyUI/custom_nodes/ez_prompt_enhance2 ]]
+}
+
+@test "install_all_lab_custom_nodes copies packs and skips non-packs" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/custom_nodes_src"
+  dest="${TEST_TMP_DIR}/ComfyUI/custom_nodes_all"
+  mkdir -p "${src}/ez_prompt_enhance" "${src}/ez_ltx_spatial" "${src}/not_a_pack"
+  echo 'ok' >"${src}/ez_prompt_enhance/__init__.py"
+  echo 'ok' >"${src}/ez_ltx_spatial/__init__.py"
+  echo 'skip' >"${src}/not_a_pack/readme.txt"
+  echo 'file' >"${src}/stray.txt"
+  run install_all_lab_custom_nodes "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/ez_prompt_enhance/__init__.py ]]
+  [[ -f ${dest}/ez_ltx_spatial/__init__.py ]]
+  [[ ! -d ${dest}/not_a_pack ]]
+  [[ ! -f ${dest}/stray.txt ]]
+  [[ "${output}" == *"installed 2 custom node pack"* ]]
+  run install_all_lab_custom_nodes "${TEST_TMP_DIR}/missing-root" "${TEST_TMP_DIR}/ComfyUI/custom_nodes_missing"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"optional mount"* ]]
+  mkdir -p "${TEST_TMP_DIR}/empty_packs"
+  run install_all_lab_custom_nodes "${TEST_TMP_DIR}/empty_packs" "${TEST_TMP_DIR}/ComfyUI/custom_nodes_empty"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"no custom node packs under"* ]]
 }
 
 @test "install_lab_workflows copies top-level and shorts JSON" {
@@ -195,6 +247,9 @@ teardown() {
   # fake activate
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
   : >"${STAMP}"
+  mkdir -p "${TEST_TMP_DIR}/cn/ez_ltx_spatial"
+  echo 'ok' >"${TEST_TMP_DIR}/cn/ez_ltx_spatial/__init__.py"
+  export LAB_CUSTOM_NODES_SRC="${TEST_TMP_DIR}/cn"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
   export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs_main"
@@ -202,6 +257,7 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"phase"* || "${output}" == *"refresh"* ]]
   [[ -L ${COMFY_HOME}/output ]]
+  [[ -f ${COMFY_HOME}/custom_nodes/ez_ltx_spatial/__init__.py ]]
 }
 
 @test "entrypoint reseeds prebuilt when volume pin lags" {
@@ -350,6 +406,7 @@ teardown() {
   run link_all_models
   [ "${status}" -eq 0 ]
   [[ -L ${COMFY_HOME}/models/diffusion_models ]]
+  [[ -L ${COMFY_HOME}/models/llm ]]
 
   run apply_free_memory_patch
   [ "${status}" -eq 0 ]
@@ -471,18 +528,71 @@ teardown() {
   echo app >"${root}/main.py"
   echo node >"${root}/custom_nodes/demo/node.py"
   export COMFY_HOME="${root}"
+  export VENV="${root}/.venv"
   export LAB_PARTS_ROOT="${parts}"
   export LAB_PACKAGE_PARTS=1
   run package_prebuilt_parts
   [ "${status}" -eq 0 ]
   [[ -f ${parts}/venv/bin/python ]]
+  [[ -f ${parts}/venv-extra/.lab-venv-extra ]]
   [[ -f ${parts}/app/main.py ]]
   [[ -f ${parts}/app/custom_nodes/demo/node.py ]]
   [[ ! -e ${parts}/app/.venv ]]
+  run venv_extra_has_torch "${parts}/venv-extra"
+  [ "${status}" -ne 0 ]
   # Disabled path is a no-op
   export LAB_PACKAGE_PARTS=0
   run package_prebuilt_parts
   [ "${status}" -eq 0 ]
+}
+
+@test "snapshot_torch_venv plus package_prebuilt_parts overlays extra pip only" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  local root parts
+  root="${TEST_TMP_DIR}/prebuilt_overlay"
+  parts="${TEST_TMP_DIR}/parts_overlay"
+  mkdir -p "${root}/.venv/lib/python3.12/site-packages/torch" \
+    "${root}/custom_nodes/demo"
+  echo torch >"${root}/.venv/lib/python3.12/site-packages/torch/__init__.py"
+  echo app >"${root}/main.py"
+  export COMFY_HOME="${root}"
+  export VENV="${root}/.venv"
+  export LAB_PARTS_ROOT="${parts}"
+  export LAB_PACKAGE_PARTS=1
+  run snapshot_torch_venv
+  [ "${status}" -eq 0 ]
+  [[ -f ${parts}/venv/lib/python3.12/site-packages/torch/__init__.py ]]
+  mkdir -p "${root}/.venv/lib/python3.12/site-packages/einops"
+  echo extra >"${root}/.venv/lib/python3.12/site-packages/einops/__init__.py"
+  run package_prebuilt_parts
+  [ "${status}" -eq 0 ]
+  [[ -f ${parts}/venv/lib/python3.12/site-packages/torch/__init__.py ]]
+  [[ -f ${parts}/venv-extra/lib/python3.12/site-packages/einops/__init__.py ]]
+  [[ ! -f ${parts}/venv-extra/lib/python3.12/site-packages/torch/__init__.py ]]
+  run venv_extra_has_torch "${parts}/venv-extra"
+  [ "${status}" -ne 0 ]
+  run venv_extra_has_torch "${parts}/venv"
+  [ "${status}" -eq 0 ]
+}
+
+@test "write_torch_pip_constraint and assert_torch_cuda" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  local cfile
+  cfile="${TEST_TMP_DIR}/torch-constraint.txt"
+  install_mock_bin pip 'printf "torch==2.14.0+cu130\ntorchvision==0.25.0+cu130\nrequests==2.0\n"'
+  run write_torch_pip_constraint "${cfile}"
+  [ "${status}" -eq 0 ]
+  grep -q '^torch==' "${cfile}"
+  grep -q '^torchvision==' "${cfile}"
+  ! grep -q requests "${cfile}"
+  install_mock_bin pip 'printf "requests==2.0\n"'
+  run write_torch_pip_constraint "${cfile}"
+  [ "${status}" -ne 0 ]
+  run assert_torch_cuda
+  # Hermetic hosts: torch missing (2) or CPU-only (1); CUDA (0) is also fine.
+  [[ "${status}" -eq 0 || "${status}" -eq 1 || "${status}" -eq 2 ]]
 }
 
 @test "default pins are non-empty validated tags" {
@@ -493,14 +603,22 @@ teardown() {
   [[ -n ${COMFYUI_MANAGER_REF} ]]
   [[ -n ${COMFYUI_NUNCHAKU_NODE_REF} ]]
   [[ "${COMFYUI_NUNCHAKU_NODE_REF}" == v* ]]
+  [[ -n ${TORCH_VERSION} ]]
+  [[ "${TORCH_INDEX_URL}" == *cu130* ]]
 }
 
 @test "install-comfy modules exist for Docker phase COPY contract" {
+  [[ -f ${REPO_ROOT}/docker/install-comfy/core.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/common.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-venv-torch.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-comfy.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-nodes.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-finalize.sh ]]
+  run grep -F 'TORCH_VERSION' "${REPO_ROOT}/docker/install-comfy/core.sh"
+  [ "${status}" -eq 0 ]
+  # Comfy pins must not live in the torch-stage COPY
+  run grep -E 'COMFYUI_REF=' "${REPO_ROOT}/docker/install-comfy/core.sh"
+  [ "${status}" -ne 0 ]
 }
 
 @test "main fails when venv python missing" {

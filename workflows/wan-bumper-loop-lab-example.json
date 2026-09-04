@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Locked camera bumper loop. Soft cyclic breeze on leaves and fabric. Motion returns near the start pose for seamless ping-pong. Keep start-image identity locked. No walk, no dolly."
+        "Locked camera bumper loop. Soft cyclic breeze on leaves and fabric. Motion returns near the start pose for seamless ping-pong. Keep start-image identity locked. No walk, no dolly. Keep every object and surface from the start image; do not redesign."
       ],
       "title": "Motion / prompt"
     },
@@ -548,7 +548,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-bumper-loop-lab-example\n\nShort loopable MP4 bumper (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_bumper`.\nLoadImage: a still or logo plate. Leave ping-pong on for seamless loops.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n"
+        "## wan-bumper-loop-lab-example\n\nShort loopable MP4 bumper (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_bumper`.\nLoadImage: a still or logo plate. Leave ping-pong on for seamless loops.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -581,10 +581,11 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Locked camera bumper loop. Soft cyclic breeze on leaves and fabric. Motion returns near the start pose for seamless ping-pong. Keep start-image identity locked. No walk, no dolly.",
-        false,
+        "Locked camera bumper loop. Soft cyclic breeze on leaves and fabric. Motion returns near the start pose for seamless ping-pong. Keep start-image identity locked. No walk, no dolly. Keep every object and surface from the start image; do not redesign.",
+        true,
         "i2v",
-        "looping bumper, 12 fps"
+        "looping bumper, 12 fps",
+        "none"
       ],
       "title": "Wan Prompt Enhance"
     }
@@ -759,7 +760,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-bumper-loop-lab-example\n\nShort loopable MP4 bumper (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_bumper`.\nLoadImage: a still or logo plate. Leave ping-pong on for seamless loops.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n",
+    "lab_note": "## wan-bumper-loop-lab-example\n\nShort loopable MP4 bumper (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_bumper`.\nLoadImage: a still or logo plate. Leave ping-pong on for seamless loops.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_profile": "wan-bumper-loop-lab-example",
     "lab_description": "Wan 5B loopable MP4 bumper",
     "ds": {

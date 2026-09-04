@@ -39,6 +39,10 @@ CREATORS = (
     ("ltx-weather-broll-lab-example", "ez_weather_video", True),
     ("ltx-interior-ambience-lab-example", "ez_interior_video", True),
     ("ltx-hook-av-lab-example", "ez_hook_video", True),
+    ("podcast-audio-first-lab-example", "ez_podcast_ep", False),
+    ("podcast-radio-drama-lab-example", "ez_radio_ep", False),
+    ("music-rap-draft-lab-example", "ez_rap_draft", False),
+    ("music-rap-full-lab-example", "ez_rap_full", False),
 )
 
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev")
@@ -116,6 +120,58 @@ def test_hook_still_is_vertical() -> None:
     assert latent["widgets_values"][1] == 768
 
 
+def _identity_plate_contract(stem: str, prefixes: set[str], persist: str = "state") -> None:
+    graph = json.loads((WF / f"{stem}.json").read_text(encoding="utf-8"))
+    encode_n = sum(1 for n in graph["nodes"] if n.get("type") == "VAEEncode")
+    ref_n = sum(1 for n in graph["nodes"] if n.get("type") == "ReferenceLatent")
+    enhance = [n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"]
+    assert len(enhance) == 1
+    assert enhance[0]["widgets_values"][1] is (persist == "state")
+    assert enhance[0]["widgets_values"][2] == "t2i"
+    assert enhance[0]["widgets_values"][-1] == "none"
+    joins = [n for n in graph["nodes"] if n.get("type") == "EZPromptJoin"]
+    assert len(joins) == len(prefixes)
+    for join in joins:
+        values = join["widgets_values"]
+        assert values[1].strip(), stem
+        assert values[2] == persist, stem
+    seeds = {
+        n["widgets_values"][0]
+        for n in graph["nodes"]
+        if n.get("type") == "KSampler"
+    }
+    assert seeds == {42}
+    saves = {
+        n["widgets_values"][0]
+        for n in graph["nodes"]
+        if n.get("type") == "SaveImage"
+    }
+    assert saves == prefixes
+    by_id = {n["id"]: n for n in graph["nodes"]}
+    incoming: dict[tuple[int, int], list] = {}
+    for link in graph["links"]:
+        incoming.setdefault((link[3], link[4]), []).append(link)
+    samplers = sorted(
+        (n for n in graph["nodes"] if n.get("type") == "KSampler"),
+        key=lambda n: n["pos"][1],
+    )
+    if persist == "state":
+        assert encode_n == 1, stem
+        assert ref_n >= 1, stem
+        for i, ks in enumerate(samplers):
+            pos_src = by_id[incoming[(ks["id"], 1)][0][1]]["type"]
+            if i == 0:
+                assert pos_src == "CLIPTextEncode"
+            else:
+                assert pos_src == "ReferenceLatent"
+    else:
+        assert encode_n == 0, stem
+        assert ref_n == 0, stem
+        for ks in samplers:
+            pos_src = by_id[incoming[(ks["id"], 1)][0][1]]["type"]
+            assert pos_src == "CLIPTextEncode", stem
+
+
 def test_pack_v2_prefixes() -> None:
     assert _save_prefixes("klein-lighting-trio-lab-example") == {
         "ez_light_01",
@@ -133,3 +189,34 @@ def test_pack_v2_prefixes() -> None:
     assert _save_prefixes("klein-color-moods-lab-example") == {
         f"ez_mood_{i:02d}" for i in range(1, 5)
     }
+    _identity_plate_contract(
+        "klein-lighting-trio-lab-example",
+        {"ez_light_01", "ez_light_02", "ez_light_03"},
+    )
+    _identity_plate_contract(
+        "klein-time-of-day-lab-example",
+        {f"ez_tod_{i:02d}" for i in range(1, 5)},
+    )
+    _identity_plate_contract(
+        "klein-camera-angles-lab-example",
+        {"ez_angle_wide", "ez_angle_med", "ez_angle_close"},
+        persist="view",
+    )
+    _identity_plate_contract(
+        "klein-color-moods-lab-example",
+        {f"ez_mood_{i:02d}" for i in range(1, 5)},
+    )
+    _identity_plate_contract(
+        "klein-before-after-lab-example",
+        {"ez_before", "ez_after"},
+    )
+    _identity_plate_contract(
+        "klein-style-lock-lab-example",
+        {f"ez_style_{i:02d}" for i in range(1, 5)},
+        persist="view",
+    )
+    _identity_plate_contract(
+        "klein-storyboard-6up-lab-example",
+        {f"ez_board_{i:02d}" for i in range(1, 7)},
+        persist="view",
+    )

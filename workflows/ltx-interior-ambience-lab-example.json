@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A wide photoreal shot of a small-town main street at golden hour. A red bicycle leans against a brick storefront as warm sidelight rakes the brick and chrome. Leaves and a shop flag stir in a light breeze while a pedestrian crosses in the background. The camera dollies in slowly toward the bicycle. Soft wind rustles the flag as distant footsteps tap the pavement and a faint shop bell clinks once. Unmarked facades sit empty of signage. No music and no score."
+        "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Five seconds."
       ],
       "title": "Positive"
     },
@@ -218,13 +218,13 @@
           "slot_index": 0
         }
       ],
-      "title": "Empty LTX latent 768x512",
+      "title": "Empty LTX latent 1280x704",
       "properties": {
         "Node name for S&R": "EmptyLTXVLatentVideo"
       },
       "widgets_values": [
         1280,
-        720,
+        704,
         121
       ]
     },
@@ -593,7 +593,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-interior-ambience-lab-example\n\nInterior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License \u2014 not Apache.\nPrefix `ez_interior_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n"
+        "## ltx-interior-ambience-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nInterior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License \u2014 not Apache.\nPrefix `ez_interior_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -691,10 +691,11 @@
       },
       "widgets_values": [
         "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Five seconds.",
-        false,
+        true,
         "t2v",
         "5 seconds, 24 fps",
-        "kettle, house creak, no score"
+        "kettle, house creak, no score",
+        "none"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -908,7 +909,7 @@
   "extra": {
     "lab_profile": "ltx-interior-ambience-lab-example",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-interior-ambience-lab-example\n\nInterior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License \u2014 not Apache.\nPrefix `ez_interior_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n",
+    "lab_note": "## ltx-interior-ambience-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nInterior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License \u2014 not Apache.\nPrefix `ez_interior_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 interior ambience AV ~5s"
   },

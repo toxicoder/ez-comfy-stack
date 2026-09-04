@@ -452,9 +452,10 @@
       },
       "widgets_values": [
         "A clean product packshot on a seamless light-gray cyclorama. A matte ceramic mug centered, soft studio key light, gentle contact shadow, unmarked surface, no logos. Photoreal commercial still, square 1:1 framing.",
-        false,
+        true,
         "t2i",
-        "YouTube 16:9 still"
+        "YouTube 16:9 still",
+        "none"
       ],
       "title": "Klein Prompt Enhance"
     }

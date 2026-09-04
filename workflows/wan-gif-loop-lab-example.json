@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Locked camera. A light breeze moves leaves and a thin curtain. Water and fabric drift, then settle. Keep the start-image identity locked. Gentle cyclic motion for a looping GIF."
+        "Locked camera. A high-altitude breeze cycles the coat hem and holographic glyph motes. Neon city lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
       ],
       "title": "Motion / prompt"
     },
@@ -548,7 +548,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-gif-loop-lab-example\n\nAfter Queue, click **Infinite loop (ping-pong) \u2014 open for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_gif_loop_*.gif`.\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse \u2014 first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png; after klein-still-daily set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n"
+        "## wan-gif-loop-lab-example\n\nAfter Queue, click **Infinite loop (ping-pong) \u2014 open for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_gif_loop_*.gif`.\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse \u2014 first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / city lights. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
       ],
       "title": "Operator note"
     },
@@ -581,10 +581,11 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Locked camera. A light breeze moves leaves and a thin curtain. Water and fabric drift, then settle. Keep the start-image identity locked. Gentle cyclic motion for a looping GIF.",
-        false,
+        "Locked camera. A high-altitude breeze cycles the coat hem and holographic glyph motes. Neon city lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF.",
+        true,
         "i2v",
-        "4 seconds, 12 fps, looping GIF"
+        "4 seconds, 12 fps, looping GIF",
+        "none"
       ],
       "title": "Wan Prompt Enhance"
     }
@@ -759,7 +760,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-gif-loop-lab-example\n\nAfter Queue, click **Infinite loop (ping-pong) \u2014 open for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_gif_loop_*.gif`.\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse \u2014 first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png; after klein-still-daily set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / leaves. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance: leave Enhance off for this canned prompt. Set Enhance true and XAI_API_KEY to rewrite a lazy sentence.\n",
+    "lab_note": "## wan-gif-loop-lab-example\n\nAfter Queue, click **Infinite loop (ping-pong) \u2014 open for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_gif_loop_*.gif`.\n\nWan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).\nModels: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.\nPRIMARY OUTPUT: VHS image/gif. loop_count 0 = infinite. Ping-pong ON so playback goes forward then reverse \u2014 first and last frames meet for a seamless loop.\nEasy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-way motion (a walk or dolly looks wrong in reverse).\nLoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.\nMotion: locked camera plus breeze / fabric / city lights. Do not prompt a walk or a one-way dolly.\nDo not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
     "lab_profile": "wan-gif-loop-lab-example",
     "lab_description": "Wan 5B looping GIF, 49 frames ping-pong @ 12 fps",
     "ds": {

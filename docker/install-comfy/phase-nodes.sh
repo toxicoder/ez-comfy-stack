@@ -203,6 +203,32 @@ ensure_lab_video_nodes() {
 }
 
 #######################################
+# Install llama-cpp-python with CUDA off so prompt enhance stays on the CPU.
+# Fail-soft: Enhance nodes pass through if this wheel is missing.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_llama_cpp_cpu() {
+  if pip_install --only-binary=:all: llama-cpp-python; then
+    log "llama-cpp-python (CPU wheel) installed for prompt enhance"
+    return 0
+  fi
+  log "No llama-cpp-python wheel; compiling with GGML_CUDA=OFF"
+  if CMAKE_ARGS="-DGGML_CUDA=OFF" pip_install llama-cpp-python; then
+    log "llama-cpp-python (CPU) installed for prompt enhance"
+    return 0
+  fi
+  warn "llama-cpp-python install failed — Prompt Enhance will pass through until rebuilt"
+  return 0
+}
+
+#######################################
 # Install custom nodes and optional packages (Docker phase: nodes).
 # Globals:
 #   COMFY_HOME, VENV, CUSTOM, COMFYUI_MANAGER_REF, COMFYUI_NUNCHAKU_NODE_REF,
@@ -232,4 +258,5 @@ phase_nodes() {
     warn "Nunchaku custom node unavailable"
   pip_install sageattention || warn "SageAttention pip install failed (optional on aarch64)"
   install_nunchaku_wheel
+  install_llama_cpp_cpu
 }

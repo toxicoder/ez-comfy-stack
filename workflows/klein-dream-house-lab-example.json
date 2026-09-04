@@ -143,7 +143,7 @@
       ],
       "size": [
         420,
-        280
+        420
       ],
       "flags": {},
       "order": 3,
@@ -172,10 +172,11 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces.",
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house.",
         false,
         "t2i",
-        "Instagram 4:5 still"
+        "Instagram 4:5 still",
+        "none"
       ],
       "title": "HOUSE IDENTITY"
     },
@@ -184,7 +185,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        800
+        940
       ],
       "size": [
         420,
@@ -232,7 +233,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        960
+        1120
       ],
       "size": [
         280,
@@ -276,7 +277,7 @@
       "type": "Note",
       "pos": [
         40,
-        1120
+        1280
       ],
       "size": [
         420,
@@ -291,7 +292,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset.\nDo not restyle the identity per shot — change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n"
+        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Enhance is off on the bible so a rewrite cannot insert a camera. Shot cards are Prompt Join only.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n"
       ],
       "title": "Operator note"
     },
@@ -330,9 +331,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Golden-hour curb appeal from the gravel drive, 24mm at eye level, Instagram 4:5 portrait. Warm sidelight rakes the cedar. Empty drive."
+        "Three-quarter lake facade of the same cabin, 24mm at eye level, Instagram 4:5, golden-hour late summer. The two-bay glass shows the linen sofa and oak floors inside.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
-      "title": "SHOT 01 curb appeal"
+      "title": "SHOT 01 lake facade"
     },
     {
       "id": 11,
@@ -377,7 +380,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Golden-hour curb appeal from the gravel drive, 24mm at eye level, Instagram 4:5 portrait. Warm sidelight rakes the cedar. Empty drive."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter lake facade of the same cabin, 24mm at eye level, Instagram 4:5, golden-hour late summer. The two-bay glass shows the linen sofa and oak floors inside."
       ],
       "title": "Positive 01"
     },
@@ -548,9 +551,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Front entry with a tall black-framed glass door, 35mm, Instagram 4:5. Soft morning light on cedar and stone. Empty porch, unmarked door."
+        "Curb of the same cabin from the empty gravel drive, 24mm, Instagram 4:5. Hip roof and cedar gable; lake glass sits on the far side of the volume.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
-      "title": "SHOT 02 entry"
+      "title": "SHOT 02 curb"
     },
     {
       "id": 16,
@@ -595,7 +600,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Front entry with a tall black-framed glass door, 35mm, Instagram 4:5. Soft morning light on cedar and stone. Empty porch, unmarked door."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Curb of the same cabin from the empty gravel drive, 24mm, Instagram 4:5. Hip roof and cedar gable; lake glass sits on the far side of the volume."
       ],
       "title": "Positive 02"
     },
@@ -766,7 +771,9 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Living room looking through the glass wall toward the still lake, 24mm, Instagram 4:5. Oak floors, linen sofa, late-day sun. Empty of occupants."
+        "From inside the living room of the same cabin, looking out the two-bay glass to the lake, 24mm, Instagram 4:5. The linen sofa sits in the foreground on oak floors, late-summer afternoon.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
       "title": "SHOT 03 living room"
     },
@@ -813,7 +820,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Living room looking through the glass wall toward the still lake, 24mm, Instagram 4:5. Oak floors, linen sofa, late-day sun. Empty of occupants."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the living room of the same cabin, looking out the two-bay glass to the lake, 24mm, Instagram 4:5. The linen sofa sits in the foreground on oak floors, late-summer afternoon."
       ],
       "title": "Positive 03"
     },
@@ -984,7 +991,9 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Kitchen island in pale stone, morning sidelight, 35mm, Instagram 4:5. Cedar cabinets, black hardware, unmarked surfaces."
+        "From inside the kitchen of the same cabin, 35mm, Instagram 4:5. Pale-stone island, cedar cabinets, black hardware, morning sidelight from the glass wall beside the living room.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
       "title": "SHOT 04 kitchen"
     },
@@ -1031,7 +1040,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Kitchen island in pale stone, morning sidelight, 35mm, Instagram 4:5. Cedar cabinets, black hardware, unmarked surfaces."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the kitchen of the same cabin, 35mm, Instagram 4:5. Pale-stone island, cedar cabinets, black hardware, morning sidelight from the glass wall beside the living room."
       ],
       "title": "Positive 04"
     },
@@ -1202,7 +1211,9 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Dining table by the window at evening, lamps lit, 35mm, Instagram 4:5. Oak table, simple ceramic, lake twilight beyond the glass."
+        "From inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak table, lamps lit, autumn twilight through the two-bay glass.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
       "title": "SHOT 05 dining"
     },
@@ -1249,7 +1260,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Dining table by the window at evening, lamps lit, 35mm, Instagram 4:5. Oak table, simple ceramic, lake twilight beyond the glass."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak table, lamps lit, autumn twilight through the two-bay glass."
       ],
       "title": "Positive 05"
     },
@@ -1420,7 +1431,9 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Primary bedroom with linen bedding and a lake window, 35mm, Instagram 4:5. Soft dawn light, cedar wall, solitary room."
+        "From inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. Linen bedding, cedar wall, lake window, dawn.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
       "title": "SHOT 06 bedroom"
     },
@@ -1467,7 +1480,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Primary bedroom with linen bedding and a lake window, 35mm, Instagram 4:5. Soft dawn light, cedar wall, solitary room."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. Linen bedding, cedar wall, lake window, dawn."
       ],
       "title": "Positive 06"
     },
@@ -1638,7 +1651,9 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Spa bath in pale stone and cedar, 35mm, Instagram 4:5. A freestanding tub faces frosted glass. Quiet, unmarked fixtures."
+        "From inside the spa bath of the same cabin, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
       "title": "SHOT 07 bath"
     },
@@ -1685,7 +1700,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Spa bath in pale stone and cedar, 35mm, Instagram 4:5. A freestanding tub faces frosted glass. Quiet, unmarked fixtures."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the spa bath of the same cabin, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures."
       ],
       "title": "Positive 07"
     },
@@ -1856,7 +1871,9 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Lakeside deck at dusk, 24mm, Instagram 4:5. Cedar boards, simple chairs, still water, evergreen ridge."
+        "Lakeside decks of the same cabin at dusk, 24mm, Instagram 4:5. Two cedar deck chairs on gravel, still water, evergreen ridge.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
       "title": "SHOT 08 deck"
     },
@@ -1903,7 +1920,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Lakeside deck at dusk, 24mm, Instagram 4:5. Cedar boards, simple chairs, still water, evergreen ridge."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Lakeside decks of the same cabin at dusk, 24mm, Instagram 4:5. Two cedar deck chairs on gravel, still water, evergreen ridge."
       ],
       "title": "Positive 08"
     },
@@ -2074,7 +2091,9 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Twilight exterior, interior lamps glowing through black-framed glass, 24mm, Instagram 4:5. Solitary house on the lake."
+        "Winter twilight exterior of the same cabin, 24mm, Instagram 4:5. Lamps glow; the linen sofa reads as a silhouette through the two-bay glass. Thin snow on the ridge; cabin volume unchanged.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
       "title": "SHOT 09 twilight"
     },
@@ -2121,7 +2140,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Twilight exterior, interior lamps glowing through black-framed glass, 24mm, Instagram 4:5. Solitary house on the lake."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Winter twilight exterior of the same cabin, 24mm, Instagram 4:5. Lamps glow; the linen sofa reads as a silhouette through the two-bay glass. Thin snow on the ridge; cabin volume unchanged."
       ],
       "title": "Positive 09"
     },
@@ -2292,7 +2311,9 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Elevated wide view of the property from the ridge, 24mm, Instagram 4:5. The cedar-and-glass house sits above the still lake among evergreens."
+        "Midsummer ridge view of the same compact cabin above the lake among evergreens, 24mm, Instagram 4:5.",
+        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "view"
       ],
       "title": "SHOT 10 ridge view"
     },
@@ -2339,7 +2360,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still photograph of a contemporary cedar-and-glass lake house. Vertical cedar siding, a charcoal standing-seam roof, and tall black-framed windows face a still alpine lake. Warm oak floors run indoors. An evergreen ridge rises behind the unmarked house. Golden wood grain, clean glass, and quiet water. Framed for Instagram 4:5 portrait. Solitary house, empty terraces, unmarked surfaces. Elevated wide view of the property from the ridge, 24mm, Instagram 4:5. The cedar-and-glass house sits above the still lake among evergreens."
+        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Midsummer ridge view of the same compact cabin above the lake among evergreens, 24mm, Instagram 4:5."
       ],
       "title": "Positive 10"
     },
@@ -3315,7 +3336,7 @@
     },
     {
       "id": 10,
-      "title": "SHOT 01 curb appeal",
+      "title": "SHOT 01 lake facade",
       "bounding": [
         500,
         60,
@@ -3328,7 +3349,7 @@
     },
     {
       "id": 11,
-      "title": "SHOT 02 entry",
+      "title": "SHOT 02 curb",
       "bounding": [
         500,
         420,
@@ -3448,8 +3469,8 @@
   "extra": {
     "lab_profile": "klein-dream-house-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one cedar-and-glass lake house (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nEdit HOUSE IDENTITY once. Each SHOT card is only the camera line; Prompt Join stitches identity + shot.\nSame seed 42 on every sampler. Queue writes ez_dream_house_01 through ez_dream_house_10.\nBypass unused SHOT groups (Ctrl+B) if you only want a subset.\nDo not restyle the identity per shot — change camera, time of day, and room only.\nPrompt enhance on identity: leave Enhance off for this canned bible. Set Enhance true and XAI_API_KEY to rewrite a lazy house description.\n",
-    "lab_description": "Ten Instagram 4:5 Klein stills of one lake house",
+    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Enhance is off on the bible so a rewrite cannot insert a camera. Shot cards are Prompt Join only.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n",
+    "lab_description": "Ten Instagram 4:5 Klein stills of one compact cedar cabin; new cameras, locked inventory",
     "ds": {
       "scale": 1,
       "offset": [

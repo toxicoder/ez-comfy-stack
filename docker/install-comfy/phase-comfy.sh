@@ -12,6 +12,54 @@ COMFYUI_REPO="${COMFYUI_REPO:-https://github.com/comfyanonymous/ComfyUI.git}"
 COMFYUI_REF="${COMFYUI_REF:-v0.34.0}"
 
 #######################################
+# Write a pip constraint file pinning already-installed torch/tv/ta.
+# Prevents ComfyUI requirements.txt (unpinned torch) from replacing cu130.
+# Globals:
+#   None (uses active venv pip)
+# Arguments:
+#   $1  Destination path
+# Outputs:
+#   Constraint lines at $1 when freeze has torch pins
+# Returns:
+#   0 if the file is non-empty; 1 if freeze had no torch lines
+#######################################
+write_torch_pip_constraint() {
+  local dest="${1:?write_torch_pip_constraint requires dest path}"
+  pip freeze 2>/dev/null | grep -E '^(torch|torchvision|torchaudio)==' >"${dest}" || true
+  [[ -s ${dest} ]]
+}
+
+#######################################
+# True if the active venv torch reports a CUDA build.
+# Globals:
+#   None (uses active venv python)
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 if torch.version.cuda is set; 1 if torch imported without CUDA;
+#   2 if torch is not importable
+#######################################
+assert_torch_cuda() {
+  local py
+  py="$(command -v python 2>/dev/null || command -v python3 2>/dev/null || true)"
+  if [[ -z ${py} ]]; then
+    return 2
+  fi
+  "${py}" - <<'PY' 2>/dev/null
+import sys
+
+try:
+    import torch
+except Exception:
+    sys.exit(2)
+cuda = getattr(getattr(torch, "version", None), "cuda", None)
+sys.exit(0 if cuda else 1)
+PY
+}
+
+#######################################
 # Clone or update ComfyUI into COMFY_HOME (honours COMFYUI_REF pin).
 # Globals:
 #   COMFY_HOME, COMFYUI_REPO, COMFYUI_REF
@@ -73,8 +121,25 @@ phase_clone_comfy() {
 #   0 on success
 #######################################
 phase_comfy() {
+  local constraint rc=0
   phase_clone_comfy
   activate_venv
-  pip_install -r "${COMFY_HOME}/requirements.txt"
+  constraint="$(mktemp)"
+  if write_torch_pip_constraint "${constraint}"; then
+    log "Comfy requirements constrained to $(tr '\n' ' ' <"${constraint}")"
+    pip_install -r "${COMFY_HOME}/requirements.txt" -c "${constraint}"
+  else
+    warn "No torch freeze pins — installing Comfy requirements unconstrained"
+    pip_install -r "${COMFY_HOME}/requirements.txt"
+  fi
+  rm -f "${constraint}"
   pip_install psutil huggingface_hub safetensors einops
+  assert_torch_cuda || rc=$?
+  if [[ ${rc} -eq 1 ]]; then
+    warn "torch has no CUDA after Comfy requirements — cu130 wheel may have been replaced"
+    if [[ ${LAB_PACKAGE_PARTS:-0} == "1" ]]; then
+      return 1
+    fi
+  fi
+  return 0
 }
