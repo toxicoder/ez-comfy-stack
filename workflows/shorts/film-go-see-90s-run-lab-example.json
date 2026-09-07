@@ -14245,7 +14245,11 @@
     "lab_slug": "gosee",
     "lab_ltx_av": true,
     "lab_one_click": true,
-    "lab_disclosure": "This video includes AI-generated picture and sound (LTX Community License). Do not strip provenance. Not legal advice."
+    "lab_disclosure": "This video includes AI-generated picture and sound (LTX Community License). Do not strip provenance. Not legal advice.",
+    "lab_dfr": {
+      "print": "ltx",
+      "note": "Two-stage DFR lives in Comfy Templates \u2192 LTX-2.5 (not vendored). YAML print: dfr selects that path. Lab printers stay 5.00s / 1280\u00d7704 / 1+8n."
+    }
   },
   "version": 0.4
 }

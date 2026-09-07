@@ -111,6 +111,27 @@ packs:
     files:
       - diffusion_pytorch_model.safetensors
     cmd: download-wan --tier vace
+  wan-s2v:
+    default: false
+    min_gb: 20
+    tier_dir: Wan-AI__Wan2.2-S2V-14B_s2v
+    files:
+      - diffusion_pytorch_model.safetensors
+    cmd: download-wan --tier s2v
+  longcat-video:
+    default: false
+    min_gb: 20
+    tier_dir: meituan-longcat__LongCat-Video_video
+    files:
+      - README.md
+    cmd: download-longcat --tier video
+  dreamx-creator:
+    default: false
+    min_gb: 8
+    tier_dir: GD-ML__DreamX-Creator_creator
+    files:
+      - cross_attn_weights.safetensors
+    cmd: download-dreamx --tier creator
   triposplat:
     default: false
     min_gb: 8

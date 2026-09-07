@@ -16,6 +16,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
 - Optional studio-ui board (`:8190` profile), LTX Director GPL clone, OpenCut MIT embed
 - Optional 3D sidecars (TRELLIS.2, DA3-BASE, host Blender / SuperSplat) and VACE join
+- Wave 4: `film-accept`, DFR print mode, A14B hero, talking-head, LongCat / DreamX opt-in
 
 **What this enables**
 
@@ -118,6 +119,8 @@ FILM=go-see   # or still-here | switchyard
 ./scripts/manage.sh film-proxies go-see --yes
 # Promote take 3 of shot 12 into the jobstore master:
 ./scripts/manage.sh take-promote go-see 12 3
+# Fail-closed accept gate before concat (5.00s, 1280×704, LTX audio):
+./scripts/manage.sh film-accept go-see
 ```
 
 Optional jobstore board (no GPU, 512m, `restart: "no"`). Default `start` does **not** launch it:
@@ -157,6 +160,17 @@ Optional 17-frame VACE join (`1+8n`, MagCache **off**). Unload LTX first:
 ```
 
 Host 3D sidecars (Comfy **must be stopped**): [Studio sidecars](studio-sidecars.md), [Blender](blender-gb10-sidecar.md), [SuperSplat](splat-sidecar.md).
+
+Wave 4 hero path (opt-in, occupancy: one heavy job):
+
+```bash
+./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
+# load optional/wan-i2v-a14b-lab-example — unload 5B first
+./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
+./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
+```
+
+Identity sheet: `klein-identity-sheet-lab-example` (seed **42**, Enhance **off**, 1280×704). Talking-head: `klein-talking-head-lab-example` (LTX A2V freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s.
 
 ```bash
 ./scripts/manage.sh stop

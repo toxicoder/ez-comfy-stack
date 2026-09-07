@@ -101,6 +101,10 @@ Opt-in packs (not `download-models`):
 ./scripts/manage.sh download-3d --tier trellis2          # native TRELLIS.2 MIT, no nvdiffrast
 ./scripts/manage.sh download-3d --tier da3-base          # DA3-BASE Apache (DA3-LARGE refused)
 ./scripts/utilities/download-wan.sh run --tier vace      # Wan 2.1 VACE 1.3B join, ~6 GB Apache
+./scripts/utilities/download-wan.sh run --tier a14b      # A14B FP8 silent hero; unload 5B first
+./scripts/utilities/download-wan.sh run --tier s2v       # S2V-14B talking-head opt-in
+./scripts/manage.sh download-longcat --tier video        # LongCat-Video MIT; no NCCL
+./scripts/manage.sh download-dreamx --tier creator       # DreamX-Creator 1.0 Apache; not World
 ```
 
 Unload LTX before Fun InP / TRELLIS / VACE. SeedVR2 is restore-only after concat. `reap-models --drop-pack` cannot eat shared VAEs. SuperSplat is a [host viewer](splat-sidecar.md), not a download.

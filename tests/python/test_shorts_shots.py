@@ -66,6 +66,9 @@ def test_eighteen_shots_and_chain() -> None:
         assert meta["shots_per_beat"] == "3"
         assert meta["total_shots"] == "18"
         assert meta["publish_cap_s"] == "90.00"
+        assert meta["print"] == "ltx"
+        assert meta["identity_seed"] == "42"
+        assert meta["identity_enhance"] == "false"
         shots = parsed["shots"]
         assert len(shots) == 18, (film, len(shots))
         prefixes = [s["prefix"] for s in shots]

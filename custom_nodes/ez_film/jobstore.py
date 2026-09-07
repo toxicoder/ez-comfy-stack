@@ -321,6 +321,9 @@ def compile_film(
             "ltx_i2v": yaml_shot["ltx_i2v"],
             "wan_i2v": yaml_shot["wan_i2v"],
             "identity": parsed["identity"],
+            "print": meta["print"],
+            "identity_seed": int(meta["identity_seed"]),
+            "identity_enhance": False,
             "card": shot_card(sid, status="pending"),
         }
         (dest / "shots" / f"{sid}.json").write_text(

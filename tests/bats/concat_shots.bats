@@ -26,11 +26,14 @@ teardown() {
   parse_args --yes --out /tmp/x.mp4
   [ "${DRY_RUN}" -eq 0 ]
   [ "${OUT_MP4}" = "/tmp/x.mp4" ]
+  parse_args --skip-accept --yes
+  [ "${SKIP_ACCEPT}" -eq 1 ]
   run bash "${CS}" --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"--film"* ]]
   [[ "${output}" == *"--cap-seconds"* ]]
   [[ "${output}" == *"--xfade"* ]]
+  [[ "${output}" == *"film-accept"* ]]
   run bash "${CS}" --nope
   [ "${status}" -ne 0 ]
   : >"${COMFY_OUTPUT_DIR}/ez_shot_01_video.mp4"
@@ -86,6 +89,7 @@ teardown() {
   [[ "${output}" == *"ez_gosee_90s.mp4"* ]]
   [[ "${output}" == *"cap 90s"* ]]
   DRY_RUN=0
+  SKIP_ACCEPT=1
   OUT_MP4="${COMFY_OUTPUT_DIR}/cap.mp4"
   : >"${TEST_TMP_DIR}/ffmpeg.log"
   run cmd_run
@@ -121,10 +125,29 @@ teardown() {
   FILE_CSV=""
   SHOT_DIR="${COMFY_OUTPUT_DIR}"
   DRY_RUN=0
+  SKIP_ACCEPT=1
   OUT_MP4="${COMFY_OUTPUT_DIR}/over.mp4"
   run cmd_run
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"exceeds cap"* ]]
+}
+
+@test "concat-shots film --yes fail-closed without accept" {
+  local b s
+  for b in 1 2 3 4 5 6; do
+    for s in 1 2 3; do
+      : >"${COMFY_OUTPUT_DIR}/ez_gosee_b${b}_s${s}_ltx_video_00001.mp4"
+    done
+  done
+  FILM=go-see
+  FILE_CSV=""
+  SHOT_DIR="${COMFY_OUTPUT_DIR}"
+  DRY_RUN=0
+  SKIP_ACCEPT=0
+  OUT_MP4="${COMFY_OUTPUT_DIR}/nope.mp4"
+  run cmd_run
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"film-accept"* ]]
 }
 
 @test "concat-shots dry-run and --yes ffmpeg" {

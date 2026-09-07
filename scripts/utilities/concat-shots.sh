@@ -46,6 +46,7 @@ FILE_CSV=""
 FILM=""
 CAP_SECONDS="90"
 XFADE_CS=0
+SKIP_ACCEPT=0
 
 #######################################
 # Parse CLI flags.
@@ -87,10 +88,12 @@ parse_args() {
         ;;
       --dry-run) DRY_RUN=1 ;;
       --yes | -y) DRY_RUN=0 ;;
+      --skip-accept) SKIP_ACCEPT=1 ;;
       -h | --help)
         echo "Usage: $0 [--dir DIR] [--out FILE] [--files a.mp4,b.mp4] [--film go-see|still-here|switchyard] [--cap-seconds N] [--xfade CS] [--dry-run|--yes]" >&2
         echo "  --xfade CS  audio acrossfade in centiseconds (10 = 0.10s). Default 0 (hard cut)." >&2
         echo "              Video stays -c:v copy. Requires audio on every shot (LTX, not Wan-silent)." >&2
+        echo "  --film --yes runs film-accept first (duration/res/audio). --skip-accept bypasses." >&2
         exit 0
         ;;
       *)
@@ -390,6 +393,12 @@ cmd_run() {
   if [[ ${DRY_RUN} -eq 1 ]]; then
     log "dry-run: would concat → ${OUT_MP4} cap ${CAP_SECONDS}s xfade_cs=${XFADE_CS} (pass --yes to run ffmpeg)"
     return 0
+  fi
+  if [[ -n ${FILM} && ${SKIP_ACCEPT} -ne 1 ]]; then
+    bash "${SCRIPT_DIR}/film-accept.sh" "${FILM}" || {
+      err "film-accept failed (fail closed before concat). Fix shots or pass --skip-accept."
+      return 1
+    }
   fi
   if ! command -v ffmpeg >/dev/null 2>&1; then
     err "ffmpeg not on PATH"
