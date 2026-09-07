@@ -45,6 +45,8 @@ flowchart TB
 
 Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D as a default.
 
+Generated meshes, previews, and scene instances are **outputs** in the [Asset Bible](asset-bible.md) under `COMFY_OUTPUT_DIR/assets/` — never in `MODELS_DIR` or `guides/`.
+
 ```bash
 ./scripts/manage.sh stop
 ./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all

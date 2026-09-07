@@ -1,0 +1,12 @@
+schema: ez.asset.v1
+id: mug-cobalt-chipped
+kind: object
+prompt: "chipped cobalt ceramic mug, studio product lighting, white sweep"
+seed: 42
+pipeline: klein-trellis2
+parent: null
+takes: [v001, v002]
+files: {preview, hero_glb, views}
+tags: [prop, kitchen]
+license: operator-output
+ready: true

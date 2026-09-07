@@ -50,6 +50,7 @@ Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HO
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
 | `blender` | Host Blender sidecar; dies if compose is up | Run next to Comfy |
 | `export-guides` | Dump a 1280×704 / 120f guide pack; dies if compose is up | 1280×720; dump while Comfy is up |
+| `asset-ls` | Read-only [Asset Bible](asset-bible.md) catalog (`COMFY_OUTPUT_DIR/assets`) | Store assets in `MODELS_DIR` or `guides/` |
 | `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio) | `--skip-accept` as a habit |
 | `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache | DreamX-World; NCCL |
 | `spark-timing` | Kitchen wall-clock table (`record --klein N --wan N --ltx N`) | Record on `pytorch-fallback` |

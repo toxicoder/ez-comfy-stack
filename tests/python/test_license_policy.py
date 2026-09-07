@@ -37,6 +37,8 @@ REQUIRED_SNIPPETS = (
     "ByteDance-Seed/SeedVR2-3B",
     "TRELLIS.2 native",
     "microsoft/TRELLIS.2",
+    "DINOv3",
+    "trellis_2_int8_convrot",
     "DA3-BASE",
     "depth-anything/DA3-BASE",
     "Wan 2.1 VACE 1.3B",
