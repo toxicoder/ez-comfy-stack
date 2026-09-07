@@ -10,7 +10,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 - Why 18 × 5.00s shots instead of one 90s denoise
 - One-click Comfy graph per film (Klein identity + 18 LTX prints + stitch)
-- Shot maps for go-see (first-person running), still-here, and switchyard
+- Shot maps for go-see (first-person parkour), still-here, and switchyard
 - Model-native Klein / LTX prompts ([Prompting](prompting.md))
 - Spark farm: optional parallel 5s Queues, local concat
 - Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
@@ -20,7 +20,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 **What this enables**
 
-- Three continuous ~90s films (first-person running go-see, still-here, switchyard) on the **US-safe local pack**
+- Three continuous ~90s films (first-person parkour go-see, still-here, switchyard) on the **US-safe local pack**
 - Last-frame continuity without a 90s denoise
 - A 90.00s publish cap (in-graph `EZFilmConcat`, or host `ffmpeg -t 90`)
 - One Queue per film — identity, 18 prints, stitch, preview, save
@@ -33,7 +33,8 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
     2. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
     3. Leave Enhance **off**. Leave LTX **1280×704**. Queue **once**.
     4. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
-    5. Open **Save 90s film (MP4) — open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`.
+    5. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`). Open **Save 90s film (MP4) — open node for preview** to watch or download it from the Comfy tab.
+    6. Copy off the Spark: `scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .`
 
     Do **not** set 241+ frames. Resume after a dropped SSH session: `film-resume` (below).
 
@@ -101,7 +102,7 @@ Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch
 1. Load one film graph (`film-go-see-90s-run-lab-example` / `film-still-here-90s-lab-example` / `film-switchyard-90s-lab-example`).
 2. Queue **once**. Klein runs first (Enhance **off**, 4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start. Leave LTX **1280×704**.
 3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
-4. After Queue, click **Save 90s film (MP4) — open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4`. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`.
+4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (container `/outputs`). Open **Save 90s film (MP4) — open node for preview** to watch or download it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`.
 5. Optional silent rehearsal of one frame: **wan-i2v-shot-lab-example**. Optional single-shot iterate: **ltx-i2v-shot-lab-example**.
 Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
 
@@ -207,20 +208,20 @@ YouTube: disclose AI-generated media (LTX term). Do not strip provenance.
 
 ## Shot maps
 
-First-person **go-see** is **camera language**, not licensed IP. Same SFW / no unlicensed marks / no real likenesses as the rest of the stack.
+First-person **go-see** is **camera language**, not licensed IP. Same SFW / no unlicensed marks / no real likenesses as the rest of the stack. Do not name or copy any commercial game’s runner, suit, or architecture.
 
 === "go-see"
 
-    First-person **running**. Identity lock: olive windbreaker + worn black gloves in frame. Footfalls and arms, not parkour. **No score** (breath + world).
+    First-person **parkour** body-cam. Identity lock: electric-cyan tech-mage sleeves + matching gloves + holographic glyph motes in frame (data-staff slung on the back). Arms always; boots/knees on vaults, drops, and wall-runs. Never a standing third-person wizard. **No score** (breath + world).
 
     | Beat | Place | s1 enter | s2 traverse | s3 exit |
     | --- | --- | --- | --- | --- |
-    | 1 | Dawn rooftop | Run on wet tar, gloves pumping | Run across the next roof | Run onto warehouse roof |
-    | 2 | Warehouse → market | Run down the stair | Run the alley, duck awning | Run out toward river |
-    | 3 | River / forest | Run across stones | Run through bridge arch | Run the creek path |
-    | 4 | Headland | Trees thin, keep running | Run past boulder | Run toward generic lighthouse |
-    | 5 | Wall / meadow | Run up granite steps | Run through dry-stone gap | Run into meadow |
-    | 6 | Ridge hold | Slow; hands on wooden rail | Look | Quiet laugh, hold |
+    | 1 | Neon megacity rooftops | Sprint + gap leap | Vault bulkhead + wall-run | Drop toward maglev |
+    | 2 | Maglev skybridge | Spine sprint | Gantry leaps | Dive into glass canyon |
+    | 3 | Glass canyon gardens | Wall-run glass | Vault terraces | Waterfall toward mesas |
+    | 4 | Storm mesas | Rain sprint | Leap a void | Vault toward glacier |
+    | 5 | Glacier ice canyon | Ice sprint | Slide the arch | Climb-run toward aurora |
+    | 6 | Aurora ridge climax | Last sprint | Leap to rail | Hold + quiet laugh |
 
 === "still-here"
 

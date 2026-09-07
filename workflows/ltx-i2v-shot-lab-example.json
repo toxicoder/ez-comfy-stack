@@ -191,7 +191,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. First-person running camera as gloved hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, pigeons scatter, continuous forward run. Breath sits close to the lens, wind in the hood, tar grit under shoes. No score, no music, no licensed songs."
+        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across the neon-wet terrace, electric-cyan sleeves and matching gloves pumping hard at the lower edges while holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Dusk wind shoves the coat, each footfall ticks wet grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score."
       ],
       "title": "Motion + audio"
     },
@@ -843,7 +843,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. First-person running camera as gloved hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, pigeons scatter, continuous forward run. Breath sits close to the lens, wind in the hood, tar grit under shoes. No score, no music, no licensed songs.",
+        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across the neon-wet terrace, electric-cyan sleeves and matching gloves pumping hard at the lower edges while holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Dusk wind shoves the coat, each footfall ticks wet grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.",
         true,
         "i2v",
         "5 seconds, 24 fps",

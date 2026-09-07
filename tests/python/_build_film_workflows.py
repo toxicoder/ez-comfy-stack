@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
+from ez_film.nodes import FILM_DISCLOSURE  # noqa: E402
 from ez_film.shots import parse_shots_yaml  # noqa: E402
 
 WF = ROOT / "workflows"
@@ -26,9 +27,10 @@ LTX_CANVAS_LANDSCAPE = (
     "LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid)."
 )
 PREVIEW_BULLET = (
-    "After Queue, click **Save 90s film (MP4) — open node for preview** for an inline "
-    "preview of the stitched short. File: `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` "
-    "(container `/outputs`). Per-shot VHS nodes remain for inspection."
+    "The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` "
+    "(container `/outputs`). After Queue, click **Save 90s film (MP4) — open node for "
+    "preview** for an inline preview and download control. Per-shot VHS nodes remain "
+    "for inspection."
 )
 KLEIN_NEG_PHOTO = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
@@ -45,14 +47,14 @@ FILMS = (
         "gosee",
         "film-go-see-90s-run-lab-example",
         "go-see.shots.yaml",
-        "first-person running",
+        "first-person parkour",
         (
-            ("1", "Dawn rooftop", "run on wet tar", "next roof", "warehouse roof"),
-            ("2", "Warehouse → market", "stair", "alley / awning", "out to river"),
-            ("3", "River / forest", "stones", "bridge arch", "creek path"),
-            ("4", "Headland", "trees thin", "boulder", "generic lighthouse"),
-            ("5", "Wall / meadow", "granite steps", "dry-stone gap", "meadow"),
-            ("6", "Ridge hold", "slow to rail", "look", "quiet laugh"),
+            ("1", "Neon megacity rooftops", "sprint + gap leap", "vault + wall-run", "drop to maglev"),
+            ("2", "Maglev skybridge", "spine sprint", "gantry leaps", "dive into canyon"),
+            ("3", "Glass canyon gardens", "wall-run glass", "vault terraces", "waterfall to mesas"),
+            ("4", "Storm mesas", "rain sprint", "leap a void", "vault toward glacier"),
+            ("5", "Glacier ice canyon", "ice sprint", "slide the arch", "climb-run to aurora"),
+            ("6", "Aurora ridge climax", "last sprint", "leap to rail", "hold + laugh"),
         ),
     ),
     (
@@ -97,6 +99,7 @@ ID_LTX_EMPTY_AUDIO = 105
 ID_UNLOAD = 50
 ID_MARKDOWN = 12
 ID_CONCAT = 900
+ID_DISCLOSURE = 901
 SHOT_ID_BASE = 200
 SHOT_ID_STRIDE = 20
 
@@ -250,7 +253,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 
 1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
-3. Open **Save 90s film (MP4) — open node for preview**. File: `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4`.
+3. The MP4 is already on disk at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4`. Open **Save 90s film (MP4) — open node for preview** to watch or download it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
@@ -556,6 +559,17 @@ def build_one_click_film(
         concat_inputs,
         [_out("path", "STRING", 0)],
     )
+    disclosure = _mk(
+        ID_DISCLOSURE,
+        "EZFilmDisclosure",
+        [BEAT_X + 480, BEAT_Y0 + 6 * BEAT_DY + 40],
+        [420, 120],
+        "LTX AI-media disclosure (end-card)",
+        [""],
+        [],
+        [_out("text", "STRING", 0)],
+    )
+    disclosure["outputs"][0]["links"] = None
 
     shot_nodes: list[dict] = []
     for index, shot in enumerate(parsed["shots"]):
@@ -575,6 +589,7 @@ def build_one_click_film(
             ltx_empty,
             concat,
             *shot_nodes,
+            disclosure,
         ]
     )
 
@@ -663,6 +678,14 @@ def build_one_click_film(
         "lab_slug": slug,
         "lab_ltx_av": True,
         "lab_one_click": True,
+        "lab_disclosure": FILM_DISCLOSURE,
+        "lab_dfr": {
+            "print": "ltx",
+            "note": (
+                "Two-stage DFR lives in Comfy Templates → LTX-2.5 (not vendored). "
+                "YAML print: dfr selects that path. Lab printers stay 5.00s / 1280×704 / 1+8n."
+            ),
+        },
     }
     graph["version"] = 0.4
     normalize_enhance_widgets(graph)

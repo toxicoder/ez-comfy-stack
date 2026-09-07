@@ -109,7 +109,7 @@ FILMS = (
         "gosee",
         "film-go-see-90s-run-lab-example",
         "go-see.shots.yaml",
-        "first-person running",
+        "first-person parkour",
     ),
     (
         "still-here",

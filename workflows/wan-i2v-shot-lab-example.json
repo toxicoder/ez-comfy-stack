@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "First-person running camera. Olive windbreaker and worn black gloves; arms pump at the edges of the frame. Dawn rooftop, pigeon scatter. Footfalls on wet tar. Continuous forward run. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps."
+        "First-person body-cam high-speed parkour sprint across a neon-wet terrace. Electric-cyan sleeves and gloves pump at the frame edges, glyph motes at the wrists. Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, locked identity, no cut."
       ],
       "title": "Motion / prompt"
     },
@@ -653,7 +653,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "First-person running camera. Olive windbreaker and worn black gloves; arms pump at the edges of the frame. Dawn rooftop, pigeon scatter. Footfalls on wet tar. Continuous forward run. Keep the start-image identity locked. One continuous 5.00 second take at 24 fps.",
+        "First-person body-cam high-speed parkour sprint across a neon-wet terrace. Electric-cyan sleeves and gloves pump at the frame edges, glyph motes at the wrists. Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, locked identity, no cut.",
         true,
         "i2v",
         "5 seconds, 24 fps",

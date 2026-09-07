@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal first-person still at cool dawn. An olive windbreaker and a matching pair of worn black gloves occupy the lower edges of the frame, hands pumping as wet tar rooftops and unmarked brick bulkheads fill the view. Blue-gold first light, a few pigeons mid-scatter over the next roof. Eye-level body-cam on a 24mm lens, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering."
+        "A HD 3D game-engine pre-rendered cutscene still, first-person body-cam at dusk. Unmarked electric-cyan coat sleeves with circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Neon-wet megacity rooftops and unmarked spires fill the view. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering."
       ],
       "title": "Positive"
     },
@@ -381,7 +381,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## film-go-see-90s-run-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview of the stitched short. File: `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (first-person running): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. Open **Save 90s film (MP4) \u2014 open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nCanned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.\n"
+        "## film-go-see-90s-run-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (first-person parkour): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nCanned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.\n"
       ],
       "title": "Operator note \u2014 one-click 90s film"
     },
@@ -414,7 +414,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal first-person still at cool dawn. An olive windbreaker and a matching pair of worn black gloves occupy the lower edges of the frame, hands pumping as wet tar rooftops and unmarked brick bulkheads fill the view. Blue-gold first light, a few pigeons mid-scatter over the next roof. Eye-level body-cam on a 24mm lens, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
+        "A HD 3D game-engine pre-rendered cutscene still, first-person body-cam at dusk. Unmarked electric-cyan coat sleeves with circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Neon-wet megacity rooftops and unmarked spires fill the view. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
         false,
         "t2i",
         "YouTube 16:9 still",
@@ -442,7 +442,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## go-see 90s (first-person running)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film go-see --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal first-person still at cool dawn. An olive windbreaker and a matching pair of worn black gloves occupy the lower edges of the frame, hands pumping as wet tar rooftops and unmarked brick bulkheads fill the view. Blue-gold first light, a few pigeons mid-scatter over the next roof. Eye-level body-cam on a 24mm lens, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Dawn rooftop | run on wet tar | next roof | warehouse roof |\n| 2 | Warehouse \u2192 market | stair | alley / awning | out to river |\n| 3 | River / forest | stones | bridge arch | creek path |\n| 4 | Headland | trees thin | boulder | generic lighthouse |\n| 5 | Wall / meadow | granite steps | dry-stone gap | meadow |\n| 6 | Ridge hold | slow to rail | look | quiet laugh |\n"
+        "## go-see 90s (first-person parkour)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film go-see --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A HD 3D game-engine pre-rendered cutscene still, first-person body-cam at dusk. Unmarked electric-cyan coat sleeves with circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Neon-wet megacity rooftops and unmarked spires fill the view. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Neon megacity rooftops | sprint + gap leap | vault + wall-run | drop to maglev |\n| 2 | Maglev skybridge | spine sprint | gantry leaps | dive into canyon |\n| 3 | Glass canyon gardens | wall-run glass | vault terraces | waterfall to mesas |\n| 4 | Storm mesas | rain sprint | leap a void | vault toward glacier |\n| 5 | Glacier ice canyon | ice sprint | slide the arch | climb-run to aurora |\n| 6 | Aurora ridge climax | last sprint | leap to rail | hold + laugh |\n"
       ],
       "title": "go-see 90s shot map"
     },
@@ -986,7 +986,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The body-cam runs forward across wet tar, olive sleeves and worn black gloves pumping at the edges while pigeons scatter off the next roof. Dawn wind shoves the hood as each footfall ticks grit and breath sits close to the lens. The camera stays a continuous first-person run. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across the neon-wet terrace, electric-cyan sleeves and matching gloves pumping hard at the lower edges while holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Dusk wind shoves the coat, each footfall ticks wet grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score."
       ],
       "title": "b1 s1 LTX I2V"
     },
@@ -1528,7 +1528,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The same body-cam keeps running onto the next unmarked rooftop, gloves flashing in and out as arms pump. Fabric snaps in the dawn wind while breath and running footfalls stay close. One continuous first-person tracking run, no cut. No music and no score."
+        "The start image holds as the first frame. The same first-person body-cam keeps the high-speed parkour run onto the next unmarked roof, electric-cyan sleeves flashing as both gloves plant a low HVAC bulkhead and vault through. Knees and boots cut the lower frame, then a short wall-run up an unmarked spire wall, hands sliding, glyph motes sparking. Fabric snaps in the wind while breath and running footfalls stay close. One continuous first-person take, no cut. No music and no score."
       ],
       "title": "b1 s2 LTX I2V"
     },
@@ -2070,7 +2070,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The run carries onto a warehouse roof, gloves still at the edges, tar grit ticking under shoes. Breath stays close while the first-person view holds a warehouse roof edge still sliding forward. Continuous body-cam, no cut. No music and no score."
+        "The start image holds as the first frame. The parkour body-cam sprints the last terrace edge, cyan gloves pumping, then drops toward a glowing unmarked maglev skybridge still sliding forward. Legs kick through the lower frame on the drop; the compact data-staff stays slung on the back. Wind rushes, grit ticks off the roof lip, and close breath rides the fall. Continuous first-person tracking into the bridge. No music and no score."
       ],
       "title": "b1 s3 LTX I2V"
     },
@@ -2612,7 +2612,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The body-cam runs down a warehouse stair, gloves grabbing a rail then pumping again. Stair treads knock underfoot while breath stays close in the stairwell. Continuous descent, not a drop. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam lands into a high-speed parkour sprint along the unmarked maglev spine, electric-cyan sleeves and gloves pumping at the edges, boots hammering metal grating. Unmarked spires streak past on both sides while the coat hem snaps. Wind, grating ticks, and close breath sit under the run. Continuous body-cam, no cut. No music and no score."
       ],
       "title": "b2 s1 LTX I2V"
     },
@@ -3154,7 +3154,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. Street-level, the body-cam runs a market alley and ducks under a canvas awning without stopping, gloves in frame. The awning slaps, distant unmarked chatter sits under breath and footfalls. Continuous first-person tracking run. No music and no score."
+        "The start image holds as the first frame. The same parkour body-cam leaps a gap between unmarked gantry segments, cyan gloves grabbing a rail then pumping again as boots flash through the frame. Glyph motes flare on the grab. Metal ticks, wind shears, and breath stays close. One continuous first-person tracking leap, no cut. No music and no score."
       ],
       "title": "b2 s2 LTX I2V"
     },
@@ -3696,7 +3696,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The run opens toward a river, gloves pumping as footfalls leave the alley for open air. Breath stays close while wind replaces the alley slap. Location change is the running camera. No music and no score."
+        "The start image holds as the first frame. The high-speed parkour run dives off the last gantry, first-person body-cam pitching down into a vertical glass canyon, electric-cyan sleeves whipping at the edges. Boots kick the lower frame as the drop begins; hanging unmarked gardens wait below. Wind roars, fabric snaps, breath sits close. Continuous first-person tracking into the canyon. No music and no score."
       ],
       "title": "b2 s3 LTX I2V"
     },
@@ -4238,7 +4238,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The body-cam runs across river stones, gloves splashing at the edges. Water and wet footfalls sit under close breath. Keep running, one continuous take. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam hits a high-speed parkour wall-run on unmarked glass, cyan gloves sliding, boots kicking along the canyon wall. Hanging gardens streak past. Glass ticks under the gloves, wind tunnels through the canyon, and breath stays close to the lens. Continuous body-cam, no cut. No music and no score."
       ],
       "title": "b3 s1 LTX I2V"
     },
@@ -4780,7 +4780,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The run threads a stone bridge arch, gloves pumping, wet rock on both sides. Water under the arch mixes with breath and footfalls. Continuous first-person tracking. No music and no score."
+        "The start image holds as the first frame. The parkour body-cam vaults hanging unmarked garden terraces, both cyan-gloved hands planting, knees flashing through the lower frame, glyph rings flaring at the wrists. The first-person view never stops moving forward. Cloth slaps, breath sits close, and footfalls knock wet stone. Continuous tracking, no cut. No music and no score."
       ],
       "title": "b3 s2 LTX I2V"
     },
@@ -5322,7 +5322,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The body-cam runs a beech-forest creek path along the bank, gloves visible. Leaves, creek water, breath, and footfalls travel with the camera. Forward travel, not a stunt. No music and no score."
+        "The start image holds as the first frame. The high-speed parkour body-cam bursts through a waterfall curtain, electric-cyan sleeves and gloves pumping, water exploding at the lens, then opens toward storm-lit floating mesas ahead. Boots splash the lower frame. Water, wind, splash, and close breath travel with the camera. Continuous first-person tracking. No music and no score."
       ],
       "title": "b3 s3 LTX I2V"
     },
@@ -5864,7 +5864,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. Trees thin as the same olive sleeves keep pumping, the body-cam running into open light. Wind in thinning trees rides over breath and footfalls. Continuous first-person run. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam sprints a rain-slick unmarked mesa in high-speed parkour, cyan sleeves pumping, glyph motes hissing in the rain. Lightning blooms far off over floating platforms. Rain, wind, wet footfalls, and close breath sit on the lens. Continuous body-cam, no cut. No music and no score."
       ],
       "title": "b4 s1 LTX I2V"
     },
@@ -6406,7 +6406,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The run passes a boulder, gloves grazing granite then pumping again. A short granite scrape sits under breath and footfalls. Continuous first-person forward run. No music and no score."
+        "The start image holds as the first frame. The parkour body-cam leaps a void between unmarked storm platforms, camera pitching, electric-cyan sleeves and legs in the lower frame, gloves reaching then pumping on landing. Glyph motes streak. Wind shears the gap, rain ticks the coat, and breath stays close. One continuous first-person leap, no cut. No music and no score."
       ],
       "title": "b4 s2 LTX I2V"
     },
@@ -6948,7 +6948,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The body-cam runs onto a headland past a generic white lighthouse, empty of lettering, windbreaker snapping in sea wind. Surf, distant gulls, fabric, breath, and footfalls travel with the camera. Keep running. No music and no score."
+        "The start image holds as the first frame. The high-speed parkour run vaults a last unmarked stone lip, cyan gloves planting, then sprints toward glacier-blue light opening ahead. Knees flash; the body-cam never stops. Wind, grit, and close breath ride the vault. Continuous first-person tracking into the ice. No music and no score."
       ],
       "title": "b4 s3 LTX I2V"
     },
@@ -7490,7 +7490,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The body-cam runs up granite steps, gloves visible, arms pumping. Boot grit and breath sit on each tread. Continuous first-person climb-run. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam sprints ice shelves in high-speed parkour, electric-cyan sleeves pumping, boots crunching, glyph motes throwing cyan on towering blue ice walls. The canyon opens toward aurora far ahead. Wind, ice grit ticking, and close breath sit under the run. Continuous body-cam, no cut. No music and no score."
       ],
       "title": "b5 s1 LTX I2V"
     },
@@ -8032,7 +8032,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The run threads a gap in a dry-stone wall, gloves brushing the stones, the body-cam never stopping. A stone scrape rides under breath and footfalls. Continuous first-person tracking. No music and no score."
+        "The start image holds as the first frame. The parkour body-cam slides under a blue ice arch, cyan gloves grazing the ice, boots kicking through the lower frame, then pops back into a sprint. A scrape, wind through the arch, and close breath stay with the camera. Continuous first-person tracking. No music and no score."
       ],
       "title": "b5 s2 LTX I2V"
     },
@@ -8574,7 +8574,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The body-cam bursts into a mountain meadow, olive sleeves and gloves at the edges. Wind in grass and a sheep bell far off sit under breath and footfalls. Continuous first-person run. No music and no score."
+        "The start image holds as the first frame. The high-speed parkour body-cam climb-runs a serrated ice ridge, cyan gloves grabbing then pumping, boots kicking shards of blue ice, aurora blooming ahead in unmarked sky. Glyph motes throw cyan on the ice. Grit ticks each ledge, wind shears the ridge, and close breath sits on the lens. Continuous first-person climb-run toward the light. No music and no score."
       ],
       "title": "b5 s3 LTX I2V"
     },
@@ -9116,7 +9116,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The ridge run slows as both worn-black-gloved hands find a weathered wooden rail. A rail creak, distant wind, slowing footfalls, and close breath settle together. First-person camera eases from a run to a hold. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam makes a last high-speed parkour sprint along the aurora ridge, electric-cyan sleeves and gloves pumping hard, glyph motes bright against the unmarked sky. Unmarked ice and stone drop away on both sides. Wind, footfalls on stone, and close breath. Continuous body-cam, no cut. No music and no score."
       ],
       "title": "b6 s1 LTX I2V"
     },
@@ -9658,7 +9658,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person view looks along the ridge, gloves staying on the rail, olive sleeves in the lower frame. Wind and breath only; the run is over. The camera holds. No music and no score."
+        "The start image holds as the first frame. The parkour body-cam leaps onto an unmarked overlook, cyan-gloved hands finding a weathered wooden rail as boots land in the lower frame. The first-person view settles forward over the ridge. A rail creak, distant wind, slowing footfalls, and close breath. Continuous take from leap to hold. No music and no score."
       ],
       "title": "b6 s2 LTX I2V"
     },
@@ -10200,7 +10200,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. Both gloved hands stay on the weathered wooden rail while the first-person view holds the ridge and a short quiet laugh leaves the breath. Distant wind and a single rail creak sit under that breath. The camera is still. No music and no score."
+        "The start image holds as the first frame. Both electric-cyan-gloved hands stay on the weathered unmarked rail, sleeves in the lower frame, holographic glyph motes settling while the first-person view holds the aurora ridge. The high-speed parkour run is over. A short quiet laugh leaves the breath. Distant wind and a single rail creak sit under that breath. The camera is still. No music and no score."
       ],
       "title": "b6 s3 LTX I2V"
     },
@@ -14270,8 +14270,8 @@
   "config": {},
   "extra": {
     "lab_profile": "film-go-see-90s-run-lab-example",
-    "lab_note": "## film-go-see-90s-run-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview of the stitched short. File: `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (first-person running): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. Open **Save 90s film (MP4) \u2014 open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nCanned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.\n",
-    "lab_description": "One-click 90s first-person running: Klein identity + 18 LTX 5.00s AV shots + stitch",
+    "lab_note": "## film-go-see-90s-run-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (first-person parkour): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nCanned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.\n",
+    "lab_description": "One-click 90s first-person parkour: Klein identity + 18 LTX 5.00s AV shots + stitch",
     "lab_film": "go-see",
     "lab_slug": "gosee",
     "lab_ltx_av": true,
