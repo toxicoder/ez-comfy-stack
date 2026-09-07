@@ -6,15 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Conventions for shell (Google Shell Style Guide), Docker, docs, testing, and safety in ez-comfy-stack.">
+        <meta name="description" content="Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets — slugs, takes, scene.json instances. Not MODELS_DIR.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/project-conventions/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/asset-bible/">
       
       
-        <link rel="prev" href="../troubleshooting/">
+        <link rel="prev" href="../studio-sidecars/">
       
+      
+        <link rel="next" href="../blender-gb10-sidecar/">
       
       
         
@@ -25,7 +27,7 @@
     
     
       
-        <title>Project Conventions - ez-comfy-stack</title>
+        <title>Asset Bible - ez-comfy-stack</title>
       
     
     
@@ -78,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#project-conventions" class="md-skip">
+        <a href="#asset-bible" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Project Conventions
+              Asset Bible
             
           </span>
         </div>
@@ -282,10 +284,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../visual-generative-ai/" class="md-tabs__link">
           
   
@@ -322,13 +326,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../project-conventions/" class="md-tabs__link">
           
   
   
@@ -792,26 +794,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -829,7 +836,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1012,10 +1019,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../asset-bible/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Asset Bible
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1031,6 +1065,59 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gen-vs-construct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gen vs Construct
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-files-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where files go
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operator-verbs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator verbs
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1358,31 +1445,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -1400,7 +1482,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1415,37 +1497,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Conventions
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../project-conventions/" class="md-nav__link">
         
   
   
@@ -1461,181 +1516,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#principles" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Principles
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#repo-layout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Repo layout
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#shell-style" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Shell style
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Shell style">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#rules-we-follow-summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Rules we follow (summary)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#intentional-deviations-from-google" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Intentional deviations from Google
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#function-comment-template" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Function comment template
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#entry-script-skeleton" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Entry script skeleton
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#utility-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Utility contract
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docker" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Docker
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#branches" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Branches
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docs-publish" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Docs publish
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Docs publish">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#docs-formatting-human-readability" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Docs formatting (human readability)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1675,10 +1555,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#principles" class="md-nav__link">
+  <a href="#gen-vs-construct" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Principles
+        Gen vs Construct
       
     </span>
   </a>
@@ -1686,10 +1566,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#repo-layout" class="md-nav__link">
+  <a href="#where-files-go" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Repo layout
+        Where files go
       
     </span>
   </a>
@@ -1697,135 +1577,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#shell-style" class="md-nav__link">
+  <a href="#operator-verbs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Shell style
+        Operator verbs
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Shell style">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#rules-we-follow-summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Rules we follow (summary)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#intentional-deviations-from-google" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Intentional deviations from Google
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#function-comment-template" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Function comment template
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#entry-script-skeleton" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Entry script skeleton
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#utility-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Utility contract
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docker" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Docker
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#branches" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Branches
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docs-publish" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Docs publish
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Docs publish">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#docs-formatting-human-readability" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Docs formatting (human readability)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1849,435 +1607,118 @@
   
 
 
-<h1 id="project-conventions">Project Conventions<a class="headerlink" href="#project-conventions" title="Permanent link">&para;</a></h1>
+<h1 id="asset-bible">Asset Bible<a class="headerlink" href="#asset-bible" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>Core principles</li>
-<li>Repo layout and ownership</li>
-<li>Shell style (Google Shell Style Guide + project deviations)</li>
-<li>Docker, testing, coverage gate, and branching rules</li>
-<li>Docs publish and <strong>human-readable formatting</strong> patterns</li>
+<li>Where assets live (<code>COMFY_OUTPUT_DIR/assets</code>, never <code>MODELS_DIR</code>)</li>
+<li>Gen vs Construct (honest limits)</li>
+<li><code>ez.asset.v1</code> records and <code>scene.json</code> that instance slugs</li>
+<li>Operator verb that exists today: <code>asset-ls</code></li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Consistent, reviewable contributions without the full lab Bazel/K8s surface</li>
-<li>Shell that matches industry practice while staying safe on remote <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">DGX Spark</span> hosts</li>
-<li>MkDocs pages operators can <strong>scan</strong> (not only search)</li>
+<li>A versioned catalog of reusable props/characters/sets as <strong>outputs</strong></li>
+<li>Scene files that shop for slugs instead of embedding meshes</li>
+<li>Read-only listing now; mint/iterate/promote verbs come later (P-A1)</li>
 </ul>
-<h2 id="principles">Principles<a class="headerlink" href="#principles" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Honesty</p>
+<p>There is <strong>no</strong> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="us-safe" data-href="../glossary/#us-safe" title="Local weights this lab will download for a US casual-commercial operator. Not legal advice.">US-safe</span> default-pack model that emits a textured city from one sentence. Whole-scene <strong>fast draft</strong> is Construct (primitives + HDRI + instanced bible assets). Whole-scene <strong>hero</strong> is Construct layout + Gen hero pieces. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS</span>-on-a-full-scene-still is <strong>DRAFT-ONLY</strong>.</p>
+</div>
+<p>This does <strong>not</strong> replace ez_film, the 5.00s printer, or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">occupancy</span>. <code>restart: "no"</code>, heavy confirm, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> are unchanged. No Blender in Docker. No MCP binary. No new default weights.</p>
+<pre class="mermaid"><code>flowchart TB
+  subgraph Gen["Gen"]
+    K["Klein still"] --&gt; T["TRELLIS.2 mesh"]
+  end
+  subgraph Construct["Construct"]
+    S["scene.json shopping list"] --&gt; P["primitives + HDRI + instanced slugs"]
+  end
+  T --&gt; B["Asset Bible slug"]
+  B --&gt; Scene["assembled scene"]
+  P --&gt; Scene</code></pre>
+<hr />
+<h2 id="gen-vs-construct">Gen vs Construct<a class="headerlink" href="#gen-vs-construct" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Principle</th>
+<th>Lane</th>
 <th>Meaning</th>
+<th>Use</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Stability first</td>
-<td>SSH stays usable under load</td>
+<td><strong>Gen</strong></td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> still → TRELLIS.2</td>
+<td>Hero <em>pieces</em> (a mug, a jacket, a hero mesh)</td>
 </tr>
 <tr>
-<td>Explicit resources</td>
-<td>Docker mem limits always set</td>
-</tr>
-<tr>
-<td>No auto-start</td>
-<td><code>restart: "no"</code></td>
-</tr>
-<tr>
-<td>Hermetic tests</td>
-<td>BATS/pytest without real Spark</td>
-</tr>
-<tr>
-<td>Docs as code</td>
-<td>MkDocs pages with required sections</td>
-</tr>
-<tr>
-<td>Keep it small</td>
-<td>No K8s/Ansible/dashboard/Bazel</td>
-</tr>
-<tr>
-<td>Style as gate</td>
-<td>ShellCheck + shfmt on every change</td>
+<td><strong>Construct</strong></td>
+<td><code>scene.json</code> shopping list</td>
+<td>Layout: primitives, HDRI, <strong>instances of bible slugs</strong></td>
 </tr>
 </tbody>
 </table>
-<h2 id="repo-layout">Repo layout<a class="headerlink" href="#repo-layout" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart TB
-  Root["ez-comfy-stack"]
-  Root --&gt; Manage["scripts/manage.sh&lt;br/&gt;operator CLI"]
-  Root --&gt; Lib["scripts/lib/*&lt;br/&gt;common · compose · paths · safety"]
-  Root --&gt; Util["scripts/utilities/*&lt;br/&gt;download-image · download-wan · download-ltx · download-limit · concat-shots · spark-farm"]
-  Root --&gt; Docker["docker/*&lt;br/&gt;compose · Dockerfile · entrypoint · patch"]
-  Root --&gt; Cfg["config/resource-policy.yaml"]
-  Root --&gt; Docs["docs/ · MkDocs"]
-  Root --&gt; Tests["tests/bats · tests/python"]
-  Manage --&gt; Lib
-  Manage --&gt; Util
-  Manage --&gt; Docker</code></pre>
-<h2 id="shell-style">Shell style<a class="headerlink" href="#shell-style" title="Permanent link">&para;</a></h2>
-<p><strong>Primary reference:</strong> <a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a>.</p>
-<p>This project follows that guide for executables and libraries, with the <strong>intentional deviations</strong> below. When the guide and this page conflict, this page wins for the listed deviations only.</p>
-<h3 id="rules-we-follow-summary">Rules we follow (summary)<a class="headerlink" href="#rules-we-follow-summary" title="Permanent link">&para;</a></h3>
+<p><code>mcp-construct</code> and <code>bpy-primitive</code> are reserved pipeline ids. This pack does <strong>not</strong> vendor an MCP binary or install Blender in the image. Host Blender stays a <a href="../blender-gb10-sidecar/">sidecar</a> (dies if compose is up).</p>
+<hr />
+<h2 id="where-files-go">Where files go<a class="headerlink" href="#where-files-go" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Area</th>
-<th>Rule</th>
+<th>Path</th>
+<th>What</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Language</td>
-<td>Bash only for executables</td>
+<td><code>${COMFY_OUTPUT_DIR}/assets/&lt;kind&gt;/&lt;slug&gt;/asset.yaml</code></td>
+<td><code>ez.asset.v1</code> record</td>
 </tr>
 <tr>
-<td>STDERR</td>
-<td><code>log</code> / <code>warn</code> / <code>err</code> → stderr; data/JSON → stdout</td>
+<td><code>…/mesh/</code>, <code>…/views/</code>, <code>…/variants/</code>, <code>…/prompts.jsonl</code></td>
+<td>Takes and previews</td>
 </tr>
 <tr>
-<td>Comments</td>
-<td>File overview header; every library function documented</td>
+<td><code>${COMFY_OUTPUT_DIR}/assets/index.yaml</code></td>
+<td>Catalog index (written by the library, not by <code>asset-ls</code>)</td>
 </tr>
 <tr>
-<td>Function docs</td>
-<td>Google-style <strong>Globals / Arguments / Outputs / Returns</strong> blocks</td>
+<td><code>MODELS_DIR</code></td>
+<td>Weights only — <strong>never</strong> bible assets</td>
 </tr>
 <tr>
-<td>Indent</td>
-<td>2 spaces; no tabs (<code>shfmt -i 2 -ci</code>)</td>
-</tr>
-<tr>
-<td>Control flow</td>
-<td><code>; then</code> / <code>; do</code> on same line as <code>if</code> / <code>for</code> / <code>while</code></td>
-</tr>
-<tr>
-<td>Tests</td>
-<td>Prefer <code>[[ … ]]</code>; use <code>-z</code> / <code>-n</code> for empty strings; <code>==</code> for equality</td>
-</tr>
-<tr>
-<td>Command subst</td>
-<td><code>$(…)</code> only (never backticks)</td>
-</tr>
-<tr>
-<td>Quoting</td>
-<td>Quote expansions: <code>"${var}"</code>, <code>"${array[@]}"</code>, <code>"$@"</code></td>
-</tr>
-<tr>
-<td>Arrays</td>
-<td>Use arrays for argument lists; expand with <code>"${arr[@]}"</code></td>
-</tr>
-<tr>
-<td>Arithmetic</td>
-<td><code>$((…))</code> / <code>((…))</code>; not <code>let</code> / <code>expr</code> / <code>$[…]</code></td>
-</tr>
-<tr>
-<td>Eval / aliases</td>
-<td>Forbidden in scripts</td>
-</tr>
-<tr>
-<td>Pipes to while</td>
-<td>Prefer process substitution: <code>while read; do …; done &lt; &lt;(cmd)</code></td>
-</tr>
-<tr>
-<td>Locals</td>
-<td><code>local</code> in functions; split <code>local x</code> / <code>x="$(cmd)"</code> when exit status of <code>cmd</code> matters</td>
-</tr>
-<tr>
-<td>Constants</td>
-<td><code>UPPER_SNAKE</code>; prefer <code>readonly</code> when set once</td>
-</tr>
-<tr>
-<td>Naming</td>
-<td>Functions/vars <code>lower_snake_case</code>; <code>name()</code> without <code>function</code> keyword</td>
-</tr>
-<tr>
-<td>Structure</td>
-<td>Helpers grouped; multi-function scripts use <code>main</code> + source guard</td>
-</tr>
-<tr>
-<td>Libraries</td>
-<td><code>scripts/lib/*.sh</code> — <code>.sh</code> extension, <strong>not</strong> executable</td>
-</tr>
-<tr>
-<td>Entry scripts</td>
-<td><code>*.sh</code>, executable, <code>set -euo pipefail</code></td>
-</tr>
-<tr>
-<td>ShellCheck</td>
-<td>Clean at warning level (<code>make lint</code>)</td>
-</tr>
-<tr>
-<td>SUID/SGID</td>
-<td>Forbidden</td>
+<td><code>guides/</code></td>
+<td>Docs/guides — <strong>never</strong> generated GLBs</td>
 </tr>
 </tbody>
 </table>
-<h3 id="intentional-deviations-from-google">Intentional deviations from Google<a class="headerlink" href="#intentional-deviations-from-google" title="Permanent link">&para;</a></h3>
+<p>Kinds: <code>object</code> · <code>character</code> · <code>building</code> · <code>set</code> · <code>scene</code> · <code>material</code> · <code>hdri</code> (directories are plural: <code>objects/</code>, …).</p>
+<p>Schema and a sample scene that <strong>instances slugs</strong> (no embedded mesh bytes): repo-root <code>schemas/asset.yaml</code> and <code>schemas/scene.json</code>.</p>
+<hr />
+<h2 id="operator-verbs">Operator verbs<a class="headerlink" href="#operator-verbs" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Google guide</th>
-<th>This project</th>
-<th>Why</th>
+<th>Verb</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Shebang <code>#!/bin/bash</code></td>
-<td><code>#!/usr/bin/env bash</code></td>
-<td>Works on macOS (Homebrew bash) and Linux Spark without assuming <code>/bin/bash</code> is modern</td>
+<td><code>asset-ls</code></td>
+<td><strong>Shipped</strong> — read-only catalog</td>
 </tr>
 <tr>
-<td>Prefer scripts ≤ ~100 lines or rewrite</td>
-<td>Modular multi-file shell ops surface</td>
-<td>Operator tooling is intentionally Bash; split by domain (<code>lib/*</code>, utilities)</td>
-</tr>
-<tr>
-<td>Function banner style only</td>
-<td>Globals/Arguments/Outputs/Returns labels (Google fields)</td>
-<td>Clearer API docs; optional <code># @command</code> on CLI entrypoints for help discoverability</td>
-</tr>
-<tr>
-<td>Hard 80-column lines</td>
-<td>Prefer ≤80; soft max ~100</td>
-<td>Long HF repo ids and one-line JSON status payloads</td>
-</tr>
-<tr>
-<td>Package functions with <code>::</code></td>
-<td>Flat <code>verb_noun</code> names</td>
-<td>Single small repository</td>
+<td><code>asset-new</code> / <code>asset-iterate</code> / <code>asset-promote</code></td>
+<td>Coming (P-A1)</td>
 </tr>
 </tbody>
 </table>
-<h3 id="function-comment-template">Function comment template<a class="headerlink" href="#function-comment-template" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">#######################################</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># One-line summary of behavior.</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Longer notes if needed for non-obvious safety or side effects.</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Globals:</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1">#   MODELS_DIR (read)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Arguments:</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1">#   $1 - tier id (fast|quality|…)</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Outputs:</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1">#   Writes human status to stderr; JSON to stdout when --json</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Returns:</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1">#   0 on success, 1 on error</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1">#######################################</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>some_func<span class="o">()</span><span class="w"> </span><span class="o">{</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">tier</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span>…
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="o">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>asset-ls
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>asset-ls<span class="w"> </span>--json
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/utilities/asset-ls.sh<span class="w"> </span>--output-dir<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/assets"</span>
 </code></pre></div>
-<h3 id="entry-script-skeleton">Entry script skeleton<a class="headerlink" href="#entry-script-skeleton" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="ch">#!/usr/bin/env bash</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">#</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># ## tool-name</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">#</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Overview, usage, safety, exit codes.</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># sources, constants (readonly where fixed)</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1">#######################################</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># …</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1">#######################################</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>helper<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>…<span class="p">;</span><span class="w"> </span><span class="o">}</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1">#######################################</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="c1"># CLI dispatcher.</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="c1"># Arguments:</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="c1">#   $@ - CLI args</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="c1">#######################################</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>main<span class="o">()</span><span class="w"> </span><span class="o">{</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span>…
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="o">}</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="c1"># shfmt -s may leave ${BASH_SOURCE[0]} unquoted inside [[ ]]; that is intentional.</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="si">}</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">0</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">  </span>main<span class="w"> </span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="k">fi</span>
-</code></pre></div>
-<h3 id="utility-contract">Utility contract<a class="headerlink" href="#utility-contract" title="Permanent link">&para;</a></h3>
-<p>Utilities under <code>scripts/utilities/</code> implement at least:</p>
-<table>
-<thead>
-<tr>
-<th>Subcommand</th>
-<th>Contract</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>status [--json]</code></td>
-<td>Read-only; exit 0 when reporting succeeds</td>
-</tr>
-<tr>
-<td><code>run</code></td>
-<td>Idempotent where practical</td>
-</tr>
-<tr>
-<td>Extra</td>
-<td><code>clear</code> / <code>wrap</code> allowed for <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span></td>
-</tr>
-</tbody>
-</table>
-<pre class="mermaid"><code>flowchart LR
-  Status["status --json&lt;br/&gt;read-only"] --&gt; Ready["Report readiness"]
-  Run["run"] --&gt; Work["Idempotent work"]
-  Extra["clear / wrap&lt;br/&gt;download-limit only"] --&gt; Safety["Always clear on exit"]</code></pre>
-<h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h2>
-<ul>
-<li>One compose service for the unified stack  </li>
-<li>Multi-stage image: <strong>runtime</strong> builder stages + <strong>runtime</strong> final (no secrets/models; <code>CUDA_BASE_IMAGE=…devel</code> is an override)  </li>
-<li><strong>Layer cache contract</strong> (do not regress):</li>
-<li>Torch stage <code>COPY</code> is only <code>install-comfy/core.sh</code> + <code>phase-venv-torch.sh</code> (not <code>common.sh</code> / Comfy pins)</li>
-<li>Named stages <code>torch</code> → <code>comfy</code> → <code>nodes</code>; pin <code>ARG</code>s declared in the stage that uses them</li>
-<li>Runtime: <code>COPY --link</code> <code>/opt/parts/venv</code> then <code>venv-extra</code> then <code>app</code> <strong>before</strong> entrypoint/install/patch</li>
-<li>Validated pins: <code>TORCH_VERSION</code>, <code>COMFYUI_REF</code>, <code>COMFYUI_MANAGER_REF</code>, <code>COMFYUI_NUNCHAKU_NODE_REF</code> (see models-and-cache.md)</li>
-<li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --link</code>, <code>COPY --chmod</code>, pip + apt cache mounts</li>
-<li>Compose bind-mounts ops scripts + <code>install-comfy/</code> for zero-rebuild iteration</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ghcr" data-href="../glossary/#ghcr" title="GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.">GHCR</span> channel by long-lived branch: publish tags <code>us-safe-studio</code> (<code>main</code>) and <code>us-safe-studio-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel). Old <code>flux-to-ltx*</code> tags freeze on the previous image.  </li>
-<li>Scripts as real files (not inline ConfigMap YAML)  </li>
-<li>Host model cache + named volume for Comfy state  </li>
-<li>Compose <code>restart: "no"</code>; explicit <code>mem_limit</code> / <code>mem_reservation</code>  </li>
-</ul>
-<pre class="mermaid"><code>flowchart TB
-  Compose["docker-compose.yml"] --&gt; Svc["comfyui service"]
-  Svc --&gt; Restart["restart: no"]
-  Svc --&gt; Mem["mem_limit / mem_reservation"]
-  Svc --&gt; Models["bind MODELS_DIR"]
-  Svc --&gt; State["volume comfy-state"]
-  Svc --&gt; Scripts["bind entrypoint · install · patch"]</code></pre>
-<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
-<ul>
-<li>TDD for behavior changes  </li>
-<li>BATS for shell; pytest for Python  </li>
-<li><strong>Hermetic by default</strong>: <code>test_helper.bash</code> sets <code>LAB_HERMETIC=1</code>, speed/probe mocks, and <code>HF_PROGRESS=0</code> (no real curl/speedtest, no progress-monitor sleeps)</li>
-<li><strong>Parallel BATS</strong>: <code>bats --jobs</code> across files when GNU <code>parallel</code> is installed (<code>BATS_JOBS</code> override); serialize within files</li>
-<li><code>make coverage</code> enforces:</li>
-<li><strong>100% Python line coverage</strong> on <code>patch_get_free_memory</code> and <code>patch_unified_memory_copy</code></li>
-<li><strong>Strict shell inventory</strong>: every function in <code>scripts/**/*.sh</code> and <code>docker/**/*.sh</code> must be <strong>named under <code>tests/</code></strong> (production-only references do not count)</li>
-<li>Full BATS suite green  </li>
-<li><strong>Tests ship with production code</strong> — same commit as the files under test  </li>
-<li><strong>Test shell style</strong>: <code>tests/bats/*.bats</code>, <code>tests/bats/*.bash</code>, and <code>tests/*.sh</code> follow the Google Shell Style Guide where applicable (quoted <code>"${var}"</code>, <code>[[ … ]]</code>, Google-style helper comments in <code>test_helper.bash</code>, 2-space indent / shfmt for <code>.sh</code> runners)</li>
-</ul>
-<pre class="mermaid"><code>flowchart LR
-  Red["Red&lt;br/&gt;failing BATS / pytest"] --&gt; Green["Green&lt;br/&gt;minimum production change"]
-  Green --&gt; Refactor["Refactor&lt;br/&gt;keep green"]
-  Refactor --&gt; Commit["Same commit&lt;br/&gt;tests + production"]</code></pre>
-<pre class="mermaid"><code>flowchart TB
-  Cov["make coverage"] --&gt; Py["100% line · UM patches"]
-  Cov --&gt; Shell["Every scripts/** + docker/** function&lt;br/&gt;named under tests/"]
-  Cov --&gt; Bats["Full BATS suite green"]
-  Lint["make lint"] --&gt; SC["ShellCheck warnings = defects"]
-  Lint --&gt; Fmt["shfmt"]</code></pre>
-<h2 id="branches">Branches<a class="headerlink" href="#branches" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Feature work from <code>development</code>: <code>feature/&lt;short-description&gt;</code>  </li>
-<li>Conventional commit titles  </li>
-<li>PR into <code>development</code> first  </li>
-</ul>
-<pre class="mermaid"><code>flowchart LR
-  Feat["feature/* · fix/* · chore/* · docs/*"] --&gt; Dev["development"]
-  Dev --&gt; Main["main&lt;br/&gt;production-ready only"]</code></pre>
-<h2 id="docs-publish">Docs publish<a class="headerlink" href="#docs-publish" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Local / PR: <code>make docs</code> (strict MkDocs Material build into <code>site/</code>)</li>
-<li>Public site (per long-lived branch) via <strong>mike</strong> on GitHub Pages:</li>
-<li><code>main</code> → <a href="https://toxicoder.github.io/ez-comfy-stack/latest/">latest</a></li>
-<li><code>development</code> → <a href="https://toxicoder.github.io/ez-comfy-stack/development/">development</a></li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../glossary/#workflow" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">Workflow</span>: <code>.github/workflows/deploy-docs.yml</code> (push to <code>main</code>/<code>development</code> with docs paths, or <code>workflow_dispatch</code>)</li>
-<li>Stack is <strong>MkDocs 1.x + Material</strong> (<code>docs/requirements.txt</code>). Do <strong>not</strong> upgrade to MkDocs 2.x (incompatible with Material plugins/theme; no migration path). CI and <code>make docs</code> set <code>NO_MKDOCS_2_WARNING=1</code> to suppress Material’s advisory. Revisit only if migrating tooling (e.g. Zensical evaluation).</li>
-<li>Keep the top nav on screen while scrolling: <code>navigation.tabs</code> <strong>and</strong> <code>navigation.tabs.sticky</code> in <code>mkdocs.yml</code>. Do <strong>not</strong> enable <code>header.autohide</code> (Material hides the tabs row on scroll without sticky).</li>
-<li>Header compact-on-scroll lives in <code>docs/stylesheets/extra.css</code> (wired via <code>extra_css</code>). Do not fork Material <code>header.html</code> / <code>tabs.html</code> for this. All header controls stay visible; only padding/height shrinks after the page title scrolls away. The same stylesheet sets <code>.md-typeset { font-size: 0.875rem }</code> (Material default is <code>0.8rem</code>); do not raise <code>html</code> font-size or the rem-based header will grow with the article.</li>
-<li>Prefer <strong>relative</strong> links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix</li>
-<li>Branch-stamped at build time via <code>docs/hooks.py</code> + <code>EZ_DOCS_VERSION</code> / <code>MIKE_DOCS_VERSION</code> (optional <code>EZ_DOCS_GIT_REF</code> override):</li>
-<li>Edit links (<code>edit/&lt;ref&gt;/docs/</code>)</li>
-<li>This-repo GitHub <code>blob</code> / <code>tree</code> URLs</li>
-<li>Operator Setup git ref: write <code>development</code> in source (e.g. <code>git clone -b development</code>); hooks stamp <code>main</code> or <code>development</code> to match the published alias</li>
-<li>Operator docs that mean “the branch for <strong>these</strong> docs” must use <code>development</code>, not a hardcoded long-lived branch name. Contributor workflow text (“branch from <code>development</code>”) stays literal.</li>
-</ul>
-<h3 id="docs-formatting-human-readability">Docs formatting (human readability)<a class="headerlink" href="#docs-formatting-human-readability" title="Permanent link">&para;</a></h3>
-<p>Readers <strong>scan</strong>. Prefer inverted pyramid: outcome and commands first, theory and edge cases later.</p>
-<p><strong>Required page chrome</strong> (every <code>docs/*.md</code> page, including <code>docs/learn/</code>):</p>
-<ol>
-<li>YAML frontmatter: <code>title</code>, <code>description</code>, <code>tags</code></li>
-<li><strong>What's on this page</strong> (bullet list)</li>
-<li><strong>What this enables</strong> (bullet list)</li>
-</ol>
-<p><strong>Nav (Diátaxis-shaped, task tabs):</strong> Learn (explanation + <a href="../glossary/">glossary</a>) → Start (tutorial) → Create (how-to) → Operate (how-to + reference) → Contribute. Do not mix a command catalog into Getting Started (<code>manage-cli.md</code>) or a workflow spreadsheet into the playbook (<code>studio-workflows.md</code>).</p>
-<p><strong>Glossary (definition modal):</strong></p>
-<ul>
-<li>Source of truth: <code>includes/glossary.json</code> (JSON, not YAML — CI pytest does not install PyYAML)</li>
-<li>Unique <code>id</code> (<code>[a-z0-9-]+</code>) and unique case-insensitive <code>aliases</code></li>
-<li><code>short</code> is one line (modal + <code>title=</code> tooltip); <code>long</code> is markdown on <a href="../glossary/">glossary.md</a></li>
-<li>First occurrence per term <strong>per page</strong>; skip <code>code</code> / <code>pre</code> / headings / links / the glossary page itself</li>
-<li><code>docs/glossary.py</code> wraps HTML; <code>docs/javascripts/glossary.js</code> opens a native <code>&lt;dialog&gt;</code></li>
-<li>Do <strong>not</strong> enable Material <code>abbr</code> + snippets <code>auto_append</code> (hover-only, double-wraps)</li>
-<li>Do <strong>not</strong> enable <code>content.instant</code> unless you re-test the modal on client-side navigation</li>
-</ul>
-<p><strong>Rich formatting patterns</strong> (MkDocs Material — see <code>mkdocs.yml</code>):</p>
-<table>
-<thead>
-<tr>
-<th>Pattern</th>
-<th>Use for</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Numbered steps</td>
-<td>Operator sequences (<code>setup</code> → <code>start</code> → <code>stop</code>)</td>
-</tr>
-<tr>
-<td>Tables</td>
-<td>Defaults, symptom → action, file basenames</td>
-</tr>
-<tr>
-<td><code>!!! tip</code> / <code>!!! warning</code> / <code>!!! danger</code> / <code>!!! success</code></td>
-<td>Side notes that must not break narrative flow</td>
-</tr>
-<tr>
-<td><code>??? …</code> collapsible</td>
-<td>Advanced, optional, “how it works”, long diagrams</td>
-</tr>
-<tr>
-<td><code>=== "…"</code> content tabs</td>
-<td>Mutually exclusive paths (interactive vs non-interactive; image vs video)</td>
-</tr>
-<tr>
-<td>Task lists <code>- [ ]</code></td>
-<td>Prerequisites the operator can check off</td>
-</tr>
-<tr>
-<td><code>++ctrl+c++</code> (<code>pymdownx.keys</code>)</td>
-<td>Keyboard shortcuts</td>
-</tr>
-<tr>
-<td>Mermaid</td>
-<td>Architecture / decision trees — <strong>after</strong> actionable commands when the reader’s job is to run something</td>
-</tr>
-<tr>
-<td>Card grids (<code>&lt;div class="grid cards" markdown&gt;</code>)</td>
-<td>Home / Learn indexes — equal-weight next steps</td>
-</tr>
-<tr>
-<td><code>:material-…:</code> / <code>:octicons-…:</code> icons</td>
-<td>Cards and scan anchors (<code>pymdownx.emoji</code> twemoji)</td>
-</tr>
-<tr>
-<td>Bold first phrase in list items</td>
-<td>Scan anchors</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Getting Started</strong> is the primary operator path: keep the happy path short; park image-layer, cold-start, and lab-internals content in collapsible blocks.</p>
-<p><strong>Session variables:</strong> operator command fences should reuse <code>SPARK_HOST</code>, <code>SPARK_USER</code>, <code>MODELS_DIR</code>, <code>COMFY_OUTPUT_DIR</code>, <code>COMFY_PORT</code>, <code>DOWNLOAD_LIMIT</code> (defaults from <code>.env.example</code>) so blocks are paste-and-run. Do not hardcode <code>&lt;spark-ip&gt;</code>.</p>
-<p><strong>Default stack vocabulary:</strong> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein 4B</span> + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan 2.2 5B</span> + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX-2.5</span>. Lab <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">CLIP</span> is <code>qwen_3_4b</code> (type <code>flux2</code>) and LTX-2.5 <code>CLIPLoader</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gemma4" data-href="../glossary/#gemma4" title="LTX-2.5 text encoder: Gemma4-12B-with-proj, CLIP type ltxv.">Gemma4</span>-with-proj. Klein 9B and old <code>flux-to-ltx*</code> GHCR tags are banned/frozen mentions only.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>make<span class="w"> </span>docs<span class="w">   </span><span class="c1"># strict build must stay green</span>
-</code></pre></div>
+<p>Empty catalog is success. Occupancy for Gen (Klein + TRELLIS) is the same one-heavy-job rule as <a href="../studio-sidecars/">Studio sidecars</a>. TRELLIS.2 remains opt-in <code>download-3d</code>, not <code>download-models</code>. See <a href="../licenses/">Model licenses</a>.</p>
 
 
 
