@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-podcast-cover-lab-example\n\nPodcast / playlist cover (Klein 4B). Default 1024\u00d71024. Prefix `ez_podcast`.\nSwap the props in the prompt. Add show title in your editor.\n"
+        "## klein-podcast-cover-lab-example\n\nPodcast / playlist cover (Klein 4B). Default 1024\u00d71024. Prefix `ez_podcast`.\nSwap the props in the prompt. Add show title in your editor.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -607,8 +607,57 @@
         0
       ]
     },
-    "lab_note": "## klein-podcast-cover-lab-example\n\nPodcast / playlist cover (Klein 4B). Default 1024\u00d71024. Prefix `ez_podcast`.\nSwap the props in the prompt. Add show title in your editor.\n",
-    "lab_description": "Klein 4B podcast cover 1:1"
+    "lab_note": "## klein-podcast-cover-lab-example\n\nPodcast / playlist cover (Klein 4B). Default 1024\u00d71024. Prefix `ez_podcast`.\nSwap the props in the prompt. Add show title in your editor.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B podcast cover 1:1",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "produce",
+      "occupancy": "klein",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "6:width",
+          "width"
+        ],
+        [
+          "6:height",
+          "height"
+        ],
+        [
+          "6:batch_size",
+          "batch_size"
+        ],
+        [
+          "7:seed",
+          "seed"
+        ],
+        [
+          "11:image",
+          "image"
+        ],
+        [
+          "12:prompt",
+          "prompt"
+        ],
+        [
+          "12:enhance",
+          "enhance"
+        ],
+        [
+          "12:style",
+          "style"
+        ]
+      ],
+      "outputs": [
+        9
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

@@ -9,7 +9,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 **What's on this page**
 
 - Which graph for which job
-- Seeded Klein / Wan / LTX / app / 90s / creator tables
+- Seeded Klein / Wan / LTX / Apps (Lane A vs Lane B) / 90s / creator tables
 - Notes that apply to every `*-lab-example`
 
 **What this enables**
@@ -72,13 +72,29 @@ flowchart TB
 
         Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** native LTX VAE sizes (720/16=45, then the next `/2` patch fails). Lab landscape graphs use **1280×704**. Klein **I2V feeders** (`klein-still-hero`, 90s film identity) are **1280×704**. Thumbnails/end-cards may stay 1280×720. Typing 720 or 1080 on LTX widgets is **auto-snapped** (704 / 1056) by `ez_ltx_spatial` — prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**. See [Troubleshooting](troubleshooting.md).
 
-=== "Apps (still / GIF / IG)"
+=== "Apps (Lane A / Lane B)"
+
+    App Mode (frontend **1.41.13+**) is a widget surface on the same `*-lab-example` JSON. Occupancy and handoff: [ComfyUI Apps](studio-apps.md).
+
+    Lane A — Inspire (occupancy **klein**)
 
     | Workflow | What it does |
     | --- | --- |
-    | **klein-still-daily-lab-example** | Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix `ez_still_app` |
-    | **wan-gif-loop-lab-example** | Wan 5B I2V GIF (49 frames @ 12 fps). **Ping-pong ON** so first and last frames meet for infinite looping. Prefix `ez_gif_loop` |
-    | **klein-dream-house-lab-example** | Ten Instagram 4:5 stills of one compact cedar cabin from **new cameras**. Edit **HOUSE IDENTITY** (world bible) and inventory once. Prefix `ez_dream_house_01`…`10` |
+    | **klein-still-draft-lab-example** | Spark Still. 768×432, Enhance off on the identity. Prefix `ez_still_draft` |
+    | **klein-identity-sheet-lab-example** | 3-angle sheet, seed **42**, **1280×704** |
+    | **klein-storyboard-6up-lab-example** | Six new cameras (`ez_board_01`…`06`) |
+    | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills, independent T2I |
+    | **klein-hook-still-lab-example** | Vertical 9:16 hook still |
+
+    Lane B — Produce
+
+    | Workflow | Occupancy | What it does |
+    | --- | --- | --- |
+    | **klein-still-daily-lab-example** | klein | Daily still. Click UNET to swap distilled / NVFP4 / base. Prefix `ez_still_app` |
+    | **klein-still-hero-lab-example** | klein | Same prompt + seed, **1280×704**, prefix `ez_still_hero` |
+    | **wan-gif-loop-lab-example** | wan | Wan 5B I2V GIF (49 frames @ 12 fps, ping-pong). Prefix `ez_gif_loop` |
+    | **wan-i2v-5s-lab-example** | wan | Silent 5 s I2V smoke, 121 frames |
+    | **ltx-i2v-5s-lab-example** | ltx | AV 5 s I2V, **1280×704** |
 
 === "90s shorts"
 

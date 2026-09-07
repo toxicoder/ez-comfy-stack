@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, ensure_group_title_inset, group as _group
+from _stamp_app_mode import stamp_suite_graph
 from _wire_prompt_enhance import normalize_enhance_widgets
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -115,6 +116,7 @@ def _load(path: Path) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    stamp_suite_graph(graph)
     ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")

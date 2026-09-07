@@ -381,7 +381,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **off**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n"
+        "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **off**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -674,13 +674,16 @@
         0
       ]
     },
-    "lab_note": "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **off**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n",
+    "lab_note": "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **off**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B edit of DCC clay first.png. Enhance off. 1280x704. Seed 42.",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
-      "enhance_off_identity": true
+      "lane": "dcc",
+      "occupancy": "klein",
+      "enhance_off_identity": true,
+      "handoff": []
     },
     "lab_dcc": {
       "enhance": false,
@@ -691,7 +694,47 @@
         704
       ],
       "prefix": "ez_clay_hero"
-    }
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "6:width",
+          "width"
+        ],
+        [
+          "6:height",
+          "height"
+        ],
+        [
+          "6:batch_size",
+          "batch_size"
+        ],
+        [
+          "7:seed",
+          "seed"
+        ],
+        [
+          "11:image",
+          "image"
+        ],
+        [
+          "12:prompt",
+          "prompt"
+        ],
+        [
+          "12:enhance",
+          "enhance"
+        ],
+        [
+          "12:style",
+          "style"
+        ]
+      ],
+      "outputs": [
+        9
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

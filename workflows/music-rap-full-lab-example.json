@@ -497,7 +497,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## music-rap-full-lab-example\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.\n\n1. Queue **music-rap-draft-lab-example** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Leave **Enhance** off. Edit lyrics before Queue. Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No \u201cin the style of <living artist>\u201d.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **klein-thumbnail-lab-example.json** / **klein-podcast-cover-lab-example.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n"
+        "## music-rap-full-lab-example\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.\n\n1. Queue **music-rap-draft-lab-example** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Leave **Enhance** off. Edit lyrics before Queue. Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No \u201cin the style of <living artist>\u201d.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **klein-thumbnail-lab-example.json** / **klein-podcast-cover-lab-example.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     }
@@ -673,7 +673,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## music-rap-full-lab-example\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.\n\n1. Queue **music-rap-draft-lab-example** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Leave **Enhance** off. Edit lyrics before Queue. Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No \u201cin the style of <living artist>\u201d.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **klein-thumbnail-lab-example.json** / **klein-podcast-cover-lab-example.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n",
+    "lab_note": "## music-rap-full-lab-example\n\nUS-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.\n\n1. Queue **music-rap-draft-lab-example** first. Then this graph.\n2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).\n3. Leave **Enhance** off. Edit lyrics before Queue. Human rewrite required before any release.\n4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No \u201cin the style of <living artist>\u201d.\n5. ACE-Step vocal is an invented timbre, not a clone.\n6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.\n7. Cover: sequential Queue **klein-thumbnail-lab-example.json** / **klein-podcast-cover-lab-example.json**. Do not embed Klein.\n8. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nCanned style swaps (tags widget only):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
     "lab_description": "US-safe rap full track: ACE-Step 1.5 turbo AIO, 96s boom-bap, invented vocal",
     "ds": {
       "scale": 1,
@@ -681,7 +681,37 @@
         0,
         0
       ]
-    }
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "audio",
+      "occupancy": "audio",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "5:lyrics",
+          "lyrics"
+        ],
+        [
+          "5:enhance",
+          "enhance"
+        ],
+        [
+          "8:seed",
+          "seed"
+        ]
+      ],
+      "outputs": [
+        10,
+        11
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

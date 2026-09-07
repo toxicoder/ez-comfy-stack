@@ -268,7 +268,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-storyboard-6up-lab-example\n\nSix Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`\u2026`06`. Independent T2I, same seed, locked inventory. Turn Enhance off on IDENTITY to pin the bible.\n"
+        "## klein-storyboard-6up-lab-example\n\nSix Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`\u2026`06`. Independent T2I, same seed, locked inventory. Turn Enhance off on IDENTITY to pin the bible.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -2192,8 +2192,85 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-storyboard-6up-lab-example",
-    "lab_note": "## klein-storyboard-6up-lab-example\n\nSix Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`\u2026`06`. Independent T2I, same seed, locked inventory. Turn Enhance off on IDENTITY to pin the bible.\n",
-    "lab_description": "Klein 4B six-frame storyboard pack, new cameras"
+    "lab_note": "## klein-storyboard-6up-lab-example\n\nSix Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`\u2026`06`. Independent T2I, same seed, locked inventory. Turn Enhance off on IDENTITY to pin the bible.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B six-frame storyboard pack, new cameras",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "klein",
+      "enhance_off_identity": false,
+      "handoff": [
+        "wan-i2v-shot-lab-example",
+        "ltx-i2v-shot-lab-example"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "4:prompt",
+          "prompt"
+        ],
+        [
+          "4:enhance",
+          "enhance"
+        ],
+        [
+          "4:style",
+          "style"
+        ],
+        [
+          "6:width",
+          "width"
+        ],
+        [
+          "6:height",
+          "height"
+        ],
+        [
+          "6:batch_size",
+          "batch_size"
+        ],
+        [
+          "10:shot",
+          "shot"
+        ],
+        [
+          "12:seed",
+          "seed"
+        ],
+        [
+          "16:shot",
+          "shot"
+        ],
+        [
+          "22:shot",
+          "shot"
+        ],
+        [
+          "28:shot",
+          "shot"
+        ],
+        [
+          "34:shot",
+          "shot"
+        ],
+        [
+          "40:shot",
+          "shot"
+        ]
+      ],
+      "outputs": [
+        14,
+        20,
+        26,
+        32,
+        38,
+        44
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

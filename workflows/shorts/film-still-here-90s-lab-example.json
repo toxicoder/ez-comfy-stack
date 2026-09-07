@@ -381,7 +381,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## film-still-here-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (household morning): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_stillhere_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film still-here --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nCanned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.\n"
+        "## film-still-here-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (household morning): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_stillhere_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film still-here --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nCanned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n"
       ],
       "title": "Operator note \u2014 one-click 90s film"
     },
@@ -14270,7 +14270,7 @@
   "config": {},
   "extra": {
     "lab_profile": "film-still-here-90s-lab-example",
-    "lab_note": "## film-still-here-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (household morning): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_stillhere_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film still-here --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nCanned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.\n",
+    "lab_note": "## film-still-here-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (household morning): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_stillhere_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film still-here --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nCanned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n",
     "lab_description": "One-click 90s household morning: Klein identity + 18 LTX 5.00s AV shots + stitch",
     "lab_film": "still-here",
     "lab_slug": "stillhere",
@@ -14280,6 +14280,74 @@
     "lab_dfr": {
       "print": "ltx",
       "note": "Two-stage DFR lives in Comfy Templates \u2192 LTX-2.5 (not vendored). YAML print: dfr selects that path. Lab printers stay 5.00s / 1280\u00d7704 / 1+8n."
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "graph",
+      "frontend_min": "1.41.13",
+      "lane": "film",
+      "occupancy": "film",
+      "enhance_off_identity": true,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "11:prompt",
+          "prompt"
+        ],
+        [
+          "11:enhance",
+          "enhance"
+        ],
+        [
+          "11:style",
+          "style"
+        ],
+        [
+          "7:seed",
+          "seed"
+        ]
+      ],
+      "outputs": [
+        9,
+        208,
+        210,
+        228,
+        230,
+        248,
+        250,
+        268,
+        270,
+        288,
+        290,
+        308,
+        310,
+        328,
+        330,
+        348,
+        350,
+        368,
+        370,
+        388,
+        390,
+        408,
+        410,
+        428,
+        430,
+        448,
+        450,
+        468,
+        470,
+        488,
+        490,
+        508,
+        510,
+        528,
+        530,
+        548,
+        550
+      ]
     }
   },
   "version": 0.4

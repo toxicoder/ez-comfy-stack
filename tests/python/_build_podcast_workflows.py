@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
+from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -146,6 +147,7 @@ class Graph:
             "extra": extra,
             "version": 0.4,
         }
+        stamp_suite_graph(graph)
         ensure_group_title_inset(graph)
         _assert_no_overlap(graph)
         return graph
