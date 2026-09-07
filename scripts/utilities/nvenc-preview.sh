@@ -30,6 +30,8 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/common.sh"
 # shellcheck source=../lib/compose.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/compose.sh"
+# shellcheck source=../lib/occupancy.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/occupancy.sh"
 
 IN_MP4=""
 OUT_MP4=""
@@ -74,25 +76,6 @@ parse_args() {
 }
 
 #######################################
-# Refuse when the studio container is up.
-# Globals:
-#   None
-# Arguments:
-#   None
-# Outputs:
-#   err when running
-# Returns:
-#   0 if stopped; 2 if running
-#######################################
-refuse_if_comfy_running() {
-  if compose_is_running; then
-    err "ComfyUI is running — stop it before NVENC preview (encoder contention)"
-    return 2
-  fi
-  return 0
-}
-
-#######################################
 # Encode preview (dry-run prints the command).
 # Globals:
 #   IN_MP4, OUT_MP4, DRY_RUN
@@ -108,7 +91,7 @@ cmd_run() {
     err "Usage: nvenc-preview.sh --in MASTER.mp4 --out PREVIEW.mp4 [--yes]"
     return 1
   fi
-  refuse_if_comfy_running || return $?
+  refuse_if_comfy_running "NVENC preview (encoder contention)" || return $?
   if [[ ${DRY_RUN} -eq 1 ]]; then
     log "dry-run: ffmpeg -y -i ${IN_MP4} -c:v h264_nvenc -preset p4 ${OUT_MP4}"
     return 0

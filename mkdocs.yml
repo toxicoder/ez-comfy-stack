@@ -106,6 +106,7 @@ nav:
       - Local music: music.md
       - Studio sidecars: studio-sidecars.md
       - Blender GB10 sidecar: blender-gb10-sidecar.md
+      - DCC guide pack: dcc-workflows.md
       - Splat sidecar: splat-sidecar.md
   - Operate:
       - manage.sh reference: manage-cli.md

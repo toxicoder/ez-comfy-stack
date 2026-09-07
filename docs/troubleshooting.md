@@ -34,6 +34,9 @@ tags: [troubleshooting, comfyui, docker]
 | LTX MP4 has no sound | Missing audio VAE decode → VHS | Re-open current **ltx-*-lab-example** |
 | Enhance did nothing | GGUF / llama.cpp missing (fail-soft) | Read **Enhance status**. `download-models` then restart |
 | VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
+| `export-guides` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [DCC guide pack](dcc-workflows.md) |
+| Guide pack QC refuses 1280×720 | LTX VAE grid is **1280×704** | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |
+| Union Control missing LoRA | IC-LoRA is opt-in, not `download-models` | `./scripts/manage.sh download-ltx --tier iclora`. Distilled-only; refuse 19B |
 
 Concepts: [ComfyUI basics](learn/comfyui.md). Full tables below.
 

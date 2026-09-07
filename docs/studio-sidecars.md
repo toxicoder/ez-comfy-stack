@@ -49,7 +49,10 @@ Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D
 ./scripts/manage.sh stop
 ./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
 ./scripts/manage.sh blender                      # dies if compose is up
+./scripts/manage.sh export-guides --film go-see --shot 12   # same occupancy
 ```
+
+Guide packs: [DCC guide pack](dcc-workflows.md). Clay is Workbench; beauty is Path A. Never 1280×720.
 
 VACE join (Wan 2.1 1.3B Apache, 17 frames = `1+8n`) is a Comfy graph, not a sidecar:
 

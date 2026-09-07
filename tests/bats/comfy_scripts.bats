@@ -239,14 +239,16 @@ teardown() {
   local src dest
   src="${TEST_TMP_DIR}/wf"
   dest="${TEST_TMP_DIR}/user_wf"
-  mkdir -p "${src}/shorts"
+  mkdir -p "${src}/shorts" "${src}/dcc"
   echo '{}' >"${src}/klein-still-draft-lab-example.json"
   echo '{}' >"${src}/shorts/film-go-see-90s-run-lab-example.json"
+  echo '{}' >"${src}/dcc/klein-from-clay-lab-example.json"
   echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/klein-still-draft-lab-example.json ]]
   [[ -f ${dest}/film-go-see-90s-run-lab-example.json ]]
+  [[ -f ${dest}/klein-from-clay-lab-example.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
   run install_lab_workflows "${TEST_TMP_DIR}/missing-wf" "${TEST_TMP_DIR}/user_wf2"
   [ "${status}" -eq 0 ]

@@ -139,6 +139,7 @@ Commands:
   download-3d [--tier trellis2|da3-base|all]
                     Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   blender           Host Blender sidecar (dies if compose is up)
+  export-guides     Dump a 1280x704 / 120f guide pack (dies if compose is up)
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
   download-longcat [--tier video|avatar|all]
@@ -996,6 +997,19 @@ cmd_blender() {
 }
 
 #######################################
+# Occupancy-gated Blender guide-pack dump (P0). Godot is P2.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  blender-guide.sh flags
+# Returns:
+#   blender-guide status (2 if compose is up)
+#######################################
+cmd_export_guides() {
+  bash "${REPO_ROOT}/scripts/utilities/blender-guide.sh" "$@"
+}
+
+#######################################
 # Fail-closed accept gate before 90s concat.
 #######################################
 cmd_film_accept() {
@@ -1125,6 +1139,7 @@ main() {
     download-restore) cmd_download_restore "$@" ;;
     download-3d) cmd_download_3d "$@" ;;
     blender) cmd_blender "$@" ;;
+    export-guides) cmd_export_guides "$@" ;;
     film-accept) cmd_film_accept "$@" ;;
     download-longcat) cmd_download_longcat "$@" ;;
     download-dreamx) cmd_download_dreamx "$@" ;;

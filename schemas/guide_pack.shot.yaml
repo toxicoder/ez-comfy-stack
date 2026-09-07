@@ -1,0 +1,14 @@
+# ez.guide.shot.v1 — DCC ↔ Comfy print handshake.
+# Size is the LTX VAE grid. Never 1280x720. Frames 120 @ 24 fps = 5.00s.
+schema: ez.guide.shot.v1
+slug: go-see
+shot_id: "12"
+engine: blender          # blender | godot | opentoonz | krita | mixed
+print: ltx-iclora-depth  # ltx-iclora-depth | ltx-iclora-canny | wan-vace | wan-flf | wan-denk-cn | dcc-final
+frames: 120
+fps: 24
+size: [1280, 704]
+layers: [rgb, depth, canny, first, last]
+identity_ref: films/go-see/identity.png
+blend: scenes/ridge.blend
+camera: CAM_ridge_dolly

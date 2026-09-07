@@ -54,6 +54,7 @@ FROZEN_MANAGE_VERBS=(
   download-restore
   download-3d
   blender
+  export-guides
   film-accept
   download-longcat
   download-dreamx
@@ -248,6 +249,9 @@ FROZEN_MANAGE_VERBS=(
   run cmd_blender --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"host Blender"* ]]
+  run cmd_export_guides --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"guide pack"* || "${output}" == *"1280x704"* ]]
   run cmd_film_accept --help
   [ "${status}" -eq 0 ]
   run cmd_download_longcat --help

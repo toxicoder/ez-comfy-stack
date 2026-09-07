@@ -139,6 +139,15 @@ flowchart TB
     | **ltx-interior-ambience-lab-example** | Interior room-tone AV |
     | **ltx-hook-av-lab-example** | ~5 s AV cold open |
 
+=== "DCC (clay → print)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **klein-from-clay-lab-example** | Klein 4B edit of a guide-pack `first.png`. Enhance **off**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Occupancy: dump while Comfy is **down**. |
+    | **ltx-iclora-depth-5s-lab-example** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. |
+
+    Operator loop: [DCC guide pack](dcc-workflows.md).
+
 === "License"
 
     MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).

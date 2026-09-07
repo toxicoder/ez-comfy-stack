@@ -1,0 +1,11 @@
+schema: ez.guide.shot.v1
+slug: go-see
+shot_id: "12"
+engine: blender
+print: ltx-iclora-depth
+frames: 120
+fps: 24
+size: [1280, 704]
+layers: [rgb, depth, canny, first, last]
+blend: tests/fixtures/dcc/suzanne-12/suzanne.blend
+camera: CAM_suzanne
