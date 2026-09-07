@@ -1843,6 +1843,11 @@
 <td><code>./scripts/manage.sh setup</code> <strong>or</strong> <code>sudo mkdir -p "${MODELS_DIR}" &amp;&amp; sudo chown "$USER:$USER" "${MODELS_DIR}"</code> <strong>or</strong> <code>MODELS_DIR=$HOME/models</code></td>
 </tr>
 <tr>
+<td><code>ln: … comfy/llm/….gguf: Permission denied</code> then <code>GGUF ready</code></td>
+<td>Relink into a nested dir the user cannot write; the GGUF is already present</td>
+<td>Start is OK — Enhance works if that path exists. To heal ownership: <code>./scripts/manage.sh setup</code> <strong>or</strong> <code>sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy/llm"</code>. Do not abort start</td>
+</tr>
+<tr>
 <td>Pending / can't start container</td>
 <td>Docker/GPU runtime</td>
 <td><code>nvidia-smi</code>, Container Toolkit install</td>
