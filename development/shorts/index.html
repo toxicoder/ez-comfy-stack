@@ -1726,6 +1726,7 @@
 <p class="admonition-title">First 90s film</p>
 <ol>
 <li>Stack is up (<code>manage.sh start</code>, type <strong>yes</strong>). LTX-2.5 weights on disk.</li>
+<li>Optional: fill <strong>beat-sheet-lab-example</strong> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">occupancy</span> <strong>none</strong>, no <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span>) and paste into host <code>workflows/shorts/&lt;slug&gt;.shots.yaml</code> — YAML is not copied by the entrypoint.</li>
 <li>Load <strong>film-go-see-90s-run-lab-example</strong> (or still-here / switchyard).</li>
 <li>Leave <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> <strong>off</strong>. Leave LTX <strong>1280×704</strong>. Queue <strong>once</strong>.</li>
 <li>Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.</li>
@@ -1893,7 +1894,7 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># load wan-vace-join-lab-example (Shot A last → Shot B first)</span>
 </code></pre></div>
 <p>Host 3D sidecars (Comfy <strong>must be stopped</strong>): <a href="../studio-sidecars/">Studio sidecars</a>, <a href="../blender-gb10-sidecar/">Blender</a>, <a href="../splat-sidecar/">SuperSplat</a>.</p>
-<p>Wave 4 hero path (opt-in, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">occupancy</span>: one heavy job):</p>
+<p>Wave 4 hero path (opt-in, occupancy: one heavy job):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>a14b<span class="w">   </span><span class="c1"># A14B FP8 8-step silent hero; MagCache off</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># load optional/wan-i2v-a14b-lab-example — unload 5B first</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>./scripts/manage.sh<span class="w"> </span>download-longcat<span class="w"> </span>--tier<span class="w"> </span>video<span class="w">     </span><span class="c1"># MIT; no NCCL</span>

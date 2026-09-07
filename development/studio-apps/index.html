@@ -1822,9 +1822,16 @@
 <td><strong>klein-hook-still-lab-example</strong></td>
 <td>Vertical 9:16 first-frame hook (<code>ez_hook_still</code>)</td>
 </tr>
+<tr>
+<td><strong>prompt-forge-lab-example</strong></td>
+<td>No UNET. Klein + Wan + LTX enhance preview. Occupancy <strong>llm</strong> (CPU GGUF)</td>
+</tr>
+<tr>
+<td><strong>beat-sheet-lab-example</strong></td>
+<td>No UNET. 6×3 STRING cards; paste into <code>workflows/shorts/&lt;slug&gt;.shots.yaml</code>. Occupancy <strong>none</strong></td>
+</tr>
 </tbody>
 </table>
-<p>Prompt Forge and Beat Sheet (no UNET) land in a follow-up change.</p>
 <hr />
 <h2 id="lane-b-produce">Lane B — Produce<a class="headerlink" href="#lane-b-produce" title="Permanent link">&para;</a></h2>
 <p>Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except <strong>klein-still-daily</strong> (swap table).</p>
@@ -1892,6 +1899,11 @@
 <td>ltx</td>
 <td>AV cold open</td>
 </tr>
+<tr>
+<td><strong>klein-platform-pack-lab-example</strong></td>
+<td>klein</td>
+<td>Six plates from one identity (<code>ez_pack_thumb</code> / ig / portrait / shorts / og / banner). Ctrl+B unused groups</td>
+</tr>
 </tbody>
 </table>
 <p>Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the <a href="../studio-workflows/">catalog</a>. Klein stills may use 1280×720; LTX feeders stay <strong>1280×704</strong>.</p>
@@ -1909,6 +1921,10 @@
 <tr>
 <td>Spark Still</td>
 <td>Hero Still → Silent 5s (<code>wan-i2v-5s</code>) → AV 5s (<code>ltx-i2v-5s</code>)</td>
+</tr>
+<tr>
+<td>Spark Still</td>
+<td>Platform Pack (<code>klein-platform-pack</code>) → Silent 5s / Hook AV</td>
 </tr>
 <tr>
 <td>Hook Still</td>

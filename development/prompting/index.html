@@ -1674,7 +1674,7 @@
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Lab graphs already ship model-native prompts</p>
-<p>Seeded <strong>*-lab-example</strong> graphs use research-backed Positive / Motion text. Leave <strong>Enhance</strong> off unless you replace that text with something short.</p>
+<p>Seeded <strong>*-lab-example</strong> graphs use research-backed Positive / Motion text. Leave <strong>Enhance</strong> off unless you replace that text with something short. <strong>prompt-forge-lab-example</strong> previews Klein / Wan / LTX rewrites with no <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">occupancy</span> <strong>llm</strong>). Copy the family you need into <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> Still.</p>
 </div>
 <pre class="mermaid"><code>flowchart TB
   Which{"Which graph is loaded?"} --&gt; K["Klein still / edit"]
@@ -1807,7 +1807,7 @@
 <p>Fail-soft: missing GGUF, missing <code>llama-cpp-python</code>, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand — <code>./scripts/manage.sh download-models</code> plus a restart heals <code>comfy/llm/</code> and <code>doctor</code>/<code>start</code> relink a snapshot that is already on disk.</p>
 <div class="admonition warning">
 <p class="admonition-title">CPU-only local LLM</p>
-<p>Prompt Enhance runs <strong>Qwen3-4B-Instruct-2507 Q4_K_M</strong> (~2.5 GiB) through llama.cpp with <strong><code>n_gpu_layers=0</code></strong>. Do not GPU-offload it next to LTX-2.5. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> while Comfy is generating.</p>
+<p>Prompt Enhance runs <strong>Qwen3-4B-Instruct-2507 Q4_K_M</strong> (~2.5 GiB) through llama.cpp with <strong><code>n_gpu_layers=0</code></strong>. Do not GPU-offload it next to LTX-2.5. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same Spark while Comfy is generating.</p>
 </div>
 <p>Safety: <code>restart: "no"</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span> preflight, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit are unchanged. No API keys. The GGUF lives under <code>MODELS_DIR</code>, never in the image.</p>
 <hr />
