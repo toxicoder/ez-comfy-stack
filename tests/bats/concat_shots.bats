@@ -30,6 +30,7 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"--film"* ]]
   [[ "${output}" == *"--cap-seconds"* ]]
+  [[ "${output}" == *"--xfade"* ]]
   run bash "${CS}" --nope
   [ "${status}" -ne 0 ]
   : >"${COMFY_OUTPUT_DIR}/ez_shot_01_video.mp4"
@@ -148,4 +149,66 @@ teardown() {
   DRY_RUN=1
   run cmd_run
   [ "${status}" -ne 0 ]
+}
+
+@test "concat-shots --xfade parse and missing-audio guard" {
+  parse_args --xfade 10 --yes
+  [ "${XFADE_CS}" -eq 10 ]
+  [ "${DRY_RUN}" -eq 0 ]
+  : >"${COMFY_OUTPUT_DIR}/a.mp4"
+  : >"${COMFY_OUTPUT_DIR}/b.mp4"
+  FILE_CSV="${COMFY_OUTPUT_DIR}/a.mp4,${COMFY_OUTPUT_DIR}/b.mp4"
+  SHOT_DIR="${COMFY_OUTPUT_DIR}"
+  FILM=""
+  DRY_RUN=1
+  XFADE_CS=10
+  OUT_MP4="${COMFY_OUTPUT_DIR}/xfade.mp4"
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"xfade_cs=10"* ]]
+  DRY_RUN=0
+  install_mock_bin ffprobe 'exit 0'
+  run cmd_run
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"requires audio"* || "${output}" == *"xfade"* ]]
+  XFADE_CS=99
+  DRY_RUN=0
+  run cmd_run
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"0–50"* || "${output}" == *"0-50"* ]]
+}
+
+@test "concat-shots xfade three-step ffmpeg when audio present" {
+  : >"${COMFY_OUTPUT_DIR}/a.mp4"
+  : >"${COMFY_OUTPUT_DIR}/b.mp4"
+  FILE_CSV="${COMFY_OUTPUT_DIR}/a.mp4,${COMFY_OUTPUT_DIR}/b.mp4"
+  SHOT_DIR="${COMFY_OUTPUT_DIR}"
+  FILM=""
+  DRY_RUN=0
+  XFADE_CS=10
+  OUT_MP4="${COMFY_OUTPUT_DIR}/xfade.mp4"
+  install_mock_bin ffprobe 'echo audio'
+  : >"${TEST_TMP_DIR}/ffmpeg.log"
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  grep -q -- '-an' "${TEST_TMP_DIR}/ffmpeg.log"
+  grep -q -- 'acrossfade' "${TEST_TMP_DIR}/ffmpeg.log"
+  run shot_has_audio "${COMFY_OUTPUT_DIR}/a.mp4"
+  [ "${status}" -eq 0 ]
+  run concat_xfade_audio "${COMFY_OUTPUT_DIR}/xfade2.mp4" \
+    "${COMFY_OUTPUT_DIR}/a.mp4" "${COMFY_OUTPUT_DIR}/b.mp4"
+  [ "${status}" -eq 0 ]
+}
+
+@test "audio_acrossfade_filter two and many inputs" {
+  run audio_acrossfade_filter 1 0.10
+  [ "${status}" -ne 0 ]
+  run audio_acrossfade_filter 2 0.10
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"acrossfade=d=0.10"* ]]
+  run audio_acrossfade_filter 18 0.10
+  [ "${status}" -eq 0 ]
+  local n
+  n="$(printf '%s' "${output}" | grep -o 'acrossfade=' | wc -l | tr -d ' ')"
+  [ "${n}" -eq 17 ]
 }

@@ -29,7 +29,7 @@ stack:
   gpus: 1
   memory_limit: 90g
   memory_reservation: 80g
-  cpu: "12"
+  cpu: "16"
   models:
     image_tier: fast
     wan_tier: 5b
