@@ -1170,6 +1170,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#app-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lab-app-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lab_app_mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#latent" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1974,6 +1996,34 @@
     
   
     Still to motion to AV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../studio-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ComfyUI Apps
   
 
     
@@ -3073,6 +3123,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#app-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lab-app-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lab_app_mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#latent" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3846,7 +3918,13 @@
 <p><strong>See also:</strong> <a href="#comfyui">ComfyUI</a> · <a href="#sampler">KSampler</a> · <a href="#seed">seed</a></p>
 <h3 id="widget">widget<a class="headerlink" href="#widget" title="Permanent link">&para;</a></h3>
 <p>Studio work is widget work: change the Positive prompt, seed, LoadImage filename, or Enhance toggle on the canvas. The JSON on disk stays the seeded lab example. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
-<p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#workflow">workflow</a> · <a href="#enhance">Enhance</a></p>
+<p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#workflow">workflow</a> · <a href="#enhance">Enhance</a> · <a href="#app-mode">App Mode</a></p>
+<h3 id="app-mode">App Mode<a class="headerlink" href="#app-mode" title="Permanent link">&para;</a></h3>
+<p>App Mode shows the creator widgets listed in <code>extra.linearData</code> (prompt, Enhance, seed, size, LoadImage). It is not a second frontend. Official persist is <code>linearData</code>; the lab contract is <code>lab_app_mode</code>. Film graphs may open in graph view. See <a href="../studio-apps/">ComfyUI Apps</a> and <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>See also:</strong> <a href="#lab-app-mode">lab_app_mode</a> · <a href="#widget">widget</a> · <a href="#occupancy">occupancy</a> · <a href="#workflow">workflow</a></p>
+<h3 id="lab-app-mode">lab_app_mode<a class="headerlink" href="#lab-app-mode" title="Permanent link">&para;</a></h3>
+<p><code>extra.lab_app_mode</code> marks a seeded graph as an App (<code>enabled</code>, <code>default_view</code>, <code>lane</code> inspire/produce/audio/film/dcc, <code>occupancy</code>, <code>handoff</code>). Do not require <code>extra.linearMode</code> — Comfy upstream does not write it. See <a href="../studio-apps/">ComfyUI Apps</a>.</p>
+<p><strong>See also:</strong> <a href="#app-mode">App Mode</a> · <a href="#occupancy">occupancy</a> · <a href="#lab-example">lab-example</a></p>
 <h3 id="latent">latent<a class="headerlink" href="#latent" title="Permanent link">&para;</a></h3>
 <p>5.00 s at 24 fps is 120 frames (some smokes use 121 = 4n+1). LTX spatial size must be divisible by 32 — lab landscape is 1280×704. Do not Queue a 30–90 s latent on GB10. See <a href="../learn/generation/">Image and video generation</a>.</p>
 <p><strong>Also called:</strong> <code>latent space</code></p>
@@ -3899,8 +3977,8 @@
 <p>The stack applies <code>patch_unified_memory_copy.py</code> (<code>copy=False</code> on safetensor <code>.to(device)</code>) and <code>patch_get_free_memory.py</code> (host free RAM instead of under-reporting cudaMemGetInfo). <code>--highvram</code> is the wrong flag here. See <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
 <p><strong>See also:</strong> <a href="#gb10">GB10</a> · <a href="#headroom">headroom</a> · <a href="#kitchen">Comfy Kitchen</a></p>
 <h3 id="occupancy">occupancy<a class="headerlink" href="#occupancy" title="Permanent link">&para;</a></h3>
-<p>GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. See <a href="../studio-sidecars/">Studio sidecars</a>.</p>
-<p><strong>See also:</strong> <a href="#sidecar">sidecar</a> · <a href="#ace-step">ACE-Step</a> · <a href="#gb10">GB10</a></p>
+<p>GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. App occupancy keys (<code>none</code>/<code>llm</code>/<code>klein</code>/<code>wan</code>/<code>ltx</code>/<code>film</code>/<code>audio</code>) are on every App Note — stop the other family before Queue. See <a href="../studio-apps/">ComfyUI Apps</a> and <a href="../studio-sidecars/">Studio sidecars</a>.</p>
+<p><strong>See also:</strong> <a href="#sidecar">sidecar</a> · <a href="#ace-step">ACE-Step</a> · <a href="#gb10">GB10</a> · <a href="#app-mode">App Mode</a></p>
 <h3 id="headroom">headroom<a class="headerlink" href="#headroom" title="Permanent link">&para;</a></h3>
 <p><code>doctor</code> and <code>start</code> refuse when host free RAM is below policy (<code>min_host_free_gib</code>). Do not weaken this for demos. See <a href="../reboot-safety/">Reboot safety</a> and <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
 <p><strong>See also:</strong> <a href="#restart-no">restart: no</a> · <a href="#doctor">doctor</a> · <a href="#unified-memory">unified memory</a></p>
