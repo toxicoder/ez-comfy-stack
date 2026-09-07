@@ -11,7 +11,7 @@ tags: [sidecar, blender, splat, trellis, 3d, occupancy]
 - What a sidecar is (host process, not Compose)
 - Occupancy: one heavy GPU job
 - TRELLIS.2 native + DA3-BASE opt-in packs
-- Pointers to Blender and SuperSplat
+- Pointers to Blender, SuperSplat, and host NLE (Kdenlive / Shotcut)
 
 **What this enables**
 
@@ -47,5 +47,19 @@ VACE join (Wan 2.1 1.3B Apache, 17 frames = `1+8n`) is a Comfy graph, not a side
 ./scripts/utilities/download-wan.sh run --tier vace
 # load workflows/wan-vace-join-lab-example.json — MagCache off
 ```
+
+## Host NLE (Kdenlive / Shotcut)
+
+OTIO from `./scripts/manage.sh film-export-otio go-see` is stdlib JSON under `films/<slug>/publish/`. Import on the Spark host or a laptop — never in the Docker image.
+
+On DGX Spark (Ubuntu aarch64):
+
+```bash
+sudo apt-get update
+sudo apt-get install -y kdenlive shotcut
+# or: flatpak install flathub org.kde.kdenlive
+```
+
+Then open the `.otio` in Kdenlive/Shotcut. Occupancy: stop Comfy first if the NLE will use the GPU.
 
 See [Model licenses](licenses.md) and [Models & Cache](models-and-cache.md).

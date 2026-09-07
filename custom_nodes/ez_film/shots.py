@@ -29,6 +29,21 @@ META_KEYS = (
 )
 PRINT_MODES = ("ltx", "dfr")
 IDENTITY_SEED = "42"
+LTX_PRINT_TEMPLATE = "ltx-i2v-5s-lab-example.json"
+DFR_TEMPLATE = "templates/ltx-2.5/t2v-i2v-two-stage-distilled"
+
+
+def print_template(mode: str) -> str:
+    """Map YAML ``print:`` to a lab graph or official Templates path.
+
+    ``dfr`` is not a vendored JSON blob (UUID subgraphs). The stub records
+    the Templates SoT path from ``workflows/quality/ltx-2.5/NOTICE.md``.
+    """
+    if mode == "dfr":
+        return DFR_TEMPLATE
+    if mode == "ltx":
+        return LTX_PRINT_TEMPLATE
+    raise ValueError(f"print must be ltx|dfr, got {mode!r}")
 
 
 def film_slug(film: str) -> str:

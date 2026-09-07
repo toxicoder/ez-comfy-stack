@@ -59,6 +59,17 @@ def test_compile_go_see(tmp_path: Path) -> None:
         js.load_state(tmp_path / "missing")
 
 
+def test_compile_dfr_records_templates_path(tmp_path: Path) -> None:
+    yaml_text = (SHORTS / "go-see.shots.yaml").read_text(encoding="utf-8")
+    yaml_text = yaml_text.replace("print: ltx", "print: dfr", 1)
+    dest = tmp_path / "films" / "gosee"
+    js.compile_film(yaml_text, dest)
+    stub = json.loads((dest / "shots" / "01.json").read_text(encoding="utf-8"))
+    assert stub["print"] == "dfr"
+    assert stub["template"] == "templates/ltx-2.5/t2v-i2v-two-stage-distilled"
+    assert not (ROOT / "workflows" / stub["template"]).exists()
+
+
 def test_mark_resume_and_skip(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     yaml_text = (SHORTS / "go-see.shots.yaml").read_text(encoding="utf-8")
     dest = tmp_path / "gosee"

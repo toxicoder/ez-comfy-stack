@@ -15,6 +15,9 @@ def test_phase_nodes_director_is_opt_in() -> None:
     assert "MiniMaxH3-Director" not in text
     assert "jtydhr88/ComfyUI-OpenCut" in text
     assert "WhatDreamsCost-ComfyUI" in text
+    assert "${COMFYUI_OPENCUT_REF}" in text
+    assert "${COMFYUI_MAGCACHE_REF}" in text
+    assert "${COMFYUI_LTX_DIRECTOR_REF}" in text
 
 
 def test_compose_studio_ui_is_optional_no_gpu() -> None:
@@ -49,8 +52,10 @@ def test_film_graphs_carry_ltx_disclosure() -> None:
         "film-still-here-90s-lab-example.json",
         "film-switchyard-90s-lab-example.json",
     ):
-        extra = json.loads((ROOT / "workflows" / "shorts" / name).read_text(encoding="utf-8"))["extra"]
+        graph = json.loads((ROOT / "workflows" / "shorts" / name).read_text(encoding="utf-8"))
+        extra = graph["extra"]
         assert "LTX Community License" in extra["lab_disclosure"]
+        assert any(n.get("type") == "EZFilmDisclosure" for n in graph["nodes"]), name
 
 
 def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: object) -> None:

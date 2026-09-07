@@ -140,6 +140,12 @@ teardown() {
   run clone_node "https://example.com/node.git" "DemoNode"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"custom node"* ]]
+  run clone_node_ref_is_sha 47bdd2aca97e568087c4e92d2d2f0426bdce7a37
+  [ "${status}" -eq 0 ]
+  run clone_node_ref_is_sha 0.5.0
+  [ "${status}" -ne 0 ]
+  run clone_node_ref_is_sha main
+  [ "${status}" -ne 0 ]
 
   # strip_prebuilt removes .git and bytecode junk
   local strip_root
@@ -615,6 +621,9 @@ teardown() {
   [[ -n ${COMFYUI_MANAGER_REF} ]]
   [[ -n ${COMFYUI_NUNCHAKU_NODE_REF} ]]
   [[ "${COMFYUI_NUNCHAKU_NODE_REF}" == v* ]]
+  [[ "${COMFYUI_OPENCUT_REF}" == "0.5.0" ]]
+  [[ ${#COMFYUI_MAGCACHE_REF} -ge 7 ]]
+  [[ ${#COMFYUI_LTX_DIRECTOR_REF} -ge 7 ]]
   [[ -n ${TORCH_VERSION} ]]
   [[ "${TORCH_INDEX_URL}" == *cu130* ]]
 }

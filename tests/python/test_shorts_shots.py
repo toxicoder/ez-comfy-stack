@@ -15,7 +15,7 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
-from ez_film.shots import parse_shots_yaml  # noqa: E402
+from ez_film.shots import DFR_TEMPLATE, LTX_PRINT_TEMPLATE, parse_shots_yaml, print_template  # noqa: E402
 
 SHORTS = ROOT / "workflows" / "shorts"
 
@@ -45,6 +45,12 @@ BIBLES = {
 
 def _path(film: str) -> Path:
     return SHORTS / f"{film}.shots.yaml"
+
+
+def test_print_template_ltx_and_dfr() -> None:
+    assert print_template("ltx") == LTX_PRINT_TEMPLATE
+    assert print_template("dfr") == DFR_TEMPLATE
+    assert DFR_TEMPLATE.startswith("templates/ltx-2.5/")
 
 
 def test_three_shot_bibles_exist() -> None:
