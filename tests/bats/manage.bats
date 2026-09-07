@@ -29,6 +29,39 @@ teardown() {
   teardown_repo_env
 }
 
+# Append-only. Replacing a verb with another is a merge defect (Wave 0 #77).
+# New manage.sh commands must be added here in the same commit.
+FROZEN_MANAGE_VERBS=(
+  help
+  setup
+  doctor
+  status
+  start
+  stop
+  restart
+  logs
+  download-models
+  download-podcast
+  download-music
+  download-limit
+  clear-hf-locks
+  reset-hf-partials
+  cleanup
+  print-shot
+  film-resume
+  models-status
+  reap-models
+)
+
+@test "manage help lists the frozen verb set (append-only)" {
+  run bash "${MANAGE_SH}" help
+  [ "${status}" -eq 0 ]
+  local verb
+  for verb in "${FROZEN_MANAGE_VERBS[@]}"; do
+    [[ "${output}" == *"${verb}"* ]]
+  done
+}
+
 @test "manage CLI help unknown doctor status start stop cleanup download" {
   run bash "${MANAGE_SH}" help
   [ "${status}" -eq 0 ]
