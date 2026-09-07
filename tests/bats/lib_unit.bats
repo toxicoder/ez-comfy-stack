@@ -638,6 +638,8 @@ exit 0
   run compose_status_json
   [ "${status}" -eq 0 ]
   [[ "${output}" == *'"stack":"studio"'* ]]
+  [[ "${output}" == *'"attention"'* ]]
+  [[ "${output}" == *'"host_free_gib"'* ]]
 
   run compose_is_running
   [ "${status}" -ne 0 ]
@@ -735,4 +737,21 @@ exit 0
   [[ "${output}" == *"not running"* || "${output}" == *"not running after start"* ]]
   unset COMPOSE_BIN
   install_docker_mocks
+}
+
+@test "compose: stack_attention_from_text kitchen sage fallback unknown" {
+  run stack_attention_from_text "Using Comfy Kitchen attention"
+  [ "${output}" = "kitchen" ]
+  run stack_attention_from_text "Using sage attention on sm_121"
+  [ "${output}" = "sage" ]
+  run stack_attention_from_text "Using SageAttention"
+  [ "${output}" = "sage" ]
+  run stack_attention_from_text "pip_install sageattention failed; starting main.py"
+  [ "${output}" = "pytorch-fallback" ]
+  run stack_attention_from_text "Starting server"
+  [ "${output}" = "pytorch-fallback" ]
+  run stack_attention_from_text ""
+  [ "${output}" = "unknown" ]
+  run stack_attention_backend
+  [ "${output}" = "unknown" ]
 }

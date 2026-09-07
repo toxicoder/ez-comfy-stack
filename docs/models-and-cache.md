@@ -397,7 +397,7 @@ flowchart TB
 
     | Change | Rebuild multi‑GB **torch** stage? | Re-pull **venv-torch**? | Re-pull **venv-extra**? | Re-pull **app**? |
     | --- | --- | --- | --- | --- |
-    | `entrypoint.sh` / `patch_get_free_memory.py` / orchestrator | No | No | No | No |
+    | `entrypoint.sh` / UM patches / orchestrator | No | No | No | No |
     | `install-comfy/common.sh` (clone/link/strip only) | No | No | No | Maybe (nodes/comfy stages) |
     | `install-comfy/phase-nodes.sh` or node **sources** only | No | No | No | Yes (smaller) |
     | VideoHelperSuite / new node **pip** deps (opencv, llama-cpp, …) | No | No | **Yes** (delta only) | Yes |
@@ -405,7 +405,7 @@ flowchart TB
     | `install-comfy/core.sh` / `phase-venv-torch.sh` / `TORCH_VERSION` | Yes | Yes | Yes | Yes |
     | Runtime `apt` only (`gcc`/`g++`/`python3-dev` for Triton JIT) | No | No (`COPY --link`) | No | No |
 
-    Builder: **named stages** `torch` → `comfy` → `nodes`. Torch `COPY` is only `core.sh` + `phase-venv-torch.sh`. Pin `ARG`s are declared in the stage that uses them. Runtime: **`COPY --link` `/opt/parts/venv` then `venv-extra` then `app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, `pythonpath/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+    Builder: **named stages** `torch` → `comfy` → `nodes`. Torch `COPY` is only `core.sh` + `phase-venv-torch.sh`. Pin `ARG`s are declared in the stage that uses them. Runtime: **`COPY --link` `/opt/parts/venv` then `venv-extra` then `app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, `pythonpath/`, and the UM patches so local script iteration needs **no image rebuild**.
 
     Runtime installs **`gcc` + `g++` + `python3-dev`** (not full `build-essential`) so PyTorch 2.13+ Triton can JIT-compile `cuda_utils` (needs **CC + `Python.h`**) on first `CLIPTextEncode`. That is a small apt layer; `COPY --link` keeps the multi‑GB torch blob. If JIT deps are still incomplete, the entrypoint sets `LAB_DISABLE_TORCH_NATIVE_TRITON=1` so torch falls back to eager/cuBLAS.
 

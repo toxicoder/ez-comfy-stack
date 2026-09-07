@@ -178,6 +178,7 @@ COPY --link --from=nodes /opt/parts/app /opt/comfy-prebuilt
 COPY --chmod=755 install-comfy.sh entrypoint.sh /opt/ez-comfy/
 COPY --chmod=755 install-comfy/ /opt/ez-comfy/install-comfy/
 COPY --chmod=644 patch_get_free_memory.py /opt/ez-comfy/
+COPY --chmod=644 patch_unified_memory_copy.py /opt/ez-comfy/
 # PYTHONPATH sitecustomize: optional torch.backends.python_native.triton disable
 COPY --chmod=644 pythonpath/ /opt/ez-comfy/pythonpath/
 

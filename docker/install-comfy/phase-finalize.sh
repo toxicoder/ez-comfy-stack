@@ -116,5 +116,6 @@ phase_finalize() {
   strip_prebuilt "${COMFY_HOME}"
   link_all_models
   apply_free_memory_patch
+  apply_unified_memory_copy_patch
   package_prebuilt_parts
 }

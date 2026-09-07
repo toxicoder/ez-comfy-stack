@@ -290,6 +290,25 @@ apply_free_memory_patch() {
 }
 
 #######################################
+# Apply Spark safetensor copy=False patch when the script is present.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 (patch failures are soft)
+#######################################
+apply_unified_memory_copy_patch() {
+  if [[ -f /opt/ez-comfy/patch_unified_memory_copy.py ]]; then
+    python3 /opt/ez-comfy/patch_unified_memory_copy.py "${COMFY_HOME}" || warn "um copy patch failed"
+  else
+    warn "patch_unified_memory_copy.py not found in image"
+  fi
+}
+
+#######################################
 # Strip bloat from a prebuilt Comfy tree (image size / seed speed).
 # Removes VCS metadata, bytecode caches, and common non-runtime dirs.
 # Safe for runtime: does not delete Python packages or model links.

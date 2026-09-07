@@ -398,7 +398,9 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 
 ??? tip "Dev: edit scripts without rebuilding"
 
-    Compose bind-mounts `docker/entrypoint.sh`, `docker/install-comfy.sh`, `docker/install-comfy/`, and `docker/patch_get_free_memory.py` into the container.
+    Compose bind-mounts `docker/entrypoint.sh`, `docker/install-comfy.sh`, `docker/install-comfy/`, `docker/patch_get_free_memory.py`, and `docker/patch_unified_memory_copy.py` into the container.
+
+    Default attention is **Comfy Kitchen** (`--use-ck-attention`). `doctor` reports `attention: kitchen|sage|pytorch-fallback|unknown`. On a running Spark, `pytorch-fallback` means a 10–20× slow path — see [Troubleshooting](troubleshooting.md).
 
     Change those files on the host, then restart the stack — **no multi‑GB image rebuild**.
 
@@ -449,8 +451,8 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
       A["manage.sh start<br/>type yes"] --> B["Docker build image<br/>ez-comfy:us-safe-studio"]
       B --> C["Create volume comfy-state"]
       C --> D["entrypoint: install-comfy.sh<br/>pip + git · 10–30+ min"]
-      D --> E["patch_get_free_memory.py"]
-      E --> F["Exec ComfyUI on 0.0.0.0:8188"]
+      D --> E["UM patches (free-mem + copy=False)"]
+      E --> F["Exec ComfyUI Kitchen + UM flags"]
       F --> G["UI ready"]
     ```
 
