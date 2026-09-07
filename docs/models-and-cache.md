@@ -223,7 +223,7 @@ Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/` from host `workflows/*.json`, `workflows/shorts/*.json`, `workflows/dcc/*.json`, and `workflows/optional/*.json` (name pattern **`*-lab-example.json`**). That directory is bind-mounted from `${COMFY_OUTPUT_DIR}/comfy-user` so operator graphs survive `cleanup`. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
+Seeded into Comfy `user/default/workflows/` from host `workflows/*.json`, `workflows/shorts/*.json`, `workflows/dcc/*.json`, and `workflows/optional/*.json` (name pattern **`*-lab-example.json`**). App Mode graphs land as **`*-lab-example.app.json`** so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. That directory is bind-mounted from `${COMFY_OUTPUT_DIR}/comfy-user` so operator graphs survive `cleanup`. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
 
 | Graph | Notes |
 | --- | --- |

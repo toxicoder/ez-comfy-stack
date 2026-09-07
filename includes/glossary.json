@@ -329,7 +329,7 @@
     "aliases": ["ComfyUI"],
     "category": "Studio",
     "short": "Node-graph UI for local image, video, and audio generation. This stack's studio.",
-    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files end in `-lab-example` and copy into `user/default/workflows/` on start. See [ComfyUI basics](learn/comfyui.md).",
+    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files end in `-lab-example` and copy into `user/default/workflows/` on start. App Mode graphs land as `*.app.json` so they appear under Apps as well as Workflows. See [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["queue", "widget", "workflow", "manage-sh"]
   },
   {
@@ -338,7 +338,7 @@
     "aliases": ["node graph", "lab graph", "workflow"],
     "category": "Studio",
     "short": "A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.",
-    "long": "Host files live under `workflows/*-lab-example.json`. The entrypoint copies them into Comfy. Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md).",
+    "long": "Host files live under `workflows/*-lab-example.json`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md).",
     "see_also": ["lab-example", "note-node", "widget", "comfyui"]
   },
   {
@@ -365,7 +365,7 @@
     "aliases": ["App Mode"],
     "category": "Studio",
     "short": "ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.",
-    "long": "App Mode shows the creator widgets listed in `extra.linearData` (prompt, Enhance, seed, size, LoadImage). It is not a second frontend. Official persist is `linearData`; the lab contract is `lab_app_mode`. Film graphs may open in graph view. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
+    "long": "App Mode shows the creator widgets listed in `extra.linearData` (prompt, Enhance, seed, size, LoadImage). It is not a second frontend. Official persist is `linearData`; the lab contract is `lab_app_mode`. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["lab-app-mode", "widget", "occupancy", "workflow"]
   },
   {
@@ -374,7 +374,7 @@
     "aliases": ["lab_app_mode"],
     "category": "Studio",
     "short": "Lab extra on *-lab-example graphs: lane, occupancy, handoff, frontend_min.",
-    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc, `occupancy`, `handoff`). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
+    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
     "see_also": ["app-mode", "occupancy", "lab-example"]
   },
   {

@@ -9,19 +9,21 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 **What's on this page**
 
 - How App Mode relates to the node graph
+- Apps sidebar (`.app.json`) vs Workflows
 - Occupancy (one GB10 job)
 - Lane A (Inspire) vs Lane B (Produce)
 - Handoff chains (still → motion → AV)
 
 **What this enables**
 
+- Opening a lab graph from Comfy’s **Apps** sidebar, not only Workflows
 - Queueing a lab graph from creator widgets instead of hunting the canvas
 - Knowing which App to stop before you load the next one
 - Following Spark Still → Hero → Silent 5s → AV 5s without renaming files
 
 **Who this is for:** studio users after `klein-still-draft-lab-example` has been loaded once.
 
-Lab graphs are still the same `*-lab-example.json` files. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`.
+Lab graphs are still the same host `*-lab-example.json` files. On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`.
 
 ```mermaid
 flowchart LR
@@ -42,9 +44,9 @@ flowchart LR
 
 Official persist is `extra.linearData` (`inputs` / `outputs`). The lab contract is `extra.lab_app_mode` (`lane`, `occupancy`, `handoff`, `frontend_min`). Do not require `extra.linearMode` — upstream does not write it.
 
-90s film graphs stay `default_view: graph` (too many widgets) but App Mode is still **enabled**.
+Comfy’s **Apps** sidebar lists files whose name ends in `.app.json`. On `start`, the entrypoint seeds every App Mode graph (`default_view: app`) as `*-lab-example.app.json` into `user/default/workflows/`. The same stem still appears under **Workflows**. 90s film graphs stay `default_view: graph` (too many widgets) and keep the `.json` suffix — App Mode is still **enabled**, but they stay Workflows-only.
 
-Filenames: [Workflow catalog](studio-workflows.md). Playbook: [Still to motion to AV](visual-generative-ai.md).
+Filenames: [Workflow catalog](studio-workflows.md). Playbook: [Still to motion to AV](visual-generative-ai.md). Restart the container after a pull so the `.app.json` copy runs.
 
 ---
 
@@ -127,4 +129,4 @@ Do **not** Queue Wan and LTX in the same session. Stop the other occupancy first
 
 !!! warning "Do not weaken"
 
-    `restart: "no"`, type **yes** on start, headroom, and download-limit are unchanged. Apps do not add `workflows/apps/` or seed `workflows/optional/`.
+    `restart: "no"`, type **yes** on start, headroom, and download-limit are unchanged. Apps do not add `workflows/apps/` or seed `workflows/optional/`. App Mode graphs seed as `*.app.json` next to the Workflows list, not as a second tree.

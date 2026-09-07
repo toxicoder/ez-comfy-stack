@@ -19,7 +19,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 
 **Who this is for:** studio users after the first still-draft Queue.
 
-After `download-models` + `start`, load from `user/default/workflows/` (seeded from host `workflows/`). Filenames end with **`-lab-example`**. Do **not** edit raw JSON — change widgets on the canvas.
+After `download-models` + `start`, load from `user/default/workflows/` (seeded from host `workflows/`). Filenames end with **`-lab-example`**. App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk; same stem). Do **not** edit raw JSON — change widgets on the canvas.
 
 ```mermaid
 flowchart TB
