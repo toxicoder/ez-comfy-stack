@@ -373,3 +373,12 @@ teardown() {
   run grep -E 'studio|flux-to-ltx|90g' "${REPO_ROOT}/config/resource-policy.yaml"
   [ "$status" -eq 0 ]
 }
+
+@test "cleanup help still says it does not delete weights" {
+  run bash "${MANAGE_SH}" help
+  [ "$status" -eq 0 ]
+  [[ "${output}" == *"comfy-state volume only"* ]]
+  [[ "${output}" != *"cleanup"*"delete weights"* ]]
+  run grep -F 'reap-models' "${MANAGE_SH}"
+  [ "$status" -eq 0 ]
+}

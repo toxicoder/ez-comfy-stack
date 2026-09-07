@@ -1,0 +1,86 @@
+# Disk bible for MODELS_DIR. LICENSE-MODELS.md stays the license bible.
+# schema 1 — restricted YAML parsed by scripts/lib/model_manifest.py
+schema: 1
+refuse:
+  - MiniMax-H3
+  - FLUX.2-klein-9b
+  - FLUX.2-dev
+  - DA3-LARGE
+  - Inria-3DGS
+  - Pixal3D-as-default
+packs:
+  klein-4b-fp8:
+    default: true
+    min_gb: 3
+    tier_dir: black-forest-labs__FLUX.2-klein-4b-fp8_fast
+    files:
+      - flux-2-klein-4b-fp8.safetensors
+  klein-qwen-te:
+    default: true
+    min_gb: 1
+    tier_dir: Comfy-Org__z_image_turbo_te
+    files:
+      - qwen_3_4b.safetensors
+  flux2-vae:
+    default: true
+    min_gb: 1
+    tier_dir: Comfy-Org__flux2-dev_vae
+    files:
+      - flux2-vae.safetensors
+  wan-ti2v-5b:
+    default: true
+    min_gb: 12
+    tier_dir: Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b
+    files:
+      - wan2.2_ti2v_5B_fp16.safetensors
+      - wan2.2_vae.safetensors
+      - umt5_xxl_fp8_e4m3fn_scaled.safetensors
+  ltx-2.5:
+    default: true
+    min_gb: 30
+    tier_dir: Lightricks__LTX-2.5_2.5
+    files:
+      - ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors
+      - gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors
+      - ltx-2.5-video-vae-bf16.safetensors
+      - ltx-2.5-audio-vae-bf16.safetensors
+  ltx-2.3:
+    default: false
+    retired: true
+    superseded_by: ltx-2.5
+    min_gb: 20
+    tier_dir: Lightricks__LTX-2.3_2.3
+    files:
+      - ltx-2.3-22b-distilled_transformer_only_fp8_input_scaled_v3.safetensors
+    cleanup: download-ltx.sh cleanup --tier 2.3
+  llm-qwen3-4b:
+    default: true
+    min_gb: 3
+    tier_dir: unsloth__Qwen3-4B-Instruct-2507-GGUF_llm
+    files:
+      - Qwen3-4B-Instruct-2507-Q4_K_M.gguf
+  music-turbo:
+    default: false
+    min_gb: 10
+    tier_dir: Comfy-Org__ace_step_1.5_ComfyUI_files_turbo
+    files:
+      - ace_step_1.5_turbo_aio.safetensors
+    shares:
+      - ace-step-aio
+  podcast-acestep:
+    default: false
+    min_gb: 10
+    tier_dir: Comfy-Org__ace_step_1.5_ComfyUI_files_acestep
+    files:
+      - ace_step_1.5_turbo_aio.safetensors
+    shares:
+      - ace-step-aio
+  triposplat:
+    default: false
+    min_gb: 8
+    tier_dir: triposplat_optin
+    files:
+      - triposplat.safetensors
+    shares:
+      - flux2-vae
+    cmd: download-splat --tier triposplat

@@ -124,10 +124,8 @@ Commands:
   reset-hf-partials [--yes] [--force]
                     Delete *.incomplete under MODELS_DIR (finished weights kept)
   cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
-  print-shot <film> <id>
-                    Queue one compiled shot (01–18) into films/<slug>/shots/
-  film-resume <film>
-                    Reprint failed/crashed shots only (skip ok with 5.00±0.05s)
+  models-status     Disk bible: keep-set + refuse list (does not delete)
+  reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
 
 Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
@@ -347,6 +345,8 @@ cmd_doctor() {
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
   warn_banned_minimax_weights "${MODELS_DIR}"
+  bash "${REPO_ROOT}/scripts/utilities/models-manifest.sh" status >/dev/null || true
+  log "models-status: see manage.sh models-status / reap-models --plan (doctor does not reap)"
   log "License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md"
   if [[ ! -f $(lab_compose_file) ]]; then
     err "compose file missing: $(lab_compose_file)"
@@ -870,37 +870,37 @@ cmd_download_limit() {
 }
 
 #######################################
-# Dispatch print-shot to utilities/print-shot.sh.
+# Print keep-set / refuse from the disk bible (does not delete).
 # Globals:
 #   REPO_ROOT
 # Arguments:
-#   $@  film id [shot id]
+#   $@  models-manifest.sh args
 # Outputs:
-#   print-shot logs
+#   status logs
 # Returns:
-#   print-shot status
+#   0
 #######################################
-cmd_print_shot() {
-  bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" "$@"
+cmd_models_status() {
+  bash "${REPO_ROOT}/scripts/utilities/models-manifest.sh" status "$@"
 }
 
 #######################################
-# Resume a film (skip ok shots with valid duration).
+# Dispatch reap-models (default --plan).
 # Globals:
 #   REPO_ROOT
 # Arguments:
-#   $1  film id
+#   $@  reap-models flags
 # Outputs:
-#   print-shot logs
+#   plan/apply logs
 # Returns:
-#   print-shot status
+#   reap-models status
 #######################################
-cmd_film_resume() {
-  bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" --resume "$@"
+cmd_reap_models() {
+  bash "${REPO_ROOT}/scripts/utilities/reap-models.sh" "$@"
 }
 
 #######################################
-# Remove the Comfy named volume after DELETE confirm (weights kept).
+# After DELETE confirmation, remove Compose volumes (Comfy install state only).
 # Globals:
 #   See file header / caller environment.
 # Arguments:
@@ -908,7 +908,7 @@ cmd_film_resume() {
 # Outputs:
 #   Status via log/warn/err
 # Returns:
-#   cleanup status
+#   0 on success/abort; 1 on hard confirm failure
 #######################################
 cmd_cleanup() {
   require_delete_confirm || {
@@ -955,8 +955,8 @@ main() {
     download-limit) cmd_download_limit "$@" ;;
     clear-hf-locks) cmd_clear_hf_locks ;;
     reset-hf-partials) cmd_reset_hf_partials "$@" ;;
-    print-shot) cmd_print_shot "$@" ;;
-    film-resume) cmd_film_resume "$@" ;;
+    models-status) cmd_models_status "$@" ;;
+    reap-models) cmd_reap_models "$@" ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"
