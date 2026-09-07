@@ -12,6 +12,8 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
+
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
@@ -61,17 +63,6 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 {DISCLOSURE_TEXT}
 """
-
-
-def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: str) -> dict:
-    return {
-        "id": gid,
-        "title": title,
-        "bounding": [x, y, w, h],
-        "color": color,
-        "font_size": 24,
-        "flags": {},
-    }
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
@@ -155,6 +146,7 @@ class Graph:
             "extra": extra,
             "version": 0.4,
         }
+        ensure_group_title_inset(graph)
         _assert_no_overlap(graph)
         return graph
 
@@ -348,10 +340,10 @@ def build_audio_first() -> dict:
             "lab_description": "US-safe audio-first episode: Kokoro TTS + ACE-Step instrumental bed + mix",
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
-                _group(1, "MODEL", 20, 40, 440, 900, "#3f789e"),
-                _group(2, "PROMPT", 480, 40, 460, 820, "#3f789e"),
-                _group(3, "SETTINGS", 1420, 40, 400, 700, "#a1309b"),
-                _group(4, "OUTPUT", 1840, 40, 440, 920, "#3f789e"),
+                _group(1, "MODEL", 20, LAB_GROUP_Y0, 440, 900, "#3f789e"),
+                _group(2, "PROMPT", 480, LAB_GROUP_Y0, 460, 820, "#3f789e"),
+                _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 400, 700, "#a1309b"),
+                _group(4, "OUTPUT", 1840, LAB_GROUP_Y0, 440, 920, "#3f789e"),
             ],
         }
     )
@@ -639,12 +631,12 @@ def build_radio_drama() -> dict:
             "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off",
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
-                _group(1, "MODEL", 20, 40, 440, 1240, "#3f789e"),
-                _group(2, "PROMPT", 480, 40, 460, 860, "#3f789e"),
-                _group(3, "SETTINGS", 1420, 40, 400, 920, "#a1309b"),
-                _group(4, "OUTPUT", 1840, 40, 820, 800, "#3f789e"),
-                _group(5, "WAN BUMPER (off)", 2700, 40, 400, 400, "#232"),
-                _group(6, "LTX HOOK (off)", 2700, 460, 400, 400, "#232"),
+                _group(1, "MODEL", 20, LAB_GROUP_Y0, 440, 1240, "#3f789e"),
+                _group(2, "PROMPT", 480, LAB_GROUP_Y0, 460, 860, "#3f789e"),
+                _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 400, 920, "#a1309b"),
+                _group(4, "OUTPUT", 1840, LAB_GROUP_Y0, 820, 800, "#3f789e"),
+                _group(5, "WAN BUMPER (off)", 2700, LAB_GROUP_Y0, 400, 400, "#232"),
+                _group(6, "LTX HOOK (off)", 2700, 480 - GROUP_TITLE_INSET, 400, 400, "#232"),
             ],
         }
     )

@@ -116,7 +116,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        480
+        510
       ],
       "size": [
         420,
@@ -154,7 +154,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        940
+        970
       ],
       "size": [
         420,
@@ -194,7 +194,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        1120
+        1150
       ],
       "size": [
         280,
@@ -230,7 +230,7 @@
       "type": "Note",
       "pos": [
         40,
-        1280
+        1310
       ],
       "size": [
         420,
@@ -297,7 +297,7 @@
       "type": "ReferenceLatent",
       "pos": [
         40,
-        1680
+        1710
       ],
       "size": [
         280,
@@ -1044,7 +1044,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        40,
+        24,
         430,
         430
       ],
@@ -1057,7 +1057,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        450,
+        454,
         460,
         500
       ],
@@ -1070,7 +1070,7 @@
       "title": "SHOT BEFORE",
       "bounding": [
         500,
-        60,
+        24,
         1840,
         360
       ],
@@ -1083,7 +1083,7 @@
       "title": "SHOT AFTER",
       "bounding": [
         500,
-        440,
+        404,
         1840,
         360
       ],

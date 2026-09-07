@@ -10,6 +10,12 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_layout import (
+    GROUP_TITLE_INSET,
+    LAB_GROUP_Y0,
+    ensure_group_title_inset,
+    group as _group,
+)
 from _lab_theme import GIF_MOTION, KLEIN_NEG_STILL, KLEIN_STILL_DAILY
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -145,6 +151,7 @@ def _node(graph: dict, ntype: str, title: str | None = None) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
 
@@ -173,17 +180,6 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
                 raise SystemExit(f"overlap {a[0]}({a[1]}) vs {b[0]}({b[1]})")
 
 
-def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: str) -> dict:
-    return {
-        "id": gid,
-        "title": title,
-        "bounding": [x, y, w, h],
-        "color": color,
-        "font_size": 24,
-        "flags": {},
-    }
-
-
 def build_still_app() -> dict:
     graph = json.loads((WF / "klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
     graph["id"] = "klein-still-daily-lab-example"
@@ -204,17 +200,19 @@ def build_still_app() -> dict:
     graph["extra"]["lab_profile"] = "klein-still-daily-lab-example"
     graph["extra"]["lab_note"] = STILL_NOTE
     graph["extra"]["lab_description"] = "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
+    graph["extra"].pop("lab_app_mode", None)
     enh = _node(graph, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = KLEIN_STILL_DAILY
+    enh["widgets_values"][1] = True
     pos = _node(graph, "CLIPTextEncode", "Positive")
     pos["widgets_values"] = [KLEIN_STILL_DAILY]
     neg = _node(graph, "CLIPTextEncode", "Negative")
     neg["widgets_values"] = [KLEIN_NEG_STILL]
     graph["groups"] = [
-        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
-        _group(2, "PROMPT", 460, 40, 920, 400, "#3f789e"),
-        _group(3, "SETTINGS", 1420, 40, 380, 500, "#a1309b"),
-        _group(4, "OUTPUT", 1820, 40, 340, 430, "#3f789e"),
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 400, "#3f789e"),
+        _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
+        _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
     ]
     return graph
 
@@ -247,8 +245,8 @@ def build_gif_loop() -> dict:
     graph["extra"]["lab_note"] = GIF_NOTE
     graph["extra"]["lab_description"] = "Wan 5B looping GIF, 49 frames ping-pong @ 12 fps"
     groups = list(graph.get("groups") or [])
-    groups.append(_group(3, "SETTINGS", 1400, 40, 640, 660, "#a1309b"))
-    groups.append(_group(4, "OUTPUT", 2400, 40, 360, 480, "#3f789e"))
+    groups.append(_group(3, "SETTINGS", 1400, LAB_GROUP_Y0, 640, 660, "#a1309b"))
+    groups.append(_group(4, "OUTPUT", 2400, LAB_GROUP_Y0, 360, 480, "#3f789e"))
     graph["groups"] = groups
     return graph
 
@@ -347,7 +345,7 @@ def build_dream_house() -> dict:
         _base_node(
             4,
             "EZKleinPromptEnhance",
-            [40, 480],
+            [40, 510],
             [420, 420],
             "HOUSE IDENTITY",
             [HOUSE_IDENTITY, False, "t2i", "Instagram 4:5 still", "none"],
@@ -359,7 +357,7 @@ def build_dream_house() -> dict:
         _base_node(
             5,
             "CLIPTextEncode",
-            [40, 940],
+            [40, 970],
             [420, 120],
             "Negative",
             [KLEIN_NEG],
@@ -372,7 +370,7 @@ def build_dream_house() -> dict:
         _base_node(
             6,
             "EmptyFlux2LatentImage",
-            [40, 1120],
+            [40, 1150],
             [280, 106],
             "Instagram 4:5 1024x1280",
             [1024, 1280, 1],
@@ -384,7 +382,7 @@ def build_dream_house() -> dict:
         _base_node(
             7,
             "Note",
-            [40, 1280],
+            [40, 1310],
             [420, 360],
             "Operator note",
             [HOUSE_NOTE],
@@ -538,13 +536,13 @@ def build_dream_house() -> dict:
         dec_out.append(lid)
 
     groups = [
-        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
-        _group(2, "HOUSE IDENTITY", 20, 450, 460, 340, "#a1309b"),
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "HOUSE IDENTITY", 20, LAB_GROUP_Y0 + 430, 460, 340, "#a1309b"),
     ]
     for i, (label, _) in enumerate(HOUSE_SHOTS):
         y = shot_y0 + i * row_h
         groups.append(
-            _group(10 + i, f"SHOT {label}", 500, y - 20, 1840, 340, "#3f789e")
+            _group(10 + i, f"SHOT {label}", 500, y - GROUP_TITLE_INSET, 1840, 340, "#3f789e")
         )
 
     last_id = max(n["id"] for n in nodes)

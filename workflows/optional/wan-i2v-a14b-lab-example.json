@@ -743,7 +743,7 @@
       "title": "Load models",
       "bounding": [
         20,
-        40,
+        24.0,
         400,
         430
       ],
@@ -756,7 +756,7 @@
       "title": "A14B low-noise (unwired; dual KSampler is Templates)",
       "bounding": [
         420,
-        40,
+        24.0,
         400,
         150
       ],
@@ -769,7 +769,7 @@
       "title": "For i2v, LoadImage enabled (bypass for t2v)",
       "bounding": [
         20,
-        480,
+        464.0,
         400,
         380
       ],

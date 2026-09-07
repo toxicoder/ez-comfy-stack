@@ -12,6 +12,8 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
+
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
@@ -73,17 +75,6 @@ Canned style swaps (tags widget only):
 - trap: {TRAP_TAGS}
 - lo-fi: {LOFI_TAGS}
 """
-
-
-def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: str) -> dict:
-    return {
-        "id": gid,
-        "title": title,
-        "bounding": [x, y, w, h],
-        "color": color,
-        "font_size": 24,
-        "flags": {},
-    }
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
@@ -176,6 +167,7 @@ class Graph:
             "extra": extra,
             "version": 0.4,
         }
+        ensure_group_title_inset(graph)
         _assert_no_overlap(graph)
         return graph
 
@@ -360,10 +352,10 @@ def _build_rap(stem: str, duration: float, lyrics: str, prefix: str, note: str, 
             "lab_description": description,
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
-                _group(1, "MODEL", 20, 40, 420, 280, "#3f789e"),
-                _group(2, "DURATION", 20, 340, 420, 300, "#3f789e"),
-                _group(3, "PROMPT", 480, 40, 820, 900, "#3f789e"),
-                _group(4, "OUTPUT", 1320, 40, 500, 940, "#3f789e"),
+                _group(1, "MODEL", 20, LAB_GROUP_Y0, 420, 280, "#3f789e"),
+                _group(2, "DURATION", 20, 380 - GROUP_TITLE_INSET, 420, 300, "#3f789e"),
+                _group(3, "PROMPT", 480, LAB_GROUP_Y0, 820, 900, "#3f789e"),
+                _group(4, "OUTPUT", 1320, LAB_GROUP_Y0, 500, 940, "#3f789e"),
             ],
         }
     )
