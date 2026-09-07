@@ -42,7 +42,8 @@ def test_compile_go_see(tmp_path: Path) -> None:
     assert ids == [f"{i:02d}" for i in range(1, 19)]
     stub = json.loads((dest / "shots" / "01.json").read_text(encoding="utf-8"))
     assert stub["template"] == "ltx-i2v-5s-lab-example.json"
-    assert "olive windbreaker" in stub["identity"]
+    assert "electric-cyan" in stub["identity"]
+    assert "olive windbreaker" not in stub["identity"]
     assert stub["identity_enhance"] is False
     assert stub["identity_seed"] == 42
     assert stub["print"] == "ltx"

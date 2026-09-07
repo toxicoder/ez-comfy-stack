@@ -131,6 +131,13 @@ def test_ltx_i2v_prompts_are_model_native() -> None:
                 "ceramic",
                 "cloth",
                 "tick",
+                "ice",
+                "grating",
+                "fabric",
+                "chime",
+                "boot",
+                "scrape",
+                "metal",
             )
             assert any(word in ltx.lower() for word in foley), (film, shot["prefix"])
             wan = shot["wan_i2v"]
@@ -148,11 +155,13 @@ def test_shorts_yaml_has_no_banned_models() -> None:
 
 def test_creative_locks() -> None:
     go = _path("go-see").read_text(encoding="utf-8")
-    assert "olive windbreaker" in go
-    assert "worn black gloves" in go
+    assert "electric-cyan" in go
+    assert "olive windbreaker" not in go
     assert "First-person" in go or "first-person" in go
-    assert "running" in go or "footfall" in go
-    for needle in ("vault", "barrel-roll", "parkour", "Parkour"):
+    assert "body-cam" in go
+    assert "parkour" in go.lower()
+    assert "gloves" in go.lower()
+    for needle in ("Faith", "Mirror's Edge", "Mirrors Edge", "barrel-roll", "backflip"):
         assert needle not in go, needle
     here = _path("still-here").read_text(encoding="utf-8")
     assert "ceramic mug" in here
@@ -346,6 +355,8 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         body = note["widgets_values"][0]
         assert "Queue once" in body or "Queue **once**" in body
         assert "concat-shots.sh" in body
+        assert "already on disk" in body
+        assert f"ez_{slug}_90s.mp4" in body
         mmap = next(n for n in graph["nodes"] if n.get("type") == "MarkdownNote")
         table = mmap["widgets_values"][0]
         assert "120" in table

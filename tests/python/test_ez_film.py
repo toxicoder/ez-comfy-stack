@@ -88,7 +88,9 @@ def test_parse_go_see_yaml() -> None:
     parsed = parse_shots_yaml((SHORTS / "go-see.shots.yaml").read_text(encoding="utf-8"))
     assert parsed["meta"]["film"] == "go-see"
     assert parsed["meta"]["total_shots"] == "18"
-    assert "olive windbreaker" in parsed["identity"]
+    assert "electric-cyan" in parsed["identity"]
+    assert "olive windbreaker" not in parsed["identity"]
+    assert "body-cam" in parsed["identity"]
     assert len(parsed["shots"]) == 18
     first = parsed["shots"][0]
     assert first["load_from"] == "identity"
@@ -310,3 +312,6 @@ def test_film_concat_node(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
     assert packed["result"][0].endswith("ez_gosee_90s.mp4")
     assert packed["ui"]["gifs"][0]["filename"] == "ez_gosee_90s.mp4"
     assert packed["ui"]["gifs"][0]["format"] == "video/h264-mp4"
+    assert packed["ui"]["gifs"][0]["type"] == "output"
+    assert packed["ui"]["gifs"][0]["subfolder"] == ""
+    assert packed["ui"]["gifs"][0]["frame_rate"] == 24

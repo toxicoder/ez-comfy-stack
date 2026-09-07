@@ -26,9 +26,10 @@ KLEIN_NEG_FILM = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
 KLEIN_GOSEE = (
-    "First-person photoreal dawn running still. An olive windbreaker and worn black "
-    "gloves stay in frame, hands pumping at the edges as wet tar and unmarked rooftops "
-    "fill the view. Identity lock for the whole short. No violence."
+    "A HD 3D game-engine pre-rendered cutscene still, first-person body-cam at dusk. "
+    "Unmarked electric-cyan coat sleeves with circuit-thread seams and matching gloves "
+    "occupy the lower edges of the frame, hands pumping as holographic glyph motes bloom "
+    "at the wrists. Eye-level 24mm body-cam, YouTube 16:9."
 )
 KLEIN_STILLHERE = (
     "Third-person household morning still. One cream ceramic mug with a hairline chip "
@@ -41,20 +42,21 @@ KLEIN_SWITCHYARD = (
     "under one yard lamp. Photoreal, empty of railroad company marks. Identity lock for the short."
 )
 WAN_GOSEE_I2V = (
-    "First-person running camera. Olive windbreaker and worn black gloves; arms pump "
-    "at the edges of the frame. Dawn rooftop, pigeon scatter. Footfalls on wet tar. "
-    "Continuous forward run. Keep the start-image identity locked. One continuous "
-    "5.00 second take at 24 fps."
+    "First-person body-cam high-speed parkour sprint across a neon-wet terrace. "
+    "Electric-cyan sleeves and gloves pump at the frame edges, glyph motes at the wrists. "
+    "Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, "
+    "locked identity, no cut."
 )
 WAN_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, "
     "rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
 )
 LTX_GOSEE_I2V = (
-    "The start image holds as the first frame. First-person running camera as gloved "
-    "hands pump at the edges of the frame on a dawn rooftop. Footfalls on wet tar, "
-    "pigeons scatter, continuous forward run. Breath sits close to the lens, wind in "
-    "the hood, tar grit under shoes. No score, no music, no licensed songs."
+    "The start image holds as the first frame. The first-person body-cam surges into a "
+    "high-speed parkour sprint across the neon-wet terrace, electric-cyan sleeves and "
+    "matching gloves pumping hard at the lower edges while holographic glyph motes streak "
+    "from the wrists. Dusk wind shoves the coat, each footfall ticks wet grit, and breath "
+    "sits close to the lens. Continuous body-cam tracking, no cut. No music and no score."
 )
 BLURB = (
     "Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, "

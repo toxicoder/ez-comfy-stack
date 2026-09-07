@@ -129,6 +129,7 @@ class EZFilmConcat:
                         "subfolder": "",
                         "type": "output",
                         "format": "video/h264-mp4",
+                        "frame_rate": 24,
                     }
                 ]
             },

@@ -84,7 +84,7 @@ flowchart TB
 
     | Workflow | What it does |
     | --- | --- |
-    | **film-go-see-90s-run-lab-example** | **One-click** first-person running 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
+    | **film-go-see-90s-run-lab-example** | **One-click** first-person parkour 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
     | **film-still-here-90s-lab-example** | **One-click** household morning 90s (same shape) |
     | **film-switchyard-90s-lab-example** | **One-click** night freight-yard 90s (same shape) |
     | **wan-i2v-shot-lab-example** | Optional silent rehearsal / six-shot concat demo |

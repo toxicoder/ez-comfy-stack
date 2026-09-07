@@ -107,7 +107,9 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
     house = (WF / "klein-dream-house-lab-example.json").read_text(encoding="utf-8").lower()
     assert "cedar" in house
     film = (WF / "shorts" / "film-go-see-90s-run-lab-example.json").read_text(encoding="utf-8").lower()
-    assert "windbreaker" in film
+    assert "electric-cyan" in film
+    assert "parkour" in film
+    assert "windbreaker" not in film
     for path in _graphs():
         if path.stem not in EXEMPT:
             continue
