@@ -1605,6 +1605,11 @@
 </thead>
 <tbody>
 <tr>
+<td>Disk full / leftover LTX-2.3 snapshot</td>
+<td>No stack-wide reap; LTX 2.3 tree still on disk after 2.5</td>
+<td><code>./scripts/manage.sh reap-models --plan</code> then <code>--apply --class superseded --quarantine --yes</code>. <code>cleanup</code> does <strong>not</strong> delete weights. After two weeks: <code>reap-models drop-quarantine --older-than 14d --yes</code></td>
+</tr>
+<tr>
 <td>Empty models in UI</td>
 <td>Downloads not run</td>
 <td><code>./scripts/utilities/download-image.sh status --tier fast</code>; <code>download-wan.sh status --tier 5b</code>; <code>download-ltx.sh status --tier 2.5</code>; check <code>${MODELS_DIR}</code> mount</td>
