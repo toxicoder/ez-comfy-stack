@@ -2363,6 +2363,11 @@
 <td>Re-open current <strong>ltx-*-lab-example</strong> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open <strong>Save video (MP4) — open node for preview</strong>; MP4 is on the host at <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_ltx_*_video_*.mp4</code>. Confirm: <code>ls "${COMFY_OUTPUT_DIR}"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. <strong>Save frames (secondary)</strong> PNGs are optional — <a href="../visual-generative-ai/#watch-the-video-wan-ltx">Visual Generative AI → Watch the video</a></td>
 </tr>
 <tr>
+<td>Where is my 90s MP4? / how do I download it?</td>
+<td>Looking only at SaveImage PNGs, or never opening group <strong>9. Publish 90s MP4</strong></td>
+<td>The stitch is already written: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code> (or <code>ez_stillhere_90s.mp4</code> / <code>ez_switchyard_90s.mp4</code>). Open <strong>Save 90s film (MP4) — open node for preview</strong> for an inline player and download control. Confirm: <code>ls "${COMFY_OUTPUT_DIR}/ez_*_90s.mp4"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. Copy off the Spark with <code>scp</code>. <code>cleanup</code> does not delete this folder — <a href="../shorts/">90s shorts</a></td>
+</tr>
+<tr>
 <td>LTX MP4 plays but has no sound</td>
 <td>Graph missing <code>LTXVAudioVAEDecode</code> → VHS audio, or old seeded JSON</td>
 <td>Pull latest workflows; confirm the canvas has <strong>Audio VAE Decode</strong> linked into <strong>Save video (MP4)</strong>. Re-copy via container restart. World audio is muxed into the MP4 — there is no separate WAV by default</td>

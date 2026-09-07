@@ -1678,7 +1678,7 @@
 <ul>
 <li>Why 18 × 5.00s shots instead of one 90s denoise</li>
 <li>One-click Comfy graph per film (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> identity + 18 <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> prints + stitch)</li>
-<li>Shot maps for go-see (first-person running), still-here, and switchyard</li>
+<li>Shot maps for go-see (first-person parkour), still-here, and switchyard</li>
 <li>Model-native Klein / LTX prompts (<a href="../prompting/">Prompting</a>)</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="spark-farm" data-href="../glossary/#spark-farm" title="Independent Sparks as parallel 5 s workers with one weight copy. No NCCL.">Spark farm</span>: optional parallel 5s Queues, local concat</li>
 <li>Shot resume, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="otio" data-href="../glossary/#otio" title="OpenTimelineIO JSON for Kdenlive/Shotcut. Host-side; never in the Docker image.">OTIO</span> export, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nvenc" data-href="../glossary/#nvenc" title="Hardware encoder for proxies/previews. Comfy must be stopped (encoder contention on GB10).">NVENC</span> proxies, take-promote, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fun-inp" data-href="../glossary/#fun-inp" title="Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.">Fun InP</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seedvr2" data-href="../glossary/#seedvr2" title="Optional Apache restorer for a stitched 90s master. Not part of download-models.">SeedVR2</span> opt-in</li>
@@ -1688,7 +1688,7 @@
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Three continuous ~90s films (first-person running go-see, still-here, switchyard) on the <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="us-safe" data-href="../glossary/#us-safe" title="Local weights this lab will download for a US casual-commercial operator. Not legal advice.">US-safe</span> local pack</strong></li>
+<li>Three continuous ~90s films (first-person parkour go-see, still-here, switchyard) on the <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="us-safe" data-href="../glossary/#us-safe" title="Local weights this lab will download for a US casual-commercial operator. Not legal advice.">US-safe</span> local pack</strong></li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="last-frame" data-href="../glossary/#last-frame" title="Shot N&#x27;s last PNG becomes shot N+1&#x27;s I2V start. How 90s films work without a 90s denoise.">Last-frame continuity</span> without a 90s denoise</li>
 <li>A 90.00s publish cap (in-graph <code>EZFilmConcat</code>, or host <code>ffmpeg -t 90</code>)</li>
 <li>One <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> per film — identity, 18 prints, stitch, preview, save</li>
@@ -1701,7 +1701,8 @@
 <li>Load <strong>film-go-see-90s-run-lab-example</strong> (or still-here / switchyard).</li>
 <li>Leave <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> <strong>off</strong>. Leave LTX <strong>1280×704</strong>. Queue <strong>once</strong>.</li>
 <li>Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.</li>
-<li>Open <strong>Save 90s film (MP4) — open node for preview</strong>. File: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code>.</li>
+<li>The stitched MP4 is <strong>already on disk</strong>: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code> (container <code>/outputs</code>). Open <strong>Save 90s film (MP4) — open node for preview</strong> to watch or download it from the Comfy tab.</li>
+<li>Copy off the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span>: <code>scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .</code></li>
 </ol>
 <p>Do <strong>not</strong> set 241+ frames. Resume after a dropped SSH session: <code>film-resume</code> (below).</p>
 </div>
@@ -1812,7 +1813,7 @@
 <li>Load one film graph (<code>film-go-see-90s-run-lab-example</code> / <code>film-still-here-90s-lab-example</code> / <code>film-switchyard-90s-lab-example</code>).</li>
 <li>Queue <strong>once</strong>. Klein runs first (Enhance <strong>off</strong>, 4-step). Models unload. Then 18 × <strong>5.00s</strong> LTX prints chain last-frame → next start. Leave LTX <strong>1280×704</strong>.</li>
 <li>Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">Headroom</span> preflight still applies at start.</li>
-<li>After Queue, click <strong>Save 90s film (MP4) — open node for preview</strong>. File: <code>${COMFY_OUTPUT_DIR}/ez_&lt;slug&gt;_90s.mp4</code>. Per-shot files remain as <code>ez_&lt;slug&gt;_bN_sM_ltx_video_*.mp4</code>.</li>
+<li>After Queue, the stitched file is already written to <code>${COMFY_OUTPUT_DIR}/ez_&lt;slug&gt;_90s.mp4</code> (container <code>/outputs</code>). Open <strong>Save 90s film (MP4) — open node for preview</strong> to watch or download it. Per-shot files remain as <code>ez_&lt;slug&gt;_bN_sM_ltx_video_*.mp4</code>. Copy off the Spark with <code>scp</code>.</li>
 <li>Optional silent rehearsal of one frame: <strong>wan-i2v-shot-lab-example</strong>. Optional single-shot iterate: <strong>ltx-i2v-shot-lab-example</strong>.
 Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</code> (<code>state.json</code>, <code>shots/NN.mp4</code>). A dropped SSH session is not a two-hour requeue:</li>
 </ol>
@@ -1823,7 +1824,7 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># crashed `running` rows (no MP4) only.</span>
 </code></pre></div>
 <ol>
-<li>Host / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">spark</span>-farm fallback (when you printed shots outside the one-click graph):</li>
+<li>Host / spark-farm fallback (when you printed shots outside the one-click graph):</li>
 </ol>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--dry-run
@@ -1885,11 +1886,11 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <p>YouTube: disclose AI-generated media (LTX term). Do not strip provenance.</p>
 <hr />
 <h2 id="shot-maps">Shot maps<a class="headerlink" href="#shot-maps" title="Permanent link">&para;</a></h2>
-<p>First-person <strong>go-see</strong> is <strong>camera language</strong>, not licensed IP. Same SFW / no unlicensed marks / no real likenesses as the rest of the stack.</p>
+<p>First-person <strong>go-see</strong> is <strong>camera language</strong>, not licensed IP. Same SFW / no unlicensed marks / no real likenesses as the rest of the stack. Do not name or copy any commercial game’s runner, suit, or architecture.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">go-see</label><label for="__tabbed_1_2">still-here</label><label for="__tabbed_1_3">switchyard</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>First-person <strong>running</strong>. Identity lock: olive windbreaker + worn black gloves in frame. Footfalls and arms, not parkour. <strong>No score</strong> (breath + world).</p>
+<p>First-person <strong>parkour</strong> body-cam. Identity lock: electric-cyan tech-mage sleeves + matching gloves + holographic glyph motes in frame (data-staff slung on the back). Arms always; boots/knees on vaults, drops, and wall-runs. Never a standing third-person wizard. <strong>No score</strong> (breath + world).</p>
 <table>
 <thead>
 <tr>
@@ -1903,45 +1904,45 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <tbody>
 <tr>
 <td>1</td>
-<td>Dawn rooftop</td>
-<td>Run on wet tar, gloves pumping</td>
-<td>Run across the next roof</td>
-<td>Run onto warehouse roof</td>
+<td>Neon megacity rooftops</td>
+<td>Sprint + gap leap</td>
+<td>Vault bulkhead + wall-run</td>
+<td>Drop toward maglev</td>
 </tr>
 <tr>
 <td>2</td>
-<td>Warehouse → market</td>
-<td>Run down the stair</td>
-<td>Run the alley, duck awning</td>
-<td>Run out toward river</td>
+<td>Maglev skybridge</td>
+<td>Spine sprint</td>
+<td>Gantry leaps</td>
+<td>Dive into glass canyon</td>
 </tr>
 <tr>
 <td>3</td>
-<td>River / forest</td>
-<td>Run across stones</td>
-<td>Run through bridge arch</td>
-<td>Run the creek path</td>
+<td>Glass canyon gardens</td>
+<td>Wall-run glass</td>
+<td>Vault terraces</td>
+<td>Waterfall toward mesas</td>
 </tr>
 <tr>
 <td>4</td>
-<td>Headland</td>
-<td>Trees thin, keep running</td>
-<td>Run past boulder</td>
-<td>Run toward generic lighthouse</td>
+<td>Storm mesas</td>
+<td>Rain sprint</td>
+<td>Leap a void</td>
+<td>Vault toward glacier</td>
 </tr>
 <tr>
 <td>5</td>
-<td>Wall / meadow</td>
-<td>Run up granite steps</td>
-<td>Run through dry-stone gap</td>
-<td>Run into meadow</td>
+<td>Glacier ice canyon</td>
+<td>Ice sprint</td>
+<td>Slide the arch</td>
+<td>Climb-run toward aurora</td>
 </tr>
 <tr>
 <td>6</td>
-<td>Ridge hold</td>
-<td>Slow; hands on wooden rail</td>
-<td>Look</td>
-<td>Quiet laugh, hold</td>
+<td>Aurora ridge climax</td>
+<td>Last sprint</td>
+<td>Leap to rail</td>
+<td>Hold + quiet laugh</td>
 </tr>
 </tbody>
 </table>
