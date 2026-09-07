@@ -204,6 +204,26 @@ FROZEN_MANAGE_VERBS=(
   [[ -L ${dest} ]]
 }
 
+@test "manage ensure_prompt_enhance_gguf does not warn when comfy/llm is not writable" {
+  export MODELS_DIR="${TEST_TMP_DIR}/models"
+  local snap dest lldir
+  snap="${MODELS_DIR}/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"
+  lldir="${MODELS_DIR}/comfy/llm"
+  dest="${lldir}/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  mkdir -p "${snap}" "${lldir}"
+  echo x >"${snap}/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  run ensure_prompt_enhance_gguf
+  [ "${status}" -eq 0 ]
+  [[ -L ${dest} ]]
+  chmod a-w "${lldir}"
+  run ensure_prompt_enhance_gguf
+  chmod u+w "${lldir}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Prompt Enhance GGUF ready"* ]]
+  [[ "${output}" != *"failed to link"* ]]
+  [[ "${output}" != *"Permission denied"* ]]
+}
+
 @test "manage cmd_* direct: help setup doctor status start stop restart logs download cleanup" {
   run cmd_help
   [ "${status}" -eq 0 ]

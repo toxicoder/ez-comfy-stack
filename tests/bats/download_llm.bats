@@ -83,6 +83,24 @@ teardown() {
   [[ -L ${dest} ]]
 }
 
+@test "download-llm link is quiet when comfy/llm is not writable but dest exists" {
+  local tdir dest lldir
+  tdir="$(llm_dir)"
+  lldir="${MODELS_DIR}/comfy/llm"
+  dest="${lldir}/$(llm_filename)"
+  mkdir -p "${tdir}" "${lldir}"
+  echo x >"${tdir}/$(llm_filename)"
+  run cmd_link
+  [ "${status}" -eq 0 ]
+  [[ -L ${dest} ]]
+  chmod a-w "${lldir}"
+  run cmd_link
+  chmod u+w "${lldir}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"failed to link"* ]]
+  [[ "${output}" != *"Permission denied"* ]]
+}
+
 @test "download-llm cleanup keeps gguf" {
   local tdir extra
   tdir="$(llm_dir)"
