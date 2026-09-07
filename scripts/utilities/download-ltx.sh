@@ -15,7 +15,7 @@
 #   manage.sh download-models for throttled sequential flux+ltx pulls.
 #
 # Usage:
-#   ./scripts/utilities/download-ltx.sh status [--tier 2.5|2.3|balanced|quality|gemma|all] [--json]
+#   ./scripts/utilities/download-ltx.sh status [--tier 2.5|2.3|balanced|quality|gemma|iclora|all] [--json]
 #   ./scripts/utilities/download-ltx.sh run [--tier ...]
 #   ./scripts/utilities/download-ltx.sh cleanup [--tier ...] [--dry-run|--yes]
 #
@@ -65,8 +65,33 @@ tier_repo() {
     2.5) echo "Lightricks/LTX-2.5" ;;
     2.3 | balanced | quality) echo "Kijai/LTX2.3_comfy" ;;
     gemma) echo "Comfy-Org/ltx-2" ;;
+    iclora) echo "Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control" ;;
     *) echo "" ;;
   esac
+}
+
+#######################################
+# Refuse leftover 19B Union Control (not the official 2.5 distilled graph).
+# Globals:
+#   None
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   Error on stderr when banned
+# Returns:
+#   0 allowed; 1 banned
+#######################################
+refuse_banned_iclora_tier() {
+  local tier="${1}"
+  local lower
+  lower="$(printf '%s' "${tier}" | tr '[:upper:]' '[:lower:]')"
+  case "${lower}" in
+    19b | iclora-19b | union-19b | ltx-2-19b-ic-lora-union-control)
+      err "Banned LTX IC-LoRA pack: ${tier} (19B Union is refused; pin 2.5 distilled + ltx-2.3-22b-ic-lora-union-control-ref0.5)"
+      return 1
+      ;;
+  esac
+  return 0
 }
 
 #######################################
@@ -89,6 +114,7 @@ tier_min_gb() {
     quality) echo 35 ;;
     # gemma_3_12B_it_fp4_mixed ≈ 9.45 GB
     gemma) echo 8 ;;
+    iclora) echo 1 ;;
     *) echo 0 ;;
   esac
 }
@@ -135,6 +161,12 @@ tier_include_patterns() {
       # Official Comfy-Org LTX-2 Gemma 3 TE (DualCLIP pair with Kijai text_projection).
       printf '%s\n' \
         "split_files/text_encoders/gemma_3_12B_it_fp4_mixed.safetensors"
+      ;;
+    iclora)
+      # Official 2.5 Union Control distilled graph widgets this 2.3 Union file.
+      # Distilled-only. Refuse 19B Union. Not part of download-models / --tier all.
+      printf '%s\n' \
+        "ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors"
       ;;
     *)
       return 0
@@ -196,6 +228,7 @@ tiers_to_process() {
   case "$TIER" in
     all) echo "2.5 2.3 gemma" ;;
     2.5) echo "2.5" ;;
+    iclora) echo "iclora" ;;
     2.3) echo "2.3 gemma" ;;
     balanced) echo "balanced gemma" ;;
     quality) echo "quality gemma" ;;
@@ -227,9 +260,10 @@ parse_args() {
       --yes | -y) CLEANUP_YES=1 ;;
       status | run | cleanup) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--tier balanced|quality|gemma|all] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier 2.5|2.3|balanced|quality|gemma|iclora|all] [--json]" >&2
         echo "  cleanup options: --dry-run (default) | --yes  delete non-selective weights" >&2
         echo "  balanced/quality auto-include gemma (Comfy-Org/ltx-2 TE for DualCLIP)" >&2
+        echo "  iclora = Union Control LoRA (opt-in; official 2.5 graph; not download-models)" >&2
         exit 0
         ;;
       *)
@@ -239,6 +273,7 @@ parse_args() {
     esac
     shift
   done
+  refuse_banned_iclora_tier "${TIER}" || exit 1
 }
 
 #######################################
@@ -367,7 +402,7 @@ prune_empty_dirs() {
 link_into_comfy() {
   local tier="${1}"
   local src="${MODELS_DIR}/comfy"
-  mkdir -p "${src}/diffusion_models" "${src}/text_encoders" "${src}/vae" "${src}/checkpoints"
+  mkdir -p "${src}/diffusion_models" "${src}/text_encoders" "${src}/vae" "${src}/checkpoints" "${src}/loras"
   local dir base dest_sub dest rel
   dir=$(tier_dir "$tier")
   [[ -d ${dir} ]] || return 0
@@ -380,10 +415,12 @@ link_into_comfy() {
     case "${rel}" in
       text_encoders/* | */text_encoders/*) dest_sub="text_encoders" ;;
       vae/* | */vae/*) dest_sub="vae" ;;
+      loras/* | */loras/*) dest_sub="loras" ;;
       diffusion_models/* | */diffusion_models/*) dest_sub="diffusion_models" ;;
       *)
         case "${base}" in
           *text_projection* | *text_encoder* | *gemma*) dest_sub="text_encoders" ;;
+          *ic-lora* | *iclora* | *lora*) dest_sub="loras" ;;
           *vae* | *audio*) dest_sub="vae" ;;
           *) dest_sub="diffusion_models" ;;
         esac

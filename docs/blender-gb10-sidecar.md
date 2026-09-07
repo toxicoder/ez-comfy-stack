@@ -46,4 +46,4 @@ Exit **2** means compose is still up:
 - Not inside the Comfy container
 - Not a reason to weaken `mem_limit: 90g` or headroom `min_host_free_gib: 28`
 
-TRELLIS.2 / DA3-BASE weights: [Studio sidecars](studio-sidecars.md). Splat viewer: [Splat sidecar](splat-sidecar.md).
+Guide packs (clay / depth / first+last): [DCC guide pack](dcc-workflows.md) (`manage.sh export-guides`). TRELLIS.2 / DA3-BASE weights: [Studio sidecars](studio-sidecars.md). Splat viewer: [Splat sidecar](splat-sidecar.md).

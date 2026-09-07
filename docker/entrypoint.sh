@@ -263,7 +263,7 @@ configure_torch_native_triton() {
 
 #######################################
 # Copy host lab JSON graphs into Comfy user workflows.
-# Includes top-level *.json and shorts/*.json (90s film bibles).
+# Includes top-level *.json, shorts/*.json (90s film bibles), and dcc/*.json.
 # Globals:
 #   None
 # Arguments:
@@ -283,7 +283,7 @@ install_lab_workflows() {
     ep_log "no workflows under ${src} (optional mount)"
     return 0
   fi
-  for wf in "${src}"/*.json "${src}"/shorts/*.json; do
+  for wf in "${src}"/*.json "${src}"/shorts/*.json "${src}"/dcc/*.json; do
     [[ -f ${wf} ]] || continue
     cp -f "${wf}" "${dest}/"
     n_wf=$((n_wf + 1))

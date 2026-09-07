@@ -20,25 +20,8 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/common.sh"
 # shellcheck source=../lib/compose.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/compose.sh"
-
-#######################################
-# Refuse when studio compose is running.
-# Globals:
-#   None (compose_is_running uses compose project env)
-# Arguments:
-#   None
-# Outputs:
-#   Error on stderr when compose is up
-# Returns:
-#   0 idle; 2 when ComfyUI is running
-#######################################
-refuse_if_comfy_running() {
-  if compose_is_running; then
-    err "ComfyUI is running — stop it before Blender (occupancy)"
-    return 2
-  fi
-  return 0
-}
+# shellcheck source=../lib/occupancy.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/occupancy.sh"
 
 #######################################
 # Launch host blender or print install hint.
@@ -52,7 +35,7 @@ refuse_if_comfy_running() {
 #   blender exit; 1 missing binary; 2 compose running
 #######################################
 cmd_run() {
-  refuse_if_comfy_running || return $?
+  refuse_if_comfy_running "Blender (occupancy)" || return $?
   if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
     echo "Usage: blender.sh [--] [args]  (host Blender; refuses if compose is up)" >&2
     echo "  Never in docker/Dockerfile. See docs/blender-gb10-sidecar.md" >&2

@@ -754,5 +754,14 @@
     "short": "Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.",
     "long": "Do not download, Queue, or pin Comfy for MiniMax H3. `doctor` warns if leftover weights exist. Use the US-safe Klein/Wan/LTX pack instead. See [Model licenses](licenses.md).",
     "see_also": ["us-safe", "klein"]
+  },
+  {
+    "id": "guide-pack",
+    "title": "Guide pack",
+    "aliases": ["guide pack", "guide-pack", "DCC guide pack"],
+    "category": "Studio",
+    "short": "DCC handshake: 1280×704 clay/depth/first+last for a 5.00s print.",
+    "long": "The only DCC ↔ Comfy print handshake. Lives under `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot>/`. Size is the LTX VAE grid (**1280×704**, never 1280×720). 120 frames @ 24 fps. Occupancy XOR: stop Comfy before `export-guides`. See [DCC guide pack](dcc-workflows.md).",
+    "see_also": ["ltx", "occupancy", "sidecar"]
   }
 ]

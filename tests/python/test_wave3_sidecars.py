@@ -40,6 +40,7 @@ def test_sidecar_docs_exist() -> None:
         "studio-sidecars.md",
         "blender-gb10-sidecar.md",
         "splat-sidecar.md",
+        "dcc-workflows.md",
     ):
         path = ROOT / "docs" / name
         text = path.read_text(encoding="utf-8")

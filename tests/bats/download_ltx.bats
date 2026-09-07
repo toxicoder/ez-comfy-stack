@@ -81,6 +81,29 @@ teardown() {
   [ "${output}" = "0" ]
 }
 
+@test "download-ltx iclora Union Control is opt-in distilled-only" {
+  run bash "${DL}" --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"iclora"* ]]
+  run tier_repo iclora
+  [[ "${output}" == *"LTX-2.3-22b-IC-LoRA-Union-Control"* ]]
+  run tier_include_patterns iclora
+  [[ "${output}" == *"ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors"* ]]
+  run tier_min_gb iclora
+  [ "${output}" = "1" ]
+  TIER=iclora
+  run tiers_to_process
+  [[ "${output}" == *"iclora"* ]]
+  TIER=all
+  run tiers_to_process
+  [[ "${output}" != *"iclora"* ]]
+  run refuse_banned_iclora_tier iclora-19b
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"19B"* ]]
+  run bash "${DL}" status --tier iclora-19b
+  [ "${status}" -ne 0 ]
+}
+
 @test "download-ltx 2.5 distilled includes INT8-convrot pack" {
   run tier_include_patterns 2.5
   [ "${status}" -eq 0 ]
