@@ -24,6 +24,16 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 
     Most operators only need: set `MODELS_DIR` → `download-models` → confirm basenames. Layer pins and Dockerfile cache order are for maintainers — collapsed below.
 
+## Three stores
+
+| Store | Holds | Not held here |
+| --- | --- | --- |
+| **GHCR image** | ComfyUI + PyTorch | Klein / Wan / LTX weights |
+| **MODELS_DIR** | Weights + `comfy/` relative symlinks | The Comfy venv |
+| **comfy-state volume** | Comfy install, custom nodes | Host PNGs/MP4s (`COMFY_OUTPUT_DIR`) |
+
+`cleanup` (type `DELETE`) removes **comfy-state only**. Concepts: [Hardware, memory, and safety](learn/hardware.md).
+
 ---
 
 ## Default location

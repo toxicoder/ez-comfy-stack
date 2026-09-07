@@ -1,0 +1,70 @@
+---
+title: manage.sh reference
+description: Operator command catalog for ez-comfy-stack — what each manage.sh verb does and when not to run it.
+tags: [manage, cli, operator, reference]
+---
+
+# manage.sh reference
+
+**What's on this page**
+
+- How to invoke the CLI
+- Command catalog
+- What not to run (banned H3 aliases, occupancy)
+
+**What this enables**
+
+- Looking up a verb without scrolling the Getting Started tutorial
+- Keeping first-run docs a tutorial, not a man page
+
+**Who this is for:** operators who already cloned the repo. First install: [Getting Started](getting-started.md).
+
+Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HOST`, `MODELS_DIR`, …) are for *your* shell (browser URL, `ssh -L`, `ls`).
+
+```bash
+./scripts/manage.sh doctor
+```
+
+---
+
+## Catalog
+
+| Command | Purpose | Do not |
+| --- | --- | --- |
+| `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, then doctor | Skip doctor failures |
+| `doctor` | Preflight (docker, GPU, RAM/disk, dirs, license one-liner, spark-timing) | Treat missing weights as a hard fail (they are a warning) |
+| `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port | — |
+| `start` | Type `yes`; headroom; compose up | Weaken confirm or `restart: "no"` |
+| `stop` | Stop containers; keep models, outputs, volume | Reboot with the stack up |
+| `restart` | `stop` + `start` (full confirm again) | — |
+| `logs` | Follow compose logs (`logs --tail 100` works) | — |
+| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap | Expect podcast/music weights (they are opt-in) |
+| `download-podcast [--tier analog\|…] [--limit auto\|N\|off]` | Opt-in Kokoro / ACE-Step / optional TTS | Co-resident with LTX/Wan/Klein |
+| `download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]` | Opt-in ACE-Step 1.5 rap AIO (~10 GB; shared dest with `download-podcast --tier acestep`) | Co-resident with the visual session |
+| `download-limit …` | Proxy to `scripts/utilities/download-limit.sh` | Leave a wrap limit stuck; wrap **always clears on exit** |
+| `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` | Force-clear while `hf` is still writing |
+| `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) | — |
+| `cleanup` | Type `DELETE`; remove `ez-comfy-state` only | Think this deletes weights or `COMFY_OUTPUT_DIR` |
+| `print-shot` / `film-resume` / `film-export-otio` / `film-proxies` / `take-promote` | 90s jobstore ([90s shorts](shorts.md)) | `film-proxies` while compose is up |
+| `download-restore` | Opt-in SeedVR2-3B | Treat as part of `download-models` |
+| `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
+| `blender` | Host Blender sidecar; dies if compose is up | Run next to Comfy |
+| `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio) | `--skip-accept` as a habit |
+| `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache | DreamX-World; NCCL |
+| `spark-timing` | Kitchen wall-clock table (`record --klein N --wan N --ltx N`) | Record on `pytorch-fallback` |
+| `models-status` / `reap-models` | Disk bible / cache cleanup (never `cleanup` weights) | `cleanup` when you meant reap |
+
+`download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3). 3D DCC notes: [Studio sidecars](studio-sidecars.md).
+
+Safety is unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflight, download-limit clear-on-exit.
+
+---
+
+## Related
+
+| Need | Page |
+| --- | --- |
+| First install | [Getting Started](getting-started.md) |
+| Why start asks for `yes` | [Hardware, memory, and safety](learn/hardware.md) |
+| Throttle details | [Download limit](download-limit.md) |
+| Symptom → fix | [Troubleshooting](troubleshooting.md) |

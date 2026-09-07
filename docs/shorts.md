@@ -25,6 +25,18 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - A 90.00s publish cap (in-graph `EZFilmConcat`, or host `ffmpeg -t 90`)
 - One Queue per film — identity, 18 prints, stitch, preview, save
 
+**Who this is for:** studio users who already Queued a 5 s LTX clip. Concepts: [Klein, Wan, and LTX](learn/pipeline.md).
+
+!!! success "First 90s film"
+
+    1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
+    2. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
+    3. Leave Enhance **off**. Leave LTX **1280×704**. Queue **once**.
+    4. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
+    5. Open **Save 90s film (MP4) — open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`.
+
+    Do **not** set 241+ frames. Resume after a dropped SSH session: `film-resume` (below).
+
 !!! warning "Not legal advice"
 
     LTX-2.5 is the audio model and is **not Apache**. Community License: free commercial under **$10M COMPANY** annual revenue (affiliates count); disclose AI-generated media; do not strip provenance; do not distill. Wan 2.2 TI2V-5B is Apache 2.0 and silent. See [Model licenses](licenses.md).

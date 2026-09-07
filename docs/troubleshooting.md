@@ -24,6 +24,19 @@ tags: [troubleshooting, comfyui, docker]
 
     Many rows below are hard failures `doctor` already reports. Prefer `./scripts/manage.sh setup` when Docker or `MODELS_DIR` is missing.
 
+## Studio user (canvas)
+
+| Symptom | Likely cause | Action |
+| --- | --- | --- |
+| **Missing Models** on a `*-lab-example` | Weights not on `MODELS_DIR` / broken `comfy/` symlink | `./scripts/manage.sh download-models` then restart. [Models and cache](models-and-cache.md) |
+| LTX `einops` / divide by 45 | Width/height not ÷32 (720 or 1080) | Lab size is **1280×704**. `ez_ltx_spatial` auto-snaps; prefer typing 704 |
+| No MP4 preview, only PNGs | Old graph without VHS, or looking at SaveImage | Re-open seeded `wan-*` / `ltx-*`; open **Save video (MP4)** node |
+| LTX MP4 has no sound | Missing audio VAE decode → VHS | Re-open current **ltx-*-lab-example** |
+| Enhance did nothing | GGUF / llama.cpp missing (fail-soft) | Read **Enhance status**. `download-models` then restart |
+| VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
+
+Concepts: [ComfyUI basics](learn/comfyui.md). Full tables below.
+
 ---
 
 ## Host & Docker

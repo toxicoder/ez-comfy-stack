@@ -107,7 +107,7 @@ make docs          # site/ (strict MkDocs build)
 # or: mkdocs serve
 ```
 
-Key pages (branch-relative source): [Getting Started](docs/getting-started.md) · [Prompting](docs/prompting.md) · [Model licenses](docs/licenses.md) · [Visual Generative AI](docs/visual-generative-ai.md) · [Local podcast](docs/podcast.md) · [90s shorts](docs/shorts.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
+Key pages (branch-relative source): [How the studio works](docs/learn/index.md) · [Glossary](docs/glossary.md) · [Getting Started](docs/getting-started.md) · [Prompting](docs/prompting.md) · [Model licenses](docs/licenses.md) · [Still to motion to AV](docs/visual-generative-ai.md) · [Workflow catalog](docs/studio-workflows.md) · [Local podcast](docs/podcast.md) · [90s shorts](docs/shorts.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
 
 ## Development
 

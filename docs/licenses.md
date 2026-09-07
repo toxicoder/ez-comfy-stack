@@ -25,6 +25,22 @@ tags: [license, apache, ltx, wan, klein, youtube, us]
 
     This page encodes the stack’s **download and workflow policy**. It is not legal advice. Read each Hugging Face model card and license before you monetize. Company-revenue caps (LTX) count **affiliates**.
 
+## Defaults vs gated vs banned
+
+| Bucket | Meaning |
+| --- | --- |
+| **Default download** | Klein 4B still (Apache) + Wan 2.2 silent (Apache) + LTX-2.5 AV (LTX Community License, **gated**, $10M company cap) + Prompt Enhance GGUF |
+| **Gated** | LTX-2.5 (LTX Community License): token **and** a license click as that Hugging Face user |
+| **Opt-in** | Podcast (Kokoro, ACE-Step), rap AIO, Z-Image, Wan A14B, Fun InP, TRELLIS.2, … |
+| **Banned** | MiniMax H3 (US Excluded Territory for weights **and** outputs), Klein 9B as default, FLUX.2-dev as default, cloud partner APIs, NC TTS packs |
+
+```mermaid
+flowchart LR
+  D["Apache still + Apache silent"] --> Daily["Daily driver"]
+  G["LTX Community · gated"] --> AV["AV hero"]
+  B["H3 / 9B default / APIs"] --> No["Not in this lab"]
+```
+
 ## Audience
 
 US-based casual content creators: YouTube, client shorts, ads under a **small LLC**. Run **only locally hosted** models. No fal / Comfy Cloud / MiniMax API / Kling / Seedance / Veo partner nodes in lab graphs.

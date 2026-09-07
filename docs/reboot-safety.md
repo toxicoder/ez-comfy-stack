@@ -11,6 +11,7 @@ tags: [safety, reboot]
 - Golden rule and recommended sequence
 - Why containers do not auto-return after reboot
 - Recovery when SSH is already unresponsive
+- Why this is a human problem (remote box, no console), not a Docker quirk
 
 **What this enables**
 
