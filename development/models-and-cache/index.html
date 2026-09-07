@@ -2033,11 +2033,11 @@
 <tr>
 <td><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfy-state" data-href="../glossary/#comfy-state" title="Docker volume for the Comfy install (venv, custom nodes). cleanup DELETE removes this only.">comfy-state</span> volume</strong></td>
 <td>Comfy install, custom nodes</td>
-<td>Host PNGs/MP4s (<code>COMFY_OUTPUT_DIR</code>)</td>
+<td>Host PNGs/MP4s, start images, and Comfy <code>user/</code> (<code>COMFY_OUTPUT_DIR</code>)</td>
 </tr>
 </tbody>
 </table>
-<p><code>cleanup</code> (type <code>DELETE</code>) removes <strong>comfy-state only</strong>. Concepts: <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<p><code>cleanup</code> (type <code>DELETE</code>) removes <strong>comfy-state only</strong>. Generated media, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> start frames (<code>${COMFY_OUTPUT_DIR}/input</code>), and Comfy user workflows (<code>${COMFY_OUTPUT_DIR}/comfy-user</code>) stay on the host. Concepts: <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
 <hr />
 <h2 id="default-location">Default location<a class="headerlink" href="#default-location" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
@@ -2286,7 +2286,7 @@
 </tbody>
 </table>
 <h3 id="example-graphs">Example graphs<a class="headerlink" href="#example-graphs" title="Permanent link">&para;</a></h3>
-<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> (name pattern <strong><code>*-lab-example.json</code></strong>). Catalog and iteration loop: <a href="../visual-generative-ai/">Visual Generative AI</a>.</p>
+<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/*.json</code>, <code>workflows/shorts/*.json</code>, <code>workflows/dcc/*.json</code>, and <code>workflows/optional/*.json</code> (name pattern <strong><code>*-lab-example.json</code></strong>). That directory is bind-mounted from <code>${COMFY_OUTPUT_DIR}/comfy-user</code> so operator graphs survive <code>cleanup</code>. Catalog and iteration loop: <a href="../visual-generative-ai/">Visual Generative AI</a>.</p>
 <table>
 <thead>
 <tr>

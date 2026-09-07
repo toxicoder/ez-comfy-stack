@@ -1785,7 +1785,7 @@
   participant L as Lyrics + tags
   participant D as VAEDecodeAudio
 
-  U-&gt;&gt;L: original bars (Enhance off)
+  U-&gt;&gt;L: original bars (Enhance on)
   U-&gt;&gt;C: Queue draft 32 s
   C-&gt;&gt;D: latent audio
   D-&gt;&gt;U: ez_rap_draft FLAC + MP3
@@ -1816,8 +1816,8 @@
 </tr>
 <tr>
 <td>PROMPT</td>
-<td>Tags + lab-original lyrics. <code>EZRapLyrics</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>off</strong>. <code>ConditioningZeroOut</code> negative. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sampler" data-href="../glossary/#sampler" title="Node that denoises latents for N steps at a CFG, seed, and scheduler.">KSampler</span> 8 / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="cfg" data-href="../glossary/#cfg" title="Classifier-free guidance scale. Distilled Klein wants 1.0 — do not &#x27;turn it up for quality&#x27;.">cfg</span> 1 / euler / simple</td>
-<td><code>ez_rap_lyrics</code></td>
+<td>Tags + lab-original lyrics. <code>EZAceStepPromptEnhance</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>on</strong>. <code>ConditioningZeroOut</code> negative. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sampler" data-href="../glossary/#sampler" title="Node that denoises latents for N steps at a CFG, seed, and scheduler.">KSampler</span> 8 / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="cfg" data-href="../glossary/#cfg" title="Classifier-free guidance scale. Distilled Klein wants 1.0 — do not &#x27;turn it up for quality&#x27;.">cfg</span> 1 / euler / simple</td>
+<td><code>ez_rap_prompt</code></td>
 </tr>
 <tr>
 <td>OUTPUT</td>
@@ -1875,7 +1875,7 @@
 <ol>
 <li><code>./scripts/manage.sh download-music --tier turbo</code></li>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
-<li>Load <strong>music-rap-draft-lab-example</strong>. Enhance off. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_rap_draft_*.flac</code> / <code>ez_rap_draft_*.mp3</code></li>
+<li>Load <strong>music-rap-draft-lab-example</strong>. Enhance on. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_rap_draft_*.flac</code> / <code>ez_rap_draft_*.mp3</code></li>
 <li>Then load <strong>music-rap-full-lab-example</strong> (96 s)</li>
 <li>Cover in a <strong>later</strong> session: <strong>klein-thumbnail-lab-example</strong> or <strong>klein-podcast-cover-lab-example</strong></li>
 </ol>

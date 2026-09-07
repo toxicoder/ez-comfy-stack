@@ -1837,7 +1837,7 @@
 <tbody>
 <tr>
 <td>SCRIPT</td>
-<td>In-tree <code>EZPodcastScript</code> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>off</strong>). Missing <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> passes the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> through</td>
+<td>In-tree <code>EZPodcastScript</code> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>on</strong>). Missing <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> passes the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> through</td>
 <td><code>ez_podcast_script</code></td>
 </tr>
 <tr>
@@ -1968,7 +1968,7 @@
   participant A as ACE-Step beds
   participant M as Mix
 
-  U-&gt;&gt;S: Queue (Enhance off)
+  U-&gt;&gt;S: Queue (Enhance on)
   S-&gt;&gt;D: script string
   D-&gt;&gt;K: bumper + lines
   D-&gt;&gt;A: instrumental tags
@@ -1981,7 +1981,7 @@
 <li><code>download-podcast --tier analog</code> (and <code>--tier acestep</code> for beds)</li>
 <li>Optional: <code>pip install kokoro-onnx onnxruntime</code> in the Comfy venv (runtime; see troubleshooting)</li>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
-<li>Load <strong>podcast-audio-first-lab-example</strong>. Enhance off. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_podcast_ep_*.flac</code> / <code>ez_podcast_mix_*.mp3</code></li>
+<li>Load <strong>podcast-audio-first-lab-example</strong>. Enhance on. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_podcast_ep_*.flac</code> / <code>ez_podcast_mix_*.mp3</code></li>
 <li>Load <strong>klein-podcast-cover-lab-example</strong> in a <strong>later</strong> session. Queue <code>ez_podcast_*.png</code></li>
 <li>Loudness (ffmpeg; Comfy cannot LUFS):</li>
 </ol>

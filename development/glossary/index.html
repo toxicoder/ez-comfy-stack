@@ -3940,10 +3940,10 @@
 <p>Fix a seed when you iterate a prompt so lighting and identity do not jump. Identity sheets pin seed 42. Random seeds are for discovery, not for matching a still into I2V. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
 <p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#identity-still">identity still</a></p>
 <h3 id="prompt-enhance">Prompt Enhance<a class="headerlink" href="#prompt-enhance" title="Permanent link">&para;</a></h3>
-<p>Klein/Wan/LTX Prompt Enhance defaults <strong>on</strong> for daily graphs and <strong>off</strong> for frozen identity bibles and 90s films. After Queue, read the dim CLIP prompt box — that is what was encoded. Fail-soft if the GGUF is missing. See <a href="../prompting/">Prompting</a>.</p>
+<p>Klein/Wan/LTX/ACE-Step Prompt Enhance defaults <strong>on</strong> for every lab graph, including identity bibles and 90s films. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See <a href="../prompting/">Prompting</a>.</p>
 <p><strong>See also:</strong> <a href="#enhance">Enhance</a> · <a href="#gguf">GGUF</a> · <a href="#qwen">Qwen3-4B</a></p>
 <h3 id="world-bible">world bible<a class="headerlink" href="#world-bible" title="Permanent link">&para;</a></h3>
-<p>Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (<code>lock=view</code>) or change only light (<code>lock=state</code>). Pin Enhance off on the bible. See <a href="../prompting/">Prompting</a>.</p>
+<p>Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (<code>lock=view</code>) or change only light (<code>lock=state</code>). Identity-mode enhance keeps the bible camera-free. See <a href="../prompting/">Prompting</a>.</p>
 <p><strong>See also:</strong> <a href="#identity-still">identity still</a> · <a href="#prompt-enhance">Prompt Enhance</a></p>
 <h3 id="identity-still">identity still<a class="headerlink" href="#identity-still" title="Permanent link">&para;</a></h3>
 <p>90s films Queue a Klein identity at 1280×704 (LTX grid), then 18 LTX prints that start from last frames. Enhance stays off so the rewriter cannot restyle the bible. See <a href="../shorts/">90s shorts</a>.</p>
@@ -3959,7 +3959,7 @@
 <p>After a still-draft Queue, set Wan/LTX LoadImage to <code>ez_still_draft_*.png</code> under COMFY_OUTPUT_DIR (the container sees <code>/outputs</code>). Leaving <code>example.png</code> is a smoke test only. See <a href="../visual-generative-ai/">Still to motion to AV</a>.</p>
 <p><strong>See also:</strong> <a href="#i2v">I2V</a> · <a href="#comfy-output-dir">COMFY_OUTPUT_DIR</a></p>
 <h3 id="enhance">Enhance<a class="headerlink" href="#enhance" title="Permanent link">&para;</a></h3>
-<p>Leave Enhance off when the lab already shipped a model-native paragraph (90s films, identity bibles). Turn it on for a lazy sentence plus optional style dropdown. I2V ignores style — the start image owns look. See <a href="../prompting/">Prompting</a>.</p>
+<p>Enhance defaults on for every lab graph. Turn it off to pin widget text. Identity mode keeps world bibles camera-free. I2V / FLF / VACE ignore style — the start frames own look. See <a href="../prompting/">Prompting</a>.</p>
 <p><strong>See also:</strong> <a href="#prompt-enhance">Prompt Enhance</a> · <a href="#world-bible">world bible</a></p>
 <h3 id="guide-pack">Guide pack<a class="headerlink" href="#guide-pack" title="Permanent link">&para;</a></h3>
 <p>The only DCC ↔ Comfy print handshake. Lives under <code>${COMFY_OUTPUT_DIR}/guides/&lt;slug&gt;/&lt;shot&gt;/</code>. Size is the LTX VAE grid (<strong>1280×704</strong>, never 1280×720). 120 frames @ 24 fps. Occupancy XOR: stop Comfy before <code>export-guides</code>. See <a href="../dcc-workflows/">DCC guide pack</a>.</p>
