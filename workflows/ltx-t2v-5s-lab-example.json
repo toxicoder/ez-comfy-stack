@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A wide HD 3D game-engine pre-rendered cutscene shot of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace as holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a high-altitude breeze while distant maglev glides between unmarked spires. The camera dollies in slowly toward the wizard. Rooftop wind and an electrical hum sit under a distant maglev, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score."
+        "A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. The camera dollies in slowly toward the wizard. A warm terrace breeze and palm rustle sit under distant bay traffic, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score."
       ],
       "title": "Positive"
     },
@@ -690,11 +690,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "A wide HD 3D game-engine pre-rendered cutscene shot of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace as holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a high-altitude breeze while distant maglev glides between unmarked spires. The camera dollies in slowly toward the wizard. Rooftop wind and an electrical hum sit under a distant maglev, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score.",
+        "A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. The camera dollies in slowly toward the wizard. A warm terrace breeze and palm rustle sit under distant bay traffic, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score.",
         true,
         "t2v",
         "5 seconds, 24 fps",
-        "rooftop wind, electrical hum, distant maglev, glyph chime, no score",
+        "warm terrace breeze, palm rustle, distant bay traffic, glyph chime, no score",
         "none"
       ],
       "title": "LTX Prompt Enhance"

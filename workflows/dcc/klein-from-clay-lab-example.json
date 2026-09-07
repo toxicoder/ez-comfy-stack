@@ -151,7 +151,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace, holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Unmarked spires recede into volumetric haze. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering."
+        "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still: physically plausible light, natural materials, unmarked surfaces empty of lettering. Do not redesign layout."
       ],
       "title": "Positive"
     },
@@ -190,7 +190,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "live-action photoreal, Pixar rounded cartoon, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -381,7 +381,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -454,7 +454,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "Keep the clay blocking, camera, and silhouette from the start image. Finish as a HD 3D game-engine pre-rendered cutscene still: PBR materials, cinematic three-point light, unmarked surfaces empty of lettering. Do not redesign layout.",
+        "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still: physically plausible light, natural materials, unmarked surfaces empty of lettering. Do not redesign layout.",
         true,
         "edit",
         "YouTube 16:9 still from clay",
@@ -674,7 +674,7 @@
         0
       ]
     },
-    "lab_note": "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B edit of DCC clay first.png. Enhance on. 1280x704. Seed 42.",
     "lab_app_mode": {
       "enabled": true,

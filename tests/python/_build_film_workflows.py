@@ -51,12 +51,12 @@ FILMS = (
         "go-see.shots.yaml",
         "first-person parkour",
         (
-            ("1", "Neon megacity rooftops", "sprint + gap leap", "vault + wall-run", "drop to maglev"),
-            ("2", "Maglev skybridge", "spine sprint", "gantry leaps", "dive into canyon"),
-            ("3", "Glass canyon gardens", "wall-run glass", "vault terraces", "waterfall to mesas"),
-            ("4", "Storm mesas", "rain sprint", "leap a void", "vault toward glacier"),
-            ("5", "Glacier ice canyon", "ice sprint", "slide the arch", "climb-run to aurora"),
-            ("6", "Aurora ridge climax", "last sprint", "leap to rail", "hold + laugh"),
+            ("1", "Golden-hour tropical rooftops", "sprint + gap leap", "vault + wall-run", "drop to bay skybridge"),
+            ("2", "Waterfront maglev / bay skybridge", "spine sprint", "gantry leaps", "dive into gardens"),
+            ("3", "Hanging tropical gardens", "wall-run glass", "vault palm terraces", "water curtain to causeway"),
+            ("4", "Tropical storm causeway", "rain sprint", "leap a squall gap", "vault toward cliffs"),
+            ("5", "Coastal jungle ridge", "ridge sprint", "slide a root arch", "climb-run to overlook"),
+            ("6", "Warm-night bay overlook", "last sprint", "leap to rail", "hold + laugh"),
         ),
     ),
     (

@@ -213,16 +213,16 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
 
 === "go-see"
 
-    First-person **parkour** body-cam. Identity lock: electric-cyan tech-mage sleeves + matching gloves + holographic glyph motes in frame (data-staff slung on the back). Arms always; boots/knees on vaults, drops, and wall-runs. Never a standing third-person wizard. **No score** (breath + world).
+    First-person **parkour** body-cam. Identity lock: sun-washed teal running-coat sleeves + matching gloves + warm gold-cyan holographic glyph motes in frame (data-staff slung on the back). Arms always; boots/knees on vaults, drops, and wall-runs. Never a standing third-person wizard. **No score** (breath + world).
 
     | Beat | Place | s1 enter | s2 traverse | s3 exit |
     | --- | --- | --- | --- | --- |
-    | 1 | Neon megacity rooftops | Sprint + gap leap | Vault bulkhead + wall-run | Drop toward maglev |
-    | 2 | Maglev skybridge | Spine sprint | Gantry leaps | Dive into glass canyon |
-    | 3 | Glass canyon gardens | Wall-run glass | Vault terraces | Waterfall toward mesas |
-    | 4 | Storm mesas | Rain sprint | Leap a void | Vault toward glacier |
-    | 5 | Glacier ice canyon | Ice sprint | Slide the arch | Climb-run toward aurora |
-    | 6 | Aurora ridge climax | Last sprint | Leap to rail | Hold + quiet laugh |
+    | 1 | Golden-hour tropical rooftops | Sprint + gap leap | Vault bulkhead + wall-run | Drop toward bay skybridge |
+    | 2 | Waterfront maglev / bay skybridge | Spine sprint | Gantry leaps | Dive into hanging gardens |
+    | 3 | Hanging tropical gardens | Wall-run glass | Vault palm terraces | Water curtain toward causeway |
+    | 4 | Tropical storm causeway | Rain sprint | Leap a squall gap | Vault toward coastal cliffs |
+    | 5 | Coastal jungle ridge | Ridge sprint | Slide a wet root arch | Climb-run toward overlook |
+    | 6 | Warm-night bay overlook | Last sprint | Leap to rail | Hold + quiet laugh |
 
 === "still-here"
 

@@ -55,7 +55,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A cyberpunk tech wizard on a neon-wet rooftop at dusk.",
+        "A techno wizard on a sunny tropical city rooftop.",
         true,
         "t2i",
         "YouTube 16:9 still",
@@ -90,7 +90,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "A cyberpunk tech wizard on a neon-wet rooftop at dusk.",
+        "A techno wizard on a sunny tropical city rooftop.",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -125,7 +125,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "A cyberpunk tech wizard on a neon-wet rooftop at dusk.",
+        "A techno wizard on a sunny tropical city rooftop.",
         true,
         "i2v",
         "5 seconds, 24 fps",

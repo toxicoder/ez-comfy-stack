@@ -35,44 +35,42 @@ from ez_prompt_enhance.client import join_prompt  # noqa: E402
 
 WF = ROOT / "workflows"
 
-KLEIN_NEG = (
-    "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
-)
+KLEIN_NEG = KLEIN_NEG_STILL
 HOUSE_SHOTS = [
     (
         "01 city facade",
         "Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, "
-        "golden-hour late summer. The three-bay glass shows the charcoal linen sofa and "
-        "walnut floors inside. High clouds over unmarked spires.",
+        "golden-hour late summer. The three-bay glass shows the sand linen sofa and "
+        "teak floors inside. High clouds over a bright bay.",
     ),
     (
         "02 canyon",
         "From the unmarked canyon street, looking up at the same penthouse crown, 24mm, "
         "Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall "
-        "tower among unmarked spires.",
+        "tower among unmarked glass towers.",
     ),
     (
         "03 living",
         "From inside the living room of the same penthouse, looking out the three-bay "
-        "glass to the megacity, 24mm, Instagram 4:5. The linen sofa sits in the "
-        "foreground on walnut floors, afternoon sky.",
+        "glass to the bay, 24mm, Instagram 4:5. The linen sofa sits in the "
+        "foreground on teak floors, afternoon sky.",
     ),
     (
         "04 kitchen",
         "From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone "
-        "island, blackened-steel cabinets, electric-cyan edge light, morning sidelight "
+        "island, warm-teak cabinets, coral-teal edge light, morning sidelight "
         "from the glass wall beside the living room.",
     ),
     (
         "05 dining",
-        "From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Walnut "
-        "table, lamps lit, autumn twilight through the three-bay glass, high weather "
-        "over the spires.",
+        "From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Teak "
+        "table, lamps lit, golden-hour through the three-bay glass, high weather "
+        "over the bay.",
     ),
     (
         "06 bedroom",
         "From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. "
-        "Linen bedding, city window, first-blue dawn sky, unmarked spires.",
+        "Linen bedding, bay window, tropical first-light sky, unmarked glass towers.",
     ),
     (
         "07 bath",
@@ -82,20 +80,20 @@ HOUSE_SHOTS = [
     ),
     (
         "08 terrace",
-        "Wraparound terrace of the same penthouse at dusk, 24mm, Instagram 4:5. Two "
-        "blackened-steel chairs, fern living wall, neon-wet deck, unmarked spires, "
-        "distant maglev, pink-gold sky.",
+        "Wraparound terrace of the same penthouse at golden hour, 24mm, Instagram 4:5. Two "
+        "teak chairs, fern living wall, palms on the deck, unmarked glass towers, "
+        "bright bay, pink-gold sky.",
     ),
     (
         "09 rain night",
-        "Rain night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; "
-        "the charcoal linen sofa reads as a silhouette through the three-bay glass. Rain "
+        "Tropical-storm night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; "
+        "the sand linen sofa reads as a silhouette through the three-bay glass. Rain "
         "on the terrace; penthouse volume unchanged.",
     ),
     (
         "10 tower view",
         "Midsummer neighboring-tower view of the same compact penthouse crown among "
-        "unmarked spires, 24mm, Instagram 4:5. Clear deep sky.",
+        "unmarked glass towers over the bay, 24mm, Instagram 4:5. Clear deep sky.",
     ),
 ]
 JOINED_WORD_CAP = 160
@@ -134,7 +132,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
 
-Ten Instagram 4:5 stills of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.
+Ten Instagram 4:5 stills of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.
 HOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse — Prompt Join lock=view. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.
 Edit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced — a per-shot rewrite would mutate the bible.
 Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.
@@ -621,7 +619,7 @@ def build_dream_house() -> dict:
             "lab_profile": "klein-dream-house-lab-example",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
-            "lab_description": "Ten Instagram 4:5 Klein stills of one charcoal-glass crown penthouse; new cameras, locked inventory",
+            "lab_description": "Ten Instagram 4:5 Klein stills of one warm-glass crown penthouse; new cameras, locked inventory",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,

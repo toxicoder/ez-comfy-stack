@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Hold the tech wizard identity from Shot A last frame and travel toward Shot B first frame. One continuous 17-frame join at 24 fps. Coat hem and holographic glyph motes stay locked. Do not redesign the set."
+        "Hold the techno wizard identity from Shot A last frame and travel toward Shot B first frame. One continuous 17-frame join at 24 fps. Coat hem and holographic glyph motes stay locked. Do not redesign the set."
       ],
       "title": "Motion / prompt"
     },
@@ -581,10 +581,10 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Hold the tech wizard identity from Shot A last frame and travel toward Shot B first frame. One continuous 17-frame join at 24 fps. Coat hem and holographic glyph motes stay locked. Do not redesign the set.",
+        "Hold the techno wizard identity from Shot A last frame and travel toward Shot B first frame. One continuous 17-frame join at 24 fps. Coat hem and holographic glyph motes stay locked. Do not redesign the set.",
         true,
         "vace",
-        "17 frames, 24 fps",
+        "5 seconds, 24 fps",
         "none"
       ],
       "title": "Wan Prompt Enhance"

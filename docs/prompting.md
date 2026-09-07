@@ -61,9 +61,9 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Front-load the subject. Write prose.
 
-    **Do:** `A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff…`
+    **Do:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff…`
 
-    **Don’t:** `rooftop, tech wizard, 3D, 24mm, no logos, no text`
+    **Don’t:** `rooftop, techno wizard, photo, 24mm, no logos, no text`
 
 === "Wan 2.2 T2V"
 
@@ -79,7 +79,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Dream-house pack (Klein)"
 
-    One **world bible** locks massing + materials + place (compact charcoal-glass crown penthouse, wraparound terrace, three-bay city glass, walnut floors, fern living wall, electric-cyan edge light on a tall unmarked megacity tower) with **no camera**. Locked inventory (charcoal linen sofa facing the glass, island, dining table, bedding, tub, terrace chairs, data-staff) must appear through the three-bay glass **and** in the matching interiors. Each SHOT card is a new camera of that same penthouse. **Prompt Join** `lock=view` stitches bible + inventory + “new photograph from a different camera”. Identity-mode enhance keeps the bible camera-free. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01, or every still copies the facade. Weather and sky may change; the building must not. `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
+    One **world bible** locks massing + materials + place (compact warm-glass crown penthouse, wraparound terrace, three-bay bay glass, teak floors, palms on the terrace, fern living wall, coral-teal edge light on a tall unmarked tropical coastal tower) with **no camera**. Locked inventory (sand linen sofa facing the glass, island, dining table, bedding, tub, terrace chairs, data-staff) must appear through the three-bay glass **and** in the matching interiors. The lab identity is a photoreal tropical techno wizard — hope stays off-camera; CLIP names wardrobe, place, and action only. Each SHOT card is a new camera of that same penthouse. **Prompt Join** `lock=view` stitches bible + inventory + “new photograph from a different camera”. Identity-mode enhance keeps the bible camera-free. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01, or every still copies the facade. Weather and sky may change; the building must not. `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
 
 === "LTX-2.5 AV"
 

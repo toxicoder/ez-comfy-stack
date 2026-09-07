@@ -176,7 +176,8 @@ def pos(g):
     enh=next(n for n in g['nodes'] if n.get('type')=='EZKleinPromptEnhance')
     return enh['widgets_values'][0]
 assert pos(d)==pos(h)
-assert 'HD 3D game-engine pre-rendered cutscene still' in pos(d)
+assert 'photoreal still' in pos(d)
+assert 'techno wizard' in pos(d)
 assert 'no logos, no text' not in pos(d)
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 for n in d['nodes'])
@@ -287,7 +288,7 @@ enh=next(n for n in d['nodes'] if n.get('type')=='EZLTXPromptEnhance')
 assert enh['widgets_values'][1] is True
 assert enh['widgets_values'][2]=='i2v'
 text=enh['widgets_values'][0].lower()
-assert 'footsteps' in text or 'wind' in text
+assert 'footsteps' in text or 'wind' in text or 'breeze' in text
 assert 'no score' in text or 'no music' in text
 t=json.load(open('${dir}/ltx-t2v-5s-lab-example.json'))
 tenh=next(n for n in t['nodes'] if n.get('type')=='EZLTXPromptEnhance')
@@ -530,7 +531,7 @@ assert enh[0]['widgets_values'][2]=='identity'
 assert enh[0]['widgets_values'][3]=='Instagram 4:5 still'
 ident=enh[0]['widgets_values'][0]
 ident_l=ident.lower()
-assert 'charcoal-glass' in ident_l and 'crown penthouse' in ident_l
+assert 'warm-glass' in ident_l and 'crown penthouse' in ident_l
 assert 'wraparound terrace' in ident_l and 'three-bay' in ident_l
 assert '24mm' not in ident_l
 assert 'cedar' not in ident_l and 'cabin' not in ident_l

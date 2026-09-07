@@ -777,26 +777,26 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
                 "ez_style_01",
                 "FACADE",
                 "Three-quarter city facade of the same penthouse, 24mm, golden-hour, "
-                "Instagram 4:5. The three-bay glass shows the charcoal linen sofa and "
-                "walnut floors inside.",
+                "Instagram 4:5. The three-bay glass shows the sand linen sofa and "
+                "teak floors inside.",
             ),
             (
                 "ez_style_02",
                 "LIVING",
                 "From inside the living room of the same penthouse, looking out the "
-                "three-bay glass to the megacity, late-day sun. Charcoal linen sofa in "
+                "three-bay glass to the bay, late-day sun. Sand linen sofa in "
                 "the foreground.",
             ),
             (
                 "ez_style_03",
                 "TERRACE",
-                "Wraparound terrace of the same penthouse at dusk, fern living wall, "
-                "neon-wet deck, unmarked spires.",
+                "Wraparound terrace of the same penthouse at golden hour, fern living wall, "
+                "palms on the deck, unmarked glass towers over the bay.",
             ),
             (
                 "ez_style_04",
                 "RAIN",
-                "Rain night exterior of the same penthouse. Lamps on; sofa silhouette "
+                "Tropical-storm night exterior of the same penthouse. Lamps on; sofa silhouette "
                 "through the three-bay glass. Penthouse volume unchanged.",
             ),
         ],
@@ -804,7 +804,7 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
         neg=KLEIN_NEG_STILL,
         note=f"""## klein-style-lock-lab-example
 
-Four Klein 4B stills of one charcoal-glass crown penthouse from new cameras (Prompt Join lock=view). Locked inventory repeats through the three-bay glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy FACADE's framing. Same world bible as klein-dream-house-lab-example.
+Four Klein 4B stills of one warm-glass crown penthouse from new cameras (Prompt Join lock=view). Locked inventory repeats through the three-bay glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy FACADE's framing. Same world bible as klein-dream-house-lab-example.
 
 Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klein-t2i-enhanced.
 """,
@@ -1441,7 +1441,7 @@ def build_creator_toolkit_v2() -> None:
         prompt=(
             f"{identity} Framed as a YouTube end-card plate: generous empty lower-right "
             "for a subscribe button later. Clean of burned-in text, logos, or UI chrome. "
-            "HD 3D game-engine pre-rendered cutscene 16:9."
+            "Photoreal still 16:9."
         ),
         note="""## klein-endcard-cta-lab-example
 
@@ -1458,7 +1458,7 @@ Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
         prefix="ez_quote_bg",
         prompt=(
             f"{identity} Square 1:1. Soft bokeh, quiet center so overlay text can sit later. "
-            "Empty of lettering. HD 3D game-engine pre-rendered cutscene quote-card background."
+            "Empty of lettering. Photoreal still quote-card background."
         ),
         note="""## klein-quote-bg-lab-example
 
@@ -1475,7 +1475,7 @@ Keep the center empty of detail; add the quote in your editor.
         prefix="ez_og",
         prompt=(
             f"{identity} Wide blog / Open Graph hero. Subject left-weighted, quiet right third "
-            "for a headline later. Clean of burned-in text. HD 3D game-engine pre-rendered cutscene ~1.9:1."
+            "for a headline later. Clean of burned-in text. Photoreal still ~1.9:1."
         ),
         note="""## klein-og-blog-lab-example
 
@@ -1510,7 +1510,7 @@ Swap the props in the prompt. Add show title in your editor.
         prefix="ez_banner",
         prompt=(
             f"{identity} Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band "
-            "for a name overlay. Empty of lettering. HD 3D game-engine pre-rendered cutscene ~3:1."
+            "for a name overlay. Empty of lettering. Photoreal still ~3:1."
         ),
         note="""## klein-banner-wide-lab-example
 
@@ -1600,12 +1600,12 @@ Swap the dish in the prompt; keep unmarked surfaces.
             (
                 "ez_light_02",
                 "WINDOW",
-                "Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera.",
+                "Same rooftop and wizard. Bright overcast skylight, gentle falloff, soft shadows. Same camera.",
             ),
             (
                 "ez_light_03",
                 "NIGHT LAMP",
-                "Same rooftop and wizard at night under rooftop sodium and city neon. Same camera.",
+                "Same rooftop and wizard at night under warm coral city glow and terrace lamps. Same camera.",
             ),
         ],
         note=f"""## klein-lighting-trio-lab-example
@@ -1618,6 +1618,45 @@ Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light
         description="Klein 4B three-light study of one subject",
     )
     _klein_pack(
+        stem="klein-identity-sheet-lab-example",
+        size=(1280, 704),
+        identity=identity,
+        inventory=ROOFTOP_INVENTORY,
+        persist="view",
+        shots=[
+            (
+                "ez_identity_front",
+                "FRONT",
+                "Front camera, eye-level, 24mm. Same identity. YouTube 16:9.",
+            ),
+            (
+                "ez_identity_threequarter",
+                "THREE-QUARTER",
+                "Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change.",
+            ),
+            (
+                "ez_identity_profile",
+                "PROFILE",
+                "Profile camera, 50mm, full side view. Same identity and light. Camera is the only change.",
+            ),
+        ],
+        note=f"""## klein-identity-sheet-lab-example
+
+Three-angle Klein identity sheet. Frozen seed 42. Identity-mode enhance is on.
+Prints ez_identity_front / ez_identity_threequarter / ez_identity_profile.
+I2V feeders stay 1280×704. Unload before LTX prints.
+
+Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+
+{ENHANCE_NOTE}
+""",
+        description="Klein 4B three-angle identity sheet 1280x704",
+    )
+    ident_path = WF / "klein-identity-sheet-lab-example.json"
+    ident_graph = _load(ident_path)
+    ident_graph.setdefault("extra", {})["lab_identity"] = {"seed": 42, "enhance": True}
+    _dump(ident_path, ident_graph)
+    _klein_pack(
         stem="klein-time-of-day-lab-example",
         size=(768, 432),
         identity=identity,
@@ -1625,28 +1664,28 @@ Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light
         shots=[
             (
                 "ez_tod_01",
-                "DUSK",
-                "Canonical dusk plate, pink sky, city lamps just on. 24mm eye-level, YouTube 16:9.",
+                "GOLDEN",
+                "Canonical golden-hour plate, amber sidelight, palms and a bright bay. 24mm eye-level, YouTube 16:9.",
             ),
             (
                 "ez_tod_02",
                 "DAWN",
-                "Same rooftop and wizard. First blue dawn, cool air, empty terrace. Same camera.",
+                "Same rooftop and wizard. Tropical first light, humid pastel sky, empty terrace. Same camera.",
             ),
             (
                 "ez_tod_03",
                 "NOON",
-                "Same rooftop and wizard. Hard noon sun, short shadows. Same camera.",
+                "Same rooftop and wizard. Hard noon sun, short shadows, bay sparkle. Same camera.",
             ),
             (
                 "ez_tod_04",
                 "NIGHT",
-                "Same rooftop and wizard at night. Warm tower glow. Same camera.",
+                "Same rooftop and wizard at night. Warm coral and amber city glow. Same camera.",
             ),
         ],
         note=f"""## klein-time-of-day-lab-example
 
-Same place at dusk / dawn / noon / night (Klein 4B). SHOT DUSK is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass DUSK on a cold canvas.
+Same place at golden hour / dawn / noon / night (Klein 4B). SHOT GOLDEN is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass GOLDEN on a cold canvas.
 Prefixes `ez_tod_01`…`04`. Change only time of day.
 
 {ENHANCE_NOTE}
@@ -1698,12 +1737,12 @@ Identity-mode enhance is on for the bible (camera-free).
             (
                 "ez_mood_02",
                 "COOL",
-                "Same rooftop and wizard. Cool teal-and-steel grade, overcast. Same camera.",
+                "Same rooftop and wizard. Cool tropical overcast teal, soft contrast. Same camera.",
             ),
             (
                 "ez_mood_03",
                 "MUTED",
-                "Same rooftop and wizard. Muted filmic grade, desaturated copper, soft contrast. Same camera.",
+                "Same rooftop and wizard. Sunset coral grade, soft contrast. Same camera.",
             ),
             (
                 "ez_mood_04",

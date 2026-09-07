@@ -11,149 +11,149 @@ print: ltx
 identity_seed: 42
 identity_enhance: true
 identity_look: |
-  A HD 3D game-engine pre-rendered cutscene still, first-person body-cam at dusk. Unmarked electric-cyan coat sleeves with circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Neon-wet megacity rooftops and unmarked spires fill the view. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
+  A photoreal still, first-person body-cam at golden hour. Unmarked sun-washed teal running-coat sleeves with faint circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as warm gold-cyan holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Tropical rooftops, palms, and unmarked glass towers fill the view toward a bright bay. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
 shots:
   - beat: 1
     shot: 1
     prefix: ez_gosee_b1_s1
     load_from: identity
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across the neon-wet terrace, electric-cyan sleeves and matching gloves pumping hard at the lower edges while holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Dusk wind shoves the coat, each footfall ticks wet grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.
+      The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.
     wan_i2v: |
-      First-person body-cam high-speed parkour sprint across a neon-wet terrace. Electric-cyan sleeves and gloves pump at the frame edges, glyph motes at the wrists. Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, locked identity, no cut.
+      First-person body-cam high-speed parkour sprint across a sunlit tropical terrace. Sun-washed teal sleeves and gloves pump at the frame edges, glyph motes at the wrists. Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, locked identity, no cut.
   - beat: 1
     shot: 2
     prefix: ez_gosee_b1_s2
     load_from: ez_gosee_b1_s1_last
     ltx_i2v: |
-      The start image holds as the first frame. The same first-person body-cam keeps the high-speed parkour run onto the next unmarked roof, electric-cyan sleeves flashing as both gloves plant a low HVAC bulkhead and vault through. Knees and boots cut the lower frame, then a short wall-run up an unmarked spire wall, hands sliding, glyph motes sparking. Fabric snaps in the wind while breath and running footfalls stay close. One continuous first-person take, no cut. No music and no score.
+      The start image holds as the first frame. The same first-person body-cam keeps the high-speed parkour run onto the next unmarked roof, sun-washed teal sleeves flashing as both gloves plant a low HVAC bulkhead and vault through. Knees and boots cut the lower frame, then a short wall-run up an unmarked glass wall, hands sliding, glyph motes sparking. Fabric snaps in the warm wind while breath and running footfalls stay close. One continuous first-person take, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour continues. Vault a low unmarked bulkhead, then a short wall-run. Electric-cyan sleeves and gloves plant and pump. Knees flash. Continuous tracking, no cut.
+      First-person parkour continues. Vault a low unmarked bulkhead, then a short wall-run. Sun-washed teal sleeves and gloves plant and pump. Knees flash. Continuous tracking, no cut.
   - beat: 1
     shot: 3
     prefix: ez_gosee_b1_s3
     load_from: ez_gosee_b1_s2_last
     ltx_i2v: |
-      The start image holds as the first frame. The parkour body-cam sprints the last terrace edge, cyan gloves pumping, then drops toward a glowing unmarked maglev skybridge still sliding forward. Legs kick through the lower frame on the drop; the compact data-staff stays slung on the back. Wind rushes, grit ticks off the roof lip, and close breath rides the fall. Continuous first-person tracking into the bridge. No music and no score.
+      The start image holds as the first frame. The parkour body-cam sprints the last terrace edge, teal gloves pumping, then drops toward a glowing unmarked waterfront skybridge still sliding forward over the bay. Legs kick through the lower frame on the drop; the compact data-staff stays slung on the back. Warm wind rushes, grit ticks off the roof lip, and close breath rides the fall. Continuous first-person tracking into the bridge. No music and no score.
     wan_i2v: |
-      First-person parkour drop off the last terrace toward a glowing unmarked maglev skybridge. Cyan sleeves in frame, legs kick through the bottom. Keep tracking forward, no cut.
+      First-person parkour drop off the last terrace toward a glowing unmarked waterfront skybridge. Teal sleeves in frame, legs kick through the bottom. Keep tracking forward, no cut.
   - beat: 2
     shot: 1
     prefix: ez_gosee_b2_s1
     load_from: ez_gosee_b1_s3_last
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam lands into a high-speed parkour sprint along the unmarked maglev spine, electric-cyan sleeves and gloves pumping at the edges, boots hammering metal grating. Unmarked spires streak past on both sides while the coat hem snaps. Wind, grating ticks, and close breath sit under the run. Continuous body-cam, no cut. No music and no score.
+      The start image holds as the first frame. The first-person body-cam lands into a high-speed parkour sprint along the unmarked maglev spine over the bay, sun-washed teal sleeves and gloves pumping at the edges, boots hammering metal grating. Unmarked glass towers streak past on both sides while the coat hem snaps. Wind, grating ticks, and close breath sit under the run. Continuous body-cam, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour sprint along an unmarked maglev spine. Cyan sleeves pump, boots on metal grating, unmarked spires streaking past. Continuous tracking, locked identity.
+      First-person parkour sprint along an unmarked maglev spine over the bay. Teal sleeves pump, boots on metal grating, unmarked glass towers streaking past. Continuous tracking, locked identity.
   - beat: 2
     shot: 2
     prefix: ez_gosee_b2_s2
     load_from: ez_gosee_b2_s1_last
     ltx_i2v: |
-      The start image holds as the first frame. The same parkour body-cam leaps a gap between unmarked gantry segments, cyan gloves grabbing a rail then pumping again as boots flash through the frame. Glyph motes flare on the grab. Metal ticks, wind shears, and breath stays close. One continuous first-person tracking leap, no cut. No music and no score.
+      The start image holds as the first frame. The same parkour body-cam leaps a gap between unmarked gantry segments, teal gloves grabbing a rail then pumping again as boots flash through the frame. Glyph motes flare on the grab. Metal ticks, wind shears, and breath stays close. One continuous first-person tracking leap, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour leap between unmarked gantry segments. Cyan gloves grab a rail then pump. Boots flash in frame. Continuous tracking, no cut.
+      First-person parkour leap between unmarked gantry segments. Teal gloves grab a rail then pump. Boots flash in frame. Continuous tracking, no cut.
   - beat: 2
     shot: 3
     prefix: ez_gosee_b2_s3
     load_from: ez_gosee_b2_s2_last
     ltx_i2v: |
-      The start image holds as the first frame. The high-speed parkour run dives off the last gantry, first-person body-cam pitching down into a vertical glass canyon, electric-cyan sleeves whipping at the edges. Boots kick the lower frame as the drop begins; hanging unmarked gardens wait below. Wind roars, fabric snaps, breath sits close. Continuous first-person tracking into the canyon. No music and no score.
+      The start image holds as the first frame. The high-speed parkour run dives off the last gantry, first-person body-cam pitching down into a vertical glass canyon of hanging gardens, sun-washed teal sleeves whipping at the edges. Boots kick the lower frame as the drop begins; palm terraces wait below. Wind roars, fabric snaps, breath sits close. Continuous first-person tracking into the canyon. No music and no score.
     wan_i2v: |
-      First-person parkour dive off the last gantry into a vertical glass canyon. Cyan sleeves whip at the edges, boots kick the lower frame. Continuous tracking downward, no cut.
+      First-person parkour dive off the last gantry into a vertical glass canyon of hanging gardens. Teal sleeves whip at the edges, boots kick the lower frame. Continuous tracking downward, no cut.
   - beat: 3
     shot: 1
     prefix: ez_gosee_b3_s1
     load_from: ez_gosee_b2_s3_last
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam hits a high-speed parkour wall-run on unmarked glass, cyan gloves sliding, boots kicking along the canyon wall. Hanging gardens streak past. Glass ticks under the gloves, wind tunnels through the canyon, and breath stays close to the lens. Continuous body-cam, no cut. No music and no score.
+      The start image holds as the first frame. The first-person body-cam hits a high-speed parkour wall-run on unmarked glass, teal gloves sliding, boots kicking along the canyon wall. Hanging tropical gardens streak past. Glass ticks under the gloves, wind tunnels through the canyon, and breath stays close to the lens. Continuous body-cam, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour wall-run on unmarked glass. Cyan gloves slide, boots kick along the canyon wall. Hanging gardens streak past. Continuous tracking, no cut.
+      First-person parkour wall-run on unmarked glass. Teal gloves slide, boots kick along the canyon wall. Hanging tropical gardens streak past. Continuous tracking, no cut.
   - beat: 3
     shot: 2
     prefix: ez_gosee_b3_s2
     load_from: ez_gosee_b3_s1_last
     ltx_i2v: |
-      The start image holds as the first frame. The parkour body-cam vaults hanging unmarked garden terraces, both cyan-gloved hands planting, knees flashing through the lower frame, glyph rings flaring at the wrists. The first-person view never stops moving forward. Cloth slaps, breath sits close, and footfalls knock wet stone. Continuous tracking, no cut. No music and no score.
+      The start image holds as the first frame. The parkour body-cam vaults hanging unmarked garden terraces, both teal-gloved hands planting, knees flashing through the lower frame, glyph rings flaring at the wrists. The first-person view never stops moving forward. Cloth slaps, breath sits close, and footfalls knock wet stone. Continuous tracking, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour vault across hanging unmarked garden terraces. Cyan gloves plant, knees flash, glyph rings flare. Keep moving forward, continuous tracking.
+      First-person parkour vault across hanging unmarked garden terraces. Teal gloves plant, knees flash, glyph rings flare. Keep moving forward, continuous tracking.
   - beat: 3
     shot: 3
     prefix: ez_gosee_b3_s3
     load_from: ez_gosee_b3_s2_last
     ltx_i2v: |
-      The start image holds as the first frame. The high-speed parkour body-cam bursts through a waterfall curtain, electric-cyan sleeves and gloves pumping, water exploding at the lens, then opens toward storm-lit floating mesas ahead. Boots splash the lower frame. Water, wind, splash, and close breath travel with the camera. Continuous first-person tracking. No music and no score.
+      The start image holds as the first frame. The high-speed parkour body-cam bursts through a garden water curtain, sun-washed teal sleeves and gloves pumping, water exploding at the lens, then opens toward a storm-lit causeway over the bay. Boots splash the lower frame. Water, wind, splash, and close breath travel with the camera. Continuous first-person tracking. No music and no score.
     wan_i2v: |
-      First-person parkour burst through a waterfall curtain toward storm-lit floating mesas. Cyan sleeves pump, boots splash the lower frame. Continuous tracking, no cut.
+      First-person parkour burst through a garden water curtain toward a storm-lit causeway. Teal sleeves pump, boots splash the lower frame. Continuous tracking, no cut.
   - beat: 4
     shot: 1
     prefix: ez_gosee_b4_s1
     load_from: ez_gosee_b3_s3_last
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam sprints a rain-slick unmarked mesa in high-speed parkour, cyan sleeves pumping, glyph motes hissing in the rain. Lightning blooms far off over floating platforms. Rain, wind, wet footfalls, and close breath sit on the lens. Continuous body-cam, no cut. No music and no score.
+      The start image holds as the first frame. The first-person body-cam sprints a rain-slick unmarked causeway in high-speed parkour, teal sleeves pumping, glyph motes hissing in the tropical rain. Lightning blooms far off over the bay. Rain, wind, wet footfalls, and close breath sit on the lens. Continuous body-cam, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour sprint across a rain-slick unmarked mesa. Cyan sleeves pump, glyph motes at the wrists, lightning far off. Continuous tracking, locked identity.
+      First-person parkour sprint across a rain-slick unmarked causeway. Teal sleeves pump, glyph motes at the wrists, lightning far off over the bay. Continuous tracking, locked identity.
   - beat: 4
     shot: 2
     prefix: ez_gosee_b4_s2
     load_from: ez_gosee_b4_s1_last
     ltx_i2v: |
-      The start image holds as the first frame. The parkour body-cam leaps a void between unmarked storm platforms, camera pitching, electric-cyan sleeves and legs in the lower frame, gloves reaching then pumping on landing. Glyph motes streak. Wind shears the gap, rain ticks the coat, and breath stays close. One continuous first-person leap, no cut. No music and no score.
+      The start image holds as the first frame. The parkour body-cam leaps a gap in the squall between unmarked causeway spans, camera pitching, sun-washed teal sleeves and legs in the lower frame, gloves reaching then pumping on landing. Glyph motes streak. Wind shears the gap, rain ticks the coat, and breath stays close. One continuous first-person leap, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour leap across a void between unmarked storm platforms. Camera pitches; cyan sleeves and legs in the lower frame. Continuous tracking, no cut.
+      First-person parkour leap across a gap in the squall between unmarked causeway spans. Camera pitches; teal sleeves and legs in the lower frame. Continuous tracking, no cut.
   - beat: 4
     shot: 3
     prefix: ez_gosee_b4_s3
     load_from: ez_gosee_b4_s2_last
     ltx_i2v: |
-      The start image holds as the first frame. The high-speed parkour run vaults a last unmarked stone lip, cyan gloves planting, then sprints toward glacier-blue light opening ahead. Knees flash; the body-cam never stops. Wind, grit, and close breath ride the vault. Continuous first-person tracking into the ice. No music and no score.
+      The start image holds as the first frame. The high-speed parkour run vaults a last unmarked causeway lip, teal gloves planting, then sprints toward coastal cliffs opening ahead as the squall thins. Knees flash; the body-cam never stops. Wind, grit, and close breath ride the vault. Continuous first-person tracking into the cliffs. No music and no score.
     wan_i2v: |
-      First-person parkour vault off a last unmarked stone lip toward glacier-blue light. Cyan gloves plant, knees flash. Keep tracking forward, no cut.
+      First-person parkour vault off a last unmarked causeway lip toward coastal cliffs. Teal gloves plant, knees flash. Keep tracking forward, no cut.
   - beat: 5
     shot: 1
     prefix: ez_gosee_b5_s1
     load_from: ez_gosee_b4_s3_last
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam sprints ice shelves in high-speed parkour, electric-cyan sleeves pumping, boots crunching, glyph motes throwing cyan on towering blue ice walls. The canyon opens toward aurora far ahead. Wind, ice grit ticking, and close breath sit under the run. Continuous body-cam, no cut. No music and no score.
+      The start image holds as the first frame. The first-person body-cam sprints a coastal jungle ridge in high-speed parkour, sun-washed teal sleeves pumping, boots on wet stone, glyph motes throwing gold-cyan on unmarked cliff walls. Palms and the bay open toward an overlook far ahead. Wind, grit ticking, and close breath sit under the run. Continuous body-cam, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour sprint across ice shelves. Electric-cyan sleeves pump, boots on blue ice, glyph motes in frame. Continuous tracking, locked identity.
+      First-person parkour sprint along a coastal jungle ridge. Sun-washed teal sleeves pump, boots on wet stone, glyph motes in frame. Continuous tracking, locked identity.
   - beat: 5
     shot: 2
     prefix: ez_gosee_b5_s2
     load_from: ez_gosee_b5_s1_last
     ltx_i2v: |
-      The start image holds as the first frame. The parkour body-cam slides under a blue ice arch, cyan gloves grazing the ice, boots kicking through the lower frame, then pops back into a sprint. A scrape, wind through the arch, and close breath stay with the camera. Continuous first-person tracking. No music and no score.
+      The start image holds as the first frame. The parkour body-cam slides under a wet root arch, teal gloves grazing the wood, boots kicking through the lower frame, then pops back into a sprint. A scrape, wind through the arch, and close breath stay with the camera. Continuous first-person tracking. No music and no score.
     wan_i2v: |
-      First-person parkour slide under a blue ice arch. Cyan gloves graze the ice, boots kick through the lower frame, then sprint again. Continuous tracking, no cut.
+      First-person parkour slide under a wet root arch. Teal gloves graze the wood, boots kick through the lower frame, then sprint again. Continuous tracking, no cut.
   - beat: 5
     shot: 3
     prefix: ez_gosee_b5_s3
     load_from: ez_gosee_b5_s2_last
     ltx_i2v: |
-      The start image holds as the first frame. The high-speed parkour body-cam climb-runs a serrated ice ridge, cyan gloves grabbing then pumping, boots kicking shards of blue ice, aurora blooming ahead in unmarked sky. Glyph motes throw cyan on the ice. Grit ticks each ledge, wind shears the ridge, and close breath sits on the lens. Continuous first-person climb-run toward the light. No music and no score.
+      The start image holds as the first frame. The high-speed parkour body-cam climb-runs a serrated coastal ridge, teal gloves grabbing then pumping, boots kicking wet stone, warm city lights blooming ahead over the bay. Glyph motes throw gold-cyan on the cliff. Grit ticks each ledge, wind shears the ridge, and close breath sits on the lens. Continuous first-person climb-run toward the overlook. No music and no score.
     wan_i2v: |
-      First-person parkour climb-run up a serrated ice ridge toward aurora. Cyan gloves grab then pump, boots kick. Continuous tracking, no cut.
+      First-person parkour climb-run up a serrated coastal ridge toward a bay overlook. Teal gloves grab then pump, boots kick. Continuous tracking, no cut.
   - beat: 6
     shot: 1
     prefix: ez_gosee_b6_s1
     load_from: ez_gosee_b5_s3_last
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam makes a last high-speed parkour sprint along the aurora ridge, electric-cyan sleeves and gloves pumping hard, glyph motes bright against the unmarked sky. Unmarked ice and stone drop away on both sides. Wind, footfalls on stone, and close breath. Continuous body-cam, no cut. No music and no score.
+      The start image holds as the first frame. The first-person body-cam makes a last high-speed parkour sprint along the warm-night ridge, sun-washed teal sleeves and gloves pumping hard, glyph motes bright against unmarked sky. Unmarked stone drops away on both sides toward the bay. Wind, footfalls on stone, and close breath. Continuous body-cam, no cut. No music and no score.
     wan_i2v: |
-      First-person parkour sprint along an aurora ridge. Electric-cyan sleeves and gloves pump hard, glyph motes bright. Continuous tracking, locked identity.
+      First-person parkour sprint along a warm-night ridge. Sun-washed teal sleeves and gloves pump hard, glyph motes bright. Continuous tracking, locked identity.
   - beat: 6
     shot: 2
     prefix: ez_gosee_b6_s2
     load_from: ez_gosee_b6_s1_last
     ltx_i2v: |
-      The start image holds as the first frame. The parkour body-cam leaps onto an unmarked overlook, cyan-gloved hands finding a weathered wooden rail as boots land in the lower frame. The first-person view settles forward over the ridge. A rail creak, distant wind, slowing footfalls, and close breath. Continuous take from leap to hold. No music and no score.
+      The start image holds as the first frame. The parkour body-cam leaps onto an unmarked overlook, teal-gloved hands finding a weathered wooden rail as boots land in the lower frame. The first-person view settles forward over warm city lights and the ocean. A rail creak, distant wind, slowing footfalls, and close breath. Continuous take from leap to hold. No music and no score.
     wan_i2v: |
-      First-person parkour leap onto an unmarked overlook. Cyan-gloved hands find a weathered wooden rail, boots land in the lower frame. Camera eases from leap to hold.
+      First-person parkour leap onto an unmarked overlook. Teal-gloved hands find a weathered wooden rail, boots land in the lower frame. Camera eases from leap to hold.
   - beat: 6
     shot: 3
     prefix: ez_gosee_b6_s3
     load_from: ez_gosee_b6_s2_last
     ltx_i2v: |
-      The start image holds as the first frame. Both electric-cyan-gloved hands stay on the weathered unmarked rail, sleeves in the lower frame, holographic glyph motes settling while the first-person view holds the aurora ridge. The high-speed parkour run is over. A short quiet laugh leaves the breath. Distant wind and a single rail creak sit under that breath. The camera is still. No music and no score.
+      The start image holds as the first frame. Both sun-washed teal-gloved hands stay on the weathered unmarked rail, sleeves in the lower frame, holographic glyph motes settling while the first-person view holds warm city lights and the ocean. The high-speed parkour run is over. A short quiet laugh leaves the breath. Distant wind and a single rail creak sit under that breath. The camera is still. No music and no score.
     wan_i2v: |
-      First-person hold on the aurora ridge. Cyan gloves stay on the unmarked rail, glyph motes settle. Camera still, locked identity.
+      First-person hold on the warm-night bay overlook. Teal gloves stay on the unmarked rail, glyph motes settle. Camera still, locked identity.

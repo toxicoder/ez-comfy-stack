@@ -155,7 +155,7 @@ def test_shorts_yaml_has_no_banned_models() -> None:
 
 def test_creative_locks() -> None:
     go = _path("go-see").read_text(encoding="utf-8")
-    assert "electric-cyan" in go
+    assert "sun-washed teal" in go
     assert "olive windbreaker" not in go
     assert "First-person" in go or "first-person" in go
     assert "body-cam" in go
