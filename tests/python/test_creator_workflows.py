@@ -250,6 +250,44 @@ def test_suite_graphs_have_app_mode_and_resolving_linear_data() -> None:
             assert int(node_id) in by_id, (path.name, node_id)
 
 
+PACK_PLATES = (
+    ("ez_pack_thumb", 1280, 720),
+    ("ez_pack_ig", 1024, 1024),
+    ("ez_pack_portrait", 1024, 1280),
+    ("ez_pack_shorts", 432, 768),
+    ("ez_pack_og", 1216, 640),
+    ("ez_pack_banner", 1536, 512),
+)
+
+
+def test_platform_pack_prefixes_sizes_and_independent_t2i() -> None:
+    graph = json.loads((WF / "klein-platform-pack-lab-example.json").read_text(encoding="utf-8"))
+    assert graph["id"] == "klein-platform-pack-lab-example"
+    assert graph["extra"]["lab_app_mode"]["lane"] == "produce"
+    assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
+    assert graph["extra"]["lab_app_mode"]["enhance_off_identity"] is True
+    assert not any(n.get("type") == "ReferenceLatent" for n in graph["nodes"])
+    enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+    assert enhance["widgets_values"][1] is False
+    saves = {
+        n["widgets_values"][0]: n
+        for n in graph["nodes"]
+        if n.get("type") == "SaveImage"
+    }
+    latents = [n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage"]
+    assert len(latents) == 6
+    by_size = {(int(n["widgets_values"][0]), int(n["widgets_values"][1])) for n in latents}
+    for prefix, width, height in PACK_PLATES:
+        assert prefix in saves, prefix
+        assert (width, height) in by_size, (prefix, width, height)
+    seeds = {n["widgets_values"][0] for n in graph["nodes"] if n.get("type") == "KSampler"}
+    assert seeds == {42}
+    blob = json.dumps(graph)
+    for needle in BANNED:
+        assert needle not in blob
+    assert "241" not in blob
+
+
 def test_only_daily_still_exposes_unet_in_app_inputs() -> None:
     unet_stems = []
     for path in suite_json_paths(WF):
