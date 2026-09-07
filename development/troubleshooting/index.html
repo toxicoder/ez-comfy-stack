@@ -2004,6 +2004,11 @@
 <td>Pull latest (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../glossary/#workflow" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">workflow</span> no longer mounts into <code>ComfyUI/</code> before clone). <code>./scripts/manage.sh logs</code> or <code>docker logs ez-comfy-studio</code>. Reset poisoned volume: <code>./scripts/manage.sh stop &amp;&amp; docker volume rm ez-comfy-state</code> then <code>start</code> again. Stop other GPU containers if needed</td>
 </tr>
 <tr>
+<td><code>unrecognized arguments: --normalvram</code> then container exits</td>
+<td>Entrypoint still passed <code>--normalvram</code>; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> v0.34+ removed that flag (default VRAM is implied)</td>
+<td>Pull latest. <code>entrypoint.sh</code> is bind-mounted — no image rebuild. <code>./scripts/manage.sh stop</code> then <code>start</code>. Confirm logs show Kitchen on :8188, not argparse help</td>
+</tr>
+<tr>
 <td><code>start</code> returns while logs still downloading torch</td>
 <td>Normal cold install; multi‑GB wheels</td>
 <td>Leave it running; <code>start</code> streams logs by default. Re-attach: <code>./scripts/manage.sh logs</code>. Markers: <code>[comfy-install] ══ step N/12 ══</code> (or <code>Docker phase: …</code> during image prebuild)</td>

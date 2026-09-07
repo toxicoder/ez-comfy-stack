@@ -1649,8 +1649,8 @@ tags: [learn, gb10, unified-memory, safety, docker, <span class="ez-term" tabind
 </thead>
 <tbody>
 <tr>
-<td><code>--normalvram</code> + offload flags</td>
-<td>Unified memory. <strong>Not</strong> <code>--highvram</code></td>
+<td>Default VRAM + offload flags</td>
+<td>Unified memory. Omit <code>--highvram</code> / <code>--gpu-only</code>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> dropped <code>--normalvram</code></td>
 </tr>
 <tr>
 <td><code>patch_unified_memory_copy.py</code></td>
@@ -1692,7 +1692,7 @@ tags: [learn, gb10, unified-memory, safety, docker, <span class="ez-term" tabind
 <tbody>
 <tr>
 <td><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ghcr" data-href="../../glossary/#ghcr" title="GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.">GHCR</span> image</strong></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> + PyTorch (<code>us-safe-studio</code> / <code>-development</code>)</td>
+<td>ComfyUI + PyTorch (<code>us-safe-studio</code> / <code>-development</code>)</td>
 <td>Re-pull / rebuild. <strong>No weights</strong></td>
 </tr>
 <tr>
