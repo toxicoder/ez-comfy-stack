@@ -84,6 +84,17 @@ ${MODELS_DIR}/
   hub/                  # HF cache (optional)
 ```
 
+When the default pack moves (LTX 2.3 → 2.5 already happened), **reap** the old tree — do not wait for disk-full:
+
+```bash
+./scripts/manage.sh models-status
+./scripts/manage.sh reap-models --plan
+./scripts/manage.sh reap-models --apply --class junk --yes
+./scripts/manage.sh reap-models --apply --class superseded --quarantine --yes
+```
+
+`manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete weights. `reap-models --plan` is the default; `--apply` requires `--yes`. Shared files (`flux2-vae`, ACE-Step AIO) stay in the keep-set so `--drop-pack` cannot eat them.
+
 `download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/…` file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.
 
 This matches the lab hostPath pattern so K8s and Docker demos can share weights.

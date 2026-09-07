@@ -136,6 +136,7 @@ sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
+| Disk full / leftover LTX-2.3 snapshot | No stack-wide reap; LTX 2.3 tree still on disk after 2.5 | `./scripts/manage.sh reap-models --plan` then `--apply --class superseded --quarantine --yes`. `cleanup` does **not** delete weights. After two weeks: `reap-models drop-quarantine --older-than 14d --yes` |
 | Empty models in UI | Downloads not run | `./scripts/utilities/download-image.sh status --tier fast`; `download-wan.sh status --tier 5b`; `download-ltx.sh status --tier 2.5`; check `${MODELS_DIR}` mount |
 | Missing `ae.safetensors` / `z_image_turbo_*.safetensors` | **Z-Image** template, not the default stack | Load **klein-still-draft-lab-example**. Default still is Klein 4B Apache (see [licenses](licenses.md)). Optional `download-image --tier zimage` |
 | Missing `flux-2-klein-4b-fp8` / Wan / LTX-2.5 in **\*-lab-example** graphs | Weights not on host and/or Comfy `models/*` not symlinked to host | 1) `./scripts/manage.sh download-models` 2) `ls "${MODELS_DIR}/comfy/diffusion_models"` 3) `docker exec ez-comfy-studio ls -la /comfy-state/ComfyUI/models/diffusion_models` — should be a **symlink** to `/models/comfy/diffusion_models`. LTX-2.5 is gated: set `HF_TOKEN` and accept the Lightricks license |

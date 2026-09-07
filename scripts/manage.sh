@@ -124,6 +124,8 @@ Commands:
   reset-hf-partials [--yes] [--force]
                     Delete *.incomplete under MODELS_DIR (finished weights kept)
   cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
+  models-status     Disk bible: keep-set + refuse list (does not delete)
+  reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
 
 Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
@@ -334,6 +336,8 @@ cmd_doctor() {
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
   warn_banned_minimax_weights "${MODELS_DIR}"
+  bash "${REPO_ROOT}/scripts/utilities/models-manifest.sh" status >/dev/null || true
+  log "models-status: see manage.sh models-status / reap-models --plan (doctor does not reap)"
   log "License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md"
   if [[ ! -f $(lab_compose_file) ]]; then
     err "compose file missing: $(lab_compose_file)"
@@ -856,15 +860,45 @@ cmd_download_limit() {
 }
 
 #######################################
+# Print keep-set / refuse from the disk bible (does not delete).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  models-manifest.sh args
+# Outputs:
+#   status logs
+# Returns:
+#   0
+#######################################
+cmd_models_status() {
+  bash "${REPO_ROOT}/scripts/utilities/models-manifest.sh" status "$@"
+}
+
+#######################################
+# Dispatch reap-models (default --plan).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  reap-models flags
+# Outputs:
+#   plan/apply logs
+# Returns:
+#   reap-models status
+#######################################
+cmd_reap_models() {
+  bash "${REPO_ROOT}/scripts/utilities/reap-models.sh" "$@"
+}
+
+#######################################
 # After DELETE confirmation, remove Compose volumes (Comfy install state only).
 # Globals:
 #   See file header / caller environment.
 # Arguments:
 #   None
 # Outputs:
-#   Status via log/warn/err on stderr unless noted.
+#   Status via log/warn/err
 # Returns:
-#   0 on success/abort; 1 on hard confirm failure.
+#   0 on success/abort; 1 on hard confirm failure
 #######################################
 cmd_cleanup() {
   require_delete_confirm || {
@@ -911,6 +945,8 @@ main() {
     download-limit) cmd_download_limit "$@" ;;
     clear-hf-locks) cmd_clear_hf_locks ;;
     reset-hf-partials) cmd_reset_hf_partials "$@" ;;
+    models-status) cmd_models_status "$@" ;;
+    reap-models) cmd_reap_models "$@" ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"
