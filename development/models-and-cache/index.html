@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/models-and-cache/">
       
       
-        <link rel="prev" href="../spark-farm/">
+        <link rel="prev" href="../splat-sidecar/">
       
       
         <link rel="next" href="../download-limit/">
@@ -722,6 +722,90 @@
     
   
     Spark farm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../studio-sidecars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio sidecars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blender-gb10-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blender GB10 sidecar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../splat-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Splat sidecar
   
 
     
@@ -1572,8 +1656,11 @@
 <p>Opt-in packs (not <code>download-models</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>fun-inp<span class="w">   </span><span class="c1"># Fun InP A14B FLF, ~47 GB Apache</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>./scripts/manage.sh<span class="w"> </span>download-restore<span class="w"> </span>--tier<span class="w"> </span>seedvr2-3b<span class="w">   </span><span class="c1"># SeedVR2-3B post-concat, ~15 GB Apache</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>trellis2<span class="w">          </span><span class="c1"># native TRELLIS.2 MIT, no nvdiffrast</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>da3-base<span class="w">          </span><span class="c1"># DA3-BASE Apache (DA3-LARGE refused)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>vace<span class="w">      </span><span class="c1"># Wan 2.1 VACE 1.3B join, ~6 GB Apache</span>
 </code></pre></div>
-<p>Unload LTX before Fun InP. SeedVR2 is restore-only after concat. <code>reap-models --drop-pack</code> cannot eat shared VAEs.</p>
+<p>Unload LTX before Fun InP / TRELLIS / VACE. SeedVR2 is restore-only after concat. <code>reap-models --drop-pack</code> cannot eat shared VAEs. SuperSplat is a <a href="../splat-sidecar/">host viewer</a>, not a download.</p>
 <p><code>manage.sh cleanup</code> is <strong>volume-only</strong> (named volume <code>comfy-state</code>). It does <strong>not</strong> delete weights. <code>reap-models --plan</code> is the default; <code>--apply</code> requires <code>--yes</code>. Shared files (<code>flux2-vae</code>, ACE-Step AIO) stay in the keep-set so <code>--drop-pack</code> cannot eat them.</p>
 <p><code>download-models</code> links weights into <code>comfy/*</code> with <strong>relative</strong> symlinks (e.g. <code>../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors</code>). That way the same tree resolves on the host (<code>MODELS_DIR=/mnt/models</code>) and inside the container (bind-mounted at <code>/models</code>). Absolute <code>/mnt/models/…</code> file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.</p>
 <p>This matches the lab hostPath pattern so K8s and Docker demos can share weights.</p>

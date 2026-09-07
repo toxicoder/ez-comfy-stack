@@ -6,29 +6,35 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Simplified Visual Generative AI (ComfyUI US-safe local studio) for a single NVIDIA DGX Spark">
+        <meta name="description" content="Host Blender next to the US-safe studio. Refuses if Compose is up. Never in the Dockerfile.">
       
       
       
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/blender-gb10-sidecar/">
       
+      
+        <link rel="prev" href="../studio-sidecars/">
+      
+      
+        <link rel="next" href="../splat-sidecar/">
       
       
         
       
       
-      <link rel="icon" href="/ez-comfy-stack/development/assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>ez-comfy-stack</title>
+        <title>Blender GB10 sidecar - ez-comfy-stack</title>
       
     
     
-      <link rel="stylesheet" href="/ez-comfy-stack/development/assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="/ez-comfy-stack/development/assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -47,9 +53,9 @@
       
     
     
-      <link rel="stylesheet" href="/ez-comfy-stack/development/stylesheets/extra.css">
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("/ez-comfy-stack/development",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -73,6 +79,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#blender-gb10-sidecar" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -89,7 +100,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/ez-comfy-stack/development/." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+    <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -109,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Blender GB10 sidecar
             
           </span>
         </div>
@@ -216,7 +227,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/ez-comfy-stack/development/." class="md-tabs__link">
+      <a href=".." class="md-tabs__link">
         
   
   
@@ -237,7 +248,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="/ez-comfy-stack/development/getting-started/" class="md-tabs__link">
+        <a href="../getting-started/" class="md-tabs__link">
           
   
   
@@ -253,11 +264,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="/ez-comfy-stack/development/visual-generative-ai/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../visual-generative-ai/" class="md-tabs__link">
           
   
   
@@ -277,7 +290,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="/ez-comfy-stack/development/models-and-cache/" class="md-tabs__link">
+        <a href="../models-and-cache/" class="md-tabs__link">
           
   
   
@@ -297,7 +310,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="/ez-comfy-stack/development/project-conventions/" class="md-tabs__link">
+        <a href="../project-conventions/" class="md-tabs__link">
           
   
   
@@ -337,7 +350,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/ez-comfy-stack/development/." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+    <a href=".." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -367,7 +380,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -446,7 +459,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/getting-started/" class="md-nav__link">
+      <a href="../getting-started/" class="md-nav__link">
         
   
   
@@ -474,7 +487,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/prompting/" class="md-nav__link">
+      <a href="../prompting/" class="md-nav__link">
         
   
   
@@ -502,7 +515,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/licenses/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
@@ -534,26 +547,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -571,7 +589,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -589,7 +607,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/visual-generative-ai/" class="md-nav__link">
+      <a href="../visual-generative-ai/" class="md-nav__link">
         
   
   
@@ -617,7 +635,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/podcast/" class="md-nav__link">
+      <a href="../podcast/" class="md-nav__link">
         
   
   
@@ -645,7 +663,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/music/" class="md-nav__link">
+      <a href="../music/" class="md-nav__link">
         
   
   
@@ -673,7 +691,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/shorts/" class="md-nav__link">
+      <a href="../shorts/" class="md-nav__link">
         
   
   
@@ -701,7 +719,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/spark-farm/" class="md-nav__link">
+      <a href="../spark-farm/" class="md-nav__link">
         
   
   
@@ -729,7 +747,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/studio-sidecars/" class="md-nav__link">
+      <a href="../studio-sidecars/" class="md-nav__link">
         
   
   
@@ -754,10 +772,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/blender-gb10-sidecar/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blender GB10 sidecar
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -773,6 +818,48 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#operator-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-this-is-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this is not
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -785,7 +872,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/splat-sidecar/" class="md-nav__link">
+      <a href="../splat-sidecar/" class="md-nav__link">
         
   
   
@@ -872,7 +959,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/models-and-cache/" class="md-nav__link">
+      <a href="../models-and-cache/" class="md-nav__link">
         
   
   
@@ -900,7 +987,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/download-limit/" class="md-nav__link">
+      <a href="../download-limit/" class="md-nav__link">
         
   
   
@@ -928,7 +1015,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/reboot-safety/" class="md-nav__link">
+      <a href="../reboot-safety/" class="md-nav__link">
         
   
   
@@ -956,7 +1043,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/troubleshooting/" class="md-nav__link">
+      <a href="../troubleshooting/" class="md-nav__link">
         
   
   
@@ -1043,7 +1130,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/ez-comfy-stack/development/project-conventions/" class="md-nav__link">
+      <a href="../project-conventions/" class="md-nav__link">
         
   
   
@@ -1088,6 +1175,38 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#operator-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-this-is-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this is not
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1098,10 +1217,65 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset">
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div>
                 
-  <h1>404 - Not found</h1>
+                  
 
+
+  
+  
+
+
+<h1 id="blender-gb10-sidecar">Blender GB10 sidecar<a class="headerlink" href="#blender-gb10-sidecar" title="Permanent link">&para;</a></h1>
+<p><strong>What's on this page</strong></p>
+<ul>
+<li>Why Blender stays on the host</li>
+<li><code>manage.sh blender</code> occupancy refuse</li>
+<li>Install hint (not a packager)</li>
+</ul>
+<p><strong>What this enables</strong></p>
+<ul>
+<li>Optional DCC pass on the same Spark after Comfy is stopped</li>
+<li>No Blender layer in <code>docker/Dockerfile</code> (image stays Comfy + torch)</li>
+</ul>
+<div class="admonition danger">
+<p class="admonition-title">Stop Comfy first</p>
+<p><code>blender.sh</code> <strong>dies</strong> if the studio compose project is running (same occupancy rule as NVENC proxies). <code>restart: "no"</code> is unchanged.</p>
+</div>
+<hr />
+<h2 id="operator-path">Operator path<a class="headerlink" href="#operator-path" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w"> </span>--<span class="w"> </span>--background
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># or: ./scripts/utilities/blender.sh -- /path/to/scene.blend</span>
+</code></pre></div>
+<p>If <code>blender</code> is not on <code>PATH</code>, the script prints an install hint and exits 1. This stack does <strong>not</strong> apt/pip/Docker-install Blender.</p>
+<p>Exit <strong>2</strong> means compose is still up:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>blender
+</code></pre></div>
+<h2 id="what-this-is-not">What this is not<a class="headerlink" href="#what-this-is-not" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Not a Compose profile (unlike optional <a href="../shorts/">studio-ui</a>)</li>
+<li>Not inside the Comfy container</li>
+<li>Not a reason to weaken <code>mem_limit: 90g</code> or headroom <code>min_host_free_gib: 28</code></li>
+</ul>
+<p>TRELLIS.2 / DA3-BASE weights: <a href="../studio-sidecars/">Studio sidecars</a>. Splat viewer: <a href="../splat-sidecar/">Splat sidecar</a>.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -1146,10 +1320,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "/ez-comfy-stack/development", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "/ez-comfy-stack/development/assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="/ez-comfy-stack/development/assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

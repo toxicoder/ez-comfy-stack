@@ -735,6 +735,90 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../studio-sidecars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio sidecars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blender-gb10-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blender GB10 sidecar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../splat-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Splat sidecar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1643,6 +1727,26 @@
 <td>take-promote missing file</td>
 <td>No <code>takes/&lt;id&gt;/tNNN.mp4</code></td>
 <td>Print the shot (take increments on <code>running</code>), then promote</td>
+</tr>
+<tr>
+<td><code>blender</code> exit 2 / occupancy</td>
+<td>Compose still up</td>
+<td><code>./scripts/manage.sh stop</code> then retry. Host Blender is never in the Dockerfile</td>
+</tr>
+<tr>
+<td><code>download-3d --tier da3-large</code> refused</td>
+<td>DA3-LARGE is banned</td>
+<td>Use <code>--tier da3-base</code>. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused</td>
+</tr>
+<tr>
+<td>TRELLIS / VACE OOM next to LTX</td>
+<td>Two heavy jobs</td>
+<td>Stop Comfy or unload LTX first. VACE join is 17 frames (<code>1+8n</code>); MagCache off</td>
+</tr>
+<tr>
+<td>SuperSplat missing in the image</td>
+<td>Host viewer, not Docker</td>
+<td><a href="../splat-sidecar/">Splat sidecar</a>. Do not add it to <code>docker/Dockerfile</code></td>
 </tr>
 <tr>
 <td>Empty models in UI</td>
