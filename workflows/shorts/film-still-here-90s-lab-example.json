@@ -14244,7 +14244,8 @@
     "lab_film": "still-here",
     "lab_slug": "stillhere",
     "lab_ltx_av": true,
-    "lab_one_click": true
+    "lab_one_click": true,
+    "lab_disclosure": "This video includes AI-generated picture and sound (LTX Community License). Do not strip provenance. Not legal advice."
   },
   "version": 0.4
 }

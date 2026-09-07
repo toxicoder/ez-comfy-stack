@@ -50,6 +50,7 @@ FROZEN_MANAGE_VERBS=(
   film-resume
   film-export-otio
   film-proxies
+  take-promote
   download-restore
   models-status
   reap-models
@@ -75,6 +76,7 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"film-resume"* ]]
   [[ "${output}" == *"film-export-otio"* ]]
   [[ "${output}" == *"film-proxies"* ]]
+  [[ "${output}" == *"take-promote"* ]]
   [[ "${output}" == *"download-restore"* ]]
   [[ "${output}" == *"reap-models"* ]]
   [[ "${output}" == *"models-status"* ]]
@@ -203,6 +205,8 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -ne 0 ]
   run cmd_film_proxies --help
   [ "${status}" -eq 0 ]
+  run cmd_take_promote
+  [ "${status}" -ne 0 ]
   run cmd_download_restore --help
   [ "${status}" -eq 0 ]
   run cmd_models_status

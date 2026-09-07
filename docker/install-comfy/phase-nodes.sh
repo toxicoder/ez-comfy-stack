@@ -294,6 +294,18 @@ phase_nodes() {
   clone_node "https://github.com/Zehong-Ma/ComfyUI-MagCache.git" "ComfyUI-MagCache" \
     "${COMFYUI_MAGCACHE_REF:-}" ||
     warn "ComfyUI-MagCache unavailable (Wan 5B draft MagCache extra still documents the pin)"
+  # OpenCut MIT embed (not the Rust rewrite, not a hosted Next.js stack).
+  clone_node "https://github.com/jtydhr88/ComfyUI-OpenCut.git" "ComfyUI-OpenCut" \
+    "${COMFYUI_OPENCUT_REF:-}" ||
+    warn "ComfyUI-OpenCut unavailable (timeline embed is optional)"
+  # GPL LTX Director: clone into the Comfy volume only when opted in. Not vendored.
+  if [[ ${LAB_ENABLE_LTX_DIRECTOR:-0} == "1" ]]; then
+    clone_node "https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI.git" \
+      "WhatDreamsCost-ComfyUI" "${COMFYUI_LTX_DIRECTOR_REF:-}" ||
+      warn "LTX Director clone failed"
+  else
+    log "LTX Director skipped (set LAB_ENABLE_LTX_DIRECTOR=1 to clone GPL pin into the volume)"
+  fi
   install_sage_wheel_if_pinned
   install_nunchaku_wheel
   install_llama_cpp_cpu

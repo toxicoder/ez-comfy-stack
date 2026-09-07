@@ -136,12 +136,49 @@ class EZFilmConcat:
         }
 
 
+FILM_DISCLOSURE = (
+    "This video includes AI-generated picture and sound (LTX Community License). "
+    "Do not strip provenance. Not legal advice."
+)
+
+
+class EZFilmDisclosure:
+    """LTX Community License end-card text (disclose AI media)."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "text": ("STRING", {"default": "", "multiline": True}),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("text",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/film"
+    DESCRIPTION = (
+        "Prepend the LTX Community License AI-media disclosure. "
+        "Idempotent. Not legal advice."
+    )
+
+    def run(self, text: str = "") -> tuple[str]:
+        body = str(text or "").strip()
+        if body.startswith(FILM_DISCLOSURE):
+            return (body,)
+        if not body:
+            return (FILM_DISCLOSURE,)
+        return (f"{FILM_DISCLOSURE}\n\n{body}",)
+
+
 NODE_CLASS_MAPPINGS = {
     "EZUnloadModels": EZUnloadModels,
     "EZFilmConcat": EZFilmConcat,
+    "EZFilmDisclosure": EZFilmDisclosure,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "EZUnloadModels": "Unload models (pass IMAGE)",
     "EZFilmConcat": "Save 90s film (MP4) — open node for preview",
+    "EZFilmDisclosure": "LTX AI-media disclosure (end-card)",
 }

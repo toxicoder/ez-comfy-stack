@@ -49,6 +49,12 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'ComfyUI-MagCache' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'LAB_ENABLE_LTX_DIRECTOR' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'ComfyUI-OpenCut' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'MiniMaxH3-Director' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
   run grep -F 'ensure_lab_video_nodes' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'ensure_lab_video_nodes' "${REPO_ROOT}/docker/install-comfy.sh"

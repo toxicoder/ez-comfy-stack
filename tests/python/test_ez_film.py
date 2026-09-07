@@ -31,7 +31,13 @@ from ez_film.concat import (  # noqa: E402
     resolve_shot_path,
     stitch_film,
 )
-from ez_film.nodes import EZFilmConcat, EZUnloadModels, NODE_CLASS_MAPPINGS  # noqa: E402
+from ez_film.nodes import (  # noqa: E402
+    EZFilmConcat,
+    EZFilmDisclosure,
+    EZUnloadModels,
+    FILM_DISCLOSURE,
+    NODE_CLASS_MAPPINGS,
+)
 from ez_film.shots import (  # noqa: E402
     DEFAULT_CAP_SECONDS,
     SHOT_COUNT,
@@ -44,7 +50,11 @@ SHORTS = ROOT / "workflows" / "shorts"
 
 def test_pack_imports_without_comfy() -> None:
     assert ez_film.NODE_CLASS_MAPPINGS == NODE_CLASS_MAPPINGS
-    assert set(NODE_CLASS_MAPPINGS) == {"EZUnloadModels", "EZFilmConcat"}
+    assert set(NODE_CLASS_MAPPINGS) == {
+        "EZUnloadModels",
+        "EZFilmConcat",
+        "EZFilmDisclosure",
+    }
     assert EZUnloadModels.CATEGORY == "ez-comfy/film"
     assert EZFilmConcat.CATEGORY == "ez-comfy/film"
     assert EZFilmConcat.OUTPUT_NODE is True
@@ -54,6 +64,15 @@ def test_pack_imports_without_comfy() -> None:
     assert spec["required"]["xfade_cs"][1]["default"] == 0
     for index in range(1, 19):
         assert spec["required"][f"shot_{index:02d}"][0] == "VHS_FILENAMES"
+
+
+def test_film_disclosure_idempotent() -> None:
+    assert "LTX Community License" in FILM_DISCLOSURE
+    assert "Wav2Lip" not in FILM_DISCLOSURE
+    node = EZFilmDisclosure()
+    first = node.run("go-see")[0]
+    assert first.startswith(FILM_DISCLOSURE)
+    assert node.run(first)[0] == first
 
 
 def test_film_slug_and_publish_path(tmp_path: Path) -> None:
