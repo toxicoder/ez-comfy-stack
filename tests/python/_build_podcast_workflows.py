@@ -42,7 +42,7 @@ AUDIO_NOTE_A = f"""## podcast-audio-first-lab-example
 
 US-safe audio-first episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
 
-1. Edit the script (human part). Enhance defaults **off** so Queue works offline.
+1. Edit the script (human part). Prompt enhance is **on**; after Queue the script node shows the rewritten lines. Turn Enhance off to pin widget text.
 2. Disclosure is prepended by the node (do not type it): {DISCLOSURE_TEXT}
 3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.
 4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck −15 dB under speech.
@@ -57,7 +57,7 @@ AUDIO_NOTE_B = f"""## podcast-radio-drama-lab-example
 
 US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.
 
-- Writer flavor `radio_drama` (enhance **off**). Announcer + two Kokoro stock voices.
+- Writer flavor `radio_drama` (enhance **on**). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
 - Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session — not a one-graph film.
 - Cover: Queue **{COVER_GRAPH}** separately.
@@ -197,7 +197,7 @@ def build_audio_first() -> dict:
         [500, 80],
         [420, 280],
         "ez_podcast_script",
-        [SEED_SCRIPT, False, "podcast_two_host"],
+        [SEED_SCRIPT, True, "podcast_two_host"],
         outputs=[g.out("script", "STRING", [])],
     )
     g.add(
@@ -372,7 +372,7 @@ def build_radio_drama() -> dict:
         [500, 80],
         [420, 300],
         "ez_radio_script",
-        [RADIO_SEED_SCRIPT, False, "radio_drama"],
+        [RADIO_SEED_SCRIPT, True, "radio_drama"],
         outputs=[g.out("script", "STRING", [])],
     )
     g.add(

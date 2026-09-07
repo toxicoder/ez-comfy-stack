@@ -223,10 +223,10 @@
       },
       "widgets_values": [
         1280,
-        720,
+        704,
         1
       ],
-      "title": "Latent 1280x720 batch 1"
+      "title": "Latent 1280x704 batch 1"
     },
     {
       "id": 7,
@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-thumbnail-lab-example\n\nYouTube thumbnail still (Klein 4B). Default 1280\u00d7720. Prefix `ez_thumbnail`.\nKeep the subject large and readable at small sizes. Do not burn in titles \u2014 add text in your editor.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-thumbnail-lab-example\n\nYouTube thumbnail still (Klein 4B). Default 1280\u00d7720. Prefix `ez_thumbnail`.\nKeep the subject large and readable at small sizes. Do not burn in titles \u2014 add text in your editor.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -554,7 +554,7 @@
         0
       ]
     },
-    "lab_note": "## klein-thumbnail-lab-example\n\nYouTube thumbnail still (Klein 4B). Default 1280\u00d7720. Prefix `ez_thumbnail`.\nKeep the subject large and readable at small sizes. Do not burn in titles \u2014 add text in your editor.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## klein-thumbnail-lab-example\n\nYouTube thumbnail still (Klein 4B). Default 1280\u00d7720. Prefix `ez_thumbnail`.\nKeep the subject large and readable at small sizes. Do not burn in titles \u2014 add text in your editor.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Klein 4B YouTube thumbnail 1280x720",
     "lab_app_mode": {
       "enabled": true,

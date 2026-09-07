@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 import sys
 
-from _wire_prompt_enhance import _rewrite_enhance_blurb, normalize_enhance_widgets
+from _wire_prompt_enhance import _rewrite_enhance_blurb, enable_lab_graph, normalize_enhance_widgets
 from _stamp_app_mode import stamp_suite_graph
 from _lab_layout import (
     GROUP_TITLE_INSET,
@@ -810,7 +810,7 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
 
 Four Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.
 
-Turn Enhance off on IDENTITY to pin the bible.
+Identity-mode enhance is on for the bible (camera-free).
 """,
         description="Klein 4B four-still lake-house views, locked inventory",
     )
@@ -867,7 +867,7 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
     enh = _node(g, "EZLTXPromptEnhance")
     enh["widgets_values"] = [
         prompt,
-        False,
+        True,
         "t2v",
         "5 seconds, 24 fps, locked camera B-roll",
         LTX_BROLL_AUDIO,
@@ -904,7 +904,7 @@ Disclose AI-generated media. No score.
         shots=board_shots,
         note=f"""## klein-storyboard-6up-lab-example
 
-Six Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`…`06`. Independent T2I, same seed, locked inventory. Turn Enhance off on IDENTITY to pin the bible.
+Six Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`…`06`. Independent T2I, same seed, locked inventory. Identity-mode enhance is on for the bible.
 """,
         description="Klein 4B six-frame storyboard pack, new cameras",
     )
@@ -998,7 +998,7 @@ def _klein_pack(
     if persist not in ("view", "state"):
         raise SystemExit(f"persist must be view or state, got {persist}")
     negative = neg if neg is not None else KLEIN_NEG_STILL
-    enhance_on = persist != "view"
+    enhance_on = True
     nodes: list[dict] = []
     links: list[list] = []
     link_id = 0
@@ -1064,7 +1064,7 @@ def _klein_pack(
             [40, 510],
             [420, 420],
             "IDENTITY",
-            [identity, enhance_on, "t2i", hint, "none"],
+            [identity, enhance_on, "identity", hint, "none"],
             3,
             outputs=[out("prompt", "STRING", ident_links)],
         )
@@ -1684,7 +1684,7 @@ Prefixes `ez_tod_01`…`04`. Change only time of day.
 
 Wide / medium / close of one subject (Klein 4B, lock=view). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed, locked inventory — new lens and framing, not copies of MEDIUM.
 
-Turn Enhance off on IDENTITY to pin the bible.
+Identity-mode enhance is on for the bible (camera-free).
 """,
         description="Klein 4B wide/medium/close angle pack, new cameras",
     )
@@ -1854,6 +1854,7 @@ def main() -> None:
     build_creator_toolkit_v2()
     for path in sorted(WF.rglob("*-lab-example.json")):
         graph = _load(path)
+        enable_lab_graph(graph)
         normalize_enhance_widgets(graph)
         stamp_suite_graph(graph)
         ensure_group_title_inset(graph)

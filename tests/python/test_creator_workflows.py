@@ -127,10 +127,14 @@ def _identity_plate_contract(stem: str, prefixes: set[str], persist: str = "stat
     encode_n = sum(1 for n in graph["nodes"] if n.get("type") == "VAEEncode")
     ref_n = sum(1 for n in graph["nodes"] if n.get("type") == "ReferenceLatent")
     enhance = [n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"]
-    assert len(enhance) == 1
-    assert enhance[0]["widgets_values"][1] is (persist == "state")
-    assert enhance[0]["widgets_values"][2] == "t2i"
-    assert enhance[0]["widgets_values"][-1] == "none"
+    assert enhance
+    ident = next(
+        (n for n in enhance if "IDENTITY" in str(n.get("title") or "").upper()),
+        enhance[0],
+    )
+    assert ident["widgets_values"][1] is True
+    assert ident["widgets_values"][2] in ("identity", "t2i")
+    assert ident["widgets_values"][-1] == "none"
     joins = [n for n in graph["nodes"] if n.get("type") == "EZPromptJoin"]
     assert len(joins) == len(prefixes)
     for join in joins:
@@ -265,10 +269,10 @@ def test_platform_pack_prefixes_sizes_and_independent_t2i() -> None:
     assert graph["id"] == "klein-platform-pack-lab-example"
     assert graph["extra"]["lab_app_mode"]["lane"] == "produce"
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
-    assert graph["extra"]["lab_app_mode"]["enhance_off_identity"] is True
+    assert graph["extra"]["lab_app_mode"]["enhance_off_identity"] is False
     assert not any(n.get("type") == "ReferenceLatent" for n in graph["nodes"])
     enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert enhance["widgets_values"][1] is False
+    assert enhance["widgets_values"][1] is True
     saves = {
         n["widgets_values"][0]: n
         for n in graph["nodes"]

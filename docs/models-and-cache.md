@@ -30,9 +30,9 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | --- | --- | --- |
 | **GHCR image** | ComfyUI + PyTorch | Klein / Wan / LTX weights |
 | **MODELS_DIR** | Weights + `comfy/` relative symlinks | The Comfy venv |
-| **comfy-state volume** | Comfy install, custom nodes | Host PNGs/MP4s (`COMFY_OUTPUT_DIR`) |
+| **comfy-state volume** | Comfy install, custom nodes | Host PNGs/MP4s, start images, and Comfy `user/` (`COMFY_OUTPUT_DIR`) |
 
-`cleanup` (type `DELETE`) removes **comfy-state only**. Concepts: [Hardware, memory, and safety](learn/hardware.md).
+`cleanup` (type `DELETE`) removes **comfy-state only**. Generated media, LoadImage start frames (`${COMFY_OUTPUT_DIR}/input`), and Comfy user workflows (`${COMFY_OUTPUT_DIR}/comfy-user`) stay on the host. Concepts: [Hardware, memory, and safety](learn/hardware.md).
 
 ---
 
@@ -223,7 +223,7 @@ Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `workflows/shorts/*.json` (name pattern **`*-lab-example.json`**). Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
+Seeded into Comfy `user/default/workflows/` from host `workflows/*.json`, `workflows/shorts/*.json`, `workflows/dcc/*.json`, and `workflows/optional/*.json` (name pattern **`*-lab-example.json`**). That directory is bind-mounted from `${COMFY_OUTPUT_DIR}/comfy-user` so operator graphs survive `cleanup`. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
 
 | Graph | Notes |
 | --- | --- |

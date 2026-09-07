@@ -324,7 +324,8 @@ def compile_film(
             "identity": parsed["identity"],
             "print": meta["print"],
             "identity_seed": int(meta["identity_seed"]),
-            "identity_enhance": False,
+            "identity_enhance": meta["identity_enhance"].lower()
+            in ("true", "1", "on", "yes"),
             "card": shot_card(sid, status="pending"),
         }
         (dest / "shots" / f"{sid}.json").write_text(

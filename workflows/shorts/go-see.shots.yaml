@@ -9,7 +9,7 @@ total_shots: 18
 publish_cap_s: 90.00
 print: ltx
 identity_seed: 42
-identity_enhance: false
+identity_enhance: true
 identity_look: |
   A HD 3D game-engine pre-rendered cutscene still, first-person body-cam at dusk. Unmarked electric-cyan coat sleeves with circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Neon-wet megacity rooftops and unmarked spires fill the view. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
 shots:

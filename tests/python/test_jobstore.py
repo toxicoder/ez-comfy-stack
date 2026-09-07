@@ -44,7 +44,7 @@ def test_compile_go_see(tmp_path: Path) -> None:
     assert stub["template"] == "ltx-i2v-5s-lab-example.json"
     assert "electric-cyan" in stub["identity"]
     assert "olive windbreaker" not in stub["identity"]
-    assert stub["identity_enhance"] is False
+    assert stub["identity_enhance"] is True
     assert stub["identity_seed"] == 42
     assert stub["print"] == "ltx"
     assert stub["card"]["id"] == "01"

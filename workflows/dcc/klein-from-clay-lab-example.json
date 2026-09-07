@@ -381,7 +381,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **off**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -455,12 +455,12 @@
       },
       "widgets_values": [
         "Keep the clay blocking, camera, and silhouette from the start image. Finish as a HD 3D game-engine pre-rendered cutscene still: PBR materials, cinematic three-point light, unmarked surfaces empty of lettering. Do not redesign layout.",
-        false,
+        true,
         "edit",
         "YouTube 16:9 still from clay",
         "none"
       ],
-      "title": "Klein Prompt Enhance (off, edit)"
+      "title": "Klein Prompt Enhance (edit)"
     },
     {
       "id": 13,
@@ -674,26 +674,16 @@
         0
       ]
     },
-    "lab_note": "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **off**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
-    "lab_description": "Klein 4B edit of DCC clay first.png. Enhance off. 1280x704. Seed 42.",
+    "lab_note": "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_description": "Klein 4B edit of DCC clay first.png. Enhance on. 1280x704. Seed 42.",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
       "lane": "dcc",
       "occupancy": "klein",
-      "enhance_off_identity": true,
+      "enhance_off_identity": false,
       "handoff": []
-    },
-    "lab_dcc": {
-      "enhance": false,
-      "mode": "edit",
-      "seed": 42,
-      "size": [
-        1280,
-        704
-      ],
-      "prefix": "ez_clay_hero"
     },
     "linearData": {
       "inputs": [
@@ -734,7 +724,17 @@
         9
       ]
     },
-    "linearMode": true
+    "linearMode": true,
+    "lab_dcc": {
+      "enhance": true,
+      "mode": "edit",
+      "seed": 42,
+      "size": [
+        1280,
+        704
+      ],
+      "prefix": "ez_clay_hero"
+    }
   },
   "version": 0.4
 }

@@ -7,7 +7,7 @@
 # Safety:
 #   - restart: "no" — never auto-start after host reboot (remote SSH safety)
 #   - mem_limit / mem_reservation leave host headroom for OS and interactive SSH
-#   - host models at MODELS_DIR; generated media at COMFY_OUTPUT_DIR; Comfy install on named volume only
+#   - host models at MODELS_DIR; generated media, input, and Comfy user/ at COMFY_OUTPUT_DIR; Comfy install on named volume only
 #   - gpus: all (exclusive GPU demo — stop other GPU workloads first)
 
 name: ez-comfy
@@ -92,6 +92,10 @@ services:
       - comfy-state:/comfy-state
       # Generated PNG/MP4 — host path, not the named volume
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs
+      # LoadImage start frames — same host tree, survives cleanup / pin sync
+      - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/input:/inputs
+      # Comfy user/ (lab graphs, operator saves, history) on the host
+      - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user:/comfy-state/ComfyUI/user
       # All example workflows (host tree); entrypoint copies into user workflows
       - ../workflows:/opt/ez-comfy/workflows:ro
       # In-tree custom nodes (prompt-enhance, LTX spatial snap); entrypoint copies packs

@@ -73,7 +73,7 @@ def test_talking_head_graph() -> None:
 def test_identity_sheet_seed_and_size() -> None:
     graph = json.loads((WF / "klein-identity-sheet-lab-example.json").read_text(encoding="utf-8"))
     assert graph["extra"]["lab_identity"]["seed"] == 42
-    assert graph["extra"]["lab_identity"]["enhance"] is False
+    assert graph["extra"]["lab_identity"]["enhance"] is True
     prefixes = [n["widgets_values"][0] for n in graph["nodes"] if n.get("type") == "SaveImage"]
     assert "ez_identity_front" in prefixes
     assert "ez_identity_threequarter" in prefixes
@@ -83,7 +83,7 @@ def test_identity_sheet_seed_and_size() -> None:
             assert int(node["widgets_values"][0]) == 1280
             assert int(node["widgets_values"][1]) == 704
         if node.get("type") == "EZKleinPromptEnhance":
-            assert node["widgets_values"][1] is False
+            assert node["widgets_values"][1] is True
         if node.get("type") == "KSampler":
             assert int(node["widgets_values"][0]) == 42
     blob = json.dumps(graph)

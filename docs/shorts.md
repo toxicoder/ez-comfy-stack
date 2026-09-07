@@ -32,7 +32,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
     1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
     2. Optional: fill **beat-sheet-lab-example** (occupancy **none**, no UNET) and paste into host `workflows/shorts/<slug>.shots.yaml` — YAML is not copied by the entrypoint.
     3. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
-    4. Leave Enhance **off**. Leave LTX **1280×704**. Queue **once**.
+    4. Prompt enhance is **on** (Klein identity mode + 18 LTX i2v rewrites). Leave LTX **1280×704**. Queue **once**.
     5. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
     6. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`). Open **Save 90s film (MP4) — open node for preview** to watch or download it from the Comfy tab.
     7. Copy off the Spark: `scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .`
@@ -101,7 +101,7 @@ LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional exper
 Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). The container entrypoint copies `*.json` and `shorts/*.json` into Comfy `user/default/workflows/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
 
 1. Load one film graph (`film-go-see-90s-run-lab-example` / `film-still-here-90s-lab-example` / `film-switchyard-90s-lab-example`).
-2. Queue **once**. Klein runs first (Enhance **off**, 4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start. Leave LTX **1280×704**.
+2. Queue **once**. Klein runs first (Enhance **on**, identity mode, 4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start (each shot has LTX Prompt Enhance on). Leave LTX **1280×704**.
 3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
 4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (container `/outputs`). Open **Save 90s film (MP4) — open node for preview** to watch or download it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`.
 5. Optional silent rehearsal of one frame: **wan-i2v-shot-lab-example**. Optional single-shot iterate: **ltx-i2v-shot-lab-example**.
@@ -185,7 +185,7 @@ Wave 4 hero path (opt-in, occupancy: one heavy job):
 ./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
 ```
 
-Identity sheet: `klein-identity-sheet-lab-example` (seed **42**, Enhance **off**, 1280×704). Talking-head: `klein-talking-head-lab-example` (LTX A2V freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s.
+Identity sheet: `klein-identity-sheet-lab-example` (seed **42**, Enhance **on**, identity mode, 1280×704). Talking-head: `klein-talking-head-lab-example` (LTX A2V freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s.
 
 ```bash
 ./scripts/manage.sh stop

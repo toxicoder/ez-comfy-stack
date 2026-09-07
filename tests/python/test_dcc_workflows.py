@@ -32,12 +32,12 @@ def test_dcc_graphs_exist_and_ids() -> None:
 def test_klein_from_clay_contract() -> None:
     graph = _load("klein-from-clay-lab-example.json")
     extra = graph["extra"]
-    assert extra["lab_dcc"]["enhance"] is False
+    assert extra["lab_dcc"]["enhance"] is True
     assert extra["lab_dcc"]["seed"] == 42
     assert extra["lab_dcc"]["size"] == [1280, 704]
     enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     widgets = enhance["widgets_values"]
-    assert widgets[1] is False
+    assert widgets[1] is True
     assert widgets[2] == "edit"
     save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_clay_hero"

@@ -109,8 +109,8 @@ def parse_shots_yaml(text: str) -> dict[str, Any]:
     if meta["identity_seed"] != IDENTITY_SEED:
         raise ValueError("identity_seed must be frozen 42")
     enh = meta["identity_enhance"].lower()
-    if enh not in ("false", "0", "off", "no"):
-        raise ValueError("identity Enhance must be off")
+    if enh not in ("true", "false", "1", "0", "on", "off", "yes", "no"):
+        raise ValueError("identity_enhance must be true or false")
 
     ident_m = re.search(r"^identity_look:\s*\|\s*\n((?:  .*\n)+)", text, re.M)
     if not ident_m:

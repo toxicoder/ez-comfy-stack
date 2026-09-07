@@ -186,6 +186,9 @@ ENHANCE_TYPES = (
     "EZKleinPromptEnhance",
     "EZWanPromptEnhance",
     "EZLTXPromptEnhance",
+    "EZAceStepPromptEnhance",
+    "EZRapLyrics",
+    "EZPodcastScript",
 )
 
 
@@ -222,10 +225,9 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "klein-still-hero-lab-example",
         "wan-i2v-5s-lab-example",
         "klein-platform-pack-lab-example",
-        enhance_off_identity=True,
     ),
     "klein-identity-sheet-lab-example": _spec(
-        "inspire", "klein", enhance_off_identity=True
+        "inspire", "klein"
     ),
     "klein-storyboard-6up-lab-example": _spec(
         "inspire",
@@ -239,10 +241,9 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "wan-gif-loop-lab-example",
         "wan-bumper-loop-lab-example",
         "wan-sticker-loop-lab-example",
-        enhance_off_identity=True,
     ),
     "klein-style-lock-lab-example": _spec(
-        "inspire", "klein", enhance_off_identity=True
+        "inspire", "klein"
     ),
     "klein-lighting-trio-lab-example": _spec("inspire", "klein"),
     "klein-camera-angles-lab-example": _spec("inspire", "klein"),
@@ -273,7 +274,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "klein",
         "wan-i2v-5s-lab-example",
         "ltx-i2v-5s-lab-example",
-        enhance_off_identity=True,
     ),
     "klein-thumbnail-lab-example": _spec("produce", "klein"),
     "klein-product-packshot-lab-example": _spec("produce", "klein"),
@@ -292,7 +292,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "klein",
         "wan-i2v-5s-lab-example",
         "ltx-hook-av-lab-example",
-        enhance_off_identity=True,
     ),
     "klein-talking-head-lab-example": _spec("produce", "ltx"),
     "wan-i2v-5s-lab-example": _spec(
@@ -316,20 +315,20 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "ltx-weather-broll-lab-example": _spec("produce", "ltx"),
     "ltx-interior-ambience-lab-example": _spec("produce", "ltx"),
     "film-go-see-90s-run-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True, enhance_off_identity=True
+        "film", "film", default_view="graph", film_minimal=True
     ),
     "film-still-here-90s-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True, enhance_off_identity=True
+        "film", "film", default_view="graph", film_minimal=True
     ),
     "film-switchyard-90s-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True, enhance_off_identity=True
+        "film", "film", default_view="graph", film_minimal=True
     ),
     "podcast-audio-first-lab-example": _spec("audio", "audio"),
     "podcast-radio-drama-lab-example": _spec("audio", "audio"),
     "music-rap-draft-lab-example": _spec("audio", "audio"),
     "music-rap-full-lab-example": _spec("audio", "audio"),
     "klein-from-clay-lab-example": _spec(
-        "dcc", "klein", enhance_off_identity=True
+        "dcc", "klein"
     ),
     "ltx-iclora-depth-5s-lab-example": _spec("dcc", "ltx"),
 }
@@ -377,7 +376,12 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
     for node in graph.get("nodes") or []:
         ntype = node.get("type")
         nid = node["id"]
-        if ntype in ENHANCE_TYPES:
+        if ntype in ("EZAceStepPromptEnhance",):
+            inputs.extend(((nid, "tags"), (nid, "lyrics"), (nid, "enhance")))
+        elif ntype in ("EZRapLyrics", "EZPodcastScript"):
+            widget = "lyrics" if ntype == "EZRapLyrics" else "prompt"
+            inputs.extend(((nid, widget), (nid, "enhance")))
+        elif ntype in ENHANCE_TYPES:
             inputs.extend(((nid, "prompt"), (nid, "enhance"), (nid, "style")))
             if spec.get("forge_widgets"):
                 inputs.extend(((nid, "mode"), (nid, "duration_hint")))

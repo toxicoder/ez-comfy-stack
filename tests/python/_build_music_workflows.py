@@ -43,7 +43,7 @@ DRAFT_NOTE = f"""## music-rap-draft-lab-example
 US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue — do not load Klein + Wan + LTX + ACE-Step together.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
-2. Leave **Enhance** off so Queue works offline. Edit the lyrics widget (human part).
+2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
@@ -65,7 +65,7 @@ US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1,
 
 1. Queue **music-rap-draft-lab-example** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
-3. Leave **Enhance** off. Edit lyrics before Queue. Human rewrite required before any release.
+3. Prompt enhance is **on**. Edit lyrics before Queue. Human rewrite required before any release.
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No “in the style of <living artist>”.
 5. ACE-Step vocal is an invented timbre, not a clone.
 6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.
@@ -251,22 +251,26 @@ def _build_rap(stem: str, duration: float, lyrics: str, prefix: str, note: str, 
     )
     g.add(
         5,
-        "EZRapLyrics",
+        "EZAceStepPromptEnhance",
         [500, 80],
-        [400, 280],
-        "ez_rap_lyrics",
-        [lyrics, False],
-        outputs=[g.out("lyrics", "STRING", [])],
+        [400, 360],
+        "ez_rap_prompt",
+        [ACE_TAGS, lyrics, True, "vocal"],
+        outputs=[
+            g.out("tags", "STRING", []),
+            g.out("lyrics", "STRING", []),
+        ],
     )
     g.add(
         6,
         "TextEncodeAceStepAudio1.5",
-        [500, 400],
+        [500, 520],
         [400, 420],
         "ACE tags + lyrics",
         _ace_widgets(lyrics, duration),
         inputs=[
             g.inp("clip", "CLIP"),
+            g.inp("tags", "STRING", widget="tags"),
             g.inp("lyrics", "STRING", widget="lyrics"),
             g.inp("duration", "FLOAT", widget="duration"),
         ],
@@ -337,8 +341,9 @@ def _build_rap(stem: str, duration: float, lyrics: str, prefix: str, note: str, 
     g.link(2, 0, 8, 0, "MODEL")
     g.link(1, 1, 6, 0, "CLIP")
     g.link(5, 0, 6, 1, "STRING")
+    g.link(5, 1, 6, 2, "STRING")
     g.link(3, 0, 4, 0, "FLOAT")
-    g.link(3, 0, 6, 2, "FLOAT")
+    g.link(3, 0, 6, 3, "FLOAT")
     g.link(6, 0, 8, 1, "CONDITIONING")
     g.link(6, 0, 7, 0, "CONDITIONING")
     g.link(7, 0, 8, 2, "CONDITIONING")
@@ -356,7 +361,7 @@ def _build_rap(stem: str, duration: float, lyrics: str, prefix: str, note: str, 
             "groups": [
                 _group(1, "MODEL", 20, LAB_GROUP_Y0, 420, 280, "#3f789e"),
                 _group(2, "DURATION", 20, 380 - GROUP_TITLE_INSET, 420, 300, "#3f789e"),
-                _group(3, "PROMPT", 480, LAB_GROUP_Y0, 820, 900, "#3f789e"),
+                _group(3, "PROMPT", 480, LAB_GROUP_Y0, 820, 1000, "#3f789e"),
                 _group(4, "OUTPUT", 1320, LAB_GROUP_Y0, 500, 940, "#3f789e"),
             ],
         }

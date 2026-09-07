@@ -29,6 +29,7 @@ tags: [troubleshooting, comfyui, docker]
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | **Missing Models** on a `*-lab-example` | Weights not on `MODELS_DIR` / broken `comfy/` symlink | `./scripts/manage.sh download-models` then restart. [Models and cache](models-and-cache.md) |
+| Start images vanished after `cleanup` | LoadImage files lived on the named volume | Put start frames in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`). `cleanup` does not delete `COMFY_OUTPUT_DIR` |
 | LTX `einops` / divide by 45 | Width/height not ÷32 (720 or 1080) | Lab size is **1280×704**. `ez_ltx_spatial` auto-snaps; prefer typing 704 |
 | No MP4 preview, only PNGs | Old graph without VHS, or looking at SaveImage | Re-open seeded `wan-*` / `ltx-*`; open **Save video (MP4)** node |
 | LTX MP4 has no sound | Missing audio VAE decode → VHS | Re-open current **ltx-*-lab-example** |
@@ -208,7 +209,7 @@ sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | Dream-house Queue too slow / only need a few rooms | All ten SHOT groups enabled | Bypass unused SHOT groups (Ctrl+B). Identity + inventory + seed stay shared; 02–10 do not consume shot 01’s pixels |
 | Dream-house 02–10 look like the same photo as 01 | Old graph still wraps 02–10 in `ReferenceLatent`, or the world bible still names a camera | Pull latest, re-open **klein-dream-house-lab-example**. Confirm Prompt Join `lock=view` and no `Ref from 01` nodes. HOUSE IDENTITY must be camera-free; shot cards own the camera |
 | Dream-house interiors do not match the sofa seen through the glass | Inventory edited on one shot, or a shot card invents new furniture | Edit locked inventory once on every SHOT join (same sofa, island, table, bedding, tub, deck chairs). Shot 01 should show that sofa through the two-bay glass; living looks out the same glass |
-| Dream-house rooms look like different cabins | Shot card restyles massing, or Enhance rewrote the bible | Pin Enhance **off** on HOUSE IDENTITY. Shot cards are camera / room / time / season only |
+| Dream-house rooms look like different cabins | Shot card restyles massing, or identity enhance drifted | Keep HOUSE IDENTITY in **identity** mode. Shot cards are camera / room / time / season only. Turn Enhance off only to pin a frozen bible |
 | OOM / multi-minute hang on a 90s (or 30s / 60s) **latent** | 241+ frame widget | Do not Queue a 90s denoise. Film graphs are 18 × **5.00 s** (120 frames) + stitch. See [90s shorts](shorts.md). Confirm headroom preflight; close other GPU jobs |
 | One-click 90s film Queue runs for a long time | 18 sequential LTX 5s prints | Expected. Open **Save 90s film (MP4)** when it finishes. A true hang is 0 GPU / 241+ frames |
 | 90s film / shot graph missing in the Comfy UI | Entrypoint only used to copy top-level `workflows/*.json` | Pull latest; restart so `install_lab_workflows` copies `workflows/*.json` and `workflows/shorts/*.json` into `user/default/workflows/`. Load **film-*-90s-*-lab-example**. YAML shot lists are not copied (edit on the host) |

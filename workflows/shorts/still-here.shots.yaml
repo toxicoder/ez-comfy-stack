@@ -9,7 +9,7 @@ total_shots: 18
 publish_cap_s: 90.00
 print: ltx
 identity_seed: 42
-identity_enhance: false
+identity_enhance: true
 identity_look: |
   A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp in the foreground. Eye-level on a 35mm lens, framed for YouTube 16:9.
 shots:

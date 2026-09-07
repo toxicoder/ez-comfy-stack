@@ -414,7 +414,7 @@
       },
       "widgets_values": [
         "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace, holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Unmarked spires recede into volumetric haze. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
-        false,
+        true,
         "t2i",
         "YouTube 16:9 still",
         "none"
@@ -524,7 +524,7 @@
       "frontend_min": "1.41.13",
       "lane": "inspire",
       "occupancy": "klein",
-      "enhance_off_identity": true,
+      "enhance_off_identity": false,
       "handoff": [
         "klein-still-hero-lab-example",
         "wan-i2v-5s-lab-example",

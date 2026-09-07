@@ -419,7 +419,7 @@
     "aliases": ["Prompt Enhance"],
     "category": "Studio",
     "short": "In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.",
-    "long": "Klein/Wan/LTX Prompt Enhance defaults **on** for daily graphs and **off** for frozen identity bibles and 90s films. After Queue, read the dim CLIP prompt box — that is what was encoded. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
+    "long": "Klein/Wan/LTX/ACE-Step Prompt Enhance defaults **on** for every lab graph, including identity bibles and 90s films. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
     "see_also": ["enhance", "gguf", "qwen"]
   },
   {
@@ -428,7 +428,7 @@
     "aliases": ["world bible"],
     "category": "Studio",
     "short": "Locked description of a place or character with no camera. Shared across shots.",
-    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Pin Enhance off on the bible. See [Prompting](prompting.md).",
+    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Identity-mode enhance keeps the bible camera-free. See [Prompting](prompting.md).",
     "see_also": ["identity-still", "prompt-enhance"]
   },
   {
@@ -473,7 +473,7 @@
     "aliases": ["Enhance"],
     "category": "Studio",
     "short": "Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.",
-    "long": "Leave Enhance off when the lab already shipped a model-native paragraph (90s films, identity bibles). Turn it on for a lazy sentence plus optional style dropdown. I2V ignores style — the start image owns look. See [Prompting](prompting.md).",
+    "long": "Enhance defaults on for every lab graph. Turn it off to pin widget text. Identity mode keeps world bibles camera-free. I2V / FLF / VACE ignore style — the start frames own look. See [Prompting](prompting.md).",
     "see_also": ["prompt-enhance", "world-bible"]
   },
   {

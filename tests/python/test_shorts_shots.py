@@ -74,7 +74,7 @@ def test_eighteen_shots_and_chain() -> None:
         assert meta["publish_cap_s"] == "90.00"
         assert meta["print"] == "ltx"
         assert meta["identity_seed"] == "42"
-        assert meta["identity_enhance"] == "false"
+        assert meta["identity_enhance"] == "true"
         shots = parsed["shots"]
         assert len(shots) == 18, (film, len(shots))
         prefixes = [s["prefix"] for s in shots]
@@ -321,7 +321,9 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
             audio = next(i for i in node["inputs"] if i.get("name") == "audio")
             assert audio.get("link") is not None
         assert not any(n.get("type") == "LoadImage" for n in graph["nodes"])
-        assert not any(n.get("type") == "EZLTXPromptEnhance" for n in graph["nodes"])
+        ltx_enh = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
+        assert len(ltx_enh) == 18
+        assert all(n["widgets_values"][1] is True for n in ltx_enh)
         klein_sampler = next(
             n
             for n in graph["nodes"]
@@ -330,7 +332,8 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert klein_sampler["widgets_values"][0] == 42
         assert klein_sampler["widgets_values"][3] == 1.0
         enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        assert enhance["widgets_values"][1] is False
+        assert enhance["widgets_values"][1] is True
+        assert enhance["widgets_values"][2] == "identity"
         assert enhance["widgets_values"][0] == parsed["identity"]
         ltx_pos = [
             n

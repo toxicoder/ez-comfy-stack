@@ -177,27 +177,51 @@ def _as_enhance_flag(value: object) -> bool:
 
 
 def normalize_enhance_widgets(graph: dict) -> None:
-    """Pad enhance-node widgets. Keep an existing enhance flag; default true if missing."""
+    """Pad enhance-node widgets. Default enhance true. Identity titles use identity mode."""
+    graph_id = str(graph.get("id") or "")
     for node in graph["nodes"]:
         ntype = node.get("type")
         values = list(node.get("widgets_values") or [])
+        title = str(node.get("title") or "")
         if ntype in ("EZKleinPromptEnhance", "EZWanPromptEnhance"):
             prompt = values[0] if values else ""
-            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
-            mode = values[2] if len(values) > 2 else ("t2i" if ntype == "EZKleinPromptEnhance" else "t2v")
+            enhance = True
+            default_mode = "t2i" if ntype == "EZKleinPromptEnhance" else "t2v"
+            mode = values[2] if len(values) > 2 else default_mode
+            if ntype == "EZKleinPromptEnhance":
+                if "IDENTITY" in title.upper() or mode == "identity":
+                    mode = "identity"
+                elif mode not in ("t2i", "edit", "identity"):
+                    mode = "t2i"
+            else:
+                if "flf" in graph_id or mode == "flf":
+                    mode = "flf"
+                elif "vace" in graph_id or mode == "vace":
+                    mode = "vace"
+                elif mode not in ("t2v", "i2v", "flf", "vace"):
+                    mode = "t2v"
             hint = values[3] if len(values) > 3 else ""
             style = values[4] if len(values) > 4 else "none"
-            if style != "none" and len(values) < 5:
-                style = "none"
             node["widgets_values"] = [prompt, enhance, mode, hint, style if style else "none"]
         elif ntype == "EZLTXPromptEnhance":
             prompt = values[0] if values else ""
-            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+            enhance = True
             mode = values[2] if len(values) > 2 else "t2v"
             hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
             audio = values[4] if len(values) > 4 else ""
             style = values[5] if len(values) > 5 else "none"
             node["widgets_values"] = [prompt, enhance, mode, hint, audio, style if style else "none"]
+        elif ntype == "EZAceStepPromptEnhance":
+            tags = values[0] if values else ""
+            lyrics = values[1] if len(values) > 1 else ""
+            mode = values[3] if len(values) > 3 else "vocal"
+            if mode not in ("vocal", "instrumental"):
+                mode = "vocal"
+            node["widgets_values"] = [tags, lyrics, True, mode]
+        elif ntype in ("EZRapLyrics", "EZPodcastScript"):
+            text = values[0] if values else ""
+            rest = list(values[2:]) if len(values) > 2 else []
+            node["widgets_values"] = [text, True, *rest]
 
 
 def append_note(graph: dict) -> None:
@@ -426,6 +450,213 @@ def ltx_t2v(path: Path) -> None:
     append_note(graph)
     normalize_enhance_widgets(graph)
     save(path, graph)
+
+
+def _clip_text_source(graph: dict, clip: dict) -> dict | None:
+    text_inp = next((i for i in clip.get("inputs") or [] if i.get("name") == "text"), None)
+    if not text_inp or text_inp.get("link") is None:
+        return None
+    lid = int(text_inp["link"])
+    by_id = {int(n["id"]): n for n in graph["nodes"]}
+    for link in graph.get("links") or []:
+        if int(link[0]) == lid:
+            return by_id.get(int(link[1]))
+    return None
+
+
+def insert_join_shot_enhance(graph: dict) -> None:
+    """Klein t2i enhance between Prompt Join and CLIP so CLIP shows the rewrite."""
+    by_id = {int(n["id"]): n for n in graph["nodes"]}
+    pending: list[tuple[dict, dict]] = []
+    for clip in graph["nodes"]:
+        if clip.get("type") != "CLIPTextEncode":
+            continue
+        title = str(clip.get("title") or "")
+        if "neg" in title.lower():
+            continue
+        src = _clip_text_source(graph, clip)
+        if src is None or src.get("type") != "EZPromptJoin":
+            continue
+        pending.append((src, clip))
+    for join, clip in pending:
+        hint = "YouTube 16:9 still"
+        ident = next(
+            (n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"),
+            None,
+        )
+        if ident and len(ident.get("widgets_values") or []) > 3:
+            hint = ident["widgets_values"][3] or hint
+        joined = (clip.get("widgets_values") or [""])[0]
+        origin_x, origin_y = clip["pos"][0], clip["pos"][1]
+        nid, lid = next_ids(graph)
+        join_to_enh = lid + 1
+        enhance = {
+            "id": nid,
+            "type": "EZKleinPromptEnhance",
+            "pos": [origin_x - 440, origin_y],
+            "size": [420, 280],
+            "flags": {},
+            "order": max(int(clip.get("order") or 0) - 1, 0),
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "prompt",
+                    "type": "STRING",
+                    "link": None,
+                    "widget": {"name": "prompt"},
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "prompt",
+                    "type": "STRING",
+                    "links": [lid],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "EZKleinPromptEnhance"},
+            "widgets_values": [joined, True, "t2i", hint, "none"],
+            "title": f"{clip.get('title') or 'Shot'} enhance",
+        }
+        graph["nodes"].append(enhance)
+        join_out = (join.get("outputs") or [{}])[0]
+        old_links = [int(x) for x in (join_out.get("links") or [])]
+        clip_text = next((i for i in clip.get("inputs") or [] if i.get("name") == "text"), None)
+        old_lid = int(clip_text["link"]) if clip_text and clip_text.get("link") is not None else None
+        enhance["inputs"][0]["link"] = join_to_enh
+        if clip_text is None:
+            clip.setdefault("inputs", []).append(
+                {
+                    "name": "text",
+                    "type": "STRING",
+                    "link": lid,
+                    "widget": {"name": "text"},
+                }
+            )
+            dest_slot = len(clip["inputs"]) - 1
+        else:
+            clip_text["link"] = lid
+            dest_slot = clip["inputs"].index(clip_text)
+        graph["links"] = [
+            link
+            for link in graph.get("links") or []
+            if old_lid is None or int(link[0]) != old_lid
+        ]
+        if isinstance(join_out.get("links"), list):
+            join_out["links"] = [x for x in old_links if old_lid is None or int(x) != old_lid]
+            join_out["links"].append(join_to_enh)
+        graph["links"].append([join_to_enh, int(join["id"]), 0, nid, 0, "STRING"])
+        graph["links"].append([lid, nid, 0, int(clip["id"]), dest_slot, "STRING"])
+        graph["last_node_id"] = max(int(graph.get("last_node_id") or 0), nid)
+        graph["last_link_id"] = max(int(graph.get("last_link_id") or 0), lid, join_to_enh)
+    _push_notes_clear(graph)
+
+
+def insert_ace_enhance(graph: dict) -> None:
+    """Wire EZAceStepPromptEnhance into ACE-Step encoders that lack tags/lyrics links."""
+    for enc in list(graph["nodes"]):
+        if enc.get("type") != "TextEncodeAceStepAudio1.5":
+            continue
+        title = str(enc.get("title") or "")
+        if "neg" in title.lower():
+            continue
+        inputs = enc.setdefault("inputs", [])
+        tags_inp = next((i for i in inputs if i.get("name") == "tags"), None)
+        lyrics_inp = next((i for i in inputs if i.get("name") == "lyrics"), None)
+        if tags_inp and tags_inp.get("link") is not None:
+            continue
+        if lyrics_inp and lyrics_inp.get("link") is not None:
+            continue
+        values = list(enc.get("widgets_values") or [])
+        tags = values[0] if values else ""
+        lyrics = values[1] if len(values) > 1 else ""
+        instrumental = not str(lyrics).strip() or "[inst]" in str(lyrics).lower()
+        if "instrumental" in str(tags).lower() or "no vocals" in str(tags).lower():
+            instrumental = True
+        nid, lid = next_ids(graph)
+        lid_lyrics = lid + 1
+        origin_x, origin_y = enc["pos"][0], enc["pos"][1]
+        enhance = {
+            "id": nid,
+            "type": "EZAceStepPromptEnhance",
+            "pos": [origin_x - 440, origin_y],
+            "size": [400, 320],
+            "flags": {},
+            "order": max(int(enc.get("order") or 0) - 1, 0),
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+                {"name": "tags", "type": "STRING", "links": [lid], "slot_index": 0},
+                {"name": "lyrics", "type": "STRING", "links": [lid_lyrics], "slot_index": 1},
+            ],
+            "properties": {"Node name for S&R": "EZAceStepPromptEnhance"},
+            "widgets_values": [
+                tags,
+                lyrics,
+                True,
+                "instrumental" if instrumental else "vocal",
+            ],
+            "title": f"{title} enhance" if title else "ACE-Step Prompt Enhance",
+        }
+        graph["nodes"].append(enhance)
+        if tags_inp is None:
+            inputs.append(
+                {
+                    "name": "tags",
+                    "type": "STRING",
+                    "link": lid,
+                    "widget": {"name": "tags"},
+                }
+            )
+            tags_slot = len(inputs) - 1
+        else:
+            tags_inp["link"] = lid
+            tags_slot = inputs.index(tags_inp)
+        if lyrics_inp is None:
+            inputs.append(
+                {
+                    "name": "lyrics",
+                    "type": "STRING",
+                    "link": lid_lyrics,
+                    "widget": {"name": "lyrics"},
+                }
+            )
+            lyrics_slot = len(inputs) - 1
+        else:
+            lyrics_inp["link"] = lid_lyrics
+            lyrics_slot = inputs.index(lyrics_inp)
+        graph.setdefault("links", []).append(
+            [lid, nid, 0, int(enc["id"]), tags_slot, "STRING"]
+        )
+        graph["links"].append(
+            [lid_lyrics, nid, 1, int(enc["id"]), lyrics_slot, "STRING"]
+        )
+        graph["last_node_id"] = nid
+        graph["last_link_id"] = lid_lyrics
+    _push_notes_clear(graph)
+
+
+def enable_lab_graph(graph: dict) -> None:
+    """Force enhance on, identity modes, and ACE tags."""
+    insert_ace_enhance(graph)
+    normalize_enhance_widgets(graph)
+    extra = graph.setdefault("extra", {})
+    for key in ("lab_note", "lab_description"):
+        raw = extra.get(key)
+        if isinstance(raw, str):
+            extra[key] = (
+                raw.replace("Enhance off (compiler-enforced).", "Identity-mode enhance is on.")
+                .replace("Enhance is **off**", "Enhance is **on**")
+                .replace("Enhance **off**", "Enhance **on**")
+                .replace("Enhance off.", "Enhance on.")
+            )
+    if isinstance(extra.get("lab_app_mode"), dict):
+        extra["lab_app_mode"]["enhance_off_identity"] = False
+    if isinstance(extra.get("lab_dcc"), dict) and "enhance" in extra["lab_dcc"]:
+        extra["lab_dcc"]["enhance"] = True
+    if isinstance(extra.get("lab_identity"), dict) and "enhance" in extra["lab_identity"]:
+        extra["lab_identity"]["enhance"] = True
+    append_note(graph)
 
 
 def main() -> None:

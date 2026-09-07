@@ -2,7 +2,7 @@
   "id": "music-rap-draft-lab-example",
   "revision": 1,
   "last_node_id": 12,
-  "last_link_id": 14,
+  "last_link_id": 15,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            5,
-            6
+            6,
+            7
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 5,
+          "link": 6,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -175,14 +175,14 @@
     },
     {
       "id": 5,
-      "type": "EZRapLyrics",
+      "type": "EZAceStepPromptEnhance",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        280
+        360
       ],
       "flags": {},
       "order": 4,
@@ -190,29 +190,39 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "lyrics",
+          "name": "tags",
           "type": "STRING",
           "links": [
             4
           ],
           "slot_index": 0
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            5
+          ],
+          "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "EZRapLyrics"
+        "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
         "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
-        false
+        true,
+        "vocal"
       ],
-      "title": "ez_rap_lyrics"
+      "title": "ez_rap_prompt"
     },
     {
       "id": 6,
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        400
+        520
       ],
       "size": [
         400,
@@ -228,9 +238,17 @@
           "link": 3
         },
         {
-          "name": "lyrics",
+          "name": "tags",
           "type": "STRING",
           "link": 4,
+          "widget": {
+            "name": "tags"
+          }
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 5,
           "widget": {
             "name": "lyrics"
           }
@@ -238,7 +256,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "duration"
           }
@@ -249,8 +267,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            7,
-            8
+            8,
+            9
           ],
           "slot_index": 0
         }
@@ -294,7 +312,7 @@
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         }
       ],
       "outputs": [
@@ -302,7 +320,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            9
+            10
           ],
           "slot_index": 0
         }
@@ -336,17 +354,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 7
+          "link": 8
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 10
+          "link": 11
         }
       ],
       "outputs": [
@@ -354,7 +372,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -391,12 +409,12 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 12
+          "link": 13
         }
       ],
       "outputs": [
@@ -404,8 +422,8 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            13,
-            14
+            14,
+            15
           ],
           "slot_index": 0
         }
@@ -434,7 +452,7 @@
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [],
@@ -464,7 +482,7 @@
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -497,7 +515,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## music-rap-draft-lab-example\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Leave **Enhance** off so Queue works offline. Edit the lyrics widget (human part).\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## music-rap-draft-lab-example\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     }
@@ -537,6 +555,14 @@
     ],
     [
       5,
+      5,
+      1,
+      6,
+      2,
+      "STRING"
+    ],
+    [
+      6,
       3,
       0,
       4,
@@ -544,15 +570,15 @@
       "FLOAT"
     ],
     [
-      6,
+      7,
       3,
       0,
       6,
-      2,
+      3,
       "FLOAT"
     ],
     [
-      7,
+      8,
       6,
       0,
       8,
@@ -560,7 +586,7 @@
       "CONDITIONING"
     ],
     [
-      8,
+      9,
       6,
       0,
       7,
@@ -568,7 +594,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       7,
       0,
       8,
@@ -576,7 +602,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       4,
       0,
       8,
@@ -584,7 +610,7 @@
       "LATENT"
     ],
     [
-      11,
+      12,
       8,
       0,
       9,
@@ -592,7 +618,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       1,
       2,
       9,
@@ -600,7 +626,7 @@
       "VAE"
     ],
     [
-      13,
+      14,
       9,
       0,
       10,
@@ -608,7 +634,7 @@
       "AUDIO"
     ],
     [
-      14,
+      15,
       9,
       0,
       11,
@@ -650,7 +676,7 @@
         480,
         24,
         820,
-        900
+        1000
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -673,7 +699,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## music-rap-draft-lab-example\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Leave **Enhance** off so Queue works offline. Edit the lyrics widget (human part).\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_note": "## music-rap-draft-lab-example\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal",
     "ds": {
       "scale": 1,
@@ -693,6 +719,10 @@
     },
     "linearData": {
       "inputs": [
+        [
+          "5:tags",
+          "tags"
+        ],
         [
           "5:lyrics",
           "lyrics"

@@ -38,7 +38,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
         outputs=["Save"],
         lane="inspire",
         occupancy="klein",
-        enhance_off_identity=True,
+        enhance_off_identity=False,
         handoff=("klein-still-hero-lab-example", "wan-i2v-5s-lab-example"),
     )
     extra = stamped["extra"]
@@ -50,7 +50,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
     assert mode["frontend_min"] == "1.41.13"
     assert mode["lane"] == "inspire"
     assert mode["occupancy"] == "klein"
-    assert mode["enhance_off_identity"] is True
+    assert mode["enhance_off_identity"] is False
     assert mode["handoff"] == [
         "klein-still-hero-lab-example",
         "wan-i2v-5s-lab-example",

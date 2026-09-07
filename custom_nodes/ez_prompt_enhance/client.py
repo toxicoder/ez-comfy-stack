@@ -39,6 +39,7 @@ LOCK_STATE_LINE = (
 )
 FLAVOR_KLEIN = "klein"
 FLAVOR_KLEIN_EDIT = "klein_edit"
+FLAVOR_KLEIN_IDENTITY = "klein_identity"
 FLAVOR_WAN = "wan"
 FLAVOR_LTX = "ltx"
 
@@ -47,6 +48,15 @@ REASON_GGUF_MISSING = "GGUF missing"
 REASON_LLAMA_UNAVAILABLE = "llama.cpp unavailable"
 REASON_EMPTY = "timeout or empty model output"
 REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
+REASON_STYLE_IGNORED_FLF = "style ignored in flf (start and end frames own look)"
+REASON_STYLE_IGNORED_VACE = "style ignored in vace (both clips own look)"
+REASON_STYLE_IGNORED_IDENTITY = "style ignored in identity (camera-free bible)"
+STYLE_IGNORED_MODES = {
+    "i2v": REASON_STYLE_IGNORED_I2V,
+    "flf": REASON_STYLE_IGNORED_FLF,
+    "vace": REASON_STYLE_IGNORED_VACE,
+    "identity": REASON_STYLE_IGNORED_IDENTITY,
+}
 
 _LLM: Any = None
 _LLM_PATH = ""
@@ -81,6 +91,9 @@ _WEAVE_BY_FLAVOR = {
     FLAVOR_KLEIN_EDIT: (
         "Restyle medium, light, and grade only. Keep identity, inventory, "
         "architecture, and counts locked."
+    ),
+    FLAVOR_KLEIN_IDENTITY: (
+        "Keep the bible camera-free. Do not add lens, shot scale, or a camera move."
     ),
     FLAVOR_WAN: (
         "Put light and lens in Aesthetic control and the medium phrases in "
@@ -346,6 +359,8 @@ def flavor_for_system(name: str) -> str:
     """Map a system-prompt stem to a style-instruction flavor."""
     if name == "klein_edit":
         return FLAVOR_KLEIN_EDIT
+    if name == "klein_identity":
+        return FLAVOR_KLEIN_IDENTITY
     if name.startswith("wan"):
         return FLAVOR_WAN
     if name.startswith("ltx"):

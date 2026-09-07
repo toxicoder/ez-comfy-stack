@@ -66,7 +66,7 @@ Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later
 
 | Graph | Weights | Notes |
 | --- | --- | --- |
-| **klein-from-clay-lab-example** | Default Klein 4B | Edit mode, Enhance **off**, seed **42**, 1280×704. Queues today. |
+| **klein-from-clay-lab-example** | Default Klein 4B | Edit mode, Enhance **on**, seed **42**, 1280×704. Queues today. |
 | **ltx-iclora-depth-5s-lab-example** | Default LTX-2.5 distilled + opt-in Union LoRA | Lab envelope. Official control graph is Comfy **Templates → LTX-2.5** (`LTX-2.5_ICLoRA_Union_Control_Distilled.json`). This tree does not vendor UUID subgraphs. |
 
 ```bash

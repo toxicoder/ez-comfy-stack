@@ -22,7 +22,7 @@ YAML_KEYS = (
     "publish_cap_s: 90.00",
     "print: ltx",
     "identity_seed",
-    "identity_enhance: false",
+    "identity_enhance: true",
     "identity_look",
     "load_from: identity",
     "_last",
@@ -85,6 +85,9 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
         assert heavy not in types, heavy
     primitives = [n for n in graph["nodes"] if n.get("type") == "PrimitiveNode"]
     assert len(primitives) == 18
+    ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
+    assert len(ltx) == 18
+    assert all(n["widgets_values"][1] is True for n in ltx)
     note = graph["extra"]["lab_note"]
     blob = json.dumps(graph)
     for key in YAML_KEYS:

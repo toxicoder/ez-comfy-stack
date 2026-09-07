@@ -548,7 +548,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Fun InP FLF (opt-in)\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\n"
+        "## Fun InP FLF (opt-in)\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note \u2014 Fun InP FLF"
     },
@@ -583,7 +583,7 @@
       "widgets_values": [
         "Slow cinematic dolly-in toward the tech wizard. Coat hem and holographic glyph motes drift in a high-altitude breeze. Distant maglev glides between unmarked spires. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.",
         true,
-        "i2v",
+        "flf",
         "5 seconds, 24 fps",
         "none"
       ],
@@ -770,7 +770,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## Fun InP FLF (opt-in)\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\n",
+    "lab_note": "## Fun InP FLF (opt-in)\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_profile": "wan-flf-5s-lab-example",
     "lab_description": "Wan 2.2 Fun InP first-last-frame 5 s draft. Opt-in pack (~47 GB). MagCache off. Unload LTX first.",
     "ds": {
@@ -783,7 +783,8 @@
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
-      "frontend_min": "1.41.13"
+      "frontend_min": "1.41.13",
+      "enhance_off_identity": false
     }
   },
   "version": 0.4

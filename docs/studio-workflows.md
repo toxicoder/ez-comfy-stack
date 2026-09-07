@@ -46,8 +46,8 @@ flowchart TB
     | Workflow | What it does |
     | --- | --- |
     | **klein-still-draft-lab-example** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
-    | **klein-still-hero-lab-example** | Same prompt + seed, **1280×704** (LTX VAE grid), more steps, prefix `ez_still_hero`. Enhance **off**. |
-    | **klein-identity-sheet-lab-example** | 3-angle sheet (front / three-quarter / profile). Seed **42**, Enhance **off**, **1280×704** |
+    | **klein-still-hero-lab-example** | Same prompt + seed, **1280×704** (LTX VAE grid), more steps, prefix `ez_still_hero`. Enhance **on**. |
+    | **klein-identity-sheet-lab-example** | 3-angle sheet (front / three-quarter / profile). Seed **42**, Enhance **on** (identity mode), **1280×704** |
     | **klein-talking-head-lab-example** | Klein still → LTX A2V freeze smoke. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
 
 === "Motion (Wan 2.2 5B)"
@@ -80,7 +80,7 @@ flowchart TB
 
     | Workflow | What it does |
     | --- | --- |
-    | **klein-still-draft-lab-example** | Spark Still. 768×432, Enhance off on the identity. Prefix `ez_still_draft` |
+    | **klein-still-draft-lab-example** | Spark Still. 768×432, Enhance on. Prefix `ez_still_draft` |
     | **klein-identity-sheet-lab-example** | 3-angle sheet, seed **42**, **1280×704** |
     | **klein-storyboard-6up-lab-example** | Six new cameras (`ez_board_01`…`06`) |
     | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills, independent T2I |
@@ -162,7 +162,7 @@ flowchart TB
 
     | Workflow | What it does |
     | --- | --- |
-    | **klein-from-clay-lab-example** | Klein 4B edit of a guide-pack `first.png`. Enhance **off**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Occupancy: dump while Comfy is **down**. |
+    | **klein-from-clay-lab-example** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Occupancy: dump while Comfy is **down**. |
     | **ltx-iclora-depth-5s-lab-example** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. |
 
     Operator loop: [DCC guide pack](dcc-workflows.md).

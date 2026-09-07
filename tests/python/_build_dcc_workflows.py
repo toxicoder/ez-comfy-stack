@@ -20,7 +20,7 @@ DCC = WF / "dcc"
 
 KLEIN_NOTE = """## klein-from-clay-lab-example
 
-Klein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **off**. Seed **42**. Size **1280x704** (LTX VAE grid — not 1280x720).
+Klein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid — not 1280x720).
 
 LoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.
 
@@ -67,9 +67,9 @@ def build_klein_from_clay() -> dict:
     extra = graph.setdefault("extra", {})
     extra["lab_profile"] = "klein-from-clay-lab-example"
     extra["lab_note"] = KLEIN_NOTE
-    extra["lab_description"] = "Klein 4B edit of DCC clay first.png. Enhance off. 1280x704. Seed 42."
+    extra["lab_description"] = "Klein 4B edit of DCC clay first.png. Enhance on. 1280x704. Seed 42."
     extra["lab_dcc"] = {
-        "enhance": False,
+        "enhance": True,
         "mode": "edit",
         "seed": 42,
         "size": [1280, 704],
@@ -87,12 +87,12 @@ def build_klein_from_clay() -> dict:
                 "cinematic three-point light, unmarked surfaces empty of lettering. "
                 "Do not redesign layout."
             )
-            widgets[1] = False
+            widgets[1] = True
             widgets[2] = "edit"
             widgets[3] = "YouTube 16:9 still from clay"
             widgets[4] = "none"
             node["widgets_values"] = widgets
-            node["title"] = "Klein Prompt Enhance (off, edit)"
+            node["title"] = "Klein Prompt Enhance (edit)"
         elif ntype == "SaveImage":
             node["widgets_values"] = ["ez_clay_hero"]
             node["title"] = "Save clay hero"
