@@ -104,6 +104,21 @@ services:
     # cpus soft limit (compose v2). GB10 has 20 ARM cores; leave 4 for OS/SSH.
     cpus: 16.0
 
+  # Optional jobstore board. Not required for doctor/start. No GPU.
+  studio-ui:
+    profiles: ["studio-ui"]
+    image: python:3.12-alpine
+    container_name: ez-comfy-studio-ui
+    restart: "no"
+    ports:
+      - "${STUDIO_UI_PORT:-8190}:8190"
+    mem_limit: 512m
+    volumes:
+      - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/films:ro
+      - ../studio-ui:/app:ro
+    command: ["python", "/app/server.py"]
+    working_dir: /app
+
 volumes:
   comfy-state:
     name: ez-comfy-state

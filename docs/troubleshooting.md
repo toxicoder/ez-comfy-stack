@@ -142,6 +142,9 @@ sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | Fun InP / SeedVR2 filled the box | Opt-in ~47 GB / ~15 GB packs | `reap-models --plan`; `--drop-pack` cannot eat shared VAE. Unload LTX before Fun InP. SeedVR2 is post-concat only |
 | `film-proxies` / NVENC preview refused | Compose still up | `./scripts/manage.sh stop` then retry. Proxies never rewrite masters |
 | MagCache node missing on Wan draft | Fail-soft clone; upstream dropdown may lack `wan2.2_ti2v_5B` | Graph still Queues without MagCache. See `extra.lab_magcache` on `wan-i2v-5s-lab-example`. Hero LTX graphs must not contain MagCache |
+| LTX Director missing | GPL clone is opt-in | `LAB_ENABLE_LTX_DIRECTOR=1` then restart. Never MiniMax H3 Director |
+| studio-ui empty / port closed | Profile not started; default `start` skips it | `docker compose --profile studio-ui up studio-ui`. No GPU. Compile a film first |
+| take-promote missing file | No `takes/<id>/tNNN.mp4` | Print the shot (take increments on `running`), then promote |
 | Empty models in UI | Downloads not run | `./scripts/utilities/download-image.sh status --tier fast`; `download-wan.sh status --tier 5b`; `download-ltx.sh status --tier 2.5`; check `${MODELS_DIR}` mount |
 | Missing `ae.safetensors` / `z_image_turbo_*.safetensors` | **Z-Image** template, not the default stack | Load **klein-still-draft-lab-example**. Default still is Klein 4B Apache (see [licenses](licenses.md)). Optional `download-image --tier zimage` |
 | Missing `flux-2-klein-4b-fp8` / Wan / LTX-2.5 in **\*-lab-example** graphs | Weights not on host and/or Comfy `models/*` not symlinked to host | 1) `./scripts/manage.sh download-models` 2) `ls "${MODELS_DIR}/comfy/diffusion_models"` 3) `docker exec ez-comfy-studio ls -la /comfy-state/ComfyUI/models/diffusion_models` — should be a **symlink** to `/models/comfy/diffusion_models`. LTX-2.5 is gated: set `HF_TOKEN` and accept the Lightricks license |

@@ -247,6 +247,18 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "studio-ui profile is optional no GPU 512m restart no" {
+  local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -F 'profiles:' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -F 'ez-comfy-studio-ui' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -F 'mem_limit: 512m' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'postgres|redis' "${compose}"
+  [ "$status" -ne 0 ]
+}
+
 @test "compose soft cpus is 16 not 12" {
   run grep -E 'cpus: 16.0' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]

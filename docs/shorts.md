@@ -13,7 +13,8 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Shot maps for go-see (first-person running), still-here, and switchyard
 - Model-native Klein / LTX prompts ([Prompting](prompting.md))
 - Spark farm: optional parallel 5s Queues, local concat
-- Shot resume, OTIO export, NVENC proxies, Fun InP / SeedVR2 opt-in
+- Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
+- Optional studio-ui board (`:8190` profile), LTX Director GPL clone, OpenCut MIT embed
 
 **What this enables**
 
@@ -114,7 +115,26 @@ FILM=go-see   # or still-here | switchyard
 # NVENC proxies 960×528 ~2 Mbps (Comfy must be stopped):
 ./scripts/manage.sh stop
 ./scripts/manage.sh film-proxies go-see --yes
+# Promote take 3 of shot 12 into the jobstore master:
+./scripts/manage.sh take-promote go-see 12 3
 ```
+
+Optional jobstore board (no GPU, 512m, `restart: "no"`). Default `start` does **not** launch it:
+
+```bash
+docker compose --profile studio-ui up studio-ui
+# http://localhost:8190
+```
+
+LTX Director is a **GPL** clone into the Comfy volume, not this MIT tree:
+
+```bash
+LAB_ENABLE_LTX_DIRECTOR=1 ./scripts/manage.sh start
+```
+
+Refuse MiniMax H3 Director. OpenCut (`jtydhr88/ComfyUI-OpenCut`, MIT) is fail-soft. Not the OpenCut Rust rewrite, not Next.js+Postgres.
+
+ACE-Step 90 s bed → `manage.sh stop` / unload → LTX A2V freeze. Qwen3-TTS is opt-in with operator-owned refs (`download-podcast --tier qwen3tts`); empty refs stay Kokoro. Wire **EZFilmDisclosure** on the publish graph (LTX Community License end-card).
 
 Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates → LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s.
 

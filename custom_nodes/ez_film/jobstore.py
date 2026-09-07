@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 import subprocess
@@ -16,6 +17,7 @@ from .shots import FILM_SLUGS, SHOT_COUNT, parse_shots_yaml
 STATUSES = ("pending", "running", "ok", "failed", "skipped")
 DURATION_S = 5.00
 DURATION_TOL = 0.05
+TAKE_KEEP = 8
 PINS_REL = Path("comfy") / ".lab-model-pins.json"
 
 
@@ -129,6 +131,80 @@ def duration_ok(path: Path, expected: float = DURATION_S, tol: float = DURATION_
 def shot_mp4(dest: Path, sid: str) -> Path:
     """``shots/NN.mp4`` under the film dir."""
     return dest / "shots" / f"{sid}.mp4"
+
+
+def take_dir(dest: Path, sid: str) -> Path:
+    """``takes/<id>/`` under the film dir."""
+    return dest / "takes" / sid
+
+
+def take_path(dest: Path, sid: str, take: int) -> Path:
+    """``takes/<id>/tNNN.mp4``."""
+    return take_dir(dest, sid) / f"t{int(take):03d}.mp4"
+
+
+def file_sha(path: Path) -> str:
+    """Short sha256 of a file (empty if missing)."""
+    if not path.is_file():
+        return ""
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    return digest[:16]
+
+
+def list_takes(dest: Path, sid: str) -> list[int]:
+    """Take numbers present on disk, newest last."""
+    folder = take_dir(dest, sid)
+    if not folder.is_dir():
+        return []
+    found: list[int] = []
+    for path in folder.glob("t*.mp4"):
+        stem = path.stem
+        if stem.startswith("t") and stem[1:].isdigit():
+            found.append(int(stem[1:]))
+    return sorted(found)
+
+
+def prune_takes(dest: Path, sid: str, keep: int = TAKE_KEEP) -> None:
+    """Keep the last ``keep`` takes."""
+    nums = list_takes(dest, sid)
+    extra = nums[:-keep] if keep >= 0 else nums
+    for num in extra:
+        take_path(dest, sid, num).unlink(missing_ok=True)
+
+
+def record_take(dest: Path, state: dict[str, Any], sid: str, src: Path) -> Path:
+    """Copy ``src`` into the take strip for this shot (current take number)."""
+    if not src.is_file():
+        raise FileNotFoundError(f"missing take source {src}")
+    row = get_shot(state, sid)
+    take = int(row.get("take") or 1)
+    dest_mp4 = take_path(dest, sid, take)
+    dest_mp4.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dest_mp4)
+    row["sha"] = file_sha(dest_mp4)
+    prune_takes(dest, sid)
+    return dest_mp4
+
+
+def promote_take(dest: Path, sid: str, take: int) -> Path:
+    """Copy take N to ``shots/NN.mp4`` and mark the shot ok."""
+    src = take_path(dest, sid, take)
+    if not src.is_file():
+        raise FileNotFoundError(f"missing take {sid}/t{int(take):03d}")
+    dest_mp4 = shot_mp4(dest, sid)
+    dest_mp4.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dest_mp4)
+    state = load_state(dest)
+    mark_shot(
+        state,
+        sid,
+        "ok",
+        mp4=f"shots/{sid}.mp4",
+        take=int(take),
+    )
+    get_shot(state, sid)["sha"] = file_sha(dest_mp4)
+    save_state(dest, state)
+    return dest_mp4
 
 
 def should_skip_shot(dest: Path, state: dict[str, Any], sid: str) -> bool:
@@ -286,6 +362,16 @@ def _cli(argv: list[str] | None = None) -> int:
     p_get.add_argument("--dest", required=True)
     p_get.add_argument("--id", required=True)
 
+    p_promote = sub.add_parser("promote")
+    p_promote.add_argument("--dest", required=True)
+    p_promote.add_argument("--id", required=True)
+    p_promote.add_argument("--take", required=True, type=int)
+
+    p_record = sub.add_parser("record-take")
+    p_record.add_argument("--dest", required=True)
+    p_record.add_argument("--id", required=True)
+    p_record.add_argument("--src", required=True)
+
     args = parser.parse_args(argv)
     try:
         if args.cmd == "init":
@@ -322,6 +408,17 @@ def _cli(argv: list[str] | None = None) -> int:
             dest = Path(args.dest)
             state = load_state(dest)
             print(json.dumps(get_shot(state, args.id)))
+            return 0
+        if args.cmd == "promote":
+            path = promote_take(Path(args.dest), args.id, args.take)
+            print(path)
+            return 0
+        if args.cmd == "record-take":
+            dest = Path(args.dest)
+            state = load_state(dest)
+            path = record_take(dest, state, args.id, Path(args.src))
+            save_state(dest, state)
+            print(path)
             return 0
     except (FileNotFoundError, KeyError, ValueError) as exc:
         print(str(exc), file=sys.stderr)

@@ -132,6 +132,8 @@ Commands:
                     Write films/<slug>/publish/<slug>.otio from jobstore
   film-proxies <film>
                     960×528 h264 NVENC proxies (refuse if compose is up; never rewrite masters)
+  take-promote <film> <id> <take>
+                    Copy takes/<id>/tNNN.mp4 to shots/<id>.mp4 and mark ok
   download-restore [--tier seedvr2-3b]
                     Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
   models-status     Disk bible: keep-set + refuse list (does not delete)
@@ -936,6 +938,19 @@ cmd_film_proxies() {
 }
 
 #######################################
+# Promote a take into shots/NN.mp4.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  film
+#   $2  shot id
+#   $3  take number
+#######################################
+cmd_take_promote() {
+  bash "${REPO_ROOT}/scripts/utilities/take-promote.sh" "$@"
+}
+
+#######################################
 # Opt-in restore pack download (SeedVR2-3B). Does not reap. Not download-models.
 # Globals:
 #   REPO_ROOT
@@ -1038,6 +1053,7 @@ main() {
     film-resume) cmd_film_resume "$@" ;;
     film-export-otio) cmd_film_export_otio "$@" ;;
     film-proxies) cmd_film_proxies "$@" ;;
+    take-promote) cmd_take_promote "$@" ;;
     download-restore) cmd_download_restore "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;

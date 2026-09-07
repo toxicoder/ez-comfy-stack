@@ -78,6 +78,35 @@ def test_mark_resume_and_skip(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     assert "11" in js.resume_ids(dest, crashed)
 
 
+def test_record_and_promote_take(tmp_path: Path) -> None:
+    yaml_text = (SHORTS / "go-see.shots.yaml").read_text(encoding="utf-8")
+    dest = tmp_path / "gosee"
+    state = js.compile_film(yaml_text, dest)
+    js.mark_shot(state, "12", "running")
+    src = tmp_path / "raw.mp4"
+    src.write_bytes(b"take-one")
+    recorded = js.record_take(dest, state, "12", src)
+    assert recorded.name == "t001.mp4"
+    js.save_state(dest, state)
+    promoted = js.promote_take(dest, "12", 1)
+    assert promoted == dest / "shots" / "12.mp4"
+    assert promoted.read_bytes() == b"take-one"
+    row = js.get_shot(js.load_state(dest), "12")
+    assert row["status"] == "ok"
+    assert row["take"] == 1
+    assert row["sha"]
+    with pytest.raises(FileNotFoundError, match="missing take"):
+        js.promote_take(dest, "12", 99)
+    for i in range(2, 12):
+        js.mark_shot(state, "12", "running")
+        extra = tmp_path / f"t{i}.mp4"
+        extra.write_bytes(bytes([i]))
+        js.record_take(dest, state, "12", extra)
+    nums = js.list_takes(dest, "12")
+    assert len(nums) == js.TAKE_KEEP
+    assert min(nums) == 4
+
+
 def test_require_pins(tmp_path: Path) -> None:
     models = tmp_path / "models"
     js.require_pins(models)
