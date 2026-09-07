@@ -36,6 +36,8 @@ teardown() {
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"download-podcast"* ]]
   [[ "${output}" == *"download-music"* ]]
+  [[ "${output}" == *"print-shot"* ]]
+  [[ "${output}" == *"film-resume"* ]]
   [[ "${output}" == *"reap-models"* ]]
   [[ "${output}" == *"models-status"* ]]
   run bash "${MANAGE_SH}" not-a-command
@@ -154,6 +156,11 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"clear-hf-locks"* ]]
+  [[ "${output}" == *"print-shot"* ]]
+  run cmd_print_shot --help
+  [ "${status}" -eq 0 ]
+  run cmd_film_resume
+  [ "${status}" -ne 0 ]
   run cmd_models_status
   [ "${status}" -eq 0 ]
   run cmd_reap_models --help

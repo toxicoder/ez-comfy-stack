@@ -124,6 +124,10 @@ Commands:
   reset-hf-partials [--yes] [--force]
                     Delete *.incomplete under MODELS_DIR (finished weights kept)
   cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
+  print-shot <film> <id>
+                    Queue one compiled shot (01–18) into films/<slug>/shots/
+  film-resume <film>
+                    Reprint failed/crashed shots only (skip ok with 5.00±0.05s)
   models-status     Disk bible: keep-set + refuse list (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
 
@@ -870,6 +874,36 @@ cmd_download_limit() {
 }
 
 #######################################
+# Dispatch print-shot to utilities/print-shot.sh.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  film id [shot id]
+# Outputs:
+#   print-shot logs
+# Returns:
+#   print-shot status
+#######################################
+cmd_print_shot() {
+  bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" "$@"
+}
+
+#######################################
+# Resume a film (skip ok shots with valid duration).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  film id
+# Outputs:
+#   print-shot logs
+# Returns:
+#   print-shot status
+#######################################
+cmd_film_resume() {
+  bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" --resume "$@"
+}
+
+#######################################
 # Print keep-set / refuse from the disk bible (does not delete).
 # Globals:
 #   REPO_ROOT
@@ -955,6 +989,8 @@ main() {
     download-limit) cmd_download_limit "$@" ;;
     clear-hf-locks) cmd_clear_hf_locks ;;
     reset-hf-partials) cmd_reset_hf_partials "$@" ;;
+    print-shot) cmd_print_shot "$@" ;;
+    film-resume) cmd_film_resume "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;
     cleanup) cmd_cleanup ;;
