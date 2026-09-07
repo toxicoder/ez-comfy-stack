@@ -203,7 +203,7 @@ Fix any errors **before** downloading multi‑GB models. Missing lab weights are
 
     Prefer `./scripts/manage.sh setup` first. Copy-paste fixes: [Troubleshooting](troubleshooting.md).
 
-`doctor` also prints the **license policy one-liner**, image tag for this git branch, and JSON status from `download-image` / `download-wan` / `download-ltx` / `download-llm`. Analog **podcast** JSON is printed as a soft line — a missing podcast pack is **not** a doctor failure.
+`doctor` also prints the **license policy one-liner**, image tag for this git branch, JSON status from `download-image` / `download-wan` / `download-ltx` / `download-llm`, and the Kitchen **spark-timing** line (`none` until you record). Analog **podcast** JSON is printed as a soft line — a missing podcast pack is **not** a doctor failure.
 
 ---
 
@@ -355,7 +355,7 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 | Command | Purpose |
 | --- | --- |
 | `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, then doctor |
-| `doctor` | Preflight (docker, GPU, RAM/disk, dirs, license one-liner) |
+| `doctor` | Preflight (docker, GPU, RAM/disk, dirs, license one-liner, spark-timing) |
 | `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port |
 | `start` | Type `yes`; headroom; compose up |
 | `stop` | Stop containers; keep models, outputs, volume |
@@ -374,6 +374,7 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 | `blender` | Host Blender sidecar; dies if compose is up |
 | `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio) |
 | `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache |
+| `spark-timing` | Kitchen wall-clock table (`record --klein N --wan N --ltx N`) |
 | `models-status` / `reap-models` | Disk bible / cache cleanup (never `cleanup` weights) |
 
 `download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3). 3D DCC notes: [Studio sidecars](studio-sidecars.md).
@@ -407,7 +408,7 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 
     Compose bind-mounts `docker/entrypoint.sh`, `docker/install-comfy.sh`, `docker/install-comfy/`, `docker/patch_get_free_memory.py`, and `docker/patch_unified_memory_copy.py` into the container.
 
-    Default attention is **Comfy Kitchen** (`--use-ck-attention`). `doctor` reports `attention: kitchen|sage|pytorch-fallback|unknown`. On a running Spark, `pytorch-fallback` means a 10–20× slow path — see [Troubleshooting](troubleshooting.md).
+    Default attention is **Comfy Kitchen** (`--use-ck-attention`). `doctor` reports `attention: kitchen|sage|pytorch-fallback|unknown`. On a running Spark, `pytorch-fallback` means a 10–20× slow path — see [Troubleshooting](troubleshooting.md). After Kitchen is live, Queue the three smokes and `./scripts/manage.sh spark-timing record --klein N --wan N --ltx N` (CI does not invent seconds).
 
     Change those files on the host, then restart the stack — **no multi‑GB image rebuild**.
 

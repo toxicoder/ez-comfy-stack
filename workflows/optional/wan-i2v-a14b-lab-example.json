@@ -1,7 +1,7 @@
 {
   "id": "wan-i2v-a14b-lab-example",
-  "revision": 2,
-  "last_node_id": 15,
+  "revision": 3,
+  "last_node_id": 16,
   "last_link_id": 16,
   "nodes": [
     {
@@ -38,6 +38,39 @@
         "default"
       ],
       "title": "Wan 2.2 A14B high-noise FP8"
+    },
+    {
+      "id": 16,
+      "type": "UNETLoader",
+      "pos": [
+        440,
+        80
+      ],
+      "size": [
+        360,
+        82
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+        "default"
+      ],
+      "title": "Wan 2.2 A14B low-noise FP8"
     },
     {
       "id": 2,
@@ -548,7 +581,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-i2v-a14b-lab-example\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nThis graph Queues on the high-noise expert so the canvas loads. Dual high/low experts are the full A14B I2V recipe after both weights exist.\n"
+        "## wan-i2v-a14b-lab-example\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\n"
       ],
       "title": "Operator note"
     },
@@ -719,6 +752,19 @@
       "flags": {}
     },
     {
+      "id": 3,
+      "title": "A14B low-noise (unwired; dual KSampler is Templates)",
+      "bounding": [
+        420,
+        40,
+        400,
+        150
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
       "id": 2,
       "title": "For i2v, LoadImage enabled (bypass for t2v)",
       "bounding": [
@@ -734,9 +780,9 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-i2v-a14b-lab-example\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nThis graph Queues on the high-noise expert so the canvas loads. Dual high/low experts are the full A14B I2V recipe after both weights exist.\n",
+    "lab_note": "## wan-i2v-a14b-lab-example\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\n",
     "lab_profile": "wan-i2v-a14b-lab-example",
-    "lab_description": "Wan 2.2 A14B FP8 8-step silent hero. MagCache off. Unload 5B first.",
+    "lab_description": "Wan 2.2 A14B FP8 high+low UNET; Queue on high-noise 8-step. MagCache off. Unload 5B first.",
     "ds": {
       "scale": 1,
       "offset": [

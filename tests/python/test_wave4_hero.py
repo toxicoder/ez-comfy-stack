@@ -20,6 +20,27 @@ def test_film_graphs_carry_dfr_extra() -> None:
         assert "Templates" in extra["lab_dfr"]["note"]
 
 
+def _overlap_hits(graph: dict) -> list[str]:
+    pad = 20
+    boxes: list[tuple[int, str, float, float, float, float]] = []
+    for node in graph["nodes"]:
+        x, y = node["pos"]
+        size = node.get("size", [200, 100])
+        if isinstance(size, dict):
+            width, height = float(size.get("0", 200)), float(size.get("1", 100))
+        else:
+            width, height = float(size[0]), float(size[1])
+        boxes.append(
+            (node["id"], node["type"], x - pad, y - pad, x + width + pad, y + height + pad)
+        )
+    hits: list[str] = []
+    for i, a in enumerate(boxes):
+        for b in boxes[i + 1 :]:
+            if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
+                hits.append(f"{a[0]}({a[1]}) vs {b[0]}({b[1]})")
+    return hits
+
+
 def test_a14b_hero_is_eight_step_magcache_off() -> None:
     graph = json.loads((WF / "optional" / "wan-i2v-a14b-lab-example.json").read_text(encoding="utf-8"))
     assert graph["id"] == "wan-i2v-a14b-lab-example"
@@ -28,8 +49,15 @@ def test_a14b_hero_is_eight_step_magcache_off() -> None:
     assert "lab_magcache" not in graph["extra"]
     sampler = next(n for n in graph["nodes"] if n.get("type") == "KSampler")
     assert int(sampler["widgets_values"][2]) == 8
-    unet = next(n for n in graph["nodes"] if n.get("type") == "UNETLoader")
-    assert "14B" in unet["widgets_values"][0]
+    unets = [n for n in graph["nodes"] if n.get("type") == "UNETLoader"]
+    files = [n["widgets_values"][0] for n in unets]
+    assert any("high_noise" in f and "14B" in f for f in files)
+    assert any("low_noise" in f and "14B" in f for f in files)
+    high = next(n for n in unets if "high_noise" in n["widgets_values"][0])
+    low = next(n for n in unets if "low_noise" in n["widgets_values"][0])
+    assert high["outputs"][0]["links"]
+    assert not low["outputs"][0]["links"]
+    assert not _overlap_hits(graph), _overlap_hits(graph)
 
 
 def test_talking_head_graph() -> None:

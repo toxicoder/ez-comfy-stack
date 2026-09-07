@@ -182,7 +182,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     logs)
-      echo "ok"
+      echo "${LAB_MOCK_DOCKER_LOGS:-ok}"
       exit 0
       ;;
     *)

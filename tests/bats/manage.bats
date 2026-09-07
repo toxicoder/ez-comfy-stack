@@ -57,6 +57,7 @@ FROZEN_MANAGE_VERBS=(
   film-accept
   download-longcat
   download-dreamx
+  spark-timing
   models-status
   reap-models
 )
@@ -88,6 +89,7 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"film-accept"* ]]
   [[ "${output}" == *"download-longcat"* ]]
   [[ "${output}" == *"download-dreamx"* ]]
+  [[ "${output}" == *"spark-timing"* ]]
   [[ "${output}" == *"reap-models"* ]]
   [[ "${output}" == *"models-status"* ]]
   run bash "${MANAGE_SH}" not-a-command
@@ -96,6 +98,7 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"writable"* || "${output}" == *"Doctor OK"* ]]
   [[ "${output}" == *"attention:"* ]]
+  [[ "${output}" == *"spark-timing:"* ]]
   [[ "${output}" == *"MODELS_DIR pack disk"* || "${output}" == *"pack disk"* ]]
   export LAB_MOCK_FREE_MEM_GIB=4
   run bash "${MANAGE_SH}" doctor
@@ -231,6 +234,10 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
   run cmd_download_dreamx --help
   [ "${status}" -eq 0 ]
+  run cmd_spark_timing --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"kitchen"* ]]
+  [[ "${output}" == *"not kitchen"* ]]
   run cmd_models_status
   [ "${status}" -eq 0 ]
   run cmd_reap_models --help

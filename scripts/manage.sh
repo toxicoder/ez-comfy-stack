@@ -145,6 +145,8 @@ Commands:
                     Opt-in LongCat-Video MIT (no NCCL; context-parallel flag only)
   download-dreamx [--tier creator]
                     Opt-in DreamX-Creator 1.0 Apache joint AV (not DreamX-World)
+  spark-timing show|record --klein N --wan N --ltx N
+                    Kitchen wall-clock table (writes COMFY_OUTPUT_DIR/spark-timing.json)
   models-status     Disk bible: keep-set + refuse list (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
 
@@ -347,6 +349,13 @@ cmd_doctor() {
     log "attention flags: --use-ck-attention (Kitchen XOR Sage; stack stopped or logs not yet classified)"
   elif [[ ${attn} == "pytorch-fallback" ]]; then
     warn "attention is pytorch-fallback — 10–20× slow vs Kitchen. See docs/troubleshooting.md"
+  fi
+  local timing_file
+  timing_file="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/spark-timing.json"
+  if [[ -f ${timing_file} ]]; then
+    log "spark-timing: $(tr -d '\n' <"${timing_file}")"
+  else
+    log "spark-timing: none — Queue klein-still-draft / wan-i2v-5s / ltx-i2v-5s then spark-timing record --klein N --wan N --ltx N"
   fi
   local image_json wan_json ltx_json llm_json podcast_json music_json
   image_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-image.sh" status --tier fast --json 2>/dev/null || echo '{}')
@@ -1008,6 +1017,21 @@ cmd_download_dreamx() {
 }
 
 #######################################
+# Kitchen smoke wall-clock table (operator-measured; CI has no GPU).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  show|record --klein N --wan N --ltx N [--json]
+# Outputs:
+#   Status on stderr; JSON on stdout with --json
+# Returns:
+#   spark-timing.sh status
+#######################################
+cmd_spark_timing() {
+  bash "${REPO_ROOT}/scripts/utilities/spark-timing.sh" "$@"
+}
+
+#######################################
 # Print keep-set / refuse from the disk bible (does not delete).
 # Globals:
 #   REPO_ROOT
@@ -1104,6 +1128,7 @@ main() {
     film-accept) cmd_film_accept "$@" ;;
     download-longcat) cmd_download_longcat "$@" ;;
     download-dreamx) cmd_download_dreamx "$@" ;;
+    spark-timing) cmd_spark_timing "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;
     cleanup) cmd_cleanup ;;
