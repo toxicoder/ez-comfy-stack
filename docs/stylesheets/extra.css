@@ -2,6 +2,13 @@
    Tabs stay inside the header; do not hide logo, title, tabs, search,
    palette, version selector, or repo. Do not enable header.autohide. */
 
+/* Material default .md-typeset is 0.8rem (~16px at html 125%). Slight bump
+   so article copy is easier to read. Do not raise html font-size: header
+   compact-on-scroll uses rem and nav chrome should stay the same size. */
+.md-typeset {
+  font-size: 0.875rem;
+}
+
 .md-header .md-header__title,
 .md-header .md-tabs__item,
 .md-header .md-tabs__link {
