@@ -54,6 +54,9 @@ FROZEN_MANAGE_VERBS=(
   download-restore
   download-3d
   blender
+  film-accept
+  download-longcat
+  download-dreamx
   models-status
   reap-models
 )
@@ -82,6 +85,9 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"download-restore"* ]]
   [[ "${output}" == *"download-3d"* ]]
   [[ "${output}" == *"blender"* ]]
+  [[ "${output}" == *"film-accept"* ]]
+  [[ "${output}" == *"download-longcat"* ]]
+  [[ "${output}" == *"download-dreamx"* ]]
   [[ "${output}" == *"reap-models"* ]]
   [[ "${output}" == *"models-status"* ]]
   run bash "${MANAGE_SH}" not-a-command
@@ -219,6 +225,12 @@ FROZEN_MANAGE_VERBS=(
   run cmd_blender --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"host Blender"* ]]
+  run cmd_film_accept --help
+  [ "${status}" -eq 0 ]
+  run cmd_download_longcat --help
+  [ "${status}" -eq 0 ]
+  run cmd_download_dreamx --help
+  [ "${status}" -eq 0 ]
   run cmd_models_status
   [ "${status}" -eq 0 ]
   run cmd_reap_models --help

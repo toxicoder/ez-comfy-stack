@@ -38,6 +38,8 @@ teardown() {
   [[ "${output}" == *"Wan2.2-Fun-A14B-InP"* ]]
   run tier_repo vace
   [[ "${output}" == *"Wan2.1-VACE-1.3B"* ]]
+  run tier_repo s2v
+  [[ "${output}" == *"Wan2.2-S2V-14B"* ]]
   run tier_repo x
   [ "${output}" = "" ]
   run tier_min_gb 5b
@@ -46,6 +48,8 @@ teardown() {
   [ "${output}" = "40" ]
   run tier_min_gb vace
   [ "${output}" = "6" ]
+  run tier_min_gb s2v
+  [ "${output}" = "20" ]
   run tier_include_patterns 5b
   [[ "${output}" == *"wan2.2_ti2v_5B_fp16.safetensors"* ]]
   [[ "${output}" == *"wan2.2_vae.safetensors"* ]]

@@ -59,6 +59,7 @@ tier_repo() {
     5b | a14b) echo "Comfy-Org/Wan_2.2_ComfyUI_Repackaged" ;;
     fun-inp) echo "alibaba-pai/Wan2.2-Fun-A14B-InP" ;;
     vace) echo "Wan-AI/Wan2.1-VACE-1.3B" ;;
+    s2v) echo "Wan-AI/Wan2.2-S2V-14B" ;;
     *) echo "" ;;
   esac
 }
@@ -80,6 +81,7 @@ tier_min_gb() {
     a14b) echo 20 ;;
     fun-inp) echo 40 ;;
     vace) echo 6 ;;
+    s2v) echo 20 ;;
     *) echo 0 ;;
   esac
 }
@@ -117,6 +119,9 @@ tier_include_patterns() {
         "configuration.json"
       ;;
     vace)
+      printf '%s\n' "diffusion_pytorch_model.safetensors" "README.md"
+      ;;
+    s2v)
       printf '%s\n' "diffusion_pytorch_model.safetensors" "README.md"
       ;;
     *)
@@ -178,7 +183,7 @@ tier_size_gb() {
 tiers_to_process() {
   case "$TIER" in
     all) echo "5b a14b fun-inp" ;;
-    5b | a14b | fun-inp | vace) echo "${TIER}" ;;
+    5b | a14b | fun-inp | vace | s2v) echo "${TIER}" ;;
     *) echo "${TIER}" ;;
   esac
 }
@@ -206,10 +211,11 @@ parse_args() {
       --yes | -y) CLEANUP_YES=1 ;;
       status | run | cleanup) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--tier 5b|a14b|fun-inp|vace|all] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier 5b|a14b|fun-inp|vace|s2v|all] [--json]" >&2
         echo "  Default 5b = Wan 2.2 TI2V-5B + wan2.2_vae + umt5 (Apache 2.0)" >&2
         echo "  fun-inp = Wan 2.2 Fun InP A14B first-last-frame (Apache; ~47 GB; not download-models)" >&2
         echo "  vace = Wan 2.1 VACE 1.3B Apache join (~6 GB). Not in --tier all. MagCache off." >&2
+        echo "  s2v = Wan 2.2 S2V-14B talking-head opt-in. Not in --tier all. Unload 5B first." >&2
         echo "  cleanup options: --dry-run (default) | --yes" >&2
         exit 0
         ;;

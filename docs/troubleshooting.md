@@ -149,6 +149,9 @@ sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | `download-3d --tier da3-large` refused | DA3-LARGE is banned | Use `--tier da3-base`. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused |
 | TRELLIS / VACE OOM next to LTX | Two heavy jobs | Stop Comfy or unload LTX first. VACE join is 17 frames (`1+8n`); MagCache off |
 | SuperSplat missing in the image | Host viewer, not Docker | [Splat sidecar](splat-sidecar.md). Do not add it to `docker/Dockerfile` |
+| `film-accept` fail closed | Shot not 5.00±0.05s / not 1280×704 / LTX missing audio | Reprint the shot. Concat `--film --yes` runs this gate. `--skip-accept` is an escape hatch only |
+| A14B / LongCat / DreamX OOM | Two heavy packs coresident | Unload 5B/LTX first. LongCat context-parallel only with `LAB_ALLOW_CONTEXT_PARALLEL=1`. No NCCL |
+| DreamX-World refused | Wrong pack | `download-dreamx --tier creator` only |
 | Empty models in UI | Downloads not run | `./scripts/utilities/download-image.sh status --tier fast`; `download-wan.sh status --tier 5b`; `download-ltx.sh status --tier 2.5`; check `${MODELS_DIR}` mount |
 | Missing `ae.safetensors` / `z_image_turbo_*.safetensors` | **Z-Image** template, not the default stack | Load **klein-still-draft-lab-example**. Default still is Klein 4B Apache (see [licenses](licenses.md)). Optional `download-image --tier zimage` |
 | Missing `flux-2-klein-4b-fp8` / Wan / LTX-2.5 in **\*-lab-example** graphs | Weights not on host and/or Comfy `models/*` not symlinked to host | 1) `./scripts/manage.sh download-models` 2) `ls "${MODELS_DIR}/comfy/diffusion_models"` 3) `docker exec ez-comfy-studio ls -la /comfy-state/ComfyUI/models/diffusion_models` — should be a **symlink** to `/models/comfy/diffusion_models`. LTX-2.5 is gated: set `HF_TOKEN` and accept the Lightricks license |

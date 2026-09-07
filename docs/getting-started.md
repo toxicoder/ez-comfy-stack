@@ -372,6 +372,8 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 | `download-restore` | Opt-in SeedVR2-3B (not `download-models`) |
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) |
 | `blender` | Host Blender sidecar; dies if compose is up |
+| `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio) |
+| `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache |
 | `models-status` / `reap-models` | Disk bible / cache cleanup (never `cleanup` weights) |
 
 `download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3). 3D DCC notes: [Studio sidecars](studio-sidecars.md).

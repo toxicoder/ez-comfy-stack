@@ -139,6 +139,12 @@ Commands:
   download-3d [--tier trellis2|da3-base|all]
                     Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   blender           Host Blender sidecar (dies if compose is up)
+  film-accept <film>
+                    Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
+  download-longcat [--tier video|avatar|all]
+                    Opt-in LongCat-Video MIT (no NCCL; context-parallel flag only)
+  download-dreamx [--tier creator]
+                    Opt-in DreamX-Creator 1.0 Apache joint AV (not DreamX-World)
   models-status     Disk bible: keep-set + refuse list (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
 
@@ -981,6 +987,27 @@ cmd_blender() {
 }
 
 #######################################
+# Fail-closed accept gate before 90s concat.
+#######################################
+cmd_film_accept() {
+  bash "${REPO_ROOT}/scripts/utilities/film-accept.sh" "$@"
+}
+
+#######################################
+# Opt-in LongCat-Video (MIT, no NCCL).
+#######################################
+cmd_download_longcat() {
+  bash "${REPO_ROOT}/scripts/utilities/download-longcat.sh" "$@"
+}
+
+#######################################
+# Opt-in DreamX-Creator 1.0 (Apache; not World).
+#######################################
+cmd_download_dreamx() {
+  bash "${REPO_ROOT}/scripts/utilities/download-dreamx.sh" "$@"
+}
+
+#######################################
 # Print keep-set / refuse from the disk bible (does not delete).
 # Globals:
 #   REPO_ROOT
@@ -1074,6 +1101,9 @@ main() {
     download-restore) cmd_download_restore "$@" ;;
     download-3d) cmd_download_3d "$@" ;;
     blender) cmd_blender "$@" ;;
+    film-accept) cmd_film_accept "$@" ;;
+    download-longcat) cmd_download_longcat "$@" ;;
+    download-dreamx) cmd_download_dreamx "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;
     cleanup) cmd_cleanup ;;

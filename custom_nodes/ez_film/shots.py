@@ -23,7 +23,12 @@ META_KEYS = (
     "shots_per_beat",
     "total_shots",
     "publish_cap_s",
+    "print",
+    "identity_seed",
+    "identity_enhance",
 )
+PRINT_MODES = ("ltx", "dfr")
+IDENTITY_SEED = "42"
 
 
 def film_slug(film: str) -> str:
@@ -84,6 +89,13 @@ def parse_shots_yaml(text: str) -> dict[str, Any]:
         if not match:
             raise ValueError(f"missing meta {key}")
         meta[key] = match.group(1).strip()
+    if meta["print"] not in PRINT_MODES:
+        raise ValueError(f"print must be ltx|dfr, got {meta['print']!r}")
+    if meta["identity_seed"] != IDENTITY_SEED:
+        raise ValueError("identity_seed must be frozen 42")
+    enh = meta["identity_enhance"].lower()
+    if enh not in ("false", "0", "off", "no"):
+        raise ValueError("identity Enhance must be off")
 
     ident_m = re.search(r"^identity_look:\s*\|\s*\n((?:  .*\n)+)", text, re.M)
     if not ident_m:
