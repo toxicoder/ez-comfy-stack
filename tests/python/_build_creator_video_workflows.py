@@ -15,6 +15,12 @@ from pathlib import Path
 import sys
 
 from _wire_prompt_enhance import _rewrite_enhance_blurb, normalize_enhance_widgets
+from _lab_layout import (
+    GROUP_TITLE_INSET,
+    LAB_GROUP_Y0,
+    ensure_group_title_inset,
+    group as _group,
+)
 from _lab_theme import (
     CREATOR_IDENTITY,
     I2V_LOCK,
@@ -133,6 +139,7 @@ def _load(path: Path) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
@@ -165,17 +172,6 @@ def _node(graph: dict, ntype: str, title: str | None = None) -> dict:
         if title is None or n.get("title") == title:
             return n
     raise KeyError(f"{ntype} {title}")
-
-
-def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: str) -> dict:
-    return {
-        "id": gid,
-        "title": title,
-        "bounding": [x, y, w, h],
-        "color": color,
-        "font_size": 24,
-        "flags": {},
-    }
 
 
 def _ensure_preview_line(text: str, *, gif: bool = False) -> str:
@@ -601,6 +597,7 @@ def build_creator_toolkit() -> None:
     enh = _node(g, "EZKleinPromptEnhance")
     prompt = KLEIN_SHORTS
     enh["widgets_values"][0] = prompt
+    enh["widgets_values"][1] = True
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     note = f"""## klein-shorts-still-lab-example
 
@@ -609,11 +606,12 @@ Save prefix: `ez_shorts_still`. Feed into **wan-shorts-i2v-lab-example** or **lt
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 """
     _set_note(g, note, "Klein 4B vertical 9:16 Shorts still")
+    g.get("extra", {}).pop("lab_app_mode", None)
     g["groups"] = [
-        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
-        _group(2, "PROMPT", 460, 40, 920, 400, "#3f789e"),
-        _group(3, "SETTINGS", 1420, 40, 380, 500, "#a1309b"),
-        _group(4, "OUTPUT", 1820, 40, 340, 430, "#3f789e"),
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 400, "#3f789e"),
+        _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
+        _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
     ]
     _dump(WF / "klein-shorts-still-lab-example.json", g)
 
@@ -933,16 +931,19 @@ def _klein_single(
     save = _node(g, "SaveImage")
     save["widgets_values"] = [prefix]
     save["title"] = "Save PNG"
-    _node(g, "EZKleinPromptEnhance")["widgets_values"][0] = prompt
+    enh = _node(g, "EZKleinPromptEnhance")
+    enh["widgets_values"][0] = prompt
+    enh["widgets_values"][1] = True
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     if neg is not None:
         _set_neg(g, neg)
     _set_note(g, note, description)
+    g.get("extra", {}).pop("lab_app_mode", None)
     g["groups"] = [
-        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
-        _group(2, "PROMPT", 460, 40, 920, 400, "#3f789e"),
-        _group(3, "SETTINGS", 1420, 40, 380, 500, "#a1309b"),
-        _group(4, "OUTPUT", 1820, 40, 340, 430, "#3f789e"),
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 400, "#3f789e"),
+        _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
+        _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
     ]
     _dump(WF / f"{stem}.json", g)
 
@@ -1060,7 +1061,7 @@ def _klein_pack(
         _base_node(
             4,
             "EZKleinPromptEnhance",
-            [40, 480],
+            [40, 510],
             [420, 420],
             "IDENTITY",
             [identity, enhance_on, "t2i", hint, "none"],
@@ -1072,7 +1073,7 @@ def _klein_pack(
         _base_node(
             5,
             "CLIPTextEncode",
-            [40, 940],
+            [40, 970],
             [420, 120],
             "Negative",
             [negative],
@@ -1085,7 +1086,7 @@ def _klein_pack(
         _base_node(
             6,
             "EmptyFlux2LatentImage",
-            [40, 1120],
+            [40, 1150],
             [280, 106],
             f"Size {size[0]}x{size[1]}",
             [size[0], size[1], 1],
@@ -1097,7 +1098,7 @@ def _klein_pack(
         _base_node(
             7,
             "Note",
-            [40, 1280],
+            [40, 1310],
             [420, 360],
             "Operator note",
             [note],
@@ -1126,7 +1127,7 @@ def _klein_pack(
             _base_node(
                 9,
                 "ReferenceLatent",
-                [40, 1680],
+                [40, 1710],
                 [280, 80],
                 "Negative + identity plate",
                 [],
@@ -1314,12 +1315,14 @@ def _klein_pack(
             dec_out.append(lid)
 
     groups = [
-        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
-        _group(2, "IDENTITY", 20, 450, 460, 500, "#a1309b"),
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "IDENTITY", 20, LAB_GROUP_Y0 + 430, 460, 500, "#a1309b"),
     ]
     for i, (_prefix, title, _shot) in enumerate(shots):
         y = shot_y0 + i * row_h
-        groups.append(_group(10 + i, f"SHOT {title}", 500, y - 20, 1840, 360, "#3f789e"))
+        groups.append(
+            _group(10 + i, f"SHOT {title}", 500, y - GROUP_TITLE_INSET, 1840, 360, "#3f789e")
+        )
     g = {
         "id": stem,
         "revision": 1,
@@ -1852,7 +1855,9 @@ def main() -> None:
     for path in sorted(WF.rglob("*-lab-example.json")):
         graph = _load(path)
         normalize_enhance_widgets(graph)
-        _dump(path, graph)
+        ensure_group_title_inset(graph)
+        path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+        print(f"wrote {path.relative_to(ROOT)}")
     print("done")
 
 

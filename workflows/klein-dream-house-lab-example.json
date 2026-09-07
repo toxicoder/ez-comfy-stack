@@ -139,7 +139,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        480
+        510
       ],
       "size": [
         420,
@@ -185,7 +185,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        940
+        970
       ],
       "size": [
         420,
@@ -233,7 +233,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        1120
+        1150
       ],
       "size": [
         280,
@@ -277,7 +277,7 @@
       "type": "Note",
       "pos": [
         40,
-        1280
+        1310
       ],
       "size": [
         420,
@@ -3313,7 +3313,7 @@
       "title": "MODEL",
       "bounding": [
         20,
-        40,
+        24,
         430,
         430
       ],
@@ -3326,7 +3326,7 @@
       "title": "HOUSE IDENTITY",
       "bounding": [
         20,
-        450,
+        454,
         460,
         340
       ],
@@ -3339,7 +3339,7 @@
       "title": "SHOT 01 lake facade",
       "bounding": [
         500,
-        60,
+        24,
         1840,
         340
       ],
@@ -3352,7 +3352,7 @@
       "title": "SHOT 02 curb",
       "bounding": [
         500,
-        420,
+        384,
         1840,
         340
       ],
@@ -3365,7 +3365,7 @@
       "title": "SHOT 03 living room",
       "bounding": [
         500,
-        780,
+        744,
         1840,
         340
       ],
@@ -3378,7 +3378,7 @@
       "title": "SHOT 04 kitchen",
       "bounding": [
         500,
-        1140,
+        1104,
         1840,
         340
       ],
@@ -3391,7 +3391,7 @@
       "title": "SHOT 05 dining",
       "bounding": [
         500,
-        1500,
+        1464,
         1840,
         340
       ],
@@ -3404,7 +3404,7 @@
       "title": "SHOT 06 bedroom",
       "bounding": [
         500,
-        1860,
+        1824,
         1840,
         340
       ],
@@ -3417,7 +3417,7 @@
       "title": "SHOT 07 bath",
       "bounding": [
         500,
-        2220,
+        2184,
         1840,
         340
       ],
@@ -3430,7 +3430,7 @@
       "title": "SHOT 08 deck",
       "bounding": [
         500,
-        2580,
+        2544,
         1840,
         340
       ],
@@ -3443,7 +3443,7 @@
       "title": "SHOT 09 twilight",
       "bounding": [
         500,
-        2940,
+        2904,
         1840,
         340
       ],
@@ -3456,7 +3456,7 @@
       "title": "SHOT 10 ridge view",
       "bounding": [
         500,
-        3300,
+        3264,
         1840,
         340
       ],

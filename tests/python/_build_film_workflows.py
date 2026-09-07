@@ -11,6 +11,7 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_layout import GROUP_TITLE_INSET, ensure_group_title_inset, group as _group
 from _wire_prompt_enhance import normalize_enhance_widgets
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -114,6 +115,7 @@ def _load(path: Path) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
@@ -135,17 +137,6 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
         for b in boxes[i + 1 :]:
             if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
                 raise SystemExit(f"overlap {a[0]}({a[1]}) vs {b[0]}({b[1]})")
-
-
-def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: str) -> dict:
-    return {
-        "id": gid,
-        "title": title,
-        "bounding": [x, y, w, h],
-        "color": color,
-        "font_size": 24,
-        "flags": {},
-    }
 
 
 def _inp(name: str, typ: str, link: int | None = None, *, shape: int | None = None, widget: str | None = None) -> dict:
@@ -644,7 +635,7 @@ def build_one_click_film(
     graph["last_node_id"] = max(n["id"] for n in graph["nodes"])
     groups = [
         _group(1, "1. Identity (Klein)", 20, 20, 2100, 1100, "#3f789e"),
-        _group(2, "2. LTX models", 20, 1140, 600, 820, "#a1309b"),
+        _group(2, "2. LTX models", 20, 1180 - GROUP_TITLE_INSET, 600, 820, "#a1309b"),
     ]
     for beat in range(6):
         groups.append(
@@ -652,7 +643,7 @@ def build_one_click_film(
                 3 + beat,
                 f"{3 + beat}. Beat {beat + 1} (3 × 5.00s LTX)",
                 BEAT_X - 20,
-                BEAT_Y0 + beat * BEAT_DY - 20,
+                BEAT_Y0 + beat * BEAT_DY - GROUP_TITLE_INSET,
                 3 * SHOT_DX + 40,
                 BEAT_DY,
                 "#3f789e" if beat % 2 == 0 else "#a1309b",
@@ -663,7 +654,7 @@ def build_one_click_film(
             9,
             "9. Publish 90s MP4",
             BEAT_X - 20,
-            BEAT_Y0 + 6 * BEAT_DY,
+            BEAT_Y0 + 6 * BEAT_DY + 40 - GROUP_TITLE_INSET,
             2000,
             280,
             "#3f789e",

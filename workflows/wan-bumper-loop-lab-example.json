@@ -710,7 +710,7 @@
       "title": "Load models",
       "bounding": [
         20,
-        40,
+        24.0,
         400,
         430
       ],
@@ -723,7 +723,7 @@
       "title": "For i2v, LoadImage enabled (bypass for t2v)",
       "bounding": [
         20,
-        480,
+        464.0,
         400,
         380
       ],
@@ -736,7 +736,7 @@
       "title": "SETTINGS",
       "bounding": [
         1400,
-        40,
+        24,
         640,
         660
       ],
@@ -749,7 +749,7 @@
       "title": "OUTPUT",
       "bounding": [
         2400,
-        40,
+        24,
         360,
         480
       ],
