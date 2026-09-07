@@ -80,6 +80,15 @@ class EZFilmConcat:
                     "step": 0.05,
                 },
             ),
+            "xfade_cs": (
+                "INT",
+                {
+                    "default": 0,
+                    "min": 0,
+                    "max": 50,
+                    "step": 1,
+                },
+            ),
         }
         for index in range(1, SHOT_COUNT + 1):
             required[f"shot_{index:02d}"] = ("VHS_FILENAMES",)
@@ -92,10 +101,17 @@ class EZFilmConcat:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Concat 18 LTX 5.00s MP4s in beat/shot order. Video stream-copy, "
-        "AAC + YouTube loudnorm, cap 90s. Open this node for the 90s preview."
+        "AAC + YouTube loudnorm, cap 90s. xfade_cs is audio-only acrossfade "
+        "(10 = 0.10s); 0 keeps the hard-cut golden. Open this node for preview."
     )
 
-    def run(self, film: str, cap_seconds: float = DEFAULT_CAP_SECONDS, **shots: object):
+    def run(
+        self,
+        film: str,
+        cap_seconds: float = DEFAULT_CAP_SECONDS,
+        xfade_cs: int = 0,
+        **shots: object,
+    ):
         paths = [
             resolve_shot_path(shots.get(f"shot_{index:02d}"))
             for index in range(1, SHOT_COUNT + 1)
@@ -103,7 +119,7 @@ class EZFilmConcat:
         dest_dir = output_directory()
         dest_dir.mkdir(parents=True, exist_ok=True)
         out_mp4 = str(publish_path(film, dest_dir))
-        stitch_film(paths, out_mp4, float(cap_seconds))
+        stitch_film(paths, out_mp4, float(cap_seconds), xfade_cs=int(xfade_cs))
         filename = publish_path(film, dest_dir).name
         return {
             "ui": {
