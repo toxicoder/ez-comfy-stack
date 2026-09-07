@@ -9,7 +9,7 @@ tags: [learn, comfyui, queue, workflow, studio]
 **What's on this page**
 
 - Node graph vs App Mode (same JSON, creator widgets)
-- How lab workflows get onto the canvas
+- How lab workflows get onto the canvas (Workflows and Apps)
 - Queue, seed, widgets, Note node
 - Where outputs go, and what “Missing Models” actually means
 
@@ -45,10 +45,10 @@ The same JSON can open as a **graph** (nodes and wires) or as an **App** (creato
 
 ## How a lab graph shows up
 
-On `start`, the entrypoint copies host `workflows/*.json`, `workflows/shorts/*.json`, and `workflows/dcc/*.json` into Comfy’s `user/default/workflows/`.
+On `start`, the entrypoint copies host `workflows/*.json`, `workflows/shorts/*.json`, and `workflows/dcc/*.json` into Comfy’s `user/default/workflows/`. App Mode graphs (`default_view: app`) land as `*-lab-example.app.json` so they show in the **Apps** sidebar as well as **Workflows**. 90s films stay `*.json` (graph default).
 
 1. Open `http://${SPARK_HOST}:${COMFY_PORT}` (port-forward from a laptop if needed)
-2. Load **klein-still-draft-lab-example** (filename suffix **`-lab-example`**)
+2. Load **klein-still-draft-lab-example** from **Apps** or **Workflows** (filename suffix **`-lab-example`**)
 3. Read the on-canvas **Note node** — purpose, models, sampler, prompting, run steps
 4. Queue
 

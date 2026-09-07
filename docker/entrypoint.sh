@@ -311,8 +311,50 @@ configure_torch_native_triton() {
 }
 
 #######################################
+# True if a lab graph should seed as Comfy .app.json (Apps sidebar).
+# Comfy AppsSidebarTab lists suffix app.json; Workflows lists every JSON.
+# Parse failure or missing python3 is not an app (start still copies .json).
+# Globals:
+#   None
+# Arguments:
+#   $1  path to workflow JSON
+# Outputs:
+#   None
+# Returns:
+#   0 if extra.linearMode is true or lab_app_mode default_view is app
+#######################################
+lab_workflow_is_app() {
+  local path="${1:?}"
+  if ! command -v python3 >/dev/null 2>&1; then
+    return 1
+  fi
+  python3 - "${path}" <<'PY'
+import json
+import sys
+
+path = sys.argv[1]
+try:
+    extra = json.load(open(path, encoding="utf-8")).get("extra") or {}
+except (OSError, json.JSONDecodeError, TypeError, AttributeError):
+    raise SystemExit(1)
+if extra.get("linearMode") is True:
+    raise SystemExit(0)
+mode = extra.get("lab_app_mode") or {}
+if (
+    isinstance(mode, dict)
+    and mode.get("enabled") is True
+    and mode.get("default_view") == "app"
+):
+    raise SystemExit(0)
+raise SystemExit(1)
+PY
+}
+
+#######################################
 # Copy host lab JSON graphs into Comfy user workflows.
 # Includes top-level *.json, shorts/*.json, dcc/*.json, and optional/*.json.
+# App Mode graphs (linearMode or lab_app_mode default_view app) seed as
+# stem.app.json so they appear in Comfy's Apps sidebar as well as Workflows.
 # Globals:
 #   None
 # Arguments:
@@ -326,7 +368,7 @@ configure_torch_native_triton() {
 install_lab_workflows() {
   local src="${1:-/opt/ez-comfy/workflows}"
   local dest="${2:?}"
-  local wf n_wf=0
+  local wf n_wf=0 stem dest_name
   mkdir -p "${dest}"
   if [[ ! -d ${src} ]]; then
     ep_log "no workflows under ${src} (optional mount)"
@@ -334,9 +376,15 @@ install_lab_workflows() {
   fi
   for wf in "${src}"/*.json "${src}"/shorts/*.json "${src}"/dcc/*.json "${src}"/optional/*.json; do
     [[ -f ${wf} ]] || continue
-    cp -f "${wf}" "${dest}/"
+    stem="$(basename "${wf}" .json)"
+    dest_name="${stem}.json"
+    if lab_workflow_is_app "${wf}"; then
+      dest_name="${stem}.app.json"
+      rm -f "${dest}/${stem}.json"
+    fi
+    cp -f "${wf}" "${dest}/${dest_name}"
     n_wf=$((n_wf + 1))
-    ep_log "installed workflow $(basename "${wf}")"
+    ep_log "installed workflow ${dest_name}"
   done
   if [[ ${n_wf} -eq 0 ]]; then
     ep_log "no workflows under ${src} (optional mount)"

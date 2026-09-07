@@ -298,6 +298,46 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "install_lab_workflows seeds App Mode graphs as app.json" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/wf_apps"
+  dest="${TEST_TMP_DIR}/user_wf_apps"
+  mkdir -p "${src}/shorts" "${dest}"
+  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
+    >"${src}/klein-still-draft-lab-example.json"
+  printf '%s\n' '{"extra":{"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
+    >"${src}/prompt-forge-lab-example.json"
+  printf '%s\n' '{"extra":{"lab_app_mode":{"enabled":true,"default_view":"graph"}}}' \
+    >"${src}/shorts/film-go-see-90s-run-lab-example.json"
+  echo '{}' >"${src}/plain-lab-example.json"
+  echo 'not json' >"${src}/broken-lab-example.json"
+  echo '{}' >"${dest}/klein-still-draft-lab-example.json"
+  run lab_workflow_is_app "${src}/klein-still-draft-lab-example.json"
+  [ "${status}" -eq 0 ]
+  run lab_workflow_is_app "${src}/prompt-forge-lab-example.json"
+  [ "${status}" -eq 0 ]
+  run lab_workflow_is_app "${src}/shorts/film-go-see-90s-run-lab-example.json"
+  [ "${status}" -eq 1 ]
+  run lab_workflow_is_app "${src}/plain-lab-example.json"
+  [ "${status}" -eq 1 ]
+  run lab_workflow_is_app "${src}/broken-lab-example.json"
+  [ "${status}" -eq 1 ]
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [ -f "${dest}/klein-still-draft-lab-example.app.json" ]
+  [ ! -f "${dest}/klein-still-draft-lab-example.json" ]
+  [ -f "${dest}/prompt-forge-lab-example.app.json" ]
+  [ ! -f "${dest}/prompt-forge-lab-example.json" ]
+  [ -f "${dest}/film-go-see-90s-run-lab-example.json" ]
+  [ ! -f "${dest}/film-go-see-90s-run-lab-example.app.json" ]
+  [ -f "${dest}/plain-lab-example.json" ]
+  [ ! -f "${dest}/plain-lab-example.app.json" ]
+  [ -f "${dest}/broken-lab-example.json" ]
+  [ ! -f "${dest}/broken-lab-example.app.json" ]
+}
+
 @test "main with mocked install and NO_EXEC" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
