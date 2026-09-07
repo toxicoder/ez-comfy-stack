@@ -743,6 +743,21 @@
         0,
         0
       ]
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13"
+    },
+    "lab_magcache": {
+      "enabled": true,
+      "node": "MagCache",
+      "model_type": "wan2.2_ti2v_5B",
+      "magcache_thresh": 0.04,
+      "magcache_K": 3,
+      "start_step": 2,
+      "end_step": -1,
+      "note": "Draft only. ComfyUI-MagCache dropdown may lack wan2.2_ti2v_5B until upstream exposes it; extra documents the pin."
     }
   },
   "version": 0.4

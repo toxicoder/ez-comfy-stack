@@ -9,23 +9,55 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
 **What's on this page**
 
 - What this project is (and is not)
-- Default stack and safety principles
-- How pieces connect
-- Where to read next
+- Choose a path: learn, first install, create, recover
+- Default stack and the four SSH-safe guards
 
 **What this enables**
 
-- Spinning up a **US-safe local studio** (Klein 4B + Wan 2.2 + LTX-2.5) on one Spark quickly
-- Sharing model weights with other stacks via `${MODELS_DIR}` (default `/mnt/models`)
-- Operating the stack safely over SSH without locking yourself out
+- Finding the right page in one screen instead of scrolling a dump
+- Spinning up a **US-safe local studio** (Klein 4B + Wan 2.2 + LTX-2.5) on one Spark
 
-!!! tip "Start here"
+---
 
-    New to this repo? Follow **[Getting Started](getting-started.md)** for setup → doctor → download → start → first still → stop.
+## Choose a path
 
-    Then: [Prompting](prompting.md) · [Model licenses](licenses.md) · studio playbook [Visual Generative AI](visual-generative-ai.md) · opt-in [Local podcast](podcast.md) · opt-in [Local music](music.md).
+<div class="grid cards" markdown>
 
-    Contributors: [Conventions](project-conventions.md).
+-   :material-school:{ .lg .middle } **New to the studio**
+
+    ---
+
+    What ComfyUI, Klein, Wan, LTX, latents, and Queue mean — then a glossary dialog on dotted terms.
+
+    [:octicons-arrow-right-24: How the studio works](learn/index.md)
+
+-   :material-rocket-launch:{ .lg .middle } **First install**
+
+    ---
+
+    Clone → setup → doctor → download → start (type **yes**) → Queue a still → stop.
+
+    [:octicons-arrow-right-24: Getting Started](getting-started.md)
+
+-   :material-movie-open:{ .lg .middle } **Make something**
+
+    ---
+
+    Still → silent 5 s → AV 5 s, or pick a thumbnail / GIF / 90s film from the catalog.
+
+    [:octicons-arrow-right-24: Still to motion to AV](visual-generative-ai.md)
+
+-   :material-lifebuoy:{ .lg .middle } **Something broke**
+
+    ---
+
+    `doctor` first. Missing Models, LTX 720, Kitchen fallback, stuck downloads.
+
+    [:octicons-arrow-right-24: Troubleshooting](troubleshooting.md)
+
+</div>
+
+Contributors: [Conventions](project-conventions.md). Licenses before a 30 GB pull: [Model licenses](licenses.md).
 
 ---
 
@@ -35,15 +67,13 @@ This is a **sample / demo** repository for **Visual Generative AI** on a **singl
 
 Long-term multi-workload operations should use the full lab project. Use **ez-comfy-stack** when you want faster experimentation.
 
-### This stack vs the full lab
-
 ```mermaid
 flowchart TB
   subgraph EZ["ez-comfy-stack"]
     direction TB
     E1["Docker Compose"]
     E2["One profile: us-safe-studio"]
-    E3["manage.sh operator CLI"]
+    E3["manage.sh + ComfyUI studio"]
     E4["Shared MODELS_DIR"]
     E1 --> E2 --> E3
     E2 --> E4
@@ -74,24 +104,7 @@ flowchart TB
 | UI | port **`${COMFY_PORT}`** (default **8188**) |
 | Memory limit | **90g** (host headroom reserved for SSH) |
 
-Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are **not** defaults. Optional fallbacks (Z-Image, Wan A14B, LTX-2.3) are documented on [Models & Cache](models-and-cache.md). Opt-in audio: [Local podcast](podcast.md) (Kokoro + native ACE-Step) and [Local music](music.md) (rap-first ACE-Step; not part of `download-models`).
-
----
-
-## Session variables
-
-Set these once per SSH session (defaults match `.env.example`). Getting Started repeats them in the copy-paste path.
-
-```bash
-export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"          # LAN IP or DNS of this Spark
-export SPARK_USER="${SPARK_USER:-$USER}"
-export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
-export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
-export COMFY_PORT="${COMFY_PORT:-8188}"
-export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"        # auto | off | integer Mbps
-```
-
-UI: `http://${SPARK_HOST}:${COMFY_PORT}`. From a laptop, port-forward first (see [Getting Started](getting-started.md)).
+Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are **not** defaults. Session variables and port-forward copy-paste live on [Getting Started](getting-started.md). Opt-in audio: [Local podcast](podcast.md) and [Local music](music.md) (not part of `download-models`).
 
 ---
 
@@ -116,69 +129,36 @@ flowchart LR
   S4 --> Safe["SSH stays usable"]
 ```
 
-Details: [Reboot Safety](reboot-safety.md) · [Download Limit](download-limit.md).
+Why those exist: [Hardware, memory, and safety](learn/hardware.md). Operator details: [Reboot safety](reboot-safety.md) · [Download limit](download-limit.md).
 
 ---
 
-## System context
-
-How an operator reaches ComfyUI on a remotely managed Spark:
+## Documentation map
 
 ```mermaid
 flowchart TB
-  Op["Operator workstation"]
-  SSH["SSH / port-forward"]
-  subgraph Spark["DGX Spark host"]
-    direction TB
-    Manage["./scripts/manage.sh"]
-    Compose["Docker Compose<br/>restart: no · mem_limit 90g"]
-    subgraph Ctr["comfyui container"]
-      Comfy["ComfyUI"]
-    end
-    Models["MODELS_DIR<br/>shared cache"]
-    Out["COMFY_OUTPUT_DIR<br/>PNG / MP4"]
-  end
-  UI["Browser · SPARK_HOST:COMFY_PORT"]
-
-  Op --> SSH --> Manage
-  Manage --> Compose --> Comfy
-  Models -.->|bind mount| Comfy
-  Out -.->|bind /outputs| Comfy
-  Comfy --> UI
-  Op --> UI
+  Home["Home"] --> Learn["Learn · concepts + glossary"]
+  Home --> GS["Getting Started"]
+  Learn --> GS
+  GS --> Prompt["Prompting"]
+  GS --> Vis["Still → Wan → LTX"]
+  Vis --> Catalog["Workflow catalog"]
+  Vis --> Shorts["90s shorts"]
+  GS --> Operate["Operate · cache, throttle, reboot"]
+  Operate --> TS["Troubleshooting"]
 ```
-
----
-
-## Documentation path
 
 | When | Read |
 | --- | --- |
+| **What is this?** | [How the studio works](learn/index.md) · [Glossary](glossary.md) |
 | **First run** | [Getting Started](getting-started.md) |
-| **How to prompt Klein / Wan / LTX** | [Prompting](prompting.md) |
+| **How to prompt** | [Prompting](prompting.md) |
 | **Licenses before a 30 GB pull** | [Model licenses](licenses.md) |
 | **Still → silent 5 s → AV 5 s** | [Visual Generative AI](visual-generative-ai.md) |
-| **90s films (first-person running go-see / still-here / switchyard)** | [90s shorts](shorts.md) |
+| **Which graph?** | [Workflow catalog](studio-workflows.md) |
+| **90s films** | [90s shorts](shorts.md) |
 | **Three Sparks, one weight copy** | [Spark farm](spark-farm.md) |
-| **Weights, cache, image pins** | [Models & Cache](models-and-cache.md) |
-| **Throttled downloads** | [Download Limit](download-limit.md) |
-| **Before reboot** | [Reboot Safety](reboot-safety.md) |
+| **`manage.sh` verbs** | [manage.sh reference](manage-cli.md) |
+| **Weights, cache, image pins** | [Models and cache](models-and-cache.md) |
 | **Something broke** | [Troubleshooting](troubleshooting.md) |
 | **Contributing** | [Conventions](project-conventions.md) |
-
-```mermaid
-flowchart TB
-  Home["Home"] --> GS["Getting Started"]
-  GS --> Prompt["Prompting"]
-  GS --> Lic["Licenses"]
-  GS --> Vis["Visual Generative AI"]
-  Vis --> Shorts["90s shorts"]
-  Shorts --> Farm["Spark farm"]
-  GS --> Mod["Models & Cache"]
-  Mod --> DL["Download Limit"]
-  GS --> RS["Reboot Safety"]
-  Vis --> TS["Troubleshooting"]
-  DL --> TS
-  RS --> TS
-  Home --> Conv["Conventions"]
-```

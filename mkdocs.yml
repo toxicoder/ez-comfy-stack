@@ -20,9 +20,11 @@ theme:
     - navigation.tracking
     - toc.follow
     - search.suggest
+    - search.highlight
     - content.code.copy
     - content.code.annotate
     - content.tabs.link
+    - content.tooltips
   palette:
     - scheme: default
       primary: indigo
@@ -39,6 +41,13 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  - javascripts/glossary.js
+
+# Reload serve when the glossary JSON (outside docs/) changes.
+watch:
+  - includes
+
 plugins:
   - search
 
@@ -52,8 +61,13 @@ extra:
 markdown_extensions:
   - admonition
   - attr_list
+  - def_list
+  - footnotes
   - md_in_html
   - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -73,20 +87,32 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Learn:
+      - How the studio works: learn/index.md
+      - ComfyUI basics: learn/comfyui.md
+      - Image and video generation: learn/generation.md
+      - Klein, Wan, and LTX: learn/pipeline.md
+      - Hardware, memory, and safety: learn/hardware.md
+      - Glossary: glossary.md
   - Start:
       - Getting Started: getting-started.md
       - Prompting: prompting.md
       - Model licenses: licenses.md
   - Create:
-      - Visual Generative AI: visual-generative-ai.md
+      - Still to motion to AV: visual-generative-ai.md
+      - Workflow catalog: studio-workflows.md
+      - 90s shorts: shorts.md
       - Local podcast: podcast.md
       - Local music: music.md
-      - 90s shorts: shorts.md
-      - Spark farm: spark-farm.md
+      - Studio sidecars: studio-sidecars.md
+      - Blender GB10 sidecar: blender-gb10-sidecar.md
+      - Splat sidecar: splat-sidecar.md
   - Operate:
-      - Models & Cache: models-and-cache.md
-      - Download Limit: download-limit.md
-      - Reboot Safety: reboot-safety.md
+      - manage.sh reference: manage-cli.md
+      - Models and cache: models-and-cache.md
+      - Download limit: download-limit.md
+      - Reboot safety: reboot-safety.md
+      - Spark farm: spark-farm.md
       - Troubleshooting: troubleshooting.md
   - Contribute:
       - Conventions: project-conventions.md

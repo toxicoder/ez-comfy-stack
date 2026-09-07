@@ -24,6 +24,16 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 
     Most operators only need: set `MODELS_DIR` → `download-models` → confirm basenames. Layer pins and Dockerfile cache order are for maintainers — collapsed below.
 
+## Three stores
+
+| Store | Holds | Not held here |
+| --- | --- | --- |
+| **GHCR image** | ComfyUI + PyTorch | Klein / Wan / LTX weights |
+| **MODELS_DIR** | Weights + `comfy/` relative symlinks | The Comfy venv |
+| **comfy-state volume** | Comfy install, custom nodes | Host PNGs/MP4s (`COMFY_OUTPUT_DIR`) |
+
+`cleanup` (type `DELETE`) removes **comfy-state only**. Concepts: [Hardware, memory, and safety](learn/hardware.md).
+
 ---
 
 ## Default location
@@ -83,6 +93,33 @@ ${MODELS_DIR}/
     checkpoints/        # opt-in ACE-Step 1.5 AIO (download-music --tier turbo / download-podcast --tier acestep)
   hub/                  # HF cache (optional)
 ```
+
+When the default pack moves (LTX 2.3 → 2.5 already happened), **reap** the old tree — do not wait for disk-full:
+
+```bash
+./scripts/manage.sh models-status
+./scripts/manage.sh reap-models --plan
+./scripts/manage.sh reap-models --apply --class junk --yes
+./scripts/manage.sh reap-models --apply --class superseded --quarantine --yes
+```
+
+Opt-in packs (not `download-models`):
+
+```bash
+./scripts/utilities/download-wan.sh run --tier fun-inp   # Fun InP A14B FLF, ~47 GB Apache
+./scripts/manage.sh download-restore --tier seedvr2-3b   # SeedVR2-3B post-concat, ~15 GB Apache
+./scripts/manage.sh download-3d --tier trellis2          # native TRELLIS.2 MIT, no nvdiffrast
+./scripts/manage.sh download-3d --tier da3-base          # DA3-BASE Apache (DA3-LARGE refused)
+./scripts/utilities/download-wan.sh run --tier vace      # Wan 2.1 VACE 1.3B join, ~6 GB Apache
+./scripts/utilities/download-wan.sh run --tier a14b      # A14B FP8 silent hero; unload 5B first
+./scripts/utilities/download-wan.sh run --tier s2v       # S2V-14B talking-head opt-in
+./scripts/manage.sh download-longcat --tier video        # LongCat-Video MIT; no NCCL
+./scripts/manage.sh download-dreamx --tier creator       # DreamX-Creator 1.0 Apache; not World
+```
+
+Unload LTX before Fun InP / TRELLIS / VACE. SeedVR2 is restore-only after concat. `reap-models --drop-pack` cannot eat shared VAEs. SuperSplat is a [host viewer](splat-sidecar.md), not a download.
+
+`manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete weights. `reap-models --plan` is the default; `--apply` requires `--yes`. Shared files (`flux2-vae`, ACE-Step AIO) stay in the keep-set so `--drop-pack` cannot eat them.
 
 `download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/…` file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.
 
@@ -193,7 +230,7 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 | `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
 | `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
-| `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×720 |
+| `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
 | `klein-dream-house-lab-example.json` | Ten IG 4:5 stills of one cabin from new cameras; locked inventory |
 | `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |
@@ -397,7 +434,7 @@ flowchart TB
 
     | Change | Rebuild multi‑GB **torch** stage? | Re-pull **venv-torch**? | Re-pull **venv-extra**? | Re-pull **app**? |
     | --- | --- | --- | --- | --- |
-    | `entrypoint.sh` / `patch_get_free_memory.py` / orchestrator | No | No | No | No |
+    | `entrypoint.sh` / UM patches / orchestrator | No | No | No | No |
     | `install-comfy/common.sh` (clone/link/strip only) | No | No | No | Maybe (nodes/comfy stages) |
     | `install-comfy/phase-nodes.sh` or node **sources** only | No | No | No | Yes (smaller) |
     | VideoHelperSuite / new node **pip** deps (opencv, llama-cpp, …) | No | No | **Yes** (delta only) | Yes |
@@ -405,7 +442,7 @@ flowchart TB
     | `install-comfy/core.sh` / `phase-venv-torch.sh` / `TORCH_VERSION` | Yes | Yes | Yes | Yes |
     | Runtime `apt` only (`gcc`/`g++`/`python3-dev` for Triton JIT) | No | No (`COPY --link`) | No | No |
 
-    Builder: **named stages** `torch` → `comfy` → `nodes`. Torch `COPY` is only `core.sh` + `phase-venv-torch.sh`. Pin `ARG`s are declared in the stage that uses them. Runtime: **`COPY --link` `/opt/parts/venv` then `venv-extra` then `app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, `pythonpath/`, and the free-memory patch so local script iteration needs **no image rebuild**.
+    Builder: **named stages** `torch` → `comfy` → `nodes`. Torch `COPY` is only `core.sh` + `phase-venv-torch.sh`. Pin `ARG`s are declared in the stage that uses them. Runtime: **`COPY --link` `/opt/parts/venv` then `venv-extra` then `app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, `pythonpath/`, and the UM patches so local script iteration needs **no image rebuild**.
 
     Runtime installs **`gcc` + `g++` + `python3-dev`** (not full `build-essential`) so PyTorch 2.13+ Triton can JIT-compile `cuda_utils` (needs **CC + `Python.h`**) on first `CLIPTextEncode`. That is a small apt layer; `COPY --link` keeps the multi‑GB torch blob. If JIT deps are still incomplete, the entrypoint sets `LAB_DISABLE_TORCH_NATIVE_TRITON=1` so torch falls back to eager/cuBLAS.
 
@@ -424,5 +461,8 @@ flowchart TB
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
     | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
     | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for lab **`VHS_VideoCombine`** MP4. **Required** for `wan-*-lab-example` / `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |
+    | `COMFYUI_OPENCUT_REF` | `0.5.0` | [jtydhr88/ComfyUI-OpenCut](https://github.com/jtydhr88/ComfyUI-OpenCut) MIT embed. Fail-soft. Not the Rust rewrite. |
+    | `COMFYUI_MAGCACHE_REF` | `47bdd2a…` | [Zehong-Ma/ComfyUI-MagCache](https://github.com/Zehong-Ma/ComfyUI-MagCache) commit pin (no release tag). Wan 5B draft extra only. |
+    | `COMFYUI_LTX_DIRECTOR_REF` | `a3c809c…` | [WhatDreamsCost-ComfyUI](https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI) GPL clone **only** when `LAB_ENABLE_LTX_DIRECTOR=1`. Commit pin (no release tag). |
 
     **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, `docker/install-comfy/core.sh` (torch) and `docker/install-comfy/common.sh` (Comfy/node refs), then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).

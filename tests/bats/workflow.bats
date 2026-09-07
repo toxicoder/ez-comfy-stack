@@ -155,7 +155,7 @@ assert 'HD 3D game-engine pre-rendered cutscene still' in pos(d)
 assert 'no logos, no text' not in pos(d)
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 for n in d['nodes'])
-assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is True for n in d['nodes'])
+assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is False for n in d['nodes'])
 "
   [ "${status}" -eq 0 ]
 }

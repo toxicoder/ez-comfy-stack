@@ -196,7 +196,7 @@ flowchart TB
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `make coverage` enforces:
-  - **100% Python line coverage** on `patch_get_free_memory`
+  - **100% Python line coverage** on `patch_get_free_memory` and `patch_unified_memory_copy`
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (production-only references do not count)
   - Full BATS suite green  
 - **Tests ship with production code** — same commit as the files under test  
@@ -211,7 +211,7 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  Cov["make coverage"] --> Py["100% line · patch_get_free_memory"]
+  Cov["make coverage"] --> Py["100% line · UM patches"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>named under tests/"]
   Cov --> Bats["Full BATS suite green"]
   Lint["make lint"] --> SC["ShellCheck warnings = defects"]
@@ -251,11 +251,23 @@ flowchart LR
 
 Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory and edge cases later.
 
-**Required page chrome** (every `docs/*.md` page):
+**Required page chrome** (every `docs/*.md` page, including `docs/learn/`):
 
 1. YAML frontmatter: `title`, `description`, `tags`
 2. **What's on this page** (bullet list)
 3. **What this enables** (bullet list)
+
+**Nav (Diátaxis-shaped, task tabs):** Learn (explanation + [glossary](glossary.md)) → Start (tutorial) → Create (how-to) → Operate (how-to + reference) → Contribute. Do not mix a command catalog into Getting Started (`manage-cli.md`) or a workflow spreadsheet into the playbook (`studio-workflows.md`).
+
+**Glossary (definition modal):**
+
+- Source of truth: `includes/glossary.json` (JSON, not YAML — CI pytest does not install PyYAML)
+- Unique `id` (`[a-z0-9-]+`) and unique case-insensitive `aliases`
+- `short` is one line (modal + `title=` tooltip); `long` is markdown on [glossary.md](glossary.md)
+- First occurrence per term **per page**; skip `code` / `pre` / headings / links / the glossary page itself
+- `docs/glossary.py` wraps HTML; `docs/javascripts/glossary.js` opens a native `<dialog>`
+- Do **not** enable Material `abbr` + snippets `auto_append` (hover-only, double-wraps)
+- Do **not** enable `content.instant` unless you re-test the modal on client-side navigation
 
 **Rich formatting patterns** (MkDocs Material — see `mkdocs.yml`):
 
@@ -269,6 +281,8 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 | Task lists `- [ ]` | Prerequisites the operator can check off |
 | `++ctrl+c++` (`pymdownx.keys`) | Keyboard shortcuts |
 | Mermaid | Architecture / decision trees — **after** actionable commands when the reader’s job is to run something |
+| Card grids (`<div class="grid cards" markdown>`) | Home / Learn indexes — equal-weight next steps |
+| `:material-…:` / `:octicons-…:` icons | Cards and scan anchors (`pymdownx.emoji` twemoji) |
 | Bold first phrase in list items | Scan anchors |
 
 **Getting Started** is the primary operator path: keep the happy path short; park image-layer, cold-start, and lab-internals content in collapsible blocks.

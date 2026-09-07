@@ -24,6 +24,20 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
     Seeded **\*-lab-example** graphs use research-backed Positive / Motion text. Leave **Enhance** off unless you replace that text with something short.
 
+```mermaid
+flowchart TB
+  Which{"Which graph is loaded?"} --> K["Klein still / edit"]
+  Which --> W["Wan T2V or I2V"]
+  Which --> L["LTX T2V or I2V"]
+  K --> Kp["Sentences: subject → place → light → camera"]
+  W --> Wp{"I2V?"}
+  Wp -->|yes| Wi["Motion + one camera only"]
+  Wp -->|no| Wt["Entity + scene + motion + aesthetic + one camera"]
+  L --> Lp["Present-tense paragraph · sound interleaved"]
+```
+
+Why the three models exist: [Klein, Wan, and LTX](learn/pipeline.md).
+
 ---
 
 ## Models and text encoders
@@ -91,6 +105,16 @@ STRING out → CLIPTextEncode `text` input.
 4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.
 
 **Enhance defaults to true.** Turn it **off** to pin the source widget (frozen identity bibles). A selected style is still applied to the CLIP string. Style is ignored on I2V (the start image owns look).
+
+```mermaid
+flowchart TD
+  E{"Enhance on?"} -->|no| Pin["CLIP encodes the widget text as typed"]
+  E -->|yes| Lazy["4B GGUF rewrites for this model's encoder"]
+  Lazy --> Style{"Style dropdown?"}
+  Style -->|preset| Rep["Dropdown wins over medium already in the source"]
+  Style -->|none| Keep["Keep rewriter output"]
+  Lazy --> Miss["Missing GGUF / llama.cpp / timeout → passthrough + status"]
+```
 
 When Enhance is **on** and a style is selected (t2i / t2v / Klein edit):
 

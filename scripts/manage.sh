@@ -100,8 +100,8 @@ Commands:
   help              Show this help
   setup [--install-docker] [--yes]
                     Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, doctor
-  doctor            Preflight: docker, GPU, free RAM/disk, models, output dir, license policy
-  status [--json]   Stack status
+  doctor            Preflight: docker, GPU, free RAM/disk, attention, models, output dir, license policy
+  status [--json]   Stack status (attention + host_free_gib when --json)
   start             Start studio stack (requires yes)
   stop              Stop stack (keep models, outputs, and comfy volume)
   restart           stop + start
@@ -124,6 +124,31 @@ Commands:
   reset-hf-partials [--yes] [--force]
                     Delete *.incomplete under MODELS_DIR (finished weights kept)
   cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
+  print-shot <film> <id>
+                    Queue one compiled shot (01–18) into films/<slug>/shots/
+  film-resume <film>
+                    Reprint failed/crashed shots only (skip ok with 5.00±0.05s)
+  film-export-otio <film>
+                    Write films/<slug>/publish/<slug>.otio from jobstore
+  film-proxies <film>
+                    960×528 h264 NVENC proxies (refuse if compose is up; never rewrite masters)
+  take-promote <film> <id> <take>
+                    Copy takes/<id>/tNNN.mp4 to shots/<id>.mp4 and mark ok
+  download-restore [--tier seedvr2-3b]
+                    Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
+  download-3d [--tier trellis2|da3-base|all]
+                    Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
+  blender           Host Blender sidecar (dies if compose is up)
+  film-accept <film>
+                    Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
+  download-longcat [--tier video|avatar|all]
+                    Opt-in LongCat-Video MIT (no NCCL; context-parallel flag only)
+  download-dreamx [--tier creator]
+                    Opt-in DreamX-Creator 1.0 Apache joint AV (not DreamX-World)
+  spark-timing show|record --klein N --wan N --ltx N
+                    Kitchen wall-clock table (writes COMFY_OUTPUT_DIR/spark-timing.json)
+  models-status     Disk bible: keep-set + refuse list (does not delete)
+  reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
 
 Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
@@ -317,6 +342,21 @@ cmd_doctor() {
   else
     ok=1
   fi
+  local attn
+  attn="$(stack_attention_backend)"
+  log "attention: ${attn}"
+  if [[ ${attn} == "unknown" ]]; then
+    log "attention flags: --use-ck-attention (Kitchen XOR Sage; stack stopped or logs not yet classified)"
+  elif [[ ${attn} == "pytorch-fallback" ]]; then
+    warn "attention is pytorch-fallback — 10–20× slow vs Kitchen. See docs/troubleshooting.md"
+  fi
+  local timing_file
+  timing_file="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/spark-timing.json"
+  if [[ -f ${timing_file} ]]; then
+    log "spark-timing: $(tr -d '\n' <"${timing_file}")"
+  else
+    log "spark-timing: none — Queue klein-still-draft / wan-i2v-5s / ltx-i2v-5s then spark-timing record --klein N --wan N --ltx N"
+  fi
   local image_json wan_json ltx_json llm_json podcast_json music_json
   image_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-image.sh" status --tier fast --json 2>/dev/null || echo '{}')
   wan_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-wan.sh" status --tier 5b --json 2>/dev/null || echo '{}')
@@ -324,16 +364,19 @@ cmd_doctor() {
   llm_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" status --json 2>/dev/null || echo '{}')
   podcast_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-podcast.sh" status --tier analog --json 2>/dev/null || echo '{}')
   music_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-music.sh" status --tier turbo --json 2>/dev/null || echo '{}')
-  log "image status: ${image_json}"
-  log "wan status: ${wan_json}"
-  log "ltx status: ${ltx_json}"
-  log "llm status: ${llm_json}"
+  log "MODELS_DIR pack disk:"
+  log "  image status: ${image_json}"
+  log "  wan status: ${wan_json}"
+  log "  ltx status: ${ltx_json}"
+  log "  llm status: ${llm_json}"
   log "podcast status: ${podcast_json} (opt-in; missing pack is not a doctor failure)"
   log "music status: ${music_json} (opt-in; missing pack is not a doctor failure)"
   ensure_prompt_enhance_gguf
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
   check_lab_models_ready "${MODELS_DIR}" || warn "lab workflow models incomplete (not a hard doctor failure)"
   warn_banned_minimax_weights "${MODELS_DIR}"
+  bash "${REPO_ROOT}/scripts/utilities/models-manifest.sh" status >/dev/null || true
+  log "models-status: see manage.sh models-status / reap-models --plan (doctor does not reap)"
   log "License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md"
   if [[ ! -f $(lab_compose_file) ]]; then
     err "compose file missing: $(lab_compose_file)"
@@ -389,6 +432,7 @@ cmd_status() {
   else
     warn "docker not available"
   fi
+  log "attention: $(stack_attention_backend)"
   log "MODELS_DIR=${MODELS_DIR} COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output} COMFY_PORT=${COMFY_PORT:-8188} MEM_LIMIT=${MEM_LIMIT:-90g}"
 }
 
@@ -856,15 +900,177 @@ cmd_download_limit() {
 }
 
 #######################################
+# Dispatch print-shot to utilities/print-shot.sh.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  film id [shot id]
+# Outputs:
+#   print-shot logs
+# Returns:
+#   print-shot status
+#######################################
+cmd_print_shot() {
+  bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" "$@"
+}
+
+#######################################
+# Resume a film (skip ok shots with valid duration).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  film id
+# Outputs:
+#   print-shot logs
+# Returns:
+#   print-shot status
+#######################################
+cmd_film_resume() {
+  bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" --resume "$@"
+}
+
+#######################################
+# Export OTIO timeline from a film jobstore.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  film id
+# Returns:
+#   film-export-otio status
+#######################################
+cmd_film_export_otio() {
+  bash "${REPO_ROOT}/scripts/utilities/film-export-otio.sh" "$@"
+}
+
+#######################################
+# NVENC proxies for a film (refuse if compose is up).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  film id and flags
+# Returns:
+#   film-proxies status
+#######################################
+cmd_film_proxies() {
+  bash "${REPO_ROOT}/scripts/utilities/film-proxies.sh" "$@"
+}
+
+#######################################
+# Promote a take into shots/NN.mp4.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  film
+#   $2  shot id
+#   $3  take number
+#######################################
+cmd_take_promote() {
+  bash "${REPO_ROOT}/scripts/utilities/take-promote.sh" "$@"
+}
+
+#######################################
+# Opt-in restore pack download (SeedVR2-3B). Does not reap. Not download-models.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  download-restore flags
+# Returns:
+#   download-restore status
+#######################################
+cmd_download_restore() {
+  bash "${REPO_ROOT}/scripts/utilities/download-restore.sh" "$@"
+}
+
+#######################################
+# Opt-in 3D packs (TRELLIS.2 native, DA3-BASE).
+#######################################
+cmd_download_3d() {
+  bash "${REPO_ROOT}/scripts/utilities/download-3d.sh" "$@"
+}
+
+#######################################
+# Host Blender sidecar (refuses if compose is up).
+#######################################
+cmd_blender() {
+  bash "${REPO_ROOT}/scripts/utilities/blender.sh" "$@"
+}
+
+#######################################
+# Fail-closed accept gate before 90s concat.
+#######################################
+cmd_film_accept() {
+  bash "${REPO_ROOT}/scripts/utilities/film-accept.sh" "$@"
+}
+
+#######################################
+# Opt-in LongCat-Video (MIT, no NCCL).
+#######################################
+cmd_download_longcat() {
+  bash "${REPO_ROOT}/scripts/utilities/download-longcat.sh" "$@"
+}
+
+#######################################
+# Opt-in DreamX-Creator 1.0 (Apache; not World).
+#######################################
+cmd_download_dreamx() {
+  bash "${REPO_ROOT}/scripts/utilities/download-dreamx.sh" "$@"
+}
+
+#######################################
+# Kitchen smoke wall-clock table (operator-measured; CI has no GPU).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  show|record --klein N --wan N --ltx N [--json]
+# Outputs:
+#   Status on stderr; JSON on stdout with --json
+# Returns:
+#   spark-timing.sh status
+#######################################
+cmd_spark_timing() {
+  bash "${REPO_ROOT}/scripts/utilities/spark-timing.sh" "$@"
+}
+
+#######################################
+# Print keep-set / refuse from the disk bible (does not delete).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  models-manifest.sh args
+# Outputs:
+#   status logs
+# Returns:
+#   0
+#######################################
+cmd_models_status() {
+  bash "${REPO_ROOT}/scripts/utilities/models-manifest.sh" status "$@"
+}
+
+#######################################
+# Dispatch reap-models (default --plan).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  reap-models flags
+# Outputs:
+#   plan/apply logs
+# Returns:
+#   reap-models status
+#######################################
+cmd_reap_models() {
+  bash "${REPO_ROOT}/scripts/utilities/reap-models.sh" "$@"
+}
+
+#######################################
 # After DELETE confirmation, remove Compose volumes (Comfy install state only).
 # Globals:
 #   See file header / caller environment.
 # Arguments:
 #   None
 # Outputs:
-#   Status via log/warn/err on stderr unless noted.
+#   Status via log/warn/err
 # Returns:
-#   0 on success/abort; 1 on hard confirm failure.
+#   0 on success/abort; 1 on hard confirm failure
 #######################################
 cmd_cleanup() {
   require_delete_confirm || {
@@ -911,6 +1117,20 @@ main() {
     download-limit) cmd_download_limit "$@" ;;
     clear-hf-locks) cmd_clear_hf_locks ;;
     reset-hf-partials) cmd_reset_hf_partials "$@" ;;
+    print-shot) cmd_print_shot "$@" ;;
+    film-resume) cmd_film_resume "$@" ;;
+    film-export-otio) cmd_film_export_otio "$@" ;;
+    film-proxies) cmd_film_proxies "$@" ;;
+    take-promote) cmd_take_promote "$@" ;;
+    download-restore) cmd_download_restore "$@" ;;
+    download-3d) cmd_download_3d "$@" ;;
+    blender) cmd_blender "$@" ;;
+    film-accept) cmd_film_accept "$@" ;;
+    download-longcat) cmd_download_longcat "$@" ;;
+    download-dreamx) cmd_download_dreamx "$@" ;;
+    spark-timing) cmd_spark_timing "$@" ;;
+    models-status) cmd_models_status "$@" ;;
+    reap-models) cmd_reap_models "$@" ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"

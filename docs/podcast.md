@@ -127,6 +127,28 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 
 ---
 
+## What runs on Queue
+
+```mermaid
+sequenceDiagram
+  participant U as Studio user
+  participant S as EZPodcastScript
+  participant D as Disclosure
+  participant K as Kokoro TTS
+  participant A as ACE-Step beds
+  participant M as Mix
+
+  U->>S: Queue (Enhance off)
+  S->>D: script string
+  D->>K: bumper + lines
+  D->>A: instrumental tags
+  K->>M: voice stems
+  A->>M: beds
+  M->>U: FLAC + MP3 under COMFY_OUTPUT_DIR
+```
+
+Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step together.
+
 ## Sequential Queue
 
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)

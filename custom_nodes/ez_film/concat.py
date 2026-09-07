@@ -131,7 +131,10 @@ def ffmpeg_stitch_argv(
     cap_seconds: float,
     ffmpeg: str,
 ) -> list[str]:
-    """Build the stitch command (video copy, AAC + YouTube loudnorm).
+    """Build the default stitch command (video copy, AAC + YouTube loudnorm).
+
+    Hard-cut goldens depend on this argv. Audio acrossfade is a separate
+    three-step remux (see :func:`stitch_film` ``xfade_cs``).
 
     Arguments:
         list_path: Concat demuxer list file.
@@ -167,6 +170,187 @@ def ffmpeg_stitch_argv(
         LOUDNORM_FILTER,
         out_mp4,
     ]
+
+
+def audio_acrossfade_filter(n_inputs: int, duration_s: float) -> str:
+    """Build an ffmpeg ``-filter_complex`` graph for chained audio acrossfade.
+
+    Arguments:
+        n_inputs: Number of audio inputs (``[0:a]`` …).
+        duration_s: Acrossfade duration in seconds (e.g. 0.10).
+    Returns:
+        filter_complex string ending in ``[a]`` after loudnorm.
+    Raises:
+        ValueError: fewer than two inputs.
+    """
+    if n_inputs < 2:
+        raise ValueError("acrossfade needs at least 2 inputs")
+    d = f"{duration_s:.2f}"
+    if n_inputs == 2:
+        chain = f"[0:a][1:a]acrossfade=d={d}:c1=tri:c2=tri[ax]"
+    else:
+        parts = [f"[0:a][1:a]acrossfade=d={d}:c1=tri:c2=tri[a1]"]
+        for index in range(2, n_inputs):
+            prev = index - 1
+            label = "ax" if index == n_inputs - 1 else f"a{index}"
+            parts.append(
+                f"[a{prev}][{index}:a]acrossfade=d={d}:c1=tri:c2=tri[{label}]"
+            )
+        chain = ";".join(parts)
+    return f"{chain};[ax]{LOUDNORM_FILTER}[a]"
+
+
+def ffmpeg_video_copy_argv(
+    list_path: str, out_mp4: str, cap_seconds: float, ffmpeg: str
+) -> list[str]:
+    """Concat demuxer, video copy, drop audio (step 1 of xfade remux)."""
+    return [
+        ffmpeg,
+        "-y",
+        "-f",
+        "concat",
+        "-safe",
+        "0",
+        "-i",
+        list_path,
+        "-t",
+        str(cap_seconds),
+        "-c:v",
+        "copy",
+        "-an",
+        out_mp4,
+    ]
+
+
+def ffmpeg_audio_acrossfade_argv(
+    shot_paths: list[str],
+    out_m4a: str,
+    ffmpeg: str,
+    duration_s: float,
+) -> list[str]:
+    """N-input audio acrossfade + loudnorm to AAC 48 kHz stereo 192k."""
+    argv: list[str] = [ffmpeg, "-y"]
+    for path in shot_paths:
+        argv.extend(["-i", path])
+    argv.extend(
+        [
+            "-filter_complex",
+            audio_acrossfade_filter(len(shot_paths), duration_s),
+            "-map",
+            "[a]",
+            "-c:a",
+            "aac",
+            "-ar",
+            AAC_RATE,
+            "-ac",
+            "2",
+            "-b:a",
+            AAC_BITRATE,
+            out_m4a,
+        ]
+    )
+    return argv
+
+
+def ffmpeg_mux_copy_argv(
+    video_mp4: str, audio_m4a: str, out_mp4: str, cap_seconds: float, ffmpeg: str
+) -> list[str]:
+    """Mux copied video with acrossfaded AAC (step 3 of xfade remux)."""
+    return [
+        ffmpeg,
+        "-y",
+        "-i",
+        video_mp4,
+        "-i",
+        audio_m4a,
+        "-t",
+        str(cap_seconds),
+        "-c:v",
+        "copy",
+        "-c:a",
+        "copy",
+        out_mp4,
+    ]
+
+
+def _ffprobe_csv(
+    path: str,
+    args: list[str],
+    ffprobe: str | None = None,
+    run: Any = None,
+) -> str | None:
+    """Run ffprobe and return stripped stdout, or None on failure."""
+    exe = ffprobe if ffprobe is not None else find_ffprobe()
+    if not exe:
+        return None
+    runner = run or subprocess.run
+    try:
+        proc = runner(
+            [exe, "-v", "error", *args, path],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as exc:
+        log(f"ffprobe failed: {exc}")
+        return None
+    if getattr(proc, "returncode", 1) != 0:
+        return None
+    text = (getattr(proc, "stdout", "") or "").strip()
+    return text or None
+
+
+def probe_has_audio(
+    path: str, ffprobe: str | None = None, run: Any = None
+) -> bool:
+    """True when ffprobe reports an audio stream.
+
+    Arguments:
+        path: MP4 path.
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+    Returns:
+        False when ffprobe is missing or no audio stream.
+    """
+    text = _ffprobe_csv(
+        path,
+        [
+            "-select_streams",
+            "a:0",
+            "-show_entries",
+            "stream=codec_type",
+            "-of",
+            "csv=p=0",
+        ],
+        ffprobe=ffprobe,
+        run=run,
+    )
+    return bool(text) and "audio" in text.lower()
+
+
+def probe_audio_hz(
+    path: str, ffprobe: str | None = None, run: Any = None
+) -> int | None:
+    """Audio sample rate in Hz, or None if unavailable."""
+    text = _ffprobe_csv(
+        path,
+        [
+            "-select_streams",
+            "a:0",
+            "-show_entries",
+            "stream=sample_rate",
+            "-of",
+            "csv=p=0",
+        ],
+        ffprobe=ffprobe,
+        run=run,
+    )
+    if not text:
+        return None
+    try:
+        return int(float(text.split(",")[-1].strip()))
+    except ValueError:
+        return None
 
 
 def probe_seconds(path: str, ffprobe: str | None = None) -> float | None:
@@ -209,6 +393,15 @@ def probe_seconds(path: str, ffprobe: str | None = None) -> float | None:
         return None
 
 
+def _run_ffmpeg(argv: list[str], runner: Any) -> None:
+    """Run one ffmpeg argv; raise RuntimeError on non-zero."""
+    log(" ".join(argv))
+    proc = runner(argv, check=False, capture_output=True, text=True)
+    if getattr(proc, "returncode", 1) != 0:
+        err = getattr(proc, "stderr", "") or getattr(proc, "stdout", "") or ""
+        raise RuntimeError(f"ffmpeg stitch failed: {err.strip() or 'exit 1'}")
+
+
 def stitch_film(
     shot_paths: list[str],
     out_mp4: str,
@@ -217,8 +410,13 @@ def stitch_film(
     ffmpeg: str | None = None,
     ffprobe: str | None = None,
     run: Any = None,
+    xfade_cs: int = 0,
 ) -> str:
     """Concat 18 shot MP4s, cap duration, fail if probe exceeds cap.
+
+    Default (``xfade_cs=0``) is concat-demuxer + ``-c:v copy`` (hard-cut golden).
+    ``xfade_cs`` is centiseconds of **audio** acrossfade (10 = 0.10 s); video
+    stays stream-copied. Wan-silent shots have no audio — xfade refuses.
 
     Arguments:
         shot_paths: Exactly 18 MP4 paths in beat/shot order.
@@ -227,31 +425,62 @@ def stitch_film(
         ffmpeg: Override ffmpeg path.
         ffprobe: Override ffprobe path.
         run: Override ``subprocess.run`` (tests).
+        xfade_cs: Audio acrossfade in centiseconds; 0 disables.
     Returns:
         ``out_mp4``.
     Raises:
-        ValueError: wrong shot count.
-        RuntimeError: ffmpeg missing/fails, or duration over cap.
+        ValueError: wrong shot count or invalid xfade_cs.
+        RuntimeError: ffmpeg missing/fails, missing audio, or duration over cap.
     """
     if len(shot_paths) != SHOT_COUNT:
         raise ValueError(f"expected {SHOT_COUNT} shots, found {len(shot_paths)}")
+    if xfade_cs < 0 or xfade_cs > 50:
+        raise ValueError(f"xfade_cs must be 0–50, got {xfade_cs}")
     exe = ffmpeg or find_ffmpeg()
     runner = run or subprocess.run
     list_file = tempfile.NamedTemporaryFile(
         "w", encoding="utf-8", suffix=".txt", delete=False
     )
+    video_tmp = ""
+    audio_tmp = ""
     try:
         for path in shot_paths:
             list_file.write(concat_list_line(path) + "\n")
         list_file.close()
-        argv = ffmpeg_stitch_argv(list_file.name, out_mp4, cap_seconds, exe)
-        log(" ".join(argv))
-        proc = runner(argv, check=False, capture_output=True, text=True)
-        if getattr(proc, "returncode", 1) != 0:
-            err = getattr(proc, "stderr", "") or getattr(proc, "stdout", "") or ""
-            raise RuntimeError(f"ffmpeg stitch failed: {err.strip() or 'exit 1'}")
+        if xfade_cs == 0:
+            argv = ffmpeg_stitch_argv(list_file.name, out_mp4, cap_seconds, exe)
+            _run_ffmpeg(argv, runner)
+        else:
+            for path in shot_paths:
+                if not probe_has_audio(path, ffprobe=ffprobe, run=run):
+                    raise RuntimeError(
+                        f"xfade requires audio on every shot (missing on {path}); "
+                        "Wan-silent concat cannot use --xfade"
+                    )
+            duration_s = xfade_cs / 100.0
+            video_tmp = list_file.name + ".v.mp4"
+            audio_tmp = list_file.name + ".a.m4a"
+            _run_ffmpeg(
+                ffmpeg_video_copy_argv(list_file.name, video_tmp, cap_seconds, exe),
+                runner,
+            )
+            _run_ffmpeg(
+                ffmpeg_audio_acrossfade_argv(shot_paths, audio_tmp, exe, duration_s),
+                runner,
+            )
+            _run_ffmpeg(
+                ffmpeg_mux_copy_argv(video_tmp, audio_tmp, out_mp4, cap_seconds, exe),
+                runner,
+            )
+            hz = probe_audio_hz(out_mp4, ffprobe=ffprobe, run=run)
+            if hz is not None and hz != int(AAC_RATE):
+                raise RuntimeError(f"concat audio is {hz} Hz, expected {AAC_RATE}")
     finally:
         Path(list_file.name).unlink(missing_ok=True)
+        if video_tmp:
+            Path(video_tmp).unlink(missing_ok=True)
+        if audio_tmp:
+            Path(audio_tmp).unlink(missing_ok=True)
 
     dur = probe_seconds(out_mp4, ffprobe=ffprobe)
     if dur is not None and dur > float(cap_seconds) + 0.05:

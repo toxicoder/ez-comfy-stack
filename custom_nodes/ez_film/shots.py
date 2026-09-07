@@ -23,7 +23,27 @@ META_KEYS = (
     "shots_per_beat",
     "total_shots",
     "publish_cap_s",
+    "print",
+    "identity_seed",
+    "identity_enhance",
 )
+PRINT_MODES = ("ltx", "dfr")
+IDENTITY_SEED = "42"
+LTX_PRINT_TEMPLATE = "ltx-i2v-5s-lab-example.json"
+DFR_TEMPLATE = "templates/ltx-2.5/t2v-i2v-two-stage-distilled"
+
+
+def print_template(mode: str) -> str:
+    """Map YAML ``print:`` to a lab graph or official Templates path.
+
+    ``dfr`` is not a vendored JSON blob (UUID subgraphs). The stub records
+    the Templates SoT path from ``workflows/quality/ltx-2.5/NOTICE.md``.
+    """
+    if mode == "dfr":
+        return DFR_TEMPLATE
+    if mode == "ltx":
+        return LTX_PRINT_TEMPLATE
+    raise ValueError(f"print must be ltx|dfr, got {mode!r}")
 
 
 def film_slug(film: str) -> str:
@@ -84,6 +104,13 @@ def parse_shots_yaml(text: str) -> dict[str, Any]:
         if not match:
             raise ValueError(f"missing meta {key}")
         meta[key] = match.group(1).strip()
+    if meta["print"] not in PRINT_MODES:
+        raise ValueError(f"print must be ltx|dfr, got {meta['print']!r}")
+    if meta["identity_seed"] != IDENTITY_SEED:
+        raise ValueError("identity_seed must be frozen 42")
+    enh = meta["identity_enhance"].lower()
+    if enh not in ("false", "0", "off", "no"):
+        raise ValueError("identity Enhance must be off")
 
     ident_m = re.search(r"^identity_look:\s*\|\s*\n((?:  .*\n)+)", text, re.M)
     if not ident_m:

@@ -80,6 +80,15 @@ class EZFilmConcat:
                     "step": 0.05,
                 },
             ),
+            "xfade_cs": (
+                "INT",
+                {
+                    "default": 0,
+                    "min": 0,
+                    "max": 50,
+                    "step": 1,
+                },
+            ),
         }
         for index in range(1, SHOT_COUNT + 1):
             required[f"shot_{index:02d}"] = ("VHS_FILENAMES",)
@@ -92,10 +101,17 @@ class EZFilmConcat:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Concat 18 LTX 5.00s MP4s in beat/shot order. Video stream-copy, "
-        "AAC + YouTube loudnorm, cap 90s. Open this node for the 90s preview."
+        "AAC + YouTube loudnorm, cap 90s. xfade_cs is audio-only acrossfade "
+        "(10 = 0.10s); 0 keeps the hard-cut golden. Open this node for preview."
     )
 
-    def run(self, film: str, cap_seconds: float = DEFAULT_CAP_SECONDS, **shots: object):
+    def run(
+        self,
+        film: str,
+        cap_seconds: float = DEFAULT_CAP_SECONDS,
+        xfade_cs: int = 0,
+        **shots: object,
+    ):
         paths = [
             resolve_shot_path(shots.get(f"shot_{index:02d}"))
             for index in range(1, SHOT_COUNT + 1)
@@ -103,7 +119,7 @@ class EZFilmConcat:
         dest_dir = output_directory()
         dest_dir.mkdir(parents=True, exist_ok=True)
         out_mp4 = str(publish_path(film, dest_dir))
-        stitch_film(paths, out_mp4, float(cap_seconds))
+        stitch_film(paths, out_mp4, float(cap_seconds), xfade_cs=int(xfade_cs))
         filename = publish_path(film, dest_dir).name
         return {
             "ui": {
@@ -120,12 +136,49 @@ class EZFilmConcat:
         }
 
 
+FILM_DISCLOSURE = (
+    "This video includes AI-generated picture and sound (LTX Community License). "
+    "Do not strip provenance. Not legal advice."
+)
+
+
+class EZFilmDisclosure:
+    """LTX Community License end-card text (disclose AI media)."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "text": ("STRING", {"default": "", "multiline": True}),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("text",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/film"
+    DESCRIPTION = (
+        "Prepend the LTX Community License AI-media disclosure. "
+        "Idempotent. Not legal advice."
+    )
+
+    def run(self, text: str = "") -> tuple[str]:
+        body = str(text or "").strip()
+        if body.startswith(FILM_DISCLOSURE):
+            return (body,)
+        if not body:
+            return (FILM_DISCLOSURE,)
+        return (f"{FILM_DISCLOSURE}\n\n{body}",)
+
+
 NODE_CLASS_MAPPINGS = {
     "EZUnloadModels": EZUnloadModels,
     "EZFilmConcat": EZFilmConcat,
+    "EZFilmDisclosure": EZFilmDisclosure,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "EZUnloadModels": "Unload models (pass IMAGE)",
     "EZFilmConcat": "Save 90s film (MP4) — open node for preview",
+    "EZFilmDisclosure": "LTX AI-media disclosure (end-card)",
 }

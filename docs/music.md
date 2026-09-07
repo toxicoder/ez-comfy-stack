@@ -28,6 +28,22 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 
 ---
 
+```mermaid
+sequenceDiagram
+  participant U as Studio user
+  participant C as ACE-Step 1.5 turbo AIO
+  participant L as Lyrics + tags
+  participant D as VAEDecodeAudio
+
+  U->>L: original bars (Enhance off)
+  U->>C: Queue draft 32 s
+  C->>D: latent audio
+  D->>U: ez_rap_draft FLAC + MP3
+  U->>C: Queue full 96 s when the draft is good
+```
+
+Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step together.
+
 ## Two graphs
 
 Do **not** load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph.

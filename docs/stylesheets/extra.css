@@ -32,3 +32,69 @@
     transition: none;
   }
 }
+
+/* Glossary term triggers + definition dialog. Keep header controls visible. */
+.ez-term {
+  border-bottom: 1px dotted var(--md-accent-fg-color);
+  cursor: help;
+}
+
+.ez-term:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
+.ez-glossary-dialog {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  padding: 0;
+  max-width: min(32rem, calc(100vw - 2rem));
+  color: var(--md-default-fg-color);
+  background: var(--md-default-bg-color);
+  box-shadow: var(--md-shadow-z3);
+}
+
+.ez-glossary-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.ez-glossary-dialog__panel {
+  padding: 1rem 1.15rem 1.15rem;
+}
+
+.ez-glossary-dialog__close {
+  float: right;
+  margin: 0 0 0.5rem 0.75rem;
+  border: 0;
+  background: transparent;
+  color: var(--md-accent-fg-color);
+  cursor: pointer;
+  font: inherit;
+}
+
+.ez-glossary-dialog__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.ez-glossary-dialog__body,
+.ez-glossary-dialog__see,
+.ez-glossary-dialog__more {
+  margin: 0 0 0.65rem;
+}
+
+.ez-glossary-dialog__chip {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--md-accent-fg-color);
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ez-glossary-dialog {
+    transition: none;
+  }
+}

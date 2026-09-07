@@ -59,8 +59,11 @@ teardown() {
   [ "${SEEDS}" = "1,2,3" ]
   parse_args sync-models
   [ "${CMD}" = "sync-models" ]
+  parse_args dispatch --film go-see
+  [ "${CMD}" = "dispatch" ]
   run bash "${SF}" --help
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"dispatch"* ]]
   run bash "${SF}" --nope
   [ "${status}" -ne 0 ]
 }
@@ -96,6 +99,24 @@ teardown() {
   run cmd_run
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"US Excluded Territory"* ]]
+}
+
+@test "spark-farm dispatch print-shot never starts compose" {
+  run dispatch_shot_groups 3
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"01 02 03 04 05 06"* ]]
+  [[ "${output}" == *"07 08 09 10 11 12"* ]]
+  [[ "${output}" == *"13 14 15 16 17 18"* ]]
+  FILM=go-see
+  run cmd_dispatch
+  [ "${status}" -eq 0 ]
+  grep -q 'print-shot' "${TEST_TMP_DIR}/ssh_calls.log"
+  if grep -E 'compose up|manage.sh start' "${TEST_TMP_DIR}/ssh_calls.log"; then
+    return 1
+  fi
+  FILM=h3-go-see
+  run cmd_dispatch
+  [ "${status}" -ne 0 ]
 }
 
 @test "spark-farm CLI status and empty hosts fail" {

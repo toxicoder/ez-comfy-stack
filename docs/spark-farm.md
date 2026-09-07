@@ -12,7 +12,8 @@ tags: [spark, farm, fabric, comfyui]
 - Fabric NFS / rsync vs management SSH
 - Three ComfyUI UIs (Queue lab-example graphs on each)
 - Optional `sync-models` (rsync `MODELS_DIR/comfy` over fabric)
-- What this sample stack refuses (NCCL, K3s, MiniMax H3)
+- `dispatch`: local `print-shot` per host, never remote compose up
+- What this sample stack refuses (NCCL, K3s, MiniMax H3, H3 Director)
 
 **What this enables**
 
@@ -20,7 +21,7 @@ tags: [spark, farm, fabric, comfyui]
 - Copies on the 200 GbE fabric, not the 10 GbE mgmt NIC
 - Unchanged `restart: "no"` and local heavy confirm on `start`
 
-This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab).
+This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab). You still have **no NCCL** and **no multi-GPU graph** in this sample stack — three UIs, one weight copy, independent 5 s Queues.
 
 ## Farm vs relay
 
@@ -87,6 +88,8 @@ See [90s shorts](shorts.md). MiniMax H3 films are banned (see [licenses](license
 
 The `run` subcommand prints a **film-*-90s / wan-i2v-shot / ltx-i2v-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
 
+`dispatch` assigns shots **01–06 / 07–12 / 13–18** (or an even split on two hosts) and SSH-runs **local** `./scripts/manage.sh print-shot` on each Spark. It **never** remote-starts compose. Director is off this path. Concat on spark-0 after gather.
+
 Memory: keep `MEM_LIMIT=90g`, `MEM_RESERVATION=80g`, `MIN_HOST_FREE_GIB=28`, `shm_size: 16gb`.
 
 ## Commands
@@ -95,4 +98,7 @@ Memory: keep `MEM_LIMIT=90g`, `MEM_RESERVATION=80g`, `MIN_HOST_FREE_GIB=28`, `sh
 ./scripts/utilities/spark-farm.sh status [--json]
 ./scripts/utilities/spark-farm.sh sync-models
 ./scripts/utilities/spark-farm.sh run --film go-see
+./scripts/utilities/spark-farm.sh dispatch --film go-see
 ```
+
+Start compose yourself on each node (`./scripts/manage.sh start`, type yes). Then dispatch.

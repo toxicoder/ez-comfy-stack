@@ -24,6 +24,14 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "Dockerfile never vendors nvdiffrast blender or SuperSplat" {
+  local df="${REPO_ROOT}/docker/Dockerfile"
+  run grep -iE 'nvdiffrast|nvdiffrec|supersplat' "${df}"
+  [ "${status}" -ne 0 ]
+  run grep -iE 'blender' "${df}"
+  [ "${status}" -ne 0 ]
+}
+
 @test "Dockerfile defaults to public Docker Hub CUDA base not nvcr" {
   # Builder default is runtime (wheels); devel is an override, not the ARG default.
   run grep -E 'ARG CUDA_BASE_IMAGE=nvidia/cuda:.*runtime' "${REPO_ROOT}/docker/Dockerfile"
@@ -112,6 +120,7 @@ teardown() {
   [[ "${torch_copy}" != *phase-nodes* ]]
   [[ "${torch_copy}" != *entrypoint* ]]
   [[ "${torch_copy}" != *patch_get_free_memory* ]]
+  [[ "${torch_copy}" != *patch_unified_memory_copy* ]]
   [[ "${torch_copy}" != *install-comfy.sh* ]]
   [[ "${torch_pins}" == *TORCH_VERSION* ]]
   [[ "${torch_pins}" != *COMFYUI_REF* ]]
@@ -158,6 +167,12 @@ teardown() {
   # VideoHelperSuite pin surface + runtime ffmpeg for VHS
   run grep -E 'ARG COMFYUI_VHS_REF=' "${df}"
   [ "$status" -eq 0 ]
+  run grep -E 'ARG COMFYUI_OPENCUT_REF=0\.5\.0' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'ARG COMFYUI_MAGCACHE_REF=[0-9a-f]{7,}' "${df}"
+  [ "$status" -eq 0 ]
+  run grep -E 'ARG COMFYUI_LTX_DIRECTOR_REF=[0-9a-f]{7,}' "${df}"
+  [ "$status" -eq 0 ]
   run grep -E '^\s*ffmpeg\s*$|ffmpeg \\' "${df}"
   [ "$status" -eq 0 ]
 }
@@ -172,6 +187,8 @@ teardown() {
   run grep -E 'install-comfy:/opt/ez-comfy/install-comfy' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'patch_get_free_memory\.py:/opt/ez-comfy/patch_get_free_memory\.py' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'patch_unified_memory_copy\.py:/opt/ez-comfy/patch_unified_memory_copy\.py' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'pythonpath:/opt/ez-comfy/pythonpath' "${compose}"
   [ "$status" -eq 0 ]
@@ -241,6 +258,52 @@ teardown() {
 
 @test "compose has mem_limit" {
   run grep -E 'mem_limit' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+}
+
+@test "studio-ui profile is optional no GPU 512m restart no" {
+  local compose="${REPO_ROOT}/docker/docker-compose.yml"
+  run grep -F 'profiles:' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -F 'ez-comfy-studio-ui' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -F 'mem_limit: 512m' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'postgres|redis' "${compose}"
+  [ "$status" -ne 0 ]
+}
+
+@test "compose soft cpus is 16 not 12" {
+  run grep -E 'cpus: 16.0' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'cpus: 12' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -ne 0 ]
+  run grep -E 'cpu: "16"' "${REPO_ROOT}/config/resource-policy.yaml"
+  [ "$status" -eq 0 ]
+}
+
+@test "compose and entrypoint use Kitchen not Sage and not highvram" {
+  # Argv tokens are their own printf lines; comments may mention banned flags.
+  run grep -E '^[[:space:]]*--use-ck-attention([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -eq 0 ]
+  run grep -E '^[[:space:]]*--use-sage-attention([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -ne 0 ]
+  run grep -E '^[[:space:]]*--highvram([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -ne 0 ]
+  run grep -E '^[[:space:]]*--gpu-only([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -ne 0 ]
+  run grep -E 'mem_limit:.*90g|MEM_LIMIT:-90g' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -F 'TORCH_COMPILE_DISABLE' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -F 'OMP_NUM_THREADS' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+}
+
+@test "phase-nodes does not pip install sageattention from PyPI" {
+  run grep -E 'pip_install sageattention' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "$status" -ne 0 ]
+  run grep -F 'install_sage_wheel_if_pinned' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "$status" -eq 0 ]
 }
 
@@ -334,5 +397,14 @@ teardown() {
 
 @test "resource policy documents studio memory limits" {
   run grep -E 'studio|flux-to-ltx|90g' "${REPO_ROOT}/config/resource-policy.yaml"
+  [ "$status" -eq 0 ]
+}
+
+@test "cleanup help still says it does not delete weights" {
+  run bash "${MANAGE_SH}" help
+  [ "$status" -eq 0 ]
+  [[ "${output}" == *"comfy-state volume only"* ]]
+  [[ "${output}" != *"cleanup"*"delete weights"* ]]
+  run grep -F 'reap-models' "${MANAGE_SH}"
   [ "$status" -eq 0 ]
 }

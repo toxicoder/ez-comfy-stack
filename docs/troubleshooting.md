@@ -24,6 +24,19 @@ tags: [troubleshooting, comfyui, docker]
 
     Many rows below are hard failures `doctor` already reports. Prefer `./scripts/manage.sh setup` when Docker or `MODELS_DIR` is missing.
 
+## Studio user (canvas)
+
+| Symptom | Likely cause | Action |
+| --- | --- | --- |
+| **Missing Models** on a `*-lab-example` | Weights not on `MODELS_DIR` / broken `comfy/` symlink | `./scripts/manage.sh download-models` then restart. [Models and cache](models-and-cache.md) |
+| LTX `einops` / divide by 45 | Width/height not ÷32 (720 or 1080) | Lab size is **1280×704**. `ez_ltx_spatial` auto-snaps; prefer typing 704 |
+| No MP4 preview, only PNGs | Old graph without VHS, or looking at SaveImage | Re-open seeded `wan-*` / `ltx-*`; open **Save video (MP4)** node |
+| LTX MP4 has no sound | Missing audio VAE decode → VHS | Re-open current **ltx-*-lab-example** |
+| Enhance did nothing | GGUF / llama.cpp missing (fail-soft) | Read **Enhance status**. `download-models` then restart |
+| VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
+
+Concepts: [ComfyUI basics](learn/comfyui.md). Full tables below.
+
 ---
 
 ## Host & Docker
@@ -118,6 +131,9 @@ sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | --- | --- | --- |
 | `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |
 | Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
+| 10–20× slow / mushy video vs a 4090 | Silent PyTorch attention fallback (Kitchen/Sage not active) | `./scripts/manage.sh doctor` must **not** say `attention: pytorch-fallback` on a running Spark. Logs should contain `Using Comfy Kitchen attention`. Launch uses `--use-ck-attention` (never `--use-sage-attention` next to it). Do **not** `pip install sageattention` from PyPI on aarch64. Do **not** `spark-timing record` on that path (the command refuses) |
+| Empty Kitchen timing table | CI has no GPU; seconds are operator-measured | `attention: kitchen`, Queue the three smokes, then `./scripts/manage.sh spark-timing record --klein N --wan N --ltx N`. File: `${COMFY_OUTPUT_DIR}/spark-timing.json`. Record refuses if compose is up and attention is not `kitchen` |
+| SSH drop mid-90s film | `restart: "no"` is correct; no jobstore before this change | `./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see` reprints only failed/crashed shots. Ok clips with duration 5.00±0.05 s are skipped |
 | Build OK, `status` empty / not in `docker ps` | Container exited immediately (`restart: "no"`) | Pull latest (workflow no longer mounts into `ComfyUI/` before clone). `./scripts/manage.sh logs` or `docker logs ez-comfy-studio`. Reset poisoned volume: `./scripts/manage.sh stop && docker volume rm ez-comfy-state` then `start` again. Stop other GPU containers if needed |
 | `start` returns while logs still downloading torch | Normal cold install; multi‑GB wheels | Leave it running; `start` streams logs by default. Re-attach: `./scripts/manage.sh logs`. Markers: `[comfy-install] ══ step N/12 ══` (or `Docker phase: …` during image prebuild) |
 | Quiet for minutes on step 4 (PyTorch) | Large cudnn/torch wheel download | Prefer GHCR prebuilt image (seed, no pip). Or wait for pip bars; host heartbeat every 30s |
@@ -136,6 +152,20 @@ sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
+| Disk full / leftover LTX-2.3 snapshot | No stack-wide reap; LTX 2.3 tree still on disk after 2.5 | `./scripts/manage.sh reap-models --plan` then `--apply --class superseded --quarantine --yes`. `cleanup` does **not** delete weights. After two weeks: `reap-models drop-quarantine --older-than 14d --yes` |
+| Fun InP / SeedVR2 filled the box | Opt-in ~47 GB / ~15 GB packs | `reap-models --plan`; `--drop-pack` cannot eat shared VAE. Unload LTX before Fun InP. SeedVR2 is post-concat only |
+| `film-proxies` / NVENC preview refused | Compose still up | `./scripts/manage.sh stop` then retry. Proxies never rewrite masters |
+| MagCache node missing on Wan draft | Fail-soft clone; upstream dropdown may lack `wan2.2_ti2v_5B` | Graph still Queues without MagCache. See `extra.lab_magcache` on `wan-i2v-5s-lab-example`. Hero LTX graphs must not contain MagCache |
+| LTX Director missing | GPL clone is opt-in | `LAB_ENABLE_LTX_DIRECTOR=1` then restart. Never MiniMax H3 Director |
+| studio-ui empty / port closed | Profile not started; default `start` skips it | `docker compose --profile studio-ui up studio-ui`. No GPU. Compile a film first |
+| take-promote missing file | No `takes/<id>/tNNN.mp4` | Print the shot (take increments on `running`), then promote |
+| `blender` exit 2 / occupancy | Compose still up | `./scripts/manage.sh stop` then retry. Host Blender is never in the Dockerfile |
+| `download-3d --tier da3-large` refused | DA3-LARGE is banned | Use `--tier da3-base`. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused |
+| TRELLIS / VACE OOM next to LTX | Two heavy jobs | Stop Comfy or unload LTX first. VACE join is 17 frames (`1+8n`); MagCache off |
+| SuperSplat missing in the image | Host viewer, not Docker | [Splat sidecar](splat-sidecar.md). Do not add it to `docker/Dockerfile` |
+| `film-accept` fail closed | Shot not 5.00±0.05s / not 1280×704 / LTX missing audio | Reprint the shot. Concat `--film --yes` runs this gate. `--skip-accept` is an escape hatch only |
+| A14B / LongCat / DreamX OOM | Two heavy packs coresident | Unload 5B/LTX first. LongCat context-parallel only with `LAB_ALLOW_CONTEXT_PARALLEL=1`. No NCCL |
+| DreamX-World refused | Wrong pack | `download-dreamx --tier creator` only |
 | Empty models in UI | Downloads not run | `./scripts/utilities/download-image.sh status --tier fast`; `download-wan.sh status --tier 5b`; `download-ltx.sh status --tier 2.5`; check `${MODELS_DIR}` mount |
 | Missing `ae.safetensors` / `z_image_turbo_*.safetensors` | **Z-Image** template, not the default stack | Load **klein-still-draft-lab-example**. Default still is Klein 4B Apache (see [licenses](licenses.md)). Optional `download-image --tier zimage` |
 | Missing `flux-2-klein-4b-fp8` / Wan / LTX-2.5 in **\*-lab-example** graphs | Weights not on host and/or Comfy `models/*` not symlinked to host | 1) `./scripts/manage.sh download-models` 2) `ls "${MODELS_DIR}/comfy/diffusion_models"` 3) `docker exec ez-comfy-studio ls -la /comfy-state/ComfyUI/models/diffusion_models` — should be a **symlink** to `/models/comfy/diffusion_models`. LTX-2.5 is gated: set `HF_TOKEN` and accept the Lightricks license |
@@ -147,7 +177,7 @@ sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | `CalledProcessError` compiling `cuda_utils*.so` / `bmm_outer_product` on **CLIPTextEncode** (LTX Gemma or Flux) | Triton JIT has `gcc` but fails the compile (missing `Python.h` / `python3-dev`, or `libcuda.so.1` not on gcc `LIBRARY_PATH`). stderr is swallowed by Triton | Pull/rebuild image so runtime has **`python3-dev`** + `gcc`/`g++`. Restart. Confirm: `docker exec ez-comfy-studio test -f /usr/include/python3.*/Python.h && echo ok`. Logs should show `Triton JIT deps OK` (or auto-disable). Escape hatch: `LAB_DISABLE_TORCH_NATIVE_TRITON=1` then restart (eager/cuBLAS fallback; CLIP still works) |
 | KSampler LTX: `Expected size 768 but got size 4096` / `embeddings_connector` | Wrong CLIP (projection-only or LTX-2.3 DualCLIP on a 2.5 graph) | Lab graphs need **CLIPLoader**: `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**. Run `./scripts/manage.sh download-models`, re-open **ltx-*-lab-example** from `workflows/` |
 | KSampler LTX: `cannot reshape tensor of 0 elements into shape [1, 0, 32, -1]` / `freqs_cis_matrix` / `av_model` audio RoPE | LTX is a **joint AV** transformer; video-only latents leave audio length T=0 | Re-open a current **ltx-*-lab-example** graph (has `LTXVEmptyLatentAudio` + `LTXVConcatAVLatent` + `ltx-2.5-audio-vae-bf16`). Do not feed `EmptyLTXVLatentVideo` / `LTXVImgToVideo` straight into `KSampler`. Confirm `ls "${MODELS_DIR}/comfy/vae/ltx-2.5-audio-vae-bf16.safetensors"` |
-| `LTXVImgToVideo` `einops.EinopsError` / `can't divide axis of length 45` (or 33) | LTX video VAE is **32×** spatial. Broadcast **720** and **1080** are not divisible by 32 (720/16=45, then the next `/2` patch fails) | Pull latest and restart so `ez_ltx_spatial` is installed — Queue **auto-snaps** 720→704 and 1080→1056 (stderr `[ez_ltx_spatial]`). Lab graphs stay **1280×704**. Klein 1280×720 stills are fine. Prefer not to type 720/1080 so you skip the extra crop. Portrait lab is **768×1280**. Confirm: `docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_ltx_spatial/__init__.py`. If the pack is missing, set widgets to a ÷32 pair and re-open **ltx-*-lab-example** |
+| `LTXVImgToVideo` `einops.EinopsError` / `can't divide axis of length 45` (or 33) | LTX video VAE is **32×** spatial. Broadcast **720** and **1080** are not divisible by 32 (720/16=45, then the next `/2` patch fails) | Pull latest and restart so `ez_ltx_spatial` is installed — Queue **auto-snaps** 720→704 and 1080→1056 (stderr `[ez_ltx_spatial]`). Lab graphs stay **1280×704**. Klein I2V feeders are **1280×704**. Prefer not to type 720/1080 so you skip the extra crop. Portrait lab is **768×1280**. Confirm: `docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_ltx_spatial/__init__.py`. If the pack is missing, set widgets to a ÷32 pair and re-open **ltx-*-lab-example** |
 | Missing `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot` in LTX graphs | LTX-2.5 TE not downloaded | `./scripts/utilities/download-ltx.sh run --tier 2.5` or `download-models`; `ls "${MODELS_DIR}/comfy/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors"` |
 | Missing `VHS_VideoCombine` node on **ltx-*-lab-example** | Image/volume predates VideoHelperSuite, or refresh clone failed | Pull/rebuild GHCR image (VHS is prebuilt). Restart container so stamp-present refresh runs `ensure_lab_video_nodes`. Confirm: `docker exec ez-comfy-studio test -d /comfy-state/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite`. Last resort: `LAB_FORCE_COLD_INSTALL=1` or volume cleanup, then re-open seeded workflows |
 | Missing **Klein/Wan/LTX Prompt Enhance** node | Host pack not mounted or entrypoint copy skipped | Confirm compose bind-mount `../custom_nodes:/opt/ez-comfy/custom_nodes`. Restart so `install_all_lab_custom_nodes` copies `ez_prompt_enhance` (and `ez_ltx_spatial`) into `/comfy-state/ComfyUI/custom_nodes/`. Confirm: `docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/__init__.py` |

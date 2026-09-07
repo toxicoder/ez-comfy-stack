@@ -1,7 +1,7 @@
 {
   "id": "film-switchyard-90s-lab-example",
   "revision": 5,
-  "last_node_id": 900,
+  "last_node_id": 901,
   "last_link_id": 427,
   "nodes": [
     {
@@ -223,10 +223,10 @@
       },
       "widgets_values": [
         1280,
-        720,
+        704,
         1
       ],
-      "title": "Latent 1280x720 batch 1"
+      "title": "Latent 1280x704 batch 1"
     },
     {
       "id": 7,
@@ -10697,6 +10697,37 @@
         "ez_switchyard_b6_s3_last"
       ],
       "title": "Save last frame"
+    },
+    {
+      "id": 901,
+      "type": "EZFilmDisclosure",
+      "pos": [
+        2680,
+        5460
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 901,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZFilmDisclosure"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "LTX AI-media disclosure (end-card)"
     }
   ],
   "links": [
@@ -14244,7 +14275,12 @@
     "lab_film": "switchyard",
     "lab_slug": "switchyard",
     "lab_ltx_av": true,
-    "lab_one_click": true
+    "lab_one_click": true,
+    "lab_disclosure": "This video includes AI-generated picture and sound (LTX Community License). Do not strip provenance. Not legal advice.",
+    "lab_dfr": {
+      "print": "ltx",
+      "note": "Two-stage DFR lives in Comfy Templates \u2192 LTX-2.5 (not vendored). YAML print: dfr selects that path. Lab printers stay 5.00s / 1280\u00d7704 / 1+8n."
+    }
   },
   "version": 0.4
 }

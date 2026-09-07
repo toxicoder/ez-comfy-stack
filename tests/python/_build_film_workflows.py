@@ -445,8 +445,8 @@ def build_one_click_film(
 
     for node in graph["nodes"]:
         if node.get("type") == "EmptyFlux2LatentImage":
-            node["widgets_values"] = [1280, 720, 1]
-            node["title"] = "Latent 1280x720 batch 1"
+            node["widgets_values"] = [1280, 704, 1]
+            node["title"] = "Latent 1280x704 batch 1"
         if node.get("type") == "KSampler":
             node["widgets_values"] = [42, "fixed", 4, 1.0, "euler", "simple", 1.0]
         if node.get("type") == "SaveImage":

@@ -5,14 +5,15 @@
 # Download Apache Wan 2.2 Comfy-Org split files into MODELS_DIR.
 #
 # Purpose:
-#   Selective pull of Wan 2.2 TI2V-5B (default silent motion) plus optional A14B.
-#   Not the whole Comfy-Org monorepo. No Wan 2.5+ API models.
+#   Selective pull of Wan 2.2 TI2V-5B (default silent motion) plus optional A14B
+#   and Fun InP A14B (first-last-frame, Apache). Not the whole Comfy-Org monorepo.
+#   No Wan 2.5+ API models.
 #
 # Audience:
 #   Operators on the Spark host. Prefer manage.sh download-models.
 #
 # Usage:
-#   ./scripts/utilities/download-wan.sh status [--tier 5b|a14b|all] [--json]
+#   ./scripts/utilities/download-wan.sh status [--tier 5b|a14b|fun-inp|all] [--json]
 #   ./scripts/utilities/download-wan.sh run [--tier ...]
 #   ./scripts/utilities/download-wan.sh cleanup [--tier ...] [--dry-run|--yes]
 #
@@ -56,6 +57,9 @@ CLEANUP_YES=0
 tier_repo() {
   case "${1}" in
     5b | a14b) echo "Comfy-Org/Wan_2.2_ComfyUI_Repackaged" ;;
+    fun-inp) echo "alibaba-pai/Wan2.2-Fun-A14B-InP" ;;
+    vace) echo "Wan-AI/Wan2.1-VACE-1.3B" ;;
+    s2v) echo "Wan-AI/Wan2.2-S2V-14B" ;;
     *) echo "" ;;
   esac
 }
@@ -75,6 +79,9 @@ tier_min_gb() {
   case "${1}" in
     5b) echo 12 ;;
     a14b) echo 20 ;;
+    fun-inp) echo 40 ;;
+    vace) echo 6 ;;
+    s2v) echo 20 ;;
     *) echo 0 ;;
   esac
 }
@@ -104,6 +111,18 @@ tier_include_patterns() {
         "split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors" \
         "split_files/vae/wan_2.1_vae.safetensors" \
         "split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ;;
+    fun-inp)
+      printf '%s\n' \
+        "high_noise_model/diffusion_pytorch_model.safetensors" \
+        "low_noise_model/diffusion_pytorch_model.safetensors" \
+        "configuration.json"
+      ;;
+    vace)
+      printf '%s\n' "diffusion_pytorch_model.safetensors" "README.md"
+      ;;
+    s2v)
+      printf '%s\n' "diffusion_pytorch_model.safetensors" "README.md"
       ;;
     *)
       return 0
@@ -163,8 +182,8 @@ tier_size_gb() {
 #######################################
 tiers_to_process() {
   case "$TIER" in
-    all) echo "5b a14b" ;;
-    5b | a14b) echo "${TIER}" ;;
+    all) echo "5b a14b fun-inp" ;;
+    5b | a14b | fun-inp | vace | s2v) echo "${TIER}" ;;
     *) echo "${TIER}" ;;
   esac
 }
@@ -192,8 +211,11 @@ parse_args() {
       --yes | -y) CLEANUP_YES=1 ;;
       status | run | cleanup) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--tier 5b|a14b|all] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier 5b|a14b|fun-inp|vace|s2v|all] [--json]" >&2
         echo "  Default 5b = Wan 2.2 TI2V-5B + wan2.2_vae + umt5 (Apache 2.0)" >&2
+        echo "  fun-inp = Wan 2.2 Fun InP A14B first-last-frame (Apache; ~47 GB; not download-models)" >&2
+        echo "  vace = Wan 2.1 VACE 1.3B Apache join (~6 GB). Not in --tier all. MagCache off." >&2
+        echo "  s2v = Wan 2.2 S2V-14B talking-head opt-in. Not in --tier all. Unload 5B first." >&2
         echo "  cleanup options: --dry-run (default) | --yes" >&2
         exit 0
         ;;
@@ -222,8 +244,13 @@ is_ltx_keep_relpath() {
   local tier="${1}"
   local rel="${2}"
   local pat
+  if [[ ${tier} == "fun-inp" ]]; then
+    case "${rel}" in
+      configuration.json | high_noise_model | high_noise_model/* | low_noise_model | low_noise_model/*) return 0 ;;
+    esac
+  fi
   case "${rel}" in
-    .gitattributes | LICENSE | README.md) return 0 ;;
+    .gitattributes | LICENSE | README.md | README_en.md) return 0 ;;
     # HF local-dir resume/cache metadata + partials (never wipe for cleanup)
     .cache | .cache/*) return 0 ;;
     *.incomplete) return 0 ;;
@@ -262,6 +289,14 @@ tier_files_ready() {
     min="$(tier_min_gb "${tier}")"
     awk "BEGIN {exit !($size >= $min)}"
     return $?
+  fi
+  if [[ ${tier} == "fun-inp" ]]; then
+    local hn ln
+    [[ -s ${dir}/configuration.json ]] || return 1
+    hn="$(find "${dir}/high_noise_model" -type f \( -name '*.safetensors' -o -name '*.bin' -o -name '*.pth' \) 2>/dev/null | head -n 1)"
+    ln="$(find "${dir}/low_noise_model" -type f \( -name '*.safetensors' -o -name '*.bin' -o -name '*.pth' \) 2>/dev/null | head -n 1)"
+    [[ -n ${hn} && -n ${ln} ]] || return 1
+    return 0
   fi
   while IFS= read -r pat; do
     [[ -z ${pat} ]] && continue
@@ -336,6 +371,16 @@ link_into_comfy() {
   local dir base dest_sub dest rel
   dir=$(tier_dir "$tier")
   [[ -d ${dir} ]] || return 0
+  if [[ ${tier} == "fun-inp" ]]; then
+    mkdir -p "${src}/Fun_Models"
+    dest="${src}/Fun_Models/Wan2.2-Fun-A14B-InP"
+    if ln_sfn_relative "${dir}" "${dest}"; then
+      log "linked Fun InP tree → comfy/Fun_Models/Wan2.2-Fun-A14B-InP"
+    else
+      warn "failed to link Fun InP tree"
+    fi
+    return 0
+  fi
   while read -r f; do
     base="$(basename "${f}")"
     rel="${f#"${dir}"/}"
@@ -546,7 +591,7 @@ main() {
     run) cmd_run ;;
     cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run|cleanup [--tier 5b|a14b|all] [--json] [--yes]"
+      err "Usage: $0 status|run|cleanup [--tier 5b|a14b|fun-inp|vace|all] [--json] [--yes]"
       exit 1
       ;;
   esac

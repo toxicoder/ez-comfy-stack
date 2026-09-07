@@ -13,6 +13,10 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Shot maps for go-see (first-person running), still-here, and switchyard
 - Model-native Klein / LTX prompts ([Prompting](prompting.md))
 - Spark farm: optional parallel 5s Queues, local concat
+- Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
+- Optional studio-ui board (`:8190` profile), LTX Director GPL clone, OpenCut MIT embed
+- Optional 3D sidecars (TRELLIS.2, DA3-BASE, host Blender / SuperSplat) and VACE join
+- Wave 4: `film-accept`, DFR print mode, A14B hero, talking-head, LongCat / DreamX opt-in
 
 **What this enables**
 
@@ -20,6 +24,18 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Last-frame continuity without a 90s denoise
 - A 90.00s publish cap (in-graph `EZFilmConcat`, or host `ffmpeg -t 90`)
 - One Queue per film — identity, 18 prints, stitch, preview, save
+
+**Who this is for:** studio users who already Queued a 5 s LTX clip. Concepts: [Klein, Wan, and LTX](learn/pipeline.md).
+
+!!! success "First 90s film"
+
+    1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
+    2. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
+    3. Leave Enhance **off**. Leave LTX **1280×704**. Queue **once**.
+    4. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
+    5. Open **Save 90s film (MP4) — open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`.
+
+    Do **not** set 241+ frames. Resume after a dropped SSH session: `film-resume` (below).
 
 !!! warning "Not legal advice"
 
@@ -37,7 +53,7 @@ The one-click film graph still prints **18 independent 5.00s latents**. Continui
 | --- | --- |
 | Micro-shot | **120 frames @ 24 fps = 5.00 s** |
 | LTX print size | **1280×704** (VAE ÷32; not 1280×720) |
-| Klein identity | **1280×720** still OK; I2V center-crops ~16 px |
+| Klein identity | **1280×704** (same VAE grid as LTX; do not feed 720) |
 | Beats | **6** |
 | Micro-shots per beat | **3** (enter / traverse / exit) |
 | Picture | **18 × 5.00 s = 90.00 s** |
@@ -87,12 +103,100 @@ Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch
 3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
 4. After Queue, click **Save 90s film (MP4) — open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4`. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`.
 5. Optional silent rehearsal of one frame: **wan-i2v-shot-lab-example**. Optional single-shot iterate: **ltx-i2v-shot-lab-example**.
+Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
+
+```bash
+./scripts/utilities/compile-film.sh go-see
+./scripts/manage.sh print-shot go-see 12
+./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see
+# film-resume skips ok shots whose duration is 5.00±0.05 s and reprints
+# crashed `running` rows (no MP4) only.
+```
+
 6. Host / spark-farm fallback (when you printed shots outside the one-click graph):
 
 ```bash
 FILM=go-see   # or still-here | switchyard
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --dry-run
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
+# Optional audio acrossfade (0.10 s). Video stays stream-copy. LTX shots only
+# (Wan-silent has no audio stream — --xfade refuses).
+./scripts/utilities/concat-shots.sh --film "${FILM}" --xfade 10 --yes
+# Listen to go-see with and without --xfade 10; default remains the hard-cut golden.
+
+# OTIO handshake for Kdenlive/Shotcut (host, no GPU; apt notes in studio-sidecars.md):
+./scripts/manage.sh film-export-otio go-see
+# NVENC proxies 960×528 ~2 Mbps (Comfy must be stopped):
+./scripts/manage.sh stop
+./scripts/manage.sh film-proxies go-see --yes
+# Promote take 3 of shot 12 into the jobstore master:
+./scripts/manage.sh take-promote go-see 12 3
+# Fail-closed accept gate before concat (5.00s, 1280×704, LTX audio):
+./scripts/manage.sh film-accept go-see
+```
+
+Optional jobstore board (no GPU, 512m, `restart: "no"`). Default `start` does **not** launch it:
+
+```bash
+docker compose --profile studio-ui up studio-ui
+# http://localhost:8190
+```
+
+LTX Director is a **GPL** clone into the Comfy volume, not this MIT tree:
+
+```bash
+LAB_ENABLE_LTX_DIRECTOR=1 ./scripts/manage.sh start
+```
+
+Refuse MiniMax H3 Director. OpenCut (`jtydhr88/ComfyUI-OpenCut`, MIT) is fail-soft. Not the OpenCut Rust rewrite, not Next.js+Postgres.
+
+ACE-Step 90 s bed → `manage.sh stop` / unload → LTX A2V freeze. Qwen3-TTS is opt-in with operator-owned refs (`download-podcast --tier qwen3tts`); empty refs stay Kokoro. Wire **EZFilmDisclosure** on the publish graph (LTX Community License end-card).
+
+Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates → LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s.
+
+Optional silent **first-last-frame** draft: `wan-flf-5s-lab-example` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `wan-i2v-5s-lab-example` (`extra.lab_magcache`; never on LTX heroes).
+
+Post-concat restore (opt-in Apache SeedVR2-3B):
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh download-restore --tier seedvr2-3b
+# Conservative 1.3–1.5× on the stitched master only. Not download-models.
+```
+
+Optional 17-frame VACE join (`1+8n`, MagCache **off**). Unload LTX first:
+
+```bash
+./scripts/utilities/download-wan.sh run --tier vace
+# load wan-vace-join-lab-example (Shot A last → Shot B first)
+```
+
+Host 3D sidecars (Comfy **must be stopped**): [Studio sidecars](studio-sidecars.md), [Blender](blender-gb10-sidecar.md), [SuperSplat](splat-sidecar.md).
+
+Wave 4 hero path (opt-in, occupancy: one heavy job):
+
+```bash
+./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
+# load optional/wan-i2v-a14b-lab-example — unload 5B first
+./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
+# load workflows/optional/longcat-video-lab-example.json (note, not 90s default)
+./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
+```
+
+Identity sheet: `klein-identity-sheet-lab-example` (seed **42**, Enhance **off**, 1280×704). Talking-head: `klein-talking-head-lab-example` (LTX A2V freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s.
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
+./scripts/manage.sh blender                       # host binary; never in Dockerfile
+```
+
+NVENC preview encode (Comfy **must be stopped** — encoder contention on GB10):
+
+```bash
+./scripts/manage.sh stop
+./scripts/utilities/nvenc-preview.sh --in "${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" \
+  --out "${COMFY_OUTPUT_DIR}/ez_gosee_90s_preview.mp4" --yes
 ```
 
 Publish names under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`): `ez_gosee_90s.mp4`, `ez_stillhere_90s.mp4`, `ez_switchyard_90s.mp4`.

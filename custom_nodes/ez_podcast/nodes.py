@@ -34,6 +34,8 @@ BACKEND_KOKORO = "kokoro"
 BACKEND_CHATTERBOX = "chatterbox"
 BACKEND_QWEN3TTS = "qwen3tts"
 BACKENDS = (BACKEND_KOKORO, BACKEND_CHATTERBOX, BACKEND_QWEN3TTS)
+# Tests inject a synthesizer. Production stays None (fail-soft to Kokoro).
+optional_backend_hook: Any | None = None
 KOKORO_VOICES = (
     "af_heart",
     "af_bella",
@@ -448,7 +450,15 @@ class EZKokoroTTS:
         path = (ref_wav if isinstance(ref_wav, str) else str(ref_wav or "")).strip()
         if not path:
             return None
-        _log(f"{backend} extra not used without a runtime install; falling back to Kokoro")
+        hook = optional_backend_hook
+        if hook is not None:
+            return hook(text, backend, path)
+        if not os.path.isfile(path):
+            _log(f"{backend} ref wav missing ({path}); falling back to Kokoro")
+            return None
+        _log(
+            f"{backend} extra not used without a runtime install; falling back to Kokoro"
+        )
         return None
 
     def _synthesize_kokoro(

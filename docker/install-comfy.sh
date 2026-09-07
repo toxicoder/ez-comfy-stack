@@ -27,6 +27,9 @@
 #   COMFYUI_MANAGER_REF — Manager pin (default 4.2.2)
 #   COMFYUI_NUNCHAKU_NODE_REF — nunchaku node pin (default v1.2.1)
 #   COMFYUI_VHS_REF — VideoHelperSuite git ref (default empty = main; required for LTX MP4)
+#   COMFYUI_OPENCUT_REF — OpenCut tag (default 0.5.0)
+#   COMFYUI_MAGCACHE_REF — MagCache commit SHA
+#   COMFYUI_LTX_DIRECTOR_REF — GPL Director commit SHA (clone only if LAB_ENABLE_LTX_DIRECTOR=1)
 #   LAB_PACKAGE_PARTS=1 — split tree into /opt/parts/{venv,app} (Docker only)
 #
 set -euo pipefail
@@ -230,8 +233,9 @@ main() {
     ensure_lab_video_nodes || warn "VideoHelperSuite refresh failed — LTX lab MP4 may be unavailable"
     step 4 "${total}" "Remove wrong PyPI nunchaku if present"
     cleanup_wrong_nunchaku
-    step 5 "${total}" "Apply Spark free-memory patch"
+    step 5 "${total}" "Apply Spark free-memory and copy=False patches"
     apply_free_memory_patch
+    apply_unified_memory_copy_patch
     step 6 "${total}" "Refresh complete"
   fi
 

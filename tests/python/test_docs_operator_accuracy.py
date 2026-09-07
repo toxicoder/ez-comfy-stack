@@ -44,6 +44,8 @@ DEFAULT_STACK_PAGES = (
     DOCS / "getting-started.md",
     DOCS / "visual-generative-ai.md",
     DOCS / "models-and-cache.md",
+    DOCS / "learn" / "index.md",
+    DOCS / "learn" / "pipeline.md",
     README,
 )
 
@@ -55,7 +57,7 @@ REQUIRED_DEFAULT_SNIPPETS = (
 
 
 def _operator_doc_paths() -> list[Path]:
-    paths = sorted(DOCS.glob("*.md"))
+    paths = sorted(DOCS.rglob("*.md"))
     paths.append(README)
     return paths
 
@@ -124,13 +126,17 @@ def test_getting_started_session_vars_and_port_forward() -> None:
 
 def test_mkdocs_nav_is_grouped_journey() -> None:
     nav = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
-    for heading in ("Start:", "Create:", "Operate:", "Contribute:"):
+    for heading in ("Learn:", "Start:", "Create:", "Operate:", "Contribute:"):
         assert heading in nav, f"mkdocs.yml missing grouped nav {heading!r}"
-    # First-run pages under Start, not 90s shorts before licenses.
+    # Concepts before first-run; first-run pages under Start, not 90s shorts before licenses.
+    learn_at = nav.index("Learn:")
     start_at = nav.index("Start:")
     create_at = nav.index("Create:")
     operate_at = nav.index("Operate:")
-    assert start_at < create_at < operate_at
+    assert learn_at < start_at < create_at < operate_at
     assert nav.index("getting-started.md") < nav.index("shorts.md")
     assert nav.index("licenses.md") < nav.index("shorts.md")
     assert nav.index("prompting.md") < nav.index("visual-generative-ai.md")
+    assert nav.index("visual-generative-ai.md") < nav.index("studio-workflows.md")
+    assert nav.index("Operate:") < nav.index("manage-cli.md")
+    assert nav.index("glossary.md") < nav.index("getting-started.md")

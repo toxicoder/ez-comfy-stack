@@ -16,6 +16,7 @@ from ez_podcast import nodes  # noqa: E402
 from ez_podcast.nodes import (  # noqa: E402
     BACKEND_CHATTERBOX,
     BACKEND_KOKORO,
+    BACKEND_QWEN3TTS,
     DISCLOSURE_TEXT,
     EZKokoroTTS,
     EZPodcastDisclosure,
@@ -65,6 +66,19 @@ def test_parse_speaker_turns() -> None:
     mixed = parse_speaker_turns("Announcer: Open.\nSpeaker A: Hi.\ncontinued.")
     assert mixed[0] == ("announcer", "Open.")
     assert mixed[1][1].endswith("continued.")
+
+
+def test_optional_backend_hook_returns_pcm(tmp_path: Path) -> None:
+    ref = tmp_path / "owned.wav"
+    ref.write_bytes(b"RIFF")
+    tts = EZKokoroTTS()
+    assert tts._try_optional_backend("hello", BACKEND_QWEN3TTS, "") is None
+    nodes.optional_backend_hook = lambda text, backend, path: [0.0, 0.1, 0.0]
+    try:
+        pcm = tts._try_optional_backend("hello", BACKEND_QWEN3TTS, str(ref))
+        assert pcm == [0.0, 0.1, 0.0]
+    finally:
+        nodes.optional_backend_hook = None
 
 
 def test_empty_refs_resolve_to_kokoro() -> None:

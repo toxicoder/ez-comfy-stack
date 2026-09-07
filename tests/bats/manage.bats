@@ -29,6 +29,48 @@ teardown() {
   teardown_repo_env
 }
 
+# Append-only. Replacing a verb with another is a merge defect (Wave 0 #77).
+FROZEN_MANAGE_VERBS=(
+  help
+  setup
+  doctor
+  status
+  start
+  stop
+  restart
+  logs
+  download-models
+  download-podcast
+  download-music
+  download-limit
+  clear-hf-locks
+  reset-hf-partials
+  cleanup
+  print-shot
+  film-resume
+  film-export-otio
+  film-proxies
+  take-promote
+  download-restore
+  download-3d
+  blender
+  film-accept
+  download-longcat
+  download-dreamx
+  spark-timing
+  models-status
+  reap-models
+)
+
+@test "manage help lists the frozen verb set (append-only)" {
+  run bash "${MANAGE_SH}" help
+  [ "${status}" -eq 0 ]
+  local verb
+  for verb in "${FROZEN_MANAGE_VERBS[@]}"; do
+    [[ "${output}" == *"${verb}"* ]]
+  done
+}
+
 @test "manage CLI help unknown doctor status start stop cleanup download" {
   run bash "${MANAGE_SH}" help
   [ "${status}" -eq 0 ]
@@ -36,11 +78,28 @@ teardown() {
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"download-podcast"* ]]
   [[ "${output}" == *"download-music"* ]]
+  [[ "${output}" == *"print-shot"* ]]
+  [[ "${output}" == *"film-resume"* ]]
+  [[ "${output}" == *"film-export-otio"* ]]
+  [[ "${output}" == *"film-proxies"* ]]
+  [[ "${output}" == *"take-promote"* ]]
+  [[ "${output}" == *"download-restore"* ]]
+  [[ "${output}" == *"download-3d"* ]]
+  [[ "${output}" == *"blender"* ]]
+  [[ "${output}" == *"film-accept"* ]]
+  [[ "${output}" == *"download-longcat"* ]]
+  [[ "${output}" == *"download-dreamx"* ]]
+  [[ "${output}" == *"spark-timing"* ]]
+  [[ "${output}" == *"reap-models"* ]]
+  [[ "${output}" == *"models-status"* ]]
   run bash "${MANAGE_SH}" not-a-command
   [ "${status}" -ne 0 ]
   run bash "${MANAGE_SH}" doctor
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"writable"* || "${output}" == *"Doctor OK"* ]]
+  [[ "${output}" == *"attention:"* ]]
+  [[ "${output}" == *"spark-timing:"* ]]
+  [[ "${output}" == *"MODELS_DIR pack disk"* || "${output}" == *"pack disk"* ]]
   export LAB_MOCK_FREE_MEM_GIB=4
   run bash "${MANAGE_SH}" doctor
   [ "${status}" -ne 0 ]
@@ -150,6 +209,39 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"clear-hf-locks"* ]]
+  [[ "${output}" == *"print-shot"* ]]
+  run cmd_print_shot --help
+  [ "${status}" -eq 0 ]
+  run cmd_film_resume
+  [ "${status}" -ne 0 ]
+  run cmd_film_export_otio
+  [ "${status}" -ne 0 ]
+  run cmd_film_proxies --help
+  [ "${status}" -eq 0 ]
+  run cmd_take_promote
+  [ "${status}" -ne 0 ]
+  run cmd_download_restore --help
+  [ "${status}" -eq 0 ]
+  run cmd_download_3d --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"trellis2"* ]]
+  run cmd_blender --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"host Blender"* ]]
+  run cmd_film_accept --help
+  [ "${status}" -eq 0 ]
+  run cmd_download_longcat --help
+  [ "${status}" -eq 0 ]
+  run cmd_download_dreamx --help
+  [ "${status}" -eq 0 ]
+  run cmd_spark_timing --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"kitchen"* ]]
+  [[ "${output}" == *"not kitchen"* ]]
+  run cmd_models_status
+  [ "${status}" -eq 0 ]
+  run cmd_reap_models --help
+  [ "${status}" -eq 0 ]
   export LAB_NO_SUDO=1
   export MODELS_DIR="${TEST_TMP_DIR}/models"
   run cmd_setup

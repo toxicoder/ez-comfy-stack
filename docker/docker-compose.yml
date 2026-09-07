@@ -32,6 +32,9 @@ services:
         COMFYUI_NUNCHAKU_NODE_REF: ${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}
         # Empty = VideoHelperSuite main (required for LTX lab VHS_VideoCombine)
         COMFYUI_VHS_REF: ${COMFYUI_VHS_REF:-}
+        COMFYUI_OPENCUT_REF: ${COMFYUI_OPENCUT_REF:-0.5.0}
+        COMFYUI_MAGCACHE_REF: ${COMFYUI_MAGCACHE_REF:-47bdd2aca97e568087c4e92d2d2f0426bdce7a37}
+        COMFYUI_LTX_DIRECTOR_REF: ${COMFYUI_LTX_DIRECTOR_REF:-a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64}
       # Reuse pulled GHCR layers as local build cache when rebuilding
       cache_from:
         - ${EZ_COMFY_IMAGE:-ghcr.io/toxicoder/ez-comfy:us-safe-studio-development}
@@ -63,8 +66,13 @@ services:
       LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
       # Runtime pin (must match build-arg). Stamp-present refresh syncs the volume when this changes.
       COMFYUI_REF: ${COMFYUI_REF:-v0.34.0}
+      COMFYUI_OPENCUT_REF: ${COMFYUI_OPENCUT_REF:-0.5.0}
+      COMFYUI_MAGCACHE_REF: ${COMFYUI_MAGCACHE_REF:-47bdd2aca97e568087c4e92d2d2f0426bdce7a37}
+      COMFYUI_LTX_DIRECTOR_REF: ${COMFYUI_LTX_DIRECTOR_REF:-a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64}
       PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
       CUDA_MODULE_LOADING: LAZY
+      TORCH_COMPILE_DISABLE: ${TORCH_COMPILE_DISABLE:-1}
+      OMP_NUM_THREADS: ${OMP_NUM_THREADS:-20}
       LAB_VISUAL_ENABLE_NVFP4: "1"
       LAB_VISUAL_PROFILE: us-safe-studio
       LAB_PIPELINE: ${LAB_PIPELINE:-studio}
@@ -93,13 +101,29 @@ services:
       - ./install-comfy.sh:/opt/ez-comfy/install-comfy.sh:ro
       - ./install-comfy:/opt/ez-comfy/install-comfy:ro
       - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
+      - ./patch_unified_memory_copy.py:/opt/ez-comfy/patch_unified_memory_copy.py:ro
       - ./pythonpath:/opt/ez-comfy/pythonpath:ro
     gpus: all
     shm_size: "16gb"
     mem_limit: ${MEM_LIMIT:-90g}
     mem_reservation: ${MEM_RESERVATION:-80g}
-    # cpus soft limit (compose v2)
-    cpus: 12.0
+    # cpus soft limit (compose v2). GB10 has 20 ARM cores; leave 4 for OS/SSH.
+    cpus: 16.0
+
+  # Optional jobstore board. Not required for doctor/start. No GPU.
+  studio-ui:
+    profiles: ["studio-ui"]
+    image: python:3.12-alpine
+    container_name: ez-comfy-studio-ui
+    restart: "no"
+    ports:
+      - "${STUDIO_UI_PORT:-8190}:8190"
+    mem_limit: 512m
+    volumes:
+      - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/films:ro
+      - ../studio-ui:/app:ro
+    command: ["python", "/app/server.py"]
+    working_dir: /app
 
 volumes:
   comfy-state:

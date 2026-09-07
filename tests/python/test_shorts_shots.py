@@ -15,7 +15,7 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
-from ez_film.shots import parse_shots_yaml  # noqa: E402
+from ez_film.shots import DFR_TEMPLATE, LTX_PRINT_TEMPLATE, parse_shots_yaml, print_template  # noqa: E402
 
 SHORTS = ROOT / "workflows" / "shorts"
 
@@ -47,6 +47,12 @@ def _path(film: str) -> Path:
     return SHORTS / f"{film}.shots.yaml"
 
 
+def test_print_template_ltx_and_dfr() -> None:
+    assert print_template("ltx") == LTX_PRINT_TEMPLATE
+    assert print_template("dfr") == DFR_TEMPLATE
+    assert DFR_TEMPLATE.startswith("templates/ltx-2.5/")
+
+
 def test_three_shot_bibles_exist() -> None:
     for film, _slug in FILMS:
         assert _path(film).is_file(), film
@@ -66,6 +72,9 @@ def test_eighteen_shots_and_chain() -> None:
         assert meta["shots_per_beat"] == "3"
         assert meta["total_shots"] == "18"
         assert meta["publish_cap_s"] == "90.00"
+        assert meta["print"] == "ltx"
+        assert meta["identity_seed"] == "42"
+        assert meta["identity_enhance"] == "false"
         shots = parsed["shots"]
         assert len(shots) == 18, (film, len(shots))
         prefixes = [s["prefix"] for s in shots]
@@ -325,7 +334,7 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert baked == expected_ltx
         latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
         assert latent["widgets_values"][0] == 1280
-        assert latent["widgets_values"][1] == 720
+        assert latent["widgets_values"][1] == 704
         assert latent["widgets_values"][2] == 1
         last_saves = [
             n

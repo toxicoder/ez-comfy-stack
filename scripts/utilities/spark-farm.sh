@@ -15,6 +15,9 @@
 #   ./scripts/utilities/spark-farm.sh status [--json]
 #   ./scripts/utilities/spark-farm.sh sync-models
 #   ./scripts/utilities/spark-farm.sh run [--film go-see] [--seeds 509201,509211,509221]
+#   ./scripts/utilities/spark-farm.sh dispatch [--film go-see]
+#     Assign shots 01-06 / 07-12 / 13-18 (or even split). Each host runs
+#     local manage.sh print-shot. Never SSH-starts compose.
 #
 # Environment:
 #   SPARK_HOSTS, SPARK_USER, SPARK_COMFY_URLS, SPARK_FABRIC_IPS, MODELS_DIR, FARM_SHARE
@@ -208,6 +211,82 @@ cmd_run() {
 }
 
 #######################################
+# Shot ids 01..18 as space-separated groups, one group per host.
+# Arguments:
+#   $1  host count (>=1)
+# Outputs:
+#   One line per host: "01 02 ..."
+#######################################
+dispatch_shot_groups() {
+  local n="${1}"
+  local -a ids=()
+  local i=1
+  while [[ ${i} -le 18 ]]; do
+    ids+=("$(printf '%02d' "${i}")")
+    i=$((i + 1))
+  done
+  if [[ ${n} -lt 1 ]]; then
+    err "need at least one SPARK_HOSTS entry"
+    return 1
+  fi
+  local chunk=$((18 / n))
+  local extra=$((18 % n))
+  local start=0
+  local h=0 size
+  while [[ ${h} -lt ${n} ]]; do
+    size="${chunk}"
+    if [[ ${h} -lt ${extra} ]]; then
+      size=$((size + 1))
+    fi
+    local -a group=("${ids[@]:start:size}")
+    printf '%s\n' "${group[*]}"
+    start=$((start + size))
+    h=$((h + 1))
+  done
+}
+
+#######################################
+# Remote print-shot only (never compose up / manage.sh start).
+# Globals:
+#   SPARK_HOSTS, SPARK_USER, FILM, FARM_SHARE
+#######################################
+cmd_dispatch() {
+  case "${FILM}" in
+    *h3* | *H3* | *MiniMax*)
+      refuse_minimax_h3
+      return 1
+      ;;
+  esac
+  local -a hosts=()
+  local line
+  while IFS= read -r line; do
+    [[ -n ${line} ]] && hosts+=("${line}")
+  done < <(csv_lines "${SPARK_HOSTS}")
+  if [[ ${#hosts[@]} -eq 0 ]]; then
+    err "SPARK_HOSTS is empty — source config/spark-farm.example.env"
+    return 1
+  fi
+  print_remote_start_hint
+  mkdir -p "${FARM_SHARE}/out"
+  local -a groups=()
+  while IFS= read -r line; do
+    [[ -n ${line} ]] && groups+=("${line}")
+  done < <(dispatch_shot_groups "${#hosts[@]}")
+  local i host sid
+  for i in "${!hosts[@]}"; do
+    host="${hosts[${i}]}"
+    log "dispatch ${host}: shots ${groups[${i}]}"
+    for sid in ${groups[${i}]}; do
+      ssh_host "${host}" "./scripts/manage.sh print-shot ${FILM} ${sid}"
+    done
+    rsync -a --inplace -e "ssh -o BatchMode=yes" \
+      "${SPARK_USER}@${host}:${FARM_SHARE}/" \
+      "${FARM_SHARE}/out/${host}/"
+  done
+  log "gather done under ${FARM_SHARE}/out — concat on spark-0 with concat-shots.sh --film ${FILM}"
+}
+
+#######################################
 # Parse CLI.
 # Arguments:
 #   $@
@@ -224,9 +303,11 @@ parse_args() {
         SEEDS="${2:?}"
         shift
         ;;
-      status | sync-models | run) CMD="${1}" ;;
+      status | sync-models | run | dispatch) CMD="${1}" ;;
       -h | --help)
-        echo "Usage: $0 status [--json] | sync-models | run [--film go-see] [--seeds a,b,c]" >&2
+        echo "Usage: $0 status [--json] | sync-models | run|dispatch [--film go-see] [--seeds a,b,c]" >&2
+        echo "  dispatch assigns 01-06 / 07-12 / 13-18 and runs local print-shot." >&2
+        echo "  Never SSH-starts compose. Director is off this path." >&2
         exit 0
         ;;
       *)
@@ -249,8 +330,9 @@ main() {
     status) cmd_status ;;
     sync-models) cmd_sync_models ;;
     run) cmd_run ;;
+    dispatch) cmd_dispatch ;;
     *)
-      err "Usage: $0 status|sync-models|run"
+      err "Usage: $0 status|sync-models|run|dispatch"
       exit 1
       ;;
   esac

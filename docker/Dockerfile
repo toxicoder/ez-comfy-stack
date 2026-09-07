@@ -116,9 +116,15 @@ ARG EZ_COMFY_PREBUILD=1
 ARG COMFYUI_MANAGER_REF=4.2.2
 ARG COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
 ARG COMFYUI_VHS_REF=
+ARG COMFYUI_OPENCUT_REF=0.5.0
+ARG COMFYUI_MAGCACHE_REF=47bdd2aca97e568087c4e92d2d2f0426bdce7a37
+ARG COMFYUI_LTX_DIRECTOR_REF=a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64
 ENV COMFYUI_MANAGER_REF=${COMFYUI_MANAGER_REF} \
     COMFYUI_NUNCHAKU_NODE_REF=${COMFYUI_NUNCHAKU_NODE_REF} \
-    COMFYUI_VHS_REF=${COMFYUI_VHS_REF}
+    COMFYUI_VHS_REF=${COMFYUI_VHS_REF} \
+    COMFYUI_OPENCUT_REF=${COMFYUI_OPENCUT_REF} \
+    COMFYUI_MAGCACHE_REF=${COMFYUI_MAGCACHE_REF} \
+    COMFYUI_LTX_DIRECTOR_REF=${COMFYUI_LTX_DIRECTOR_REF}
 
 COPY --chmod=755 install-comfy/phase-nodes.sh install-comfy/phase-finalize.sh \
     /opt/ez-comfy/install-comfy/
@@ -178,6 +184,7 @@ COPY --link --from=nodes /opt/parts/app /opt/comfy-prebuilt
 COPY --chmod=755 install-comfy.sh entrypoint.sh /opt/ez-comfy/
 COPY --chmod=755 install-comfy/ /opt/ez-comfy/install-comfy/
 COPY --chmod=644 patch_get_free_memory.py /opt/ez-comfy/
+COPY --chmod=644 patch_unified_memory_copy.py /opt/ez-comfy/
 # PYTHONPATH sitecustomize: optional torch.backends.python_native.triton disable
 COPY --chmod=644 pythonpath/ /opt/ez-comfy/pythonpath/
 

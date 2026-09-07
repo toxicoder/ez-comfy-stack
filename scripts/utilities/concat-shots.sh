@@ -14,6 +14,7 @@
 #   ./scripts/utilities/concat-shots.sh [--dir DIR] [--out FILE] [--dry-run|--yes]
 #   ./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 [--out FILE]
 #   ./scripts/utilities/concat-shots.sh --film go-see|still-here|switchyard [--yes]
+#   ./scripts/utilities/concat-shots.sh --film go-see --xfade 10 --yes
 #
 # Environment:
 #   COMFY_OUTPUT_DIR — default /mnt/comfy-output
@@ -44,11 +45,13 @@ DRY_RUN=1
 FILE_CSV=""
 FILM=""
 CAP_SECONDS="90"
+XFADE_CS=0
+SKIP_ACCEPT=0
 
 #######################################
 # Parse CLI flags.
 # Globals:
-#   SHOT_DIR, OUT_MP4, DRY_RUN, FILE_CSV, FILM, CAP_SECONDS
+#   SHOT_DIR, OUT_MP4, DRY_RUN, FILE_CSV, FILM, CAP_SECONDS, XFADE_CS
 # Arguments:
 #   $@
 # Outputs:
@@ -79,10 +82,18 @@ parse_args() {
         CAP_SECONDS="${2:?}"
         shift
         ;;
+      --xfade)
+        XFADE_CS="${2:?}"
+        shift
+        ;;
       --dry-run) DRY_RUN=1 ;;
       --yes | -y) DRY_RUN=0 ;;
+      --skip-accept) SKIP_ACCEPT=1 ;;
       -h | --help)
-        echo "Usage: $0 [--dir DIR] [--out FILE] [--files a.mp4,b.mp4] [--film go-see|still-here|switchyard] [--cap-seconds N] [--dry-run|--yes]" >&2
+        echo "Usage: $0 [--dir DIR] [--out FILE] [--files a.mp4,b.mp4] [--film go-see|still-here|switchyard] [--cap-seconds N] [--xfade CS] [--dry-run|--yes]" >&2
+        echo "  --xfade CS  audio acrossfade in centiseconds (10 = 0.10s). Default 0 (hard cut)." >&2
+        echo "              Video stays -c:v copy. Requires audio on every shot (LTX, not Wan-silent)." >&2
+        echo "  --film --yes runs film-accept first (duration/res/audio). --skip-accept bypasses." >&2
         exit 0
         ;;
       *)
@@ -235,9 +246,112 @@ write_concat_list() {
 }
 
 #######################################
+# True when the MP4 has an audio stream.
+# Arguments:
+#   $1  path
+# Outputs:
+#   None
+# Returns:
+#   0 if audio present; 1 otherwise
+#######################################
+shot_has_audio() {
+  local path="${1}"
+  local kind
+  if ! command -v ffprobe >/dev/null 2>&1; then
+    return 1
+  fi
+  kind="$(
+    ffprobe -v error -select_streams a:0 -show_entries stream=codec_type \
+      -of csv=p=0 "${path}" 2>/dev/null || true
+  )"
+  [[ ${kind} == *audio* ]]
+}
+
+#######################################
+# Build a chained audio acrossfade filter_complex (plus loudnorm).
+# Arguments:
+#   $1  input count
+#   $2  duration seconds (e.g. 0.10)
+# Outputs:
+#   filter graph on stdout
+# Returns:
+#   0; 1 if count < 2
+#######################################
+audio_acrossfade_filter() {
+  local n="${1}"
+  local d="${2}"
+  local i prev label
+  local -a parts=()
+  if [[ ${n} -lt 2 ]]; then
+    return 1
+  fi
+  if [[ ${n} -eq 2 ]]; then
+    printf '[0:a][1:a]acrossfade=d=%s:c1=tri:c2=tri[ax];[ax]loudnorm=I=-14:LRA=11:TP=-1.5[a]\n' "${d}"
+    return 0
+  fi
+  parts+=("[0:a][1:a]acrossfade=d=${d}:c1=tri:c2=tri[a1]")
+  i=2
+  while [[ ${i} -lt ${n} ]]; do
+    prev=$((i - 1))
+    if [[ ${i} -eq $((n - 1)) ]]; then
+      label="ax"
+    else
+      label="a${i}"
+    fi
+    parts+=("[a${prev}][${i}:a]acrossfade=d=${d}:c1=tri:c2=tri[${label}]")
+    i=$((i + 1))
+  done
+  local IFS=';'
+  printf '%s;[ax]loudnorm=I=-14:LRA=11:TP=-1.5[a]\n' "${parts[*]}"
+}
+
+#######################################
+# Three-step remux: video copy, audio acrossfade, mux.
+# Globals:
+#   CAP_SECONDS, XFADE_CS
+# Arguments:
+#   $1  output mp4
+#   remaining: shot paths
+# Outputs:
+#   log/err
+# Returns:
+#   0 on success; 1 on missing audio or ffmpeg failure
+#######################################
+concat_xfade_audio() {
+  local out="${1}"
+  shift
+  local -a files=("$@")
+  local f d list video_tmp audio_tmp filter
+  for f in "${files[@]}"; do
+    if ! shot_has_audio "${f}"; then
+      err "xfade requires audio on every shot (missing on ${f}); Wan-silent concat cannot use --xfade"
+      return 1
+    fi
+  done
+  d="$(awk "BEGIN {printf \"%.2f\", ${XFADE_CS}/100}")"
+  filter="$(audio_acrossfade_filter "${#files[@]}" "${d}")" || {
+    err "acrossfade needs at least 2 shots"
+    return 1
+  }
+  list="$(mktemp)"
+  video_tmp="${list}.v.mp4"
+  audio_tmp="${list}.a.m4a"
+  write_concat_list "${list}" "${files[@]}"
+  ffmpeg -y -f concat -safe 0 -i "${list}" -t "${CAP_SECONDS}" -c:v copy -an "${video_tmp}"
+  local -a aargv=(ffmpeg -y)
+  for f in "${files[@]}"; do
+    aargv+=(-i "${f}")
+  done
+  aargv+=(-filter_complex "${filter}" -map "[a]" -c:a aac -ar 48000 -ac 2 -b:a 192k "${audio_tmp}")
+  "${aargv[@]}"
+  ffmpeg -y -i "${video_tmp}" -i "${audio_tmp}" -t "${CAP_SECONDS}" -c:v copy -c:a copy "${out}"
+  rm -f "${list}" "${video_tmp}" "${audio_tmp}"
+}
+
+#######################################
 # Concatenate shots (dry-run prints the list).
 # Globals:
-#   SHOT_DIR, OUT_MP4, DRY_RUN, FILM, CAP_SECONDS
+#   SHOT_DIR, OUT_MP4, DRY_RUN, FILM, CAP_SECONDS, XFADE_CS
 # Arguments:
 #   None
 # Outputs:
@@ -277,21 +391,35 @@ cmd_run() {
     log "  ${f}"
   done
   if [[ ${DRY_RUN} -eq 1 ]]; then
-    log "dry-run: would concat → ${OUT_MP4} cap ${CAP_SECONDS}s (pass --yes to run ffmpeg)"
+    log "dry-run: would concat → ${OUT_MP4} cap ${CAP_SECONDS}s xfade_cs=${XFADE_CS} (pass --yes to run ffmpeg)"
     return 0
+  fi
+  if [[ -n ${FILM} && ${SKIP_ACCEPT} -ne 1 ]]; then
+    bash "${SCRIPT_DIR}/film-accept.sh" "${FILM}" || {
+      err "film-accept failed (fail closed before concat). Fix shots or pass --skip-accept."
+      return 1
+    }
   fi
   if ! command -v ffmpeg >/dev/null 2>&1; then
     err "ffmpeg not on PATH"
     return 1
   fi
-  local list
-  list="$(mktemp)"
-  write_concat_list "${list}" "${files[@]}"
-  ffmpeg -y -f concat -safe 0 -i "${list}" -t "${CAP_SECONDS}" \
-    -c:v copy -c:a aac -ar 48000 -ac 2 -b:a 192k \
-    -af "loudnorm=I=-14:LRA=11:TP=-1.5" \
-    "${OUT_MP4}"
-  rm -f "${list}"
+  if [[ ${XFADE_CS} -lt 0 || ${XFADE_CS} -gt 50 ]]; then
+    err "xfade_cs must be 0–50 (centiseconds), got ${XFADE_CS}"
+    return 1
+  fi
+  if [[ ${XFADE_CS} -gt 0 ]]; then
+    concat_xfade_audio "${OUT_MP4}" "${files[@]}" || return 1
+  else
+    local list
+    list="$(mktemp)"
+    write_concat_list "${list}" "${files[@]}"
+    ffmpeg -y -f concat -safe 0 -i "${list}" -t "${CAP_SECONDS}" \
+      -c:v copy -c:a aac -ar 48000 -ac 2 -b:a 192k \
+      -af "loudnorm=I=-14:LRA=11:TP=-1.5" \
+      "${OUT_MP4}"
+    rm -f "${list}"
+  fi
   local dur
   dur="$(probe_mp4_seconds "${OUT_MP4}")"
   if [[ -n ${dur} ]] && awk "BEGIN {exit !(${dur} > ${CAP_SECONDS} + 0.05)}"; then

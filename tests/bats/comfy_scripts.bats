@@ -47,6 +47,14 @@ teardown() {
   source "${REPO_ROOT}/docker/install-comfy.sh"
   run grep -F 'ComfyUI-VideoHelperSuite' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'ComfyUI-MagCache' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'LAB_ENABLE_LTX_DIRECTOR' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'ComfyUI-OpenCut' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'MiniMaxH3-Director' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
   run grep -F 'ensure_lab_video_nodes' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'ensure_lab_video_nodes' "${REPO_ROOT}/docker/install-comfy.sh"
@@ -132,6 +140,12 @@ teardown() {
   run clone_node "https://example.com/node.git" "DemoNode"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"custom node"* ]]
+  run clone_node_ref_is_sha 47bdd2aca97e568087c4e92d2d2f0426bdce7a37
+  [ "${status}" -eq 0 ]
+  run clone_node_ref_is_sha 0.5.0
+  [ "${status}" -ne 0 ]
+  run clone_node_ref_is_sha main
+  [ "${status}" -ne 0 ]
 
   # strip_prebuilt removes .git and bytecode junk
   local strip_root
@@ -412,6 +426,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"not found"* || "${output}" == *"patch"* || -z ${output} ]]
 
+  run apply_unified_memory_copy_patch
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || -z ${output} ]]
+
   # finalize with mocked strip deps
   run phase_finalize
   [ "${status}" -eq 0 ]
@@ -603,6 +621,9 @@ teardown() {
   [[ -n ${COMFYUI_MANAGER_REF} ]]
   [[ -n ${COMFYUI_NUNCHAKU_NODE_REF} ]]
   [[ "${COMFYUI_NUNCHAKU_NODE_REF}" == v* ]]
+  [[ "${COMFYUI_OPENCUT_REF}" == "0.5.0" ]]
+  [[ ${#COMFYUI_MAGCACHE_REF} -ge 7 ]]
+  [[ ${#COMFYUI_LTX_DIRECTOR_REF} -ge 7 ]]
   [[ -n ${TORCH_VERSION} ]]
   [[ "${TORCH_INDEX_URL}" == *cu130* ]]
 }
@@ -732,4 +753,41 @@ teardown() {
   install_mock_bin python "echo '${py_inc}'"
   configure_torch_native_triton
   [[ "${LAB_DISABLE_TORCH_NATIVE_TRITON}" == "0" ]]
+}
+
+@test "comfy_exec_args is Kitchen XOR Sage and never highvram" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  run comfy_exec_args
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"--use-ck-attention"* ]]
+  [[ "${output}" == *"--normalvram"* ]]
+  [[ "${output}" == *"--disable-mmap"* ]]
+  [[ "${output}" != *"--use-sage-attention"* ]]
+  [[ "${output}" != *"--highvram"* ]]
+  [[ "${output}" == *"--bf16-unet"* ]]
+}
+
+@test "install_sage_wheel_if_pinned skips without URL and refuses URL without sha" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  unset LAB_SAGE_WHEEL_URL
+  unset LAB_SAGE_WHEEL_SHA256
+  run install_sage_wheel_if_pinned
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Kitchen"* || "${output}" == *"skipped"* ]]
+  export LAB_SAGE_WHEEL_URL="https://example.invalid/sage.whl"
+  unset LAB_SAGE_WHEEL_SHA256
+  run install_sage_wheel_if_pinned
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"SHA256"* || "${output}" == *"refusing"* ]]
+  export LAB_SAGE_WHEEL_SHA256="deadbeef"
+  pip_install() { echo "pip ${1}"; return 0; }
+  run install_sage_wheel_if_pinned
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"pip ok"* || "${output}" == *"pinned"* ]]
+  pip_install() { return 1; }
+  run install_sage_wheel_if_pinned
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"failed"* || "${output}" == *"optional"* ]]
 }

@@ -308,7 +308,8 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
     klein_d = next(n for n in draft["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     klein_h = next(n for n in hero["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein_d["widgets_values"][0] == klein_h["widgets_values"][0]
-    assert klein_d["widgets_values"][1] is True
+    assert klein_d["widgets_values"][1] is False
+    assert klein_h["widgets_values"][1] is False
     assert klein_d["widgets_values"][-1] == "none"
     wan_t = json.loads((wf / "wan-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
     wan_i = json.loads((wf / "wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
