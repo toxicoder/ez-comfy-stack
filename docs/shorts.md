@@ -15,6 +15,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Spark farm: optional parallel 5s Queues, local concat
 - Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
 - Optional studio-ui board (`:8190` profile), LTX Director GPL clone, OpenCut MIT embed
+- Optional 3D sidecars (TRELLIS.2, DA3-BASE, host Blender / SuperSplat) and VACE join
 
 **What this enables**
 
@@ -146,6 +147,21 @@ Post-concat restore (opt-in Apache SeedVR2-3B):
 ./scripts/manage.sh stop
 ./scripts/manage.sh download-restore --tier seedvr2-3b
 # Conservative 1.3–1.5× on the stitched master only. Not download-models.
+```
+
+Optional 17-frame VACE join (`1+8n`, MagCache **off**). Unload LTX first:
+
+```bash
+./scripts/utilities/download-wan.sh run --tier vace
+# load wan-vace-join-lab-example (Shot A last → Shot B first)
+```
+
+Host 3D sidecars (Comfy **must be stopped**): [Studio sidecars](studio-sidecars.md), [Blender](blender-gb10-sidecar.md), [SuperSplat](splat-sidecar.md).
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
+./scripts/manage.sh blender                       # host binary; never in Dockerfile
 ```
 
 NVENC preview encode (Comfy **must be stopped** — encoder contention on GB10):

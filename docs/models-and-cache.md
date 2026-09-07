@@ -98,9 +98,12 @@ Opt-in packs (not `download-models`):
 ```bash
 ./scripts/utilities/download-wan.sh run --tier fun-inp   # Fun InP A14B FLF, ~47 GB Apache
 ./scripts/manage.sh download-restore --tier seedvr2-3b   # SeedVR2-3B post-concat, ~15 GB Apache
+./scripts/manage.sh download-3d --tier trellis2          # native TRELLIS.2 MIT, no nvdiffrast
+./scripts/manage.sh download-3d --tier da3-base          # DA3-BASE Apache (DA3-LARGE refused)
+./scripts/utilities/download-wan.sh run --tier vace      # Wan 2.1 VACE 1.3B join, ~6 GB Apache
 ```
 
-Unload LTX before Fun InP. SeedVR2 is restore-only after concat. `reap-models --drop-pack` cannot eat shared VAEs.
+Unload LTX before Fun InP / TRELLIS / VACE. SeedVR2 is restore-only after concat. `reap-models --drop-pack` cannot eat shared VAEs. SuperSplat is a [host viewer](splat-sidecar.md), not a download.
 
 `manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete weights. `reap-models --plan` is the default; `--apply` requires `--yes`. Shared files (`flux2-vae`, ACE-Step AIO) stay in the keep-set so `--drop-pack` cannot eat them.
 

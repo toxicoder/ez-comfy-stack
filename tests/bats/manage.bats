@@ -52,6 +52,8 @@ FROZEN_MANAGE_VERBS=(
   film-proxies
   take-promote
   download-restore
+  download-3d
+  blender
   models-status
   reap-models
 )
@@ -78,6 +80,8 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"film-proxies"* ]]
   [[ "${output}" == *"take-promote"* ]]
   [[ "${output}" == *"download-restore"* ]]
+  [[ "${output}" == *"download-3d"* ]]
+  [[ "${output}" == *"blender"* ]]
   [[ "${output}" == *"reap-models"* ]]
   [[ "${output}" == *"models-status"* ]]
   run bash "${MANAGE_SH}" not-a-command
@@ -209,6 +213,12 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -ne 0 ]
   run cmd_download_restore --help
   [ "${status}" -eq 0 ]
+  run cmd_download_3d --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"trellis2"* ]]
+  run cmd_blender --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"host Blender"* ]]
   run cmd_models_status
   [ "${status}" -eq 0 ]
   run cmd_reap_models --help

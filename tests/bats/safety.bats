@@ -24,6 +24,14 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "Dockerfile never vendors nvdiffrast blender or SuperSplat" {
+  local df="${REPO_ROOT}/docker/Dockerfile"
+  run grep -iE 'nvdiffrast|nvdiffrec|supersplat' "${df}"
+  [ "${status}" -ne 0 ]
+  run grep -iE 'blender' "${df}"
+  [ "${status}" -ne 0 ]
+}
+
 @test "Dockerfile defaults to public Docker Hub CUDA base not nvcr" {
   # Builder default is runtime (wheels); devel is an override, not the ARG default.
   run grep -E 'ARG CUDA_BASE_IMAGE=nvidia/cuda:.*runtime' "${REPO_ROOT}/docker/Dockerfile"
