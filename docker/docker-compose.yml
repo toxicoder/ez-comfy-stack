@@ -65,6 +65,8 @@ services:
       COMFYUI_REF: ${COMFYUI_REF:-v0.34.0}
       PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
       CUDA_MODULE_LOADING: LAZY
+      TORCH_COMPILE_DISABLE: ${TORCH_COMPILE_DISABLE:-1}
+      OMP_NUM_THREADS: ${OMP_NUM_THREADS:-20}
       LAB_VISUAL_ENABLE_NVFP4: "1"
       LAB_VISUAL_PROFILE: us-safe-studio
       LAB_PIPELINE: ${LAB_PIPELINE:-studio}
@@ -93,13 +95,14 @@ services:
       - ./install-comfy.sh:/opt/ez-comfy/install-comfy.sh:ro
       - ./install-comfy:/opt/ez-comfy/install-comfy:ro
       - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
+      - ./patch_unified_memory_copy.py:/opt/ez-comfy/patch_unified_memory_copy.py:ro
       - ./pythonpath:/opt/ez-comfy/pythonpath:ro
     gpus: all
     shm_size: "16gb"
     mem_limit: ${MEM_LIMIT:-90g}
     mem_reservation: ${MEM_RESERVATION:-80g}
-    # cpus soft limit (compose v2)
-    cpus: 12.0
+    # cpus soft limit (compose v2). GB10 has 20 ARM cores; leave 4 for OS/SSH.
+    cpus: 16.0
 
 volumes:
   comfy-state:

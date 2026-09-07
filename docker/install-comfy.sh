@@ -230,8 +230,9 @@ main() {
     ensure_lab_video_nodes || warn "VideoHelperSuite refresh failed — LTX lab MP4 may be unavailable"
     step 4 "${total}" "Remove wrong PyPI nunchaku if present"
     cleanup_wrong_nunchaku
-    step 5 "${total}" "Apply Spark free-memory patch"
+    step 5 "${total}" "Apply Spark free-memory and copy=False patches"
     apply_free_memory_patch
+    apply_unified_memory_copy_patch
     step 6 "${total}" "Refresh complete"
   fi
 

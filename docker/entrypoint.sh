@@ -324,6 +324,40 @@ install_lab_custom_nodes() {
 }
 
 #######################################
+# Print ComfyUI CLI tokens (one per line) for GB10 unified memory.
+# Kitchen XOR Sage: never includes --use-sage-attention. Never --highvram.
+# Globals:
+#   LAB_OUTPUTS_MOUNT
+# Arguments:
+#   None
+# Outputs:
+#   argv tokens on stdout
+# Returns:
+#   0
+#######################################
+comfy_exec_args() {
+  printf '%s\n' \
+    --listen \
+    0.0.0.0 \
+    --port \
+    8188 \
+    --output-directory \
+    "${LAB_OUTPUTS_MOUNT:-/outputs}" \
+    --use-ck-attention \
+    --normalvram \
+    --disable-dynamic-vram \
+    --disable-pinned-memory \
+    --disable-async-offload \
+    --dont-upcast-attention \
+    --reserve-vram \
+    1 \
+    --bf16-unet \
+    --bf16-vae \
+    --bf16-text-enc \
+    --disable-mmap
+}
+
+#######################################
 # Copy every in-tree pack under a root into Comfy custom_nodes.
 # Globals:
 #   None
@@ -424,9 +458,12 @@ main() {
   # shellcheck disable=SC1091
   source "${venv}/bin/activate"
 
-  ep_log "phase 2/4: free-memory patch (best-effort)"
+  ep_log "phase 2/4: free-memory + unified-memory copy patches (best-effort)"
   if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
     python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
+  fi
+  if [[ -f /opt/ez-comfy/patch_unified_memory_copy.py ]]; then
+    python3 /opt/ez-comfy/patch_unified_memory_copy.py "${comfy_home}" || true
   fi
 
   ep_log "phase 3/4: install lab workflows and custom nodes"
@@ -436,17 +473,23 @@ main() {
     "${comfy_home}/custom_nodes"
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
+  export TORCH_COMPILE_DISABLE="${TORCH_COMPILE_DISABLE:-1}"
+  export OMP_NUM_THREADS="${OMP_NUM_THREADS:-20}"
   ensure_triton_build_env
   configure_torch_native_triton
   cd "${comfy_home}"
   link_comfy_output_dir "${comfy_home}/output"
-  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs})"
+  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs}; Kitchen attention)"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then
     ep_log "LAB_ENTRYPOINT_NO_EXEC=1; skipping exec"
     return 0
   fi
-  exec python main.py --listen 0.0.0.0 --port 8188 \
-    --output-directory "${LAB_OUTPUTS_MOUNT:-/outputs}"
+  local -a exec_args=()
+  local tok
+  while IFS= read -r tok; do
+    exec_args+=("${tok}")
+  done < <(comfy_exec_args)
+  exec python main.py "${exec_args[@]}"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then

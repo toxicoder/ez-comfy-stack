@@ -1,8 +1,8 @@
 """Pytest configuration for Spark free-memory patch unit tests.
 
 Ensures the ``docker/`` directory is importable as a top-level path so tests can
-``import patch_get_free_memory`` and coverage can attribute lines to
-``patch_get_free_memory.py`` without packaging the module.
+``import patch_get_free_memory`` / ``patch_unified_memory_copy`` and coverage can
+attribute lines without packaging the modules.
 
 This conftest intentionally performs only sys.path setup — no network, Docker,
 or GPU fixtures — keeping the suite hermetic for CI and laptops.

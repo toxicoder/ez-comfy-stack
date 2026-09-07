@@ -100,8 +100,8 @@ Commands:
   help              Show this help
   setup [--install-docker] [--yes]
                     Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, doctor
-  doctor            Preflight: docker, GPU, free RAM/disk, models, output dir, license policy
-  status [--json]   Stack status
+  doctor            Preflight: docker, GPU, free RAM/disk, attention, models, output dir, license policy
+  status [--json]   Stack status (attention + host_free_gib when --json)
   start             Start studio stack (requires yes)
   stop              Stop stack (keep models, outputs, and comfy volume)
   restart           stop + start
@@ -319,6 +319,14 @@ cmd_doctor() {
   else
     ok=1
   fi
+  local attn
+  attn="$(stack_attention_backend)"
+  log "attention: ${attn}"
+  if [[ ${attn} == "unknown" ]]; then
+    log "attention flags: --use-ck-attention (Kitchen XOR Sage; stack stopped or logs not yet classified)"
+  elif [[ ${attn} == "pytorch-fallback" ]]; then
+    warn "attention is pytorch-fallback — 10–20× slow vs Kitchen. See docs/troubleshooting.md"
+  fi
   local image_json wan_json ltx_json llm_json podcast_json music_json
   image_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-image.sh" status --tier fast --json 2>/dev/null || echo '{}')
   wan_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-wan.sh" status --tier 5b --json 2>/dev/null || echo '{}')
@@ -326,10 +334,11 @@ cmd_doctor() {
   llm_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" status --json 2>/dev/null || echo '{}')
   podcast_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-podcast.sh" status --tier analog --json 2>/dev/null || echo '{}')
   music_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-music.sh" status --tier turbo --json 2>/dev/null || echo '{}')
-  log "image status: ${image_json}"
-  log "wan status: ${wan_json}"
-  log "ltx status: ${ltx_json}"
-  log "llm status: ${llm_json}"
+  log "MODELS_DIR pack disk:"
+  log "  image status: ${image_json}"
+  log "  wan status: ${wan_json}"
+  log "  ltx status: ${ltx_json}"
+  log "  llm status: ${llm_json}"
   log "podcast status: ${podcast_json} (opt-in; missing pack is not a doctor failure)"
   log "music status: ${music_json} (opt-in; missing pack is not a doctor failure)"
   ensure_prompt_enhance_gguf
@@ -393,6 +402,7 @@ cmd_status() {
   else
     warn "docker not available"
   fi
+  log "attention: $(stack_attention_backend)"
   log "MODELS_DIR=${MODELS_DIR} COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output} COMFY_PORT=${COMFY_PORT:-8188} MEM_LIMIT=${MEM_LIMIT:-90g}"
 }
 

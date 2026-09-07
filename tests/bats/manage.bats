@@ -43,6 +43,8 @@ teardown() {
   run bash "${MANAGE_SH}" doctor
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"writable"* || "${output}" == *"Doctor OK"* ]]
+  [[ "${output}" == *"attention:"* ]]
+  [[ "${output}" == *"MODELS_DIR pack disk"* || "${output}" == *"pack disk"* ]]
   export LAB_MOCK_FREE_MEM_GIB=4
   run bash "${MANAGE_SH}" doctor
   [ "${status}" -ne 0 ]
