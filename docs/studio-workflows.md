@@ -83,7 +83,7 @@ flowchart TB
     | **klein-still-draft-lab-example** | Spark Still. 768×432, Enhance on. Prefix `ez_still_draft` |
     | **klein-identity-sheet-lab-example** | 3-angle sheet, seed **42**, **1280×704** |
     | **klein-storyboard-6up-lab-example** | Six new cameras (`ez_board_01`…`06`) |
-    | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills, independent T2I |
+    | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills of one wizard penthouse, independent T2I |
     | **klein-hook-still-lab-example** | Vertical 9:16 hook still |
     | **prompt-forge-lab-example** | No UNET. Klein / Wan / LTX enhance preview (occupancy **llm**) |
     | **beat-sheet-lab-example** | No UNET. 18 STRING cards → paste into `shorts/<slug>.shots.yaml` (occupancy **none**) |
@@ -123,7 +123,7 @@ flowchart TB
     | **klein-thumbnail-lab-example** | YouTube thumbnail still 1280×720 |
     | **klein-product-packshot-lab-example** | Clean product packshot 1:1 |
     | **klein-before-after-lab-example** | Before plate, after Klein-edit of the same mug |
-    | **klein-style-lock-lab-example** | One lake house, four cameras, locked inventory |
+    | **klein-style-lock-lab-example** | One penthouse, four cameras, locked inventory |
     | **wan-bumper-loop-lab-example** | Loopable MP4 bumper (ping-pong) |
     | **ltx-broll-ambient-lab-example** | Ambient B-roll AV plate (~5 s) |
     | **klein-storyboard-6up-lab-example** | Six storyboard frames of one rooftop from new cameras |

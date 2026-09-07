@@ -98,7 +98,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     ```
 
 6. **90s films** (go-see first-person parkour / still-here / switchyard): load one **film-*-90s** graph → Queue **once** → the MP4 is already at `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4`; open **Save 90s film (MP4)** to preview or download. See [90s shorts](shorts.md).
-7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel of one cabin (new cameras, locked inventory).
+7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel of one wizard penthouse (new cameras, locked inventory).
 8. Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up — [catalog](studio-workflows.md).
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes; one-click films are 18 × 5s prints.

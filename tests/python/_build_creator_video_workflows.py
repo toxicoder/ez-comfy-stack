@@ -24,6 +24,8 @@ from _lab_layout import (
 )
 from _lab_theme import (
     CREATOR_IDENTITY,
+    HOUSE_IDENTITY,
+    HOUSE_INVENTORY,
     I2V_LOCK,
     KLEIN_HOOK,
     KLEIN_NEG_STILL,
@@ -764,55 +766,49 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
         description="Klein 4B before/after still pair",
     )
 
-    house_lock = (
-        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal "
-        "standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, "
-        "empty of people."
-    )
     _klein_pack(
         stem="klein-style-lock-lab-example",
         size=(768, 960),
-        identity=house_lock,
-        inventory=(
-            "vertical cedar siding, charcoal standing-seam hip roof, tall black-framed "
-            "windows, linen sofa facing the lake glass, oak floors"
-        ),
+        identity=HOUSE_IDENTITY,
+        inventory=HOUSE_INVENTORY,
         persist="view",
         shots=[
             (
                 "ez_style_01",
-                "CURB",
-                "Three-quarter lake facade of the same house, 24mm, golden-hour, Instagram "
-                "4:5. Glass shows the linen sofa and oak floors inside.",
+                "FACADE",
+                "Three-quarter city facade of the same penthouse, 24mm, golden-hour, "
+                "Instagram 4:5. The three-bay glass shows the charcoal linen sofa and "
+                "walnut floors inside.",
             ),
             (
                 "ez_style_02",
                 "LIVING",
-                "From inside the living room of the same house, looking out the glass to "
-                "the lake, late-day sun. Linen sofa in the foreground.",
+                "From inside the living room of the same penthouse, looking out the "
+                "three-bay glass to the megacity, late-day sun. Charcoal linen sofa in "
+                "the foreground.",
             ),
             (
                 "ez_style_03",
-                "DECK",
-                "Lakeside deck of the same house at dusk, cedar boards, quiet water, "
-                "evergreen ridge.",
+                "TERRACE",
+                "Wraparound terrace of the same penthouse at dusk, fern living wall, "
+                "neon-wet deck, unmarked spires.",
             ),
             (
                 "ez_style_04",
-                "TWILIGHT",
-                "Twilight exterior of the same house. Lamps on; sofa silhouette through "
-                "black-framed glass.",
+                "RAIN",
+                "Rain night exterior of the same penthouse. Lamps on; sofa silhouette "
+                "through the three-bay glass. Penthouse volume unchanged.",
             ),
         ],
         hint="Instagram 4:5 still",
-        neg=KLEIN_NEG_PHOTO,
+        neg=KLEIN_NEG_STILL,
         note=f"""## klein-style-lock-lab-example
 
-Four Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.
+Four Klein 4B stills of one charcoal-glass crown penthouse from new cameras (Prompt Join lock=view). Locked inventory repeats through the three-bay glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy FACADE's framing. Same world bible as klein-dream-house-lab-example.
 
-Identity-mode enhance is on for the bible (camera-free).
+Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klein-t2i-enhanced.
 """,
-        description="Klein 4B four-still lake-house views, locked inventory",
+        description="Klein 4B four-still penthouse views, locked inventory",
     )
 
     # 8. Wan bumper loop MP4

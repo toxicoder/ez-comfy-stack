@@ -74,8 +74,8 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein-still-draft-lab-example** | Spark Still. 768×432, seed 42, Enhance on. Prefix `ez_still_draft` |
 | **klein-identity-sheet-lab-example** | Front / three-quarter / profile. 1280×704, Enhance on (identity mode) |
 | **klein-storyboard-6up-lab-example** | Six new cameras of one rooftop (`ez_board_01`…`06`) |
-| **klein-dream-house-lab-example** | World bible. Ten 4:5 stills, independent T2I, identity-mode enhance on the bible |
-| **klein-style-lock-lab-example** | One house, four cameras, locked inventory |
+| **klein-dream-house-lab-example** | World bible. Ten 4:5 stills of one wizard penthouse, independent T2I, identity-mode enhance on the bible |
+| **klein-style-lock-lab-example** | One penthouse, four cameras, locked inventory |
 | **klein-lighting-trio-lab-example** | Same subject, three lights |
 | **klein-camera-angles-lab-example** | Wide / medium / close |
 | **klein-color-moods-lab-example** | Warm plate plus three grades |
