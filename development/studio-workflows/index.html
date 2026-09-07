@@ -1626,7 +1626,7 @@
 <li>Keeping the <a href="../visual-generative-ai/">playbook</a> a how-to, not a spreadsheet</li>
 </ul>
 <p><strong>Who this is for:</strong> studio users after the first still-draft <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span>.</p>
-<p>After <code>download-models</code> + <code>start</code>, load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>. Do <strong>not</strong> edit raw JSON — change widgets on the canvas.</p>
+<p>After <code>download-models</code> + <code>start</code>, load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> graphs also appear under Comfy’s <strong>Apps</strong> sidebar (<code>*.app.json</code> on disk; same stem). Do <strong>not</strong> edit raw JSON — change widgets on the canvas.</p>
 <pre class="mermaid"><code>flowchart TB
   Need{"What do you need?"} --&gt; Still["A still"]
   Need --&gt; Motion["Silent ~5 s"]
@@ -1733,7 +1733,7 @@
 </div>
 </div>
 <div class="tabbed-block">
-<p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> (frontend <strong>1.41.13+</strong>) is a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> surface on the same <code>*-lab-example</code> JSON. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span> and handoff: <a href="../studio-apps/">ComfyUI Apps</a>.</p>
+<p>App Mode (frontend <strong>1.41.13+</strong>) is a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> surface on the same <code>*-lab-example</code> JSON. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span> and handoff: <a href="../studio-apps/">ComfyUI Apps</a>.</p>
 <p>Lane A — Inspire (occupancy <strong>klein</strong>)</p>
 <table>
 <thead>

@@ -2456,6 +2456,11 @@
 <td>Pull latest; restart so <code>install_lab_workflows</code> copies <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> into <code>user/default/workflows/</code>. Load <strong>film-<em>-90s-</em>-lab-example</strong>. YAML shot lists are not copied (edit on the host)</td>
 </tr>
 <tr>
+<td>Lab graph is in Workflows but not in Apps</td>
+<td>Seeded as <code>*.json</code> (film default, or pre-<code>.app.json</code> volume)</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> graphs seed as <code>*-lab-example.app.json</code>. Pull latest and restart so the entrypoint re-copies and removes the old <code>.json</code> sibling. 90s films stay Workflows-only (<code>default_view: graph</code>). This is not <code>studio-ui</code>.</td>
+</tr>
+<tr>
 <td>Queuing a 90s film OOMs with Klein and LTX both resident</td>
 <td><code>EZUnloadModels</code> missing on an old graph</td>
 <td>Pull latest film JSON; confirm <strong>Unload models (pass IMAGE)</strong> sits between Klein decode and LTX shot 1 — <a href="../shorts/">90s shorts</a></td>

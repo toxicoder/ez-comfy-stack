@@ -1683,18 +1683,20 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>How <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> relates to the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../glossary/#workflow" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">node graph</span></li>
+<li>Apps sidebar (<code>.app.json</code>) vs Workflows</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span> (one <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> job)</li>
 <li>Lane A (Inspire) vs Lane B (Produce)</li>
 <li>Handoff chains (still → motion → AV)</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
+<li>Opening a lab graph from Comfy’s <strong>Apps</strong> sidebar, not only Workflows</li>
 <li>Queueing a lab graph from creator widgets instead of hunting the canvas</li>
 <li>Knowing which App to stop before you load the next one</li>
 <li>Following <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> Still → Hero → Silent 5s → AV 5s without renaming files</li>
 </ul>
 <p><strong>Who this is for:</strong> studio users after <code>klein-still-draft-lab-example</code> has been loaded once.</p>
-<p>Lab graphs are still the same <code>*-lab-example.json</code> files. <a href="../learn/comfyui/#graph-and-app">App Mode</a> is a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> surface on that JSON (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> frontend <strong>1.41.13+</strong>). It is <strong>not</strong> a second frontend and not <code>studio-ui</code>.</p>
+<p>Lab graphs are still the same host <code>*-lab-example.json</code> files. On <code>start</code> they <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> into Comfy as <code>*.app.json</code> when App Mode is the default view, so they appear under <strong>Apps</strong> as well as <strong>Workflows</strong>. <a href="../learn/comfyui/#graph-and-app">App Mode</a> is a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> surface on that JSON (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> frontend <strong>1.41.13+</strong>). It is <strong>not</strong> a second frontend and not <code>studio-ui</code>.</p>
 <pre class="mermaid"><code>flowchart LR
   Load["Load *-lab-example"] --&gt; App["App Mode widgets"]
   App --&gt; Queue["Queue"]
@@ -1713,7 +1715,7 @@
 <tbody>
 <tr>
 <td><strong>App</strong></td>
-<td>Prompt, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span>, style, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span>, size, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span></td>
+<td>Prompt, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span>, style, seed, size, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span></td>
 <td>Daily <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span></td>
 </tr>
 <tr>
@@ -1724,8 +1726,8 @@
 </tbody>
 </table>
 <p>Official persist is <code>extra.linearData</code> (<code>inputs</code> / <code>outputs</code>). The lab contract is <code>extra.lab_app_mode</code> (<code>lane</code>, <code>occupancy</code>, <code>handoff</code>, <code>frontend_min</code>). Do not require <code>extra.linearMode</code> — upstream does not write it.</p>
-<p>90s film graphs stay <code>default_view: graph</code> (too many widgets) but App Mode is still <strong>enabled</strong>.</p>
-<p>Filenames: <a href="../studio-workflows/">Workflow catalog</a>. Playbook: <a href="../visual-generative-ai/">Still to motion to AV</a>.</p>
+<p>Comfy’s <strong>Apps</strong> sidebar lists files whose name ends in <code>.app.json</code>. On <code>start</code>, the entrypoint seeds every App Mode graph (<code>default_view: app</code>) as <code>*-lab-example.app.json</code> into <code>user/default/workflows/</code>. The same stem still appears under <strong>Workflows</strong>. 90s film graphs stay <code>default_view: graph</code> (too many widgets) and keep the <code>.json</code> suffix — App Mode is still <strong>enabled</strong>, but they stay Workflows-only.</p>
+<p>Filenames: <a href="../studio-workflows/">Workflow catalog</a>. Playbook: <a href="../visual-generative-ai/">Still to motion to AV</a>. Restart the container after a pull so the <code>.app.json</code> copy runs.</p>
 <hr />
 <h2 id="occupancy">Occupancy<a class="headerlink" href="#occupancy" title="Permanent link">&para;</a></h2>
 <p>One GB10 job. Cover art ≠ film ≠ podcast. Every App Note includes a one-line occupancy stanza.</p>
@@ -1944,7 +1946,7 @@
 <p>Do <strong>not</strong> Queue Wan and LTX in the same session. Stop the other occupancy first.</p>
 <div class="admonition warning">
 <p class="admonition-title">Do not weaken</p>
-<p><code>restart: "no"</code>, type <strong>yes</strong> on start, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> are unchanged. Apps do not add <code>workflows/apps/</code> or seed <code>workflows/optional/</code>.</p>
+<p><code>restart: "no"</code>, type <strong>yes</strong> on start, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> are unchanged. Apps do not add <code>workflows/apps/</code> or seed <code>workflows/optional/</code>. App Mode graphs seed as <code>*.app.json</code> next to the Workflows list, not as a second tree.</p>
 </div>
 
 
