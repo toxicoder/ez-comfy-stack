@@ -118,7 +118,7 @@ sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | --- | --- | --- |
 | `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |
 | Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
-| 10–20× slow / mushy video vs a 4090 | Silent PyTorch attention fallback (Kitchen/Sage not active) | `./scripts/manage.sh doctor` must **not** say `attention: pytorch-fallback` on a running Spark. Logs should contain `Using Comfy Kitchen attention`. Launch uses `--use-ck-attention` (never `--use-sage-attention` next to it). Do **not** `pip install sageattention` from PyPI on aarch64 |
+| SSH drop mid-90s film | `restart: "no"` is correct; no jobstore before this change | `./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see` reprints only failed/crashed shots. Ok clips with duration 5.00±0.05 s are skipped |
 | Build OK, `status` empty / not in `docker ps` | Container exited immediately (`restart: "no"`) | Pull latest (workflow no longer mounts into `ComfyUI/` before clone). `./scripts/manage.sh logs` or `docker logs ez-comfy-studio`. Reset poisoned volume: `./scripts/manage.sh stop && docker volume rm ez-comfy-state` then `start` again. Stop other GPU containers if needed |
 | `start` returns while logs still downloading torch | Normal cold install; multi‑GB wheels | Leave it running; `start` streams logs by default. Re-attach: `./scripts/manage.sh logs`. Markers: `[comfy-install] ══ step N/12 ══` (or `Docker phase: …` during image prebuild) |
 | Quiet for minutes on step 4 (PyTorch) | Large cudnn/torch wheel download | Prefer GHCR prebuilt image (seed, no pip). Or wait for pip bars; host heartbeat every 30s |

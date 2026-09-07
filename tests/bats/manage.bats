@@ -36,6 +36,8 @@ teardown() {
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"download-podcast"* ]]
   [[ "${output}" == *"download-music"* ]]
+  [[ "${output}" == *"print-shot"* ]]
+  [[ "${output}" == *"film-resume"* ]]
   run bash "${MANAGE_SH}" not-a-command
   [ "${status}" -ne 0 ]
   run bash "${MANAGE_SH}" doctor
@@ -152,6 +154,11 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"clear-hf-locks"* ]]
+  [[ "${output}" == *"print-shot"* ]]
+  run cmd_print_shot --help
+  [ "${status}" -eq 0 ]
+  run cmd_film_resume
+  [ "${status}" -ne 0 ]
   export LAB_NO_SUDO=1
   export MODELS_DIR="${TEST_TMP_DIR}/models"
   run cmd_setup
