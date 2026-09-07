@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .prompt_enums import shot_card
-from .shots import FILM_SLUGS, SHOT_COUNT, parse_shots_yaml
+from .shots import FILM_SLUGS, SHOT_COUNT, parse_shots_yaml, print_template
 
 STATUSES = ("pending", "running", "ok", "failed", "skipped")
 DURATION_S = 5.00
@@ -295,7 +295,7 @@ def compile_film(
     yaml_text: str,
     dest: Path,
     *,
-    template: str = "ltx-i2v-5s-lab-example.json",
+    template: str | None = None,
 ) -> dict[str, Any]:
     """Write film.yaml, per-shot JSON stubs, and state.json (pending)."""
     parsed = parse_shots_yaml(yaml_text)
@@ -304,6 +304,7 @@ def compile_film(
     slug = str(meta["slug"])
     if FILM_SLUGS.get(film) != slug:
         raise ValueError(f"slug mismatch for {film}: {slug}")
+    chosen = template or print_template(meta["print"])
     dest.mkdir(parents=True, exist_ok=True)
     (dest / "shots").mkdir(exist_ok=True)
     (dest / "takes").mkdir(exist_ok=True)
@@ -315,7 +316,7 @@ def compile_film(
         sid = shot_id(beat, shot)
         payload = {
             "id": sid,
-            "template": template,
+            "template": chosen,
             "prefix": yaml_shot["prefix"],
             "load_from": yaml_shot["load_from"],
             "ltx_i2v": yaml_shot["ltx_i2v"],
@@ -341,7 +342,7 @@ def _cli(argv: list[str] | None = None) -> int:
     p_init = sub.add_parser("init")
     p_init.add_argument("--yaml", required=True)
     p_init.add_argument("--dest", required=True)
-    p_init.add_argument("--template", default="ltx-i2v-5s-lab-example.json")
+    p_init.add_argument("--template", default=None)
 
     p_mark = sub.add_parser("mark")
     p_mark.add_argument("--dest", required=True)

@@ -112,7 +112,7 @@ FILM=go-see   # or still-here | switchyard
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --xfade 10 --yes
 # Listen to go-see with and without --xfade 10; default remains the hard-cut golden.
 
-# OTIO handshake for Kdenlive/Shotcut (host, no GPU):
+# OTIO handshake for Kdenlive/Shotcut (host, no GPU; apt notes in studio-sidecars.md):
 ./scripts/manage.sh film-export-otio go-see
 # NVENC proxies 960×528 ~2 Mbps (Comfy must be stopped):
 ./scripts/manage.sh stop
@@ -167,6 +167,7 @@ Wave 4 hero path (opt-in, occupancy: one heavy job):
 ./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
 # load optional/wan-i2v-a14b-lab-example — unload 5B first
 ./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
+# load workflows/optional/longcat-video-lab-example.json (note, not 90s default)
 ./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
 ```
 

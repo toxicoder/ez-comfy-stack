@@ -23,6 +23,10 @@ COMFYUI_MANAGER_REF="${COMFYUI_MANAGER_REF:-4.2.2}"
 COMFYUI_NUNCHAKU_NODE_REF="${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}"
 # Empty = clone default branch (main). Set to a tag/branch/SHA branch name when available.
 COMFYUI_VHS_REF="${COMFYUI_VHS_REF:-}"
+# Wave-closeout pins: OpenCut tag; MagCache/Director commit SHAs (no tags upstream).
+COMFYUI_OPENCUT_REF="${COMFYUI_OPENCUT_REF:-0.5.0}"
+COMFYUI_MAGCACHE_REF="${COMFYUI_MAGCACHE_REF:-47bdd2aca97e568087c4e92d2d2f0426bdce7a37}"
+COMFYUI_LTX_DIRECTOR_REF="${COMFYUI_LTX_DIRECTOR_REF:-a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64}"
 
 #######################################
 # Path of the volume ComfyUI pin stamp.
@@ -161,38 +165,58 @@ step() {
 }
 
 #######################################
-# Clone or update a ComfyUI custom node and install its requirements.
-# Globals:
-#   CUSTOM — custom_nodes directory (must be set by caller)
+# True when a git ref is a hex commit SHA (not a tag/branch).
 # Arguments:
-#   $1 - Git URL
-#   $2 - Directory name under CUSTOM
-#   $3 - Optional git ref (tag/branch/SHA); shallow clone uses --branch when set
+#   $1  Git ref
+# Returns:
+#   0 if SHA-shaped; 1 otherwise
+#######################################
+clone_node_ref_is_sha() {
+  [[ ${1} =~ ^[0-9a-fA-F]{7,40}$ ]]
+}
+
+#######################################
+# Shallow-clone or update a custom node at a tag, branch, or commit SHA.
+# Globals:
+#   CUSTOM
+# Arguments:
+#   $1  Git URL
+#   $2  Directory name under CUSTOM
+#   $3  Optional git ref
 # Outputs:
 #   Progress via log/warn
 # Returns:
-#   0 even on soft failures (clone/pip may warn and continue)
+#   0 even on soft failures
 #######################################
 clone_node() {
   local url="${1}"
   local name="${2}"
   local ref="${3:-}"
-  local -a clone_args=(--depth 1)
+  local dest="${CUSTOM}/${name}"
   log "custom node: begin ${name}${ref:+ (ref ${ref})}"
-  if [[ -n ${ref} ]]; then
-    clone_args+=(--branch "${ref}")
-  fi
-  if [[ ! -d "${CUSTOM}/${name}/.git" ]]; then
+  if [[ ! -d ${dest}/.git ]]; then
     log "custom node: cloning ${name}…"
-    git clone "${clone_args[@]}" "${url}" "${CUSTOM}/${name}" || warn "clone failed: ${name}"
+    if [[ -n ${ref} ]] && clone_node_ref_is_sha "${ref}"; then
+      mkdir -p "${dest}"
+      git -C "${dest}" init >/dev/null 2>&1 || true
+      git -C "${dest}" remote add origin "${url}" 2>/dev/null || true
+      git -C "${dest}" fetch --depth 1 origin "${ref}" || warn "clone failed: ${name}"
+      git -C "${dest}" checkout FETCH_HEAD >/dev/null 2>&1 || warn "checkout failed: ${name}"
+    else
+      local -a clone_args=(--depth 1)
+      if [[ -n ${ref} ]]; then
+        clone_args+=(--branch "${ref}")
+      fi
+      git clone "${clone_args[@]}" "${url}" "${dest}" || warn "clone failed: ${name}"
+    fi
   else
     log "custom node: updating ${name}…"
     if [[ -n ${ref} ]]; then
-      git -C "${CUSTOM}/${name}" fetch --depth 1 origin "${ref}" 2>/dev/null || true
-      git -C "${CUSTOM}/${name}" checkout "${ref}" 2>/dev/null ||
-        git -C "${CUSTOM}/${name}" pull --ff-only || true
+      git -C "${dest}" fetch --depth 1 origin "${ref}" 2>/dev/null || true
+      git -C "${dest}" checkout "${ref}" 2>/dev/null ||
+        git -C "${dest}" pull --ff-only || true
     else
-      git -C "${CUSTOM}/${name}" pull --ff-only || true
+      git -C "${dest}" pull --ff-only || true
     fi
   fi
   if [[ -f "${CUSTOM}/${name}/requirements.txt" ]]; then

@@ -1,7 +1,7 @@
 {
   "id": "film-go-see-90s-run-lab-example",
   "revision": 5,
-  "last_node_id": 900,
+  "last_node_id": 901,
   "last_link_id": 427,
   "nodes": [
     {
@@ -10697,6 +10697,37 @@
         "ez_gosee_b6_s3_last"
       ],
       "title": "Save last frame"
+    },
+    {
+      "id": 901,
+      "type": "EZFilmDisclosure",
+      "pos": [
+        2680,
+        5460
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 901,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZFilmDisclosure"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "LTX AI-media disclosure (end-card)"
     }
   ],
   "links": [

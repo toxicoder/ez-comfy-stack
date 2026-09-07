@@ -58,8 +58,25 @@ def test_identity_sheet_seed_and_size() -> None:
             assert node["widgets_values"][1] is False
         if node.get("type") == "KSampler":
             assert int(node["widgets_values"][0]) == 42
+    blob = json.dumps(graph)
+    assert "Front camera" in blob
+    assert "Three-quarter camera" in blob
+    assert "Profile camera" in blob
+    assert "Hard golden key light" not in blob
+    assert "NIGHT LAMP" not in blob
+
+
+def test_longcat_lab_note_refuses_nccl() -> None:
+    path = WF / "optional" / "longcat-video-lab-example.json"
+    graph = json.loads(path.read_text(encoding="utf-8"))
+    assert graph["id"] == "longcat-video-lab-example"
+    note = graph["extra"]["lab_note"]
+    assert "NCCL" in note
+    assert "nvidia-dgx-spark-lab" in note
+    assert graph["extra"]["lab_longcat"]["nccl"] is False
 
 
 def test_notice_names_dfr() -> None:
     text = (WF / "quality" / "ltx-2.5" / "NOTICE.md").read_text(encoding="utf-8")
     assert "print: dfr" in text or "DFR" in text
+    assert "templates/ltx-2.5/t2v-i2v-two-stage-distilled" in text

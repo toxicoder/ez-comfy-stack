@@ -9,7 +9,7 @@ Lab **default printers stay 5.00 s / 121 frames / 1280×704** (`ltx-i2v-5s-lab-e
 | Official graph | Lab role |
 | --- | --- |
 | T2V/I2V single-stage distilled | Fast quality preview (same family as lab 5 s I2V) |
-| T2V/I2V two-stage distilled | DFR / 2× spatial + refine (Wave 4 `print: dfr`) |
+| T2V/I2V two-stage distilled | DFR / 2× spatial + refine. YAML `print: dfr` records stub template `templates/ltx-2.5/t2v-i2v-two-stage-distilled` (not vendored JSON) |
 | A2V two-stage distilled | Audio freeze (talking-head / ACE-Step bed) |
 | IC-LoRA Union Control | Depth / canny / pose v2v |
 

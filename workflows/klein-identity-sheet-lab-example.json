@@ -377,11 +377,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9.",
+        "Front camera, eye-level, 24mm. Same identity. YouTube 16:9.",
         "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
         "state"
       ],
-      "title": "SHOT KEY"
+      "title": "SHOT FRONT"
     },
     {
       "id": 11,
@@ -426,9 +426,9 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Front camera, eye-level, 24mm. Same identity. YouTube 16:9."
       ],
-      "title": "Positive KEY"
+      "title": "Positive front"
     },
     {
       "id": 12,
@@ -488,7 +488,7 @@
         "simple",
         1.0
       ],
-      "title": "Sampler KEY"
+      "title": "Sampler front"
     },
     {
       "id": 13,
@@ -531,7 +531,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "Decode KEY"
+      "title": "Decode front"
     },
     {
       "id": 14,
@@ -598,11 +598,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera.",
+        "Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change.",
         "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
         "state"
       ],
-      "title": "SHOT WINDOW"
+      "title": "SHOT THREE-QUARTER"
     },
     {
       "id": 17,
@@ -647,9 +647,9 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change."
       ],
-      "title": "Positive WINDOW"
+      "title": "Positive three-quarter"
     },
     {
       "id": 18,
@@ -709,7 +709,7 @@
         "simple",
         1.0
       ],
-      "title": "Sampler WINDOW"
+      "title": "Sampler three-quarter"
     },
     {
       "id": 19,
@@ -751,7 +751,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "Decode WINDOW"
+      "title": "Decode three-quarter"
     },
     {
       "id": 20,
@@ -824,7 +824,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Ref from 01 (WINDOW)"
+      "title": "Ref from 01 (three-quarter)"
     },
     {
       "id": 22,
@@ -861,11 +861,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and wizard at night under rooftop sodium and city neon. Same camera.",
+        "Profile camera, 50mm, full side view. Same identity and light. Camera is the only change.",
         "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
         "state"
       ],
-      "title": "SHOT NIGHT LAMP"
+      "title": "SHOT PROFILE"
     },
     {
       "id": 23,
@@ -910,9 +910,9 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard at night under rooftop sodium and city neon. Same camera."
+        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place, inventory, and camera framing. The shot names the only change. Profile camera, 50mm, full side view. Same identity and light. Camera is the only change."
       ],
-      "title": "Positive NIGHT LAMP"
+      "title": "Positive profile"
     },
     {
       "id": 24,
@@ -972,7 +972,7 @@
         "simple",
         1.0
       ],
-      "title": "Sampler NIGHT LAMP"
+      "title": "Sampler profile"
     },
     {
       "id": 25,
@@ -1014,7 +1014,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "Decode NIGHT LAMP"
+      "title": "Decode profile"
     },
     {
       "id": 26,
@@ -1087,7 +1087,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Ref from 01 (NIGHT LAMP)"
+      "title": "Ref from 01 (profile)"
     }
   ],
   "links": [
@@ -1433,7 +1433,7 @@
     },
     {
       "id": 10,
-      "title": "SHOT KEY",
+      "title": "SHOT FRONT",
       "bounding": [
         500,
         60,
@@ -1446,7 +1446,7 @@
     },
     {
       "id": 11,
-      "title": "SHOT WINDOW",
+      "title": "SHOT THREE-QUARTER",
       "bounding": [
         500,
         440,
@@ -1459,7 +1459,7 @@
     },
     {
       "id": 12,
-      "title": "SHOT NIGHT LAMP",
+      "title": "SHOT PROFILE",
       "bounding": [
         500,
         820,

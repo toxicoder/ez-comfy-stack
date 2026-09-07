@@ -451,5 +451,8 @@ flowchart TB
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
     | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
     | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for lab **`VHS_VideoCombine`** MP4. **Required** for `wan-*-lab-example` / `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |
+    | `COMFYUI_OPENCUT_REF` | `0.5.0` | [jtydhr88/ComfyUI-OpenCut](https://github.com/jtydhr88/ComfyUI-OpenCut) MIT embed. Fail-soft. Not the Rust rewrite. |
+    | `COMFYUI_MAGCACHE_REF` | `47bdd2a…` | [Zehong-Ma/ComfyUI-MagCache](https://github.com/Zehong-Ma/ComfyUI-MagCache) commit pin (no release tag). Wan 5B draft extra only. |
+    | `COMFYUI_LTX_DIRECTOR_REF` | `a3c809c…` | [WhatDreamsCost-ComfyUI](https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI) GPL clone **only** when `LAB_ENABLE_LTX_DIRECTOR=1`. Commit pin (no release tag). |
 
     **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, `docker/install-comfy/core.sh` (torch) and `docker/install-comfy/common.sh` (Comfy/node refs), then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).
