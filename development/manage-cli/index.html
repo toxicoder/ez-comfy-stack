@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="SuperSplat MIT host viewer for Gaussian splats. Not in the Dockerfile. Occupancy with Comfy.">
+        <meta name="description" content="Operator command catalog for ez-comfy-stack — what each manage.sh verb does and when not to run it.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/splat-sidecar/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/manage-cli/">
       
       
-        <link rel="prev" href="../blender-gb10-sidecar/">
+        <link rel="prev" href="../splat-sidecar/">
       
       
-        <link rel="next" href="../manage-cli/">
+        <link rel="next" href="../models-and-cache/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Splat sidecar - ez-comfy-stack</title>
+        <title>manage.sh reference - ez-comfy-stack</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#splat-sidecar" class="md-skip">
+        <a href="#managesh-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Splat sidecar
+              manage.sh reference
             
           </span>
         </div>
@@ -284,12 +284,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../visual-generative-ai/" class="md-tabs__link">
           
   
@@ -306,11 +304,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../manage-cli/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -794,31 +794,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -836,7 +831,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1047,6 +1042,98 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../splat-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Splat sidecar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operate
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operate
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
     
   
   
@@ -1066,7 +1153,7 @@
   <span class="md-ellipsis">
     
   
-    Splat sidecar
+    manage.sh reference
   
 
     
@@ -1084,7 +1171,7 @@
   <span class="md-ellipsis">
     
   
-    Splat sidecar
+    manage.sh reference
   
 
     
@@ -1110,10 +1197,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#operator-path" class="md-nav__link">
+  <a href="#catalog" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Operator path
+        Catalog
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
       
     </span>
   </a>
@@ -1124,93 +1222,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Operate
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Operate
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manage-cli/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    manage.sh reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1477,10 +1488,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#operator-path" class="md-nav__link">
+  <a href="#catalog" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Operator path
+        Catalog
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
       
     </span>
   </a>
@@ -1507,32 +1529,175 @@
   
 
 
-<h1 id="splat-sidecar">Splat sidecar<a class="headerlink" href="#splat-sidecar" title="Permanent link">&para;</a></h1>
+<h1 id="managesh-reference">manage.sh reference<a class="headerlink" href="#managesh-reference" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>SuperSplat as a <strong>host</strong> static viewer (MIT)</li>
-<li>Why it is not in <code>docker/Dockerfile</code></li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span> with Comfy / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS</span></li>
+<li>How to invoke the CLI</li>
+<li>Command catalog</li>
+<li>What not to run (banned H3 aliases, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">occupancy</span>)</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Inspecting a splat on the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> without baking a viewer into the Comfy image</li>
-<li>Keeping Pixal3D / Inria 3DGS <strong>out</strong> of the default pack</li>
+<li>Looking up a verb without scrolling the Getting Started tutorial</li>
+<li>Keeping first-run docs a tutorial, not a man page</li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Host viewer</p>
-<p>SuperSplat (<code>playcanvas/supersplat</code>, MIT) is a static viewer you run on the host. It is <strong>not</strong> cloned into this MIT tree, <strong>not</strong> a Compose service, and <strong>not</strong> a <code>manage.sh</code> verb.</p>
-</div>
+<p><strong>Who this is for:</strong> operators who already cloned the repo. First install: <a href="../getting-started/">Getting Started</a>.</p>
+<p>Run from the <strong>repo root</strong>. <code>manage.sh</code> loads <code>.env</code>. Session exports (<code>SPARK_HOST</code>, <code>MODELS_DIR</code>, …) are for <em>your</em> shell (browser URL, <code>ssh -L</code>, <code>ls</code>).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>doctor
+</code></pre></div>
 <hr />
-<h2 id="operator-path">Operator path<a class="headerlink" href="#operator-path" title="Permanent link">&para;</a></h2>
-<ol>
-<li><code>./scripts/manage.sh stop</code> — encoder / GPU occupancy</li>
-<li>Open SuperSplat on the host (upstream release or local static build)</li>
-<li>Load the splat file from disk. Do not point it at the Comfy volume as a live mount while compose is up</li>
-</ol>
-<p>TripoSR / TripoSplat weights remain an opt-in manifest pack (<code>triposplat</code>) and are <strong>not</strong> a default. <code>--drop-pack triposplat</code> cannot eat <code>flux2-vae</code>.</p>
-<p>Banned as defaults: Inria 3DGS, Pixal3D-as-default, nvdiffrast TRELLIS. See <a href="../licenses/">Model licenses</a>.</p>
-<p>Related: <a href="../studio-sidecars/">Studio sidecars</a> · <a href="../blender-gb10-sidecar/">Blender GB10 sidecar</a>.</p>
+<h2 id="catalog">Catalog<a class="headerlink" href="#catalog" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+<th>Do not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setup [--install-docker] [--yes]</code></td>
+<td><code>.env</code>, dirs, optional Docker CE, then <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="doctor" data-href="../glossary/#doctor" title="Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.">doctor</span></td>
+<td>Skip doctor failures</td>
+</tr>
+<tr>
+<td><code>doctor</code></td>
+<td>Preflight (docker, GPU, RAM/disk, dirs, license one-liner, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">spark</span>-timing)</td>
+<td>Treat missing weights as a hard fail (they are a warning)</td>
+</tr>
+<tr>
+<td><code>status [--json]</code></td>
+<td>Compose project; prints <code>MODELS_DIR</code>, <code>COMFY_OUTPUT_DIR</code>, port</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>Type <code>yes</code>; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>; compose up</td>
+<td>Weaken confirm or <code>restart: "no"</code></td>
+</tr>
+<tr>
+<td><code>stop</code></td>
+<td>Stop containers; keep models, outputs, volume</td>
+<td>Reboot with the stack up</td>
+</tr>
+<tr>
+<td><code>restart</code></td>
+<td><code>stop</code> + <code>start</code> (full confirm again)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>logs</code></td>
+<td>Follow compose logs (<code>logs --tail 100</code> works)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>download-models [--limit auto\|N\|off] [--drop-incomplete]</code></td>
+<td>Default pack, throttled wrap</td>
+<td>Expect podcast/music weights (they are opt-in)</td>
+</tr>
+<tr>
+<td><code>download-podcast [--tier analog\|…] [--limit auto\|N\|off]</code></td>
+<td>Opt-in <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> / optional <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span></td>
+<td>Co-resident with <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span></td>
+</tr>
+<tr>
+<td><code>download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]</code></td>
+<td>Opt-in ACE-Step 1.5 rap AIO (~10 GB; shared dest with <code>download-podcast --tier acestep</code>)</td>
+<td>Co-resident with the visual session</td>
+</tr>
+<tr>
+<td><code>download-limit …</code></td>
+<td>Proxy to <code>scripts/utilities/download-limit.sh</code></td>
+<td>Leave a wrap limit stuck; wrap <strong>always clears on exit</strong></td>
+</tr>
+<tr>
+<td><code>clear-hf-locks</code></td>
+<td>Stale Hugging Face <code>.lock</code> files under <code>MODELS_DIR</code></td>
+<td>Force-clear while <code>hf</code> is still writing</td>
+</tr>
+<tr>
+<td><code>reset-hf-partials [--yes] [--force]</code></td>
+<td>Delete <code>*.incomplete</code> (finished weights kept)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cleanup</code></td>
+<td>Type <code>DELETE</code>; remove <code>ez-comfy-state</code> only</td>
+<td>Think this deletes weights or <code>COMFY_OUTPUT_DIR</code></td>
+</tr>
+<tr>
+<td><code>print-shot</code> / <code>film-resume</code> / <code>film-export-otio</code> / <code>film-proxies</code> / <code>take-promote</code></td>
+<td>90s <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="jobstore" data-href="../glossary/#jobstore" title="Per-film state.json + shot MP4s under COMFY_OUTPUT_DIR/films/&lt;slug&gt;/ for resume.">jobstore</span> (<a href="../shorts/">90s shorts</a>)</td>
+<td><code>film-proxies</code> while compose is up</td>
+</tr>
+<tr>
+<td><code>download-restore</code></td>
+<td>Opt-in <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seedvr2" data-href="../glossary/#seedvr2" title="Optional Apache restorer for a stitched 90s master. Not part of download-models.">SeedVR2-3B</span></td>
+<td>Treat as part of <code>download-models</code></td>
+</tr>
+<tr>
+<td><code>download-3d</code></td>
+<td>Opt-in <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS.2</span> + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="da3" data-href="../glossary/#da3" title="Optional Apache depth model. DA3-LARGE is refused.">DA3-BASE</span> (no nvdiffrast; DA3-LARGE refused)</td>
+<td><code>--tier da3-large</code></td>
+</tr>
+<tr>
+<td><code>blender</code></td>
+<td>Host Blender <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span>; dies if compose is up</td>
+<td>Run next to Comfy</td>
+</tr>
+<tr>
+<td><code>film-accept</code></td>
+<td>Fail-closed 90s gate (duration / 1280×704 / LTX audio)</td>
+<td><code>--skip-accept</code> as a habit</td>
+</tr>
+<tr>
+<td><code>download-longcat</code> / <code>download-dreamx</code></td>
+<td>Opt-in <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="longcat" data-href="../glossary/#longcat" title="Optional MIT video pack. No NCCL. Not a 90s default.">LongCat</span> MIT / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dreamx" data-href="../glossary/#dreamx" title="Optional Apache joint-AV pack. DreamX-World is refused.">DreamX-Creator</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache</span></td>
+<td>DreamX-World; NCCL</td>
+</tr>
+<tr>
+<td><code>spark-timing</code></td>
+<td>Kitchen wall-clock table (<code>record --klein N --wan N --ltx N</code>)</td>
+<td>Record on <code>pytorch-fallback</code></td>
+</tr>
+<tr>
+<td><code>models-status</code> / <code>reap-models</code></td>
+<td>Disk bible / cache cleanup (never <code>cleanup</code> weights)</td>
+<td><code>cleanup</code> when you meant reap</td>
+</tr>
+</tbody>
+</table>
+<p><code>download-h3</code>, <code>queue-h3</code>, <code>farm-h3</code>, and <code>stitch-h3</code> are <strong>banned</strong> aliases (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="h3" data-href="../glossary/#h3" title="Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.">MiniMax H3</span>). 3D DCC notes: <a href="../studio-sidecars/">Studio sidecars</a>.</p>
+<p>Safety is unchanged: <code>restart: "no"</code>, heavy confirm on <code>start</code>, headroom preflight, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit.</p>
+<hr />
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First install</td>
+<td><a href="../getting-started/">Getting Started</a></td>
+</tr>
+<tr>
+<td>Why start asks for <code>yes</code></td>
+<td><a href="../learn/hardware/">Hardware, memory, and safety</a></td>
+</tr>
+<tr>
+<td>Throttle details</td>
+<td><a href="../download-limit/">Download limit</a></td>
+</tr>
+<tr>
+<td>Symptom → fix</td>
+<td><a href="../troubleshooting/">Troubleshooting</a></td>
+</tr>
+</tbody>
+</table>
 
 
 

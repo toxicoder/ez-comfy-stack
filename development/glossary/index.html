@@ -1,0 +1,3965 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Terms used in the US-safe ComfyUI studio — click a dotted word anywhere in the docs for a short definition.">
+      
+      
+      
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/glossary/">
+      
+      
+        <link rel="prev" href="../learn/hardware/">
+      
+      
+        <link rel="next" href="../getting-started/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Glossary - ez-comfy-stack</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#glossary" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ez-comfy-stack
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Glossary
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/toxicoder/ez-comfy-stack" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../learn/" class="md-tabs__link">
+          
+  
+  
+  Learn
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../getting-started/" class="md-tabs__link">
+          
+  
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../visual-generative-ai/" class="md-tabs__link">
+          
+  
+  
+  Create
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../manage-cli/" class="md-tabs__link">
+          
+  
+  
+  Operate
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../project-conventions/" class="md-tabs__link">
+          
+  
+  
+  Contribute
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ez-comfy-stack
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/toxicoder/ez-comfy-stack" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learn
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the studio works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../learn/comfyui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ComfyUI basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../learn/generation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image and video generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../learn/pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Klein, Wan, and LTX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../learn/hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware, memory, and safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#klein" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Klein 4B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wan 2.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ltx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LTX-2.5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qwen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qwen3-4B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#umt5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UMT5-XXL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gemma4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gemma 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ace-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ACE-Step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokoro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokoro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chatterbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chatterbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLIP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VAE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNET
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gguf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GGUF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#magcache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MagCache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nunchaku" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nunchaku
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seedvr2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SeedVR2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trellis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TRELLIS.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#da3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DA3-BASE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#longcat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LongCat-Video
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dreamx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DreamX-Creator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fun-inp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fun InP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VACE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#z-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Z-Image Turbo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vhs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VideoHelperSuite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qwen3-tts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qwen3-TTS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fp8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FP8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#int8-convrot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        INT8-convrot
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modalities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modalities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modalities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#t2i" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        T2I
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i2v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I2V
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#t2v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        T2V
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a2v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A2V
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S2V
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#av" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        joint AV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        first-last-frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ping-pong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ping-pong
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#studio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Studio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Studio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comfyui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ComfyUI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        widget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#latent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KSampler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CFG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        seed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt-enhance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt Enhance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#world-bible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        world bible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identity-still" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        identity still
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lab-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lab-example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#note-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadimage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoadImage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-and-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware and safety
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware and safety">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dgx-spark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGX Spark
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gb10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GB10
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unified-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unified memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#occupancy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        occupancy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headroom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        headroom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restart-no" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        restart: no
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download-limit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#htb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#models-dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MODELS_DIR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comfy-output-dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        COMFY_OUTPUT_DIR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comfy-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        comfy-state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ghcr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GHCR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-safe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-safe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manage-sh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        manage.sh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#doctor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        doctor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hf-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HF_TOKEN
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gated model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kitchen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comfy Kitchen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pytorch-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pytorch-fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-container-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA Container Toolkit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#film" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Film
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Film">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#last-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        last-frame continuity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OTIO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvenc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVENC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#film-accept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        film-accept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobstore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        jobstore
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loudnorm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        loudnorm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sidecar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sidecar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spark-farm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spark farm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concat-shots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        concat-shots
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Audio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TTS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disclosure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        disclosure bumper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licenses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Licenses
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Licenses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apache 2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LTX Community License
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MiniMax H3
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prompting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prompting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Create
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-generative-ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Still to motion to AV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../studio-workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shorts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    90s shorts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../studio-sidecars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio sidecars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blender-gb10-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blender GB10 sidecar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../splat-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Splat sidecar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operate
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operate
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manage-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    manage.sh reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-and-cache/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and cache
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../download-limit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Download limit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reboot-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reboot safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-farm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark farm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contribute
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contribute
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-conventions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conventions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#klein" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Klein 4B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wan 2.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ltx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LTX-2.5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qwen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qwen3-4B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#umt5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UMT5-XXL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gemma4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gemma 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ace-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ACE-Step
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kokoro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kokoro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chatterbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chatterbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLIP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VAE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNET
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gguf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GGUF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#magcache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MagCache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nunchaku" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nunchaku
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seedvr2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SeedVR2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trellis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TRELLIS.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#da3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DA3-BASE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#longcat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LongCat-Video
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dreamx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DreamX-Creator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fun-inp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fun InP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VACE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#z-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Z-Image Turbo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vhs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VideoHelperSuite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qwen3-tts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qwen3-TTS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fp8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FP8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#int8-convrot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        INT8-convrot
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modalities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modalities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modalities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#t2i" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        T2I
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i2v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I2V
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#t2v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        T2V
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a2v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A2V
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S2V
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#av" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        joint AV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        first-last-frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ping-pong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ping-pong
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#studio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Studio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Studio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comfyui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ComfyUI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        widget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#latent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KSampler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CFG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        seed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt-enhance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt Enhance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#world-bible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        world bible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identity-still" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        identity still
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lab-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lab-example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#note-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadimage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoadImage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-and-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware and safety
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware and safety">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dgx-spark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGX Spark
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gb10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GB10
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unified-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unified memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#occupancy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        occupancy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headroom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        headroom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restart-no" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        restart: no
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download-limit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#htb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#models-dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MODELS_DIR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comfy-output-dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        COMFY_OUTPUT_DIR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comfy-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        comfy-state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ghcr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GHCR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#us-safe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        US-safe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manage-sh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        manage.sh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#doctor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        doctor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hf-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HF_TOKEN
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gated model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kitchen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comfy Kitchen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pytorch-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pytorch-fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-container-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA Container Toolkit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#film" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Film
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Film">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#last-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        last-frame continuity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OTIO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvenc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVENC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#film-accept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        film-accept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jobstore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        jobstore
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loudnorm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        loudnorm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sidecar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sidecar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spark-farm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spark farm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concat-shots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        concat-shots
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Audio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TTS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disclosure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        disclosure bumper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licenses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Licenses
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Licenses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apache 2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LTX Community License
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MiniMax H3
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div>
+                
+                  
+
+
+  
+  
+
+
+<h1 id="glossary">Glossary<a class="headerlink" href="#glossary" title="Permanent link">&para;</a></h1>
+<p><strong>What's on this page</strong></p>
+<ul>
+<li>How dotted terms and the definition dialog work</li>
+<li>Every studio, model, and operator term in one place</li>
+<li>Links from each entry to the guide that teaches it</li>
+</ul>
+<p><strong>What this enables</strong></p>
+<ul>
+<li>Looking up Klein, Wan, LTX, Queue, latent, headroom, and the rest without leaving the page</li>
+<li>Teaching vocabulary once so Create and Operate pages can stay task-focused</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Dotted words open a definition</p>
+<p>Across the docs, the <strong>first</strong> time a glossary term appears on a page it is underlined with dots.</p>
+<ul>
+<li><strong>Hover</strong> (or keyboard focus) to read the short definition</li>
+<li><strong>Click</strong> or press <span class="keys"><kbd class="key-enter">Enter</kbd></span> / <span class="keys"><kbd class="key-space">Space</kbd></span> to open the dialog</li>
+<li><strong>Open full glossary entry</strong> jumps here</li>
+<li><span class="keys"><kbd class="key-escape">Esc</kbd></span> or the backdrop closes the dialog</li>
+</ul>
+<p>Terms inside code, headings, and links stay plain so copy-paste and navigation do not fight the modal.</p>
+</div>
+<pre class="mermaid"><code>flowchart LR
+  Prose["Docs prose"] --&gt; First["First match on the page"]
+  First --&gt; Hover["Hover: short definition"]
+  First --&gt; Click["Click: dialog"]
+  Click --&gt; Full["This page: long entry"]</code></pre>
+<p>Add or change a term in <code>includes/glossary.json</code> (unique <code>id</code> and aliases). Conventions: <a href="../project-conventions/">Project conventions</a>.</p>
+<h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
+<h3 id="klein">Klein 4B<a class="headerlink" href="#klein" title="Permanent link">&para;</a></h3>
+<p>FLUX.2 Klein 4B distilled FP8 is the default still engine in this studio. Distilled means quality is almost entirely the <strong>positive</strong> prompt: 4 steps, CFG 1.0, Qwen3-4B CLIP (<code>flux2</code>). Klein 9B is FLUX Non-Commercial and is <strong>not</strong> the lab default. See <a href="../learn/pipeline/">Klein, Wan, and LTX</a> and <a href="../prompting/">Prompting</a>.</p>
+<p><strong>Also called:</strong> <code>FLUX.2 Klein 4B</code>, <code>FLUX.2 Klein</code>, <code>Klein</code></p>
+<p><strong>See also:</strong> <a href="#t2i">T2I</a> · <a href="#qwen">Qwen3-4B</a> · <a href="#wan">Wan 2.2</a> · <a href="#ltx">LTX-2.5</a> · <a href="#prompt-enhance">Prompt Enhance</a></p>
+<h3 id="wan">Wan 2.2<a class="headerlink" href="#wan" title="Permanent link">&para;</a></h3>
+<p>Wan 2.2 TI2V-5B is the silent motion lane. I2V prompts should be <strong>motion + one camera move</strong> — the start image owns look. Do not prompt audio or a score. Optional A14B and Fun InP packs are not part of <code>download-models</code>. See <a href="../learn/pipeline/">Klein, Wan, and LTX</a>.</p>
+<p><strong>Also called:</strong> <code>Wan 2.2 5B</code>, <code>TI2V-5B</code>, <code>Wan</code></p>
+<p><strong>See also:</strong> <a href="#i2v">I2V</a> · <a href="#t2v">T2V</a> · <a href="#umt5">UMT5-XXL</a> · <a href="#ltx">LTX-2.5</a> · <a href="#ping-pong">ping-pong</a></p>
+<h3 id="ltx">LTX-2.5<a class="headerlink" href="#ltx" title="Permanent link">&para;</a></h3>
+<p>LTX-2.5 distilled INT8-convrot is the AV hero. Lab graphs load an audio VAE, concat empty audio latents with video latents, then decode audio into VHS so the MP4 has world sound. Landscape size is <strong>1280×704</strong> (VAE ÷32), not 1280×720. Accept the Hugging Face license and set HF_TOKEN before <code>download-models</code>. See <a href="../licenses/">Model licenses</a>.</p>
+<p><strong>Also called:</strong> <code>LTX</code></p>
+<p><strong>See also:</strong> <a href="#av">joint AV</a> · <a href="#i2v">I2V</a> · <a href="#community-license">LTX Community License</a> · <a href="#gated">gated model</a> · <a href="#vhs">VideoHelperSuite</a></p>
+<h3 id="qwen">Qwen3-4B<a class="headerlink" href="#qwen" title="Permanent link">&para;</a></h3>
+<p>Klein stills encode prompts with <code>qwen_3_4b</code> as CLIP type <code>flux2</code>. Comfy wraps the string in a Qwen chat template — do not paste <code>&lt;|im_start|&gt;</code> into the widget. A separate Qwen3-4B-Instruct GGUF rewrites lazy sentences when Prompt Enhance is on (CPU-only). See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>Also called:</strong> <code>qwen_3_4b</code>, <code>Qwen3</code></p>
+<p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#clip">CLIP</a> · <a href="#gguf">GGUF</a> · <a href="#prompt-enhance">Prompt Enhance</a></p>
+<h3 id="umt5">UMT5-XXL<a class="headerlink" href="#umt5" title="Permanent link">&para;</a></h3>
+<p>Wan graphs load UMT5-XXL as CLIP type <code>wan</code>. T2V wants Entity + Scene + Motion + Aesthetic + one camera verb. I2V should drop look language so the start image stays in charge. See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>Also called:</strong> <code>UMT5</code></p>
+<p><strong>See also:</strong> <a href="#wan">Wan 2.2</a> · <a href="#clip">CLIP</a> · <a href="#t2v">T2V</a> · <a href="#i2v">I2V</a></p>
+<h3 id="gemma4">Gemma 4<a class="headerlink" href="#gemma4" title="Permanent link">&para;</a></h3>
+<p>Seeded LTX graphs use CLIPLoader <code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code> with type <code>ltxv</code>. A DualCLIP or LTX-2.3 encoder on a 2.5 graph throws embedding-size errors. Write one present-tense paragraph with sound interleaved. See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>Also called:</strong> <code>Gemma4</code></p>
+<p><strong>See also:</strong> <a href="#ltx">LTX-2.5</a> · <a href="#clip">CLIP</a> · <a href="#av">joint AV</a></p>
+<h3 id="ace-step">ACE-Step<a class="headerlink" href="#ace-step" title="Permanent link">&para;</a></h3>
+<p>Native ACE-Step 1.5 ships in the Comfy pin. Podcast beds stay instrumental; rap graphs send original lyrics. <code>download-music --tier turbo</code> and <code>download-podcast --tier acestep</code> share the same AIO file. Occupancy: stop Klein/Wan/LTX first. See <a href="../music/">Local music</a> and <a href="../podcast/">Local podcast</a>.</p>
+<p><strong>Also called:</strong> <code>ACE-Step 1.5</code></p>
+<p><strong>See also:</strong> <a href="#occupancy">occupancy</a> · <a href="#kokoro">Kokoro</a> · <a href="#tts">TTS</a></p>
+<h3 id="kokoro">Kokoro<a class="headerlink" href="#kokoro" title="Permanent link">&para;</a></h3>
+<p>Kokoro-82M is the US-safe default TTS (opt-in <code>download-podcast --tier analog</code>). Voices are stock identities, not clones of real people. The disclosure node prepends the spoken bumper so you do not type it. See <a href="../podcast/">Local podcast</a>.</p>
+<p><strong>Also called:</strong> <code>Kokoro-82M</code></p>
+<p><strong>See also:</strong> <a href="#tts">TTS</a> · <a href="#ace-step">ACE-Step</a> · <a href="#disclosure">disclosure bumper</a></p>
+<h3 id="chatterbox">Chatterbox<a class="headerlink" href="#chatterbox" title="Permanent link">&para;</a></h3>
+<p>Chatterbox Turbo is an opt-in TTS (<code>download-podcast --tier chatterbox</code>). Keep the PerTh watermark. Do not add celebrity reference WAVs. Kokoro remains the Spark-safe default. See <a href="../podcast/">Local podcast</a>.</p>
+<p><strong>See also:</strong> <a href="#kokoro">Kokoro</a> · <a href="#tts">TTS</a></p>
+<h3 id="clip">CLIP<a class="headerlink" href="#clip" title="Permanent link">&para;</a></h3>
+<p>In this studio, “CLIP” means the model-specific text encoder: Qwen (<code>flux2</code>) for Klein, UMT5 (<code>wan</code>) for Wan, Gemma4-with-proj (<code>ltxv</code>) for LTX. Wrong CLIP type is a common Queue failure. See <a href="../learn/generation/">Image and video generation</a>.</p>
+<p><strong>See also:</strong> <a href="#qwen">Qwen3-4B</a> · <a href="#umt5">UMT5-XXL</a> · <a href="#gemma4">Gemma 4</a> · <a href="#sampler">KSampler</a></p>
+<h3 id="vae">VAE<a class="headerlink" href="#vae" title="Permanent link">&para;</a></h3>
+<p>A VAE compresses an image or video into latents and decodes latents back to pixels (and, for LTX, audio). Mixing a Wan VAE with an LTX graph will fail. LTX also needs the <strong>audio</strong> VAE so joint AV latents are not length-zero. See <a href="../learn/generation/">Image and video generation</a>.</p>
+<p><strong>See also:</strong> <a href="#latent">latent</a> · <a href="#ltx">LTX-2.5</a> · <a href="#klein">Klein 4B</a> · <a href="#wan">Wan 2.2</a></p>
+<h3 id="unet">UNET<a class="headerlink" href="#unet" title="Permanent link">&para;</a></h3>
+<p>Comfy loaders still say UNET for many diffusion transformers, including Klein and Wan. The filename on the canvas must match a weight under MODELS_DIR. Lab graphs pin those names; do not swap in Klein 9B or FLUX.2-dev. See <a href="../models-and-cache/">Models and cache</a>.</p>
+<p><strong>See also:</strong> <a href="#sampler">KSampler</a> · <a href="#latent">latent</a> · <a href="#models-dir">MODELS_DIR</a></p>
+<h3 id="gguf">GGUF<a class="headerlink" href="#gguf" title="Permanent link">&para;</a></h3>
+<p><code>download-models</code> places <code>Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code> under <code>comfy/llm/</code>. Prompt Enhance runs it <strong>CPU-only</strong> (<code>n_gpu_layers=0</code>) so it does not fight LTX for GB10 memory. Missing GGUF is fail-soft: generation still runs. See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>See also:</strong> <a href="#prompt-enhance">Prompt Enhance</a> · <a href="#qwen">Qwen3-4B</a> · <a href="#occupancy">occupancy</a></p>
+<h3 id="magcache">MagCache<a class="headerlink" href="#magcache" title="Permanent link">&para;</a></h3>
+<p>MagCache skips some denoiser steps on the Wan 5 s smoke graph (<code>extra.lab_magcache</code>). Hero LTX prints and A14B graphs leave it off. If the node is missing, the Wan graph still Queues. See <a href="../studio-workflows/">Workflow catalog</a>.</p>
+<p><strong>See also:</strong> <a href="#wan">Wan 2.2</a> · <a href="#i2v">I2V</a></p>
+<h3 id="nunchaku">Nunchaku<a class="headerlink" href="#nunchaku" title="Permanent link">&para;</a></h3>
+<p><code>LAB_VISUAL_ENABLE_NUNCHAKU=0</code>. Seeded Klein graphs use core UNET/CLIP/VAE loaders. Do not <code>pip install nunchaku</code> from PyPI (that is a stats library). aarch64 Spark wheels are skip-by-default. See <a href="../troubleshooting/">Troubleshooting</a>.</p>
+<p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#unet">UNET</a></p>
+<h3 id="seedvr2">SeedVR2<a class="headerlink" href="#seedvr2" title="Permanent link">&para;</a></h3>
+<p>SeedVR2-3B is a post-concat restore (<code>download-restore --tier seedvr2-3b</code>). Conservative 1.3–1.5× on the master only. Occupancy: stop Comfy first if you restore on GPU. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>Also called:</strong> <code>SeedVR2-3B</code></p>
+<p><strong>See also:</strong> <a href="#occupancy">occupancy</a> · <a href="#last-frame">last-frame continuity</a></p>
+<h3 id="trellis">TRELLIS.2<a class="headerlink" href="#trellis" title="Permanent link">&para;</a></h3>
+<p><code>download-3d --tier trellis2</code> pulls TRELLIS.2 native weights only. Never pip-install nvdiffrast/nvdiffrec. Stop the Comfy stack before a heavy 3D job. See <a href="../studio-sidecars/">Studio sidecars</a>.</p>
+<p><strong>Also called:</strong> <code>TRELLIS</code></p>
+<p><strong>See also:</strong> <a href="#sidecar">sidecar</a> · <a href="#occupancy">occupancy</a> · <a href="#da3">DA3-BASE</a></p>
+<h3 id="da3">DA3-BASE<a class="headerlink" href="#da3" title="Permanent link">&para;</a></h3>
+<p>Depth Anything 3 BASE is the allowed depth sidecar weight. <code>--tier da3-large</code> is banned. Same occupancy rule as TRELLIS: one heavy GPU job. See <a href="../studio-sidecars/">Studio sidecars</a>.</p>
+<p><strong>Also called:</strong> <code>DA3</code></p>
+<p><strong>See also:</strong> <a href="#trellis">TRELLIS.2</a> · <a href="#occupancy">occupancy</a></p>
+<h3 id="longcat">LongCat-Video<a class="headerlink" href="#longcat" title="Permanent link">&para;</a></h3>
+<p><code>download-longcat --tier video</code> is opt-in. Context-parallel needs an explicit allow flag. Independent Sparks still share MODELS_DIR; this sample stack does not ship in-tree NCCL. See <a href="../spark-farm/">Spark farm</a>.</p>
+<p><strong>Also called:</strong> <code>LongCat</code></p>
+<p><strong>See also:</strong> <a href="#spark-farm">Spark farm</a> · <a href="#wan">Wan 2.2</a></p>
+<h3 id="dreamx">DreamX-Creator<a class="headerlink" href="#dreamx" title="Permanent link">&para;</a></h3>
+<p><code>download-dreamx --tier creator</code> only. Unload LTX/Wan 5B first. Not a lab default and not a 90s printer. See <a href="../licenses/">Model licenses</a>.</p>
+<p><strong>Also called:</strong> <code>DreamX</code></p>
+<p><strong>See also:</strong> <a href="#av">joint AV</a> · <a href="#ltx">LTX-2.5</a></p>
+<h3 id="fun-inp">Fun InP<a class="headerlink" href="#fun-inp" title="Permanent link">&para;</a></h3>
+<p><code>download-wan --tier fun-inp</code> then load <code>wan-flf-5s-lab-example</code>. Unload LTX first. This is a continuity draft, not the 90s LTX print path. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>See also:</strong> <a href="#flf">first-last-frame</a> · <a href="#wan">Wan 2.2</a> · <a href="#vace">VACE</a></p>
+<h3 id="vace">VACE<a class="headerlink" href="#vace" title="Permanent link">&para;</a></h3>
+<p>VACE stitches the last frame of shot A toward the first frame of shot B as a short join clip. It is a Comfy graph, not a Docker sidecar. See <a href="../studio-sidecars/">Studio sidecars</a>.</p>
+<p><strong>See also:</strong> <a href="#fun-inp">Fun InP</a> · <a href="#last-frame">last-frame continuity</a> · <a href="#wan">Wan 2.2</a></p>
+<h3 id="z-image">Z-Image Turbo<a class="headerlink" href="#z-image" title="Permanent link">&para;</a></h3>
+<p>Z-Image Turbo uses different weights (<code>ae</code>, <code>z_image_turbo_*</code>). Seeded lab stills are Klein 4B. If a template asks for <code>ae.safetensors</code>, you loaded the wrong graph — open <code>klein-still-draft-lab-example</code>. Optional: <code>download-image --tier zimage</code>. See <a href="../licenses/">Model licenses</a>.</p>
+<p><strong>Also called:</strong> <code>Z-Image</code></p>
+<p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#t2i">T2I</a></p>
+<h3 id="vhs">VideoHelperSuite<a class="headerlink" href="#vhs" title="Permanent link">&para;</a></h3>
+<p>Wan and LTX lab graphs wire <code>VHS_VideoCombine</code> with <code>save_output: true</code>. After Queue, open <strong>Save video (MP4) — open node for preview</strong>. Files land on the host at COMFY_OUTPUT_DIR. LTX also feeds decoded audio into VHS. See <a href="../visual-generative-ai/">Still to motion to AV</a>.</p>
+<p><strong>Also called:</strong> <code>VHS_VideoCombine</code>, <code>VHS</code></p>
+<p><strong>See also:</strong> <a href="#ltx">LTX-2.5</a> · <a href="#wan">Wan 2.2</a> · <a href="#comfy-output-dir">COMFY_OUTPUT_DIR</a></p>
+<h3 id="qwen3-tts">Qwen3-TTS<a class="headerlink" href="#qwen3-tts" title="Permanent link">&para;</a></h3>
+<p><code>download-podcast --tier qwen3tts</code> is opt-in. Empty reference audio stays on Kokoro. Do not use it to clone a real person. See <a href="../podcast/">Local podcast</a>.</p>
+<p><strong>See also:</strong> <a href="#kokoro">Kokoro</a> · <a href="#tts">TTS</a></p>
+<h3 id="fp8">FP8<a class="headerlink" href="#fp8" title="Permanent link">&para;</a></h3>
+<p>FP8 keeps the default Klein 4B and several Wan files small enough for GB10. It is a storage/compute format, not a style. NVFP4 Klein is optional and still Apache for 4B. See <a href="../models-and-cache/">Models and cache</a>.</p>
+<p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#int8-convrot">INT8-convrot</a></p>
+<h3 id="int8-convrot">INT8-convrot<a class="headerlink" href="#int8-convrot" title="Permanent link">&para;</a></h3>
+<p>Lab LTX-2.5 filenames include <code>int8-convrot</code>. If INT8-convrot or gated access fails, LTX-2.3 distilled FP8 is an optional fallback — seeded graphs still expect 2.5 names. See <a href="../models-and-cache/">Models and cache</a>.</p>
+<p><strong>See also:</strong> <a href="#ltx">LTX-2.5</a> · <a href="#fp8">FP8</a></p>
+<h2 id="modalities">Modalities<a class="headerlink" href="#modalities" title="Permanent link">&para;</a></h2>
+<h3 id="t2i">T2I<a class="headerlink" href="#t2i" title="Permanent link">&para;</a></h3>
+<p>Text-to-image is the first studio move. Queue <code>klein-still-draft-lab-example</code>, then feed a PNG into Wan or LTX I2V if you want motion. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>Also called:</strong> <code>text-to-image</code></p>
+<p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#i2v">I2V</a> · <a href="#queue">Queue</a></p>
+<h3 id="i2v">I2V<a class="headerlink" href="#i2v" title="Permanent link">&para;</a></h3>
+<p>Wan I2V is silent; LTX I2V can carry world audio. Point LoadImage at <code>ez_still_draft_*.png</code> (or a hero 1280×704 still for LTX). Do not re-describe wardrobe and location in an I2V prompt. See <a href="../learn/pipeline/">Klein, Wan, and LTX</a>.</p>
+<p><strong>Also called:</strong> <code>image-to-video</code></p>
+<p><strong>See also:</strong> <a href="#t2v">T2V</a> · <a href="#loadimage">LoadImage</a> · <a href="#wan">Wan 2.2</a> · <a href="#ltx">LTX-2.5</a></p>
+<h3 id="t2v">T2V<a class="headerlink" href="#t2v" title="Permanent link">&para;</a></h3>
+<p>Use T2V when you do not have a still you want to keep. Lab Wan T2V bypasses LoadImage. LTX T2V still wants a flowing paragraph with sound. See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>Also called:</strong> <code>text-to-video</code></p>
+<p><strong>See also:</strong> <a href="#i2v">I2V</a> · <a href="#wan">Wan 2.2</a> · <a href="#ltx">LTX-2.5</a></p>
+<h3 id="a2v">A2V<a class="headerlink" href="#a2v" title="Permanent link">&para;</a></h3>
+<p><code>klein-talking-head-lab-example</code> smokes LTX A2V freeze. Banned lip-sync OSS (Wav2Lip) stays out. See <a href="../studio-workflows/">Workflow catalog</a>.</p>
+<p><strong>Also called:</strong> <code>audio-to-video</code></p>
+<p><strong>See also:</strong> <a href="#s2v">S2V</a> · <a href="#ltx">LTX-2.5</a></p>
+<h3 id="s2v">S2V<a class="headerlink" href="#s2v" title="Permanent link">&para;</a></h3>
+<p>Wan S2V is opt-in (<code>download-wan --tier s2v</code>) and occupancy-heavy. Talking-head lab graphs mention it; they do not require it for the LTX freeze smoke. See <a href="../licenses/">Model licenses</a>.</p>
+<p><strong>Also called:</strong> <code>speech-to-video</code></p>
+<p><strong>See also:</strong> <a href="#a2v">A2V</a> · <a href="#wan">Wan 2.2</a></p>
+<h3 id="av">joint AV<a class="headerlink" href="#av" title="Permanent link">&para;</a></h3>
+<p>LTX is a joint audio/video model. Lab graphs must build empty audio latents and concat them before KSampler. Omitting that path yields a reshape error on length-zero audio. Wan stays silent on purpose (cleaner Apache motion). See <a href="../learn/pipeline/">Klein, Wan, and LTX</a>.</p>
+<p><strong>Also called:</strong> <code>AV hero</code></p>
+<p><strong>See also:</strong> <a href="#ltx">LTX-2.5</a> · <a href="#wan">Wan 2.2</a> · <a href="#vhs">VideoHelperSuite</a></p>
+<h3 id="flf">first-last-frame<a class="headerlink" href="#flf" title="Permanent link">&para;</a></h3>
+<p>FLF is a continuity draft: you pick how the shot starts and ends. It is optional and large. 90s films instead chain last-frame PNG → next I2V start. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>Also called:</strong> <code>FLF</code></p>
+<p><strong>See also:</strong> <a href="#fun-inp">Fun InP</a> · <a href="#last-frame">last-frame continuity</a> · <a href="#i2v">I2V</a></p>
+<h3 id="ping-pong">ping-pong<a class="headerlink" href="#ping-pong" title="Permanent link">&para;</a></h3>
+<p><code>wan-gif-loop-lab-example</code> leaves VHS ping-pong on. Prompt cyclic motion (breeze, curtains), not a walk or one-way dolly, or reverse playback looks wrong. See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>See also:</strong> <a href="#wan">Wan 2.2</a> · <a href="#vhs">VideoHelperSuite</a></p>
+<h2 id="studio">Studio<a class="headerlink" href="#studio" title="Permanent link">&para;</a></h2>
+<h3 id="comfyui">ComfyUI<a class="headerlink" href="#comfyui" title="Permanent link">&para;</a></h3>
+<p>You operate the host with manage.sh; you <em>use</em> the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files end in <code>-lab-example</code> and copy into <code>user/default/workflows/</code> on start. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#widget">widget</a> · <a href="#workflow">workflow</a> · <a href="#manage-sh">manage.sh</a></p>
+<h3 id="workflow">workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h3>
+<p>Host files live under <code>workflows/*-lab-example.json</code>. The entrypoint copies them into Comfy. Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See <a href="../studio-workflows/">Workflow catalog</a>.</p>
+<p><strong>Also called:</strong> <code>node graph</code>, <code>lab graph</code></p>
+<p><strong>See also:</strong> <a href="#lab-example">lab-example</a> · <a href="#note-node">Note node</a> · <a href="#widget">widget</a> · <a href="#comfyui">ComfyUI</a></p>
+<h3 id="queue">Queue<a class="headerlink" href="#queue" title="Permanent link">&para;</a></h3>
+<p>Queue is the studio's play button. A still-draft Queue is minutes; a 5 s Wan/LTX Queue is minutes; a one-click 90s film Queue is 18 sequential 5 s prints (long wall-clock, not a 90s denoise). See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>See also:</strong> <a href="#comfyui">ComfyUI</a> · <a href="#sampler">KSampler</a> · <a href="#seed">seed</a></p>
+<h3 id="widget">widget<a class="headerlink" href="#widget" title="Permanent link">&para;</a></h3>
+<p>Studio work is widget work: change the Positive prompt, seed, LoadImage filename, or Enhance toggle on the canvas. The JSON on disk stays the seeded lab example. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#workflow">workflow</a> · <a href="#enhance">Enhance</a></p>
+<h3 id="latent">latent<a class="headerlink" href="#latent" title="Permanent link">&para;</a></h3>
+<p>5.00 s at 24 fps is 120 frames (some smokes use 121 = 4n+1). LTX spatial size must be divisible by 32 — lab landscape is 1280×704. Do not Queue a 30–90 s latent on GB10. See <a href="../learn/generation/">Image and video generation</a>.</p>
+<p><strong>Also called:</strong> <code>latent space</code></p>
+<p><strong>See also:</strong> <a href="#vae">VAE</a> · <a href="#sampler">KSampler</a> · <a href="#ltx">LTX-2.5</a></p>
+<h3 id="sampler">KSampler<a class="headerlink" href="#sampler" title="Permanent link">&para;</a></h3>
+<p>Distilled Klein uses 4 steps and CFG 1.0. Wan/LTX lab graphs pin steps, scheduler, and frame count on the canvas. Changing those widgets is how you experiment; changing them to a 90 s denoise is how you melt the Spark. See <a href="../learn/generation/">Image and video generation</a>.</p>
+<p><strong>Also called:</strong> <code>sampler</code></p>
+<p><strong>See also:</strong> <a href="#cfg">CFG</a> · <a href="#seed">seed</a> · <a href="#latent">latent</a> · <a href="#queue">Queue</a></p>
+<h3 id="cfg">CFG<a class="headerlink" href="#cfg" title="Permanent link">&para;</a></h3>
+<p>CFG 1.0 on distilled Klein means the positive prompt is the whole game. FLUX-family models do not use negatives well; put constraints in the positive (“unmarked facades”). See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#sampler">KSampler</a></p>
+<h3 id="seed">seed<a class="headerlink" href="#seed" title="Permanent link">&para;</a></h3>
+<p>Fix a seed when you iterate a prompt so lighting and identity do not jump. Identity sheets pin seed 42. Random seeds are for discovery, not for matching a still into I2V. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#identity-still">identity still</a></p>
+<h3 id="prompt-enhance">Prompt Enhance<a class="headerlink" href="#prompt-enhance" title="Permanent link">&para;</a></h3>
+<p>Klein/Wan/LTX Prompt Enhance defaults <strong>on</strong> for daily graphs and <strong>off</strong> for frozen identity bibles and 90s films. After Queue, read the dim CLIP prompt box — that is what was encoded. Fail-soft if the GGUF is missing. See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>See also:</strong> <a href="#enhance">Enhance</a> · <a href="#gguf">GGUF</a> · <a href="#qwen">Qwen3-4B</a></p>
+<h3 id="world-bible">world bible<a class="headerlink" href="#world-bible" title="Permanent link">&para;</a></h3>
+<p>Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (<code>lock=view</code>) or change only light (<code>lock=state</code>). Pin Enhance off on the bible. See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>See also:</strong> <a href="#identity-still">identity still</a> · <a href="#prompt-enhance">Prompt Enhance</a></p>
+<h3 id="identity-still">identity still<a class="headerlink" href="#identity-still" title="Permanent link">&para;</a></h3>
+<p>90s films Queue a Klein identity at 1280×704 (LTX grid), then 18 LTX prints that start from last frames. Enhance stays off so the rewriter cannot restyle the bible. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#world-bible">world bible</a> · <a href="#last-frame">last-frame continuity</a></p>
+<h3 id="lab-example">lab-example<a class="headerlink" href="#lab-example" title="Permanent link">&para;</a></h3>
+<p>If it does not end in <code>-lab-example</code>, it is not a lab smoke. Optional packs live under <code>workflows/optional/</code> and <code>workflows/shorts/</code>. See <a href="../studio-workflows/">Workflow catalog</a>.</p>
+<p><strong>Also called:</strong> <code>lab-example graphs</code></p>
+<p><strong>See also:</strong> <a href="#workflow">workflow</a> · <a href="#note-node">Note node</a></p>
+<h3 id="note-node">Note node<a class="headerlink" href="#note-node" title="Permanent link">&para;</a></h3>
+<p>Every seeded graph includes a Comfy Note plus <code>extra.lab_note</code>. Read it before you Queue. It is the UI source of truth when docs and widgets disagree after a pull. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>See also:</strong> <a href="#lab-example">lab-example</a> · <a href="#workflow">workflow</a></p>
+<h3 id="loadimage">LoadImage<a class="headerlink" href="#loadimage" title="Permanent link">&para;</a></h3>
+<p>After a still-draft Queue, set Wan/LTX LoadImage to <code>ez_still_draft_*.png</code> under COMFY_OUTPUT_DIR (the container sees <code>/outputs</code>). Leaving <code>example.png</code> is a smoke test only. See <a href="../visual-generative-ai/">Still to motion to AV</a>.</p>
+<p><strong>See also:</strong> <a href="#i2v">I2V</a> · <a href="#comfy-output-dir">COMFY_OUTPUT_DIR</a></p>
+<h3 id="enhance">Enhance<a class="headerlink" href="#enhance" title="Permanent link">&para;</a></h3>
+<p>Leave Enhance off when the lab already shipped a model-native paragraph (90s films, identity bibles). Turn it on for a lazy sentence plus optional style dropdown. I2V ignores style — the start image owns look. See <a href="../prompting/">Prompting</a>.</p>
+<p><strong>See also:</strong> <a href="#prompt-enhance">Prompt Enhance</a> · <a href="#world-bible">world bible</a></p>
+<h2 id="hardware-and-safety">Hardware and safety<a class="headerlink" href="#hardware-and-safety" title="Permanent link">&para;</a></h2>
+<h3 id="dgx-spark">DGX Spark<a class="headerlink" href="#dgx-spark" title="Permanent link">&para;</a></h3>
+<p>ez-comfy-stack is a sample studio for a <strong>single</strong> DGX Spark. Independent Sparks may share MODELS_DIR (Spark farm) but there is no in-tree NCCL. SSH recoverability drives restart: no, headroom, and download-limit. See <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<p><strong>Also called:</strong> <code>Spark</code></p>
+<p><strong>See also:</strong> <a href="#gb10">GB10</a> · <a href="#headroom">headroom</a> · <a href="#spark-farm">Spark farm</a> · <a href="#restart-no">restart: no</a></p>
+<h3 id="gb10">GB10<a class="headerlink" href="#gb10" title="Permanent link">&para;</a></h3>
+<p>There is no separate giant VRAM pool. Compose <code>mem_limit</code> is 90g so the host keeps headroom for SSH. One heavy job at a time. See <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<p><strong>See also:</strong> <a href="#unified-memory">unified memory</a> · <a href="#headroom">headroom</a> · <a href="#occupancy">occupancy</a></p>
+<h3 id="unified-memory">unified memory<a class="headerlink" href="#unified-memory" title="Permanent link">&para;</a></h3>
+<p>The stack applies <code>patch_unified_memory_copy.py</code> (<code>copy=False</code> on safetensor <code>.to(device)</code>) and <code>patch_get_free_memory.py</code> (host free RAM instead of under-reporting cudaMemGetInfo). <code>--highvram</code> is the wrong flag here. See <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<p><strong>See also:</strong> <a href="#gb10">GB10</a> · <a href="#headroom">headroom</a> · <a href="#kitchen">Comfy Kitchen</a></p>
+<h3 id="occupancy">occupancy<a class="headerlink" href="#occupancy" title="Permanent link">&para;</a></h3>
+<p>GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. See <a href="../studio-sidecars/">Studio sidecars</a>.</p>
+<p><strong>See also:</strong> <a href="#sidecar">sidecar</a> · <a href="#ace-step">ACE-Step</a> · <a href="#gb10">GB10</a></p>
+<h3 id="headroom">headroom<a class="headerlink" href="#headroom" title="Permanent link">&para;</a></h3>
+<p><code>doctor</code> and <code>start</code> refuse when host free RAM is below policy (<code>min_host_free_gib</code>). Do not weaken this for demos. See <a href="../reboot-safety/">Reboot safety</a> and <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<p><strong>See also:</strong> <a href="#restart-no">restart: no</a> · <a href="#doctor">doctor</a> · <a href="#unified-memory">unified memory</a></p>
+<h3 id="restart-no">restart: no<a class="headerlink" href="#restart-no" title="Permanent link">&para;</a></h3>
+<p>A remotely managed Spark that relaunches a 90g GPU job on boot is how you lose SSH. Always <code>manage.sh stop</code> before reboot. Independent farm nodes use the same policy. See <a href="../reboot-safety/">Reboot safety</a>.</p>
+<p><strong>Also called:</strong> <code>restart: "no"</code></p>
+<p><strong>See also:</strong> <a href="#headroom">headroom</a> · <a href="#manage-sh">manage.sh</a> · <a href="#dgx-spark">DGX Spark</a></p>
+<h3 id="download-limit">download-limit<a class="headerlink" href="#download-limit" title="Permanent link">&para;</a></h3>
+<p>Full-rate multi-GB pulls freeze SSH. <code>download-models</code> wraps wondershaper when HTB works, else gentler HF workers. <code>DOWNLOAD_LIMIT=off</code> is an SSH risk. See <a href="../download-limit/">Download limit</a>.</p>
+<p><strong>Also called:</strong> <code>download limit</code></p>
+<p><strong>See also:</strong> <a href="#htb">HTB</a> · <a href="#headroom">headroom</a> · <a href="#models-dir">MODELS_DIR</a></p>
+<h3 id="htb">HTB<a class="headerlink" href="#htb" title="Permanent link">&para;</a></h3>
+<p>When <code>sch_htb</code> is absent, downloads continue with a warning and gentler Hugging Face settings. That is not a license to set <code>DOWNLOAD_LIMIT=off</code>. See <a href="../download-limit/">Download limit</a>.</p>
+<p><strong>Also called:</strong> <code>wondershaper</code></p>
+<p><strong>See also:</strong> <a href="#download-limit">download-limit</a></p>
+<h3 id="models-dir">MODELS_DIR<a class="headerlink" href="#models-dir" title="Permanent link">&para;</a></h3>
+<p>Weights live on the host so GHCR images stay small and multiple stacks can share one cache. <code>cleanup</code> does not delete MODELS_DIR. See <a href="../models-and-cache/">Models and cache</a>.</p>
+<p><strong>See also:</strong> <a href="#comfy-state">comfy-state</a> · <a href="#ghcr">GHCR</a> · <a href="#comfy-output-dir">COMFY_OUTPUT_DIR</a></p>
+<h3 id="comfy-output-dir">COMFY_OUTPUT_DIR<a class="headerlink" href="#comfy-output-dir" title="Permanent link">&para;</a></h3>
+<p><code>cleanup</code> does not delete outputs. <code>status</code> prints the path. Look here after Queue, not inside the git repo. See <a href="../getting-started/">Getting Started</a>.</p>
+<p><strong>See also:</strong> <a href="#models-dir">MODELS_DIR</a> · <a href="#vhs">VideoHelperSuite</a></p>
+<h3 id="comfy-state">comfy-state<a class="headerlink" href="#comfy-state" title="Permanent link">&para;</a></h3>
+<p>First start seeds the volume from <code>/opt/comfy-prebuilt</code>. Weights are not in this volume. Resetting it does not re-download Klein/Wan/LTX. See <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<p><strong>See also:</strong> <a href="#ghcr">GHCR</a> · <a href="#models-dir">MODELS_DIR</a></p>
+<h3 id="ghcr">GHCR<a class="headerlink" href="#ghcr" title="Permanent link">&para;</a></h3>
+<p><code>main</code> → <code>ghcr.io/toxicoder/ez-comfy:us-safe-studio</code>; <code>development</code> and feature branches → <code>-development</code>. The image has Comfy+torch, not Klein/Wan/LTX weights. Old <code>flux-to-ltx*</code> tags freeze. See <a href="../getting-started/">Getting Started</a>.</p>
+<p><strong>See also:</strong> <a href="#comfy-state">comfy-state</a> · <a href="#models-dir">MODELS_DIR</a></p>
+<h3 id="us-safe">US-safe<a class="headerlink" href="#us-safe" title="Permanent link">&para;</a></h3>
+<p>Defaults: Apache Klein 4B + Apache Wan 2.2 + LTX-2.5 Community (gated, $10M cap). MiniMax H3 is a US Excluded Territory ban for weights <strong>and</strong> outputs. Read <a href="../licenses/">Model licenses</a> before a 30 GB pull.</p>
+<p><strong>See also:</strong> <a href="#community-license">LTX Community License</a> · <a href="#apache">Apache 2.0</a> · <a href="#h3">MiniMax H3</a></p>
+<h3 id="manage-sh">manage.sh<a class="headerlink" href="#manage-sh" title="Permanent link">&para;</a></h3>
+<p>Run from the repo root. It loads <code>.env</code>. Studio users still Queue in the browser; operators keep SSH alive with this tool. Full catalog: <a href="../manage-cli/">manage.sh reference</a>.</p>
+<p><strong>See also:</strong> <a href="#doctor">doctor</a> · <a href="#restart-no">restart: no</a> · <a href="#download-limit">download-limit</a></p>
+<h3 id="doctor">doctor<a class="headerlink" href="#doctor" title="Permanent link">&para;</a></h3>
+<p>Fix hard doctor failures before <code>download-models</code>. Missing lab weights are a warning, not a hard fail. <code>attention: pytorch-fallback</code> on a running Spark is a 10–20× slow path. See <a href="../troubleshooting/">Troubleshooting</a>.</p>
+<p><strong>See also:</strong> <a href="#manage-sh">manage.sh</a> · <a href="#headroom">headroom</a> · <a href="#kitchen">Comfy Kitchen</a></p>
+<h3 id="hf-token">HF_TOKEN<a class="headerlink" href="#hf-token" title="Permanent link">&para;</a></h3>
+<p>Klein 4B and Wan 5B are Apache. LTX-2.5 still needs you to open the model card as that user and click Agree. Fine-grained tokens need gated-repo read. See <a href="../licenses/">Model licenses</a>.</p>
+<p><strong>See also:</strong> <a href="#gated">gated model</a> · <a href="#ltx">LTX-2.5</a></p>
+<h3 id="gated">gated model<a class="headerlink" href="#gated" title="Permanent link">&para;</a></h3>
+<p>A token in <code>.env</code> is not the same as accepting the Lightricks license. <code>download-models</code> exits non-zero until the distilled LTX set is on disk. See <a href="../getting-started/">Getting Started</a>.</p>
+<p><strong>Also called:</strong> <code>gated repo</code></p>
+<p><strong>See also:</strong> <a href="#hf-token">HF_TOKEN</a> · <a href="#ltx">LTX-2.5</a> · <a href="#community-license">LTX Community License</a></p>
+<h3 id="kitchen">Comfy Kitchen<a class="headerlink" href="#kitchen" title="Permanent link">&para;</a></h3>
+<p><code>doctor</code> prints <code>attention: kitchen|sage|pytorch-fallback|unknown</code>. Never pass <code>--use-sage-attention</code> next to Kitchen. spark-timing refuses to record unless Kitchen is live. See <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<p><strong>Also called:</strong> <code>Kitchen attention</code></p>
+<p><strong>See also:</strong> <a href="#pytorch-fallback">pytorch-fallback</a> · <a href="#doctor">doctor</a></p>
+<h3 id="pytorch-fallback">pytorch-fallback<a class="headerlink" href="#pytorch-fallback" title="Permanent link">&para;</a></h3>
+<p>If <code>doctor</code> says <code>attention: pytorch-fallback</code> while compose is up, do not record spark-timing and do not treat mushy video as a prompt problem. See <a href="../troubleshooting/">Troubleshooting</a>.</p>
+<p><strong>See also:</strong> <a href="#kitchen">Comfy Kitchen</a></p>
+<h3 id="nvidia-container-toolkit">NVIDIA Container Toolkit<a class="headerlink" href="#nvidia-container-toolkit" title="Permanent link">&para;</a></h3>
+<p><code>setup --install-docker</code> configures <code>nvidia-ctk</code> when present. Snap Docker is the wrong install. See <a href="../getting-started/">Getting Started</a>.</p>
+<p><strong>See also:</strong> <a href="#dgx-spark">DGX Spark</a> · <a href="#manage-sh">manage.sh</a></p>
+<h2 id="film">Film<a class="headerlink" href="#film" title="Permanent link">&para;</a></h2>
+<h3 id="last-frame">last-frame continuity<a class="headerlink" href="#last-frame" title="Permanent link">&para;</a></h3>
+<p>18 × 5.00 s LTX prints (120 frames @ 24 fps) stitch to a 90.00 s cap. One-click film graphs chain this inside Comfy; <code>print-shot</code> / <code>film-resume</code> do it on the host jobstore. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>See also:</strong> <a href="#identity-still">identity still</a> · <a href="#ltx">LTX-2.5</a> · <a href="#film-accept">film-accept</a></p>
+<h3 id="otio">OTIO<a class="headerlink" href="#otio" title="Permanent link">&para;</a></h3>
+<p><code>manage.sh film-export-otio go-see</code> writes stdlib JSON under <code>films/&lt;slug&gt;/publish/</code>. Import on the Spark host or a laptop. Occupancy: stop Comfy if the NLE will use the GPU. See <a href="../studio-sidecars/">Studio sidecars</a>.</p>
+<p><strong>See also:</strong> <a href="#sidecar">sidecar</a> · <a href="#jobstore">jobstore</a></p>
+<h3 id="nvenc">NVENC<a class="headerlink" href="#nvenc" title="Permanent link">&para;</a></h3>
+<p><code>film-proxies</code> and <code>nvenc-preview.sh</code> refuse while compose is up. They never rewrite masters. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>See also:</strong> <a href="#occupancy">occupancy</a> · <a href="#film-accept">film-accept</a></p>
+<h3 id="film-accept">film-accept<a class="headerlink" href="#film-accept" title="Permanent link">&para;</a></h3>
+<p><code>manage.sh film-accept go-see</code> (and concat <code>--film --yes</code>) refuse shots that drift. <code>--skip-accept</code> is an escape hatch, not a default. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>See also:</strong> <a href="#last-frame">last-frame continuity</a> · <a href="#ltx">LTX-2.5</a></p>
+<h3 id="jobstore">jobstore<a class="headerlink" href="#jobstore" title="Permanent link">&para;</a></h3>
+<p>A dropped SSH session is not a two-hour requeue: <code>film-resume</code> skips ok 5.00 s shots. Optional studio-ui on :8190 is lights only (no GPU). See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>See also:</strong> <a href="#last-frame">last-frame continuity</a> · <a href="#film-accept">film-accept</a></p>
+<h3 id="loudnorm">loudnorm<a class="headerlink" href="#loudnorm" title="Permanent link">&para;</a></h3>
+<p><code>podcast-loudnorm.sh</code> is a hard fail if ffmpeg is missing — it will not skip. 90s publish graphs apply YouTube loudnorm in EZFilmConcat. See <a href="../podcast/">Local podcast</a>.</p>
+<p><strong>See also:</strong> <a href="#tts">TTS</a> · <a href="#vhs">VideoHelperSuite</a></p>
+<h3 id="sidecar">sidecar<a class="headerlink" href="#sidecar" title="Permanent link">&para;</a></h3>
+<p>Sidecars stay off the Docker image on purpose. <code>manage.sh blender</code> dies if compose is up. See <a href="../studio-sidecars/">Studio sidecars</a>.</p>
+<p><strong>See also:</strong> <a href="#occupancy">occupancy</a> · <a href="#trellis">TRELLIS.2</a></p>
+<h3 id="spark-farm">Spark farm<a class="headerlink" href="#spark-farm" title="Permanent link">&para;</a></h3>
+<p>Farm mode Queues different beats on different hosts. Concat stays on one machine. <code>spark-farm.sh</code> never starts compose on a remote node (each node still types yes locally). See <a href="../spark-farm/">Spark farm</a>.</p>
+<p><strong>See also:</strong> <a href="#dgx-spark">DGX Spark</a> · <a href="#models-dir">MODELS_DIR</a> · <a href="#restart-no">restart: no</a></p>
+<h3 id="concat-shots">concat-shots<a class="headerlink" href="#concat-shots" title="Permanent link">&para;</a></h3>
+<p><code>concat-shots.sh --film go-see --yes</code> is the host fallback. <code>--xfade</code> is audio-only and refuses Wan-silent shots. See <a href="../shorts/">90s shorts</a>.</p>
+<p><strong>See also:</strong> <a href="#last-frame">last-frame continuity</a> · <a href="#film-accept">film-accept</a></p>
+<h2 id="audio">Audio<a class="headerlink" href="#audio" title="Permanent link">&para;</a></h2>
+<h3 id="tts">TTS<a class="headerlink" href="#tts" title="Permanent link">&para;</a></h3>
+<p>Invented characters only. Disclose synthetic voices in the mix (spoken bumper), not only in a description box. TTS-Audio-Suite and celebrity refs are out of policy. See <a href="../podcast/">Local podcast</a>.</p>
+<p><strong>See also:</strong> <a href="#kokoro">Kokoro</a> · <a href="#disclosure">disclosure bumper</a> · <a href="#ace-step">ACE-Step</a></p>
+<h3 id="disclosure">disclosure bumper<a class="headerlink" href="#disclosure" title="Permanent link">&para;</a></h3>
+<p>Do not type the bumper yourself — <code>EZPodcastDisclosure</code> prepends it. Platform and USCO rules still apply; this page is not legal advice. See <a href="../podcast/">Local podcast</a>.</p>
+<p><strong>See also:</strong> <a href="#tts">TTS</a> · <a href="#kokoro">Kokoro</a></p>
+<h2 id="licenses">Licenses<a class="headerlink" href="#licenses" title="Permanent link">&para;</a></h2>
+<h3 id="apache">Apache 2.0<a class="headerlink" href="#apache" title="Permanent link">&para;</a></h3>
+<p>Apache still + Apache silent motion is why the daily driver is legally the cleanest motion path. LTX is <strong>not</strong> Apache. This is policy text, not legal advice. See <a href="../licenses/">Model licenses</a>.</p>
+<p><strong>Also called:</strong> <code>Apache</code></p>
+<p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#wan">Wan 2.2</a> · <a href="#community-license">LTX Community License</a> · <a href="#us-safe">US-safe</a></p>
+<h3 id="community-license">LTX Community License<a class="headerlink" href="#community-license" title="Permanent link">&para;</a></h3>
+<p>No US geo-ban on the Community License, but the company-revenue cap counts affiliates. Disclose AI-generated media; do not strip provenance. Not legal advice. See <a href="../licenses/">Model licenses</a>.</p>
+<p><strong>Also called:</strong> <code>Community License</code></p>
+<p><strong>See also:</strong> <a href="#ltx">LTX-2.5</a> · <a href="#gated">gated model</a> · <a href="#us-safe">US-safe</a></p>
+<h3 id="h3">MiniMax H3<a class="headerlink" href="#h3" title="Permanent link">&para;</a></h3>
+<p>Do not download, Queue, or pin Comfy for MiniMax H3. <code>doctor</code> warns if leftover weights exist. Use the US-safe Klein/Wan/LTX pack instead. See <a href="../licenses/">Model licenses</a>.</p>
+<p><strong>See also:</strong> <a href="#us-safe">US-safe</a> · <a href="#klein">Klein 4B</a></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../javascripts/glossary.js"></script>
+      
+    
+  </body>
+</html>

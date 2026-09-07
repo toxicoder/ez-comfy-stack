@@ -17,7 +17,15 @@
          <lastmod>2026-09-07</lastmod>
     </url>
     <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/glossary/</loc>
+         <lastmod>2026-09-07</lastmod>
+    </url>
+    <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/licenses/</loc>
+         <lastmod>2026-09-07</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/manage-cli/</loc>
          <lastmod>2026-09-07</lastmod>
     </url>
     <url>
@@ -61,11 +69,35 @@
          <lastmod>2026-09-07</lastmod>
     </url>
     <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/studio-workflows/</loc>
+         <lastmod>2026-09-07</lastmod>
+    </url>
+    <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/troubleshooting/</loc>
          <lastmod>2026-09-07</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/visual-generative-ai/</loc>
+         <lastmod>2026-09-07</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/learn/</loc>
+         <lastmod>2026-09-07</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/learn/comfyui/</loc>
+         <lastmod>2026-09-07</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/learn/generation/</loc>
+         <lastmod>2026-09-07</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/learn/hardware/</loc>
+         <lastmod>2026-09-07</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/learn/pipeline/</loc>
          <lastmod>2026-09-07</lastmod>
     </url>
 </urlset>
