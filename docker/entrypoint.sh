@@ -325,7 +325,9 @@ install_lab_custom_nodes() {
 
 #######################################
 # Print ComfyUI CLI tokens (one per line) for GB10 unified memory.
-# Kitchen XOR Sage: never includes --use-sage-attention. Never --highvram.
+# Kitchen XOR Sage: never includes --use-sage-attention.
+# Default VRAM (omit --highvram / --gpu-only / --lowvram). ComfyUI v0.34+
+# dropped --normalvram; passing it exits with unrecognized arguments.
 # Globals:
 #   LAB_OUTPUTS_MOUNT
 # Arguments:
@@ -344,7 +346,6 @@ comfy_exec_args() {
     --output-directory \
     "${LAB_OUTPUTS_MOUNT:-/outputs}" \
     --use-ck-attention \
-    --normalvram \
     --disable-dynamic-vram \
     --disable-pinned-memory \
     --disable-async-offload \
