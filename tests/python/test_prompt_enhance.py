@@ -394,17 +394,19 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     ident = next(n for n in house["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     ident_text = ident["widgets_values"][0]
     ident_l = ident_text.lower()
-    assert "cedar" in ident_l
-    assert "lake" in ident_l
-    assert "compact" in ident_l
-    assert "single-story" in ident_l
-    assert "hip" in ident_l
-    assert "chimney" in ident_l
-    assert "two-bay" in ident_l
-    assert "decks" in ident_l
-    assert "gravel" in ident_l
+    assert "hd 3d game-engine pre-rendered cutscene" in ident_l
+    assert "charcoal-glass" in ident_l
+    assert "crown penthouse" in ident_l
+    assert "wraparound terrace" in ident_l
+    assert "three-bay" in ident_l
+    assert "walnut" in ident_l
+    assert "fern" in ident_l or "living wall" in ident_l
+    assert "electric-cyan" in ident_l
     assert "24mm" not in ident_l
     assert "golden-hour" not in ident_l and "golden hour" not in ident_l
+    assert "cedar" not in ident_l
+    assert "cabin" not in ident_l
+    assert "lake" not in ident_l
     assert "no logos, no text" not in ident_text
     assert ident["widgets_values"][1] is True
     assert ident["widgets_values"][2] == "identity"
@@ -426,6 +428,12 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         "glass box",
         "outdoor kitchen",
         "outdoor tub",
+        "cedar",
+        "alpine",
+        "gravel",
+        "chimney",
+        "hip roof",
+        "live-action",
     )
     inventories = set()
     for join in sorted(joins, key=lambda n: n["id"]):
@@ -439,13 +447,14 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         assert "dining table" in inventory
         assert "bedding" in inventory
         assert "tub" in inventory
-        assert "deck chairs" in inventory or "cedar deck" in inventory
-        assert "same" in shot.lower() and "cabin" in shot.lower()
+        assert "terrace chairs" in inventory
+        assert "data-staff" in inventory
+        assert "same" in shot.lower() and "penthouse" in shot.lower()
         joined = client.join_prompt(ident_text, shot, inventory, lock)
-        assert len(joined.split()) <= 170
+        assert len(joined.split()) <= 160
         title = join.get("title") or ""
         if "01" in title:
-            assert "through" in shot.lower() or "shows the linen sofa" in shot.lower()
+            assert "sofa" in shot.lower() and ("shows" in shot.lower() or "through" in shot.lower())
         if any(k in title for k in ("03 living", "04 kitchen", "05 dining", "06 bedroom", "07 bath")):
             assert "from inside" in shot.lower()
         if "03 living" in title:
@@ -456,7 +465,7 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         assert text.startswith(ident_text)
         assert "different camera" in text
         assert "linen sofa" in text
-        assert len(text.split()) <= 170
+        assert len(text.split()) <= 160
     assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 0
     assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 0
     by_id = {n["id"]: n for n in house["nodes"]}

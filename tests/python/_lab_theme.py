@@ -11,6 +11,23 @@ from __future__ import annotations
 
 STYLE_LOCK = "HD 3D game-engine pre-rendered cutscene still"
 
+# Camera-free place bible for klein-dream-house and klein-style-lock.
+# Shot cards own lens, time, and weather. Do not name a camera here.
+HOUSE_IDENTITY = (
+    f"A {STYLE_LOCK} of one compact charcoal-glass crown penthouse on a tall "
+    "unmarked megacity tower. One wraparound terrace sits outside a three-bay "
+    "black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen "
+    "island behind the sofa, dining beside the island, bedroom and bath left. A fern "
+    "living wall beside the glass. Electric-cyan edge light on blackened steel. "
+    "Unmarked home, empty of lettering."
+)
+HOUSE_INVENTORY = (
+    "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island "
+    "with blackened-steel cabinets, walnut dining table, linen bedding at the "
+    "city-window bedroom, freestanding stone tub facing frosted glass, two "
+    "blackened-steel terrace chairs, compact unmarked data-staff"
+)
+
 ROOFTOP_INVENTORY = (
     "unmarked electric-cyan tech-mage coat with circuit-thread seams, "
     "floating unmarked holographic glyph rings, compact unmarked data-staff, "

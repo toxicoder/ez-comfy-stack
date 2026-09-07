@@ -5,7 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from _lab_theme import KLEIN_STILL, KLEIN_STILL_DAILY, STYLE_LOCK, WAN_T2V
+from _lab_theme import (
+    HOUSE_IDENTITY,
+    HOUSE_INVENTORY,
+    KLEIN_STILL,
+    KLEIN_STILL_DAILY,
+    STYLE_LOCK,
+    WAN_T2V,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
@@ -51,6 +58,23 @@ def test_theme_module_lens_split_and_lock() -> None:
     assert "dollies" in WAN_T2V.lower() or "dolly" in WAN_T2V.lower()
     assert "bicycle" not in KLEIN_STILL.lower()
     assert "superhero" not in KLEIN_STILL.lower()
+
+
+def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
+    ident = HOUSE_IDENTITY.lower()
+    assert STYLE_LOCK.lower() in ident
+    assert "charcoal-glass" in ident
+    assert "crown penthouse" in ident
+    assert "wraparound terrace" in ident
+    assert "three-bay" in ident
+    assert "24mm" not in ident
+    assert "golden-hour" not in ident
+    assert "cedar" not in ident
+    assert "cabin" not in ident
+    inv = HOUSE_INVENTORY.lower()
+    assert "linen sofa" in inv
+    assert "data-staff" in inv
+    assert "terrace chairs" in inv
 
 
 def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
@@ -105,7 +129,13 @@ def test_lab_identity_graphs_lock_tech_wizard_cutscene() -> None:
 
 def test_exempt_packs_keep_their_own_subjects() -> None:
     house = (WF / "klein-dream-house-lab-example.json").read_text(encoding="utf-8").lower()
-    assert "cedar" in house
+    style = (WF / "klein-style-lock-lab-example.json").read_text(encoding="utf-8").lower()
+    for blob in (house, style):
+        assert "charcoal-glass" in blob
+        assert "crown penthouse" in blob
+        assert "three-bay" in blob
+        assert "cedar" not in blob
+        assert "alpine" not in blob
     film = (WF / "shorts" / "film-go-see-90s-run-lab-example.json").read_text(encoding="utf-8").lower()
     assert "electric-cyan" in film
     assert "parkour" in film

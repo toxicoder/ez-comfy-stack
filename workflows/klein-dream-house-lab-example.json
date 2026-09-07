@@ -172,7 +172,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house.",
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering.",
         true,
         "identity",
         "Instagram 4:5 still",
@@ -224,7 +224,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, Pixar rounded cartoon, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -292,7 +292,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards go through Prompt Join then Klein t2i enhance.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -331,11 +331,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Three-quarter lake facade of the same cabin, 24mm at eye level, Instagram 4:5, golden-hour late summer. The two-bay glass shows the linen sofa and oak floors inside.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, golden-hour late summer. The three-bay glass shows the charcoal linen sofa and walnut floors inside. High clouds over unmarked spires.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT 01 lake facade"
+      "title": "SHOT 01 city facade"
     },
     {
       "id": 11,
@@ -380,7 +380,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter lake facade of the same cabin, 24mm at eye level, Instagram 4:5, golden-hour late summer. The two-bay glass shows the linen sofa and oak floors inside."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, golden-hour late summer. The three-bay glass shows the charcoal linen sofa and walnut floors inside. High clouds over unmarked spires."
       ],
       "title": "Positive 01"
     },
@@ -551,11 +551,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Curb of the same cabin from the empty gravel drive, 24mm, Instagram 4:5. Hip roof and cedar gable; lake glass sits on the far side of the volume.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "From the unmarked canyon street, looking up at the same penthouse crown, 24mm, Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall tower among unmarked spires.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT 02 curb"
+      "title": "SHOT 02 canyon"
     },
     {
       "id": 16,
@@ -600,7 +600,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Curb of the same cabin from the empty gravel drive, 24mm, Instagram 4:5. Hip roof and cedar gable; lake glass sits on the far side of the volume."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From the unmarked canyon street, looking up at the same penthouse crown, 24mm, Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall tower among unmarked spires."
       ],
       "title": "Positive 02"
     },
@@ -771,11 +771,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the living room of the same cabin, looking out the two-bay glass to the lake, 24mm, Instagram 4:5. The linen sofa sits in the foreground on oak floors, late-summer afternoon.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "From inside the living room of the same penthouse, looking out the three-bay glass to the megacity, 24mm, Instagram 4:5. The linen sofa sits in the foreground on walnut floors, afternoon sky.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT 03 living room"
+      "title": "SHOT 03 living"
     },
     {
       "id": 21,
@@ -820,7 +820,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the living room of the same cabin, looking out the two-bay glass to the lake, 24mm, Instagram 4:5. The linen sofa sits in the foreground on oak floors, late-summer afternoon."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the living room of the same penthouse, looking out the three-bay glass to the megacity, 24mm, Instagram 4:5. The linen sofa sits in the foreground on walnut floors, afternoon sky."
       ],
       "title": "Positive 03"
     },
@@ -991,8 +991,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the kitchen of the same cabin, 35mm, Instagram 4:5. Pale-stone island, cedar cabinets, black hardware, morning sidelight from the glass wall beside the living room.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone island, blackened-steel cabinets, electric-cyan edge light, morning sidelight from the glass wall beside the living room.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 04 kitchen"
@@ -1040,7 +1040,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the kitchen of the same cabin, 35mm, Instagram 4:5. Pale-stone island, cedar cabinets, black hardware, morning sidelight from the glass wall beside the living room."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone island, blackened-steel cabinets, electric-cyan edge light, morning sidelight from the glass wall beside the living room."
       ],
       "title": "Positive 04"
     },
@@ -1211,8 +1211,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak table, lamps lit, autumn twilight through the two-bay glass.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Walnut table, lamps lit, autumn twilight through the three-bay glass, high weather over the spires.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 05 dining"
@@ -1260,7 +1260,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak table, lamps lit, autumn twilight through the two-bay glass."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Walnut table, lamps lit, autumn twilight through the three-bay glass, high weather over the spires."
       ],
       "title": "Positive 05"
     },
@@ -1431,8 +1431,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. Linen bedding, cedar wall, lake window, dawn.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. Linen bedding, city window, first-blue dawn sky, unmarked spires.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 06 bedroom"
@@ -1480,7 +1480,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. Linen bedding, cedar wall, lake window, dawn."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. Linen bedding, city window, first-blue dawn sky, unmarked spires."
       ],
       "title": "Positive 06"
     },
@@ -1651,8 +1651,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the spa bath of the same cabin, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "From inside the spa bath of the same penthouse, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures. Soft daylight.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 07 bath"
@@ -1700,7 +1700,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the spa bath of the same cabin, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the spa bath of the same penthouse, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures. Soft daylight."
       ],
       "title": "Positive 07"
     },
@@ -1871,11 +1871,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Lakeside decks of the same cabin at dusk, 24mm, Instagram 4:5. Two cedar deck chairs on gravel, still water, evergreen ridge.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "Wraparound terrace of the same penthouse at dusk, 24mm, Instagram 4:5. Two blackened-steel chairs, fern living wall, neon-wet deck, unmarked spires, distant maglev, pink-gold sky.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT 08 deck"
+      "title": "SHOT 08 terrace"
     },
     {
       "id": 46,
@@ -1920,7 +1920,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Lakeside decks of the same cabin at dusk, 24mm, Instagram 4:5. Two cedar deck chairs on gravel, still water, evergreen ridge."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Wraparound terrace of the same penthouse at dusk, 24mm, Instagram 4:5. Two blackened-steel chairs, fern living wall, neon-wet deck, unmarked spires, distant maglev, pink-gold sky."
       ],
       "title": "Positive 08"
     },
@@ -2091,11 +2091,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Winter twilight exterior of the same cabin, 24mm, Instagram 4:5. Lamps glow; the linen sofa reads as a silhouette through the two-bay glass. Thin snow on the ridge; cabin volume unchanged.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "Rain night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; the charcoal linen sofa reads as a silhouette through the three-bay glass. Rain on the terrace; penthouse volume unchanged.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT 09 twilight"
+      "title": "SHOT 09 rain night"
     },
     {
       "id": 51,
@@ -2140,7 +2140,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Winter twilight exterior of the same cabin, 24mm, Instagram 4:5. Lamps glow; the linen sofa reads as a silhouette through the two-bay glass. Thin snow on the ridge; cabin volume unchanged."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Rain night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; the charcoal linen sofa reads as a silhouette through the three-bay glass. Rain on the terrace; penthouse volume unchanged."
       ],
       "title": "Positive 09"
     },
@@ -2311,11 +2311,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Midsummer ridge view of the same compact cabin above the lake among evergreens, 24mm, Instagram 4:5.",
-        "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs",
+        "Midsummer neighboring-tower view of the same compact penthouse crown among unmarked spires, 24mm, Instagram 4:5. Clear deep sky.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT 10 ridge view"
+      "title": "SHOT 10 tower view"
     },
     {
       "id": 56,
@@ -2360,7 +2360,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One compact single-story rectangular cedar cabin on a still alpine lake. One low charcoal standing-seam hip roof with a single black chimney, vertical knotty cedar siding, and a two-bay four-lite black-framed glass wall on the lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak floors run indoors. An evergreen ridge rises behind the solitary unmarked house. Locked inventory (do not change): one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar cabinets and black hardware, oak dining table, linen bedding at the lake-window bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs. Keep this exact place and inventory. New photograph from a different camera and framing. Midsummer ridge view of the same compact cabin above the lake among evergreens, 24mm, Instagram 4:5."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Midsummer neighboring-tower view of the same compact penthouse crown among unmarked spires, 24mm, Instagram 4:5. Clear deep sky."
       ],
       "title": "Positive 10"
     },
@@ -3336,7 +3336,7 @@
     },
     {
       "id": 10,
-      "title": "SHOT 01 lake facade",
+      "title": "SHOT 01 city facade",
       "bounding": [
         500,
         24,
@@ -3349,7 +3349,7 @@
     },
     {
       "id": 11,
-      "title": "SHOT 02 curb",
+      "title": "SHOT 02 canyon",
       "bounding": [
         500,
         384,
@@ -3362,7 +3362,7 @@
     },
     {
       "id": 12,
-      "title": "SHOT 03 living room",
+      "title": "SHOT 03 living",
       "bounding": [
         500,
         744,
@@ -3427,7 +3427,7 @@
     },
     {
       "id": 17,
-      "title": "SHOT 08 deck",
+      "title": "SHOT 08 terrace",
       "bounding": [
         500,
         2544,
@@ -3440,7 +3440,7 @@
     },
     {
       "id": 18,
-      "title": "SHOT 09 twilight",
+      "title": "SHOT 09 rain night",
       "bounding": [
         500,
         2904,
@@ -3453,7 +3453,7 @@
     },
     {
       "id": 19,
-      "title": "SHOT 10 ridge view",
+      "title": "SHOT 10 tower view",
       "bounding": [
         500,
         3264,
@@ -3469,8 +3469,8 @@
   "extra": {
     "lab_profile": "klein-dream-house-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards go through Prompt Join then Klein t2i enhance.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "Ten Instagram 4:5 Klein stills of one compact cedar cabin; new cameras, locked inventory",
+    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Ten Instagram 4:5 Klein stills of one charcoal-glass crown penthouse; new cameras, locked inventory",
     "ds": {
       "scale": 1,
       "offset": [

@@ -19,6 +19,8 @@ from _lab_layout import (
 from _lab_theme import (
     CREATOR_IDENTITY,
     GIF_MOTION,
+    HOUSE_IDENTITY,
+    HOUSE_INVENTORY,
     KLEIN_NEG_STILL,
     KLEIN_STILL_DAILY,
     ROOFTOP_INVENTORY,
@@ -36,75 +38,67 @@ WF = ROOT / "workflows"
 KLEIN_NEG = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
-HOUSE_IDENTITY = (
-    "One compact single-story rectangular cedar cabin on a still alpine lake. "
-    "One low charcoal standing-seam hip roof with a single black chimney, vertical "
-    "knotty cedar siding, and a two-bay four-lite black-framed glass wall on the "
-    "lake facade. Two modest low cedar decks sit on the gravel shore. Warm oak "
-    "floors run indoors. An evergreen ridge rises behind the solitary unmarked house."
-)
-HOUSE_INVENTORY = (
-    "one linen sofa facing the two-bay glass, pale-stone kitchen island with cedar "
-    "cabinets and black hardware, oak dining table, linen bedding at the lake-window "
-    "bedroom, freestanding stone tub facing frosted glass, two simple cedar deck chairs"
-)
 HOUSE_SHOTS = [
     (
-        "01 lake facade",
-        "Three-quarter lake facade of the same cabin, 24mm at eye level, Instagram "
-        "4:5, golden-hour late summer. The two-bay glass shows the linen sofa and oak "
-        "floors inside.",
+        "01 city facade",
+        "Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, "
+        "golden-hour late summer. The three-bay glass shows the charcoal linen sofa and "
+        "walnut floors inside. High clouds over unmarked spires.",
     ),
     (
-        "02 curb",
-        "Curb of the same cabin from the empty gravel drive, 24mm, Instagram 4:5. Hip "
-        "roof and cedar gable; lake glass sits on the far side of the volume.",
+        "02 canyon",
+        "From the unmarked canyon street, looking up at the same penthouse crown, 24mm, "
+        "Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall "
+        "tower among unmarked spires.",
     ),
     (
-        "03 living room",
-        "From inside the living room of the same cabin, looking out the two-bay glass "
-        "to the lake, 24mm, Instagram 4:5. The linen sofa sits in the foreground on "
-        "oak floors, late-summer afternoon.",
+        "03 living",
+        "From inside the living room of the same penthouse, looking out the three-bay "
+        "glass to the megacity, 24mm, Instagram 4:5. The linen sofa sits in the "
+        "foreground on walnut floors, afternoon sky.",
     ),
     (
         "04 kitchen",
-        "From inside the kitchen of the same cabin, 35mm, Instagram 4:5. Pale-stone "
-        "island, cedar cabinets, black hardware, morning sidelight from the glass wall "
-        "beside the living room.",
+        "From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone "
+        "island, blackened-steel cabinets, electric-cyan edge light, morning sidelight "
+        "from the glass wall beside the living room.",
     ),
     (
         "05 dining",
-        "From inside the dining room of the same cabin, 35mm, Instagram 4:5. Oak "
-        "table, lamps lit, autumn twilight through the two-bay glass.",
+        "From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Walnut "
+        "table, lamps lit, autumn twilight through the three-bay glass, high weather "
+        "over the spires.",
     ),
     (
         "06 bedroom",
-        "From inside the primary bedroom of the same cabin, 35mm, Instagram 4:5. "
-        "Linen bedding, cedar wall, lake window, dawn.",
+        "From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. "
+        "Linen bedding, city window, first-blue dawn sky, unmarked spires.",
     ),
     (
         "07 bath",
-        "From inside the spa bath of the same cabin, 35mm, Instagram 4:5. Freestanding "
-        "stone tub facing frosted glass. Quiet unmarked fixtures.",
+        "From inside the spa bath of the same penthouse, 35mm, Instagram 4:5. "
+        "Freestanding stone tub facing frosted glass. Quiet unmarked fixtures. Soft "
+        "daylight.",
     ),
     (
-        "08 deck",
-        "Lakeside decks of the same cabin at dusk, 24mm, Instagram 4:5. Two cedar "
-        "deck chairs on gravel, still water, evergreen ridge.",
+        "08 terrace",
+        "Wraparound terrace of the same penthouse at dusk, 24mm, Instagram 4:5. Two "
+        "blackened-steel chairs, fern living wall, neon-wet deck, unmarked spires, "
+        "distant maglev, pink-gold sky.",
     ),
     (
-        "09 twilight",
-        "Winter twilight exterior of the same cabin, 24mm, Instagram 4:5. Lamps glow; "
-        "the linen sofa reads as a silhouette through the two-bay glass. Thin snow on "
-        "the ridge; cabin volume unchanged.",
+        "09 rain night",
+        "Rain night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; "
+        "the charcoal linen sofa reads as a silhouette through the three-bay glass. Rain "
+        "on the terrace; penthouse volume unchanged.",
     ),
     (
-        "10 ridge view",
-        "Midsummer ridge view of the same compact cabin above the lake among "
-        "evergreens, 24mm, Instagram 4:5.",
+        "10 tower view",
+        "Midsummer neighboring-tower view of the same compact penthouse crown among "
+        "unmarked spires, 24mm, Instagram 4:5. Clear deep sky.",
     ),
 ]
-JOINED_WORD_CAP = 170
+JOINED_WORD_CAP = 160
 GIF_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
     "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
@@ -140,10 +134,10 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
 
-Ten Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).
-HOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin — Prompt Join lock=view. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.
-Edit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards go through Prompt Join then Klein t2i enhance.
-Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.
+Ten Instagram 4:5 stills of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.
+HOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse — Prompt Join lock=view. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.
+Edit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced — a per-shot rewrite would mutate the bible.
+Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.
 If materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.
 """
 
@@ -428,7 +422,7 @@ def build_dream_house() -> dict:
             [40, 970],
             [420, 120],
             "Negative",
-            [KLEIN_NEG],
+            [KLEIN_NEG_STILL],
             4,
             inputs=[{"name": "clip", "type": "CLIP", "link": None}],
             outputs=[out("CONDITIONING", "CONDITIONING", neg_links)],
@@ -627,7 +621,7 @@ def build_dream_house() -> dict:
             "lab_profile": "klein-dream-house-lab-example",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
-            "lab_description": "Ten Instagram 4:5 Klein stills of one compact cedar cabin; new cameras, locked inventory",
+            "lab_description": "Ten Instagram 4:5 Klein stills of one charcoal-glass crown penthouse; new cameras, locked inventory",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,

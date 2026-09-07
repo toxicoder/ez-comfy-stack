@@ -148,7 +148,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, empty of people.",
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering.",
         true,
         "identity",
         "Instagram 4:5 still",
@@ -194,7 +194,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "live-action photoreal, Pixar rounded cartoon, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -256,7 +256,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-style-lock-lab-example\n\nFour Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`\u2026`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## klein-style-lock-lab-example\n\nFour Klein 4B stills of one charcoal-glass crown penthouse from new cameras (Prompt Join lock=view). Locked inventory repeats through the three-bay glass and in the living room. Prefixes `ez_style_01`\u2026`04`. Shots are independent T2I (same seed); they do not copy FACADE's framing. Same world bible as klein-dream-house-lab-example.\n\nIdentity-mode enhance is on for the bible (camera-free). Shot cards are not Klein-t2i-enhanced.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -295,11 +295,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Three-quarter lake facade of the same house, 24mm, golden-hour, Instagram 4:5. Glass shows the linen sofa and oak floors inside.",
-        "vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, linen sofa facing the lake glass, oak floors",
+        "Three-quarter city facade of the same penthouse, 24mm, golden-hour, Instagram 4:5. The three-bay glass shows the charcoal linen sofa and walnut floors inside.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT CURB"
+      "title": "SHOT FACADE"
     },
     {
       "id": 11,
@@ -344,9 +344,9 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, empty of people. Locked inventory (do not change): vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, linen sofa facing the lake glass, oak floors. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter lake facade of the same house, 24mm, golden-hour, Instagram 4:5. Glass shows the linen sofa and oak floors inside."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter city facade of the same penthouse, 24mm, golden-hour, Instagram 4:5. The three-bay glass shows the charcoal linen sofa and walnut floors inside."
       ],
-      "title": "Positive CURB"
+      "title": "Positive FACADE"
     },
     {
       "id": 12,
@@ -406,7 +406,7 @@
         "simple",
         1.0
       ],
-      "title": "Sampler CURB"
+      "title": "Sampler FACADE"
     },
     {
       "id": 13,
@@ -448,7 +448,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "Decode CURB"
+      "title": "Decode FACADE"
     },
     {
       "id": 14,
@@ -478,7 +478,7 @@
       "widgets_values": [
         "ez_style_01"
       ],
-      "title": "Save CURB"
+      "title": "Save FACADE"
     },
     {
       "id": 16,
@@ -515,8 +515,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the living room of the same house, looking out the glass to the lake, late-day sun. Linen sofa in the foreground.",
-        "vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, linen sofa facing the lake glass, oak floors",
+        "From inside the living room of the same penthouse, looking out the three-bay glass to the megacity, late-day sun. Charcoal linen sofa in the foreground.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT LIVING"
@@ -564,7 +564,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, empty of people. Locked inventory (do not change): vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, linen sofa facing the lake glass, oak floors. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the living room of the same house, looking out the glass to the lake, late-day sun. Linen sofa in the foreground."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the living room of the same penthouse, looking out the three-bay glass to the megacity, late-day sun. Charcoal linen sofa in the foreground."
       ],
       "title": "Positive LIVING"
     },
@@ -735,11 +735,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Lakeside deck of the same house at dusk, cedar boards, quiet water, evergreen ridge.",
-        "vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, linen sofa facing the lake glass, oak floors",
+        "Wraparound terrace of the same penthouse at dusk, fern living wall, neon-wet deck, unmarked spires.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT DECK"
+      "title": "SHOT TERRACE"
     },
     {
       "id": 23,
@@ -784,9 +784,9 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, empty of people. Locked inventory (do not change): vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, linen sofa facing the lake glass, oak floors. Keep this exact place and inventory. New photograph from a different camera and framing. Lakeside deck of the same house at dusk, cedar boards, quiet water, evergreen ridge."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Wraparound terrace of the same penthouse at dusk, fern living wall, neon-wet deck, unmarked spires."
       ],
-      "title": "Positive DECK"
+      "title": "Positive TERRACE"
     },
     {
       "id": 24,
@@ -846,7 +846,7 @@
         "simple",
         1.0
       ],
-      "title": "Sampler DECK"
+      "title": "Sampler TERRACE"
     },
     {
       "id": 25,
@@ -888,7 +888,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "Decode DECK"
+      "title": "Decode TERRACE"
     },
     {
       "id": 26,
@@ -918,7 +918,7 @@
       "widgets_values": [
         "ez_style_03"
       ],
-      "title": "Save DECK"
+      "title": "Save TERRACE"
     },
     {
       "id": 28,
@@ -955,11 +955,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Twilight exterior of the same house. Lamps on; sofa silhouette through black-framed glass.",
-        "vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, linen sofa facing the lake glass, oak floors",
+        "Rain night exterior of the same penthouse. Lamps on; sofa silhouette through the three-bay glass. Penthouse volume unchanged.",
+        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
         "view"
       ],
-      "title": "SHOT TWILIGHT"
+      "title": "SHOT RAIN"
     },
     {
       "id": 29,
@@ -1004,9 +1004,9 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, empty of people. Locked inventory (do not change): vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, linen sofa facing the lake glass, oak floors. Keep this exact place and inventory. New photograph from a different camera and framing. Twilight exterior of the same house. Lamps on; sofa silhouette through black-framed glass."
+        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Rain night exterior of the same penthouse. Lamps on; sofa silhouette through the three-bay glass. Penthouse volume unchanged."
       ],
-      "title": "Positive TWILIGHT"
+      "title": "Positive RAIN"
     },
     {
       "id": 30,
@@ -1066,7 +1066,7 @@
         "simple",
         1.0
       ],
-      "title": "Sampler TWILIGHT"
+      "title": "Sampler RAIN"
     },
     {
       "id": 31,
@@ -1108,7 +1108,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "Decode TWILIGHT"
+      "title": "Decode RAIN"
     },
     {
       "id": 32,
@@ -1138,7 +1138,7 @@
       "widgets_values": [
         "ez_style_04"
       ],
-      "title": "Save TWILIGHT"
+      "title": "Save RAIN"
     }
   ],
   "links": [
@@ -1500,7 +1500,7 @@
     },
     {
       "id": 10,
-      "title": "SHOT CURB",
+      "title": "SHOT FACADE",
       "bounding": [
         500,
         24,
@@ -1526,7 +1526,7 @@
     },
     {
       "id": 12,
-      "title": "SHOT DECK",
+      "title": "SHOT TERRACE",
       "bounding": [
         500,
         784,
@@ -1539,7 +1539,7 @@
     },
     {
       "id": 13,
-      "title": "SHOT TWILIGHT",
+      "title": "SHOT RAIN",
       "bounding": [
         500,
         1164,
@@ -1554,8 +1554,8 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-style-lock-lab-example",
-    "lab_note": "## klein-style-lock-lab-example\n\nFour Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`\u2026`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "Klein 4B four-still lake-house views, locked inventory",
+    "lab_note": "## klein-style-lock-lab-example\n\nFour Klein 4B stills of one charcoal-glass crown penthouse from new cameras (Prompt Join lock=view). Locked inventory repeats through the three-bay glass and in the living room. Prefixes `ez_style_01`\u2026`04`. Shots are independent T2I (same seed); they do not copy FACADE's framing. Same world bible as klein-dream-house-lab-example.\n\nIdentity-mode enhance is on for the bible (camera-free). Shot cards are not Klein-t2i-enhanced.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B four-still penthouse views, locked inventory",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
