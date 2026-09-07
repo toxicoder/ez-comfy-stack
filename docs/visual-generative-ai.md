@@ -12,7 +12,7 @@ tags: [comfyui, klein, wan, ltx, visual]
 - Klein → Wan → LTX pipeline
 - Seeded lab workflows and the iteration loop
 - Watching VHS MP4 output
-- Spark unified-memory patch and entrypoint sequence
+- Spark unified-memory patch, Kitchen timing table, and entrypoint sequence
 
 **What this enables**
 
@@ -127,7 +127,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
     | **wan-i2v-5s-lab-example** | Silent I2V smoke, 832×480, **121** frames @ 24 fps. MagCache **draft-only** (`extra.lab_magcache`) |
     | **wan-flf-5s-lab-example** | Fun InP first-last-frame 5 s (opt-in `download-wan --tier fun-inp`). MagCache off |
     | **wan-vace-join-lab-example** | Wan 2.1 VACE 1.3B 17-frame join (`1+8n`). Opt-in `download-wan --tier vace`. MagCache off |
-    | **wan-i2v-a14b-lab-example** | Optional A14B FP8 8-step silent hero (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `workflows/optional/` |
+    | **wan-i2v-a14b-lab-example** | Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `workflows/optional/` |
     | **wan-t2v-5s-lab-example** | Silent T2V smoke, 121 frames (LoadImage bypassed) |
     | **wan-i2v-shot-lab-example** | Concat-safe **120** frames + last-frame SaveImage. 90s shots, or prefix `ez_shot_01..06` |
 
@@ -215,7 +215,7 @@ After `download-models` + `start`, open ComfyUI and load from `user/default/work
 
 Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **wan-gif-loop-lab-example** emits `image/gif`.
 
-Optional Wan A14B is a Queue graph (`workflows/optional/wan-i2v-a14b-lab-example.json`): high-noise FP8, 8-step Lightning-style, MagCache **off**. Download `download-wan.sh run --tier a14b` and unload 5B first. Dual high/low experts are the full I2V recipe after both weights exist.
+Optional Wan A14B is a Queue graph (`workflows/optional/wan-i2v-a14b-lab-example.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
 
 ---
 
@@ -311,13 +311,22 @@ flowchart TB
 
 !!! warning "Time these on a real Spark after this image"
 
-    CI has no GPU. After `doctor` prints `attention: kitchen` (not `pytorch-fallback`), write wall-clock seconds here:
+    CI has no GPU and **does not invent seconds**. After `doctor` prints `attention: kitchen` (not `pytorch-fallback`), Queue the three smokes and record wall-clock:
 
-    | Smoke | Seconds (fill in) |
-    | --- | --- |
-    | Klein still-draft (4-step) | |
-    | Wan 2.2 TI2V-5B 5 s | |
-    | LTX-2.5 distilled 5 s AV | |
+    ```bash
+    ./scripts/manage.sh doctor          # attention: kitchen
+    # Queue klein-still-draft-lab-example, wan-i2v-5s-lab-example, ltx-i2v-5s-lab-example
+    ./scripts/manage.sh spark-timing record --klein N --wan N --ltx N
+    ./scripts/manage.sh spark-timing show
+    ```
+
+    JSON lands at `${COMFY_OUTPUT_DIR}/spark-timing.json` (host file, not git). `doctor` prints it when present. Recording **refuses** if compose is up and live attention is not `kitchen` (`pytorch-fallback`, sage, or unclassified). Stack down after a Kitchen run is OK.
+
+    | Smoke | Graph | This Spark |
+    | --- | --- | --- |
+    | Klein still-draft (4-step, 768×432) | `klein-still-draft-lab-example` | `spark-timing.json` → `klein_s` |
+    | Wan 2.2 TI2V-5B 5 s (832×480) | `wan-i2v-5s-lab-example` | `wan_s` |
+    | LTX-2.5 distilled 5 s AV (1280×704) | `ltx-i2v-5s-lab-example` | `ltx_s` |
 
 ### Container entrypoint sequence
 
@@ -364,6 +373,7 @@ First-run commands live on [Getting Started](getting-started.md). Day-to-day on 
 ./scripts/manage.sh doctor
 ./scripts/manage.sh status
 ./scripts/manage.sh logs
+./scripts/manage.sh spark-timing show
 ./scripts/manage.sh stop
 ```
 
