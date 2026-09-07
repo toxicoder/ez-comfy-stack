@@ -97,6 +97,7 @@ flowchart TB
     | **wan-gif-loop-lab-example** | wan | Wan 5B I2V GIF (49 frames @ 12 fps, ping-pong). Prefix `ez_gif_loop` |
     | **wan-i2v-5s-lab-example** | wan | Silent 5 s I2V smoke, 121 frames |
     | **ltx-i2v-5s-lab-example** | ltx | AV 5 s I2V, **1280×704** |
+    | **klein-platform-pack-lab-example** | klein | Six plates, one identity (`ez_pack_*`). Independent T2I; Ctrl+B unused groups |
 
 === "90s shorts"
 
