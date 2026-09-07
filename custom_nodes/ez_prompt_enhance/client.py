@@ -71,6 +71,9 @@ _LAB_LOOK_PHRASES = (
     "game-engine pre-rendered cutscene",
     "game-engine pre-rendered",
     "game-engine",
+    "photoreal cinematic still",
+    "photoreal still",
+    "photoreal shot",
 )
 STYLE_SYSTEM_ADDENDUM = (
     "The user message contains a Visual style block. That style is the only look. "

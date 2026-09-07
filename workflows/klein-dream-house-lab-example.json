@@ -172,7 +172,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering.",
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering.",
         true,
         "identity",
         "Instagram 4:5 still",
@@ -224,7 +224,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "live-action photoreal, Pixar rounded cartoon, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -292,7 +292,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -331,8 +331,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, golden-hour late summer. The three-bay glass shows the charcoal linen sofa and walnut floors inside. High clouds over unmarked spires.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, golden-hour late summer. The three-bay glass shows the sand linen sofa and teak floors inside. High clouds over a bright bay.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 01 city facade"
@@ -380,7 +380,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, golden-hour late summer. The three-bay glass shows the charcoal linen sofa and walnut floors inside. High clouds over unmarked spires."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, golden-hour late summer. The three-bay glass shows the sand linen sofa and teak floors inside. High clouds over a bright bay."
       ],
       "title": "Positive 01"
     },
@@ -551,8 +551,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From the unmarked canyon street, looking up at the same penthouse crown, 24mm, Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall tower among unmarked spires.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "From the unmarked canyon street, looking up at the same penthouse crown, 24mm, Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall tower among unmarked glass towers.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 02 canyon"
@@ -600,7 +600,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From the unmarked canyon street, looking up at the same penthouse crown, 24mm, Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall tower among unmarked spires."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From the unmarked canyon street, looking up at the same penthouse crown, 24mm, Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall tower among unmarked glass towers."
       ],
       "title": "Positive 02"
     },
@@ -771,8 +771,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the living room of the same penthouse, looking out the three-bay glass to the megacity, 24mm, Instagram 4:5. The linen sofa sits in the foreground on walnut floors, afternoon sky.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "From inside the living room of the same penthouse, looking out the three-bay glass to the bay, 24mm, Instagram 4:5. The linen sofa sits in the foreground on teak floors, afternoon sky.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 03 living"
@@ -820,7 +820,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the living room of the same penthouse, looking out the three-bay glass to the megacity, 24mm, Instagram 4:5. The linen sofa sits in the foreground on walnut floors, afternoon sky."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the living room of the same penthouse, looking out the three-bay glass to the bay, 24mm, Instagram 4:5. The linen sofa sits in the foreground on teak floors, afternoon sky."
       ],
       "title": "Positive 03"
     },
@@ -991,8 +991,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone island, blackened-steel cabinets, electric-cyan edge light, morning sidelight from the glass wall beside the living room.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone island, warm-teak cabinets, coral-teal edge light, morning sidelight from the glass wall beside the living room.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 04 kitchen"
@@ -1040,7 +1040,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone island, blackened-steel cabinets, electric-cyan edge light, morning sidelight from the glass wall beside the living room."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone island, warm-teak cabinets, coral-teal edge light, morning sidelight from the glass wall beside the living room."
       ],
       "title": "Positive 04"
     },
@@ -1211,8 +1211,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Walnut table, lamps lit, autumn twilight through the three-bay glass, high weather over the spires.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Teak table, lamps lit, golden-hour through the three-bay glass, high weather over the bay.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 05 dining"
@@ -1260,7 +1260,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Walnut table, lamps lit, autumn twilight through the three-bay glass, high weather over the spires."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Teak table, lamps lit, golden-hour through the three-bay glass, high weather over the bay."
       ],
       "title": "Positive 05"
     },
@@ -1431,8 +1431,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. Linen bedding, city window, first-blue dawn sky, unmarked spires.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. Linen bedding, bay window, tropical first-light sky, unmarked glass towers.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 06 bedroom"
@@ -1480,7 +1480,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. Linen bedding, city window, first-blue dawn sky, unmarked spires."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. Linen bedding, bay window, tropical first-light sky, unmarked glass towers."
       ],
       "title": "Positive 06"
     },
@@ -1652,7 +1652,7 @@
       },
       "widgets_values": [
         "From inside the spa bath of the same penthouse, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures. Soft daylight.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 07 bath"
@@ -1700,7 +1700,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the spa bath of the same penthouse, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures. Soft daylight."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. From inside the spa bath of the same penthouse, 35mm, Instagram 4:5. Freestanding stone tub facing frosted glass. Quiet unmarked fixtures. Soft daylight."
       ],
       "title": "Positive 07"
     },
@@ -1871,8 +1871,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Wraparound terrace of the same penthouse at dusk, 24mm, Instagram 4:5. Two blackened-steel chairs, fern living wall, neon-wet deck, unmarked spires, distant maglev, pink-gold sky.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "Wraparound terrace of the same penthouse at golden hour, 24mm, Instagram 4:5. Two teak chairs, fern living wall, palms on the deck, unmarked glass towers, bright bay, pink-gold sky.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 08 terrace"
@@ -1920,7 +1920,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Wraparound terrace of the same penthouse at dusk, 24mm, Instagram 4:5. Two blackened-steel chairs, fern living wall, neon-wet deck, unmarked spires, distant maglev, pink-gold sky."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Wraparound terrace of the same penthouse at golden hour, 24mm, Instagram 4:5. Two teak chairs, fern living wall, palms on the deck, unmarked glass towers, bright bay, pink-gold sky."
       ],
       "title": "Positive 08"
     },
@@ -2091,8 +2091,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Rain night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; the charcoal linen sofa reads as a silhouette through the three-bay glass. Rain on the terrace; penthouse volume unchanged.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "Tropical-storm night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; the sand linen sofa reads as a silhouette through the three-bay glass. Rain on the terrace; penthouse volume unchanged.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 09 rain night"
@@ -2140,7 +2140,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Rain night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; the charcoal linen sofa reads as a silhouette through the three-bay glass. Rain on the terrace; penthouse volume unchanged."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Tropical-storm night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; the sand linen sofa reads as a silhouette through the three-bay glass. Rain on the terrace; penthouse volume unchanged."
       ],
       "title": "Positive 09"
     },
@@ -2311,8 +2311,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Midsummer neighboring-tower view of the same compact penthouse crown among unmarked spires, 24mm, Instagram 4:5. Clear deep sky.",
-        "one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff",
+        "Midsummer neighboring-tower view of the same compact penthouse crown among unmarked glass towers over the bay, 24mm, Instagram 4:5. Clear deep sky.",
+        "one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff",
         "view"
       ],
       "title": "SHOT 10 tower view"
@@ -2360,7 +2360,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower. One wraparound terrace sits outside a three-bay black-framed city glass wall. Dark walnut floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. A fern living wall beside the glass. Electric-cyan edge light on blackened steel. Unmarked home, empty of lettering. Locked inventory (do not change): one charcoal linen sofa facing the three-bay glass, pale-stone kitchen island with blackened-steel cabinets, walnut dining table, linen bedding at the city-window bedroom, freestanding stone tub facing frosted glass, two blackened-steel terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Midsummer neighboring-tower view of the same compact penthouse crown among unmarked spires, 24mm, Instagram 4:5. Clear deep sky."
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Locked inventory (do not change): one sand linen sofa facing the three-bay glass, pale-stone kitchen island with warm-teak cabinets, teak dining table, linen bedding at the bay-window bedroom, freestanding stone tub facing frosted glass, two teak terrace chairs, compact unmarked data-staff. Keep this exact place and inventory. New photograph from a different camera and framing. Midsummer neighboring-tower view of the same compact penthouse crown among unmarked glass towers over the bay, 24mm, Instagram 4:5. Clear deep sky."
       ],
       "title": "Positive 10"
     },
@@ -3469,8 +3469,8 @@
   "extra": {
     "lab_profile": "klein-dream-house-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact charcoal-glass crown penthouse on a tall unmarked megacity tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
-    "lab_description": "Ten Instagram 4:5 Klein stills of one charcoal-glass crown penthouse; new cameras, locked inventory",
+    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_description": "Ten Instagram 4:5 Klein stills of one warm-glass crown penthouse; new cameras, locked inventory",
     "ds": {
       "scale": 1,
       "offset": [

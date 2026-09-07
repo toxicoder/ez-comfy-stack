@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Locked-camera weather B-roll. Rain streaks across a neon-wet rooftop terrace and an electric-cyan tech-mage coat at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds."
+        "Locked-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds."
       ],
       "title": "Positive"
     },
@@ -690,11 +690,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "Locked-camera weather B-roll. Rain streaks across a neon-wet rooftop terrace and an electric-cyan tech-mage coat at dusk leftovers. Soft wind, rain on metal, distant drip. Unmarked surfaces. No music and no score. Five seconds.",
+        "Locked-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds.",
         true,
         "t2v",
         "5 seconds, 24 fps",
-        "rain, wind, drip, no score",
+        "tropical rain, thunder far off, water on glass, palm slap, no score",
         "none"
       ],
       "title": "LTX Prompt Enhance"

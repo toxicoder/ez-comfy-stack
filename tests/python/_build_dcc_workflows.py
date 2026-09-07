@@ -75,24 +75,27 @@ def build_klein_from_clay() -> dict:
         "size": [1280, 704],
         "prefix": "ez_clay_hero",
     }
+    clay_finish = (
+        "Keep the clay blocking, camera, and silhouette from the start image. "
+        "Finish as a photoreal still: physically plausible light, natural materials, "
+        "unmarked surfaces empty of lettering. "
+        "Do not redesign layout."
+    )
     for node in graph["nodes"]:
         ntype = node.get("type")
         if ntype == "EZKleinPromptEnhance":
             widgets = list(node.get("widgets_values") or [])
             while len(widgets) < 5:
                 widgets.append("")
-            widgets[0] = (
-                "Keep the clay blocking, camera, and silhouette from the start image. "
-                "Finish as a HD 3D game-engine pre-rendered cutscene still: PBR materials, "
-                "cinematic three-point light, unmarked surfaces empty of lettering. "
-                "Do not redesign layout."
-            )
+            widgets[0] = clay_finish
             widgets[1] = True
             widgets[2] = "edit"
             widgets[3] = "YouTube 16:9 still from clay"
             widgets[4] = "none"
             node["widgets_values"] = widgets
             node["title"] = "Klein Prompt Enhance (edit)"
+        elif ntype == "CLIPTextEncode" and node.get("title") != "Negative":
+            node["widgets_values"] = [clay_finish]
         elif ntype == "SaveImage":
             node["widgets_values"] = ["ez_clay_hero"]
             node["title"] = "Save clay hero"

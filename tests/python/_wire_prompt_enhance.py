@@ -10,13 +10,18 @@ import json
 from pathlib import Path
 
 from _lab_theme import (
+    GOSEE_LTX_I2V_01,
+    GOSEE_WAN_I2V_01,
     KLEIN_NEG_STILL,
     KLEIN_STILL,
     LTX_AUDIO_HINT,
     LTX_I2V,
     LTX_T2V,
+    LTX_TALKING_AUDIO,
+    LTX_TALKING_HEAD,
     WAN_I2V,
     WAN_T2V,
+    WAN_VACE,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -25,38 +30,9 @@ WF = ROOT / "workflows"
 KLEIN_NEG_FILM = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
-KLEIN_GOSEE = (
-    "A HD 3D game-engine pre-rendered cutscene still, first-person body-cam at dusk. "
-    "Unmarked electric-cyan coat sleeves with circuit-thread seams and matching gloves "
-    "occupy the lower edges of the frame, hands pumping as holographic glyph motes bloom "
-    "at the wrists. Eye-level 24mm body-cam, YouTube 16:9."
-)
-KLEIN_STILLHERE = (
-    "Third-person household morning still. One cream ceramic mug with a hairline chip "
-    "on the rim sits on a honey-oak table in first light. White subway tile backsplash, "
-    "one linen curtain at a single window. Unmarked kitchen, empty of brands. The mug "
-    "is the identity lock. SFW, no real likenesses."
-)
-KLEIN_SWITCHYARD = (
-    "Night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast "
-    "under one yard lamp. Photoreal, empty of railroad company marks. Identity lock for the short."
-)
-WAN_GOSEE_I2V = (
-    "First-person body-cam high-speed parkour sprint across a neon-wet terrace. "
-    "Electric-cyan sleeves and gloves pump at the frame edges, glyph motes at the wrists. "
-    "Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, "
-    "locked identity, no cut."
-)
 WAN_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, "
     "rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
-)
-LTX_GOSEE_I2V = (
-    "The start image holds as the first frame. The first-person body-cam surges into a "
-    "high-speed parkour sprint across the neon-wet terrace, electric-cyan sleeves and "
-    "matching gloves pumping hard at the lower edges while holographic glyph motes streak "
-    "from the wrists. Dusk wind shoves the coat, each footfall ticks wet grit, and breath "
-    "sits close to the lens. Continuous body-cam tracking, no cut. No music and no score."
 )
 BLURB = (
     "Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, "
@@ -664,6 +640,10 @@ def main() -> None:
     klein(WF / "klein-still-hero-lab-example.json", KLEIN_STILL, neg=KLEIN_NEG_STILL)
     wan_i2v(WF / "wan-i2v-5s-lab-example.json", WAN_I2V)
     wan_t2v(WF / "wan-t2v-5s-lab-example.json")
+    wan_i2v(WF / "wan-i2v-shot-lab-example.json", GOSEE_WAN_I2V_01)
+    wan_i2v(WF / "wan-flf-5s-lab-example.json", WAN_I2V)
+    wan_i2v(WF / "wan-vace-join-lab-example.json", WAN_VACE)
+    wan_i2v(WF / "optional" / "wan-i2v-a14b-lab-example.json", WAN_I2V)
     ltx_i2v(
         WF / "ltx-i2v-5s-lab-example.json",
         LTX_I2V,
@@ -671,6 +651,18 @@ def main() -> None:
         "Motion / prompt",
     )
     ltx_t2v(WF / "ltx-t2v-5s-lab-example.json")
+    ltx_i2v(
+        WF / "ltx-i2v-shot-lab-example.json",
+        GOSEE_LTX_I2V_01,
+        LTX_AUDIO_HINT,
+        "Motion + audio",
+    )
+    ltx_i2v(
+        WF / "klein-talking-head-lab-example.json",
+        LTX_TALKING_HEAD,
+        LTX_TALKING_AUDIO,
+        "Motion / prompt",
+    )
     print("wired prompt-enhance nodes")
 
 

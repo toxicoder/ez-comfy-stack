@@ -166,14 +166,18 @@ def test_apply_style_to_prompt_overrides_lab_3d() -> None:
     assert "japanese anime" in anime.lower() or "cel-shaded" in anime.lower()
     assert "game-engine" not in anime.lower()
     assert client.apply_style_to_prompt(src, "none") == src
+    photo = "A photoreal still of a tropical rooftop."
+    painted = client.apply_style_to_prompt(photo, "watercolor_illustration")
+    assert "photoreal still" not in painted.lower()
+    assert "transparent watercolor" in painted.lower() or "wet-into-wet" in painted.lower()
 
 
 def test_strip_fences_quotes_and_think() -> None:
-    fenced = "```text\nA cyberpunk tech wizard stands on a rooftop terrace.\n```"
-    assert client.strip_model_wrapping(fenced) == "A cyberpunk tech wizard stands on a rooftop terrace."
-    assert client.strip_model_wrapping('"A cyberpunk tech wizard."') == "A cyberpunk tech wizard."
-    think = "<think>plan the shot</think>\nA cyberpunk tech wizard stands on a rooftop terrace."
-    assert client.strip_model_wrapping(think) == "A cyberpunk tech wizard stands on a rooftop terrace."
+    fenced = "```text\nA techno wizard stands on a rooftop terrace.\n```"
+    assert client.strip_model_wrapping(fenced) == "A techno wizard stands on a rooftop terrace."
+    assert client.strip_model_wrapping('"A techno wizard."') == "A techno wizard."
+    think = "<think>plan the shot</think>\nA techno wizard stands on a rooftop terrace."
+    assert client.strip_model_wrapping(think) == "A techno wizard stands on a rooftop terrace."
 
 
 def test_web_directory_and_preview_js() -> None:
@@ -293,10 +297,10 @@ def test_success_strips_fences() -> None:
     with patch.object(
         client,
         "complete",
-        return_value=("A HD 3D game-engine pre-rendered cutscene still of a cyberpunk tech wizard.", None),
+        return_value=("A photoreal still of a techno wizard.", None),
     ) as complete:
         out = client.enhance_prompt("sys", "hero still", enhance=True, fallback="hero still")
-    assert out.text == "A HD 3D game-engine pre-rendered cutscene still of a cyberpunk tech wizard."
+    assert out.text == "A photoreal still of a techno wizard."
     assert out.reason is None
     assert out.preview == out.text
     complete.assert_called_once()
@@ -384,8 +388,8 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein["widgets_values"][1] is True
     assert klein["widgets_values"][-1] == "none"
-    assert "HD 3D game-engine pre-rendered cutscene still" in klein["widgets_values"][0]
-    assert "tech wizard" in klein["widgets_values"][0]
+    assert "photoreal still" in klein["widgets_values"][0]
+    assert "techno wizard" in klein["widgets_values"][0]
     wan = next(n for n in gif["nodes"] if n.get("type") == "EZWanPromptEnhance")
     assert wan["widgets_values"][2] == "i2v"
     motion = wan["widgets_values"][0].lower()
@@ -394,14 +398,14 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     ident = next(n for n in house["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     ident_text = ident["widgets_values"][0]
     ident_l = ident_text.lower()
-    assert "hd 3d game-engine pre-rendered cutscene" in ident_l
-    assert "charcoal-glass" in ident_l
+    assert "photoreal still" in ident_l
+    assert "warm-glass" in ident_l
     assert "crown penthouse" in ident_l
     assert "wraparound terrace" in ident_l
     assert "three-bay" in ident_l
-    assert "walnut" in ident_l
+    assert "teak" in ident_l
     assert "fern" in ident_l or "living wall" in ident_l
-    assert "electric-cyan" in ident_l
+    assert "coral-teal" in ident_l
     assert "24mm" not in ident_l
     assert "golden-hour" not in ident_l and "golden hour" not in ident_l
     assert "cedar" not in ident_l
@@ -496,9 +500,9 @@ def test_node_mappings_modes_preview_and_style() -> None:
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
     assert len(styles) == 51
-    off = klein.run("A cyberpunk tech wizard.", False, "t2i", "YouTube 16:9 still")
-    assert off["result"] == ("A cyberpunk tech wizard.",)
-    assert off["ui"]["text"][0] == "A cyberpunk tech wizard."
+    off = klein.run("A techno wizard.", False, "t2i", "YouTube 16:9 still")
+    assert off["result"] == ("A techno wizard.",)
+    assert off["ui"]["text"][0] == "A techno wizard."
     assert "[passthrough:" not in off["ui"]["text"][0]
     assert off["ui"]["passthrough"][0] == "enhance off"
     styled_off = klein.run("A rooftop.", False, "t2i", "", "photorealistic")

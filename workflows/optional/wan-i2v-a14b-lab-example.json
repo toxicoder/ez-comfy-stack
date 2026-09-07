@@ -229,7 +229,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Slow cinematic dolly-in toward the tech wizard. Coat hem and holographic glyph motes drift. Keep the start-image identity locked. One continuous five-second take."
+        "Slow cinematic dolly-in toward the techno wizard. Coat hem and holographic glyph motes drift in a warm bay breeze. Palms and unmarked glass towers hold over a bright waterfront. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps."
       ],
       "title": "Motion / prompt"
     },
@@ -614,7 +614,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Slow cinematic dolly-in toward the tech wizard. Coat hem and holographic glyph motes drift. Keep the start-image identity locked. One continuous five-second take.",
+        "Slow cinematic dolly-in toward the techno wizard. Coat hem and holographic glyph motes drift in a warm bay breeze. Palms and unmarked glass towers hold over a bright waterfront. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.",
         true,
         "i2v",
         "5 seconds, 24 fps",

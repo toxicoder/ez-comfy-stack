@@ -144,7 +144,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering.",
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering.",
         true,
         "identity",
         "YouTube 16:9 still",
@@ -189,7 +189,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "live-action photoreal, Pixar rounded cartoon, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
       "title": "Negative"
     },
@@ -290,7 +290,7 @@
       },
       "widgets_values": [
         "35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9.",
-        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
+        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
         "view"
       ],
       "title": "SHOT MEDIUM"
@@ -338,7 +338,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place and inventory. New photograph from a different camera and framing. 35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. 35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9."
       ],
       "title": "Positive MEDIUM"
     },
@@ -510,7 +510,7 @@
       },
       "widgets_values": [
         "24mm wide establishing of the same rooftop and wizard, lots of city and sky.",
-        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
+        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
         "view"
       ],
       "title": "SHOT WIDE"
@@ -558,7 +558,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place and inventory. New photograph from a different camera and framing. 24mm wide establishing of the same rooftop and wizard, lots of city and sky."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. 24mm wide establishing of the same rooftop and wizard, lots of city and sky."
       ],
       "title": "Positive WIDE"
     },
@@ -730,7 +730,7 @@
       },
       "widgets_values": [
         "50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials.",
-        "unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze",
+        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
         "view"
       ],
       "title": "SHOT CLOSE"
@@ -778,7 +778,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked electric-cyan tech-mage coat with circuit-thread seams, floating unmarked holographic glyph rings, compact unmarked data-staff, neon-wet megacity rooftop terrace, unmarked spires in volumetric haze. Keep this exact place and inventory. New photograph from a different camera and framing. 50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. 50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials."
       ],
       "title": "Positive CLOSE"
     },

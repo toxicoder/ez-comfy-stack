@@ -17,12 +17,13 @@ from _lab_layout import (
     ensure_group_title_inset,
     group as _group,
 )
+from _lab_theme import LAZY_FORGE
 from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 
-LAZY = "A cyberpunk tech wizard on a neon-wet rooftop at dusk."
+LAZY = LAZY_FORGE
 
 FORGE_NOTE = """## prompt-forge-lab-example
 
