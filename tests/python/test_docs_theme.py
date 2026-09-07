@@ -64,9 +64,21 @@ def test_extra_css_compacts_header_without_hiding_chrome() -> None:
     assert "translateY(-100%" not in css.replace(" ", "")
 
 
+def test_extra_css_bumps_typeset_font_not_html() -> None:
+    """Article copy is slightly larger than Material 0.8rem; chrome is not."""
+    css = _read(EXTRA_CSS)
+    assert re.search(
+        r"\.md-typeset\s*\{[^}]*font-size:\s*0\.875rem",
+        css,
+        re.S,
+    )
+    assert re.search(r"html\s*\{[^}]*font-size", css, re.S) is None
+
+
 def test_conventions_document_sticky_header() -> None:
     """Docs publish notes the sticky-tabs contract for later edits."""
     text = _read(CONVENTIONS)
     assert "navigation.tabs.sticky" in text
     assert "header.autohide" in text
     assert "stylesheets/extra.css" in text
+    assert "0.875rem" in text
