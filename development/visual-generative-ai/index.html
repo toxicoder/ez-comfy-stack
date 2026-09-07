@@ -1468,7 +1468,7 @@
 </tr>
 <tr>
 <td><strong>klein-still-hero-lab-example</strong></td>
-<td>Same prompt + seed, <strong>1280×720</strong>, more steps, prefix <code>ez_still_hero</code></td>
+<td>Same prompt + seed, <strong>1280×704</strong> (LTX VAE grid), more steps, prefix <code>ez_still_hero</code>. Enhance <strong>off</strong>.</td>
 </tr>
 </tbody>
 </table>
@@ -1484,7 +1484,11 @@
 <tbody>
 <tr>
 <td><strong>wan-i2v-5s-lab-example</strong></td>
-<td>Silent I2V smoke, 832×480, <strong>121</strong> frames @ 24 fps</td>
+<td>Silent I2V smoke, 832×480, <strong>121</strong> frames @ 24 fps. MagCache <strong>draft-only</strong> (<code>extra.lab_magcache</code>)</td>
+</tr>
+<tr>
+<td><strong>wan-flf-5s-lab-example</strong></td>
+<td>Fun InP first-last-frame 5 s (opt-in <code>download-wan --tier fun-inp</code>). MagCache off</td>
 </tr>
 <tr>
 <td><strong>wan-t2v-5s-lab-example</strong></td>
@@ -1518,7 +1522,7 @@
 </table>
 <div class="admonition warning">
 <p class="admonition-title">LTX width/height must be divisible by 32</p>
-<p>Broadcast 720p (<strong>1280×720</strong>) and 1080p (<strong>1920×1080</strong>) are <strong>not</strong> native LTX VAE sizes (720/16=45, then the next <code>/2</code> patch fails). Lab landscape graphs use <strong>1280×704</strong>. Klein stills may stay 1280×720; I2V center-crops. Typing 720 or 1080 on LTX widgets is <strong>auto-snapped</strong> (704 / 1056) by <code>ez_ltx_spatial</code> — prefer 704 so you skip the extra crop. Portrait shorts I2V is <strong>768×1280</strong>. See <a href="../troubleshooting/">Troubleshooting</a>.</p>
+<p>Broadcast 720p (<strong>1280×720</strong>) and 1080p (<strong>1920×1080</strong>) are <strong>not</strong> native LTX VAE sizes (720/16=45, then the next <code>/2</code> patch fails). Lab landscape graphs use <strong>1280×704</strong>. Klein <strong>I2V feeders</strong> (<code>klein-still-hero</code>, 90s film identity) are <strong>1280×704</strong>. Thumbnails/end-cards may stay 1280×720. Typing 720 or 1080 on LTX widgets is <strong>auto-snapped</strong> (704 / 1056) by <code>ez_ltx_spatial</code> — prefer 704 so you skip the extra crop. Portrait shorts I2V is <strong>768×1280</strong>. See <a href="../troubleshooting/">Troubleshooting</a>.</p>
 </div>
 </div>
 <div class="tabbed-block">
@@ -1747,7 +1751,7 @@
 <li>Load <strong>klein-still-draft-lab-example</strong> → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).</li>
 <li>Pick a frame under <code>${COMFY_OUTPUT_DIR}</code> (<code>ez_still_draft_*.png</code>).</li>
 <li>Load <strong>wan-i2v-5s-lab-example</strong> → set LoadImage to that PNG (or leave <code>example.png</code> to smoke-test) → edit <strong>Motion / prompt</strong> only → Queue ~5 s silent.</li>
-<li>Optional audio: <strong>ltx-i2v-5s-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV at <strong>1280×704</strong> (I2V center-crops a 1280×720 still).</li>
+<li>Optional audio: <strong>ltx-i2v-5s-lab-example</strong>, same first frame, same seed note, Queue ~5 s AV at <strong>1280×704</strong>.</li>
 <li>
 <p>Short six-shot demo: Queue <strong>wan-i2v-shot-lab-example</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--yes

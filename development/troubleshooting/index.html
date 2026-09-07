@@ -1615,6 +1615,21 @@
 <td><code>./scripts/manage.sh reap-models --plan</code> then <code>--apply --class superseded --quarantine --yes</code>. <code>cleanup</code> does <strong>not</strong> delete weights. After two weeks: <code>reap-models drop-quarantine --older-than 14d --yes</code></td>
 </tr>
 <tr>
+<td>Fun InP / SeedVR2 filled the box</td>
+<td>Opt-in ~47 GB / ~15 GB packs</td>
+<td><code>reap-models --plan</code>; <code>--drop-pack</code> cannot eat shared VAE. Unload LTX before Fun InP. SeedVR2 is post-concat only</td>
+</tr>
+<tr>
+<td><code>film-proxies</code> / NVENC preview refused</td>
+<td>Compose still up</td>
+<td><code>./scripts/manage.sh stop</code> then retry. Proxies never rewrite masters</td>
+</tr>
+<tr>
+<td>MagCache node missing on Wan draft</td>
+<td>Fail-soft clone; upstream dropdown may lack <code>wan2.2_ti2v_5B</code></td>
+<td>Graph still Queues without MagCache. See <code>extra.lab_magcache</code> on <code>wan-i2v-5s-lab-example</code>. Hero LTX graphs must not contain MagCache</td>
+</tr>
+<tr>
 <td>Empty models in UI</td>
 <td>Downloads not run</td>
 <td><code>./scripts/utilities/download-image.sh status --tier fast</code>; <code>download-wan.sh status --tier 5b</code>; <code>download-ltx.sh status --tier 2.5</code>; check <code>${MODELS_DIR}</code> mount</td>
@@ -1672,7 +1687,7 @@
 <tr>
 <td><code>LTXVImgToVideo</code> <code>einops.EinopsError</code> / <code>can't divide axis of length 45</code> (or 33)</td>
 <td>LTX video VAE is <strong>32×</strong> spatial. Broadcast <strong>720</strong> and <strong>1080</strong> are not divisible by 32 (720/16=45, then the next <code>/2</code> patch fails)</td>
-<td>Pull latest and restart so <code>ez_ltx_spatial</code> is installed — Queue <strong>auto-snaps</strong> 720→704 and 1080→1056 (stderr <code>[ez_ltx_spatial]</code>). Lab graphs stay <strong>1280×704</strong>. Klein 1280×720 stills are fine. Prefer not to type 720/1080 so you skip the extra crop. Portrait lab is <strong>768×1280</strong>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_ltx_spatial/__init__.py</code>. If the pack is missing, set widgets to a ÷32 pair and re-open <strong>ltx-*-lab-example</strong></td>
+<td>Pull latest and restart so <code>ez_ltx_spatial</code> is installed — Queue <strong>auto-snaps</strong> 720→704 and 1080→1056 (stderr <code>[ez_ltx_spatial]</code>). Lab graphs stay <strong>1280×704</strong>. Klein I2V feeders are <strong>1280×704</strong>. Prefer not to type 720/1080 so you skip the extra crop. Portrait lab is <strong>768×1280</strong>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_ltx_spatial/__init__.py</code>. If the pack is missing, set widgets to a ÷32 pair and re-open <strong>ltx-*-lab-example</strong></td>
 </tr>
 <tr>
 <td>Missing <code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code> in LTX graphs</td>

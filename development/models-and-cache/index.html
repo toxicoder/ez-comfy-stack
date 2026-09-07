@@ -1569,6 +1569,11 @@
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>./scripts/manage.sh<span class="w"> </span>reap-models<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>junk<span class="w"> </span>--yes
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>./scripts/manage.sh<span class="w"> </span>reap-models<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>superseded<span class="w"> </span>--quarantine<span class="w"> </span>--yes
 </code></pre></div>
+<p>Opt-in packs (not <code>download-models</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>fun-inp<span class="w">   </span><span class="c1"># Fun InP A14B FLF, ~47 GB Apache</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>./scripts/manage.sh<span class="w"> </span>download-restore<span class="w"> </span>--tier<span class="w"> </span>seedvr2-3b<span class="w">   </span><span class="c1"># SeedVR2-3B post-concat, ~15 GB Apache</span>
+</code></pre></div>
+<p>Unload LTX before Fun InP. SeedVR2 is restore-only after concat. <code>reap-models --drop-pack</code> cannot eat shared VAEs.</p>
 <p><code>manage.sh cleanup</code> is <strong>volume-only</strong> (named volume <code>comfy-state</code>). It does <strong>not</strong> delete weights. <code>reap-models --plan</code> is the default; <code>--apply</code> requires <code>--yes</code>. Shared files (<code>flux2-vae</code>, ACE-Step AIO) stay in the keep-set so <code>--drop-pack</code> cannot eat them.</p>
 <p><code>download-models</code> links weights into <code>comfy/*</code> with <strong>relative</strong> symlinks (e.g. <code>../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors</code>). That way the same tree resolves on the host (<code>MODELS_DIR=/mnt/models</code>) and inside the container (bind-mounted at <code>/models</code>). Absolute <code>/mnt/models/…</code> file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.</p>
 <p>This matches the lab hostPath pattern so K8s and Docker demos can share weights.</p>
@@ -1591,26 +1596,26 @@
   Comfy --&gt; Ckpt["checkpoints/ · opt-in ACE-Step AIO"]</code></pre>
 <hr />
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/manage.sh<span class="w"> </span>download-models
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># Exits non-zero until every lab basename under MODELS_DIR/comfy is present</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># Klein TE + flux2-vae use file-level readiness so a TE-only</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># partial cannot cache-hit skip the VAE.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>download-models
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Exits non-zero until every lab basename under MODELS_DIR/comfy is present</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Klein TE + flux2-vae use file-level readiness so a TE-only</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># partial cannot cache-hit skip the VAE.</span>
 </code></pre></div>
 <p>Or per utility:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/utilities/download-image.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>fast<span class="w"> </span>--json
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>5b<span class="w"> </span>--json
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5<span class="w"> </span>--json
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>./scripts/utilities/download-image.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>fast
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>5b
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>./scripts/utilities/download-llm.sh<span class="w"> </span>run
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w"> </span>--json
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>./scripts/utilities/download-music.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>turbo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>./scripts/utilities/download-image.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>fast<span class="w"> </span>--json
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>5b<span class="w"> </span>--json
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5<span class="w"> </span>--json
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>./scripts/utilities/download-image.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>fast
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>5b
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>./scripts/utilities/download-llm.sh<span class="w"> </span>run
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w"> </span>--json
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>./scripts/utilities/download-music.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>turbo
 </code></pre></div>
 <p><code>--tier fast</code> also pulls Klein companions (<code>te</code> + <code>vae</code>). Optional stills: <code>--tier nvfp4</code> / <code>--tier base</code> / <code>--tier zimage</code>. Optional motion: <code>download-wan.sh run --tier a14b</code>. Optional LTX fallback: <code>download-ltx.sh run --tier 2.3</code>.</p>
 <p>Downloads use the modern <strong><code>hf download</code></strong> CLI (not deprecated <code>huggingface-cli</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>hf<span class="w"> </span><span class="o">||</span><span class="w"> </span>pipx<span class="w"> </span>install<span class="w"> </span>huggingface_hub
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># or: pip install -U 'huggingface_hub[cli]'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>hf<span class="w"> </span><span class="o">||</span><span class="w"> </span>pipx<span class="w"> </span>install<span class="w"> </span>huggingface_hub
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># or: pip install -U 'huggingface_hub[cli]'</span>
 </code></pre></div>
 <p>Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. <code>HF_PROGRESS=0</code> turns progress lines off; <code>HF_PROGRESS_INTERVAL=10</code> sets the tick (seconds).</p>
 <h3 id="expected-basenames-after-download-models-lab-workflows">Expected basenames after <code>download-models</code> (lab workflows)<a class="headerlink" href="#expected-basenames-after-download-models-lab-workflows" title="Permanent link">&para;</a></h3>
@@ -1681,8 +1686,8 @@
 </tbody>
 </table>
 <p>Opt-in music (<code>./scripts/manage.sh download-music --tier turbo</code>, <strong>not</strong> <code>download-models</code>). Turbo <strong>reuses</strong> the podcast acestep snapshot — do not pull the ~10 GB AIO twice:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>./scripts/manage.sh<span class="w"> </span>download-music<span class="w"> </span>--tier<span class="w"> </span>turbo
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w"> </span>--json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>./scripts/manage.sh<span class="w"> </span>download-music<span class="w"> </span>--tier<span class="w"> </span>turbo
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w"> </span>--json
 </code></pre></div>
 <table>
 <thead>
@@ -1776,7 +1781,7 @@
 </tr>
 <tr>
 <td><code>klein-still-hero-lab-example.json</code></td>
-<td>Same prompt/seed, 1280×720</td>
+<td>Same prompt/seed, 1280×704 (LTX VAE grid)</td>
 </tr>
 <tr>
 <td><code>klein-still-daily-lab-example.json</code></td>
@@ -1944,11 +1949,11 @@
 <p>MiniMax H3 is <strong>banned</strong> (US Excluded Territory). See <a href="../licenses/">Model licenses</a>. <code>download-models</code> refuses <code>--with-h3</code>.</p>
 <h3 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h3>
 <p><strong>LTX-2.5</strong> (<code>Lightricks/LTX-2.5</code>) is gated. Klein 4B distilled and Wan 2.2 5B are Apache and do not need a license click. A token in <code>.env</code> is <strong>not</strong> the same as accepting the Lightricks license.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># .env</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_...
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># or: hf auth login</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>hf<span class="w"> </span>auth<span class="w"> </span>whoami
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># .env</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_...
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># or: hf auth login</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>hf<span class="w"> </span>auth<span class="w"> </span>whoami
 </code></pre></div>
 <p>Fine-grained tokens need <strong>gated repo</strong> read. <code>download-models</code> passes <code>--token</code> from <code>HF_TOKEN</code> so it wins over a leftover <code>hf auth login</code>.</p>
 <h3 id="disk-headroom">Disk headroom<a class="headerlink" href="#disk-headroom" title="Permanent link">&para;</a></h3>
@@ -1998,18 +2003,18 @@
 <details class="tip">
 <summary>Cleanup extra LTX monorepo files</summary>
 <p>If an older run pulled the full <code>Kijai/LTX2.3_comfy</code> snapshot into a 2.3/balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Preview (default)</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Delete extras (keeps FP8 transformer + TE + VAEs only)</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3<span class="w"> </span>--yes
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Preview (default)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Delete extras (keeps FP8 transformer + TE + VAEs only)</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3<span class="w"> </span>--yes
 </code></pre></div>
 <p>Does <strong>not</strong> touch Klein, Wan, or other trees under <code>MODELS_DIR</code>.</p>
 </details>
 <details class="warning">
 <summary>Full monorepo escape hatch</summary>
 <p>Operators who really want every precision/lora:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nv">LTX_FULL_REPO</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nv">LTX_FULL_REPO</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
 </code></pre></div>
 <p>After a full-repo mistake, use <code>cleanup --yes</code> instead of wiping all of <code>MODELS_DIR</code>.</p>
 </details>
