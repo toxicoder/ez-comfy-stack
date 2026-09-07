@@ -1618,7 +1618,12 @@
 <tr>
 <td>10–20× slow / mushy video vs a 4090</td>
 <td>Silent PyTorch attention fallback (Kitchen/Sage not active)</td>
-<td><code>./scripts/manage.sh doctor</code> must <strong>not</strong> say <code>attention: pytorch-fallback</code> on a running Spark. Logs should contain <code>Using Comfy Kitchen attention</code>. Launch uses <code>--use-ck-attention</code> (never <code>--use-sage-attention</code> next to it). Do <strong>not</strong> <code>pip install sageattention</code> from PyPI on aarch64</td>
+<td><code>./scripts/manage.sh doctor</code> must <strong>not</strong> say <code>attention: pytorch-fallback</code> on a running Spark. Logs should contain <code>Using Comfy Kitchen attention</code>. Launch uses <code>--use-ck-attention</code> (never <code>--use-sage-attention</code> next to it). Do <strong>not</strong> <code>pip install sageattention</code> from PyPI on aarch64. Do <strong>not</strong> <code>spark-timing record</code> on that path (the command refuses)</td>
+</tr>
+<tr>
+<td>Empty Kitchen timing table</td>
+<td>CI has no GPU; seconds are operator-measured</td>
+<td><code>attention: kitchen</code>, Queue the three smokes, then <code>./scripts/manage.sh spark-timing record --klein N --wan N --ltx N</code>. File: <code>${COMFY_OUTPUT_DIR}/spark-timing.json</code>. Record refuses if compose is up and attention is not <code>kitchen</code></td>
 </tr>
 <tr>
 <td>SSH drop mid-90s film</td>

@@ -1742,7 +1742,7 @@
 </ul>
 <p>Prefer <code>./scripts/manage.sh setup</code> first. Copy-paste fixes: <a href="../troubleshooting/">Troubleshooting</a>.</p>
 </div>
-<p><code>doctor</code> also prints the <strong>license policy one-liner</strong>, image tag for this git branch, and JSON status from <code>download-image</code> / <code>download-wan</code> / <code>download-ltx</code> / <code>download-llm</code>. Analog <strong>podcast</strong> JSON is printed as a soft line — a missing podcast pack is <strong>not</strong> a doctor failure.</p>
+<p><code>doctor</code> also prints the <strong>license policy one-liner</strong>, image tag for this git branch, JSON status from <code>download-image</code> / <code>download-wan</code> / <code>download-ltx</code> / <code>download-llm</code>, and the Kitchen <strong>spark-timing</strong> line (<code>none</code> until you record). Analog <strong>podcast</strong> JSON is printed as a soft line — a missing podcast pack is <strong>not</strong> a doctor failure.</p>
 <hr />
 <h2 id="download-models">Download models<a class="headerlink" href="#download-models" title="Permanent link">&para;</a></h2>
 <p>LTX-2.5 is <strong>gated</strong>. Klein 4B and Wan 5B are Apache — a token in <code>.env</code> is <strong>not</strong> the same as accepting the Lightricks license. Policy: <a href="../licenses/">Model licenses</a>.</p>
@@ -1972,7 +1972,7 @@
 </tr>
 <tr>
 <td><code>doctor</code></td>
-<td>Preflight (docker, GPU, RAM/disk, dirs, license one-liner)</td>
+<td>Preflight (docker, GPU, RAM/disk, dirs, license one-liner, spark-timing)</td>
 </tr>
 <tr>
 <td><code>status [--json]</code></td>
@@ -2047,6 +2047,10 @@
 <td>Opt-in LongCat MIT / DreamX-Creator Apache</td>
 </tr>
 <tr>
+<td><code>spark-timing</code></td>
+<td>Kitchen wall-clock table (<code>record --klein N --wan N --ltx N</code>)</td>
+</tr>
+<tr>
 <td><code>models-status</code> / <code>reap-models</code></td>
 <td>Disk bible / cache cleanup (never <code>cleanup</code> weights)</td>
 </tr>
@@ -2086,7 +2090,7 @@
 <details class="tip">
 <summary>Dev: edit scripts without rebuilding</summary>
 <p>Compose bind-mounts <code>docker/entrypoint.sh</code>, <code>docker/install-comfy.sh</code>, <code>docker/install-comfy/</code>, <code>docker/patch_get_free_memory.py</code>, and <code>docker/patch_unified_memory_copy.py</code> into the container.</p>
-<p>Default attention is <strong>Comfy Kitchen</strong> (<code>--use-ck-attention</code>). <code>doctor</code> reports <code>attention: kitchen|sage|pytorch-fallback|unknown</code>. On a running Spark, <code>pytorch-fallback</code> means a 10–20× slow path — see <a href="../troubleshooting/">Troubleshooting</a>.</p>
+<p>Default attention is <strong>Comfy Kitchen</strong> (<code>--use-ck-attention</code>). <code>doctor</code> reports <code>attention: kitchen|sage|pytorch-fallback|unknown</code>. On a running Spark, <code>pytorch-fallback</code> means a 10–20× slow path — see <a href="../troubleshooting/">Troubleshooting</a>. After Kitchen is live, Queue the three smokes and <code>./scripts/manage.sh spark-timing record --klein N --wan N --ltx N</code> (CI does not invent seconds).</p>
 <p>Change those files on the host, then restart the stack — <strong>no multi‑GB image rebuild</strong>.</p>
 <p>Rebuild only when you need a new baked <code>/opt/comfy-prebuilt</code> tree (torch / Comfy / nodes): <a href="./#build-the-image-locally-optional">build the image locally</a> or publish.</p>
 <p>See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds-pulls">Models &amp; Cache</a> for what invalidates which layers.</p>

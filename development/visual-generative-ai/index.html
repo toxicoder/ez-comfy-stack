@@ -1421,7 +1421,7 @@
 <li>Klein → Wan → LTX pipeline</li>
 <li>Seeded lab workflows and the iteration loop</li>
 <li>Watching VHS MP4 output</li>
-<li>Spark unified-memory patch and entrypoint sequence</li>
+<li>Spark unified-memory patch, Kitchen timing table, and entrypoint sequence</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
@@ -1588,7 +1588,7 @@
 </tr>
 <tr>
 <td><strong>wan-i2v-a14b-lab-example</strong></td>
-<td>Optional A14B FP8 8-step silent hero (<code>download-wan --tier a14b</code>). MagCache off. Unload 5B first. Under <code>workflows/optional/</code></td>
+<td>Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (<code>download-wan --tier a14b</code>). MagCache off. Unload 5B first. Under <code>workflows/optional/</code></td>
 </tr>
 <tr>
 <td><strong>wan-t2v-5s-lab-example</strong></td>
@@ -1843,7 +1843,7 @@
 </div>
 </div>
 <p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with <strong><code>save_output: true</code></strong>; after Queue, open <strong>Save video (MP4) — open node for preview</strong>. LTX graphs decode audio (<code>LTXVAudioVAEDecode</code>) into the MP4. <strong>wan-gif-loop-lab-example</strong> emits <code>image/gif</code>.</p>
-<p>Optional Wan A14B is a Queue graph (<code>workflows/optional/wan-i2v-a14b-lab-example.json</code>): high-noise FP8, 8-step Lightning-style, MagCache <strong>off</strong>. Download <code>download-wan.sh run --tier a14b</code> and unload 5B first. Dual high/low experts are the full I2V recipe after both weights exist.</p>
+<p>Optional Wan A14B is a Queue graph (<code>workflows/optional/wan-i2v-a14b-lab-example.json</code>): <strong>both</strong> high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache <strong>off</strong>) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download <code>download-wan.sh run --tier a14b</code> and unload 5B first.</p>
 <hr />
 <h2 id="iteration-loop-youtube-169">Iteration loop (YouTube 16:9)<a class="headerlink" href="#iteration-loop-youtube-169" title="Permanent link">&para;</a></h2>
 <p>Do <strong>not</strong> edit raw JSON. Change widgets on the canvas.</p>
@@ -1981,26 +1981,36 @@
 </table>
 <div class="admonition warning">
 <p class="admonition-title">Time these on a real Spark after this image</p>
-<p>CI has no GPU. After <code>doctor</code> prints <code>attention: kitchen</code> (not <code>pytorch-fallback</code>), write wall-clock seconds here:</p>
+<p>CI has no GPU and <strong>does not invent seconds</strong>. After <code>doctor</code> prints <code>attention: kitchen</code> (not <code>pytorch-fallback</code>), Queue the three smokes and record wall-clock:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>doctor<span class="w">          </span><span class="c1"># attention: kitchen</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Queue klein-still-draft-lab-example, wan-i2v-5s-lab-example, ltx-i2v-5s-lab-example</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>./scripts/manage.sh<span class="w"> </span>spark-timing<span class="w"> </span>record<span class="w"> </span>--klein<span class="w"> </span>N<span class="w"> </span>--wan<span class="w"> </span>N<span class="w"> </span>--ltx<span class="w"> </span>N
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>./scripts/manage.sh<span class="w"> </span>spark-timing<span class="w"> </span>show
+</code></pre></div>
+<p>JSON lands at <code>${COMFY_OUTPUT_DIR}/spark-timing.json</code> (host file, not git). <code>doctor</code> prints it when present. Recording <strong>refuses</strong> if compose is up and live attention is not <code>kitchen</code> (<code>pytorch-fallback</code>, sage, or unclassified). Stack down after a Kitchen run is OK.</p>
 <table>
 <thead>
 <tr>
 <th>Smoke</th>
-<th>Seconds (fill in)</th>
+<th>Graph</th>
+<th>This Spark</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Klein still-draft (4-step)</td>
-<td></td>
+<td>Klein still-draft (4-step, 768×432)</td>
+<td><code>klein-still-draft-lab-example</code></td>
+<td><code>spark-timing.json</code> → <code>klein_s</code></td>
 </tr>
 <tr>
-<td>Wan 2.2 TI2V-5B 5 s</td>
-<td></td>
+<td>Wan 2.2 TI2V-5B 5 s (832×480)</td>
+<td><code>wan-i2v-5s-lab-example</code></td>
+<td><code>wan_s</code></td>
 </tr>
 <tr>
-<td>LTX-2.5 distilled 5 s AV</td>
-<td></td>
+<td>LTX-2.5 distilled 5 s AV (1280×704)</td>
+<td><code>ltx-i2v-5s-lab-example</code></td>
+<td><code>ltx_s</code></td>
 </tr>
 </tbody>
 </table>
@@ -2041,10 +2051,11 @@
 <hr />
 <h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
 <p>First-run commands live on <a href="../getting-started/">Getting Started</a>. Day-to-day on a running host:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>doctor
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/manage.sh<span class="w"> </span>status
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>./scripts/manage.sh<span class="w"> </span>logs
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>./scripts/manage.sh<span class="w"> </span>stop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/manage.sh<span class="w"> </span>doctor
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/manage.sh<span class="w"> </span>status
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./scripts/manage.sh<span class="w"> </span>logs
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>./scripts/manage.sh<span class="w"> </span>spark-timing<span class="w"> </span>show
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>./scripts/manage.sh<span class="w"> </span>stop
 </code></pre></div>
 <pre class="mermaid"><code>flowchart LR
   Doctor["doctor"] --&gt; Download["download-models"]
