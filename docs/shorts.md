@@ -30,11 +30,12 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 !!! success "First 90s film"
 
     1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
-    2. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
-    3. Leave Enhance **off**. Leave LTX **1280×704**. Queue **once**.
-    4. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
-    5. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`). Open **Save 90s film (MP4) — open node for preview** to watch or download it from the Comfy tab.
-    6. Copy off the Spark: `scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .`
+    2. Optional: fill **beat-sheet-lab-example** (occupancy **none**, no UNET) and paste into host `workflows/shorts/<slug>.shots.yaml` — YAML is not copied by the entrypoint.
+    3. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
+    4. Leave Enhance **off**. Leave LTX **1280×704**. Queue **once**.
+    5. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
+    6. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`). Open **Save 90s film (MP4) — open node for preview** to watch or download it from the Comfy tab.
+    7. Copy off the Spark: `scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .`
 
     Do **not** set 241+ frames. Resume after a dropped SSH session: `film-resume` (below).
 

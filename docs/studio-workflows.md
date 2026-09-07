@@ -85,6 +85,8 @@ flowchart TB
     | **klein-storyboard-6up-lab-example** | Six new cameras (`ez_board_01`…`06`) |
     | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills, independent T2I |
     | **klein-hook-still-lab-example** | Vertical 9:16 hook still |
+    | **prompt-forge-lab-example** | No UNET. Klein / Wan / LTX enhance preview (occupancy **llm**) |
+    | **beat-sheet-lab-example** | No UNET. 18 STRING cards → paste into `shorts/<slug>.shots.yaml` (occupancy **none**) |
 
     Lane B — Produce
 

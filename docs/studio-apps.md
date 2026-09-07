@@ -81,8 +81,8 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein-color-moods-lab-example** | Warm plate plus three grades |
 | **klein-time-of-day-lab-example** | Dusk plate, then dawn / noon / night |
 | **klein-hook-still-lab-example** | Vertical 9:16 first-frame hook (`ez_hook_still`) |
-
-Prompt Forge and Beat Sheet (no UNET) land in a follow-up change.
+| **prompt-forge-lab-example** | No UNET. Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
+| **beat-sheet-lab-example** | No UNET. 6×3 STRING cards; paste into `workflows/shorts/<slug>.shots.yaml`. Occupancy **none** |
 
 ---
 
