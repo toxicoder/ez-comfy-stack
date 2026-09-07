@@ -16,6 +16,53 @@ teardown() {
   teardown_repo_env
 }
 
+@test "gitignore hides operator _user graphs and local media" {
+  local gi="${REPO_ROOT}/.gitignore"
+  run grep -F '/workflows/_user/*' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '!/workflows/_user/.gitkeep' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '!/workflows/_user/README.md' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '/workflows/*/_user/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '**/.user-local/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '/output/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '/outputs/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '/input/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '/inputs/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '/comfy-state/' "${gi}"
+  [ "${status}" -eq 0 ]
+  cd "${REPO_ROOT}"
+  run git check-ignore -q workflows/_user/keep-me.json
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q output/ez_still_draft_00001_.png
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q outputs/ez_gosee_90s.mp4
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q input/start.png
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q inputs/start.png
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q comfy-state/ComfyUI/main.py
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q workflows/_user/.gitkeep
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q workflows/_user/README.md
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q workflows/klein-still-draft-lab-example.json
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q workflows/_lab/klein/klein-still-draft-lab-example.json
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q workflows/klein/_user/secret.json
+  [ "${status}" -eq 0 ]
+}
+
 @test "lab workflows forbid MiniMax H3 nodes and filenames" {
   local dir="${REPO_ROOT}/workflows"
   run grep -R -E 'MiniMaxH3|minimax_h3|h3-go-see|h3-still-here|h3-switchyard|GO_SEE_90s_H3' "${dir}"

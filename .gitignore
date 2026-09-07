@@ -23,7 +23,23 @@ kcov-output/
 
 # Docker / local state
 comfy-state/
+/comfy-state/
 .models/
+
+# Operator / contributor private Comfy state (never commit)
+# Do not ignore the directory itself — git cannot re-include README/.gitkeep
+# if the parent is ignored. Nested _user dumps stay fully ignored.
+/workflows/*/_user/
+/workflows/*/*/_user/
+/workflows/_user/*
+!/workflows/_user/.gitkeep
+!/workflows/_user/README.md
+**/.user-local/
+# Host media bind is outside the repo; keep these in case of local overrides
+/output/
+/outputs/
+/input/
+/inputs/
 
 # OS / IDE
 .DS_Store
