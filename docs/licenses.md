@@ -45,6 +45,10 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | Wan 2.2 A14B T2V/I2V | Comfy-Org/Wan_2.2_ComfyUI_Repackaged | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Wan 2.2 Fun InP A14B | alibaba-pai/Wan2.2-Fun-A14B-InP | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | SeedVR2-3B | ByteDance-Seed/SeedVR2-3B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
+| TRELLIS.2 native | microsoft/TRELLIS.2 | MIT | Yes | Yes | none | MIT NOTICE | No extra ban beyond MIT. No nvdiffrast/nvdiffrec | No |
+| DA3-BASE | depth-anything/DA3-BASE | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
+| Wan 2.1 VACE 1.3B | Wan-AI/Wan2.1-VACE-1.3B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
+| SuperSplat | playcanvas/supersplat | MIT | Yes | Yes | none | MIT | Host static viewer. Not in Dockerfile | No |
 | UMT5-XXL text encoder (Wan companion) | Comfy-Org/Wan_2.2_ComfyUI_Repackaged | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
 | LTX-2.5 distilled INT8-convrot | Lightricks/LTX-2.5 | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes — do not distill into a competing model | Yes |
 | LTX-2.3 distilled FP8 | Kijai/LTX2.3_comfy | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes — do not distill into a competing model | No |
@@ -113,6 +117,7 @@ Do not download, do not reference in lab graphs, do not pin Comfy for them:
 - F5-TTS official weights (CC-BY-NC-4.0), Coqui XTTS v2 (CPML), Echo-TTS (CC-BY-NC-SA)
 - Fish Audio S2 (research/NC), Higgs Boson (community/commercial traps)
 - TTS-Audio-Suite as a pack; OldTimeRadio as a pack (H3 / FLUX-dev / NC optional lanes)
+- nvdiffrast / nvdiffrec TRELLIS, DA3-LARGE, Inria 3DGS, Pixal3D-as-default
 
 Opt-in local podcast (not in `download-models`): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See [Local podcast](podcast.md). Opt-in local rap: same ACE-Step 1.5 turbo AIO via `download-music --tier turbo` (shared dest with `download-podcast --tier acestep`). See [Local music](music.md).
 

@@ -136,6 +136,9 @@ Commands:
                     Copy takes/<id>/tNNN.mp4 to shots/<id>.mp4 and mark ok
   download-restore [--tier seedvr2-3b]
                     Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
+  download-3d [--tier trellis2|da3-base|all]
+                    Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
+  blender           Host Blender sidecar (dies if compose is up)
   models-status     Disk bible: keep-set + refuse list (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
 
@@ -964,6 +967,20 @@ cmd_download_restore() {
 }
 
 #######################################
+# Opt-in 3D packs (TRELLIS.2 native, DA3-BASE).
+#######################################
+cmd_download_3d() {
+  bash "${REPO_ROOT}/scripts/utilities/download-3d.sh" "$@"
+}
+
+#######################################
+# Host Blender sidecar (refuses if compose is up).
+#######################################
+cmd_blender() {
+  bash "${REPO_ROOT}/scripts/utilities/blender.sh" "$@"
+}
+
+#######################################
 # Print keep-set / refuse from the disk bible (does not delete).
 # Globals:
 #   REPO_ROOT
@@ -1055,6 +1072,8 @@ main() {
     film-proxies) cmd_film_proxies "$@" ;;
     take-promote) cmd_take_promote "$@" ;;
     download-restore) cmd_download_restore "$@" ;;
+    download-3d) cmd_download_3d "$@" ;;
+    blender) cmd_blender "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;
     cleanup) cmd_cleanup ;;

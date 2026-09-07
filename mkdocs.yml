@@ -83,6 +83,9 @@ nav:
       - Local music: music.md
       - 90s shorts: shorts.md
       - Spark farm: spark-farm.md
+      - Studio sidecars: studio-sidecars.md
+      - Blender GB10 sidecar: blender-gb10-sidecar.md
+      - Splat sidecar: splat-sidecar.md
   - Operate:
       - Models & Cache: models-and-cache.md
       - Download Limit: download-limit.md

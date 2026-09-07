@@ -42,6 +42,7 @@ def test_default_filenames_in_keep_set() -> None:
     assert "FLUX.2-dev" in refuse
     assert "DA3-LARGE" in refuse
     assert "Inria-3DGS" in refuse
+    assert "Pixal3D-as-default" in refuse
 
 
 def test_cli_keep_set() -> None:

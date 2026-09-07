@@ -36,12 +36,16 @@ teardown() {
   [[ "${output}" == *"Wan_2.2_ComfyUI_Repackaged"* ]]
   run tier_repo fun-inp
   [[ "${output}" == *"Wan2.2-Fun-A14B-InP"* ]]
+  run tier_repo vace
+  [[ "${output}" == *"Wan2.1-VACE-1.3B"* ]]
   run tier_repo x
   [ "${output}" = "" ]
   run tier_min_gb 5b
   [ "${output}" = "12" ]
   run tier_min_gb fun-inp
   [ "${output}" = "40" ]
+  run tier_min_gb vace
+  [ "${output}" = "6" ]
   run tier_include_patterns 5b
   [[ "${output}" == *"wan2.2_ti2v_5B_fp16.safetensors"* ]]
   [[ "${output}" == *"wan2.2_vae.safetensors"* ]]
@@ -50,9 +54,12 @@ teardown() {
   [[ "${output}" == *"wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors"* ]]
   run tier_include_patterns fun-inp
   [[ "${output}" == *"high_noise_model/diffusion_pytorch_model.safetensors"* ]]
+  run tier_include_patterns vace
+  [[ "${output}" == *"diffusion_pytorch_model.safetensors"* ]]
   TIER=all
   run tiers_to_process
   [[ "${output}" == *"5b"* && "${output}" == *"a14b"* && "${output}" == *"fun-inp"* ]]
+  [[ "${output}" != *"vace"* ]]
   parse_args status --tier 5b --json
   [ "${CMD}" = "status" ]
   run check_hf_cli
@@ -88,6 +95,12 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ -e ${MODELS_DIR}/comfy/Fun_Models/Wan2.2-Fun-A14B-InP/configuration.json ]]
   [[ -e ${MODELS_DIR}/comfy/Fun_Models/Wan2.2-Fun-A14B-InP/high_noise_model/diffusion_pytorch_model.safetensors ]]
+}
+
+@test "download-wan vace mock links diffusion_models" {
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DW}\" run --tier vace"
+  [ "${status}" -eq 0 ]
+  [[ -e ${MODELS_DIR}/comfy/diffusion_models/diffusion_pytorch_model.safetensors ]]
 }
 
 @test "download-wan cleanup keep selective" {

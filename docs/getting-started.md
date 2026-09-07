@@ -368,8 +368,13 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 | `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` |
 | `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) |
 | `cleanup` | Type `DELETE`; remove `ez-comfy-state` only |
+| `print-shot` / `film-resume` / `film-export-otio` / `film-proxies` / `take-promote` | 90s jobstore (see [90s shorts](shorts.md)) |
+| `download-restore` | Opt-in SeedVR2-3B (not `download-models`) |
+| `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) |
+| `blender` | Host Blender sidecar; dies if compose is up |
+| `models-status` / `reap-models` | Disk bible / cache cleanup (never `cleanup` weights) |
 
-`download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3).
+`download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3). 3D DCC notes: [Studio sidecars](studio-sidecars.md).
 
 ---
 
