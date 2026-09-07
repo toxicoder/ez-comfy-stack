@@ -2353,6 +2353,21 @@
 <td><em>(empty = main)</em></td>
 <td><a href="https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite">ComfyUI-VideoHelperSuite</a> for lab <strong><code>VHS_VideoCombine</code></strong> MP4. <strong>Required</strong> for <code>wan-*-lab-example</code> / <code>ltx-*-lab-example</code>. Empty ref clones default branch; set a tag/branch when you need a pin.</td>
 </tr>
+<tr>
+<td><code>COMFYUI_OPENCUT_REF</code></td>
+<td><code>0.5.0</code></td>
+<td><a href="https://github.com/jtydhr88/ComfyUI-OpenCut">jtydhr88/ComfyUI-OpenCut</a> MIT embed. Fail-soft. Not the Rust rewrite.</td>
+</tr>
+<tr>
+<td><code>COMFYUI_MAGCACHE_REF</code></td>
+<td><code>47bdd2a…</code></td>
+<td><a href="https://github.com/Zehong-Ma/ComfyUI-MagCache">Zehong-Ma/ComfyUI-MagCache</a> commit pin (no release tag). Wan 5B draft extra only.</td>
+</tr>
+<tr>
+<td><code>COMFYUI_LTX_DIRECTOR_REF</code></td>
+<td><code>a3c809c…</code></td>
+<td><a href="https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI">WhatDreamsCost-ComfyUI</a> GPL clone <strong>only</strong> when <code>LAB_ENABLE_LTX_DIRECTOR=1</code>. Commit pin (no release tag).</td>
+</tr>
 </tbody>
 </table>
 <p><strong>How to bump pins:</strong> change the defaults in <code>docker/Dockerfile</code> <code>ARG</code>s, <code>docker/docker-compose.yml</code> build-args, <code>.github/workflows/publish-image.yml</code>, <code>docker/install-comfy/core.sh</code> (torch) and <code>docker/install-comfy/common.sh</code> (Comfy/node refs), then rebuild/publish. Escape hatch: set <code>COMFYUI_REF=</code> empty to float the default branch (not recommended for GHCR).</p>

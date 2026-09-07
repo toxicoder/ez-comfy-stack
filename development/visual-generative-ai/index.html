@@ -1588,7 +1588,7 @@
 </tr>
 <tr>
 <td><strong>wan-i2v-a14b-lab-example</strong></td>
-<td>Optional A14B FP8 8-step silent hero (<code>download-wan --tier a14b</code>). MagCache off. Unload 5B first</td>
+<td>Optional A14B FP8 8-step silent hero (<code>download-wan --tier a14b</code>). MagCache off. Unload 5B first. Under <code>workflows/optional/</code></td>
 </tr>
 <tr>
 <td><strong>wan-t2v-5s-lab-example</strong></td>
@@ -1843,7 +1843,7 @@
 </div>
 </div>
 <p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with <strong><code>save_output: true</code></strong>; after Queue, open <strong>Save video (MP4) — open node for preview</strong>. LTX graphs decode audio (<code>LTXVAudioVAEDecode</code>) into the MP4. <strong>wan-gif-loop-lab-example</strong> emits <code>image/gif</code>.</p>
-<p>Optional Wan A14B is a <strong>placeholder note</strong> only (<code>workflows/optional/wan-i2v-a14b-lab-example.json</code>) — download <code>download-wan.sh run --tier a14b</code> first; it is not a Queue graph.</p>
+<p>Optional Wan A14B is a Queue graph (<code>workflows/optional/wan-i2v-a14b-lab-example.json</code>): high-noise FP8, 8-step Lightning-style, MagCache <strong>off</strong>. Download <code>download-wan.sh run --tier a14b</code> and unload 5B first. Dual high/low experts are the full I2V recipe after both weights exist.</p>
 <hr />
 <h2 id="iteration-loop-youtube-169">Iteration loop (YouTube 16:9)<a class="headerlink" href="#iteration-loop-youtube-169" title="Permanent link">&para;</a></h2>
 <p>Do <strong>not</strong> edit raw JSON. Change widgets on the canvas.</p>

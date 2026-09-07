@@ -817,6 +817,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#host-nle-kdenlive-shotcut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host NLE (Kdenlive / Shotcut)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1184,6 +1195,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#host-nle-kdenlive-shotcut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host NLE (Kdenlive / Shotcut)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1210,7 +1232,7 @@
 <li>What a sidecar is (host process, not Compose)</li>
 <li>Occupancy: one heavy GPU job</li>
 <li>TRELLIS.2 native + DA3-BASE opt-in packs</li>
-<li>Pointers to Blender and SuperSplat</li>
+<li>Pointers to Blender, SuperSplat, and host NLE (Kdenlive / Shotcut)</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
@@ -1268,6 +1290,14 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>vace
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># load workflows/wan-vace-join-lab-example.json — MagCache off</span>
 </code></pre></div>
+<h2 id="host-nle-kdenlive-shotcut">Host NLE (Kdenlive / Shotcut)<a class="headerlink" href="#host-nle-kdenlive-shotcut" title="Permanent link">&para;</a></h2>
+<p>OTIO from <code>./scripts/manage.sh film-export-otio go-see</code> is stdlib JSON under <code>films/&lt;slug&gt;/publish/</code>. Import on the Spark host or a laptop — never in the Docker image.</p>
+<p>On DGX Spark (Ubuntu aarch64):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>kdenlive<span class="w"> </span>shotcut
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># or: flatpak install flathub org.kde.kdenlive</span>
+</code></pre></div>
+<p>Then open the <code>.otio</code> in Kdenlive/Shotcut. Occupancy: stop Comfy first if the NLE will use the GPU.</p>
 <p>See <a href="../licenses/">Model licenses</a> and <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
 
 

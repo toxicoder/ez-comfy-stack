@@ -1462,7 +1462,7 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--xfade<span class="w"> </span><span class="m">10</span><span class="w"> </span>--yes
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Listen to go-see with and without --xfade 10; default remains the hard-cut golden.</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># OTIO handshake for Kdenlive/Shotcut (host, no GPU):</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># OTIO handshake for Kdenlive/Shotcut (host, no GPU; apt notes in studio-sidecars.md):</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>./scripts/manage.sh<span class="w"> </span>film-export-otio<span class="w"> </span>go-see
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># NVENC proxies 960×528 ~2 Mbps (Comfy must be stopped):</span>
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>./scripts/manage.sh<span class="w"> </span>stop
@@ -1497,7 +1497,8 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>a14b<span class="w">   </span><span class="c1"># A14B FP8 8-step silent hero; MagCache off</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># load optional/wan-i2v-a14b-lab-example — unload 5B first</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>./scripts/manage.sh<span class="w"> </span>download-longcat<span class="w"> </span>--tier<span class="w"> </span>video<span class="w">     </span><span class="c1"># MIT; no NCCL</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>./scripts/manage.sh<span class="w"> </span>download-dreamx<span class="w"> </span>--tier<span class="w"> </span>creator<span class="w">    </span><span class="c1"># Apache joint AV; not DreamX-World</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># load workflows/optional/longcat-video-lab-example.json (note, not 90s default)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>./scripts/manage.sh<span class="w"> </span>download-dreamx<span class="w"> </span>--tier<span class="w"> </span>creator<span class="w">    </span><span class="c1"># Apache joint AV; not DreamX-World</span>
 </code></pre></div>
 <p>Identity sheet: <code>klein-identity-sheet-lab-example</code> (seed <strong>42</strong>, Enhance <strong>off</strong>, 1280×704). Talking-head: <code>klein-talking-head-lab-example</code> (LTX A2V freeze; S2V opt-in <code>--tier s2v</code>). DFR two-stage stays in Comfy <strong>Templates → LTX-2.5</strong>; YAML <code>print: dfr</code> selects that path. Lab printers stay 5.00 s.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>stop
