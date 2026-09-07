@@ -229,6 +229,40 @@ install_llama_cpp_cpu() {
 }
 
 #######################################
+# Optional ABI-matched SageAttention wheel. Default is Kitchen (--use-ck-attention).
+# Never pip-installs the PyPI package ``sageattention`` (silent aarch64 fallback).
+# Globals:
+#   LAB_SAGE_WHEEL_URL, LAB_SAGE_WHEEL_SHA256
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (fail-soft)
+#######################################
+install_sage_wheel_if_pinned() {
+  local url sha
+  url="${LAB_SAGE_WHEEL_URL:-}"
+  sha="${LAB_SAGE_WHEEL_SHA256:-}"
+  if [[ -z ${url} ]]; then
+    log "SageAttention: skipped (Kitchen is default; do not pip install sageattention from PyPI)"
+    return 0
+  fi
+  if [[ -z ${sha} ]]; then
+    warn "LAB_SAGE_WHEEL_URL set without LAB_SAGE_WHEEL_SHA256 — refusing Sage wheel"
+    return 0
+  fi
+  log "SageAttention pinned wheel requested (sha256=${sha})"
+  warn "Kitchen remains the Comfy CLI default; do not pass --use-sage-attention with --use-ck-attention"
+  if pip_install "${url}"; then
+    log "Sage wheel pip ok — verify torch ABI before switching attention flags"
+  else
+    warn "Sage wheel install failed (optional; Kitchen stays default)"
+  fi
+  return 0
+}
+
+#######################################
 # Install custom nodes and optional packages (Docker phase: nodes).
 # Globals:
 #   COMFY_HOME, VENV, CUSTOM, COMFYUI_MANAGER_REF, COMFYUI_NUNCHAKU_NODE_REF,
@@ -239,7 +273,7 @@ install_llama_cpp_cpu() {
 #   Progress via log/warn
 # Returns:
 #   0 on success; non-zero if required VideoHelperSuite is missing
-#   (nunchaku/SageAttention remain fail-soft)
+#   (nunchaku / optional Sage wheel remain fail-soft)
 #######################################
 phase_nodes() {
   activate_venv
@@ -256,7 +290,7 @@ phase_nodes() {
     clone_node "https://github.com/mit-han-lab/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" \
       "${COMFYUI_NUNCHAKU_NODE_REF:-}" ||
     warn "Nunchaku custom node unavailable"
-  pip_install sageattention || warn "SageAttention pip install failed (optional on aarch64)"
+  install_sage_wheel_if_pinned
   install_nunchaku_wheel
   install_llama_cpp_cpu
 }

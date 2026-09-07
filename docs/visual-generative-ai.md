@@ -43,7 +43,7 @@ flowchart TB
   subgraph Ctr["Container: ez-comfy-studio"]
     EP["entrypoint.sh"]
     Install["install-comfy.sh"]
-    Patch["patch_get_free_memory.py"]
+    Patch["UM patches"]
     Comfy["ComfyUI"]
     EP --> Install --> Patch --> Comfy
   end
@@ -293,11 +293,26 @@ flowchart TB
 
 | Setting | Purpose |
 | --- | --- |
+| `--use-ck-attention` | Comfy Kitchen attention (default). XOR Sage — never pass `--use-sage-attention` with Kitchen |
+| `--normalvram` + disable dynamic/pinned/async offload | Unified-memory flags. Do **not** use `--highvram` |
+| `--disable-mmap` + `patch_unified_memory_copy.py` | `copy=False` on safetensor `.to(device)` so UM does not double weights |
 | `patch_get_free_memory.py` | Use host free RAM instead of under-reporting `cudaMemGetInfo` |
+| `TORCH_COMPILE_DISABLE=1` | `torch.compile` / Triton compile off by default on sm_121 |
+| `OMP_NUM_THREADS=20` | ARM cores for CPU ops; compose soft `cpus: 16.0` leaves 4 for OS/SSH |
 | `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` | Less allocator fragmentation |
 | `LAB_VISUAL_ENABLE_NVFP4=1` | Hint only; default graphs use core FP8 Klein 4B, not Nunchaku |
 | `LAB_VISUAL_ENABLE_NUNCHAKU=0` | Lab examples do not require Nunchaku |
-| Fail-soft Nunchaku / SageAttention | aarch64 wheels may be missing |
+| SageAttention | **Not** `pip install sageattention` from PyPI. Optional `LAB_SAGE_WHEEL_URL` + sha256 only when torch ABI matches |
+
+!!! warning "Time these on a real Spark after this image"
+
+    CI has no GPU. After `doctor` prints `attention: kitchen` (not `pytorch-fallback`), write wall-clock seconds here:
+
+    | Smoke | Seconds (fill in) |
+    | --- | --- |
+    | Klein still-draft (4-step) | |
+    | Wan 2.2 TI2V-5B 5 s | |
+    | LTX-2.5 distilled 5 s AV | |
 
 ### Container entrypoint sequence
 
@@ -306,15 +321,15 @@ sequenceDiagram
   participant C as compose up
   participant E as entrypoint.sh
   participant I as install-comfy.sh
-  participant P as patch_get_free_memory.py
+  participant P as UM patches
   participant U as ComfyUI
 
   C->>E: start container
   E->>I: idempotent install / refresh
   I-->>E: COMFY_HOME + venv ready
-  E->>P: re-apply Spark free-memory patch
+  E->>P: free-memory + copy=False patches
   P-->>E: patched (fail-soft)
-  E->>U: exec listen 0.0.0.0:8188
+  E->>U: exec Kitchen + UM flags on :8188
   Note over U: First cold start can take 10–30+ minutes
 ```
 

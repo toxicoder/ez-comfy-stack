@@ -83,12 +83,13 @@ require_docker() {
 }
 
 #######################################
-# Emit a minimal JSON object describing the studio stack state on stdout.
+# Emit a JSON object describing the studio stack state on stdout.
 # State values:
 #   stopped  — no containers / empty ps output
 #   running  — ps JSON mentions running
 #   present  — containers exist but not clearly running
 #   unknown  — compose ps failed (Docker down, etc.)
+# Also includes attention (kitchen|sage|pytorch-fallback|unknown) and host_free_gib.
 # Globals:
 #   See file header / caller environment.
 # Arguments:
@@ -99,7 +100,7 @@ require_docker() {
 #   Always 0 after printing one JSON line to stdout.
 #######################################
 compose_status_json() {
-  local ps_out state="unknown"
+  local ps_out state="unknown" attention host_free
   if ps_out=$(compose_run ps --format json 2>/dev/null); then
     if [[ -z ${ps_out} || ${ps_out} == "[]" ]]; then
       state="stopped"
@@ -111,7 +112,61 @@ compose_status_json() {
   else
     state="unknown"
   fi
-  printf '{"stack":"studio","state":"%s"}\n' "${state}"
+  attention="$(stack_attention_backend)"
+  host_free="$(host_free_mem_gib 2>/dev/null || echo 0)"
+  [[ -n ${host_free} ]] || host_free=0
+  printf '{"stack":"studio","state":"%s","attention":"%s","host_free_gib":%s}\n' \
+    "${state}" "${attention}" "${host_free}"
+}
+
+#######################################
+# Classify ComfyUI log text into kitchen|sage|pytorch-fallback|unknown.
+# Sage pip-fail lines must not count as sage-active.
+# Globals:
+#   None
+# Arguments:
+#   $1  Log blob (may be empty)
+# Outputs:
+#   One token on stdout
+# Returns:
+#   0
+#######################################
+stack_attention_from_text() {
+  local text="${1:-}"
+  if [[ ${text} == *"Using Comfy Kitchen attention"* ]]; then
+    echo "kitchen"
+    return 0
+  fi
+  if [[ ${text} == *"Using sage attention"* || ${text} == *"Using SageAttention"* ]]; then
+    echo "sage"
+    return 0
+  fi
+  if [[ ${text} == *"main.py"* || ${text} == *"Starting server"* ]]; then
+    echo "pytorch-fallback"
+    return 0
+  fi
+  echo "unknown"
+}
+
+#######################################
+# Report the live attention backend, or unknown if the stack is down.
+# Globals:
+#   See compose_run / compose_is_running
+# Arguments:
+#   None
+# Outputs:
+#   kitchen|sage|pytorch-fallback|unknown on stdout
+# Returns:
+#   0
+#######################################
+stack_attention_backend() {
+  local logs
+  if ! compose_is_running; then
+    echo "unknown"
+    return 0
+  fi
+  logs="$(compose_run logs --tail 400 comfyui 2>/dev/null || true)"
+  stack_attention_from_text "${logs}"
 }
 
 #######################################

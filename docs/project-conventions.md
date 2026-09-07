@@ -196,7 +196,7 @@ flowchart TB
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `make coverage` enforces:
-  - **100% Python line coverage** on `patch_get_free_memory`
+  - **100% Python line coverage** on `patch_get_free_memory` and `patch_unified_memory_copy`
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (production-only references do not count)
   - Full BATS suite green  
 - **Tests ship with production code** — same commit as the files under test  
@@ -211,7 +211,7 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  Cov["make coverage"] --> Py["100% line · patch_get_free_memory"]
+  Cov["make coverage"] --> Py["100% line · UM patches"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>named under tests/"]
   Cov --> Bats["Full BATS suite green"]
   Lint["make lint"] --> SC["ShellCheck warnings = defects"]
