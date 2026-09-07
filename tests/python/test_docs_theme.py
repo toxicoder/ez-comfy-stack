@@ -44,6 +44,9 @@ def test_mkdocs_wires_extra_css() -> None:
     text = _read(MKDOCS_YML)
     assert "extra_css:" in text
     assert "stylesheets/extra.css" in text
+    assert "extra_javascript:" in text
+    assert "javascripts/glossary.js" in text
+    assert "content.tooltips" in text
 
 
 def test_extra_css_compacts_header_without_hiding_chrome() -> None:

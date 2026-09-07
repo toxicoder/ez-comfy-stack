@@ -21,7 +21,7 @@ tags: [spark, farm, fabric, comfyui]
 - Copies on the 200 GbE fabric, not the 10 GbE mgmt NIC
 - Unchanged `restart: "no"` and local heavy confirm on `start`
 
-This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab).
+This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab). You still have **no NCCL** and **no multi-GPU graph** in this sample stack — three UIs, one weight copy, independent 5 s Queues.
 
 ## Farm vs relay
 

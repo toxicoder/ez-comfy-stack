@@ -22,6 +22,16 @@ tags: [sidecar, blender, splat, trellis, 3d, occupancy]
 
     GB10 is one GPU. Stop Comfy before Blender, SuperSplat, TRELLIS, or VACE. Sidecars are **not** `docker compose` services.
 
+```mermaid
+flowchart TB
+  G["GB10"] --> M{"One heavy job"}
+  M --> C["ComfyUI compose"]
+  M --> B["Host Blender"]
+  M --> S["SuperSplat viewer"]
+  M --> T["TRELLIS / DA3 / NVENC"]
+  C -.->|XOR| B
+```
+
 ---
 
 ## Host, not Dockerfile

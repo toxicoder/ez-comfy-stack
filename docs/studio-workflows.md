@@ -1,0 +1,154 @@
+---
+title: Workflow catalog
+description: Which *-lab-example graph to load for a still, 5 s clip, GIF, creator plate, or 90s film.
+tags: [comfyui, workflows, klein, wan, ltx, catalog]
+---
+
+# Workflow catalog
+
+**What's on this page**
+
+- Which graph for which job
+- Seeded Klein / Wan / LTX / app / 90s / creator tables
+- Notes that apply to every `*-lab-example`
+
+**What this enables**
+
+- Picking a filename instead of starting from a blank canvas
+- Keeping the [playbook](visual-generative-ai.md) a how-to, not a spreadsheet
+
+**Who this is for:** studio users after the first still-draft Queue.
+
+After `download-models` + `start`, load from `user/default/workflows/` (seeded from host `workflows/`). Filenames end with **`-lab-example`**. Do **not** edit raw JSON — change widgets on the canvas.
+
+```mermaid
+flowchart TB
+  Need{"What do you need?"} --> Still["A still"]
+  Need --> Motion["Silent ~5 s"]
+  Need --> AV["AV ~5 s"]
+  Need --> Loop["Loop / GIF / bumper"]
+  Need --> Film["~90 s short"]
+  Need --> Plate["Thumbnail / packshot / cover"]
+  Still --> K["klein-still-draft or daily / hero"]
+  Motion --> W["wan-i2v-5s or shot"]
+  AV --> L["ltx-i2v-5s or shorts I2V"]
+  Loop --> G["wan-gif-loop or bumper-loop"]
+  Film --> F["film-*-90s one-click"]
+  Plate --> C["klein-thumbnail / packshot / cover"]
+```
+
+---
+
+## Catalog
+
+=== "Still (Klein 4B)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **klein-still-draft-lab-example** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
+    | **klein-still-hero-lab-example** | Same prompt + seed, **1280×704** (LTX VAE grid), more steps, prefix `ez_still_hero`. Enhance **off**. |
+    | **klein-identity-sheet-lab-example** | 3-angle sheet (front / three-quarter / profile). Seed **42**, Enhance **off**, **1280×704** |
+    | **klein-talking-head-lab-example** | Klein still → LTX A2V freeze smoke. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
+
+=== "Motion (Wan 2.2 5B)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **wan-i2v-5s-lab-example** | Silent I2V smoke, 832×480, **121** frames @ 24 fps. MagCache **draft-only** (`extra.lab_magcache`) |
+    | **wan-flf-5s-lab-example** | Fun InP first-last-frame 5 s (opt-in `download-wan --tier fun-inp`). MagCache off |
+    | **wan-vace-join-lab-example** | Wan 2.1 VACE 1.3B 17-frame join (`1+8n`). Opt-in `download-wan --tier vace`. MagCache off |
+    | **wan-i2v-a14b-lab-example** | Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `workflows/optional/` |
+    | **wan-t2v-5s-lab-example** | Silent T2V smoke, 121 frames (LoadImage bypassed) |
+    | **wan-i2v-shot-lab-example** | Concat-safe **120** frames + last-frame SaveImage. 90s shots, or prefix `ez_shot_01..06` |
+
+=== "AV hero (LTX-2.5)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **ltx-i2v-5s-lab-example** | ~5 s I2V, **1280×704**, native audio (Community License, $10M cap) |
+    | **ltx-t2v-5s-lab-example** | ~5 s T2V AV, **1280×704** |
+
+    !!! warning "LTX width/height must be divisible by 32"
+
+        Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** native LTX VAE sizes (720/16=45, then the next `/2` patch fails). Lab landscape graphs use **1280×704**. Klein **I2V feeders** (`klein-still-hero`, 90s film identity) are **1280×704**. Thumbnails/end-cards may stay 1280×720. Typing 720 or 1080 on LTX widgets is **auto-snapped** (704 / 1056) by `ez_ltx_spatial` — prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**. See [Troubleshooting](troubleshooting.md).
+
+=== "Apps (still / GIF / IG)"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **klein-still-daily-lab-example** | Daily Klein 4B still. Click the UNET filename to swap distilled / NVFP4 / base. Size, steps, CFG, seed on the canvas. Prefix `ez_still_app` |
+    | **wan-gif-loop-lab-example** | Wan 5B I2V GIF (49 frames @ 12 fps). **Ping-pong ON** so first and last frames meet for infinite looping. Prefix `ez_gif_loop` |
+    | **klein-dream-house-lab-example** | Ten Instagram 4:5 stills of one compact cedar cabin from **new cameras**. Edit **HOUSE IDENTITY** (world bible) and inventory once. Prefix `ez_dream_house_01`…`10` |
+
+=== "90s shorts"
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **film-go-see-90s-run-lab-example** | **One-click** first-person running 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
+    | **film-still-here-90s-lab-example** | **One-click** household morning 90s (same shape) |
+    | **film-switchyard-90s-lab-example** | **One-click** night freight-yard 90s (same shape) |
+    | **wan-i2v-shot-lab-example** | Optional silent rehearsal / six-shot concat demo |
+    | **ltx-i2v-shot-lab-example** | Generic 5.00 s AV print (non-film) |
+
+    Full loop: [90s shorts](shorts.md). One file per film — Queue once.
+
+=== "Creator toolkit"
+
+    Pack 1
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **klein-shorts-still-lab-example** | Vertical 9:16 Shorts still (`ez_shorts_still`) |
+    | **wan-shorts-i2v-lab-example** | Vertical silent I2V from that still |
+    | **ltx-shorts-i2v-lab-example** | Vertical AV I2V (~5 s) with world audio |
+    | **klein-thumbnail-lab-example** | YouTube thumbnail still 1280×720 |
+    | **klein-product-packshot-lab-example** | Clean product packshot 1:1 |
+    | **klein-before-after-lab-example** | Before plate, after Klein-edit of the same mug |
+    | **klein-style-lock-lab-example** | One lake house, four cameras, locked inventory |
+    | **wan-bumper-loop-lab-example** | Loopable MP4 bumper (ping-pong) |
+    | **ltx-broll-ambient-lab-example** | Ambient B-roll AV plate (~5 s) |
+    | **klein-storyboard-6up-lab-example** | Six storyboard frames of one rooftop from new cameras |
+
+    Pack 2 — stills and plates
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **klein-endcard-cta-lab-example** | End-card / CTA plate 16:9 |
+    | **klein-quote-bg-lab-example** | Quote-card background 1:1 |
+    | **klein-og-blog-lab-example** | Blog / Open Graph hero |
+    | **klein-podcast-cover-lab-example** | Podcast cover 1:1 |
+    | **klein-banner-wide-lab-example** | Channel / LinkedIn banner ~3:1 |
+    | **klein-ig-square-lab-example** | Instagram 1:1 still |
+    | **klein-hook-still-lab-example** | 9:16 first-frame hook |
+    | **klein-lower-third-bg-lab-example** | Lower-third-safe 16:9 plate |
+    | **klein-food-tabletop-lab-example** | Food / tabletop 4:5 |
+    | **klein-lighting-trio-lab-example** | Same subject, three lights (SHOT KEY is the identity plate) |
+    | **klein-time-of-day-lab-example** | Dusk plate, then dawn / noon / night edits |
+    | **klein-camera-angles-lab-example** | Wide / medium / close of one subject, new cameras |
+    | **klein-color-moods-lab-example** | Warm plate, then three grade edits |
+
+    Pack 2 — motion / AV
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **wan-orbit-i2v-lab-example** | Slow orbit I2V ~5 s |
+    | **wan-push-in-i2v-lab-example** | Hero push-in I2V ~5 s |
+    | **wan-parallax-i2v-lab-example** | Subtle parallax I2V ~5 s |
+    | **wan-sticker-loop-lab-example** | Looping sticker MP4 |
+    | **ltx-weather-broll-lab-example** | Rain / wind B-roll AV |
+    | **ltx-interior-ambience-lab-example** | Interior room-tone AV |
+    | **ltx-hook-av-lab-example** | ~5 s AV cold open |
+
+=== "License"
+
+    MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).
+
+---
+
+## Notes that apply to every lab graph
+
+Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **wan-gif-loop-lab-example** emits `image/gif`.
+
+Optional Wan A14B is a Queue graph (`workflows/optional/wan-i2v-a14b-lab-example.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
+
+Daily loop: [Still to motion to AV](visual-generative-ai.md). Prompt shapes: [Prompting](prompting.md).

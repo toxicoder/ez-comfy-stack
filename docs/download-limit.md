@@ -21,7 +21,7 @@ tags: [bandwidth, wondershaper, speedtest, safety]
 
 ## Why
 
-DGX Spark nodes are often operated **over the internet** without physical console access. A full-rate Hugging Face pull can starve interactive SSH. This utility applies kernel-level traffic shaping via **wondershaper** when HTB is available, and falls back to gentler HF client settings when it is not.
+You cannot walk over to a Spark and wiggle the HDMI cable. Bandwidth left for SSH is how you recover a host that is pulling 30 GB of LTX. A full-rate Hugging Face pull can starve interactive SSH. This utility applies kernel-level traffic shaping via **wondershaper** when HTB is available, and falls back to gentler HF client settings when it is not. Wrap **always clears on exit** — do not weaken that.
 
 Inspired by the throttled Ollama downloader in `dgx-spark-it-up`, generalized and improved with **auto** limiting.
 

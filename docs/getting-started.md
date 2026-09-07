@@ -13,7 +13,8 @@ tags: [getting-started, docker, comfyui]
 - Prerequisites checklist
 - Setup, doctor, download, start, first still, stop
 - Optional: build the Docker image locally instead of pulling GHCR
-- `manage.sh` command catalog
+- What that first still actually did
+- Pointer to the `manage.sh` catalog
 
 **What this enables**
 
@@ -21,6 +22,7 @@ tags: [getting-started, docker, comfyui]
 - Safe model downloads that leave bandwidth for SSH
 - Choosing prebuilt GHCR pull (default) or a local Dockerfile build
 - One queued **still-draft** before you move to the [studio playbook](visual-generative-ai.md)
+- Knowing *why* you typed `yes` and *where* the PNG went — [How the studio works](learn/index.md)
 
 ---
 
@@ -285,7 +287,9 @@ ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 
     In ComfyUI, load **klein-still-draft-lab-example** from `user/default/workflows/` (seeded from host `workflows/`). Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
 
-    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Visual Generative AI](visual-generative-ai.md). After that first still, optional audio: [Local podcast](podcast.md) (`download-podcast --tier analog`, then **podcast-audio-first-lab-example**) or rap-first [Local music](music.md) (`download-music --tier turbo`, then **music-rap-draft-lab-example** — do not co-resident with LTX/Wan/Klein).
+    **What you just did:** `start` launched ComfyUI (no auto-restart after reboot). The graph loaded Klein 4B distilled (4 steps, CFG 1.0) and wrote a still on the host — not inside the git repo. Canvas nouns: [ComfyUI basics](learn/comfyui.md).
+
+    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Still to motion to AV](visual-generative-ai.md). After that first still, optional audio: [Local podcast](podcast.md) (`download-podcast --tier analog`, then **podcast-audio-first-lab-example**) or rap-first [Local music](music.md) (`download-music --tier turbo`, then **music-rap-draft-lab-example** — do not co-resident with LTX/Wan/Klein).
 
 ### Build the image locally (optional)
 
@@ -352,32 +356,9 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 
 ## manage.sh catalog
 
-| Command | Purpose |
-| --- | --- |
-| `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, then doctor |
-| `doctor` | Preflight (docker, GPU, RAM/disk, dirs, license one-liner, spark-timing) |
-| `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port |
-| `start` | Type `yes`; headroom; compose up |
-| `stop` | Stop containers; keep models, outputs, volume |
-| `restart` | `stop` + `start` (full confirm again) |
-| `logs` | Follow compose logs (`logs --tail 100` works) |
-| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap (does **not** pull podcast or music weights) |
-| `download-podcast [--tier analog\|…] [--limit auto\|N\|off]` | Opt-in Kokoro / ACE-Step / optional TTS |
-| `download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]` | Opt-in ACE-Step 1.5 rap AIO (~10 GB; shared dest with `download-podcast --tier acestep`) |
-| `download-limit …` | Proxy to `scripts/utilities/download-limit.sh` |
-| `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` |
-| `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) |
-| `cleanup` | Type `DELETE`; remove `ez-comfy-state` only |
-| `print-shot` / `film-resume` / `film-export-otio` / `film-proxies` / `take-promote` | 90s jobstore (see [90s shorts](shorts.md)) |
-| `download-restore` | Opt-in SeedVR2-3B (not `download-models`) |
-| `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) |
-| `blender` | Host Blender sidecar; dies if compose is up |
-| `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio) |
-| `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache |
-| `spark-timing` | Kitchen wall-clock table (`record --klein N --wan N --ltx N`) |
-| `models-status` / `reap-models` | Disk bible / cache cleanup (never `cleanup` weights) |
+The full verb list (including when **not** to run each command) lives on **[manage.sh reference](manage-cli.md)**. First-run you need: `setup` → `doctor` → `download-models` → `start` → `status` → `stop`.
 
-`download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3). 3D DCC notes: [Studio sidecars](studio-sidecars.md).
+`download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3).
 
 ---
 
@@ -470,9 +451,11 @@ Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-
 
 | Need | Page |
 | --- | --- |
+| Concepts (ComfyUI, latents, why these models) | [How the studio works](learn/index.md) · [Glossary](glossary.md) |
 | How to write Klein / Wan / LTX prompts | [Prompting](prompting.md) |
 | Licenses, $10M LTX cap, banned models | [Model licenses](licenses.md) |
-| Still → Wan 5 s → LTX 5 s AV playbook | [Visual Generative AI](visual-generative-ai.md) |
+| Still → Wan 5 s → LTX 5 s AV playbook | [Still to motion to AV](visual-generative-ai.md) |
+| `manage.sh` verbs | [manage.sh reference](manage-cli.md) |
 | 90s films | [90s shorts](shorts.md) |
 | Cache layout, basenames, layer pins | [Models & Cache](models-and-cache.md) |
 | Bandwidth throttle details | [Download Limit](download-limit.md) |

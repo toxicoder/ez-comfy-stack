@@ -8,15 +8,42 @@ Branch-aware site artifacts (mike aliases ``latest`` / ``development``):
   source links match the same ref. Optional override: ``EZ_DOCS_GIT_REF``.
 - ``on_page_markdown`` / ``on_post_page`` also replace the operator token
   ``__DOCS_GIT_REF__`` (e.g. Setup ``git clone -b``) with that ref.
+- ``on_page_markdown`` expands the glossary placeholder via ``docs/glossary.py``.
+- ``on_post_page`` wraps the first glossary term hits and injects the definition
+  dialog (skipped on ``glossary.md``).
 - When ``MIKE_DOCS_VERSION`` or ``EZ_DOCS_VERSION`` is ``development``, injects
   a small banner so readers know they are on the development docs alias.
 """
 
 from __future__ import annotations
 
+import importlib.util
 import os
 import re
+import sys
+from pathlib import Path
 from typing import Any
+
+_GLOSSARY_MOD = None
+
+
+def _glossary_mod() -> Any:
+    """Load docs/glossary.py once (same directory as this hooks file).
+
+    Returns:
+        The glossary module.
+    """
+    global _GLOSSARY_MOD
+    if _GLOSSARY_MOD is None:
+        path = Path(__file__).resolve().parent / "glossary.py"
+        spec = importlib.util.spec_from_file_location("ez_docs_glossary", path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"cannot load glossary module from {path}")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules["ez_docs_glossary"] = module
+        spec.loader.exec_module(module)
+        _GLOSSARY_MOD = module
+    return _GLOSSARY_MOD
 
 _REPO = "toxicoder/ez-comfy-stack"
 
@@ -134,54 +161,53 @@ def stamp_docs_git_ref_placeholder(text: str, ref: str | None = None) -> str:
 
 
 def on_page_markdown(markdown: str, **kwargs: Any) -> str:
-    """Stamp this-repo GitHub refs and ``__DOCS_GIT_REF__`` to ``docs_git_ref()``.
+    """Stamp git refs, then expand the glossary placeholder if present.
 
     Args:
         markdown: Raw page markdown before rendering.
-        **kwargs: Unused MkDocs hook metadata accepted for API compatibility.
+        **kwargs: MkDocs hook metadata (unused besides API compatibility).
 
     Returns:
-        Markdown with branch-stamped source links and Setup git ref tokens.
+        Markdown with branch stamps and rendered glossary sections.
     """
     del kwargs
-    return stamp_docs_git_ref_placeholder(stamp_git_ref(markdown))
+    stamped = stamp_docs_git_ref_placeholder(stamp_git_ref(markdown))
+    return _glossary_mod().render_placeholder(stamped)
 
 
 def on_post_page(output: str, **kwargs: Any) -> str:
-    """Inject optional development banner and re-stamp git refs in HTML.
+    """Stamp refs, inject the development banner, then wrap glossary terms.
 
     Args:
         output: Rendered HTML page content from MkDocs.
-        **kwargs: Unused MkDocs hook metadata accepted for API compatibility.
+        **kwargs: MkDocs hook metadata; ``page`` is used for glossary hrefs.
 
     Returns:
-        HTML with branch stamps and, when on the development alias, a
-        development banner near the start of the content.
+        HTML with branch stamps, optional development banner, and glossary
+        term triggers plus a definition dialog when terms matched.
     """
-    del kwargs
+    page = kwargs.get("page")
     output = stamp_docs_git_ref_placeholder(stamp_git_ref(output))
 
-    if docs_version() != "development" or "ez-docs-dev-banner" in output:
-        return output
+    if docs_version() == "development" and "ez-docs-dev-banner" not in output:
+        html2, n = re.subn(
+            r'(<article\b[^>]*class="[^"]*md-content__inner[^"]*"[^>]*>)',
+            r"\1" + _DEV_BANNER,
+            output,
+            count=1,
+            flags=re.IGNORECASE,
+        )
+        if n:
+            output = html2
+        else:
+            html2, n = re.subn(
+                r"(<h1\b[^>]*>)",
+                _DEV_BANNER + r"\1",
+                output,
+                count=1,
+                flags=re.IGNORECASE,
+            )
+            if n:
+                output = html2
 
-    html2, n = re.subn(
-        r'(<article\b[^>]*class="[^"]*md-content__inner[^"]*"[^>]*>)',
-        r"\1" + _DEV_BANNER,
-        output,
-        count=1,
-        flags=re.IGNORECASE,
-    )
-    if n:
-        return html2
-
-    html2, n = re.subn(
-        r"(<h1\b[^>]*>)",
-        _DEV_BANNER + r"\1",
-        output,
-        count=1,
-        flags=re.IGNORECASE,
-    )
-    if n:
-        return html2
-
-    return output
+    return _glossary_mod().apply_glossary(output, page)

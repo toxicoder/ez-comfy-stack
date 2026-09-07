@@ -1,0 +1,758 @@
+[
+  {
+    "id": "klein",
+    "title": "Klein 4B",
+    "aliases": ["FLUX.2 Klein 4B", "Klein 4B", "FLUX.2 Klein", "Klein"],
+    "category": "Models",
+    "short": "Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.",
+    "long": "FLUX.2 Klein 4B distilled FP8 is the default still engine in this studio. Distilled means quality is almost entirely the **positive** prompt: 4 steps, CFG 1.0, Qwen3-4B CLIP (`flux2`). Klein 9B is FLUX Non-Commercial and is **not** the lab default. See [Klein, Wan, and LTX](learn/pipeline.md) and [Prompting](prompting.md).",
+    "see_also": ["t2i", "qwen", "wan", "ltx", "prompt-enhance"]
+  },
+  {
+    "id": "wan",
+    "title": "Wan 2.2",
+    "aliases": ["Wan 2.2 5B", "Wan 2.2", "TI2V-5B", "Wan"],
+    "category": "Models",
+    "short": "Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.",
+    "long": "Wan 2.2 TI2V-5B is the silent motion lane. I2V prompts should be **motion + one camera move** — the start image owns look. Do not prompt audio or a score. Optional A14B and Fun InP packs are not part of `download-models`. See [Klein, Wan, and LTX](learn/pipeline.md).",
+    "see_also": ["i2v", "t2v", "umt5", "ltx", "ping-pong"]
+  },
+  {
+    "id": "ltx",
+    "title": "LTX-2.5",
+    "aliases": ["LTX-2.5", "LTX"],
+    "category": "Models",
+    "short": "Joint audio/video model (Community License, gated, $10M company-revenue cap).",
+    "long": "LTX-2.5 distilled INT8-convrot is the AV hero. Lab graphs load an audio VAE, concat empty audio latents with video latents, then decode audio into VHS so the MP4 has world sound. Landscape size is **1280×704** (VAE ÷32), not 1280×720. Accept the Hugging Face license and set HF_TOKEN before `download-models`. See [Model licenses](licenses.md).",
+    "see_also": ["av", "i2v", "community-license", "gated", "vhs"]
+  },
+  {
+    "id": "qwen",
+    "title": "Qwen3-4B",
+    "aliases": ["Qwen3-4B", "qwen_3_4b", "Qwen3"],
+    "category": "Models",
+    "short": "Klein's text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.",
+    "long": "Klein stills encode prompts with `qwen_3_4b` as CLIP type `flux2`. Comfy wraps the string in a Qwen chat template — do not paste `<|im_start|>` into the widget. A separate Qwen3-4B-Instruct GGUF rewrites lazy sentences when Prompt Enhance is on (CPU-only). See [Prompting](prompting.md).",
+    "see_also": ["klein", "clip", "gguf", "prompt-enhance"]
+  },
+  {
+    "id": "umt5",
+    "title": "UMT5-XXL",
+    "aliases": ["UMT5-XXL", "UMT5"],
+    "category": "Models",
+    "short": "Wan 2.2 text encoder (CLIP type wan).",
+    "long": "Wan graphs load UMT5-XXL as CLIP type `wan`. T2V wants Entity + Scene + Motion + Aesthetic + one camera verb. I2V should drop look language so the start image stays in charge. See [Prompting](prompting.md).",
+    "see_also": ["wan", "clip", "t2v", "i2v"]
+  },
+  {
+    "id": "gemma4",
+    "title": "Gemma 4",
+    "aliases": ["Gemma 4", "Gemma4"],
+    "category": "Models",
+    "short": "LTX-2.5 text encoder: Gemma4-12B-with-proj, CLIP type ltxv.",
+    "long": "Seeded LTX graphs use CLIPLoader `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot` with type `ltxv`. A DualCLIP or LTX-2.3 encoder on a 2.5 graph throws embedding-size errors. Write one present-tense paragraph with sound interleaved. See [Prompting](prompting.md).",
+    "see_also": ["ltx", "clip", "av"]
+  },
+  {
+    "id": "ace-step",
+    "title": "ACE-Step",
+    "aliases": ["ACE-Step 1.5", "ACE-Step"],
+    "category": "Models",
+    "short": "MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.",
+    "long": "Native ACE-Step 1.5 ships in the Comfy pin. Podcast beds stay instrumental; rap graphs send original lyrics. `download-music --tier turbo` and `download-podcast --tier acestep` share the same AIO file. Occupancy: stop Klein/Wan/LTX first. See [Local music](music.md) and [Local podcast](podcast.md).",
+    "see_also": ["occupancy", "kokoro", "tts"]
+  },
+  {
+    "id": "kokoro",
+    "title": "Kokoro",
+    "aliases": ["Kokoro-82M", "Kokoro"],
+    "category": "Models",
+    "short": "Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.",
+    "long": "Kokoro-82M is the US-safe default TTS (opt-in `download-podcast --tier analog`). Voices are stock identities, not clones of real people. The disclosure node prepends the spoken bumper so you do not type it. See [Local podcast](podcast.md).",
+    "see_also": ["tts", "ace-step", "disclosure"]
+  },
+  {
+    "id": "chatterbox",
+    "title": "Chatterbox",
+    "aliases": ["Chatterbox"],
+    "category": "Models",
+    "short": "Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.",
+    "long": "Chatterbox Turbo is an opt-in TTS (`download-podcast --tier chatterbox`). Keep the PerTh watermark. Do not add celebrity reference WAVs. Kokoro remains the Spark-safe default. See [Local podcast](podcast.md).",
+    "see_also": ["kokoro", "tts"]
+  },
+  {
+    "id": "clip",
+    "title": "CLIP",
+    "aliases": ["CLIP"],
+    "category": "Models",
+    "short": "Text encoder that turns a prompt into conditioning for the sampler.",
+    "long": "In this studio, “CLIP” means the model-specific text encoder: Qwen (`flux2`) for Klein, UMT5 (`wan`) for Wan, Gemma4-with-proj (`ltxv`) for LTX. Wrong CLIP type is a common Queue failure. See [Image and video generation](learn/generation.md).",
+    "see_also": ["qwen", "umt5", "gemma4", "sampler"]
+  },
+  {
+    "id": "vae",
+    "title": "VAE",
+    "aliases": ["VAE"],
+    "category": "Models",
+    "short": "Encoder/decoder between pixels and latent space. Each model family has its own.",
+    "long": "A VAE compresses an image or video into latents and decodes latents back to pixels (and, for LTX, audio). Mixing a Wan VAE with an LTX graph will fail. LTX also needs the **audio** VAE so joint AV latents are not length-zero. See [Image and video generation](learn/generation.md).",
+    "see_also": ["latent", "ltx", "klein", "wan"]
+  },
+  {
+    "id": "unet",
+    "title": "UNET",
+    "aliases": ["UNET"],
+    "category": "Models",
+    "short": "Denoiser / transformer weights that turn noise + conditioning into a sample.",
+    "long": "Comfy loaders still say UNET for many diffusion transformers, including Klein and Wan. The filename on the canvas must match a weight under MODELS_DIR. Lab graphs pin those names; do not swap in Klein 9B or FLUX.2-dev. See [Models and cache](models-and-cache.md).",
+    "see_also": ["sampler", "latent", "models-dir"]
+  },
+  {
+    "id": "gguf",
+    "title": "GGUF",
+    "aliases": ["GGUF"],
+    "category": "Models",
+    "short": "llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.",
+    "long": "`download-models` places `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` under `comfy/llm/`. Prompt Enhance runs it **CPU-only** (`n_gpu_layers=0`) so it does not fight LTX for GB10 memory. Missing GGUF is fail-soft: generation still runs. See [Prompting](prompting.md).",
+    "see_also": ["prompt-enhance", "qwen", "occupancy"]
+  },
+  {
+    "id": "magcache",
+    "title": "MagCache",
+    "aliases": ["MagCache"],
+    "category": "Models",
+    "short": "Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.",
+    "long": "MagCache skips some denoiser steps on the Wan 5 s smoke graph (`extra.lab_magcache`). Hero LTX prints and A14B graphs leave it off. If the node is missing, the Wan graph still Queues. See [Workflow catalog](studio-workflows.md).",
+    "see_also": ["wan", "i2v"]
+  },
+  {
+    "id": "nunchaku",
+    "title": "Nunchaku",
+    "aliases": ["Nunchaku"],
+    "category": "Models",
+    "short": "Optional quantized engine. Lab graphs do not require it; PyPI nunchaku is the wrong package.",
+    "long": "`LAB_VISUAL_ENABLE_NUNCHAKU=0`. Seeded Klein graphs use core UNET/CLIP/VAE loaders. Do not `pip install nunchaku` from PyPI (that is a stats library). aarch64 Spark wheels are skip-by-default. See [Troubleshooting](troubleshooting.md).",
+    "see_also": ["klein", "unet"]
+  },
+  {
+    "id": "seedvr2",
+    "title": "SeedVR2",
+    "aliases": ["SeedVR2-3B", "SeedVR2"],
+    "category": "Models",
+    "short": "Optional Apache restorer for a stitched 90s master. Not part of download-models.",
+    "long": "SeedVR2-3B is a post-concat restore (`download-restore --tier seedvr2-3b`). Conservative 1.3–1.5× on the master only. Occupancy: stop Comfy first if you restore on GPU. See [90s shorts](shorts.md).",
+    "see_also": ["occupancy", "last-frame"]
+  },
+  {
+    "id": "trellis",
+    "title": "TRELLIS.2",
+    "aliases": ["TRELLIS.2", "TRELLIS"],
+    "category": "Models",
+    "short": "Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.",
+    "long": "`download-3d --tier trellis2` pulls TRELLIS.2 native weights only. Never pip-install nvdiffrast/nvdiffrec. Stop the Comfy stack before a heavy 3D job. See [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["sidecar", "occupancy", "da3"]
+  },
+  {
+    "id": "da3",
+    "title": "DA3-BASE",
+    "aliases": ["DA3-BASE", "DA3"],
+    "category": "Models",
+    "short": "Optional Apache depth model. DA3-LARGE is refused.",
+    "long": "Depth Anything 3 BASE is the allowed depth sidecar weight. `--tier da3-large` is banned. Same occupancy rule as TRELLIS: one heavy GPU job. See [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["trellis", "occupancy"]
+  },
+  {
+    "id": "longcat",
+    "title": "LongCat-Video",
+    "aliases": ["LongCat-Video", "LongCat"],
+    "category": "Models",
+    "short": "Optional MIT video pack. No NCCL. Not a 90s default.",
+    "long": "`download-longcat --tier video` is opt-in. Context-parallel needs an explicit allow flag. Independent Sparks still share MODELS_DIR; this sample stack does not ship in-tree NCCL. See [Spark farm](spark-farm.md).",
+    "see_also": ["spark-farm", "wan"]
+  },
+  {
+    "id": "dreamx",
+    "title": "DreamX-Creator",
+    "aliases": ["DreamX-Creator", "DreamX"],
+    "category": "Models",
+    "short": "Optional Apache joint-AV pack. DreamX-World is refused.",
+    "long": "`download-dreamx --tier creator` only. Unload LTX/Wan 5B first. Not a lab default and not a 90s printer. See [Model licenses](licenses.md).",
+    "see_also": ["av", "ltx"]
+  },
+  {
+    "id": "fun-inp",
+    "title": "Fun InP",
+    "aliases": ["Fun InP"],
+    "category": "Models",
+    "short": "Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.",
+    "long": "`download-wan --tier fun-inp` then load `wan-flf-5s-lab-example`. Unload LTX first. This is a continuity draft, not the 90s LTX print path. See [90s shorts](shorts.md).",
+    "see_also": ["flf", "wan", "vace"]
+  },
+  {
+    "id": "vace",
+    "title": "VACE",
+    "aliases": ["VACE"],
+    "category": "Models",
+    "short": "Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.",
+    "long": "VACE stitches the last frame of shot A toward the first frame of shot B as a short join clip. It is a Comfy graph, not a Docker sidecar. See [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["fun-inp", "last-frame", "wan"]
+  },
+  {
+    "id": "z-image",
+    "title": "Z-Image Turbo",
+    "aliases": ["Z-Image Turbo", "Z-Image"],
+    "category": "Models",
+    "short": "Optional Apache still runner-up. Not the default Klein path.",
+    "long": "Z-Image Turbo uses different weights (`ae`, `z_image_turbo_*`). Seeded lab stills are Klein 4B. If a template asks for `ae.safetensors`, you loaded the wrong graph — open `klein-still-draft-lab-example`. Optional: `download-image --tier zimage`. See [Model licenses](licenses.md).",
+    "see_also": ["klein", "t2i"]
+  },
+  {
+    "id": "vhs",
+    "title": "VideoHelperSuite",
+    "aliases": ["VHS_VideoCombine", "VideoHelperSuite", "VHS"],
+    "category": "Models",
+    "short": "Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview.",
+    "long": "Wan and LTX lab graphs wire `VHS_VideoCombine` with `save_output: true`. After Queue, open **Save video (MP4) — open node for preview**. Files land on the host at COMFY_OUTPUT_DIR. LTX also feeds decoded audio into VHS. See [Still to motion to AV](visual-generative-ai.md).",
+    "see_also": ["ltx", "wan", "comfy-output-dir"]
+  },
+  {
+    "id": "qwen3-tts",
+    "title": "Qwen3-TTS",
+    "aliases": ["Qwen3-TTS"],
+    "category": "Models",
+    "short": "Optional Apache TTS + voice design. Not the Kokoro default.",
+    "long": "`download-podcast --tier qwen3tts` is opt-in. Empty reference audio stays on Kokoro. Do not use it to clone a real person. See [Local podcast](podcast.md).",
+    "see_also": ["kokoro", "tts"]
+  },
+  {
+    "id": "fp8",
+    "title": "FP8",
+    "aliases": ["FP8"],
+    "category": "Models",
+    "short": "8-bit float weight format used by default Klein distilled and some Wan packs.",
+    "long": "FP8 keeps the default Klein 4B and several Wan files small enough for GB10. It is a storage/compute format, not a style. NVFP4 Klein is optional and still Apache for 4B. See [Models and cache](models-and-cache.md).",
+    "see_also": ["klein", "int8-convrot"]
+  },
+  {
+    "id": "int8-convrot",
+    "title": "INT8-convrot",
+    "aliases": ["INT8-convrot"],
+    "category": "Models",
+    "short": "Quantized LTX-2.5 transformer format used by the lab distilled weights.",
+    "long": "Lab LTX-2.5 filenames include `int8-convrot`. If INT8-convrot or gated access fails, LTX-2.3 distilled FP8 is an optional fallback — seeded graphs still expect 2.5 names. See [Models and cache](models-and-cache.md).",
+    "see_also": ["ltx", "fp8"]
+  },
+  {
+    "id": "t2i",
+    "title": "T2I",
+    "aliases": ["text-to-image", "T2I"],
+    "category": "Modalities",
+    "short": "Text-to-image: a prompt becomes a still (PNG). Klein's job.",
+    "long": "Text-to-image is the first studio move. Queue `klein-still-draft-lab-example`, then feed a PNG into Wan or LTX I2V if you want motion. See [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["klein", "i2v", "queue"]
+  },
+  {
+    "id": "i2v",
+    "title": "I2V",
+    "aliases": ["image-to-video", "I2V"],
+    "category": "Modalities",
+    "short": "Image-to-video: a start still plus motion text becomes a clip. Start image owns look.",
+    "long": "Wan I2V is silent; LTX I2V can carry world audio. Point LoadImage at `ez_still_draft_*.png` (or a hero 1280×704 still for LTX). Do not re-describe wardrobe and location in an I2V prompt. See [Klein, Wan, and LTX](learn/pipeline.md).",
+    "see_also": ["t2v", "loadimage", "wan", "ltx"]
+  },
+  {
+    "id": "t2v",
+    "title": "T2V",
+    "aliases": ["text-to-video", "T2V"],
+    "category": "Modalities",
+    "short": "Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.",
+    "long": "Use T2V when you do not have a still you want to keep. Lab Wan T2V bypasses LoadImage. LTX T2V still wants a flowing paragraph with sound. See [Prompting](prompting.md).",
+    "see_also": ["i2v", "wan", "ltx"]
+  },
+  {
+    "id": "a2v",
+    "title": "A2V",
+    "aliases": ["audio-to-video", "A2V"],
+    "category": "Modalities",
+    "short": "Audio-to-video: picture follows a soundtrack (talking-head freeze, not lip-sync OSS).",
+    "long": "`klein-talking-head-lab-example` smokes LTX A2V freeze. Banned lip-sync OSS (Wav2Lip) stays out. See [Workflow catalog](studio-workflows.md).",
+    "see_also": ["s2v", "ltx"]
+  },
+  {
+    "id": "s2v",
+    "title": "S2V",
+    "aliases": ["speech-to-video", "S2V"],
+    "category": "Modalities",
+    "short": "Speech-to-video (optional Wan 2.2 S2V 14B). Not a download-models default.",
+    "long": "Wan S2V is opt-in (`download-wan --tier s2v`) and occupancy-heavy. Talking-head lab graphs mention it; they do not require it for the LTX freeze smoke. See [Model licenses](licenses.md).",
+    "see_also": ["a2v", "wan"]
+  },
+  {
+    "id": "av",
+    "title": "joint AV",
+    "aliases": ["joint AV", "AV hero"],
+    "category": "Modalities",
+    "short": "Audio and video in one transformer pass. LTX-2.5's job; Wan cannot do this.",
+    "long": "LTX is a joint audio/video model. Lab graphs must build empty audio latents and concat them before KSampler. Omitting that path yields a reshape error on length-zero audio. Wan stays silent on purpose (cleaner Apache motion). See [Klein, Wan, and LTX](learn/pipeline.md).",
+    "see_also": ["ltx", "wan", "vhs"]
+  },
+  {
+    "id": "flf",
+    "title": "first-last-frame",
+    "aliases": ["first-last-frame", "FLF"],
+    "category": "Modalities",
+    "short": "Condition a clip on both a first and last still (Wan Fun InP).",
+    "long": "FLF is a continuity draft: you pick how the shot starts and ends. It is optional and large. 90s films instead chain last-frame PNG → next I2V start. See [90s shorts](shorts.md).",
+    "see_also": ["fun-inp", "last-frame", "i2v"]
+  },
+  {
+    "id": "ping-pong",
+    "title": "ping-pong",
+    "aliases": ["ping-pong"],
+    "category": "Modalities",
+    "short": "Play a clip forward then reverse so the join frame equals the start (GIF/bumper loops).",
+    "long": "`wan-gif-loop-lab-example` leaves VHS ping-pong on. Prompt cyclic motion (breeze, curtains), not a walk or one-way dolly, or reverse playback looks wrong. See [Prompting](prompting.md).",
+    "see_also": ["wan", "vhs"]
+  },
+  {
+    "id": "comfyui",
+    "title": "ComfyUI",
+    "aliases": ["ComfyUI"],
+    "category": "Studio",
+    "short": "Node-graph UI for local image, video, and audio generation. This stack's studio.",
+    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files end in `-lab-example` and copy into `user/default/workflows/` on start. See [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["queue", "widget", "workflow", "manage-sh"]
+  },
+  {
+    "id": "workflow",
+    "title": "workflow",
+    "aliases": ["node graph", "lab graph", "workflow"],
+    "category": "Studio",
+    "short": "A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.",
+    "long": "Host files live under `workflows/*-lab-example.json`. The entrypoint copies them into Comfy. Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md).",
+    "see_also": ["lab-example", "note-node", "widget", "comfyui"]
+  },
+  {
+    "id": "queue",
+    "title": "Queue",
+    "aliases": ["Queue"],
+    "category": "Studio",
+    "short": "One run of the current graph: encode, sample, decode, save.",
+    "long": "Queue is the studio's play button. A still-draft Queue is minutes; a 5 s Wan/LTX Queue is minutes; a one-click 90s film Queue is 18 sequential 5 s prints (long wall-clock, not a 90s denoise). See [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["comfyui", "sampler", "seed"]
+  },
+  {
+    "id": "widget",
+    "title": "widget",
+    "aliases": ["widget"],
+    "category": "Studio",
+    "short": "A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).",
+    "long": "Studio work is widget work: change the Positive prompt, seed, LoadImage filename, or Enhance toggle on the canvas. The JSON on disk stays the seeded lab example. See [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["queue", "workflow", "enhance"]
+  },
+  {
+    "id": "latent",
+    "title": "latent",
+    "aliases": ["latent space", "latent"],
+    "category": "Studio",
+    "short": "Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.",
+    "long": "5.00 s at 24 fps is 120 frames (some smokes use 121 = 4n+1). LTX spatial size must be divisible by 32 — lab landscape is 1280×704. Do not Queue a 30–90 s latent on GB10. See [Image and video generation](learn/generation.md).",
+    "see_also": ["vae", "sampler", "ltx"]
+  },
+  {
+    "id": "sampler",
+    "title": "KSampler",
+    "aliases": ["KSampler", "sampler"],
+    "category": "Studio",
+    "short": "Node that denoises latents for N steps at a CFG, seed, and scheduler.",
+    "long": "Distilled Klein uses 4 steps and CFG 1.0. Wan/LTX lab graphs pin steps, scheduler, and frame count on the canvas. Changing those widgets is how you experiment; changing them to a 90 s denoise is how you melt the Spark. See [Image and video generation](learn/generation.md).",
+    "see_also": ["cfg", "seed", "latent", "queue"]
+  },
+  {
+    "id": "cfg",
+    "title": "CFG",
+    "aliases": ["CFG"],
+    "category": "Studio",
+    "short": "Classifier-free guidance scale. Distilled Klein wants 1.0 — do not 'turn it up for quality'.",
+    "long": "CFG 1.0 on distilled Klein means the positive prompt is the whole game. FLUX-family models do not use negatives well; put constraints in the positive (“unmarked facades”). See [Prompting](prompting.md).",
+    "see_also": ["klein", "sampler"]
+  },
+  {
+    "id": "seed",
+    "title": "seed",
+    "aliases": ["seed"],
+    "category": "Studio",
+    "short": "RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.",
+    "long": "Fix a seed when you iterate a prompt so lighting and identity do not jump. Identity sheets pin seed 42. Random seeds are for discovery, not for matching a still into I2V. See [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["queue", "identity-still"]
+  },
+  {
+    "id": "prompt-enhance",
+    "title": "Prompt Enhance",
+    "aliases": ["Prompt Enhance"],
+    "category": "Studio",
+    "short": "In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.",
+    "long": "Klein/Wan/LTX Prompt Enhance defaults **on** for daily graphs and **off** for frozen identity bibles and 90s films. After Queue, read the dim CLIP prompt box — that is what was encoded. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
+    "see_also": ["enhance", "gguf", "qwen"]
+  },
+  {
+    "id": "world-bible",
+    "title": "world bible",
+    "aliases": ["world bible"],
+    "category": "Studio",
+    "short": "Locked description of a place or character with no camera. Shared across shots.",
+    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Pin Enhance off on the bible. See [Prompting](prompting.md).",
+    "see_also": ["identity-still", "prompt-enhance"]
+  },
+  {
+    "id": "identity-still",
+    "title": "identity still",
+    "aliases": ["identity still"],
+    "category": "Studio",
+    "short": "Klein frame that locks wardrobe/place so later I2V shots stay the same person or house.",
+    "long": "90s films Queue a Klein identity at 1280×704 (LTX grid), then 18 LTX prints that start from last frames. Enhance stays off so the rewriter cannot restyle the bible. See [90s shorts](shorts.md).",
+    "see_also": ["klein", "world-bible", "last-frame"]
+  },
+  {
+    "id": "lab-example",
+    "title": "lab-example",
+    "aliases": ["lab-example graphs"],
+    "category": "Studio",
+    "short": "Seeded graph filename suffix. Load these; do not start from a blank canvas.",
+    "long": "If it does not end in `-lab-example`, it is not a lab smoke. Optional packs live under `workflows/optional/` and `workflows/shorts/`. See [Workflow catalog](studio-workflows.md).",
+    "see_also": ["workflow", "note-node"]
+  },
+  {
+    "id": "note-node",
+    "title": "Note node",
+    "aliases": ["Note node"],
+    "category": "Studio",
+    "short": "On-canvas operator note: purpose, models, sampler, prompting tips, run steps.",
+    "long": "Every seeded graph includes a Comfy Note plus `extra.lab_note`. Read it before you Queue. It is the UI source of truth when docs and widgets disagree after a pull. See [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["lab-example", "workflow"]
+  },
+  {
+    "id": "loadimage",
+    "title": "LoadImage",
+    "aliases": ["LoadImage"],
+    "category": "Studio",
+    "short": "Node that feeds a PNG into I2V. Point it at your still, not only example.png.",
+    "long": "After a still-draft Queue, set Wan/LTX LoadImage to `ez_still_draft_*.png` under COMFY_OUTPUT_DIR (the container sees `/outputs`). Leaving `example.png` is a smoke test only. See [Still to motion to AV](visual-generative-ai.md).",
+    "see_also": ["i2v", "comfy-output-dir"]
+  },
+  {
+    "id": "enhance",
+    "title": "Enhance",
+    "aliases": ["Enhance"],
+    "category": "Studio",
+    "short": "Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.",
+    "long": "Leave Enhance off when the lab already shipped a model-native paragraph (90s films, identity bibles). Turn it on for a lazy sentence plus optional style dropdown. I2V ignores style — the start image owns look. See [Prompting](prompting.md).",
+    "see_also": ["prompt-enhance", "world-bible"]
+  },
+  {
+    "id": "dgx-spark",
+    "title": "DGX Spark",
+    "aliases": ["DGX Spark", "Spark"],
+    "category": "Hardware and safety",
+    "short": "NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.",
+    "long": "ez-comfy-stack is a sample studio for a **single** DGX Spark. Independent Sparks may share MODELS_DIR (Spark farm) but there is no in-tree NCCL. SSH recoverability drives restart: no, headroom, and download-limit. See [Hardware, memory, and safety](learn/hardware.md).",
+    "see_also": ["gb10", "headroom", "spark-farm", "restart-no"]
+  },
+  {
+    "id": "gb10",
+    "title": "GB10",
+    "aliases": ["GB10"],
+    "category": "Hardware and safety",
+    "short": "Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.",
+    "long": "There is no separate giant VRAM pool. Compose `mem_limit` is 90g so the host keeps headroom for SSH. One heavy job at a time. See [Hardware, memory, and safety](learn/hardware.md).",
+    "see_also": ["unified-memory", "headroom", "occupancy"]
+  },
+  {
+    "id": "unified-memory",
+    "title": "unified memory",
+    "aliases": ["unified memory"],
+    "category": "Hardware and safety",
+    "short": "CPU and GPU share one memory pool on GB10. Weight copies can double unless patched.",
+    "long": "The stack applies `patch_unified_memory_copy.py` (`copy=False` on safetensor `.to(device)`) and `patch_get_free_memory.py` (host free RAM instead of under-reporting cudaMemGetInfo). `--highvram` is the wrong flag here. See [Hardware, memory, and safety](learn/hardware.md).",
+    "see_also": ["gb10", "headroom", "kitchen"]
+  },
+  {
+    "id": "occupancy",
+    "title": "occupancy",
+    "aliases": ["occupancy"],
+    "category": "Hardware and safety",
+    "short": "One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.",
+    "long": "GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. See [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["sidecar", "ace-step", "gb10"]
+  },
+  {
+    "id": "headroom",
+    "title": "headroom",
+    "aliases": ["headroom"],
+    "category": "Hardware and safety",
+    "short": "Free host RAM/disk checked before start so SSH still works under load.",
+    "long": "`doctor` and `start` refuse when host free RAM is below policy (`min_host_free_gib`). Do not weaken this for demos. See [Reboot safety](reboot-safety.md) and [Hardware, memory, and safety](learn/hardware.md).",
+    "see_also": ["restart-no", "doctor", "unified-memory"]
+  },
+  {
+    "id": "restart-no",
+    "title": "restart: no",
+    "aliases": ["restart: \"no\"", "restart: no"],
+    "category": "Hardware and safety",
+    "short": "Compose never auto-starts Comfy after reboot. Manual start only (type yes).",
+    "long": "A remotely managed Spark that relaunches a 90g GPU job on boot is how you lose SSH. Always `manage.sh stop` before reboot. Independent farm nodes use the same policy. See [Reboot safety](reboot-safety.md).",
+    "see_also": ["headroom", "manage-sh", "dgx-spark"]
+  },
+  {
+    "id": "download-limit",
+    "title": "download-limit",
+    "aliases": ["download-limit", "download limit"],
+    "category": "Hardware and safety",
+    "short": "Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.",
+    "long": "Full-rate multi-GB pulls freeze SSH. `download-models` wraps wondershaper when HTB works, else gentler HF workers. `DOWNLOAD_LIMIT=off` is an SSH risk. See [Download limit](download-limit.md).",
+    "see_also": ["htb", "headroom", "models-dir"]
+  },
+  {
+    "id": "htb",
+    "title": "HTB",
+    "aliases": ["wondershaper", "HTB"],
+    "category": "Hardware and safety",
+    "short": "Kernel traffic shaping used by download-limit. Often missing on Spark; then the wrap soft-fails.",
+    "long": "When `sch_htb` is absent, downloads continue with a warning and gentler Hugging Face settings. That is not a license to set `DOWNLOAD_LIMIT=off`. See [Download limit](download-limit.md).",
+    "see_also": ["download-limit"]
+  },
+  {
+    "id": "models-dir",
+    "title": "MODELS_DIR",
+    "aliases": ["MODELS_DIR"],
+    "category": "Hardware and safety",
+    "short": "Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.",
+    "long": "Weights live on the host so GHCR images stay small and multiple stacks can share one cache. `cleanup` does not delete MODELS_DIR. See [Models and cache](models-and-cache.md).",
+    "see_also": ["comfy-state", "ghcr", "comfy-output-dir"]
+  },
+  {
+    "id": "comfy-output-dir",
+    "title": "COMFY_OUTPUT_DIR",
+    "aliases": ["COMFY_OUTPUT_DIR"],
+    "category": "Hardware and safety",
+    "short": "Host folder for PNG/MP4 (default /mnt/comfy-output). Container path /outputs.",
+    "long": "`cleanup` does not delete outputs. `status` prints the path. Look here after Queue, not inside the git repo. See [Getting Started](getting-started.md).",
+    "see_also": ["models-dir", "vhs"]
+  },
+  {
+    "id": "comfy-state",
+    "title": "comfy-state",
+    "aliases": ["comfy-state"],
+    "category": "Hardware and safety",
+    "short": "Docker volume for the Comfy install (venv, custom nodes). cleanup DELETE removes this only.",
+    "long": "First start seeds the volume from `/opt/comfy-prebuilt`. Weights are not in this volume. Resetting it does not re-download Klein/Wan/LTX. See [Hardware, memory, and safety](learn/hardware.md).",
+    "see_also": ["ghcr", "models-dir"]
+  },
+  {
+    "id": "ghcr",
+    "title": "GHCR",
+    "aliases": ["GHCR"],
+    "category": "Hardware and safety",
+    "short": "GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.",
+    "long": "`main` → `ghcr.io/toxicoder/ez-comfy:us-safe-studio`; `development` and feature branches → `-development`. The image has Comfy+torch, not Klein/Wan/LTX weights. Old `flux-to-ltx*` tags freeze. See [Getting Started](getting-started.md).",
+    "see_also": ["comfy-state", "models-dir"]
+  },
+  {
+    "id": "us-safe",
+    "title": "US-safe",
+    "aliases": ["US-safe"],
+    "category": "Hardware and safety",
+    "short": "Local weights this lab will download for a US casual-commercial operator. Not legal advice.",
+    "long": "Defaults: Apache Klein 4B + Apache Wan 2.2 + LTX-2.5 Community (gated, $10M cap). MiniMax H3 is a US Excluded Territory ban for weights **and** outputs. Read [Model licenses](licenses.md) before a 30 GB pull.",
+    "see_also": ["community-license", "apache", "h3"]
+  },
+  {
+    "id": "manage-sh",
+    "title": "manage.sh",
+    "aliases": ["manage.sh"],
+    "category": "Hardware and safety",
+    "short": "Operator CLI: setup, doctor, download-models, start (type yes), stop, status.",
+    "long": "Run from the repo root. It loads `.env`. Studio users still Queue in the browser; operators keep SSH alive with this tool. Full catalog: [manage.sh reference](manage-cli.md).",
+    "see_also": ["doctor", "restart-no", "download-limit"]
+  },
+  {
+    "id": "doctor",
+    "title": "doctor",
+    "aliases": ["doctor"],
+    "category": "Hardware and safety",
+    "short": "Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.",
+    "long": "Fix hard doctor failures before `download-models`. Missing lab weights are a warning, not a hard fail. `attention: pytorch-fallback` on a running Spark is a 10–20× slow path. See [Troubleshooting](troubleshooting.md).",
+    "see_also": ["manage-sh", "headroom", "kitchen"]
+  },
+  {
+    "id": "hf-token",
+    "title": "HF_TOKEN",
+    "aliases": ["HF_TOKEN"],
+    "category": "Hardware and safety",
+    "short": "Hugging Face token in .env. Required for gated LTX-2.5. Not a license click by itself.",
+    "long": "Klein 4B and Wan 5B are Apache. LTX-2.5 still needs you to open the model card as that user and click Agree. Fine-grained tokens need gated-repo read. See [Model licenses](licenses.md).",
+    "see_also": ["gated", "ltx"]
+  },
+  {
+    "id": "gated",
+    "title": "gated model",
+    "aliases": ["gated model", "gated repo"],
+    "category": "Hardware and safety",
+    "short": "Hugging Face repo that requires a license click plus a token. LTX-2.5 is gated.",
+    "long": "A token in `.env` is not the same as accepting the Lightricks license. `download-models` exits non-zero until the distilled LTX set is on disk. See [Getting Started](getting-started.md).",
+    "see_also": ["hf-token", "ltx", "community-license"]
+  },
+  {
+    "id": "kitchen",
+    "title": "Comfy Kitchen",
+    "aliases": ["Kitchen attention", "Comfy Kitchen"],
+    "category": "Hardware and safety",
+    "short": "Default attention backend (--use-ck-attention). pytorch-fallback is a 10–20× slow path.",
+    "long": "`doctor` prints `attention: kitchen|sage|pytorch-fallback|unknown`. Never pass `--use-sage-attention` next to Kitchen. spark-timing refuses to record unless Kitchen is live. See [Hardware, memory, and safety](learn/hardware.md).",
+    "see_also": ["pytorch-fallback", "doctor"]
+  },
+  {
+    "id": "pytorch-fallback",
+    "title": "pytorch-fallback",
+    "aliases": ["pytorch-fallback"],
+    "category": "Hardware and safety",
+    "short": "Slow PyTorch attention. On a real Spark this is a defect, not a default.",
+    "long": "If `doctor` says `attention: pytorch-fallback` while compose is up, do not record spark-timing and do not treat mushy video as a prompt problem. See [Troubleshooting](troubleshooting.md).",
+    "see_also": ["kitchen"]
+  },
+  {
+    "id": "nvidia-container-toolkit",
+    "title": "NVIDIA Container Toolkit",
+    "aliases": ["NVIDIA Container Toolkit"],
+    "category": "Hardware and safety",
+    "short": "Lets Docker see the GPU. Required on the Spark host before start.",
+    "long": "`setup --install-docker` configures `nvidia-ctk` when present. Snap Docker is the wrong install. See [Getting Started](getting-started.md).",
+    "see_also": ["dgx-spark", "manage-sh"]
+  },
+  {
+    "id": "last-frame",
+    "title": "last-frame continuity",
+    "aliases": ["last-frame continuity"],
+    "category": "Film",
+    "short": "Shot N's last PNG becomes shot N+1's I2V start. How 90s films work without a 90s denoise.",
+    "long": "18 × 5.00 s LTX prints (120 frames @ 24 fps) stitch to a 90.00 s cap. One-click film graphs chain this inside Comfy; `print-shot` / `film-resume` do it on the host jobstore. See [90s shorts](shorts.md).",
+    "see_also": ["identity-still", "ltx", "film-accept"]
+  },
+  {
+    "id": "otio",
+    "title": "OTIO",
+    "aliases": ["OTIO"],
+    "category": "Film",
+    "short": "OpenTimelineIO JSON for Kdenlive/Shotcut. Host-side; never in the Docker image.",
+    "long": "`manage.sh film-export-otio go-see` writes stdlib JSON under `films/<slug>/publish/`. Import on the Spark host or a laptop. Occupancy: stop Comfy if the NLE will use the GPU. See [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["sidecar", "jobstore"]
+  },
+  {
+    "id": "nvenc",
+    "title": "NVENC",
+    "aliases": ["NVENC"],
+    "category": "Film",
+    "short": "Hardware encoder for proxies/previews. Comfy must be stopped (encoder contention on GB10).",
+    "long": "`film-proxies` and `nvenc-preview.sh` refuse while compose is up. They never rewrite masters. See [90s shorts](shorts.md).",
+    "see_also": ["occupancy", "film-accept"]
+  },
+  {
+    "id": "film-accept",
+    "title": "film-accept",
+    "aliases": ["film-accept"],
+    "category": "Film",
+    "short": "Fail-closed gate: 5.00 s, 1280×704, LTX audio present before concat.",
+    "long": "`manage.sh film-accept go-see` (and concat `--film --yes`) refuse shots that drift. `--skip-accept` is an escape hatch, not a default. See [90s shorts](shorts.md).",
+    "see_also": ["last-frame", "ltx"]
+  },
+  {
+    "id": "jobstore",
+    "title": "jobstore",
+    "aliases": ["jobstore"],
+    "category": "Film",
+    "short": "Per-film state.json + shot MP4s under COMFY_OUTPUT_DIR/films/<slug>/ for resume.",
+    "long": "A dropped SSH session is not a two-hour requeue: `film-resume` skips ok 5.00 s shots. Optional studio-ui on :8190 is lights only (no GPU). See [90s shorts](shorts.md).",
+    "see_also": ["last-frame", "film-accept"]
+  },
+  {
+    "id": "loudnorm",
+    "title": "loudnorm",
+    "aliases": ["loudnorm"],
+    "category": "Film",
+    "short": "ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.",
+    "long": "`podcast-loudnorm.sh` is a hard fail if ffmpeg is missing — it will not skip. 90s publish graphs apply YouTube loudnorm in EZFilmConcat. See [Local podcast](podcast.md).",
+    "see_also": ["tts", "vhs"]
+  },
+  {
+    "id": "sidecar",
+    "title": "sidecar",
+    "aliases": ["sidecar"],
+    "category": "Film",
+    "short": "Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.",
+    "long": "Sidecars stay off the Docker image on purpose. `manage.sh blender` dies if compose is up. See [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["occupancy", "trellis"]
+  },
+  {
+    "id": "spark-farm",
+    "title": "Spark farm",
+    "aliases": ["Spark farm"],
+    "category": "Film",
+    "short": "Independent Sparks as parallel 5 s workers with one weight copy. No NCCL.",
+    "long": "Farm mode Queues different beats on different hosts. Concat stays on one machine. `spark-farm.sh` never starts compose on a remote node (each node still types yes locally). See [Spark farm](spark-farm.md).",
+    "see_also": ["dgx-spark", "models-dir", "restart-no"]
+  },
+  {
+    "id": "concat-shots",
+    "title": "concat-shots",
+    "aliases": ["concat-shots"],
+    "category": "Film",
+    "short": "Host ffmpeg stitch for 5 s takes. In-graph EZFilmConcat is the one-click 90s path.",
+    "long": "`concat-shots.sh --film go-see --yes` is the host fallback. `--xfade` is audio-only and refuses Wan-silent shots. See [90s shorts](shorts.md).",
+    "see_also": ["last-frame", "film-accept"]
+  },
+  {
+    "id": "tts",
+    "title": "TTS",
+    "aliases": ["TTS"],
+    "category": "Audio",
+    "short": "Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.",
+    "long": "Invented characters only. Disclose synthetic voices in the mix (spoken bumper), not only in a description box. TTS-Audio-Suite and celebrity refs are out of policy. See [Local podcast](podcast.md).",
+    "see_also": ["kokoro", "disclosure", "ace-step"]
+  },
+  {
+    "id": "disclosure",
+    "title": "disclosure bumper",
+    "aliases": ["disclosure bumper"],
+    "category": "Audio",
+    "short": "Spoken line that the podcast graph prepends: voices and music are synthesized.",
+    "long": "Do not type the bumper yourself — `EZPodcastDisclosure` prepends it. Platform and USCO rules still apply; this page is not legal advice. See [Local podcast](podcast.md).",
+    "see_also": ["tts", "kokoro"]
+  },
+  {
+    "id": "apache",
+    "title": "Apache 2.0",
+    "aliases": ["Apache 2.0", "Apache"],
+    "category": "Licenses",
+    "short": "License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.",
+    "long": "Apache still + Apache silent motion is why the daily driver is legally the cleanest motion path. LTX is **not** Apache. This is policy text, not legal advice. See [Model licenses](licenses.md).",
+    "see_also": ["klein", "wan", "community-license", "us-safe"]
+  },
+  {
+    "id": "community-license",
+    "title": "LTX Community License",
+    "aliases": ["LTX Community License", "Community License"],
+    "category": "Licenses",
+    "short": "LTX-2.5 terms: free commercial under $10M COMPANY revenue (affiliates count); disclose AI; no distill.",
+    "long": "No US geo-ban on the Community License, but the company-revenue cap counts affiliates. Disclose AI-generated media; do not strip provenance. Not legal advice. See [Model licenses](licenses.md).",
+    "see_also": ["ltx", "gated", "us-safe"]
+  },
+  {
+    "id": "h3",
+    "title": "MiniMax H3",
+    "aliases": ["MiniMax H3"],
+    "category": "Licenses",
+    "short": "Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.",
+    "long": "Do not download, Queue, or pin Comfy for MiniMax H3. `doctor` warns if leftover weights exist. Use the US-safe Klein/Wan/LTX pack instead. See [Model licenses](licenses.md).",
+    "see_also": ["us-safe", "klein"]
+  }
+]
