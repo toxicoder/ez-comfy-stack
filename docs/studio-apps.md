@@ -103,7 +103,6 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 | **wan-gif-loop-lab-example** | wan | 49-frame ping-pong GIF |
 | **ltx-i2v-5s-lab-example** | ltx | AV 5 s, 1280×704 |
 | **ltx-hook-av-lab-example** | ltx | AV cold open |
-| **klein-platform-pack-lab-example** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
 
@@ -116,7 +115,6 @@ Audio Apps (`podcast-*`, `music-rap-*`) are occupancy **audio**. Film `film-*-90
 | From | To |
 | --- | --- |
 | Spark Still | Hero Still → Silent 5s (`wan-i2v-5s`) → AV 5s (`ltx-i2v-5s`) |
-| Spark Still | Platform Pack (`klein-platform-pack`) → Silent 5s / Hook AV |
 | Hook Still | `wan-shorts-i2v` → `ltx-shorts-i2v` |
 | Storyboard 6-up | `wan-i2v-shot` / `ltx-i2v-shot` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |

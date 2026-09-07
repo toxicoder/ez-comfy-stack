@@ -221,7 +221,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "klein",
         "klein-still-hero-lab-example",
         "wan-i2v-5s-lab-example",
-        "klein-platform-pack-lab-example",
         enhance_off_identity=True,
     ),
     "klein-identity-sheet-lab-example": _spec(
@@ -287,13 +286,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "klein-food-tabletop-lab-example": _spec("produce", "klein"),
     "klein-shorts-still-lab-example": _spec("produce", "klein"),
     "klein-before-after-lab-example": _spec("produce", "klein"),
-    "klein-platform-pack-lab-example": _spec(
-        "produce",
-        "klein",
-        "wan-i2v-5s-lab-example",
-        "ltx-hook-av-lab-example",
-        enhance_off_identity=True,
-    ),
     "klein-talking-head-lab-example": _spec("produce", "ltx"),
     "wan-i2v-5s-lab-example": _spec(
         "produce", "wan", "ltx-i2v-5s-lab-example"

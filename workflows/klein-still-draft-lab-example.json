@@ -527,8 +527,7 @@
       "enhance_off_identity": true,
       "handoff": [
         "klein-still-hero-lab-example",
-        "wan-i2v-5s-lab-example",
-        "klein-platform-pack-lab-example"
+        "wan-i2v-5s-lab-example"
       ]
     },
     "linearData": {
