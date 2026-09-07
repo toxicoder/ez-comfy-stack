@@ -760,12 +760,22 @@ teardown() {
   source "${REPO_ROOT}/docker/entrypoint.sh"
   run comfy_exec_args
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"--use-ck-attention"* ]]
-  [[ "${output}" == *"--normalvram"* ]]
-  [[ "${output}" == *"--disable-mmap"* ]]
-  [[ "${output}" != *"--use-sage-attention"* ]]
-  [[ "${output}" != *"--highvram"* ]]
-  [[ "${output}" == *"--bf16-unet"* ]]
+  local args="${output}"
+  [[ "${args}" == *"--use-ck-attention"* ]]
+  [[ "${args}" == *"--disable-mmap"* ]]
+  [[ "${args}" == *"--bf16-unet"* ]]
+  # One token per line from comfy_exec_args. grep -Fx so bash 3.2 set -e
+  # does not swallow a failed [[ != ]] in the middle of the test function.
+  run grep -Fx -- '--use-sage-attention' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--highvram' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--gpu-only' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--lowvram' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--normalvram' <<< "${args}"
+  [ "${status}" -ne 0 ]
 }
 
 @test "install_sage_wheel_if_pinned skips without URL and refuses URL without sha" {

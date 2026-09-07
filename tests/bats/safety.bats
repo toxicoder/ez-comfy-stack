@@ -292,6 +292,8 @@ teardown() {
   [ "$status" -ne 0 ]
   run grep -E '^[[:space:]]*--gpu-only([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "$status" -ne 0 ]
+  run grep -E '^[[:space:]]*--normalvram([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -ne 0 ]
   run grep -E 'mem_limit:.*90g|MEM_LIMIT:-90g' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]
   run grep -F 'TORCH_COMPILE_DISABLE' "${REPO_ROOT}/docker/docker-compose.yml"
