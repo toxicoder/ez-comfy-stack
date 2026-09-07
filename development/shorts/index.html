@@ -1325,6 +1325,7 @@
 <li>Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in</li>
 <li>Optional studio-ui board (<code>:8190</code> profile), LTX Director GPL clone, OpenCut MIT embed</li>
 <li>Optional 3D sidecars (TRELLIS.2, DA3-BASE, host Blender / SuperSplat) and VACE join</li>
+<li>Wave 4: <code>film-accept</code>, DFR print mode, A14B hero, talking-head, LongCat / DreamX opt-in</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
@@ -1468,6 +1469,8 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>./scripts/manage.sh<span class="w"> </span>film-proxies<span class="w"> </span>go-see<span class="w"> </span>--yes
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="c1"># Promote take 3 of shot 12 into the jobstore master:</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>./scripts/manage.sh<span class="w"> </span>take-promote<span class="w"> </span>go-see<span class="w"> </span><span class="m">12</span><span class="w"> </span><span class="m">3</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># Fail-closed accept gate before concat (5.00s, 1280×704, LTX audio):</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>./scripts/manage.sh<span class="w"> </span>film-accept<span class="w"> </span>go-see
 </code></pre></div>
 <p>Optional jobstore board (no GPU, 512m, <code>restart: "no"</code>). Default <code>start</code> does <strong>not</strong> launch it:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>studio-ui<span class="w"> </span>up<span class="w"> </span>studio-ui
@@ -1490,14 +1493,21 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># load wan-vace-join-lab-example (Shot A last → Shot B first)</span>
 </code></pre></div>
 <p>Host 3D sidecars (Comfy <strong>must be stopped</strong>): <a href="../studio-sidecars/">Studio sidecars</a>, <a href="../blender-gb10-sidecar/">Blender</a>, <a href="../splat-sidecar/">SuperSplat</a>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>trellis2<span class="w">   </span><span class="c1"># or da3-base | all</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w">                       </span><span class="c1"># host binary; never in Dockerfile</span>
+<p>Wave 4 hero path (opt-in, occupancy: one heavy job):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>a14b<span class="w">   </span><span class="c1"># A14B FP8 8-step silent hero; MagCache off</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># load optional/wan-i2v-a14b-lab-example — unload 5B first</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>./scripts/manage.sh<span class="w"> </span>download-longcat<span class="w"> </span>--tier<span class="w"> </span>video<span class="w">     </span><span class="c1"># MIT; no NCCL</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>./scripts/manage.sh<span class="w"> </span>download-dreamx<span class="w"> </span>--tier<span class="w"> </span>creator<span class="w">    </span><span class="c1"># Apache joint AV; not DreamX-World</span>
+</code></pre></div>
+<p>Identity sheet: <code>klein-identity-sheet-lab-example</code> (seed <strong>42</strong>, Enhance <strong>off</strong>, 1280×704). Talking-head: <code>klein-talking-head-lab-example</code> (LTX A2V freeze; S2V opt-in <code>--tier s2v</code>). DFR two-stage stays in Comfy <strong>Templates → LTX-2.5</strong>; YAML <code>print: dfr</code> selects that path. Lab printers stay 5.00 s.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>trellis2<span class="w">   </span><span class="c1"># or da3-base | all</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w">                       </span><span class="c1"># host binary; never in Dockerfile</span>
 </code></pre></div>
 <p>NVENC preview encode (Comfy <strong>must be stopped</strong> — encoder contention on GB10):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./scripts/utilities/nvenc-preview.sh<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_gosee_90s.mp4"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>--out<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_gosee_90s_preview.mp4"</span><span class="w"> </span>--yes
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>./scripts/utilities/nvenc-preview.sh<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_gosee_90s.mp4"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>--out<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_gosee_90s_preview.mp4"</span><span class="w"> </span>--yes
 </code></pre></div>
 <p>Publish names under <code>${COMFY_OUTPUT_DIR}</code> (default <code>/mnt/comfy-output</code>): <code>ez_gosee_90s.mp4</code>, <code>ez_stillhere_90s.mp4</code>, <code>ez_switchyard_90s.mp4</code>.</p>
 <p>YouTube: disclose AI-generated media (LTX term). Do not strip provenance.</p>
