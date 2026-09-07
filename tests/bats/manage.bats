@@ -29,6 +29,41 @@ teardown() {
   teardown_repo_env
 }
 
+# Append-only. Replacing a verb with another is a merge defect (Wave 0 #77).
+FROZEN_MANAGE_VERBS=(
+  help
+  setup
+  doctor
+  status
+  start
+  stop
+  restart
+  logs
+  download-models
+  download-podcast
+  download-music
+  download-limit
+  clear-hf-locks
+  reset-hf-partials
+  cleanup
+  print-shot
+  film-resume
+  film-export-otio
+  film-proxies
+  download-restore
+  models-status
+  reap-models
+)
+
+@test "manage help lists the frozen verb set (append-only)" {
+  run bash "${MANAGE_SH}" help
+  [ "${status}" -eq 0 ]
+  local verb
+  for verb in "${FROZEN_MANAGE_VERBS[@]}"; do
+    [[ "${output}" == *"${verb}"* ]]
+  done
+}
+
 @test "manage CLI help unknown doctor status start stop cleanup download" {
   run bash "${MANAGE_SH}" help
   [ "${status}" -eq 0 ]
@@ -38,6 +73,9 @@ teardown() {
   [[ "${output}" == *"download-music"* ]]
   [[ "${output}" == *"print-shot"* ]]
   [[ "${output}" == *"film-resume"* ]]
+  [[ "${output}" == *"film-export-otio"* ]]
+  [[ "${output}" == *"film-proxies"* ]]
+  [[ "${output}" == *"download-restore"* ]]
   [[ "${output}" == *"reap-models"* ]]
   [[ "${output}" == *"models-status"* ]]
   run bash "${MANAGE_SH}" not-a-command
@@ -161,6 +199,12 @@ teardown() {
   [ "${status}" -eq 0 ]
   run cmd_film_resume
   [ "${status}" -ne 0 ]
+  run cmd_film_export_otio
+  [ "${status}" -ne 0 ]
+  run cmd_film_proxies --help
+  [ "${status}" -eq 0 ]
+  run cmd_download_restore --help
+  [ "${status}" -eq 0 ]
   run cmd_models_status
   [ "${status}" -eq 0 ]
   run cmd_reap_models --help

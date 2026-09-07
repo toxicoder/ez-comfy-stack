@@ -13,6 +13,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Shot maps for go-see (first-person running), still-here, and switchyard
 - Model-native Klein / LTX prompts ([Prompting](prompting.md))
 - Spark farm: optional parallel 5s Queues, local concat
+- Shot resume, OTIO export, NVENC proxies, Fun InP / SeedVR2 opt-in
 
 **What this enables**
 
@@ -37,7 +38,7 @@ The one-click film graph still prints **18 independent 5.00s latents**. Continui
 | --- | --- |
 | Micro-shot | **120 frames @ 24 fps = 5.00 s** |
 | LTX print size | **1280×704** (VAE ÷32; not 1280×720) |
-| Klein identity | **1280×720** still OK; I2V center-crops ~16 px |
+| Klein identity | **1280×704** (same VAE grid as LTX; do not feed 720) |
 | Beats | **6** |
 | Micro-shots per beat | **3** (enter / traverse / exit) |
 | Picture | **18 × 5.00 s = 90.00 s** |
@@ -107,6 +108,24 @@ FILM=go-see   # or still-here | switchyard
 # (Wan-silent has no audio stream — --xfade refuses).
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --xfade 10 --yes
 # Listen to go-see with and without --xfade 10; default remains the hard-cut golden.
+
+# OTIO handshake for Kdenlive/Shotcut (host, no GPU):
+./scripts/manage.sh film-export-otio go-see
+# NVENC proxies 960×528 ~2 Mbps (Comfy must be stopped):
+./scripts/manage.sh stop
+./scripts/manage.sh film-proxies go-see --yes
+```
+
+Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates → LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s.
+
+Optional silent **first-last-frame** draft: `wan-flf-5s-lab-example` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `wan-i2v-5s-lab-example` (`extra.lab_magcache`; never on LTX heroes).
+
+Post-concat restore (opt-in Apache SeedVR2-3B):
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh download-restore --tier seedvr2-3b
+# Conservative 1.3–1.5× on the stitched master only. Not download-models.
 ```
 
 NVENC preview encode (Comfy **must be stopped** — encoder contention on GB10):

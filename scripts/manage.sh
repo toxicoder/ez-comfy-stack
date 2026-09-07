@@ -128,6 +128,12 @@ Commands:
                     Queue one compiled shot (01–18) into films/<slug>/shots/
   film-resume <film>
                     Reprint failed/crashed shots only (skip ok with 5.00±0.05s)
+  film-export-otio <film>
+                    Write films/<slug>/publish/<slug>.otio from jobstore
+  film-proxies <film>
+                    960×528 h264 NVENC proxies (refuse if compose is up; never rewrite masters)
+  download-restore [--tier seedvr2-3b]
+                    Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
   models-status     Disk bible: keep-set + refuse list (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
 
@@ -904,6 +910,45 @@ cmd_film_resume() {
 }
 
 #######################################
+# Export OTIO timeline from a film jobstore.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  film id
+# Returns:
+#   film-export-otio status
+#######################################
+cmd_film_export_otio() {
+  bash "${REPO_ROOT}/scripts/utilities/film-export-otio.sh" "$@"
+}
+
+#######################################
+# NVENC proxies for a film (refuse if compose is up).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  film id and flags
+# Returns:
+#   film-proxies status
+#######################################
+cmd_film_proxies() {
+  bash "${REPO_ROOT}/scripts/utilities/film-proxies.sh" "$@"
+}
+
+#######################################
+# Opt-in restore pack download (SeedVR2-3B). Does not reap. Not download-models.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  download-restore flags
+# Returns:
+#   download-restore status
+#######################################
+cmd_download_restore() {
+  bash "${REPO_ROOT}/scripts/utilities/download-restore.sh" "$@"
+}
+
+#######################################
 # Print keep-set / refuse from the disk bible (does not delete).
 # Globals:
 #   REPO_ROOT
@@ -991,6 +1036,9 @@ main() {
     reset-hf-partials) cmd_reset_hf_partials "$@" ;;
     print-shot) cmd_print_shot "$@" ;;
     film-resume) cmd_film_resume "$@" ;;
+    film-export-otio) cmd_film_export_otio "$@" ;;
+    film-proxies) cmd_film_proxies "$@" ;;
+    download-restore) cmd_download_restore "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;
     cleanup) cmd_cleanup ;;

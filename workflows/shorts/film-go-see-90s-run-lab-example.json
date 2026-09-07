@@ -223,10 +223,10 @@
       },
       "widgets_values": [
         1280,
-        720,
+        704,
         1
       ],
-      "title": "Latent 1280x720 batch 1"
+      "title": "Latent 1280x704 batch 1"
     },
     {
       "id": 7,
