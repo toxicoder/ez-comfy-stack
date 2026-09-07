@@ -17,6 +17,7 @@ from _lab_layout import (
     group as _group,
 )
 from _lab_theme import GIF_MOTION, KLEIN_NEG_STILL, KLEIN_STILL_DAILY
+from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -151,6 +152,7 @@ def _node(graph: dict, ntype: str, title: str | None = None) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    stamp_suite_graph(graph)
     ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
@@ -200,7 +202,6 @@ def build_still_app() -> dict:
     graph["extra"]["lab_profile"] = "klein-still-daily-lab-example"
     graph["extra"]["lab_note"] = STILL_NOTE
     graph["extra"]["lab_description"] = "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
-    graph["extra"].pop("lab_app_mode", None)
     enh = _node(graph, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = KLEIN_STILL_DAILY
     enh["widgets_values"][1] = True

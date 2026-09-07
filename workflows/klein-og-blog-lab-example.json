@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-og-blog-lab-example\n\nBlog / Open Graph hero (Klein 4B). Default 1216\u00d7640. Prefix `ez_og`.\nLeave space for a title overlay. No burned-in words.\n"
+        "## klein-og-blog-lab-example\n\nBlog / Open Graph hero (Klein 4B). Default 1216\u00d7640. Prefix `ez_og`.\nLeave space for a title overlay. No burned-in words.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -607,8 +607,57 @@
         0
       ]
     },
-    "lab_note": "## klein-og-blog-lab-example\n\nBlog / Open Graph hero (Klein 4B). Default 1216\u00d7640. Prefix `ez_og`.\nLeave space for a title overlay. No burned-in words.\n",
-    "lab_description": "Klein 4B blog / OG hero ~1.9:1"
+    "lab_note": "## klein-og-blog-lab-example\n\nBlog / Open Graph hero (Klein 4B). Default 1216\u00d7640. Prefix `ez_og`.\nLeave space for a title overlay. No burned-in words.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B blog / OG hero ~1.9:1",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "produce",
+      "occupancy": "klein",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "6:width",
+          "width"
+        ],
+        [
+          "6:height",
+          "height"
+        ],
+        [
+          "6:batch_size",
+          "batch_size"
+        ],
+        [
+          "7:seed",
+          "seed"
+        ],
+        [
+          "11:image",
+          "image"
+        ],
+        [
+          "12:prompt",
+          "prompt"
+        ],
+        [
+          "12:enhance",
+          "enhance"
+        ],
+        [
+          "12:style",
+          "style"
+        ]
+      ],
+      "outputs": [
+        9
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

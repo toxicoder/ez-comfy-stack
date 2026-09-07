@@ -250,7 +250,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
+        "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -1474,8 +1474,67 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-lighting-trio-lab-example",
-    "lab_note": "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
-    "lab_description": "Klein 4B three-light study of one subject"
+    "lab_note": "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B three-light study of one subject",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "klein",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "4:prompt",
+          "prompt"
+        ],
+        [
+          "4:enhance",
+          "enhance"
+        ],
+        [
+          "4:style",
+          "style"
+        ],
+        [
+          "6:width",
+          "width"
+        ],
+        [
+          "6:height",
+          "height"
+        ],
+        [
+          "6:batch_size",
+          "batch_size"
+        ],
+        [
+          "10:shot",
+          "shot"
+        ],
+        [
+          "12:seed",
+          "seed"
+        ],
+        [
+          "16:shot",
+          "shot"
+        ],
+        [
+          "22:shot",
+          "shot"
+        ]
+      ],
+      "outputs": [
+        14,
+        20,
+        26
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

@@ -250,7 +250,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-identity-sheet-lab-example\n\nThree-angle Klein identity sheet. Frozen seed 42. Enhance off (compiler-enforced).\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n"
+        "## klein-identity-sheet-lab-example\n\nThree-angle Klein identity sheet. Frozen seed 42. Enhance off (compiler-enforced).\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -1474,7 +1474,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-identity-sheet-lab-example",
-    "lab_note": "## klein-identity-sheet-lab-example\n\nThree-angle Klein identity sheet. Frozen seed 42. Enhance off (compiler-enforced).\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n",
+    "lab_note": "## klein-identity-sheet-lab-example\n\nThree-angle Klein identity sheet. Frozen seed 42. Enhance off (compiler-enforced).\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "3-angle Klein identity sheet. Seed 42 frozen. Enhance off.",
     "lab_identity": {
       "seed": 42,
@@ -1488,7 +1488,66 @@
         1280,
         704
       ]
-    }
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "klein",
+      "enhance_off_identity": true,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "4:prompt",
+          "prompt"
+        ],
+        [
+          "4:enhance",
+          "enhance"
+        ],
+        [
+          "4:style",
+          "style"
+        ],
+        [
+          "6:width",
+          "width"
+        ],
+        [
+          "6:height",
+          "height"
+        ],
+        [
+          "6:batch_size",
+          "batch_size"
+        ],
+        [
+          "10:shot",
+          "shot"
+        ],
+        [
+          "12:seed",
+          "seed"
+        ],
+        [
+          "16:shot",
+          "shot"
+        ],
+        [
+          "22:shot",
+          "shot"
+        ]
+      ],
+      "outputs": [
+        14,
+        20,
+        26
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

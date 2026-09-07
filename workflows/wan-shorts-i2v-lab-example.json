@@ -548,7 +548,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-shorts-i2v-lab-example\n\nVertical silent Wan 5B I2V for Shorts (~5 s @ 24 fps). Apache 2.0.\nLoadImage: `ez_shorts_still_*.png` (or example.png to smoke-test).\nPRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n"
+        "## wan-shorts-i2v-lab-example\n\nVertical silent Wan 5B I2V for Shorts (~5 s @ 24 fps). Apache 2.0.\nLoadImage: `ez_shorts_still_*.png` (or example.png to smoke-test).\nPRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -734,7 +734,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-shorts-i2v-lab-example\n\nVertical silent Wan 5B I2V for Shorts (~5 s @ 24 fps). Apache 2.0.\nLoadImage: `ez_shorts_still_*.png` (or example.png to smoke-test).\nPRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n",
+    "lab_note": "## wan-shorts-i2v-lab-example\n\nVertical silent Wan 5B I2V for Shorts (~5 s @ 24 fps). Apache 2.0.\nLoadImage: `ez_shorts_still_*.png` (or example.png to smoke-test).\nPRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\n",
     "lab_profile": "wan-shorts-i2v-lab-example",
     "lab_description": "Wan 5B vertical 9:16 silent I2V ~5s",
     "ds": {
@@ -743,7 +743,47 @@
         0,
         0
       ]
-    }
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "produce",
+      "occupancy": "wan",
+      "enhance_off_identity": false,
+      "handoff": [
+        "ltx-shorts-i2v-lab-example"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "4:image",
+          "image"
+        ],
+        [
+          "10:seed",
+          "seed"
+        ],
+        [
+          "15:prompt",
+          "prompt"
+        ],
+        [
+          "15:enhance",
+          "enhance"
+        ],
+        [
+          "15:style",
+          "style"
+        ]
+      ],
+      "outputs": [
+        12,
+        13
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

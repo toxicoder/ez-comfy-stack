@@ -8,7 +8,7 @@ tags: [learn, comfyui, queue, workflow, studio]
 
 **What's on this page**
 
-- Node graph vs a linear app
+- Node graph vs App Mode (same JSON, creator widgets)
 - How lab workflows get onto the canvas
 - Queue, seed, widgets, Note node
 - Where outputs go, and what “Missing Models” actually means
@@ -37,11 +37,15 @@ flowchart LR
 
 Daily rule: **do not edit raw `*-lab-example` JSON.** Open the graph, change widgets, Queue.
 
+### Graph and App
+
+The same JSON can open as a **graph** (nodes and wires) or as an **App** (creator widgets only). App Mode is official from ComfyUI frontend **1.41.13**. Lab graphs stamp `extra.linearData` plus `extra.lab_app_mode` so the prompt, Enhance toggle, seed, and outputs show in the App panel. UNET/CLIP/VAE stay hidden except on **klein-still-daily**. 90s films stay in graph view. This is **not** `studio-ui` and not a second product. See [ComfyUI Apps](../studio-apps.md).
+
 ---
 
 ## How a lab graph shows up
 
-On `start`, the entrypoint copies host `workflows/*.json` and `workflows/shorts/*.json` into Comfy’s `user/default/workflows/`.
+On `start`, the entrypoint copies host `workflows/*.json`, `workflows/shorts/*.json`, and `workflows/dcc/*.json` into Comfy’s `user/default/workflows/`.
 
 1. Open `http://${SPARK_HOST}:${COMFY_PORT}` (port-forward from a laptop if needed)
 2. Load **klein-still-draft-lab-example** (filename suffix **`-lab-example`**)

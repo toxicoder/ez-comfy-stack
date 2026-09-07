@@ -292,7 +292,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Enhance is off on the bible so a rewrite cannot insert a camera. Shot cards are Prompt Join only.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n"
+        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Enhance is off on the bible so a rewrite cannot insert a camera. Shot cards are Prompt Join only.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -3469,7 +3469,7 @@
   "extra": {
     "lab_profile": "klein-dream-house-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Enhance is off on the bible so a rewrite cannot insert a camera. Shot cards are Prompt Join only.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n",
+    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).\nHOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin \u2014 Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.\nEdit HOUSE IDENTITY and inventory once. Enhance is off on the bible so a rewrite cannot insert a camera. Shot cards are Prompt Join only.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Ten Instagram 4:5 Klein stills of one compact cedar cabin; new cameras, locked inventory",
     "ds": {
       "scale": 1,
@@ -3477,7 +3477,105 @@
         0,
         0
       ]
-    }
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "klein",
+      "enhance_off_identity": true,
+      "handoff": [
+        "wan-gif-loop-lab-example",
+        "wan-bumper-loop-lab-example",
+        "wan-sticker-loop-lab-example"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "4:prompt",
+          "prompt"
+        ],
+        [
+          "4:enhance",
+          "enhance"
+        ],
+        [
+          "4:style",
+          "style"
+        ],
+        [
+          "6:width",
+          "width"
+        ],
+        [
+          "6:height",
+          "height"
+        ],
+        [
+          "6:batch_size",
+          "batch_size"
+        ],
+        [
+          "10:shot",
+          "shot"
+        ],
+        [
+          "12:seed",
+          "seed"
+        ],
+        [
+          "15:shot",
+          "shot"
+        ],
+        [
+          "20:shot",
+          "shot"
+        ],
+        [
+          "25:shot",
+          "shot"
+        ],
+        [
+          "30:shot",
+          "shot"
+        ],
+        [
+          "35:shot",
+          "shot"
+        ],
+        [
+          "40:shot",
+          "shot"
+        ],
+        [
+          "45:shot",
+          "shot"
+        ],
+        [
+          "50:shot",
+          "shot"
+        ],
+        [
+          "55:shot",
+          "shot"
+        ]
+      ],
+      "outputs": [
+        14,
+        19,
+        24,
+        29,
+        34,
+        39,
+        44,
+        49,
+        54,
+        59
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

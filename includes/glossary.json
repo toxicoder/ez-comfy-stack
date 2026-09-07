@@ -357,7 +357,25 @@
     "category": "Studio",
     "short": "A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).",
     "long": "Studio work is widget work: change the Positive prompt, seed, LoadImage filename, or Enhance toggle on the canvas. The JSON on disk stays the seeded lab example. See [ComfyUI basics](learn/comfyui.md).",
-    "see_also": ["queue", "workflow", "enhance"]
+    "see_also": ["queue", "workflow", "enhance", "app-mode"]
+  },
+  {
+    "id": "app-mode",
+    "title": "App Mode",
+    "aliases": ["App Mode"],
+    "category": "Studio",
+    "short": "ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.",
+    "long": "App Mode shows the creator widgets listed in `extra.linearData` (prompt, Enhance, seed, size, LoadImage). It is not a second frontend. Official persist is `linearData`; the lab contract is `lab_app_mode`. Film graphs may open in graph view. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["lab-app-mode", "widget", "occupancy", "workflow"]
+  },
+  {
+    "id": "lab-app-mode",
+    "title": "lab_app_mode",
+    "aliases": ["lab_app_mode"],
+    "category": "Studio",
+    "short": "Lab extra on *-lab-example graphs: lane, occupancy, handoff, frontend_min.",
+    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc, `occupancy`, `handoff`). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
+    "see_also": ["app-mode", "occupancy", "lab-example"]
   },
   {
     "id": "latent",
@@ -491,8 +509,8 @@
     "aliases": ["occupancy"],
     "category": "Hardware and safety",
     "short": "One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.",
-    "long": "GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. See [Studio sidecars](studio-sidecars.md).",
-    "see_also": ["sidecar", "ace-step", "gb10"]
+    "long": "GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`) are on every App Note — stop the other family before Queue. See [ComfyUI Apps](studio-apps.md) and [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["sidecar", "ace-step", "gb10", "app-mode"]
   },
   {
     "id": "headroom",
