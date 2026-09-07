@@ -1630,6 +1630,21 @@
 <td>Graph still Queues without MagCache. See <code>extra.lab_magcache</code> on <code>wan-i2v-5s-lab-example</code>. Hero LTX graphs must not contain MagCache</td>
 </tr>
 <tr>
+<td>LTX Director missing</td>
+<td>GPL clone is opt-in</td>
+<td><code>LAB_ENABLE_LTX_DIRECTOR=1</code> then restart. Never MiniMax H3 Director</td>
+</tr>
+<tr>
+<td>studio-ui empty / port closed</td>
+<td>Profile not started; default <code>start</code> skips it</td>
+<td><code>docker compose --profile studio-ui up studio-ui</code>. No GPU. Compile a film first</td>
+</tr>
+<tr>
+<td>take-promote missing file</td>
+<td>No <code>takes/&lt;id&gt;/tNNN.mp4</code></td>
+<td>Print the shot (take increments on <code>running</code>), then promote</td>
+</tr>
+<tr>
 <td>Empty models in UI</td>
 <td>Downloads not run</td>
 <td><code>./scripts/utilities/download-image.sh status --tier fast</code>; <code>download-wan.sh status --tier 5b</code>; <code>download-ltx.sh status --tier 2.5</code>; check <code>${MODELS_DIR}</code> mount</td>

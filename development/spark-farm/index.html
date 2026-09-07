@@ -1193,7 +1193,8 @@
 <li>Fabric NFS / rsync vs management SSH</li>
 <li>Three ComfyUI UIs (Queue lab-example graphs on each)</li>
 <li>Optional <code>sync-models</code> (rsync <code>MODELS_DIR/comfy</code> over fabric)</li>
-<li>What this sample stack refuses (NCCL, K3s, MiniMax H3)</li>
+<li><code>dispatch</code>: local <code>print-shot</code> per host, never remote compose up</li>
+<li>What this sample stack refuses (NCCL, K3s, MiniMax H3, H3 Director)</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
@@ -1263,12 +1264,15 @@
 <p>See <a href="../shorts/">90s shorts</a>. MiniMax H3 films are banned (see <a href="../licenses/">licenses</a>).</p>
 <p><code>spark-farm.sh</code> <strong>never</strong> starts compose remotely. It prints the exact <code>./scripts/manage.sh start</code> you must run locally (heavy confirm stays on that node). Containers still use <code>restart: "no"</code>.</p>
 <p>The <code>run</code> subcommand prints a <strong>film-*-90s / wan-i2v-shot / ltx-i2v-shot</strong> Queue reminder for <code>--film go-see</code> (or still-here / switchyard). It does <strong>not</strong> POST graphs. It refuses MiniMax H3 names (<code>*h3*</code> / <code>*MiniMax*</code>).</p>
+<p><code>dispatch</code> assigns shots <strong>01–06 / 07–12 / 13–18</strong> (or an even split on two hosts) and SSH-runs <strong>local</strong> <code>./scripts/manage.sh print-shot</code> on each Spark. It <strong>never</strong> remote-starts compose. Director is off this path. Concat on spark-0 after gather.</p>
 <p>Memory: keep <code>MEM_LIMIT=90g</code>, <code>MEM_RESERVATION=80g</code>, <code>MIN_HOST_FREE_GIB=28</code>, <code>shm_size: 16gb</code>.</p>
 <h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>run<span class="w"> </span>--film<span class="w"> </span>go-see
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>dispatch<span class="w"> </span>--film<span class="w"> </span>go-see
 </code></pre></div>
+<p>Start compose yourself on each node (<code>./scripts/manage.sh start</code>, type yes). Then dispatch.</p>
 
 
 

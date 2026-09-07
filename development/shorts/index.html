@@ -1238,7 +1238,8 @@
 <li>Shot maps for go-see (first-person running), still-here, and switchyard</li>
 <li>Model-native Klein / LTX prompts (<a href="../prompting/">Prompting</a>)</li>
 <li>Spark farm: optional parallel 5s Queues, local concat</li>
-<li>Shot resume, OTIO export, NVENC proxies, Fun InP / SeedVR2 opt-in</li>
+<li>Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in</li>
+<li>Optional studio-ui board (<code>:8190</code> profile), LTX Director GPL clone, OpenCut MIT embed</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
@@ -1380,18 +1381,29 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># NVENC proxies 960×528 ~2 Mbps (Comfy must be stopped):</span>
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>./scripts/manage.sh<span class="w"> </span>stop
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>./scripts/manage.sh<span class="w"> </span>film-proxies<span class="w"> </span>go-see<span class="w"> </span>--yes
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="c1"># Promote take 3 of shot 12 into the jobstore master:</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>./scripts/manage.sh<span class="w"> </span>take-promote<span class="w"> </span>go-see<span class="w"> </span><span class="m">12</span><span class="w"> </span><span class="m">3</span>
 </code></pre></div>
+<p>Optional jobstore board (no GPU, 512m, <code>restart: "no"</code>). Default <code>start</code> does <strong>not</strong> launch it:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>studio-ui<span class="w"> </span>up<span class="w"> </span>studio-ui
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># http://localhost:8190</span>
+</code></pre></div>
+<p>LTX Director is a <strong>GPL</strong> clone into the Comfy volume, not this MIT tree:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">LAB_ENABLE_LTX_DIRECTOR</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/manage.sh<span class="w"> </span>start
+</code></pre></div>
+<p>Refuse MiniMax H3 Director. OpenCut (<code>jtydhr88/ComfyUI-OpenCut</code>, MIT) is fail-soft. Not the OpenCut Rust rewrite, not Next.js+Postgres.</p>
+<p>ACE-Step 90 s bed → <code>manage.sh stop</code> / unload → LTX A2V freeze. Qwen3-TTS is opt-in with operator-owned refs (<code>download-podcast --tier qwen3tts</code>); empty refs stay Kokoro. Wire <strong>EZFilmDisclosure</strong> on the publish graph (LTX Community License end-card).</p>
 <p>Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy <strong>Templates → LTX-2.5</strong>. Repo note: <code>workflows/quality/ltx-2.5/NOTICE.md</code>. Lab printers stay 5.00 s.</p>
 <p>Optional silent <strong>first-last-frame</strong> draft: <code>wan-flf-5s-lab-example</code> after <code>./scripts/utilities/download-wan.sh run --tier fun-inp</code> (~47 GB, Apache). Unload LTX first. MagCache is <strong>draft-only</strong> on <code>wan-i2v-5s-lab-example</code> (<code>extra.lab_magcache</code>; never on LTX heroes).</p>
 <p>Post-concat restore (opt-in Apache SeedVR2-3B):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/manage.sh<span class="w"> </span>download-restore<span class="w"> </span>--tier<span class="w"> </span>seedvr2-3b
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Conservative 1.3–1.5× on the stitched master only. Not download-models.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/manage.sh<span class="w"> </span>download-restore<span class="w"> </span>--tier<span class="w"> </span>seedvr2-3b
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Conservative 1.3–1.5× on the stitched master only. Not download-models.</span>
 </code></pre></div>
 <p>NVENC preview encode (Comfy <strong>must be stopped</strong> — encoder contention on GB10):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/utilities/nvenc-preview.sh<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_gosee_90s.mp4"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--out<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_gosee_90s_preview.mp4"</span><span class="w"> </span>--yes
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>./scripts/utilities/nvenc-preview.sh<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_gosee_90s.mp4"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--out<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_gosee_90s_preview.mp4"</span><span class="w"> </span>--yes
 </code></pre></div>
 <p>Publish names under <code>${COMFY_OUTPUT_DIR}</code> (default <code>/mnt/comfy-output</code>): <code>ez_gosee_90s.mp4</code>, <code>ez_stillhere_90s.mp4</code>, <code>ez_switchyard_90s.mp4</code>.</p>
 <p>YouTube: disclose AI-generated media (LTX term). Do not strip provenance.</p>
