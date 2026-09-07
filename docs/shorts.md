@@ -87,6 +87,16 @@ Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch
 3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
 4. After Queue, click **Save 90s film (MP4) — open node for preview**. File: `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4`. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`.
 5. Optional silent rehearsal of one frame: **wan-i2v-shot-lab-example**. Optional single-shot iterate: **ltx-i2v-shot-lab-example**.
+Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
+
+```bash
+./scripts/utilities/compile-film.sh go-see
+./scripts/manage.sh print-shot go-see 12
+./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see
+# film-resume skips ok shots whose duration is 5.00±0.05 s and reprints
+# crashed `running` rows (no MP4) only.
+```
+
 6. Host / spark-farm fallback (when you printed shots outside the one-click graph):
 
 ```bash

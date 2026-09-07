@@ -124,6 +124,10 @@ Commands:
   reset-hf-partials [--yes] [--force]
                     Delete *.incomplete under MODELS_DIR (finished weights kept)
   cleanup           Remove comfy-state volume only (type DELETE; keeps COMFY_OUTPUT_DIR)
+  print-shot <film> <id>
+                    Queue one compiled shot (01–18) into films/<slug>/shots/
+  film-resume <film>
+                    Reprint failed/crashed shots only (skip ok with 5.00±0.05s)
 
 Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
@@ -856,15 +860,45 @@ cmd_download_limit() {
 }
 
 #######################################
-# After DELETE confirmation, remove Compose volumes (Comfy install state only).
+# Dispatch print-shot to utilities/print-shot.sh.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  film id [shot id]
+# Outputs:
+#   print-shot logs
+# Returns:
+#   print-shot status
+#######################################
+cmd_print_shot() {
+  bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" "$@"
+}
+
+#######################################
+# Resume a film (skip ok shots with valid duration).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  film id
+# Outputs:
+#   print-shot logs
+# Returns:
+#   print-shot status
+#######################################
+cmd_film_resume() {
+  bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" --resume "$@"
+}
+
+#######################################
+# Remove the Comfy named volume after DELETE confirm (weights kept).
 # Globals:
 #   See file header / caller environment.
 # Arguments:
 #   None
 # Outputs:
-#   Status via log/warn/err on stderr unless noted.
+#   Status via log/warn/err
 # Returns:
-#   0 on success/abort; 1 on hard confirm failure.
+#   cleanup status
 #######################################
 cmd_cleanup() {
   require_delete_confirm || {
@@ -911,6 +945,8 @@ main() {
     download-limit) cmd_download_limit "$@" ;;
     clear-hf-locks) cmd_clear_hf_locks ;;
     reset-hf-partials) cmd_reset_hf_partials "$@" ;;
+    print-shot) cmd_print_shot "$@" ;;
+    film-resume) cmd_film_resume "$@" ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"
