@@ -22,7 +22,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 !!! tip "Lab graphs already ship model-native prompts"
 
-    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text. Leave **Enhance** off unless you replace that text with something short.
+    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text. Leave **Enhance** off unless you replace that text with something short. **prompt-forge-lab-example** previews Klein / Wan / LTX rewrites with no UNET (occupancy **llm**). Copy the family you need into Spark Still.
 
 ```mermaid
 flowchart TB

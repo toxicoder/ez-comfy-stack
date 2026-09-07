@@ -198,6 +198,8 @@ def _spec(
     expose_unet: bool = False,
     sampler_steps_cfg: bool = False,
     film_minimal: bool = False,
+    forge_widgets: bool = False,
+    primitive_strings: bool = False,
 ) -> dict[str, Any]:
     return {
         "lane": lane,
@@ -208,6 +210,8 @@ def _spec(
         "expose_unet": expose_unet,
         "sampler_steps_cfg": sampler_steps_cfg,
         "film_minimal": film_minimal,
+        "forge_widgets": forge_widgets,
+        "primitive_strings": primitive_strings,
     }
 
 
@@ -217,6 +221,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "klein",
         "klein-still-hero-lab-example",
         "wan-i2v-5s-lab-example",
+        "klein-platform-pack-lab-example",
         enhance_off_identity=True,
     ),
     "klein-identity-sheet-lab-example": _spec(
@@ -246,6 +251,20 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "klein-hook-still-lab-example": _spec(
         "inspire", "klein", "wan-shorts-i2v-lab-example"
     ),
+    "prompt-forge-lab-example": _spec(
+        "inspire",
+        "llm",
+        "klein-still-draft-lab-example",
+        forge_widgets=True,
+    ),
+    "beat-sheet-lab-example": _spec(
+        "inspire",
+        "none",
+        "film-go-see-90s-run-lab-example",
+        "film-still-here-90s-lab-example",
+        "film-switchyard-90s-lab-example",
+        primitive_strings=True,
+    ),
     "klein-still-daily-lab-example": _spec(
         "produce", "klein", expose_unet=True, sampler_steps_cfg=True
     ),
@@ -268,6 +287,13 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "klein-food-tabletop-lab-example": _spec("produce", "klein"),
     "klein-shorts-still-lab-example": _spec("produce", "klein"),
     "klein-before-after-lab-example": _spec("produce", "klein"),
+    "klein-platform-pack-lab-example": _spec(
+        "produce",
+        "klein",
+        "wan-i2v-5s-lab-example",
+        "ltx-hook-av-lab-example",
+        enhance_off_identity=True,
+    ),
     "klein-talking-head-lab-example": _spec("produce", "ltx"),
     "wan-i2v-5s-lab-example": _spec(
         "produce", "wan", "ltx-i2v-5s-lab-example"
@@ -353,6 +379,10 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
         nid = node["id"]
         if ntype in ENHANCE_TYPES:
             inputs.extend(((nid, "prompt"), (nid, "enhance"), (nid, "style")))
+            if spec.get("forge_widgets"):
+                inputs.extend(((nid, "mode"), (nid, "duration_hint")))
+        elif ntype == "PrimitiveNode" and spec.get("primitive_strings"):
+            inputs.append((nid, "value"))
         elif ntype == "EZPromptJoin":
             inputs.append((nid, "shot"))
         elif ntype == "EZPodcastScript":
@@ -373,12 +403,28 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
     return inputs
 
 
-def infer_suite_outputs(graph: dict) -> list[int]:
-    return [
+def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> list[int]:
+    spec = spec or {}
+    found = [
         int(node["id"])
         for node in graph.get("nodes") or []
         if node.get("type") in OUTPUT_TYPES
     ]
+    if found:
+        return found
+    if spec.get("forge_widgets"):
+        return [
+            int(node["id"])
+            for node in graph.get("nodes") or []
+            if node.get("type") in ENHANCE_TYPES
+        ]
+    if spec.get("primitive_strings"):
+        return [
+            int(node["id"])
+            for node in graph.get("nodes") or []
+            if node.get("type") == "PrimitiveNode"
+        ]
+    return []
 
 
 def stamp_suite_graph(graph: dict) -> dict:
@@ -386,7 +432,7 @@ def stamp_suite_graph(graph: dict) -> dict:
     spec = STAMP_SPECS.get(str(graph.get("id") or ""))
     if spec is None:
         return graph
-    outputs = infer_suite_outputs(graph)
+    outputs = infer_suite_outputs(graph, spec)
     if not outputs:
         raise ValueError(f"missing output node on {graph.get('id')}")
     inputs = infer_suite_inputs(graph, spec)

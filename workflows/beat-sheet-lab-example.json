@@ -1,0 +1,880 @@
+{
+  "id": "beat-sheet-lab-example",
+  "revision": 1,
+  "last_node_id": 19,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        1340,
+        420.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## beat-sheet-lab-example\n\nBeat Sheet v1 \u2014 6 beats \u00d7 enter / traverse / exit (18 STRING widgets). Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Paste the filled cards into host YAML:\n\n  workflows/shorts/<slug>.shots.yaml\n\nThe entrypoint does **not** copy YAML. Edit on the host. Then Queue **film-go-see-90s-run-lab-example** (or still-here / switchyard).\n\ngo-see.shots.yaml contract (keep these keys):\n\n  film\n  slug\n  frames: 120\n  fps: 24\n  duration_s: 5.00\n  beats: 6\n  shots_per_beat: 3\n  total_shots: 18\n  publish_cap_s: 90.00\n  print: ltx\n  identity_seed\n  identity_enhance: false\n  identity_look\n  shots[]{beat, shot, prefix, load_from, ltx_i2v, wan_i2v}\n\nShot 1 of beat 1 load_from: identity\nLater shots load_from: <prev_prefix>_last\nExample: ez_gosee_b1_s1 then ez_gosee_b1_s1_last.\n\nDo not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        580.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 1 enter"
+    },
+    {
+      "id": 3,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        580.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 1 traverse"
+    },
+    {
+      "id": 4,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        580.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 1 exit"
+    },
+    {
+      "id": 5,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        836.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 2 enter"
+    },
+    {
+      "id": 6,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        836.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 2 traverse"
+    },
+    {
+      "id": 7,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        836.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 2 exit"
+    },
+    {
+      "id": 8,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        1092.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 3 enter"
+    },
+    {
+      "id": 9,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        1092.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 3 traverse"
+    },
+    {
+      "id": 10,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        1092.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 3 exit"
+    },
+    {
+      "id": 11,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        1348.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 4 enter"
+    },
+    {
+      "id": 12,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        1348.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 4 traverse"
+    },
+    {
+      "id": 13,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        1348.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 4 exit"
+    },
+    {
+      "id": 14,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        1604.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 5 enter"
+    },
+    {
+      "id": 15,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        1604.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 5 traverse"
+    },
+    {
+      "id": 16,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        1604.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 5 exit"
+    },
+    {
+      "id": 17,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        1860.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 6 enter"
+    },
+    {
+      "id": 18,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        1860.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 6 traverse"
+    },
+    {
+      "id": 19,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        1860.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "fixed"
+      ],
+      "title": "Beat 6 exit"
+    }
+  ],
+  "links": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        1380,
+        476.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "BEAT 1",
+      "bounding": [
+        20,
+        524.0,
+        1380,
+        216.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "BEAT 2",
+      "bounding": [
+        20,
+        780.0,
+        1380,
+        216.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "BEAT 3",
+      "bounding": [
+        20,
+        1036.0,
+        1380,
+        216.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "BEAT 4",
+      "bounding": [
+        20,
+        1292.0,
+        1380,
+        216.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "BEAT 5",
+      "bounding": [
+        20,
+        1548.0,
+        1380,
+        216.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "BEAT 6",
+      "bounding": [
+        20,
+        1804.0,
+        1380,
+        216.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "beat-sheet-lab-example",
+    "lab_note": "## beat-sheet-lab-example\n\nBeat Sheet v1 \u2014 6 beats \u00d7 enter / traverse / exit (18 STRING widgets). Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Paste the filled cards into host YAML:\n\n  workflows/shorts/<slug>.shots.yaml\n\nThe entrypoint does **not** copy YAML. Edit on the host. Then Queue **film-go-see-90s-run-lab-example** (or still-here / switchyard).\n\ngo-see.shots.yaml contract (keep these keys):\n\n  film\n  slug\n  frames: 120\n  fps: 24\n  duration_s: 5.00\n  beats: 6\n  shots_per_beat: 3\n  total_shots: 18\n  publish_cap_s: 90.00\n  print: ltx\n  identity_seed\n  identity_enhance: false\n  identity_look\n  shots[]{beat, shot, prefix, load_from, ltx_i2v, wan_i2v}\n\nShot 1 of beat 1 load_from: identity\nLater shots load_from: <prev_prefix>_last\nExample: ez_gosee_b1_s1 then ez_gosee_b1_s1_last.\n\nDo not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).\n",
+    "lab_description": "No-UNET beat sheet: 6 beats x enter/traverse/exit for shots.yaml",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "none",
+      "enhance_off_identity": false,
+      "handoff": [
+        "film-go-see-90s-run-lab-example",
+        "film-still-here-90s-lab-example",
+        "film-switchyard-90s-lab-example"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "2:value",
+          "value"
+        ],
+        [
+          "3:value",
+          "value"
+        ],
+        [
+          "4:value",
+          "value"
+        ],
+        [
+          "5:value",
+          "value"
+        ],
+        [
+          "6:value",
+          "value"
+        ],
+        [
+          "7:value",
+          "value"
+        ],
+        [
+          "8:value",
+          "value"
+        ],
+        [
+          "9:value",
+          "value"
+        ],
+        [
+          "10:value",
+          "value"
+        ],
+        [
+          "11:value",
+          "value"
+        ],
+        [
+          "12:value",
+          "value"
+        ],
+        [
+          "13:value",
+          "value"
+        ],
+        [
+          "14:value",
+          "value"
+        ],
+        [
+          "15:value",
+          "value"
+        ],
+        [
+          "16:value",
+          "value"
+        ],
+        [
+          "17:value",
+          "value"
+        ],
+        [
+          "18:value",
+          "value"
+        ],
+        [
+          "19:value",
+          "value"
+        ]
+      ],
+      "outputs": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    "linearMode": true
+  },
+  "version": 0.4
+}

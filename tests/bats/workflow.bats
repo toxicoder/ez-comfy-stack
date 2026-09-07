@@ -421,9 +421,12 @@ assert any(isinstance(n.get('widgets_values'), list) and n['widgets_values'] and
 clips=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode']
 ace=[n for n in d['nodes'] if n.get('type')=='TextEncodeAceStepAudio1.5']
 zero=[n for n in d['nodes'] if n.get('type')=='ConditioningZeroOut']
+unets=[n for n in d['nodes'] if n.get('type')=='UNETLoader']
 # Visual graphs use two CLIP encodes. Podcast beds use two ACE encodes.
 # Rap graphs follow Comfy-Org ACE-Step 1.5: one encode + ConditioningZeroOut.
-assert len(clips)>=2 or len(ace)>=2 or (len(ace)>=1 and len(zero)>=1), p
+# No-UNET inspire Apps (Prompt Forge / Beat Sheet) have neither.
+if unets:
+    assert len(clips)>=2 or len(ace)>=2 or (len(ace)>=1 and len(zero)>=1), p
 for n in clips:
     text=(n.get('widgets_values') or [''])[0]
     assert isinstance(text,str) and text.strip()
