@@ -93,6 +93,18 @@ Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch
 FILM=go-see   # or still-here | switchyard
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --dry-run
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
+# Optional audio acrossfade (0.10 s). Video stays stream-copy. LTX shots only
+# (Wan-silent has no audio stream — --xfade refuses).
+./scripts/utilities/concat-shots.sh --film "${FILM}" --xfade 10 --yes
+# Listen to go-see with and without --xfade 10; default remains the hard-cut golden.
+```
+
+NVENC preview encode (Comfy **must be stopped** — encoder contention on GB10):
+
+```bash
+./scripts/manage.sh stop
+./scripts/utilities/nvenc-preview.sh --in "${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" \
+  --out "${COMFY_OUTPUT_DIR}/ez_gosee_90s_preview.mp4" --yes
 ```
 
 Publish names under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`): `ez_gosee_90s.mp4`, `ez_stillhere_90s.mp4`, `ez_switchyard_90s.mp4`.
