@@ -62,7 +62,20 @@ seed_from_prebuilt() {
   ep_log "Seeding ${dest} from ${root} (local copy — not re-downloading torch)"
   mkdir -p "${dest}"
   if command -v rsync >/dev/null 2>&1; then
-    rsync -a --info=progress2 "${root}/" "${dest}/" || rsync -a "${root}/" "${dest}/"
+    rsync -a --info=progress2 \
+      --exclude user/ \
+      --exclude input/ \
+      --exclude output/ \
+      --exclude temp/ \
+      --exclude extra_model_paths.yaml \
+      "${root}/" "${dest}/" ||
+      rsync -a \
+        --exclude user/ \
+        --exclude input/ \
+        --exclude output/ \
+        --exclude temp/ \
+        --exclude extra_model_paths.yaml \
+        "${root}/" "${dest}/"
   else
     ep_log "rsync missing; using cp -a (no progress bar)"
     cp -a "${root}/." "${dest}/"
@@ -222,6 +235,42 @@ link_comfy_output_dir() {
 }
 
 #######################################
+# Point ComfyUI/input at the host bind-mount (/inputs).
+# Migrates leftover files from a real input/ dir on the named volume.
+# Globals:
+#   COMFY_HOME, LAB_INPUTS_MOUNT
+# Arguments:
+#   $1 - Optional Comfy input path (default COMFY_HOME/input)
+# Outputs:
+#   Progress logs
+# Returns:
+#   0
+#######################################
+link_comfy_input_dir() {
+  local dest="${1:-}"
+  local mount="${LAB_INPUTS_MOUNT:-/inputs}"
+  if [[ -z ${dest} ]]; then
+    dest="${COMFY_HOME:-/comfy-state/ComfyUI}/input"
+  fi
+  mkdir -p "${mount}"
+  if [[ -d ${dest} && ! -L ${dest} ]]; then
+    if [[ -n "$(ls -A "${dest}" 2>/dev/null || true)" ]]; then
+      ep_log "Migrating existing Comfy input/ into ${mount}"
+      if command -v rsync >/dev/null 2>&1; then
+        rsync -a "${dest}/" "${mount}/"
+      else
+        cp -a "${dest}/." "${mount}/"
+      fi
+    fi
+    rm -rf "${dest}"
+  elif [[ -L ${dest} || -e ${dest} ]]; then
+    rm -f "${dest}"
+  fi
+  ln -sfn "${mount}" "${dest}"
+  ep_log "Comfy input → ${mount} (host COMFY_OUTPUT_DIR/input bind-mount)"
+}
+
+#######################################
 # Prefer working Triton; disable torch python_native Triton when deps missing.
 # Globals:
 #   LAB_DISABLE_TORCH_NATIVE_TRITON, PYTHONPATH
@@ -263,7 +312,7 @@ configure_torch_native_triton() {
 
 #######################################
 # Copy host lab JSON graphs into Comfy user workflows.
-# Includes top-level *.json, shorts/*.json (90s film bibles), and dcc/*.json.
+# Includes top-level *.json, shorts/*.json, dcc/*.json, and optional/*.json.
 # Globals:
 #   None
 # Arguments:
@@ -283,7 +332,7 @@ install_lab_workflows() {
     ep_log "no workflows under ${src} (optional mount)"
     return 0
   fi
-  for wf in "${src}"/*.json "${src}"/shorts/*.json "${src}"/dcc/*.json; do
+  for wf in "${src}"/*.json "${src}"/shorts/*.json "${src}"/dcc/*.json "${src}"/optional/*.json; do
     [[ -f ${wf} ]] || continue
     cp -f "${wf}" "${dest}/"
     n_wf=$((n_wf + 1))
@@ -345,6 +394,8 @@ comfy_exec_args() {
     8188 \
     --output-directory \
     "${LAB_OUTPUTS_MOUNT:-/outputs}" \
+    --input-directory \
+    "${LAB_INPUTS_MOUNT:-/inputs}" \
     --use-ck-attention \
     --disable-dynamic-vram \
     --disable-pinned-memory \
@@ -480,7 +531,8 @@ main() {
   configure_torch_native_triton
   cd "${comfy_home}"
   link_comfy_output_dir "${comfy_home}/output"
-  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs}; Kitchen attention)"
+  link_comfy_input_dir "${comfy_home}/input"
+  ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs}; input ${LAB_INPUTS_MOUNT:-/inputs}; Kitchen attention)"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then
     ep_log "LAB_ENTRYPOINT_NO_EXEC=1; skipping exec"
     return 0

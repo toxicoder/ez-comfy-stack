@@ -241,7 +241,7 @@ def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str
 {PREVIEW_BULLET}
 
 One-click 90s film ({label}): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
-Models: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
+Models: Klein 4B distilled FP8 (identity, 4-step, Enhance **on**, identity mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
 LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
@@ -251,7 +251,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
 Do not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.
-Canned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.
+Prompt enhance is on by default. After Queue, each Enhance node shows the CLIP string used. Turn Enhance off to pin widget text.
 """
 
 
@@ -275,13 +275,24 @@ def _shot_nodes(index: int, slug: str, prompt: str, prefix: str, seed: int) -> l
     nid_vhs = base + 8
     nid_batch = base + 9
     nid_save = base + 10
+    nid_enh = base + 11
     title = f"b{(index // 3) + 1} s{(index % 3) + 1} LTX I2V"
     return [
         _mk(
+            nid_enh,
+            "EZLTXPromptEnhance",
+            [ox, oy],
+            [420, 280],
+            f"{title} enhance",
+            [prompt, True, "i2v", "5 seconds, 24 fps", "", "none"],
+            [],
+            [_out("prompt", "STRING", 0)],
+        ),
+        _mk(
             nid_pos,
             "CLIPTextEncode",
-            [ox, oy],
-            [420, 180],
+            [ox, oy + 320],
+            [420, 160],
             title,
             [prompt],
             [_inp("clip", "CLIP"), _inp("text", "STRING", widget="text")],
@@ -400,7 +411,7 @@ def _shot_nodes(index: int, slug: str, prompt: str, prefix: str, seed: int) -> l
         _mk(
             nid_batch,
             "ImageFromBatch",
-            [ox, oy + 220],
+            [ox + 820, oy + 430],
             [240, 80],
             "Last frame",
             [119, 1],
@@ -411,8 +422,8 @@ def _shot_nodes(index: int, slug: str, prompt: str, prefix: str, seed: int) -> l
         _mk(
             nid_save,
             "SaveImage",
-            [ox, oy + 340],
-            [280, 270],
+            [ox + 820, oy + 550],
+            [280, 200],
             "Save last frame",
             [f"{prefix}_last"],
             [_inp("images", "IMAGE")],
@@ -453,7 +464,7 @@ def build_one_click_film(
             node["title"] = "Operator note — one-click 90s film"
             node["size"] = [960, 280]
         if node.get("type") == "EZKleinPromptEnhance":
-            node["widgets_values"] = [identity, False, "t2i", "YouTube 16:9 still", "none"]
+            node["widgets_values"] = [identity, True, "identity", "YouTube 16:9 still", "none"]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
             node["widgets_values"] = [identity]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":
@@ -597,6 +608,7 @@ def build_one_click_film(
         base = SHOT_ID_BASE + index * SHOT_ID_STRIDE
         pos = by_id[base]
         i2v = by_id[base + 1]
+        enh = by_id[base + 11]
         cond = by_id[base + 2]
         cat = by_id[base + 3]
         ks = by_id[base + 4]
@@ -607,6 +619,7 @@ def build_one_click_film(
         batch = by_id[base + 9]
         save = by_id[base + 10]
         _add_link(graph, ltx_clip, 0, pos, "clip", "CLIP")
+        _add_link(graph, enh, 0, pos, "text", "STRING")
         _add_link(graph, pos, 0, i2v, "positive", "CONDITIONING")
         _add_link(graph, ltx_neg, 0, i2v, "negative", "CONDITIONING")
         _add_link(graph, ltx_video_vae, 0, i2v, "vae", "VAE")

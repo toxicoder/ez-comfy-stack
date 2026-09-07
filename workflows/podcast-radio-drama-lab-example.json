@@ -1,8 +1,8 @@
 {
   "id": "podcast-radio-drama-lab-example",
   "revision": 1,
-  "last_node_id": 33,
-  "last_link_id": 24,
+  "last_node_id": 35,
+  "last_link_id": 28,
   "nodes": [
     {
       "id": 1,
@@ -87,7 +87,7 @@
       },
       "widgets_values": [
         "Announcer: Tonight on the machine-only hour: a story that never left the rack.\nSpeaker A: The transmitter light is steady. We do not borrow a voice from the wire.\nSpeaker B: If the card goes dark, the play ends. That is the bargain.\nSpeaker A: Then say the line like you mean the cut, not the cloud.\nSpeaker B: Cue the bed. Keep it instrumental. We own the silence between words.\nAnnouncer: End of scene. The hosts are invented. The mix is local.",
-        false,
+        true,
         "radio_drama"
       ],
       "title": "ez_radio_script"
@@ -194,6 +194,22 @@
           "name": "clip",
           "type": "CLIP",
           "link": 3
+        },
+        {
+          "name": "tags",
+          "type": "STRING",
+          "link": 25,
+          "widget": {
+            "name": "tags"
+          }
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 26,
+          "widget": {
+            "name": "lyrics"
+          }
         }
       ],
       "outputs": [
@@ -246,6 +262,22 @@
           "name": "clip",
           "type": "CLIP",
           "link": 4
+        },
+        {
+          "name": "tags",
+          "type": "STRING",
+          "link": 27,
+          "widget": {
+            "name": "tags"
+          }
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 28,
+          "widget": {
+            "name": "lyrics"
+          }
         }
       ],
       "outputs": [
@@ -813,7 +845,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **on**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -938,6 +970,94 @@
         "save_output": true
       },
       "title": "ez_radio_hook preview (off)"
+    },
+    {
+      "id": 34,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        -400,
+        220
+      ],
+      "size": [
+        400,
+        320
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "tags",
+          "type": "STRING",
+          "links": [
+            25
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            26
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZAceStepPromptEnhance"
+      },
+      "widgets_values": [
+        "short instrumental sting, analog keys hit, no vocals, instrumental",
+        "",
+        true,
+        "instrumental"
+      ],
+      "title": "ez_radio_sting enhance"
+    },
+    {
+      "id": 35,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        -400,
+        600
+      ],
+      "size": [
+        400,
+        320
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "tags",
+          "type": "STRING",
+          "links": [
+            27
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            28
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZAceStepPromptEnhance"
+      },
+      "widgets_values": [
+        "instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental",
+        "",
+        true,
+        "instrumental"
+      ],
+      "title": "ez_radio_bed enhance"
     }
   ],
   "links": [
@@ -1132,6 +1252,38 @@
       18,
       0,
       "AUDIO"
+    ],
+    [
+      25,
+      34,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      26,
+      34,
+      1,
+      5,
+      2,
+      "STRING"
+    ],
+    [
+      27,
+      35,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      28,
+      35,
+      1,
+      6,
+      2,
+      "STRING"
     ]
   ],
   "groups": [
@@ -1217,7 +1369,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-radio",
-    "lab_note": "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_note": "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **on**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off",
     "ds": {
       "scale": 1,
@@ -1248,6 +1400,30 @@
         [
           "10:seed",
           "seed"
+        ],
+        [
+          "34:tags",
+          "tags"
+        ],
+        [
+          "34:lyrics",
+          "lyrics"
+        ],
+        [
+          "34:enhance",
+          "enhance"
+        ],
+        [
+          "35:tags",
+          "tags"
+        ],
+        [
+          "35:lyrics",
+          "lyrics"
+        ],
+        [
+          "35:enhance",
+          "enhance"
         ]
       ],
       "outputs": [

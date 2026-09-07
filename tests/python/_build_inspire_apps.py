@@ -62,7 +62,7 @@ go-see.shots.yaml contract (keep these keys):
   publish_cap_s: 90.00
   print: ltx
   identity_seed
-  identity_enhance: false
+  identity_enhance: true
   identity_look
   shots[]{beat, shot, prefix, load_from, ltx_i2v, wan_i2v}
 
@@ -204,8 +204,9 @@ def build_prompt_forge() -> dict:
 def build_beat_sheet() -> dict:
     note_h = 420.0
     card_w, card_h = 420.0, 160.0
+    enh_h = 280.0
     gap = 40.0
-    row_stride = card_h + GROUP_TITLE_INSET + gap
+    row_stride = card_h + enh_h + GROUP_TITLE_INSET + gap + 50.0
     cards_y0 = LAB_NODE_Y0 + note_h + 80.0
     nodes = [
         _node(
@@ -230,6 +231,8 @@ def build_beat_sheet() -> dict:
         )
     ]
     nid = 2
+    links: list[list] = []
+    lid = 1
     for beat in range(1, 7):
         row_y = cards_y0 + (beat - 1) * row_stride
         group_top = row_y - GROUP_TITLE_INSET
@@ -240,7 +243,7 @@ def build_beat_sheet() -> dict:
                 20,
                 group_top,
                 1380,
-                card_h + GROUP_TITLE_INSET,
+                card_h + enh_h + 70 + GROUP_TITLE_INSET,
                 "#3f789e",
             )
         )
@@ -250,9 +253,10 @@ def build_beat_sheet() -> dict:
             placeholder = (
                 f"{role} beat {beat} — paste into workflows/shorts/<slug>.shots.yaml"
             )
+            prim_id = nid
             nodes.append(
                 _node(
-                    nid,
+                    prim_id,
                     "PrimitiveNode",
                     [x, row_y],
                     [card_w, card_h],
@@ -263,7 +267,7 @@ def build_beat_sheet() -> dict:
                         {
                             "name": "STRING",
                             "type": "STRING",
-                            "links": None,
+                            "links": [lid],
                             "widget": {"name": "value"},
                             "slot_index": 0,
                         }
@@ -271,13 +275,37 @@ def build_beat_sheet() -> dict:
                 )
             )
             nid += 1
+            enh_id = nid
+            nodes.append(
+                _node(
+                    enh_id,
+                    "EZLTXPromptEnhance",
+                    [x, row_y + card_h + 50],
+                    [card_w, enh_h],
+                    f"{title} LTX enhance",
+                    [placeholder, True, "i2v", "5 seconds, 24 fps", "", "none"],
+                    nid - 1,
+                    _str_out(),
+                )
+            )
+            nodes[-1]["inputs"] = [
+                {
+                    "name": "prompt",
+                    "type": "STRING",
+                    "link": lid,
+                    "widget": {"name": "prompt"},
+                }
+            ]
+            links.append([lid, prim_id, 0, enh_id, 0, "STRING"])
+            lid += 1
+            nid += 1
     graph = {
         "id": "beat-sheet-lab-example",
         "revision": 1,
         "last_node_id": nid - 1,
-        "last_link_id": 0,
+        "last_link_id": lid - 1,
         "nodes": nodes,
-        "links": [],
+        "links": links,
         "groups": groups,
         "config": {},
         "extra": {

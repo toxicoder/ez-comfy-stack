@@ -149,8 +149,8 @@
       },
       "widgets_values": [
         "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, empty of people.",
-        false,
-        "t2i",
+        true,
+        "identity",
         "Instagram 4:5 still",
         "none"
       ],
@@ -256,7 +256,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-style-lock-lab-example\n\nFour Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`\u2026`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.\n\nTurn Enhance off on IDENTITY to pin the bible.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-style-lock-lab-example\n\nFour Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`\u2026`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -1554,7 +1554,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-style-lock-lab-example",
-    "lab_note": "## klein-style-lock-lab-example\n\nFour Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`\u2026`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.\n\nTurn Enhance off on IDENTITY to pin the bible.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## klein-style-lock-lab-example\n\nFour Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`\u2026`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Klein 4B four-still lake-house views, locked inventory",
     "lab_app_mode": {
       "enabled": true,
@@ -1562,7 +1562,7 @@
       "frontend_min": "1.41.13",
       "lane": "inspire",
       "occupancy": "klein",
-      "enhance_off_identity": true,
+      "enhance_off_identity": false,
       "handoff": []
     },
     "linearData": {

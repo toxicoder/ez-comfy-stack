@@ -139,7 +139,13 @@ refresh_comfy_pin_if_needed() {
     log "Re-seeding ${COMFY_HOME} from prebuilt"
     mkdir -p "${COMFY_HOME}"
     if command -v rsync >/dev/null 2>&1; then
-      rsync -a "${pre}/" "${COMFY_HOME}/"
+      rsync -a \
+        --exclude user/ \
+        --exclude input/ \
+        --exclude output/ \
+        --exclude temp/ \
+        --exclude extra_model_paths.yaml \
+        "${pre}/" "${COMFY_HOME}/"
     else
       cp -a "${pre}/." "${COMFY_HOME}/"
     fi

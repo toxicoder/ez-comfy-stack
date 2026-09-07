@@ -109,7 +109,7 @@ class EZRapLyrics:
                         "dynamicPrompts": False,
                     },
                 ),
-                "enhance": ("BOOLEAN", {"default": False}),
+                "enhance": ("BOOLEAN", {"default": True}),
             }
         }
 
@@ -120,9 +120,9 @@ class EZRapLyrics:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Rewrites lab-original rap lyrics with the on-box Qwen3-4B-Instruct "
-        "GGUF. Enhance defaults off so Queue works offline. Missing GGUF "
-        "passes the widget text through. Forbids living-MC names and famous "
-        "hooks. ACE-Step still invents the vocal timbre from tags plus lyrics."
+        "GGUF. Enhance defaults on. Missing GGUF passes the widget text "
+        "through. Forbids living-MC names and famous hooks. ACE-Step still "
+        "invents the vocal timbre from tags plus lyrics."
     )
 
     def run(self, lyrics, enhance=False):

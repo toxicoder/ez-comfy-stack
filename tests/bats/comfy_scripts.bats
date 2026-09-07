@@ -169,6 +169,48 @@ teardown() {
   [[ -f ${strip_root}/input/keep.txt ]]
 }
 
+@test "link_comfy_input_dir migrates volume input and symlinks to mount" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local vol_in mount
+  vol_in="${TEST_TMP_DIR}/ComfyUI/input"
+  mount="${TEST_TMP_DIR}/host_inputs"
+  mkdir -p "${vol_in}"
+  echo startpng >"${vol_in}/start.png"
+  export LAB_INPUTS_MOUNT="${mount}"
+  export COMFY_HOME="${TEST_TMP_DIR}/ComfyUI"
+  run link_comfy_input_dir "${vol_in}"
+  [ "${status}" -eq 0 ]
+  [[ -L ${TEST_TMP_DIR}/ComfyUI/input ]]
+  [[ -f ${mount}/start.png ]]
+  [[ "$(readlink "${TEST_TMP_DIR}/ComfyUI/input")" == "${mount}" ]]
+}
+
+@test "seed_from_prebuilt rsync excludes user and input" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local pre dest
+  pre="${TEST_TMP_DIR}/prebuilt"
+  dest="${TEST_TMP_DIR}/ComfyUI"
+  mkdir -p "${pre}/.venv/bin" "${pre}/user/default" "${pre}/input" "${dest}/user/default" "${dest}/input"
+  printf '#!/usr/bin/env bash\necho ok\n' >"${pre}/.venv/bin/python"
+  chmod +x "${pre}/.venv/bin/python"
+  echo pre >"${pre}/main.py"
+  echo wipe-me >"${pre}/user/default/lab.json"
+  echo keep-me >"${dest}/user/default/mine.json"
+  echo oldstart >"${dest}/input/start.png"
+  echo prestart >"${pre}/input/example.png"
+  export LAB_PREBUILT_ROOT="${pre}"
+  export COMFY_HOME="${dest}"
+  run seed_from_prebuilt
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/main.py ]]
+  [[ -f ${dest}/user/default/mine.json ]]
+  [[ ! -f ${dest}/user/default/lab.json ]]
+  [[ -f ${dest}/input/start.png ]]
+  [[ ! -f ${dest}/input/example.png ]]
+}
+
 @test "link_comfy_output_dir migrates volume output and symlinks to mount" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
@@ -239,16 +281,18 @@ teardown() {
   local src dest
   src="${TEST_TMP_DIR}/wf"
   dest="${TEST_TMP_DIR}/user_wf"
-  mkdir -p "${src}/shorts" "${src}/dcc"
+  mkdir -p "${src}/shorts" "${src}/dcc" "${src}/optional"
   echo '{}' >"${src}/klein-still-draft-lab-example.json"
   echo '{}' >"${src}/shorts/film-go-see-90s-run-lab-example.json"
   echo '{}' >"${src}/dcc/klein-from-clay-lab-example.json"
+  echo '{}' >"${src}/optional/wan-i2v-a14b-lab-example.json"
   echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/klein-still-draft-lab-example.json ]]
   [[ -f ${dest}/film-go-see-90s-run-lab-example.json ]]
   [[ -f ${dest}/klein-from-clay-lab-example.json ]]
+  [[ -f ${dest}/wan-i2v-a14b-lab-example.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
   run install_lab_workflows "${TEST_TMP_DIR}/missing-wf" "${TEST_TMP_DIR}/user_wf2"
   [ "${status}" -eq 0 ]
@@ -766,6 +810,8 @@ teardown() {
   [[ "${args}" == *"--use-ck-attention"* ]]
   [[ "${args}" == *"--disable-mmap"* ]]
   [[ "${args}" == *"--bf16-unet"* ]]
+  [[ "${args}" == *"--input-directory"* ]]
+  [[ "${args}" == *"--output-directory"* ]]
   # One token per line from comfy_exec_args. grep -Fx so bash 3.2 set -e
   # does not swallow a failed [[ != ]] in the middle of the test function.
   run grep -Fx -- '--use-sage-attention' <<< "${args}"

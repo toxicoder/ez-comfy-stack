@@ -142,14 +142,14 @@ HOUSE_NOTE = """## klein-dream-house-lab-example
 
 Ten Instagram 4:5 stills of one compact single-story cedar cabin on an alpine lake (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280).
 HOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, deck chairs) repeats through the two-bay glass and in every interior. Each SHOT card is a new camera of that same cabin — Prompt Join lock=view. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.
-Edit HOUSE IDENTITY and inventory once. Enhance is off on the bible so a rewrite cannot insert a camera. Shot cards are Prompt Join only.
+Edit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards go through Prompt Join then Klein t2i enhance.
 Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Season may change foliage, sky, and snow; it must not change the building.
 If materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.
 """
 
 PACK_NOTE = """## klein-platform-pack-lab-example
 
-One identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Enhance is **off** on the bible so a rewrite cannot insert a camera. Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios).
+One identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios).
 
 Prefixes and sizes (copy of the single-plate graphs):
 - ez_pack_thumb 1280x720
@@ -416,7 +416,7 @@ def build_dream_house() -> dict:
             [40, 510],
             [420, 420],
             "HOUSE IDENTITY",
-            [HOUSE_IDENTITY, False, "t2i", "Instagram 4:5 still", "none"],
+            [HOUSE_IDENTITY, True, "identity", "Instagram 4:5 still", "none"],
             3,
             outputs=[out("prompt", "STRING", ident_links)],
         )
@@ -697,7 +697,7 @@ def build_platform_pack() -> dict:
             [40, 510],
             [420, 420],
             "PACK IDENTITY",
-            [CREATOR_IDENTITY, False, "t2i", "platform pack still", "none"],
+            [CREATOR_IDENTITY, True, "identity", "platform pack still", "none"],
             3,
             outputs=[out("prompt", "STRING", ident_links)],
         )

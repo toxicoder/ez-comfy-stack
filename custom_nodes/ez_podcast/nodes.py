@@ -272,7 +272,7 @@ class EZPodcastScript:
                         "dynamicPrompts": False,
                     },
                 ),
-                "enhance": ("BOOLEAN", {"default": False}),
+                "enhance": ("BOOLEAN", {"default": True}),
                 "flavor": ([FLAVOR_PODCAST, FLAVOR_RADIO], {"default": FLAVOR_PODCAST}),
             }
         }
@@ -284,9 +284,9 @@ class EZPodcastScript:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Rewrites a two-host or radio-drama script with the on-box "
-        "Qwen3-4B-Instruct GGUF. Enhance defaults off so Queue works offline. "
-        "Missing GGUF passes the widget text through. Unloads the writer "
-        "after a rewrite so TTS can run in the same Queue."
+        "Qwen3-4B-Instruct GGUF. Enhance defaults on. Missing GGUF passes "
+        "the widget text through. Unloads the writer after a rewrite so TTS "
+        "can run in the same Queue."
     )
 
     def run(self, prompt, enhance, flavor=FLAVOR_PODCAST):

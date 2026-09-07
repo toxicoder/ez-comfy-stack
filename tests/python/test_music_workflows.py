@@ -70,8 +70,9 @@ def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None
     assert flac["widgets_values"][0] == prefix
     mp3 = next(n for n in graph["nodes"] if n["type"] == "SaveAudioMP3")
     assert mp3["widgets_values"][0] == prefix
-    lyrics = next(n for n in graph["nodes"] if n["type"] == "EZRapLyrics")
-    assert lyrics["widgets_values"][1] is False
+    ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
+    assert ace["widgets_values"][2] is True
+    assert ace["widgets_values"][3] == "vocal"
     assert "Note" in {n["type"] for n in graph["nodes"]}
     assert "klein-thumbnail-lab-example" in extra["lab_note"]
     assert "klein-podcast-cover-lab-example" in extra["lab_note"]

@@ -542,6 +542,8 @@ stack_start() {
   log "══ start ══ unified us-safe-studio (mem_limit=${MEM_LIMIT})"
   log "Image: ${EZ_COMFY_IMAGE} (branch=${branch})"
   log "Outputs: ${COMFY_OUTPUT_DIR} → /outputs"
+  log "Input: ${COMFY_OUTPUT_DIR}/input → /inputs"
+  log "Comfy user: ${COMFY_OUTPUT_DIR}/comfy-user → /comfy-state/ComfyUI/user"
 
   local up_args=(up -d)
   if [[ ${LAB_STACK_FORCE_BUILD:-0} == "1" ]]; then

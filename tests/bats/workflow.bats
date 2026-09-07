@@ -180,7 +180,7 @@ assert 'HD 3D game-engine pre-rendered cutscene still' in pos(d)
 assert 'no logos, no text' not in pos(d)
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 for n in d['nodes'])
-assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is False for n in d['nodes'])
+assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is True for n in d['nodes'])
 "
   [ "${status}" -eq 0 ]
 }
@@ -525,8 +525,8 @@ assert all(
 )
 enh=[n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance']
 assert len(enh)==1
-assert enh[0]['widgets_values'][1] is False
-assert enh[0]['widgets_values'][2]=='t2i'
+assert enh[0]['widgets_values'][1] is True
+assert enh[0]['widgets_values'][2]=='identity'
 assert enh[0]['widgets_values'][3]=='Instagram 4:5 still'
 ident=enh[0]['widgets_values'][0]
 ident_l=ident.lower()

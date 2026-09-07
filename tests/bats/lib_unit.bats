@@ -283,6 +283,8 @@ teardown() {
   run ensure_comfy_output_dir "${TEST_TMP_DIR}/comfy-out-ok"
   [ "${status}" -eq 0 ]
   [ -d "${TEST_TMP_DIR}/comfy-out-ok" ]
+  [ -d "${TEST_TMP_DIR}/comfy-out-ok/input" ]
+  [ -d "${TEST_TMP_DIR}/comfy-out-ok/comfy-user/default/workflows" ]
   run ensure_writable_host_dir COMFY_OUTPUT_DIR "${TEST_TMP_DIR}/comfy-out-ok"
   [ "${status}" -eq 0 ]
   run prepare_comfy_output_dir "${TEST_TMP_DIR}/prepared_output"

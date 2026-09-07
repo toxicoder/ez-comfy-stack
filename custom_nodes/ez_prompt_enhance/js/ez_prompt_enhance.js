@@ -5,6 +5,9 @@ const NODE_CLASSES = new Set([
   "EZKleinPromptEnhance",
   "EZWanPromptEnhance",
   "EZLTXPromptEnhance",
+  "EZAceStepPromptEnhance",
+  "EZRapLyrics",
+  "EZPodcastScript",
 ]);
 
 const PREVIEW = "CLIP prompt";
@@ -58,6 +61,11 @@ app.registerExtension({
     if (!NODE_CLASSES.has(nodeData.name)) {
       return;
     }
+    const onNodeCreated = nodeType.prototype.onNodeCreated;
+    nodeType.prototype.onNodeCreated = function () {
+      onNodeCreated?.apply(this, arguments);
+      populate(this, "", "Queue to rewrite");
+    };
     const onExecuted = nodeType.prototype.onExecuted;
     nodeType.prototype.onExecuted = function (message) {
       onExecuted?.apply(this, arguments);

@@ -35,7 +35,7 @@ sequenceDiagram
   participant L as Lyrics + tags
   participant D as VAEDecodeAudio
 
-  U->>L: original bars (Enhance off)
+  U->>L: original bars (Enhance on)
   U->>C: Queue draft 32 s
   C->>D: latent audio
   D->>U: ez_rap_draft FLAC + MP3
@@ -56,7 +56,7 @@ Graph: **music-rap-draft-lab-example** (`extra.lab_profile` `us-safe-music`). Sa
 | --- | --- | --- |
 | MODEL | `CheckpointLoaderSimple` `ace_step_1.5_turbo_aio.safetensors` + `ModelSamplingAuraFlow` | — |
 | DURATION | Primitive **32** s → `EmptyAceStep1.5LatentAudio` | — |
-| PROMPT | Tags + lab-original lyrics. `EZRapLyrics` enhance **off**. `ConditioningZeroOut` negative. KSampler 8 / cfg 1 / euler / simple | `ez_rap_lyrics` |
+| PROMPT | Tags + lab-original lyrics. `EZAceStepPromptEnhance` enhance **on**. `ConditioningZeroOut` negative. KSampler 8 / cfg 1 / euler / simple | `ez_rap_prompt` |
 | OUTPUT | `VAEDecodeAudio` → FLAC + 320 kbps MP3 | `ez_rap_draft` |
 | COVER | Queue **klein-thumbnail-lab-example** or **klein-podcast-cover-lab-example** separately | `ez_thumbnail` / `ez_podcast` |
 
@@ -123,7 +123,7 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 
 1. `./scripts/manage.sh download-music --tier turbo`
 2. `./scripts/manage.sh start` — type **yes**
-3. Load **music-rap-draft-lab-example**. Enhance off. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
+3. Load **music-rap-draft-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
 4. Then load **music-rap-full-lab-example** (96 s)
 5. Cover in a **later** session: **klein-thumbnail-lab-example** or **klein-podcast-cover-lab-example**
 

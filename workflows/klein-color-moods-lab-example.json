@@ -151,7 +151,7 @@
       "widgets_values": [
         "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering.",
         true,
-        "t2i",
+        "identity",
         "YouTube 16:9 still",
         "none"
       ],

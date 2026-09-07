@@ -779,6 +779,16 @@
       "enhance_off_identity": false,
       "handoff": []
     },
+    "lab_magcache": {
+      "enabled": true,
+      "node": "MagCache",
+      "model_type": "wan2.2_ti2v_5B",
+      "magcache_thresh": 0.04,
+      "magcache_K": 3,
+      "start_step": 2,
+      "end_step": -1,
+      "note": "Draft only. ComfyUI-MagCache dropdown may lack wan2.2_ti2v_5B until upstream exposes it; extra documents the pin."
+    },
     "linearData": {
       "inputs": [
         [

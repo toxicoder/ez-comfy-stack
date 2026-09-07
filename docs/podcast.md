@@ -37,7 +37,7 @@ Graph: **podcast-audio-first-lab-example** (`extra.lab_profile` `us-safe-podcast
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
-| SCRIPT | In-tree `EZPodcastScript` (enhance **off**). Missing GGUF passes the widget through | `ez_podcast_script` |
+| SCRIPT | In-tree `EZPodcastScript` (enhance **on**). Missing GGUF passes the widget through | `ez_podcast_script` |
 | DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
 | VOICES | `EZKokoroTTS` — Kokoro-82M ONNX/CPU built-ins | `ez_podcast_voice` |
 | BEDS | Native Comfy ACE-Step 1.5, instrumental, empty lyrics | `ez_podcast_bed` |
@@ -138,7 +138,7 @@ sequenceDiagram
   participant A as ACE-Step beds
   participant M as Mix
 
-  U->>S: Queue (Enhance off)
+  U->>S: Queue (Enhance on)
   S->>D: script string
   D->>K: bumper + lines
   D->>A: instrumental tags
@@ -154,7 +154,7 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
 2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see troubleshooting)
 3. `./scripts/manage.sh start` — type **yes**
-4. Load **podcast-audio-first-lab-example**. Enhance off. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
+4. Load **podcast-audio-first-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
 5. Load **klein-podcast-cover-lab-example** in a **later** session. Queue `ez_podcast_*.png`
 6. Loudness (ffmpeg; Comfy cannot LUFS):
 

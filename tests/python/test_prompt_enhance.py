@@ -17,6 +17,7 @@ if str(CUSTOM) not in sys.path:
 import ez_prompt_enhance  # noqa: E402
 from ez_prompt_enhance import client  # noqa: E402
 from ez_prompt_enhance.nodes import (  # noqa: E402
+    EZAceStepPromptEnhance,
     EZKleinPromptEnhance,
     EZLTXPromptEnhance,
     EZPromptJoin,
@@ -70,6 +71,20 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "first frame" in ltx_i2v.lower()
     assert "camera motion" in ltx_i2v.lower()
     assert "new objects" in ltx_i2v.lower()
+    ident = client.load_system_prompt("klein_identity")
+    assert "camera-free" in ident.lower()
+    assert "lens" in ident.lower()
+    assert "150" in ident
+    flf = client.load_system_prompt("wan_flf")
+    assert "first-last" in flf.lower() or "first last" in flf.lower() or "end frame" in flf.lower()
+    assert "audio" in flf.lower()
+    vace = client.load_system_prompt("wan_vace")
+    assert "join" in vace.lower() or "seam" in vace.lower()
+    ace_tags = client.load_system_prompt("ace_tags")
+    assert "genre first" in ace_tags.lower() or "genre is always first" in ace_tags.lower()
+    ace_inst = client.load_system_prompt("ace_instrumental")
+    assert "instrumental" in ace_inst.lower()
+    assert "no vocals" in ace_inst.lower()
 
 
 def test_style_catalog_is_fifty_unique() -> None:
@@ -169,6 +184,10 @@ def test_web_directory_and_preview_js() -> None:
     assert "EZKleinPromptEnhance" in body
     assert "EZWanPromptEnhance" in body
     assert "EZLTXPromptEnhance" in body
+    assert "EZAceStepPromptEnhance" in body
+    assert "EZRapLyrics" in body
+    assert "EZPodcastScript" in body
+    assert "onNodeCreated" in body
     assert "CLIP prompt" in body
     assert "Enhance status" in body
     assert "passthrough" in body
@@ -308,8 +327,8 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
     klein_d = next(n for n in draft["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     klein_h = next(n for n in hero["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein_d["widgets_values"][0] == klein_h["widgets_values"][0]
-    assert klein_d["widgets_values"][1] is False
-    assert klein_h["widgets_values"][1] is False
+    assert klein_d["widgets_values"][1] is True
+    assert klein_h["widgets_values"][1] is True
     assert klein_d["widgets_values"][-1] == "none"
     wan_t = json.loads((wf / "wan-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
     wan_i = json.loads((wf / "wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
@@ -387,8 +406,8 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert "24mm" not in ident_l
     assert "golden-hour" not in ident_l and "golden hour" not in ident_l
     assert "no logos, no text" not in ident_text
-    assert ident["widgets_values"][1] is False
-    assert ident["widgets_values"][2] == "t2i"
+    assert ident["widgets_values"][1] is True
+    assert ident["widgets_values"][2] == "identity"
     assert ident["widgets_values"][3] == "Instagram 4:5 still"
     assert ident["widgets_values"][4] == "none"
     joins = [n for n in house["nodes"] if n.get("type") == "EZPromptJoin"]
@@ -458,6 +477,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
         "EZPromptJoin",
+        "EZAceStepPromptEnhance",
     }
     klein = EZKleinPromptEnhance()
     wan = EZWanPromptEnhance()
@@ -556,3 +576,122 @@ def test_node_mappings_modes_preview_and_style() -> None:
     ltx_user = mock.call_args[0][1]
     assert "oil painting" in ltx_user.lower()
     assert "coherent light" in ltx_user.lower()
+    klein_modes = klein.INPUT_TYPES()["required"]["mode"][0]
+    assert "identity" in klein_modes
+    wan_modes = wan.INPUT_TYPES()["required"]["mode"][0]
+    assert wan_modes == ["t2v", "i2v", "flf", "vace"]
+    with patch.object(client, "complete", return_value=("bible", None)) as mock:
+        ident_out = klein.run("cedar cabin", True, "identity", "", "anime")
+    assert ident_out["result"] == ("bible",)
+    assert "camera-free" in mock.call_args[0][0].lower()
+    with patch.object(client, "complete", return_value=("flf-motion", None)) as mock:
+        wan.run("between frames", True, "flf", "5 seconds, 24 fps", "anime")
+    assert "end frame" in mock.call_args[0][0].lower() or "first-last" in mock.call_args[0][0].lower()
+    assert "Visual style" not in mock.call_args[0][1]
+
+
+def test_ace_step_enhance_node_defaults_and_modes() -> None:
+    ace = EZAceStepPromptEnhance()
+    spec = ace.INPUT_TYPES()["required"]
+    assert spec["enhance"][1]["default"] is True
+    assert spec["mode"][0] == ["vocal", "instrumental"]
+    off = ace.run("boom bap, 88 bpm", "[verse]\nhi", False, "vocal")
+    assert off["result"] == ("boom bap, 88 bpm", "[verse]\nhi")
+    assert off["ui"]["passthrough"][0] == "enhance off"
+    inst_off = ace.run("lo-fi keys", "", False, "instrumental")
+    assert "instrumental" in inst_off["result"][0].lower()
+    assert inst_off["result"][1] == "[inst]"
+    with patch("ez_prompt_enhance.nodes.complete", side_effect=[("boom bap, dusty drums, 88 bpm", None), ("[verse]\nrewritten", None)]):
+        with patch("ez_prompt_enhance.nodes._close_llm"):
+            on = ace.run("lazy beat", "[verse]\nhi", True, "vocal")
+    assert on["result"][0].startswith("boom bap")
+    assert "[verse]" in on["result"][1]
+    with patch("ez_prompt_enhance.nodes.complete", return_value=("lo-fi, warm keys, instrumental, no vocals", None)):
+        with patch("ez_prompt_enhance.nodes._close_llm"):
+            bed = ace.run("lo-fi bed", "", True, "instrumental")
+    assert "instrumental" in bed["result"][0].lower()
+    assert bed["result"][1] == "[inst]"
+
+
+def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
+    """Every lab CLIP/ACE positive prompt comes from an EZ enhance node, enhance on."""
+    skip_ids = {"longcat-video-lab-example"}
+    enhance_types = {
+        "EZKleinPromptEnhance",
+        "EZWanPromptEnhance",
+        "EZLTXPromptEnhance",
+        "EZAceStepPromptEnhance",
+        "EZRapLyrics",
+        "EZPodcastScript",
+    }
+    encoder_types = {"CLIPTextEncode", "TextEncodeAceStepAudio1.5"}
+    wf_root = ROOT / "workflows"
+    missing: list[str] = []
+    for path in sorted(wf_root.rglob("*-lab-example.json")):
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        gid = str(graph.get("id") or path.stem)
+        if gid in skip_ids:
+            continue
+        by_id = {int(n["id"]): n for n in graph["nodes"]}
+        links = {int(link[0]): link for link in graph.get("links") or []}
+        for node in graph["nodes"]:
+            ntype = node.get("type")
+            if ntype in enhance_types:
+                values = node.get("widgets_values") or []
+                flag = values[1] if ntype != "EZAceStepPromptEnhance" else (
+                    values[2] if len(values) > 2 else True
+                )
+                if ntype == "EZAceStepPromptEnhance":
+                    flag = values[2] if len(values) > 2 else True
+                if flag is not True:
+                    missing.append(f"{path.name}: {ntype}#{node['id']} enhance={flag!r}")
+            if ntype not in encoder_types:
+                continue
+            title = str(node.get("title") or "")
+            if "neg" in title.lower():
+                continue
+            if ntype == "CLIPTextEncode":
+                text_inp = next(
+                    (i for i in node.get("inputs") or [] if i.get("name") == "text"),
+                    None,
+                )
+                if text_inp is None or text_inp.get("link") is None:
+                    missing.append(f"{path.name}: CLIP {title!r} has no text link")
+                    continue
+                src = by_id.get(int(links[int(text_inp["link"])][1]))
+                if src is None:
+                    missing.append(f"{path.name}: CLIP {title!r} missing text source")
+                    continue
+                if src.get("type") in enhance_types:
+                    continue
+                if src.get("type") == "EZPromptJoin":
+                    ident_inp = next(
+                        (i for i in src.get("inputs") or [] if i.get("name") == "identity"),
+                        None,
+                    )
+                    ident_src = None
+                    if ident_inp and ident_inp.get("link") is not None:
+                        ident_src = by_id.get(int(links[int(ident_inp["link"])][1]))
+                    if ident_src and ident_src.get("type") in enhance_types:
+                        continue
+                missing.append(
+                    f"{path.name}: CLIP {title!r} fed by {src.get('type')}"
+                )
+            elif ntype == "TextEncodeAceStepAudio1.5":
+                tags_inp = next(
+                    (i for i in node.get("inputs") or [] if i.get("name") == "tags"),
+                    None,
+                )
+                lyrics_inp = next(
+                    (i for i in node.get("inputs") or [] if i.get("name") == "lyrics"),
+                    None,
+                )
+                linked = False
+                for inp in (tags_inp, lyrics_inp):
+                    if inp and inp.get("link") is not None:
+                        src = by_id.get(int(links[int(inp["link"])][1]))
+                        if src and src.get("type") in enhance_types:
+                            linked = True
+                if not linked:
+                    missing.append(f"{path.name}: ACE encoder {title!r} not fed by enhance")
+    assert not missing, "\n".join(missing[:40])

@@ -229,7 +229,13 @@ teardown() {
   local compose="${REPO_ROOT}/docker/docker-compose.yml"
   run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs' "${compose}"
   [ "$status" -eq 0 ]
+  run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}/input:/inputs' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user:/comfy-state/ComfyUI/user' "${compose}"
+  [ "$status" -eq 0 ]
   run grep -E 'output-directory|/outputs' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -eq 0 ]
+  run grep -F -- '--input-directory' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "$status" -eq 0 ]
   run grep -E 'down -v' "${REPO_ROOT}/scripts/lib/compose.sh"
   [ "$status" -eq 0 ]

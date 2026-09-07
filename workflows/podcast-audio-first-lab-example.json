@@ -1,8 +1,8 @@
 {
   "id": "podcast-audio-first-lab-example",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 15,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -84,7 +84,7 @@
       },
       "widgets_values": [
         "Speaker A: Welcome back to Local Signal. Today we stay on the machine in front of us.\nSpeaker B: No cloud voices. No rented music. If the card dies, the show dies with it.\nSpeaker A: That is the point. A small studio should own the weights and the cuts.\nSpeaker B: Edit the script before you generate speech. The edit is the human part.",
-        false,
+        true,
         "podcast_two_host"
       ],
       "title": "ez_podcast_script"
@@ -191,6 +191,22 @@
           "name": "clip",
           "type": "CLIP",
           "link": 3
+        },
+        {
+          "name": "tags",
+          "type": "STRING",
+          "link": 16,
+          "widget": {
+            "name": "tags"
+          }
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 17,
+          "widget": {
+            "name": "lyrics"
+          }
         }
       ],
       "outputs": [
@@ -577,9 +593,53 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## podcast-audio-first-lab-example\n\nUS-safe audio-first episode (Option A). Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Enhance defaults **off** so Queue works offline.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck \u221215 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **klein-podcast-cover-lab-example.json** (prefix `ez_podcast`, 1024\u00b2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (\u221216 LUFS podcast / `--youtube` \u221214). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## podcast-audio-first-lab-example\n\nUS-safe audio-first episode (Option A). Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Prompt enhance is **on**; after Queue the script node shows the rewritten lines. Turn Enhance off to pin widget text.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck \u221215 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **klein-podcast-cover-lab-example.json** (prefix `ez_podcast`, 1024\u00b2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (\u221216 LUFS podcast / `--youtube` \u221214). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
+    },
+    {
+      "id": 15,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        -400,
+        220
+      ],
+      "size": [
+        400,
+        320
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "tags",
+          "type": "STRING",
+          "links": [
+            16
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZAceStepPromptEnhance"
+      },
+      "widgets_values": [
+        "instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental",
+        "",
+        true,
+        "instrumental"
+      ],
+      "title": "ez_podcast_bed enhance"
     }
   ],
   "links": [
@@ -702,6 +762,22 @@
       13,
       0,
       "AUDIO"
+    ],
+    [
+      16,
+      15,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      17,
+      15,
+      1,
+      5,
+      2,
+      "STRING"
     ]
   ],
   "groups": [
@@ -761,7 +837,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-podcast",
-    "lab_note": "## podcast-audio-first-lab-example\n\nUS-safe audio-first episode (Option A). Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Enhance defaults **off** so Queue works offline.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck \u221215 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **klein-podcast-cover-lab-example.json** (prefix `ez_podcast`, 1024\u00b2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (\u221216 LUFS podcast / `--youtube` \u221214). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_note": "## podcast-audio-first-lab-example\n\nUS-safe audio-first episode (Option A). Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step + TTS together.\n\n1. Edit the script (human part). Prompt enhance is **on**; after Queue the script node shows the rewritten lines. Turn Enhance off to pin widget text.\n2. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.\n4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck \u221215 dB under speech.\n5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.\n6. Cover separately: Queue **klein-podcast-cover-lab-example.json** (prefix `ez_podcast`, 1024\u00b2). Do not embed Klein here.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (\u221216 LUFS podcast / `--youtube` \u221214). Comfy cannot loudnorm.\n\nWeights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "US-safe audio-first episode: Kokoro TTS + ACE-Step instrumental bed + mix",
     "ds": {
       "scale": 1,
@@ -792,6 +868,18 @@
         [
           "8:seed",
           "seed"
+        ],
+        [
+          "15:tags",
+          "tags"
+        ],
+        [
+          "15:lyrics",
+          "lyrics"
+        ],
+        [
+          "15:enhance",
+          "enhance"
         ]
       ],
       "outputs": [
