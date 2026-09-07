@@ -2376,14 +2376,14 @@
 <td>Restart the container so entrypoint copies <code>ez_prompt_enhance/js/</code>. Hard-refresh the Comfy tab. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/js/ez_prompt_enhance.js</code></td>
 </tr>
 <tr>
-<td>Style selected but still looks like the lab 3D/photo prompt</td>
+<td>Style selected but still looks like the lab photoreal prompt</td>
 <td>Style is <code>none</code>, mode is I2V, or reading the source widget instead of <strong>CLIP prompt</strong></td>
-<td>Set <strong>style</strong> to a preset (not <code>none</code>). Mode must be <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">t2i</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2v" data-href="../glossary/#t2v" title="Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.">t2v</span> / Klein edit. Read the <strong>CLIP prompt</strong> box — it should front-load the medium and drop <code>game-engine</code> / photoreal fights. I2V ignores style (start image owns look)</td>
+<td>Set <strong>style</strong> to a preset (not <code>none</code>). Mode must be <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">t2i</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2v" data-href="../glossary/#t2v" title="Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.">t2v</span> / Klein edit. Read the <strong>CLIP prompt</strong> box — it should front-load the medium and drop <code>photoreal still</code> / <code>game-engine</code> fights. I2V ignores style (start image owns look)</td>
 </tr>
 <tr>
 <td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span> or locked inventory edited per shot, or an old graph</td>
-<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> and inventory once. View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code>. State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / DUSK / WARM / BEFORE on a cold canvas</td>
+<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> and inventory once. View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code>. State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / GOLDEN / WARM / BEFORE on a cold canvas</td>
 </tr>
 <tr>
 <td>Enhance rewrites a locked shorts identity</td>
@@ -2433,7 +2433,7 @@
 <tr>
 <td>Dream-house interiors do not match the sofa seen through the glass</td>
 <td>Inventory edited on one shot, or a shot card invents new furniture</td>
-<td>Edit locked inventory once on every SHOT join (same sofa, island, table, bedding, tub, terrace chairs, data-staff). Shot 01 should show that sofa through the three-bay glass; living looks out the same glass</td>
+<td>Edit locked inventory once on every SHOT join (same sofa, island, table, bedding, tub, terrace chairs, data-staff). Shot 01 should show that sand linen sofa through the three-bay glass; living looks out the same glass</td>
 </tr>
 <tr>
 <td>Dream-house rooms look like different penthouses</td>
