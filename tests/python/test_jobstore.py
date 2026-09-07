@@ -43,6 +43,9 @@ def test_compile_go_see(tmp_path: Path) -> None:
     stub = json.loads((dest / "shots" / "01.json").read_text(encoding="utf-8"))
     assert stub["template"] == "ltx-i2v-5s-lab-example.json"
     assert "olive windbreaker" in stub["identity"]
+    assert stub["card"]["id"] == "01"
+    assert stub["card"]["status"] == "pending"
+    assert stub["card"]["camera"] == "dolly in"
     loaded = js.load_state(dest)
     assert js.get_shot(loaded, "12")["status"] == "pending"
     with pytest.raises(KeyError):

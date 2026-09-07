@@ -325,7 +325,7 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert baked == expected_ltx
         latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
         assert latent["widgets_values"][0] == 1280
-        assert latent["widgets_values"][1] == 720
+        assert latent["widgets_values"][1] == 704
         assert latent["widgets_values"][2] == 1
         last_saves = [
             n

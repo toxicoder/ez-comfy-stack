@@ -30,7 +30,6 @@ teardown() {
 }
 
 # Append-only. Replacing a verb with another is a merge defect (Wave 0 #77).
-# New manage.sh commands must be added here in the same commit.
 FROZEN_MANAGE_VERBS=(
   help
   setup
@@ -49,6 +48,9 @@ FROZEN_MANAGE_VERBS=(
   cleanup
   print-shot
   film-resume
+  film-export-otio
+  film-proxies
+  download-restore
   models-status
   reap-models
 )
@@ -71,6 +73,9 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"download-music"* ]]
   [[ "${output}" == *"print-shot"* ]]
   [[ "${output}" == *"film-resume"* ]]
+  [[ "${output}" == *"film-export-otio"* ]]
+  [[ "${output}" == *"film-proxies"* ]]
+  [[ "${output}" == *"download-restore"* ]]
   [[ "${output}" == *"reap-models"* ]]
   [[ "${output}" == *"models-status"* ]]
   run bash "${MANAGE_SH}" not-a-command
@@ -194,6 +199,12 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
   run cmd_film_resume
   [ "${status}" -ne 0 ]
+  run cmd_film_export_otio
+  [ "${status}" -ne 0 ]
+  run cmd_film_proxies --help
+  [ "${status}" -eq 0 ]
+  run cmd_download_restore --help
+  [ "${status}" -eq 0 ]
   run cmd_models_status
   [ "${status}" -eq 0 ]
   run cmd_reap_models --help

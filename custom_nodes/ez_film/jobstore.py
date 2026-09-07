@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from .prompt_enums import shot_card
 from .shots import FILM_SLUGS, SHOT_COUNT, parse_shots_yaml
 
 STATUSES = ("pending", "running", "ok", "failed", "skipped")
@@ -244,6 +245,7 @@ def compile_film(
             "ltx_i2v": yaml_shot["ltx_i2v"],
             "wan_i2v": yaml_shot["wan_i2v"],
             "identity": parsed["identity"],
+            "card": shot_card(sid, status="pending"),
         }
         (dest / "shots" / f"{sid}.json").write_text(
             json.dumps(payload, indent=2) + "\n", encoding="utf-8"

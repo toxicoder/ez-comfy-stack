@@ -290,6 +290,10 @@ phase_nodes() {
     clone_node "https://github.com/mit-han-lab/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" \
       "${COMFYUI_NUNCHAKU_NODE_REF:-}" ||
     warn "Nunchaku custom node unavailable"
+  # MagCache: Wan 5B draft only. Fail-soft. Hero LTX graphs must not depend on it.
+  clone_node "https://github.com/Zehong-Ma/ComfyUI-MagCache.git" "ComfyUI-MagCache" \
+    "${COMFYUI_MAGCACHE_REF:-}" ||
+    warn "ComfyUI-MagCache unavailable (Wan 5B draft MagCache extra still documents the pin)"
   install_sage_wheel_if_pinned
   install_nunchaku_wheel
   install_llama_cpp_cpu

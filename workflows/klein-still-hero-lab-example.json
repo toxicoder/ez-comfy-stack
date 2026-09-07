@@ -223,10 +223,10 @@
       },
       "widgets_values": [
         1280,
-        720,
+        704,
         1
       ],
-      "title": "Latent 1280x720 batch 1"
+      "title": "Latent 1280x704 batch 1"
     },
     {
       "id": 7,
@@ -452,7 +452,7 @@
       },
       "widgets_values": [
         "A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat with circuit-thread seams stands on a terrace, holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Unmarked spires recede into volumetric haze. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
-        true,
+        false,
         "t2i",
         "YouTube 16:9 still",
         "none"
@@ -555,7 +555,13 @@
       ]
     },
     "lab_note": "## klein-still-hero-lab-example\n\nHD Klein 4B still (Apache 2.0 distilled FP8). Same prompt and seed as klein-still-draft-lab-example.\nModels: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.\nWidgets: seed 42 fixed \u00b7 CFG 1.0 \u00b7 8 steps \u00b7 1280x720 \u00b7 batch 1.\nSaveImage prefix: ez_still_hero.\n\nFeed ez_still_hero_*.png into wan-i2v-5s-lab-example or ltx-i2v-5s-lab-example.\nDistilled is 4-step-optimized; extra steps are optional.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "Klein 4B hero still, 1280x720, 8 steps"
+    "lab_description": "Klein 4B hero still, 1280x720, 8 steps",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "enhance_off_identity": true
+    }
   },
   "version": 0.4
 }

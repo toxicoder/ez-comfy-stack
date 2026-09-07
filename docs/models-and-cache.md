@@ -93,6 +93,15 @@ When the default pack moves (LTX 2.3 → 2.5 already happened), **reap** the old
 ./scripts/manage.sh reap-models --apply --class superseded --quarantine --yes
 ```
 
+Opt-in packs (not `download-models`):
+
+```bash
+./scripts/utilities/download-wan.sh run --tier fun-inp   # Fun InP A14B FLF, ~47 GB Apache
+./scripts/manage.sh download-restore --tier seedvr2-3b   # SeedVR2-3B post-concat, ~15 GB Apache
+```
+
+Unload LTX before Fun InP. SeedVR2 is restore-only after concat. `reap-models --drop-pack` cannot eat shared VAEs.
+
 `manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete weights. `reap-models --plan` is the default; `--apply` requires `--yes`. Shared files (`flux2-vae`, ACE-Step AIO) stay in the keep-set so `--drop-pack` cannot eat them.
 
 `download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/…` file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.
@@ -204,7 +213,7 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 | `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
 | `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
-| `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×720 |
+| `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
 | `klein-dream-house-lab-example.json` | Ten IG 4:5 stills of one cabin from new cameras; locked inventory |
 | `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |

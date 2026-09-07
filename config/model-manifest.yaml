@@ -27,6 +27,21 @@ packs:
     tier_dir: Comfy-Org__flux2-dev_vae
     files:
       - flux2-vae.safetensors
+  wan-fun-inp:
+    default: false
+    min_gb: 40
+    tier_dir: alibaba-pai__Wan2.2-Fun-A14B-InP_fun-inp
+    files:
+      - diffusion_pytorch_model.safetensors
+    cmd: download-wan --tier fun-inp
+  seedvr2-3b:
+    default: false
+    min_gb: 15
+    tier_dir: ByteDance-Seed__SeedVR2-3B_seedvr2-3b
+    files:
+      - seedvr2_ema_3b.pth
+      - ema_vae.pth
+    cmd: download-restore --tier seedvr2-3b
   wan-ti2v-5b:
     default: true
     min_gb: 12
