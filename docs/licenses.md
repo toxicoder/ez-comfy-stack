@@ -94,6 +94,8 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | TTS-Audio-Suite | diodiogod/TTS-Audio-Suite | mixed NC / research pack | No | No | n/a | n/a | n/a | No |
 | OldTimeRadio | jbrick2070/ComfyUI-OldTimeRadio | H3 / FLUX-dev / NC optional lanes | No | No | n/a | n/a | n/a | No |
 
+TRELLIS.2 footnote: companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download. Native TRELLIS Comfy basenames such as `trellis_2_int8_convrot` are opt-in via `download-3d` only — do not treat them as `download-models`.
+
 The same table is in repo-root `LICENSE-MODELS.md` so tests can grep either file.
 
 ## Before `download-models`

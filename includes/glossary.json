@@ -153,6 +153,15 @@
     "see_also": ["sidecar", "occupancy", "da3"]
   },
   {
+    "id": "asset-bible",
+    "title": "Asset Bible",
+    "aliases": ["Asset Bible", "asset-bible"],
+    "category": "Studio",
+    "short": "Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets. Outputs, never MODELS_DIR.",
+    "long": "Each slug is an `ez.asset.v1` record (kind, prompt, seed, pipeline, takes). `scene.json` instances slugs; it does not embed meshes. Gen is Klein still → TRELLIS.2. Construct is a shopping list of primitives + HDRI + bible refs. Operator verb today: `asset-ls`. See [Asset Bible](asset-bible.md).",
+    "see_also": ["klein", "ltx", "trellis"]
+  },
+  {
     "id": "da3",
     "title": "DA3-BASE",
     "aliases": ["DA3-BASE", "DA3"],

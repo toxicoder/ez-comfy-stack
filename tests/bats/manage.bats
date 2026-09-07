@@ -61,6 +61,7 @@ FROZEN_MANAGE_VERBS=(
   spark-timing
   models-status
   reap-models
+  asset-ls
 )
 
 @test "manage help lists the frozen verb set (append-only)" {
@@ -252,6 +253,9 @@ FROZEN_MANAGE_VERBS=(
   run cmd_export_guides --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"guide pack"* || "${output}" == *"1280x704"* ]]
+  run cmd_asset_ls --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Asset Bible"* ]]
   run cmd_film_accept --help
   [ "${status}" -eq 0 ]
   run cmd_download_longcat --help

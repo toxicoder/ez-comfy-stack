@@ -140,6 +140,9 @@ Commands:
                     Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   blender           Host Blender sidecar (dies if compose is up)
   export-guides     Dump a 1280x704 / 120f guide pack (dies if compose is up)
+  asset-ls [--json] [--output-dir DIR]
+                    Read-only Asset Bible catalog (COMFY_OUTPUT_DIR/assets)
+                    Coming later: asset-new / asset-iterate / asset-promote
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
   download-longcat [--tier video|avatar|all]
@@ -1010,6 +1013,21 @@ cmd_export_guides() {
 }
 
 #######################################
+# Read-only Asset Bible catalog (outputs under COMFY_OUTPUT_DIR/assets).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  asset-ls.sh flags (--json, --output-dir DIR)
+# Outputs:
+#   Catalog listing or JSON on stdout
+# Returns:
+#   asset-ls.sh status
+#######################################
+cmd_asset_ls() {
+  bash "${REPO_ROOT}/scripts/utilities/asset-ls.sh" "$@"
+}
+
+#######################################
 # Fail-closed accept gate before 90s concat.
 #######################################
 cmd_film_accept() {
@@ -1140,6 +1158,7 @@ main() {
     download-3d) cmd_download_3d "$@" ;;
     blender) cmd_blender "$@" ;;
     export-guides) cmd_export_guides "$@" ;;
+    asset-ls) cmd_asset_ls "$@" ;;
     film-accept) cmd_film_accept "$@" ;;
     download-longcat) cmd_download_longcat "$@" ;;
     download-dreamx) cmd_download_dreamx "$@" ;;

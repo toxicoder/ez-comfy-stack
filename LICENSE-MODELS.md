@@ -49,6 +49,8 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | TTS-Audio-Suite | diodiogod/TTS-Audio-Suite | mixed NC / research pack | No | No | n/a | n/a | n/a | No |
 | OldTimeRadio | jbrick2070/ComfyUI-OldTimeRadio | H3 / FLUX-dev / NC optional lanes | No | No | n/a | n/a | n/a | No |
 
+TRELLIS.2 footnote: companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download. Native TRELLIS Comfy basenames such as `trellis_2_int8_convrot` are opt-in via `download-3d` only — do not treat them as `download-models`.
+
 ## Banned from this stack (do not download, do not pin lab graphs)
 
 - MiniMax H3 and MiniMaxH3* nodes/workflows
