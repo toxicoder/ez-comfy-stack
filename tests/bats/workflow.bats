@@ -119,6 +119,31 @@ for i in range(len(boxes)):
   [[ ${n} -ge 8 ]]
 }
 
+@test "suite lab graphs stamp App Mode linearData to live node ids" {
+  run python3 -c "
+import json, sys
+from pathlib import Path
+root = Path('${REPO_ROOT}')
+sys.path.insert(0, str(root / 'tests' / 'python'))
+from _stamp_app_mode import STAMP_SPECS, suite_json_paths
+paths = suite_json_paths(root / 'workflows')
+assert len(paths) == len(STAMP_SPECS)
+for path in paths:
+    graph = json.loads(path.read_text(encoding='utf-8'))
+    extra = graph['extra']
+    assert extra['lab_app_mode']['enabled'] is True, path.name
+    linear = extra['linearData']
+    assert linear['inputs'] and linear['outputs'], path.name
+    live = {int(n['id']) for n in graph['nodes']}
+    for entry in linear['inputs']:
+        nid = int(str(entry[0]).split(':', 1)[0])
+        assert nid in live, (path.name, entry[0])
+    for nid in linear['outputs']:
+        assert int(nid) in live, (path.name, nid)
+"
+  [ "${status}" -eq 0 ]
+}
+
 @test "still lab graphs use Klein 4B Apache weights and flux2 CLIP" {
   local dir="${REPO_ROOT}/workflows"
   local wf

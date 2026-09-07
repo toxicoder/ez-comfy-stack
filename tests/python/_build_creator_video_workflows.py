@@ -15,6 +15,7 @@ from pathlib import Path
 import sys
 
 from _wire_prompt_enhance import _rewrite_enhance_blurb, normalize_enhance_widgets
+from _stamp_app_mode import stamp_suite_graph
 from _lab_layout import (
     GROUP_TITLE_INSET,
     LAB_GROUP_Y0,
@@ -139,6 +140,7 @@ def _load(path: Path) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    stamp_suite_graph(graph)
     ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
@@ -606,7 +608,6 @@ Save prefix: `ez_shorts_still`. Feed into **wan-shorts-i2v-lab-example** or **lt
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 """
     _set_note(g, note, "Klein 4B vertical 9:16 Shorts still")
-    g.get("extra", {}).pop("lab_app_mode", None)
     g["groups"] = [
         _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
         _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 400, "#3f789e"),
@@ -938,7 +939,6 @@ def _klein_single(
     if neg is not None:
         _set_neg(g, neg)
     _set_note(g, note, description)
-    g.get("extra", {}).pop("lab_app_mode", None)
     g["groups"] = [
         _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
         _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 400, "#3f789e"),
@@ -1855,6 +1855,7 @@ def main() -> None:
     for path in sorted(WF.rglob("*-lab-example.json")):
         graph = _load(path)
         normalize_enhance_widgets(graph)
+        stamp_suite_graph(graph)
         ensure_group_title_inset(graph)
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")

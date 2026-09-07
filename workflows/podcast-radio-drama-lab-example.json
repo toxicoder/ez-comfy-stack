@@ -813,7 +813,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n"
+        "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -1217,7 +1217,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-radio",
-    "lab_note": "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n",
+    "lab_note": "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
     "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off",
     "ds": {
       "scale": 1,
@@ -1225,7 +1225,39 @@
         0,
         0
       ]
-    }
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "audio",
+      "occupancy": "audio",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "2:prompt",
+          "prompt"
+        ],
+        [
+          "2:enhance",
+          "enhance"
+        ],
+        [
+          "10:seed",
+          "seed"
+        ]
+      ],
+      "outputs": [
+        17,
+        18,
+        31,
+        33
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

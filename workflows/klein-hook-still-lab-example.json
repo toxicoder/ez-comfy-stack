@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-hook-still-lab-example\n\nFirst-frame Shorts hook still (Klein 4B). Default 432\u00d7768 (9:16). Prefix `ez_hook_still`.\nFeed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.\n"
+        "## klein-hook-still-lab-example\n\nFirst-frame Shorts hook still (Klein 4B). Default 432\u00d7768 (9:16). Prefix `ez_hook_still`.\nFeed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -569,8 +569,55 @@
         0
       ]
     },
-    "lab_note": "## klein-hook-still-lab-example\n\nFirst-frame Shorts hook still (Klein 4B). Default 432\u00d7768 (9:16). Prefix `ez_hook_still`.\nFeed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.\n",
-    "lab_description": "Klein 4B 9:16 Shorts hook still"
+    "lab_note": "## klein-hook-still-lab-example\n\nFirst-frame Shorts hook still (Klein 4B). Default 432\u00d7768 (9:16). Prefix `ez_hook_still`.\nFeed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B 9:16 Shorts hook still",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "klein",
+      "enhance_off_identity": false,
+      "handoff": [
+        "wan-shorts-i2v-lab-example"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "6:width",
+          "width"
+        ],
+        [
+          "6:height",
+          "height"
+        ],
+        [
+          "6:batch_size",
+          "batch_size"
+        ],
+        [
+          "7:seed",
+          "seed"
+        ],
+        [
+          "11:prompt",
+          "prompt"
+        ],
+        [
+          "11:enhance",
+          "enhance"
+        ],
+        [
+          "11:style",
+          "style"
+        ]
+      ],
+      "outputs": [
+        9
+      ]
+    },
+    "linearMode": true
   },
   "version": 0.4
 }

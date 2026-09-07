@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _stamp_app_mode import STAMP_SPECS, suite_json_paths
+
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 
@@ -220,3 +222,41 @@ def test_pack_v2_prefixes() -> None:
         {f"ez_board_{i:02d}" for i in range(1, 7)},
         persist="view",
     )
+
+
+def test_suite_graphs_have_app_mode_and_resolving_linear_data() -> None:
+    paths = suite_json_paths(WF)
+    assert len(paths) == len(STAMP_SPECS), (
+        sorted(STAMP_SPECS) ,
+        sorted(p.stem for p in paths),
+    )
+    for path in paths:
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        extra = graph.get("extra") or {}
+        mode = extra.get("lab_app_mode") or {}
+        assert mode.get("enabled") is True, path.name
+        linear = extra.get("linearData") or {}
+        inputs = linear.get("inputs") or []
+        outputs = linear.get("outputs") or []
+        assert inputs, path.name
+        assert outputs, path.name
+        by_id = {int(n["id"]): n for n in graph["nodes"]}
+        for entry in inputs:
+            widget_id, widget_name = entry[0], entry[1]
+            node_id_s, name = str(widget_id).split(":", 1)
+            assert int(node_id_s) in by_id, (path.name, widget_id)
+            assert name == widget_name
+        for node_id in outputs:
+            assert int(node_id) in by_id, (path.name, node_id)
+
+
+def test_only_daily_still_exposes_unet_in_app_inputs() -> None:
+    unet_stems = []
+    for path in suite_json_paths(WF):
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        linear = graph.get("extra", {}).get("linearData") or {}
+        hits = [entry for entry in linear.get("inputs") or [] if entry[1] == "unet_name"]
+        if hits:
+            unet_stems.append(graph["id"])
+    assert unet_stems == ["klein-still-daily-lab-example"]
+

@@ -12,6 +12,8 @@ import json
 import sys
 from pathlib import Path
 
+from _stamp_app_mode import stamp_suite_graph
+
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 DCC = WF / "dcc"
@@ -55,6 +57,7 @@ def _load(name: str) -> dict:
 
 def _save(graph: dict, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
+    stamp_suite_graph(graph)
     dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
 
 
