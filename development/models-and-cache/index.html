@@ -2158,7 +2158,7 @@
 </thead>
 <tbody>
 <tr>
-<td><code>entrypoint.sh</code> / <code>patch_get_free_memory.py</code> / orchestrator</td>
+<td><code>entrypoint.sh</code> / UM patches / orchestrator</td>
 <td>No</td>
 <td>No</td>
 <td>No</td>
@@ -2208,7 +2208,7 @@
 </tr>
 </tbody>
 </table>
-<p>Builder: <strong>named stages</strong> <code>torch</code> → <code>comfy</code> → <code>nodes</code>. Torch <code>COPY</code> is only <code>core.sh</code> + <code>phase-venv-torch.sh</code>. Pin <code>ARG</code>s are declared in the stage that uses them. Runtime: <strong><code>COPY --link</code> <code>/opt/parts/venv</code> then <code>venv-extra</code> then <code>app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, <code>pythonpath/</code>, and the free-memory patch so local script iteration needs <strong>no image rebuild</strong>.</p>
+<p>Builder: <strong>named stages</strong> <code>torch</code> → <code>comfy</code> → <code>nodes</code>. Torch <code>COPY</code> is only <code>core.sh</code> + <code>phase-venv-torch.sh</code>. Pin <code>ARG</code>s are declared in the stage that uses them. Runtime: <strong><code>COPY --link</code> <code>/opt/parts/venv</code> then <code>venv-extra</code> then <code>app</code></strong> (then thin ops scripts). Compose bind-mounts <code>entrypoint.sh</code>, <code>install-comfy.sh</code>, <code>install-comfy/</code>, <code>pythonpath/</code>, and the UM patches so local script iteration needs <strong>no image rebuild</strong>.</p>
 <p>Runtime installs <strong><code>gcc</code> + <code>g++</code> + <code>python3-dev</code></strong> (not full <code>build-essential</code>) so PyTorch 2.13+ Triton can JIT-compile <code>cuda_utils</code> (needs <strong>CC + <code>Python.h</code></strong>) on first <code>CLIPTextEncode</code>. That is a small apt layer; <code>COPY --link</code> keeps the multi‑GB torch blob. If JIT deps are still incomplete, the entrypoint sets <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> so torch falls back to eager/cuBLAS.</p>
 <p><strong>venv-extra</strong> is the pip delta after the torch snapshot (Comfy <code>requirements.txt</code>, Manager/VHS, llama-cpp). Baking a small optional wheel (e.g. <code>kokoro-onnx</code>) invalidates extra, not torch.</p>
 </details>

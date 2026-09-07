@@ -1532,6 +1532,11 @@
 <td>Confirm patch in container logs; re-run entrypoint install</td>
 </tr>
 <tr>
+<td>10–20× slow / mushy video vs a 4090</td>
+<td>Silent PyTorch attention fallback (Kitchen/Sage not active)</td>
+<td><code>./scripts/manage.sh doctor</code> must <strong>not</strong> say <code>attention: pytorch-fallback</code> on a running Spark. Logs should contain <code>Using Comfy Kitchen attention</code>. Launch uses <code>--use-ck-attention</code> (never <code>--use-sage-attention</code> next to it). Do <strong>not</strong> <code>pip install sageattention</code> from PyPI on aarch64</td>
+</tr>
+<tr>
 <td>Build OK, <code>status</code> empty / not in <code>docker ps</code></td>
 <td>Container exited immediately (<code>restart: "no"</code>)</td>
 <td>Pull latest (workflow no longer mounts into <code>ComfyUI/</code> before clone). <code>./scripts/manage.sh logs</code> or <code>docker logs ez-comfy-studio</code>. Reset poisoned volume: <code>./scripts/manage.sh stop &amp;&amp; docker volume rm ez-comfy-state</code> then <code>start</code> again. Stop other GPU containers if needed</td>

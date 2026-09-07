@@ -1364,7 +1364,7 @@
   subgraph Ctr["Container: ez-comfy-studio"]
     EP["entrypoint.sh"]
     Install["install-comfy.sh"]
-    Patch["patch_get_free_memory.py"]
+    Patch["UM patches"]
     Comfy["ComfyUI"]
     EP --&gt; Install --&gt; Patch --&gt; Comfy
   end
@@ -1834,8 +1834,28 @@
 </thead>
 <tbody>
 <tr>
+<td><code>--use-ck-attention</code></td>
+<td>Comfy Kitchen attention (default). XOR Sage — never pass <code>--use-sage-attention</code> with Kitchen</td>
+</tr>
+<tr>
+<td><code>--normalvram</code> + disable dynamic/pinned/async offload</td>
+<td>Unified-memory flags. Do <strong>not</strong> use <code>--highvram</code></td>
+</tr>
+<tr>
+<td><code>--disable-mmap</code> + <code>patch_unified_memory_copy.py</code></td>
+<td><code>copy=False</code> on safetensor <code>.to(device)</code> so UM does not double weights</td>
+</tr>
+<tr>
 <td><code>patch_get_free_memory.py</code></td>
 <td>Use host free RAM instead of under-reporting <code>cudaMemGetInfo</code></td>
+</tr>
+<tr>
+<td><code>TORCH_COMPILE_DISABLE=1</code></td>
+<td><code>torch.compile</code> / Triton compile off by default on sm_121</td>
+</tr>
+<tr>
+<td><code>OMP_NUM_THREADS=20</code></td>
+<td>ARM cores for CPU ops; compose soft <code>cpus: 16.0</code> leaves 4 for OS/SSH</td>
 </tr>
 <tr>
 <td><code>PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True</code></td>
@@ -1850,25 +1870,51 @@
 <td>Lab examples do not require Nunchaku</td>
 </tr>
 <tr>
-<td>Fail-soft Nunchaku / SageAttention</td>
-<td>aarch64 wheels may be missing</td>
+<td>SageAttention</td>
+<td><strong>Not</strong> <code>pip install sageattention</code> from PyPI. Optional <code>LAB_SAGE_WHEEL_URL</code> + sha256 only when torch ABI matches</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">Time these on a real Spark after this image</p>
+<p>CI has no GPU. After <code>doctor</code> prints <code>attention: kitchen</code> (not <code>pytorch-fallback</code>), write wall-clock seconds here:</p>
+<table>
+<thead>
+<tr>
+<th>Smoke</th>
+<th>Seconds (fill in)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Klein still-draft (4-step)</td>
+<td></td>
+</tr>
+<tr>
+<td>Wan 2.2 TI2V-5B 5 s</td>
+<td></td>
+</tr>
+<tr>
+<td>LTX-2.5 distilled 5 s AV</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
 <h3 id="container-entrypoint-sequence">Container entrypoint sequence<a class="headerlink" href="#container-entrypoint-sequence" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
   participant C as compose up
   participant E as entrypoint.sh
   participant I as install-comfy.sh
-  participant P as patch_get_free_memory.py
+  participant P as UM patches
   participant U as ComfyUI
 
   C-&gt;&gt;E: start container
   E-&gt;&gt;I: idempotent install / refresh
   I--&gt;&gt;E: COMFY_HOME + venv ready
-  E-&gt;&gt;P: re-apply Spark free-memory patch
+  E-&gt;&gt;P: free-memory + copy=False patches
   P--&gt;&gt;E: patched (fail-soft)
-  E-&gt;&gt;U: exec listen 0.0.0.0:8188
+  E-&gt;&gt;U: exec Kitchen + UM flags on :8188
   Note over U: First cold start can take 10–30+ minutes</code></pre>
 <details class="abstract">
 <summary>Lab workflow internals</summary>

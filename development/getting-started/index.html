@@ -1973,7 +1973,8 @@
 </details>
 <details class="tip">
 <summary>Dev: edit scripts without rebuilding</summary>
-<p>Compose bind-mounts <code>docker/entrypoint.sh</code>, <code>docker/install-comfy.sh</code>, <code>docker/install-comfy/</code>, and <code>docker/patch_get_free_memory.py</code> into the container.</p>
+<p>Compose bind-mounts <code>docker/entrypoint.sh</code>, <code>docker/install-comfy.sh</code>, <code>docker/install-comfy/</code>, <code>docker/patch_get_free_memory.py</code>, and <code>docker/patch_unified_memory_copy.py</code> into the container.</p>
+<p>Default attention is <strong>Comfy Kitchen</strong> (<code>--use-ck-attention</code>). <code>doctor</code> reports <code>attention: kitchen|sage|pytorch-fallback|unknown</code>. On a running Spark, <code>pytorch-fallback</code> means a 10–20× slow path — see <a href="../troubleshooting/">Troubleshooting</a>.</p>
 <p>Change those files on the host, then restart the stack — <strong>no multi‑GB image rebuild</strong>.</p>
 <p>Rebuild only when you need a new baked <code>/opt/comfy-prebuilt</code> tree (torch / Comfy / nodes): <a href="./#build-the-image-locally-optional">build the image locally</a> or publish.</p>
 <p>See <a href="../models-and-cache/#image-layer-cache-high-velocity-rebuilds-pulls">Models &amp; Cache</a> for what invalidates which layers.</p>
@@ -2016,8 +2017,8 @@
   A["manage.sh start&lt;br/&gt;type yes"] --&gt; B["Docker build image&lt;br/&gt;ez-comfy:us-safe-studio"]
   B --&gt; C["Create volume comfy-state"]
   C --&gt; D["entrypoint: install-comfy.sh&lt;br/&gt;pip + git · 10–30+ min"]
-  D --&gt; E["patch_get_free_memory.py"]
-  E --&gt; F["Exec ComfyUI on 0.0.0.0:8188"]
+  D --&gt; E["UM patches (free-mem + copy=False)"]
+  E --&gt; F["Exec ComfyUI Kitchen + UM flags"]
   F --&gt; G["UI ready"]</code></pre>
 </details>
 <hr />
