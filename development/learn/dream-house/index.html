@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Simplified Visual Generative AI (ComfyUI US-safe local studio) for a single NVIDIA DGX Spark">
+        <meta name="description" content="Two Instagram 4:5 virtual tours of one place — language-locked T2I, or a Blender greybox that Klein restyles.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/learn/hardware/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/learn/dream-house/">
       
       
-        <link rel="prev" href="../dream-house/">
+        <link rel="prev" href="../clay-to-finish/">
       
       
-        <link rel="next" href="../../glossary/">
+        <link rel="next" href="../hardware/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Hardware, memory, and safety - ez-comfy-stack</title>
+        <title>Dream-house tours - ez-comfy-stack</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#hardware-memory-and-safety" class="md-skip">
+        <a href="#dream-house-tours" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Hardware, memory, and safety
+              Dream-house tours
             
           </span>
         </div>
@@ -621,34 +621,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../dream-house/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Dream-house tours
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -668,7 +640,7 @@
   <span class="md-ellipsis">
     
   
-    Hardware, memory, and safety
+    Dream-house tours
   
 
     
@@ -686,7 +658,7 @@
   <span class="md-ellipsis">
     
   
-    Hardware, memory, and safety
+    Dream-house tours
   
 
     
@@ -712,10 +684,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-constraint-is-ssh-not-the-demo" class="md-nav__link">
+  <a href="#two-doors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The constraint is SSH, not the demo
+        Two doors
       
     </span>
   </a>
@@ -723,10 +695,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#unified-memory-on-gb10" class="md-nav__link">
+  <a href="#clay-loop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unified memory on GB10
+        Clay loop
       
     </span>
   </a>
@@ -734,10 +706,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#three-stores" class="md-nav__link">
+  <a href="#skip-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Three stores
+        Skip rules
       
     </span>
   </a>
@@ -755,21 +727,38 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#what-happens-on-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What happens on start
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware, memory, and safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1745,10 +1734,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-constraint-is-ssh-not-the-demo" class="md-nav__link">
+  <a href="#two-doors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The constraint is SSH, not the demo
+        Two doors
       
     </span>
   </a>
@@ -1756,10 +1745,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#unified-memory-on-gb10" class="md-nav__link">
+  <a href="#clay-loop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unified memory on GB10
+        Clay loop
       
     </span>
   </a>
@@ -1767,10 +1756,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#three-stores" class="md-nav__link">
+  <a href="#skip-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Three stores
+        Skip rules
       
     </span>
   </a>
@@ -1782,17 +1771,6 @@
     <span class="md-ellipsis">
       
         Occupancy
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-happens-on-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What happens on start
       
     </span>
   </a>
@@ -1819,156 +1797,104 @@
   
 
 
-<hr />
-<p>title: Hardware, memory, and safety
-description: <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unified-memory" data-href="../../glossary/#unified-memory" title="CPU and GPU share one memory pool on GB10. Weight copies can double unless patched.">unified memory</span>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">occupancy</span>, three stores (image / weights / volume), and why <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="restart-no" data-href="../../glossary/#restart-no" title="Compose never auto-starts Comfy after reboot. Manual start only (type yes).">restart: no</span> exists.
-tags: [learn, gb10, unified-memory, safety, docker, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">spark</span>]</p>
-<hr />
-<h1 id="hardware-memory-and-safety">Hardware, memory, and safety<a class="headerlink" href="#hardware-memory-and-safety" title="Permanent link">&para;</a></h1>
+<h1 id="dream-house-tours">Dream-house tours<a class="headerlink" href="#dream-house-tours" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>Why SSH recoverability shapes every default</li>
-<li>Unified memory, 90g limit, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span> preflight</li>
-<li>Image vs weights vs <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfy-state" data-href="../../glossary/#comfy-state" title="Docker volume for the Comfy install (venv, custom nodes). cleanup DELETE removes this only.">comfy-state</span></li>
-<li>Occupancy, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kitchen" data-href="../../glossary/#kitchen" title="Default attention backend (--use-ck-attention). pytorch-fallback is a 10–20× slow path.">Kitchen attention</span>, and the entrypoint</li>
+<li>Two doors to a ten-still Instagram 4:5 walkthrough</li>
+<li>When to use language persistence vs a 3D greybox</li>
+<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: stop Comfy before <code>house-views</code></li>
+<li>Skip rule when Blender is missing</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Operating a remote Spark without locking yourself out</li>
-<li>Knowing what <code>cleanup</code>, <code>stop</code>, and <code>download-models</code> each delete or keep</li>
+<li>Keeping <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">klein</span>-dream-house-lab-example</strong> as a one-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> language tour</li>
+<li>Using a real 3D scene so rooms stay adjacent while Klein only paints materials</li>
 </ul>
-<p><strong>Who this is for:</strong> operators, and studio users who just hit OOM or a slow <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span>.</p>
-<div class="admonition warning">
-<p class="admonition-title">Do not weaken</p>
-<p><code>restart: "no"</code>, type <strong>yes</strong> on start, headroom preflight, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> <strong>clear-on-exit</strong> are the SSH-safe defaults. Demos do not get a pass.</p>
-</div>
+<p><strong>Who this is for:</strong> studio users who already Queued the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">T2I</span> dream-house and want the rooms to share a floorplan.</p>
 <hr />
-<h2 id="the-constraint-is-ssh-not-the-demo">The constraint is SSH, not the demo<a class="headerlink" href="#the-constraint-is-ssh-not-the-demo" title="Permanent link">&para;</a></h2>
-<p>DGX Spark nodes are often driven over the internet with no KVM. A 90g GPU job that auto-starts on boot, or a full-rate Hugging Face pull, is how you lose the box.</p>
-<pre class="mermaid"><code>flowchart LR
-  S1["restart: no"] --&gt; S2["type yes on start"]
-  S2 --&gt; S3["RAM/disk headroom"]
-  S3 --&gt; S4["download-limit auto 85%"]
-  S4 --&gt; Safe["SSH stays usable"]</code></pre>
-<p>Details: <a href="../../reboot-safety/">Reboot safety</a> · <a href="../../download-limit/">Download limit</a>. Disk full from leftover experiments: <a href="../../disk-wizard/">Disk wizard</a> (<code>--plan</code> first).</p>
-<hr />
-<h2 id="unified-memory-on-gb10">Unified memory on GB10<a class="headerlink" href="#unified-memory-on-gb10" title="Permanent link">&para;</a></h2>
-<p>GB10 shares <strong>~128 GiB</strong> among OS, SSH, Docker, and Comfy. There is no separate giant VRAM island.</p>
+<h2 id="two-doors">Two doors<a class="headerlink" href="#two-doors" title="Permanent link">&para;</a></h2>
+<p>The T2I tour remembers the place in prose (<code>HOUSE IDENTITY</code> + Prompt Join <code>lock=view</code>). The <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="house-views" data-href="../../glossary/#house-views" title="Blender greybox + ten 1024×1280 Instagram clay stills. Occupancy XOR.">clay tour</span> remembers it as geometry: Blender dumps ten Workbench stills from named cameras, then Klein <strong>edit</strong> restyles each plate.</p>
 <pre class="mermaid"><code>flowchart TB
-  subgraph UM["~128 GiB unified memory"]
-    OS["OS + Docker + interactive SSH"]
-    Free["min_host_free_gib ≥ 28 · required before start"]
-    Cont["Container mem_limit 90g · mem_reservation 80g"]
+  subgraph Language["Language tour"]
+    A["HOUSE IDENTITY"] --&gt; B["klein-dream-house-lab-example"]
+    B --&gt; C["ez_dream_house_01..10"]
   end
-  Free --&gt; Gate{"doctor / start OK?"}
-  Gate --&gt;|yes| Cont
-  Gate --&gt;|no| Refuse["start refused"]</code></pre>
-<p>Lab flags (do not “optimize” these away):</p>
+  subgraph Clay["Clay tour"]
+    D["Same HOUSE IDENTITY"] --&gt; E["house-views greybox"]
+    E --&gt; F["ez_house_clay_01..10"]
+    F --&gt; G["klein-dream-house-clay-lab-example"]
+    G --&gt; H["ez_dream_house_clay_01..10"]
+  end</code></pre>
 <table>
 <thead>
 <tr>
-<th>Setting</th>
-<th>Why</th>
+<th>Graph</th>
+<th>Persistence</th>
+<th>When</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Default VRAM + offload flags</td>
-<td>Unified memory. Omit <code>--highvram</code> / <code>--gpu-only</code>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> dropped <code>--normalvram</code></td>
+<td><strong>klein-dream-house-lab-example</strong></td>
+<td>Prompt Join <code>lock=view</code>. Independent T2I</td>
+<td>No Blender, or you want a one-Queue draft</td>
 </tr>
 <tr>
-<td><code>patch_unified_memory_copy.py</code></td>
-<td><code>copy=False</code> so UM does not double weights</td>
-</tr>
-<tr>
-<td><code>patch_get_free_memory.py</code></td>
-<td>Host free RAM instead of under-reporting <code>cudaMemGetInfo</code></td>
-</tr>
-<tr>
-<td><code>--use-ck-attention</code></td>
-<td>Comfy Kitchen. XOR Sage — never both</td>
-</tr>
-<tr>
-<td><code>TORCH_COMPILE_DISABLE=1</code></td>
-<td>Triton compile off by default on sm_121</td>
-</tr>
-<tr>
-<td>Occupancy</td>
-<td>One heavy GPU job</td>
+<td><strong>klein-dream-house-clay-lab-example</strong></td>
+<td>One greybox + ten cameras. Klein edit + <code>ReferenceLatent</code></td>
+<td>Host Blender on <code>PATH</code>. You want the kitchen to stay next to the lounge</td>
 </tr>
 </tbody>
 </table>
-<p><code>doctor</code> must <strong>not</strong> print <code>attention: pytorch-fallback</code> on a running Spark (10–20× slow). spark-timing is measured on a real Spark after Kitchen is live — CI does not invent seconds.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>doctor
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Queue klein-still-draft, wan-i2v-5s, ltx-i2v-5s</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>spark-timing<span class="w"> </span>record<span class="w"> </span>--klein<span class="w"> </span>N<span class="w"> </span>--wan<span class="w"> </span>N<span class="w"> </span>--ltx<span class="w"> </span>N
-</code></pre></div>
+<p>Same ten cameras (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same 1024×1280 Instagram 4:5. Same optional style dropdown on the bible. Prefixes do <strong>not</strong> collide.</p>
+<p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS.2</span> is a hero-piece tool, not a walkable house. Do not TRELLIS a full-scene still and expect a foyer. Godot is P2 — <code>house-views</code> is Blender only.</p>
 <hr />
-<h2 id="three-stores">Three stores<a class="headerlink" href="#three-stores" title="Permanent link">&para;</a></h2>
+<h2 id="clay-loop">Clay loop<a class="headerlink" href="#clay-loop" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>house-views<span class="w"> </span>--slug<span class="w"> </span>lab-penthouse
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># optional: --layout /path/to/house_layout.yaml</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">   </span><span class="c1"># type yes</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Queue workflows/_lab/klein/klein-dream-house-clay-lab-example.json</span>
+</code></pre></div>
+<p>Dump lives under <code>${COMFY_OUTPUT_DIR}/assets/sets/&lt;slug&gt;/</code> (layout, <code>mesh/house.glb</code>, <code>views/</code>, <code>depth/</code>). Clay copies <code>ez_house_clay_01.png</code> … <code>10.png</code> land in that folder and in <code>COMFY_OUTPUT_DIR</code> so <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> finds them.</p>
+<p>Default layout is <code>schemas/house_layout.yaml</code> (lab penthouse matching the canned bible). <code>--layout</code> overrides. v1 does not invent a unique floorplan from prose.</p>
+<hr />
+<h2 id="skip-rules">Skip rules<a class="headerlink" href="#skip-rules" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Store</th>
-<th>What it is</th>
-<th>Destroyed by</th>
+<th>If</th>
+<th>Skip</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ghcr" data-href="../../glossary/#ghcr" title="GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.">GHCR</span> image</strong></td>
-<td>ComfyUI + PyTorch (<code>us-safe-studio</code> / <code>-development</code>)</td>
-<td>Re-pull / rebuild. <strong>No weights</strong></td>
+<td>No host Blender</td>
+<td>Clay tour. Use the T2I dream-house. Do not fake clay</td>
 </tr>
 <tr>
-<td><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="models-dir" data-href="../../glossary/#models-dir" title="Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.">MODELS_DIR</span></strong></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> on the host (default <code>/mnt/models</code>)</td>
-<td>You, or <code>reap-models</code>. <strong>Not</strong> <code>cleanup</code></td>
+<td>Compose is up</td>
+<td><code>house-views</code> (exit 2). <code>./scripts/manage.sh stop</code> first</td>
 </tr>
 <tr>
-<td><strong>comfy-state volume</strong></td>
-<td>Comfy install, custom nodes, seeded workflows</td>
-<td><code>cleanup</code> (type <code>DELETE</code>)</td>
+<td>You only needed a language bible</td>
+<td>Clay dump. Queue <strong>klein-dream-house-lab-example</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Outputs live in <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfy-output-dir" data-href="../../glossary/#comfy-output-dir" title="Host folder for PNG/MP4 (default /mnt/comfy-output). Container path /outputs.">COMFY_OUTPUT_DIR</span></strong> (default <code>/mnt/comfy-output</code>). <code>cleanup</code> does not delete them.</p>
-<pre class="mermaid"><code>flowchart TB
-  Image["GHCR image · Comfy + torch"] --&gt; Vol["comfy-state volume"]
-  Weights["MODELS_DIR · bind /models"] -.-&gt; Comfy["ComfyUI process"]
-  Vol --&gt; Comfy
-  Out["COMFY_OUTPUT_DIR · bind /outputs"] -.-&gt; Comfy</code></pre>
 <hr />
 <h2 id="occupancy">Occupancy<a class="headerlink" href="#occupancy" title="Permanent link">&para;</a></h2>
-<p>GB10 is <strong>one</strong> GPU.</p>
-<pre class="mermaid"><code>flowchart TB
-  G["GB10"] --&gt; X{"One heavy job"}
-  X --&gt; C["Comfy visual or ACE-Step"]
-  X --&gt; B["Host Blender"]
-  X --&gt; S["SuperSplat / NLE / NVENC"]</code></pre>
-<p><code>manage.sh blender</code>, <code>film-proxies</code>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nvenc" data-href="../../glossary/#nvenc" title="Hardware encoder for proxies/previews. Comfy must be stopped (encoder contention on GB10).">NVENC</span> preview <strong>die if compose is up</strong>. Cover art is a separate Klein session from podcast/rap.</p>
-<hr />
-<h2 id="what-happens-on-start">What happens on start<a class="headerlink" href="#what-happens-on-start" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>sequenceDiagram
-  participant C as compose up
-  participant E as entrypoint.sh
-  participant I as install-comfy.sh
-  participant P as UM patches
-  participant U as ComfyUI
-
-  C-&gt;&gt;E: start container
-  E-&gt;&gt;I: idempotent install / seed prebuilt
-  I--&gt;&gt;E: COMFY_HOME + venv
-  E-&gt;&gt;P: free-memory + copy=False
-  P--&gt;&gt;E: patched (fail-soft)
-  E-&gt;&gt;U: Kitchen + UM flags on :8188</code></pre>
-<p>First start usually <strong>seeds</strong> from <code>/opt/comfy-prebuilt</code>. Without that image, cold pip is <strong>10–30+ minutes</strong>. Ops scripts are bind-mounted — edit them on the host and restart; do not rebuild for an entrypoint typo.</p>
-<p>Operator first run: <a href="../../getting-started/">Getting Started</a>. Command catalog: <a href="../../manage-cli/">manage.sh reference</a>.</p>
+<p>One <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> job. <code>house-views</code> dies if compose is up (exit 2), same XOR as <code>export-guides</code>. Do not Queue the clay graph and a dump in one session. <code>restart: "no"</code>, type <strong>yes</strong> on start, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit are unchanged. Blender is never in the Dockerfile.</p>
+<p>Related: <a href="../clay-to-finish/">Clay to finish</a> (film Path B), <a href="../../dcc-workflows/">DCC guide pack</a> (1280×704 / 120f <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> packs — different contract), <a href="../../asset-bible/">Asset Bible</a>, <a href="../../prompting/">Prompting</a>.</p>
 
 
 
 
 
 
+
+  
+  
 
 
 
