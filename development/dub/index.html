@@ -6,35 +6,35 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Why the US-safe studio is still → silent 5 s → AV 5 s, and how each model reads a prompt.">
+        <meta name="description" content="US-safe multi-speaker clone-and-translate for YouTube and podcast localization on one DGX Spark.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/learn/pipeline/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/dub/">
       
       
-        <link rel="prev" href="../generation/">
+        <link rel="prev" href="../podcast/">
       
       
-        <link rel="next" href="../hardware/">
+        <link rel="next" href="../music/">
       
       
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Klein, Wan, and LTX - ez-comfy-stack</title>
+        <title>Local dub - ez-comfy-stack</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,9 +53,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#klein-wan-and-ltx" class="md-skip">
+        <a href="#local-dub" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+    <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Klein, Wan, and LTX
+              Local dub
             
           </span>
         </div>
@@ -227,7 +227,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href=".." class="md-tabs__link">
         
   
   
@@ -244,13 +244,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../learn/" class="md-tabs__link">
           
   
   
@@ -270,7 +268,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../getting-started/" class="md-tabs__link">
+        <a href="../getting-started/" class="md-tabs__link">
           
   
   
@@ -286,11 +284,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../visual-generative-ai/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../visual-generative-ai/" class="md-tabs__link">
           
   
   
@@ -310,7 +310,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../manage-cli/" class="md-tabs__link">
+        <a href="../manage-cli/" class="md-tabs__link">
           
   
   
@@ -330,7 +330,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../project-conventions/" class="md-tabs__link">
+        <a href="../project-conventions/" class="md-tabs__link">
           
   
   
@@ -370,7 +370,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+    <a href=".." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -400,7 +400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -424,31 +424,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -466,7 +461,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -484,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../learn/" class="md-nav__link">
         
   
   
@@ -512,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../comfyui/" class="md-nav__link">
+      <a href="../learn/comfyui/" class="md-nav__link">
         
   
   
@@ -540,7 +535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generation/" class="md-nav__link">
+      <a href="../learn/generation/" class="md-nav__link">
         
   
   
@@ -565,37 +560,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Klein, Wan, and LTX
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../learn/pipeline/" class="md-nav__link">
         
   
   
@@ -611,70 +579,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#three-jobs-three-licenses" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Three jobs, three licenses
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-you-type-vs-what-they-hear" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What you type vs what they hear
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-not-one-model-for-everything" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why not one model for everything
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#occupancy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Occupancy
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -687,7 +591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../hardware/" class="md-nav__link">
+      <a href="../learn/hardware/" class="md-nav__link">
         
   
   
@@ -715,7 +619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../glossary/" class="md-nav__link">
+      <a href="../glossary/" class="md-nav__link">
         
   
   
@@ -802,7 +706,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/" class="md-nav__link">
+      <a href="../getting-started/" class="md-nav__link">
         
   
   
@@ -830,7 +734,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prompting/" class="md-nav__link">
+      <a href="../prompting/" class="md-nav__link">
         
   
   
@@ -858,7 +762,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../licenses/" class="md-nav__link">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
@@ -890,26 +794,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -927,7 +836,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -945,7 +854,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../visual-generative-ai/" class="md-nav__link">
+      <a href="../visual-generative-ai/" class="md-nav__link">
         
   
   
@@ -973,7 +882,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../studio-apps/" class="md-nav__link">
+      <a href="../studio-apps/" class="md-nav__link">
         
   
   
@@ -1001,7 +910,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../studio-workflows/" class="md-nav__link">
+      <a href="../studio-workflows/" class="md-nav__link">
         
   
   
@@ -1029,7 +938,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../shorts/" class="md-nav__link">
+      <a href="../shorts/" class="md-nav__link">
         
   
   
@@ -1057,7 +966,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../podcast/" class="md-nav__link">
+      <a href="../podcast/" class="md-nav__link">
         
   
   
@@ -1082,10 +991,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../dub/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local dub
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1101,6 +1037,125 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#this-is-not-the-podcast-lane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This is not the podcast lane
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rights
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quality-bar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quality bar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#engines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Download
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sequential-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequential Queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#youtube-multi-language-audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        YouTube multi-language audio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-runs-on-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What runs on Queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1113,7 +1168,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../music/" class="md-nav__link">
+      <a href="../music/" class="md-nav__link">
         
   
   
@@ -1141,7 +1196,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../studio-sidecars/" class="md-nav__link">
+      <a href="../studio-sidecars/" class="md-nav__link">
         
   
   
@@ -1169,7 +1224,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../asset-bible/" class="md-nav__link">
+      <a href="../asset-bible/" class="md-nav__link">
         
   
   
@@ -1197,7 +1252,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../blender-gb10-sidecar/" class="md-nav__link">
+      <a href="../blender-gb10-sidecar/" class="md-nav__link">
         
   
   
@@ -1225,7 +1280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../dcc-workflows/" class="md-nav__link">
+      <a href="../dcc-workflows/" class="md-nav__link">
         
   
   
@@ -1253,7 +1308,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../splat-sidecar/" class="md-nav__link">
+      <a href="../splat-sidecar/" class="md-nav__link">
         
   
   
@@ -1340,7 +1395,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../manage-cli/" class="md-nav__link">
+      <a href="../manage-cli/" class="md-nav__link">
         
   
   
@@ -1368,7 +1423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../models-and-cache/" class="md-nav__link">
+      <a href="../models-and-cache/" class="md-nav__link">
         
   
   
@@ -1396,7 +1451,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../disk-wizard/" class="md-nav__link">
+      <a href="../disk-wizard/" class="md-nav__link">
         
   
   
@@ -1424,7 +1479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../download-tiers/" class="md-nav__link">
+      <a href="../download-tiers/" class="md-nav__link">
         
   
   
@@ -1452,7 +1507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../download-limit/" class="md-nav__link">
+      <a href="../download-limit/" class="md-nav__link">
         
   
   
@@ -1480,7 +1535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reboot-safety/" class="md-nav__link">
+      <a href="../reboot-safety/" class="md-nav__link">
         
   
   
@@ -1508,7 +1563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../spark-farm/" class="md-nav__link">
+      <a href="../spark-farm/" class="md-nav__link">
         
   
   
@@ -1536,7 +1591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../troubleshooting/" class="md-nav__link">
+      <a href="../troubleshooting/" class="md-nav__link">
         
   
   
@@ -1623,7 +1678,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../project-conventions/" class="md-nav__link">
+      <a href="../project-conventions/" class="md-nav__link">
         
   
   
@@ -1678,10 +1733,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#three-jobs-three-licenses" class="md-nav__link">
+  <a href="#this-is-not-the-podcast-lane" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Three jobs, three licenses
+        This is not the podcast lane
       
     </span>
   </a>
@@ -1689,10 +1744,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-you-type-vs-what-they-hear" class="md-nav__link">
+  <a href="#rights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What you type vs what they hear
+        Rights
       
     </span>
   </a>
@@ -1700,10 +1755,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-not-one-model-for-everything" class="md-nav__link">
+  <a href="#quality-bar" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why not one model for everything
+        Quality bar
       
     </span>
   </a>
@@ -1711,10 +1766,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#occupancy" class="md-nav__link">
+  <a href="#engines" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Occupancy
+        Engines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Download
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sequential-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequential Queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#youtube-multi-language-audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        YouTube multi-language audio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-runs-on-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What runs on Queue
       
     </span>
   </a>
@@ -1741,99 +1851,202 @@
   
 
 
-<h1 id="klein-wan-and-ltx">Klein, Wan, and LTX<a class="headerlink" href="#klein-wan-and-ltx" title="Permanent link">&para;</a></h1>
+<h1 id="local-dub">Local dub<a class="headerlink" href="#local-dub" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>Role split (still / silent motion / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="av" data-href="../../glossary/#av" title="Audio and video in one transformer pass. LTX-2.5&#x27;s job; Wan cannot do this.">joint AV</span>)</li>
-<li>Licenses in one traffic-light</li>
-<li>What you type vs what each encoder hears</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: do not stack <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span></li>
+<li>Rights gate (required) vs the original-character podcast lane</li>
+<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: file or URL, languages, stage, clone engine</li>
+<li>Cascade: ingest → diarize → ASR → translate → clone → duration lock</li>
+<li>YouTube Studio <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="multi-language-audio" data-href="../glossary/#multi-language-audio" title="YouTube Studio Languages tab: upload an audio-only dub the same length as the video.">multi-language audio</span> upload (audio-only file + SRT)</li>
+<li><code>download-dub</code> usage, sequential <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span></li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Picking the next graph after a still without guessing</li>
-<li>Prompting each model in its native shape</li>
+<li>A second audio track in another language that keeps each speaker’s voice</li>
+<li>A duration-locked WAV/MP3 for YouTube Languages → Audio</li>
+<li>Source and translated SRT captions from the same turns</li>
 </ul>
-<p><strong>Who this is for:</strong> studio users who have Queued <code>klein-still-draft-lab-example</code> once.</p>
-<hr />
-<h2 id="three-jobs-three-licenses">Three jobs, three licenses<a class="headerlink" href="#three-jobs-three-licenses" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Not legal advice</p>
+<p>Platform rules, copyright, and voice-likeness law change. Read the current YouTube, FTC, and USCO pages before you monetize. Do not clone people without consent.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Do not weaken</p>
+<p><code>restart: "no"</code>, type <strong>yes</strong> on start, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> are unchanged. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span> is <strong>audio</strong> — stop <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> first.</p>
+</div>
+<h2 id="this-is-not-the-podcast-lane">This is not the podcast lane<a class="headerlink" href="#this-is-not-the-podcast-lane" title="Permanent link">&para;</a></h2>
+<p><a href="../podcast/">Local podcast</a> invents hosts and uses <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> stock voices. This lane clones <strong>recorded speakers</strong> from a show you own or are licensed to translate. Different disclosure. Different App.</p>
+<p>First spoken bumper (optional overlay, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> always written):</p>
+<blockquote>
+<p>This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.</p>
+</blockquote>
+<h2 id="rights">Rights<a class="headerlink" href="#rights" title="Permanent link">&para;</a></h2>
+<p>Queue <strong>refuses</strong> unless App <strong>I have rights</strong> is on. That <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> defaults <strong>off</strong>.</p>
+<p>Use this App when:</p>
+<ul>
+<li>You own the recording, or</li>
+<li>Every speaker consented, and you have a license to translate and redistribute</li>
+</ul>
+<p>Do not paste celebrity reference WAVs. Refs are extracted from <strong>this</strong> job’s audio. URL ingest is for operator-owned or licensed URLs only. YouTube’s terms of service still apply to <code>yt-dlp</code>.</p>
+<h2 id="quality-bar">Quality bar<a class="headerlink" href="#quality-bar" title="Permanent link">&para;</a></h2>
+<p>Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Editable translation JSON is the quality lever (Stage <strong>analyze</strong>, edit, Stage <strong>render</strong>).</p>
+<p>Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera lip sync. <strong>No lip-sync OSS</strong> (Wav2Lip stays banned). Mouths will not match on talking-head video.</p>
+<h2 id="engines">Engines<a class="headerlink" href="#engines" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Model</th>
-<th>Job</th>
-<th>Encoder</th>
+<th>Stage</th>
+<th>Default</th>
 <th>License</th>
+<th>Download</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein 4B</span></strong> distilled <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fp8" data-href="../../glossary/#fp8" title="8-bit float weight format used by default Klein distilled and some Wan packs.">FP8</span></td>
-<td>Still (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">T2I</span>, optional edit)</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span> · <code>flux2</code></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache 2.0</span></td>
+<td>VAD</td>
+<td>Silero VAD ONNX (energy VAD fallback)</td>
+<td>MIT</td>
+<td><code>download-dub --tier asr</code></td>
 </tr>
 <tr>
-<td><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan 2.2</span></strong> TI2V-5B</td>
-<td>Silent <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2v" data-href="../../glossary/#t2v" title="Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.">T2V</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">I2V</span> ~5 s</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="umt5" data-href="../../glossary/#umt5" title="Wan 2.2 text encoder (CLIP type wan).">UMT5-XXL</span> · <code>wan</code></td>
-<td>Apache 2.0 — <strong>no native audio</strong></td>
+<td>ASR</td>
+<td>faster-whisper large-v3</td>
+<td>MIT</td>
+<td><code>download-dub --tier asr</code></td>
 </tr>
 <tr>
-<td><strong>LTX-2.5</strong> distilled <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="int8-convrot" data-href="../../glossary/#int8-convrot" title="Quantized LTX-2.5 transformer format used by the lab distilled weights.">INT8-convrot</span></td>
-<td>Joint AV ~5 s</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gemma4" data-href="../../glossary/#gemma4" title="LTX-2.5 text encoder: Gemma4-12B-with-proj, CLIP type ltxv.">Gemma4</span>-with-proj · <code>ltxv</code></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="community-license" data-href="../../glossary/#community-license" title="LTX-2.5 terms: free commercial under $10M COMPANY revenue (affiliates count); disclose AI; no distill.">Community License</span>, <strong>gated</strong>, $10M company cap</td>
+<td>Translate</td>
+<td>On-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span></td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache 2.0</span></td>
+<td>already in <code>download-models</code></td>
+</tr>
+<tr>
+<td>Clone</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span> (23 languages, PerTh on)</td>
+<td>MIT</td>
+<td><code>download-dub --tier clone</code></td>
+</tr>
+<tr>
+<td>Clone alt</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> 0.6B</td>
+<td>Apache 2.0</td>
+<td><code>download-podcast --tier qwen3tts</code></td>
 </tr>
 </tbody>
 </table>
-<p>Klein 9B and FLUX.2-dev are not defaults. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="h3" data-href="../../glossary/#h3" title="Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.">MiniMax H3</span> is banned (US Excluded Territory). Canonical table: <a href="../../licenses/">Model licenses</a>.</p>
-<pre class="mermaid"><code>flowchart LR
-  Prompt["Text"] --&gt; Klein["Klein 4B T2I"]
-  Klein --&gt; PNG["Still PNG"]
-  PNG --&gt; Wan["Wan 2.2 I2V · silent"]
-  PNG --&gt; LTX["LTX-2.5 I2V · world audio"]
-  Wan --&gt; Silent["MP4 silent"]
-  LTX --&gt; AV["MP4 + audio"]</code></pre>
-<p><strong>Handoff:</strong> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> a Klein still → set Wan <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span></strong> to that PNG → optional LTX I2V from the <strong>same</strong> first frame at <strong>1280×704</strong>.</p>
-<hr />
-<h2 id="what-you-type-vs-what-they-hear">What you type vs what they hear<a class="headerlink" href="#what-you-type-vs-what-they-hear" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Klein (still)</label><label for="__tabbed_1_2">Wan I2V</label><label for="__tabbed_1_3">Wan T2V</label><label for="__tabbed_1_4">LTX AV</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p>Sentences. Subject → place → light → camera. Under ~150 words. Positive opposites, not “no logos”. Distilled = <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="cfg" data-href="../../glossary/#cfg" title="Classifier-free guidance scale. Distilled Klein wants 1.0 — do not &#x27;turn it up for quality&#x27;.">CFG</span> 1.0 / 4 steps, so the Positive <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> <em>is</em> the quality knob.</p>
+<p><code>faster-whisper</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span>, and <code>yt-dlp</code> are <strong>optional runtime</strong> installs inside the container venv. They are <strong>not</strong> baked in <code>phase-nodes.sh</code>. The graph still loads if a wheel is missing; Queue fail-softs until you install it and download the pack.</p>
+<p>Chatterbox languages: Arabic, Danish, German, Greek, English, Spanish, Finnish, French, Hebrew, Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian, Polish, Portuguese, Russian, Swedish, Swahili, Turkish, Chinese. Soccer EN→ES is first-class.</p>
+<p>Banned: F5-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>, XTTS, Fish, Higgs, NLLB, SeamlessM4T, ElevenLabs, Wav2Lip, TTS-Audio-Suite.</p>
+<h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
+<p>Dub weights are <strong>opt-in</strong>. <code>./scripts/manage.sh download-models</code> does <strong>not</strong> pull them. <code>doctor</code> prints dub JSON and still exits 0 when the pack is absent.</p>
+<div class="ez-cmd-builder" data-ez-cmd="download-dub">
+<noscript><pre><code>./scripts/manage.sh download-dub --tier asr --limit auto</code></pre></noscript>
 </div>
-<div class="tabbed-block">
-<p>The PNG owns look. Prompt <strong>motion + one camera verb</strong> (<code>dolly in</code>, <code>pan</code>, <code>tracking</code>, <code>fixed camera</code>). Silent — do not prompt a score, foley, or dialogue.</p>
-</div>
-<div class="tabbed-block">
-<p>Entity + scene + motion + aesthetic + one camera move, about 80–120 words. Still no audio.</p>
-</div>
-<div class="tabbed-block">
-<p>One flowing <strong>present-tense</strong> paragraph, 4–8 sentences, <strong>sound interleaved</strong> (wind beside the coat, not a trailer at the end). Dialogue in <code>"quotes"</code> only if you asked for speech. Shorts: world SFX, no score.</p>
-</div>
-</div>
-</div>
-<p>Lab <code>*-lab-example</code> graphs already ship model-native text. Leave <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span></strong> off unless you replace that text with something short. Recipes: <a href="../../prompting/">Prompting</a>.</p>
-<hr />
-<h2 id="why-not-one-model-for-everything">Why not one model for everything<a class="headerlink" href="#why-not-one-model-for-everything" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Wan</strong> is the legally cleanest motion default (Apache) and the cheap 5 s rehearsal. It cannot mux world audio.</li>
-<li><strong>LTX</strong> is the AV hero and is <strong>not</strong> Apache. You accept a gated license and a revenue cap for that audio.</li>
-<li><strong>Klein</strong> is the identity lock. A 90s film is Klein identity + 18 LTX prints, not a 90s Wan denoise.</li>
-</ul>
-<p>Optional fallbacks (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="z-image" data-href="../../glossary/#z-image" title="Optional Apache still runner-up. Not the default Klein path.">Z-Image</span>, Wan A14B, LTX-2.3) live on <a href="../../models-and-cache/">Models and cache</a>. They are not the first download.</p>
-<hr />
-<h2 id="occupancy">Occupancy<a class="headerlink" href="#occupancy" title="Permanent link">&para;</a></h2>
-<p>Do <strong>not</strong> load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate Klein graph. Podcast and rap packs are opt-in and share the ACE-Step AIO file.</p>
-<pre class="mermaid"><code>flowchart TB
-  GPU["One GB10"]
-  GPU --&gt; A["Comfy visual session"]
-  GPU --&gt; B["ACE-Step music/podcast"]
-  GPU --&gt; C["Host Blender / SuperSplat"]
-  A -.-&gt;|XOR| B
-  B -.-&gt;|XOR| C</code></pre>
-<p>Playbook after this page: <a href="../../visual-generative-ai/">Still to motion to AV</a>. Which filename to load: <a href="../../studio-workflows/">Workflow catalog</a>.</p>
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>asr<span class="w">        </span><span class="c1"># Silero VAD + faster-whisper large-v3</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>clone<span class="w">      </span><span class="c1"># Chatterbox Multilingual V3</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>all
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># same --limit auto|N|off wrap as download-models (always clears on exit)</span>
+</code></pre></div>
+<p>Optional runtime (container venv; invalidates a baked layer if you rebuild):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>faster-whisper
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># clone engine: follow the Chatterbox card; keep PerTh on</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># URL ingest on the host:</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>pip<span class="w"> </span>install<span class="w"> </span>yt-dlp
+</code></pre></div>
+<h2 id="app">App<a class="headerlink" href="#app" title="Permanent link">&para;</a></h2>
+<p>Graph: <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dub" data-href="../glossary/#dub" title="Clone-and-translate a recorded show into a duration-locked second audio track.">dub-localize</span>-lab-example</strong> (<code>extra.lab_profile</code> <code>us-safe-dub</code>). Occupancy <strong>audio</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Source</strong></td>
+<td>Local wav/mp4/mkv/mp3 path, or http(s) URL</td>
+</tr>
+<tr>
+<td><strong>I have rights</strong></td>
+<td>Required. Off refuses Queue</td>
+</tr>
+<tr>
+<td><strong>Job slug</strong></td>
+<td><code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/</code></td>
+</tr>
+<tr>
+<td><strong>Target language</strong></td>
+<td>Default Spanish</td>
+</tr>
+<tr>
+<td><strong>Source language</strong></td>
+<td><code>auto</code> or pin</td>
+</tr>
+<tr>
+<td><strong>Rewrite translation</strong></td>
+<td>On: diarize + ASR + GGUF. Off: pin the JSON</td>
+</tr>
+<tr>
+<td><strong>Stage</strong></td>
+<td><code>all</code> / <code>analyze</code> / <code>render</code></td>
+</tr>
+<tr>
+<td><strong>Clone engine</strong></td>
+<td>chatterbox-ml or qwen3tts</td>
+</tr>
+<tr>
+<td><strong>Keep original bed</strong></td>
+<td>Gaps keep ambience</td>
+</tr>
+<tr>
+<td><strong>Spoken disclosure</strong></td>
+<td>3 s overlay; sidecar always written</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sequential-queue">Sequential Queue<a class="headerlink" href="#sequential-queue" title="Permanent link">&para;</a></h2>
+<ol>
+<li><code>download-dub --tier asr</code> then <code>--tier clone</code></li>
+<li>Optional: <code>faster-whisper</code> (and Chatterbox) in the Comfy venv</li>
+<li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
+<li>Load <strong>dub-localize-lab-example</strong>. Set Source. Turn <strong>I have rights</strong> on. Queue</li>
+<li>Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_dub_mix_*.flac</code> / <code>ez_dub_yt_*.mp3</code> plus <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt.wav</code></li>
+<li>Loudness:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>run<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/dubs/episode/ez_dub_yt.wav"</span><span class="w"> </span>--target<span class="w"> </span>youtube
+</code></pre></div>
+<p>URL helper (host, writes <code>${COMFY_OUTPUT_DIR}/input</code>, survives <code>cleanup</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/utilities/dub-fetch.sh<span class="w"> </span>run<span class="w"> </span>--url<span class="w"> </span><span class="s1">'https://www.youtube.com/watch?v=YOUR_VIDEO'</span>
+</code></pre></div>
+<p>Then set Source to that wav/mp4 path.</p>
+<h2 id="youtube-multi-language-audio">YouTube multi-language audio<a class="headerlink" href="#youtube-multi-language-audio" title="Permanent link">&para;</a></h2>
+<p>Do <strong>not</strong> rely on muxing two AAC tracks into one MP4 as the YouTube path. Studio wants an <strong>audio-only</strong> file roughly the same length as the video.</p>
+<ol>
+<li>Upload the original video as usual</li>
+<li>YouTube Studio (desktop) → <strong>Languages</strong> (or Subtitles) → the video → <strong>Add language</strong></li>
+<li>Under Audio / Dub, upload <code>ez_dub_yt.wav</code> (or the loudnormed file)</li>
+<li>Upload <code>ez_dub.es.srt</code> (or your target) as captions</li>
+<li>Flip YouTube’s synthetic/altered-content toggle</li>
+<li>If YouTube already auto-dubbed that language, delete the auto-dub first</li>
+</ol>
+<p>MLA is rolling out; not every channel has it. Duration lock exists so Studio accepts the file.</p>
+<p>Optional local mux (VLC/archive, not the documented YouTube upload) can use ffmpeg against <code>source_video.mp4</code> in the job dir.</p>
+<h2 id="what-runs-on-queue">What runs on Queue<a class="headerlink" href="#what-runs-on-queue" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>sequenceDiagram
+  participant U as Studio user
+  participant I as EZDubIngest
+  participant S as EZDubScript
+  participant R as EZDubRender
+
+  U-&gt;&gt;I: Source + I have rights
+  I-&gt;&gt;S: job slug
+  S-&gt;&gt;S: VAD + diarize + ASR + GGUF
+  S-&gt;&gt;R: translation JSON
+  R-&gt;&gt;U: duration-locked mix + SRT + disclosure</code></pre>
+<p>Cover art is a <strong>later</strong> Klein session. Occupancy: do not load LTX + this together.</p>
+<p>Start still requires typing <code>yes</code>. Compose <code>restart: "no"</code> is unchanged.</p>
 
 
 
@@ -1894,14 +2107,14 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
-        <script src="../../javascripts/glossary.js"></script>
+        <script src="../javascripts/glossary.js"></script>
       
-        <script src="../../javascripts/commands.js"></script>
+        <script src="../javascripts/commands.js"></script>
       
     
   <script type="application/json" id="ez-cmd-data">{"variables":[{"id":"SPARK_HOST","label":"Spark IP / DNS","default":"127.0.0.1"},{"id":"SPARK_USER","label":"SSH user","default":"spark"},{"id":"MODELS_DIR","label":"MODELS_DIR","default":"/mnt/models"},{"id":"COMFY_OUTPUT_DIR","label":"COMFY_OUTPUT_DIR","default":"/mnt/comfy-output"},{"id":"COMFY_PORT","label":"ComfyUI port","default":"8188"},{"id":"DOWNLOAD_LIMIT","label":"Download limit","default":"auto"}],"commands":[{"id":"download-models","title":"download-models","description":"Default pack only (Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF). No --tier. --limit is bandwidth, not quality.","argv":["./scripts/manage.sh","download-models"],"flags":[{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto (85% of speedtest when HTB works)"},{"value":"off","label":"off (SSH risk — full-rate pull)"}]},{"name":"drop-incomplete","kind":"bool","default":false,"label":"Delete stuck *.incomplete then re-pull"}]},{"id":"download-image","title":"download-image --tier","description":"Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder.","argv":["./scripts/utilities/download-image.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"fast","choices":[{"value":"fast","label":"fast — Klein 4B distilled FP8 + TE + VAE (default, in download-models)"},{"value":"nvfp4","label":"nvfp4 — Klein 4B NVFP4 still UNET (optional)"},{"value":"base","label":"base — Klein 4B base FP8 still UNET (optional)"},{"value":"zimage","label":"zimage — Z-Image Turbo stills (optional)"},{"value":"all","label":"all — fast + nvfp4 + base + zimage"}]}]},{"id":"download-wan","title":"download-wan --tier","description":"Different Wan graphs, not a quality ladder. all does not include vace or s2v. Unload LTX before Fun InP / VACE / S2V.","argv":["./scripts/utilities/download-wan.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"5b","choices":[{"value":"5b","label":"5b — Wan 2.2 TI2V-5B silent (~12 GB, in download-models)"},{"value":"a14b","label":"a14b — Wan 2.2 I2V A14B FP8 (~20 GB, opt-in)"},{"value":"fun-inp","label":"fun-inp — Fun InP A14B first-last-frame (~40 GB)"},{"value":"vace","label":"vace — Wan 2.1 VACE 1.3B join (~6 GB, not in all)"},{"value":"s2v","label":"s2v — Wan 2.2 S2V-14B talking-head (~20 GB, not in all)"},{"value":"all","label":"all — 5b + a14b + fun-inp (not vace, not s2v)"}]}]},{"id":"download-ltx","title":"download-ltx --tier","description":"LTX generation selector, not “better”. 2.5 is the lab default. 2.3 is a retired fallback.","argv":["./scripts/utilities/download-ltx.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"2.5","choices":[{"value":"2.5","label":"2.5 — distilled INT8-convrot AV (~30 GB, in download-models)"},{"value":"2.3","label":"2.3 — retired distilled FP8 fallback (~20 GB)"},{"value":"iclora","label":"iclora — IC-LoRA Union Control (~1 GB, opt-in)"},{"value":"gemma","label":"gemma — LTX-2.3 Gemma DualCLIP (~8 GB)"}]}]},{"id":"download-podcast","title":"download-podcast --tier","description":"Opt-in audio packs. analog is Kokoro only. acestep shares the ~10 GB AIO with download-music --tier turbo. Missing pack is not a doctor failure.","argv":["./scripts/manage.sh","download-podcast"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"analog","choices":[{"value":"analog","label":"analog — Kokoro-82M ONNX + voices (tiny, default)"},{"value":"acestep","label":"acestep — ACE-Step 1.5 turbo AIO (~10 GB, shared with music turbo)"},{"value":"chatterbox","label":"chatterbox — optional MIT GPU TTS"},{"value":"qwen3tts","label":"qwen3tts — optional Qwen3-TTS 0.6B"},{"value":"all","label":"all — analog + acestep + chatterbox + qwen3tts"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-dub","title":"download-dub --tier","description":"Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3. Missing pack is not a doctor failure.","argv":["./scripts/manage.sh","download-dub"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"asr","choices":[{"value":"asr","label":"asr — Silero VAD + faster-whisper large-v3 (default)"},{"value":"clone","label":"clone — Chatterbox Multilingual V3 (MIT, PerTh on)"},{"value":"all","label":"all — asr + clone"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-music","title":"download-music --tier","description":"Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep — do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.","argv":["./scripts/manage.sh","download-music"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"turbo","choices":[{"value":"turbo","label":"turbo — ACE-Step 1.5 AIO (~10 GB, default rap/podcast beds)"},{"value":"xl","label":"xl — split XL files (larger; not the default)"},{"value":"all","label":"all — turbo + xl"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-3d","title":"download-3d --tier","description":"Opt-in 3D. da3-large is refused. Unload LTX first. SuperSplat is a host viewer, not this downloader.","argv":["./scripts/manage.sh","download-3d"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"trellis2","choices":[{"value":"trellis2","label":"trellis2 — native TRELLIS.2 MIT (~8 GB)"},{"value":"da3-base","label":"da3-base — Depth Anything 3 BASE Apache (~1 GB)"},{"value":"all","label":"all — trellis2 + da3-base"}]}]},{"id":"download-longcat","title":"download-longcat --tier","description":"Opt-in MIT LongCat. No NCCL in this sample stack.","argv":["./scripts/manage.sh","download-longcat"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"video","choices":[{"value":"video","label":"video — LongCat-Video"},{"value":"avatar","label":"avatar — LongCat-Video-Avatar"},{"value":"all","label":"all — video + avatar"}]}]},{"id":"download-dreamx","title":"download-dreamx --tier","description":"Apache DreamX-Creator only. DreamX-World is refused.","argv":["./scripts/manage.sh","download-dreamx"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"creator","choices":[{"value":"creator","label":"creator — DreamX-Creator 1.0 Apache (~8 GB)"}]}]},{"id":"download-restore","title":"download-restore --tier","description":"Post-concat SeedVR2 restore pack. Not part of download-models.","argv":["./scripts/manage.sh","download-restore"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"seedvr2-3b","choices":[{"value":"seedvr2-3b","label":"seedvr2-3b — SeedVR2-3B Apache (~15 GB)"}]}]},{"id":"download-llm","title":"download-llm","description":"Prompt-enhance GGUF (Qwen3-4B-Instruct Q4_K_M). No --tier. Already in download-models.","argv":["./scripts/utilities/download-llm.sh","run"],"flags":[]},{"id":"ssh-forward","title":"SSH port-forward","description":"Laptop tunnel to ComfyUI on the Spark. Then open http://127.0.0.1:${COMFY_PORT}.","argv":["ssh","-L","${COMFY_PORT}:127.0.0.1:${COMFY_PORT}","${SPARK_USER}@${SPARK_HOST}"],"flags":[]},{"id":"open-ui","title":"Open ComfyUI URL","description":"On-box / LAN URL. Use ssh-forward from a laptop instead.","argv":["echo","http://${SPARK_HOST}:${COMFY_PORT}"],"flags":[]},{"id":"doctor","title":"doctor","description":"Preflight. Missing weights are a warning, not a hard fail.","argv":["./scripts/manage.sh","doctor"],"flags":[]},{"id":"start","title":"start","description":"Type yes. Headroom preflight. Compose restart: no.","argv":["./scripts/manage.sh","start"],"flags":[]},{"id":"stop","title":"stop","description":"Stop containers. Keeps models, outputs, and the comfy-state volume.","argv":["./scripts/manage.sh","stop"],"flags":[]},{"id":"reap-models-plan","title":"reap-models --plan","description":"MODELS_DIR class plan only. Does not delete. cleanup does not delete weights.","argv":["./scripts/manage.sh","reap-models","--plan"],"flags":[]},{"id":"disk-wizard-plan","title":"disk-wizard --plan","description":"Host-wide leftover survey. Read-only. Never docker system prune -a --volumes.","argv":["./scripts/manage.sh","disk-wizard","--plan"],"flags":[]}]}</script>
