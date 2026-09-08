@@ -83,7 +83,7 @@ Graph: **music-rap-full-lab-example**. App **Duration (seconds)** defaults to **
 - **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
 - **Lyrics** are the bars. Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant.
 - Original lyrics only. Do not write “in the style of \<living artist\>”. No living-MC names. No famous-hook paraphrases.
-- Short percussive lines (about 6–10 syllables) slur less. Keep `language=en`.
+- Short percussive lines (about 6–10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **music-rap-draft-lab-example** after a pull so those combos stay aligned.
 
 ACE-Step generates the vocal from lyrics + tags. That timbre is an **invented identity**, not a cloned MC. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs.
 
