@@ -1391,39 +1391,66 @@
       "inputs": [
         [
           "2:prompt",
-          "prompt"
-        ],
-        [
-          "2:enhance",
-          "enhance"
-        ],
-        [
-          "10:seed",
-          "seed"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "34:tags",
-          "tags"
-        ],
-        [
-          "34:lyrics",
-          "lyrics"
-        ],
-        [
-          "34:enhance",
-          "enhance"
+          "tags",
+          {
+            "description": "Genre-first ACE-Step tags."
+          }
         ],
         [
           "35:tags",
-          "tags"
+          "tags",
+          {
+            "description": "Genre-first ACE-Step tags."
+          }
+        ],
+        [
+          "34:lyrics",
+          "lyrics",
+          {
+            "description": "Lyrics, or [inst] for instrumental."
+          }
         ],
         [
           "35:lyrics",
-          "lyrics"
+          "lyrics",
+          {
+            "description": "Lyrics, or [inst] for instrumental."
+          }
+        ],
+        [
+          "2:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "34:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "35:enhance",
-          "enhance"
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "10:seed",
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

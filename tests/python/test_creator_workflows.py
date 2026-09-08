@@ -139,7 +139,10 @@ def _identity_plate_contract(stem: str, prefixes: set[str], persist: str = "stat
     assert len(joins) == len(prefixes)
     for join in joins:
         values = join["widgets_values"]
-        assert values[1].strip(), stem
+        if stem == "klein-before-after-lab-example":
+            assert values[1].strip(), stem
+        else:
+            assert values[1].strip() == "", stem
         assert values[2] == persist, stem
     seeds = {
         n["widgets_values"][0]
@@ -301,4 +304,28 @@ def test_only_daily_still_exposes_unet_in_app_inputs() -> None:
         if hits:
             unet_stems.append(graph["id"])
     assert unet_stems == ["klein-still-daily-lab-example"]
+
+
+def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
+    latent_stems = []
+    for path in suite_json_paths(WF):
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        linear = graph.get("extra", {}).get("linearData") or {}
+        names = [entry[1] for entry in linear.get("inputs") or []]
+        assert "shot" not in names, graph["id"]
+        assert "inventory" not in names, graph["id"]
+        creator = next(
+            (
+                name
+                for name in names
+                if name in {"prompt", "tags", "lyrics", "value"}
+            ),
+            None,
+        )
+        assert creator is not None, graph["id"]
+        if "seed" in names:
+            assert names.index(creator) < names.index("seed"), graph["id"]
+        if "width" in names or "unet_name" in names:
+            latent_stems.append(graph["id"])
+    assert latent_stems == ["klein-still-daily-lab-example"]
 

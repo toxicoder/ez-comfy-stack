@@ -84,14 +84,12 @@ WAN_T2V = (
     "natural materials, 24mm, YouTube 16:9."
 )
 WAN_I2V = (
-    "Slow cinematic dolly-in toward the techno wizard. Coat hem and holographic glyph "
-    "motes drift in a warm bay breeze. Palms and unmarked glass towers hold over a bright "
-    "waterfront. Keep the start-image identity locked. Keep every object and surface "
-    "from the start image; do not redesign. One continuous five-second take "
-    "at 24 fps."
+    "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or "
+    "foliage. Keep the start-image identity locked. Keep every object and surface from "
+    "the start image; do not redesign. One continuous five-second take at 24 fps."
 )
 
-LTX_AUDIO_HINT = "warm terrace breeze, palm rustle, distant bay traffic, glyph chime, no score"
+LTX_AUDIO_HINT = "world SFX matching the start image, no score"
 LTX_T2V = (
     f"A wide {STYLE_LOCK_VIDEO} of a tropical coastal city rooftop terrace at golden hour. "
     "An original techno wizard in an unmarked sun-washed teal technical running coat with "
@@ -103,18 +101,15 @@ LTX_T2V = (
     "surfaces sit empty of lettering. No music and no score."
 )
 LTX_I2V = (
-    "The start image holds as the first frame. The camera dollies in slowly toward "
-    "the techno wizard while coat hem and holographic glyph motes drift in a warm bay "
-    "breeze and palms hold over a bright waterfront. A warm terrace breeze and palm rustle "
-    "sit under distant bay traffic, then a glyph chime. The rooftop "
-    "and wizard identity stay locked. Keep every object and surface from the start "
+    "The start image holds as the first frame. The camera moves slowly toward the "
+    "subject while fabric or foliage drifts. Light wind and world SFX matching the "
+    "start image sit under the action. Keep every object and surface from the start "
     "image; do not redesign. No music and no score."
 )
 
 GIF_MOTION = (
-    "Locked camera. A warm bay breeze cycles the coat hem, holographic glyph "
-    "motes, and palm fronds. Distant waterfront lights shimmer, then settle. Keep the "
-    "start-image identity locked. "
+    "Locked camera. Gentle cyclic breeze in fabric or leaves. Lights shimmer, "
+    "then settle. Keep the start-image identity locked. "
     "Keep every object and surface from the start image; do not redesign. "
     "Gentle cyclic motion for a looping GIF."
 )
@@ -141,10 +136,9 @@ KLEIN_HOOK = (
 )
 
 WAN_SHORTS_I2V = (
-    "Locked vertical framing for Shorts. Coat hem and holographic glyph motes drift. "
-    "Palms and waterfront lights hold. Camera holds, then a slow push-in. Keep the start-image "
-    "identity locked. Keep every object and surface from the start image; do not redesign. "
-    "One continuous ~5 s take at 24 fps. No audio."
+    "Locked vertical framing for Shorts. Gentle subject motion. Camera holds, then a "
+    "slow push-in. Keep the start-image identity locked. Keep every object and surface "
+    "from the start image; do not redesign. One continuous ~5 s take at 24 fps. No audio."
 )
 WAN_ORBIT = (
     "Slow orbit around the start-image subject. Camera arcs a few degrees right while "
@@ -152,17 +146,15 @@ WAN_ORBIT = (
     "the start image; do not redesign. One continuous ~5 s take, no cuts."
 )
 WAN_VACE = (
-    "Hold the techno wizard identity from Shot A last frame and travel toward Shot B "
-    "first frame. One continuous 17-frame join at 24 fps. Coat hem and holographic glyph "
-    "motes stay locked. Do not redesign the set."
+    "Hold identity from Shot A last frame and travel toward Shot B first frame. "
+    "One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
 )
 
-LTX_SHORTS_AUDIO = "warm terrace breeze, palm rustle, distant bay traffic, glyph chime, no score"
+LTX_SHORTS_AUDIO = "world SFX matching the start image, no score"
 LTX_SHORTS_I2V = (
-    "The start image holds as the first frame in vertical Shorts framing. A warm terrace "
-    "breeze and palm rustle sit under distant bay traffic, then a glyph chime. Slow "
-    "push-in. Keep every object and surface from the start image; do not redesign. "
-    "No music and no score."
+    "The start image holds as the first frame in vertical Shorts framing. World SFX "
+    "matching the start image sit under a slow push-in. Keep every object and surface "
+    "from the start image; do not redesign. No music and no score."
 )
 LTX_BROLL_AUDIO = "warm terrace breeze, palm rustle, distant bay traffic, glyph chime, no score"
 LTX_BROLL = (
@@ -177,26 +169,26 @@ LTX_WEATHER = (
     "sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, "
     "rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds."
 )
-LTX_HOOK_AUDIO = "warm terrace breeze, palm rustle, distant bay traffic, glyph chime, no score"
+LTX_HOOK_AUDIO = "world SFX matching the start image, no score"
 LTX_HOOK_AV = (
-    "A five-second AV cold open. Camera snaps to an original techno wizard mid-stride "
-    "on a tropical rooftop terrace at golden hour as warm gold-cyan holographic glyph rings bloom and "
-    "distant bay traffic hums. Fast present-tense energy, unmarked surfaces. No music and no score."
+    "A five-second AV cold open. Camera snaps to the start-image subject with fast "
+    "present-tense energy. World SFX matching the start image. Unmarked surfaces. "
+    "No music and no score."
 )
-LTX_TALKING_AUDIO = "warm terrace breeze, palm rustle, modest speech, no score"
+LTX_TALKING_AUDIO = "room tone matching the start image, modest speech, no score"
 LTX_TALKING_HEAD = (
-    "The start image holds as the first frame. The techno wizard holds still and speaks one "
-    "short line. Coat hem and glyph motes stay locked. Mouth motion is modest. A warm terrace "
-    "breeze and palm rustle sit under the voice. No music and no score."
+    "The start image holds as the first frame. The subject holds still and speaks one "
+    "short line. Wardrobe and set stay locked. Mouth motion is modest. Room tone sits "
+    "under the voice. No music and no score."
 )
 
 STORYBOARD = (
-    ("ez_board_01", "Wide establishing shot of a tropical coastal city of unmarked glass towers and a bright bay from a rooftop, 24mm."),
-    ("ez_board_02", "Medium shot of an original techno wizard mid-stride on a rooftop terrace, 35mm."),
-    ("ez_board_03", "Detail of the compact unmarked data-staff and warm gold-cyan holographic glyph rings, 50mm."),
-    ("ez_board_04", "Rooftop tracking angle as palms and unmarked towers hold over the waterfront, 35mm."),
-    ("ez_board_05", "Over-the-shoulder toward the unmarked city skyline and bright bay, golden-hour haze."),
-    ("ez_board_06", "Closing wide as warm night lights come on in the towers, quiet terrace, 24mm."),
+    ("ez_board_01", "Wide establishing of this scene, 24mm."),
+    ("ez_board_02", "Enter: the bible subject arriving into this scene, 35mm."),
+    ("ez_board_03", "Traverse: moving through this scene, 35mm."),
+    ("ez_board_04", "Insert: a material or prop detail named in the bible, 50mm."),
+    ("ez_board_05", "Exit: turning toward the way out of this scene, 35mm."),
+    ("ez_board_06", "Closer hook of the same scene, 24mm."),
 )
 
 GOSEE_IDENTITY = (
@@ -223,3 +215,12 @@ GOSEE_LTX_I2V_01 = (
     "Continuous body-cam tracking, no cut. No music and no score."
 )
 LAZY_FORGE = "A techno wizard on a sunny tropical city rooftop."
+
+CHARACTER_DRAFT = (
+    f"A {STYLE_LOCK} of an original character, standing, full body with headroom, "
+    "Instagram 4:5. Distinct face, wardrobe, and one signature prop. Unmarked surfaces, "
+    "empty of lettering. Eye-level 35mm."
+)
+CHARACTER_TWEAK = (
+    "Keep this character's face, wardrobe, and proportions. Change only what this prompt names."
+)

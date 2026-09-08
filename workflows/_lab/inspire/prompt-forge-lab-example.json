@@ -217,63 +217,115 @@
       "inputs": [
         [
           "2:prompt",
-          "prompt"
-        ],
-        [
-          "2:enhance",
-          "enhance"
-        ],
-        [
-          "2:style",
-          "style"
-        ],
-        [
-          "2:mode",
-          "mode"
-        ],
-        [
-          "2:duration_hint",
-          "duration_hint"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "3:prompt",
-          "prompt"
-        ],
-        [
-          "3:enhance",
-          "enhance"
-        ],
-        [
-          "3:style",
-          "style"
-        ],
-        [
-          "3:mode",
-          "mode"
-        ],
-        [
-          "3:duration_hint",
-          "duration_hint"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "4:prompt",
-          "prompt"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
-          "4:enhance",
-          "enhance"
+          "2:style",
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
+        ],
+        [
+          "3:style",
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
         ],
         [
           "4:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
+        ],
+        [
+          "2:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "3:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "4:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "2:mode",
+          "mode",
+          {
+            "description": "Rewrite family for this encoder."
+          }
+        ],
+        [
+          "3:mode",
+          "mode",
+          {
+            "description": "Rewrite family for this encoder."
+          }
         ],
         [
           "4:mode",
-          "mode"
+          "mode",
+          {
+            "description": "Rewrite family for this encoder."
+          }
+        ],
+        [
+          "2:duration_hint",
+          "duration_hint",
+          {
+            "description": "Aspect or duration the rewriter should target."
+          }
+        ],
+        [
+          "3:duration_hint",
+          "duration_hint",
+          {
+            "description": "Aspect or duration the rewriter should target."
+          }
         ],
         [
           "4:duration_hint",
-          "duration_hint"
+          "duration_hint",
+          {
+            "description": "Aspect or duration the rewriter should target."
+          }
+        ],
+        [
+          "4:audio_notes",
+          "audio_notes",
+          {
+            "description": "World SFX to interleave. No score unless you asked for music."
+          }
         ]
       ],
       "outputs": [

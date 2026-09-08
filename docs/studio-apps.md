@@ -23,7 +23,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 
 **Who this is for:** studio users after `klein-still-draft-lab-example` has been loaded once.
 
-Lab graphs are still the same host `*-lab-example.json` files. On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`.
+Lab graphs are still the same host `*-lab-example.json` files. On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`. A small occupancy strip (bottom-left) shows which family is running, still N of M on multi-plate Apps, and the next handoff. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
 
 ```mermaid
 flowchart LR
@@ -39,8 +39,8 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Prompt, Enhance, style, seed, size, LoadImage | Daily Queue |
-| **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE | Debug, film one-click, unused plates |
+| **App** | Prompt first, then style, Enhance, seed. LoadImage on I2V / tweak. Size and UNET only on **klein-still-daily**. | Daily Queue |
+| **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards | Debug, film one-click, unused plates |
 
 Official persist is `extra.linearData` (`inputs` / `outputs`). The lab contract is `extra.lab_app_mode` (`lane`, `occupancy`, `handoff`, `frontend_min`). Do not require `extra.linearMode` — upstream does not write it.
 
@@ -75,14 +75,16 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | --- | --- |
 | **klein-still-draft-lab-example** | Spark Still. 768×432, seed 42, Enhance on. Prefix `ez_still_draft` |
 | **klein-identity-sheet-lab-example** | Front / three-quarter / profile. 1280×704, Enhance on (identity mode) |
-| **klein-storyboard-6up-lab-example** | Six new cameras of one rooftop (`ez_board_01`…`06`) |
-| **klein-dream-house-lab-example** | World bible. Ten 4:5 stills of one wizard penthouse, independent T2I, identity-mode enhance on the bible |
-| **klein-style-lock-lab-example** | One penthouse, four cameras, locked inventory |
+| **klein-storyboard-6up-lab-example** | Six new cameras of one scene (`ez_board_01`…`06`) |
+| **klein-dream-house-lab-example** | World bible. Ten 4:5 stills of **one place** (type any place; default placeholder is the lab penthouse) |
+| **klein-style-lock-lab-example** | One place, four cameras |
 | **klein-lighting-trio-lab-example** | Same subject, three lights |
 | **klein-camera-angles-lab-example** | Wide / medium / close |
 | **klein-color-moods-lab-example** | Warm plate plus three grades |
 | **klein-time-of-day-lab-example** | Dusk plate, then dawn / noon / night |
 | **klein-hook-still-lab-example** | Vertical 9:16 first-frame hook (`ez_hook_still`) |
+| **klein-character-draft-lab-example** | Character still. Prompt + style, 1024×1280, prefix `ez_character` |
+| **klein-character-tweak-lab-example** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
 | **prompt-forge-lab-example** | No UNET. Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
 | **beat-sheet-lab-example** | No UNET. 6×3 STRING cards; paste into `workflows/shorts/<slug>.shots.yaml`. Occupancy **none** |
 
@@ -119,6 +121,7 @@ Audio Apps (`podcast-*`, `music-rap-*`) are occupancy **audio**. Film `film-*-90
 | --- | --- |
 | Spark Still | Hero Still → Silent 5s (`wan-i2v-5s`) → AV 5s (`ltx-i2v-5s`) |
 | Spark Still | Platform Pack (`klein-platform-pack`) → Silent 5s / Hook AV |
+| Character Draft | Character Tweak → Identity Sheet → Silent 5s |
 | Hook Still | `wan-shorts-i2v` → `ltx-shorts-i2v` |
 | Storyboard 6-up | `wan-i2v-shot` / `ltx-i2v-shot` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |

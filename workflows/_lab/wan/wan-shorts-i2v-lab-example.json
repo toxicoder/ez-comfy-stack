@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Locked vertical framing for Shorts. Coat hem and holographic glyph motes drift. Palms and waterfront lights hold. Camera holds, then a slow push-in. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take at 24 fps. No audio."
+        "Locked vertical framing for Shorts. Gentle subject motion. Camera holds, then a slow push-in. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take at 24 fps. No audio."
       ],
       "title": "Motion / prompt"
     },
@@ -581,7 +581,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "Locked vertical framing for Shorts. Coat hem and holographic glyph motes drift. Palms and waterfront lights hold. Camera holds, then a slow push-in. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take at 24 fps. No audio.",
+        "Locked vertical framing for Shorts. Gentle subject motion. Camera holds, then a slow push-in. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take at 24 fps. No audio.",
         true,
         "i2v",
         "5 seconds, 24 fps, 9:16",
@@ -768,24 +768,39 @@
     "linearData": {
       "inputs": [
         [
-          "4:image",
-          "image"
-        ],
-        [
-          "10:seed",
-          "seed"
-        ],
-        [
           "15:prompt",
-          "prompt"
-        ],
-        [
-          "15:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "15:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
+        ],
+        [
+          "15:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "4:image",
+          "image",
+          {
+            "description": "Start frame or reference still."
+          }
+        ],
+        [
+          "10:seed",
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

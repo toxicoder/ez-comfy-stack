@@ -442,7 +442,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## go-see 90s (first-person parkour)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film go-see --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal still, first-person body-cam at golden hour. Unmarked sun-washed teal running-coat sleeves with faint circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as warm gold-cyan holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Tropical rooftops, palms, and unmarked glass towers fill the view toward a bright bay. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Golden-hour tropical rooftops | sprint + gap leap | vault + wall-run | drop to bay skybridge |\n| 2 | Waterfront maglev / bay skybridge | spine sprint | gantry leaps | dive into gardens |\n| 3 | Hanging tropical gardens | wall-run glass | vault palm terraces | water curtain to causeway |\n| 4 | Tropical storm causeway | rain sprint | leap a squall gap | vault toward cliffs |\n| 5 | Coastal jungle ridge | ridge sprint | slide a root arch | climb-run to overlook |\n| 6 | Warm-night bay overlook | last sprint | leap to rail | hold + laugh |\n"
+        "## go-see 90s (first-person parkour)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film go-see --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal still, first-person body-cam at golden hour. Unmarked sun-washed teal running-coat sleeves with faint circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as warm gold-cyan holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Tropical rooftops, palms, and unmarked glass towers fill the view toward a bright bay. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Golden-hour tropical rooftops | sprint + gap leap | vault + wall-run | drop to bay skybridge |\n| 2 | Waterfront maglev / bay skybridge | spine sprint | gantry leaps | dive into gardens |\n| 3 | Hanging tropical gardens | wall-run glass | vault palm terraces | water curtain to causeway |\n| 4 | Tropical storm causeway | rain sprint | leap a squall gap | vault toward cliffs |\n| 5 | Coastal jungle ridge | ridge sprint | slide a root arch | climb-run to overlook |\n| 6 | Warm-night bay overlook | last sprint | leap to rail | hold + laugh |\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "go-see 90s shot map"
     },
@@ -15140,19 +15140,31 @@
       "inputs": [
         [
           "11:prompt",
-          "prompt"
-        ],
-        [
-          "11:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "11:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
+        ],
+        [
+          "11:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "7:seed",
-          "seed"
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

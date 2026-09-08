@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A five-second AV cold open. Camera snaps to an original techno wizard mid-stride on a tropical rooftop terrace at golden hour as warm gold-cyan holographic glyph rings bloom and distant bay traffic hums. Fast present-tense energy, unmarked surfaces. No music and no score."
+        "A five-second AV cold open. Camera snaps to the start-image subject with fast present-tense energy. World SFX matching the start image. Unmarked surfaces. No music and no score."
       ],
       "title": "Positive"
     },
@@ -690,11 +690,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "A five-second AV cold open. Camera snaps to an original techno wizard mid-stride on a tropical rooftop terrace at golden hour as warm gold-cyan holographic glyph rings bloom and distant bay traffic hums. Fast present-tense energy, unmarked surfaces. No music and no score.",
+        "A five-second AV cold open. Camera snaps to the start-image subject with fast present-tense energy. World SFX matching the start image. Unmarked surfaces. No music and no score.",
         true,
         "t2v",
         "5 seconds, 24 fps",
-        "warm terrace breeze, palm rustle, distant bay traffic, glyph chime, no score",
+        "world SFX matching the start image, no score",
         "none"
       ],
       "title": "LTX Prompt Enhance"
@@ -924,20 +924,39 @@
     "linearData": {
       "inputs": [
         [
-          "8:seed",
-          "seed"
-        ],
-        [
           "17:prompt",
-          "prompt"
-        ],
-        [
-          "17:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "17:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
+        ],
+        [
+          "17:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "17:audio_notes",
+          "audio_notes",
+          {
+            "description": "World SFX to interleave. No score unless you asked for music."
+          }
+        ],
+        [
+          "8:seed",
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

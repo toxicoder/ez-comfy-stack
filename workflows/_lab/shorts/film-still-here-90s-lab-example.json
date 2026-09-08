@@ -442,7 +442,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## still-here 90s (household morning)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film still-here --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp in the foreground. Eye-level on a 35mm lens, framed for YouTube 16:9.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Kitchen, first light | kettle | pour | mug + off-screen hum |\n| 2 | Table | steam | hum closer | doorway |\n| 3 | Hands on mug | wrap | motif answers | hold |\n| 4 | Living room | sun bar | silhouette | doorway |\n| 5 | Doorway | silhouette | look + hum | pull back |\n| 6 | Table hold | empty chair | last note | house quiet |\n"
+        "## still-here 90s (household morning)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film still-here --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp in the foreground. Eye-level on a 35mm lens, framed for YouTube 16:9.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Kitchen, first light | kettle | pour | mug + off-screen hum |\n| 2 | Table | steam | hum closer | doorway |\n| 3 | Hands on mug | wrap | motif answers | hold |\n| 4 | Living room | sun bar | silhouette | doorway |\n| 5 | Doorway | silhouette | look + hum | pull back |\n| 6 | Table hold | empty chair | last note | house quiet |\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "still-here 90s shot map"
     },
@@ -15140,19 +15140,31 @@
       "inputs": [
         [
           "11:prompt",
-          "prompt"
-        ],
-        [
-          "11:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "11:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
+        ],
+        [
+          "11:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "7:seed",
-          "seed"
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

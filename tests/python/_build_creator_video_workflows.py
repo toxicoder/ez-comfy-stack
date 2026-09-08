@@ -26,7 +26,6 @@ from _lab_layout import (
 from _lab_theme import (
     CREATOR_IDENTITY,
     HOUSE_IDENTITY,
-    HOUSE_INVENTORY,
     I2V_LOCK,
     KLEIN_HOOK,
     KLEIN_NEG_STILL,
@@ -40,8 +39,6 @@ from _lab_theme import (
     LTX_SHORTS_I2V,
     LTX_WEATHER,
     LTX_WEATHER_AUDIO,
-    ROOFTOP_INVENTORY,
-    STORYBOARD,
     WAN_ORBIT,
     WAN_SHORTS_I2V,
 )
@@ -55,7 +52,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
-from ez_prompt_enhance.client import join_prompt  # noqa: E402
+from ez_prompt_enhance.client import join_prompt, load_view_pack  # noqa: E402
 from _build_film_workflows import build_all_films  # noqa: E402
 
 WF = ROOT / "workflows"
@@ -767,49 +764,26 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
         description="Klein 4B before/after still pair",
     )
 
+    style_cards = load_view_pack("place_4")
     _klein_pack(
         stem="klein-style-lock-lab-example",
         size=(768, 960),
         identity=HOUSE_IDENTITY,
-        inventory=HOUSE_INVENTORY,
+        inventory="",
         persist="view",
         shots=[
-            (
-                "ez_style_01",
-                "FACADE",
-                "Three-quarter city facade of the same penthouse, 24mm, golden-hour, "
-                "Instagram 4:5. The three-bay glass shows the sand linen sofa and "
-                "teak floors inside.",
-            ),
-            (
-                "ez_style_02",
-                "LIVING",
-                "From inside the living room of the same penthouse, looking out the "
-                "three-bay glass to the bay, late-day sun. Sand linen sofa in "
-                "the foreground.",
-            ),
-            (
-                "ez_style_03",
-                "TERRACE",
-                "Wraparound terrace of the same penthouse at golden hour, fern living wall, "
-                "palms on the deck, unmarked glass towers over the bay.",
-            ),
-            (
-                "ez_style_04",
-                "RAIN",
-                "Tropical-storm night exterior of the same penthouse. Lamps on; sofa silhouette "
-                "through the three-bay glass. Penthouse volume unchanged.",
-            ),
+            (f"ez_style_{i:02d}", card["label"], card["shot"])
+            for i, card in enumerate(style_cards, start=1)
         ],
         hint="Instagram 4:5 still",
         neg=KLEIN_NEG_STILL,
         note=f"""## klein-style-lock-lab-example
 
-Four Klein 4B stills of one warm-glass crown penthouse from new cameras (Prompt Join lock=view). Locked inventory repeats through the three-bay glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy FACADE's framing. Same world bible as klein-dream-house-lab-example.
+Four Klein 4B stills of **one place** from new cameras (Prompt Join lock=view). Type any place in IDENTITY — default placeholder is the lab penthouse. Hidden cards are camera roles. Prefixes `ez_style_01`…`04`. Independent T2I, same seed.
 
 Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klein-t2i-enhanced.
 """,
-        description="Klein 4B four-still penthouse views, locked inventory",
+        description="Klein 4B four-still place views, locked identity",
     )
 
     # 8. Wan bumper loop MP4
@@ -885,23 +859,21 @@ Disclose AI-generated media. No score.
     _set_note(g, note, "LTX-2.5 ambient B-roll AV ~5s")
     _dump(lab_json("ltx-broll-ambient-lab-example.json"), g)
 
-    board_shots = []
-    for i, (prefix, camera) in enumerate(STORYBOARD):
-        if i == 0:
-            line = f"Canonical plate. {camera} Unmarked surfaces, empty of lettering."
-        else:
-            line = f"Same rooftop and wizard. {camera} Unmarked surfaces, empty of lettering."
-        board_shots.append((prefix, f"{i + 1:02d}", line))
+    board_cards = load_view_pack("storyboard_6")
+    board_shots = [
+        (f"ez_board_{i:02d}", card["label"], card["shot"])
+        for i, card in enumerate(board_cards, start=1)
+    ]
     _klein_pack(
         stem="klein-storyboard-6up-lab-example",
         size=(768, 432),
         identity=CREATOR_IDENTITY,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         persist="view",
         shots=board_shots,
         note=f"""## klein-storyboard-6up-lab-example
 
-Six Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`…`06`. Independent T2I, same seed, locked inventory. Identity-mode enhance is on for the bible.
+Six Klein 4B storyboard frames of **one scene** from new cameras (lock=view). Type any scene in IDENTITY. Prefixes `ez_board_01`…`06`. Independent T2I, same seed. Identity-mode enhance is on for the bible.
 """,
         description="Klein 4B six-frame storyboard pack, new cameras",
     )
@@ -981,7 +953,7 @@ def _klein_pack(
     description: str,
     cols: int = 2,
     identity: str = CREATOR_IDENTITY,
-    inventory: str = ROOFTOP_INVENTORY,
+    inventory: str = "",
     hint: str = "YouTube 16:9 still",
     neg: str | None = None,
     persist: str = "state",
@@ -1587,63 +1559,44 @@ Swap the dish in the prompt; keep unmarked surfaces.
         neg=KLEIN_NEG_PHOTO,
     )
 
+    light_cards = load_view_pack("lighting_3")
     _klein_pack(
         stem="klein-lighting-trio-lab-example",
         size=(768, 432),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         shots=[
-            (
-                "ez_light_01",
-                "KEY",
-                "Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9.",
-            ),
-            (
-                "ez_light_02",
-                "WINDOW",
-                "Same rooftop and wizard. Bright overcast skylight, gentle falloff, soft shadows. Same camera.",
-            ),
-            (
-                "ez_light_03",
-                "NIGHT LAMP",
-                "Same rooftop and wizard at night under warm coral city glow and terrace lamps. Same camera.",
-            ),
+            (f"ez_light_{i:02d}", card["label"], card["shot"])
+            for i, card in enumerate(light_cards, start=1)
         ],
         note=f"""## klein-lighting-trio-lab-example
 
-Same subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02–03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.
+Same subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02–03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.
 Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light.
 
 {ENHANCE_NOTE}
 """,
         description="Klein 4B three-light study of one subject",
     )
+    sheet_cards = load_view_pack("character_sheet")
+    sheet_prefixes = (
+        "ez_identity_front",
+        "ez_identity_threequarter",
+        "ez_identity_profile",
+    )
     _klein_pack(
         stem="klein-identity-sheet-lab-example",
         size=(1280, 704),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         persist="view",
         shots=[
-            (
-                "ez_identity_front",
-                "FRONT",
-                "Front camera, eye-level, 24mm. Same identity. YouTube 16:9.",
-            ),
-            (
-                "ez_identity_threequarter",
-                "THREE-QUARTER",
-                "Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change.",
-            ),
-            (
-                "ez_identity_profile",
-                "PROFILE",
-                "Profile camera, 50mm, full side view. Same identity and light. Camera is the only change.",
-            ),
+            (prefix, card["label"], card["shot"])
+            for prefix, card in zip(sheet_prefixes, sheet_cards, strict=True)
         ],
         note=f"""## klein-identity-sheet-lab-example
 
-Three-angle Klein identity sheet. Frozen seed 42. Identity-mode enhance is on.
+Three-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.
 Prints ez_identity_front / ez_identity_threequarter / ez_identity_profile.
 I2V feeders stay 1280×704. Unload before LTX prints.
 
@@ -1657,103 +1610,58 @@ Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
     ident_graph = _load(ident_path)
     ident_graph.setdefault("extra", {})["lab_identity"] = {"seed": 42, "enhance": True}
     _dump(ident_path, ident_graph)
+    tod_cards = load_view_pack("time_of_day_4")
     _klein_pack(
         stem="klein-time-of-day-lab-example",
         size=(768, 432),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         shots=[
-            (
-                "ez_tod_01",
-                "GOLDEN",
-                "Canonical golden-hour plate, amber sidelight, palms and a bright bay. 24mm eye-level, YouTube 16:9.",
-            ),
-            (
-                "ez_tod_02",
-                "DAWN",
-                "Same rooftop and wizard. Tropical first light, humid pastel sky, empty terrace. Same camera.",
-            ),
-            (
-                "ez_tod_03",
-                "NOON",
-                "Same rooftop and wizard. Hard noon sun, short shadows, bay sparkle. Same camera.",
-            ),
-            (
-                "ez_tod_04",
-                "NIGHT",
-                "Same rooftop and wizard at night. Warm coral and amber city glow. Same camera.",
-            ),
+            (f"ez_tod_{i:02d}", card["label"], card["shot"])
+            for i, card in enumerate(tod_cards, start=1)
         ],
         note=f"""## klein-time-of-day-lab-example
 
-Same place at golden hour / dawn / noon / night (Klein 4B). SHOT GOLDEN is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass GOLDEN on a cold canvas.
+Same place at golden hour / dawn / noon / night (Klein 4B). Type any place in IDENTITY. SHOT GOLDEN is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass GOLDEN on a cold canvas.
 Prefixes `ez_tod_01`…`04`. Change only time of day.
 
 {ENHANCE_NOTE}
 """,
         description="Klein 4B time-of-day four-still pack",
     )
+    angle_cards = load_view_pack("camera_angles")
+    angle_prefixes = ("ez_angle_med", "ez_angle_wide", "ez_angle_close")
     _klein_pack(
         stem="klein-camera-angles-lab-example",
         size=(768, 432),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         persist="view",
         shots=[
-            (
-                "ez_angle_med",
-                "MEDIUM",
-                "35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9.",
-            ),
-            (
-                "ez_angle_wide",
-                "WIDE",
-                "24mm wide establishing of the same rooftop and wizard, lots of city and sky.",
-            ),
-            (
-                "ez_angle_close",
-                "CLOSE",
-                "50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials.",
-            ),
+            (prefix, card["label"], card["shot"])
+            for prefix, card in zip(angle_prefixes, angle_cards, strict=True)
         ],
         note=f"""## klein-camera-angles-lab-example
 
-Wide / medium / close of one subject (Klein 4B, lock=view). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed, locked inventory — new lens and framing, not copies of MEDIUM.
+Wide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed — new lens and framing, not copies of MEDIUM.
 
 Identity-mode enhance is on for the bible (camera-free).
 """,
         description="Klein 4B wide/medium/close angle pack, new cameras",
     )
+    mood_cards = load_view_pack("color_moods_4")
     _klein_pack(
         stem="klein-color-moods-lab-example",
         size=(768, 432),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         shots=[
-            (
-                "ez_mood_01",
-                "WARM",
-                "Canonical plate. Warm amber grade, golden sidelight. 24mm, YouTube 16:9.",
-            ),
-            (
-                "ez_mood_02",
-                "COOL",
-                "Same rooftop and wizard. Cool tropical overcast teal, soft contrast. Same camera.",
-            ),
-            (
-                "ez_mood_03",
-                "MUTED",
-                "Same rooftop and wizard. Sunset coral grade, soft contrast. Same camera.",
-            ),
-            (
-                "ez_mood_04",
-                "HIGH KEY",
-                "Same rooftop and wizard. High-key bright daylight, lifted shadows, clean whites. Same camera.",
-            ),
+            (f"ez_mood_{i:02d}", card["label"], card["shot"])
+            for i, card in enumerate(mood_cards, start=1)
         ],
         note=f"""## klein-color-moods-lab-example
 
-Four color moods, shared identity (Klein 4B). SHOT WARM is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass WARM on a cold canvas.
+Four color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass WARM on a cold canvas.
 Prefixes `ez_mood_01`…`04`. Change only grade / mood.
 
 {ENHANCE_NOTE}

@@ -18,6 +18,7 @@ from typing import Any
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 STYLES_PATH = Path(__file__).resolve().parent / "styles.json"
+VIEWS_PATH = Path(__file__).resolve().parent / "views.json"
 GGUF_FILENAME = "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
 SNAPSHOT_DIR = "unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"
 DEFAULT_GGUF = f"/models/comfy/llm/{GGUF_FILENAME}"
@@ -50,17 +51,16 @@ REASON_EMPTY = "timeout or empty model output"
 REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
 REASON_STYLE_IGNORED_FLF = "style ignored in flf (start and end frames own look)"
 REASON_STYLE_IGNORED_VACE = "style ignored in vace (both clips own look)"
-REASON_STYLE_IGNORED_IDENTITY = "style ignored in identity (camera-free bible)"
 STYLE_IGNORED_MODES = {
     "i2v": REASON_STYLE_IGNORED_I2V,
     "flf": REASON_STYLE_IGNORED_FLF,
     "vace": REASON_STYLE_IGNORED_VACE,
-    "identity": REASON_STYLE_IGNORED_IDENTITY,
 }
 
 _LLM: Any = None
 _LLM_PATH = ""
 _STYLES: dict[str, dict[str, Any]] | None = None
+_VIEWS: dict[str, list[dict[str, str]]] | None = None
 
 _STYLE_LOOK_FIELDS = ("medium", "light", "color", "texture", "camera")
 _LAB_LOOK_PHRASES = (
@@ -197,6 +197,34 @@ def load_system_prompt(name: str) -> str:
     """
     path = PROMPTS_DIR / f"{name}.txt"
     return path.read_text(encoding="utf-8").strip()
+
+
+def load_view_pack(name: str) -> list[dict[str, str]]:
+    """Load one camera-role pack from views.json (label + shot, no identity nouns)."""
+    global _VIEWS
+    if _VIEWS is None:
+        raw = json.loads(VIEWS_PATH.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict):
+            raise ValueError("views.json must be an object")
+        views: dict[str, list[dict[str, str]]] = {}
+        for key, value in raw.items():
+            if not isinstance(value, list):
+                raise ValueError(f"view pack {key} must be a list")
+            cards: list[dict[str, str]] = []
+            for item in value:
+                if not isinstance(item, dict):
+                    raise ValueError(f"view pack {key} entries must be objects")
+                label = str(item.get("label") or "").strip()
+                shot = str(item.get("shot") or "").strip()
+                if not label or not shot:
+                    raise ValueError(f"view pack {key} needs label and shot")
+                cards.append({"label": label, "shot": shot})
+            views[str(key)] = cards
+        _VIEWS = views
+    pack = _VIEWS.get(name)
+    if pack is None:
+        raise KeyError(f"unknown view pack {name!r}")
+    return pack
 
 
 def load_styles() -> dict[str, dict[str, Any]]:

@@ -250,7 +250,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-identity-sheet-lab-example\n\nThree-angle Klein identity sheet. Frozen seed 42. Identity-mode enhance is on.\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
+        "## klein-identity-sheet-lab-example\n\nThree-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n"
       ],
       "title": "Operator note"
     },
@@ -290,7 +290,7 @@
       },
       "widgets_values": [
         "Front camera, eye-level, 24mm. Same identity. YouTube 16:9.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT FRONT"
@@ -338,7 +338,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Front camera, eye-level, 24mm. Same identity. YouTube 16:9."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Front camera, eye-level, 24mm. Same identity. YouTube 16:9."
       ],
       "title": "Positive FRONT"
     },
@@ -510,7 +510,7 @@
       },
       "widgets_values": [
         "Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT THREE-QUARTER"
@@ -558,7 +558,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change."
       ],
       "title": "Positive THREE-QUARTER"
     },
@@ -730,7 +730,7 @@
       },
       "widgets_values": [
         "Profile camera, 50mm, full side view. Same identity and light. Camera is the only change.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT PROFILE"
@@ -778,7 +778,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Profile camera, 50mm, full side view. Same identity and light. Camera is the only change."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Profile camera, 50mm, full side view. Same identity and light. Camera is the only change."
       ],
       "title": "Positive PROFILE"
     },
@@ -1235,7 +1235,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-identity-sheet-lab-example",
-    "lab_note": "## klein-identity-sheet-lab-example\n\nThree-angle Klein identity sheet. Frozen seed 42. Identity-mode enhance is on.\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
+    "lab_note": "## klein-identity-sheet-lab-example\n\nThree-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.\nPrints ez_identity_front / ez_identity_threequarter / ez_identity_profile.\nI2V feeders stay 1280\u00d7704. Unload before LTX prints.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n",
     "lab_description": "Klein 4B three-angle identity sheet 1280x704",
     "lab_app_mode": {
       "enabled": true,
@@ -1250,43 +1250,31 @@
       "inputs": [
         [
           "4:prompt",
-          "prompt"
-        ],
-        [
-          "4:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "4:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
         ],
         [
-          "6:width",
-          "width"
-        ],
-        [
-          "6:height",
-          "height"
-        ],
-        [
-          "6:batch_size",
-          "batch_size"
-        ],
-        [
-          "10:shot",
-          "shot"
+          "4:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "12:seed",
-          "seed"
-        ],
-        [
-          "16:shot",
-          "shot"
-        ],
-        [
-          "22:shot",
-          "shot"
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

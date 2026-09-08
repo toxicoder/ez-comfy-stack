@@ -255,7 +255,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-color-moods-lab-example\n\nFour color moods, shared identity (Klein 4B). SHOT WARM is the identity plate. Queue the whole graph; 02\u201304 Klein-edit from 01. Do not bypass WARM on a cold canvas.\nPrefixes `ez_mood_01`\u2026`04`. Change only grade / mood.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-color-moods-lab-example\n\nFour color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02\u201304 Klein-edit from 01. Do not bypass WARM on a cold canvas.\nPrefixes `ez_mood_01`\u2026`04`. Change only grade / mood.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -385,7 +385,7 @@
       },
       "widgets_values": [
         "Canonical plate. Warm amber grade, golden sidelight. 24mm, YouTube 16:9.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "state"
       ],
       "title": "SHOT WARM"
@@ -433,7 +433,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place, inventory, and camera framing. The shot names the only change. Canonical plate. Warm amber grade, golden sidelight. 24mm, YouTube 16:9."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place, inventory, and camera framing. The shot names the only change. Canonical plate. Warm amber grade, golden sidelight. 24mm, YouTube 16:9."
       ],
       "title": "Positive WARM"
     },
@@ -605,8 +605,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and wizard. Cool tropical overcast teal, soft contrast. Same camera.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "Same subject and camera. Cool overcast teal, soft contrast.",
+        "",
         "state"
       ],
       "title": "SHOT COOL"
@@ -654,7 +654,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard. Cool tropical overcast teal, soft contrast. Same camera."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place, inventory, and camera framing. The shot names the only change. Same subject and camera. Cool overcast teal, soft contrast."
       ],
       "title": "Positive COOL"
     },
@@ -868,8 +868,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and wizard. Sunset coral grade, soft contrast. Same camera.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "Same subject and camera. Soft coral grade, low contrast.",
+        "",
         "state"
       ],
       "title": "SHOT MUTED"
@@ -917,7 +917,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard. Sunset coral grade, soft contrast. Same camera."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place, inventory, and camera framing. The shot names the only change. Same subject and camera. Soft coral grade, low contrast."
       ],
       "title": "Positive MUTED"
     },
@@ -1131,8 +1131,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and wizard. High-key bright daylight, lifted shadows, clean whites. Same camera.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "Same subject and camera. High-key bright daylight, lifted shadows, clean whites.",
+        "",
         "state"
       ],
       "title": "SHOT HIGH KEY"
@@ -1180,7 +1180,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard. High-key bright daylight, lifted shadows, clean whites. Same camera."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place, inventory, and camera framing. The shot names the only change. Same subject and camera. High-key bright daylight, lifted shadows, clean whites."
       ],
       "title": "Positive HIGH KEY"
     },
@@ -1853,7 +1853,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-color-moods-lab-example",
-    "lab_note": "## klein-color-moods-lab-example\n\nFour color moods, shared identity (Klein 4B). SHOT WARM is the identity plate. Queue the whole graph; 02\u201304 Klein-edit from 01. Do not bypass WARM on a cold canvas.\nPrefixes `ez_mood_01`\u2026`04`. Change only grade / mood.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## klein-color-moods-lab-example\n\nFour color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02\u201304 Klein-edit from 01. Do not bypass WARM on a cold canvas.\nPrefixes `ez_mood_01`\u2026`04`. Change only grade / mood.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B four-mood color pack",
     "lab_app_mode": {
       "enabled": true,
@@ -1868,47 +1868,31 @@
       "inputs": [
         [
           "4:prompt",
-          "prompt"
-        ],
-        [
-          "4:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "4:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
         ],
         [
-          "6:width",
-          "width"
-        ],
-        [
-          "6:height",
-          "height"
-        ],
-        [
-          "6:batch_size",
-          "batch_size"
-        ],
-        [
-          "10:shot",
-          "shot"
+          "4:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "12:seed",
-          "seed"
-        ],
-        [
-          "16:shot",
-          "shot"
-        ],
-        [
-          "22:shot",
-          "shot"
-        ],
-        [
-          "28:shot",
-          "shot"
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

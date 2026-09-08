@@ -192,6 +192,82 @@ ENHANCE_TYPES = (
 )
 
 
+# App Mode widget order: the thing the user types first, then look, then Run knobs.
+WIDGET_ORDER = (
+    "prompt",
+    "tags",
+    "lyrics",
+    "value",
+    "style",
+    "enhance",
+    "mode",
+    "duration_hint",
+    "audio_notes",
+    "image",
+    "seed",
+    "width",
+    "height",
+    "batch_size",
+    "steps",
+    "cfg",
+    "unet_name",
+)
+HIDDEN_APP_WIDGETS = frozenset({"shot", "inventory", "lock"})
+DEFAULT_WIDGET_DESCRIPTIONS = {
+    "prompt": "What to generate. Rewrite prompt expands this for the model.",
+    "style": "Optional look. The start image owns look on I2V.",
+    "enhance": (
+        "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+    ),
+    "seed": "Fix to iterate; randomize to explore.",
+    "image": "Start frame or reference still.",
+    "tags": "Genre-first ACE-Step tags.",
+    "lyrics": "Lyrics, or [inst] for instrumental.",
+    "audio_notes": "World SFX to interleave. No score unless you asked for music.",
+    "width": "Latent width in pixels.",
+    "height": "Latent height in pixels.",
+    "batch_size": "How many stills in one Run.",
+    "steps": "Sampler steps. Distilled Klein stays at 4 unless you swapped to base.",
+    "cfg": "Guidance. Distilled Klein stays at 1.0 unless you swapped to base.",
+    "unet_name": "Click to swap Klein 4B distilled / NVFP4 / base.",
+    "mode": "Rewrite family for this encoder.",
+    "duration_hint": "Aspect or duration the rewriter should target.",
+    "value": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+}
+
+
+def widget_config(
+    name: str, spec: Mapping[str, Any] | None = None
+) -> dict[str, str] | None:
+    """Return linearData InputWidgetConfig, or None when there is no help text."""
+    overrides = (spec or {}).get("descriptions") or {}
+    text = overrides.get(name) or DEFAULT_WIDGET_DESCRIPTIONS.get(name)
+    if not text:
+        return None
+    return {"description": str(text)}
+
+
+def _input_spec(
+    nid: NodeRef, name: str, spec: Mapping[str, Any] | None = None
+) -> InputSpec:
+    config = widget_config(name, spec)
+    if config:
+        return (nid, name, config)
+    return (nid, name)
+
+
+def _widget_rank(name: str) -> int:
+    try:
+        return WIDGET_ORDER.index(name)
+    except ValueError:
+        return len(WIDGET_ORDER)
+
+
+def order_app_inputs(inputs: Sequence[InputSpec]) -> list[InputSpec]:
+    """Prompt / tags first. Stable for equal ranks (node order)."""
+    return sorted(inputs, key=lambda spec: _widget_rank(_parse_input(spec)[1]))
+
+
 def _spec(
     lane: str,
     occupancy: str,
@@ -199,6 +275,7 @@ def _spec(
     default_view: str = "app",
     enhance_off_identity: bool = False,
     expose_unet: bool = False,
+    expose_latent: bool = False,
     sampler_steps_cfg: bool = False,
     film_minimal: bool = False,
     forge_widgets: bool = False,
@@ -211,6 +288,7 @@ def _spec(
         "default_view": default_view,
         "enhance_off_identity": enhance_off_identity,
         "expose_unet": expose_unet,
+        "expose_latent": expose_latent,
         "sampler_steps_cfg": sampler_steps_cfg,
         "film_minimal": film_minimal,
         "forge_widgets": forge_widgets,
@@ -252,6 +330,19 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "klein-hook-still-lab-example": _spec(
         "inspire", "klein", "wan-shorts-i2v-lab-example"
     ),
+    "klein-character-draft-lab-example": _spec(
+        "inspire",
+        "klein",
+        "klein-character-tweak-lab-example",
+        "klein-identity-sheet-lab-example",
+        "wan-i2v-5s-lab-example",
+    ),
+    "klein-character-tweak-lab-example": _spec(
+        "inspire",
+        "klein",
+        "klein-identity-sheet-lab-example",
+        "wan-i2v-5s-lab-example",
+    ),
     "prompt-forge-lab-example": _spec(
         "inspire",
         "llm",
@@ -267,7 +358,11 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         primitive_strings=True,
     ),
     "klein-still-daily-lab-example": _spec(
-        "produce", "klein", expose_unet=True, sampler_steps_cfg=True
+        "produce",
+        "klein",
+        expose_unet=True,
+        expose_latent=True,
+        sampler_steps_cfg=True,
     ),
     "klein-still-hero-lab-example": _spec(
         "produce",
@@ -375,55 +470,104 @@ def ensure_occupancy_note(graph: dict, occupancy: str) -> None:
 
 
 def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
+    """Creator widgets only: prompt first, no join-shot cards, no latent size except daily."""
     inputs: list[InputSpec] = []
     if spec.get("film_minimal"):
         for node in graph.get("nodes") or []:
             if node.get("type") == "EZKleinPromptEnhance":
                 nid = node["id"]
                 inputs.extend(
-                    ((nid, "prompt"), (nid, "enhance"), (nid, "style"))
+                    (
+                        _input_spec(nid, "prompt", spec),
+                        _input_spec(nid, "style", spec),
+                        _input_spec(nid, "enhance", spec),
+                    )
                 )
         sampler = next(
             (n for n in graph.get("nodes") or [] if n.get("type") == "KSampler"),
             None,
         )
         if sampler is not None:
-            inputs.append((sampler["id"], "seed"))
-        return inputs
+            inputs.append(_input_spec(sampler["id"], "seed", spec))
+        return order_app_inputs(inputs)
+
+    if spec.get("primitive_strings"):
+        for node in graph.get("nodes") or []:
+            if node.get("type") == "PrimitiveNode":
+                inputs.append(_input_spec(node["id"], "value", spec))
+        return order_app_inputs(inputs)
 
     saw_seed = False
+    saw_primary_enhance = False
     for node in graph.get("nodes") or []:
         ntype = node.get("type")
         nid = node["id"]
-        if ntype in ("EZAceStepPromptEnhance",):
-            inputs.extend(((nid, "tags"), (nid, "lyrics"), (nid, "enhance")))
+        if ntype == "EZAceStepPromptEnhance":
+            inputs.extend(
+                (
+                    _input_spec(nid, "tags", spec),
+                    _input_spec(nid, "lyrics", spec),
+                    _input_spec(nid, "enhance", spec),
+                )
+            )
         elif ntype in ("EZRapLyrics", "EZPodcastScript"):
             widget = "lyrics" if ntype == "EZRapLyrics" else "prompt"
-            inputs.extend(((nid, widget), (nid, "enhance")))
+            inputs.extend(
+                (
+                    _input_spec(nid, widget, spec),
+                    _input_spec(nid, "enhance", spec),
+                )
+            )
         elif ntype in ENHANCE_TYPES:
-            inputs.extend(((nid, "prompt"), (nid, "enhance"), (nid, "style")))
+            if not spec.get("forge_widgets") and saw_primary_enhance:
+                continue
+            saw_primary_enhance = True
+            inputs.extend(
+                (
+                    _input_spec(nid, "prompt", spec),
+                    _input_spec(nid, "style", spec),
+                    _input_spec(nid, "enhance", spec),
+                )
+            )
             if spec.get("forge_widgets"):
-                inputs.extend(((nid, "mode"), (nid, "duration_hint")))
-        elif ntype == "PrimitiveNode" and spec.get("primitive_strings"):
-            inputs.append((nid, "value"))
-        elif ntype == "EZPromptJoin":
-            inputs.append((nid, "shot"))
-        elif ntype == "EZPodcastScript":
-            inputs.extend(((nid, "prompt"), (nid, "enhance")))
-        elif ntype == "EZRapLyrics":
-            inputs.extend(((nid, "lyrics"), (nid, "enhance")))
-        elif ntype == "EmptyFlux2LatentImage":
-            inputs.extend(((nid, "width"), (nid, "height"), (nid, "batch_size")))
+                inputs.extend(
+                    (
+                        _input_spec(nid, "mode", spec),
+                        _input_spec(nid, "duration_hint", spec),
+                    )
+                )
+            if ntype == "EZLTXPromptEnhance":
+                inputs.append(_input_spec(nid, "audio_notes", spec))
+        elif ntype == "EmptyFlux2LatentImage" and spec.get("expose_latent"):
+            if any(_parse_input(item)[1] == "width" for item in inputs):
+                continue
+            inputs.extend(
+                (
+                    _input_spec(nid, "width", spec),
+                    _input_spec(nid, "height", spec),
+                    _input_spec(nid, "batch_size", spec),
+                )
+            )
         elif ntype == "KSampler" and not saw_seed:
-            inputs.append((nid, "seed"))
+            inputs.append(_input_spec(nid, "seed", spec))
             if spec.get("sampler_steps_cfg"):
-                inputs.extend(((nid, "steps"), (nid, "cfg")))
+                inputs.extend(
+                    (
+                        _input_spec(nid, "steps", spec),
+                        _input_spec(nid, "cfg", spec),
+                    )
+                )
             saw_seed = True
         elif ntype == "LoadImage":
-            inputs.append((nid, "image"))
+            inputs.append(_input_spec(nid, "image", spec))
         elif ntype == "UNETLoader" and spec.get("expose_unet"):
-            inputs.append((nid, "unet_name"))
-    return inputs
+            inputs.append(_input_spec(nid, "unet_name", spec))
+    cleaned = [
+        item
+        for item in inputs
+        if _parse_input(item)[1] not in HIDDEN_APP_WIDGETS
+    ]
+    return order_app_inputs(cleaned)
 
 
 def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> list[int]:

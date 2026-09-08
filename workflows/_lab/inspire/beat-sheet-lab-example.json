@@ -1773,291 +1773,129 @@
       "inputs": [
         [
           "2:value",
-          "value"
-        ],
-        [
-          "3:prompt",
-          "prompt"
-        ],
-        [
-          "3:enhance",
-          "enhance"
-        ],
-        [
-          "3:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "4:value",
-          "value"
-        ],
-        [
-          "5:prompt",
-          "prompt"
-        ],
-        [
-          "5:enhance",
-          "enhance"
-        ],
-        [
-          "5:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "6:value",
-          "value"
-        ],
-        [
-          "7:prompt",
-          "prompt"
-        ],
-        [
-          "7:enhance",
-          "enhance"
-        ],
-        [
-          "7:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "8:value",
-          "value"
-        ],
-        [
-          "9:prompt",
-          "prompt"
-        ],
-        [
-          "9:enhance",
-          "enhance"
-        ],
-        [
-          "9:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "10:value",
-          "value"
-        ],
-        [
-          "11:prompt",
-          "prompt"
-        ],
-        [
-          "11:enhance",
-          "enhance"
-        ],
-        [
-          "11:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "12:value",
-          "value"
-        ],
-        [
-          "13:prompt",
-          "prompt"
-        ],
-        [
-          "13:enhance",
-          "enhance"
-        ],
-        [
-          "13:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "14:value",
-          "value"
-        ],
-        [
-          "15:prompt",
-          "prompt"
-        ],
-        [
-          "15:enhance",
-          "enhance"
-        ],
-        [
-          "15:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "16:value",
-          "value"
-        ],
-        [
-          "17:prompt",
-          "prompt"
-        ],
-        [
-          "17:enhance",
-          "enhance"
-        ],
-        [
-          "17:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "18:value",
-          "value"
-        ],
-        [
-          "19:prompt",
-          "prompt"
-        ],
-        [
-          "19:enhance",
-          "enhance"
-        ],
-        [
-          "19:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "20:value",
-          "value"
-        ],
-        [
-          "21:prompt",
-          "prompt"
-        ],
-        [
-          "21:enhance",
-          "enhance"
-        ],
-        [
-          "21:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "22:value",
-          "value"
-        ],
-        [
-          "23:prompt",
-          "prompt"
-        ],
-        [
-          "23:enhance",
-          "enhance"
-        ],
-        [
-          "23:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "24:value",
-          "value"
-        ],
-        [
-          "25:prompt",
-          "prompt"
-        ],
-        [
-          "25:enhance",
-          "enhance"
-        ],
-        [
-          "25:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "26:value",
-          "value"
-        ],
-        [
-          "27:prompt",
-          "prompt"
-        ],
-        [
-          "27:enhance",
-          "enhance"
-        ],
-        [
-          "27:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "28:value",
-          "value"
-        ],
-        [
-          "29:prompt",
-          "prompt"
-        ],
-        [
-          "29:enhance",
-          "enhance"
-        ],
-        [
-          "29:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "30:value",
-          "value"
-        ],
-        [
-          "31:prompt",
-          "prompt"
-        ],
-        [
-          "31:enhance",
-          "enhance"
-        ],
-        [
-          "31:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "32:value",
-          "value"
-        ],
-        [
-          "33:prompt",
-          "prompt"
-        ],
-        [
-          "33:enhance",
-          "enhance"
-        ],
-        [
-          "33:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "34:value",
-          "value"
-        ],
-        [
-          "35:prompt",
-          "prompt"
-        ],
-        [
-          "35:enhance",
-          "enhance"
-        ],
-        [
-          "35:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ],
         [
           "36:value",
-          "value"
-        ],
-        [
-          "37:prompt",
-          "prompt"
-        ],
-        [
-          "37:enhance",
-          "enhance"
-        ],
-        [
-          "37:style",
-          "style"
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+          }
         ]
       ],
       "outputs": [

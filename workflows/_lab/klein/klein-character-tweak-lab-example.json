@@ -1,8 +1,8 @@
 {
-  "id": "klein-still-daily-lab-example",
+  "id": "klein-character-tweak-lab-example",
   "revision": 1,
-  "last_node_id": 11,
-  "last_link_id": 10,
+  "last_node_id": 14,
+  "last_link_id": 15,
   "nodes": [
     {
       "id": 1,
@@ -36,7 +36,7 @@
         "flux-2-klein-4b-fp8.safetensors",
         "default"
       ],
-      "title": "Image model \u2014 click filename to swap"
+      "title": "Klein 4B distilled FP8"
     },
     {
       "id": 2,
@@ -94,7 +94,8 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            7
+            7,
+            12
           ],
           "slot_index": 0
         }
@@ -141,7 +142,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            4
+            13
           ],
           "slot_index": 0
         }
@@ -150,7 +151,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Palms and unmarked glass towers recede toward a bright bay. Shot on a 35mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering."
+        "Keep this character's face, wardrobe, and proportions. Change only what this prompt names."
       ],
       "title": "Positive"
     },
@@ -197,8 +198,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1440,
-        390
+        940,
+        460
       ],
       "size": [
         280,
@@ -223,10 +224,10 @@
       },
       "widgets_values": [
         1024,
-        576,
+        1280,
         1
       ],
-      "title": "Size (width x height x batch)"
+      "title": "Size 4:5 character still"
     },
     {
       "id": 7,
@@ -251,7 +252,7 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 4
+          "link": 15
         },
         {
           "name": "negative",
@@ -280,13 +281,13 @@
       "widgets_values": [
         42,
         "fixed",
-        4,
+        8,
         1.0,
         "euler",
         "simple",
         1.0
       ],
-      "title": "Sampler (seed / steps / CFG)"
+      "title": "KSampler"
     },
     {
       "id": 8,
@@ -356,9 +357,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_still_app"
+        "ez_character_tweak"
       ],
-      "title": "Save PNG"
+      "title": "Save tweak"
     },
     {
       "id": 10,
@@ -380,12 +381,52 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-still-daily-lab-example\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-character-tweak-lab-example\n\nKlein 4B **edit** of a character still. LoadImage: `ez_character_*.png` from Character Draft (or any Klein still). Prompt only the change. Enhance **edit**. Style restyles medium/grade; identity stays in the reference image. Prefix `ez_character_tweak`. Size 1024x1280.\n\nVAEEncode + ReferenceLatent. Do not Queue without a start image.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
     {
       "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        2180,
+        80
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Character still (ez_character_*.png)"
+    },
+    {
+      "id": 12,
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
@@ -413,13 +454,98 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Palms and unmarked glass towers recede toward a bright bay. Shot on a 35mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
+        "Keep this character's face, wardrobe, and proportions. Change only what this prompt names.",
         true,
-        "t2i",
-        "YouTube 16:9 still",
+        "edit",
+        "Instagram 4:5 character edit",
         "none"
       ],
-      "title": "Klein Prompt Enhance"
+      "title": "Klein Prompt Enhance (edit)"
+    },
+    {
+      "id": 13,
+      "type": "VAEEncode",
+      "pos": [
+        2180,
+        460
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            14
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode character plate"
+    },
+    {
+      "id": 14,
+      "type": "ReferenceLatent",
+      "pos": [
+        1440,
+        400
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 13
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 14,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            15
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Positive + character plate"
     }
   ],
   "links": [
@@ -446,14 +572,6 @@
       5,
       0,
       "CLIP"
-    ],
-    [
-      4,
-      4,
-      0,
-      7,
-      1,
-      "CONDITIONING"
     ],
     [
       5,
@@ -497,70 +615,57 @@
     ],
     [
       10,
-      11,
+      12,
       0,
       4,
       1,
       "STRING"
+    ],
+    [
+      11,
+      11,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      3,
+      0,
+      13,
+      1,
+      "VAE"
+    ],
+    [
+      13,
+      4,
+      0,
+      14,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      14,
+      13,
+      0,
+      14,
+      1,
+      "LATENT"
+    ],
+    [
+      15,
+      14,
+      0,
+      7,
+      1,
+      "CONDITIONING"
     ]
   ],
-  "groups": [
-    {
-      "id": 1,
-      "title": "MODEL",
-      "bounding": [
-        20,
-        24,
-        430,
-        430
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 2,
-      "title": "PROMPT",
-      "bounding": [
-        460,
-        24,
-        920,
-        400
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 3,
-      "title": "SETTINGS",
-      "bounding": [
-        1420,
-        24,
-        380,
-        500
-      ],
-      "color": "#a1309b",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 4,
-      "title": "OUTPUT",
-      "bounding": [
-        1820,
-        24,
-        340,
-        430
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    }
-  ],
+  "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "klein-still-daily-lab-example",
+    "lab_profile": "klein-character-tweak-lab-example",
     "lab_flux_tier": "fast",
     "ds": {
       "scale": 1,
@@ -569,38 +674,48 @@
         0
       ]
     },
-    "lab_note": "## klein-still-daily-lab-example\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
-    "lab_description": "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base",
+    "lab_note": "## klein-character-tweak-lab-example\n\nKlein 4B **edit** of a character still. LoadImage: `ez_character_*.png` from Character Draft (or any Klein still). Prompt only the change. Enhance **edit**. Style restyles medium/grade; identity stays in the reference image. Prefix `ez_character_tweak`. Size 1024x1280.\n\nVAEEncode + ReferenceLatent. Do not Queue without a start image.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B character edit. LoadImage ez_character_*.png. ReferenceLatent. Prefix ez_character_tweak.",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
-      "lane": "produce",
+      "lane": "inspire",
       "occupancy": "klein",
       "enhance_off_identity": false,
-      "handoff": []
+      "handoff": [
+        "klein-identity-sheet-lab-example",
+        "wan-i2v-5s-lab-example"
+      ]
     },
     "linearData": {
       "inputs": [
         [
-          "11:prompt",
+          "12:prompt",
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model."
           }
         ],
         [
-          "11:style",
+          "12:style",
           "style",
           {
             "description": "Optional look. The start image owns look on I2V."
           }
         ],
         [
-          "11:enhance",
+          "12:enhance",
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "11:image",
+          "image",
+          {
+            "description": "Start frame or reference still."
           }
         ],
         [
@@ -609,55 +724,16 @@
           {
             "description": "Fix to iterate; randomize to explore."
           }
-        ],
-        [
-          "6:width",
-          "width",
-          {
-            "description": "Latent width in pixels."
-          }
-        ],
-        [
-          "6:height",
-          "height",
-          {
-            "description": "Latent height in pixels."
-          }
-        ],
-        [
-          "6:batch_size",
-          "batch_size",
-          {
-            "description": "How many stills in one Run."
-          }
-        ],
-        [
-          "7:steps",
-          "steps",
-          {
-            "description": "Sampler steps. Distilled Klein stays at 4 unless you swapped to base."
-          }
-        ],
-        [
-          "7:cfg",
-          "cfg",
-          {
-            "description": "Guidance. Distilled Klein stays at 1.0 unless you swapped to base."
-          }
-        ],
-        [
-          "1:unet_name",
-          "unet_name",
-          {
-            "description": "Click to swap Klein 4B distilled / NVFP4 / base."
-          }
         ]
       ],
       "outputs": [
         9
       ]
     },
-    "linearMode": true
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "LoadImage"
+    ]
   },
   "version": 0.4
 }

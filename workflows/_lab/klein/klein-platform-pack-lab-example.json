@@ -228,7 +228,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-platform-pack-lab-example\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios).\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still \u2192 this pack \u2192 Silent 5s / Hook AV.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## klein-platform-pack-lab-example\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still \u2192 this pack \u2192 Silent 5s / Hook AV.\n"
       ],
       "title": "Operator note"
     },
@@ -268,7 +268,7 @@
       },
       "widgets_values": [
         "Bold YouTube thumbnail still, 16:9. Subject large and readable. Clean of burned-in words.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT thumb"
@@ -316,7 +316,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Bold YouTube thumbnail still, 16:9. Subject large and readable. Clean of burned-in words."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Bold YouTube thumbnail still, 16:9. Subject large and readable. Clean of burned-in words."
       ],
       "title": "Positive thumb"
     },
@@ -523,7 +523,7 @@
       },
       "widgets_values": [
         "Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT ig"
@@ -571,7 +571,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces."
       ],
       "title": "Positive ig"
     },
@@ -778,7 +778,7 @@
       },
       "widgets_values": [
         "Instagram 4:5 portrait. Headroom for a caption, unmarked surfaces.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT portrait"
@@ -826,7 +826,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Instagram 4:5 portrait. Headroom for a caption, unmarked surfaces."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Instagram 4:5 portrait. Headroom for a caption, unmarked surfaces."
       ],
       "title": "Positive portrait"
     },
@@ -1033,7 +1033,7 @@
       },
       "widgets_values": [
         "Vertical 9:16 Shorts still. Caption headroom at the top.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT shorts"
@@ -1081,7 +1081,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Vertical 9:16 Shorts still. Caption headroom at the top."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Vertical 9:16 Shorts still. Caption headroom at the top."
       ],
       "title": "Positive shorts"
     },
@@ -1288,7 +1288,7 @@
       },
       "widgets_values": [
         "Blog / Open Graph hero ~1.9:1. Subject left-weighted, quiet right third.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT og"
@@ -1336,7 +1336,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Blog / Open Graph hero ~1.9:1. Subject left-weighted, quiet right third."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Blog / Open Graph hero ~1.9:1. Subject left-weighted, quiet right third."
       ],
       "title": "Positive og"
     },
@@ -1543,7 +1543,7 @@
       },
       "widgets_values": [
         "Ultra-wide channel banner ~3:1. Horizon low, empty sky band for a name overlay.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "",
         "view"
       ],
       "title": "SHOT banner"
@@ -1591,7 +1591,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. Ultra-wide channel banner ~3:1. Horizon low, empty sky band for a name overlay."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Ultra-wide channel banner ~3:1. Horizon low, empty sky band for a name overlay."
       ],
       "title": "Positive banner"
     },
@@ -2363,7 +2363,7 @@
   "extra": {
     "lab_profile": "klein-platform-pack-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-platform-pack-lab-example\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios).\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still \u2192 this pack \u2192 Silent 5s / Hook AV.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## klein-platform-pack-lab-example\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still \u2192 this pack \u2192 Silent 5s / Hook AV.\n",
     "lab_description": "Six Klein platform plates from one identity; independent T2I per aspect",
     "ds": {
       "scale": 1,
@@ -2388,115 +2388,31 @@
       "inputs": [
         [
           "4:prompt",
-          "prompt"
-        ],
-        [
-          "4:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "4:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
         ],
         [
-          "10:shot",
-          "shot"
-        ],
-        [
-          "12:width",
-          "width"
-        ],
-        [
-          "12:height",
-          "height"
-        ],
-        [
-          "12:batch_size",
-          "batch_size"
+          "4:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "13:seed",
-          "seed"
-        ],
-        [
-          "16:shot",
-          "shot"
-        ],
-        [
-          "18:width",
-          "width"
-        ],
-        [
-          "18:height",
-          "height"
-        ],
-        [
-          "18:batch_size",
-          "batch_size"
-        ],
-        [
-          "22:shot",
-          "shot"
-        ],
-        [
-          "24:width",
-          "width"
-        ],
-        [
-          "24:height",
-          "height"
-        ],
-        [
-          "24:batch_size",
-          "batch_size"
-        ],
-        [
-          "28:shot",
-          "shot"
-        ],
-        [
-          "30:width",
-          "width"
-        ],
-        [
-          "30:height",
-          "height"
-        ],
-        [
-          "30:batch_size",
-          "batch_size"
-        ],
-        [
-          "34:shot",
-          "shot"
-        ],
-        [
-          "36:width",
-          "width"
-        ],
-        [
-          "36:height",
-          "height"
-        ],
-        [
-          "36:batch_size",
-          "batch_size"
-        ],
-        [
-          "40:shot",
-          "shot"
-        ],
-        [
-          "42:width",
-          "width"
-        ],
-        [
-          "42:height",
-          "height"
-        ],
-        [
-          "42:batch_size",
-          "batch_size"
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [
