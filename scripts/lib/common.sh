@@ -658,9 +658,13 @@ ensure_models_dir() {
 ensure_comfy_output_dir() {
   local dir="${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
   ensure_writable_host_dir COMFY_OUTPUT_DIR "${dir}" || return 1
-  # Start images and Comfy user/ (history, operator workflows) live beside
-  # generated PNG/MP4 so they survive image pulls and volume cleanup.
-  mkdir -p "${dir}/input" "${dir}/comfy-user/default/workflows" || return 1
+  # Start images, Comfy user/ (history, operator workflows), and operator
+  # custom-node packs live beside generated PNG/MP4 so they survive image
+  # pulls, pin refresh, and volume cleanup.
+  mkdir -p \
+    "${dir}/input" \
+    "${dir}/custom-nodes-user" \
+    "${dir}/comfy-user/default/workflows/_user" || return 1
 }
 
 #######################################

@@ -46,7 +46,73 @@ prebuilt_ready() {
 }
 
 #######################################
+# Print paths that prebuilt seed must not overwrite.
+# Includes operator custom_nodes/_user (host bind). Never rm -rf that tree.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   One exclude pattern per line on stdout
+# Returns:
+#   0
+#######################################
+prebuilt_exclude_patterns() {
+  printf '%s\n' \
+    user/ \
+    input/ \
+    output/ \
+    temp/ \
+    extra_model_paths.yaml \
+    custom_nodes/_user/
+}
+
+#######################################
+# Copy prebuilt tree into dest honoring seed excludes (rsync missing).
+# Does not --delete dest-only files. Never writes custom_nodes/_user.
+# Globals:
+#   None
+# Arguments:
+#   $1  source prebuilt root
+#   $2  destination COMFY_HOME
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+copy_prebuilt_tree() {
+  local src="${1:?}"
+  local dest="${2:?}"
+  local item base pack
+  mkdir -p "${dest}"
+  (
+    shopt -s dotglob nullglob
+    for item in "${src}"/*; do
+      base="$(basename "${item}")"
+      case "${base}" in
+        user | input | output | temp | extra_model_paths.yaml) continue ;;
+      esac
+      if [[ ${base} == custom_nodes && -d ${item} ]]; then
+        mkdir -p "${dest}/custom_nodes"
+        for pack in "${item}"/*; do
+          [[ -e ${pack} ]] || continue
+          if [[ $(basename "${pack}") == _user ]]; then
+            continue
+          fi
+          cp -a "${pack}" "${dest}/custom_nodes/"
+        done
+        continue
+      fi
+      cp -a "${item}" "${dest}/"
+    done
+  )
+}
+
+#######################################
 # Copy prebuilt Comfy tree onto the volume (local disk; no pip).
+# rsync --exclude (or copy_prebuilt_tree) skips user/, input/, output/,
+# temp/, extra_model_paths.yaml, and custom_nodes/_user/. Never --delete
+# those trees. Image includes rsync; cp fallback honors the same list.
 # Globals:
 #   COMFY_HOME, LAB_PREBUILT_ROOT
 # Arguments:
@@ -59,26 +125,19 @@ prebuilt_ready() {
 seed_from_prebuilt() {
   local root="${LAB_PREBUILT_ROOT:-/opt/comfy-prebuilt}"
   local dest="${COMFY_HOME:-/comfy-state/ComfyUI}"
+  local -a rsync_excludes=()
+  local pat
   ep_log "Seeding ${dest} from ${root} (local copy — not re-downloading torch)"
   mkdir -p "${dest}"
+  while IFS= read -r pat; do
+    rsync_excludes+=(--exclude "${pat}")
+  done < <(prebuilt_exclude_patterns)
   if command -v rsync >/dev/null 2>&1; then
-    rsync -a --info=progress2 \
-      --exclude user/ \
-      --exclude input/ \
-      --exclude output/ \
-      --exclude temp/ \
-      --exclude extra_model_paths.yaml \
-      "${root}/" "${dest}/" ||
-      rsync -a \
-        --exclude user/ \
-        --exclude input/ \
-        --exclude output/ \
-        --exclude temp/ \
-        --exclude extra_model_paths.yaml \
-        "${root}/" "${dest}/"
+    rsync -a --info=progress2 "${rsync_excludes[@]}" "${root}/" "${dest}/" ||
+      rsync -a "${rsync_excludes[@]}" "${root}/" "${dest}/"
   else
-    ep_log "rsync missing; using cp -a (no progress bar)"
-    cp -a "${root}/." "${dest}/"
+    ep_log "rsync missing; using cp -a with seed excludes (no progress bar)"
+    copy_prebuilt_tree "${root}" "${dest}"
   fi
   ep_log "Seed complete"
 }
@@ -351,10 +410,197 @@ PY
 }
 
 #######################################
-# Copy host lab JSON graphs into Comfy user workflows.
-# Includes top-level *.json, shorts/*.json, dcc/*.json, and optional/*.json.
-# App Mode graphs (linearMode or lab_app_mode default_view app) seed as
-# stem.app.json so they appear in Comfy's Apps sidebar as well as Workflows.
+# Map a workflow path relative to the workflows root onto a sidebar lane.
+# Prefers _lab/<lane>/…; else filename/dir globs used during the flat-tree
+# transition (deleted after git mv into workflows/_lab).
+# Globals:
+#   None
+# Arguments:
+#   $1  relative path (e.g. _lab/klein/foo.json or klein-foo.json)
+# Outputs:
+#   Lane name on stdout
+# Returns:
+#   0 when mapped; 1 when the path must not be seeded
+#######################################
+lab_workflow_lane() {
+  local rel="${1:?}"
+  local rest
+  rel="${rel#./}"
+  case "${rel}" in
+    _lab/*)
+      rest="${rel#_lab/}"
+      rest="${rest%%/*}"
+      if [[ -z ${rest} || ${rest} == _user ]]; then
+        return 1
+      fi
+      printf '%s\n' "${rest}"
+      return 0
+      ;;
+    shorts/*) printf '%s\n' shorts ;;
+    dcc/*) printf '%s\n' dcc ;;
+    optional/*) printf '%s\n' optional ;;
+    klein-*) printf '%s\n' klein ;;
+    wan-*) printf '%s\n' wan ;;
+    ltx-*) printf '%s\n' ltx ;;
+    podcast-* | music-*) printf '%s\n' audio ;;
+    prompt-forge-* | beat-sheet-*) printf '%s\n' inspire ;;
+    *) return 1 ;;
+  esac
+}
+
+#######################################
+# Sync JSON under src into dest, preserving relative folders.
+# Prefers rsync -a --delete scoped to dest (JSON only). Without rsync,
+# find+cp then delete dest *.json that are not in src. Never copies
+# *.shots.yaml, NOTICE.md, or non-JSON.
+# Globals:
+#   None
+# Arguments:
+#   $1  source directory
+#   $2  destination directory
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+sync_lab_json_dir() {
+  local src="${1:?}"
+  local dest="${2:?}"
+  local path rel tmp
+  mkdir -p "${dest}"
+  if [[ ! -d ${src} ]]; then
+    return 0
+  fi
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a --delete \
+      --include='*/' \
+      --include='*.json' \
+      --exclude='*' \
+      "${src}/" "${dest}/"
+    return 0
+  fi
+  tmp="$(mktemp -d)"
+  while IFS= read -r -d '' path; do
+    rel="${path#"${src}"/}"
+    mkdir -p "${tmp}/$(dirname "${rel}")"
+    cp -a "${path}" "${tmp}/${rel}"
+  done < <(find "${src}" -type f -name '*.json' -print0)
+  while IFS= read -r -d '' path; do
+    rel="${path#"${dest}"/}"
+    if [[ ! -f ${tmp}/${rel} ]]; then
+      rm -f "${path}"
+    fi
+  done < <(find "${dest}" -type f -name '*.json' -print0)
+  while IFS= read -r -d '' path; do
+    rel="${path#"${tmp}"/}"
+    mkdir -p "${dest}/$(dirname "${rel}")"
+    cp -a "${path}" "${dest}/${rel}"
+  done < <(find "${tmp}" -type f -name '*.json' -print0)
+  rm -rf "${tmp}"
+}
+
+#######################################
+# Map legacy flat repo globs into dest/_lab/<lane>/ then sync --delete.
+# Transition only: used when src/_lab is absent. Do not copy quality/,
+# YAML, NOTICE, or _user/.
+# Globals:
+#   None
+# Arguments:
+#   $1  source workflows root
+#   $2  destination _lab directory
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+seed_legacy_lab_workflows() {
+  local src="${1:?}"
+  local dest_lab="${2:?}"
+  local tmp wf rel lane
+  tmp="$(mktemp -d)"
+  (
+    shopt -s nullglob
+    for wf in \
+      "${src}"/*.json \
+      "${src}"/shorts/*.json \
+      "${src}"/dcc/*.json \
+      "${src}"/optional/*.json; do
+      [[ -f ${wf} ]] || continue
+      rel="${wf#"${src}"/}"
+      lane="$(lab_workflow_lane "${rel}")" || continue
+      mkdir -p "${tmp}/${lane}"
+      cp -a "${wf}" "${tmp}/${lane}/$(basename "${wf}")"
+    done
+  )
+  sync_lab_json_dir "${tmp}" "${dest_lab}"
+  rm -rf "${tmp}"
+}
+
+#######################################
+# Rename dest _lab App Mode graphs to stem.app.json (Apps sidebar).
+# Films and default_view graph stay *.json. Walks after rsync so --delete
+# can restore git *.json then this pass rewrites the dest name.
+# Globals:
+#   None
+# Arguments:
+#   $1  destination _lab directory
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+apply_lab_app_json_names() {
+  local dest_lab="${1:?}"
+  local wf dir stem
+  [[ -d ${dest_lab} ]] || return 0
+  while IFS= read -r -d '' wf; do
+    [[ ${wf} == *.app.json ]] && continue
+    dir="$(dirname "${wf}")"
+    stem="$(basename "${wf}" .json)"
+    if lab_workflow_is_app "${wf}"; then
+      mv -f "${wf}" "${dir}/${stem}.app.json"
+    fi
+  done < <(find "${dest_lab}" -type f -name '*.json' -print0)
+}
+
+#######################################
+# Log seeded JSON counts per sidebar lane.
+# Globals:
+#   None
+# Arguments:
+#   $1  destination _lab directory
+# Outputs:
+#   ep_log lines
+# Returns:
+#   0
+#######################################
+log_lab_seed_counts() {
+  local dest_lab="${1:?}"
+  local lane n total=0
+  local -a lanes=(klein wan ltx shorts dcc optional audio inspire)
+  for lane in "${lanes[@]}"; do
+    n=0
+    if [[ -d ${dest_lab}/${lane} ]]; then
+      n="$(find "${dest_lab}/${lane}" -type f -name '*.json' | wc -l | tr -d ' ')"
+    fi
+    if [[ ${n} -gt 0 ]]; then
+      ep_log "installed ${n} workflow(s) in _lab/${lane}"
+      total=$((total + n))
+    fi
+  done
+  if [[ ${total} -eq 0 ]]; then
+    ep_log "no workflows under ${dest_lab}"
+  else
+    ep_log "installed ${total} workflow(s) under _lab/"
+  fi
+}
+
+#######################################
+# Copy host lab JSON into Comfy user/default/workflows/_lab/<lane>/.
+# Preferred: rsync -a --delete src/_lab/ → dest/_lab/ (JSON only).
+# Transition: when src/_lab is missing, map legacy flat globs into _lab/.
+# Then rename App Mode graphs to stem.app.json in dest only.
+# Never writes dest/_user/ or dest root. Never copies YAML, NOTICE, quality/.
 # Globals:
 #   None
 # Arguments:
@@ -368,29 +614,18 @@ PY
 install_lab_workflows() {
   local src="${1:-/opt/ez-comfy/workflows}"
   local dest="${2:?}"
-  local wf n_wf=0 stem dest_name
-  mkdir -p "${dest}"
+  mkdir -p "${dest}/_lab" "${dest}/_user"
   if [[ ! -d ${src} ]]; then
     ep_log "no workflows under ${src} (optional mount)"
     return 0
   fi
-  for wf in "${src}"/*.json "${src}"/shorts/*.json "${src}"/dcc/*.json "${src}"/optional/*.json; do
-    [[ -f ${wf} ]] || continue
-    stem="$(basename "${wf}" .json)"
-    dest_name="${stem}.json"
-    if lab_workflow_is_app "${wf}"; then
-      dest_name="${stem}.app.json"
-      rm -f "${dest}/${stem}.json"
-    fi
-    cp -f "${wf}" "${dest}/${dest_name}"
-    n_wf=$((n_wf + 1))
-    ep_log "installed workflow ${dest_name}"
-  done
-  if [[ ${n_wf} -eq 0 ]]; then
-    ep_log "no workflows under ${src} (optional mount)"
+  if [[ -d ${src}/_lab ]]; then
+    sync_lab_json_dir "${src}/_lab" "${dest}/_lab"
   else
-    ep_log "installed ${n_wf} workflow(s)"
+    seed_legacy_lab_workflows "${src}" "${dest}/_lab"
   fi
+  apply_lab_app_json_names "${dest}/_lab"
+  log_lab_seed_counts "${dest}/_lab"
 }
 
 #######################################

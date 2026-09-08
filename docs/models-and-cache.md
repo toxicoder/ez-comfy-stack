@@ -9,6 +9,7 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 **What's on this page**
 
 - Default cache location and layout
+- Host persistence (weights, media, Comfy `user/`, operator custom nodes)
 - Download utilities, resume / stuck-partial recovery, and readiness checks
 - Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
 - Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
@@ -30,9 +31,26 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | --- | --- | --- |
 | **GHCR image** | ComfyUI + PyTorch | Klein / Wan / LTX weights |
 | **MODELS_DIR** | Weights + `comfy/` relative symlinks | The Comfy venv |
-| **comfy-state volume** | Comfy install, custom nodes | Host PNGs/MP4s, start images, and Comfy `user/` (`COMFY_OUTPUT_DIR`) |
+| **comfy-state volume** | Comfy install, lab `ez_*` custom nodes | Host PNGs/MP4s, start images, Comfy `user/`, operator `_user` node packs (`COMFY_OUTPUT_DIR`) |
 
-`cleanup` (type `DELETE`) removes **comfy-state only**. Generated media, LoadImage start frames (`${COMFY_OUTPUT_DIR}/input`), and Comfy user workflows (`${COMFY_OUTPUT_DIR}/comfy-user`) stay on the host. Concepts: [Hardware, memory, and safety](learn/hardware.md).
+`cleanup` (type `DELETE`) removes **comfy-state only**. Generated media, LoadImage start frames (`${COMFY_OUTPUT_DIR}/input`), Comfy user workflows (`${COMFY_OUTPUT_DIR}/comfy-user`), and operator custom nodes (`${COMFY_OUTPUT_DIR}/custom-nodes-user`) stay on the host. Concepts: [Hardware, memory, and safety](learn/hardware.md).
+
+### Persistence (survives stop / image pull)
+
+| What | Host | Container | On `start` |
+| --- | --- | --- | --- |
+| Model weights | `${MODELS_DIR:-/mnt/models}` | `/models` | persist |
+| Generated PNG/MP4/audio | `${COMFY_OUTPUT_DIR:-/mnt/comfy-output}` | `/outputs` | persist |
+| LoadImage inputs | `${COMFY_OUTPUT_DIR}/input` | `/inputs` | persist |
+| Comfy `user/` (sidebar, history) | `${COMFY_OUTPUT_DIR}/comfy-user` | `/comfy-state/ComfyUI/user` | persist |
+| Live lab graphs | `…/comfy-user/default/workflows/_lab/` | same | **overwrite** from repo `workflows/` (or `workflows/_lab/` when present) |
+| Live operator graphs | `…/comfy-user/default/workflows/_user/` | same | **never touch** |
+| Other files under live workflows | same tree | same | **never touch** |
+| Lab custom nodes `ez_*` | git `custom_nodes/` | `$COMFY_HOME/custom_nodes/ez_*` | overwrite |
+| Operator custom nodes | `${COMFY_OUTPUT_DIR}/custom-nodes-user` | `$COMFY_HOME/custom_nodes/_user` | persist (pin refresh excludes this tree) |
+| Comfy install + venv | Docker volume `ez-comfy-state` | `/comfy-state` | persist until `cleanup` |
+
+`seed_from_prebuilt` already skips `user/`, `input/`, `output/`, `temp/`, and `extra_model_paths.yaml`. It also skips `custom_nodes/_user/` so a pin refresh cannot delete Manager-installed packs that live on the host bind. Lab packs named `ez_*` still overwrite from `/opt/ez-comfy/custom_nodes`.
 
 ---
 
@@ -223,7 +241,7 @@ Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/` from host `workflows/*.json`, `workflows/shorts/*.json`, `workflows/dcc/*.json`, and `workflows/optional/*.json` (name pattern **`*-lab-example.json`**). App Mode graphs land as **`*-lab-example.app.json`** so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. That directory is bind-mounted from `${COMFY_OUTPUT_DIR}/comfy-user` so operator graphs survive `cleanup`. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
+Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Name pattern **`*-lab-example.json`**. App Mode graphs land as **`*-lab-example.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
 
 | Graph | Notes |
 | --- | --- |

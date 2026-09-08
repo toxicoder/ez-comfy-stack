@@ -96,6 +96,9 @@ services:
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/input:/inputs
       # Comfy user/ (lab graphs, operator saves, history) on the host
       - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user:/comfy-state/ComfyUI/user
+      # Operator-installed custom nodes (not ez_* lab packs). Pin refresh must
+      # not delete this tree. Lab packs still copy from /opt/ez-comfy/custom_nodes.
+      - ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/custom-nodes-user:/comfy-state/ComfyUI/custom_nodes/_user
       # All example workflows (host tree); entrypoint copies into user workflows
       - ../workflows:/opt/ez-comfy/workflows:ro
       # In-tree custom nodes (prompt-enhance, LTX spatial snap); entrypoint copies packs

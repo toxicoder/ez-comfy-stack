@@ -45,7 +45,7 @@ The same JSON can open as a **graph** (nodes and wires) or as an **App** (creato
 
 ## How a lab graph shows up
 
-On `start`, the entrypoint copies host `workflows/*.json`, `workflows/shorts/*.json`, and `workflows/dcc/*.json` into Comfy’s `user/default/workflows/`. App Mode graphs (`default_view: app`) land as `*-lab-example.app.json` so they show in the **Apps** sidebar as well as **Workflows**. 90s films stay `*.json` (graph default).
+On `start`, the entrypoint rsyncs shipped JSON into Comfy’s `user/default/workflows/_lab/<lane>/` (directory-preserving; `--delete` is scoped to `_lab/` only). Prefer host `workflows/_lab/` when present; otherwise map the current flat repo globs into those lanes. App Mode graphs (`default_view: app`) land as `_lab/<lane>/*-lab-example.app.json` so they show in the **Apps** sidebar as well as **Workflows**. 90s films stay `*.json` (graph default). Save your own graphs under **`_user/`** — start never deletes or overwrites that folder. Do not edit files under `_lab/`; copy to `_user/` first.
 
 1. Open `http://${SPARK_HOST}:${COMFY_PORT}` (port-forward from a laptop if needed)
 2. Load **klein-still-draft-lab-example** from **Apps** or **Workflows** (filename suffix **`-lab-example`**)
