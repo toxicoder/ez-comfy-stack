@@ -47,8 +47,28 @@ def test_seed_lyrics_have_sections() -> None:
         assert needle not in FULL_LYRICS
 
 
-def test_nill_bye_diss_examples_are_original_90s() -> None:
-    assert len(DISS_EXAMPLES) == 5
+EXPECTED_NILL_BYE_TITLES = (
+    "lab coat lecture",
+    "peer review",
+    "in his feels",
+    "fake cool",
+    "hypothesis vs rumor",
+    "control group",
+    "sample size",
+    "placebo",
+    "error bars",
+    "lab notebook",
+    "office hours",
+    "grant denied",
+    "contamination",
+    "double blind",
+    "replicate or retract",
+)
+
+
+def test_nill_bye_diss_examples_are_original_180s() -> None:
+    assert DISS_DURATION_S == 180.0
+    assert len(DISS_EXAMPLES) == 15
     prefixes: list[str] = []
     stems: list[str] = []
     seeds: list[int] = []
@@ -59,7 +79,8 @@ def test_nill_bye_diss_examples_are_original_90s() -> None:
         assert "[verse]" in lyrics
         assert "[chorus]" in lyrics
         assert "[outro]" in lyrics
-        assert lyrics.count("[chorus]") >= 2
+        assert lyrics.count("[verse]") >= 3
+        assert lyrics.count("[chorus]") >= 3
         assert "Nill Bye" in lyrics
         assert "Rake" in lyrics
         assert str(ex["bpm"]) in ex["tags"]
@@ -75,15 +96,16 @@ def test_nill_bye_diss_examples_are_original_90s() -> None:
         seeds.append(int(ex["seed"]))
         if "[spoken word]" in lyrics:
             spoken += 1
-    assert len(set(prefixes)) == 5
-    assert len(set(stems)) == 5
-    assert spoken == 1
+    assert len(set(prefixes)) == 15
+    assert len(set(stems)) == 15
+    assert spoken == 2
     assert any(seed != 42 for seed in seeds)
-    assert DISS_EXAMPLES[0]["title"] == "lab coat lecture"
-    assert DISS_EXAMPLES[1]["title"] == "peer review"
-    assert DISS_EXAMPLES[2]["title"] == "in his feels"
-    assert DISS_EXAMPLES[3]["title"] == "fake cool"
-    assert DISS_EXAMPLES[4]["title"] == "hypothesis vs rumor"
+    assert tuple(ex["title"] for ex in DISS_EXAMPLES) == EXPECTED_NILL_BYE_TITLES
+    assert "Rake walks in with a club report" in DISS_EXAMPLES[0]["lyrics"]
+    assert "Peer review time" in DISS_EXAMPLES[1]["lyrics"]
+    assert "Rake in his feels like a full-time job" in DISS_EXAMPLES[2]["lyrics"]
+    assert "Rake talk club like a uniform" in DISS_EXAMPLES[3]["lyrics"]
+    assert "Hypothesis: Rake is cool" in DISS_EXAMPLES[4]["lyrics"]
 
 
 def test_writer_prompt_forbids_living_mcs() -> None:

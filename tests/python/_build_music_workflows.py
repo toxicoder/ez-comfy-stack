@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build US-safe ACE-Step rap lab graphs (draft, full, 90s diss takes).
+"""Build US-safe ACE-Step rap lab graphs (draft, full, 180s diss takes).
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -213,16 +213,17 @@ def _sampler_widgets(seed: int = 42) -> list:
 
 
 def _diss_note(ex: DissExample) -> str:
+    duration_s = int(ex["duration"])
     return f"""## {ex["stem"]}
 
-US-safe rap **90 s diss** take: **{ex["title"]}**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite.
+US-safe rap **{duration_s} s diss** take: **{ex["title"]}**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 90 s, bpm {ex["bpm"]}, language en, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language en, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
 8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -458,7 +459,8 @@ def main() -> None:
     for ex in DISS_EXAMPLES:
         graphs[f"{ex['stem']}.json"] = build_diss(ex)
     for name, graph in graphs.items():
-        path = lab_dest(name)
+        subdir = "nill-bye" if name.startswith("music-rap-nill-bye-") else None
+        path = lab_dest(name, subdir=subdir)
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")
 

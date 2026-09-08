@@ -9,6 +9,7 @@ from ez_music.diss_examples import DISS_EXAMPLES
 
 from _ace_widgets_contract import assert_ace_encoder_widgets
 from _lab_paths import lab_json
+from _stamp_app_mode import NILL_BYE_STAMP_STEMS, STAMP_SPECS
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -117,7 +118,8 @@ def test_music_rap_full_graph() -> None:
 
 
 def test_music_rap_nill_bye_diss_graphs() -> None:
-    assert len(DISS_EXAMPLES) == 5
+    assert len(DISS_EXAMPLES) == 15
+    assert tuple(ex["stem"] for ex in DISS_EXAMPLES) == NILL_BYE_STAMP_STEMS
     for ex in DISS_EXAMPLES:
         stem = ex["stem"]
         graph = _load(stem)
@@ -134,12 +136,20 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
         assert "[outro]" in blob
         assert "Nill Bye" in blob
         assert "Rake" in blob
-        assert blob.count("[chorus]") >= 2
+        assert blob.count("[chorus]") >= 3
         note = graph["extra"]["lab_note"]
-        assert "90" in note
+        assert "180" in note
         assert "on its own" in note.lower() or "queue on its own" in note.lower()
-        if ex["title"] == "peer review":
+        if ex["title"] in {"peer review", "grant denied"}:
             assert "[spoken word]" in blob
+
+
+def test_nill_bye_stems_are_stamped_audio() -> None:
+    stems = {ex["stem"] for ex in DISS_EXAMPLES}
+    assert stems <= set(STAMP_SPECS)
+    for stem in stems:
+        assert STAMP_SPECS[stem]["lane"] == "audio"
+        assert STAMP_SPECS[stem]["occupancy"] == "audio"
 
 
 def test_music_apps_expose_duration_and_vocal_mode() -> None:

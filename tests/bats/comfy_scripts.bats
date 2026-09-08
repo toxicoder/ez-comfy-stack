@@ -338,6 +338,9 @@ teardown() {
   run lab_workflow_lane "music-rap-draft-lab-example.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "audio" ]
+  run lab_workflow_lane "_lab/audio/nill-bye/music-rap-nill-bye-lab-coat-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "audio" ]
   run lab_workflow_lane "prompt-forge-lab-example.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "inspire" ]
@@ -361,6 +364,7 @@ teardown() {
     "${src}/_lab/shorts" \
     "${src}/_lab/dcc" \
     "${src}/_lab/optional" \
+    "${src}/_lab/audio/nill-bye" \
     "${src}/_user" \
     "${src}/shorts" \
     "${src}/quality/ltx-2.5" \
@@ -370,6 +374,7 @@ teardown() {
   echo '{}' >"${src}/_lab/shorts/film-go-see-90s-run-lab-example.json"
   echo '{}' >"${src}/_lab/dcc/klein-from-clay-lab-example.json"
   echo '{}' >"${src}/_lab/optional/wan-i2v-a14b-lab-example.json"
+  echo '{}' >"${src}/_lab/audio/nill-bye/music-rap-nill-bye-lab-coat-lab-example.json"
   echo '{}' >"${src}/_user/keep-me.json"
   echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
   echo 'notice' >"${src}/quality/ltx-2.5/NOTICE.md"
@@ -384,6 +389,7 @@ teardown() {
   [[ -f ${dest}/_lab/shorts/film-go-see-90s-run-lab-example.json ]]
   [[ -f ${dest}/_lab/dcc/klein-from-clay-lab-example.json ]]
   [[ -f ${dest}/_lab/optional/wan-i2v-a14b-lab-example.json ]]
+  [[ -f ${dest}/_lab/audio/nill-bye/music-rap-nill-bye-lab-coat-lab-example.json ]]
   [[ ! -f ${dest}/film-go-see-90s-run-lab-example.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
   [[ ! -f ${dest}/_lab/shorts/go-see.shots.yaml ]]

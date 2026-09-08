@@ -32,7 +32,8 @@ user/default/workflows/
     shorts/    film-*-90s-*-lab-example.json
     dcc/       clay → print, iclora envelope
     optional/  a14b, longcat stub
-    audio/     podcast-*, dub-*, music-rap-*
+    audio/     podcast-*, dub-*, music-rap-draft/full
+      nill-bye/  fifteen 180 s music-rap-nill-bye-* diss takes
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -191,11 +192,21 @@ flowchart TB
     | **podcast-radio-drama-lab-example** | One-graph radio drama. Sting + bed stay instrumental. Prefix `ez_radio_ep` |
     | **music-rap-draft-lab-example** | ACE-Step rap draft **32 s** boom-bap 88 (`ez_rap_draft`) |
     | **music-rap-full-lab-example** | ACE-Step rap full **96 s** boom-bap 88 (`ez_rap_full`). Queue draft first |
-    | **music-rap-nill-bye-lab-coat-lab-example** | **90 s** diss, boom-bap 88. Nill Bye lab-coat roast of Rake (`ez_rap_nill_labcoat`). Queue on its own |
-    | **music-rap-nill-bye-peer-review-lab-example** | **90 s** diss, boom-bap 88, `[spoken word]` intro (`ez_rap_nill_review`) |
-    | **music-rap-nill-bye-feels-lab-example** | **90 s** diss, lo-fi 86 (`ez_rap_nill_feels`) |
-    | **music-rap-nill-bye-fake-cool-lab-example** | **90 s** diss, trap 140 (`ez_rap_nill_fakecool`) |
-    | **music-rap-nill-bye-hypothesis-lab-example** | **90 s** diss, boom-bap 92, seed 7 (`ez_rap_nill_hypothesis`) |
+    | **music-rap-nill-bye-lab-coat-lab-example** | **180 s** diss, boom-bap 88. Nill Bye lab-coat roast of Rake (`ez_rap_nill_labcoat`). `_lab/audio/nill-bye/`. Queue on its own |
+    | **music-rap-nill-bye-peer-review-lab-example** | **180 s** diss, boom-bap 88, `[spoken word]` intro (`ez_rap_nill_review`) |
+    | **music-rap-nill-bye-feels-lab-example** | **180 s** diss, lo-fi 86 (`ez_rap_nill_feels`) |
+    | **music-rap-nill-bye-fake-cool-lab-example** | **180 s** diss, trap 140 (`ez_rap_nill_fakecool`) |
+    | **music-rap-nill-bye-hypothesis-lab-example** | **180 s** diss, boom-bap 92, seed 7 (`ez_rap_nill_hypothesis`) |
+    | **music-rap-nill-bye-control-group-lab-example** | **180 s** diss, boom-bap 88 (`ez_rap_nill_control`). Uncontrolled variable |
+    | **music-rap-nill-bye-sample-size-lab-example** | **180 s** diss, boom-bap 92, seed 11 (`ez_rap_nill_samplesize`) |
+    | **music-rap-nill-bye-placebo-lab-example** | **180 s** diss, trap 140, seed 13 (`ez_rap_nill_placebo`) |
+    | **music-rap-nill-bye-error-bars-lab-example** | **180 s** diss, boom-bap 88, seed 17 (`ez_rap_nill_errorbars`) |
+    | **music-rap-nill-bye-lab-notebook-lab-example** | **180 s** diss, boom-bap 92, seed 19 (`ez_rap_nill_notebook`) |
+    | **music-rap-nill-bye-office-hours-lab-example** | **180 s** diss, lo-fi 86, seed 23 (`ez_rap_nill_office`) |
+    | **music-rap-nill-bye-grant-denied-lab-example** | **180 s** diss, boom-bap 88, `[spoken word]` intro, seed 29 (`ez_rap_nill_grant`) |
+    | **music-rap-nill-bye-contamination-lab-example** | **180 s** diss, trap 140, seed 31 (`ez_rap_nill_contam`) |
+    | **music-rap-nill-bye-double-blind-lab-example** | **180 s** diss, boom-bap 92, seed 37 (`ez_rap_nill_doubleblind`) |
+    | **music-rap-nill-bye-replicate-lab-example** | **180 s** diss, boom-bap 88, seed 7 (`ez_rap_nill_replicate`) |
 
 === "DCC (clay → print)"
 
