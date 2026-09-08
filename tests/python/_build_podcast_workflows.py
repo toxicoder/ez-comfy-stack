@@ -155,10 +155,12 @@ class Graph:
 
 
 def _ace_widgets(tags: str, duration: float, seed: int = 42) -> list:
+    # seed is followed by control_after_generate (native TextEncodeAceStepAudio1.5).
     return [
         tags,
         "",
         seed,
+        "fixed",
         90,
         duration,
         "4",

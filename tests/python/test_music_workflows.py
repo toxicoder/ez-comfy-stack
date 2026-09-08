@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _ace_widgets_contract import assert_ace_encoder_widgets
 from _lab_paths import lab_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -55,12 +56,14 @@ def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None
     prim = next(n for n in graph["nodes"] if n["type"] == "PrimitiveNode")
     assert prim["widgets_values"][0] == duration
     enc = next(n for n in graph["nodes"] if n["type"] == "TextEncodeAceStepAudio1.5")
-    widgets = enc["widgets_values"]
-    assert widgets[3] == 88
-    assert widgets[4] == duration
-    assert widgets[5] == "4"
-    assert widgets[6] == "en"
-    assert widgets[8] is True
+    widgets = assert_ace_encoder_widgets(enc, where=stem)
+    assert widgets[3] == "fixed"
+    assert widgets[4] == 88
+    assert widgets[5] == duration
+    assert widgets[6] == "4"
+    assert widgets[7] == "en"
+    assert widgets[8] == "C minor"
+    assert widgets[9] is True
     sampler = next(n for n in graph["nodes"] if n["type"] == "KSampler")
     sw = sampler["widgets_values"]
     assert sw[2] == 8
