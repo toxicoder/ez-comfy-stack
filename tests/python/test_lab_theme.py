@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 from _lab_theme import (
     GOSEE_IDENTITY,
     GOSEE_LTX_I2V_01,
@@ -95,8 +97,8 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
 
 
 def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
-    draft = json.loads((WF / "klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
-    hero = json.loads((WF / "klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
+    draft = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
+    hero = json.loads(lab_json("klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
 
     def pos(graph: dict) -> str:
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
@@ -139,14 +141,14 @@ def test_lab_example_graphs_drop_superhero_theme() -> None:
 
 
 def test_lab_identity_graphs_lock_techno_wizard() -> None:
-    draft = (WF / "klein-still-draft-lab-example.json").read_text(encoding="utf-8")
+    draft = lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8")
     for needle in LOCK:
         assert needle in draft
 
 
 def test_exempt_packs_keep_their_own_subjects() -> None:
-    house = (WF / "klein-dream-house-lab-example.json").read_text(encoding="utf-8").lower()
-    style = (WF / "klein-style-lock-lab-example.json").read_text(encoding="utf-8").lower()
+    house = lab_json("klein-dream-house-lab-example.json").read_text(encoding="utf-8").lower()
+    style = lab_json("klein-style-lock-lab-example.json").read_text(encoding="utf-8").lower()
     for blob in (house, style):
         assert "warm-glass" in blob
         assert "crown penthouse" in blob
@@ -154,7 +156,7 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
         assert "cedar" not in blob
         assert "alpine" not in blob
         assert "charcoal-glass" not in blob
-    film = (WF / "shorts" / "film-go-see-90s-run-lab-example.json").read_text(encoding="utf-8").lower()
+    film = lab_json("film-go-see-90s-run-lab-example.json").read_text(encoding="utf-8").lower()
     assert "sun-washed teal" in film
     assert "parkour" in film
     assert "windbreaker" not in film

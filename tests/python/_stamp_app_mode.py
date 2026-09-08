@@ -297,6 +297,9 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "wan-i2v-5s-lab-example": _spec(
         "produce", "wan", "ltx-i2v-5s-lab-example"
     ),
+    "wan-t2v-5s-lab-example": _spec("produce", "wan"),
+    "wan-flf-5s-lab-example": _spec("produce", "wan"),
+    "wan-vace-join-lab-example": _spec("produce", "wan"),
     "wan-i2v-shot-lab-example": _spec("produce", "wan"),
     "wan-gif-loop-lab-example": _spec("produce", "wan"),
     "wan-bumper-loop-lab-example": _spec("produce", "wan"),
@@ -308,6 +311,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "wan-push-in-i2v-lab-example": _spec("produce", "wan"),
     "wan-parallax-i2v-lab-example": _spec("produce", "wan"),
     "ltx-i2v-5s-lab-example": _spec("produce", "ltx"),
+    "ltx-t2v-5s-lab-example": _spec("produce", "ltx"),
     "ltx-i2v-shot-lab-example": _spec("produce", "ltx"),
     "ltx-shorts-i2v-lab-example": _spec("produce", "ltx"),
     "ltx-hook-av-lab-example": _spec("produce", "ltx"),
@@ -331,6 +335,21 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "dcc", "klein"
     ),
     "ltx-iclora-depth-5s-lab-example": _spec("dcc", "ltx"),
+    "wan-i2v-a14b-lab-example": _spec("produce", "wan", default_view="graph"),
+}
+
+STUB_IDS = frozenset({"longcat-video-lab-example"})
+OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
+    "ltx-iclora-depth-5s-lab-example": ("EZFilmDisclosure",),
+    "wan-i2v-a14b-lab-example": ("UNETLoader",),
+    "podcast-radio-drama-lab-example": ("UNETLoader", "VHS_VideoCombine"),
+    "prompt-forge-lab-example": (
+        "EZKleinPromptEnhance",
+        "EZWanPromptEnhance",
+        "EZLTXPromptEnhance",
+    ),
+    "wan-flf-5s-lab-example": ("LoadImage",),
+    "wan-vace-join-lab-example": ("LoadImage",),
 }
 
 
@@ -431,11 +450,29 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
     return []
 
 
+def apply_lab_completeness_flags(graph: dict) -> dict:
+    """Write lab_stub / lab_optional_unwired. Preserve other extra keys."""
+    extra = graph.setdefault("extra", {})
+    gid = str(graph.get("id") or "")
+    if gid in STUB_IDS:
+        extra["lab_stub"] = True
+    types = list(OPTIONAL_UNWIRED.get(gid, ()))
+    occupancy = (extra.get("lab_app_mode") or {}).get("occupancy")
+    if occupancy == "klein" and any(
+        n.get("type") == "LoadImage" for n in graph.get("nodes") or []
+    ):
+        if "LoadImage" not in types:
+            types.append("LoadImage")
+    if types:
+        extra["lab_optional_unwired"] = sorted(set(types))
+    return graph
+
+
 def stamp_suite_graph(graph: dict) -> dict:
     """Stamp a known suite graph. No-op when graph id is not in STAMP_SPECS."""
     spec = STAMP_SPECS.get(str(graph.get("id") or ""))
     if spec is None:
-        return graph
+        return apply_lab_completeness_flags(graph)
     outputs = infer_suite_outputs(graph, spec)
     if not outputs:
         raise ValueError(f"missing output node on {graph.get('id')}")
@@ -443,7 +480,7 @@ def stamp_suite_graph(graph: dict) -> dict:
     if not inputs:
         raise ValueError(f"missing creator input on {graph.get('id')}")
     ensure_occupancy_note(graph, spec["occupancy"])
-    return stamp_app_mode(
+    stamp_app_mode(
         graph,
         inputs=inputs,
         outputs=outputs,
@@ -453,32 +490,42 @@ def stamp_suite_graph(graph: dict) -> dict:
         default_view=spec["default_view"],
         enhance_off_identity=spec["enhance_off_identity"],
     )
+    return apply_lab_completeness_flags(graph)
 
 
 def suite_json_paths(root: Any) -> list[Any]:
-    """Return existing JSON paths for every STAMP_SPECS id under workflows/."""
+    """Return existing JSON paths for every STAMP_SPECS id under workflows/_lab."""
     from pathlib import Path
+
+    from _lab_paths import lab_json
 
     wf = Path(root)
     found: list[Path] = []
     for stem in STAMP_SPECS:
-        for folder in (wf, wf / "shorts", wf / "dcc"):
-            path = folder / f"{stem}.json"
-            if path.is_file():
-                found.append(path)
-                break
+        try:
+            found.append(lab_json(stem, root=wf))
+        except FileNotFoundError:
+            continue
     return found
 
 
 def stamp_all_suite_files(root: Any | None = None) -> None:
     from pathlib import Path
 
+    from _lab_paths import lab_example_paths
+
     wf = Path(root) if root is not None else Path(__file__).resolve().parents[2] / "workflows"
-    for path in suite_json_paths(wf):
+    stamped = {p.resolve() for p in suite_json_paths(wf)}
+    for path in lab_example_paths(wf if wf.name == "_lab" else wf):
         graph = json.loads(path.read_text(encoding="utf-8"))
-        stamp_suite_graph(graph)
+        if path.resolve() in stamped:
+            stamp_suite_graph(graph)
+            label = "stamped"
+        else:
+            apply_lab_completeness_flags(graph)
+            label = "flagged"
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
-        print(f"stamped {path}")
+        print(f"{label} {path}")
 
 
 if __name__ == "__main__":

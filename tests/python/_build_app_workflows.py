@@ -25,6 +25,7 @@ from _lab_theme import (
     KLEIN_STILL_DAILY,
     ROOFTOP_INVENTORY,
 )
+from _lab_paths import lab_json
 from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -242,7 +243,7 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
 
 
 def build_still_app() -> dict:
-    graph = json.loads((WF / "klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
     graph["id"] = "klein-still-daily-lab-example"
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
@@ -278,7 +279,7 @@ def build_still_app() -> dict:
 
 
 def build_gif_loop() -> dict:
-    graph = json.loads((WF / "wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
     graph["id"] = "wan-gif-loop-lab-example"
     graph["revision"] = 1
     lat = _node(graph, "Wan22ImageToVideoLatent")
@@ -898,10 +899,10 @@ def main() -> None:
     gif = build_gif_loop()
     house = build_dream_house()
     pack = build_platform_pack()
-    _dump(WF / "klein-still-daily-lab-example.json", still)
-    _dump(WF / "wan-gif-loop-lab-example.json", gif)
-    _dump(WF / "klein-dream-house-lab-example.json", house)
-    _dump(WF / "klein-platform-pack-lab-example.json", pack)
+    _dump(lab_json("klein-still-daily-lab-example.json"), still)
+    _dump(lab_json("wan-gif-loop-lab-example.json"), gif)
+    _dump(lab_json("klein-dream-house-lab-example.json"), house)
+    _dump(lab_json("klein-platform-pack-lab-example.json"), pack)
     print("wrote still-app, gif-loop, dream-house, platform-pack")
 
 

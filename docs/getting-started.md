@@ -31,7 +31,7 @@ tags: [getting-started, docker, comfyui]
 | Goal | Detail |
 | --- | --- |
 | **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` |
-| **Workflow** | **klein-still-draft-lab-example** queued without missing-weight errors |
+| **Workflow** | **`_lab/klein/klein-still-draft-lab-example`** queued without missing-weight errors |
 | **Weights** | Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under `${MODELS_DIR}` (default `/mnt/models`) |
 | **Output** | `ez_still_draft_*.png` under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 
@@ -285,7 +285,7 @@ ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 
 !!! success "First Queue"
 
-    In ComfyUI, load **klein-still-draft-lab-example** from the **Apps** sidebar (or **Workflows**). It is seeded into `user/default/workflows/` as `*.app.json` from host `workflows/`. Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
+    In ComfyUI, load **klein-still-draft-lab-example** from the **Apps** sidebar (or **Workflows → `_lab/klein/`**). Host file: `workflows/_lab/klein/klein-still-draft-lab-example.json`. It is seeded as `*.app.json` under `_lab/klein/`. Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
 
     **What you just did:** `start` launched ComfyUI (no auto-restart after reboot). The graph loaded Klein 4B distilled (4 steps, CFG 1.0) and wrote a still on the host — not inside the git repo. Canvas nouns: [ComfyUI basics](learn/comfyui.md).
 

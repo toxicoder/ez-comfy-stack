@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 DOCKERFILE = ROOT / "docker" / "Dockerfile"
@@ -17,7 +19,7 @@ def test_dockerfile_has_no_nvdiffrast_blender_or_supersplat() -> None:
 
 
 def test_vace_join_graph_is_17_frames_magcache_off() -> None:
-    path = WF / "wan-vace-join-lab-example.json"
+    path = lab_json("wan-vace-join-lab-example.json")
     graph = json.loads(path.read_text(encoding="utf-8"))
     assert graph["id"] == "wan-vace-join-lab-example"
     extra = graph["extra"]

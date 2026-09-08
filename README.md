@@ -80,7 +80,7 @@ scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
 scripts/utilities download-image, download-wan, download-ltx, download-llm, download-podcast, download-limit, concat-shots, spark-farm
 config/           Resource / headroom policy
-workflows/        Seeded lab ComfyUI example graphs (Klein / Wan / LTX; one-click 90s films under workflows/shorts/; creator toolkit)
+workflows/_lab/   Seeded lab ComfyUI graphs by lane (klein / wan / ltx / shorts / …); YAML shot lists stay in workflows/shorts/; private graphs belong in _user/
 docs/             MkDocs site
 tests/            BATS + pytest + coverage gate
 ```

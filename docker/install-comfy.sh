@@ -145,9 +145,19 @@ refresh_comfy_pin_if_needed() {
         --exclude output/ \
         --exclude temp/ \
         --exclude extra_model_paths.yaml \
+        --exclude custom_nodes/_user/ \
         "${pre}/" "${COMFY_HOME}/"
     else
-      cp -a "${pre}/." "${COMFY_HOME}/"
+      log "rsync missing; copying prebuilt with seed excludes"
+      # Do not clobber operator custom_nodes/_user on the cp fallback.
+      tar -C "${pre}" \
+        --exclude=user \
+        --exclude=input \
+        --exclude=output \
+        --exclude=temp \
+        --exclude=extra_model_paths.yaml \
+        --exclude=custom_nodes/_user \
+        -cf - . | tar -C "${COMFY_HOME}" -xf -
     fi
     activate_venv
   else

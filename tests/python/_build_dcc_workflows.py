@@ -12,11 +12,11 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_paths import LAB_ROOT, lab_json
 from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
-WF = ROOT / "workflows"
-DCC = WF / "dcc"
+DCC = LAB_ROOT / "dcc"
 
 KLEIN_NOTE = """## klein-from-clay-lab-example
 
@@ -52,7 +52,7 @@ LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not str
 
 
 def _load(name: str) -> dict:
-    return json.loads((WF / name).read_text(encoding="utf-8"))
+    return json.loads(lab_json(name).read_text(encoding="utf-8"))
 
 
 def _save(graph: dict, dest: Path) -> None:

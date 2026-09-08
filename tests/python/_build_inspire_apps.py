@@ -18,6 +18,7 @@ from _lab_layout import (
     group as _group,
 )
 from _lab_theme import LAZY_FORGE
+from _lab_paths import lab_json
 from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -321,8 +322,8 @@ def build_beat_sheet() -> dict:
 
 
 def main() -> None:
-    _dump(WF / "prompt-forge-lab-example.json", build_prompt_forge())
-    _dump(WF / "beat-sheet-lab-example.json", build_beat_sheet())
+    _dump(lab_json("prompt-forge-lab-example.json"), build_prompt_forge())
+    _dump(lab_json("beat-sheet-lab-example.json"), build_beat_sheet())
 
 
 if __name__ == "__main__":

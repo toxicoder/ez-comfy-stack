@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, ensure_group_title_inset, group as _group
+from _lab_paths import lab_json
 from _stamp_app_mode import stamp_suite_graph
 from _wire_prompt_enhance import normalize_enhance_widgets
 
@@ -442,7 +443,7 @@ def build_one_click_film(
 ) -> dict:
     parsed = parse_shots_yaml((SHORTS / yaml_name).read_text(encoding="utf-8"))
     identity = parsed["identity"]
-    graph = copy.deepcopy(_load(WF / "klein-still-draft-lab-example.json"))
+    graph = copy.deepcopy(_load(lab_json("klein-still-draft-lab-example.json")))
     graph["id"] = stem
     graph["revision"] = int(graph.get("revision", 1)) + 1
     graph["links"] = [list(link) for link in graph.get("links") or []]
@@ -551,7 +552,8 @@ def build_one_click_film(
         [_out("Latent", "LATENT", 0)],
     )
     concat_inputs = [
-        _inp(f"shot_{i:02d}", "VHS_FILENAMES") for i in range(1, 19)
+        *(_inp(f"shot_{i:02d}", "VHS_FILENAMES") for i in range(1, 19)),
+        _inp("disclosure", "STRING", widget="disclosure"),
     ]
     concat = _mk(
         ID_CONCAT,
@@ -573,7 +575,6 @@ def build_one_click_film(
         [],
         [_out("text", "STRING", 0)],
     )
-    disclosure["outputs"][0]["links"] = None
 
     shot_nodes: list[dict] = []
     for index, shot in enumerate(parsed["shots"]):
@@ -646,6 +647,7 @@ def build_one_click_film(
         _add_link(graph, batch, 0, save, "images", "IMAGE")
         _add_link(graph, vhs, 0, concat, f"shot_{index + 1:02d}", "VHS_FILENAMES")
         prev_last = batch
+    _add_link(graph, disclosure, 0, concat, "disclosure", "STRING")
 
     graph["last_node_id"] = max(n["id"] for n in graph["nodes"])
     groups = [
@@ -701,7 +703,7 @@ def build_one_click_film(
 def build_all_films() -> None:
     for film, slug, stem, yaml_name, label, beats in FILMS:
         graph = build_one_click_film(film, slug, stem, yaml_name, label, beats)
-        _dump(SHORTS / f"{stem}.json", graph)
+        _dump(lab_json(stem), graph)
 
 
 if __name__ == "__main__":

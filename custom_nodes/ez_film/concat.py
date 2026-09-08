@@ -113,6 +113,24 @@ def resolve_shot_path(value: object) -> str:
     raise ValueError(f"unusable shot payload: {type(value).__name__}")
 
 
+def write_disclosure_sidecar(out_mp4: str, text: str) -> Path | None:
+    """Write LTX disclosure next to the published MP4. No-op when text is empty.
+
+    Arguments:
+        out_mp4: Published MP4 path.
+        text: Disclosure body (already run through EZFilmDisclosure).
+    Returns:
+        Sidecar path, or None when skipped.
+    """
+    body = str(text or "").strip()
+    if not body:
+        return None
+    sidecar = Path(out_mp4).with_suffix(".disclosure.txt")
+    sidecar.parent.mkdir(parents=True, exist_ok=True)
+    sidecar.write_text(body + "\n", encoding="utf-8")
+    return sidecar
+
+
 def concat_list_line(path: str) -> str:
     """One concat-demuxer line with escaped single quotes.
 

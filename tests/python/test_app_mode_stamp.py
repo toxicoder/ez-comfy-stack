@@ -11,14 +11,14 @@ from pathlib import Path
 
 import pytest
 
+from _lab_paths import lab_json
 from _stamp_app_mode import stamp_app_mode
 
 ROOT = Path(__file__).resolve().parents[2]
-WF = ROOT / "workflows"
 
 
 def _load(name: str) -> dict:
-    return json.loads((WF / name).read_text(encoding="utf-8"))
+    return json.loads(lab_json(name).read_text(encoding="utf-8"))
 
 
 def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:

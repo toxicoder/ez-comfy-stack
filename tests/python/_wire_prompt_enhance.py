@@ -9,6 +9,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 from _lab_theme import (
     GOSEE_LTX_I2V_01,
     GOSEE_WAN_I2V_01,
@@ -636,29 +638,29 @@ def enable_lab_graph(graph: dict) -> None:
 
 
 def main() -> None:
-    klein(WF / "klein-still-draft-lab-example.json", KLEIN_STILL, neg=KLEIN_NEG_STILL)
-    klein(WF / "klein-still-hero-lab-example.json", KLEIN_STILL, neg=KLEIN_NEG_STILL)
-    wan_i2v(WF / "wan-i2v-5s-lab-example.json", WAN_I2V)
-    wan_t2v(WF / "wan-t2v-5s-lab-example.json")
-    wan_i2v(WF / "wan-i2v-shot-lab-example.json", GOSEE_WAN_I2V_01)
-    wan_i2v(WF / "wan-flf-5s-lab-example.json", WAN_I2V)
-    wan_i2v(WF / "wan-vace-join-lab-example.json", WAN_VACE)
-    wan_i2v(WF / "optional" / "wan-i2v-a14b-lab-example.json", WAN_I2V)
+    klein(lab_json("klein-still-draft-lab-example.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    klein(lab_json("klein-still-hero-lab-example.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    wan_i2v(lab_json("wan-i2v-5s-lab-example.json"), WAN_I2V)
+    wan_t2v(lab_json("wan-t2v-5s-lab-example.json"))
+    wan_i2v(lab_json("wan-i2v-shot-lab-example.json"), GOSEE_WAN_I2V_01)
+    wan_i2v(lab_json("wan-flf-5s-lab-example.json"), WAN_I2V)
+    wan_i2v(lab_json("wan-vace-join-lab-example.json"), WAN_VACE)
+    wan_i2v(lab_json("wan-i2v-a14b-lab-example.json"), WAN_I2V)
     ltx_i2v(
-        WF / "ltx-i2v-5s-lab-example.json",
+        lab_json("ltx-i2v-5s-lab-example.json"),
         LTX_I2V,
         LTX_AUDIO_HINT,
         "Motion / prompt",
     )
-    ltx_t2v(WF / "ltx-t2v-5s-lab-example.json")
+    ltx_t2v(lab_json("ltx-t2v-5s-lab-example.json"))
     ltx_i2v(
-        WF / "ltx-i2v-shot-lab-example.json",
+        lab_json("ltx-i2v-shot-lab-example.json"),
         GOSEE_LTX_I2V_01,
         LTX_AUDIO_HINT,
         "Motion + audio",
     )
     ltx_i2v(
-        WF / "klein-talking-head-lab-example.json",
+        lab_json("klein-talking-head-lab-example.json"),
         LTX_TALKING_HEAD,
         LTX_TALKING_AUDIO,
         "Motion / prompt",

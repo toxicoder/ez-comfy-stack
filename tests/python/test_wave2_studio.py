@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -52,7 +54,7 @@ def test_film_graphs_carry_ltx_disclosure() -> None:
         "film-still-here-90s-lab-example.json",
         "film-switchyard-90s-lab-example.json",
     ):
-        graph = json.loads((ROOT / "workflows" / "shorts" / name).read_text(encoding="utf-8"))
+        graph = json.loads(lab_json(name).read_text(encoding="utf-8"))
         extra = graph["extra"]
         assert "LTX Community License" in extra["lab_disclosure"]
         assert any(n.get("type") == "EZFilmDisclosure" for n in graph["nodes"]), name

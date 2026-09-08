@@ -10,6 +10,8 @@ import re
 import sys
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
@@ -172,7 +174,9 @@ def test_creative_locks() -> None:
 
 
 def _json_files() -> list[Path]:
-    files = sorted(SHORTS.glob("*-lab-example.json"))
+    from _lab_paths import LAB_ROOT
+
+    files = sorted((LAB_ROOT / "shorts").glob("*-lab-example.json"))
     assert files, "expected shorts lab JSON"
     return files
 
@@ -238,8 +242,8 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
 
 
 def test_shot_graphs_are_five_second_i2v() -> None:
-    wan = json.loads((ROOT / "workflows" / "wan-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
-    ltx = json.loads((ROOT / "workflows" / "ltx-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
+    wan = json.loads(lab_json("wan-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
+    ltx = json.loads(lab_json("ltx-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
     wan_len = next(
         n["widgets_values"][2]
         for n in wan["nodes"]
@@ -273,7 +277,10 @@ def test_shot_graphs_are_five_second_i2v() -> None:
 def test_no_long_latents_in_shorts() -> None:
     for path in _json_files():
         graph = json.loads(path.read_text(encoding="utf-8"))
-        for node in graph["nodes"]:
+        nodes = list(graph["nodes"])
+        for sub in ((graph.get("definitions") or {}).get("subgraphs") or []):
+            nodes.extend(sub.get("nodes") or [])
+        for node in nodes:
             if node.get("type") not in LONG_LATENT_TYPES:
                 continue
             values = node.get("widgets_values") or []
@@ -284,7 +291,7 @@ def test_no_long_latents_in_shorts() -> None:
 
 def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
     for film, slug in FILMS:
-        path = SHORTS / BIBLES[film]
+        path = lab_json(BIBLES[film])
         graph = json.loads(path.read_text(encoding="utf-8"))
         text = path.read_text(encoding="utf-8")
         parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))

@@ -1,0 +1,47 @@
+{
+  "id": "longcat-video-lab-example",
+  "revision": 1,
+  "last_node_id": 1,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        720,
+        320
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## longcat-video-lab-example\n\nOpt-in LongCat-Video (MIT) second stack. Not download-models.\nDownload: ./scripts/manage.sh download-longcat --tier video\nContext-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample \u2014 tensor-parallel LLMs belong in nvidia-dgx-spark-lab.\nThis canvas is a lab note, not a 90s default printer. Unload LTX first. Occupancy: one heavy job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+      ],
+      "title": "Operator note"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "lab_note": "## longcat-video-lab-example\n\nOpt-in LongCat-Video (MIT) second stack. Not download-models.\nDownload: ./scripts/manage.sh download-longcat --tier video\nContext-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample \u2014 tensor-parallel LLMs belong in nvidia-dgx-spark-lab.\nThis canvas is a lab note, not a 90s default printer. Unload LTX first. Occupancy: one heavy job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_profile": "longcat-video-lab-example",
+    "lab_description": "LongCat-Video MIT opt-in. No NCCL. Not a 90s default.",
+    "lab_longcat": {
+      "enabled": true,
+      "nccl": false,
+      "context_parallel": "LAB_ALLOW_CONTEXT_PARALLEL=1"
+    },
+    "lab_stub": true
+  },
+  "version": 0.4
+}
