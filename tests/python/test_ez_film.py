@@ -30,6 +30,7 @@ from ez_film.concat import (  # noqa: E402
     publish_path,
     resolve_shot_path,
     stitch_film,
+    write_disclosure_sidecar,
 )
 from ez_film.nodes import (  # noqa: E402
     EZFilmConcat,
@@ -64,6 +65,19 @@ def test_pack_imports_without_comfy() -> None:
     assert spec["required"]["xfade_cs"][1]["default"] == 0
     for index in range(1, 19):
         assert spec["required"][f"shot_{index:02d}"][0] == "VHS_FILENAMES"
+    assert spec["optional"]["disclosure"][0] == "STRING"
+
+
+def test_write_disclosure_sidecar(tmp_path: Path) -> None:
+    mp4 = tmp_path / "ez_gosee_90s.mp4"
+    mp4.write_bytes(b"fake")
+    assert write_disclosure_sidecar(str(mp4), "") is None
+    assert not (tmp_path / "ez_gosee_90s.disclosure.txt").exists()
+    sidecar = write_disclosure_sidecar(str(mp4), "  " + FILM_DISCLOSURE + "  ")
+    assert sidecar is not None
+    text = sidecar.read_text(encoding="utf-8")
+    assert text.startswith(FILM_DISCLOSURE)
+    assert text.endswith("\n")
 
 
 def test_film_disclosure_idempotent() -> None:

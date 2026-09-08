@@ -607,7 +607,10 @@
         9
       ]
     },
-    "linearMode": true
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "LoadImage"
+    ]
   },
   "version": 0.4
 }

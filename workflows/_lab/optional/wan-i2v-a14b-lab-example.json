@@ -581,7 +581,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-i2v-a14b-lab-example\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## wan-i2v-a14b-lab-example\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -780,7 +780,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-i2v-a14b-lab-example\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## wan-i2v-a14b-lab-example\n\nOpt-in Wan 2.2 A14B FP8 silent hero. Not download-models.\nDownload: ./scripts/utilities/download-wan.sh run --tier a14b\nUnload 5B first. MagCache is off. Lightning-style 8 steps (not 4-step TI2V-5B).\nModels: wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors + wan_2.1_vae.safetensors.\nBoth UNETs sit on the canvas. Queue uses the high-noise expert so the graph loads. Dual-expert KSampler split is the full A14B I2V recipe after both weights exist (Comfy Templates / operator).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\n",
     "lab_profile": "wan-i2v-a14b-lab-example",
     "lab_description": "Wan 2.2 A14B FP8 high+low UNET; Queue on high-noise 8-step. MagCache off. Unload 5B first.",
     "ds": {
@@ -792,9 +792,12 @@
     },
     "lab_app_mode": {
       "enabled": true,
-      "default_view": "app",
+      "default_view": "graph",
       "frontend_min": "1.41.13",
-      "enhance_off_identity": false
+      "lane": "produce",
+      "occupancy": "wan",
+      "enhance_off_identity": false,
+      "handoff": []
     },
     "lab_a14b": {
       "enabled": true,
@@ -806,7 +809,38 @@
         "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
         "wan_2.1_vae.safetensors"
       ]
-    }
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "4:image",
+          "image"
+        ],
+        [
+          "10:seed",
+          "seed"
+        ],
+        [
+          "15:prompt",
+          "prompt"
+        ],
+        [
+          "15:enhance",
+          "enhance"
+        ],
+        [
+          "15:style",
+          "style"
+        ]
+      ],
+      "outputs": [
+        12,
+        13
+      ]
+    },
+    "lab_optional_unwired": [
+      "UNETLoader"
+    ]
   },
   "version": 0.4
 }

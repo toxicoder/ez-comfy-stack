@@ -1433,7 +1433,11 @@
         33
       ]
     },
-    "linearMode": true
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "UNETLoader",
+      "VHS_VideoCombine"
+    ]
   },
   "version": 0.4
 }

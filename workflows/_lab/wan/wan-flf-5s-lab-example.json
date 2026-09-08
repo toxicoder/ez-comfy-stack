@@ -784,8 +784,47 @@
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
-      "enhance_off_identity": false
-    }
+      "lane": "produce",
+      "occupancy": "wan",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          "4:image",
+          "image"
+        ],
+        [
+          "10:seed",
+          "seed"
+        ],
+        [
+          "15:prompt",
+          "prompt"
+        ],
+        [
+          "15:enhance",
+          "enhance"
+        ],
+        [
+          "15:style",
+          "style"
+        ],
+        [
+          "16:image",
+          "image"
+        ]
+      ],
+      "outputs": [
+        12,
+        13
+      ]
+    },
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "LoadImage"
+    ]
   },
   "version": 0.4
 }

@@ -40,7 +40,8 @@
       "enabled": true,
       "nccl": false,
       "context_parallel": "LAB_ALLOW_CONTEXT_PARALLEL=1"
-    }
+    },
+    "lab_stub": true
   },
   "version": 0.4
 }

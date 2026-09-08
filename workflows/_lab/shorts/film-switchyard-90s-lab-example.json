@@ -2,7 +2,7 @@
   "id": "film-switchyard-90s-lab-example",
   "revision": 5,
   "last_node_id": 901,
-  "last_link_id": 445,
+  "last_link_id": 446,
   "nodes": [
     {
       "id": 1,
@@ -442,7 +442,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## switchyard 90s (night freight yard)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film switchyard --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel walk | rain walk | puddles | stop between cars |\n| 2 | Between cars | gloves on rail | coupling clank | look up |\n| 3 | Ladder | climb | continue | roof edge |\n| 4 | Roof walk | along cars | distant horn | look down |\n| 5 | Drop to gravel | splash | window glow | keep walking |\n| 6 | Lamp hold | stop | look down the string | quiet laugh |\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## switchyard 90s (night freight yard)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film switchyard --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel walk | rain walk | puddles | stop between cars |\n| 2 | Between cars | gloves on rail | coupling clank | look up |\n| 3 | Ladder | climb | continue | roof edge |\n| 4 | Roof walk | along cars | distant horn | look down |\n| 5 | Drop to gravel | splash | window glow | keep walking |\n| 6 | Lamp hold | stop | look down the string | quiet laugh |\n"
       ],
       "title": "switchyard 90s shot map"
     },
@@ -924,6 +924,14 @@
           "name": "shot_18",
           "type": "VHS_FILENAMES",
           "link": 445
+        },
+        {
+          "name": "disclosure",
+          "type": "STRING",
+          "link": 446,
+          "widget": {
+            "name": "disclosure"
+          }
         }
       ],
       "outputs": [
@@ -11401,7 +11409,9 @@
         {
           "name": "text",
           "type": "STRING",
-          "links": null,
+          "links": [
+            446
+          ],
           "slot_index": 0
         }
       ],
@@ -14974,6 +14984,14 @@
       900,
       17,
       "VHS_FILENAMES"
+    ],
+    [
+      446,
+      901,
+      0,
+      900,
+      18,
+      "STRING"
     ]
   ],
   "groups": [

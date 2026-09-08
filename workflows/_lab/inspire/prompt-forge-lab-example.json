@@ -282,7 +282,12 @@
         4
       ]
     },
-    "linearMode": true
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "EZKleinPromptEnhance",
+      "EZLTXPromptEnhance",
+      "EZWanPromptEnhance"
+    ]
   },
   "version": 0.4
 }

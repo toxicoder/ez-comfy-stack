@@ -552,7 +552,8 @@ def build_one_click_film(
         [_out("Latent", "LATENT", 0)],
     )
     concat_inputs = [
-        _inp(f"shot_{i:02d}", "VHS_FILENAMES") for i in range(1, 19)
+        *(_inp(f"shot_{i:02d}", "VHS_FILENAMES") for i in range(1, 19)),
+        _inp("disclosure", "STRING", widget="disclosure"),
     ]
     concat = _mk(
         ID_CONCAT,
@@ -574,7 +575,6 @@ def build_one_click_film(
         [],
         [_out("text", "STRING", 0)],
     )
-    disclosure["outputs"][0]["links"] = None
 
     shot_nodes: list[dict] = []
     for index, shot in enumerate(parsed["shots"]):
@@ -647,6 +647,7 @@ def build_one_click_film(
         _add_link(graph, batch, 0, save, "images", "IMAGE")
         _add_link(graph, vhs, 0, concat, f"shot_{index + 1:02d}", "VHS_FILENAMES")
         prev_last = batch
+    _add_link(graph, disclosure, 0, concat, "disclosure", "STRING")
 
     graph["last_node_id"] = max(n["id"] for n in graph["nodes"])
     groups = [

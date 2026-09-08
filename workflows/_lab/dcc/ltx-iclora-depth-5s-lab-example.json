@@ -1197,7 +1197,10 @@
       "depth_default": true,
       "magcache": false
     },
-    "lab_disclosure": "LTX Community License"
+    "lab_disclosure": "LTX Community License",
+    "lab_optional_unwired": [
+      "EZFilmDisclosure"
+    ]
   },
   "version": 0.4
 }

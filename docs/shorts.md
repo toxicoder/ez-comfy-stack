@@ -152,7 +152,7 @@ LAB_ENABLE_LTX_DIRECTOR=1 ./scripts/manage.sh start
 
 Refuse MiniMax H3 Director. OpenCut (`jtydhr88/ComfyUI-OpenCut`, MIT) is fail-soft. Not the OpenCut Rust rewrite, not Next.js+Postgres.
 
-ACE-Step 90 s bed → `manage.sh stop` / unload → LTX A2V freeze. Qwen3-TTS is opt-in with operator-owned refs (`download-podcast --tier qwen3tts`); empty refs stay Kokoro. Wire **EZFilmDisclosure** on the publish graph (LTX Community License end-card).
+ACE-Step 90 s bed → `manage.sh stop` / unload → LTX A2V freeze. Qwen3-TTS is opt-in with operator-owned refs (`download-podcast --tier qwen3tts`); empty refs stay Kokoro. **EZFilmDisclosure** is wired into **EZFilmConcat**; Queue writes `${COMFY_OUTPUT_DIR}/ez_*_90s.disclosure.txt` beside the stitched MP4 (LTX Community License). Do not strip it.
 
 Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates → LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s. Depth-guided hybrid (clay dump → Klein look → Union Control): [DCC guide pack](dcc-workflows.md). Opt-in `download-ltx --tier iclora` (not `download-models`).
 
