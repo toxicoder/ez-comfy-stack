@@ -156,6 +156,8 @@ Commands:
                     Cheap 90s animatic from clay.mp4 or stills (host ffmpeg)
   stem-mix --film SLUG --shot ID --bg PATH
                     Picture-lock stem mix; duck -15 dB; YouTube loudnorm
+  audio-still-video --audio FILE --image FILE
+                    Mux a still + audio master to YouTube MP4 (host ffmpeg)
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
   download-longcat [--tier video|avatar|all]
@@ -1183,6 +1185,21 @@ cmd_stem_mix() {
 }
 
 #######################################
+# Mux a still + audio master to YouTube MP4 (CPU ffmpeg).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  audio-still-video.sh flags (--audio, --image, --out, --size, --fit)
+# Outputs:
+#   Status on stderr; MP4 on disk
+# Returns:
+#   audio-still-video.sh status
+#######################################
+cmd_audio_still_video() {
+  bash "${REPO_ROOT}/scripts/utilities/audio-still-video.sh" "$@"
+}
+
+#######################################
 # Opt-in LongCat-Video (MIT, no NCCL).
 #######################################
 cmd_download_longcat() {
@@ -1329,6 +1346,7 @@ main() {
     overlay-qc) cmd_overlay_qc "$@" ;;
     film-animatic) cmd_film_animatic "$@" ;;
     stem-mix) cmd_stem_mix "$@" ;;
+    audio-still-video) cmd_audio_still_video "$@" ;;
     download-longcat) cmd_download_longcat "$@" ;;
     download-dreamx) cmd_download_dreamx "$@" ;;
     spark-timing) cmd_spark_timing "$@" ;;

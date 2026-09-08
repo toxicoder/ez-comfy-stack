@@ -183,7 +183,7 @@ flowchart TB
 
 === "Audio (podcast / dub / rap)"
 
-    Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Playbook: [Local podcast](podcast.md), [Local dub](dub.md), [Local music](music.md).
+    Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Graphs still save FLAC + MP3; YouTube still-image MP4 is host `audio-still-video` after Queue. Playbook: [Local podcast](podcast.md), [Local dub](dub.md), [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |

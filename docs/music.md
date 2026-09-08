@@ -16,6 +16,7 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 - ACE-Step vocal = invented identity, not a clone
 - DistroKid / Spotify / YouTube / USCO Part 2 disclosure
 - `download-music --tier turbo`; sequential Queue + existing Klein covers
+- Optional YouTube still-video: host `audio-still-video` after Queue (graphs stay FLAC + MP3)
 - Spark: ~10 GB AIO; do not co-resident with LTX / Wan / Klein
 
 **What this enables**
@@ -24,6 +25,7 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 - Fifteen 180 s original diss takes (Nill Bye vs Rake) without cloud music APIs
 - Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - Keeping the visual studio bootable when the music pack is missing
+- Muxing a cover still + FLAC into a YouTube MP4 without changing the rap graphs
 
 !!! warning "Not legal advice"
 
@@ -155,6 +157,15 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 3. Load **music-rap-draft-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
 4. Then load **music-rap-full-lab-example** (96 s), **or** one **music-rap-nill-bye-*-lab-example** (180 s) from `_lab/audio/nill-bye/` on its own
 5. Cover in a **later** session: **klein-thumbnail-lab-example** or **klein-podcast-cover-lab-example**
+6. Optional YouTube still-image video (host ffmpeg; graphs still save FLAC + MP3):
+
+```bash
+./scripts/manage.sh audio-still-video \
+  --audio "${COMFY_OUTPUT_DIR}/ez_rap_full_00001_.flac" \
+  --image "${COMFY_OUTPUT_DIR}/ez_thumbnail_00001_.png"
+# → ${COMFY_OUTPUT_DIR}/ez_rap_full_00001_.mp4
+# Square covers letterbox onto 1920×1080. Shorts: --size 1080x1920
+```
 
 Spark: the AIO is ~10 GB VRAM-adjacent work. Do **not** co-resident with LTX / Wan / Klein.
 
