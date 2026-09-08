@@ -62,8 +62,14 @@ FROZEN_MANAGE_VERBS=(
   spark-timing
   models-status
   reap-models
+  disk-wizard
   asset-ls
 )
+
+@test "cmd_disk_wizard --plan is read-only" {
+  run cmd_disk_wizard --plan
+  [ "${status}" -eq 0 ]
+}
 
 @test "manage help lists the frozen verb set (append-only)" {
   run bash "${MANAGE_SH}" help

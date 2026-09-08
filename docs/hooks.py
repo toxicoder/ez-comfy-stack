@@ -8,9 +8,11 @@ Branch-aware site artifacts (mike aliases ``latest`` / ``development``):
   source links match the same ref. Optional override: ``EZ_DOCS_GIT_REF``.
 - ``on_page_markdown`` / ``on_post_page`` also replace the operator token
   ``__DOCS_GIT_REF__`` (e.g. Setup ``git clone -b``) with that ref.
-- ``on_page_markdown`` expands the glossary placeholder via ``docs/glossary.py``.
-- ``on_post_page`` wraps the first glossary term hits and injects the definition
-  dialog (skipped on ``glossary.md``).
+- ``on_page_markdown`` expands ``ezcmd`` fences via ``docs/commands.py`` and the
+  glossary placeholder via ``docs/glossary.py``.
+- ``on_post_page`` injects the command-builder JSON blob, wraps the first
+  glossary term hits, and injects the definition dialog (skipped on
+  ``glossary.md``).
 - When ``MIKE_DOCS_VERSION`` or ``EZ_DOCS_VERSION`` is ``development``, injects
   a small banner so readers know they are on the development docs alias.
 """
@@ -25,6 +27,26 @@ from pathlib import Path
 from typing import Any
 
 _GLOSSARY_MOD = None
+_COMMANDS_MOD = None
+
+
+def _commands_mod() -> Any:
+    """Load docs/commands.py once (same directory as this hooks file).
+
+    Returns:
+        The command-builder module.
+    """
+    global _COMMANDS_MOD
+    if _COMMANDS_MOD is None:
+        path = Path(__file__).resolve().parent / "commands.py"
+        spec = importlib.util.spec_from_file_location("ez_docs_commands", path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"cannot load commands module from {path}")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules["ez_docs_commands"] = module
+        spec.loader.exec_module(module)
+        _COMMANDS_MOD = module
+    return _COMMANDS_MOD
 
 
 def _glossary_mod() -> Any:
@@ -161,17 +183,18 @@ def stamp_docs_git_ref_placeholder(text: str, ref: str | None = None) -> str:
 
 
 def on_page_markdown(markdown: str, **kwargs: Any) -> str:
-    """Stamp git refs, then expand the glossary placeholder if present.
+    """Stamp git refs, expand ezcmd fences, then the glossary placeholder.
 
     Args:
         markdown: Raw page markdown before rendering.
         **kwargs: MkDocs hook metadata (unused besides API compatibility).
 
     Returns:
-        Markdown with branch stamps and rendered glossary sections.
+        Markdown with branch stamps, command widgets, and glossary sections.
     """
     del kwargs
     stamped = stamp_docs_git_ref_placeholder(stamp_git_ref(markdown))
+    stamped = _commands_mod().expand_ezcmd(stamped)
     return _glossary_mod().render_placeholder(stamped)
 
 
@@ -210,4 +233,5 @@ def on_post_page(output: str, **kwargs: Any) -> str:
             if n:
                 output = html2
 
+    output = _commands_mod().inject_command_assets(output)
     return _glossary_mod().apply_glossary(output, page)
