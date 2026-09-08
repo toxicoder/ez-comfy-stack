@@ -325,19 +325,20 @@ def test_n_gpu_layers_refused_without_allow(monkeypatch: pytest.MonkeyPatch) -> 
 
 
 def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
-    wf = ROOT / "workflows"
-    draft = json.loads((wf / "klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
-    hero = json.loads((wf / "klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
+    from _lab_paths import lab_json
+
+    draft = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
+    hero = json.loads(lab_json("klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
     klein_d = next(n for n in draft["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     klein_h = next(n for n in hero["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein_d["widgets_values"][0] == klein_h["widgets_values"][0]
     assert klein_d["widgets_values"][1] is True
     assert klein_h["widgets_values"][1] is True
     assert klein_d["widgets_values"][-1] == "none"
-    wan_t = json.loads((wf / "wan-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    wan_i = json.loads((wf / "wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    ltx_t = json.loads((wf / "ltx-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    ltx_i = json.loads((wf / "ltx-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    wan_t = json.loads(lab_json("wan-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    wan_i = json.loads(lab_json("wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    ltx_t = json.loads(lab_json("ltx-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    ltx_i = json.loads(lab_json("ltx-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
     wan_tp = next(n for n in wan_t["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"][0]
     wan_ip = next(n for n in wan_i["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"][0]
     ltx_tp = next(n for n in ltx_t["nodes"] if n.get("type") == "EZLTXPromptEnhance")["widgets_values"][0]
@@ -381,10 +382,11 @@ def test_ez_prompt_join_identity_and_shot() -> None:
 
 
 def test_app_lab_graphs_wire_join_and_enhance() -> None:
-    wf = ROOT / "workflows"
-    still = json.loads((wf / "klein-still-daily-lab-example.json").read_text(encoding="utf-8"))
-    gif = json.loads((wf / "wan-gif-loop-lab-example.json").read_text(encoding="utf-8"))
-    house = json.loads((wf / "klein-dream-house-lab-example.json").read_text(encoding="utf-8"))
+    from _lab_paths import lab_json
+
+    still = json.loads(lab_json("klein-still-daily-lab-example.json").read_text(encoding="utf-8"))
+    gif = json.loads(lab_json("wan-gif-loop-lab-example.json").read_text(encoding="utf-8"))
+    house = json.loads(lab_json("klein-dream-house-lab-example.json").read_text(encoding="utf-8"))
     klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein["widgets_values"][1] is True
     assert klein["widgets_values"][-1] == "none"

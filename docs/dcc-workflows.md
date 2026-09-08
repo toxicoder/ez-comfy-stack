@@ -34,7 +34,7 @@ This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar
 ./scripts/manage.sh stop
 ./scripts/manage.sh export-guides --engine blender --film go-see --shot 12 --blend /path/to/shot.blend
 ./scripts/manage.sh start          # type yes
-# Queue workflows/dcc/klein-from-clay-lab-example.json on first.png
+# Queue workflows/_lab/dcc/klein-from-clay-lab-example.json on first.png
 # After download-ltx --tier iclora: Templates → LTX-2.5 Union Control, depth from depth.mp4
 ```
 

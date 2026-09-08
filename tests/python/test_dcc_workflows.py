@@ -6,14 +6,15 @@ import ast
 import json
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
-WF = ROOT / "workflows" / "dcc"
 DOCKERFILE = ROOT / "docker" / "Dockerfile"
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev", "Wav2Lip")
 
 
 def _load(name: str) -> dict:
-    path = WF / name
+    path = lab_json(name)
     assert path.is_file(), path
     return json.loads(path.read_text(encoding="utf-8"))
 

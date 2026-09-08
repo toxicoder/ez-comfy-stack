@@ -456,17 +456,18 @@ def stamp_suite_graph(graph: dict) -> dict:
 
 
 def suite_json_paths(root: Any) -> list[Any]:
-    """Return existing JSON paths for every STAMP_SPECS id under workflows/."""
+    """Return existing JSON paths for every STAMP_SPECS id under workflows/_lab."""
     from pathlib import Path
+
+    from _lab_paths import lab_json
 
     wf = Path(root)
     found: list[Path] = []
     for stem in STAMP_SPECS:
-        for folder in (wf, wf / "shorts", wf / "dcc"):
-            path = folder / f"{stem}.json"
-            if path.is_file():
-                found.append(path)
-                break
+        try:
+            found.append(lab_json(stem, root=wf))
+        except FileNotFoundError:
+            continue
     return found
 
 

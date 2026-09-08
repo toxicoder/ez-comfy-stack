@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
+from _lab_paths import lab_json
 from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -650,7 +651,7 @@ def main() -> None:
         "podcast-radio-drama-lab-example.json": build_radio_drama(),
     }
     for name, graph in graphs.items():
-        path = WF / name
+        path = lab_json(name)
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")
 

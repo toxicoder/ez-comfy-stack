@@ -15,6 +15,7 @@ from pathlib import Path
 import sys
 
 from _wire_prompt_enhance import _rewrite_enhance_blurb, enable_lab_graph, normalize_enhance_widgets
+from _lab_paths import lab_json
 from _stamp_app_mode import stamp_suite_graph
 from _lab_layout import (
     GROUP_TITLE_INSET,
@@ -313,13 +314,13 @@ def polish_video_graph(graph: dict, *, gif: bool = False) -> dict:
 
 def patch_existing_video_graphs() -> None:
     video_files = [
-        WF / "wan-i2v-5s-lab-example.json",
-        WF / "wan-t2v-5s-lab-example.json",
-        WF / "wan-i2v-shot-lab-example.json",
-        WF / "ltx-i2v-5s-lab-example.json",
-        WF / "ltx-t2v-5s-lab-example.json",
-        WF / "ltx-i2v-shot-lab-example.json",
-        WF / "wan-gif-loop-lab-example.json",
+        lab_json("wan-i2v-5s-lab-example.json"),
+        lab_json("wan-t2v-5s-lab-example.json"),
+        lab_json("wan-i2v-shot-lab-example.json"),
+        lab_json("ltx-i2v-5s-lab-example.json"),
+        lab_json("ltx-t2v-5s-lab-example.json"),
+        lab_json("ltx-i2v-shot-lab-example.json"),
+        lab_json("wan-gif-loop-lab-example.json"),
     ]
     for path in video_files:
         graph = _load(path)
@@ -589,7 +590,7 @@ def _set_note(graph: dict, note: str, description: str) -> None:
 
 def build_creator_toolkit() -> None:
     # 1. Vertical Shorts still
-    g = _load(WF / "klein-still-draft-lab-example.json")
+    g = _load(lab_json("klein-still-draft-lab-example.json"))
     g["id"] = "klein-shorts-still-lab-example"
     g["revision"] = 1
     latent = _node(g, "EmptyFlux2LatentImage")
@@ -616,10 +617,10 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; r
         _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
         _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
     ]
-    _dump(WF / "klein-shorts-still-lab-example.json", g)
+    _dump(lab_json("klein-shorts-still-lab-example.json"), g)
 
     # 2. Vertical Wan I2V
-    g = _load(WF / "wan-i2v-5s-lab-example.json")
+    g = _load(lab_json("wan-i2v-5s-lab-example.json"))
     g["id"] = "wan-shorts-i2v-lab-example"
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
@@ -648,10 +649,10 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
 {PREVIEW_BULLET}
 """
     _set_note(g, note, "Wan 5B vertical 9:16 silent I2V ~5s")
-    _dump(WF / "wan-shorts-i2v-lab-example.json", g)
+    _dump(lab_json("wan-shorts-i2v-lab-example.json"), g)
 
     # 3. Vertical LTX I2V AV
-    g = _load(WF / "ltx-i2v-5s-lab-example.json")
+    g = _load(lab_json("ltx-i2v-5s-lab-example.json"))
     g["id"] = "ltx-shorts-i2v-lab-example"
     g["revision"] = 1
     wire_ltx_audio(g)
@@ -689,10 +690,10 @@ LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio mu
 Disclose AI-generated media; do not strip provenance; do not distill. No score.
 """
     _set_note(g, note, "LTX-2.5 vertical 9:16 AV I2V ~5s")
-    _dump(WF / "ltx-shorts-i2v-lab-example.json", g)
+    _dump(lab_json("ltx-shorts-i2v-lab-example.json"), g)
 
     # 4. Thumbnail
-    g = _load(WF / "klein-still-hero-lab-example.json")
+    g = _load(lab_json("klein-still-hero-lab-example.json"))
     g["id"] = "klein-thumbnail-lab-example"
     g["revision"] = 1
     save = _node(g, "SaveImage")
@@ -707,10 +708,10 @@ YouTube thumbnail still (Klein 4B). Default 1280×720. Prefix `ez_thumbnail`.
 Keep the subject large and readable at small sizes. Do not burn in titles — add text in your editor.
 """
     _set_note(g, note, "Klein 4B YouTube thumbnail 1280x720")
-    _dump(WF / "klein-thumbnail-lab-example.json", g)
+    _dump(lab_json("klein-thumbnail-lab-example.json"), g)
 
     # 5. Product packshot
-    g = _load(WF / "klein-still-hero-lab-example.json")
+    g = _load(lab_json("klein-still-hero-lab-example.json"))
     g["id"] = "klein-product-packshot-lab-example"
     g["revision"] = 1
     save = _node(g, "SaveImage")
@@ -732,7 +733,7 @@ Clean product / packshot still (Klein 4B). Default 1024×1024. Prefix `ez_packsh
 Swap the subject in the prompt; keep seamless background and soft studio light.
 """
     _set_note(g, note, "Klein 4B product packshot 1:1")
-    _dump(WF / "klein-product-packshot-lab-example.json", g)
+    _dump(lab_json("klein-product-packshot-lab-example.json"), g)
 
     mug_identity = (
         "A photoreal still of a small kitchen table at first light. One cream ceramic mug "
@@ -812,7 +813,7 @@ Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klei
     )
 
     # 8. Wan bumper loop MP4
-    g = _load(WF / "wan-gif-loop-lab-example.json")
+    g = _load(lab_json("wan-gif-loop-lab-example.json"))
     g["id"] = "wan-bumper-loop-lab-example"
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
@@ -849,10 +850,10 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
 """
     _set_note(g, note, "Wan 5B loopable MP4 bumper")
     polish_video_graph(g)
-    _dump(WF / "wan-bumper-loop-lab-example.json", g)
+    _dump(lab_json("wan-bumper-loop-lab-example.json"), g)
 
     # 9. LTX ambient B-roll
-    g = _load(WF / "ltx-t2v-5s-lab-example.json")
+    g = _load(lab_json("ltx-t2v-5s-lab-example.json"))
     g["id"] = "ltx-broll-ambient-lab-example"
     g["revision"] = 1
     wire_ltx_audio(g)
@@ -882,7 +883,7 @@ Locked camera, world audio muxed into MP4. Prefix `ez_broll_video`.
 Disclose AI-generated media. No score.
 """
     _set_note(g, note, "LTX-2.5 ambient B-roll AV ~5s")
-    _dump(WF / "ltx-broll-ambient-lab-example.json", g)
+    _dump(lab_json("ltx-broll-ambient-lab-example.json"), g)
 
     board_shots = []
     for i, (prefix, camera) in enumerate(STORYBOARD):
@@ -918,7 +919,7 @@ def _klein_single(
     size_title: str | None = None,
     neg: str | None = None,
 ) -> None:
-    src = WF / "klein-still-hero-lab-example.json" if template == "hero" else WF / "klein-still-draft-lab-example.json"
+    src = lab_json("klein-still-hero-lab-example.json") if template == "hero" else lab_json("klein-still-draft-lab-example.json")
     g = _load(src)
     g["id"] = stem
     g["revision"] = 1
@@ -941,7 +942,7 @@ def _klein_single(
         _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
         _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
     ]
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def _base_node(
@@ -1335,7 +1336,7 @@ def _klein_pack(
         },
         "version": 0.4,
     }
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def _wan_i2v(
@@ -1348,7 +1349,7 @@ def _wan_i2v(
     size: tuple[int, int] = (832, 480),
     length: int = 121,
 ) -> None:
-    g = _load(WF / "wan-i2v-5s-lab-example.json")
+    g = _load(lab_json("wan-i2v-5s-lab-example.json"))
     g["id"] = stem
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
@@ -1364,7 +1365,7 @@ def _wan_i2v(
     _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, True, "i2v", "5 seconds, 24 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     _set_note(g, note, description)
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def _wan_loop(
@@ -1375,7 +1376,7 @@ def _wan_loop(
     note: str,
     description: str,
 ) -> None:
-    g = _load(WF / "wan-gif-loop-lab-example.json")
+    g = _load(lab_json("wan-gif-loop-lab-example.json"))
     g["id"] = stem
     g["revision"] = 1
     vhs = _node(g, "VHS_VideoCombine")
@@ -1394,7 +1395,7 @@ def _wan_loop(
     _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, True, "i2v", "looping sticker, 12 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     _set_note(g, note, description)
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def _ltx_av(
@@ -1407,7 +1408,7 @@ def _ltx_av(
     mode: str,
     audio_hint: str,
 ) -> None:
-    src = WF / "ltx-i2v-5s-lab-example.json" if mode == "i2v" else WF / "ltx-t2v-5s-lab-example.json"
+    src = lab_json("ltx-i2v-5s-lab-example.json") if mode == "i2v" else lab_json("ltx-t2v-5s-lab-example.json")
     g = _load(src)
     g["id"] = stem
     g["revision"] = 1
@@ -1427,7 +1428,7 @@ def _ltx_av(
         ):
             n["widgets_values"] = [prompt]
     _set_note(g, note, description)
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def build_creator_toolkit_v2() -> None:
@@ -1652,7 +1653,7 @@ Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 """,
         description="Klein 4B three-angle identity sheet 1280x704",
     )
-    ident_path = WF / "klein-identity-sheet-lab-example.json"
+    ident_path = lab_json("klein-identity-sheet-lab-example.json")
     ident_graph = _load(ident_path)
     ident_graph.setdefault("extra", {})["lab_identity"] = {"seed": 42, "enhance": True}
     _dump(ident_path, ident_graph)

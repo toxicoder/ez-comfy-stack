@@ -130,7 +130,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
 ??? abstract "Lab workflow internals"
 
-    - Name pattern: host files `workflows/*-lab-example.json` and `workflows/shorts/*-lab-example.json` (entrypoint copies both)
+    - Name pattern: host files `workflows/_lab/<lane>/*-lab-example.json` (entrypoint rsyncs into `user/default/workflows/_lab/`)
     - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
     - Klein CLIP loader type is **`flux2`** with `qwen_3_4b` + `EmptyFlux2LatentImage` (simplified `KSampler`)
     - LTX-2.5 graphs use **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps)

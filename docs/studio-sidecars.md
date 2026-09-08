@@ -60,7 +60,7 @@ VACE join (Wan 2.1 1.3B Apache, 17 frames = `1+8n`) is a Comfy graph, not a side
 
 ```bash
 ./scripts/utilities/download-wan.sh run --tier vace
-# load workflows/wan-vace-join-lab-example.json — MagCache off
+# load workflows/_lab/wan/wan-vace-join-lab-example.json — MagCache off
 ```
 
 ## Host NLE (Kdenlive / Shotcut)

@@ -44,10 +44,13 @@ flowchart TB
   Root --> Cfg["config/resource-policy.yaml"]
   Root --> Docs["docs/ · MkDocs"]
   Root --> Tests["tests/bats · tests/python"]
+  Root --> Wf["workflows/_lab/<lane> shipped JSON<br/>workflows/_user local only<br/>workflows/shorts YAML"]
   Manage --> Lib
   Manage --> Util
   Manage --> Docker
 ```
+
+Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`) and keep the `*-lab-example.json` suffix. Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` and must not be committed.
 
 ## Shell style
 

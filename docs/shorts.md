@@ -82,13 +82,13 @@ flowchart LR
 | Identity still | Group **1. Identity (Klein)** | Klein 4B distilled FP8 | Apache 2.0 |
 | Print + synced world audio | Groups **3–8** (beats) | LTX-2.5 distilled I2V | Community License (not Apache) |
 | Stitch + preview | Group **9. Publish 90s MP4** | `EZFilmConcat` (ffmpeg AAC + YouTube loudnorm) | — |
-| Optional silent rehearsal | `workflows/wan-i2v-shot-lab-example.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
+| Optional silent rehearsal | `workflows/_lab/wan/wan-i2v-shot-lab-example.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
 
 One-click film files:
 
-- `workflows/shorts/film-go-see-90s-run-lab-example.json`
-- `workflows/shorts/film-still-here-90s-lab-example.json`
-- `workflows/shorts/film-switchyard-90s-lab-example.json`
+- `workflows/_lab/shorts/film-go-see-90s-run-lab-example.json`
+- `workflows/_lab/shorts/film-still-here-90s-lab-example.json`
+- `workflows/_lab/shorts/film-switchyard-90s-lab-example.json`
 
 Deliverable MP4s are **LTX I2V heroes** (breath, world objects, **no score**) with audio muxed per shot via `LTXVAudioVAEDecode` → `VHS_VideoCombine`, then stitched. Wan is an optional cheap motion draft — skip it if you already like the camera.
 
@@ -98,7 +98,7 @@ LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional exper
 
 ## Operator loop
 
-Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). The container entrypoint copies `*.json` and `shorts/*.json` into Comfy `user/default/workflows/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
+Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/shorts/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/shorts/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
 
 1. Load one film graph (`film-go-see-90s-run-lab-example` / `film-still-here-90s-lab-example` / `film-switchyard-90s-lab-example`).
 2. Queue **once**. Klein runs first (Enhance **on**, identity mode, 4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start (each shot has LTX Prompt Enhance on). Leave LTX **1280×704**.
@@ -181,7 +181,7 @@ Wave 4 hero path (opt-in, occupancy: one heavy job):
 ./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
 # load optional/wan-i2v-a14b-lab-example — unload 5B first
 ./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
-# load workflows/optional/longcat-video-lab-example.json (note, not 90s default)
+# load workflows/_lab/optional/longcat-video-lab-example.json (note, not 90s default)
 ./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
 ```
 

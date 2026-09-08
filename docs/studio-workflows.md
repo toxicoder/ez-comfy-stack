@@ -19,7 +19,23 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 
 **Who this is for:** studio users after the first still-draft Queue.
 
-After `download-models` + `start`, load from `user/default/workflows/` (seeded from host `workflows/`). Filenames end with **`-lab-example`**. App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk; same stem). Do **not** edit raw JSON — change widgets on the canvas.
+After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames end with **`-lab-example`**. App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Do **not** edit live `_lab/` copies — they are overwritten on start. Do **not** edit raw JSON — change widgets on the canvas.
+
+Sidebar tree after start:
+
+```text
+user/default/workflows/
+  _lab/
+    klein/     stills, plates, identity, platform pack, dream-house, …
+    wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
+    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
+    shorts/    film-*-90s-*-lab-example.json
+    dcc/       clay → print, iclora envelope
+    optional/  a14b, longcat stub
+    audio/     podcast-*, music-rap-*
+    inspire/   prompt-forge, beat-sheet
+  _user/       your graphs (never overwritten)
+```
 
 ```mermaid
 flowchart TB
@@ -57,7 +73,7 @@ flowchart TB
     | **wan-i2v-5s-lab-example** | Silent I2V smoke, 832×480, **121** frames @ 24 fps. MagCache **draft-only** (`extra.lab_magcache`) |
     | **wan-flf-5s-lab-example** | Fun InP first-last-frame 5 s (opt-in `download-wan --tier fun-inp`). MagCache off |
     | **wan-vace-join-lab-example** | Wan 2.1 VACE 1.3B 17-frame join (`1+8n`). Opt-in `download-wan --tier vace`. MagCache off |
-    | **wan-i2v-a14b-lab-example** | Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `workflows/optional/` |
+    | **wan-i2v-a14b-lab-example** | Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `_lab/optional/` |
     | **wan-t2v-5s-lab-example** | Silent T2V smoke, 121 frames (LoadImage bypassed) |
     | **wan-i2v-shot-lab-example** | Concat-safe **120** frames + last-frame SaveImage. 90s shots, or prefix `ez_shot_01..06` |
 
@@ -177,6 +193,6 @@ flowchart TB
 
 Every **\*-lab-example** graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **wan-gif-loop-lab-example** emits `image/gif`.
 
-Optional Wan A14B is a Queue graph (`workflows/optional/wan-i2v-a14b-lab-example.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
+Optional Wan A14B is a Queue graph (`workflows/_lab/optional/wan-i2v-a14b-lab-example.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
 
 Daily loop: [Still to motion to AV](visual-generative-ai.md). Prompt shapes: [Prompting](prompting.md).

@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 
@@ -15,7 +17,7 @@ def test_film_graphs_carry_dfr_extra() -> None:
         "film-still-here-90s-lab-example.json",
         "film-switchyard-90s-lab-example.json",
     ):
-        extra = json.loads((WF / "shorts" / name).read_text(encoding="utf-8"))["extra"]
+        extra = json.loads(lab_json(name).read_text(encoding="utf-8"))["extra"]
         assert extra["lab_dfr"]["print"] == "ltx"
         assert "Templates" in extra["lab_dfr"]["note"]
 
@@ -42,7 +44,7 @@ def _overlap_hits(graph: dict) -> list[str]:
 
 
 def test_a14b_hero_is_eight_step_magcache_off() -> None:
-    graph = json.loads((WF / "optional" / "wan-i2v-a14b-lab-example.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("wan-i2v-a14b-lab-example.json").read_text(encoding="utf-8"))
     assert graph["id"] == "wan-i2v-a14b-lab-example"
     assert graph["extra"]["lab_a14b"]["steps"] == 8
     assert graph["extra"]["lab_a14b"]["magcache"] is False
@@ -61,7 +63,7 @@ def test_a14b_hero_is_eight_step_magcache_off() -> None:
 
 
 def test_talking_head_graph() -> None:
-    graph = json.loads((WF / "klein-talking-head-lab-example.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("klein-talking-head-lab-example.json").read_text(encoding="utf-8"))
     assert graph["id"] == "klein-talking-head-lab-example"
     assert graph["extra"]["lab_talking_head"]["s2v_tier"] == "s2v"
     blob = json.dumps(graph)
@@ -71,7 +73,7 @@ def test_talking_head_graph() -> None:
 
 
 def test_identity_sheet_seed_and_size() -> None:
-    graph = json.loads((WF / "klein-identity-sheet-lab-example.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("klein-identity-sheet-lab-example.json").read_text(encoding="utf-8"))
     assert graph["extra"]["lab_identity"]["seed"] == 42
     assert graph["extra"]["lab_identity"]["enhance"] is True
     prefixes = [n["widgets_values"][0] for n in graph["nodes"] if n.get("type") == "SaveImage"]
@@ -95,7 +97,7 @@ def test_identity_sheet_seed_and_size() -> None:
 
 
 def test_longcat_lab_note_refuses_nccl() -> None:
-    path = WF / "optional" / "longcat-video-lab-example.json"
+    path = lab_json("longcat-video-lab-example.json")
     graph = json.loads(path.read_text(encoding="utf-8"))
     assert graph["id"] == "longcat-video-lab-example"
     note = graph["extra"]["lab_note"]

@@ -258,7 +258,7 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `ltx-i2v-5s-lab-example.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
 | `ltx-t2v-5s-lab-example.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
 | `ltx-i2v-shot-lab-example.json` | 5.00 s LTX I2V print + last-frame SaveImage |
-| `shorts/film-*-90s-*-lab-example.json` | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](shorts.md)) |
+| `_lab/shorts/film-*-90s-*-lab-example.json` | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](shorts.md)) |
 | `klein-shorts-still-lab-example.json` | Vertical 9:16 Shorts still |
 | `wan-shorts-i2v-lab-example.json` | Vertical silent Shorts I2V |
 | `ltx-shorts-i2v-lab-example.json` | Vertical AV Shorts I2V |

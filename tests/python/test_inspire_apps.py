@@ -5,8 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
-WF = ROOT / "workflows"
 
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev", "Seedance", "Kling")
 HEAVY = ("UNETLoader", "VAELoader", "KSampler", "VAEDecode")
@@ -30,7 +31,7 @@ YAML_KEYS = (
 
 
 def _load(stem: str) -> dict:
-    path = WF / f"{stem}.json"
+    path = lab_json(stem)
     assert path.is_file(), stem
     return json.loads(path.read_text(encoding="utf-8"))
 

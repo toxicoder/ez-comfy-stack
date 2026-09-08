@@ -5,10 +5,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import WF, lab_json
 from _stamp_app_mode import STAMP_SPECS, suite_json_paths
 
 ROOT = Path(__file__).resolve().parents[2]
-WF = ROOT / "workflows"
 
 CREATORS = (
     ("klein-shorts-still-lab-example", "ez_shorts_still", False),
@@ -52,7 +52,7 @@ BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev")
 
 def test_creator_toolkit_files_and_prefixes() -> None:
     for stem, prefix, is_video in CREATORS:
-        path = WF / f"{stem}.json"
+        path = lab_json(stem)
         assert path.is_file(), stem
         text = path.read_text(encoding="utf-8")
         for needle in BANNED:
@@ -78,18 +78,18 @@ def test_creator_toolkit_files_and_prefixes() -> None:
 
 
 def test_vertical_shorts_sizes() -> None:
-    still = json.loads((WF / "klein-shorts-still-lab-example.json").read_text(encoding="utf-8"))
+    still = json.loads(lab_json("klein-shorts-still-lab-example.json").read_text(encoding="utf-8"))
     latent = next(n for n in still["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     assert latent["widgets_values"][0] == 432
     assert latent["widgets_values"][1] == 768
-    wan = json.loads((WF / "wan-shorts-i2v-lab-example.json").read_text(encoding="utf-8"))
+    wan = json.loads(lab_json("wan-shorts-i2v-lab-example.json").read_text(encoding="utf-8"))
     wlat = next(n for n in wan["nodes"] if n.get("type") == "Wan22ImageToVideoLatent")
     assert wlat["widgets_values"][0] == 480
     assert wlat["widgets_values"][1] == 832
 
 
 def test_before_after_and_storyboard_prefixes() -> None:
-    before = json.loads((WF / "klein-before-after-lab-example.json").read_text(encoding="utf-8"))
+    before = json.loads(lab_json("klein-before-after-lab-example.json").read_text(encoding="utf-8"))
     prefixes = {
         n["widgets_values"][0]
         for n in before["nodes"]
@@ -97,7 +97,7 @@ def test_before_after_and_storyboard_prefixes() -> None:
     }
     assert "ez_before" in prefixes
     assert "ez_after" in prefixes
-    board = json.loads((WF / "klein-storyboard-6up-lab-example.json").read_text(encoding="utf-8"))
+    board = json.loads(lab_json("klein-storyboard-6up-lab-example.json").read_text(encoding="utf-8"))
     board_prefixes = {
         n["widgets_values"][0]
         for n in board["nodes"]
@@ -107,7 +107,7 @@ def test_before_after_and_storyboard_prefixes() -> None:
 
 
 def _save_prefixes(stem: str) -> set[str]:
-    graph = json.loads((WF / f"{stem}.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json(stem).read_text(encoding="utf-8"))
     return {
         n["widgets_values"][0]
         for n in graph["nodes"]
@@ -116,14 +116,14 @@ def _save_prefixes(stem: str) -> set[str]:
 
 
 def test_hook_still_is_vertical() -> None:
-    still = json.loads((WF / "klein-hook-still-lab-example.json").read_text(encoding="utf-8"))
+    still = json.loads(lab_json("klein-hook-still-lab-example.json").read_text(encoding="utf-8"))
     latent = next(n for n in still["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     assert latent["widgets_values"][0] == 432
     assert latent["widgets_values"][1] == 768
 
 
 def _identity_plate_contract(stem: str, prefixes: set[str], persist: str = "state") -> None:
-    graph = json.loads((WF / f"{stem}.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json(stem).read_text(encoding="utf-8"))
     encode_n = sum(1 for n in graph["nodes"] if n.get("type") == "VAEEncode")
     ref_n = sum(1 for n in graph["nodes"] if n.get("type") == "ReferenceLatent")
     enhance = [n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"]
@@ -265,7 +265,7 @@ PACK_PLATES = (
 
 
 def test_platform_pack_prefixes_sizes_and_independent_t2i() -> None:
-    graph = json.loads((WF / "klein-platform-pack-lab-example.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("klein-platform-pack-lab-example.json").read_text(encoding="utf-8"))
     assert graph["id"] == "klein-platform-pack-lab-example"
     assert graph["extra"]["lab_app_mode"]["lane"] == "produce"
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
