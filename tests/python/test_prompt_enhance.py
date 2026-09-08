@@ -218,29 +218,53 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert labels == [
         "01 exterior",
         "02 entrance",
-        "03 inside",
-        "04 lounge",
-        "05 kitchen",
+        "03 lounge",
+        "04 kitchen",
+        "05 dining",
         "06 bath",
         "07 bedroom",
-        "08 drone",
-        "09 day",
-        "10 night",
+        "08 terrace",
+        "09 drone",
+        "10 nook",
     ]
     blobs = {card["label"]: card["shot"].lower() for card in pack10}
-    assert "ground-level" in blobs["01 exterior"] and "dusk" in blobs["01 exterior"]
+    three_quarter = [
+        lab for lab, text in blobs.items() if "three-quarter" in text and "ground-level" in text
+    ]
+    assert three_quarter == ["01 exterior"]
+    assert "dusk" in blobs["01 exterior"]
+    assert "establishing" in blobs["01 exterior"] or "only" in blobs["01 exterior"]
     assert "entrance" in blobs["02 entrance"] and "way in" in blobs["02 entrance"]
-    assert "just inside" in blobs["03 inside"]
-    assert "lounging" in blobs["04 lounge"] and "seating" in blobs["04 lounge"]
-    assert "kitchen" in blobs["05 kitchen"] and "work surface" in blobs["05 kitchen"]
+    assert "behind the camera" in blobs["02 entrance"]
+    assert "seating" in blobs["03 lounge"] and "main opening" in blobs["03 lounge"]
+    toward_opening = [
+        lab
+        for lab, text in blobs.items()
+        if "toward the main opening" in text
+        or "looks out that opening" in text
+        or "out the main opening" in text
+    ]
+    assert toward_opening == ["03 lounge"]
+    assert "kitchen" in blobs["04 kitchen"]
+    assert "cabinets" in blobs["04 kitchen"] or "work surface" in blobs["04 kitchen"]
+    assert "behind the camera" in blobs["04 kitchen"]
+    assert "dining" in blobs["05 dining"]
+    assert "out of frame" in blobs["05 dining"]
     assert "bathroom" in blobs["06 bath"] or "bathing" in blobs["06 bath"]
+    assert "frosted" in blobs["06 bath"] or "opaque" in blobs["06 bath"]
     assert "bedroom" in blobs["07 bedroom"] and "bedding" in blobs["07 bedroom"]
-    assert "overhead" in blobs["08 drone"] or "drone" in blobs["08 drone"]
-    assert "daylight" in blobs["09 day"]
-    assert "night" in blobs["10 night"] and "lamps" in blobs["10 night"]
-    assert blobs["01 exterior"] != blobs["02 entrance"]
-    assert blobs["04 lounge"] != blobs["05 kitchen"]
-    assert blobs["09 day"] != blobs["10 night"]
+    assert "headboard" in blobs["07 bedroom"]
+    assert "along" in blobs["08 terrace"]
+    assert "overhead" in blobs["09 drone"] or "drone" in blobs["09 drone"]
+    assert "looking down" in blobs["09 drone"] or "roof" in blobs["09 drone"]
+    assert "corner" in blobs["10 nook"] or "planted" in blobs["10 nook"]
+    assert "sliver" in blobs["10 nook"]
+    joined_cards = " ".join(blobs.values())
+    assert "just inside" not in joined_cards
+    assert "daylight exterior" not in joined_cards
+    assert "night exterior" not in joined_cards
+    assert blobs["03 lounge"] != blobs["04 kitchen"]
+    assert blobs["05 dining"] != blobs["08 terrace"]
 
 
 def test_studio_app_chrome_pack_exists() -> None:
@@ -442,8 +466,8 @@ def test_ez_prompt_join_identity_and_shot() -> None:
     assert "walkthrough" in view[0]
     assert "Same building" in view[0]
     assert "furniture placement" in view[0]
-    assert "sky" in view[0]
-    assert "background" in view[0]
+    assert "outlook that camera would see" in view[0]
+    assert "sky, and background" not in view[0]
     trimmed = join.run("  House.  ", "  Dusk deck.  ")[0]
     assert trimmed.startswith("Dusk deck.")
     assert "House." in trimmed
@@ -513,6 +537,20 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert ident["widgets_values"][4] == "none"
     joins = [n for n in house["nodes"] if n.get("type") == "EZPromptJoin"]
     assert len(joins) == 10
+    join_titles = [n["title"] for n in sorted(joins, key=lambda n: n["id"])]
+    assert join_titles == [
+        "SHOT 01 exterior",
+        "SHOT 02 entrance",
+        "SHOT 03 lounge",
+        "SHOT 04 kitchen",
+        "SHOT 05 dining",
+        "SHOT 06 bath",
+        "SHOT 07 bedroom",
+        "SHOT 08 terrace",
+        "SHOT 09 drone",
+        "SHOT 10 nook",
+    ]
+    assert "cook wall" in ident_l
     positives = {
         n["title"]: n["widgets_values"][0]
         for n in house["nodes"]
@@ -564,6 +602,8 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         assert ident_text in text
         assert "different camera" in text
         assert "walkthrough" in text
+        assert "outlook that camera would see" in text
+        assert "sky, and background" not in text
         assert "linen sofa" in text
         assert len(text.split()) <= 180
     assert inventories == {""}

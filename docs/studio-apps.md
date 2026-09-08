@@ -77,7 +77,7 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein-still-draft-lab-example** | Spark Still. 768×432, seed 42, Enhance on. Prefix `ez_still_draft` |
 | **klein-identity-sheet-lab-example** | Front / three-quarter / profile. 1280×704, Enhance on (identity mode) |
 | **klein-storyboard-6up-lab-example** | Six new cameras of one scene (`ez_board_01`…`06`) |
-| **klein-dream-house-lab-example** | Virtual tour. Ten 4:5 stills of **one place** (type any place; default placeholder is the lab penthouse) |
+| **klein-dream-house-lab-example** | Virtual tour. Ten 4:5 stills of **one place**, one room or angle each (type any place; default placeholder is the lab penthouse) |
 | **klein-style-lock-lab-example** | One place, four cameras |
 | **klein-lighting-trio-lab-example** | Same subject, three lights |
 | **klein-camera-angles-lab-example** | Wide / medium / close |

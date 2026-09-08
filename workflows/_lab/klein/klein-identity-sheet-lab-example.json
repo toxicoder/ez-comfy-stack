@@ -338,7 +338,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Front camera, eye-level, 24mm. Same identity. YouTube 16:9. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Front camera, eye-level, 24mm. Same identity. YouTube 16:9. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
       ],
       "title": "Positive FRONT"
     },
@@ -558,7 +558,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
       ],
       "title": "Positive THREE-QUARTER"
     },
@@ -778,7 +778,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Profile camera, 50mm, full side view. Same identity and light. Camera is the only change. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Profile camera, 50mm, full side view. Same identity and light. Camera is the only change. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
       ],
       "title": "Positive PROFILE"
     },

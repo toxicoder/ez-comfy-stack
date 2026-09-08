@@ -31,8 +31,9 @@ LOCK_VIEW = "view"
 LOCK_STATE = "state"
 LOCK_IDS = (LOCK_VIEW, LOCK_STATE)
 LOCK_VIEW_LINE = (
-    "Same building, rooms, furniture placement, materials, sky, and background. "
-    "New photograph from a different camera in a walkthrough of this place."
+    "Same building, rooms, furniture placement, and materials. "
+    "New photograph from a different camera in a walkthrough of this place. "
+    "Each room keeps only the outlook that camera would see."
 )
 LOCK_STATE_LINE = (
     "Keep this exact place, inventory, and camera framing. The shot names the only "
@@ -166,7 +167,8 @@ def join_prompt(
     Returns:
       One CLIP string, or empty when every field is blank.
       lock=view with a shot card front-loads the camera so Klein treats
-      the still as a new walkthrough frame. lock=state and identity-only
+      the still as a new walkthrough frame. Each room keeps only the
+      outlook that camera would see. lock=state and identity-only
       joins keep the bible first.
     """
     bible = identity.strip() if isinstance(identity, str) else str(identity or "").strip()
