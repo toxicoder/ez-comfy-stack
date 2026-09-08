@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="US self-host license policy for Klein 4B, Wan 2.2, and LTX-2.5. Not legal advice.">
+        <meta name="description" content="Guided, plan-first reclaim for leftover AI experiment files on a DGX Spark that also runs other inference backends.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/licenses/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/disk-wizard/">
       
       
-        <link rel="prev" href="../prompting/">
+        <link rel="prev" href="../models-and-cache/">
       
       
-        <link rel="next" href="../visual-generative-ai/">
+        <link rel="next" href="../download-tiers/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Model licenses - ez-comfy-stack</title>
+        <title>Disk wizard - ez-comfy-stack</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#model-licenses" class="md-skip">
+        <a href="#disk-wizard" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Model licenses
+              Disk wizard
             
           </span>
         </div>
@@ -264,12 +264,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../getting-started/" class="md-tabs__link">
           
   
@@ -306,10 +304,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../manage-cli/" class="md-tabs__link">
           
   
@@ -651,31 +651,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -693,7 +688,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -764,37 +759,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Model licenses
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../licenses/" class="md-nav__link">
         
   
   
@@ -810,114 +778,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#defaults-vs-gated-vs-banned" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Defaults vs gated vs banned
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#audience" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Audience
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#canonical-table" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Canonical table
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#before-download-models" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Before download-models
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-these-defaults" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why these defaults
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#banned" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Banned
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#default-download-models-pack" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Default download-models pack
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#doctor-one-liner" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Doctor one-liner
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1301,26 +1161,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -1338,7 +1203,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1409,10 +1274,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../disk-wizard/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Disk wizard
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1428,6 +1320,103 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-tools-do-not-mix-them-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three tools (do not mix them up)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wizard-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wizard steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-row-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a row means
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allowed-roots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allowed roots
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hard-refuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard refuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1694,10 +1683,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#defaults-vs-gated-vs-banned" class="md-nav__link">
+  <a href="#when-to-use-this" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Defaults vs gated vs banned
+        When to use this
       
     </span>
   </a>
@@ -1705,10 +1694,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#audience" class="md-nav__link">
+  <a href="#three-tools-do-not-mix-them-up" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Audience
+        Three tools (do not mix them up)
       
     </span>
   </a>
@@ -1716,10 +1705,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#canonical-table" class="md-nav__link">
+  <a href="#wizard-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Canonical table
+        Wizard steps
       
     </span>
   </a>
@@ -1727,10 +1716,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#before-download-models" class="md-nav__link">
+  <a href="#what-a-row-means" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Before download-models
+        What a row means
       
     </span>
   </a>
@@ -1738,10 +1727,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-these-defaults" class="md-nav__link">
+  <a href="#allowed-roots" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why these defaults
+        Allowed roots
       
     </span>
   </a>
@@ -1749,10 +1738,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#banned" class="md-nav__link">
+  <a href="#hard-refuses" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Banned
+        Hard refuses
       
     </span>
   </a>
@@ -1760,21 +1749,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#default-download-models-pack" class="md-nav__link">
+  <a href="#related" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Default download-models pack
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#doctor-one-liner" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Doctor one-liner
+        Related
       
     </span>
   </a>
@@ -1801,586 +1779,153 @@
   
 
 
-<h1 id="model-licenses">Model licenses<a class="headerlink" href="#model-licenses" title="Permanent link">&para;</a></h1>
+<h1 id="disk-wizard">Disk wizard<a class="headerlink" href="#disk-wizard" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>Who this policy is for (US casual commercial, local weights only)</li>
-<li>Canonical table (same rows as repo-root <code>LICENSE-MODELS.md</code>)</li>
-<li>What we download by default vs omit</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> $10M company-revenue cap vs <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache</span> silent video</li>
-<li>How 90s shorts split <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> still / optional silent Wan / LTX AV print</li>
-<li>What is banned (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="h3" data-href="../glossary/#h3" title="Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.">MiniMax H3</span>, MiniMax Music 3, Suno/Udio, Klein 9B, FLUX.2-dev, API-only)</li>
+<li>What the wizard will and will not touch</li>
+<li>How it differs from <code>cleanup</code> and <code>reap-models</code></li>
+<li>Plan → explain → apply</li>
+<li>Restore from <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="quarantine" data-href="../glossary/#quarantine" title="Move-aside instead of delete so a leftover pack can be restored.">quarantine</span></li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>A grep-able policy CI can test</li>
-<li>Honest copy: LTX is the audio model and is <strong>not Apache</strong>; Wan is the legally cleanest motion model and has <strong>no native audio</strong></li>
-<li>Operators can <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> the lab graphs without pulling US-excluded or non-commercial defaults</li>
+<li>Freeing tens of GB of leftover HF blobs, Docker build cache, Ollama pulls, and superseded Comfy packs <strong>without</strong> deleting the lab keep-set</li>
+<li>Understanding <em>what a file is</em>, <em>why you might have it</em>, and <em>the risk of removing it</em></li>
+<li>Keeping <code>cleanup</code> as volume-only and <code>reap-models</code> as the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="models-dir" data-href="../glossary/#models-dir" title="Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.">MODELS_DIR</span> specialist</li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Not legal advice</p>
-<p>This page encodes the stack’s <strong>download and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../glossary/#workflow" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">workflow</span> policy</strong>. It is not legal advice. Read each Hugging Face model card and license before you monetize. Company-revenue caps (LTX) count <strong>affiliates</strong>.</p>
+<p><strong>Safety impact:</strong> additive. Default is read-only <code>--plan</code>. Does not change <code>restart: "no"</code>, start <code>yes</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit.</p>
+<hr />
+<h2 id="when-to-use-this">When to use this<a class="headerlink" href="#when-to-use-this" title="Permanent link">&para;</a></h2>
+<p>You run this studio <strong>and</strong> other experiments on the same <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> (vLLM, Ollama, llama.cpp, extra Compose stacks, ad-hoc <code>hf download</code>). Disk fills with residue that <code>reap-models</code> cannot see because it only walks <code>MODELS_DIR</code>.</p>
+<div class="ez-cmd-builder" data-ez-cmd="disk-wizard-plan">
+<noscript><pre><code>./scripts/manage.sh disk-wizard --plan</code></pre></noscript>
 </div>
-<h2 id="defaults-vs-gated-vs-banned">Defaults vs gated vs banned<a class="headerlink" href="#defaults-vs-gated-vs-banned" title="Permanent link">&para;</a></h2>
+
+<p>TTY with no flags starts a numbered guide, then still writes a plan. Non-interactive (CI, pipes) is <code>--plan</code>. <code>--apply</code> requires <code>--yes</code>.</p>
+<hr />
+<h2 id="three-tools-do-not-mix-them-up">Three tools (do not mix them up)<a class="headerlink" href="#three-tools-do-not-mix-them-up" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Bucket</th>
+<th>Tool</th>
+<th>Scope</th>
+<th>Default</th>
+<th>Deletes weights?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cleanup</code></td>
+<td>Named volume <code>ez-comfy-state</code> only</td>
+<td>type <code>DELETE</code></td>
+<td><strong>No</strong></td>
+</tr>
+<tr>
+<td><code>reap-models</code></td>
+<td><code>MODELS_DIR</code> classes (junk / superseded / banned / drop-pack)</td>
+<td><code>--plan</code></td>
+<td>Only after <code>--apply --yes</code></td>
+</tr>
+<tr>
+<td><code>disk-wizard</code></td>
+<td>Host leftovers (HF hub, Docker cache, Ollama, tmp dumps, MODELS_DIR junk)</td>
+<td><code>--plan</code></td>
+<td>Safe junk after <code>--apply --yes</code>; review-class <strong>quarantines</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Never offered: <code>docker system prune -a --volumes</code>. That would eat other stacks' volumes.</p>
+<hr />
+<h2 id="wizard-steps">Wizard steps<a class="headerlink" href="#wizard-steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Survey</strong> (always read-only) — <code>df</code>, Docker <code>system df</code> when available, catalog matches, top files under allowed roots.</li>
+<li><strong>Explain + rank</strong> — largest <em>likely leftover</em> first. Each row: what / why / risk / reclaim / whether something is running.</li>
+<li><strong>Guide in three steps</strong><ul>
+<li><strong>A — Safe junk</strong> — <code>*.incomplete</code>, dangling Comfy symlinks, unused Docker <strong>build cache</strong>, detached HF revisions, core dumps. Default accept on <code>--apply</code>.</li>
+<li><strong>B — Review leftovers</strong> — unused named images, HF hub repos that are not the lab keep-set, Ollama blobs, opt-in Comfy packs, large MP4s under <code>COMFY_OUTPUT_DIR</code>. Default <strong>skip</strong>. Set <code>DISK_WIZARD_STEP_B=1</code> to quarantine those when applying.</li>
+<li><strong>C — Will not touch</strong> — default keep-set weights, <code>ez-comfy-state</code> (use <code>cleanup</code>), images of running containers, path escape, other users' homes.</li>
+</ul>
+</li>
+<li><strong>Confirm</strong> — <code>--apply --yes</code>. Log: <code>${MODELS_DIR}/.disk-wizard.log</code>.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>--plan
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>--json
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>--apply<span class="w"> </span>--yes
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>.disk-quarantine/&lt;utc&gt;
+</code></pre></div>
+<hr />
+<h2 id="what-a-row-means">What a row means<a class="headerlink" href="#what-a-row-means" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Default download</strong></td>
-<td>Klein 4B still (Apache) + Wan 2.2 silent (Apache) + LTX-2.5 AV (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="community-license" data-href="../glossary/#community-license" title="LTX-2.5 terms: free commercial under $10M COMPANY revenue (affiliates count); disclose AI; no distill.">LTX Community License</span>, <strong>gated</strong>, $10M company cap) + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="prompt-enhance" data-href="../glossary/#prompt-enhance" title="In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.">Prompt Enhance</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span></td>
+<td><strong>what</strong></td>
+<td>What this file or Docker object is</td>
 </tr>
 <tr>
-<td><strong>Gated</strong></td>
-<td>LTX-2.5 (LTX Community License): token <strong>and</strong> a license click as that Hugging Face user</td>
+<td><strong>why</strong></td>
+<td>Why it exists on a Spark used for mixed inference experiments</td>
 </tr>
 <tr>
-<td><strong>Opt-in</strong></td>
-<td>Podcast (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span>), rap AIO, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="z-image" data-href="../glossary/#z-image" title="Optional Apache still runner-up. Not the default Klein path.">Z-Image</span>, Wan A14B, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fun-inp" data-href="../glossary/#fun-inp" title="Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.">Fun InP</span>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS.2</span>, …</td>
+<td><strong>risk</strong></td>
+<td><code>safe</code> (junk) / <code>review</code> (maybe still wanted) / <code>dangerous</code> (refused)</td>
 </tr>
 <tr>
-<td><strong>Banned</strong></td>
-<td>MiniMax H3 (US Excluded Territory for weights <strong>and</strong> outputs), Klein 9B as default, FLUX.2-dev as default, cloud partner APIs, NC <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span> packs</td>
+<td><strong>reclaim</strong></td>
+<td><code>delete</code> / <code>quarantine</code> / <code>hf-prune</code> / <code>reap-models</code> / <code>none</code></td>
 </tr>
 </tbody>
 </table>
-<pre class="mermaid"><code>flowchart LR
-  D["Apache still + Apache silent"] --&gt; Daily["Daily driver"]
-  G["LTX Community · gated"] --&gt; AV["AV hero"]
-  B["H3 / 9B default / APIs"] --&gt; No["Not in this lab"]</code></pre>
-<h2 id="audience">Audience<a class="headerlink" href="#audience" title="Permanent link">&para;</a></h2>
-<p>US-based casual content creators: YouTube, client shorts, ads under a <strong>small LLC</strong>. Run <strong>only locally hosted</strong> models. No fal / Comfy Cloud / MiniMax API / Kling / Seedance / Veo partner nodes in lab graphs.</p>
-<h2 id="canonical-table">Canonical table<a class="headerlink" href="#canonical-table" title="Permanent link">&para;</a></h2>
-<p>Columns: model | HF repo | license name | US self-host OK? | monetized YouTube OK? | $ threshold | attribution | distillation ban | default download?</p>
+<p>Quarantine dest: <code>${MODELS_DIR}/.disk-quarantine/&lt;utc&gt;/</code> when the path is under <code>MODELS_DIR</code>, else <code>${COMFY_OUTPUT_DIR}/.disk-quarantine/&lt;utc&gt;/</code>. Manifest is JSONL. Restore moves files back.</p>
+<hr />
+<h2 id="allowed-roots">Allowed roots<a class="headerlink" href="#allowed-roots" title="Permanent link">&para;</a></h2>
+<p>Default: <code>MODELS_DIR</code>, <code>COMFY_OUTPUT_DIR</code>, <code>$HOME/.cache</code>, <code>$HOME/.ollama</code>, <code>/tmp</code>, <code>/var/tmp</code>. Extra colon-separated roots: <code>DISK_WIZARD_ROOTS</code>. Paths are realpath-jailed (no <code>/</code>, <code>/boot</code>, other homes).</p>
+<p><code>--i-system</code> is <strong>not</strong> implemented in v1 (apt/journal stay off).</p>
+<hr />
+<h2 id="hard-refuses">Hard refuses<a class="headerlink" href="#hard-refuses" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Default keep-set basenames (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> 5B / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX-2.5</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>)</li>
+<li>Docker image <strong>in use</strong></li>
+<li>Named volume <code>ez-comfy-state</code></li>
+<li><code>docker system prune -a --volumes</code> as one shot</li>
+<li>HF pid / <code>.hf-download.pid</code> (override <code>--force</code>, not the happy path)</li>
+<li>Path escape after <code>realpath</code></li>
+<li>Drive-by <code>rm -rf ~/.cache/huggingface</code></li>
+</ul>
+<p>MODELS_DIR class work still belongs to <code>reap-models</code> for superseded LTX-2.3 / drop-pack; the wizard <strong>explains</strong> those rows and quarantines on apply rather than reimplementing keep-set.</p>
+<hr />
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>model</th>
-<th>HF repo</th>
-<th>license name</th>
-<th>US self-host OK?</th>
-<th>monetized YouTube OK?</th>
-<th>$ threshold</th>
-<th>attribution</th>
-<th>distillation ban</th>
-<th>default download?</th>
+<th>Need</th>
+<th>Page</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>FLUX.2 Klein 4B distilled <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fp8" data-href="../glossary/#fp8" title="8-bit float weight format used by default Klein distilled and some Wan packs.">FP8</span></td>
-<td>black-forest-labs/FLUX.2-klein-4b-fp8</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>Yes</td>
+<td>MODELS_DIR classes only</td>
+<td><a href="../models-and-cache/">Models and cache</a></td>
 </tr>
 <tr>
-<td>FLUX.2 Klein 4B base FP8</td>
-<td>black-forest-labs/FLUX.2-klein-base-4b-fp8</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
+<td><code>--tier</code> pack map</td>
+<td><a href="../download-tiers/">Download tiers</a></td>
 </tr>
 <tr>
-<td>FLUX.2 Klein 4B NVFP4</td>
-<td>black-forest-labs/FLUX.2-klein-4b-nvfp4</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
+<td>Verb catalog</td>
+<td><a href="../manage-cli/">manage.sh reference</a></td>
 </tr>
 <tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span> text encoder (Klein 4B companion)</td>
-<td>Comfy-Org/flux2-klein-4B</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>FLUX.2 <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vae" data-href="../glossary/#vae" title="Encoder/decoder between pixels and latent space. Each model family has its own.">VAE</span></td>
-<td>Comfy-Org/flux2-dev (split_files/vae)</td>
-<td>Apache 2.0 companion</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>follow card</td>
-<td>No extra ban beyond card</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>Z-Image Turbo</td>
-<td>Comfy-Org/z_image_turbo</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Wan 2.2 TI2V-5B</td>
-<td>Comfy-Org/Wan_2.2_ComfyUI_Repackaged</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>Wan 2.2 A14B <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2v" data-href="../glossary/#t2v" title="Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.">T2V</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">I2V</span></td>
-<td>Comfy-Org/Wan_2.2_ComfyUI_Repackaged</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Wan 2.2 Fun InP A14B</td>
-<td>alibaba-pai/Wan2.2-Fun-A14B-InP</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seedvr2" data-href="../glossary/#seedvr2" title="Optional Apache restorer for a stitched 90s master. Not part of download-models.">SeedVR2-3B</span></td>
-<td>ByteDance-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">Seed</span>/SeedVR2-3B</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td>TRELLIS.2 native</td>
-<td>microsoft/TRELLIS.2</td>
-<td>MIT</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>MIT NOTICE</td>
-<td>No extra ban beyond MIT. No nvdiffrast/nvdiffrec</td>
-<td>No</td>
-</tr>
-<tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="da3" data-href="../glossary/#da3" title="Optional Apache depth model. DA3-LARGE is refused.">DA3-BASE</span></td>
-<td>depth-anything/DA3-BASE</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Wan 2.1 <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vace" data-href="../glossary/#vace" title="Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.">VACE</span> 1.3B</td>
-<td>Wan-AI/Wan2.1-VACE-1.3B</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Wan 2.2 <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="s2v" data-href="../glossary/#s2v" title="Speech-to-video (optional Wan 2.2 S2V 14B). Not a download-models default.">S2V</span> 14B</td>
-<td>Wan-AI/Wan2.2-S2V-14B</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td>SuperSplat</td>
-<td>playcanvas/supersplat</td>
-<td>MIT</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>MIT</td>
-<td>Host static viewer. Not in Dockerfile</td>
-<td>No</td>
-</tr>
-<tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="umt5" data-href="../glossary/#umt5" title="Wan 2.2 text encoder (CLIP type wan).">UMT5-XXL</span> text encoder (Wan companion)</td>
-<td>Comfy-Org/Wan_2.2_ComfyUI_Repackaged</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>LTX-2.5 distilled <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="int8-convrot" data-href="../glossary/#int8-convrot" title="Quantized LTX-2.5 transformer format used by the lab distilled weights.">INT8-convrot</span></td>
-<td>Lightricks/LTX-2.5</td>
-<td>LTX Community License</td>
-<td>Yes</td>
-<td>Yes if company under cap</td>
-<td>$10M COMPANY annual revenue (affiliates count)</td>
-<td>disclose AI-generated media; do not strip provenance</td>
-<td>Yes — do not distill into a competing model</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>LTX-2.5 IC-LoRA Union Control</td>
-<td>Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control</td>
-<td>LTX Community License</td>
-<td>Yes</td>
-<td>Yes if company under cap</td>
-<td>$10M COMPANY annual revenue (affiliates count)</td>
-<td>disclose AI-generated media; do not strip provenance</td>
-<td>Yes — do not distill into a competing model. Distilled-only. Official 2.5 graph widgets <code>ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors</code>. Refuse 19B Union.</td>
-<td>No</td>
-</tr>
-<tr>
-<td>LTX-2.3 distilled FP8</td>
-<td>Kijai/LTX2.3_comfy</td>
-<td>LTX Community License</td>
-<td>Yes</td>
-<td>Yes if company under cap</td>
-<td>$10M COMPANY annual revenue (affiliates count)</td>
-<td>disclose AI-generated media; do not strip provenance</td>
-<td>Yes — do not distill into a competing model</td>
-<td>No</td>
-</tr>
-<tr>
-<td>FLUX.2 Klein 9B</td>
-<td>black-forest-labs/FLUX.2-klein-9b-nvfp4</td>
-<td>FLUX Non-Commercial</td>
-<td>Yes (non-commercial only)</td>
-<td>No</td>
-<td>paid BFL commercial license</td>
-<td>card</td>
-<td>card</td>
-<td>No</td>
-</tr>
-<tr>
-<td>FLUX.2 [dev]</td>
-<td>black-forest-labs/FLUX.2-dev</td>
-<td>FLUX.2-dev / Non-Commercial</td>
-<td>Yes (non-commercial only)</td>
-<td>No</td>
-<td>paid BFL commercial license</td>
-<td>card</td>
-<td>card</td>
-<td>No</td>
-</tr>
-<tr>
-<td>MiniMax H3</td>
-<td>Comfy-Org/MiniMax-H3</td>
-<td>MiniMax H3 Community License</td>
-<td>No — US Excluded Territory for weights AND outputs</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Wan 2.5 / 2.6 / 2.7 / 3.0</td>
-<td>(API / partner)</td>
-<td>API-only / partner</td>
-<td>No (not local weights)</td>
-<td>No as a lab default</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Seedance / Kling / Veo / fal / Comfy Cloud</td>
-<td>(API / partner)</td>
-<td>API-only / partner</td>
-<td>No (not local weights)</td>
-<td>No as a lab default</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>HunyuanVideo 1.5</td>
-<td>Tencent Hunyuan</td>
-<td>territorial clause (not EU/UK/KR)</td>
-<td>Yes</td>
-<td>Yes in the US</td>
-<td>card</td>
-<td>card</td>
-<td>card</td>
-<td>No</td>
-</tr>
-<tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="longcat" data-href="../glossary/#longcat" title="Optional MIT video pack. No NCCL. Not a 90s default.">LongCat-Video</span></td>
-<td>meituan-longcat/LongCat-Video</td>
-<td>MIT</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>MIT</td>
-<td>No extra ban beyond MIT. No NCCL</td>
-<td>No</td>
-</tr>
-<tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dreamx" data-href="../glossary/#dreamx" title="Optional Apache joint-AV pack. DreamX-World is refused.">DreamX-Creator</span> 1.0</td>
-<td>GD-ML/DreamX-Creator</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache. Not DreamX-World</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Qwen3-4B-Instruct-2507 Q4_K_M GGUF</td>
-<td>unsloth/Qwen3-4B-Instruct-2507-GGUF</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>Kokoro-82M</td>
-<td>hexgrad/Kokoro-82M (ONNX pack: fastrtc/kokoro-onnx)</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td>ACE-Step 1.5 turbo AIO</td>
-<td>Comfy-Org/ace_step_1.5_ComfyUI_files</td>
-<td>MIT upstream / Apache companion pack</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>MIT</td>
-<td>No extra ban beyond MIT</td>
-<td>No</td>
-</tr>
-<tr>
-<td>ACE-Step 1.5 XL</td>
-<td>Comfy-Org/ace_step_1.5_ComfyUI_files</td>
-<td>MIT</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>MIT</td>
-<td>No extra ban beyond MIT</td>
-<td>No</td>
-</tr>
-<tr>
-<td>MiniMax Music 3</td>
-<td>(partner / not lab default)</td>
-<td>MiniMax Music 3</td>
-<td>No — not a lab default</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Suno / Udio</td>
-<td>(partner)</td>
-<td>API-only / partner</td>
-<td>No (not local weights)</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> / Multilingual v3 / Turbo</td>
-<td>ResembleAI/chatterbox</td>
-<td>MIT</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>MIT; PerTh watermark stays on</td>
-<td>No extra ban beyond MIT</td>
-<td>No</td>
-</tr>
-<tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> 0.6B</td>
-<td>Qwen/Qwen3-TTS-12Hz-0.6B-Base</td>
-<td>Apache 2.0</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>none</td>
-<td>Apache NOTICE if you redistribute weights</td>
-<td>No extra ban beyond Apache</td>
-<td>No</td>
-</tr>
-<tr>
-<td>F5-TTS official weights</td>
-<td>SWivid/F5-TTS</td>
-<td>CC-BY-NC-4.0</td>
-<td>No</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Coqui XTTS v2</td>
-<td>coqui/XTTS-v2</td>
-<td>CPML</td>
-<td>No</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Echo-TTS</td>
-<td>(Echo-TTS card)</td>
-<td>CC-BY-NC-SA</td>
-<td>No</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Fish Audio S2</td>
-<td>Fish Audio S2</td>
-<td>research/NC</td>
-<td>No</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>Higgs Boson</td>
-<td>Higgs v2/v3</td>
-<td>community/commercial traps</td>
-<td>No</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>TTS-Audio-Suite</td>
-<td>diodiogod/TTS-Audio-Suite</td>
-<td>mixed NC / research pack</td>
-<td>No</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
-</tr>
-<tr>
-<td>OldTimeRadio</td>
-<td>jbrick2070/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span>-OldTimeRadio</td>
-<td>H3 / FLUX-dev / NC optional lanes</td>
-<td>No</td>
-<td>No</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>No</td>
+<td>Disk-full symptom</td>
+<td><a href="../troubleshooting/">Troubleshooting</a></td>
 </tr>
 </tbody>
 </table>
-<p>TRELLIS.2 footnote: companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download. Native TRELLIS Comfy basenames such as <code>trellis_2_int8_convrot</code> are opt-in via <code>download-3d</code> only — do not treat them as <code>download-models</code>.</p>
-<p>The same table is in repo-root <code>LICENSE-MODELS.md</code> so tests can grep either file.</p>
-<h2 id="before-download-models">Before <code>download-models</code><a class="headerlink" href="#before-download-models" title="Permanent link">&para;</a></h2>
-<p>LTX-2.5 is gated. Klein 4B and Wan 5B are Apache and do not need a license click.</p>
-<ol>
-<li>Create or edit <code>.env</code> with <code>HF_TOKEN=hf_...</code> (or <code>hf auth login</code>)</li>
-<li>In a browser, as <strong>that same user</strong>, open https://huggingface.co/Lightricks/LTX-2.5 and click <strong>Agree</strong></li>
-<li>Fine-grained tokens need <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gated" data-href="../glossary/#gated" title="Hugging Face repo that requires a license click plus a token. LTX-2.5 is gated.">gated repo</span></strong> read</li>
-<li><code>hf auth whoami</code> then <code>./scripts/manage.sh download-models</code></li>
-</ol>
-<p>A token in <code>.env</code> is <strong>not</strong> the same as accepting the Lightricks license. First-run path: <a href="../getting-started/">Getting Started</a>.</p>
-<h2 id="why-these-defaults">Why these defaults<a class="headerlink" href="#why-these-defaults" title="Permanent link">&para;</a></h2>
-<p><strong>Still (Apache 2.0):</strong> FLUX.2 Klein <strong>4B distilled FP8</strong> is the official ComfyUI Klein 4B path (<code>flux-2-klein-4b-fp8.safetensors</code>, <code>qwen_3_4b.safetensors</code>, <code>flux2-vae.safetensors</code>). Distilled = 4 steps, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="cfg" data-href="../glossary/#cfg" title="Classifier-free guidance scale. Distilled Klein wants 1.0 — do not &#x27;turn it up for quality&#x27;.">CFG</span> 1.0. Klein <strong>9B</strong> is FLUX Non-Commercial — <strong>not</strong> fine for monetized YouTube as a lab default. FLUX.2 [dev] is not a casual-commercial default.</p>
-<p><strong>Runner-up still:</strong> Z-Image Turbo (Apache 2.0, native Comfy templates). Optional <code>download-image --tier zimage</code> if Klein 4B quality disappoints. Qwen-Image is the slower quality sibling — documented only, not a default download.</p>
-<p><strong>Silent motion (Apache 2.0):</strong> Wan 2.2 TI2V-5B is the daily driver (T2V + I2V, official Comfy templates). <strong>No native audio.</strong> Wan 2.2 A14B is an optional hero (<code>download-wan --tier a14b</code>), not the first download.</p>
-<p><strong>Audio + video (not Apache):</strong> LTX-2.5 distilled INT8-convrot is the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="av" data-href="../glossary/#av" title="Audio and video in one transformer pass. LTX-2.5&#x27;s job; Wan cannot do this.">AV hero</span>. <strong>LTX Community License</strong>: free commercial under <strong>$10M COMPANY annual revenue (affiliates count)</strong>; <strong>no US geo-ban</strong>; disclose AI-generated media; do not strip provenance; do not distill into a competing model. Hugging Face repo is <strong>gated</strong> — accept the license and set <code>HF_TOKEN</code> before <code>download-models</code>. Lab download is the <strong>small distilled set</strong>, not the 400 GB monorepo.</p>
-<p><strong>LTX-2.3:</strong> optional fallback (<code>download-ltx --tier 2.3</code>) if 2.5 access or INT8-convrot fails. Not advertised as 30 s / 60 s films.</p>
-<p><strong>90s films:</strong> Klein <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="identity-still" data-href="../glossary/#identity-still" title="Klein frame that locks wardrobe/place so later I2V shots stay the same person or house.">identity still</span> + 18 × LTX 5.00s print (world audio, no score), stitch with a 90s cap. Do not Queue a 90s <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="latent" data-href="../glossary/#latent" title="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.">latent</span>. See <a href="../shorts/">90s shorts</a>.</p>
-<p><strong>Omitted:</strong> LongCat-Video (custom-node risk). HunyuanVideo 1.5 (US-legal but territorial clause for other countries — not the one-stack default).</p>
-<h2 id="banned">Banned<a class="headerlink" href="#banned" title="Permanent link">&para;</a></h2>
-<p>Do not download, do not reference in lab graphs, do not pin Comfy for them:</p>
-<ul>
-<li>MiniMax H3 (US Excluded Territory for <strong>weights and outputs</strong>)</li>
-<li>MiniMax Music 3 as a lab default</li>
-<li>Suno / Udio partner APIs</li>
-<li>FLUX.2 [dev] as any default or “quality” tier</li>
-<li>FLUX.2 Klein 9B as the default image model</li>
-<li>API-only models (Wan 2.5/2.6/2.7/3.0, Seedance, Kling, Veo, fal, Comfy Cloud, MiniMax API)</li>
-<li>F5-TTS official weights (CC-BY-NC-4.0), Coqui XTTS v2 (CPML), Echo-TTS (CC-BY-NC-SA)</li>
-<li>Fish Audio S2 (research/NC), Higgs Boson (community/commercial traps)</li>
-<li>TTS-Audio-Suite as a pack; OldTimeRadio as a pack (H3 / FLUX-dev / NC optional lanes)</li>
-<li>nvdiffrast / nvdiffrec TRELLIS, DA3-LARGE, Inria 3DGS, Pixal3D-as-default</li>
-<li>DreamX-World (Creator 1.0 Apache only)</li>
-<li>Wav2Lip OSS</li>
-<li>LTX-2 19B IC-LoRA Union Control (<code>Lightricks/LTX-2-19b-IC-LoRA-Union-Control</code>)</li>
-</ul>
-<p>Opt-in local podcast (not in <code>download-models</code>): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See <a href="../podcast/">Local podcast</a>. Opt-in local rap: same ACE-Step 1.5 turbo AIO via <code>download-music --tier turbo</code> (shared dest with <code>download-podcast --tier acestep</code>). See <a href="../music/">Local music</a>.</p>
-<p><code>./scripts/manage.sh download-models</code> <strong>refuses</strong> MiniMax H3.</p>
-<h2 id="default-download-models-pack">Default <code>download-models</code> pack<a class="headerlink" href="#default-download-models-pack" title="Permanent link">&para;</a></h2>
-<p>Apache still: <code>flux-2-klein-4b-fp8.safetensors</code> + <code>qwen_3_4b.safetensors</code> + <code>flux2-vae.safetensors</code></p>
-<p>Apache silent motion: <code>wan2.2_ti2v_5B_fp16.safetensors</code> + <code>wan2.2_vae.safetensors</code> + <code>umt5_xxl_fp8_e4m3fn_scaled.safetensors</code></p>
-<p>LTX AV (not Apache): <code>ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors</code> + <code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors</code> + <code>ltx-2.5-video-vae-bf16.safetensors</code> + <code>ltx-2.5-audio-vae-bf16.safetensors</code></p>
-<p>Apache prompt-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> GGUF: <code>Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code></p>
-<h2 id="doctor-one-liner">Doctor one-liner<a class="headerlink" href="#doctor-one-liner" title="Permanent link">&para;</a></h2>
-<p><code>manage.sh doctor</code> prints:</p>
-<p><code>License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md</code></p>
 
 
 
