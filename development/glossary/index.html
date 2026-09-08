@@ -596,6 +596,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../learn/clay-to-finish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clay to finish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../learn/hardware/" class="md-nav__link">
         
   
@@ -1688,6 +1716,39 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#shot-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shot card
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overlay-qc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        overlay-qc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#film-animatic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        film-animatic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#loudnorm" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1764,6 +1825,17 @@
     <span class="md-ellipsis">
       
         YouTube multi-language audio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stem-mix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stem-mix
       
     </span>
   </a>
@@ -3802,6 +3874,39 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#shot-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shot card
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overlay-qc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        overlay-qc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#film-animatic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        film-animatic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#loudnorm" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3878,6 +3983,17 @@
     <span class="md-ellipsis">
       
         YouTube multi-language audio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stem-mix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stem-mix
       
     </span>
   </a>
@@ -4303,6 +4419,18 @@
 <h3 id="jobstore">jobstore<a class="headerlink" href="#jobstore" title="Permanent link">&para;</a></h3>
 <p>A dropped SSH session is not a two-hour requeue: <code>film-resume</code> skips ok 5.00 s shots. Optional studio-ui on :8190 is lights only (no GPU). See <a href="../shorts/">90s shorts</a>.</p>
 <p><strong>See also:</strong> <a href="#last-frame">last-frame continuity</a> · <a href="#film-accept">film-accept</a></p>
+<h3 id="shot-card">Shot card<a class="headerlink" href="#shot-card" title="Permanent link">&para;</a></h3>
+<p><code>shot-sheet</code> writes <code>films/&lt;slug&gt;/shots.yaml</code> with fail-closed defaults (<code>clay: skip</code>, <code>audio_policy: world-only</code>). Lab <code>workflows/shorts/*.shots.yaml</code> stay golden fixtures. See <a href="../learn/clay-to-finish/">Clay to finish</a>.</p>
+<p><strong>Also called:</strong> <code>shot card</code>, <code>shot-card</code></p>
+<p><strong>See also:</strong> <a href="#guide-pack">Guide pack</a> · <a href="#film-accept">film-accept</a></p>
+<h3 id="overlay-qc">overlay-qc<a class="headerlink" href="#overlay-qc" title="Permanent link">&para;</a></h3>
+<p>Host ffmpeg; compose may stay up. Writes <code>overlay.png</code> and <code>score.json</code>. Human still picks; the score only ranks. See <a href="../learn/clay-to-finish/">Clay to finish</a>.</p>
+<p><strong>Also called:</strong> <code>overlay QC</code></p>
+<p><strong>See also:</strong> <a href="#guide-pack">Guide pack</a> · <a href="#occupancy">occupancy</a></p>
+<h3 id="film-animatic">film-animatic<a class="headerlink" href="#film-animatic" title="Permanent link">&para;</a></h3>
+<p><code>manage.sh film-animatic --film go-see</code> concats clay clips or 5.00 s still holds, cap 90 s. Not a 90 s denoise. See <a href="../learn/clay-to-finish/">Clay to finish</a>.</p>
+<p><strong>Also called:</strong> <code>animatic</code></p>
+<p><strong>See also:</strong> <a href="#guide-pack">Guide pack</a> · <a href="#shot-card">Shot card</a></p>
 <h3 id="loudnorm">loudnorm<a class="headerlink" href="#loudnorm" title="Permanent link">&para;</a></h3>
 <p><code>podcast-loudnorm.sh</code> is a hard fail if ffmpeg is missing — it will not skip. 90s publish graphs apply YouTube loudnorm in EZFilmConcat. See <a href="../podcast/">Local podcast</a>.</p>
 <p><strong>See also:</strong> <a href="#tts">TTS</a> · <a href="#vhs">VideoHelperSuite</a></p>
@@ -4324,6 +4452,10 @@
 <p>YouTube does not reliably ingest extra AAC tracks muxed into an MP4. Export <code>ez_dub_yt.wav</code>, upload it under Languages → Audio, add the translated SRT, and use the synthetic/altered-content toggle. Eligibility varies by channel. See <a href="../dub/">Local dub</a>.</p>
 <p><strong>Also called:</strong> <code>multi-language audio</code>, <code>MLA</code></p>
 <p><strong>See also:</strong> <a href="#dub">Local dub</a> · <a href="#loudnorm">loudnorm</a></p>
+<h3 id="stem-mix">stem-mix<a class="headerlink" href="#stem-mix" title="Permanent link">&para;</a></h3>
+<p>LTX joint AV is the world bed, not the master. Occupancy audio — stop Klein / Wan / LTX first. <code>film-accept</code> checks stem LUFS when <code>audio_policy: stems</code>. See <a href="../learn/clay-to-finish/">Clay to finish</a>.</p>
+<p><strong>Also called:</strong> <code>audio finish</code></p>
+<p><strong>See also:</strong> <a href="#loudnorm">loudnorm</a> · <a href="#film-accept">film-accept</a></p>
 <h3 id="tts">TTS<a class="headerlink" href="#tts" title="Permanent link">&para;</a></h3>
 <p>Invented characters only. Disclose synthetic voices in the mix (spoken bumper), not only in a description box. TTS-Audio-Suite and celebrity refs are out of policy. See <a href="../podcast/">Local podcast</a>.</p>
 <p><strong>See also:</strong> <a href="#kokoro">Kokoro</a> · <a href="#disclosure">disclosure bumper</a> · <a href="#ace-step">ACE-Step</a></p>
