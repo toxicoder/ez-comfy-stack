@@ -86,6 +86,9 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
     assert "crown penthouse" in ident
     assert "wraparound terrace" in ident
     assert "three-bay" in ident
+    assert "lounge" in ident
+    assert "lantern" in ident or "path light" in ident
+    assert "bay" in ident
     assert "24mm" not in ident
     assert "golden-hour" not in ident
     assert "cedar" not in ident
@@ -94,6 +97,7 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
     assert "linen sofa" in inv
     assert "data-staff" in inv
     assert "terrace chairs" in inv
+    assert "lantern" in inv or "path light" in inv
 
 
 def test_klein_draft_and_hero_lock_cutscene_identity() -> None:

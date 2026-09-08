@@ -31,8 +31,8 @@ LOCK_VIEW = "view"
 LOCK_STATE = "state"
 LOCK_IDS = (LOCK_VIEW, LOCK_STATE)
 LOCK_VIEW_LINE = (
-    "Keep this exact place and inventory. New photograph from a different camera "
-    "and framing."
+    "Same building, rooms, furniture placement, materials, sky, and background. "
+    "New photograph from a different camera in a walkthrough of this place."
 )
 LOCK_STATE_LINE = (
     "Keep this exact place, inventory, and camera framing. The shot names the only "
@@ -165,6 +165,9 @@ def join_prompt(
       lock: view (new camera) or state (same camera)
     Returns:
       One CLIP string, or empty when every field is blank.
+      lock=view with a shot card front-loads the camera so Klein treats
+      the still as a new walkthrough frame. lock=state and identity-only
+      joins keep the bible first.
     """
     bible = identity.strip() if isinstance(identity, str) else str(identity or "").strip()
     card = shot.strip() if isinstance(shot, str) else str(shot or "").strip()
@@ -174,12 +177,23 @@ def join_prompt(
         mode = LOCK_VIEW
     if not bible and not card and not inv:
         return ""
+    inv_line = f"Locked inventory (do not change): {inv}." if inv else ""
+    lock_line = LOCK_STATE_LINE if mode == LOCK_STATE else LOCK_VIEW_LINE
     parts: list[str] = []
+    camera_first = mode == LOCK_VIEW and bool(card)
+    if camera_first:
+        parts.append(card)
+        parts.append(lock_line)
+        if bible:
+            parts.append(bible)
+        if inv_line:
+            parts.append(inv_line)
+        return " ".join(parts)
     if bible:
         parts.append(bible)
-    if inv:
-        parts.append(f"Locked inventory (do not change): {inv}.")
-    parts.append(LOCK_STATE_LINE if mode == LOCK_STATE else LOCK_VIEW_LINE)
+    if inv_line:
+        parts.append(inv_line)
+    parts.append(lock_line)
     if card:
         parts.append(card)
     return " ".join(parts)

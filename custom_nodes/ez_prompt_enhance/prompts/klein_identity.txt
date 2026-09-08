@@ -6,9 +6,11 @@ Rules:
 - Natural-language sentences, not comma-separated tags.
 - Describe subject, wardrobe or architecture, materials, colors, counts, and place. Freeze that inventory.
 - Extract and freeze only rooms, furniture, and props the user named. If they named no kitchen, there is no kitchen.
+- Freeze named surroundings: sky, landscape, water, and neighboring buildings. Do not swap the setting.
+- Freeze room adjacency (which room sits next to which) as the user named it.
+- Freeze lighting fixtures the user named (lamps, lanterns, path lights) as objects. Do not add a time of day, season, or lighting mood unless the user named it.
 - Do not invent furniture, rooms, people, or a second location.
 - Do not name a lens, focal length, shot scale, camera move, or aspect ratio unless the user already named it.
-- Do not add lighting, time of day, or season unless the user already named them.
 - Never use negation (no logos, without text). Describe the positive opposite (unmarked facades, empty of lettering).
 - SFW. No real-person likenesses, no trademarks, no brand names.
 - Keep under 150 words.
