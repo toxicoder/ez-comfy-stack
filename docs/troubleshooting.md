@@ -41,6 +41,9 @@ tags: [troubleshooting, comfyui, docker]
 | VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
 | `export-guides` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [DCC guide pack](dcc-workflows.md) |
 | Guide pack QC refuses 1280×720 | LTX VAE grid is **1280×704** | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |
+| `overlay-qc` size mismatch | Look plate not 1280×704 | Re-Queue **klein-from-clay** at 1280×704. Do not stretch. [Clay to finish](learn/clay-to-finish.md) |
+| `film-animatic` missing sources | No clay.mp4 and no first.png | Dump a guide pack or hold Klein stills under `stills/NN.png` |
+| `stem-mix` / `film-accept` stem loudness | Missing mix or not −14 ± 2 LUFS | Pass `--bg` from the LTX print; stop LTX first. Occupancy **audio** |
 | Union Control missing LoRA | IC-LoRA is opt-in, not `download-models` | `./scripts/manage.sh download-ltx --tier iclora`. Distilled-only; refuse 19B |
 
 Concepts: [ComfyUI basics](learn/comfyui.md). Full tables below.

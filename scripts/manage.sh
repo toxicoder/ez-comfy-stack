@@ -148,6 +148,14 @@ Commands:
   asset-ls [--json] [--output-dir DIR]
                     Read-only Asset Bible catalog (COMFY_OUTPUT_DIR/assets)
                     Coming later: asset-new / asset-iterate / asset-promote
+  shot-sheet status|run --film SLUG
+                    Write films/<slug>/shots.yaml (shot-card defaults). No Docker.
+  overlay-qc --film SLUG --shot ID --look PATH
+                    50% clay/look overlay (host ffmpeg; compose may stay up)
+  film-animatic --film SLUG
+                    Cheap 90s animatic from clay.mp4 or stills (host ffmpeg)
+  stem-mix --film SLUG --shot ID --bg PATH
+                    Picture-lock stem mix; duck -15 dB; YouTube loudnorm
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
   download-longcat [--tier video|avatar|all]
@@ -1147,6 +1155,34 @@ cmd_film_accept() {
 }
 
 #######################################
+# Write films/<slug>/shots.yaml with shot-card defaults.
+#######################################
+cmd_shot_sheet() {
+  bash "${REPO_ROOT}/scripts/utilities/shot-sheet.sh" "$@"
+}
+
+#######################################
+# Clay vs look overlay QC (host ffmpeg, no GPU).
+#######################################
+cmd_overlay_qc() {
+  bash "${REPO_ROOT}/scripts/utilities/overlay-qc.sh" "$@"
+}
+
+#######################################
+# Cheap 90s animatic from clay or held stills.
+#######################################
+cmd_film_animatic() {
+  bash "${REPO_ROOT}/scripts/utilities/film-animatic.sh" "$@"
+}
+
+#######################################
+# Picture-lock stem mix (CPU ffmpeg).
+#######################################
+cmd_stem_mix() {
+  bash "${REPO_ROOT}/scripts/utilities/stem-mix.sh" "$@"
+}
+
+#######################################
 # Opt-in LongCat-Video (MIT, no NCCL).
 #######################################
 cmd_download_longcat() {
@@ -1289,6 +1325,10 @@ main() {
     export-guides) cmd_export_guides "$@" ;;
     asset-ls) cmd_asset_ls "$@" ;;
     film-accept) cmd_film_accept "$@" ;;
+    shot-sheet) cmd_shot_sheet "$@" ;;
+    overlay-qc) cmd_overlay_qc "$@" ;;
+    film-animatic) cmd_film_animatic "$@" ;;
+    stem-mix) cmd_stem_mix "$@" ;;
     download-longcat) cmd_download_longcat "$@" ;;
     download-dreamx) cmd_download_dreamx "$@" ;;
     spark-timing) cmd_spark_timing "$@" ;;

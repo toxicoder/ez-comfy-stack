@@ -12,21 +12,11 @@ ROOT = Path(__file__).resolve().parents[2]
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev", "Seedance", "Kling")
 HEAVY = ("UNETLoader", "VAELoader", "KSampler", "VAEDecode")
 YAML_KEYS = (
-    "film",
-    "slug",
-    "frames: 120",
-    "fps: 24",
-    "duration_s: 5.00",
-    "beats: 6",
-    "shots_per_beat: 3",
-    "total_shots: 18",
-    "publish_cap_s: 90.00",
-    "print: ltx",
-    "identity_seed",
-    "identity_enhance: true",
-    "identity_look",
+    "audio_policy",
+    "shot-sheet",
     "load_from: identity",
     "_last",
+    "5.00 s",
 )
 
 
@@ -135,7 +125,9 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     for heavy in HEAVY:
         assert heavy not in types, heavy
     primitives = [n for n in graph["nodes"] if n.get("type") == "PrimitiveNode"]
-    assert len(primitives) == 18
+    assert len(primitives) == 22
+    titles = [n.get("title") for n in primitives]
+    assert titles[:4] == ["Logline", "Script", "Audio policy", "Score"]
     ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
     assert len(ltx) == 18
     assert all(n["widgets_values"][1] is True for n in ltx)
@@ -143,12 +135,15 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     blob = json.dumps(graph)
     for key in YAML_KEYS:
         assert key in blob, key
-    assert "go-see.shots.yaml" in note or "shots.yaml" in note
-    assert "paste" in note.lower()
+    assert "shots.yaml" in note
+    assert "shot-sheet" in note
+    assert "audio_policy" in note
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "none"
     assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
     handoff = graph["extra"]["lab_app_mode"]["handoff"]
     assert "film-go-see-90s-run-lab-example" in handoff
+    assert "klein-from-clay-lab-example" in handoff
+    assert "klein-identity-sheet-lab-example" in handoff
     assert "1280×720" not in blob and "1280x720" not in blob
     assert "MODELS_DIR" not in blob
     for needle in BANNED:

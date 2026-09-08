@@ -18,6 +18,7 @@ const LABELS = {
   mode: "Mode",
   duration_hint: "Duration / framing",
   value: "Shot card",
+  logline: "Logline",
   seconds: "Duration (seconds)",
   speaker_a_voice: "Speaker A",
   speaker_b_voice: "Speaker B",

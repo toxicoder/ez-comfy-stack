@@ -50,6 +50,8 @@ def test_klein_from_clay_contract() -> None:
     note = extra["lab_note"].lower()
     assert "occupancy" in note
     assert "1280" in note and "704" in note
+    assert "overlay-qc" in extra["lab_note"]
+    assert extra["lab_app_mode"]["handoff"] == ["ltx-iclora-depth-5s-lab-example"]
 
 
 def test_ltx_iclora_envelope_contract() -> None:
@@ -70,6 +72,8 @@ def test_ltx_iclora_envelope_contract() -> None:
     assert "19b" not in blob.lower() or "Refuse 19B" in extra["lab_note"]
     assert "download-ltx --tier iclora" in extra["lab_note"]
     assert "subgraph" in extra["lab_note"].lower() or "Templates" in extra["lab_note"]
+    assert extra["lab_app_mode"]["handoff"] == ["audio-finish-lab-example"]
+    assert extra["lab_app_mode"]["occupancy"] == "ltx"
 
 
 def test_dockerfile_still_has_no_dcc_binaries() -> None:

@@ -93,6 +93,7 @@ nav:
       - ComfyUI basics: learn/comfyui.md
       - Image and video generation: learn/generation.md
       - Klein, Wan, and LTX: learn/pipeline.md
+      - Clay to finish: learn/clay-to-finish.md
       - Hardware, memory, and safety: learn/hardware.md
       - Glossary: glossary.md
   - Start:

@@ -69,6 +69,7 @@ def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: object) -> None:
     monkeypatch.setattr(studio_server, "FILMS", tmp_path / "missing")
     html = studio_server._page().decode("utf-8")
     assert "No films yet" in html
+    assert "Jobstore lights only" in html
     dest = tmp_path / "gosee"
     dest.mkdir()
     (dest / "state.json").write_text(
@@ -78,4 +79,6 @@ def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: object) -> None:
     monkeypatch.setattr(studio_server, "FILMS", tmp_path)
     html = studio_server._page().decode("utf-8")
     assert "gosee" in html
+    assert "clay" in html
+    assert "audio_policy" in html
     assert "1/2" in html

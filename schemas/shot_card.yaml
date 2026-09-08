@@ -1,0 +1,35 @@
+# ez.shot.card.v1 — film bible extras on workflows/shorts/*.shots.yaml
+# and films/<slug>/shots.yaml (shot-sheet output). Optional keys default
+# fail-closed. Does not replace ez.guide.shot.v1 (DCC pack handshake).
+schema: ez.shot.card.v1
+film: go-see
+slug: gosee
+frames: 120
+fps: 24
+duration_s: 5.00
+beats: 6
+shots_per_beat: 3
+total_shots: 18
+publish_cap_s: 90.00
+print: ltx                 # ltx | ltx-iclora-depth | dfr | wan-flf | dcc-final
+audio_policy: world-only   # world-only | stems | a2v-lock
+score: none                # none | acestep-instrumental
+identity_seed: 42
+identity_enhance: true
+shots:
+  - beat: 1
+    shot: 1
+    prefix: ez_gosee_b1_s1
+    load_from: identity
+    script: One sentence of action.
+    dialogue: ""             # empty → no DX stem
+    audio_world: wind, footfalls, breath
+    camera: tracking         # prompt_enums.CAMERAS; "fixed" → fixed camera
+    clay: skip               # skip | required
+    look: ""                 # ez_clay_hero_*.png or identity
+    print_mode: ""           # override film print, or empty
+    audio_lock: none         # none | a2v
+    ltx_i2v: |
+      Present-tense paragraph. Sound interleaved. No music and no score.
+    wan_i2v: |
+      Motion + one camera. Silent. No audio words.

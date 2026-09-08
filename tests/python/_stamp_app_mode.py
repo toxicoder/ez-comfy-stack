@@ -615,9 +615,9 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "beat-sheet-lab-example": _spec(
         "inspire",
         "none",
+        "klein-identity-sheet-lab-example",
+        "klein-from-clay-lab-example",
         "film-go-see-90s-run-lab-example",
-        "film-still-here-90s-lab-example",
-        "film-switchyard-90s-lab-example",
         primitive_strings=True,
     ),
     "klein-still-daily-lab-example": _spec(
@@ -696,15 +696,27 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "music-rap-nill-bye-fake-cool-lab-example": _spec("audio", "audio"),
     "music-rap-nill-bye-hypothesis-lab-example": _spec("audio", "audio"),
     "klein-from-clay-lab-example": _spec(
-        "dcc", "klein"
+        "dcc",
+        "klein",
+        "ltx-iclora-depth-5s-lab-example",
     ),
-    "ltx-iclora-depth-5s-lab-example": _spec("dcc", "ltx"),
+    "ltx-iclora-depth-5s-lab-example": _spec(
+        "dcc",
+        "ltx",
+        "audio-finish-lab-example",
+    ),
+    "audio-finish-lab-example": _spec(
+        "audio",
+        "audio",
+        primitive_strings=True,
+    ),
     "wan-i2v-a14b-lab-example": _spec("produce", "wan", default_view="graph"),
 }
 
 STUB_IDS = frozenset({"longcat-video-lab-example"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
     "ltx-iclora-depth-5s-lab-example": ("EZFilmDisclosure",),
+    "audio-finish-lab-example": ("SaveAudio", "PrimitiveNode"),
     "wan-i2v-a14b-lab-example": ("UNETLoader",),
     "podcast-radio-drama-lab-example": ("UNETLoader", "VHS_VideoCombine"),
     "prompt-forge-lab-example": (

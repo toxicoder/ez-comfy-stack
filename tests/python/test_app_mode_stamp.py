@@ -173,7 +173,7 @@ def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
 
 def test_beat_sheet_exposes_only_shot_cards() -> None:
     names = _widget_names(_load("beat-sheet-lab-example.json"))
-    assert names == ["value"] * 18
+    assert names == ["value"] * 22
 
 
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
@@ -254,7 +254,8 @@ def test_beat_sheet_labels_are_node_titles() -> None:
         if n.get("type") == "PrimitiveNode"
     ]
     assert labels == titles
-    assert len(set(labels)) == 18
+    assert len(set(labels)) == 22
+    assert labels[:4] == ["Logline", "Script", "Audio policy", "Score"]
 
 
 def test_music_exposes_duration_and_vocal_mode() -> None:
