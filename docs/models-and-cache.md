@@ -250,6 +250,11 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
 | `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
+| `music-rap-nill-bye-lab-coat-lab-example.json` | ACE-Step 90 s diss, boom-bap 88 (`ez_rap_nill_labcoat`) |
+| `music-rap-nill-bye-peer-review-lab-example.json` | ACE-Step 90 s diss, boom-bap 88 (`ez_rap_nill_review`) |
+| `music-rap-nill-bye-feels-lab-example.json` | ACE-Step 90 s diss, lo-fi 86 (`ez_rap_nill_feels`) |
+| `music-rap-nill-bye-fake-cool-lab-example.json` | ACE-Step 90 s diss, trap 140 (`ez_rap_nill_fakecool`) |
+| `music-rap-nill-bye-hypothesis-lab-example.json` | ACE-Step 90 s diss, boom-bap 92 (`ez_rap_nill_hypothesis`) |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
 | `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (outside through rooms, drone, day/night) |

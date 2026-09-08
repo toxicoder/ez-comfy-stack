@@ -633,6 +633,11 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "podcast-radio-drama-lab-example": _spec("audio", "audio"),
     "music-rap-draft-lab-example": _spec("audio", "audio"),
     "music-rap-full-lab-example": _spec("audio", "audio"),
+    "music-rap-nill-bye-lab-coat-lab-example": _spec("audio", "audio"),
+    "music-rap-nill-bye-peer-review-lab-example": _spec("audio", "audio"),
+    "music-rap-nill-bye-feels-lab-example": _spec("audio", "audio"),
+    "music-rap-nill-bye-fake-cool-lab-example": _spec("audio", "audio"),
+    "music-rap-nill-bye-hypothesis-lab-example": _spec("audio", "audio"),
     "klein-from-clay-lab-example": _spec(
         "dcc", "klein"
     ),
