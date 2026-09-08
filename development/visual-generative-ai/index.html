@@ -1861,7 +1861,7 @@
 <details class="abstract">
 <summary>Lab workflow internals</summary>
 <ul>
-<li>Name pattern: host files <code>workflows/*-lab-example.json</code> and <code>workflows/shorts/*-lab-example.json</code> (entrypoint copies both)</li>
+<li>Name pattern: host files <code>workflows/_lab/&lt;lane&gt;/*-lab-example.json</code> (entrypoint rsyncs into <code>user/default/workflows/_lab/</code>)</li>
 <li>Every graph has a ComfyUI <strong>Note</strong> node + <code>extra.lab_note</code> with the same operator guidance</li>
 <li>Klein <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">CLIP</span> loader type is <strong><code>flux2</code></strong> with <code>qwen_3_4b</code> + <code>EmptyFlux2LatentImage</code> (simplified <code>KSampler</code>)</li>
 <li>LTX-2.5 graphs use <strong>CLIPLoader</strong> (<code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code>, type <strong><code>ltxv</code></strong>), save <strong>MP4</strong> via <strong><code>VHS_VideoCombine</code></strong> (h264, 24 fps)</li>

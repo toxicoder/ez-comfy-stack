@@ -1941,9 +1941,11 @@
   Root --&gt; Cfg["config/resource-policy.yaml"]
   Root --&gt; Docs["docs/ · MkDocs"]
   Root --&gt; Tests["tests/bats · tests/python"]
+  Root --&gt; Wf["workflows/_lab/&lt;lane&gt; shipped JSON&lt;br/&gt;workflows/_user local only&lt;br/&gt;workflows/shorts YAML"]
   Manage --&gt; Lib
   Manage --&gt; Util
   Manage --&gt; Docker</code></pre>
+<p>Shipped Comfy graphs live under <code>workflows/_lab/&lt;lane&gt;/</code> (<code>klein</code>, <code>wan</code>, <code>ltx</code>, <code>shorts</code>, <code>dcc</code>, <code>optional</code>, <code>audio</code>, <code>inspire</code>) and keep the <code>*-lab-example.json</code> suffix. Shot YAML stays in <code>workflows/shorts/*.shots.yaml</code>. <code>workflows/_user/</code> is a local convention only — live private graphs are on <code>${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/</code> and must not be committed.</p>
 <h2 id="shell-style">Shell style<a class="headerlink" href="#shell-style" title="Permanent link">&para;</a></h2>
 <p><strong>Primary reference:</strong> <a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a>.</p>
 <p>This project follows that guide for executables and libraries, with the <strong>intentional deviations</strong> below. When the guide and this page conflict, this page wins for the listed deviations only.</p>

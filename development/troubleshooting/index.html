@@ -2452,8 +2452,18 @@
 </tr>
 <tr>
 <td>90s film / shot graph missing in the Comfy UI</td>
-<td>Entrypoint only used to copy top-level <code>workflows/*.json</code></td>
-<td>Pull latest; restart so <code>install_lab_workflows</code> copies <code>workflows/*.json</code> and <code>workflows/shorts/*.json</code> into <code>user/default/workflows/</code>. Load <strong>film-<em>-90s-</em>-lab-example</strong>. YAML shot lists are not copied (edit on the host)</td>
+<td>Looking at the old flat <code>user/default/workflows/</code> list, or seed skipped</td>
+<td>Look under <strong><code>_lab/shorts/</code></strong> (and <code>_lab/klein</code>, <code>_lab/wan</code>, <code>_lab/ltx</code>, …). Restart so <code>install_lab_workflows</code> rsyncs into <code>_lab/</code> only. Load <strong>film-<em>-90s-</em>-lab-example</strong>. YAML shot lists stay on the host at <code>workflows/shorts/*.shots.yaml</code></td>
+</tr>
+<tr>
+<td>My edit to a lab graph vanished after restart</td>
+<td>You edited the live <code>_lab/</code> copy</td>
+<td>Live <code>_lab/</code> is overwritten on every start. Copy the graph to <strong><code>_user/</code></strong> (or Save As) before editing. Operator files outside <code>_lab/</code> are never deleted</td>
+</tr>
+<tr>
+<td>Manager-installed custom nodes vanished after pin refresh</td>
+<td>Pack lived in <code>custom_nodes/</code> but not <code>_user/</code></td>
+<td>Install operator packs under <code>${COMFY_OUTPUT_DIR}/custom-nodes-user</code> (container <code>$COMFY_HOME/custom_nodes/_user</code>). Lab <code>ez_*</code> packs still overwrite from git</td>
 </tr>
 <tr>
 <td>Lab graph is in Workflows but not in Apps</td>

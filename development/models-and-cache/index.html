@@ -1317,6 +1317,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Three stores">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#persistence-survives-stop-image-pull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence (survives stop / image pull)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1769,6 +1786,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Three stores">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#persistence-survives-stop-image-pull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence (survives stop / image pull)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1995,6 +2029,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>Default cache location and layout</li>
+<li>Host persistence (weights, media, Comfy <code>user/</code>, operator custom nodes)</li>
 <li>Download utilities, resume / stuck-partial recovery, and readiness checks</li>
 <li>Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)</li>
 <li>Volume Comfy pin (<code>.lab-comfyui-ref</code>) vs image <code>COMFYUI_REF</code></li>
@@ -2032,12 +2067,86 @@
 </tr>
 <tr>
 <td><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfy-state" data-href="../glossary/#comfy-state" title="Docker volume for the Comfy install (venv, custom nodes). cleanup DELETE removes this only.">comfy-state</span> volume</strong></td>
-<td>Comfy install, custom nodes</td>
-<td>Host PNGs/MP4s, start images, and Comfy <code>user/</code> (<code>COMFY_OUTPUT_DIR</code>)</td>
+<td>Comfy install, lab <code>ez_*</code> custom nodes</td>
+<td>Host PNGs/MP4s, start images, Comfy <code>user/</code>, operator <code>_user</code> node packs (<code>COMFY_OUTPUT_DIR</code>)</td>
 </tr>
 </tbody>
 </table>
-<p><code>cleanup</code> (type <code>DELETE</code>) removes <strong>comfy-state only</strong>. Generated media, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> start frames (<code>${COMFY_OUTPUT_DIR}/input</code>), and Comfy user workflows (<code>${COMFY_OUTPUT_DIR}/comfy-user</code>) stay on the host. Concepts: <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<p><code>cleanup</code> (type <code>DELETE</code>) removes <strong>comfy-state only</strong>. Generated media, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> start frames (<code>${COMFY_OUTPUT_DIR}/input</code>), Comfy user workflows (<code>${COMFY_OUTPUT_DIR}/comfy-user</code>), and operator custom nodes (<code>${COMFY_OUTPUT_DIR}/custom-nodes-user</code>) stay on the host. Concepts: <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
+<h3 id="persistence-survives-stop-image-pull">Persistence (survives stop / image pull)<a class="headerlink" href="#persistence-survives-stop-image-pull" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Host</th>
+<th>Container</th>
+<th>On <code>start</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model weights</td>
+<td><code>${MODELS_DIR:-/mnt/models}</code></td>
+<td><code>/models</code></td>
+<td>persist</td>
+</tr>
+<tr>
+<td>Generated PNG/MP4/audio</td>
+<td><code>${COMFY_OUTPUT_DIR:-/mnt/comfy-output}</code></td>
+<td><code>/outputs</code></td>
+<td>persist</td>
+</tr>
+<tr>
+<td>LoadImage inputs</td>
+<td><code>${COMFY_OUTPUT_DIR}/input</code></td>
+<td><code>/inputs</code></td>
+<td>persist</td>
+</tr>
+<tr>
+<td>Comfy <code>user/</code> (sidebar, history)</td>
+<td><code>${COMFY_OUTPUT_DIR}/comfy-user</code></td>
+<td><code>/comfy-state/ComfyUI/user</code></td>
+<td>persist</td>
+</tr>
+<tr>
+<td>Live lab graphs</td>
+<td><code>…/comfy-user/default/workflows/_lab/</code></td>
+<td>same</td>
+<td><strong>overwrite</strong> from repo <code>workflows/</code> (or <code>workflows/_lab/</code> when present)</td>
+</tr>
+<tr>
+<td>Live operator graphs</td>
+<td><code>…/comfy-user/default/workflows/_user/</code></td>
+<td>same</td>
+<td><strong>never touch</strong></td>
+</tr>
+<tr>
+<td>Other files under live workflows</td>
+<td>same tree</td>
+<td>same</td>
+<td><strong>never touch</strong></td>
+</tr>
+<tr>
+<td>Lab custom nodes <code>ez_*</code></td>
+<td>git <code>custom_nodes/</code></td>
+<td><code>$COMFY_HOME/custom_nodes/ez_*</code></td>
+<td>overwrite</td>
+</tr>
+<tr>
+<td>Operator custom nodes</td>
+<td><code>${COMFY_OUTPUT_DIR}/custom-nodes-user</code></td>
+<td><code>$COMFY_HOME/custom_nodes/_user</code></td>
+<td>persist (pin refresh excludes this tree)</td>
+</tr>
+<tr>
+<td>Comfy install + venv</td>
+<td>Docker volume <code>ez-comfy-state</code></td>
+<td><code>/comfy-state</code></td>
+<td>persist until <code>cleanup</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>seed_from_prebuilt</code> already skips <code>user/</code>, <code>input/</code>, <code>output/</code>, <code>temp/</code>, and <code>extra_model_paths.yaml</code>. It also skips <code>custom_nodes/_user/</code> so a pin refresh cannot delete Manager-installed packs that live on the host bind. Lab packs named <code>ez_*</code> still overwrite from <code>/opt/ez-comfy/custom_nodes</code>.</p>
 <hr />
 <h2 id="default-location">Default location<a class="headerlink" href="#default-location" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
@@ -2286,7 +2395,7 @@
 </tbody>
 </table>
 <h3 id="example-graphs">Example graphs<a class="headerlink" href="#example-graphs" title="Permanent link">&para;</a></h3>
-<p>Seeded into Comfy <code>user/default/workflows/</code> from host <code>workflows/*.json</code>, <code>workflows/shorts/*.json</code>, <code>workflows/dcc/*.json</code>, and <code>workflows/optional/*.json</code> (name pattern <strong><code>*-lab-example.json</code></strong>). <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> graphs land as <strong><code>*-lab-example.app.json</code></strong> so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay <code>.json</code>. That directory is bind-mounted from <code>${COMFY_OUTPUT_DIR}/comfy-user</code> so operator graphs survive <code>cleanup</code>. Catalog and iteration loop: <a href="../visual-generative-ai/">Visual Generative AI</a>.</p>
+<p>Seeded into Comfy <code>user/default/workflows/_lab/&lt;lane&gt;/</code> (never flattened). Prefer host <code>workflows/_lab/</code> when that tree exists; otherwise the entrypoint maps the current top-level / <code>shorts/</code> / <code>dcc/</code> / <code>optional/</code> JSON into <code>_lab/&lt;lane&gt;/</code>. Name pattern <strong><code>*-lab-example.json</code></strong>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> graphs land as <strong><code>*-lab-example.app.json</code></strong> under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay <code>.json</code>. Operator saves belong in <code>_user/</code> (never overwritten). YAML shot lists and <code>quality/</code> NOTICE files are not copied. Catalog and iteration loop: <a href="../visual-generative-ai/">Visual Generative AI</a>.</p>
 <table>
 <thead>
 <tr>
@@ -2348,7 +2457,7 @@
 <td>5.00 s LTX I2V print + last-frame SaveImage</td>
 </tr>
 <tr>
-<td><code>shorts/film-*-90s-*-lab-example.json</code></td>
+<td><code>_lab/shorts/film-*-90s-*-lab-example.json</code></td>
 <td><strong>One-click</strong> Klein identity + 18 LTX 5.00s AV prints + stitch (<a href="../shorts/">90s shorts</a>)</td>
 </tr>
 <tr>

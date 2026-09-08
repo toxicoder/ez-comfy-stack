@@ -1626,7 +1626,21 @@
 <li>Keeping the <a href="../visual-generative-ai/">playbook</a> a how-to, not a spreadsheet</li>
 </ul>
 <p><strong>Who this is for:</strong> studio users after the first still-draft <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span>.</p>
-<p>After <code>download-models</code> + <code>start</code>, load from <code>user/default/workflows/</code> (seeded from host <code>workflows/</code>). Filenames end with <strong><code>-lab-example</code></strong>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> graphs also appear under Comfy’s <strong>Apps</strong> sidebar (<code>*.app.json</code> on disk; same stem). Do <strong>not</strong> edit raw JSON — change widgets on the canvas.</p>
+<p>After <code>download-models</code> + <code>start</code>, load from Comfy’s <strong>Workflows</strong> sidebar under <strong><code>_lab/&lt;lane&gt;/</code></strong> (seeded from host <code>workflows/_lab/</code>). Filenames end with <strong><code>-lab-example</code></strong>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> graphs also appear under Comfy’s <strong>Apps</strong> sidebar (<code>*.app.json</code> on disk under the same lane folder; same stem). Save your own graphs in <strong><code>_user/</code></strong>. Do <strong>not</strong> edit live <code>_lab/</code> copies — they are overwritten on start. Do <strong>not</strong> edit raw JSON — change widgets on the canvas.</p>
+<p>Sidebar tree after start:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>user/default/workflows/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  _lab/
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    klein/     stills, plates, identity, platform pack, dream-house, …
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    shorts/    film-*-90s-*-lab-example.json
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    dcc/       clay → print, iclora envelope
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    optional/  a14b, longcat stub
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    audio/     podcast-*, music-rap-*
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    inspire/   prompt-forge, beat-sheet
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  _user/       your graphs (never overwritten)
+</code></pre></div>
+<p>Reusable printer blocks live in the node library after start (<code>custom_nodes/ez_studio_blocks/subgraphs/</code>): <strong>klein-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">t2i</span>-backbone</strong>, <strong>wan-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">i2v</span>-5s</strong>, <strong>ltx-av-5s</strong>, <strong>ltx-film-shot</strong>. Drop them from the subgraph menu instead of copy-pasting chains.</p>
 <pre class="mermaid"><code>flowchart TB
   Need{"What do you need?"} --&gt; Still["A still"]
   Need --&gt; Motion["Silent ~5 s"]
@@ -1682,7 +1696,7 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>wan-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">i2v</span>-5s-lab-example</strong></td>
+<td><strong>wan-i2v-5s-lab-example</strong></td>
 <td>Silent I2V smoke, 832×480, <strong>121</strong> frames @ 24 fps. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> <strong>draft-only</strong> (<code>extra.lab_magcache</code>)</td>
 </tr>
 <tr>
@@ -1695,7 +1709,7 @@
 </tr>
 <tr>
 <td><strong>wan-i2v-a14b-lab-example</strong></td>
-<td>Optional A14B <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fp8" data-href="../glossary/#fp8" title="8-bit float weight format used by default Klein distilled and some Wan packs.">FP8</span>: high+low <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span> on canvas, Queue on high-noise 8-step (<code>download-wan --tier a14b</code>). MagCache off. Unload 5B first. Under <code>workflows/optional/</code></td>
+<td>Optional A14B <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fp8" data-href="../glossary/#fp8" title="8-bit float weight format used by default Klein distilled and some Wan packs.">FP8</span>: high+low <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span> on canvas, Queue on high-noise 8-step (<code>download-wan --tier a14b</code>). MagCache off. Unload 5B first. Under <code>_lab/optional/</code></td>
 </tr>
 <tr>
 <td><strong>wan-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2v" data-href="../glossary/#t2v" title="Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.">t2v</span>-5s-lab-example</strong></td>
@@ -1757,7 +1771,7 @@
 </tr>
 <tr>
 <td><strong>klein-dream-house-lab-example</strong></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span>. Ten Instagram 4:5 stills of one wizard penthouse, independent <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">T2I</span></td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span>. Ten Instagram 4:5 stills of one wizard penthouse, independent T2I</td>
 </tr>
 <tr>
 <td><strong>klein-hook-still-lab-example</strong></td>
@@ -2033,7 +2047,7 @@
 <hr />
 <h2 id="notes-that-apply-to-every-lab-graph">Notes that apply to every lab graph<a class="headerlink" href="#notes-that-apply-to-every-lab-graph" title="Permanent link">&para;</a></h2>
 <p>Every <strong>*-lab-example</strong> graph includes an on-canvas <strong>Note</strong> (purpose, models, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sampler" data-href="../glossary/#sampler" title="Node that denoises latents for N steps at a CFG, seed, and scheduler.">sampler</span>, prompting tips, run steps). Video graphs emit MP4 via <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vhs" data-href="../glossary/#vhs" title="Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview.">VHS</span> with <strong><code>save_output: true</code></strong>; after Queue, open <strong>Save video (MP4) — open node for preview</strong>. LTX graphs decode audio (<code>LTXVAudioVAEDecode</code>) into the MP4. <strong>wan-gif-loop-lab-example</strong> emits <code>image/gif</code>.</p>
-<p>Optional Wan A14B is a Queue graph (<code>workflows/optional/wan-i2v-a14b-lab-example.json</code>): <strong>both</strong> high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache <strong>off</strong>) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download <code>download-wan.sh run --tier a14b</code> and unload 5B first.</p>
+<p>Optional Wan A14B is a Queue graph (<code>workflows/_lab/optional/wan-i2v-a14b-lab-example.json</code>): <strong>both</strong> high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache <strong>off</strong>) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download <code>download-wan.sh run --tier a14b</code> and unload 5B first.</p>
 <p>Daily loop: <a href="../visual-generative-ai/">Still to motion to AV</a>. Prompt shapes: <a href="../prompting/">Prompting</a>.</p>
 
 
