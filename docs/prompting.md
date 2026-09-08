@@ -80,7 +80,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Dream-house pack (Klein)"
 
-    Type **one place**. Identity-mode enhance freezes only the rooms, furniture, outdoor lamps, and surroundings you named (the default placeholder is the lab penthouse). Name lounge, kitchen, dining, bath, bedroom, terrace, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough — exterior, entrance, lounge, kitchen, dining, bath, bedroom, terrace, drone, nook — not a penthouse template. Each card is one room or angle with its own backdrop: only lounge looks out the main opening; kitchen, dining, bath, and bedroom keep interior backdrops. **Prompt Join** `lock=view` front-loads the shot, then “same building, rooms, furniture, and materials” + “each room keeps only the outlook that camera would see” + the bible. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01. Dawn / noon / night of one camera belong on **klein-time-of-day-lab-example** (`lock=state`). `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
+    Type **one place**. Identity-mode enhance freezes only the rooms, furniture, outdoor lamps, and surroundings you named (the default placeholder is a full-floor penthouse on a tall tower in a dense unmarked city). Name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough — tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study — not a penthouse template. Each card is one room or angle with its own backdrop: only lounge looks out the main opening; kitchen, dining, bedroom, bath, and study keep interior walls. **Prompt Join** `lock=view` front-loads the shot, then “same building, rooms, furniture, and materials” + “this still is only the room and backdrop the shot names” + the bible, and repeats that closer after the bible. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01. Dawn / noon / night of one camera belong on **klein-time-of-day-lab-example** (`lock=state`). `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
 
 === "LTX-2.5 AV"
 
@@ -100,7 +100,7 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 | **Wan Prompt Enhance** | `t2v`, `i2v`, `flf`, `vace` | wan-i2v-5s / wan-t2v-5s / wan-flf-5s / wan-vace-join |
 | **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / each 90s film shot |
 | **ACE-Step Prompt Enhance** | `vocal`, `instrumental` | music-rap-* tags+lyrics; podcast instrumental beds |
-| **Prompt Join** | `lock=view`: shot + lock + bible + inventory (camera-first walkthrough; each room keeps its own outlook). `lock=state`: bible + inventory + lock + shot | dream-house (view) and lighting/before-after (state) |
+| **Prompt Join** | `lock=view`: shot + lock + bible + inventory + closer (camera-first walkthrough; this still is only the room and backdrop the shot names). `lock=state`: bible + inventory + lock + shot | dream-house (view) and lighting/before-after (state) |
 
 STRING out → CLIPTextEncode `text` input.
 

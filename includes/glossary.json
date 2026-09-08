@@ -455,7 +455,7 @@
     "aliases": ["world bible"],
     "category": "Studio",
     "short": "Locked description of a place or character with no camera. Shared across shots.",
-    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Identity-mode enhance keeps the bible camera-free. See [Prompting](prompting.md).",
+    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Each view shot names its own room backdrop so interiors do not reuse one skyline. Identity-mode enhance keeps the bible camera-free. See [Prompting](prompting.md).",
     "see_also": ["identity-still", "prompt-enhance"]
   },
   {
