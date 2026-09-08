@@ -112,7 +112,7 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
 
-Audio Apps (`podcast-*`, `music-rap-*`) are occupancy **audio**. Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md).
+Audio Apps (`podcast-*`, `music-rap-*`) are occupancy **audio**. That includes the five **90 s** `music-rap-nill-bye-*-lab-example` diss takes ([Local music](music.md)). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md).
 
 ---
 

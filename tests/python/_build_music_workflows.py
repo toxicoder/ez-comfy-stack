@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build US-safe ACE-Step rap lab graphs (draft + full).
+"""Build US-safe ACE-Step rap lab graphs (draft, full, 90s diss takes).
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -13,31 +13,28 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
-from _lab_paths import lab_json
+from _lab_paths import lab_dest
 from _stamp_app_mode import stamp_suite_graph
+from _wire_prompt_enhance import _rewrite_enhance_blurb
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
+from ez_music.diss_examples import (  # noqa: E402
+    BOOM_BAP_TAGS_88,
+    DISS_EXAMPLES,
+    LOFI_TAGS,
+    TRAP_TAGS,
+    DissExample,
+)
 from ez_music.nodes import DRAFT_LYRICS, FULL_LYRICS  # noqa: E402
 
-WF = ROOT / "workflows"
-
 ACE_CKPT = "ace_step_1.5_turbo_aio.safetensors"
-ACE_TAGS = (
-    "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano "
-    "stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm"
-)
+ACE_TAGS = BOOM_BAP_TAGS_88
 COVER_THUMB = "klein-thumbnail-lab-example.json"
 COVER_PODCAST = "klein-podcast-cover-lab-example.json"
-TRAP_TAGS = (
-    "trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm"
-)
-LOFI_TAGS = (
-    "lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm"
-)
 
 DRAFT_NOTE = f"""## music-rap-draft-lab-example
 
@@ -170,19 +167,34 @@ class Graph:
             "version": 0.4,
         }
         stamp_suite_graph(graph)
+        extra = graph.setdefault("extra", {})
+        extra["lab_note"] = _rewrite_enhance_blurb(str(extra.get("lab_note") or ""))
+        for node in graph["nodes"]:
+            if node.get("type") != "Note":
+                continue
+            values = node.get("widgets_values") or [""]
+            node["widgets_values"] = [_rewrite_enhance_blurb(str(values[0]))]
+            break
         ensure_group_title_inset(graph)
         _assert_no_overlap(graph)
         return graph
 
 
-def _ace_widgets(lyrics: str, duration: float, seed: int = 42) -> list:
+def _ace_widgets(
+    lyrics: str,
+    duration: float,
+    seed: int = 42,
+    *,
+    tags: str = ACE_TAGS,
+    bpm: int = 88,
+) -> list:
     # seed is followed by control_after_generate (native TextEncodeAceStepAudio1.5).
     return [
-        ACE_TAGS,
+        tags,
         lyrics,
         seed,
         "fixed",
-        88,
+        bpm,
         duration,
         "4",
         "en",
@@ -196,11 +208,42 @@ def _ace_widgets(lyrics: str, duration: float, seed: int = 42) -> list:
     ]
 
 
-def _sampler_widgets() -> list:
-    return [42, "fixed", 8, 1.0, "euler", "simple", 1.0]
+def _sampler_widgets(seed: int = 42) -> list:
+    return [seed, "fixed", 8, 1.0, "euler", "simple", 1.0]
 
 
-def _build_rap(stem: str, duration: float, lyrics: str, prefix: str, note: str, description: str) -> dict:
+def _diss_note(ex: DissExample) -> str:
+    return f"""## {ex["stem"]}
+
+US-safe rap **90 s diss** take: **{ex["title"]}**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite.
+
+1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
+2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.
+3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
+4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
+5. ACE-Step vocal is an **invented** identity, not a cloned MC.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 90 s, bpm {ex["bpm"]}, language en, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
+7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
+8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
+9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
+10. Do not co-resident with LTX / Wan / Klein on this Spark.
+
+Beat-only pass: append instrumental, no vocals, and replace lyrics with [inst].
+"""
+
+
+def _build_rap(
+    stem: str,
+    duration: float,
+    lyrics: str,
+    prefix: str,
+    note: str,
+    description: str,
+    *,
+    tags: str = ACE_TAGS,
+    bpm: int = 88,
+    seed: int = 42,
+) -> dict:
     g = Graph(stem)
     g.add(
         1,
@@ -258,7 +301,7 @@ def _build_rap(stem: str, duration: float, lyrics: str, prefix: str, note: str, 
         [500, 80],
         [400, 360],
         "ez_rap_prompt",
-        [ACE_TAGS, lyrics, True, "vocal"],
+        [tags, lyrics, True, "vocal"],
         outputs=[
             g.out("tags", "STRING", []),
             g.out("lyrics", "STRING", []),
@@ -270,7 +313,7 @@ def _build_rap(stem: str, duration: float, lyrics: str, prefix: str, note: str, 
         [500, 520],
         [400, 420],
         "ACE tags + lyrics",
-        _ace_widgets(lyrics, duration),
+        _ace_widgets(lyrics, duration, seed, tags=tags, bpm=bpm),
         inputs=[
             g.inp("clip", "CLIP"),
             g.inp("tags", "STRING", widget="tags"),
@@ -295,7 +338,7 @@ def _build_rap(stem: str, duration: float, lyrics: str, prefix: str, note: str, 
         [940, 180],
         [330, 262],
         "ACE sampler",
-        _sampler_widgets(),
+        _sampler_widgets(seed),
         inputs=[
             g.inp("model", "MODEL"),
             g.inp("positive", "CONDITIONING"),
@@ -393,13 +436,29 @@ def build_full() -> dict:
     )
 
 
+def build_diss(ex: DissExample) -> dict:
+    return _build_rap(
+        ex["stem"],
+        float(ex["duration"]),
+        ex["lyrics"],
+        ex["prefix"],
+        _diss_note(ex),
+        ex["description"],
+        tags=ex["tags"],
+        bpm=int(ex["bpm"]),
+        seed=int(ex["seed"]),
+    )
+
+
 def main() -> None:
     graphs = {
         "music-rap-draft-lab-example.json": build_draft(),
         "music-rap-full-lab-example.json": build_full(),
     }
+    for ex in DISS_EXAMPLES:
+        graphs[f"{ex['stem']}.json"] = build_diss(ex)
     for name, graph in graphs.items():
-        path = lab_json(name)
+        path = lab_dest(name)
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")
 

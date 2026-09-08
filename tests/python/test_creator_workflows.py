@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from ez_music.diss_examples import DISS_EXAMPLES
+
 from _lab_paths import WF, lab_json
 from _stamp_app_mode import STAMP_SPECS, suite_json_paths
 
@@ -45,7 +47,7 @@ CREATORS = (
     ("podcast-radio-drama-lab-example", "ez_radio_ep", False),
     ("music-rap-draft-lab-example", "ez_rap_draft", False),
     ("music-rap-full-lab-example", "ez_rap_full", False),
-)
+) + tuple((ex["stem"], ex["prefix"], False) for ex in DISS_EXAMPLES)
 
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev")
 

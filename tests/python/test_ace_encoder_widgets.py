@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from ez_music.diss_examples import DISS_EXAMPLES
+
 from _ace_widgets_contract import assert_ace_encoder_widgets, iter_ace_encoders
 from _lab_paths import lab_example_paths, lab_json
 
@@ -28,15 +30,18 @@ def test_every_lab_ace_encoder_has_seed_control_and_valid_combos() -> None:
 
 
 def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
-    for stem, duration in (
-        ("music-rap-draft-lab-example", 32.0),
-        ("music-rap-full-lab-example", 96.0),
-    ):
+    cases: list[tuple[str, float, int]] = [
+        ("music-rap-draft-lab-example", 32.0, 88),
+        ("music-rap-full-lab-example", 96.0, 88),
+    ]
+    for ex in DISS_EXAMPLES:
+        cases.append((ex["stem"], float(ex["duration"]), int(ex["bpm"])))
+    for stem, duration, bpm in cases:
         graph = _load(lab_json(stem))
         enc = next(iter_ace_encoders(graph))
         widgets = assert_ace_encoder_widgets(enc, where=stem)
         assert widgets[3] == "fixed"
-        assert widgets[4] == 88
+        assert widgets[4] == bpm
         assert widgets[5] == duration
         assert widgets[6] == "4"
         assert widgets[7] == "en"

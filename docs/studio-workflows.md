@@ -1,6 +1,6 @@
 ---
 title: Workflow catalog
-description: Which *-lab-example graph to load for a still, 5 s clip, GIF, creator plate, or 90s film.
+description: Which *-lab-example graph to load for a still, 5 s clip, GIF, creator plate, 90s film, or local audio.
 tags: [comfyui, workflows, klein, wan, ltx, catalog]
 ---
 
@@ -9,7 +9,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 **What's on this page**
 
 - Which graph for which job
-- Seeded Klein / Wan / LTX / Apps (Lane A vs Lane B) / 90s / creator tables
+- Seeded Klein / Wan / LTX / Apps (Lane A vs Lane B) / 90s / creator / audio tables
 - Notes that apply to every `*-lab-example`
 
 **What this enables**
@@ -179,6 +179,22 @@ flowchart TB
     | **ltx-weather-broll-lab-example** | Rain / wind B-roll AV |
     | **ltx-interior-ambience-lab-example** | Interior room-tone AV |
     | **ltx-hook-av-lab-example** | ~5 s AV cold open |
+
+=== "Audio (podcast / rap)"
+
+    Occupancy **audio**. Opt-in weights (`download-podcast` / `download-music`). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Playbook: [Local podcast](podcast.md), [Local music](music.md).
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **podcast-audio-first-lab-example** | Two-host episode. Kokoro stock voices + ACE-Step instrumental bed. Prefix `ez_podcast_ep` |
+    | **podcast-radio-drama-lab-example** | One-graph radio drama. Sting + bed stay instrumental. Prefix `ez_radio_ep` |
+    | **music-rap-draft-lab-example** | ACE-Step rap draft **32 s** boom-bap 88 (`ez_rap_draft`) |
+    | **music-rap-full-lab-example** | ACE-Step rap full **96 s** boom-bap 88 (`ez_rap_full`). Queue draft first |
+    | **music-rap-nill-bye-lab-coat-lab-example** | **90 s** diss, boom-bap 88. Nill Bye lab-coat roast of Rake (`ez_rap_nill_labcoat`). Queue on its own |
+    | **music-rap-nill-bye-peer-review-lab-example** | **90 s** diss, boom-bap 88, `[spoken word]` intro (`ez_rap_nill_review`) |
+    | **music-rap-nill-bye-feels-lab-example** | **90 s** diss, lo-fi 86 (`ez_rap_nill_feels`) |
+    | **music-rap-nill-bye-fake-cool-lab-example** | **90 s** diss, trap 140 (`ez_rap_nill_fakecool`) |
+    | **music-rap-nill-bye-hypothesis-lab-example** | **90 s** diss, boom-bap 92, seed 7 (`ez_rap_nill_hypothesis`) |
 
 === "DCC (clay → print)"
 
