@@ -277,9 +277,10 @@ class EZPromptJoin:
     FUNCTION = "run"
     CATEGORY = "ez-comfy/prompt"
     DESCRIPTION = (
-        "Joins a shared world bible with a shot card. lock=view is a new camera "
-        "of the same place; lock=state keeps framing and changes only light, "
-        "grade, or the named action. Inventory is a locked object list."
+        "Joins a shared world bible with a shot card. lock=view front-loads the "
+        "shot so Klein sees a new camera in a walkthrough of the same place; "
+        "lock=state keeps framing and changes only light, grade, or the named "
+        "action. Inventory is a locked object list."
     )
 
     def run(self, identity, shot, inventory="", lock=LOCK_VIEW):

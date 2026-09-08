@@ -252,7 +252,7 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
-| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills of one penthouse from new cameras; locked inventory |
+| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (outside through rooms, drone, day/night) |
 | `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |
 | `wan-t2v-5s-lab-example.json` | Wan 5B T2V smoke |
 | `wan-i2v-shot-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |

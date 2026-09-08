@@ -20,19 +20,24 @@ STYLE_LOCK_VIDEO = "photoreal shot"
 
 # Camera-free place bible for klein-dream-house and klein-style-lock.
 # Shot cards own lens, time, and weather. Do not name a camera here.
+# Outdoor lamps are fixtures (inventory), not a time of day.
 HOUSE_IDENTITY = (
     f"A {STYLE_LOCK} of one compact warm-glass crown penthouse on a tall "
-    "unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay "
-    "black-framed bay glass wall. Teak floors. Living at the glass, kitchen "
-    "island behind the sofa, dining beside the island, bedroom and bath left. Palms "
-    "on the terrace and a fern living wall beside the glass. Coral-teal edge light "
-    "on pale stone. Unmarked home, empty of lettering."
+    "unmarked tropical coastal tower over a bright bay, unmarked glass towers "
+    "and palms behind. One wraparound terrace sits outside a three-bay "
+    "black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. "
+    "Lounge at the glass with one sand linen sofa facing the bays, kitchen island "
+    "behind the sofa, dining beside the island, master bedroom and bath left of "
+    "the living volume. Warm teak terrace lanterns and low path lights on the "
+    "terrace. Palms on the terrace and a fern living wall beside the glass. "
+    "Unmarked home, empty of lettering."
 )
 HOUSE_INVENTORY = (
     "one sand linen sofa facing the three-bay glass, pale-stone kitchen island "
     "with warm-teak cabinets, teak dining table, linen bedding at the "
     "bay-window bedroom, freestanding stone tub facing frosted glass, two "
-    "teak terrace chairs, compact unmarked data-staff"
+    "teak terrace chairs, compact unmarked data-staff, warm teak terrace "
+    "lanterns, low path lights"
 )
 
 ROOFTOP_INVENTORY = (

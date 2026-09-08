@@ -40,7 +40,8 @@ KLEIN_NEG = KLEIN_NEG_STILL
 HOUSE_SHOTS = [
     (item["label"], item["shot"]) for item in load_view_pack("place_10")
 ]
-JOINED_WORD_CAP = 160
+# Klein prefers ~150 words; join adds lock + shot after the bible.
+JOINED_WORD_CAP = 180
 GIF_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
     "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
@@ -76,10 +77,10 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
 
-Ten Instagram 4:5 stills of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY — the default placeholder is the lab penthouse.
-HOUSE IDENTITY is a camera-free world bible. Enhance extracts only the rooms and furniture you named. Hidden SHOT cards are camera roles (exterior, approach, interiors the bible named, night, context), not a penthouse template. Prompt Join lock=view. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
+Ten Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY — the default placeholder is the lab penthouse.
+HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings). Enhance extracts only the rooms and furniture you named — name lounge, kitchen, bath, bedroom, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough (exterior, entrance, inside, lounge, kitchen, bath, bedroom, drone, day, night), not a penthouse template. Prompt Join lock=view front-loads the shot. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
 Identity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.
-Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; massing must not.
+Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Day and night may change sky and lamp state; massing, rooms, furniture, and surroundings must not.
 If materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.
 """
 
@@ -581,7 +582,7 @@ def build_dream_house() -> dict:
             "lab_profile": "klein-dream-house-lab-example",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
-            "lab_description": "Ten Instagram 4:5 Klein stills of one warm-glass crown penthouse; new cameras, locked inventory",
+            "lab_description": "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, entrance, rooms, drone, day, night)",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,

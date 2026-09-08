@@ -77,6 +77,10 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "150" in ident
     assert "invent" in ident.lower()
     assert "visual-style" in ident.lower()
+    ident_l = ident.lower()
+    assert "surround" in ident_l or "landscape" in ident_l
+    assert "fixture" in ident_l or "lantern" in ident_l
+    assert "adjacen" in ident_l
     flf = client.load_system_prompt("wan_flf")
     assert "first-last" in flf.lower() or "first last" in flf.lower() or "end frame" in flf.lower()
     assert "audio" in flf.lower()
@@ -208,7 +212,35 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
             blob = f"{card['label']} {card['shot']}".lower()
             for noun in nouns:
                 assert noun not in blob, (name, noun, card["label"])
-    assert len(client.load_view_pack("place_10")) == 10
+    pack10 = client.load_view_pack("place_10")
+    assert len(pack10) == 10
+    labels = [card["label"] for card in pack10]
+    assert labels == [
+        "01 exterior",
+        "02 entrance",
+        "03 inside",
+        "04 lounge",
+        "05 kitchen",
+        "06 bath",
+        "07 bedroom",
+        "08 drone",
+        "09 day",
+        "10 night",
+    ]
+    blobs = {card["label"]: card["shot"].lower() for card in pack10}
+    assert "ground-level" in blobs["01 exterior"] and "dusk" in blobs["01 exterior"]
+    assert "entrance" in blobs["02 entrance"] and "way in" in blobs["02 entrance"]
+    assert "just inside" in blobs["03 inside"]
+    assert "lounging" in blobs["04 lounge"] and "seating" in blobs["04 lounge"]
+    assert "kitchen" in blobs["05 kitchen"] and "work surface" in blobs["05 kitchen"]
+    assert "bathroom" in blobs["06 bath"] or "bathing" in blobs["06 bath"]
+    assert "bedroom" in blobs["07 bedroom"] and "bedding" in blobs["07 bedroom"]
+    assert "overhead" in blobs["08 drone"] or "drone" in blobs["08 drone"]
+    assert "daylight" in blobs["09 day"]
+    assert "night" in blobs["10 night"] and "lamps" in blobs["10 night"]
+    assert blobs["01 exterior"] != blobs["02 entrance"]
+    assert blobs["04 lounge"] != blobs["05 kitchen"]
+    assert blobs["09 day"] != blobs["10 night"]
 
 
 def test_studio_app_chrome_pack_exists() -> None:
@@ -403,23 +435,36 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
 def test_ez_prompt_join_identity_and_shot() -> None:
     join = EZPromptJoin()
     view = join.run("Cedar house on a still lake.", "Golden-hour facade, 24mm.")
-    assert view[0].startswith("Cedar house on a still lake.")
+    assert view[0].startswith("Golden-hour facade, 24mm.")
+    assert "Cedar house on a still lake." in view[0]
     assert "different camera" in view[0]
-    assert view[0].endswith("Golden-hour facade, 24mm.")
-    assert join.run("  House.  ", "  Dusk deck.  ")[0].endswith("Dusk deck.")
+    assert "walkthrough" in view[0]
+    assert "Same building" in view[0]
+    assert "furniture placement" in view[0]
+    assert "sky" in view[0]
+    assert "background" in view[0]
+    trimmed = join.run("  House.  ", "  Dusk deck.  ")[0]
+    assert trimmed.startswith("Dusk deck.")
+    assert "House." in trimmed
     only = join.run("Identity only.", "")
-    assert "Identity only." in only[0]
+    assert only[0].startswith("Identity only.")
     assert "different camera" in only[0]
-    assert join.run("", "Shot only.")[0].endswith("Shot only.")
+    shot_only = join.run("", "Shot only.")[0]
+    assert shot_only.startswith("Shot only.")
+    assert "different camera" in shot_only
     assert join.run("  ", "  ") == ("",)
     locked = join.run("Cabin.", "Dawn deck.", "cedar siding, hip roof")
+    assert locked[0].startswith("Dawn deck.")
+    assert "Cabin." in locked[0]
     assert "Locked inventory (do not change): cedar siding, hip roof." in locked[0]
     assert "different camera" in locked[0]
-    assert locked[0].endswith("Dawn deck.")
+    assert locked[0].endswith("cedar siding, hip roof.")
     state = join.run("Cabin.", "Warm key.", "mug", "state")
+    assert state[0].startswith("Cabin.")
     assert "camera framing" in state[0]
     assert "The shot names the only change." in state[0]
     assert "mug" in state[0]
+    assert state[0].endswith("Warm key.")
     types = EZPromptJoin.INPUT_TYPES()["required"]["lock"][0]
     assert types[0] == "view"
     assert "state" in types
@@ -452,6 +497,9 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert "teak" in ident_l
     assert "fern" in ident_l or "living wall" in ident_l
     assert "coral-teal" in ident_l
+    assert "lounge" in ident_l
+    assert "lantern" in ident_l or "path light" in ident_l
+    assert "bay" in ident_l
     assert "24mm" not in ident_l
     assert "golden-hour" not in ident_l and "golden hour" not in ident_l
     assert "cedar" not in ident_l
@@ -495,7 +543,8 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         "stone tub",
     )
     inventories = set()
-    for join in sorted(joins, key=lambda n: n["id"]):
+    assert "linen sofa" in ident_l
+    for i, join in enumerate(sorted(joins, key=lambda n: n["id"])):
         shot = join["widgets_values"][0]
         inventory = join["widgets_values"][1]
         lock = join["widgets_values"][2]
@@ -505,14 +554,18 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         shot_l = shot.lower()
         assert not any(noun in shot_l for noun in hidden_nouns)
         joined = client.join_prompt(ident_text, shot, inventory, lock)
-        assert len(joined.split()) <= 160
+        assert joined.startswith(shot)
+        assert ident_text in joined
+        assert len(joined.split()) <= 180
         assert not any(b in shot_l for b in banned)
-    assert inventories == {""}
-    for text in positives.values():
-        assert text.startswith(ident_text)
+        text = positives[f"Positive {i + 1:02d}"]
+        assert text.startswith(shot)
+        assert ident_text in text
         assert "different camera" in text
-        assert "linen sofa" not in text
-        assert len(text.split()) <= 160
+        assert "walkthrough" in text
+        assert "linen sofa" in text
+        assert len(text.split()) <= 180
+    assert inventories == {""}
     assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 0
     assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 0
     by_id = {n["id"]: n for n in house["nodes"]}

@@ -610,6 +610,8 @@ ident=enh[0]['widgets_values'][0]
 ident_l=ident.lower()
 assert 'warm-glass' in ident_l and 'crown penthouse' in ident_l
 assert 'wraparound terrace' in ident_l and 'three-bay' in ident_l
+assert 'lounge' in ident_l
+assert 'lantern' in ident_l or 'path light' in ident_l
 assert '24mm' not in ident_l
 assert 'cedar' not in ident_l and 'cabin' not in ident_l
 assert 'no logos, no text' not in ident
@@ -620,19 +622,24 @@ incoming={}
 for l in d['links']:
     incoming.setdefault((l[3], l[4]), []).append(l)
 banned=('pier','courtyard','pavilion','two-story','a-frame','glass box','outdoor kitchen','outdoor tub','cedar','alpine','gravel','hip roof')
+tour=('SHOT 01 exterior','SHOT 02 entrance','SHOT 03 inside','SHOT 04 lounge','SHOT 05 kitchen','SHOT 06 bath','SHOT 07 bedroom','SHOT 08 drone','SHOT 09 day','SHOT 10 night')
+assert [n.get('title') for n in sorted(joins, key=lambda n: n['id'])]==list(tour)
 for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     shot=join['widgets_values'][0]
     inv=join['widgets_values'][1]
     lock=join['widgets_values'][2]
     assert lock=='view'
     assert inv.strip()==''
-    full=ident+' '+shot
-    assert len(full.split())<=160, (join.get('title'), len(full.split()))
+    full=shot+' '+ident
+    assert len(full.split())<=180, (join.get('title'), len(full.split()))
     sl=shot.lower()
     assert 'penthouse' not in sl
     assert 'techno wizard' not in sl
     assert 'data-staff' not in sl
     assert not any(b in sl for b in banned)
+    pos=next(n for n in d['nodes'] if n.get('title')==f'Positive {i+1:02d}')
+    assert pos['widgets_values'][0].startswith(shot)
+    assert 'walkthrough' in pos['widgets_values'][0]
     ks_id=12+i*5
     pos_src=by_id[incoming[(ks_id,1)][0][1]]['type']
     lat_src=by_id[incoming[(ks_id,3)][0][1]]['type']
@@ -641,6 +648,7 @@ for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
 note=next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))
 ntext=str(note['widgets_values'][0]).lower()
 assert 'world bible' in ntext or 'camera-free' in ntext or 'one place' in ntext
+assert 'walkthrough' in ntext or 'virtual tour' in ntext
 assert 'referencelatent' in ntext or 'new views' in ntext or 'independent t2i' in ntext
 "
   [ "${status}" -eq 0 ]

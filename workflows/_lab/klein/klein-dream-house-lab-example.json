@@ -172,7 +172,7 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering.",
+        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering.",
         true,
         "identity",
         "Instagram 4:5 still",
@@ -292,7 +292,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY \u2014 the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible. Enhance extracts only the rooms and furniture you named. Hidden SHOT cards are camera roles (exterior, approach, interiors the bible named, night, context), not a penthouse template. Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; massing must not.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY \u2014 the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings). Enhance extracts only the rooms and furniture you named \u2014 name lounge, kitchen, bath, bedroom, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough (exterior, entrance, inside, lounge, kitchen, bath, bedroom, drone, day, night), not a penthouse template. Prompt Join lock=view front-loads the shot. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Day and night may change sky and lamp state; massing, rooms, furniture, and surroundings must not.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -331,7 +331,7 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Three-quarter exterior of this place, 24mm, Instagram 4:5. Openings readable so interior inventory from the bible shows from outside.",
+        "Ground-level three-quarter exterior of this place, eye-level 24mm, Instagram 4:5. Dusk, cozy outdoor lamps glowing. Openings readable from outside.",
         "",
         "view"
       ],
@@ -380,7 +380,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Three-quarter exterior of this place, 24mm, Instagram 4:5. Openings readable so interior inventory from the bible shows from outside."
+        "Ground-level three-quarter exterior of this place, eye-level 24mm, Instagram 4:5. Dusk, cozy outdoor lamps glowing. Openings readable from outside. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 01"
     },
@@ -551,11 +551,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From the approach looking up at this same place, 24mm, Instagram 4:5.",
+        "At the entrance looking in through the way in, 35mm, Instagram 4:5. Dusk, cozy outdoor lamps at the threshold. Door filling the frame at human height.",
         "",
         "view"
       ],
-      "title": "SHOT 02 approach"
+      "title": "SHOT 02 entrance"
     },
     {
       "id": 16,
@@ -600,7 +600,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. From the approach looking up at this same place, 24mm, Instagram 4:5."
+        "At the entrance looking in through the way in, 35mm, Instagram 4:5. Dusk, cozy outdoor lamps at the threshold. Door filling the frame at human height. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 02"
     },
@@ -771,11 +771,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From the primary interior looking out the main opening, 24mm, Instagram 4:5. Bible inventory in the foreground.",
+        "Just inside, looking through the main living volume out the main opening, 24mm, Instagram 4:5. Dusk, outdoor lamps visible through the glass.",
         "",
         "view"
       ],
-      "title": "SHOT 03 primary interior"
+      "title": "SHOT 03 inside"
     },
     {
       "id": 21,
@@ -820,7 +820,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. From the primary interior looking out the main opening, 24mm, Instagram 4:5. Bible inventory in the foreground."
+        "Just inside, looking through the main living volume out the main opening, 24mm, Instagram 4:5. Dusk, outdoor lamps visible through the glass. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 03"
     },
@@ -991,11 +991,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From a secondary interior the bible named for work, cook, or make. If none, another interior of this place. 35mm, Instagram 4:5.",
+        "From the lounging interior the bible named; if none, the primary seating interior from a new camera. Seating in the foreground toward the main opening, 35mm, Instagram 4:5. Dusk, outdoor lamps outside.",
         "",
         "view"
       ],
-      "title": "SHOT 04 work interior"
+      "title": "SHOT 04 lounge"
     },
     {
       "id": 26,
@@ -1040,7 +1040,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. From a secondary interior the bible named for work, cook, or make. If none, another interior of this place. 35mm, Instagram 4:5."
+        "From the lounging interior the bible named; if none, the primary seating interior from a new camera. Seating in the foreground toward the main opening, 35mm, Instagram 4:5. Dusk, outdoor lamps outside. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 04"
     },
@@ -1211,11 +1211,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From a gathering interior the bible named. If none, a lived-in interior of this place. 35mm, Instagram 4:5.",
+        "From the kitchen the bible named; if none, a work interior. Work surface in the foreground, 35mm, Instagram 4:5. Dusk. Cook space only.",
         "",
         "view"
       ],
-      "title": "SHOT 05 gathering"
+      "title": "SHOT 05 kitchen"
     },
     {
       "id": 31,
@@ -1260,7 +1260,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. From a gathering interior the bible named. If none, a lived-in interior of this place. 35mm, Instagram 4:5."
+        "From the kitchen the bible named; if none, a work interior. Work surface in the foreground, 35mm, Instagram 4:5. Dusk. Cook space only. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 05"
     },
@@ -1431,11 +1431,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From a private interior the bible named. If none, a quieter corner of this place. 35mm, Instagram 4:5.",
+        "From the bathroom the bible named; if none, a wet interior. Bathing fixture in the foreground, 35mm, Instagram 4:5. Warm practicals. Wet room only.",
         "",
         "view"
       ],
-      "title": "SHOT 06 private"
+      "title": "SHOT 06 bath"
     },
     {
       "id": 36,
@@ -1480,7 +1480,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. From a private interior the bible named. If none, a quieter corner of this place. 35mm, Instagram 4:5."
+        "From the bathroom the bible named; if none, a wet interior. Bathing fixture in the foreground, 35mm, Instagram 4:5. Warm practicals. Wet room only. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 06"
     },
@@ -1651,11 +1651,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "From a wet or utility interior the bible named. If none, a material-detail interior of this place. 35mm, Instagram 4:5.",
+        "From the master bedroom the bible named; if none, the private interior. Bedding in the foreground toward its opening, 35mm, Instagram 4:5. Dusk, outdoor lamps outside.",
         "",
         "view"
       ],
-      "title": "SHOT 07 utility"
+      "title": "SHOT 07 bedroom"
     },
     {
       "id": 41,
@@ -1700,7 +1700,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. From a wet or utility interior the bible named. If none, a material-detail interior of this place. 35mm, Instagram 4:5."
+        "From the master bedroom the bible named; if none, the private interior. Bedding in the foreground toward its opening, 35mm, Instagram 4:5. Dusk, outdoor lamps outside. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 07"
     },
@@ -1871,11 +1871,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Outdoor living or threshold the bible named. If none, the main exterior at human height. 24mm, Instagram 4:5.",
+        "Overhead drone of this same place in its landscape, high above looking down, 24mm, Instagram 4:5. Dusk. Roof, terrace, and outdoor lamps readable from above. Same surroundings as the ground shots.",
         "",
         "view"
       ],
-      "title": "SHOT 08 threshold"
+      "title": "SHOT 08 drone"
     },
     {
       "id": 46,
@@ -1920,7 +1920,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. Outdoor living or threshold the bible named. If none, the main exterior at human height. 24mm, Instagram 4:5."
+        "Overhead drone of this same place in its landscape, high above looking down, 24mm, Instagram 4:5. Dusk. Roof, terrace, and outdoor lamps readable from above. Same surroundings as the ground shots. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 08"
     },
@@ -2091,11 +2091,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "This same place at night or in weather, 24mm, Instagram 4:5. Massing unchanged.",
+        "Daylight exterior of this same place, ground-level three-quarter, 24mm, Instagram 4:5. Clear day sky. Outdoor lamps present but not the key light. Same massing and surroundings as dusk.",
         "",
         "view"
       ],
-      "title": "SHOT 09 night weather"
+      "title": "SHOT 09 day"
     },
     {
       "id": 51,
@@ -2140,7 +2140,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. This same place at night or in weather, 24mm, Instagram 4:5. Massing unchanged."
+        "Daylight exterior of this same place, ground-level three-quarter, 24mm, Instagram 4:5. Clear day sky. Outdoor lamps present but not the key light. Same massing and surroundings as dusk. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 09"
     },
@@ -2311,11 +2311,11 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "This place in its neighborhood or landscape, 24mm, Instagram 4:5.",
+        "Night exterior of this same place, ground-level three-quarter, 24mm, Instagram 4:5. Cozy outdoor lamps fully on against night sky. Same massing and surroundings. Interior glow through openings.",
         "",
         "view"
       ],
-      "title": "SHOT 10 context"
+      "title": "SHOT 10 night"
     },
     {
       "id": 56,
@@ -2360,7 +2360,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors. Living at the glass, kitchen island behind the sofa, dining beside the island, bedroom and bath left. Palms on the terrace and a fern living wall beside the glass. Coral-teal edge light on pale stone. Unmarked home, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. This place in its neighborhood or landscape, 24mm, Instagram 4:5."
+        "Night exterior of this same place, ground-level three-quarter, 24mm, Instagram 4:5. Cozy outdoor lamps fully on against night sky. Same massing and surroundings. Interior glow through openings. Same building, rooms, furniture placement, materials, sky, and background. New photograph from a different camera in a walkthrough of this place. A photoreal still of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower over a bright bay, unmarked glass towers and palms behind. One wraparound terrace sits outside a three-bay black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the bays, kitchen island behind the sofa, dining beside the island, master bedroom and bath left of the living volume. Warm teak terrace lanterns and low path lights on the terrace. Palms on the terrace and a fern living wall beside the glass. Unmarked home, empty of lettering."
       ],
       "title": "Positive 10"
     },
@@ -3349,7 +3349,7 @@
     },
     {
       "id": 11,
-      "title": "SHOT 02 approach",
+      "title": "SHOT 02 entrance",
       "bounding": [
         500,
         384,
@@ -3362,7 +3362,7 @@
     },
     {
       "id": 12,
-      "title": "SHOT 03 primary interior",
+      "title": "SHOT 03 inside",
       "bounding": [
         500,
         744,
@@ -3375,7 +3375,7 @@
     },
     {
       "id": 13,
-      "title": "SHOT 04 work interior",
+      "title": "SHOT 04 lounge",
       "bounding": [
         500,
         1104,
@@ -3388,7 +3388,7 @@
     },
     {
       "id": 14,
-      "title": "SHOT 05 gathering",
+      "title": "SHOT 05 kitchen",
       "bounding": [
         500,
         1464,
@@ -3401,7 +3401,7 @@
     },
     {
       "id": 15,
-      "title": "SHOT 06 private",
+      "title": "SHOT 06 bath",
       "bounding": [
         500,
         1824,
@@ -3414,7 +3414,7 @@
     },
     {
       "id": 16,
-      "title": "SHOT 07 utility",
+      "title": "SHOT 07 bedroom",
       "bounding": [
         500,
         2184,
@@ -3427,7 +3427,7 @@
     },
     {
       "id": 17,
-      "title": "SHOT 08 threshold",
+      "title": "SHOT 08 drone",
       "bounding": [
         500,
         2544,
@@ -3440,7 +3440,7 @@
     },
     {
       "id": 18,
-      "title": "SHOT 09 night weather",
+      "title": "SHOT 09 day",
       "bounding": [
         500,
         2904,
@@ -3453,7 +3453,7 @@
     },
     {
       "id": 19,
-      "title": "SHOT 10 context",
+      "title": "SHOT 10 night",
       "bounding": [
         500,
         3264,
@@ -3469,8 +3469,8 @@
   "extra": {
     "lab_profile": "klein-dream-house-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY \u2014 the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible. Enhance extracts only the rooms and furniture you named. Hidden SHOT cards are camera roles (exterior, approach, interiors the bible named, night, context), not a penthouse template. Prompt Join lock=view. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; massing must not.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
-    "lab_description": "Ten Instagram 4:5 Klein stills of one warm-glass crown penthouse; new cameras, locked inventory",
+    "lab_note": "## klein-dream-house-lab-example\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY \u2014 the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings). Enhance extracts only the rooms and furniture you named \u2014 name lounge, kitchen, bath, bedroom, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough (exterior, entrance, inside, lounge, kitchen, bath, bedroom, drone, day, night), not a penthouse template. Prompt Join lock=view front-loads the shot. Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Day and night may change sky and lamp state; massing, rooms, furniture, and surroundings must not.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, entrance, rooms, drone, day, night)",
     "ds": {
       "scale": 1,
       "offset": [
