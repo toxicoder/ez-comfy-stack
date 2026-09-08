@@ -1748,9 +1748,10 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    shorts/    film-*-90s-*-lab-example.json
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    dcc/       clay → print, iclora envelope
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    optional/  a14b, longcat stub
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    audio/     podcast-*, dub-*, music-rap-*
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    inspire/   prompt-forge, beat-sheet
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  _user/       your graphs (never overwritten)
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    audio/     podcast-*, dub-*, music-rap-draft/full
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      nill-bye/  fifteen 180 s music-rap-nill-bye-* diss takes
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    inspire/   prompt-forge, beat-sheet
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  _user/       your graphs (never overwritten)
 </code></pre></div>
 <p>Reusable printer blocks live in the node library after start (<code>custom_nodes/ez_studio_blocks/subgraphs/</code>): <strong>klein-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">t2i</span>-backbone</strong>, <strong>wan-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">i2v</span>-5s</strong>, <strong>ltx-av-5s</strong>, <strong>ltx-film-shot</strong>. Drop them from the subgraph menu instead of copy-pasting chains.</p>
 <pre class="mermaid"><code>flowchart TB
@@ -2178,23 +2179,63 @@
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-lab-coat-lab-example</strong></td>
-<td><strong>90 s</strong> diss, boom-bap 88. Nill Bye lab-coat roast of Rake (<code>ez_rap_nill_labcoat</code>). Queue on its own</td>
+<td><strong>180 s</strong> diss, boom-bap 88. Nill Bye lab-coat roast of Rake (<code>ez_rap_nill_labcoat</code>). <code>_lab/audio/nill-bye/</code>. Queue on its own</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-peer-review-lab-example</strong></td>
-<td><strong>90 s</strong> diss, boom-bap 88, <code>[spoken word]</code> intro (<code>ez_rap_nill_review</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 88, <code>[spoken word]</code> intro (<code>ez_rap_nill_review</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-feels-lab-example</strong></td>
-<td><strong>90 s</strong> diss, lo-fi 86 (<code>ez_rap_nill_feels</code>)</td>
+<td><strong>180 s</strong> diss, lo-fi 86 (<code>ez_rap_nill_feels</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-fake-cool-lab-example</strong></td>
-<td><strong>90 s</strong> diss, trap 140 (<code>ez_rap_nill_fakecool</code>)</td>
+<td><strong>180 s</strong> diss, trap 140 (<code>ez_rap_nill_fakecool</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-hypothesis-lab-example</strong></td>
-<td><strong>90 s</strong> diss, boom-bap 92, seed 7 (<code>ez_rap_nill_hypothesis</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 92, seed 7 (<code>ez_rap_nill_hypothesis</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-control-group-lab-example</strong></td>
+<td><strong>180 s</strong> diss, boom-bap 88 (<code>ez_rap_nill_control</code>). Uncontrolled variable</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-sample-size-lab-example</strong></td>
+<td><strong>180 s</strong> diss, boom-bap 92, seed 11 (<code>ez_rap_nill_samplesize</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-placebo-lab-example</strong></td>
+<td><strong>180 s</strong> diss, trap 140, seed 13 (<code>ez_rap_nill_placebo</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-error-bars-lab-example</strong></td>
+<td><strong>180 s</strong> diss, boom-bap 88, seed 17 (<code>ez_rap_nill_errorbars</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-lab-notebook-lab-example</strong></td>
+<td><strong>180 s</strong> diss, boom-bap 92, seed 19 (<code>ez_rap_nill_notebook</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-office-hours-lab-example</strong></td>
+<td><strong>180 s</strong> diss, lo-fi 86, seed 23 (<code>ez_rap_nill_office</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-grant-denied-lab-example</strong></td>
+<td><strong>180 s</strong> diss, boom-bap 88, <code>[spoken word]</code> intro, seed 29 (<code>ez_rap_nill_grant</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-contamination-lab-example</strong></td>
+<td><strong>180 s</strong> diss, trap 140, seed 31 (<code>ez_rap_nill_contam</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-double-blind-lab-example</strong></td>
+<td><strong>180 s</strong> diss, boom-bap 92, seed 37 (<code>ez_rap_nill_doubleblind</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-replicate-lab-example</strong></td>
+<td><strong>180 s</strong> diss, boom-bap 88, seed 7 (<code>ez_rap_nill_replicate</code>)</td>
 </tr>
 </tbody>
 </table>

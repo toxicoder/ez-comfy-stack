@@ -1144,10 +1144,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#90s-nill-bye-diss-examples" class="md-nav__link">
+  <a href="#180s-nill-bye-diss-examples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        90s Nill Bye diss examples
+        180s Nill Bye diss examples
       
     </span>
   </a>
@@ -1801,10 +1801,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#90s-nill-bye-diss-examples" class="md-nav__link">
+  <a href="#180s-nill-bye-diss-examples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        90s Nill Bye diss examples
+        180s Nill Bye diss examples
       
     </span>
   </a>
@@ -1895,7 +1895,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> the rap <strong>draft</strong> first, then the <strong>full</strong> track</li>
-<li>Five <strong>90 s</strong> Nill Bye vs Rake diss examples (Queue on their own)</li>
+<li>Fifteen <strong>180 s</strong> Nill Bye vs Rake diss examples under <code>_lab/audio/nill-bye/</code> (Queue on their own)</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: tags, lyrics, rewrite, vocal/instrumental, duration</li>
 <li>Tags vs lyrics; <code>[verse]</code> / <code>[chorus]</code> / <code>[spoken word]</code> as vocal hints</li>
 <li>Original lyrics only — no “in the style of \&lt;living artist&gt;”</li>
@@ -1907,7 +1907,7 @@
 <p><strong>What this enables</strong></p>
 <ul>
 <li>A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs</li>
-<li>Five 90 s original diss takes (Nill Bye vs Rake) without cloud music APIs</li>
+<li>Fifteen 180 s original diss takes (Nill Bye vs Rake) without cloud music APIs</li>
 <li>Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice</li>
 <li>Keeping the visual studio bootable when the music pack is missing</li>
 </ul>
@@ -1978,8 +1978,8 @@
 </ul>
 <h3 id="full-track">Full track<a class="headerlink" href="#full-track" title="Permanent link">&para;</a></h3>
 <p>Graph: <strong>music-rap-full-lab-example</strong>. App <strong>Duration (seconds)</strong> defaults to <strong>96</strong> s. Same sampler and model. Prefix <code>ez_rap_full</code>. Same voice + second verse + repeated chorus + <code>[outro]</code>. Human rewrite required before any release.</p>
-<h3 id="90s-nill-bye-diss-examples">90s Nill Bye diss examples<a class="headerlink" href="#90s-nill-bye-diss-examples" title="Permanent link">&para;</a></h3>
-<p>Five extra full-track graphs. Same AIO, sampler, occupancy <strong>audio</strong>, and Klein cover handoff as the 96 s full track. App <strong>Duration (seconds)</strong> defaults to <strong>90</strong>. Queue <strong>on their own</strong> — draft-first is the generic lane, not a prerequisite.</p>
+<h3 id="180s-nill-bye-diss-examples">180s Nill Bye diss examples<a class="headerlink" href="#180s-nill-bye-diss-examples" title="Permanent link">&para;</a></h3>
+<p>Fifteen extra full-track graphs under <strong><code>_lab/audio/nill-bye/</code></strong>. Same AIO, sampler, occupancy <strong>audio</strong>, and Klein cover handoff as the 96 s full track. App <strong>Duration (seconds)</strong> defaults to <strong>180</strong>. Queue <strong>on their own</strong> — draft-first is the generic lane, not a prerequisite. A longer Queue is expected (this is still an ACE-Step audio <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="latent" data-href="../glossary/#latent" title="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.">latent</span>, not a video 90 s denoise).</p>
 <p>Fictional MCs only: <strong>Nill Bye</strong> (science guy, mad) roasting <strong>Rake</strong> (in his feels; club-talk and fake-cool as a brand). Original lyrics. No living-MC names. No famous-hook paraphrases. Shipped bars stay short and SFW (roast the pose, not graphic content). ACE-Step vocal is an invented timbre. Human rewrite required before any release.</p>
 <table>
 <thead>
@@ -2021,6 +2021,66 @@
 <td><code>ez_rap_nill_hypothesis</code></td>
 <td>Data vs rumor</td>
 </tr>
+<tr>
+<td><strong>music-rap-nill-bye-control-group-lab-example</strong></td>
+<td>boom-bap <strong>88</strong></td>
+<td><code>ez_rap_nill_control</code></td>
+<td>Rake is the uncontrolled variable</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-sample-size-lab-example</strong></td>
+<td>boom-bap <strong>92</strong>, seed <strong>11</strong></td>
+<td><code>ez_rap_nill_samplesize</code></td>
+<td>One night is not a study</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-placebo-lab-example</strong></td>
+<td>trap <strong>140</strong></td>
+<td><code>ez_rap_nill_placebo</code></td>
+<td>The flex is a sugar pill</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-error-bars-lab-example</strong></td>
+<td>boom-bap <strong>88</strong>, seed <strong>17</strong></td>
+<td><code>ez_rap_nill_errorbars</code></td>
+<td>Confidence is a vibe, not a CI</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-lab-notebook-lab-example</strong></td>
+<td>boom-bap <strong>92</strong>, seed <strong>19</strong></td>
+<td><code>ez_rap_nill_notebook</code></td>
+<td>Receipts vs group-chat lore</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-office-hours-lab-example</strong></td>
+<td>lo-fi <strong>86</strong>, seed <strong>23</strong></td>
+<td><code>ez_rap_nill_office</code></td>
+<td>Extra help for a failing brand</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-grant-denied-lab-example</strong></td>
+<td>boom-bap <strong>88</strong>, <code>[spoken word]</code> intro, seed <strong>29</strong></td>
+<td><code>ez_rap_nill_grant</code></td>
+<td>No funding for feelings</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-contamination-lab-example</strong></td>
+<td>trap <strong>140</strong>, seed <strong>31</strong></td>
+<td><code>ez_rap_nill_contam</code></td>
+<td>Club talk leaked into the sample</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-double-blind-lab-example</strong></td>
+<td>boom-bap <strong>92</strong>, seed <strong>37</strong></td>
+<td><code>ez_rap_nill_doubleblind</code></td>
+<td>Even the booth knows you are faking</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-replicate-lab-example</strong></td>
+<td>boom-bap <strong>88</strong>, seed <strong>7</strong></td>
+<td><code>ez_rap_nill_replicate</code></td>
+<td>Cannot reproduce the night</td>
+</tr>
 </tbody>
 </table>
 <p>Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.</p>
@@ -2059,7 +2119,7 @@
 <li><code>./scripts/manage.sh download-music --tier turbo</code></li>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
 <li>Load <strong>music-rap-draft-lab-example</strong>. Enhance on. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_rap_draft_*.flac</code> / <code>ez_rap_draft_*.mp3</code></li>
-<li>Then load <strong>music-rap-full-lab-example</strong> (96 s), <strong>or</strong> one <strong>music-rap-nill-bye-*-lab-example</strong> (90 s) on its own</li>
+<li>Then load <strong>music-rap-full-lab-example</strong> (96 s), <strong>or</strong> one <strong>music-rap-nill-bye-*-lab-example</strong> (180 s) from <code>_lab/audio/nill-bye/</code> on its own</li>
 <li>Cover in a <strong>later</strong> session: <strong>klein-thumbnail-lab-example</strong> or <strong>klein-podcast-cover-lab-example</strong></li>
 </ol>
 <p>Spark: the AIO is ~10 GB VRAM-adjacent work. Do <strong>not</strong> co-resident with LTX / Wan / Klein.</p>
