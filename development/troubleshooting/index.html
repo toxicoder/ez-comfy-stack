@@ -2594,18 +2594,23 @@
 </tr>
 <tr>
 <td>Dream-house stills are ten similar facades</td>
-<td>Old <code>place_10</code> roles (approach / context) or bible-first join</td>
-<td>Pull latest, re-open <strong>klein-dream-house-lab-example</strong>. Shot groups should read exterior, entrance, inside, lounge, kitchen, bath, bedroom, drone, day, night. Prompt Join <code>lock=view</code> front-loads the shot</td>
+<td>Old <code>place_10</code> roles (approach / context / day-night copies of the same three-quarter) or bible-first join</td>
+<td>Pull latest, re-open <strong>klein-dream-house-lab-example</strong>. Shot groups should read exterior, entrance, lounge, kitchen, dining, bath, bedroom, terrace, drone, nook. Prompt Join <code>lock=view</code> front-loads the shot. Dawn / noon / night of one camera is <strong>klein-time-of-day-lab-example</strong></td>
+</tr>
+<tr>
+<td>Dream-house kitchen or bath shows the lounge skyline</td>
+<td>Old lock line forced “same sky and background” into every room, or an old graph</td>
+<td>Pull latest. Kitchen / dining / bath / bedroom cards keep the main opening behind the camera or out of frame. Only lounge looks out that opening. Re-open the seeded JSON</td>
 </tr>
 <tr>
 <td>Dream-house interiors do not match the sofa seen through the glass</td>
 <td>HOUSE IDENTITY omitted the seating or outdoor lamps, or a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="shot-card" data-href="../glossary/#shot-card" title="Per-shot YAML extras: script, camera, clay required, audio policy, stems.">shot card</span> invents new furniture</td>
-<td>Name lounge, kitchen, bath, bedroom, outdoor lamps, and the view beyond the glass in HOUSE IDENTITY (App Mode is one prompt). Shot 01 should show that seating through the main opening; lounge looks out the same opening</td>
+<td>Name lounge, kitchen, dining, bath, bedroom, terrace, outdoor lamps, and the view beyond the glass in HOUSE IDENTITY (App Mode is one prompt). Lounge looks out the main opening; other rooms do not reuse that backdrop</td>
 </tr>
 <tr>
 <td>Dream-house rooms look like different penthouses</td>
 <td>Shot card restyles massing, or identity enhance drifted</td>
-<td>Keep HOUSE IDENTITY in <strong>identity</strong> mode. Shot cards are camera / room / lamp-state only. Turn Enhance off only to pin a frozen bible. Do not Klein-t2i-enhance joined shot cards. Day and night may change sky; massing, rooms, furniture, and surroundings must not</td>
+<td>Keep HOUSE IDENTITY in <strong>identity</strong> mode. Shot cards are camera / room only. Turn Enhance off only to pin a frozen bible. Do not Klein-t2i-enhance joined shot cards. Massing, rooms, furniture, and surroundings must not change across the tour</td>
 </tr>
 <tr>
 <td>OOM / multi-minute hang on a 90s (or 30s / 60s) <strong>latent</strong></td>
