@@ -574,6 +574,7 @@ def _spec(
     film_minimal: bool = False,
     forge_widgets: bool = False,
     primitive_strings: bool = False,
+    hide_images: bool = False,
 ) -> dict[str, Any]:
     return {
         "lane": lane,
@@ -587,6 +588,7 @@ def _spec(
         "film_minimal": film_minimal,
         "forge_widgets": forge_widgets,
         "primitive_strings": primitive_strings,
+        "hide_images": hide_images,
     }
 
 
@@ -613,6 +615,14 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "wan-gif-loop-lab-example",
         "wan-bumper-loop-lab-example",
         "wan-sticker-loop-lab-example",
+    ),
+    "klein-dream-house-clay-lab-example": _spec(
+        "inspire",
+        "klein",
+        "wan-gif-loop-lab-example",
+        "wan-bumper-loop-lab-example",
+        "wan-sticker-loop-lab-example",
+        hide_images=True,
     ),
     "klein-style-lock-lab-example": _spec(
         "inspire", "klein"
@@ -880,6 +890,8 @@ def _collect_raw_inputs(
                 )
             saw_seed = True
         elif ntype == "LoadImage":
+            if spec.get("hide_images"):
+                continue
             if _node_always(node) and _image_output_linked(node):
                 raw.append((nid, "image", node))
         elif ntype == "UNETLoader" and spec.get("expose_unet"):

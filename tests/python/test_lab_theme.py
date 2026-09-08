@@ -153,8 +153,9 @@ def test_lab_identity_graphs_lock_techno_wizard() -> None:
 
 def test_exempt_packs_keep_their_own_subjects() -> None:
     house = lab_json("klein-dream-house-lab-example.json").read_text(encoding="utf-8").lower()
+    clay = lab_json("klein-dream-house-clay-lab-example.json").read_text(encoding="utf-8").lower()
     style = lab_json("klein-style-lock-lab-example.json").read_text(encoding="utf-8").lower()
-    for blob in (house, style):
+    for blob in (house, clay, style):
         assert "warm-glass" in blob
         assert "crown penthouse" in blob
         assert "full-floor" in blob

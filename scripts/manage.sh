@@ -145,6 +145,7 @@ Commands:
                     Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   blender           Host Blender sidecar (dies if compose is up)
   export-guides     Dump a 1280x704 / 120f guide pack (dies if compose is up)
+  house-views       Dump 1024x1280 Instagram 4:5 clay stills + GLB (dies if compose is up)
   asset-ls [--json] [--output-dir DIR]
                     Read-only Asset Bible catalog (COMFY_OUTPUT_DIR/assets)
                     Coming later: asset-new / asset-iterate / asset-promote
@@ -1135,6 +1136,19 @@ cmd_export_guides() {
 }
 
 #######################################
+# Occupancy-gated Blender Instagram clay dump (P0). Godot is P2.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  house-views.sh flags
+# Returns:
+#   house-views status (2 if compose is up)
+#######################################
+cmd_house_views() {
+  bash "${REPO_ROOT}/scripts/utilities/house-views.sh" "$@"
+}
+
+#######################################
 # Read-only Asset Bible catalog (outputs under COMFY_OUTPUT_DIR/assets).
 # Globals:
 #   REPO_ROOT
@@ -1340,6 +1354,7 @@ main() {
     download-3d) cmd_download_3d "$@" ;;
     blender) cmd_blender "$@" ;;
     export-guides) cmd_export_guides "$@" ;;
+    house-views) cmd_house_views "$@" ;;
     asset-ls) cmd_asset_ls "$@" ;;
     film-accept) cmd_film_accept "$@" ;;
     shot-sheet) cmd_shot_sheet "$@" ;;

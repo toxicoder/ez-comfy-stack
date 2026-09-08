@@ -10,7 +10,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 - How each lab model actually reads a prompt
 - Canned lab-example text (already rewritten)
-- GIF loop motion and dream-house world bible (one place prompt; one shot per room or angle; Prompt Join lock=view)
+- GIF loop motion and dream-house world bible (one place prompt; one shot per room or angle; Prompt Join lock=view). Clay tour: same bible, Klein restyles Blender stills
 - Character draft then tweak (style dropdown; generated still as the next reference)
 - Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance **on** by default, including identity bibles and 90s films)
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
@@ -81,6 +81,8 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 === "Dream-house pack (Klein)"
 
     Type **one place**. Identity-mode enhance freezes only the rooms, furniture, outdoor lamps, and surroundings you named (the default placeholder is a full-floor penthouse on a tall tower in a dense unmarked city). Name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough — tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study — not a penthouse template. Each card is one room or angle with its own backdrop: only lounge looks out the main opening; kitchen, dining, bedroom, bath, and study keep interior walls. **Prompt Join** `lock=view` front-loads the shot, then “same building, rooms, furniture, and materials” + “this still is only the room and backdrop the shot names” + the bible, and repeats that closer after the bible. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01. Dawn / noon / night of one camera belong on **klein-time-of-day-lab-example** (`lock=state`). `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
+
+    Second door — **klein-dream-house-clay-lab-example**: same bible and shot cards, but each still `ReferenceLatent`s a Blender clay plate (`ez_house_clay_01`…`10`). Dump with `./scripts/manage.sh house-views` while Comfy is **down**. Prompt the **look** (style dropdown, materials); do not re-describe the floorplan — the greybox already locked cameras and adjacency. Prefix `ez_dream_house_clay_01`…`10`. No Blender → stay on the T2I tour. Playbook: [Dream-house tours](learn/dream-house.md).
 
 === "LTX-2.5 AV"
 
