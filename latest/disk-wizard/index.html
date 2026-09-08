@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Host-only 3D and DCC sidecars on GB10 — Blender, SuperSplat, TRELLIS.2, DA3-BASE. Occupancy with Comfy.">
+        <meta name="description" content="Guided, plan-first reclaim for leftover AI experiment files on a DGX Spark that also runs other inference backends.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/studio-sidecars/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/disk-wizard/">
       
       
-        <link rel="prev" href="../music/">
+        <link rel="prev" href="../models-and-cache/">
       
       
-        <link rel="next" href="../asset-bible/">
+        <link rel="next" href="../download-tiers/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Studio sidecars - ez-comfy-stack</title>
+        <title>Disk wizard - ez-comfy-stack</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#studio-sidecars" class="md-skip">
+        <a href="#disk-wizard" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Studio sidecars
+              Disk wizard
             
           </span>
         </div>
@@ -284,12 +284,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../visual-generative-ai/" class="md-tabs__link">
           
   
@@ -306,10 +304,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../manage-cli/" class="md-tabs__link">
           
   
@@ -794,31 +794,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -836,7 +831,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1019,37 +1014,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Studio sidecars
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../studio-sidecars/" class="md-nav__link">
         
   
   
@@ -1065,48 +1033,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#host-not-dockerfile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Host, not Dockerfile
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#host-nle-kdenlive-shotcut" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Host NLE (Kdenlive / Shotcut)
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1235,26 +1161,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -1272,7 +1203,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1343,10 +1274,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../disk-wizard/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Disk wizard
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1362,6 +1320,103 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-tools-do-not-mix-them-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three tools (do not mix them up)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wizard-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wizard steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-row-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a row means
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allowed-roots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allowed roots
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hard-refuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard refuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1628,10 +1683,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#host-not-dockerfile" class="md-nav__link">
+  <a href="#when-to-use-this" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host, not Dockerfile
+        When to use this
       
     </span>
   </a>
@@ -1639,10 +1694,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#host-nle-kdenlive-shotcut" class="md-nav__link">
+  <a href="#three-tools-do-not-mix-them-up" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host NLE (Kdenlive / Shotcut)
+        Three tools (do not mix them up)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wizard-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wizard steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-row-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a row means
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allowed-roots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allowed roots
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hard-refuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard refuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
       
     </span>
   </a>
@@ -1669,89 +1779,153 @@
   
 
 
-<h1 id="studio-sidecars">Studio sidecars<a class="headerlink" href="#studio-sidecars" title="Permanent link">&para;</a></h1>
+<h1 id="disk-wizard">Disk wizard<a class="headerlink" href="#disk-wizard" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>What a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> is (host process, not Compose)</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: one heavy GPU job</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS.2</span> native + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="da3" data-href="../glossary/#da3" title="Optional Apache depth model. DA3-LARGE is refused.">DA3-BASE</span> opt-in packs</li>
-<li>Pointers to Blender, SuperSplat, and host NLE (Kdenlive / Shotcut)</li>
+<li>What the wizard will and will not touch</li>
+<li>How it differs from <code>cleanup</code> and <code>reap-models</code></li>
+<li>Plan → explain → apply</li>
+<li>Restore from <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="quarantine" data-href="../glossary/#quarantine" title="Move-aside instead of delete so a leftover pack can be restored.">quarantine</span></li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Optional 3D stills and depth without putting DCC or splat viewers in the Docker image</li>
-<li>Unchanged <code>restart: "no"</code>, <code>mem_limit: 90g</code>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span> preflight</li>
+<li>Freeing tens of GB of leftover HF blobs, Docker build cache, Ollama pulls, and superseded Comfy packs <strong>without</strong> deleting the lab keep-set</li>
+<li>Understanding <em>what a file is</em>, <em>why you might have it</em>, and <em>the risk of removing it</em></li>
+<li>Keeping <code>cleanup</code> as volume-only and <code>reap-models</code> as the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="models-dir" data-href="../glossary/#models-dir" title="Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.">MODELS_DIR</span> specialist</li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Occupancy</p>
-<p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> is one GPU. Stop Comfy before Blender, SuperSplat, TRELLIS, or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vace" data-href="../glossary/#vace" title="Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.">VACE</span>. Sidecars are <strong>not</strong> <code>docker compose</code> services.</p>
-</div>
-<pre class="mermaid"><code>flowchart TB
-  G["GB10"] --&gt; M{"One heavy job"}
-  M --&gt; C["ComfyUI compose"]
-  M --&gt; B["Host Blender"]
-  M --&gt; S["SuperSplat viewer"]
-  M --&gt; T["TRELLIS / DA3 / NVENC"]
-  C -.-&gt;|XOR| B</code></pre>
+<p><strong>Safety impact:</strong> additive. Default is read-only <code>--plan</code>. Does not change <code>restart: "no"</code>, start <code>yes</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit.</p>
 <hr />
-<h2 id="host-not-dockerfile">Host, not Dockerfile<a class="headerlink" href="#host-not-dockerfile" title="Permanent link">&para;</a></h2>
+<h2 id="when-to-use-this">When to use this<a class="headerlink" href="#when-to-use-this" title="Permanent link">&para;</a></h2>
+<p>You run this studio <strong>and</strong> other experiments on the same <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> (vLLM, Ollama, llama.cpp, extra Compose stacks, ad-hoc <code>hf download</code>). Disk fills with residue that <code>reap-models</code> cannot see because it only walks <code>MODELS_DIR</code>.</p>
+<div class="ez-cmd-builder" data-ez-cmd="disk-wizard-plan">
+<noscript><pre><code>./scripts/manage.sh disk-wizard --plan</code></pre></noscript>
+</div>
+
+<p>TTY with no flags starts a numbered guide, then still writes a plan. Non-interactive (CI, pipes) is <code>--plan</code>. <code>--apply</code> requires <code>--yes</code>.</p>
+<hr />
+<h2 id="three-tools-do-not-mix-them-up">Three tools (do not mix them up)<a class="headerlink" href="#three-tools-do-not-mix-them-up" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Sidecar</th>
-<th>Where it runs</th>
-<th>License</th>
-<th>In image?</th>
+<th>Tool</th>
+<th>Scope</th>
+<th>Default</th>
+<th>Deletes weights?</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Blender</td>
-<td>Host binary on <code>PATH</code></td>
-<td>Blender's own</td>
-<td><strong>No</strong> — <a href="../blender-gb10-sidecar/">Blender GB10 sidecar</a></td>
+<td><code>cleanup</code></td>
+<td>Named volume <code>ez-comfy-state</code> only</td>
+<td>type <code>DELETE</code></td>
+<td><strong>No</strong></td>
 </tr>
 <tr>
-<td>SuperSplat</td>
-<td>Host static viewer</td>
-<td>MIT</td>
-<td><strong>No</strong> — <a href="../splat-sidecar/">Splat sidecar</a></td>
+<td><code>reap-models</code></td>
+<td><code>MODELS_DIR</code> classes (junk / superseded / banned / drop-pack)</td>
+<td><code>--plan</code></td>
+<td>Only after <code>--apply --yes</code></td>
 </tr>
 <tr>
-<td>TRELLIS.2 native</td>
-<td>Comfy after <code>download-3d</code></td>
-<td>MIT</td>
-<td>Weights on <code>MODELS_DIR</code> only. No nvdiffrast</td>
-</tr>
-<tr>
-<td>DA3-BASE</td>
-<td>Comfy after <code>download-3d</code></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache 2.0</span></td>
-<td>Weights on <code>MODELS_DIR</code> only. DA3-LARGE refused</td>
+<td><code>disk-wizard</code></td>
+<td>Host leftovers (HF hub, Docker cache, Ollama, tmp dumps, MODELS_DIR junk)</td>
+<td><code>--plan</code></td>
+<td>Safe junk after <code>--apply --yes</code>; review-class <strong>quarantines</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Never <code>pip install nvdiffrast</code> / <code>nvdiffrec</code>. Never vendor Inria 3DGS or Pixal3D as a default.</p>
-<p>Generated meshes, previews, and scene instances are <strong>outputs</strong> in the <a href="../asset-bible/">Asset Bible</a> under <code>COMFY_OUTPUT_DIR/assets/</code> — never in <code>MODELS_DIR</code> or <code>guides/</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>trellis2<span class="w">   </span><span class="c1"># or da3-base | all</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w">                      </span><span class="c1"># dies if compose is up</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>export-guides<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w">   </span><span class="c1"># same occupancy</span>
+<p>Never offered: <code>docker system prune -a --volumes</code>. That would eat other stacks' volumes.</p>
+<hr />
+<h2 id="wizard-steps">Wizard steps<a class="headerlink" href="#wizard-steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Survey</strong> (always read-only) — <code>df</code>, Docker <code>system df</code> when available, catalog matches, top files under allowed roots.</li>
+<li><strong>Explain + rank</strong> — largest <em>likely leftover</em> first. Each row: what / why / risk / reclaim / whether something is running.</li>
+<li><strong>Guide in three steps</strong><ul>
+<li><strong>A — Safe junk</strong> — <code>*.incomplete</code>, dangling Comfy symlinks, unused Docker <strong>build cache</strong>, detached HF revisions, core dumps. Default accept on <code>--apply</code>.</li>
+<li><strong>B — Review leftovers</strong> — unused named images, HF hub repos that are not the lab keep-set, Ollama blobs, opt-in Comfy packs, large MP4s under <code>COMFY_OUTPUT_DIR</code>. Default <strong>skip</strong>. Set <code>DISK_WIZARD_STEP_B=1</code> to quarantine those when applying.</li>
+<li><strong>C — Will not touch</strong> — default keep-set weights, <code>ez-comfy-state</code> (use <code>cleanup</code>), images of running containers, path escape, other users' homes.</li>
+</ul>
+</li>
+<li><strong>Confirm</strong> — <code>--apply --yes</code>. Log: <code>${MODELS_DIR}/.disk-wizard.log</code>.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>--plan
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>--json
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>--apply<span class="w"> </span>--yes
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>.disk-quarantine/&lt;utc&gt;
 </code></pre></div>
-<p>Guide packs: <a href="../dcc-workflows/">DCC guide pack</a>. Clay is Workbench; beauty is Path A. Never 1280×720.</p>
-<p>VACE join (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> 2.1 1.3B Apache, 17 frames = <code>1+8n</code>) is a Comfy graph, not a sidecar:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>vace
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># load workflows/_lab/wan/wan-vace-join-lab-example.json — MagCache off</span>
-</code></pre></div>
-<h2 id="host-nle-kdenlive-shotcut">Host NLE (Kdenlive / Shotcut)<a class="headerlink" href="#host-nle-kdenlive-shotcut" title="Permanent link">&para;</a></h2>
-<p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="otio" data-href="../glossary/#otio" title="OpenTimelineIO JSON for Kdenlive/Shotcut. Host-side; never in the Docker image.">OTIO</span> from <code>./scripts/manage.sh film-export-otio go-see</code> is stdlib JSON under <code>films/&lt;slug&gt;/publish/</code>. Import on the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> host or a laptop — never in the Docker image.</p>
-<p>On DGX Spark (Ubuntu aarch64):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>kdenlive<span class="w"> </span>shotcut
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># or: flatpak install flathub org.kde.kdenlive</span>
-</code></pre></div>
-<p>Then open the <code>.otio</code> in Kdenlive/Shotcut. Occupancy: stop Comfy first if the NLE will use the GPU.</p>
-<p>See <a href="../licenses/">Model licenses</a> and <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
+<hr />
+<h2 id="what-a-row-means">What a row means<a class="headerlink" href="#what-a-row-means" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>what</strong></td>
+<td>What this file or Docker object is</td>
+</tr>
+<tr>
+<td><strong>why</strong></td>
+<td>Why it exists on a Spark used for mixed inference experiments</td>
+</tr>
+<tr>
+<td><strong>risk</strong></td>
+<td><code>safe</code> (junk) / <code>review</code> (maybe still wanted) / <code>dangerous</code> (refused)</td>
+</tr>
+<tr>
+<td><strong>reclaim</strong></td>
+<td><code>delete</code> / <code>quarantine</code> / <code>hf-prune</code> / <code>reap-models</code> / <code>none</code></td>
+</tr>
+</tbody>
+</table>
+<p>Quarantine dest: <code>${MODELS_DIR}/.disk-quarantine/&lt;utc&gt;/</code> when the path is under <code>MODELS_DIR</code>, else <code>${COMFY_OUTPUT_DIR}/.disk-quarantine/&lt;utc&gt;/</code>. Manifest is JSONL. Restore moves files back.</p>
+<hr />
+<h2 id="allowed-roots">Allowed roots<a class="headerlink" href="#allowed-roots" title="Permanent link">&para;</a></h2>
+<p>Default: <code>MODELS_DIR</code>, <code>COMFY_OUTPUT_DIR</code>, <code>$HOME/.cache</code>, <code>$HOME/.ollama</code>, <code>/tmp</code>, <code>/var/tmp</code>. Extra colon-separated roots: <code>DISK_WIZARD_ROOTS</code>. Paths are realpath-jailed (no <code>/</code>, <code>/boot</code>, other homes).</p>
+<p><code>--i-system</code> is <strong>not</strong> implemented in v1 (apt/journal stay off).</p>
+<hr />
+<h2 id="hard-refuses">Hard refuses<a class="headerlink" href="#hard-refuses" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Default keep-set basenames (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> 5B / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX-2.5</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>)</li>
+<li>Docker image <strong>in use</strong></li>
+<li>Named volume <code>ez-comfy-state</code></li>
+<li><code>docker system prune -a --volumes</code> as one shot</li>
+<li>HF pid / <code>.hf-download.pid</code> (override <code>--force</code>, not the happy path)</li>
+<li>Path escape after <code>realpath</code></li>
+<li>Drive-by <code>rm -rf ~/.cache/huggingface</code></li>
+</ul>
+<p>MODELS_DIR class work still belongs to <code>reap-models</code> for superseded LTX-2.3 / drop-pack; the wizard <strong>explains</strong> those rows and quarantines on apply rather than reimplementing keep-set.</p>
+<hr />
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MODELS_DIR classes only</td>
+<td><a href="../models-and-cache/">Models and cache</a></td>
+</tr>
+<tr>
+<td><code>--tier</code> pack map</td>
+<td><a href="../download-tiers/">Download tiers</a></td>
+</tr>
+<tr>
+<td>Verb catalog</td>
+<td><a href="../manage-cli/">manage.sh reference</a></td>
+</tr>
+<tr>
+<td>Disk-full symptom</td>
+<td><a href="../troubleshooting/">Troubleshooting</a></td>
+</tr>
+</tbody>
+</table>
 
 
 

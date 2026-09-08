@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Host-only 3D and DCC sidecars on GB10 — Blender, SuperSplat, TRELLIS.2, DA3-BASE. Occupancy with Comfy.">
+        <meta name="description" content="Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets — slugs, takes, scene.json instances. Not MODELS_DIR.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/studio-sidecars/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/asset-bible/">
       
       
-        <link rel="prev" href="../music/">
+        <link rel="prev" href="../studio-sidecars/">
       
       
-        <link rel="next" href="../asset-bible/">
+        <link rel="next" href="../blender-gb10-sidecar/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Studio sidecars - ez-comfy-stack</title>
+        <title>Asset Bible - ez-comfy-stack</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#studio-sidecars" class="md-skip">
+        <a href="#asset-bible" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Studio sidecars
+              Asset Bible
             
           </span>
         </div>
@@ -1019,6 +1019,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../studio-sidecars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio sidecars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1038,7 +1066,7 @@
   <span class="md-ellipsis">
     
   
-    Studio sidecars
+    Asset Bible
   
 
     
@@ -1056,7 +1084,7 @@
   <span class="md-ellipsis">
     
   
-    Studio sidecars
+    Asset Bible
   
 
     
@@ -1082,10 +1110,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#host-not-dockerfile" class="md-nav__link">
+  <a href="#gen-vs-construct" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host, not Dockerfile
+        Gen vs Construct
       
     </span>
   </a>
@@ -1093,10 +1121,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#host-nle-kdenlive-shotcut" class="md-nav__link">
+  <a href="#where-files-go" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host NLE (Kdenlive / Shotcut)
+        Where files go
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operator-verbs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator verbs
       
     </span>
   </a>
@@ -1107,34 +1146,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../asset-bible/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Asset Bible
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1628,10 +1639,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#host-not-dockerfile" class="md-nav__link">
+  <a href="#gen-vs-construct" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host, not Dockerfile
+        Gen vs Construct
       
     </span>
   </a>
@@ -1639,10 +1650,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#host-nle-kdenlive-shotcut" class="md-nav__link">
+  <a href="#where-files-go" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host NLE (Kdenlive / Shotcut)
+        Where files go
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operator-verbs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator verbs
       
     </span>
   </a>
@@ -1669,89 +1691,118 @@
   
 
 
-<h1 id="studio-sidecars">Studio sidecars<a class="headerlink" href="#studio-sidecars" title="Permanent link">&para;</a></h1>
+<h1 id="asset-bible">Asset Bible<a class="headerlink" href="#asset-bible" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>What a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> is (host process, not Compose)</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: one heavy GPU job</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS.2</span> native + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="da3" data-href="../glossary/#da3" title="Optional Apache depth model. DA3-LARGE is refused.">DA3-BASE</span> opt-in packs</li>
-<li>Pointers to Blender, SuperSplat, and host NLE (Kdenlive / Shotcut)</li>
+<li>Where assets live (<code>COMFY_OUTPUT_DIR/assets</code>, never <code>MODELS_DIR</code>)</li>
+<li>Gen vs Construct (honest limits)</li>
+<li><code>ez.asset.v1</code> records and <code>scene.json</code> that instance slugs</li>
+<li>Operator verb that exists today: <code>asset-ls</code></li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Optional 3D stills and depth without putting DCC or splat viewers in the Docker image</li>
-<li>Unchanged <code>restart: "no"</code>, <code>mem_limit: 90g</code>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span> preflight</li>
+<li>A versioned catalog of reusable props/characters/sets as <strong>outputs</strong></li>
+<li>Scene files that shop for slugs instead of embedding meshes</li>
+<li>Read-only listing now; mint/iterate/promote verbs come later (P-A1)</li>
 </ul>
 <div class="admonition warning">
-<p class="admonition-title">Occupancy</p>
-<p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> is one GPU. Stop Comfy before Blender, SuperSplat, TRELLIS, or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vace" data-href="../glossary/#vace" title="Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.">VACE</span>. Sidecars are <strong>not</strong> <code>docker compose</code> services.</p>
+<p class="admonition-title">Honesty</p>
+<p>There is <strong>no</strong> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="us-safe" data-href="../glossary/#us-safe" title="Local weights this lab will download for a US casual-commercial operator. Not legal advice.">US-safe</span> default-pack model that emits a textured city from one sentence. Whole-scene <strong>fast draft</strong> is Construct (primitives + HDRI + instanced bible assets). Whole-scene <strong>hero</strong> is Construct layout + Gen hero pieces. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS</span>-on-a-full-scene-still is <strong>DRAFT-ONLY</strong>.</p>
 </div>
+<p>This does <strong>not</strong> replace ez_film, the 5.00s printer, or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">occupancy</span>. <code>restart: "no"</code>, heavy confirm, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> are unchanged. No Blender in Docker. No MCP binary. No new default weights.</p>
 <pre class="mermaid"><code>flowchart TB
-  G["GB10"] --&gt; M{"One heavy job"}
-  M --&gt; C["ComfyUI compose"]
-  M --&gt; B["Host Blender"]
-  M --&gt; S["SuperSplat viewer"]
-  M --&gt; T["TRELLIS / DA3 / NVENC"]
-  C -.-&gt;|XOR| B</code></pre>
+  subgraph Gen["Gen"]
+    K["Klein still"] --&gt; T["TRELLIS.2 mesh"]
+  end
+  subgraph Construct["Construct"]
+    S["scene.json shopping list"] --&gt; P["primitives + HDRI + instanced slugs"]
+  end
+  T --&gt; B["Asset Bible slug"]
+  B --&gt; Scene["assembled scene"]
+  P --&gt; Scene</code></pre>
 <hr />
-<h2 id="host-not-dockerfile">Host, not Dockerfile<a class="headerlink" href="#host-not-dockerfile" title="Permanent link">&para;</a></h2>
+<h2 id="gen-vs-construct">Gen vs Construct<a class="headerlink" href="#gen-vs-construct" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Sidecar</th>
-<th>Where it runs</th>
-<th>License</th>
-<th>In image?</th>
+<th>Lane</th>
+<th>Meaning</th>
+<th>Use</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Blender</td>
-<td>Host binary on <code>PATH</code></td>
-<td>Blender's own</td>
-<td><strong>No</strong> — <a href="../blender-gb10-sidecar/">Blender GB10 sidecar</a></td>
+<td><strong>Gen</strong></td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> still → TRELLIS.2</td>
+<td>Hero <em>pieces</em> (a mug, a jacket, a hero mesh)</td>
 </tr>
 <tr>
-<td>SuperSplat</td>
-<td>Host static viewer</td>
-<td>MIT</td>
-<td><strong>No</strong> — <a href="../splat-sidecar/">Splat sidecar</a></td>
-</tr>
-<tr>
-<td>TRELLIS.2 native</td>
-<td>Comfy after <code>download-3d</code></td>
-<td>MIT</td>
-<td>Weights on <code>MODELS_DIR</code> only. No nvdiffrast</td>
-</tr>
-<tr>
-<td>DA3-BASE</td>
-<td>Comfy after <code>download-3d</code></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache 2.0</span></td>
-<td>Weights on <code>MODELS_DIR</code> only. DA3-LARGE refused</td>
+<td><strong>Construct</strong></td>
+<td><code>scene.json</code> shopping list</td>
+<td>Layout: primitives, HDRI, <strong>instances of bible slugs</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Never <code>pip install nvdiffrast</code> / <code>nvdiffrec</code>. Never vendor Inria 3DGS or Pixal3D as a default.</p>
-<p>Generated meshes, previews, and scene instances are <strong>outputs</strong> in the <a href="../asset-bible/">Asset Bible</a> under <code>COMFY_OUTPUT_DIR/assets/</code> — never in <code>MODELS_DIR</code> or <code>guides/</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>trellis2<span class="w">   </span><span class="c1"># or da3-base | all</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w">                      </span><span class="c1"># dies if compose is up</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>export-guides<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w">   </span><span class="c1"># same occupancy</span>
+<p><code>mcp-construct</code> and <code>bpy-primitive</code> are reserved pipeline ids. This pack does <strong>not</strong> vendor an MCP binary or install Blender in the image. Host Blender stays a <a href="../blender-gb10-sidecar/">sidecar</a> (dies if compose is up).</p>
+<hr />
+<h2 id="where-files-go">Where files go<a class="headerlink" href="#where-files-go" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${COMFY_OUTPUT_DIR}/assets/&lt;kind&gt;/&lt;slug&gt;/asset.yaml</code></td>
+<td><code>ez.asset.v1</code> record</td>
+</tr>
+<tr>
+<td><code>…/mesh/</code>, <code>…/views/</code>, <code>…/variants/</code>, <code>…/prompts.jsonl</code></td>
+<td>Takes and previews</td>
+</tr>
+<tr>
+<td><code>${COMFY_OUTPUT_DIR}/assets/index.yaml</code></td>
+<td>Catalog index (written by the library, not by <code>asset-ls</code>)</td>
+</tr>
+<tr>
+<td><code>MODELS_DIR</code></td>
+<td>Weights only — <strong>never</strong> bible assets</td>
+</tr>
+<tr>
+<td><code>guides/</code></td>
+<td>Docs/guides — <strong>never</strong> generated GLBs</td>
+</tr>
+</tbody>
+</table>
+<p>Kinds: <code>object</code> · <code>character</code> · <code>building</code> · <code>set</code> · <code>scene</code> · <code>material</code> · <code>hdri</code> (directories are plural: <code>objects/</code>, …).</p>
+<p>Schema and a sample scene that <strong>instances slugs</strong> (no embedded mesh bytes): repo-root <code>schemas/asset.yaml</code> and <code>schemas/scene.json</code>.</p>
+<hr />
+<h2 id="operator-verbs">Operator verbs<a class="headerlink" href="#operator-verbs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Verb</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>asset-ls</code></td>
+<td><strong>Shipped</strong> — read-only catalog</td>
+</tr>
+<tr>
+<td><code>asset-new</code> / <code>asset-iterate</code> / <code>asset-promote</code></td>
+<td>Coming (P-A1)</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>asset-ls
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>asset-ls<span class="w"> </span>--json
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/utilities/asset-ls.sh<span class="w"> </span>--output-dir<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/assets"</span>
 </code></pre></div>
-<p>Guide packs: <a href="../dcc-workflows/">DCC guide pack</a>. Clay is Workbench; beauty is Path A. Never 1280×720.</p>
-<p>VACE join (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> 2.1 1.3B Apache, 17 frames = <code>1+8n</code>) is a Comfy graph, not a sidecar:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>vace
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># load workflows/_lab/wan/wan-vace-join-lab-example.json — MagCache off</span>
-</code></pre></div>
-<h2 id="host-nle-kdenlive-shotcut">Host NLE (Kdenlive / Shotcut)<a class="headerlink" href="#host-nle-kdenlive-shotcut" title="Permanent link">&para;</a></h2>
-<p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="otio" data-href="../glossary/#otio" title="OpenTimelineIO JSON for Kdenlive/Shotcut. Host-side; never in the Docker image.">OTIO</span> from <code>./scripts/manage.sh film-export-otio go-see</code> is stdlib JSON under <code>films/&lt;slug&gt;/publish/</code>. Import on the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> host or a laptop — never in the Docker image.</p>
-<p>On DGX Spark (Ubuntu aarch64):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>kdenlive<span class="w"> </span>shotcut
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># or: flatpak install flathub org.kde.kdenlive</span>
-</code></pre></div>
-<p>Then open the <code>.otio</code> in Kdenlive/Shotcut. Occupancy: stop Comfy first if the NLE will use the GPU.</p>
-<p>See <a href="../licenses/">Model licenses</a> and <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
+<p>Empty catalog is success. Occupancy for Gen (Klein + TRELLIS) is the same one-heavy-job rule as <a href="../studio-sidecars/">Studio sidecars</a>. TRELLIS.2 remains opt-in <code>download-3d</code>, not <code>download-models</code>. See <a href="../licenses/">Model licenses</a>.</p>
 
 
 

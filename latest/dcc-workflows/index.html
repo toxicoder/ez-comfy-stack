@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Host-only 3D and DCC sidecars on GB10 — Blender, SuperSplat, TRELLIS.2, DA3-BASE. Occupancy with Comfy.">
+        <meta name="description" content="Block in Blender, dump a 1280×704 clay/depth pack, Klein-look the first frame, print a depth-guided LTX 5.00s hero.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/studio-sidecars/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/dcc-workflows/">
       
       
-        <link rel="prev" href="../music/">
+        <link rel="prev" href="../blender-gb10-sidecar/">
       
       
-        <link rel="next" href="../asset-bible/">
+        <link rel="next" href="../splat-sidecar/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Studio sidecars - ez-comfy-stack</title>
+        <title>DCC guide pack - ez-comfy-stack</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#studio-sidecars" class="md-skip">
+        <a href="#dcc-guide-pack" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Studio sidecars
+              DCC guide pack
             
           </span>
         </div>
@@ -1019,37 +1019,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Studio sidecars
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../studio-sidecars/" class="md-nav__link">
         
   
   
@@ -1065,48 +1038,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#host-not-dockerfile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Host, not Dockerfile
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#host-nle-kdenlive-shotcut" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Host NLE (Kdenlive / Shotcut)
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1172,10 +1103,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../dcc-workflows/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DCC guide pack
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1191,6 +1149,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#operator-loop-path-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator loop (Path B)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pack-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pack contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graphs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graphs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paths
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1628,10 +1661,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#host-not-dockerfile" class="md-nav__link">
+  <a href="#operator-loop-path-b" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host, not Dockerfile
+        Operator loop (Path B)
       
     </span>
   </a>
@@ -1639,10 +1672,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#host-nle-kdenlive-shotcut" class="md-nav__link">
+  <a href="#pack-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host NLE (Kdenlive / Shotcut)
+        Pack contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graphs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graphs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paths
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety
       
     </span>
   </a>
@@ -1669,89 +1735,133 @@
   
 
 
-<h1 id="studio-sidecars">Studio sidecars<a class="headerlink" href="#studio-sidecars" title="Permanent link">&para;</a></h1>
+<h1 id="dcc-guide-pack">DCC guide pack<a class="headerlink" href="#dcc-guide-pack" title="Permanent link">&para;</a></h1>
 <p><strong>What's on this page</strong></p>
 <ul>
-<li>What a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> is (host process, not Compose)</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: one heavy GPU job</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS.2</span> native + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="da3" data-href="../glossary/#da3" title="Optional Apache depth model. DA3-LARGE is refused.">DA3-BASE</span> opt-in packs</li>
-<li>Pointers to Blender, SuperSplat, and host NLE (Kdenlive / Shotcut)</li>
+<li>The only DCC ↔ Comfy handshake (<code>guides/&lt;slug&gt;/&lt;shot&gt;/</code>)</li>
+<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: stop Comfy before a dump</li>
+<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span>-from-clay on today's pack</li>
+<li>Opt-in <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> IC-LoRA Union Control (not <code>download-models</code>)</li>
+<li>Path A / B / D</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
-<li>Optional 3D stills and depth without putting DCC or splat viewers in the Docker image</li>
-<li>Unchanged <code>restart: "no"</code>, <code>mem_limit: 90g</code>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span> preflight</li>
+<li>A 5.00s LTX print that keeps the camera you blocked</li>
+<li>Fail-closed packs (1280×704, 120 frames @ 24 fps) before Comfy sees them</li>
+<li>Laptop DCC / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> Comfy as the default on one <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span></li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Occupancy</p>
-<p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> is one GPU. Stop Comfy before Blender, SuperSplat, TRELLIS, or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vace" data-href="../glossary/#vace" title="Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.">VACE</span>. Sidecars are <strong>not</strong> <code>docker compose</code> services.</p>
+<p>This extends <code>ez_film</code>. It does <strong>not</strong> replace the 5.00s printer or the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> occupancy rule. Blender stays on the host — never in <code>docker/Dockerfile</code> or Compose.</p>
+<div class="admonition danger">
+<p class="admonition-title">Stop Comfy first</p>
+<p>Pack writing is a host GPU job. <code>export-guides</code> <strong>dies</strong> (exit 2) if compose is up. Same XOR as <code>manage.sh blender</code>. <code>restart: "no"</code> is unchanged.</p>
 </div>
-<pre class="mermaid"><code>flowchart TB
-  G["GB10"] --&gt; M{"One heavy job"}
-  M --&gt; C["ComfyUI compose"]
-  M --&gt; B["Host Blender"]
-  M --&gt; S["SuperSplat viewer"]
-  M --&gt; T["TRELLIS / DA3 / NVENC"]
-  C -.-&gt;|XOR| B</code></pre>
 <hr />
-<h2 id="host-not-dockerfile">Host, not Dockerfile<a class="headerlink" href="#host-not-dockerfile" title="Permanent link">&para;</a></h2>
+<h2 id="operator-loop-path-b">Operator loop (Path B)<a class="headerlink" href="#operator-loop-path-b" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>stop
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>export-guides<span class="w"> </span>--engine<span class="w"> </span>blender<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--blend<span class="w"> </span>/path/to/shot.blend
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">          </span><span class="c1"># type yes</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Queue workflows/_lab/dcc/klein-from-clay-lab-example.json on first.png</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># After download-ltx --tier iclora: Templates → LTX-2.5 Union Control, depth from depth.mp4</span>
+</code></pre></div>
+<p>Default on one GB10 is <strong>Path D</strong>: block and MCP on the laptop, rsync <code>guides/</code> to the Spark, Spark only runs Comfy.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>rsync<span class="w"> </span>-a<span class="w"> </span>guides/go-see/12/<span class="w"> </span>spark-0:/mnt/comfy-output/guides/go-see/12/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>start
+</code></pre></div>
+<h2 id="pack-contract">Pack contract<a class="headerlink" href="#pack-contract" title="Permanent link">&para;</a></h2>
+<p><code>${COMFY_OUTPUT_DIR}/guides/&lt;slug&gt;/&lt;shot_id&gt;/</code></p>
 <table>
 <thead>
 <tr>
-<th>Sidecar</th>
-<th>Where it runs</th>
-<th>License</th>
-<th>In image?</th>
+<th>File</th>
+<th>Rule</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Blender</td>
-<td>Host binary on <code>PATH</code></td>
-<td>Blender's own</td>
-<td><strong>No</strong> — <a href="../blender-gb10-sidecar/">Blender GB10 sidecar</a></td>
+<td><code>shot.yaml</code></td>
+<td><code>ez.guide.shot.v1</code> — 120 frames, 24 fps, <strong>1280×704</strong></td>
 </tr>
 <tr>
-<td>SuperSplat</td>
-<td>Host static viewer</td>
-<td>MIT</td>
-<td><strong>No</strong> — <a href="../splat-sidecar/">Splat sidecar</a></td>
+<td><code>first.png</code> / <code>last.png</code></td>
+<td>Exact LTX <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vae" data-href="../glossary/#vae" title="Encoder/decoder between pixels and latent space. Each model family has its own.">VAE</span> grid. Never 1280×720</td>
 </tr>
 <tr>
-<td>TRELLIS.2 native</td>
-<td>Comfy after <code>download-3d</code></td>
-<td>MIT</td>
-<td>Weights on <code>MODELS_DIR</code> only. No nvdiffrast</td>
+<td><code>rgb/</code> + <code>clay.mp4</code></td>
+<td>Workbench / unshaded clay. Not Cycles beauty</td>
 </tr>
 <tr>
-<td>DA3-BASE</td>
-<td>Comfy after <code>download-3d</code></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache 2.0</span></td>
-<td>Weights on <code>MODELS_DIR</code> only. DA3-LARGE refused</td>
+<td><code>depth/</code> + <code>depth.mp4</code></td>
+<td>Mist 0–1, near=white / far=black. Raw metric Z is a QC fail</td>
+</tr>
+<tr>
+<td><code>canny/</code></td>
+<td>Freestyle / line-art when present</td>
+</tr>
+<tr>
+<td><code>camera.json</code></td>
+<td>Optional per-frame extrinsics</td>
 </tr>
 </tbody>
 </table>
-<p>Never <code>pip install nvdiffrast</code> / <code>nvdiffrec</code>. Never vendor Inria 3DGS or Pixal3D as a default.</p>
-<p>Generated meshes, previews, and scene instances are <strong>outputs</strong> in the <a href="../asset-bible/">Asset Bible</a> under <code>COMFY_OUTPUT_DIR/assets/</code> — never in <code>MODELS_DIR</code> or <code>guides/</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>stop
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>trellis2<span class="w">   </span><span class="c1"># or da3-base | all</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w">                      </span><span class="c1"># dies if compose is up</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>export-guides<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w">   </span><span class="c1"># same occupancy</span>
+<p>QC is fail-closed: wrong size, wrong frame count, or compose-up → non-zero, pack not marked ok.</p>
+<p>Clay is Workbench. <strong>Beauty MP4 is Path A only</strong> (engine-final ingest in a later PR).</p>
+<h2 id="graphs">Graphs<a class="headerlink" href="#graphs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Graph</th>
+<th>Weights</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>klein-from-clay-lab-example</strong></td>
+<td>Default Klein 4B</td>
+<td>Edit mode, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> <strong>on</strong>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> <strong>42</strong>, 1280×704. Queues today.</td>
+</tr>
+<tr>
+<td><strong>ltx-iclora-depth-5s-lab-example</strong></td>
+<td>Default LTX-2.5 distilled + opt-in Union LoRA</td>
+<td>Lab envelope. Official control graph is Comfy <strong>Templates → LTX-2.5</strong> (<code>LTX-2.5_ICLoRA_Union_Control_Distilled.json</code>). This tree does not vendor UUID subgraphs.</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>download-ltx<span class="w"> </span>--tier<span class="w"> </span>iclora<span class="w">   </span><span class="c1"># not download-models</span>
 </code></pre></div>
-<p>Guide packs: <a href="../dcc-workflows/">DCC guide pack</a>. Clay is Workbench; beauty is Path A. Never 1280×720.</p>
-<p>VACE join (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> 2.1 1.3B Apache, 17 frames = <code>1+8n</code>) is a Comfy graph, not a sidecar:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>vace
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># load workflows/_lab/wan/wan-vace-join-lab-example.json — MagCache off</span>
-</code></pre></div>
-<h2 id="host-nle-kdenlive-shotcut">Host NLE (Kdenlive / Shotcut)<a class="headerlink" href="#host-nle-kdenlive-shotcut" title="Permanent link">&para;</a></h2>
-<p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="otio" data-href="../glossary/#otio" title="OpenTimelineIO JSON for Kdenlive/Shotcut. Host-side; never in the Docker image.">OTIO</span> from <code>./scripts/manage.sh film-export-otio go-see</code> is stdlib JSON under <code>films/&lt;slug&gt;/publish/</code>. Import on the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> host or a laptop — never in the Docker image.</p>
-<p>On DGX Spark (Ubuntu aarch64):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>kdenlive<span class="w"> </span>shotcut
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># or: flatpak install flathub org.kde.kdenlive</span>
-</code></pre></div>
-<p>Then open the <code>.otio</code> in Kdenlive/Shotcut. Occupancy: stop Comfy first if the NLE will use the GPU.</p>
-<p>See <a href="../licenses/">Model licenses</a> and <a href="../models-and-cache/">Models &amp; Cache</a>.</p>
+<p>Official 2.5 Union Control distilled widgets <code>ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors</code> onto the <strong>distilled</strong> transformer. Distilled-only. <strong>Refuse 19B Union.</strong> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> off.</p>
+<h2 id="paths">Paths<a class="headerlink" href="#paths" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong> Engine-final</td>
+<td>DCC beauty MP4 → <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="jobstore" data-href="../glossary/#jobstore" title="Per-film state.json + shot MP4s under COMFY_OUTPUT_DIR/films/&lt;slug&gt;/ for resume.">jobstore</span> later (<code>dcc-final</code>). No AI video.</td>
+</tr>
+<tr>
+<td><strong>B</strong> Hybrid clay → AI finish</td>
+<td>DCC owns layout/camera/timing. AI owns materials/faces/light. <strong>This PR.</strong></td>
+</tr>
+<tr>
+<td><strong>D</strong> Laptop-DCC / Spark-Comfy</td>
+<td>Default ergonomics on one GB10.</td>
+</tr>
+</tbody>
+</table>
+<p>Godot is a first-class blocking engine in a later PR, not a second Blender. OpenToonz / Krita are plate emitters into the same pack, not v1 engines.</p>
+<p>Do not run a live Blender MCP socket and Comfy on the same GB10.</p>
+<h2 id="safety">Safety<a class="headerlink" href="#safety" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Do not weaken <code>restart: "no"</code>, heavy confirm, <code>mem_limit: 90g</code>, <code>min_host_free_gib: 28</code>, or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit.</li>
+<li>Never <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">queue</span> a DCC dump and a print in one session.</li>
+<li>Unload Klein before LTX. IC-LoRA is not part of <code>download-models</code>.</li>
+</ul>
+<p>Related: <a href="../blender-gb10-sidecar/">Blender GB10 sidecar</a>, <a href="../studio-sidecars/">Studio sidecars</a>, <a href="../shorts/">90s shorts</a>, <a href="../licenses/">Model licenses</a>.</p>
 
 
 
