@@ -8,7 +8,8 @@
 #   Concatenate approved 5.00 s lab MP4s. Default glob is six ez_shot_01..06
 #   files. --film joins the 18-shot US-safe 90s shorts (go-see / still-here /
 #   switchyard) in beat/shot order and caps the result at 90 s. Video is
-#   stream-copied; audio is AAC + YouTube loudnorm (same contract as EZFilmConcat).
+#   libx264 CRF 18 (stream-copy fallback); audio is AAC + YouTube loudnorm +
+#   faststart (same contract as EZFilmConcat).
 #
 # Usage:
 #   ./scripts/utilities/concat-shots.sh [--dir DIR] [--out FILE] [--dry-run|--yes]
@@ -92,7 +93,7 @@ parse_args() {
       -h | --help)
         echo "Usage: $0 [--dir DIR] [--out FILE] [--files a.mp4,b.mp4] [--film go-see|still-here|switchyard] [--cap-seconds N] [--xfade CS] [--dry-run|--yes]" >&2
         echo "  --xfade CS  audio acrossfade in centiseconds (10 = 0.10s). Default 0 (hard cut)." >&2
-        echo "              Video stays -c:v copy. Requires audio on every shot (LTX, not Wan-silent)." >&2
+        echo "              Video is a hard cut (H.264). Requires audio on every shot (LTX, not Wan-silent)." >&2
         echo "  --film --yes runs film-accept first (duration/res/audio). --skip-accept bypasses." >&2
         exit 0
         ;;
@@ -286,7 +287,7 @@ audio_acrossfade_filter() {
     return 1
   fi
   if [[ ${n} -eq 2 ]]; then
-    printf '[0:a][1:a]acrossfade=d=%s:c1=tri:c2=tri[ax];[ax]loudnorm=I=-14:LRA=11:TP=-1.5[a]\n' "${d}"
+    printf '[0:a][1:a]acrossfade=d=%s:c1=tri:c2=tri[ax];[ax]aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5[a]\n' "${d}"
     return 0
   fi
   parts+=("[0:a][1:a]acrossfade=d=${d}:c1=tri:c2=tri[a1]")
@@ -302,7 +303,80 @@ audio_acrossfade_filter() {
     i=$((i + 1))
   done
   local IFS=';'
-  printf '%s;[ax]loudnorm=I=-14:LRA=11:TP=-1.5[a]\n' "${parts[*]}"
+  printf '%s;[ax]aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5[a]\n' "${parts[*]}"
+}
+
+#######################################
+# Write a one-file HTML player next to the published MP4.
+# Arguments:
+#   $1  mp4 path
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+write_preview_html() {
+  local mp4="${1}"
+  local name html_path stem
+  name="$(basename "${mp4}")"
+  stem="${name%.mp4}"
+  html_path="${mp4%.mp4}.html"
+  cat >"${html_path}" <<EOF
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${stem}</title>
+  <style>
+    body{margin:0;background:#111;color:#eee;font:16px/1.4 system-ui,sans-serif}
+    main{max-width:1280px;margin:0 auto;padding:16px}
+    video{width:100%;height:auto;background:#000}
+    a{color:#8cf}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>${stem}</h1>
+    <video controls playsinline src="${name}"></video>
+    <p><a href="${name}" download>Download MP4</a></p>
+  </main>
+</body>
+</html>
+EOF
+}
+
+#######################################
+# Playable concat: libx264 + AAC + faststart, copy fallback.
+# Globals:
+#   CAP_SECONDS
+# Arguments:
+#   $1  concat list path
+#   $2  output mp4
+# Outputs:
+#   log/warn
+# Returns:
+#   0 on success; 1 on ffmpeg failure
+#######################################
+concat_playable() {
+  local list="${1}"
+  local out="${2}"
+  if ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+    -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
+    -r 24 -c:v libx264 -preset veryfast -crf 18 -pix_fmt yuv420p \
+    -c:a aac -ar 48000 -ac 2 -b:a 192k \
+    -af "aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5" \
+    -movflags +faststart \
+    "${out}"; then
+    return 0
+  fi
+  warn "libx264 missing; falling back to stream-copy + faststart"
+  ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+    -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
+    -c:v copy -c:a aac -ar 48000 -ac 2 -b:a 192k \
+    -af "aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5" \
+    -movflags +faststart \
+    "${out}" || return 1
 }
 
 #######################################
@@ -337,14 +411,23 @@ concat_xfade_audio() {
   video_tmp="${list}.v.mp4"
   audio_tmp="${list}.a.m4a"
   write_concat_list "${list}" "${files[@]}"
-  ffmpeg -y -f concat -safe 0 -i "${list}" -t "${CAP_SECONDS}" -c:v copy -an "${video_tmp}"
+  if ! ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+    -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
+    -r 24 -c:v libx264 -preset veryfast -crf 18 -pix_fmt yuv420p -an \
+    "${video_tmp}"; then
+    warn "libx264 missing; falling back to stream-copy for xfade video"
+    ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+      -t "${CAP_SECONDS}" -avoid_negative_ts make_zero -c:v copy -an "${video_tmp}" ||
+      return 1
+  fi
   local -a aargv=(ffmpeg -y)
   for f in "${files[@]}"; do
     aargv+=(-i "${f}")
   done
   aargv+=(-filter_complex "${filter}" -map "[a]" -c:a aac -ar 48000 -ac 2 -b:a 192k "${audio_tmp}")
   "${aargv[@]}"
-  ffmpeg -y -i "${video_tmp}" -i "${audio_tmp}" -t "${CAP_SECONDS}" -c:v copy -c:a copy "${out}"
+  ffmpeg -y -i "${video_tmp}" -i "${audio_tmp}" -t "${CAP_SECONDS}" \
+    -c:v copy -c:a copy -movflags +faststart "${out}"
   rm -f "${list}" "${video_tmp}" "${audio_tmp}"
 }
 
@@ -414,12 +497,13 @@ cmd_run() {
     local list
     list="$(mktemp)"
     write_concat_list "${list}" "${files[@]}"
-    ffmpeg -y -f concat -safe 0 -i "${list}" -t "${CAP_SECONDS}" \
-      -c:v copy -c:a aac -ar 48000 -ac 2 -b:a 192k \
-      -af "loudnorm=I=-14:LRA=11:TP=-1.5" \
-      "${OUT_MP4}"
+    concat_playable "${list}" "${OUT_MP4}" || {
+      rm -f "${list}"
+      return 1
+    }
     rm -f "${list}"
   fi
+  write_preview_html "${OUT_MP4}"
   local dur
   dur="$(probe_mp4_seconds "${OUT_MP4}")"
   if [[ -n ${dur} ]] && awk "BEGIN {exit !(${dur} > ${CAP_SECONDS} + 0.05)}"; then

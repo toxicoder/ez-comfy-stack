@@ -344,7 +344,11 @@ def compile_film(
             "identity_seed": int(meta["identity_seed"]),
             "identity_enhance": meta["identity_enhance"].lower()
             in ("true", "1", "on", "yes"),
-            "card": shot_card(sid, status="pending"),
+            "card": shot_card(
+                sid,
+                status="pending",
+                camera=str(yaml_shot.get("camera") or "dolly in"),
+            ),
             "clay": yaml_shot.get("clay") or "skip",
             "dialogue": yaml_shot.get("dialogue") or "",
             "audio_lock": yaml_shot.get("audio_lock") or "none",

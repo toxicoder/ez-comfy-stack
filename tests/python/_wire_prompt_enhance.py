@@ -163,7 +163,7 @@ def normalize_enhance_widgets(graph: dict) -> None:
         title = str(node.get("title") or "")
         if ntype in ("EZKleinPromptEnhance", "EZWanPromptEnhance"):
             prompt = values[0] if values else ""
-            enhance = True
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
             default_mode = "t2i" if ntype == "EZKleinPromptEnhance" else "t2v"
             mode = values[2] if len(values) > 2 else default_mode
             if ntype == "EZKleinPromptEnhance":
@@ -183,7 +183,7 @@ def normalize_enhance_widgets(graph: dict) -> None:
             node["widgets_values"] = [prompt, enhance, mode, hint, style if style else "none"]
         elif ntype == "EZLTXPromptEnhance":
             prompt = values[0] if values else ""
-            enhance = True
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
             mode = values[2] if len(values) > 2 else "t2v"
             hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
             audio = values[4] if len(values) > 4 else ""

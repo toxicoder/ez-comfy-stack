@@ -97,6 +97,14 @@ teardown() {
   grep -q -- '-t 90' "${TEST_TMP_DIR}/ffmpeg.log"
   grep -q -- 'aac' "${TEST_TMP_DIR}/ffmpeg.log"
   grep -q -- 'loudnorm' "${TEST_TMP_DIR}/ffmpeg.log"
+  grep -q -- 'libx264' "${TEST_TMP_DIR}/ffmpeg.log"
+  grep -q -- 'faststart' "${TEST_TMP_DIR}/ffmpeg.log"
+  [[ -f "${COMFY_OUTPUT_DIR}/cap.html" ]]
+  run type concat_playable
+  [ "${status}" -eq 0 ]
+  run write_preview_html "${COMFY_OUTPUT_DIR}/cap.mp4"
+  [ "${status}" -eq 0 ]
+  [[ -f "${COMFY_OUTPUT_DIR}/cap.html" ]]
   run first_glob "${COMFY_OUTPUT_DIR}/ez_gosee_b1_s1_ltx_video*.mp4"
   [[ "${output}" == *"ltx_video"* ]]
   run probe_mp4_seconds "${COMFY_OUTPUT_DIR}/cap.mp4"

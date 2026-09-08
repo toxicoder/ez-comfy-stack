@@ -18,12 +18,17 @@ import ez_film  # noqa: E402
 from ez_film import concat as film_concat  # noqa: E402
 from ez_film import nodes as film_nodes  # noqa: E402
 from ez_film.concat import (  # noqa: E402
+    AUDIO_FILTER,
     LOUDNORM_FILTER,
+    MOVFLAGS,
     audio_acrossfade_filter,
     concat_list_line,
+    copy_publish_master,
+    encoder_missing,
     ffmpeg_audio_acrossfade_argv,
     ffmpeg_mux_copy_argv,
     ffmpeg_stitch_argv,
+    ffmpeg_stitch_copy_argv,
     ffmpeg_video_copy_argv,
     probe_audio_hz,
     probe_has_audio,
@@ -31,6 +36,7 @@ from ez_film.concat import (  # noqa: E402
     resolve_shot_path,
     stitch_film,
     write_disclosure_sidecar,
+    write_preview_html,
 )
 from ez_film.nodes import (  # noqa: E402
     EZFilmConcat,
@@ -56,6 +62,7 @@ def test_pack_imports_without_comfy() -> None:
         "EZFilmConcat",
         "EZFilmDisclosure",
     }
+    assert ez_film.WEB_DIRECTORY == "./js"
     assert EZUnloadModels.CATEGORY == "ez-comfy/film"
     assert EZFilmConcat.CATEGORY == "ez-comfy/film"
     assert EZFilmConcat.OUTPUT_NODE is True
@@ -66,6 +73,12 @@ def test_pack_imports_without_comfy() -> None:
     for index in range(1, 19):
         assert spec["required"][f"shot_{index:02d}"][0] == "VHS_FILENAMES"
     assert spec["optional"]["disclosure"][0] == "STRING"
+    js = ROOT / "custom_nodes" / "ez_film" / "js" / "ez_film_preview.js"
+    body = js.read_text(encoding="utf-8")
+    assert "EZFilmConcat" in body
+    assert "onExecuted" in body
+    assert "90s film ready" in body
+    assert "download" in body.lower()
 
 
 def test_write_disclosure_sidecar(tmp_path: Path) -> None:
@@ -136,31 +149,18 @@ def test_concat_list_escapes_quotes() -> None:
 
 def test_ffmpeg_argv_has_cap_aac_loudnorm() -> None:
     argv = ffmpeg_stitch_argv("/tmp/list.txt", "/tmp/out.mp4", 90.0, "ffmpeg")
-    assert argv == [
-        "ffmpeg",
-        "-y",
-        "-f",
-        "concat",
-        "-safe",
-        "0",
-        "-i",
-        "/tmp/list.txt",
-        "-t",
-        "90.0",
-        "-c:v",
-        "copy",
-        "-c:a",
-        "aac",
-        "-ar",
-        "48000",
-        "-ac",
-        "2",
-        "-b:a",
-        "192k",
-        "-af",
-        LOUDNORM_FILTER,
-        "/tmp/out.mp4",
-    ]
+    assert argv[argv.index("-t") + 1] == "90.0"
+    assert argv[argv.index("-c:v") + 1] == "libx264"
+    assert argv[argv.index("-c:a") + 1] == "aac"
+    assert argv[argv.index("-af") + 1] == AUDIO_FILTER
+    assert LOUDNORM_FILTER in AUDIO_FILTER
+    assert argv[argv.index("-movflags") + 1] == MOVFLAGS
+    assert "+faststart" in MOVFLAGS
+    copy_argv = ffmpeg_stitch_copy_argv("/tmp/list.txt", "/tmp/out.mp4", 90.0, "ffmpeg")
+    assert copy_argv[copy_argv.index("-c:v") + 1] == "copy"
+    assert copy_argv[copy_argv.index("-movflags") + 1] == MOVFLAGS
+    assert encoder_missing("Unknown encoder 'libx264'") is True
+    assert encoder_missing("ok") is False
 
 
 def test_audio_acrossfade_filter_and_xfade_argv() -> None:
@@ -178,10 +178,11 @@ def test_audio_acrossfade_filter_and_xfade_argv() -> None:
     assert "acrossfade" in audio_argv[audio_argv.index("-filter_complex") + 1]
     video_argv = ffmpeg_video_copy_argv("/tmp/list.txt", "/tmp/v.mp4", 90.0, "ffmpeg")
     assert "-an" in video_argv
-    assert "-c:v" in video_argv and video_argv[video_argv.index("-c:v") + 1] == "copy"
+    assert "-c:v" in video_argv and video_argv[video_argv.index("-c:v") + 1] == "libx264"
     mux = ffmpeg_mux_copy_argv("/tmp/v.mp4", "/tmp/a.m4a", "/tmp/out.mp4", 90.0, "ffmpeg")
     assert mux[mux.index("-c:v") + 1] == "copy"
     assert mux[mux.index("-c:a") + 1] == "copy"
+    assert mux[mux.index("-movflags") + 1] == MOVFLAGS
 
 
 def test_stitch_film_runs_ffmpeg_and_checks_cap(tmp_path: Path) -> None:
@@ -198,7 +199,9 @@ def test_stitch_film_runs_ffmpeg_and_checks_cap(tmp_path: Path) -> None:
         stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run)
     assert captured
     assert "-t" in captured[0]
-    assert LOUDNORM_FILTER in captured[0]
+    assert any(LOUDNORM_FILTER in str(part) for part in captured[0])
+    assert captured[0][captured[0].index("-c:v") + 1] == "libx264"
+    assert captured[0][captured[0].index("-movflags") + 1] == MOVFLAGS
     assert Path(out).is_file()
 
     with patch.object(film_concat, "probe_seconds", return_value=91.0):
@@ -329,3 +332,41 @@ def test_film_concat_node(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
     assert packed["ui"]["gifs"][0]["type"] == "output"
     assert packed["ui"]["gifs"][0]["subfolder"] == ""
     assert packed["ui"]["gifs"][0]["frame_rate"] == 24
+    html = tmp_path / "ez_gosee_90s.html"
+    assert html.is_file()
+    text = html.read_text(encoding="utf-8")
+    assert "<video" in text
+    assert "download" in text
+    assert "ez_gosee_90s.mp4" in text
+
+
+def test_write_preview_html_and_x264_fallback(tmp_path: Path) -> None:
+    mp4 = tmp_path / "ez_gosee_90s.mp4"
+    mp4.write_bytes(b"mp4")
+    sidecar = write_preview_html(str(mp4))
+    assert sidecar == tmp_path / "ez_gosee_90s.html"
+    assert copy_publish_master(str(mp4), "go-see", tmp_path) is None
+    publish = tmp_path / "films" / "gosee" / "publish"
+    publish.mkdir(parents=True)
+    copied = copy_publish_master(str(mp4), "go-see", tmp_path)
+    assert copied == publish / "master.mp4"
+    assert copied.is_file()
+    shots = [str(tmp_path / f"s{i:02d}.mp4") for i in range(18)]
+    out = str(tmp_path / "out.mp4")
+    captured: list[list[str]] = []
+
+    def fail_then_ok(argv, **_kwargs):
+        captured.append(list(argv))
+        if len(captured) == 1:
+            return SimpleNamespace(
+                returncode=1, stdout="", stderr="Unknown encoder 'libx264'"
+            )
+        Path(argv[-1]).write_bytes(b"out")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    with patch.object(film_concat, "probe_seconds", return_value=90.0):
+        stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fail_then_ok)
+    assert len(captured) == 2
+    assert captured[0][captured[0].index("-c:v") + 1] == "libx264"
+    assert captured[1][captured[1].index("-c:v") + 1] == "copy"
+    assert captured[1][captured[1].index("-movflags") + 1] == MOVFLAGS

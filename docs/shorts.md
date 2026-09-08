@@ -10,6 +10,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 - Why 18 × 5.00s shots instead of one 90s denoise
 - One-click Comfy graph per film (Klein identity + 18 LTX prints + stitch)
+- Play/download: overlay, `ez_*_90s.html`, studio-ui `/watch/<slug>`
 - Shot maps for go-see (first-person parkour), still-here, and switchyard
 - Model-native Klein / LTX prompts ([Prompting](prompting.md))
 - Spark farm: optional parallel 5s Queues, local concat
@@ -22,8 +23,8 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 - Three continuous ~90s films (first-person parkour go-see, still-here, switchyard) on the **US-safe local pack**
 - Last-frame continuity without a 90s denoise
-- A 90.00s publish cap (in-graph `EZFilmConcat`, or host `ffmpeg -t 90`)
-- One Queue per film — identity, 18 prints, stitch, preview, save
+- A 90.00s publish cap (in-graph `EZFilmConcat` faststart H.264, or host `ffmpeg -t 90`)
+- One Queue per film — identity, 18 prints, stitch, play, download
 
 **Who this is for:** studio users who already Queued a 5 s LTX clip. Concepts: [Klein, Wan, and LTX](learn/pipeline.md).
 
@@ -32,9 +33,9 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
     1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
     2. Optional: fill **beat-sheet-lab-example** (occupancy **none**, no UNET) then `./scripts/manage.sh shot-sheet run --film go-see` — writes `films/<slug>/shots.yaml`. Lab YAML is not copied by the entrypoint.
     3. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
-    4. Prompt enhance is **on** (Klein identity mode + 18 LTX i2v rewrites). Leave LTX **1280×704**. Queue **once**.
+    4. **go-see** pins Enhance **off** so the body-cam bible is what CLIP encodes. still-here / switchyard keep Enhance **on**. Leave LTX **1280×704**. Queue **once**.
     5. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
-    6. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`). Open **Save 90s film (MP4) — open node for preview** to watch or download it from the Comfy tab.
+    6. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`), plus `ez_gosee_90s.html`. A **90s film ready** overlay offers play and download. Optional board: `docker compose --profile studio-ui up studio-ui` then http://localhost:8190/watch/gosee
     7. Copy off the Spark: `scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .`
 
     Do **not** set 241+ frames. Resume after a dropped SSH session: `film-resume` (below).
@@ -70,7 +71,7 @@ flowchart LR
   Klein --> Unload["Unload models"]
   Unload --> Shot["LTX 5.00s AV ×18 last-frame chain"]
   Shot --> Concat["EZFilmConcat · cap 90s"]
-  Concat --> Preview["Open 90s MP4 node for preview"]
+  Concat --> Preview["Overlay · HTML sidecar · /watch"]
 ```
 
 ---
@@ -81,7 +82,7 @@ flowchart LR
 | --- | --- | --- | --- |
 | Identity still | Group **1. Identity (Klein)** | Klein 4B distilled FP8 | Apache 2.0 |
 | Print + synced world audio | Groups **3–8** (beats) | LTX-2.5 distilled I2V | Community License (not Apache) |
-| Stitch + preview | Group **9. Publish 90s MP4** | `EZFilmConcat` (ffmpeg AAC + YouTube loudnorm) | — |
+| Stitch + preview | Group **9. Publish 90s MP4** (left column) | `EZFilmConcat` (H.264 CRF 18 + AAC + YouTube loudnorm + faststart) | — |
 | Optional silent rehearsal | `workflows/_lab/wan/wan-i2v-shot-lab-example.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
 
 One-click film files:
@@ -101,9 +102,9 @@ LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional exper
 Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/shorts/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/shorts/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
 
 1. Load one film graph (`film-go-see-90s-run-lab-example` / `film-still-here-90s-lab-example` / `film-switchyard-90s-lab-example`).
-2. Queue **once**. Klein runs first (Enhance **on**, identity mode, 4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start (each shot has LTX Prompt Enhance on). Leave LTX **1280×704**.
+2. Queue **once**. Klein runs first (4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start. **go-see** pins Enhance **off** on identity and every LTX shot; the other two films keep Enhance **on**. Leave LTX **1280×704**.
 3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
-4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (container `/outputs`). Open **Save 90s film (MP4) — open node for preview** to watch or download it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`.
+4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (H.264 + AAC + faststart) plus `ez_<slug>_90s.html`. A **90s film ready** overlay plays and downloads it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`. Optional: studio-ui `/watch/<slug>`.
 5. Optional silent rehearsal of one frame: **wan-i2v-shot-lab-example**. Optional single-shot iterate: **ltx-i2v-shot-lab-example**.
 Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
 
@@ -121,8 +122,8 @@ Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`,
 FILM=go-see   # or still-here | switchyard
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --dry-run
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
-# Optional audio acrossfade (0.10 s). Video stays stream-copy. LTX shots only
-# (Wan-silent has no audio stream — --xfade refuses).
+# Optional audio acrossfade (0.10 s). Video is a hard cut (H.264). LTX shots only
+# (Wan-silent has no audio stream — --xfade refuses). go-see in-graph uses 0.08 s.
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --xfade 10 --yes
 # Listen to go-see with and without --xfade 10; default remains the hard-cut golden.
 
@@ -213,16 +214,16 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
 
 === "go-see"
 
-    First-person **parkour** body-cam. Identity lock: sun-washed teal running-coat sleeves + matching gloves + warm gold-cyan holographic glyph motes in frame (data-staff slung on the back). Arms always; boots/knees on vaults, drops, and wall-runs. Never a standing third-person wizard. **No score** (breath + world).
+    First-person **parkour** body-cam. Identity lock: sun-washed teal running-coat sleeves + matching gloves + warm gold-cyan holographic glyph motes in frame (data-staff slung on the back). Eye-level, arms always in the lower third; boots/knees on vaults, drops, and wall-runs. Dead sprint from frame 1. One signature stunt per 5 s; each shot lands on a readable plant for the next I2V. Never a standing third-person wizard. **No score, no speech** (breath + world foley).
 
     | Beat | Place | s1 enter | s2 traverse | s3 exit |
     | --- | --- | --- | --- | --- |
-    | 1 | Golden-hour tropical rooftops | Sprint + gap leap | Vault bulkhead + wall-run | Drop toward bay skybridge |
-    | 2 | Waterfront maglev / bay skybridge | Spine sprint | Gantry leaps | Dive into hanging gardens |
-    | 3 | Hanging tropical gardens | Wall-run glass | Vault palm terraces | Water curtain toward causeway |
-    | 4 | Tropical storm causeway | Rain sprint | Leap a squall gap | Vault toward coastal cliffs |
+    | 1 | Golden-hour tropical rooftops | Dead sprint | Tucked front flip across the gap | Kong vault + wall-run drop |
+    | 2 | Waterfront maglev / bay skybridge | Grating sprint | Cat leap between gantries | Dive into hanging gardens |
+    | 3 | Hanging tropical gardens | Glass wall-run | Tic-tac / speed vault | Burst through water curtain |
+    | 4 | Tropical storm causeway | Rain sprint | Precision leap a squall gap | Dash vault toward cliffs |
     | 5 | Coastal jungle ridge | Ridge sprint | Slide a wet root arch | Climb-run toward overlook |
-    | 6 | Warm-night bay overlook | Last sprint | Leap to rail | Hold + quiet laugh |
+    | 6 | Warm-night bay overlook | Last sprint | Leap to rail | Hold + breath only |
 
 === "still-here"
 

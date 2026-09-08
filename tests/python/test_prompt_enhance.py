@@ -278,6 +278,7 @@ def test_studio_app_chrome_pack_exists() -> None:
     assert "lab_app_mode" in body
     assert "execution_start" in body
     assert "SaveImage" in body
+    assert "EZFilmConcat" in body
 
 
 def test_web_directory_and_preview_js() -> None:
@@ -767,8 +768,12 @@ def test_ace_step_enhance_node_defaults_and_modes() -> None:
 
 
 def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
-    """Every lab CLIP/ACE positive prompt comes from an EZ enhance node, enhance on."""
+    """Every lab CLIP/ACE positive prompt comes from an EZ enhance node, enhance on.
+
+    go-see pins Enhance off so the body-cam bible is encoded as written.
+    """
     skip_ids = {"longcat-video-lab-example"}
+    pin_off_ids = {"film-go-see-90s-run-lab-example"}
     enhance_types = {
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
@@ -796,7 +801,12 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
                 )
                 if ntype == "EZAceStepPromptEnhance":
                     flag = values[2] if len(values) > 2 else True
-                if flag is not True:
+                if gid in pin_off_ids:
+                    if flag is not False:
+                        missing.append(
+                            f"{path.name}: {ntype}#{node['id']} enhance={flag!r}"
+                        )
+                elif flag is not True:
                     missing.append(f"{path.name}: {ntype}#{node['id']} enhance={flag!r}")
             if ntype not in encoder_types:
                 continue

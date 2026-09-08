@@ -18,6 +18,37 @@ if not GUIDES.is_dir():
     if alt.is_dir():
         GUIDES = alt
 
+PUBLISH_FILES = {
+    "gosee": "ez_gosee_90s.mp4",
+    "stillhere": "ez_stillhere_90s.mp4",
+    "switchyard": "ez_switchyard_90s.mp4",
+}
+
+
+def output_root() -> Path:
+    """Comfy output dir: parent of jobstore ``films/`` when that layout exists."""
+    if FILMS.name == "films":
+        parent = FILMS.parent
+        if parent.is_dir():
+            return parent
+    return FILMS
+
+
+def publish_mp4(slug: str) -> Path | None:
+    """Allowlisted 90s master under the output root, or None."""
+    name = PUBLISH_FILES.get(slug)
+    if not name:
+        return None
+    root = output_root()
+    path = root / name
+    try:
+        path.resolve().relative_to(root.resolve())
+    except (OSError, ValueError):
+        return None
+    if path.is_file():
+        return path
+    return None
+
 
 def _light(on: bool) -> str:
     return "on" if on else "off"
@@ -98,11 +129,19 @@ def _page() -> bytes:
             body.append("<h2>{} / {}</h2>".format(
                 html.escape(str(row["film"])), html.escape(str(row["slug"]))
             ))
+            watch = ""
+            slug = str(row["slug"])
+            if publish_mp4(slug) is not None:
+                watch = (
+                    ' · <a href="/watch/{0}">Watch 90s film</a>'
+                    ' · <a href="/media/{0}?dl=1">Download MP4</a>'
+                ).format(html.escape(slug))
             body.append(
-                "<p>prints {}/{} · audio_policy {}</p>".format(
+                "<p>prints {}/{} · audio_policy {}{}</p>".format(
                     html.escape(str(row["ok"])),
                     html.escape(str(row["total"])),
                     html.escape(str(row["audio_policy"])),
+                    watch,
                 )
             )
             body.append('<div class="strip">')
@@ -139,6 +178,29 @@ def _page() -> bytes:
     return doc.encode("utf-8")
 
 
+def watch_page(slug: str) -> bytes | None:
+    """HTML5 player for an allowlisted 90s master."""
+    path = publish_mp4(slug)
+    if path is None:
+        return None
+    name = html.escape(path.name)
+    safe = html.escape(slug)
+    return (
+        "<!doctype html><html><head><meta charset='utf-8'>"
+        f"<title>{name}</title>"
+        "<style>body{margin:0;background:#111;color:#eee;"
+        "font:16px/1.4 ui-sans-serif,system-ui,sans-serif}"
+        "main{max-width:1280px;margin:0 auto;padding:16px}"
+        "video{width:100%;height:auto;background:#000}"
+        "a{color:#8cf}</style></head><body><main>"
+        f"<h1>{name}</h1>"
+        f'<video controls playsinline src="/media/{safe}"></video>'
+        f'<p><a href="/media/{safe}?dl=1">Download MP4</a>'
+        ' · <a href="/">Board</a></p>'
+        "</main></body></html>"
+    ).encode("utf-8")
+
+
 def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
     if not slug.isalnum() or not shot.isdigit() or kind not in {"clay", "overlay"}:
         return None
@@ -159,6 +221,35 @@ def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
+        parts = [p for p in parsed.path.split("/") if p]
+        if len(parts) == 2 and parts[0] in {"watch", "media"}:
+            slug = parts[1]
+            path = publish_mp4(slug)
+            if path is None:
+                self.send_response(404)
+                self.end_headers()
+                return
+            if parts[0] == "watch":
+                payload = watch_page(slug) or b""
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+                return
+            payload = path.read_bytes()
+            query = parse_qs(parsed.query)
+            self.send_response(200)
+            self.send_header("Content-Type", "video/mp4")
+            self.send_header("Content-Length", str(len(payload)))
+            if (query.get("dl") or [""])[0] == "1":
+                self.send_header(
+                    "Content-Disposition",
+                    f'attachment; filename="{path.name}"',
+                )
+            self.end_headers()
+            self.wfile.write(payload)
+            return
         if parsed.path == "/thumb":
             query = parse_qs(parsed.query)
             slug = (query.get("slug") or [""])[0]
