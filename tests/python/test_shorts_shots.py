@@ -277,7 +277,10 @@ def test_shot_graphs_are_five_second_i2v() -> None:
 def test_no_long_latents_in_shorts() -> None:
     for path in _json_files():
         graph = json.loads(path.read_text(encoding="utf-8"))
-        for node in graph["nodes"]:
+        nodes = list(graph["nodes"])
+        for sub in ((graph.get("definitions") or {}).get("subgraphs") or []):
+            nodes.extend(sub.get("nodes") or [])
+        for node in nodes:
             if node.get("type") not in LONG_LATENT_TYPES:
                 continue
             values = node.get("widgets_values") or []

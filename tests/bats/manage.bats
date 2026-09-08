@@ -51,6 +51,7 @@ FROZEN_MANAGE_VERBS=(
   film-export-otio
   film-proxies
   take-promote
+  promote-workflow
   download-restore
   download-3d
   blender
@@ -241,6 +242,8 @@ FROZEN_MANAGE_VERBS=(
   run cmd_film_proxies --help
   [ "${status}" -eq 0 ]
   run cmd_take_promote
+  [ "${status}" -ne 0 ]
+  run cmd_promote_workflow
   [ "${status}" -ne 0 ]
   run cmd_download_restore --help
   [ "${status}" -eq 0 ]

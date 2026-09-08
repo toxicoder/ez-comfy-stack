@@ -8,7 +8,18 @@ Thanks for improving **ez-comfy-stack**.
 2. Prefer TDD (`make test` / `make coverage`)  
 3. **Commit tests with the production files they cover** (same commit)  
 4. Run `make lint` and `make docs`  
-5. Open a PR into `development`  
+5. Open a PR into `development`
+
+To ship a keeper from a live `_user` graph (does **not** commit):
+
+```bash
+./scripts/manage.sh promote-workflow \
+  --from "${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/my-hook.json" \
+  --lane klein \
+  --id klein-my-hook-lab-example
+```
+
+Destination is `workflows/_lab/<lane>/<id>.json`. The file must end in `-lab-example` and must not contain MiniMax / Klein 9B / FLUX.2-dev / Seedance / Kling / z_image_turbo. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.  
 
 ```mermaid
 flowchart TB

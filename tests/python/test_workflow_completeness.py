@@ -103,14 +103,16 @@ def test_lab_graph_completeness(path: Path) -> None:
             assert int(nid) in live, (path.name, nid)
 
     types = {n.get("type") for n in graph["nodes"]}
+    nested: list[dict] = []
+    for sub in ((graph.get("definitions") or {}).get("subgraphs") or []):
+        nested.extend(sub.get("nodes") or [])
+    all_nodes = list(graph["nodes"]) + nested
+    all_types = {n.get("type") for n in all_nodes}
+
     if occupancy not in ("none", "llm") and extra.get("lab_stub") is not True:
         if occupancy == "film" or path.name.startswith("film-"):
             assert "EZFilmConcat" in types, path.name
-            assert any(
-                n.get("type") == "VHS_VideoCombine" for n in graph["nodes"]
-            ) or any(
-                (graph.get("definitions") or {}).get("subgraphs")
-            ), path.name
+            assert "VHS_VideoCombine" in all_types, path.name
         elif occupancy == "audio" or "SaveAudio" in types or "SaveAudioMP3" in types:
             assert "SaveAudio" in types or "SaveAudioMP3" in types, path.name
         elif occupancy in ("wan", "ltx") or "VHS_VideoCombine" in types:
@@ -163,7 +165,7 @@ def test_lab_graph_completeness(path: Path) -> None:
         )
 
     if path.name.startswith("film-"):
-        for node in graph["nodes"]:
+        for node in all_nodes:
             if node.get("type") in ("LTXVImgToVideo", "LTXVEmptyLatentAudio"):
                 values = node.get("widgets_values") or []
                 length = int(
