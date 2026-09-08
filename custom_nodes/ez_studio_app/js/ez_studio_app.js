@@ -71,14 +71,17 @@ function labAppMode() {
 }
 
 function stampedLabels() {
+  // Persist is [nodeId, widgetName, config]. App panel titles use widget.label.
   const labels = new Map();
   const inputs = app.graph?.extra?.linearData?.inputs || [];
   for (const entry of inputs) {
-    const widgetId = entry?.[0];
+    const nodeId = entry?.[0];
+    const widgetName = entry?.[1];
     const config = entry?.[2];
-    if (typeof widgetId === "string" && config?.label) {
-      labels.set(widgetId, config.label);
+    if (nodeId == null || !widgetName || !config?.label) {
+      continue;
     }
+    labels.set(`${nodeId}:${widgetName}`, config.label);
   }
   return labels;
 }

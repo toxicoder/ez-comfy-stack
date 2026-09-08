@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -17,9 +18,14 @@ from _stamp_app_mode import (
     HIDDEN_APP_WIDGETS,
     STAMP_SPECS,
     infer_suite_inputs,
+    linear_input_node_id,
     stamp_app_mode,
+    suite_json_paths,
     widget_config,
 )
+
+# ComfyUI_frontend v1.49.6 WidgetId: graphId:nodeId:name (three parts).
+_FRONTEND_WIDGET_ID = re.compile(r"^[^:]+:[^:]+:[^:]+$")
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -67,11 +73,12 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
     assert linear["inputs"]
     assert linear["outputs"]
     for entry in linear["inputs"]:
-        widget_id, widget_name = entry[0], entry[1]
-        node_id_s, name = widget_id.split(":", 1)
-        node = by_id[int(node_id_s)]
-        assert name == widget_name
-        assert node is not None
+        node_id = linear_input_node_id(entry)
+        widget_name = entry[1]
+        assert isinstance(entry[0], int)
+        assert ":" not in str(entry[0])
+        assert node_id in by_id
+        assert widget_name == entry[1]
     save = next(n for n in stamped["nodes"] if n.get("type") == "SaveImage")
     assert linear["outputs"] == [save["id"]]
 
@@ -179,9 +186,11 @@ def test_beat_sheet_exposes_only_shot_cards() -> None:
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
     names = _widget_names(_load("prompt-forge-lab-example.json"))
     assert names[:3] == ["prompt", "prompt", "prompt"]
-    assert "mode" in names
-    assert "duration_hint" in names
+    assert names.count("style") == 3
+    assert names.count("enhance") == 3
     assert "audio_notes" in names
+    assert "mode" not in names
+    assert "duration_hint" not in names
 
 
 def test_widget_help_text_has_no_banned_models() -> None:
@@ -305,3 +314,87 @@ def test_widget_config_carries_label_and_prompt_height() -> None:
     assert cfg["label"] == "Prompt"
     assert cfg["height"] == 140
     assert "description" in cfg
+
+
+def _frontend_1496_keeps_input(stored_id: object, node_ids: set[int]) -> bool:
+    """Keep/drop rule from ComfyUI_frontend v1.49.6 upgradeAndValidateInput.
+
+    Three-part WidgetIds resolve by nodeId. A string that contains ':' but is
+    not a WidgetId is treated as a subgraph locator and dropped when
+    getNodeById('11:prompt') fails. Integer (or digit-string) node ids upgrade
+    via getNodeById + widget name.
+    """
+    if isinstance(stored_id, str) and _FRONTEND_WIDGET_ID.match(stored_id):
+        node_part = stored_id.split(":")[1]
+        return node_part.lstrip("-").isdigit() and int(node_part) in node_ids
+    if isinstance(stored_id, str) and ":" in stored_id:
+        return False
+    if isinstance(stored_id, bool) or stored_id is None:
+        return False
+    if isinstance(stored_id, int):
+        return stored_id in node_ids
+    if isinstance(stored_id, str) and stored_id.lstrip("-").isdigit():
+        return int(stored_id) in node_ids
+    return False
+
+
+def test_linear_input_node_id_accepts_int_and_rejects_colon_join() -> None:
+    assert linear_input_node_id([11, "prompt"]) == 11
+    assert linear_input_node_id(["7", "seed"]) == 7
+    with pytest.raises(ValueError, match="legacy"):
+        linear_input_node_id(["11:prompt", "prompt"])
+    with pytest.raises(ValueError, match="invalid"):
+        linear_input_node_id([True, "prompt"])
+    with pytest.raises(ValueError, match="invalid"):
+        linear_input_node_id([])
+
+
+def test_frontend_1496_drops_two_part_widget_ids() -> None:
+    graph = _load("klein-still-draft-lab-example.json")
+    node_ids = {int(n["id"]) for n in graph["nodes"]}
+    enhance = next(
+        n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"
+    )
+    nid = int(enhance["id"])
+    assert _frontend_1496_keeps_input(f"{nid}:prompt", node_ids) is False
+    assert _frontend_1496_keeps_input(nid, node_ids) is True
+    assert _frontend_1496_keeps_input(str(nid), node_ids) is True
+
+
+def test_stamped_inputs_survive_frontend_1496_prune() -> None:
+    graph = copy.deepcopy(_load("klein-still-draft-lab-example.json"))
+    stamped = stamp_app_mode(
+        graph,
+        inputs=[
+            ("Klein Prompt Enhance", "prompt"),
+            ("Klein Prompt Enhance", "style"),
+            ("Klein Prompt Enhance", "enhance"),
+            ("KSampler", "seed"),
+        ],
+        outputs=["Save"],
+        lane="inspire",
+        occupancy="klein",
+    )
+    node_ids = {int(n["id"]) for n in stamped["nodes"]}
+    inputs = stamped["extra"]["linearData"]["inputs"]
+    kept = [
+        entry for entry in inputs if _frontend_1496_keeps_input(entry[0], node_ids)
+    ]
+    assert [entry[1] for entry in kept] == ["prompt", "style", "enhance", "seed"]
+    assert kept == inputs
+
+
+def test_shipped_suite_inputs_survive_frontend_1496_prune() -> None:
+    for path in suite_json_paths(ROOT / "workflows"):
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        node_ids = {int(n["id"]) for n in graph["nodes"]}
+        inputs = (graph.get("extra") or {}).get("linearData", {}).get("inputs") or []
+        assert inputs, path.name
+        kept = [
+            entry
+            for entry in inputs
+            if _frontend_1496_keeps_input(entry[0], node_ids)
+        ]
+        assert kept == inputs, path.name
+        for entry in inputs:
+            assert linear_input_node_id(entry) in node_ids, (path.name, entry[0])

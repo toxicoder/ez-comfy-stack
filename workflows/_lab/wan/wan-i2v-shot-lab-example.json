@@ -831,7 +831,7 @@
     "linearData": {
       "inputs": [
         [
-          "17:prompt",
+          17,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -840,7 +840,7 @@
           }
         ],
         [
-          "17:enhance",
+          17,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -848,7 +848,7 @@
           }
         ],
         [
-          "4:image",
+          4,
           "image",
           {
             "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
@@ -856,7 +856,7 @@
           }
         ],
         [
-          "10:seed",
+          10,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

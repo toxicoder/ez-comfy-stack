@@ -22,6 +22,12 @@ from .client import (
 from .client import _close_llm
 
 
+_ENHANCE_BOOL = (
+    "BOOLEAN",
+    {"default": True, "label_on": "On", "label_off": "Off"},
+)
+
+
 def _as_bool(value: object) -> bool:
     if isinstance(value, bool):
         return value
@@ -114,7 +120,7 @@ class EZKleinPromptEnhance:
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
-                "enhance": ("BOOLEAN", {"default": True}),
+                "enhance": _ENHANCE_BOOL,
                 "mode": (["t2i", "edit", "identity"], {"default": "t2i"}),
                 "duration_hint": ("STRING", {"default": "YouTube 16:9 still"}),
                 "style": (style_ids(), {"default": STYLE_NONE}),
@@ -162,7 +168,7 @@ class EZWanPromptEnhance:
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
-                "enhance": ("BOOLEAN", {"default": True}),
+                "enhance": _ENHANCE_BOOL,
                 "mode": (["t2v", "i2v", "flf", "vace"], {"default": "t2v"}),
                 "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
                 "style": (style_ids(), {"default": STYLE_NONE}),
@@ -211,7 +217,7 @@ class EZLTXPromptEnhance:
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
-                "enhance": ("BOOLEAN", {"default": True}),
+                "enhance": _ENHANCE_BOOL,
                 "mode": (["t2v", "i2v"], {"default": "t2v"}),
                 "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
                 "audio_notes": (
@@ -317,7 +323,7 @@ class EZAceStepPromptEnhance:
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
-                "enhance": ("BOOLEAN", {"default": True}),
+                "enhance": _ENHANCE_BOOL,
                 "mode": (["vocal", "instrumental"], {"default": "vocal"}),
             }
         }

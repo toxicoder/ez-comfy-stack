@@ -721,7 +721,7 @@
     "linearData": {
       "inputs": [
         [
-          "5:tags",
+          5,
           "tags",
           {
             "description": "Genre-first ACE-Step tags.",
@@ -730,7 +730,7 @@
           }
         ],
         [
-          "5:lyrics",
+          5,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -739,7 +739,7 @@
           }
         ],
         [
-          "5:enhance",
+          5,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -747,7 +747,7 @@
           }
         ],
         [
-          "5:mode",
+          5,
           "mode",
           {
             "description": "Vocal vs instrumental. Instrumental forces no-vocals tags and [inst] lyrics.",
@@ -755,7 +755,7 @@
           }
         ],
         [
-          "3:seconds",
+          3,
           "seconds",
           {
             "description": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
@@ -763,7 +763,7 @@
           }
         ],
         [
-          "8:seed",
+          8,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

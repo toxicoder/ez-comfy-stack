@@ -3494,7 +3494,7 @@
     "linearData": {
       "inputs": [
         [
-          "4:prompt",
+          4,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -3503,7 +3503,7 @@
           }
         ],
         [
-          "4:style",
+          4,
           "style",
           {
             "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
@@ -3511,7 +3511,7 @@
           }
         ],
         [
-          "4:enhance",
+          4,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -3519,7 +3519,7 @@
           }
         ],
         [
-          "12:seed",
+          12,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

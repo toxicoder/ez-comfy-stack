@@ -39,6 +39,10 @@ def test_pack_imports_without_kokoro() -> None:
     }
     for cls in NODE_CLASS_MAPPINGS.values():
         assert cls.CATEGORY == "ez-comfy/podcast"
+    enhance = EZPodcastScript.INPUT_TYPES()["required"]["enhance"][1]
+    assert enhance["default"] is True
+    assert enhance["label_on"] == "On"
+    assert enhance["label_off"] == "Off"
 
 
 def test_disclosure_string_exact() -> None:

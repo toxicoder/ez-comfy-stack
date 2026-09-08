@@ -1925,7 +1925,7 @@
     "linearData": {
       "inputs": [
         [
-          "2:value",
+          2,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1934,7 +1934,7 @@
           }
         ],
         [
-          "3:value",
+          3,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1943,7 +1943,7 @@
           }
         ],
         [
-          "4:value",
+          4,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1952,7 +1952,7 @@
           }
         ],
         [
-          "5:value",
+          5,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1961,7 +1961,7 @@
           }
         ],
         [
-          "6:value",
+          6,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1970,7 +1970,7 @@
           }
         ],
         [
-          "8:value",
+          8,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1979,7 +1979,7 @@
           }
         ],
         [
-          "10:value",
+          10,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1988,7 +1988,7 @@
           }
         ],
         [
-          "12:value",
+          12,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1997,7 +1997,7 @@
           }
         ],
         [
-          "14:value",
+          14,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2006,7 +2006,7 @@
           }
         ],
         [
-          "16:value",
+          16,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2015,7 +2015,7 @@
           }
         ],
         [
-          "18:value",
+          18,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2024,7 +2024,7 @@
           }
         ],
         [
-          "20:value",
+          20,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2033,7 +2033,7 @@
           }
         ],
         [
-          "22:value",
+          22,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2042,7 +2042,7 @@
           }
         ],
         [
-          "24:value",
+          24,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2051,7 +2051,7 @@
           }
         ],
         [
-          "26:value",
+          26,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2060,7 +2060,7 @@
           }
         ],
         [
-          "28:value",
+          28,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2069,7 +2069,7 @@
           }
         ],
         [
-          "30:value",
+          30,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2078,7 +2078,7 @@
           }
         ],
         [
-          "32:value",
+          32,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2087,7 +2087,7 @@
           }
         ],
         [
-          "34:value",
+          34,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2096,7 +2096,7 @@
           }
         ],
         [
-          "36:value",
+          36,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2105,7 +2105,7 @@
           }
         ],
         [
-          "38:value",
+          38,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -2114,7 +2114,7 @@
           }
         ],
         [
-          "40:value",
+          40,
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",

@@ -5,8 +5,11 @@ Not imported by pytest collection (leading underscore). Tests import
 lab_note / lab_description.
 
 Official persist: extra.linearData = {inputs, outputs}
-  LinearInput = [widgetId, widgetName, config?]
-  widgetId = "{node.id}:{widgetName}" when the node exists
+  LinearInput = [nodeId, widgetName, config?]
+  nodeId = integer node.id (Comfy SerializedNodeId). Frontend 1.49.6+
+  upgrades this to a live WidgetId (graphId:nodeId:name) at load.
+  Do not persist "nodeId:widgetName" — the frontend treats a colon as a
+  subgraph locator and drops the input.
 Lab contract: extra.lab_app_mode
 Do not require extra.linearMode (upstream does not write it; lab sugar only).
 """
@@ -69,6 +72,34 @@ def _resolve_node(graph: dict, ref: NodeRef, *, kind: str) -> dict:
     return hits[0]
 
 
+def linear_input_node_id(entry: Sequence[Any]) -> int:
+    """Return the persisted node id from a linearData input tuple.
+
+    ComfyUI frontend 1.49.6+ accepts SerializedNodeId (int, or a digit
+    string with no colon) and upgrades it to a live WidgetId at load.
+    Two-part ``nodeId:widgetName`` strings are dropped by the frontend.
+
+    Args:
+        entry: ``[nodeId, widgetName, config?]``.
+
+    Returns:
+        Integer node id.
+
+    Raises:
+        ValueError: missing entry, or a colon-joined / non-numeric id.
+    """
+    if not isinstance(entry, (list, tuple)) or not entry:
+        raise ValueError(f"invalid linear input {entry!r}")
+    stored = entry[0]
+    if isinstance(stored, bool) or stored is None:
+        raise ValueError(f"invalid linear input id {stored!r}")
+    if isinstance(stored, int):
+        return stored
+    if isinstance(stored, str) and ":" not in stored and stored.lstrip("-").isdigit():
+        return int(stored)
+    raise ValueError(f"legacy or invalid linear input id {stored!r}")
+
+
 def _parse_input(spec: InputSpec) -> tuple[NodeRef, str, Mapping[str, Any] | None]:
     if not isinstance(spec, (tuple, list)) or len(spec) < 2:
         raise ValueError(f"invalid input spec {spec!r}")
@@ -95,6 +126,7 @@ def stamp_app_mode(
     Args:
         graph: Serialized Comfy graph (mutated in place).
         inputs: (node title|id|unique type, widgetName[, config]).
+            Persisted as [int(node.id), widgetName, config?].
         outputs: Node title|id|unique type for SaveImage / VHS_VideoCombine.
         lane: inspire | produce | audio | film | dcc.
         occupancy: llm | klein | wan | ltx | audio | film | none.
@@ -131,8 +163,7 @@ def stamp_app_mode(
     for spec in inputs:
         node_ref, widget_name, config = _parse_input(spec)
         node = _resolve_node(graph, node_ref, kind="input")
-        widget_id = f"{node['id']}:{widget_name}"
-        entry: list = [widget_id, widget_name]
+        entry: list = [int(node["id"]), widget_name]
         if config:
             entry.append(dict(config))
         linear_inputs.append(entry)
@@ -826,13 +857,6 @@ def _collect_raw_inputs(
             if not skip_style:
                 raw.append((nid, "style", node))
             raw.append((nid, "enhance", node))
-            if spec.get("forge_widgets"):
-                raw.extend(
-                    (
-                        (nid, "mode", node),
-                        (nid, "duration_hint", node),
-                    )
-                )
             if ntype == "EZLTXPromptEnhance":
                 raw.append((nid, "audio_notes", node))
         elif ntype == "EmptyFlux2LatentImage" and spec.get("expose_latent"):

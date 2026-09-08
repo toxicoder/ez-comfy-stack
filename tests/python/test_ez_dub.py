@@ -35,6 +35,10 @@ def test_pack_imports_without_whisper() -> None:
     assert set(NODE_CLASS_MAPPINGS) == {"EZDubIngest", "EZDubScript", "EZDubRender"}
     for cls in NODE_CLASS_MAPPINGS.values():
         assert cls.CATEGORY == "ez-comfy/dub"
+    enhance = EZDubScript.INPUT_TYPES()["required"]["enhance"][1]
+    assert enhance["default"] is True
+    assert enhance["label_on"] == "On"
+    assert enhance["label_off"] == "Off"
 
 
 def test_disclosure_string_exact() -> None:

@@ -634,7 +634,12 @@ def test_node_mappings_modes_preview_and_style() -> None:
     wan = EZWanPromptEnhance()
     ltx = EZLTXPromptEnhance()
     assert klein.OUTPUT_NODE is True
-    assert klein.INPUT_TYPES()["required"]["enhance"][1]["default"] is True
+    enhance = klein.INPUT_TYPES()["required"]["enhance"][1]
+    assert enhance["default"] is True
+    assert enhance["label_on"] == "On"
+    assert enhance["label_off"] == "Off"
+    assert wan.INPUT_TYPES()["required"]["enhance"][1]["label_on"] == "On"
+    assert ltx.INPUT_TYPES()["required"]["enhance"][1]["label_off"] == "Off"
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
     assert len(styles) == 51
@@ -748,6 +753,8 @@ def test_ace_step_enhance_node_defaults_and_modes() -> None:
     ace = EZAceStepPromptEnhance()
     spec = ace.INPUT_TYPES()["required"]
     assert spec["enhance"][1]["default"] is True
+    assert spec["enhance"][1]["label_on"] == "On"
+    assert spec["enhance"][1]["label_off"] == "Off"
     assert spec["mode"][0] == ["vocal", "instrumental"]
     off = ace.run("boom bap, 88 bpm", "[verse]\nhi", False, "vocal")
     assert off["result"] == ("boom bap, 88 bpm", "[verse]\nhi")
