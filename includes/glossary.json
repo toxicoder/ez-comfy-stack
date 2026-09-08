@@ -153,6 +153,15 @@
     "see_also": ["sidecar", "occupancy", "da3"]
   },
   {
+    "id": "asset-bible",
+    "title": "Asset Bible",
+    "aliases": ["Asset Bible", "asset-bible"],
+    "category": "Studio",
+    "short": "Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets. Outputs, never MODELS_DIR.",
+    "long": "Each slug is an `ez.asset.v1` record (kind, prompt, seed, pipeline, takes). `scene.json` instances slugs; it does not embed meshes. Gen is Klein still → TRELLIS.2. Construct is a shopping list of primitives + HDRI + bible refs. Operator verb today: `asset-ls`. See [Asset Bible](asset-bible.md).",
+    "see_also": ["klein", "ltx", "trellis"]
+  },
+  {
     "id": "da3",
     "title": "DA3-BASE",
     "aliases": ["DA3-BASE", "DA3"],
@@ -320,7 +329,7 @@
     "aliases": ["ComfyUI"],
     "category": "Studio",
     "short": "Node-graph UI for local image, video, and audio generation. This stack's studio.",
-    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files end in `-lab-example` and copy into `user/default/workflows/` on start. See [ComfyUI basics](learn/comfyui.md).",
+    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files end in `-lab-example` and copy into `user/default/workflows/` on start. App Mode graphs land as `*.app.json` so they appear under Apps as well as Workflows. See [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["queue", "widget", "workflow", "manage-sh"]
   },
   {
@@ -329,7 +338,7 @@
     "aliases": ["node graph", "lab graph", "workflow"],
     "category": "Studio",
     "short": "A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.",
-    "long": "Host files live under `workflows/*-lab-example.json`. The entrypoint copies them into Comfy. Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md).",
+    "long": "Host files live under `workflows/*-lab-example.json`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md).",
     "see_also": ["lab-example", "note-node", "widget", "comfyui"]
   },
   {
@@ -348,7 +357,25 @@
     "category": "Studio",
     "short": "A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).",
     "long": "Studio work is widget work: change the Positive prompt, seed, LoadImage filename, or Enhance toggle on the canvas. The JSON on disk stays the seeded lab example. See [ComfyUI basics](learn/comfyui.md).",
-    "see_also": ["queue", "workflow", "enhance"]
+    "see_also": ["queue", "workflow", "enhance", "app-mode"]
+  },
+  {
+    "id": "app-mode",
+    "title": "App Mode",
+    "aliases": ["App Mode"],
+    "category": "Studio",
+    "short": "ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.",
+    "long": "App Mode shows the creator widgets listed in `extra.linearData` (prompt first, then style, Enhance, seed; LoadImage on I2V; size/UNET only on the daily still). It is not a second frontend. Official persist is `linearData`; the lab contract is `lab_app_mode`. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["lab-app-mode", "widget", "occupancy", "workflow"]
+  },
+  {
+    "id": "lab-app-mode",
+    "title": "lab_app_mode",
+    "aliases": ["lab_app_mode"],
+    "category": "Studio",
+    "short": "Lab extra on *-lab-example graphs: lane, occupancy, handoff, frontend_min.",
+    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
+    "see_also": ["app-mode", "occupancy", "lab-example"]
   },
   {
     "id": "latent",
@@ -392,7 +419,7 @@
     "aliases": ["Prompt Enhance"],
     "category": "Studio",
     "short": "In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.",
-    "long": "Klein/Wan/LTX Prompt Enhance defaults **on** for daily graphs and **off** for frozen identity bibles and 90s films. After Queue, read the dim CLIP prompt box — that is what was encoded. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
+    "long": "Klein/Wan/LTX/ACE-Step Prompt Enhance defaults **on** for every lab graph, including identity bibles and 90s films. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
     "see_also": ["enhance", "gguf", "qwen"]
   },
   {
@@ -401,7 +428,7 @@
     "aliases": ["world bible"],
     "category": "Studio",
     "short": "Locked description of a place or character with no camera. Shared across shots.",
-    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Pin Enhance off on the bible. See [Prompting](prompting.md).",
+    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Identity-mode enhance keeps the bible camera-free. See [Prompting](prompting.md).",
     "see_also": ["identity-still", "prompt-enhance"]
   },
   {
@@ -446,7 +473,7 @@
     "aliases": ["Enhance"],
     "category": "Studio",
     "short": "Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.",
-    "long": "Leave Enhance off when the lab already shipped a model-native paragraph (90s films, identity bibles). Turn it on for a lazy sentence plus optional style dropdown. I2V ignores style — the start image owns look. See [Prompting](prompting.md).",
+    "long": "Enhance defaults on for every lab graph. Turn it off to pin widget text. Identity mode keeps world bibles camera-free. I2V / FLF / VACE ignore style — the start frames own look. See [Prompting](prompting.md).",
     "see_also": ["prompt-enhance", "world-bible"]
   },
   {
@@ -482,8 +509,8 @@
     "aliases": ["occupancy"],
     "category": "Hardware and safety",
     "short": "One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.",
-    "long": "GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. See [Studio sidecars](studio-sidecars.md).",
-    "see_also": ["sidecar", "ace-step", "gb10"]
+    "long": "GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`) are on every App Note — stop the other family before Queue. See [ComfyUI Apps](studio-apps.md) and [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["sidecar", "ace-step", "gb10", "app-mode"]
   },
   {
     "id": "headroom",
@@ -510,7 +537,43 @@
     "category": "Hardware and safety",
     "short": "Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.",
     "long": "Full-rate multi-GB pulls freeze SSH. `download-models` wraps wondershaper when HTB works, else gentler HF workers. `DOWNLOAD_LIMIT=off` is an SSH risk. See [Download limit](download-limit.md).",
-    "see_also": ["htb", "headroom", "models-dir"]
+    "see_also": ["htb", "headroom", "models-dir", "download-tier"]
+  },
+  {
+    "id": "download-tier",
+    "title": "--tier",
+    "aliases": ["--tier"],
+    "category": "Hardware and safety",
+    "short": "Pack selector on one downloader. Not a studio-wide quality ladder. --limit is Mbps.",
+    "long": "`download-models` has no `--tier`. Image `fast`, Wan `5b`, and LTX `2.5` are three different pack ids that happen to be the lab defaults. Wan `--tier all` does not include `vace` or `s2v`. See [Download tiers](download-tiers.md).",
+    "see_also": ["download-models", "download-limit", "models-dir"]
+  },
+  {
+    "id": "download-models",
+    "title": "download-models",
+    "aliases": ["download-models"],
+    "category": "Hardware and safety",
+    "short": "Default pack only: Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. No --tier.",
+    "long": "Does not pull podcast, music, 3D, LongCat, DreamX, or SeedVR2. Those are opt-in utilities with their own `--tier` pack ids. Throttled by download-limit. See [Download tiers](download-tiers.md) and [Models and cache](models-and-cache.md).",
+    "see_also": ["download-tier", "download-limit", "models-dir"]
+  },
+  {
+    "id": "disk-wizard",
+    "title": "disk-wizard",
+    "aliases": ["disk-wizard", "disk wizard"],
+    "category": "Hardware and safety",
+    "short": "Guided host reclaim. Default --plan. Does not replace cleanup or reap-models.",
+    "long": "Surveys MODELS_DIR junk, Hugging Face hub cache, Docker build cache, Ollama/vLLM leftovers, and other experiment residue on a Spark that runs more than this studio. `--plan` is read-only. Review-class items quarantine. Never `docker system prune -a --volumes`. `cleanup` still only removes the comfy-state volume. See [Disk wizard](disk-wizard.md).",
+    "see_also": ["quarantine", "models-dir", "download-models"]
+  },
+  {
+    "id": "quarantine",
+    "title": "quarantine",
+    "aliases": ["quarantine"],
+    "category": "Hardware and safety",
+    "short": "Move-aside instead of delete so a leftover pack can be restored.",
+    "long": "`reap-models --quarantine` and `disk-wizard` review-class actions move files to a timestamped tree with a JSONL manifest. Restore with the matching `restore --from` command. Junk class may delete in place. See [Disk wizard](disk-wizard.md).",
+    "see_also": ["disk-wizard", "models-dir"]
   },
   {
     "id": "htb",
@@ -754,5 +817,14 @@
     "short": "Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.",
     "long": "Do not download, Queue, or pin Comfy for MiniMax H3. `doctor` warns if leftover weights exist. Use the US-safe Klein/Wan/LTX pack instead. See [Model licenses](licenses.md).",
     "see_also": ["us-safe", "klein"]
+  },
+  {
+    "id": "guide-pack",
+    "title": "Guide pack",
+    "aliases": ["guide pack", "guide-pack", "DCC guide pack"],
+    "category": "Studio",
+    "short": "DCC handshake: 1280×704 clay/depth/first+last for a 5.00s print.",
+    "long": "The only DCC ↔ Comfy print handshake. Lives under `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot>/`. Size is the LTX VAE grid (**1280×704**, never 1280×720). 120 frames @ 24 fps. Occupancy XOR: stop Comfy before `export-guides`. See [DCC guide pack](dcc-workflows.md).",
+    "see_also": ["ltx", "occupancy", "sidecar"]
   }
 ]

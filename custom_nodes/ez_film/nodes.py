@@ -11,6 +11,7 @@ from .concat import (
     publish_path,
     resolve_shot_path,
     stitch_film,
+    write_disclosure_sidecar,
 )
 from .shots import DEFAULT_CAP_SECONDS, FILM_CHOICES, SHOT_COUNT
 
@@ -92,7 +93,12 @@ class EZFilmConcat:
         }
         for index in range(1, SHOT_COUNT + 1):
             required[f"shot_{index:02d}"] = ("VHS_FILENAMES",)
-        return {"required": required}
+        return {
+            "required": required,
+            "optional": {
+                "disclosure": ("STRING", {"forceInput": True, "default": ""}),
+            },
+        }
 
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("path",)
@@ -110,6 +116,7 @@ class EZFilmConcat:
         film: str,
         cap_seconds: float = DEFAULT_CAP_SECONDS,
         xfade_cs: int = 0,
+        disclosure: str = "",
         **shots: object,
     ):
         paths = [
@@ -120,6 +127,7 @@ class EZFilmConcat:
         dest_dir.mkdir(parents=True, exist_ok=True)
         out_mp4 = str(publish_path(film, dest_dir))
         stitch_film(paths, out_mp4, float(cap_seconds), xfade_cs=int(xfade_cs))
+        write_disclosure_sidecar(out_mp4, disclosure)
         filename = publish_path(film, dest_dir).name
         return {
             "ui": {
@@ -129,6 +137,7 @@ class EZFilmConcat:
                         "subfolder": "",
                         "type": "output",
                         "format": "video/h264-mp4",
+                        "frame_rate": 24,
                     }
                 ]
             },

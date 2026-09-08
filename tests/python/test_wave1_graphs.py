@@ -5,15 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 
 
 def _load(name: str) -> dict:
-    path = WF / name if not name.startswith("shorts/") else WF / name
-    if name.startswith("shorts/"):
-        path = WF / name
-    return json.loads(path.read_text(encoding="utf-8"))
+    return json.loads(lab_json(name).read_text(encoding="utf-8"))
 
 
 def test_app_mode_extra_on_lab_printers() -> None:
@@ -28,14 +27,14 @@ def test_app_mode_extra_on_lab_printers() -> None:
         assert extra["frontend_min"] == "1.41.13"
 
 
-def test_identity_enhance_off() -> None:
+def test_identity_enhance_on() -> None:
     for name in (
         "klein-still-draft-lab-example.json",
         "klein-still-hero-lab-example.json",
     ):
         graph = _load(name)
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        assert node["widgets_values"][1] is False
+        assert node["widgets_values"][1] is True
 
 
 def test_klein_i2v_feeders_are_1280x704() -> None:

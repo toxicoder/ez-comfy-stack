@@ -8,8 +8,8 @@ tags: [learn, comfyui, queue, workflow, studio]
 
 **What's on this page**
 
-- Node graph vs a linear app
-- How lab workflows get onto the canvas
+- Node graph vs App Mode (same JSON, creator widgets)
+- How lab workflows get onto the canvas (Workflows and Apps)
 - Queue, seed, widgets, Note node
 - Where outputs go, and what “Missing Models” actually means
 
@@ -37,14 +37,18 @@ flowchart LR
 
 Daily rule: **do not edit raw `*-lab-example` JSON.** Open the graph, change widgets, Queue.
 
+### Graph and App
+
+The same JSON can open as a **graph** (nodes and wires) or as an **App** (creator widgets only). App Mode is official from ComfyUI frontend **1.41.13**. Lab graphs stamp `extra.linearData` plus `extra.lab_app_mode` so **prompt, style, Enhance, and seed** show first in the App panel. **Start image** appears only when that LoadImage is wired (I2V / character tweak / clay). Style is hidden on I2V — the start frame owns look. Size and UNET stay hidden except on **klein-still-daily**. Multi-shot Apps expose one identity prompt — not ten shot cards. Duplicate widgets get unique labels (Klein / Wan / LTX on Prompt Forge; Beat 1 enter on the beat sheet). 90s films stay in graph view. Occupancy is a chip at the top of the widget list, not over Run. This is **not** `studio-ui` and not a second product. See [ComfyUI Apps](../studio-apps.md).
+
 ---
 
 ## How a lab graph shows up
 
-On `start`, the entrypoint copies host `workflows/*.json` and `workflows/shorts/*.json` into Comfy’s `user/default/workflows/`.
+On `start`, the entrypoint rsyncs shipped JSON into Comfy’s `user/default/workflows/_lab/<lane>/` (directory-preserving; `--delete` is scoped to `_lab/` only). Prefer host `workflows/_lab/` when present; otherwise map the current flat repo globs into those lanes. App Mode graphs (`default_view: app`) land as `_lab/<lane>/*-lab-example.app.json` so they show in the **Apps** sidebar as well as **Workflows**. 90s films stay `*.json` (graph default). Save your own graphs under **`_user/`** — start never deletes or overwrites that folder. Do not edit files under `_lab/`; copy to `_user/` first.
 
 1. Open `http://${SPARK_HOST}:${COMFY_PORT}` (port-forward from a laptop if needed)
-2. Load **klein-still-draft-lab-example** (filename suffix **`-lab-example`**)
+2. Load **klein-still-draft-lab-example** from **Apps** or **Workflows** (filename suffix **`-lab-example`**)
 3. Read the on-canvas **Note node** — purpose, models, sampler, prompting, run steps
 4. Queue
 

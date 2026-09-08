@@ -44,10 +44,13 @@ flowchart TB
   Root --> Cfg["config/resource-policy.yaml"]
   Root --> Docs["docs/ · MkDocs"]
   Root --> Tests["tests/bats · tests/python"]
+  Root --> Wf["workflows/_lab/<lane> shipped JSON<br/>workflows/_user local only<br/>workflows/shorts YAML"]
   Manage --> Lib
   Manage --> Util
   Manage --> Docker
 ```
+
+Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`) and keep the `*-lab-example.json` suffix. Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` and must not be committed.
 
 ## Shell style
 
@@ -240,6 +243,7 @@ flowchart LR
 - Stack is **MkDocs 1.x + Material** (`docs/requirements.txt`). Do **not** upgrade to MkDocs 2.x (incompatible with Material plugins/theme; no migration path). CI and `make docs` set `NO_MKDOCS_2_WARNING=1` to suppress Material’s advisory. Revisit only if migrating tooling (e.g. Zensical evaluation).
 - Keep the top nav on screen while scrolling: `navigation.tabs` **and** `navigation.tabs.sticky` in `mkdocs.yml`. Do **not** enable `header.autohide` (Material hides the tabs row on scroll without sticky).
 - Header compact-on-scroll lives in `docs/stylesheets/extra.css` (wired via `extra_css`). Do not fork Material `header.html` / `tabs.html` for this. All header controls stay visible; only padding/height shrinks after the page title scrolls away. The same stylesheet sets `.md-typeset { font-size: 0.875rem }` (Material default is `0.8rem`); do not raise `html` font-size or the rem-based header will grow with the article.
+- Sticky table headers also live in `extra.css`: `.md-typeset table thead th` pins under the lifted header (`--ez-sticky-table-top`, 4.8rem default / 4.2rem after compact-on-scroll). Keep `.md-typeset__scrollwrap { overflow: visible }` so the wrap does not become the sticky scrollport. Do not fork table templates.
 - Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
 - Branch-stamped at build time via `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION` (optional `EZ_DOCS_GIT_REF` override):
   - Edit links (`edit/<ref>/docs/`)
@@ -267,7 +271,7 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 - First occurrence per term **per page**; skip `code` / `pre` / headings / links / the glossary page itself
 - `docs/glossary.py` wraps HTML; `docs/javascripts/glossary.js` opens a native `<dialog>`
 - Do **not** enable Material `abbr` + snippets `auto_append` (hover-only, double-wraps)
-- Do **not** enable `content.instant` unless you re-test the modal on client-side navigation
+- Do **not** enable `content.instant` unless you re-test the glossary modal **and** `javascripts/commands.js` on client-side navigation
 
 **Rich formatting patterns** (MkDocs Material — see `mkdocs.yml`):
 
@@ -287,7 +291,11 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 
 **Getting Started** is the primary operator path: keep the happy path short; park image-layer, cold-start, and lab-internals content in collapsible blocks.
 
-**Session variables:** operator command fences should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`.
+**Session variables:** operator command fences should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`. `docs/javascripts/commands.js` substitutes those `${VAR}` tokens at runtime from `localStorage` (`ez-comfy.cmdvars`) and sets Material copy to `data-clipboard-text`.
+
+**Interactive commands (`ezcmd`):** flagged download examples use a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json`. `docs/hooks.py` expands the fence (do not add `mkdocs-placeholder-plugin`; its `xNAMEx` tokens fight bash `${VAR}` and InnerHTML replace breaks Material search). Recipes and substitution live in `docs/commands.py` — keep `commands.js` aligned with `substitute_vars` / `render_command`. `--tier` is a per-utility **pack id**; document it on [Download tiers](download-tiers.md), not as a global quality flag.
+
+**Your Spark panel:** injected by `commands.js` into `article.md-content__inner` (not the Material header). Do not fork `header.html` / `tabs.html`. Do not add `display: none` to `extra.css` (theme tests). Collapse with `<details>` / the `hidden` attribute.
 
 **Default stack vocabulary:** Klein 4B + Wan 2.2 5B + LTX-2.5. Lab CLIP is `qwen_3_4b` (type `flux2`) and LTX-2.5 `CLIPLoader` Gemma4-with-proj. Klein 9B and old `flux-to-ltx*` GHCR tags are banned/frozen mentions only.
 

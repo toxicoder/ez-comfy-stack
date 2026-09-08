@@ -9,7 +9,7 @@ total_shots: 18
 publish_cap_s: 90.00
 print: ltx
 identity_seed: 42
-identity_enhance: false
+identity_enhance: true
 identity_look: |
   A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.
 shots:

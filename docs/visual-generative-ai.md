@@ -66,7 +66,7 @@ flowchart LR
   LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff:** load **klein-still-draft-lab-example** → Queue → set **wan-i2v-5s-lab-example** LoadImage to `ez_still_draft_*.png` → Queue ~5 s silent → optional **ltx-i2v-5s-lab-example** for native audio. I2V graphs also Queue on Comfy’s default **example.png**.
+**Handoff (start in App Mode):** load **klein-still-draft-lab-example** → enter App Mode → Queue Spark Still → open **klein-still-hero-lab-example** (same seed) → set **wan-i2v-5s-lab-example** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **ltx-i2v-5s-lab-example** for native audio. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
 
 LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, concat them with video latents before `KSampler`, then decode audio with **`LTXVAudioVAEDecode`** into **`VHS_VideoCombine`** so the MP4 includes world audio. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
@@ -97,8 +97,8 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     # default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4
     ```
 
-6. **90s films** (go-see / still-here / switchyard): load one **film-*-90s** graph → Queue **once** → open **Save 90s film (MP4)**. See [90s shorts](shorts.md).
-7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo carousel of one cabin (new cameras, locked inventory).
+6. **90s films** (go-see first-person parkour / still-here / switchyard): load one **film-*-90s** graph → Queue **once** → the MP4 is already at `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4`; open **Save 90s film (MP4)** to preview or download. See [90s shorts](shorts.md).
+7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo virtual tour of one place (type any place; outside, entrance, rooms, drone, day/night). Character loop: **klein-character-draft-lab-example** → **klein-character-tweak-lab-example** (`ez_character_*.png`).
 8. Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up — [catalog](studio-workflows.md).
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes; one-click films are 18 × 5s prints.
@@ -130,7 +130,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
 ??? abstract "Lab workflow internals"
 
-    - Name pattern: host files `workflows/*-lab-example.json` and `workflows/shorts/*-lab-example.json` (entrypoint copies both)
+    - Name pattern: host files `workflows/_lab/<lane>/*-lab-example.json` (entrypoint rsyncs into `user/default/workflows/_lab/`)
     - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
     - Klein CLIP loader type is **`flux2`** with `qwen_3_4b` + `EmptyFlux2LatentImage` (simplified `KSampler`)
     - LTX-2.5 graphs use **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps)

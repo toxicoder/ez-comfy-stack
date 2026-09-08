@@ -40,6 +40,31 @@
   }
 }
 
+/* Sticky table headers sit under the lifted header + tabs. Compact-on-scroll
+   shrinks that chrome (2.2rem title + 2.0rem tabs). z-index stays below
+   .md-header (Material 4). Do not hide header controls. */
+html {
+  --ez-sticky-table-top: 4.8rem;
+}
+
+html:has(.md-header__title--active) {
+  --ez-sticky-table-top: 4.2rem;
+}
+
+.md-typeset table thead th {
+  position: sticky;
+  top: var(--ez-sticky-table-top);
+  z-index: 2;
+  background-color: var(--md-default-bg-color);
+  box-shadow: 0 1px 0 var(--md-default-fg-color--lightest);
+}
+
+/* overflow-x: auto on the wrap makes it the sticky scrollport, so thead
+   never pins to the page. Catalog tables are 2–3 columns. */
+.md-typeset__scrollwrap {
+  overflow: visible;
+}
+
 /* Glossary term triggers + definition dialog. Keep header controls visible. */
 .ez-term {
   border-bottom: 1px dotted var(--md-accent-fg-color);
@@ -104,4 +129,121 @@
   .ez-glossary-dialog {
     transition: none;
   }
+}
+
+/* Your Spark panel + command builders. Do not hide chrome (theme tests forbid
+   a display-none rule). Collapse uses details / the hidden attribute.
+   Do not fork header.html. */
+.ez-spark-panel {
+  margin: 0.75rem 0 1.25rem;
+  padding: 0.65rem 0.9rem 0.85rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-left: 4px solid var(--md-accent-fg-color);
+  border-radius: 4px;
+  background: var(--md-code-bg-color);
+  font-size: 0.85em;
+}
+
+.ez-spark-panel__summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ez-spark-panel__hint {
+  margin: 0.5rem 0 0.65rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.ez-spark-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.5rem 0.75rem;
+}
+
+.ez-spark-panel__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+}
+
+.ez-spark-panel__label {
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.ez-spark-panel__field input {
+  font: inherit;
+  font-family: var(--md-code-font-family);
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 3px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+}
+
+.ez-spark-panel__actions {
+  margin: 0.65rem 0 0;
+}
+
+.ez-spark-panel__reset {
+  font: inherit;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--md-accent-fg-color);
+  cursor: pointer;
+}
+
+.ez-cmd-builder {
+  margin: 0.9rem 0 1.2rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 4px;
+}
+
+.ez-cmd-builder__title {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.ez-cmd-builder__desc {
+  margin: 0 0 0.65rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.9em;
+}
+
+.ez-cmd-builder__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin: 0 0 0.65rem;
+}
+
+.ez-cmd-builder__flag {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.ez-cmd-builder__flag select,
+.ez-cmd-builder__flag input[type="number"] {
+  font: inherit;
+  max-width: 100%;
+}
+
+.ez-cmd-builder__code pre {
+  position: relative;
+  margin: 0;
+}
+
+.ez-cmd-builder__copy {
+  cursor: pointer;
+}
+
+.ez-var {
+  border-bottom: 1px dotted var(--md-accent-fg-color);
 }

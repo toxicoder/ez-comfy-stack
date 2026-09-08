@@ -160,5 +160,7 @@ flowchart TB
 | **Three Sparks, one weight copy** | [Spark farm](spark-farm.md) |
 | **`manage.sh` verbs** | [manage.sh reference](manage-cli.md) |
 | **Weights, cache, image pins** | [Models and cache](models-and-cache.md) |
+| **What `--tier` means** | [Download tiers](download-tiers.md) |
+| **Free disk (safely)** | [Disk wizard](disk-wizard.md) |
 | **Something broke** | [Troubleshooting](troubleshooting.md) |
 | **Contributing** | [Conventions](project-conventions.md) |

@@ -167,6 +167,22 @@ def test_on_page_markdown_stamps_setup_clone(
     assert "Always branch from development." in out
 
 
+def test_on_page_markdown_expands_ezcmd(hooks) -> None:
+    """ezcmd fences become builder widgets during markdown processing."""
+    out = hooks.on_page_markdown("```ezcmd\nid: download-music\n```\n")
+    assert "```ezcmd" not in out
+    assert 'data-ez-cmd="download-music"' in out
+    assert "download-music --tier turbo" in out
+
+
+def test_on_post_page_injects_command_builder_json(hooks) -> None:
+    """Every page gets #ez-cmd-data for the Your Spark panel."""
+    html = "<html><body><article class=\"md-content__inner\"><h1>Hi</h1></article></body></html>"
+    out = hooks.on_post_page(html)
+    assert 'id="ez-cmd-data"' in out
+    assert "SPARK_HOST" in out
+
+
 def test_on_page_markdown_stamps_main_for_latest(
     hooks, monkeypatch: pytest.MonkeyPatch
 ) -> None:

@@ -48,7 +48,7 @@ export COMFY_PORT="${COMFY_PORT:-8188}"
 ./scripts/manage.sh setup --install-docker   # .env, MODELS_DIR, Docker if needed
 # set HF_TOKEN in .env if models are gated (LTX-2.5)
 ./scripts/manage.sh doctor
-./scripts/manage.sh download-models   # throttled Klein 4B + Wan 5B + LTX-2.5
+./scripts/manage.sh download-models   # throttled Klein 4B + Wan 5B + LTX-2.5 (no --tier; pack map: docs/download-tiers.md)
 ./scripts/manage.sh start             # type yes
 ./scripts/manage.sh status
 # open http://${SPARK_HOST}:${COMFY_PORT}
@@ -80,7 +80,7 @@ scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
 scripts/utilities download-image, download-wan, download-ltx, download-llm, download-podcast, download-limit, concat-shots, spark-farm
 config/           Resource / headroom policy
-workflows/        Seeded lab ComfyUI example graphs (Klein / Wan / LTX; one-click 90s films under workflows/shorts/; creator toolkit)
+workflows/_lab/   Seeded lab ComfyUI graphs by lane (klein / wan / ltx / shorts / …); YAML shot lists stay in workflows/shorts/; private graphs belong in _user/
 docs/             MkDocs site
 tests/            BATS + pytest + coverage gate
 ```

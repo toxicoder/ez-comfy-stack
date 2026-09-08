@@ -9,6 +9,7 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 **What's on this page**
 
 - Queue the rap **draft** first, then the **full** track
+- App Mode: tags, lyrics, rewrite, vocal/instrumental, duration
 - Tags vs lyrics; `[verse]` / `[chorus]` / `[spoken word]` as vocal hints
 - Original lyrics only — no “in the style of \<living artist\>”
 - ACE-Step vocal = invented identity, not a clone
@@ -35,7 +36,7 @@ sequenceDiagram
   participant L as Lyrics + tags
   participant D as VAEDecodeAudio
 
-  U->>L: original bars (Enhance off)
+  U->>L: original bars (Enhance on)
   U->>C: Queue draft 32 s
   C->>D: latent audio
   D->>U: ez_rap_draft FLAC + MP3
@@ -55,8 +56,8 @@ Graph: **music-rap-draft-lab-example** (`extra.lab_profile` `us-safe-music`). Sa
 | Stage | What runs | Prefix |
 | --- | --- | --- |
 | MODEL | `CheckpointLoaderSimple` `ace_step_1.5_turbo_aio.safetensors` + `ModelSamplingAuraFlow` | — |
-| DURATION | Primitive **32** s → `EmptyAceStep1.5LatentAudio` | — |
-| PROMPT | Tags + lab-original lyrics. `EZRapLyrics` enhance **off**. `ConditioningZeroOut` negative. KSampler 8 / cfg 1 / euler / simple | `ez_rap_lyrics` |
+| DURATION | App **Duration (seconds)** (primitive **32** s) → `EmptyAceStep1.5LatentAudio` | — |
+| PROMPT | App **Tags**, **Lyrics**, **Rewrite prompt**, **Vocal / instrumental**. `EZAceStepPromptEnhance` enhance **on**. `ConditioningZeroOut` negative. KSampler 8 / cfg 1 / euler / simple | `ez_rap_prompt` |
 | OUTPUT | `VAEDecodeAudio` → FLAC + 320 kbps MP3 | `ez_rap_draft` |
 | COVER | Queue **klein-thumbnail-lab-example** or **klein-podcast-cover-lab-example** separately | `ez_thumbnail` / `ez_podcast` |
 
@@ -64,7 +65,7 @@ Default tags (both graphs):
 
 `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm`
 
-**Beat-only pass:** keep boom-bap tags, append `instrumental, no vocals`, and replace lyrics with `[inst]`. There is no third instrumental JSON.
+**Beat-only pass:** set App **Vocal / instrumental** to instrumental (forces no-vocals tags and `[inst]` lyrics). There is no third instrumental JSON.
 
 Canned style swaps (tags widget only — not extra files):
 
@@ -73,7 +74,7 @@ Canned style swaps (tags widget only — not extra files):
 
 ### Full track
 
-Graph: **music-rap-full-lab-example**. Duration **96** s. Same sampler and model. Prefix `ez_rap_full`. Same voice + second verse + repeated chorus + `[outro]`. Human rewrite required before any release.
+Graph: **music-rap-full-lab-example**. App **Duration (seconds)** defaults to **96** s. Same sampler and model. Prefix `ez_rap_full`. Same voice + second verse + repeated chorus + `[outro]`. Human rewrite required before any release.
 
 ---
 
@@ -82,7 +83,7 @@ Graph: **music-rap-full-lab-example**. Duration **96** s. Same sampler and model
 - **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
 - **Lyrics** are the bars. Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant.
 - Original lyrics only. Do not write “in the style of \<living artist\>”. No living-MC names. No famous-hook paraphrases.
-- Short percussive lines (about 6–10 syllables) slur less. Keep `language=en`.
+- Short percussive lines (about 6–10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **music-rap-draft-lab-example** after a pull so those combos stay aligned.
 
 ACE-Step generates the vocal from lyrics + tags. That timbre is an **invented identity**, not a cloned MC. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs.
 
@@ -123,7 +124,7 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 
 1. `./scripts/manage.sh download-music --tier turbo`
 2. `./scripts/manage.sh start` — type **yes**
-3. Load **music-rap-draft-lab-example**. Enhance off. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
+3. Load **music-rap-draft-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
 4. Then load **music-rap-full-lab-example** (96 s)
 5. Cover in a **later** session: **klein-thumbnail-lab-example** or **klein-podcast-cover-lab-example**
 

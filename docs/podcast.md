@@ -9,6 +9,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 **What's on this page**
 
 - Option A (audio-first commercial episode) vs Option B (one-graph radio drama)
+- App Mode: script, bed/sting tags, length, Kokoro stock voices (refs stay graph-only)
 - Why TTS-Audio-Suite and OldTimeRadio are not vendored
 - Kokoro default on Spark; Chatterbox / Qwen3-TTS optional
 - Native ACE-Step instrumental beds
@@ -37,10 +38,10 @@ Graph: **podcast-audio-first-lab-example** (`extra.lab_profile` `us-safe-podcast
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
-| SCRIPT | In-tree `EZPodcastScript` (enhance **off**). Missing GGUF passes the widget through | `ez_podcast_script` |
+| SCRIPT | App **Script** + **Rewrite script**. In-tree `EZPodcastScript` (enhance **on**). Missing GGUF passes the widget through | `ez_podcast_script` |
 | DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
-| VOICES | `EZKokoroTTS` — Kokoro-82M ONNX/CPU built-ins | `ez_podcast_voice` |
-| BEDS | Native Comfy ACE-Step 1.5, instrumental, empty lyrics | `ez_podcast_bed` |
+| VOICES | App **Speaker A / B**, **Include announcer**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only | `ez_podcast_voice` |
+| BEDS | App **Bed tags**, **Rewrite bed**, **Bed length (seconds)**. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden) | `ez_podcast_bed` |
 | MIX | Duck −15 dB + overlay. FLAC master + 320 kbps MP3 | `ez_podcast_ep` / `ez_podcast_mix` |
 | COVER | Queue **klein-podcast-cover-lab-example** separately (1024², `ez_podcast`) | `ez_podcast` |
 
@@ -52,7 +53,7 @@ Do not type that line yourself. The disclosure node prepends it.
 
 ### Option B — one-graph radio drama
 
-Graph: **podcast-radio-drama-lab-example** (`us-safe-radio`). Same legal engines. Writer prompt is lab-original fiction (`radio_drama.txt`), not a news rewrite. Announcer + two Kokoro stock voices. ACE-Step sting + bed. One master mix (`ez_radio_ep` / `ez_radio_mix`).
+Graph: **podcast-radio-drama-lab-example** (`us-safe-radio`). Same legal engines. Writer prompt is lab-original fiction (`radio_drama.txt`), not a news rewrite. App Mode: **Script**, **Sting tags** / **Bed tags**, sting and bed length, **Speaker A / B / Announcer**, **Include announcer**, **Speaking speed**. ACE-Step sting + bed stay instrumental (lyrics hidden). One master mix (`ez_radio_ep` / `ez_radio_mix`).
 
 Optional Wan silent bumper / LTX 5s hook **groups default off** (node mode never). Queue **wan-bumper-loop-lab-example** or **ltx-hook-av-lab-example** in a later session. Not a one-graph film.
 
@@ -138,7 +139,7 @@ sequenceDiagram
   participant A as ACE-Step beds
   participant M as Mix
 
-  U->>S: Queue (Enhance off)
+  U->>S: Queue (Enhance on)
   S->>D: script string
   D->>K: bumper + lines
   D->>A: instrumental tags
@@ -154,7 +155,7 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
 2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see troubleshooting)
 3. `./scripts/manage.sh start` — type **yes**
-4. Load **podcast-audio-first-lab-example**. Enhance off. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
+4. Load **podcast-audio-first-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
 5. Load **klein-podcast-cover-lab-example** in a **later** session. Queue `ez_podcast_*.png`
 6. Loudness (ffmpeg; Comfy cannot LUFS):
 

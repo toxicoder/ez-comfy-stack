@@ -10,9 +10,11 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 - How each lab model actually reads a prompt
 - Canned lab-example text (already rewritten)
-- GIF loop motion and dream-house world bible (Prompt Join, lock=view)
-- Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance on by default)
+- GIF loop motion and dream-house world bible (one place prompt; virtual-tour shot cards; Prompt Join lock=view)
+- Character draft then tweak (style dropdown; generated still as the next reference)
+- Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance **on** by default, including identity bibles and 90s films)
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
+- After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
 
 **What this enables**
 
@@ -22,7 +24,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 !!! tip "Lab graphs already ship model-native prompts"
 
-    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text. Leave **Enhance** off unless you replace that text with something short.
+    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text **and** Prompt Enhance **on**. Turn Enhance **off** only to pin widget text. **prompt-forge-lab-example** previews Klein / Wan / LTX rewrites with no UNET (occupancy **llm**). Copy the family you need into Spark Still. The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
 
 ```mermaid
 flowchart TB
@@ -60,9 +62,9 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Front-load the subject. Write prose.
 
-    **Do:** `A HD 3D game-engine pre-rendered cutscene still of a neon-wet dusk megacity rooftop. An original cyberpunk tech wizard in an unmarked electric-cyan coat stands on a terrace. Holographic glyph rings bloom from a compact unmarked data-staff…`
+    **Do:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff…`
 
-    **Don’t:** `rooftop, tech wizard, 3D, 24mm, no logos, no text`
+    **Don’t:** `rooftop, techno wizard, photo, 24mm, no logos, no text`
 
 === "Wan 2.2 T2V"
 
@@ -78,11 +80,11 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Dream-house pack (Klein)"
 
-    One **world bible** locks massing + materials + place (compact single-story cedar cabin, hip roof, two-bay glass, decks on gravel, alpine lake) with **no camera**. Locked inventory (linen sofa facing the glass, island, dining table, bedding, tub, deck chairs) must appear through the two-bay glass **and** in the matching interiors. Each SHOT card is a new camera of that cabin. **Prompt Join** `lock=view` stitches bible + inventory + “new photograph from a different camera”. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01, or every still copies the facade. `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Pin Enhance **off** on the bible. Unused shots may be bypassed.
+    Type **one place**. Identity-mode enhance freezes only the rooms, furniture, outdoor lamps, and surroundings you named (the default placeholder is the lab penthouse). Name lounge, kitchen, bath, bedroom, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough — exterior, entrance, inside, lounge, kitchen, bath, bedroom, drone, day, night — not a penthouse template. **Prompt Join** `lock=view` front-loads the shot, then “same building, rooms, furniture, sky, and background” + the bible. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01. Day and night may change sky and lamp state; massing, rooms, furniture, and surroundings must not. `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
 
 === "LTX-2.5 AV"
 
-    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). Leave Enhance **off** on those graphs.
+    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look) and run **LTX Prompt Enhance** on each shot (Enhance on).
 
 ---
 
@@ -92,10 +94,11 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 
 | Node | Modes | Use on |
 | --- | --- | --- |
-| **Klein Prompt Enhance** | `t2i`, `edit` | klein-still-draft / klein-still-hero / klein-still-daily / klein-dream-house identity. Film-*-90s identity is canned — Enhance **off** |
-| **Wan Prompt Enhance** | `t2v`, `i2v` | wan-i2v-5s / wan-t2v-5s / wan-i2v-shot / wan-gif-loop |
-| **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / ltx-i2v-shot |
-| **Prompt Join** | bible + inventory + shot + `lock` (view/state) → one STRING | dream-house (view) and lighting/before-after (state) |
+| **Klein Prompt Enhance** | `t2i`, `edit`, `identity` | every Klein still / edit / identity bible (including 90s film identity) |
+| **Wan Prompt Enhance** | `t2v`, `i2v`, `flf`, `vace` | wan-i2v-5s / wan-t2v-5s / wan-flf-5s / wan-vace-join |
+| **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / each 90s film shot |
+| **ACE-Step Prompt Enhance** | `vocal`, `instrumental` | music-rap-* tags+lyrics; podcast instrumental beds |
+| **Prompt Join** | `lock=view`: shot + lock + bible + inventory (camera-first walkthrough). `lock=state`: bible + inventory + lock + shot | dream-house (view) and lighting/before-after (state) |
 
 STRING out → CLIPTextEncode `text` input.
 
@@ -104,7 +107,7 @@ STRING out → CLIPTextEncode `text` input.
 3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
 4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.
 
-**Enhance defaults to true.** Turn it **off** to pin the source widget (frozen identity bibles). A selected style is still applied to the CLIP string. Style is ignored on I2V (the start image owns look).
+**Enhance defaults to true** on every lab graph, including identity bibles and 90s films. Turn it **off** to pin the source widget. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE (the start image owns look).
 
 ```mermaid
 flowchart TD
@@ -116,7 +119,7 @@ flowchart TD
   Lazy --> Miss["Missing GGUF / llama.cpp / timeout → passthrough + status"]
 ```
 
-When Enhance is **on** and a style is selected (t2i / t2v / Klein edit):
+When Enhance is **on** and a style is selected (t2i / t2v / Klein edit / identity):
 
 - The dropdown is look authority. If the source already names a medium, lighting, grade, lens, or art style, the rewriter **replaces** those clauses so they match the dropdown. It does not stack two styles.
 - Each preset is a short reference (medium, light, color, texture, camera or projection) tuned for Klein prose, Wan aesthetic+stylization, or LTX lighting/surface in the flowing paragraph.
@@ -138,4 +141,4 @@ Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit ar
 
 ## Next steps
 
-Queue **klein-still-draft-lab-example** first ([Getting Started](getting-started.md)), then the still → Wan 5 s → LTX 5 s loop on [Visual Generative AI](visual-generative-ai.md).
+Queue **klein-still-draft-lab-example** first ([Getting Started](getting-started.md)), or **klein-character-draft-lab-example** then **klein-character-tweak-lab-example** to iterate a still. Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).

@@ -30,6 +30,7 @@ from ez_film.concat import (  # noqa: E402
     publish_path,
     resolve_shot_path,
     stitch_film,
+    write_disclosure_sidecar,
 )
 from ez_film.nodes import (  # noqa: E402
     EZFilmConcat,
@@ -64,6 +65,19 @@ def test_pack_imports_without_comfy() -> None:
     assert spec["required"]["xfade_cs"][1]["default"] == 0
     for index in range(1, 19):
         assert spec["required"][f"shot_{index:02d}"][0] == "VHS_FILENAMES"
+    assert spec["optional"]["disclosure"][0] == "STRING"
+
+
+def test_write_disclosure_sidecar(tmp_path: Path) -> None:
+    mp4 = tmp_path / "ez_gosee_90s.mp4"
+    mp4.write_bytes(b"fake")
+    assert write_disclosure_sidecar(str(mp4), "") is None
+    assert not (tmp_path / "ez_gosee_90s.disclosure.txt").exists()
+    sidecar = write_disclosure_sidecar(str(mp4), "  " + FILM_DISCLOSURE + "  ")
+    assert sidecar is not None
+    text = sidecar.read_text(encoding="utf-8")
+    assert text.startswith(FILM_DISCLOSURE)
+    assert text.endswith("\n")
 
 
 def test_film_disclosure_idempotent() -> None:
@@ -88,7 +102,9 @@ def test_parse_go_see_yaml() -> None:
     parsed = parse_shots_yaml((SHORTS / "go-see.shots.yaml").read_text(encoding="utf-8"))
     assert parsed["meta"]["film"] == "go-see"
     assert parsed["meta"]["total_shots"] == "18"
-    assert "olive windbreaker" in parsed["identity"]
+    assert "sun-washed teal" in parsed["identity"]
+    assert "olive windbreaker" not in parsed["identity"]
+    assert "body-cam" in parsed["identity"]
     assert len(parsed["shots"]) == 18
     first = parsed["shots"][0]
     assert first["load_from"] == "identity"
@@ -310,3 +326,6 @@ def test_film_concat_node(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
     assert packed["result"][0].endswith("ez_gosee_90s.mp4")
     assert packed["ui"]["gifs"][0]["filename"] == "ez_gosee_90s.mp4"
     assert packed["ui"]["gifs"][0]["format"] == "video/h264-mp4"
+    assert packed["ui"]["gifs"][0]["type"] == "output"
+    assert packed["ui"]["gifs"][0]["subfolder"] == ""
+    assert packed["ui"]["gifs"][0]["frame_rate"] == 24

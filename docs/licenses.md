@@ -68,6 +68,7 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | SuperSplat | playcanvas/supersplat | MIT | Yes | Yes | none | MIT | Host static viewer. Not in Dockerfile | No |
 | UMT5-XXL text encoder (Wan companion) | Comfy-Org/Wan_2.2_ComfyUI_Repackaged | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
 | LTX-2.5 distilled INT8-convrot | Lightricks/LTX-2.5 | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes — do not distill into a competing model | Yes |
+| LTX-2.5 IC-LoRA Union Control | Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes — do not distill into a competing model. Distilled-only. Official 2.5 graph widgets `ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors`. Refuse 19B Union. | No |
 | LTX-2.3 distilled FP8 | Kijai/LTX2.3_comfy | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes — do not distill into a competing model | No |
 | FLUX.2 Klein 9B | black-forest-labs/FLUX.2-klein-9b-nvfp4 | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
 | FLUX.2 [dev] | black-forest-labs/FLUX.2-dev | FLUX.2-dev / Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
@@ -92,6 +93,8 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | Higgs Boson | Higgs v2/v3 | community/commercial traps | No | No | n/a | n/a | n/a | No |
 | TTS-Audio-Suite | diodiogod/TTS-Audio-Suite | mixed NC / research pack | No | No | n/a | n/a | n/a | No |
 | OldTimeRadio | jbrick2070/ComfyUI-OldTimeRadio | H3 / FLUX-dev / NC optional lanes | No | No | n/a | n/a | n/a | No |
+
+TRELLIS.2 footnote: companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download. Native TRELLIS Comfy basenames such as `trellis_2_int8_convrot` are opt-in via `download-3d` only — do not treat them as `download-models`.
 
 The same table is in repo-root `LICENSE-MODELS.md` so tests can grep either file.
 
@@ -138,6 +141,7 @@ Do not download, do not reference in lab graphs, do not pin Comfy for them:
 - nvdiffrast / nvdiffrec TRELLIS, DA3-LARGE, Inria 3DGS, Pixal3D-as-default
 - DreamX-World (Creator 1.0 Apache only)
 - Wav2Lip OSS
+- LTX-2 19B IC-LoRA Union Control (`Lightricks/LTX-2-19b-IC-LoRA-Union-Control`)
 
 Opt-in local podcast (not in `download-models`): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See [Local podcast](podcast.md). Opt-in local rap: same ACE-Step 1.5 turbo AIO via `download-music --tier turbo` (shared dest with `download-podcast --tier acestep`). See [Local music](music.md).
 

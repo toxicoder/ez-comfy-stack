@@ -10,6 +10,8 @@ import re
 import sys
 from pathlib import Path
 
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
@@ -74,7 +76,7 @@ def test_eighteen_shots_and_chain() -> None:
         assert meta["publish_cap_s"] == "90.00"
         assert meta["print"] == "ltx"
         assert meta["identity_seed"] == "42"
-        assert meta["identity_enhance"] == "false"
+        assert meta["identity_enhance"] == "true"
         shots = parsed["shots"]
         assert len(shots) == 18, (film, len(shots))
         prefixes = [s["prefix"] for s in shots]
@@ -131,6 +133,13 @@ def test_ltx_i2v_prompts_are_model_native() -> None:
                 "ceramic",
                 "cloth",
                 "tick",
+                "ice",
+                "grating",
+                "fabric",
+                "chime",
+                "boot",
+                "scrape",
+                "metal",
             )
             assert any(word in ltx.lower() for word in foley), (film, shot["prefix"])
             wan = shot["wan_i2v"]
@@ -148,11 +157,13 @@ def test_shorts_yaml_has_no_banned_models() -> None:
 
 def test_creative_locks() -> None:
     go = _path("go-see").read_text(encoding="utf-8")
-    assert "olive windbreaker" in go
-    assert "worn black gloves" in go
+    assert "sun-washed teal" in go
+    assert "olive windbreaker" not in go
     assert "First-person" in go or "first-person" in go
-    assert "running" in go or "footfall" in go
-    for needle in ("vault", "barrel-roll", "parkour", "Parkour"):
+    assert "body-cam" in go
+    assert "parkour" in go.lower()
+    assert "gloves" in go.lower()
+    for needle in ("Faith", "Mirror's Edge", "Mirrors Edge", "barrel-roll", "backflip"):
         assert needle not in go, needle
     here = _path("still-here").read_text(encoding="utf-8")
     assert "ceramic mug" in here
@@ -163,7 +174,9 @@ def test_creative_locks() -> None:
 
 
 def _json_files() -> list[Path]:
-    files = sorted(SHORTS.glob("*-lab-example.json"))
+    from _lab_paths import LAB_ROOT
+
+    files = sorted((LAB_ROOT / "shorts").glob("*-lab-example.json"))
     assert files, "expected shorts lab JSON"
     return files
 
@@ -229,8 +242,8 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
 
 
 def test_shot_graphs_are_five_second_i2v() -> None:
-    wan = json.loads((ROOT / "workflows" / "wan-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
-    ltx = json.loads((ROOT / "workflows" / "ltx-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
+    wan = json.loads(lab_json("wan-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
+    ltx = json.loads(lab_json("ltx-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
     wan_len = next(
         n["widgets_values"][2]
         for n in wan["nodes"]
@@ -264,7 +277,10 @@ def test_shot_graphs_are_five_second_i2v() -> None:
 def test_no_long_latents_in_shorts() -> None:
     for path in _json_files():
         graph = json.loads(path.read_text(encoding="utf-8"))
-        for node in graph["nodes"]:
+        nodes = list(graph["nodes"])
+        for sub in ((graph.get("definitions") or {}).get("subgraphs") or []):
+            nodes.extend(sub.get("nodes") or [])
+        for node in nodes:
             if node.get("type") not in LONG_LATENT_TYPES:
                 continue
             values = node.get("widgets_values") or []
@@ -275,7 +291,7 @@ def test_no_long_latents_in_shorts() -> None:
 
 def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
     for film, slug in FILMS:
-        path = SHORTS / BIBLES[film]
+        path = lab_json(BIBLES[film])
         graph = json.loads(path.read_text(encoding="utf-8"))
         text = path.read_text(encoding="utf-8")
         parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))
@@ -312,7 +328,9 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
             audio = next(i for i in node["inputs"] if i.get("name") == "audio")
             assert audio.get("link") is not None
         assert not any(n.get("type") == "LoadImage" for n in graph["nodes"])
-        assert not any(n.get("type") == "EZLTXPromptEnhance" for n in graph["nodes"])
+        ltx_enh = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
+        assert len(ltx_enh) == 18
+        assert all(n["widgets_values"][1] is True for n in ltx_enh)
         klein_sampler = next(
             n
             for n in graph["nodes"]
@@ -321,7 +339,8 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert klein_sampler["widgets_values"][0] == 42
         assert klein_sampler["widgets_values"][3] == 1.0
         enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        assert enhance["widgets_values"][1] is False
+        assert enhance["widgets_values"][1] is True
+        assert enhance["widgets_values"][2] == "identity"
         assert enhance["widgets_values"][0] == parsed["identity"]
         ltx_pos = [
             n
@@ -346,6 +365,8 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         body = note["widgets_values"][0]
         assert "Queue once" in body or "Queue **once**" in body
         assert "concat-shots.sh" in body
+        assert "already on disk" in body
+        assert f"ez_{slug}_90s.mp4" in body
         mmap = next(n for n in graph["nodes"] if n.get("type") == "MarkdownNote")
         table = mmap["widgets_values"][0]
         assert "120" in table

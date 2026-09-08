@@ -169,6 +169,83 @@ teardown() {
   [[ -f ${strip_root}/input/keep.txt ]]
 }
 
+@test "link_comfy_input_dir migrates volume input and symlinks to mount" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local vol_in mount
+  vol_in="${TEST_TMP_DIR}/ComfyUI/input"
+  mount="${TEST_TMP_DIR}/host_inputs"
+  mkdir -p "${vol_in}"
+  echo startpng >"${vol_in}/start.png"
+  export LAB_INPUTS_MOUNT="${mount}"
+  export COMFY_HOME="${TEST_TMP_DIR}/ComfyUI"
+  run link_comfy_input_dir "${vol_in}"
+  [ "${status}" -eq 0 ]
+  [[ -L ${TEST_TMP_DIR}/ComfyUI/input ]]
+  [[ -f ${mount}/start.png ]]
+  [[ "$(readlink "${TEST_TMP_DIR}/ComfyUI/input")" == "${mount}" ]]
+}
+
+@test "seed_from_prebuilt rsync excludes user and input" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local pre dest
+  pre="${TEST_TMP_DIR}/prebuilt"
+  dest="${TEST_TMP_DIR}/ComfyUI"
+  mkdir -p "${pre}/.venv/bin" "${pre}/user/default" "${pre}/input" \
+    "${pre}/custom_nodes/_user" "${pre}/custom_nodes/ez_prompt_enhance" \
+    "${dest}/user/default" "${dest}/input" "${dest}/custom_nodes/_user"
+  printf '#!/usr/bin/env bash\necho ok\n' >"${pre}/.venv/bin/python"
+  chmod +x "${pre}/.venv/bin/python"
+  echo pre >"${pre}/main.py"
+  echo wipe-me >"${pre}/user/default/lab.json"
+  echo keep-me >"${dest}/user/default/mine.json"
+  echo oldstart >"${dest}/input/start.png"
+  echo prestart >"${pre}/input/example.png"
+  echo poison >"${pre}/custom_nodes/_user/poison.py"
+  echo ok >"${pre}/custom_nodes/ez_prompt_enhance/__init__.py"
+  echo keep-pack >"${dest}/custom_nodes/_user/mine.py"
+  export LAB_PREBUILT_ROOT="${pre}"
+  export COMFY_HOME="${dest}"
+  run prebuilt_exclude_patterns
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"custom_nodes/_user/"* ]]
+  run seed_from_prebuilt
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/main.py ]]
+  [[ -f ${dest}/user/default/mine.json ]]
+  [[ ! -f ${dest}/user/default/lab.json ]]
+  [[ -f ${dest}/input/start.png ]]
+  [[ ! -f ${dest}/input/example.png ]]
+  [[ -f ${dest}/custom_nodes/_user/mine.py ]]
+  [[ ! -f ${dest}/custom_nodes/_user/poison.py ]]
+  [[ -f ${dest}/custom_nodes/ez_prompt_enhance/__init__.py ]]
+}
+
+@test "copy_prebuilt_tree skips user input and custom_nodes/_user" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local pre dest
+  pre="${TEST_TMP_DIR}/prebuilt_cp"
+  dest="${TEST_TMP_DIR}/ComfyUI_cp"
+  mkdir -p "${pre}/.venv/bin" "${pre}/user/default" "${pre}/custom_nodes/_user" \
+    "${pre}/custom_nodes/ez_film" "${dest}/user/default" "${dest}/custom_nodes/_user"
+  echo pre >"${pre}/main.py"
+  echo wipe >"${pre}/user/default/lab.json"
+  echo keep >"${dest}/user/default/mine.json"
+  echo poison >"${pre}/custom_nodes/_user/poison.py"
+  echo ok >"${pre}/custom_nodes/ez_film/__init__.py"
+  echo keep-pack >"${dest}/custom_nodes/_user/mine.py"
+  run copy_prebuilt_tree "${pre}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/main.py ]]
+  [[ -f ${dest}/user/default/mine.json ]]
+  [[ ! -f ${dest}/user/default/lab.json ]]
+  [[ -f ${dest}/custom_nodes/_user/mine.py ]]
+  [[ ! -f ${dest}/custom_nodes/_user/poison.py ]]
+  [[ -f ${dest}/custom_nodes/ez_film/__init__.py ]]
+}
+
 @test "link_comfy_output_dir migrates volume output and symlinks to mount" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
@@ -215,15 +292,19 @@ teardown() {
   mkdir -p "${src}/ez_prompt_enhance" "${src}/ez_ltx_spatial" "${src}/not_a_pack"
   echo 'ok' >"${src}/ez_prompt_enhance/__init__.py"
   echo 'ok' >"${src}/ez_ltx_spatial/__init__.py"
+  mkdir -p "${src}/ez_studio_blocks/subgraphs"
+  echo 'ok' >"${src}/ez_studio_blocks/__init__.py"
+  echo '{}' >"${src}/ez_studio_blocks/subgraphs/klein-t2i-backbone.json"
   echo 'skip' >"${src}/not_a_pack/readme.txt"
   echo 'file' >"${src}/stray.txt"
   run install_all_lab_custom_nodes "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/ez_prompt_enhance/__init__.py ]]
   [[ -f ${dest}/ez_ltx_spatial/__init__.py ]]
+  [[ -f ${dest}/ez_studio_blocks/subgraphs/klein-t2i-backbone.json ]]
   [[ ! -d ${dest}/not_a_pack ]]
   [[ ! -f ${dest}/stray.txt ]]
-  [[ "${output}" == *"installed 2 custom node pack"* ]]
+  [[ "${output}" == *"installed 3 custom node pack"* ]]
   run install_all_lab_custom_nodes "${TEST_TMP_DIR}/missing-root" "${TEST_TMP_DIR}/ComfyUI/custom_nodes_missing"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"optional mount"* ]]
@@ -233,23 +314,167 @@ teardown() {
   [[ "${output}" == *"no custom node packs under"* ]]
 }
 
-@test "install_lab_workflows copies top-level and shorts JSON" {
+@test "lab_workflow_lane maps _lab and legacy globs" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  run lab_workflow_lane "_lab/klein/klein-still-draft-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "klein" ]
+  run lab_workflow_lane "klein-still-draft-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "klein" ]
+  run lab_workflow_lane "shorts/film-go-see-90s-run-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "shorts" ]
+  run lab_workflow_lane "dcc/klein-from-clay-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "dcc" ]
+  run lab_workflow_lane "optional/wan-i2v-a14b-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "optional" ]
+  run lab_workflow_lane "podcast-audio-first-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "audio" ]
+  run lab_workflow_lane "music-rap-draft-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "audio" ]
+  run lab_workflow_lane "prompt-forge-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "inspire" ]
+  run lab_workflow_lane "beat-sheet-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "inspire" ]
+  run lab_workflow_lane "_lab/_user/keep-me.json"
+  [ "${status}" -ne 0 ]
+  run lab_workflow_lane "quality/NOTICE.md"
+  [ "${status}" -ne 0 ]
+}
+
+@test "install_lab_workflows seeds nested _lab and preserves _user" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
   local src dest
   src="${TEST_TMP_DIR}/wf"
   dest="${TEST_TMP_DIR}/user_wf"
-  mkdir -p "${src}/shorts"
-  echo '{}' >"${src}/klein-still-draft-lab-example.json"
-  echo '{}' >"${src}/shorts/film-go-see-90s-run-lab-example.json"
+  mkdir -p \
+    "${src}/_lab/klein" \
+    "${src}/_lab/shorts" \
+    "${src}/_lab/dcc" \
+    "${src}/_lab/optional" \
+    "${src}/_user" \
+    "${src}/shorts" \
+    "${src}/quality/ltx-2.5" \
+    "${dest}/_lab/klein" \
+    "${dest}/_user"
+  echo '{}' >"${src}/_lab/klein/klein-still-draft-lab-example.json"
+  echo '{}' >"${src}/_lab/shorts/film-go-see-90s-run-lab-example.json"
+  echo '{}' >"${src}/_lab/dcc/klein-from-clay-lab-example.json"
+  echo '{}' >"${src}/_lab/optional/wan-i2v-a14b-lab-example.json"
+  echo '{}' >"${src}/_user/keep-me.json"
   echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
+  echo 'notice' >"${src}/quality/ltx-2.5/NOTICE.md"
+  echo poison >"${dest}/_user/keep-me.json"
+  echo leftover >"${dest}/klein-still-draft-lab-example.json"
+  echo stale >"${dest}/_lab/klein/stale-gone-lab-example.json"
+  run sync_lab_json_dir "${src}/_lab" "${dest}/_lab"
+  [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [[ -f ${dest}/klein-still-draft-lab-example.json ]]
-  [[ -f ${dest}/film-go-see-90s-run-lab-example.json ]]
+  [[ -f ${dest}/_lab/klein/klein-still-draft-lab-example.json ]]
+  [[ -f ${dest}/_lab/shorts/film-go-see-90s-run-lab-example.json ]]
+  [[ -f ${dest}/_lab/dcc/klein-from-clay-lab-example.json ]]
+  [[ -f ${dest}/_lab/optional/wan-i2v-a14b-lab-example.json ]]
+  [[ ! -f ${dest}/film-go-see-90s-run-lab-example.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
+  [[ ! -f ${dest}/_lab/shorts/go-see.shots.yaml ]]
+  [[ ! -f ${dest}/NOTICE.md ]]
+  [[ ! -f ${dest}/_lab/klein/stale-gone-lab-example.json ]]
+  [[ -f ${dest}/_user/keep-me.json ]]
+  [[ "$(cat "${dest}/_user/keep-me.json")" == poison ]]
+  [[ -f ${dest}/klein-still-draft-lab-example.json ]]
+  [[ "$(cat "${dest}/klein-still-draft-lab-example.json")" == leftover ]]
+  [[ "${output}" == *"in _lab/klein"* ]]
+  run log_lab_seed_counts "${dest}/_lab"
+  [ "${status}" -eq 0 ]
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ "$(cat "${dest}/_user/keep-me.json")" == poison ]]
   run install_lab_workflows "${TEST_TMP_DIR}/missing-wf" "${TEST_TMP_DIR}/user_wf2"
   [ "${status}" -eq 0 ]
+}
+
+@test "install_lab_workflows maps legacy flat globs into _lab" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/wf_legacy"
+  dest="${TEST_TMP_DIR}/user_wf_legacy"
+  mkdir -p "${src}/shorts" "${src}/dcc" "${src}/optional"
+  echo '{}' >"${src}/klein-still-draft-lab-example.json"
+  echo '{}' >"${src}/podcast-audio-first-lab-example.json"
+  echo '{}' >"${src}/shorts/film-go-see-90s-run-lab-example.json"
+  echo '{}' >"${src}/dcc/klein-from-clay-lab-example.json"
+  echo '{}' >"${src}/optional/wan-i2v-a14b-lab-example.json"
+  echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
+  run seed_legacy_lab_workflows "${src}" "${dest}/_lab"
+  [ "${status}" -eq 0 ]
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/_lab/klein/klein-still-draft-lab-example.json ]]
+  [[ -f ${dest}/_lab/audio/podcast-audio-first-lab-example.json ]]
+  [[ -f ${dest}/_lab/shorts/film-go-see-90s-run-lab-example.json ]]
+  [[ -f ${dest}/_lab/dcc/klein-from-clay-lab-example.json ]]
+  [[ -f ${dest}/_lab/optional/wan-i2v-a14b-lab-example.json ]]
+  [[ ! -f ${dest}/klein-still-draft-lab-example.json ]]
+  [[ ! -f ${dest}/go-see.shots.yaml ]]
+  [[ -d ${dest}/_user ]]
+}
+
+@test "install_lab_workflows seeds App Mode graphs as app.json" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/wf_apps"
+  dest="${TEST_TMP_DIR}/user_wf_apps"
+  mkdir -p "${src}/_lab/klein" "${src}/_lab/inspire" "${src}/_lab/shorts" "${dest}"
+  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
+    >"${src}/_lab/klein/klein-still-draft-lab-example.json"
+  printf '%s\n' '{"extra":{"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
+    >"${src}/_lab/inspire/prompt-forge-lab-example.json"
+  printf '%s\n' '{"extra":{"lab_app_mode":{"enabled":true,"default_view":"graph"}}}' \
+    >"${src}/_lab/shorts/film-go-see-90s-run-lab-example.json"
+  echo '{}' >"${src}/_lab/klein/plain-lab-example.json"
+  echo 'not json' >"${src}/_lab/klein/broken-lab-example.json"
+  mkdir -p "${dest}/_lab/klein"
+  echo '{}' >"${dest}/_lab/klein/klein-still-draft-lab-example.json"
+  run lab_workflow_is_app "${src}/_lab/klein/klein-still-draft-lab-example.json"
+  [ "${status}" -eq 0 ]
+  run lab_workflow_is_app "${src}/_lab/inspire/prompt-forge-lab-example.json"
+  [ "${status}" -eq 0 ]
+  run lab_workflow_is_app "${src}/_lab/shorts/film-go-see-90s-run-lab-example.json"
+  [ "${status}" -eq 1 ]
+  run lab_workflow_is_app "${src}/_lab/klein/plain-lab-example.json"
+  [ "${status}" -eq 1 ]
+  run lab_workflow_is_app "${src}/_lab/klein/broken-lab-example.json"
+  [ "${status}" -eq 1 ]
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [ -f "${dest}/_lab/klein/klein-still-draft-lab-example.app.json" ]
+  [ ! -f "${dest}/_lab/klein/klein-still-draft-lab-example.json" ]
+  [ -f "${dest}/_lab/inspire/prompt-forge-lab-example.app.json" ]
+  [ ! -f "${dest}/_lab/inspire/prompt-forge-lab-example.json" ]
+  [ -f "${dest}/_lab/shorts/film-go-see-90s-run-lab-example.json" ]
+  [ ! -f "${dest}/_lab/shorts/film-go-see-90s-run-lab-example.app.json" ]
+  [ -f "${dest}/_lab/klein/plain-lab-example.json" ]
+  [ ! -f "${dest}/_lab/klein/plain-lab-example.app.json" ]
+  [ -f "${dest}/_lab/klein/broken-lab-example.json" ]
+  [ ! -f "${dest}/_lab/klein/broken-lab-example.app.json" ]
+  run apply_lab_app_json_names "${dest}/_lab"
+  [ "${status}" -eq 0 ]
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [ -f "${dest}/_lab/klein/klein-still-draft-lab-example.app.json" ]
+  [ ! -f "${dest}/_lab/klein/klein-still-draft-lab-example.json" ]
 }
 
 @test "main with mocked install and NO_EXEC" {
@@ -498,10 +723,15 @@ teardown() {
   mkdir -p "${pre}"
   echo seeded >"${pre}/from_image.txt"
   echo 'print("ok")' >"${pre}/main.py"
+  mkdir -p "${pre}/custom_nodes/_user" "${COMFY_HOME}/custom_nodes/_user"
+  echo poison >"${pre}/custom_nodes/_user/poison.py"
+  echo keep >"${COMFY_HOME}/custom_nodes/_user/mine.py"
   COMFYUI_REF="v0.34.0"
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
   [[ -f ${COMFY_HOME}/from_image.txt ]]
+  [[ -f ${COMFY_HOME}/custom_nodes/_user/mine.py ]]
+  [[ ! -f ${COMFY_HOME}/custom_nodes/_user/poison.py ]]
   [[ "${output}" == *"Re-seeding"* || "${output}" == *"prebuilt"* ]]
 }
 
@@ -760,12 +990,24 @@ teardown() {
   source "${REPO_ROOT}/docker/entrypoint.sh"
   run comfy_exec_args
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"--use-ck-attention"* ]]
-  [[ "${output}" == *"--normalvram"* ]]
-  [[ "${output}" == *"--disable-mmap"* ]]
-  [[ "${output}" != *"--use-sage-attention"* ]]
-  [[ "${output}" != *"--highvram"* ]]
-  [[ "${output}" == *"--bf16-unet"* ]]
+  local args="${output}"
+  [[ "${args}" == *"--use-ck-attention"* ]]
+  [[ "${args}" == *"--disable-mmap"* ]]
+  [[ "${args}" == *"--bf16-unet"* ]]
+  [[ "${args}" == *"--input-directory"* ]]
+  [[ "${args}" == *"--output-directory"* ]]
+  # One token per line from comfy_exec_args. grep -Fx so bash 3.2 set -e
+  # does not swallow a failed [[ != ]] in the middle of the test function.
+  run grep -Fx -- '--use-sage-attention' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--highvram' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--gpu-only' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--lowvram' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--normalvram' <<< "${args}"
+  [ "${status}" -ne 0 ]
 }
 
 @test "install_sage_wheel_if_pinned skips without URL and refuses URL without sha" {

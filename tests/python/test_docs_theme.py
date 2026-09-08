@@ -46,6 +46,7 @@ def test_mkdocs_wires_extra_css() -> None:
     assert "stylesheets/extra.css" in text
     assert "extra_javascript:" in text
     assert "javascripts/glossary.js" in text
+    assert "javascripts/commands.js" in text
     assert "content.tooltips" in text
 
 
@@ -75,6 +76,39 @@ def test_extra_css_bumps_typeset_font_not_html() -> None:
     assert re.search(r"html\s*\{[^}]*font-size", css, re.S) is None
 
 
+def test_extra_css_sticks_table_headers_under_tabs() -> None:
+    """Table thead stays under the sticky header; wrap does not steal the scrollport."""
+    css = _read(EXTRA_CSS)
+    assert re.search(
+        r"thead\s+th\s*\{[^}]*position:\s*sticky",
+        css,
+        re.S,
+    )
+    assert "--ez-sticky-table-top" in css
+    assert "4.8rem" in css
+    assert "4.2rem" in css
+    assert re.search(
+        r"html:has\(\.md-header__title--active\)\s*\{[^}]*--ez-sticky-table-top:\s*4\.2rem",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"thead\s+th\s*\{[^}]*background-color:\s*var\(--md-default-bg-color\)",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"\.md-typeset__scrollwrap\s*\{[^}]*overflow:\s*visible",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"thead\s+th\s*\{[^}]*z-index:\s*[12]\b",
+        css,
+        re.S,
+    )
+
+
 def test_conventions_document_sticky_header() -> None:
     """Docs publish notes the sticky-tabs contract for later edits."""
     text = _read(CONVENTIONS)
@@ -82,3 +116,5 @@ def test_conventions_document_sticky_header() -> None:
     assert "header.autohide" in text
     assert "stylesheets/extra.css" in text
     assert "0.875rem" in text
+    assert "thead" in text
+    assert "sticky table" in text.lower() or "table header" in text.lower()

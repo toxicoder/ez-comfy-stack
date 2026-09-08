@@ -9,7 +9,7 @@ tags: [getting-started, docker, comfyui]
 **What's on this page**
 
 - What success looks like
-- Session variables (copy-paste)
+- Session variables (Your Spark panel or shell exports)
 - Prerequisites checklist
 - Setup, doctor, download, start, first still, stop
 - Optional: build the Docker image locally instead of pulling GHCR
@@ -31,7 +31,7 @@ tags: [getting-started, docker, comfyui]
 | Goal | Detail |
 | --- | --- |
 | **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` |
-| **Workflow** | **klein-still-draft-lab-example** queued without missing-weight errors |
+| **Workflow** | **`_lab/klein/klein-still-draft-lab-example`** queued without missing-weight errors |
 | **Weights** | Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under `${MODELS_DIR}` (default `/mnt/models`) |
 | **Output** | `ez_still_draft_*.png` under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 
@@ -41,7 +41,12 @@ tags: [getting-started, docker, comfyui]
 
 ## Session variables
 
-Run these from the **repo root** on the Spark. Defaults match `.env.example`. Change `SPARK_HOST` to this machine’s LAN IP or DNS if you will open the UI from another computer.
+Two ways to fill Spark IP / paths so copy-paste works:
+
+1. **Your Spark** panel (top of every docs page) — stored in this browser, applied to copyable commands site-wide.
+2. **Shell exports** on the Spark (below) — `manage.sh` still loads `.env`; these exports are for *your* shell (`ls`, `ssh -L`, the browser URL).
+
+Defaults match `.env.example`. Set `SPARK_HOST` to this machine’s LAN IP or DNS if you will open the UI from another computer.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -52,7 +57,7 @@ export COMFY_PORT="${COMFY_PORT:-8188}"
 export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"   # auto | off | integer Mbps
 ```
 
-Later command blocks assume these exports. After `setup`, the same keys live in `.env` (`manage.sh` loads `.env` automatically; the exports are for **your** shell — `ls`, `ssh -L`, the browser URL).
+`--tier` on download commands is a **pack id**, not a global quality flag. Map: [Download tiers](download-tiers.md). `--limit` is bandwidth.
 
 ---
 
@@ -274,22 +279,23 @@ If Comfy shows **Missing Models** on **klein-still-draft-lab-example**, re-run d
 ./scripts/manage.sh status
 ```
 
-Open **`http://${SPARK_HOST}:${COMFY_PORT}`**.
+Open **`http://${SPARK_HOST}:${COMFY_PORT}`** (Your Spark panel fills the IP when you copy).
 
 From a laptop (Spark is remote):
 
-```bash
-ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
-# then open http://127.0.0.1:${COMFY_PORT}
+```ezcmd
+id: ssh-forward
 ```
+
+Then open `http://127.0.0.1:${COMFY_PORT}` on the laptop.
 
 !!! success "First Queue"
 
-    In ComfyUI, load **klein-still-draft-lab-example** from `user/default/workflows/` (seeded from host `workflows/`). Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
+    In ComfyUI, load **klein-still-draft-lab-example** from the **Apps** sidebar (or **Workflows → `_lab/klein/`**). Host file: `workflows/_lab/klein/klein-still-draft-lab-example.json`. It is seeded as `*.app.json` under `_lab/klein/`. Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
 
     **What you just did:** `start` launched ComfyUI (no auto-restart after reboot). The graph loaded Klein 4B distilled (4 steps, CFG 1.0) and wrote a still on the host — not inside the git repo. Canvas nouns: [ComfyUI basics](learn/comfyui.md).
 
-    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Still to motion to AV](visual-generative-ai.md). After that first still, optional audio: [Local podcast](podcast.md) (`download-podcast --tier analog`, then **podcast-audio-first-lab-example**) or rap-first [Local music](music.md) (`download-music --tier turbo`, then **music-rap-draft-lab-example** — do not co-resident with LTX/Wan/Klein).
+    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Still to motion to AV](visual-generative-ai.md). After that first still, optional audio packs (not part of `download-models`; `--tier` is which pack): [Download tiers](download-tiers.md), then [Local podcast](podcast.md) or [Local music](music.md) — do not co-resident with LTX/Wan/Klein.
 
 ### Build the image locally (optional)
 

@@ -124,6 +124,47 @@ teardown() {
   [[ "$(cat "${link}")" == "weight" ]]
 }
 
+@test "common: ln_sfn_relative is idempotent when dest is already usable" {
+  local base="${TEST_TMP_DIR}/ln_idem"
+  local target="${base}/snap/Qwen.gguf"
+  local linkdir="${base}/comfy/llm"
+  local link="${linkdir}/Qwen.gguf"
+  mkdir -p "$(dirname "${target}")" "${linkdir}"
+  echo gguf >"${target}"
+  run ln_sfn_relative "${target}" "${link}"
+  [ "${status}" -eq 0 ]
+  [[ -L ${link} ]]
+  install_mock_bin ln 'echo called >>"${TEST_TMP_DIR}/ln_calls.log"; echo "ln: Permission denied" >&2; exit 1'
+  run ln_sfn_relative "${target}" "${link}"
+  [ "${status}" -eq 0 ]
+  [[ ! -f ${TEST_TMP_DIR}/ln_calls.log ]]
+
+  rm -f "${link}"
+  echo gguf >"${link}"
+  run ln_sfn_relative "${target}" "${link}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${link} && ! -L ${link} ]]
+}
+
+@test "common: ln_sfn_relative fails closed on absolute or missing dest when ln fails" {
+  local base="${TEST_TMP_DIR}/ln_fail"
+  local target="${base}/snap/Qwen.gguf"
+  local linkdir="${base}/comfy/llm"
+  local link="${linkdir}/Qwen.gguf"
+  mkdir -p "$(dirname "${target}")" "${linkdir}"
+  echo gguf >"${target}"
+  /bin/ln -sfn "${target}" "${link}"
+  [[ -L ${link} ]]
+  install_mock_bin ln 'echo "ln: Permission denied" >&2; exit 1'
+  run ln_sfn_relative "${target}" "${link}"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"Permission denied"* || "${output}" == *"ln_sfn_relative"* ]]
+
+  rm -f "${link}"
+  run ln_sfn_relative "${target}" "${link}"
+  [ "${status}" -ne 0 ]
+}
+
 @test "common: check_lab_models_ready rejects broken symlinks" {
   local root="${TEST_TMP_DIR}/lab_broken"
   while IFS= read -r rel; do
@@ -242,6 +283,10 @@ teardown() {
   run ensure_comfy_output_dir "${TEST_TMP_DIR}/comfy-out-ok"
   [ "${status}" -eq 0 ]
   [ -d "${TEST_TMP_DIR}/comfy-out-ok" ]
+  [ -d "${TEST_TMP_DIR}/comfy-out-ok/input" ]
+  [ -d "${TEST_TMP_DIR}/comfy-out-ok/custom-nodes-user" ]
+  [ -d "${TEST_TMP_DIR}/comfy-out-ok/comfy-user/default/workflows" ]
+  [ -d "${TEST_TMP_DIR}/comfy-out-ok/comfy-user/default/workflows/_user" ]
   run ensure_writable_host_dir COMFY_OUTPUT_DIR "${TEST_TMP_DIR}/comfy-out-ok"
   [ "${status}" -eq 0 ]
   run prepare_comfy_output_dir "${TEST_TMP_DIR}/prepared_output"

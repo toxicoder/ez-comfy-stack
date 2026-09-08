@@ -5,8 +5,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _ace_widgets_contract import assert_ace_encoder_widgets
+from _lab_paths import lab_json
+
 ROOT = Path(__file__).resolve().parents[2]
-WF = ROOT / "workflows"
 
 BANNED = (
     "MiniMax",
@@ -27,7 +29,7 @@ BANNED = (
 
 
 def _load(stem: str) -> dict:
-    path = WF / f"{stem}.json"
+    path = lab_json(stem)
     assert path.is_file(), stem
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -54,12 +56,14 @@ def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None
     prim = next(n for n in graph["nodes"] if n["type"] == "PrimitiveNode")
     assert prim["widgets_values"][0] == duration
     enc = next(n for n in graph["nodes"] if n["type"] == "TextEncodeAceStepAudio1.5")
-    widgets = enc["widgets_values"]
-    assert widgets[3] == 88
-    assert widgets[4] == duration
-    assert widgets[5] == "4"
-    assert widgets[6] == "en"
-    assert widgets[8] is True
+    widgets = assert_ace_encoder_widgets(enc, where=stem)
+    assert widgets[3] == "fixed"
+    assert widgets[4] == 88
+    assert widgets[5] == duration
+    assert widgets[6] == "4"
+    assert widgets[7] == "en"
+    assert widgets[8] == "C minor"
+    assert widgets[9] is True
     sampler = next(n for n in graph["nodes"] if n["type"] == "KSampler")
     sw = sampler["widgets_values"]
     assert sw[2] == 8
@@ -70,8 +74,9 @@ def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None
     assert flac["widgets_values"][0] == prefix
     mp3 = next(n for n in graph["nodes"] if n["type"] == "SaveAudioMP3")
     assert mp3["widgets_values"][0] == prefix
-    lyrics = next(n for n in graph["nodes"] if n["type"] == "EZRapLyrics")
-    assert lyrics["widgets_values"][1] is False
+    ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
+    assert ace["widgets_values"][2] is True
+    assert ace["widgets_values"][3] == "vocal"
     assert "Note" in {n["type"] for n in graph["nodes"]}
     assert "klein-thumbnail-lab-example" in extra["lab_note"]
     assert "klein-podcast-cover-lab-example" in extra["lab_note"]
@@ -93,3 +98,18 @@ def test_music_rap_full_graph() -> None:
     blob = json.dumps(graph)
     assert "[outro]" in blob
     assert blob.count("[chorus]") >= 2
+
+
+def test_music_apps_expose_duration_and_vocal_mode() -> None:
+    for stem in ("music-rap-draft-lab-example", "music-rap-full-lab-example"):
+        graph = _load(stem)
+        names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
+        assert "seconds" in names, stem
+        assert "mode" in names, stem
+        assert "backend" not in names, stem
+        labels = [
+            ((entry[2] or {}).get("label") if len(entry) > 2 else None) or entry[1]
+            for entry in graph["extra"]["linearData"]["inputs"]
+        ]
+        assert "Duration (seconds)" in labels, stem
+        assert "Vocal / instrumental" in labels, stem

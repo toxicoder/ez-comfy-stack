@@ -139,9 +139,25 @@ refresh_comfy_pin_if_needed() {
     log "Re-seeding ${COMFY_HOME} from prebuilt"
     mkdir -p "${COMFY_HOME}"
     if command -v rsync >/dev/null 2>&1; then
-      rsync -a "${pre}/" "${COMFY_HOME}/"
+      rsync -a \
+        --exclude user/ \
+        --exclude input/ \
+        --exclude output/ \
+        --exclude temp/ \
+        --exclude extra_model_paths.yaml \
+        --exclude custom_nodes/_user/ \
+        "${pre}/" "${COMFY_HOME}/"
     else
-      cp -a "${pre}/." "${COMFY_HOME}/"
+      log "rsync missing; copying prebuilt with seed excludes"
+      # Do not clobber operator custom_nodes/_user on the cp fallback.
+      tar -C "${pre}" \
+        --exclude=user \
+        --exclude=input \
+        --exclude=output \
+        --exclude=temp \
+        --exclude=extra_model_paths.yaml \
+        --exclude=custom_nodes/_user \
+        -cf - . | tar -C "${COMFY_HOME}" -xf -
     fi
     activate_venv
   else

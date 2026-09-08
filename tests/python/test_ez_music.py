@@ -28,7 +28,7 @@ def test_pack_imports_without_extra_pip() -> None:
     cls = NODE_CLASS_MAPPINGS["EZRapLyrics"]
     assert cls.CATEGORY == "ez-comfy/music"
     spec = cls.INPUT_TYPES()
-    assert spec["required"]["enhance"][1]["default"] is False
+    assert spec["required"]["enhance"][1]["default"] is True
     assert "[verse]" in spec["required"]["lyrics"][1]["default"]
     assert "[chorus]" in spec["required"]["lyrics"][1]["default"]
 

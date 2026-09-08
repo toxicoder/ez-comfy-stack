@@ -18,6 +18,7 @@ from typing import Any
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 STYLES_PATH = Path(__file__).resolve().parent / "styles.json"
+VIEWS_PATH = Path(__file__).resolve().parent / "views.json"
 GGUF_FILENAME = "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
 SNAPSHOT_DIR = "unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"
 DEFAULT_GGUF = f"/models/comfy/llm/{GGUF_FILENAME}"
@@ -30,8 +31,8 @@ LOCK_VIEW = "view"
 LOCK_STATE = "state"
 LOCK_IDS = (LOCK_VIEW, LOCK_STATE)
 LOCK_VIEW_LINE = (
-    "Keep this exact place and inventory. New photograph from a different camera "
-    "and framing."
+    "Same building, rooms, furniture placement, materials, sky, and background. "
+    "New photograph from a different camera in a walkthrough of this place."
 )
 LOCK_STATE_LINE = (
     "Keep this exact place, inventory, and camera framing. The shot names the only "
@@ -39,6 +40,7 @@ LOCK_STATE_LINE = (
 )
 FLAVOR_KLEIN = "klein"
 FLAVOR_KLEIN_EDIT = "klein_edit"
+FLAVOR_KLEIN_IDENTITY = "klein_identity"
 FLAVOR_WAN = "wan"
 FLAVOR_LTX = "ltx"
 
@@ -47,10 +49,18 @@ REASON_GGUF_MISSING = "GGUF missing"
 REASON_LLAMA_UNAVAILABLE = "llama.cpp unavailable"
 REASON_EMPTY = "timeout or empty model output"
 REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
+REASON_STYLE_IGNORED_FLF = "style ignored in flf (start and end frames own look)"
+REASON_STYLE_IGNORED_VACE = "style ignored in vace (both clips own look)"
+STYLE_IGNORED_MODES = {
+    "i2v": REASON_STYLE_IGNORED_I2V,
+    "flf": REASON_STYLE_IGNORED_FLF,
+    "vace": REASON_STYLE_IGNORED_VACE,
+}
 
 _LLM: Any = None
 _LLM_PATH = ""
 _STYLES: dict[str, dict[str, Any]] | None = None
+_VIEWS: dict[str, list[dict[str, str]]] | None = None
 
 _STYLE_LOOK_FIELDS = ("medium", "light", "color", "texture", "camera")
 _LAB_LOOK_PHRASES = (
@@ -61,6 +71,9 @@ _LAB_LOOK_PHRASES = (
     "game-engine pre-rendered cutscene",
     "game-engine pre-rendered",
     "game-engine",
+    "photoreal cinematic still",
+    "photoreal still",
+    "photoreal shot",
 )
 STYLE_SYSTEM_ADDENDUM = (
     "The user message contains a Visual style block. That style is the only look. "
@@ -81,6 +94,9 @@ _WEAVE_BY_FLAVOR = {
     FLAVOR_KLEIN_EDIT: (
         "Restyle medium, light, and grade only. Keep identity, inventory, "
         "architecture, and counts locked."
+    ),
+    FLAVOR_KLEIN_IDENTITY: (
+        "Keep the bible camera-free. Do not add lens, shot scale, or a camera move."
     ),
     FLAVOR_WAN: (
         "Put light and lens in Aesthetic control and the medium phrases in "
@@ -149,6 +165,9 @@ def join_prompt(
       lock: view (new camera) or state (same camera)
     Returns:
       One CLIP string, or empty when every field is blank.
+      lock=view with a shot card front-loads the camera so Klein treats
+      the still as a new walkthrough frame. lock=state and identity-only
+      joins keep the bible first.
     """
     bible = identity.strip() if isinstance(identity, str) else str(identity or "").strip()
     card = shot.strip() if isinstance(shot, str) else str(shot or "").strip()
@@ -158,12 +177,23 @@ def join_prompt(
         mode = LOCK_VIEW
     if not bible and not card and not inv:
         return ""
+    inv_line = f"Locked inventory (do not change): {inv}." if inv else ""
+    lock_line = LOCK_STATE_LINE if mode == LOCK_STATE else LOCK_VIEW_LINE
     parts: list[str] = []
+    camera_first = mode == LOCK_VIEW and bool(card)
+    if camera_first:
+        parts.append(card)
+        parts.append(lock_line)
+        if bible:
+            parts.append(bible)
+        if inv_line:
+            parts.append(inv_line)
+        return " ".join(parts)
     if bible:
         parts.append(bible)
-    if inv:
-        parts.append(f"Locked inventory (do not change): {inv}.")
-    parts.append(LOCK_STATE_LINE if mode == LOCK_STATE else LOCK_VIEW_LINE)
+    if inv_line:
+        parts.append(inv_line)
+    parts.append(lock_line)
     if card:
         parts.append(card)
     return " ".join(parts)
@@ -181,6 +211,34 @@ def load_system_prompt(name: str) -> str:
     """
     path = PROMPTS_DIR / f"{name}.txt"
     return path.read_text(encoding="utf-8").strip()
+
+
+def load_view_pack(name: str) -> list[dict[str, str]]:
+    """Load one camera-role pack from views.json (label + shot, no identity nouns)."""
+    global _VIEWS
+    if _VIEWS is None:
+        raw = json.loads(VIEWS_PATH.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict):
+            raise ValueError("views.json must be an object")
+        views: dict[str, list[dict[str, str]]] = {}
+        for key, value in raw.items():
+            if not isinstance(value, list):
+                raise ValueError(f"view pack {key} must be a list")
+            cards: list[dict[str, str]] = []
+            for item in value:
+                if not isinstance(item, dict):
+                    raise ValueError(f"view pack {key} entries must be objects")
+                label = str(item.get("label") or "").strip()
+                shot = str(item.get("shot") or "").strip()
+                if not label or not shot:
+                    raise ValueError(f"view pack {key} needs label and shot")
+                cards.append({"label": label, "shot": shot})
+            views[str(key)] = cards
+        _VIEWS = views
+    pack = _VIEWS.get(name)
+    if pack is None:
+        raise KeyError(f"unknown view pack {name!r}")
+    return pack
 
 
 def load_styles() -> dict[str, dict[str, Any]]:
@@ -346,6 +404,8 @@ def flavor_for_system(name: str) -> str:
     """Map a system-prompt stem to a style-instruction flavor."""
     if name == "klein_edit":
         return FLAVOR_KLEIN_EDIT
+    if name == "klein_identity":
+        return FLAVOR_KLEIN_IDENTITY
     if name.startswith("wan"):
         return FLAVOR_WAN
     if name.startswith("ltx"):

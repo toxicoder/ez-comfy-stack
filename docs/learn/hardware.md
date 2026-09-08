@@ -38,7 +38,7 @@ flowchart LR
   S4 --> Safe["SSH stays usable"]
 ```
 
-Details: [Reboot safety](../reboot-safety.md) · [Download limit](../download-limit.md).
+Details: [Reboot safety](../reboot-safety.md) · [Download limit](../download-limit.md). Disk full from leftover experiments: [Disk wizard](../disk-wizard.md) (`--plan` first).
 
 ---
 
@@ -62,7 +62,7 @@ Lab flags (do not “optimize” these away):
 
 | Setting | Why |
 | --- | --- |
-| `--normalvram` + offload flags | Unified memory. **Not** `--highvram` |
+| Default VRAM + offload flags | Unified memory. Omit `--highvram` / `--gpu-only`. ComfyUI dropped `--normalvram` |
 | `patch_unified_memory_copy.py` | `copy=False` so UM does not double weights |
 | `patch_get_free_memory.py` | Host free RAM instead of under-reporting `cudaMemGetInfo` |
 | `--use-ck-attention` | Comfy Kitchen. XOR Sage — never both |

@@ -14,9 +14,18 @@ import re
 from pathlib import Path
 import sys
 
-from _wire_prompt_enhance import _rewrite_enhance_blurb, normalize_enhance_widgets
+from _wire_prompt_enhance import _rewrite_enhance_blurb, enable_lab_graph, normalize_enhance_widgets
+from _lab_paths import lab_json
+from _stamp_app_mode import stamp_suite_graph
+from _lab_layout import (
+    GROUP_TITLE_INSET,
+    LAB_GROUP_Y0,
+    ensure_group_title_inset,
+    group as _group,
+)
 from _lab_theme import (
     CREATOR_IDENTITY,
+    HOUSE_IDENTITY,
     I2V_LOCK,
     KLEIN_HOOK,
     KLEIN_NEG_STILL,
@@ -30,8 +39,6 @@ from _lab_theme import (
     LTX_SHORTS_I2V,
     LTX_WEATHER,
     LTX_WEATHER_AUDIO,
-    ROOFTOP_INVENTORY,
-    STORYBOARD,
     WAN_ORBIT,
     WAN_SHORTS_I2V,
 )
@@ -45,7 +52,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
-from ez_prompt_enhance.client import join_prompt  # noqa: E402
+from ez_prompt_enhance.client import join_prompt, load_view_pack  # noqa: E402
 from _build_film_workflows import build_all_films  # noqa: E402
 
 WF = ROOT / "workflows"
@@ -109,7 +116,7 @@ FILMS = (
         "gosee",
         "film-go-see-90s-run-lab-example",
         "go-see.shots.yaml",
-        "first-person running",
+        "first-person parkour",
     ),
     (
         "still-here",
@@ -133,6 +140,8 @@ def _load(path: Path) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    stamp_suite_graph(graph)
+    ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
@@ -165,17 +174,6 @@ def _node(graph: dict, ntype: str, title: str | None = None) -> dict:
         if title is None or n.get("title") == title:
             return n
     raise KeyError(f"{ntype} {title}")
-
-
-def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: str) -> dict:
-    return {
-        "id": gid,
-        "title": title,
-        "bounding": [x, y, w, h],
-        "color": color,
-        "font_size": 24,
-        "flags": {},
-    }
 
 
 def _ensure_preview_line(text: str, *, gif: bool = False) -> str:
@@ -313,13 +311,13 @@ def polish_video_graph(graph: dict, *, gif: bool = False) -> dict:
 
 def patch_existing_video_graphs() -> None:
     video_files = [
-        WF / "wan-i2v-5s-lab-example.json",
-        WF / "wan-t2v-5s-lab-example.json",
-        WF / "wan-i2v-shot-lab-example.json",
-        WF / "ltx-i2v-5s-lab-example.json",
-        WF / "ltx-t2v-5s-lab-example.json",
-        WF / "ltx-i2v-shot-lab-example.json",
-        WF / "wan-gif-loop-lab-example.json",
+        lab_json("wan-i2v-5s-lab-example.json"),
+        lab_json("wan-t2v-5s-lab-example.json"),
+        lab_json("wan-i2v-shot-lab-example.json"),
+        lab_json("ltx-i2v-5s-lab-example.json"),
+        lab_json("ltx-t2v-5s-lab-example.json"),
+        lab_json("ltx-i2v-shot-lab-example.json"),
+        lab_json("wan-gif-loop-lab-example.json"),
     ]
     for path in video_files:
         graph = _load(path)
@@ -589,7 +587,7 @@ def _set_note(graph: dict, note: str, description: str) -> None:
 
 def build_creator_toolkit() -> None:
     # 1. Vertical Shorts still
-    g = _load(WF / "klein-still-draft-lab-example.json")
+    g = _load(lab_json("klein-still-draft-lab-example.json"))
     g["id"] = "klein-shorts-still-lab-example"
     g["revision"] = 1
     latent = _node(g, "EmptyFlux2LatentImage")
@@ -601,6 +599,7 @@ def build_creator_toolkit() -> None:
     enh = _node(g, "EZKleinPromptEnhance")
     prompt = KLEIN_SHORTS
     enh["widgets_values"][0] = prompt
+    enh["widgets_values"][1] = True
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     note = f"""## klein-shorts-still-lab-example
 
@@ -610,15 +609,15 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; r
 """
     _set_note(g, note, "Klein 4B vertical 9:16 Shorts still")
     g["groups"] = [
-        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
-        _group(2, "PROMPT", 460, 40, 920, 400, "#3f789e"),
-        _group(3, "SETTINGS", 1420, 40, 380, 500, "#a1309b"),
-        _group(4, "OUTPUT", 1820, 40, 340, 430, "#3f789e"),
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 400, "#3f789e"),
+        _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
+        _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
     ]
-    _dump(WF / "klein-shorts-still-lab-example.json", g)
+    _dump(lab_json("klein-shorts-still-lab-example.json"), g)
 
     # 2. Vertical Wan I2V
-    g = _load(WF / "wan-i2v-5s-lab-example.json")
+    g = _load(lab_json("wan-i2v-5s-lab-example.json"))
     g["id"] = "wan-shorts-i2v-lab-example"
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
@@ -647,10 +646,10 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
 {PREVIEW_BULLET}
 """
     _set_note(g, note, "Wan 5B vertical 9:16 silent I2V ~5s")
-    _dump(WF / "wan-shorts-i2v-lab-example.json", g)
+    _dump(lab_json("wan-shorts-i2v-lab-example.json"), g)
 
     # 3. Vertical LTX I2V AV
-    g = _load(WF / "ltx-i2v-5s-lab-example.json")
+    g = _load(lab_json("ltx-i2v-5s-lab-example.json"))
     g["id"] = "ltx-shorts-i2v-lab-example"
     g["revision"] = 1
     wire_ltx_audio(g)
@@ -688,10 +687,10 @@ LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio mu
 Disclose AI-generated media; do not strip provenance; do not distill. No score.
 """
     _set_note(g, note, "LTX-2.5 vertical 9:16 AV I2V ~5s")
-    _dump(WF / "ltx-shorts-i2v-lab-example.json", g)
+    _dump(lab_json("ltx-shorts-i2v-lab-example.json"), g)
 
     # 4. Thumbnail
-    g = _load(WF / "klein-still-hero-lab-example.json")
+    g = _load(lab_json("klein-still-hero-lab-example.json"))
     g["id"] = "klein-thumbnail-lab-example"
     g["revision"] = 1
     save = _node(g, "SaveImage")
@@ -706,10 +705,10 @@ YouTube thumbnail still (Klein 4B). Default 1280×720. Prefix `ez_thumbnail`.
 Keep the subject large and readable at small sizes. Do not burn in titles — add text in your editor.
 """
     _set_note(g, note, "Klein 4B YouTube thumbnail 1280x720")
-    _dump(WF / "klein-thumbnail-lab-example.json", g)
+    _dump(lab_json("klein-thumbnail-lab-example.json"), g)
 
     # 5. Product packshot
-    g = _load(WF / "klein-still-hero-lab-example.json")
+    g = _load(lab_json("klein-still-hero-lab-example.json"))
     g["id"] = "klein-product-packshot-lab-example"
     g["revision"] = 1
     save = _node(g, "SaveImage")
@@ -731,7 +730,7 @@ Clean product / packshot still (Klein 4B). Default 1024×1024. Prefix `ez_packsh
 Swap the subject in the prompt; keep seamless background and soft studio light.
 """
     _set_note(g, note, "Klein 4B product packshot 1:1")
-    _dump(WF / "klein-product-packshot-lab-example.json", g)
+    _dump(lab_json("klein-product-packshot-lab-example.json"), g)
 
     mug_identity = (
         "A photoreal still of a small kitchen table at first light. One cream ceramic mug "
@@ -765,59 +764,30 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
         description="Klein 4B before/after still pair",
     )
 
-    house_lock = (
-        "One contemporary cedar-and-glass lake house. Vertical cedar siding, charcoal "
-        "standing-seam hip roof, tall black-framed windows, unmarked surfaces, solitary, "
-        "empty of people."
-    )
+    style_cards = load_view_pack("place_4")
     _klein_pack(
         stem="klein-style-lock-lab-example",
         size=(768, 960),
-        identity=house_lock,
-        inventory=(
-            "vertical cedar siding, charcoal standing-seam hip roof, tall black-framed "
-            "windows, linen sofa facing the lake glass, oak floors"
-        ),
+        identity=HOUSE_IDENTITY,
+        inventory="",
         persist="view",
         shots=[
-            (
-                "ez_style_01",
-                "CURB",
-                "Three-quarter lake facade of the same house, 24mm, golden-hour, Instagram "
-                "4:5. Glass shows the linen sofa and oak floors inside.",
-            ),
-            (
-                "ez_style_02",
-                "LIVING",
-                "From inside the living room of the same house, looking out the glass to "
-                "the lake, late-day sun. Linen sofa in the foreground.",
-            ),
-            (
-                "ez_style_03",
-                "DECK",
-                "Lakeside deck of the same house at dusk, cedar boards, quiet water, "
-                "evergreen ridge.",
-            ),
-            (
-                "ez_style_04",
-                "TWILIGHT",
-                "Twilight exterior of the same house. Lamps on; sofa silhouette through "
-                "black-framed glass.",
-            ),
+            (f"ez_style_{i:02d}", card["label"], card["shot"])
+            for i, card in enumerate(style_cards, start=1)
         ],
         hint="Instagram 4:5 still",
-        neg=KLEIN_NEG_PHOTO,
+        neg=KLEIN_NEG_STILL,
         note=f"""## klein-style-lock-lab-example
 
-Four Klein 4B stills of one lake house from new cameras (Prompt Join lock=view). Locked inventory repeats through the glass and in the living room. Prefixes `ez_style_01`…`04`. Shots are independent T2I (same seed); they do not copy CURB's framing.
+Four Klein 4B stills of **one place** from new cameras (Prompt Join lock=view). Type any place in IDENTITY — default placeholder is the lab penthouse. Hidden cards are camera roles. Prefixes `ez_style_01`…`04`. Independent T2I, same seed.
 
-Turn Enhance off on IDENTITY to pin the bible.
+Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klein-t2i-enhanced.
 """,
-        description="Klein 4B four-still lake-house views, locked inventory",
+        description="Klein 4B four-still place views, locked identity",
     )
 
     # 8. Wan bumper loop MP4
-    g = _load(WF / "wan-gif-loop-lab-example.json")
+    g = _load(lab_json("wan-gif-loop-lab-example.json"))
     g["id"] = "wan-bumper-loop-lab-example"
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
@@ -854,10 +824,10 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
 """
     _set_note(g, note, "Wan 5B loopable MP4 bumper")
     polish_video_graph(g)
-    _dump(WF / "wan-bumper-loop-lab-example.json", g)
+    _dump(lab_json("wan-bumper-loop-lab-example.json"), g)
 
     # 9. LTX ambient B-roll
-    g = _load(WF / "ltx-t2v-5s-lab-example.json")
+    g = _load(lab_json("ltx-t2v-5s-lab-example.json"))
     g["id"] = "ltx-broll-ambient-lab-example"
     g["revision"] = 1
     wire_ltx_audio(g)
@@ -868,7 +838,7 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
     enh = _node(g, "EZLTXPromptEnhance")
     enh["widgets_values"] = [
         prompt,
-        False,
+        True,
         "t2v",
         "5 seconds, 24 fps, locked camera B-roll",
         LTX_BROLL_AUDIO,
@@ -887,25 +857,23 @@ Locked camera, world audio muxed into MP4. Prefix `ez_broll_video`.
 Disclose AI-generated media. No score.
 """
     _set_note(g, note, "LTX-2.5 ambient B-roll AV ~5s")
-    _dump(WF / "ltx-broll-ambient-lab-example.json", g)
+    _dump(lab_json("ltx-broll-ambient-lab-example.json"), g)
 
-    board_shots = []
-    for i, (prefix, camera) in enumerate(STORYBOARD):
-        if i == 0:
-            line = f"Canonical plate. {camera} Unmarked surfaces, empty of lettering."
-        else:
-            line = f"Same rooftop and wizard. {camera} Unmarked surfaces, empty of lettering."
-        board_shots.append((prefix, f"{i + 1:02d}", line))
+    board_cards = load_view_pack("storyboard_6")
+    board_shots = [
+        (f"ez_board_{i:02d}", card["label"], card["shot"])
+        for i, card in enumerate(board_cards, start=1)
+    ]
     _klein_pack(
         stem="klein-storyboard-6up-lab-example",
         size=(768, 432),
         identity=CREATOR_IDENTITY,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         persist="view",
         shots=board_shots,
         note=f"""## klein-storyboard-6up-lab-example
 
-Six Klein 4B storyboard frames of one rooftop from new cameras (lock=view). Prefixes `ez_board_01`…`06`. Independent T2I, same seed, locked inventory. Turn Enhance off on IDENTITY to pin the bible.
+Six Klein 4B storyboard frames of **one scene** from new cameras (lock=view). Type any scene in IDENTITY. Prefixes `ez_board_01`…`06`. Independent T2I, same seed. Identity-mode enhance is on for the bible.
 """,
         description="Klein 4B six-frame storyboard pack, new cameras",
     )
@@ -923,7 +891,7 @@ def _klein_single(
     size_title: str | None = None,
     neg: str | None = None,
 ) -> None:
-    src = WF / "klein-still-hero-lab-example.json" if template == "hero" else WF / "klein-still-draft-lab-example.json"
+    src = lab_json("klein-still-hero-lab-example.json") if template == "hero" else lab_json("klein-still-draft-lab-example.json")
     g = _load(src)
     g["id"] = stem
     g["revision"] = 1
@@ -933,18 +901,20 @@ def _klein_single(
     save = _node(g, "SaveImage")
     save["widgets_values"] = [prefix]
     save["title"] = "Save PNG"
-    _node(g, "EZKleinPromptEnhance")["widgets_values"][0] = prompt
+    enh = _node(g, "EZKleinPromptEnhance")
+    enh["widgets_values"][0] = prompt
+    enh["widgets_values"][1] = True
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     if neg is not None:
         _set_neg(g, neg)
     _set_note(g, note, description)
     g["groups"] = [
-        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
-        _group(2, "PROMPT", 460, 40, 920, 400, "#3f789e"),
-        _group(3, "SETTINGS", 1420, 40, 380, 500, "#a1309b"),
-        _group(4, "OUTPUT", 1820, 40, 340, 430, "#3f789e"),
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 400, "#3f789e"),
+        _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
+        _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
     ]
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def _base_node(
@@ -983,7 +953,7 @@ def _klein_pack(
     description: str,
     cols: int = 2,
     identity: str = CREATOR_IDENTITY,
-    inventory: str = ROOFTOP_INVENTORY,
+    inventory: str = "",
     hint: str = "YouTube 16:9 still",
     neg: str | None = None,
     persist: str = "state",
@@ -997,7 +967,7 @@ def _klein_pack(
     if persist not in ("view", "state"):
         raise SystemExit(f"persist must be view or state, got {persist}")
     negative = neg if neg is not None else KLEIN_NEG_STILL
-    enhance_on = persist != "view"
+    enhance_on = True
     nodes: list[dict] = []
     links: list[list] = []
     link_id = 0
@@ -1060,10 +1030,10 @@ def _klein_pack(
         _base_node(
             4,
             "EZKleinPromptEnhance",
-            [40, 480],
+            [40, 510],
             [420, 420],
             "IDENTITY",
-            [identity, enhance_on, "t2i", hint, "none"],
+            [identity, enhance_on, "identity", hint, "none"],
             3,
             outputs=[out("prompt", "STRING", ident_links)],
         )
@@ -1072,7 +1042,7 @@ def _klein_pack(
         _base_node(
             5,
             "CLIPTextEncode",
-            [40, 940],
+            [40, 970],
             [420, 120],
             "Negative",
             [negative],
@@ -1085,7 +1055,7 @@ def _klein_pack(
         _base_node(
             6,
             "EmptyFlux2LatentImage",
-            [40, 1120],
+            [40, 1150],
             [280, 106],
             f"Size {size[0]}x{size[1]}",
             [size[0], size[1], 1],
@@ -1097,7 +1067,7 @@ def _klein_pack(
         _base_node(
             7,
             "Note",
-            [40, 1280],
+            [40, 1310],
             [420, 360],
             "Operator note",
             [note],
@@ -1126,7 +1096,7 @@ def _klein_pack(
             _base_node(
                 9,
                 "ReferenceLatent",
-                [40, 1680],
+                [40, 1710],
                 [280, 80],
                 "Negative + identity plate",
                 [],
@@ -1314,12 +1284,14 @@ def _klein_pack(
             dec_out.append(lid)
 
     groups = [
-        _group(1, "MODEL", 20, 40, 430, 430, "#3f789e"),
-        _group(2, "IDENTITY", 20, 450, 460, 500, "#a1309b"),
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "IDENTITY", 20, LAB_GROUP_Y0 + 430, 460, 500, "#a1309b"),
     ]
     for i, (_prefix, title, _shot) in enumerate(shots):
         y = shot_y0 + i * row_h
-        groups.append(_group(10 + i, f"SHOT {title}", 500, y - 20, 1840, 360, "#3f789e"))
+        groups.append(
+            _group(10 + i, f"SHOT {title}", 500, y - GROUP_TITLE_INSET, 1840, 360, "#3f789e")
+        )
     g = {
         "id": stem,
         "revision": 1,
@@ -1336,7 +1308,7 @@ def _klein_pack(
         },
         "version": 0.4,
     }
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def _wan_i2v(
@@ -1349,7 +1321,7 @@ def _wan_i2v(
     size: tuple[int, int] = (832, 480),
     length: int = 121,
 ) -> None:
-    g = _load(WF / "wan-i2v-5s-lab-example.json")
+    g = _load(lab_json("wan-i2v-5s-lab-example.json"))
     g["id"] = stem
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
@@ -1365,7 +1337,7 @@ def _wan_i2v(
     _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, True, "i2v", "5 seconds, 24 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     _set_note(g, note, description)
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def _wan_loop(
@@ -1376,7 +1348,7 @@ def _wan_loop(
     note: str,
     description: str,
 ) -> None:
-    g = _load(WF / "wan-gif-loop-lab-example.json")
+    g = _load(lab_json("wan-gif-loop-lab-example.json"))
     g["id"] = stem
     g["revision"] = 1
     vhs = _node(g, "VHS_VideoCombine")
@@ -1395,7 +1367,7 @@ def _wan_loop(
     _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, True, "i2v", "looping sticker, 12 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     _set_note(g, note, description)
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def _ltx_av(
@@ -1408,7 +1380,7 @@ def _ltx_av(
     mode: str,
     audio_hint: str,
 ) -> None:
-    src = WF / "ltx-i2v-5s-lab-example.json" if mode == "i2v" else WF / "ltx-t2v-5s-lab-example.json"
+    src = lab_json("ltx-i2v-5s-lab-example.json") if mode == "i2v" else lab_json("ltx-t2v-5s-lab-example.json")
     g = _load(src)
     g["id"] = stem
     g["revision"] = 1
@@ -1428,7 +1400,7 @@ def _ltx_av(
         ):
             n["widgets_values"] = [prompt]
     _set_note(g, note, description)
-    _dump(WF / f"{stem}.json", g)
+    _dump(lab_json(stem), g)
 
 
 def build_creator_toolkit_v2() -> None:
@@ -1442,7 +1414,7 @@ def build_creator_toolkit_v2() -> None:
         prompt=(
             f"{identity} Framed as a YouTube end-card plate: generous empty lower-right "
             "for a subscribe button later. Clean of burned-in text, logos, or UI chrome. "
-            "HD 3D game-engine pre-rendered cutscene 16:9."
+            "Photoreal still 16:9."
         ),
         note="""## klein-endcard-cta-lab-example
 
@@ -1459,7 +1431,7 @@ Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
         prefix="ez_quote_bg",
         prompt=(
             f"{identity} Square 1:1. Soft bokeh, quiet center so overlay text can sit later. "
-            "Empty of lettering. HD 3D game-engine pre-rendered cutscene quote-card background."
+            "Empty of lettering. Photoreal still quote-card background."
         ),
         note="""## klein-quote-bg-lab-example
 
@@ -1476,7 +1448,7 @@ Keep the center empty of detail; add the quote in your editor.
         prefix="ez_og",
         prompt=(
             f"{identity} Wide blog / Open Graph hero. Subject left-weighted, quiet right third "
-            "for a headline later. Clean of burned-in text. HD 3D game-engine pre-rendered cutscene ~1.9:1."
+            "for a headline later. Clean of burned-in text. Photoreal still ~1.9:1."
         ),
         note="""## klein-og-blog-lab-example
 
@@ -1511,7 +1483,7 @@ Swap the props in the prompt. Add show title in your editor.
         prefix="ez_banner",
         prompt=(
             f"{identity} Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band "
-            "for a name overlay. Empty of lettering. HD 3D game-engine pre-rendered cutscene ~3:1."
+            "for a name overlay. Empty of lettering. Photoreal still ~3:1."
         ),
         note="""## klein-banner-wide-lab-example
 
@@ -1587,134 +1559,109 @@ Swap the dish in the prompt; keep unmarked surfaces.
         neg=KLEIN_NEG_PHOTO,
     )
 
+    light_cards = load_view_pack("lighting_3")
     _klein_pack(
         stem="klein-lighting-trio-lab-example",
         size=(768, 432),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         shots=[
-            (
-                "ez_light_01",
-                "KEY",
-                "Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9.",
-            ),
-            (
-                "ez_light_02",
-                "WINDOW",
-                "Same rooftop and wizard. Soft overcast skylight, gentle falloff, cool shadows. Same camera.",
-            ),
-            (
-                "ez_light_03",
-                "NIGHT LAMP",
-                "Same rooftop and wizard at night under rooftop sodium and city neon. Same camera.",
-            ),
+            (f"ez_light_{i:02d}", card["label"], card["shot"])
+            for i, card in enumerate(light_cards, start=1)
         ],
         note=f"""## klein-lighting-trio-lab-example
 
-Same subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02–03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.
+Same subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02–03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.
 Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light.
 
 {ENHANCE_NOTE}
 """,
         description="Klein 4B three-light study of one subject",
     )
+    sheet_cards = load_view_pack("character_sheet")
+    sheet_prefixes = (
+        "ez_identity_front",
+        "ez_identity_threequarter",
+        "ez_identity_profile",
+    )
+    _klein_pack(
+        stem="klein-identity-sheet-lab-example",
+        size=(1280, 704),
+        identity=identity,
+        inventory="",
+        persist="view",
+        shots=[
+            (prefix, card["label"], card["shot"])
+            for prefix, card in zip(sheet_prefixes, sheet_cards, strict=True)
+        ],
+        note=f"""## klein-identity-sheet-lab-example
+
+Three-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.
+Prints ez_identity_front / ez_identity_threequarter / ez_identity_profile.
+I2V feeders stay 1280×704. Unload before LTX prints.
+
+Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+
+{ENHANCE_NOTE}
+""",
+        description="Klein 4B three-angle identity sheet 1280x704",
+    )
+    ident_path = lab_json("klein-identity-sheet-lab-example.json")
+    ident_graph = _load(ident_path)
+    ident_graph.setdefault("extra", {})["lab_identity"] = {"seed": 42, "enhance": True}
+    _dump(ident_path, ident_graph)
+    tod_cards = load_view_pack("time_of_day_4")
     _klein_pack(
         stem="klein-time-of-day-lab-example",
         size=(768, 432),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         shots=[
-            (
-                "ez_tod_01",
-                "DUSK",
-                "Canonical dusk plate, pink sky, city lamps just on. 24mm eye-level, YouTube 16:9.",
-            ),
-            (
-                "ez_tod_02",
-                "DAWN",
-                "Same rooftop and wizard. First blue dawn, cool air, empty terrace. Same camera.",
-            ),
-            (
-                "ez_tod_03",
-                "NOON",
-                "Same rooftop and wizard. Hard noon sun, short shadows. Same camera.",
-            ),
-            (
-                "ez_tod_04",
-                "NIGHT",
-                "Same rooftop and wizard at night. Warm tower glow. Same camera.",
-            ),
+            (f"ez_tod_{i:02d}", card["label"], card["shot"])
+            for i, card in enumerate(tod_cards, start=1)
         ],
         note=f"""## klein-time-of-day-lab-example
 
-Same place at dusk / dawn / noon / night (Klein 4B). SHOT DUSK is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass DUSK on a cold canvas.
+Same place at golden hour / dawn / noon / night (Klein 4B). Type any place in IDENTITY. SHOT GOLDEN is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass GOLDEN on a cold canvas.
 Prefixes `ez_tod_01`…`04`. Change only time of day.
 
 {ENHANCE_NOTE}
 """,
         description="Klein 4B time-of-day four-still pack",
     )
+    angle_cards = load_view_pack("camera_angles")
+    angle_prefixes = ("ez_angle_med", "ez_angle_wide", "ez_angle_close")
     _klein_pack(
         stem="klein-camera-angles-lab-example",
         size=(768, 432),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         persist="view",
         shots=[
-            (
-                "ez_angle_med",
-                "MEDIUM",
-                "35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9.",
-            ),
-            (
-                "ez_angle_wide",
-                "WIDE",
-                "24mm wide establishing of the same rooftop and wizard, lots of city and sky.",
-            ),
-            (
-                "ez_angle_close",
-                "CLOSE",
-                "50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials.",
-            ),
+            (prefix, card["label"], card["shot"])
+            for prefix, card in zip(angle_prefixes, angle_cards, strict=True)
         ],
         note=f"""## klein-camera-angles-lab-example
 
-Wide / medium / close of one subject (Klein 4B, lock=view). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed, locked inventory — new lens and framing, not copies of MEDIUM.
+Wide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed — new lens and framing, not copies of MEDIUM.
 
-Turn Enhance off on IDENTITY to pin the bible.
+Identity-mode enhance is on for the bible (camera-free).
 """,
         description="Klein 4B wide/medium/close angle pack, new cameras",
     )
+    mood_cards = load_view_pack("color_moods_4")
     _klein_pack(
         stem="klein-color-moods-lab-example",
         size=(768, 432),
         identity=identity,
-        inventory=ROOFTOP_INVENTORY,
+        inventory="",
         shots=[
-            (
-                "ez_mood_01",
-                "WARM",
-                "Canonical plate. Warm amber grade, golden sidelight. 24mm, YouTube 16:9.",
-            ),
-            (
-                "ez_mood_02",
-                "COOL",
-                "Same rooftop and wizard. Cool teal-and-steel grade, overcast. Same camera.",
-            ),
-            (
-                "ez_mood_03",
-                "MUTED",
-                "Same rooftop and wizard. Muted filmic grade, desaturated copper, soft contrast. Same camera.",
-            ),
-            (
-                "ez_mood_04",
-                "HIGH KEY",
-                "Same rooftop and wizard. High-key bright daylight, lifted shadows, clean whites. Same camera.",
-            ),
+            (f"ez_mood_{i:02d}", card["label"], card["shot"])
+            for i, card in enumerate(mood_cards, start=1)
         ],
         note=f"""## klein-color-moods-lab-example
 
-Four color moods, shared identity (Klein 4B). SHOT WARM is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass WARM on a cold canvas.
+Four color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass WARM on a cold canvas.
 Prefixes `ez_mood_01`…`04`. Change only grade / mood.
 
 {ENHANCE_NOTE}
@@ -1851,8 +1798,12 @@ def main() -> None:
     build_creator_toolkit_v2()
     for path in sorted(WF.rglob("*-lab-example.json")):
         graph = _load(path)
+        enable_lab_graph(graph)
         normalize_enhance_widgets(graph)
-        _dump(path, graph)
+        stamp_suite_graph(graph)
+        ensure_group_title_inset(graph)
+        path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+        print(f"wrote {path.relative_to(ROOT)}")
     print("done")
 
 

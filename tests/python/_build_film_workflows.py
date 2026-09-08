@@ -11,12 +11,16 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_layout import GROUP_TITLE_INSET, ensure_group_title_inset, group as _group
+from _lab_paths import lab_json
+from _stamp_app_mode import stamp_suite_graph
 from _wire_prompt_enhance import normalize_enhance_widgets
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
+from ez_film.nodes import FILM_DISCLOSURE  # noqa: E402
 from ez_film.shots import parse_shots_yaml  # noqa: E402
 
 WF = ROOT / "workflows"
@@ -26,9 +30,10 @@ LTX_CANVAS_LANDSCAPE = (
     "LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid)."
 )
 PREVIEW_BULLET = (
-    "After Queue, click **Save 90s film (MP4) — open node for preview** for an inline "
-    "preview of the stitched short. File: `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` "
-    "(container `/outputs`). Per-shot VHS nodes remain for inspection."
+    "The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` "
+    "(container `/outputs`). After Queue, click **Save 90s film (MP4) — open node for "
+    "preview** for an inline preview and download control. Per-shot VHS nodes remain "
+    "for inspection."
 )
 KLEIN_NEG_PHOTO = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
@@ -45,14 +50,14 @@ FILMS = (
         "gosee",
         "film-go-see-90s-run-lab-example",
         "go-see.shots.yaml",
-        "first-person running",
+        "first-person parkour",
         (
-            ("1", "Dawn rooftop", "run on wet tar", "next roof", "warehouse roof"),
-            ("2", "Warehouse → market", "stair", "alley / awning", "out to river"),
-            ("3", "River / forest", "stones", "bridge arch", "creek path"),
-            ("4", "Headland", "trees thin", "boulder", "generic lighthouse"),
-            ("5", "Wall / meadow", "granite steps", "dry-stone gap", "meadow"),
-            ("6", "Ridge hold", "slow to rail", "look", "quiet laugh"),
+            ("1", "Golden-hour tropical rooftops", "sprint + gap leap", "vault + wall-run", "drop to bay skybridge"),
+            ("2", "Waterfront maglev / bay skybridge", "spine sprint", "gantry leaps", "dive into gardens"),
+            ("3", "Hanging tropical gardens", "wall-run glass", "vault palm terraces", "water curtain to causeway"),
+            ("4", "Tropical storm causeway", "rain sprint", "leap a squall gap", "vault toward cliffs"),
+            ("5", "Coastal jungle ridge", "ridge sprint", "slide a root arch", "climb-run to overlook"),
+            ("6", "Warm-night bay overlook", "last sprint", "leap to rail", "hold + laugh"),
         ),
     ),
     (
@@ -97,6 +102,7 @@ ID_LTX_EMPTY_AUDIO = 105
 ID_UNLOAD = 50
 ID_MARKDOWN = 12
 ID_CONCAT = 900
+ID_DISCLOSURE = 901
 SHOT_ID_BASE = 200
 SHOT_ID_STRIDE = 20
 
@@ -111,6 +117,8 @@ def _load(path: Path) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    stamp_suite_graph(graph)
+    ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
@@ -132,17 +140,6 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
         for b in boxes[i + 1 :]:
             if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
                 raise SystemExit(f"overlap {a[0]}({a[1]}) vs {b[0]}({b[1]})")
-
-
-def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: str) -> dict:
-    return {
-        "id": gid,
-        "title": title,
-        "bounding": [x, y, w, h],
-        "color": color,
-        "font_size": 24,
-        "flags": {},
-    }
 
 
 def _inp(name: str, typ: str, link: int | None = None, *, shape: int | None = None, widget: str | None = None) -> dict:
@@ -245,17 +242,17 @@ def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str
 {PREVIEW_BULLET}
 
 One-click 90s film ({label}): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
-Models: Klein 4B distilled FP8 (identity, 4-step, Enhance **off**) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
+Models: Klein 4B distilled FP8 (identity, 4-step, Enhance **on**, identity mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
 LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
-3. Open **Save 90s film (MP4) — open node for preview**. File: `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4`.
+3. The MP4 is already on disk at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4`. Open **Save 90s film (MP4) — open node for preview** to watch or download it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
 Do not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.
-Canned Klein / LTX prompts are model-native; leave Enhance **off** to pin them.
+Prompt enhance is on by default. After Queue, each Enhance node shows the CLIP string used. Turn Enhance off to pin widget text.
 """
 
 
@@ -279,13 +276,24 @@ def _shot_nodes(index: int, slug: str, prompt: str, prefix: str, seed: int) -> l
     nid_vhs = base + 8
     nid_batch = base + 9
     nid_save = base + 10
+    nid_enh = base + 11
     title = f"b{(index // 3) + 1} s{(index % 3) + 1} LTX I2V"
     return [
         _mk(
+            nid_enh,
+            "EZLTXPromptEnhance",
+            [ox, oy],
+            [420, 280],
+            f"{title} enhance",
+            [prompt, True, "i2v", "5 seconds, 24 fps", "", "none"],
+            [],
+            [_out("prompt", "STRING", 0)],
+        ),
+        _mk(
             nid_pos,
             "CLIPTextEncode",
-            [ox, oy],
-            [420, 180],
+            [ox, oy + 320],
+            [420, 160],
             title,
             [prompt],
             [_inp("clip", "CLIP"), _inp("text", "STRING", widget="text")],
@@ -404,7 +412,7 @@ def _shot_nodes(index: int, slug: str, prompt: str, prefix: str, seed: int) -> l
         _mk(
             nid_batch,
             "ImageFromBatch",
-            [ox, oy + 220],
+            [ox + 820, oy + 430],
             [240, 80],
             "Last frame",
             [119, 1],
@@ -415,8 +423,8 @@ def _shot_nodes(index: int, slug: str, prompt: str, prefix: str, seed: int) -> l
         _mk(
             nid_save,
             "SaveImage",
-            [ox, oy + 340],
-            [280, 270],
+            [ox + 820, oy + 550],
+            [280, 200],
             "Save last frame",
             [f"{prefix}_last"],
             [_inp("images", "IMAGE")],
@@ -435,7 +443,7 @@ def build_one_click_film(
 ) -> dict:
     parsed = parse_shots_yaml((SHORTS / yaml_name).read_text(encoding="utf-8"))
     identity = parsed["identity"]
-    graph = copy.deepcopy(_load(WF / "klein-still-draft-lab-example.json"))
+    graph = copy.deepcopy(_load(lab_json("klein-still-draft-lab-example.json")))
     graph["id"] = stem
     graph["revision"] = int(graph.get("revision", 1)) + 1
     graph["links"] = [list(link) for link in graph.get("links") or []]
@@ -457,7 +465,7 @@ def build_one_click_film(
             node["title"] = "Operator note — one-click 90s film"
             node["size"] = [960, 280]
         if node.get("type") == "EZKleinPromptEnhance":
-            node["widgets_values"] = [identity, False, "t2i", "YouTube 16:9 still", "none"]
+            node["widgets_values"] = [identity, True, "identity", "YouTube 16:9 still", "none"]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
             node["widgets_values"] = [identity]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":
@@ -544,7 +552,8 @@ def build_one_click_film(
         [_out("Latent", "LATENT", 0)],
     )
     concat_inputs = [
-        _inp(f"shot_{i:02d}", "VHS_FILENAMES") for i in range(1, 19)
+        *(_inp(f"shot_{i:02d}", "VHS_FILENAMES") for i in range(1, 19)),
+        _inp("disclosure", "STRING", widget="disclosure"),
     ]
     concat = _mk(
         ID_CONCAT,
@@ -555,6 +564,16 @@ def build_one_click_film(
         [film, 90.0],
         concat_inputs,
         [_out("path", "STRING", 0)],
+    )
+    disclosure = _mk(
+        ID_DISCLOSURE,
+        "EZFilmDisclosure",
+        [BEAT_X + 480, BEAT_Y0 + 6 * BEAT_DY + 40],
+        [420, 120],
+        "LTX AI-media disclosure (end-card)",
+        [""],
+        [],
+        [_out("text", "STRING", 0)],
     )
 
     shot_nodes: list[dict] = []
@@ -575,6 +594,7 @@ def build_one_click_film(
             ltx_empty,
             concat,
             *shot_nodes,
+            disclosure,
         ]
     )
 
@@ -589,6 +609,7 @@ def build_one_click_film(
         base = SHOT_ID_BASE + index * SHOT_ID_STRIDE
         pos = by_id[base]
         i2v = by_id[base + 1]
+        enh = by_id[base + 11]
         cond = by_id[base + 2]
         cat = by_id[base + 3]
         ks = by_id[base + 4]
@@ -599,6 +620,7 @@ def build_one_click_film(
         batch = by_id[base + 9]
         save = by_id[base + 10]
         _add_link(graph, ltx_clip, 0, pos, "clip", "CLIP")
+        _add_link(graph, enh, 0, pos, "text", "STRING")
         _add_link(graph, pos, 0, i2v, "positive", "CONDITIONING")
         _add_link(graph, ltx_neg, 0, i2v, "negative", "CONDITIONING")
         _add_link(graph, ltx_video_vae, 0, i2v, "vae", "VAE")
@@ -625,11 +647,12 @@ def build_one_click_film(
         _add_link(graph, batch, 0, save, "images", "IMAGE")
         _add_link(graph, vhs, 0, concat, f"shot_{index + 1:02d}", "VHS_FILENAMES")
         prev_last = batch
+    _add_link(graph, disclosure, 0, concat, "disclosure", "STRING")
 
     graph["last_node_id"] = max(n["id"] for n in graph["nodes"])
     groups = [
         _group(1, "1. Identity (Klein)", 20, 20, 2100, 1100, "#3f789e"),
-        _group(2, "2. LTX models", 20, 1140, 600, 820, "#a1309b"),
+        _group(2, "2. LTX models", 20, 1180 - GROUP_TITLE_INSET, 600, 820, "#a1309b"),
     ]
     for beat in range(6):
         groups.append(
@@ -637,7 +660,7 @@ def build_one_click_film(
                 3 + beat,
                 f"{3 + beat}. Beat {beat + 1} (3 × 5.00s LTX)",
                 BEAT_X - 20,
-                BEAT_Y0 + beat * BEAT_DY - 20,
+                BEAT_Y0 + beat * BEAT_DY - GROUP_TITLE_INSET,
                 3 * SHOT_DX + 40,
                 BEAT_DY,
                 "#3f789e" if beat % 2 == 0 else "#a1309b",
@@ -648,7 +671,7 @@ def build_one_click_film(
             9,
             "9. Publish 90s MP4",
             BEAT_X - 20,
-            BEAT_Y0 + 6 * BEAT_DY,
+            BEAT_Y0 + 6 * BEAT_DY + 40 - GROUP_TITLE_INSET,
             2000,
             280,
             "#3f789e",
@@ -663,6 +686,14 @@ def build_one_click_film(
         "lab_slug": slug,
         "lab_ltx_av": True,
         "lab_one_click": True,
+        "lab_disclosure": FILM_DISCLOSURE,
+        "lab_dfr": {
+            "print": "ltx",
+            "note": (
+                "Two-stage DFR lives in Comfy Templates → LTX-2.5 (not vendored). "
+                "YAML print: dfr selects that path. Lab printers stay 5.00s / 1280×704 / 1+8n."
+            ),
+        },
     }
     graph["version"] = 0.4
     normalize_enhance_widgets(graph)
@@ -672,7 +703,7 @@ def build_one_click_film(
 def build_all_films() -> None:
     for film, slug, stem, yaml_name, label, beats in FILMS:
         graph = build_one_click_film(film, slug, stem, yaml_name, label, beats)
-        _dump(SHORTS / f"{stem}.json", graph)
+        _dump(lab_json(stem), graph)
 
 
 if __name__ == "__main__":

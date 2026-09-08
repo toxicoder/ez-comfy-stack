@@ -9,7 +9,9 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 **What's on this page**
 
 - Default cache location and layout
+- Host persistence (weights, media, Comfy `user/`, operator custom nodes)
 - Download utilities, resume / stuck-partial recovery, and readiness checks
+- Pointer: `--tier` is a pack id ([Download tiers](download-tiers.md))
 - Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
 - Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
 - Sharing with nvidia-dgx-spark-lab
@@ -30,9 +32,26 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | --- | --- | --- |
 | **GHCR image** | ComfyUI + PyTorch | Klein / Wan / LTX weights |
 | **MODELS_DIR** | Weights + `comfy/` relative symlinks | The Comfy venv |
-| **comfy-state volume** | Comfy install, custom nodes | Host PNGs/MP4s (`COMFY_OUTPUT_DIR`) |
+| **comfy-state volume** | Comfy install, lab `ez_*` custom nodes | Host PNGs/MP4s, start images, Comfy `user/`, operator `_user` node packs (`COMFY_OUTPUT_DIR`) |
 
-`cleanup` (type `DELETE`) removes **comfy-state only**. Concepts: [Hardware, memory, and safety](learn/hardware.md).
+`cleanup` (type `DELETE`) removes **comfy-state only**. Generated media, LoadImage start frames (`${COMFY_OUTPUT_DIR}/input`), Comfy user workflows (`${COMFY_OUTPUT_DIR}/comfy-user`), and operator custom nodes (`${COMFY_OUTPUT_DIR}/custom-nodes-user`) stay on the host. Concepts: [Hardware, memory, and safety](learn/hardware.md).
+
+### Persistence (survives stop / image pull)
+
+| What | Host | Container | On `start` |
+| --- | --- | --- | --- |
+| Model weights | `${MODELS_DIR:-/mnt/models}` | `/models` | persist |
+| Generated PNG/MP4/audio | `${COMFY_OUTPUT_DIR:-/mnt/comfy-output}` | `/outputs` | persist |
+| LoadImage inputs | `${COMFY_OUTPUT_DIR}/input` | `/inputs` | persist |
+| Comfy `user/` (sidebar, history) | `${COMFY_OUTPUT_DIR}/comfy-user` | `/comfy-state/ComfyUI/user` | persist |
+| Live lab graphs | `…/comfy-user/default/workflows/_lab/` | same | **overwrite** from repo `workflows/` (or `workflows/_lab/` when present) |
+| Live operator graphs | `…/comfy-user/default/workflows/_user/` | same | **never touch** |
+| Other files under live workflows | same tree | same | **never touch** |
+| Lab custom nodes `ez_*` | git `custom_nodes/` | `$COMFY_HOME/custom_nodes/ez_*` | overwrite |
+| Operator custom nodes | `${COMFY_OUTPUT_DIR}/custom-nodes-user` | `$COMFY_HOME/custom_nodes/_user` | persist (pin refresh excludes this tree) |
+| Comfy install + venv | Docker volume `ez-comfy-state` | `/comfy-state` | persist until `cleanup` |
+
+`seed_from_prebuilt` already skips `user/`, `input/`, `output/`, `temp/`, and `extra_model_paths.yaml`. It also skips `custom_nodes/_user/` so a pin refresh cannot delete Manager-installed packs that live on the host bind. Lab packs named `ez_*` still overwrite from `/opt/ez-comfy/custom_nodes`.
 
 ---
 
@@ -94,7 +113,7 @@ ${MODELS_DIR}/
   hub/                  # HF cache (optional)
 ```
 
-When the default pack moves (LTX 2.3 → 2.5 already happened), **reap** the old tree — do not wait for disk-full:
+Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) are **not** `reap-models` — use [disk-wizard](disk-wizard.md) (`--plan` first). When the default pack moves (LTX 2.3 → 2.5 already happened), **reap** the old tree — do not wait for disk-full:
 
 ```bash
 ./scripts/manage.sh models-status
@@ -149,6 +168,8 @@ flowchart TB
 
 ## Download
 
+`download-models` has **no** `--tier`. It always pulls the default still + Wan 5B + LTX-2.5 set. On every other downloader, `--tier` is **which pack**, not a global quality ladder. `--limit` is Mbps. Full flag map and live builders: [Download tiers](download-tiers.md).
+
 ```bash
 ./scripts/manage.sh download-models
 # Exits non-zero until every lab basename under MODELS_DIR/comfy is present
@@ -156,21 +177,20 @@ flowchart TB
 # partial cannot cache-hit skip the VAE.
 ```
 
-Or per utility:
+```ezcmd
+id: download-models
+```
+
+Per-utility status (read-only) still uses the default pack ids:
 
 ```bash
 ./scripts/utilities/download-image.sh status --tier fast --json
 ./scripts/utilities/download-wan.sh status --tier 5b --json
 ./scripts/utilities/download-ltx.sh status --tier 2.5 --json
-./scripts/utilities/download-image.sh run --tier fast
-./scripts/utilities/download-wan.sh run --tier 5b
-./scripts/utilities/download-ltx.sh run --tier 2.5
 ./scripts/utilities/download-llm.sh run
-./scripts/utilities/download-music.sh status --tier turbo --json
-./scripts/utilities/download-music.sh run --tier turbo
 ```
 
-`--tier fast` also pulls Klein companions (`te` + `vae`). Optional stills: `--tier nvfp4` / `--tier base` / `--tier zimage`. Optional motion: `download-wan.sh run --tier a14b`. Optional LTX fallback: `download-ltx.sh run --tier 2.3`.
+`--tier fast` also pulls Klein companions (`te` + `vae`). Opt-in packs (Wan A14B, Fun InP, LTX 2.3, music, podcast, 3D, …) live on [Download tiers](download-tiers.md).
 
 Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`):
 
@@ -223,7 +243,7 @@ Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `workflows/shorts/*.json` (name pattern **`*-lab-example.json`**). Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
+Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Name pattern **`*-lab-example.json`**. App Mode graphs land as **`*-lab-example.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
 
 | Graph | Notes |
 | --- | --- |
@@ -232,7 +252,7 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
-| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills of one cabin from new cameras; locked inventory |
+| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (outside through rooms, drone, day/night) |
 | `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |
 | `wan-t2v-5s-lab-example.json` | Wan 5B T2V smoke |
 | `wan-i2v-shot-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |
@@ -240,14 +260,14 @@ Seeded into Comfy `user/default/workflows/` from host `workflows/*.json` and `wo
 | `ltx-i2v-5s-lab-example.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
 | `ltx-t2v-5s-lab-example.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
 | `ltx-i2v-shot-lab-example.json` | 5.00 s LTX I2V print + last-frame SaveImage |
-| `shorts/film-*-90s-*-lab-example.json` | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](shorts.md)) |
+| `_lab/shorts/film-*-90s-*-lab-example.json` | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](shorts.md)) |
 | `klein-shorts-still-lab-example.json` | Vertical 9:16 Shorts still |
 | `wan-shorts-i2v-lab-example.json` | Vertical silent Shorts I2V |
 | `ltx-shorts-i2v-lab-example.json` | Vertical AV Shorts I2V |
 | `klein-thumbnail-lab-example.json` | YouTube thumbnail still |
 | `klein-product-packshot-lab-example.json` | Product packshot 1:1 |
 | `klein-before-after-lab-example.json` | Before/after still pair |
-| `klein-style-lock-lab-example.json` | Four style-locked stills |
+| `klein-style-lock-lab-example.json` | Four stills of one penthouse from new cameras; locked inventory |
 | `wan-bumper-loop-lab-example.json` | Loopable MP4 bumper |
 | `ltx-broll-ambient-lab-example.json` | Ambient B-roll AV ~5 s |
 | `klein-storyboard-6up-lab-example.json` | Six storyboard frames |

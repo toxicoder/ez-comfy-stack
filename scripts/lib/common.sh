@@ -657,7 +657,14 @@ ensure_models_dir() {
 #######################################
 ensure_comfy_output_dir() {
   local dir="${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
-  ensure_writable_host_dir COMFY_OUTPUT_DIR "${dir}"
+  ensure_writable_host_dir COMFY_OUTPUT_DIR "${dir}" || return 1
+  # Start images, Comfy user/ (history, operator workflows), and operator
+  # custom-node packs live beside generated PNG/MP4 so they survive image
+  # pulls, pin refresh, and volume cleanup.
+  mkdir -p \
+    "${dir}/input" \
+    "${dir}/custom-nodes-user" \
+    "${dir}/comfy-user/default/workflows/_user" || return 1
 }
 
 #######################################
@@ -1004,12 +1011,14 @@ hf_auth_identity() {
 # Outputs:
 #   warn on missing target or fallback to absolute
 # Returns:
-#   0 on success; 1 if target missing or link creation fails
+#   0 if the dest is the desired relative link, was created, or is a usable
+#   regular file; 1 if the target is missing, dest is missing, or dest is an
+#   absolute/broken symlink that could not be replaced
 #######################################
 ln_sfn_relative() {
   local target="${1:?ln_sfn_relative requires target}"
   local linkpath="${2:?ln_sfn_relative requires link path}"
-  local linkdir rel
+  local linkdir rel current err
   linkdir="$(dirname "${linkpath}")"
   mkdir -p "${linkdir}" || return 1
   if [[ ! -e ${target} ]]; then
@@ -1026,7 +1035,21 @@ ln_sfn_relative() {
     rel="${target}"
     warn "ln_sfn_relative: no relpath support; using absolute target (container-fragile)"
   fi
-  ln -sfn "${rel}" "${linkpath}"
+  if [[ -L ${linkpath} ]]; then
+    current="$(readlink "${linkpath}")"
+    if [[ ${current} == "${rel}" ]]; then
+      return 0
+    fi
+  fi
+  if err="$(ln -sfn "${rel}" "${linkpath}" 2>&1)"; then
+    return 0
+  fi
+  # Regular file at dest is still visible in the container bind-mount.
+  if [[ -e ${linkpath} && ! -L ${linkpath} ]]; then
+    return 0
+  fi
+  warn "ln_sfn_relative: ${err}"
+  return 1
 }
 
 #######################################

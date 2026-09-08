@@ -17,6 +17,7 @@ if str(CUSTOM) not in sys.path:
 import ez_prompt_enhance  # noqa: E402
 from ez_prompt_enhance import client  # noqa: E402
 from ez_prompt_enhance.nodes import (  # noqa: E402
+    EZAceStepPromptEnhance,
     EZKleinPromptEnhance,
     EZLTXPromptEnhance,
     EZPromptJoin,
@@ -70,6 +71,26 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "first frame" in ltx_i2v.lower()
     assert "camera motion" in ltx_i2v.lower()
     assert "new objects" in ltx_i2v.lower()
+    ident = client.load_system_prompt("klein_identity")
+    assert "camera-free" in ident.lower()
+    assert "lens" in ident.lower()
+    assert "150" in ident
+    assert "invent" in ident.lower()
+    assert "visual-style" in ident.lower()
+    ident_l = ident.lower()
+    assert "surround" in ident_l or "landscape" in ident_l
+    assert "fixture" in ident_l or "lantern" in ident_l
+    assert "adjacen" in ident_l
+    flf = client.load_system_prompt("wan_flf")
+    assert "first-last" in flf.lower() or "first last" in flf.lower() or "end frame" in flf.lower()
+    assert "audio" in flf.lower()
+    vace = client.load_system_prompt("wan_vace")
+    assert "join" in vace.lower() or "seam" in vace.lower()
+    ace_tags = client.load_system_prompt("ace_tags")
+    assert "genre first" in ace_tags.lower() or "genre is always first" in ace_tags.lower()
+    ace_inst = client.load_system_prompt("ace_instrumental")
+    assert "instrumental" in ace_inst.lower()
+    assert "no vocals" in ace_inst.lower()
 
 
 def test_style_catalog_is_fifty_unique() -> None:
@@ -151,14 +172,88 @@ def test_apply_style_to_prompt_overrides_lab_3d() -> None:
     assert "japanese anime" in anime.lower() or "cel-shaded" in anime.lower()
     assert "game-engine" not in anime.lower()
     assert client.apply_style_to_prompt(src, "none") == src
+    photo = "A photoreal still of a tropical rooftop."
+    painted = client.apply_style_to_prompt(photo, "watercolor_illustration")
+    assert "photoreal still" not in painted.lower()
+    assert "transparent watercolor" in painted.lower() or "wet-into-wet" in painted.lower()
 
 
 def test_strip_fences_quotes_and_think() -> None:
-    fenced = "```text\nA cyberpunk tech wizard stands on a rooftop terrace.\n```"
-    assert client.strip_model_wrapping(fenced) == "A cyberpunk tech wizard stands on a rooftop terrace."
-    assert client.strip_model_wrapping('"A cyberpunk tech wizard."') == "A cyberpunk tech wizard."
-    think = "<think>plan the shot</think>\nA cyberpunk tech wizard stands on a rooftop terrace."
-    assert client.strip_model_wrapping(think) == "A cyberpunk tech wizard stands on a rooftop terrace."
+    fenced = "```text\nA techno wizard stands on a rooftop terrace.\n```"
+    assert client.strip_model_wrapping(fenced) == "A techno wizard stands on a rooftop terrace."
+    assert client.strip_model_wrapping('"A techno wizard."') == "A techno wizard."
+    think = "<think>plan the shot</think>\nA techno wizard stands on a rooftop terrace."
+    assert client.strip_model_wrapping(think) == "A techno wizard stands on a rooftop terrace."
+
+
+def test_view_packs_are_camera_roles_without_lab_identity() -> None:
+    nouns = (
+        "penthouse",
+        "sand linen",
+        "techno wizard",
+        "data-staff",
+        "three-bay",
+        "linen sofa",
+    )
+    names = (
+        "place_10",
+        "place_4",
+        "character_sheet",
+        "storyboard_6",
+        "camera_angles",
+        "lighting_3",
+        "time_of_day_4",
+        "color_moods_4",
+    )
+    for name in names:
+        pack = client.load_view_pack(name)
+        assert pack, name
+        for card in pack:
+            blob = f"{card['label']} {card['shot']}".lower()
+            for noun in nouns:
+                assert noun not in blob, (name, noun, card["label"])
+    pack10 = client.load_view_pack("place_10")
+    assert len(pack10) == 10
+    labels = [card["label"] for card in pack10]
+    assert labels == [
+        "01 exterior",
+        "02 entrance",
+        "03 inside",
+        "04 lounge",
+        "05 kitchen",
+        "06 bath",
+        "07 bedroom",
+        "08 drone",
+        "09 day",
+        "10 night",
+    ]
+    blobs = {card["label"]: card["shot"].lower() for card in pack10}
+    assert "ground-level" in blobs["01 exterior"] and "dusk" in blobs["01 exterior"]
+    assert "entrance" in blobs["02 entrance"] and "way in" in blobs["02 entrance"]
+    assert "just inside" in blobs["03 inside"]
+    assert "lounging" in blobs["04 lounge"] and "seating" in blobs["04 lounge"]
+    assert "kitchen" in blobs["05 kitchen"] and "work surface" in blobs["05 kitchen"]
+    assert "bathroom" in blobs["06 bath"] or "bathing" in blobs["06 bath"]
+    assert "bedroom" in blobs["07 bedroom"] and "bedding" in blobs["07 bedroom"]
+    assert "overhead" in blobs["08 drone"] or "drone" in blobs["08 drone"]
+    assert "daylight" in blobs["09 day"]
+    assert "night" in blobs["10 night"] and "lamps" in blobs["10 night"]
+    assert blobs["01 exterior"] != blobs["02 entrance"]
+    assert blobs["04 lounge"] != blobs["05 kitchen"]
+    assert blobs["09 day"] != blobs["10 night"]
+
+
+def test_studio_app_chrome_pack_exists() -> None:
+    pack = ROOT / "custom_nodes" / "ez_studio_app"
+    js = pack / "js" / "ez_studio_app.js"
+    init = (pack / "__init__.py").read_text(encoding="utf-8")
+    body = js.read_text(encoding="utf-8")
+    assert "WEB_DIRECTORY" in init
+    assert "ez_studio_app.chrome" in body
+    assert "Rewrite prompt" in body
+    assert "lab_app_mode" in body
+    assert "execution_start" in body
+    assert "SaveImage" in body
 
 
 def test_web_directory_and_preview_js() -> None:
@@ -169,6 +264,10 @@ def test_web_directory_and_preview_js() -> None:
     assert "EZKleinPromptEnhance" in body
     assert "EZWanPromptEnhance" in body
     assert "EZLTXPromptEnhance" in body
+    assert "EZAceStepPromptEnhance" in body
+    assert "EZRapLyrics" in body
+    assert "EZPodcastScript" in body
+    assert "onNodeCreated" in body
     assert "CLIP prompt" in body
     assert "Enhance status" in body
     assert "passthrough" in body
@@ -274,10 +373,10 @@ def test_success_strips_fences() -> None:
     with patch.object(
         client,
         "complete",
-        return_value=("A HD 3D game-engine pre-rendered cutscene still of a cyberpunk tech wizard.", None),
+        return_value=("A photoreal still of a techno wizard.", None),
     ) as complete:
         out = client.enhance_prompt("sys", "hero still", enhance=True, fallback="hero still")
-    assert out.text == "A HD 3D game-engine pre-rendered cutscene still of a cyberpunk tech wizard."
+    assert out.text == "A photoreal still of a techno wizard."
     assert out.reason is None
     assert out.preview == out.text
     complete.assert_called_once()
@@ -302,19 +401,20 @@ def test_n_gpu_layers_refused_without_allow(monkeypatch: pytest.MonkeyPatch) -> 
 
 
 def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
-    wf = ROOT / "workflows"
-    draft = json.loads((wf / "klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
-    hero = json.loads((wf / "klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
+    from _lab_paths import lab_json
+
+    draft = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
+    hero = json.loads(lab_json("klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
     klein_d = next(n for n in draft["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     klein_h = next(n for n in hero["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein_d["widgets_values"][0] == klein_h["widgets_values"][0]
-    assert klein_d["widgets_values"][1] is False
-    assert klein_h["widgets_values"][1] is False
+    assert klein_d["widgets_values"][1] is True
+    assert klein_h["widgets_values"][1] is True
     assert klein_d["widgets_values"][-1] == "none"
-    wan_t = json.loads((wf / "wan-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    wan_i = json.loads((wf / "wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    ltx_t = json.loads((wf / "ltx-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    ltx_i = json.loads((wf / "ltx-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    wan_t = json.loads(lab_json("wan-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    wan_i = json.loads(lab_json("wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    ltx_t = json.loads(lab_json("ltx-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    ltx_i = json.loads(lab_json("ltx-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
     wan_tp = next(n for n in wan_t["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"][0]
     wan_ip = next(n for n in wan_i["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"][0]
     ltx_tp = next(n for n in ltx_t["nodes"] if n.get("type") == "EZLTXPromptEnhance")["widgets_values"][0]
@@ -335,38 +435,52 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
 def test_ez_prompt_join_identity_and_shot() -> None:
     join = EZPromptJoin()
     view = join.run("Cedar house on a still lake.", "Golden-hour facade, 24mm.")
-    assert view[0].startswith("Cedar house on a still lake.")
+    assert view[0].startswith("Golden-hour facade, 24mm.")
+    assert "Cedar house on a still lake." in view[0]
     assert "different camera" in view[0]
-    assert view[0].endswith("Golden-hour facade, 24mm.")
-    assert join.run("  House.  ", "  Dusk deck.  ")[0].endswith("Dusk deck.")
+    assert "walkthrough" in view[0]
+    assert "Same building" in view[0]
+    assert "furniture placement" in view[0]
+    assert "sky" in view[0]
+    assert "background" in view[0]
+    trimmed = join.run("  House.  ", "  Dusk deck.  ")[0]
+    assert trimmed.startswith("Dusk deck.")
+    assert "House." in trimmed
     only = join.run("Identity only.", "")
-    assert "Identity only." in only[0]
+    assert only[0].startswith("Identity only.")
     assert "different camera" in only[0]
-    assert join.run("", "Shot only.")[0].endswith("Shot only.")
+    shot_only = join.run("", "Shot only.")[0]
+    assert shot_only.startswith("Shot only.")
+    assert "different camera" in shot_only
     assert join.run("  ", "  ") == ("",)
     locked = join.run("Cabin.", "Dawn deck.", "cedar siding, hip roof")
+    assert locked[0].startswith("Dawn deck.")
+    assert "Cabin." in locked[0]
     assert "Locked inventory (do not change): cedar siding, hip roof." in locked[0]
     assert "different camera" in locked[0]
-    assert locked[0].endswith("Dawn deck.")
+    assert locked[0].endswith("cedar siding, hip roof.")
     state = join.run("Cabin.", "Warm key.", "mug", "state")
+    assert state[0].startswith("Cabin.")
     assert "camera framing" in state[0]
     assert "The shot names the only change." in state[0]
     assert "mug" in state[0]
+    assert state[0].endswith("Warm key.")
     types = EZPromptJoin.INPUT_TYPES()["required"]["lock"][0]
     assert types[0] == "view"
     assert "state" in types
 
 
 def test_app_lab_graphs_wire_join_and_enhance() -> None:
-    wf = ROOT / "workflows"
-    still = json.loads((wf / "klein-still-daily-lab-example.json").read_text(encoding="utf-8"))
-    gif = json.loads((wf / "wan-gif-loop-lab-example.json").read_text(encoding="utf-8"))
-    house = json.loads((wf / "klein-dream-house-lab-example.json").read_text(encoding="utf-8"))
+    from _lab_paths import lab_json
+
+    still = json.loads(lab_json("klein-still-daily-lab-example.json").read_text(encoding="utf-8"))
+    gif = json.loads(lab_json("wan-gif-loop-lab-example.json").read_text(encoding="utf-8"))
+    house = json.loads(lab_json("klein-dream-house-lab-example.json").read_text(encoding="utf-8"))
     klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein["widgets_values"][1] is True
     assert klein["widgets_values"][-1] == "none"
-    assert "HD 3D game-engine pre-rendered cutscene still" in klein["widgets_values"][0]
-    assert "tech wizard" in klein["widgets_values"][0]
+    assert "photoreal still" in klein["widgets_values"][0]
+    assert "techno wizard" in klein["widgets_values"][0]
     wan = next(n for n in gif["nodes"] if n.get("type") == "EZWanPromptEnhance")
     assert wan["widgets_values"][2] == "i2v"
     motion = wan["widgets_values"][0].lower()
@@ -375,20 +489,25 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     ident = next(n for n in house["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     ident_text = ident["widgets_values"][0]
     ident_l = ident_text.lower()
-    assert "cedar" in ident_l
-    assert "lake" in ident_l
-    assert "compact" in ident_l
-    assert "single-story" in ident_l
-    assert "hip" in ident_l
-    assert "chimney" in ident_l
-    assert "two-bay" in ident_l
-    assert "decks" in ident_l
-    assert "gravel" in ident_l
+    assert "photoreal still" in ident_l
+    assert "warm-glass" in ident_l
+    assert "crown penthouse" in ident_l
+    assert "wraparound terrace" in ident_l
+    assert "three-bay" in ident_l
+    assert "teak" in ident_l
+    assert "fern" in ident_l or "living wall" in ident_l
+    assert "coral-teal" in ident_l
+    assert "lounge" in ident_l
+    assert "lantern" in ident_l or "path light" in ident_l
+    assert "bay" in ident_l
     assert "24mm" not in ident_l
     assert "golden-hour" not in ident_l and "golden hour" not in ident_l
+    assert "cedar" not in ident_l
+    assert "cabin" not in ident_l
+    assert "lake" not in ident_l
     assert "no logos, no text" not in ident_text
-    assert ident["widgets_values"][1] is False
-    assert ident["widgets_values"][2] == "t2i"
+    assert ident["widgets_values"][1] is True
+    assert ident["widgets_values"][2] == "identity"
     assert ident["widgets_values"][3] == "Instagram 4:5 still"
     assert ident["widgets_values"][4] == "none"
     joins = [n for n in house["nodes"] if n.get("type") == "EZPromptJoin"]
@@ -407,37 +526,46 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         "glass box",
         "outdoor kitchen",
         "outdoor tub",
+        "cedar",
+        "alpine",
+        "gravel",
+        "chimney",
+        "hip roof",
+        "live-action",
+    )
+    hidden_nouns = (
+        "penthouse",
+        "sand linen",
+        "techno wizard",
+        "data-staff",
+        "three-bay",
+        "linen sofa",
+        "stone tub",
     )
     inventories = set()
-    for join in sorted(joins, key=lambda n: n["id"]):
+    assert "linen sofa" in ident_l
+    for i, join in enumerate(sorted(joins, key=lambda n: n["id"])):
         shot = join["widgets_values"][0]
         inventory = join["widgets_values"][1]
         lock = join["widgets_values"][2]
         inventories.add(inventory)
         assert lock == "view"
-        assert "linen sofa" in inventory
-        assert "island" in inventory
-        assert "dining table" in inventory
-        assert "bedding" in inventory
-        assert "tub" in inventory
-        assert "deck chairs" in inventory or "cedar deck" in inventory
-        assert "same" in shot.lower() and "cabin" in shot.lower()
+        assert inventory.strip() == ""
+        shot_l = shot.lower()
+        assert not any(noun in shot_l for noun in hidden_nouns)
         joined = client.join_prompt(ident_text, shot, inventory, lock)
-        assert len(joined.split()) <= 170
-        title = join.get("title") or ""
-        if "01" in title:
-            assert "through" in shot.lower() or "shows the linen sofa" in shot.lower()
-        if any(k in title for k in ("03 living", "04 kitchen", "05 dining", "06 bedroom", "07 bath")):
-            assert "from inside" in shot.lower()
-        if "03 living" in title:
-            assert "sofa" in shot.lower()
-        assert not any(b in shot.lower() for b in banned)
-    assert len(inventories) == 1
-    for text in positives.values():
-        assert text.startswith(ident_text)
+        assert joined.startswith(shot)
+        assert ident_text in joined
+        assert len(joined.split()) <= 180
+        assert not any(b in shot_l for b in banned)
+        text = positives[f"Positive {i + 1:02d}"]
+        assert text.startswith(shot)
+        assert ident_text in text
         assert "different camera" in text
+        assert "walkthrough" in text
         assert "linen sofa" in text
-        assert len(text.split()) <= 170
+        assert len(text.split()) <= 180
+    assert inventories == {""}
     assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 0
     assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 0
     by_id = {n["id"]: n for n in house["nodes"]}
@@ -458,6 +586,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
         "EZPromptJoin",
+        "EZAceStepPromptEnhance",
     }
     klein = EZKleinPromptEnhance()
     wan = EZWanPromptEnhance()
@@ -467,9 +596,9 @@ def test_node_mappings_modes_preview_and_style() -> None:
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
     assert len(styles) == 51
-    off = klein.run("A cyberpunk tech wizard.", False, "t2i", "YouTube 16:9 still")
-    assert off["result"] == ("A cyberpunk tech wizard.",)
-    assert off["ui"]["text"][0] == "A cyberpunk tech wizard."
+    off = klein.run("A techno wizard.", False, "t2i", "YouTube 16:9 still")
+    assert off["result"] == ("A techno wizard.",)
+    assert off["ui"]["text"][0] == "A techno wizard."
     assert "[passthrough:" not in off["ui"]["text"][0]
     assert off["ui"]["passthrough"][0] == "enhance off"
     styled_off = klein.run("A rooftop.", False, "t2i", "", "photorealistic")
@@ -556,3 +685,125 @@ def test_node_mappings_modes_preview_and_style() -> None:
     ltx_user = mock.call_args[0][1]
     assert "oil painting" in ltx_user.lower()
     assert "coherent light" in ltx_user.lower()
+    klein_modes = klein.INPUT_TYPES()["required"]["mode"][0]
+    assert "identity" in klein_modes
+    wan_modes = wan.INPUT_TYPES()["required"]["mode"][0]
+    assert wan_modes == ["t2v", "i2v", "flf", "vace"]
+    with patch.object(client, "complete", return_value=("bible", None)) as mock:
+        ident_out = klein.run("cedar cabin", True, "identity", "", "anime")
+    ident_clip = ident_out["result"][0].lower()
+    assert "bible" in ident_clip
+    assert "japanese anime" in ident_clip or "cel" in ident_clip
+    assert "camera-free" in mock.call_args[0][0].lower()
+    assert "Visual style" in mock.call_args[0][1]
+    with patch.object(client, "complete", return_value=("flf-motion", None)) as mock:
+        wan.run("between frames", True, "flf", "5 seconds, 24 fps", "anime")
+    assert "end frame" in mock.call_args[0][0].lower() or "first-last" in mock.call_args[0][0].lower()
+    assert "Visual style" not in mock.call_args[0][1]
+
+
+def test_ace_step_enhance_node_defaults_and_modes() -> None:
+    ace = EZAceStepPromptEnhance()
+    spec = ace.INPUT_TYPES()["required"]
+    assert spec["enhance"][1]["default"] is True
+    assert spec["mode"][0] == ["vocal", "instrumental"]
+    off = ace.run("boom bap, 88 bpm", "[verse]\nhi", False, "vocal")
+    assert off["result"] == ("boom bap, 88 bpm", "[verse]\nhi")
+    assert off["ui"]["passthrough"][0] == "enhance off"
+    inst_off = ace.run("lo-fi keys", "", False, "instrumental")
+    assert "instrumental" in inst_off["result"][0].lower()
+    assert inst_off["result"][1] == "[inst]"
+    with patch("ez_prompt_enhance.nodes.complete", side_effect=[("boom bap, dusty drums, 88 bpm", None), ("[verse]\nrewritten", None)]):
+        with patch("ez_prompt_enhance.nodes._close_llm"):
+            on = ace.run("lazy beat", "[verse]\nhi", True, "vocal")
+    assert on["result"][0].startswith("boom bap")
+    assert "[verse]" in on["result"][1]
+    with patch("ez_prompt_enhance.nodes.complete", return_value=("lo-fi, warm keys, instrumental, no vocals", None)):
+        with patch("ez_prompt_enhance.nodes._close_llm"):
+            bed = ace.run("lo-fi bed", "", True, "instrumental")
+    assert "instrumental" in bed["result"][0].lower()
+    assert bed["result"][1] == "[inst]"
+
+
+def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
+    """Every lab CLIP/ACE positive prompt comes from an EZ enhance node, enhance on."""
+    skip_ids = {"longcat-video-lab-example"}
+    enhance_types = {
+        "EZKleinPromptEnhance",
+        "EZWanPromptEnhance",
+        "EZLTXPromptEnhance",
+        "EZAceStepPromptEnhance",
+        "EZRapLyrics",
+        "EZPodcastScript",
+    }
+    encoder_types = {"CLIPTextEncode", "TextEncodeAceStepAudio1.5"}
+    wf_root = ROOT / "workflows"
+    missing: list[str] = []
+    for path in sorted(wf_root.rglob("*-lab-example.json")):
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        gid = str(graph.get("id") or path.stem)
+        if gid in skip_ids:
+            continue
+        by_id = {int(n["id"]): n for n in graph["nodes"]}
+        links = {int(link[0]): link for link in graph.get("links") or []}
+        for node in graph["nodes"]:
+            ntype = node.get("type")
+            if ntype in enhance_types:
+                values = node.get("widgets_values") or []
+                flag = values[1] if ntype != "EZAceStepPromptEnhance" else (
+                    values[2] if len(values) > 2 else True
+                )
+                if ntype == "EZAceStepPromptEnhance":
+                    flag = values[2] if len(values) > 2 else True
+                if flag is not True:
+                    missing.append(f"{path.name}: {ntype}#{node['id']} enhance={flag!r}")
+            if ntype not in encoder_types:
+                continue
+            title = str(node.get("title") or "")
+            if "neg" in title.lower():
+                continue
+            if ntype == "CLIPTextEncode":
+                text_inp = next(
+                    (i for i in node.get("inputs") or [] if i.get("name") == "text"),
+                    None,
+                )
+                if text_inp is None or text_inp.get("link") is None:
+                    missing.append(f"{path.name}: CLIP {title!r} has no text link")
+                    continue
+                src = by_id.get(int(links[int(text_inp["link"])][1]))
+                if src is None:
+                    missing.append(f"{path.name}: CLIP {title!r} missing text source")
+                    continue
+                if src.get("type") in enhance_types:
+                    continue
+                if src.get("type") == "EZPromptJoin":
+                    ident_inp = next(
+                        (i for i in src.get("inputs") or [] if i.get("name") == "identity"),
+                        None,
+                    )
+                    ident_src = None
+                    if ident_inp and ident_inp.get("link") is not None:
+                        ident_src = by_id.get(int(links[int(ident_inp["link"])][1]))
+                    if ident_src and ident_src.get("type") in enhance_types:
+                        continue
+                missing.append(
+                    f"{path.name}: CLIP {title!r} fed by {src.get('type')}"
+                )
+            elif ntype == "TextEncodeAceStepAudio1.5":
+                tags_inp = next(
+                    (i for i in node.get("inputs") or [] if i.get("name") == "tags"),
+                    None,
+                )
+                lyrics_inp = next(
+                    (i for i in node.get("inputs") or [] if i.get("name") == "lyrics"),
+                    None,
+                )
+                linked = False
+                for inp in (tags_inp, lyrics_inp):
+                    if inp and inp.get("link") is not None:
+                        src = by_id.get(int(links[int(inp["link"])][1]))
+                        if src and src.get("type") in enhance_types:
+                            linked = True
+                if not linked:
+                    missing.append(f"{path.name}: ACE encoder {title!r} not fed by enhance")
+    assert not missing, "\n".join(missing[:40])

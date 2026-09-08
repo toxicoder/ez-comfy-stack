@@ -1,0 +1,166 @@
+{
+  "place_10": [
+    {
+      "label": "01 exterior",
+      "shot": "Ground-level three-quarter exterior of this place, eye-level 24mm, Instagram 4:5. Dusk, cozy outdoor lamps glowing. Openings readable from outside."
+    },
+    {
+      "label": "02 entrance",
+      "shot": "At the entrance looking in through the way in, 35mm, Instagram 4:5. Dusk, cozy outdoor lamps at the threshold. Door filling the frame at human height."
+    },
+    {
+      "label": "03 inside",
+      "shot": "Just inside, looking through the main living volume out the main opening, 24mm, Instagram 4:5. Dusk, outdoor lamps visible through the glass."
+    },
+    {
+      "label": "04 lounge",
+      "shot": "From the lounging interior the bible named; if none, the primary seating interior from a new camera. Seating in the foreground toward the main opening, 35mm, Instagram 4:5. Dusk, outdoor lamps outside."
+    },
+    {
+      "label": "05 kitchen",
+      "shot": "From the kitchen the bible named; if none, a work interior. Work surface in the foreground, 35mm, Instagram 4:5. Dusk. Cook space only."
+    },
+    {
+      "label": "06 bath",
+      "shot": "From the bathroom the bible named; if none, a wet interior. Bathing fixture in the foreground, 35mm, Instagram 4:5. Warm practicals. Wet room only."
+    },
+    {
+      "label": "07 bedroom",
+      "shot": "From the master bedroom the bible named; if none, the private interior. Bedding in the foreground toward its opening, 35mm, Instagram 4:5. Dusk, outdoor lamps outside."
+    },
+    {
+      "label": "08 drone",
+      "shot": "Overhead drone of this same place in its landscape, high above looking down, 24mm, Instagram 4:5. Dusk. Roof, terrace, and outdoor lamps readable from above. Same surroundings as the ground shots."
+    },
+    {
+      "label": "09 day",
+      "shot": "Daylight exterior of this same place, ground-level three-quarter, 24mm, Instagram 4:5. Clear day sky. Outdoor lamps present but not the key light. Same massing and surroundings as dusk."
+    },
+    {
+      "label": "10 night",
+      "shot": "Night exterior of this same place, ground-level three-quarter, 24mm, Instagram 4:5. Cozy outdoor lamps fully on against night sky. Same massing and surroundings. Interior glow through openings."
+    }
+  ],
+  "place_4": [
+    {
+      "label": "FACADE",
+      "shot": "Three-quarter exterior of this place, 24mm, Instagram 4:5. Openings readable so interior inventory from the bible shows from outside."
+    },
+    {
+      "label": "LIVING",
+      "shot": "From the primary interior looking out the main opening, late-day sun, Instagram 4:5. Bible inventory in the foreground."
+    },
+    {
+      "label": "TERRACE",
+      "shot": "Outdoor living or threshold of this place at golden hour, Instagram 4:5."
+    },
+    {
+      "label": "RAIN",
+      "shot": "This same place at night or in weather. Lamps on if the bible has them. Massing unchanged."
+    }
+  ],
+  "character_sheet": [
+    {
+      "label": "FRONT",
+      "shot": "Front camera, eye-level, 24mm. Same identity. YouTube 16:9."
+    },
+    {
+      "label": "THREE-QUARTER",
+      "shot": "Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Camera is the only change."
+    },
+    {
+      "label": "PROFILE",
+      "shot": "Profile camera, 50mm, full side view. Same identity and light. Camera is the only change."
+    }
+  ],
+  "storyboard_6": [
+    {
+      "label": "01",
+      "shot": "Wide establishing of this scene, 24mm. Unmarked surfaces, empty of lettering."
+    },
+    {
+      "label": "02",
+      "shot": "Enter: the bible subject arriving into this scene, 35mm. Unmarked surfaces, empty of lettering."
+    },
+    {
+      "label": "03",
+      "shot": "Traverse: moving through this scene, 35mm. Unmarked surfaces, empty of lettering."
+    },
+    {
+      "label": "04",
+      "shot": "Insert: a material or prop detail named in the bible, 50mm. Unmarked surfaces, empty of lettering."
+    },
+    {
+      "label": "05",
+      "shot": "Exit: turning toward the way out of this scene, 35mm. Unmarked surfaces, empty of lettering."
+    },
+    {
+      "label": "06",
+      "shot": "Closer hook of the same scene, 24mm. Unmarked surfaces, empty of lettering."
+    }
+  ],
+  "camera_angles": [
+    {
+      "label": "MEDIUM",
+      "shot": "35mm medium of this identity; subject fills the middle third. YouTube 16:9."
+    },
+    {
+      "label": "WIDE",
+      "shot": "24mm wide establishing of this identity and place. YouTube 16:9."
+    },
+    {
+      "label": "CLOSE",
+      "shot": "50mm close on face, hands, or signature materials from the bible. YouTube 16:9."
+    }
+  ],
+  "lighting_3": [
+    {
+      "label": "KEY",
+      "shot": "Canonical plate. Hard key light from camera left, deep contact shadows. 24mm, YouTube 16:9."
+    },
+    {
+      "label": "WINDOW",
+      "shot": "Same subject and camera. Bright overcast skylight, gentle falloff, soft shadows."
+    },
+    {
+      "label": "NIGHT LAMP",
+      "shot": "Same subject and camera at night under warm practical lamps."
+    }
+  ],
+  "time_of_day_4": [
+    {
+      "label": "GOLDEN",
+      "shot": "Canonical golden-hour plate, amber sidelight. 24mm eye-level, YouTube 16:9."
+    },
+    {
+      "label": "DAWN",
+      "shot": "Same place and camera. First light, humid pastel sky."
+    },
+    {
+      "label": "NOON",
+      "shot": "Same place and camera. Hard noon sun, short shadows."
+    },
+    {
+      "label": "NIGHT",
+      "shot": "Same place and camera at night. Warm practicals; city glow only if the bible is urban."
+    }
+  ],
+  "color_moods_4": [
+    {
+      "label": "WARM",
+      "shot": "Canonical plate. Warm amber grade, golden sidelight. 24mm, YouTube 16:9."
+    },
+    {
+      "label": "COOL",
+      "shot": "Same subject and camera. Cool overcast teal, soft contrast."
+    },
+    {
+      "label": "MUTED",
+      "shot": "Same subject and camera. Soft coral grade, low contrast."
+    },
+    {
+      "label": "HIGH KEY",
+      "shot": "Same subject and camera. High-key bright daylight, lifted shadows, clean whites."
+    }
+  ]
+}

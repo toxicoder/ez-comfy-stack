@@ -12,6 +12,10 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
+from _lab_paths import lab_json
+from _stamp_app_mode import stamp_suite_graph
+
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
@@ -39,7 +43,7 @@ AUDIO_NOTE_A = f"""## podcast-audio-first-lab-example
 
 US-safe audio-first episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
 
-1. Edit the script (human part). Enhance defaults **off** so Queue works offline.
+1. Edit the script (human part). Prompt enhance is **on**; after Queue the script node shows the rewritten lines. Turn Enhance off to pin widget text.
 2. Disclosure is prepended by the node (do not type it): {DISCLOSURE_TEXT}
 3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.
 4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck −15 dB under speech.
@@ -54,24 +58,13 @@ AUDIO_NOTE_B = f"""## podcast-radio-drama-lab-example
 
 US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.
 
-- Writer flavor `radio_drama` (enhance **off**). Announcer + two Kokoro stock voices.
+- Writer flavor `radio_drama` (enhance **on**). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
 - Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session — not a one-graph film.
 - Cover: Queue **{COVER_GRAPH}** separately.
 
 {DISCLOSURE_TEXT}
 """
-
-
-def _group(gid: int, title: str, x: float, y: float, w: float, h: float, color: str) -> dict:
-    return {
-        "id": gid,
-        "title": title,
-        "bounding": [x, y, w, h],
-        "color": color,
-        "font_size": 24,
-        "flags": {},
-    }
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
@@ -155,15 +148,19 @@ class Graph:
             "extra": extra,
             "version": 0.4,
         }
+        stamp_suite_graph(graph)
+        ensure_group_title_inset(graph)
         _assert_no_overlap(graph)
         return graph
 
 
 def _ace_widgets(tags: str, duration: float, seed: int = 42) -> list:
+    # seed is followed by control_after_generate (native TextEncodeAceStepAudio1.5).
     return [
         tags,
         "",
         seed,
+        "fixed",
         90,
         duration,
         "4",
@@ -203,7 +200,7 @@ def build_audio_first() -> dict:
         [500, 80],
         [420, 280],
         "ez_podcast_script",
-        [SEED_SCRIPT, False, "podcast_two_host"],
+        [SEED_SCRIPT, True, "podcast_two_host"],
         outputs=[g.out("script", "STRING", [])],
     )
     g.add(
@@ -348,10 +345,10 @@ def build_audio_first() -> dict:
             "lab_description": "US-safe audio-first episode: Kokoro TTS + ACE-Step instrumental bed + mix",
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
-                _group(1, "MODEL", 20, 40, 440, 900, "#3f789e"),
-                _group(2, "PROMPT", 480, 40, 460, 820, "#3f789e"),
-                _group(3, "SETTINGS", 1420, 40, 400, 700, "#a1309b"),
-                _group(4, "OUTPUT", 1840, 40, 440, 920, "#3f789e"),
+                _group(1, "MODEL", 20, LAB_GROUP_Y0, 440, 900, "#3f789e"),
+                _group(2, "PROMPT", 480, LAB_GROUP_Y0, 460, 820, "#3f789e"),
+                _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 400, 700, "#a1309b"),
+                _group(4, "OUTPUT", 1840, LAB_GROUP_Y0, 440, 920, "#3f789e"),
             ],
         }
     )
@@ -378,7 +375,7 @@ def build_radio_drama() -> dict:
         [500, 80],
         [420, 300],
         "ez_radio_script",
-        [RADIO_SEED_SCRIPT, False, "radio_drama"],
+        [RADIO_SEED_SCRIPT, True, "radio_drama"],
         outputs=[g.out("script", "STRING", [])],
     )
     g.add(
@@ -639,12 +636,12 @@ def build_radio_drama() -> dict:
             "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off",
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
-                _group(1, "MODEL", 20, 40, 440, 1240, "#3f789e"),
-                _group(2, "PROMPT", 480, 40, 460, 860, "#3f789e"),
-                _group(3, "SETTINGS", 1420, 40, 400, 920, "#a1309b"),
-                _group(4, "OUTPUT", 1840, 40, 820, 800, "#3f789e"),
-                _group(5, "WAN BUMPER (off)", 2700, 40, 400, 400, "#232"),
-                _group(6, "LTX HOOK (off)", 2700, 460, 400, 400, "#232"),
+                _group(1, "MODEL", 20, LAB_GROUP_Y0, 440, 1240, "#3f789e"),
+                _group(2, "PROMPT", 480, LAB_GROUP_Y0, 460, 860, "#3f789e"),
+                _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 400, 920, "#a1309b"),
+                _group(4, "OUTPUT", 1840, LAB_GROUP_Y0, 820, 800, "#3f789e"),
+                _group(5, "WAN BUMPER (off)", 2700, LAB_GROUP_Y0, 400, 400, "#232"),
+                _group(6, "LTX HOOK (off)", 2700, 480 - GROUP_TITLE_INSET, 400, 400, "#232"),
             ],
         }
     )
@@ -656,7 +653,7 @@ def main() -> None:
         "podcast-radio-drama-lab-example.json": build_radio_drama(),
     }
     for name, graph in graphs.items():
-        path = WF / name
+        path = lab_json(name)
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")
 

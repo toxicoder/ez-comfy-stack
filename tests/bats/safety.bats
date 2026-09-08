@@ -229,7 +229,15 @@ teardown() {
   local compose="${REPO_ROOT}/docker/docker-compose.yml"
   run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}:/outputs' "${compose}"
   [ "$status" -eq 0 ]
+  run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}/input:/inputs' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user:/comfy-state/ComfyUI/user' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}/custom-nodes-user:/comfy-state/ComfyUI/custom_nodes/_user' "${compose}"
+  [ "$status" -eq 0 ]
   run grep -E 'output-directory|/outputs' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -eq 0 ]
+  run grep -F -- '--input-directory' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "$status" -eq 0 ]
   run grep -E 'down -v' "${REPO_ROOT}/scripts/lib/compose.sh"
   [ "$status" -eq 0 ]
@@ -291,6 +299,8 @@ teardown() {
   run grep -E '^[[:space:]]*--highvram([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "$status" -ne 0 ]
   run grep -E '^[[:space:]]*--gpu-only([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -ne 0 ]
+  run grep -E '^[[:space:]]*--normalvram([[:space:]]|\\|$)' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "$status" -ne 0 ]
   run grep -E 'mem_limit:.*90g|MEM_LIMIT:-90g' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -eq 0 ]

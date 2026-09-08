@@ -134,11 +134,17 @@ Commands:
                     960×528 h264 NVENC proxies (refuse if compose is up; never rewrite masters)
   take-promote <film> <id> <take>
                     Copy takes/<id>/tNNN.mp4 to shots/<id>.mp4 and mark ok
+  promote-workflow --from PATH --lane LANE --id STEM-lab-example
+                    Copy a live _user graph into workflows/_lab/<lane>/ (does not commit)
   download-restore [--tier seedvr2-3b]
                     Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
   download-3d [--tier trellis2|da3-base|all]
                     Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   blender           Host Blender sidecar (dies if compose is up)
+  export-guides     Dump a 1280x704 / 120f guide pack (dies if compose is up)
+  asset-ls [--json] [--output-dir DIR]
+                    Read-only Asset Bible catalog (COMFY_OUTPUT_DIR/assets)
+                    Coming later: asset-new / asset-iterate / asset-promote
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
   download-longcat [--tier video|avatar|all]
@@ -149,6 +155,7 @@ Commands:
                     Kitchen wall-clock table (writes COMFY_OUTPUT_DIR/spark-timing.json)
   models-status     Disk bible: keep-set + refuse list (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
+  disk-wizard       Guided host reclaim (default --plan; never cleanup / never docker prune -a --volumes)
 
 Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
@@ -969,6 +976,19 @@ cmd_take_promote() {
 }
 
 #######################################
+# Copy a live user graph into the repo lab tree. Does not commit.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  promote-workflow flags
+# Returns:
+#   promote-workflow status
+#######################################
+cmd_promote_workflow() {
+  bash "${REPO_ROOT}/scripts/utilities/promote-workflow.sh" "$@"
+}
+
+#######################################
 # Opt-in restore pack download (SeedVR2-3B). Does not reap. Not download-models.
 # Globals:
 #   REPO_ROOT
@@ -993,6 +1013,34 @@ cmd_download_3d() {
 #######################################
 cmd_blender() {
   bash "${REPO_ROOT}/scripts/utilities/blender.sh" "$@"
+}
+
+#######################################
+# Occupancy-gated Blender guide-pack dump (P0). Godot is P2.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  blender-guide.sh flags
+# Returns:
+#   blender-guide status (2 if compose is up)
+#######################################
+cmd_export_guides() {
+  bash "${REPO_ROOT}/scripts/utilities/blender-guide.sh" "$@"
+}
+
+#######################################
+# Read-only Asset Bible catalog (outputs under COMFY_OUTPUT_DIR/assets).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  asset-ls.sh flags (--json, --output-dir DIR)
+# Outputs:
+#   Catalog listing or JSON on stdout
+# Returns:
+#   asset-ls.sh status
+#######################################
+cmd_asset_ls() {
+  bash "${REPO_ROOT}/scripts/utilities/asset-ls.sh" "$@"
 }
 
 #######################################
@@ -1062,6 +1110,21 @@ cmd_reap_models() {
 }
 
 #######################################
+# Dispatch disk-wizard (default --plan / TTY wizard).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  disk-wizard flags
+# Outputs:
+#   plan/apply logs
+# Returns:
+#   disk-wizard status
+#######################################
+cmd_disk_wizard() {
+  bash "${REPO_ROOT}/scripts/utilities/disk-wizard.sh" "$@"
+}
+
+#######################################
 # After DELETE confirmation, remove Compose volumes (Comfy install state only).
 # Globals:
 #   See file header / caller environment.
@@ -1122,15 +1185,19 @@ main() {
     film-export-otio) cmd_film_export_otio "$@" ;;
     film-proxies) cmd_film_proxies "$@" ;;
     take-promote) cmd_take_promote "$@" ;;
+    promote-workflow) cmd_promote_workflow "$@" ;;
     download-restore) cmd_download_restore "$@" ;;
     download-3d) cmd_download_3d "$@" ;;
     blender) cmd_blender "$@" ;;
+    export-guides) cmd_export_guides "$@" ;;
+    asset-ls) cmd_asset_ls "$@" ;;
     film-accept) cmd_film_accept "$@" ;;
     download-longcat) cmd_download_longcat "$@" ;;
     download-dreamx) cmd_download_dreamx "$@" ;;
     spark-timing) cmd_spark_timing "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;
+    disk-wizard) cmd_disk_wizard "$@" ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"
