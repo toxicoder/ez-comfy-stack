@@ -69,6 +69,7 @@ FROZEN_MANAGE_VERBS=(
   reap-models
   disk-wizard
   asset-ls
+  audio-still-video
 )
 
 @test "cmd_disk_wizard --plan is read-only" {
@@ -84,6 +85,11 @@ FROZEN_MANAGE_VERBS=(
   run type cmd_film_animatic
   [ "${status}" -eq 0 ]
   run type cmd_stem_mix
+  [ "${status}" -eq 0 ]
+}
+
+@test "audio-still-video verb dispatches" {
+  run type cmd_audio_still_video
   [ "${status}" -eq 0 ]
 }
 
@@ -284,6 +290,9 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"Asset Bible"* ]]
   run cmd_film_accept --help
   [ "${status}" -eq 0 ]
+  run cmd_audio_still_video --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"YouTube"* ]]
   run cmd_download_longcat --help
   [ "${status}" -eq 0 ]
   run cmd_download_dreamx --help

@@ -13,6 +13,7 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 - Cascade: ingest → diarize → ASR → translate → clone → duration lock
 - YouTube Studio multi-language audio upload (audio-only file + SRT)
 - `download-dub` usage, sequential Queue, and loudnorm
+- Optional still-image MP4 when you have no source video (host `audio-still-video`)
 
 **What this enables**
 
@@ -145,6 +146,16 @@ Do **not** rely on muxing two AAC tracks into one MP4 as the YouTube path. Studi
 MLA is rolling out; not every channel has it. Duration lock exists so Studio accepts the file.
 
 Optional local mux (VLC/archive, not the documented YouTube upload) can use ffmpeg against `source_video.mp4` in the job dir.
+
+When there is **no** source video and you want a still-image YouTube file (cover + dubbed audio), keep the graph as FLAC/MP3 and mux on the host:
+
+```bash
+./scripts/manage.sh audio-still-video \
+  --audio "${COMFY_OUTPUT_DIR}/dubs/episode/ez_dub_yt.wav" \
+  --image "${COMFY_OUTPUT_DIR}/ez_podcast_00001_.png"
+```
+
+Do not treat that MP4 as the YouTube Languages extra-audio path — Studio still wants the duration-locked WAV.
 
 ## What runs on Queue
 

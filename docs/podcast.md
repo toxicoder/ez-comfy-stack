@@ -15,6 +15,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 - Native ACE-Step instrumental beds
 - Voice consent, platform rules, and authorship
 - `download-podcast` usage, sequential Queue, and loudnorm
+- Optional YouTube still-video: host `audio-still-video` after cover (not Apple Podcasts)
 - Clone-and-translate of a recorded show is a different lane: [Local dub](dub.md)
 
 **What this enables**
@@ -22,6 +23,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 - Queue a local two-host episode without cloud TTS or rented music
 - Keep the visual studio bootable when podcast extras are missing
 - Disclose synthetic voices in the mix, not only in a description box
+- Mux a cover still + episode FLAC into a YouTube MP4 without changing the episode graph
 
 !!! warning "Not legal advice"
 
@@ -164,5 +166,15 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 ./scripts/utilities/podcast-loudnorm.sh run --in "${COMFY_OUTPUT_DIR}/ez_podcast_ep_00001_.flac"
 # --target youtube  → −14 LUFS; default podcast → −16 LUFS
 ```
+
+7. Optional YouTube still-image video (host ffmpeg; the graph still saves FLAC + MP3). Do this **after** loudnorm if you want −14 LUFS in the MP4; `audio-still-video` does not loudnorm unless `--loudnorm youtube`:
+
+```bash
+./scripts/manage.sh audio-still-video \
+  --audio "${COMFY_OUTPUT_DIR}/ez_podcast_ep_00001_-youtube-lufs.flac" \
+  --image "${COMFY_OUTPUT_DIR}/ez_podcast_00001_.png"
+```
+
+Apple Podcasts still wants the audio master. The MP4 is a YouTube convenience, not a talking-head.
 
 Start still requires typing `yes`. Compose `restart: "no"` is unchanged.
