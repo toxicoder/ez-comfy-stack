@@ -155,6 +155,7 @@ Commands:
                     Kitchen wall-clock table (writes COMFY_OUTPUT_DIR/spark-timing.json)
   models-status     Disk bible: keep-set + refuse list (does not delete)
   reap-models       Plan/apply model cache cleanup (default --plan; never cleanup)
+  disk-wizard       Guided host reclaim (default --plan; never cleanup / never docker prune -a --volumes)
 
 Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT)
 EOF
@@ -1109,6 +1110,21 @@ cmd_reap_models() {
 }
 
 #######################################
+# Dispatch disk-wizard (default --plan / TTY wizard).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  disk-wizard flags
+# Outputs:
+#   plan/apply logs
+# Returns:
+#   disk-wizard status
+#######################################
+cmd_disk_wizard() {
+  bash "${REPO_ROOT}/scripts/utilities/disk-wizard.sh" "$@"
+}
+
+#######################################
 # After DELETE confirmation, remove Compose volumes (Comfy install state only).
 # Globals:
 #   See file header / caller environment.
@@ -1181,6 +1197,7 @@ main() {
     spark-timing) cmd_spark_timing "$@" ;;
     models-status) cmd_models_status "$@" ;;
     reap-models) cmd_reap_models "$@" ;;
+    disk-wizard) cmd_disk_wizard "$@" ;;
     cleanup) cmd_cleanup ;;
     *)
       err "Unknown command: ${cmd}"

@@ -1,0 +1,206 @@
+# Host leftover signatures for disk-wizard. Restricted YAML (scripts/lib/disk_catalog.py).
+# risk: safe | review | dangerous
+# reclaim: delete | quarantine | docker-prune | hf-prune | reap-models | none
+schema: 1
+signatures:
+  hf-incomplete:
+    risk: safe
+    reclaim: delete
+    leftover_weight: 10
+    what: "Interrupted Hugging Face download (*.incomplete)"
+    why: "download-models / hf download was Ctrl-C'd or the Spark rebooted mid-pull"
+    leftover_when: "basename ends with .incomplete"
+    match_suffix:
+      - ".incomplete"
+    roots:
+      - MODELS_DIR
+      - HOME_HF
+    refuse_if:
+      - hf_pid
+  hf-lock-stale:
+    risk: safe
+    reclaim: delete
+    leftover_weight: 8
+    what: "Stale Hugging Face .lock file"
+    why: "A previous hf process died without removing the lock"
+    leftover_when: "basename ends with .lock and no hf PID is running"
+    match_suffix:
+      - ".lock"
+    roots:
+      - MODELS_DIR
+      - HOME_HF
+    refuse_if:
+      - hf_pid
+  dangling-symlink:
+    risk: safe
+    reclaim: delete
+    leftover_weight: 9
+    what: "Broken symlink under MODELS_DIR/comfy"
+    why: "A pack was moved or reaped but the Comfy relative link was left behind"
+    leftover_when: "symlink target does not exist"
+    match_broken_symlink: true
+    roots:
+      - MODELS_DIR
+  ltx-2.3-superseded:
+    risk: review
+    reclaim: reap-models
+    leftover_weight: 7
+    what: "Superseded LTX-2.3 snapshot"
+    why: "Lab default moved to LTX-2.5; the 2.3 tree is leftover unless you still Queue 2.3 graphs"
+    leftover_when: "path contains LTX-2.3"
+    match_contains:
+      - "LTX-2.3"
+      - "LTX2.3"
+    roots:
+      - MODELS_DIR
+  banned-weight:
+    risk: review
+    reclaim: reap-models
+    leftover_weight: 8
+    what: "Banned weight token (H3, Klein 9B, FLUX.2-dev, DA3-LARGE, …)"
+    why: "An old download-h3 or refused pack was left on MODELS_DIR"
+    leftover_when: "path matches the manifest refuse list"
+    match_refuse: true
+    roots:
+      - MODELS_DIR
+  hf-hub-detached:
+    risk: safe
+    reclaim: hf-prune
+    leftover_weight: 9
+    what: "Detached Hugging Face hub revision / leftover blob"
+    why: "vLLM, transformers, or a container pulled an HF id; old snapshots stay after you switch models"
+    leftover_when: "under ~/.cache/huggingface/hub and not a keep-set basename"
+    match_contains:
+      - "huggingface/hub"
+    roots:
+      - HOME_HF
+    refuse_if:
+      - hf_pid
+  docker-build-cache:
+    risk: safe
+    reclaim: docker-prune
+    leftover_weight: 8
+    what: "Docker BuildKit cache"
+    why: "Local image builds (vLLM, this stack, other experiments) keep layer cache"
+    leftover_when: "docker builder cache is unused"
+    docker_type: build-cache
+  docker-dangling-image:
+    risk: safe
+    reclaim: docker-prune
+    leftover_weight: 7
+    what: "Dangling Docker image (<none>:<none>)"
+    why: "Retagged builds leave untagged layers"
+    leftover_when: "image has no tag and no container"
+    docker_type: dangling-image
+  docker-unused-image:
+    risk: review
+    reclaim: docker-prune
+    leftover_weight: 5
+    what: "Named Docker image with no container"
+    why: "You pulled vLLM / TensorRT-LLM / another stack and are not running it"
+    leftover_when: "docker images not referenced by docker ps -a"
+    docker_type: unused-image
+    refuse_if:
+      - image_in_use
+  docker-volume-ez-comfy-state:
+    risk: dangerous
+    reclaim: none
+    leftover_weight: 0
+    what: "Compose volume ez-comfy-state (Comfy install + venv)"
+    why: "This is the studio install, not leftover weights"
+    leftover_when: "never — use manage.sh cleanup (type DELETE)"
+    docker_type: volume
+    match_contains:
+      - "ez-comfy-state"
+  ollama-blobs:
+    risk: review
+    reclaim: quarantine
+    leftover_weight: 5
+    what: "Ollama model blobs"
+    why: "ollama pull of a GGUF you were testing on this Spark"
+    leftover_when: "under ~/.ollama/models and you no longer serve that tag"
+    roots:
+      - HOME_OLLAMA
+  torch-cache:
+    risk: review
+    reclaim: quarantine
+    leftover_weight: 4
+    what: "PyTorch hub / extension cache"
+    why: "torch.hub or compiled extensions from a one-off notebook"
+    leftover_when: "under ~/.cache/torch"
+    match_contains:
+      - "/.cache/torch"
+    roots:
+      - HOME_CACHE
+  pip-uv-cache:
+    risk: review
+    reclaim: delete
+    leftover_weight: 3
+    what: "pip or uv wheel cache"
+    why: "Repeated pip install in venvs and containers"
+    leftover_when: "under ~/.cache/pip or ~/.cache/uv and you can re-download wheels"
+    match_contains:
+      - "/.cache/pip"
+      - "/.cache/uv"
+    roots:
+      - HOME_CACHE
+  vllm-sglang-cache:
+    risk: review
+    reclaim: quarantine
+    leftover_weight: 6
+    what: "vLLM or SGLang compile cache"
+    why: "Inference backend kernel compile while testing servers on this Spark"
+    leftover_when: "under ~/.cache/vllm or ~/.cache/sglang"
+    match_contains:
+      - "/.cache/vllm"
+      - "/.cache/sglang"
+    roots:
+      - HOME_CACHE
+  comfy-outputs-media:
+    risk: review
+    reclaim: none
+    leftover_weight: 2
+    what: "Generated MP4/PNG under COMFY_OUTPUT_DIR"
+    why: "You Queued films or stills — this is your media, not a cache"
+    leftover_when: "only if you no longer need the take"
+    match_suffix:
+      - ".mp4"
+      - ".png"
+      - ".wav"
+    roots:
+      - COMFY_OUTPUT_DIR
+  reap-quarantine-old:
+    risk: review
+    reclaim: reap-models
+    leftover_weight: 4
+    what: "Old reap-models quarantine tree"
+    why: "A previous reap --quarantine was never dropped"
+    leftover_when: "under MODELS_DIR/.reap-quarantine"
+    match_contains:
+      - ".reap-quarantine"
+    roots:
+      - MODELS_DIR
+  core-dump:
+    risk: safe
+    reclaim: delete
+    leftover_weight: 8
+    what: "Core dump or NVIDIA crash log in /tmp"
+    why: "A process aborted; dumps are not needed to Queue again"
+    leftover_when: "basename is core, core.*, or nvidia-crash-ish in tmp"
+    match_basename:
+      - "core"
+    match_prefix:
+      - "core."
+    roots:
+      - TMP
+      - VAR_TMP
+  keep-set-weight:
+    risk: dangerous
+    reclaim: none
+    leftover_weight: 0
+    what: "Default lab keep-set weight"
+    why: "Required by klein/wan/ltx lab graphs"
+    leftover_when: "never — disk-wizard will not touch this"
+    match_keep_set: true
+    roots:
+      - MODELS_DIR

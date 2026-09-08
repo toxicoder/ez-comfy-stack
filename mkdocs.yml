@@ -43,6 +43,7 @@ extra_css:
 
 extra_javascript:
   - javascripts/glossary.js
+  - javascripts/commands.js
 
 # Reload serve when the glossary JSON (outside docs/) changes.
 watch:
@@ -113,6 +114,8 @@ nav:
   - Operate:
       - manage.sh reference: manage-cli.md
       - Models and cache: models-and-cache.md
+      - Disk wizard: disk-wizard.md
+      - Download tiers: download-tiers.md
       - Download limit: download-limit.md
       - Reboot safety: reboot-safety.md
       - Spark farm: spark-farm.md

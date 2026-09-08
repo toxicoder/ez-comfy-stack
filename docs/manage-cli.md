@@ -10,6 +10,7 @@ tags: [manage, cli, operator, reference]
 
 - How to invoke the CLI
 - Command catalog
+- `--tier` is a pack id (not a quality ladder)
 - What not to run (banned H3 aliases, occupancy)
 
 **What this enables**
@@ -19,11 +20,13 @@ tags: [manage, cli, operator, reference]
 
 **Who this is for:** operators who already cloned the repo. First install: [Getting Started](getting-started.md).
 
-Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HOST`, `MODELS_DIR`, …) are for *your* shell (browser URL, `ssh -L`, `ls`).
+Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HOST`, `MODELS_DIR`, …) are for *your* shell (browser URL, `ssh -L`, `ls`). The **Your Spark** panel on these docs fills the same keys when you copy a command.
 
-```bash
-./scripts/manage.sh doctor
+```ezcmd
+id: doctor
 ```
+
+`--tier` on `download-podcast` / `download-music` / `download-3d` / … selects **which pack**, not a studio-wide quality level. `--limit` is Mbps. Full map: [Download tiers](download-tiers.md). `download-models` has no `--tier`.
 
 ---
 
@@ -38,9 +41,9 @@ Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HO
 | `stop` | Stop containers; keep models, outputs, volume | Reboot with the stack up |
 | `restart` | `stop` + `start` (full confirm again) | — |
 | `logs` | Follow compose logs (`logs --tail 100` works) | — |
-| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap | Expect podcast/music weights (they are opt-in) |
-| `download-podcast [--tier analog\|…] [--limit auto\|N\|off]` | Opt-in Kokoro / ACE-Step / optional TTS | Co-resident with LTX/Wan/Klein |
-| `download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]` | Opt-in ACE-Step 1.5 rap AIO (~10 GB; shared dest with `download-podcast --tier acestep`) | Co-resident with the visual session |
+| `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap. **No `--tier`.** | Expect podcast/music weights (they are opt-in) |
+| `download-podcast [--tier analog\|…] [--limit auto\|N\|off]` | Opt-in pack id (`analog` = Kokoro). [Tiers](download-tiers.md) | Co-resident with LTX/Wan/Klein |
+| `download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]` | Opt-in size ladder; `turbo` shares dest with `download-podcast --tier acestep` | Co-resident with the visual session |
 | `download-limit …` | Proxy to `scripts/utilities/download-limit.sh` | Leave a wrap limit stuck; wrap **always clears on exit** |
 | `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` | Force-clear while `hf` is still writing |
 | `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) | — |
@@ -54,7 +57,8 @@ Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HO
 | `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio) | `--skip-accept` as a habit |
 | `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache | DreamX-World; NCCL |
 | `spark-timing` | Kitchen wall-clock table (`record --klein N --wan N --ltx N`) | Record on `pytorch-fallback` |
-| `models-status` / `reap-models` | Disk bible / cache cleanup (never `cleanup` weights) | `cleanup` when you meant reap |
+| `models-status` / `reap-models` | Disk bible / MODELS_DIR cache cleanup (never `cleanup` weights) | `cleanup` when you meant reap |
+| `disk-wizard` | Host-wide leftover survey (default `--plan`). [Disk wizard](disk-wizard.md) | `docker system prune -a --volumes`; confuse with `cleanup` |
 
 `download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3). 3D DCC notes: [Studio sidecars](studio-sidecars.md).
 

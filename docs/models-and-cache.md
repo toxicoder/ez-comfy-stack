@@ -11,6 +11,7 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 - Default cache location and layout
 - Host persistence (weights, media, Comfy `user/`, operator custom nodes)
 - Download utilities, resume / stuck-partial recovery, and readiness checks
+- Pointer: `--tier` is a pack id ([Download tiers](download-tiers.md))
 - Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
 - Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
 - Sharing with nvidia-dgx-spark-lab
@@ -112,7 +113,7 @@ ${MODELS_DIR}/
   hub/                  # HF cache (optional)
 ```
 
-When the default pack moves (LTX 2.3 → 2.5 already happened), **reap** the old tree — do not wait for disk-full:
+Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) are **not** `reap-models` — use [disk-wizard](disk-wizard.md) (`--plan` first). When the default pack moves (LTX 2.3 → 2.5 already happened), **reap** the old tree — do not wait for disk-full:
 
 ```bash
 ./scripts/manage.sh models-status
@@ -167,6 +168,8 @@ flowchart TB
 
 ## Download
 
+`download-models` has **no** `--tier`. It always pulls the default still + Wan 5B + LTX-2.5 set. On every other downloader, `--tier` is **which pack**, not a global quality ladder. `--limit` is Mbps. Full flag map and live builders: [Download tiers](download-tiers.md).
+
 ```bash
 ./scripts/manage.sh download-models
 # Exits non-zero until every lab basename under MODELS_DIR/comfy is present
@@ -174,21 +177,20 @@ flowchart TB
 # partial cannot cache-hit skip the VAE.
 ```
 
-Or per utility:
+```ezcmd
+id: download-models
+```
+
+Per-utility status (read-only) still uses the default pack ids:
 
 ```bash
 ./scripts/utilities/download-image.sh status --tier fast --json
 ./scripts/utilities/download-wan.sh status --tier 5b --json
 ./scripts/utilities/download-ltx.sh status --tier 2.5 --json
-./scripts/utilities/download-image.sh run --tier fast
-./scripts/utilities/download-wan.sh run --tier 5b
-./scripts/utilities/download-ltx.sh run --tier 2.5
 ./scripts/utilities/download-llm.sh run
-./scripts/utilities/download-music.sh status --tier turbo --json
-./scripts/utilities/download-music.sh run --tier turbo
 ```
 
-`--tier fast` also pulls Klein companions (`te` + `vae`). Optional stills: `--tier nvfp4` / `--tier base` / `--tier zimage`. Optional motion: `download-wan.sh run --tier a14b`. Optional LTX fallback: `download-ltx.sh run --tier 2.3`.
+`--tier fast` also pulls Klein companions (`te` + `vae`). Opt-in packs (Wan A14B, Fun InP, LTX 2.3, music, podcast, 3D, …) live on [Download tiers](download-tiers.md).
 
 Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`):
 

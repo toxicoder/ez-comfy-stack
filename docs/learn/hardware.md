@@ -38,7 +38,7 @@ flowchart LR
   S4 --> Safe["SSH stays usable"]
 ```
 
-Details: [Reboot safety](../reboot-safety.md) · [Download limit](../download-limit.md).
+Details: [Reboot safety](../reboot-safety.md) · [Download limit](../download-limit.md). Disk full from leftover experiments: [Disk wizard](../disk-wizard.md) (`--plan` first).
 
 ---
 

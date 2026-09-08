@@ -46,6 +46,7 @@ def test_mkdocs_wires_extra_css() -> None:
     assert "stylesheets/extra.css" in text
     assert "extra_javascript:" in text
     assert "javascripts/glossary.js" in text
+    assert "javascripts/commands.js" in text
     assert "content.tooltips" in text
 
 

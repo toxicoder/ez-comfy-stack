@@ -537,7 +537,43 @@
     "category": "Hardware and safety",
     "short": "Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.",
     "long": "Full-rate multi-GB pulls freeze SSH. `download-models` wraps wondershaper when HTB works, else gentler HF workers. `DOWNLOAD_LIMIT=off` is an SSH risk. See [Download limit](download-limit.md).",
-    "see_also": ["htb", "headroom", "models-dir"]
+    "see_also": ["htb", "headroom", "models-dir", "download-tier"]
+  },
+  {
+    "id": "download-tier",
+    "title": "--tier",
+    "aliases": ["--tier"],
+    "category": "Hardware and safety",
+    "short": "Pack selector on one downloader. Not a studio-wide quality ladder. --limit is Mbps.",
+    "long": "`download-models` has no `--tier`. Image `fast`, Wan `5b`, and LTX `2.5` are three different pack ids that happen to be the lab defaults. Wan `--tier all` does not include `vace` or `s2v`. See [Download tiers](download-tiers.md).",
+    "see_also": ["download-models", "download-limit", "models-dir"]
+  },
+  {
+    "id": "download-models",
+    "title": "download-models",
+    "aliases": ["download-models"],
+    "category": "Hardware and safety",
+    "short": "Default pack only: Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. No --tier.",
+    "long": "Does not pull podcast, music, 3D, LongCat, DreamX, or SeedVR2. Those are opt-in utilities with their own `--tier` pack ids. Throttled by download-limit. See [Download tiers](download-tiers.md) and [Models and cache](models-and-cache.md).",
+    "see_also": ["download-tier", "download-limit", "models-dir"]
+  },
+  {
+    "id": "disk-wizard",
+    "title": "disk-wizard",
+    "aliases": ["disk-wizard", "disk wizard"],
+    "category": "Hardware and safety",
+    "short": "Guided host reclaim. Default --plan. Does not replace cleanup or reap-models.",
+    "long": "Surveys MODELS_DIR junk, Hugging Face hub cache, Docker build cache, Ollama/vLLM leftovers, and other experiment residue on a Spark that runs more than this studio. `--plan` is read-only. Review-class items quarantine. Never `docker system prune -a --volumes`. `cleanup` still only removes the comfy-state volume. See [Disk wizard](disk-wizard.md).",
+    "see_also": ["quarantine", "models-dir", "download-models"]
+  },
+  {
+    "id": "quarantine",
+    "title": "quarantine",
+    "aliases": ["quarantine"],
+    "category": "Hardware and safety",
+    "short": "Move-aside instead of delete so a leftover pack can be restored.",
+    "long": "`reap-models --quarantine` and `disk-wizard` review-class actions move files to a timestamped tree with a JSONL manifest. Restore with the matching `restore --from` command. Junk class may delete in place. See [Disk wizard](disk-wizard.md).",
+    "see_also": ["disk-wizard", "models-dir"]
   },
   {
     "id": "htb",

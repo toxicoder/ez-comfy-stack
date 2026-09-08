@@ -81,7 +81,14 @@ VOID_TAGS = frozenset(
         "wbr",
     }
 )
-SKIP_CLASS_MARKERS = ("ez-term", "ez-docs-dev-banner", "ez-glossary-dialog")
+SKIP_CLASS_MARKERS = (
+    "ez-term",
+    "ez-docs-dev-banner",
+    "ez-glossary-dialog",
+    "ez-spark-panel",
+    "ez-cmd-builder",
+    "ez-var",
+)
 
 _GLOSSARY_CACHE: dict[str, tuple["Term", ...]] = {}
 
