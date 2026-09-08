@@ -721,19 +721,31 @@
       "inputs": [
         [
           "5:tags",
-          "tags"
+          "tags",
+          {
+            "description": "Genre-first ACE-Step tags."
+          }
         ],
         [
           "5:lyrics",
-          "lyrics"
+          "lyrics",
+          {
+            "description": "Lyrics, or [inst] for instrumental."
+          }
         ],
         [
           "5:enhance",
-          "enhance"
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "8:seed",
-          "seed"
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

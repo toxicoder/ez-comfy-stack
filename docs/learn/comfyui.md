@@ -39,7 +39,7 @@ Daily rule: **do not edit raw `*-lab-example` JSON.** Open the graph, change wid
 
 ### Graph and App
 
-The same JSON can open as a **graph** (nodes and wires) or as an **App** (creator widgets only). App Mode is official from ComfyUI frontend **1.41.13**. Lab graphs stamp `extra.linearData` plus `extra.lab_app_mode` so the prompt, Enhance toggle, seed, and outputs show in the App panel. UNET/CLIP/VAE stay hidden except on **klein-still-daily**. 90s films stay in graph view. This is **not** `studio-ui` and not a second product. See [ComfyUI Apps](../studio-apps.md).
+The same JSON can open as a **graph** (nodes and wires) or as an **App** (creator widgets only). App Mode is official from ComfyUI frontend **1.41.13**. Lab graphs stamp `extra.linearData` plus `extra.lab_app_mode` so **prompt, style, Enhance, and seed** show first in the App panel (LoadImage on I2V). Size and UNET stay hidden except on **klein-still-daily**. Multi-shot Apps expose one identity prompt — not ten shot cards. 90s films stay in graph view. This is **not** `studio-ui` and not a second product. See [ComfyUI Apps](../studio-apps.md).
 
 ---
 

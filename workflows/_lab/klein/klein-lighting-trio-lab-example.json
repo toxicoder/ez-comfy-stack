@@ -250,7 +250,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -377,8 +377,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "Canonical plate. Hard key light from camera left, deep contact shadows. 24mm, YouTube 16:9.",
+        "",
         "state"
       ],
       "title": "SHOT KEY"
@@ -426,7 +426,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place, inventory, and camera framing. The shot names the only change. Canonical plate. Hard golden key light from camera left, deep contact shadows. 24mm, YouTube 16:9."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place, inventory, and camera framing. The shot names the only change. Canonical plate. Hard key light from camera left, deep contact shadows. 24mm, YouTube 16:9."
       ],
       "title": "Positive KEY"
     },
@@ -598,8 +598,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and wizard. Bright overcast skylight, gentle falloff, soft shadows. Same camera.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "Same subject and camera. Bright overcast skylight, gentle falloff, soft shadows.",
+        "",
         "state"
       ],
       "title": "SHOT WINDOW"
@@ -647,7 +647,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard. Bright overcast skylight, gentle falloff, soft shadows. Same camera."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place, inventory, and camera framing. The shot names the only change. Same subject and camera. Bright overcast skylight, gentle falloff, soft shadows."
       ],
       "title": "Positive WINDOW"
     },
@@ -861,8 +861,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "Same rooftop and wizard at night under warm coral city glow and terrace lamps. Same camera.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "Same subject and camera at night under warm practical lamps.",
+        "",
         "state"
       ],
       "title": "SHOT NIGHT LAMP"
@@ -910,7 +910,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place, inventory, and camera framing. The shot names the only change. Same rooftop and wizard at night under warm coral city glow and terrace lamps. Same camera."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place, inventory, and camera framing. The shot names the only change. Same subject and camera at night under warm practical lamps."
       ],
       "title": "Positive NIGHT LAMP"
     },
@@ -1474,7 +1474,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-lighting-trio-lab-example",
-    "lab_note": "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## klein-lighting-trio-lab-example\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B three-light study of one subject",
     "lab_app_mode": {
       "enabled": true,
@@ -1489,43 +1489,31 @@
       "inputs": [
         [
           "4:prompt",
-          "prompt"
-        ],
-        [
-          "4:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "4:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
         ],
         [
-          "6:width",
-          "width"
-        ],
-        [
-          "6:height",
-          "height"
-        ],
-        [
-          "6:batch_size",
-          "batch_size"
-        ],
-        [
-          "10:shot",
-          "shot"
+          "4:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "12:seed",
-          "seed"
-        ],
-        [
-          "16:shot",
-          "shot"
-        ],
-        [
-          "22:shot",
-          "shot"
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

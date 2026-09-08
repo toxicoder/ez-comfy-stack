@@ -621,36 +621,39 @@
     "linearData": {
       "inputs": [
         [
-          "6:width",
-          "width"
-        ],
-        [
-          "6:height",
-          "height"
-        ],
-        [
-          "6:batch_size",
-          "batch_size"
-        ],
-        [
-          "7:seed",
-          "seed"
-        ],
-        [
-          "11:image",
-          "image"
-        ],
-        [
           "12:prompt",
-          "prompt"
-        ],
-        [
-          "12:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "12:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
+        ],
+        [
+          "12:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "11:image",
+          "image",
+          {
+            "description": "Start frame or reference still."
+          }
+        ],
+        [
+          "7:seed",
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

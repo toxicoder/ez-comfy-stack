@@ -12,7 +12,13 @@ from pathlib import Path
 import pytest
 
 from _lab_paths import lab_json
-from _stamp_app_mode import stamp_app_mode
+from _stamp_app_mode import (
+    DEFAULT_WIDGET_DESCRIPTIONS,
+    HIDDEN_APP_WIDGETS,
+    STAMP_SPECS,
+    infer_suite_inputs,
+    stamp_app_mode,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -126,3 +132,58 @@ def test_banned_string_in_label_is_rejected() -> None:
             occupancy="klein",
             handoff=("klein-9b-lab-example",),
         )
+
+
+def _widget_names(graph: dict) -> list[str]:
+    spec = STAMP_SPECS[str(graph["id"])]
+    return [entry[1] for entry in infer_suite_inputs(graph, spec)]
+
+
+def test_still_draft_app_inputs_are_prompt_first_without_latent_size() -> None:
+    names = _widget_names(_load("klein-still-draft-lab-example.json"))
+    assert names[:4] == ["prompt", "style", "enhance", "seed"]
+    assert "width" not in names
+    assert "height" not in names
+    assert "batch_size" not in names
+    assert "shot" not in names
+    assert "unet_name" not in names
+
+
+def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
+    names = _widget_names(_load("klein-still-daily-lab-example.json"))
+    assert names[0] == "prompt"
+    assert names.index("prompt") < names.index("seed")
+    assert names.index("style") < names.index("enhance")
+    assert "width" in names
+    assert "height" in names
+    assert "unet_name" in names
+    assert "steps" in names
+    assert "cfg" in names
+
+
+def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
+    names = _widget_names(_load("klein-dream-house-lab-example.json"))
+    assert names.count("prompt") == 1
+    assert names[0] == "prompt"
+    for hidden in HIDDEN_APP_WIDGETS:
+        assert hidden not in names
+    assert "width" not in names
+
+
+def test_beat_sheet_exposes_only_shot_cards() -> None:
+    names = _widget_names(_load("beat-sheet-lab-example.json"))
+    assert names == ["value"] * 18
+
+
+def test_prompt_forge_keeps_three_family_prompts_first() -> None:
+    names = _widget_names(_load("prompt-forge-lab-example.json"))
+    assert names[:3] == ["prompt", "prompt", "prompt"]
+    assert "mode" in names
+    assert "duration_hint" in names
+    assert "audio_notes" in names
+
+
+def test_widget_help_text_has_no_banned_models() -> None:
+    blob = json.dumps(DEFAULT_WIDGET_DESCRIPTIONS)
+    for needle in ("MiniMax", "klein-9b", "FLUX.2-dev", "Seedance", "Kling"):
+        assert needle not in blob

@@ -75,6 +75,8 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "camera-free" in ident.lower()
     assert "lens" in ident.lower()
     assert "150" in ident
+    assert "invent" in ident.lower()
+    assert "visual-style" in ident.lower()
     flf = client.load_system_prompt("wan_flf")
     assert "first-last" in flf.lower() or "first last" in flf.lower() or "end frame" in flf.lower()
     assert "audio" in flf.lower()
@@ -178,6 +180,48 @@ def test_strip_fences_quotes_and_think() -> None:
     assert client.strip_model_wrapping('"A techno wizard."') == "A techno wizard."
     think = "<think>plan the shot</think>\nA techno wizard stands on a rooftop terrace."
     assert client.strip_model_wrapping(think) == "A techno wizard stands on a rooftop terrace."
+
+
+def test_view_packs_are_camera_roles_without_lab_identity() -> None:
+    nouns = (
+        "penthouse",
+        "sand linen",
+        "techno wizard",
+        "data-staff",
+        "three-bay",
+        "linen sofa",
+    )
+    names = (
+        "place_10",
+        "place_4",
+        "character_sheet",
+        "storyboard_6",
+        "camera_angles",
+        "lighting_3",
+        "time_of_day_4",
+        "color_moods_4",
+    )
+    for name in names:
+        pack = client.load_view_pack(name)
+        assert pack, name
+        for card in pack:
+            blob = f"{card['label']} {card['shot']}".lower()
+            for noun in nouns:
+                assert noun not in blob, (name, noun, card["label"])
+    assert len(client.load_view_pack("place_10")) == 10
+
+
+def test_studio_app_chrome_pack_exists() -> None:
+    pack = ROOT / "custom_nodes" / "ez_studio_app"
+    js = pack / "js" / "ez_studio_app.js"
+    init = (pack / "__init__.py").read_text(encoding="utf-8")
+    body = js.read_text(encoding="utf-8")
+    assert "WEB_DIRECTORY" in init
+    assert "ez_studio_app.chrome" in body
+    assert "Rewrite prompt" in body
+    assert "lab_app_mode" in body
+    assert "execution_start" in body
+    assert "SaveImage" in body
 
 
 def test_web_directory_and_preview_js() -> None:
@@ -441,6 +485,15 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         "hip roof",
         "live-action",
     )
+    hidden_nouns = (
+        "penthouse",
+        "sand linen",
+        "techno wizard",
+        "data-staff",
+        "three-bay",
+        "linen sofa",
+        "stone tub",
+    )
     inventories = set()
     for join in sorted(joins, key=lambda n: n["id"]):
         shot = join["widgets_values"][0]
@@ -448,29 +501,17 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         lock = join["widgets_values"][2]
         inventories.add(inventory)
         assert lock == "view"
-        assert "linen sofa" in inventory
-        assert "island" in inventory
-        assert "dining table" in inventory
-        assert "bedding" in inventory
-        assert "tub" in inventory
-        assert "terrace chairs" in inventory
-        assert "data-staff" in inventory
-        assert "same" in shot.lower() and "penthouse" in shot.lower()
+        assert inventory.strip() == ""
+        shot_l = shot.lower()
+        assert not any(noun in shot_l for noun in hidden_nouns)
         joined = client.join_prompt(ident_text, shot, inventory, lock)
         assert len(joined.split()) <= 160
-        title = join.get("title") or ""
-        if "01" in title:
-            assert "sofa" in shot.lower() and ("shows" in shot.lower() or "through" in shot.lower())
-        if any(k in title for k in ("03 living", "04 kitchen", "05 dining", "06 bedroom", "07 bath")):
-            assert "from inside" in shot.lower()
-        if "03 living" in title:
-            assert "sofa" in shot.lower()
-        assert not any(b in shot.lower() for b in banned)
-    assert len(inventories) == 1
+        assert not any(b in shot_l for b in banned)
+    assert inventories == {""}
     for text in positives.values():
         assert text.startswith(ident_text)
         assert "different camera" in text
-        assert "linen sofa" in text
+        assert "linen sofa" not in text
         assert len(text.split()) <= 160
     assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 0
     assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 0
@@ -597,8 +638,11 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert wan_modes == ["t2v", "i2v", "flf", "vace"]
     with patch.object(client, "complete", return_value=("bible", None)) as mock:
         ident_out = klein.run("cedar cabin", True, "identity", "", "anime")
-    assert ident_out["result"] == ("bible",)
+    ident_clip = ident_out["result"][0].lower()
+    assert "bible" in ident_clip
+    assert "japanese anime" in ident_clip or "cel" in ident_clip
     assert "camera-free" in mock.call_args[0][0].lower()
+    assert "Visual style" in mock.call_args[0][1]
     with patch.object(client, "complete", return_value=("flf-motion", None)) as mock:
         wan.run("between frames", True, "flf", "5 seconds, 24 fps", "anime")
     assert "end frame" in mock.call_args[0][0].lower() or "first-last" in mock.call_args[0][0].lower()

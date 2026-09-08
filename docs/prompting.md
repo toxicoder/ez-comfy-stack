@@ -10,7 +10,8 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 - How each lab model actually reads a prompt
 - Canned lab-example text (already rewritten)
-- GIF loop motion and dream-house world bible (Prompt Join, lock=view)
+- GIF loop motion and dream-house world bible (one place prompt; camera-role cards; Prompt Join lock=view)
+- Character draft then tweak (style dropdown; generated still as the next reference)
 - Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance **on** by default, including identity bibles and 90s films)
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
 - After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
@@ -79,7 +80,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Dream-house pack (Klein)"
 
-    One **world bible** locks massing + materials + place (compact warm-glass crown penthouse, wraparound terrace, three-bay bay glass, teak floors, palms on the terrace, fern living wall, coral-teal edge light on a tall unmarked tropical coastal tower) with **no camera**. Locked inventory (sand linen sofa facing the glass, island, dining table, bedding, tub, terrace chairs, data-staff) must appear through the three-bay glass **and** in the matching interiors. The lab identity is a photoreal tropical techno wizard — hope stays off-camera; CLIP names wardrobe, place, and action only. Each SHOT card is a new camera of that same penthouse. **Prompt Join** `lock=view` stitches bible + inventory + “new photograph from a different camera”. Identity-mode enhance keeps the bible camera-free. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01, or every still copies the facade. Weather and sky may change; the building must not. `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
+    Type **one place**. Identity-mode enhance freezes only the rooms and furniture you named (the default placeholder is the lab penthouse). Hidden SHOT cards are camera roles — exterior, approach, interiors the bible named, night, context — not a penthouse kitchen. **Prompt Join** `lock=view` stitches bible + “new photograph from a different camera”. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01. Weather and sky may change; massing must not. `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
 
 === "LTX-2.5 AV"
 
@@ -106,7 +107,7 @@ STRING out → CLIPTextEncode `text` input.
 3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
 4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.
 
-**Enhance defaults to true** on every lab graph, including identity bibles and 90s films. Turn it **off** to pin the source widget. Identity mode keeps the bible camera-free. A selected style is still applied to the CLIP string except on I2V / FLF / VACE / identity (start frames or the bible own look). Style is ignored on I2V (the start image owns look).
+**Enhance defaults to true** on every lab graph, including identity bibles and 90s films. Turn it **off** to pin the source widget. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE (the start image owns look).
 
 ```mermaid
 flowchart TD
@@ -118,7 +119,7 @@ flowchart TD
   Lazy --> Miss["Missing GGUF / llama.cpp / timeout → passthrough + status"]
 ```
 
-When Enhance is **on** and a style is selected (t2i / t2v / Klein edit):
+When Enhance is **on** and a style is selected (t2i / t2v / Klein edit / identity):
 
 - The dropdown is look authority. If the source already names a medium, lighting, grade, lens, or art style, the rewriter **replaces** those clauses so they match the dropdown. It does not stack two styles.
 - Each preset is a short reference (medium, light, color, texture, camera or projection) tuned for Klein prose, Wan aesthetic+stylization, or LTX lighting/surface in the flowing paragraph.
@@ -140,4 +141,4 @@ Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit ar
 
 ## Next steps
 
-Queue **klein-still-draft-lab-example** first ([Getting Started](getting-started.md)), then the still → Wan 5 s → LTX 5 s loop on [Visual Generative AI](visual-generative-ai.md).
+Queue **klein-still-draft-lab-example** first ([Getting Started](getting-started.md)), or **klein-character-draft-lab-example** then **klein-character-tweak-lab-example** to iterate a still. Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).

@@ -250,7 +250,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-camera-angles-lab-example\n\nWide / medium / close of one subject (Klein 4B, lock=view). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed, locked inventory \u2014 new lens and framing, not copies of MEDIUM.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## klein-camera-angles-lab-example\n\nWide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed \u2014 new lens and framing, not copies of MEDIUM.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -289,8 +289,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "35mm medium of this identity; subject fills the middle third. YouTube 16:9.",
+        "",
         "view"
       ],
       "title": "SHOT MEDIUM"
@@ -338,7 +338,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. 35mm medium of the same rooftop and wizard; subject fills the middle third. YouTube 16:9."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. 35mm medium of this identity; subject fills the middle third. YouTube 16:9."
       ],
       "title": "Positive MEDIUM"
     },
@@ -509,8 +509,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "24mm wide establishing of the same rooftop and wizard, lots of city and sky.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "24mm wide establishing of this identity and place. YouTube 16:9.",
+        "",
         "view"
       ],
       "title": "SHOT WIDE"
@@ -558,7 +558,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. 24mm wide establishing of the same rooftop and wizard, lots of city and sky."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. 24mm wide establishing of this identity and place. YouTube 16:9."
       ],
       "title": "Positive WIDE"
     },
@@ -729,8 +729,8 @@
         "Node name for S&R": "EZPromptJoin"
       },
       "widgets_values": [
-        "50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials.",
-        "unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay",
+        "50mm close on face, hands, or signature materials from the bible. YouTube 16:9.",
+        "",
         "view"
       ],
       "title": "SHOT CLOSE"
@@ -778,7 +778,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Locked inventory (do not change): unmarked sun-washed teal technical running coat with faint circuit-thread seams, floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, tropical rooftop terrace with palms, unmarked glass towers over a bright bay. Keep this exact place and inventory. New photograph from a different camera and framing. 50mm close of the same rooftop and wizard on the data-staff, glyph rings, and coat materials."
+        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Keep this exact place and inventory. New photograph from a different camera and framing. 50mm close on face, hands, or signature materials from the bible. YouTube 16:9."
       ],
       "title": "Positive CLOSE"
     },
@@ -1235,7 +1235,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein-camera-angles-lab-example",
-    "lab_note": "## klein-camera-angles-lab-example\n\nWide / medium / close of one subject (Klein 4B, lock=view). Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed, locked inventory \u2014 new lens and framing, not copies of MEDIUM.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## klein-camera-angles-lab-example\n\nWide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed \u2014 new lens and framing, not copies of MEDIUM.\n\nIdentity-mode enhance is on for the bible (camera-free).\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Klein 4B wide/medium/close angle pack, new cameras",
     "lab_app_mode": {
       "enabled": true,
@@ -1250,43 +1250,31 @@
       "inputs": [
         [
           "4:prompt",
-          "prompt"
-        ],
-        [
-          "4:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "4:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
         ],
         [
-          "6:width",
-          "width"
-        ],
-        [
-          "6:height",
-          "height"
-        ],
-        [
-          "6:batch_size",
-          "batch_size"
-        ],
-        [
-          "10:shot",
-          "shot"
+          "4:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           "12:seed",
-          "seed"
-        ],
-        [
-          "16:shot",
-          "shot"
-        ],
-        [
-          "22:shot",
-          "shot"
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

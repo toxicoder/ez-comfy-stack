@@ -78,6 +78,48 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     _assert_no_overlap(graph)
 
 
+def test_character_draft_is_t2i_without_reference() -> None:
+    graph = _load("klein-character-draft-lab-example")
+    assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
+    assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
+    assert "klein-character-tweak-lab-example" in graph["extra"]["lab_app_mode"]["handoff"]
+    enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+    assert enh["widgets_values"][2] == "t2i"
+    assert enh["widgets_values"][1] is True
+    latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
+    assert latent["widgets_values"][:2] == [1024, 1280]
+    save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
+    assert save["widgets_values"][0] == "ez_character"
+    assert not any(n.get("type") == "ReferenceLatent" for n in graph["nodes"])
+    names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
+    assert names[0] == "prompt"
+    assert "style" in names
+    assert "shot" not in names
+    _assert_no_overlap(graph)
+
+
+def test_character_tweak_wires_reference_latent() -> None:
+    graph = _load("klein-character-tweak-lab-example")
+    assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
+    enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+    assert enh["widgets_values"][2] == "edit"
+    assert any(n.get("type") == "VAEEncode" for n in graph["nodes"])
+    assert any(n.get("type") == "ReferenceLatent" for n in graph["nodes"])
+    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
+    assert load["title"].lower().startswith("character")
+    save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
+    assert save["widgets_values"][0] == "ez_character_tweak"
+    names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
+    assert names[0] == "prompt"
+    assert "image" in names
+    sampler = next(n for n in graph["nodes"] if n.get("type") == "KSampler")
+    by_id = {int(n["id"]): n for n in graph["nodes"]}
+    pos = next(i for i in sampler["inputs"] if i.get("name") == "positive")
+    src = by_id[next(int(link[1]) for link in graph["links"] if int(link[0]) == int(pos["link"]))]
+    assert src["type"] == "ReferenceLatent"
+    _assert_no_overlap(graph)
+
+
 def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     graph = _load("beat-sheet-lab-example")
     assert graph["id"] == "beat-sheet-lab-example"

@@ -625,17 +625,13 @@ for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     inv=join['widgets_values'][1]
     lock=join['widgets_values'][2]
     assert lock=='view'
-    assert 'linen sofa' in inv
-    assert 'terrace chairs' in inv
-    assert 'data-staff' in inv
+    assert inv.strip()==''
     full=ident+' '+shot
     assert len(full.split())<=160, (join.get('title'), len(full.split()))
     sl=shot.lower()
-    assert 'same' in sl and 'penthouse' in sl
-    if i==0:
-        assert 'sofa' in sl and ('shows' in sl or 'through' in sl)
-    if 2<=i<=6:
-        assert 'from inside' in sl
+    assert 'penthouse' not in sl
+    assert 'techno wizard' not in sl
+    assert 'data-staff' not in sl
     assert not any(b in sl for b in banned)
     ks_id=12+i*5
     pos_src=by_id[incoming[(ks_id,1)][0][1]]['type']
@@ -644,8 +640,8 @@ for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     assert pos_src=='CLIPTextEncode'
 note=next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))
 ntext=str(note['widgets_values'][0]).lower()
-assert 'world bible' in ntext or 'locked inventory' in ntext
-assert 'referencelatent' in ntext or 'new views' in ntext
+assert 'world bible' in ntext or 'camera-free' in ntext or 'one place' in ntext
+assert 'referencelatent' in ntext or 'new views' in ntext or 'independent t2i' in ntext
 "
   [ "${status}" -eq 0 ]
 }

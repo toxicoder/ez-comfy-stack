@@ -17,85 +17,28 @@ from _lab_layout import (
     group as _group,
 )
 from _lab_theme import (
+    CHARACTER_DRAFT,
+    CHARACTER_TWEAK,
     CREATOR_IDENTITY,
     GIF_MOTION,
     HOUSE_IDENTITY,
-    HOUSE_INVENTORY,
     KLEIN_NEG_STILL,
     KLEIN_STILL_DAILY,
-    ROOFTOP_INVENTORY,
 )
-from _lab_paths import lab_json
+from _lab_paths import lab_dest, lab_json
 from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
-from ez_prompt_enhance.client import join_prompt  # noqa: E402
+from ez_prompt_enhance.client import join_prompt, load_view_pack  # noqa: E402
 
 WF = ROOT / "workflows"
 
 KLEIN_NEG = KLEIN_NEG_STILL
 HOUSE_SHOTS = [
-    (
-        "01 city facade",
-        "Three-quarter city facade of the same penthouse, 24mm, Instagram 4:5, "
-        "golden-hour late summer. The three-bay glass shows the sand linen sofa and "
-        "teak floors inside. High clouds over a bright bay.",
-    ),
-    (
-        "02 canyon",
-        "From the unmarked canyon street, looking up at the same penthouse crown, 24mm, "
-        "Instagram 4:5. Wraparound terrace and three-bay glass sit at the top of the tall "
-        "tower among unmarked glass towers.",
-    ),
-    (
-        "03 living",
-        "From inside the living room of the same penthouse, looking out the three-bay "
-        "glass to the bay, 24mm, Instagram 4:5. The linen sofa sits in the "
-        "foreground on teak floors, afternoon sky.",
-    ),
-    (
-        "04 kitchen",
-        "From inside the kitchen of the same penthouse, 35mm, Instagram 4:5. Pale-stone "
-        "island, warm-teak cabinets, coral-teal edge light, morning sidelight "
-        "from the glass wall beside the living room.",
-    ),
-    (
-        "05 dining",
-        "From inside the dining room of the same penthouse, 35mm, Instagram 4:5. Teak "
-        "table, lamps lit, golden-hour through the three-bay glass, high weather "
-        "over the bay.",
-    ),
-    (
-        "06 bedroom",
-        "From inside the primary bedroom of the same penthouse, 35mm, Instagram 4:5. "
-        "Linen bedding, bay window, tropical first-light sky, unmarked glass towers.",
-    ),
-    (
-        "07 bath",
-        "From inside the spa bath of the same penthouse, 35mm, Instagram 4:5. "
-        "Freestanding stone tub facing frosted glass. Quiet unmarked fixtures. Soft "
-        "daylight.",
-    ),
-    (
-        "08 terrace",
-        "Wraparound terrace of the same penthouse at golden hour, 24mm, Instagram 4:5. Two "
-        "teak chairs, fern living wall, palms on the deck, unmarked glass towers, "
-        "bright bay, pink-gold sky.",
-    ),
-    (
-        "09 rain night",
-        "Tropical-storm night exterior of the same penthouse, 24mm, Instagram 4:5. Lamps glow; "
-        "the sand linen sofa reads as a silhouette through the three-bay glass. Rain "
-        "on the terrace; penthouse volume unchanged.",
-    ),
-    (
-        "10 tower view",
-        "Midsummer neighboring-tower view of the same compact penthouse crown among "
-        "unmarked glass towers over the bay, 24mm, Instagram 4:5. Clear deep sky.",
-    ),
+    (item["label"], item["shot"]) for item in load_view_pack("place_10")
 ]
 JOINED_WORD_CAP = 160
 GIF_NEG = (
@@ -133,16 +76,34 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
 
-Ten Instagram 4:5 stills of one compact warm-glass crown penthouse on a tall unmarked tropical coastal tower (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). The wraparound terrace is the same unmarked rooftop as Spark Still.
-HOUSE IDENTITY is a camera-free world bible. Locked inventory (sofa, island, table, bedding, tub, terrace chairs, data-staff) repeats through the three-bay glass and in every interior. Each SHOT card is a new camera of that same penthouse — Prompt Join lock=view. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still, so they are new views rather than copies of 01.
-Edit HOUSE IDENTITY and inventory once. Identity-mode enhance is **on** (camera-free bible). Shot cards are not Klein-t2i-enhanced — a per-shot rewrite would mutate the bible.
-Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; they must not change the building.
+Ten Instagram 4:5 stills of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY — the default placeholder is the lab penthouse.
+HOUSE IDENTITY is a camera-free world bible. Enhance extracts only the rooms and furniture you named. Hidden SHOT cards are camera roles (exterior, approach, interiors the bible named, night, context), not a penthouse template. Prompt Join lock=view. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
+Identity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.
+Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Weather and sky may change; massing must not.
 If materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.
+"""
+
+CHARACTER_DRAFT_NOTE = """## klein-character-draft-lab-example
+
+Klein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.
+
+Handoff: load **klein-character-tweak-lab-example**, pick `ez_character_*.png`, and prompt the change.
+
+Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+"""
+
+CHARACTER_TWEAK_NOTE = """## klein-character-tweak-lab-example
+
+Klein 4B **edit** of a character still. LoadImage: `ez_character_*.png` from Character Draft (or any Klein still). Prompt only the change. Enhance **edit**. Style restyles medium/grade; identity stays in the reference image. Prefix `ez_character_tweak`. Size 1024x1280.
+
+VAEEncode + ReferenceLatent. Do not Queue without a start image.
+
+Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 """
 
 PACK_NOTE = """## klein-platform-pack-lab-example
 
-One identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios).
+One identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.
 
 Prefixes and sizes (copy of the single-plate graphs):
 - ez_pack_thumb 1280x720
@@ -220,7 +181,7 @@ def _dump(path: Path, graph: dict) -> None:
 
 def _assert_house_word_cap() -> None:
     for label, shot in HOUSE_SHOTS:
-        text = join_prompt(HOUSE_IDENTITY, shot, HOUSE_INVENTORY, "view")
+        text = join_prompt(HOUSE_IDENTITY, shot, "", "view")
         n = len(text.split())
         if n > JOINED_WORD_CAP:
             raise SystemExit(f"joined prompt too long for {label}: {n} words")
@@ -286,7 +247,7 @@ def build_gif_loop() -> dict:
     lat["widgets_values"][2] = 49
     lat["title"] = "GIF size and length (49 frames)"
     vhs = _node(graph, "VHS_VideoCombine")
-    vhs["title"] = "Infinite loop (ping-pong)"
+    vhs["title"] = "Infinite loop (ping-pong) — open for preview"
     vhs["widgets_values"]["format"] = "image/gif"
     vhs["widgets_values"]["pingpong"] = True
     vhs["widgets_values"]["loop_count"] = 0
@@ -465,7 +426,7 @@ def build_dream_house() -> dict:
         dec_id = 13 + i * 5
         save_id = 14 + i * 5
         prefix = f"ez_dream_house_{i + 1:02d}"
-        full = join_prompt(HOUSE_IDENTITY, shot, HOUSE_INVENTORY, "view")
+        full = join_prompt(HOUSE_IDENTITY, shot, "", "view")
         n = 20 + i * 5
 
         join_out: list[int] = []
@@ -480,7 +441,7 @@ def build_dream_house() -> dict:
                 [520, y],
                 [420, 180],
                 f"SHOT {label}",
-                [shot, HOUSE_INVENTORY, "view"],
+                [shot, "", "view"],
                 n,
                 inputs=[{"name": "identity", "type": "STRING", "link": None}],
                 outputs=[out("prompt", "STRING", join_out)],
@@ -733,7 +694,7 @@ def build_platform_pack() -> dict:
         ks_id = 13 + i * 6
         dec_id = 14 + i * 6
         save_id = 15 + i * 6
-        full = join_prompt(CREATOR_IDENTITY, shot, ROOFTOP_INVENTORY, "view")
+        full = join_prompt(CREATOR_IDENTITY, shot, "", "view")
         n = 20 + i * 6
         join_out: list[int] = []
         clip_out: list[int] = []
@@ -747,7 +708,7 @@ def build_platform_pack() -> dict:
                 [520, y],
                 [420, 180],
                 f"SHOT {label}",
-                [shot, ROOFTOP_INVENTORY, "view"],
+                [shot, "", "view"],
                 n,
                 inputs=[{"name": "identity", "type": "STRING", "link": None}],
                 outputs=[out("prompt", "STRING", join_out)],
@@ -894,16 +855,96 @@ def build_platform_pack() -> dict:
     }
 
 
+def build_character_draft() -> dict:
+    graph = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
+    graph["id"] = "klein-character-draft-lab-example"
+    graph["revision"] = 1
+    latent = _node(graph, "EmptyFlux2LatentImage")
+    latent["widgets_values"] = [1024, 1280, 1]
+    latent["title"] = "Size 4:5 character still"
+    save = _node(graph, "SaveImage")
+    save["widgets_values"] = ["ez_character"]
+    save["title"] = "Save character"
+    enh = _node(graph, "EZKleinPromptEnhance")
+    enh["widgets_values"] = [
+        CHARACTER_DRAFT,
+        True,
+        "t2i",
+        "Instagram 4:5 character still",
+        "none",
+    ]
+    pos = _node(graph, "CLIPTextEncode", "Positive")
+    pos["widgets_values"] = [CHARACTER_DRAFT]
+    note = _node(graph, "Note")
+    note["widgets_values"] = [CHARACTER_DRAFT_NOTE]
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "klein-character-draft-lab-example"
+    extra["lab_note"] = CHARACTER_DRAFT_NOTE
+    extra["lab_description"] = "Klein 4B character still, 1024x1280, style on, prefix ez_character"
+    return graph
+
+
+def build_character_tweak() -> dict:
+    from _build_dcc_workflows import build_klein_from_clay
+
+    graph = build_klein_from_clay()
+    graph["id"] = "klein-character-tweak-lab-example"
+    graph["revision"] = 1
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "klein-character-tweak-lab-example"
+    extra["lab_note"] = CHARACTER_TWEAK_NOTE
+    extra["lab_description"] = (
+        "Klein 4B character edit. LoadImage ez_character_*.png. ReferenceLatent. Prefix ez_character_tweak."
+    )
+    extra.pop("lab_dcc", None)
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        if ntype == "EZKleinPromptEnhance":
+            node["widgets_values"] = [
+                CHARACTER_TWEAK,
+                True,
+                "edit",
+                "Instagram 4:5 character edit",
+                "none",
+            ]
+            node["title"] = "Klein Prompt Enhance (edit)"
+        elif ntype == "CLIPTextEncode" and node.get("title") != "Negative":
+            node["widgets_values"] = [CHARACTER_TWEAK]
+        elif ntype == "SaveImage":
+            node["widgets_values"] = ["ez_character_tweak"]
+            node["title"] = "Save tweak"
+        elif ntype == "LoadImage":
+            node["widgets_values"] = ["example.png", "image"]
+            node["title"] = "Character still (ez_character_*.png)"
+        elif ntype == "EmptyFlux2LatentImage":
+            node["widgets_values"] = [1024, 1280, 1]
+            node["title"] = "Size 4:5 character still"
+        elif ntype == "Note":
+            node["widgets_values"] = [CHARACTER_TWEAK_NOTE]
+            node["title"] = "Operator note"
+        elif ntype == "VAEEncode":
+            node["title"] = "Encode character plate"
+            node["pos"] = [2180, 460]
+        elif ntype == "ReferenceLatent":
+            node["title"] = "Positive + character plate"
+            node["pos"] = [1440, 400]
+    return graph
+
+
 def main() -> None:
     still = build_still_app()
     gif = build_gif_loop()
     house = build_dream_house()
     pack = build_platform_pack()
+    draft = build_character_draft()
+    tweak = build_character_tweak()
     _dump(lab_json("klein-still-daily-lab-example.json"), still)
     _dump(lab_json("wan-gif-loop-lab-example.json"), gif)
     _dump(lab_json("klein-dream-house-lab-example.json"), house)
     _dump(lab_json("klein-platform-pack-lab-example.json"), pack)
-    print("wrote still-app, gif-loop, dream-house, platform-pack")
+    _dump(lab_dest("klein-character-draft-lab-example"), draft)
+    _dump(lab_dest("klein-character-tweak-lab-example"), tweak)
+    print("wrote still-app, gif-loop, dream-house, platform-pack, character draft/tweak")
 
 
 if __name__ == "__main__":

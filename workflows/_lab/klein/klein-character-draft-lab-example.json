@@ -1,5 +1,5 @@
 {
-  "id": "klein-still-daily-lab-example",
+  "id": "klein-character-draft-lab-example",
   "revision": 1,
   "last_node_id": 11,
   "last_link_id": 10,
@@ -36,7 +36,7 @@
         "flux-2-klein-4b-fp8.safetensors",
         "default"
       ],
-      "title": "Image model \u2014 click filename to swap"
+      "title": "Klein 4B distilled FP8"
     },
     {
       "id": 2,
@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Palms and unmarked glass towers recede toward a bright bay. Shot on a 35mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering."
+        "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, wardrobe, and one signature prop. Unmarked surfaces, empty of lettering. Eye-level 35mm."
       ],
       "title": "Positive"
     },
@@ -197,8 +197,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1440,
-        390
+        940,
+        460
       ],
       "size": [
         280,
@@ -223,10 +223,10 @@
       },
       "widgets_values": [
         1024,
-        576,
+        1280,
         1
       ],
-      "title": "Size (width x height x batch)"
+      "title": "Size 4:5 character still"
     },
     {
       "id": 7,
@@ -286,7 +286,7 @@
         "simple",
         1.0
       ],
-      "title": "Sampler (seed / steps / CFG)"
+      "title": "KSampler"
     },
     {
       "id": 8,
@@ -356,9 +356,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_still_app"
+        "ez_character"
       ],
-      "title": "Save PNG"
+      "title": "Save character"
     },
     {
       "id": 10,
@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-still-daily-lab-example\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-character-draft-lab-example\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **klein-character-tweak-lab-example**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -413,10 +413,10 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Palms and unmarked glass towers recede toward a bright bay. Shot on a 35mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
+        "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, wardrobe, and one signature prop. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         true,
         "t2i",
-        "YouTube 16:9 still",
+        "Instagram 4:5 character still",
         "none"
       ],
       "title": "Klein Prompt Enhance"
@@ -504,63 +504,10 @@
       "STRING"
     ]
   ],
-  "groups": [
-    {
-      "id": 1,
-      "title": "MODEL",
-      "bounding": [
-        20,
-        24,
-        430,
-        430
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 2,
-      "title": "PROMPT",
-      "bounding": [
-        460,
-        24,
-        920,
-        400
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 3,
-      "title": "SETTINGS",
-      "bounding": [
-        1420,
-        24,
-        380,
-        500
-      ],
-      "color": "#a1309b",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 4,
-      "title": "OUTPUT",
-      "bounding": [
-        1820,
-        24,
-        340,
-        430
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    }
-  ],
+  "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "klein-still-daily-lab-example",
+    "lab_profile": "klein-character-draft-lab-example",
     "lab_flux_tier": "fast",
     "ds": {
       "scale": 1,
@@ -569,16 +516,20 @@
         0
       ]
     },
-    "lab_note": "## klein-still-daily-lab-example\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
-    "lab_description": "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base",
+    "lab_note": "## klein-character-draft-lab-example\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **klein-character-tweak-lab-example**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B character still, 1024x1280, style on, prefix ez_character",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
-      "lane": "produce",
+      "lane": "inspire",
       "occupancy": "klein",
       "enhance_off_identity": false,
-      "handoff": []
+      "handoff": [
+        "klein-character-tweak-lab-example",
+        "klein-identity-sheet-lab-example",
+        "wan-i2v-5s-lab-example"
+      ]
     },
     "linearData": {
       "inputs": [
@@ -608,48 +559,6 @@
           "seed",
           {
             "description": "Fix to iterate; randomize to explore."
-          }
-        ],
-        [
-          "6:width",
-          "width",
-          {
-            "description": "Latent width in pixels."
-          }
-        ],
-        [
-          "6:height",
-          "height",
-          {
-            "description": "Latent height in pixels."
-          }
-        ],
-        [
-          "6:batch_size",
-          "batch_size",
-          {
-            "description": "How many stills in one Run."
-          }
-        ],
-        [
-          "7:steps",
-          "steps",
-          {
-            "description": "Sampler steps. Distilled Klein stays at 4 unless you swapped to base."
-          }
-        ],
-        [
-          "7:cfg",
-          "cfg",
-          {
-            "description": "Guidance. Distilled Klein stays at 1.0 unless you swapped to base."
-          }
-        ],
-        [
-          "1:unet_name",
-          "unet_name",
-          {
-            "description": "Click to swap Klein 4B distilled / NVFP4 / base."
           }
         ]
       ],

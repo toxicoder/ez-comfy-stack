@@ -65,7 +65,9 @@ flowchart TB
     | --- | --- |
     | **klein-still-draft-lab-example** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
     | **klein-still-hero-lab-example** | Same prompt + seed, **1280×704** (LTX VAE grid), more steps, prefix `ez_still_hero`. Enhance **on**. |
-    | **klein-identity-sheet-lab-example** | 3-angle sheet (front / three-quarter / profile). Seed **42**, Enhance **on** (identity mode), **1280×704** |
+    | **klein-identity-sheet-lab-example** | 3-angle sheet (front / three-quarter / profile) of the identity you type. Seed **42**, Enhance **on** (identity mode), **1280×704** |
+    | **klein-character-draft-lab-example** | Character still 1024×1280, style dropdown, prefix `ez_character` |
+    | **klein-character-tweak-lab-example** | Klein-edit that still (LoadImage + ReferenceLatent), prefix `ez_character_tweak` |
     | **klein-talking-head-lab-example** | Klein still → LTX A2V freeze smoke. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
 
 === "Motion (Wan 2.2 5B)"
@@ -99,9 +101,11 @@ flowchart TB
     | Workflow | What it does |
     | --- | --- |
     | **klein-still-draft-lab-example** | Spark Still. 768×432, Enhance on. Prefix `ez_still_draft` |
-    | **klein-identity-sheet-lab-example** | 3-angle sheet, seed **42**, **1280×704** |
-    | **klein-storyboard-6up-lab-example** | Six new cameras (`ez_board_01`…`06`) |
-    | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills of one wizard penthouse, independent T2I |
+    | **klein-identity-sheet-lab-example** | 3-angle sheet of the identity you type, seed **42**, **1280×704** |
+    | **klein-storyboard-6up-lab-example** | Six new cameras of one scene (`ez_board_01`…`06`) |
+    | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills of one place from a single prompt |
+    | **klein-character-draft-lab-example** | Character still, 1024×1280, style dropdown, prefix `ez_character` |
+    | **klein-character-tweak-lab-example** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |
     | **klein-hook-still-lab-example** | Vertical 9:16 hook still |
     | **prompt-forge-lab-example** | No UNET. Klein / Wan / LTX enhance preview (occupancy **llm**) |
     | **beat-sheet-lab-example** | No UNET. 18 STRING cards → paste into `shorts/<slug>.shots.yaml` (occupancy **none**) |

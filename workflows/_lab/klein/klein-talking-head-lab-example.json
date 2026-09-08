@@ -191,7 +191,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The techno wizard holds still and speaks one short line. Coat hem and glyph motes stay locked. Mouth motion is modest. A warm terrace breeze and palm rustle sit under the voice. No music and no score."
+        "The start image holds as the first frame. The subject holds still and speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Room tone sits under the voice. No music and no score."
       ],
       "title": "Motion / prompt"
     },
@@ -771,11 +771,11 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The techno wizard holds still and speaks one short line. Coat hem and glyph motes stay locked. Mouth motion is modest. A warm terrace breeze and palm rustle sit under the voice. No music and no score.",
+        "The start image holds as the first frame. The subject holds still and speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Room tone sits under the voice. No music and no score.",
         true,
         "i2v",
         "5 seconds, 24 fps",
-        "warm terrace breeze, palm rustle, modest speech, no score",
+        "room tone matching the start image, modest speech, no score",
         "none"
       ],
       "title": "LTX Prompt Enhance"
@@ -1044,24 +1044,46 @@
     "linearData": {
       "inputs": [
         [
-          "4:image",
-          "image"
-        ],
-        [
-          "9:seed",
-          "seed"
-        ],
-        [
           "19:prompt",
-          "prompt"
-        ],
-        [
-          "19:enhance",
-          "enhance"
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           "19:style",
-          "style"
+          "style",
+          {
+            "description": "Optional look. The start image owns look on I2V."
+          }
+        ],
+        [
+          "19:enhance",
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
+        ],
+        [
+          "19:audio_notes",
+          "audio_notes",
+          {
+            "description": "World SFX to interleave. No score unless you asked for music."
+          }
+        ],
+        [
+          "4:image",
+          "image",
+          {
+            "description": "Start frame or reference still."
+          }
+        ],
+        [
+          "9:seed",
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [
