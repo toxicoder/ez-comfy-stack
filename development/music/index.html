@@ -1817,6 +1817,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> the rap <strong>draft</strong> first, then the <strong>full</strong> track</li>
+<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: tags, lyrics, rewrite, vocal/instrumental, duration</li>
 <li>Tags vs lyrics; <code>[verse]</code> / <code>[chorus]</code> / <code>[spoken word]</code> as vocal hints</li>
 <li>Original lyrics only — no “in the style of \&lt;living artist&gt;”</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> vocal = invented identity, not a clone</li>
@@ -1867,12 +1868,12 @@
 </tr>
 <tr>
 <td>DURATION</td>
-<td>Primitive <strong>32</strong> s → <code>EmptyAceStep1.5LatentAudio</code></td>
+<td>App <strong>Duration (seconds)</strong> (primitive <strong>32</strong> s) → <code>EmptyAceStep1.5LatentAudio</code></td>
 <td>—</td>
 </tr>
 <tr>
 <td>PROMPT</td>
-<td>Tags + lab-original lyrics. <code>EZAceStepPromptEnhance</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>on</strong>. <code>ConditioningZeroOut</code> negative. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sampler" data-href="../glossary/#sampler" title="Node that denoises latents for N steps at a CFG, seed, and scheduler.">KSampler</span> 8 / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="cfg" data-href="../glossary/#cfg" title="Classifier-free guidance scale. Distilled Klein wants 1.0 — do not &#x27;turn it up for quality&#x27;.">cfg</span> 1 / euler / simple</td>
+<td>App <strong>Tags</strong>, <strong>Lyrics</strong>, <strong>Rewrite prompt</strong>, <strong>Vocal / instrumental</strong>. <code>EZAceStepPromptEnhance</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>on</strong>. <code>ConditioningZeroOut</code> negative. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sampler" data-href="../glossary/#sampler" title="Node that denoises latents for N steps at a CFG, seed, and scheduler.">KSampler</span> 8 / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="cfg" data-href="../glossary/#cfg" title="Classifier-free guidance scale. Distilled Klein wants 1.0 — do not &#x27;turn it up for quality&#x27;.">cfg</span> 1 / euler / simple</td>
 <td><code>ez_rap_prompt</code></td>
 </tr>
 <tr>
@@ -1889,14 +1890,14 @@
 </table>
 <p>Default tags (both graphs):</p>
 <p><code>boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm</code></p>
-<p><strong>Beat-only pass:</strong> keep boom-bap tags, append <code>instrumental, no vocals</code>, and replace lyrics with <code>[inst]</code>. There is no third instrumental JSON.</p>
+<p><strong>Beat-only pass:</strong> set App <strong>Vocal / instrumental</strong> to instrumental (forces no-vocals tags and <code>[inst]</code> lyrics). There is no third instrumental JSON.</p>
 <p>Canned style swaps (tags <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> only — not extra files):</p>
 <ul>
 <li><strong>trap:</strong> <code>trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm</code></li>
 <li><strong>lo-fi:</strong> <code>lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm</code></li>
 </ul>
 <h3 id="full-track">Full track<a class="headerlink" href="#full-track" title="Permanent link">&para;</a></h3>
-<p>Graph: <strong>music-rap-full-lab-example</strong>. Duration <strong>96</strong> s. Same sampler and model. Prefix <code>ez_rap_full</code>. Same voice + second verse + repeated chorus + <code>[outro]</code>. Human rewrite required before any release.</p>
+<p>Graph: <strong>music-rap-full-lab-example</strong>. App <strong>Duration (seconds)</strong> defaults to <strong>96</strong> s. Same sampler and model. Prefix <code>ez_rap_full</code>. Same voice + second verse + repeated chorus + <code>[outro]</code>. Human rewrite required before any release.</p>
 <hr />
 <h2 id="tags-vs-lyrics">Tags vs lyrics<a class="headerlink" href="#tags-vs-lyrics" title="Permanent link">&para;</a></h2>
 <ul>

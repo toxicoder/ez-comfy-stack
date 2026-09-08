@@ -2542,6 +2542,21 @@
 <td>App Mode graphs seed as <code>*-lab-example.app.json</code>. Pull latest and restart so the entrypoint re-copies and removes the old <code>.json</code> sibling. 90s films stay Workflows-only (<code>default_view: graph</code>). This is not <code>studio-ui</code>.</td>
 </tr>
 <tr>
+<td>App Mode shows three identical Prompt boxes / 18 “Shot card”s</td>
+<td>Old JSON or <code>ez_studio_app</code> JS not copied</td>
+<td>Pull latest, restart so graphs restamp unique <code>label</code>s and <code>custom_nodes/ez_studio_app/js</code> copies. Prompt Forge should read Klein / Wan / LTX; beat sheet should read Beat 1 enter …</td>
+</tr>
+<tr>
+<td>Klein plate App has a Start image that does nothing</td>
+<td>Unwired LoadImage on a t2i plate (old stamp)</td>
+<td>Pull latest. App Mode only exposes LoadImage when it is wired (I2V / character tweak / clay). Optional plate LoadImage stays graph-only</td>
+</tr>
+<tr>
+<td>Occupancy chip covers the App Run button</td>
+<td>Old <code>ez_studio_app</code> banner at bottom-left</td>
+<td>Restart so the new JS mounts the chip at the top of the widget list (or under the menu in graph view)</td>
+</tr>
+<tr>
 <td>Queuing a 90s film OOMs with Klein and LTX both resident</td>
 <td><code>EZUnloadModels</code> missing on an old graph</td>
 <td>Pull latest film JSON; confirm <strong>Unload models (pass IMAGE)</strong> sits between Klein decode and LTX shot 1 — <a href="../shorts/">90s shorts</a></td>

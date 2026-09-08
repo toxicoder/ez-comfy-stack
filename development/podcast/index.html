@@ -1861,8 +1861,9 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>Option A (audio-first commercial episode) vs Option B (one-graph radio drama)</li>
+<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: script, bed/sting tags, length, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> stock voices (refs stay graph-only)</li>
 <li>Why <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>-Audio-Suite and OldTimeRadio are not vendored</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> default on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span>; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> optional</li>
+<li>Kokoro default on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span>; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> optional</li>
 <li>Native <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> instrumental beds</li>
 <li>Voice consent, platform rules, and authorship</li>
 <li><code>download-podcast</code> usage, sequential <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span></li>
@@ -1893,7 +1894,7 @@
 <tbody>
 <tr>
 <td>SCRIPT</td>
-<td>In-tree <code>EZPodcastScript</code> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>on</strong>). Missing <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> passes the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> through</td>
+<td>App <strong>Script</strong> + <strong>Rewrite script</strong>. In-tree <code>EZPodcastScript</code> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>on</strong>). Missing <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> passes the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> through</td>
 <td><code>ez_podcast_script</code></td>
 </tr>
 <tr>
@@ -1903,12 +1904,12 @@
 </tr>
 <tr>
 <td>VOICES</td>
-<td><code>EZKokoroTTS</code> — Kokoro-82M ONNX/CPU built-ins</td>
+<td>App <strong>Speaker A / B</strong>, <strong>Include announcer</strong>, <strong>Speaking speed</strong>. <code>EZKokoroTTS</code> Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only</td>
 <td><code>ez_podcast_voice</code></td>
 </tr>
 <tr>
 <td>BEDS</td>
-<td>Native Comfy ACE-Step 1.5, instrumental, empty lyrics</td>
+<td>App <strong>Bed tags</strong>, <strong>Rewrite bed</strong>, <strong>Bed length (seconds)</strong>. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden)</td>
 <td><code>ez_podcast_bed</code></td>
 </tr>
 <tr>
@@ -1929,7 +1930,7 @@
 </blockquote>
 <p>Do not type that line yourself. The disclosure node prepends it.</p>
 <h3 id="option-b-one-graph-radio-drama">Option B — one-graph radio drama<a class="headerlink" href="#option-b-one-graph-radio-drama" title="Permanent link">&para;</a></h3>
-<p>Graph: <strong>podcast-radio-drama-lab-example</strong> (<code>us-safe-radio</code>). Same legal engines. Writer prompt is lab-original fiction (<code>radio_drama.txt</code>), not a news rewrite. Announcer + two Kokoro stock voices. ACE-Step sting + bed. One master mix (<code>ez_radio_ep</code> / <code>ez_radio_mix</code>).</p>
+<p>Graph: <strong>podcast-radio-drama-lab-example</strong> (<code>us-safe-radio</code>). Same legal engines. Writer prompt is lab-original fiction (<code>radio_drama.txt</code>), not a news rewrite. App Mode: <strong>Script</strong>, <strong>Sting tags</strong> / <strong>Bed tags</strong>, sting and bed length, <strong>Speaker A / B / Announcer</strong>, <strong>Include announcer</strong>, <strong>Speaking speed</strong>. ACE-Step sting + bed stay instrumental (lyrics hidden). One master mix (<code>ez_radio_ep</code> / <code>ez_radio_mix</code>).</p>
 <p>Optional Wan silent bumper / LTX 5s hook <strong>groups default off</strong> (node mode never). Queue <strong>wan-bumper-loop-lab-example</strong> or <strong>ltx-hook-av-lab-example</strong> in a later session. Not a one-graph film.</p>
 <hr />
 <h2 id="why-those-packs-are-not-vendored">Why those packs are not vendored<a class="headerlink" href="#why-those-packs-are-not-vendored" title="Permanent link">&para;</a></h2>
