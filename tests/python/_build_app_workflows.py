@@ -99,7 +99,11 @@ Stop Comfy, dump clay, then Queue:
   ./scripts/manage.sh house-views --slug lab-penthouse
   ./scripts/manage.sh start
 
-LoadImage names are ez_house_clay_01.png … ez_house_clay_10.png (copied next to the dump and into COMFY_OUTPUT_DIR). Prefix ez_dream_house_clay_01 … 10.
+LoadImage names are ez_house_clay_01.png … ez_house_clay_10.png (copied next to the dump and into COMFY_OUTPUT_DIR/input — container /inputs). Prefix ez_dream_house_clay_01 … 10.
+
+Already dumped but Clay 01–10 say no file selected? Copy without Blender (compose may stay up):
+
+  ./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
 
 HOUSE IDENTITY is the same camera-free world bible as klein-dream-house-lab-example. Shot cards are the place_10 walkthrough. Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 

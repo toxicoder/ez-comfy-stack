@@ -47,6 +47,8 @@ def test_dream_house_clay_contract() -> None:
     assert "house-views" in note
     assert "occupancy" in note
     assert "1024" in note and "1280" in note
+    assert "/inputs" in extra["lab_note"] or "input" in note
+    assert "install-inputs" in note
     assert "klein-dream-house-lab-example" in extra["lab_note"]
     assert extra["lab_app_mode"]["handoff"] == [
         "wan-gif-loop-lab-example",

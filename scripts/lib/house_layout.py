@@ -8,6 +8,7 @@ COMFY_OUTPUT_DIR/assets/sets/<slug>. Never MODELS_DIR or guides/.
 from __future__ import annotations
 
 import argparse
+import shutil
 import sys
 from pathlib import Path
 from typing import Any
@@ -73,6 +74,39 @@ def clay_copy_name(index: int) -> str:
         Filename for Comfy LoadImage.
     """
     return f"{CLAY_PREFIX}_{index + 1:02d}.png"
+
+
+def copy_clay_to_input_dir(
+    pack_dir: str | Path, input_dir: str | Path
+) -> list[Path]:
+    """Copy ez_house_clay_NN.png from a views pack into Comfy's LoadImage folder.
+
+    LoadImage indexes COMFY_OUTPUT_DIR/input (container /inputs), not the
+    output root.
+
+    Args:
+        pack_dir: assets/sets/<slug> directory that already has clay copies.
+        input_dir: Host COMFY_OUTPUT_DIR/input (container /inputs).
+
+    Returns:
+        Paths written under input_dir, in place_10 order.
+
+    Raises:
+        HouseLayoutError: A pack copy is missing, or input_dir is under MODELS_DIR.
+    """
+    dest = Path(pack_dir)
+    target = refuse_output_dir(input_dir)
+    target.mkdir(parents=True, exist_ok=True)
+    written: list[Path] = []
+    for index in range(len(PLACE_10_IDS)):
+        name = clay_copy_name(index)
+        src = dest / name
+        if not src.is_file():
+            raise HouseLayoutError(f"missing clay copy {src}")
+        out = target / name
+        shutil.copy2(src, out)
+        written.append(out)
+    return written
 
 
 def view_png_name(camera_id: str) -> str:
@@ -460,7 +494,11 @@ def dump_asset_yaml(slug: str) -> str:
 
 
 def validate_views_dir(
-    pack_dir: str | Path, *, require_glb: bool = True, require_depth: bool = True
+    pack_dir: str | Path,
+    *,
+    require_glb: bool = True,
+    require_depth: bool = True,
+    input_dir: str | Path | None = None,
 ) -> dict[str, Any]:
     """Fail-closed QC of a house-views dump.
 
@@ -468,6 +506,7 @@ def validate_views_dir(
         pack_dir: assets/sets/<slug> directory.
         require_glb: Require mesh/house.glb.
         require_depth: Require depth/<id>.png for each camera.
+        input_dir: When set, require ez_house_clay_NN.png in Comfy LoadImage input/.
 
     Returns:
         Validated views mapping.
@@ -510,6 +549,20 @@ def validate_views_dir(
             if csize != (PACK_WIDTH, PACK_HEIGHT):
                 raise HouseLayoutError(
                     f"{copy_name} size {csize} is not {PACK_WIDTH}x{PACK_HEIGHT}"
+                )
+    if input_dir is not None:
+        input_root = Path(input_dir)
+        if not input_root.is_dir():
+            raise HouseLayoutError(f"missing LoadImage input dir {input_root}")
+        for index in range(len(PLACE_10_IDS)):
+            name = clay_copy_name(index)
+            plate = input_root / name
+            if not plate.is_file():
+                raise HouseLayoutError(f"missing LoadImage input {plate}")
+            isize = png_size(plate)
+            if isize != (PACK_WIDTH, PACK_HEIGHT):
+                raise HouseLayoutError(
+                    f"{name} in input dir size {isize} is not {PACK_WIDTH}x{PACK_HEIGHT}"
                 )
     if require_glb:
         glb = dest / "mesh" / "house.glb"
@@ -566,6 +619,12 @@ def _cli(argv: list[str] | None = None) -> int:
     p_fix = sub.add_parser("fixture", help="write solid PNG placeholders")
     p_fix.add_argument("path")
     p_fix.add_argument("--slug", default="lab-penthouse")
+    p_copy = sub.add_parser(
+        "copy-inputs",
+        help="copy ez_house_clay_NN.png into Comfy LoadImage input/",
+    )
+    p_copy.add_argument("pack")
+    p_copy.add_argument("input_dir")
     ns = parser.parse_args(argv)
     try:
         if ns.cmd == "validate":
@@ -577,6 +636,10 @@ def _cli(argv: list[str] | None = None) -> int:
                 ns.path, require_glb=not ns.fixture, require_depth=not ns.fixture
             )
             print(f"ok {ns.path}")
+            return 0
+        if ns.cmd == "copy-inputs":
+            written = copy_clay_to_input_dir(ns.pack, ns.input_dir)
+            print(f"ok {len(written)} clay plates → {ns.input_dir}")
             return 0
         write_fixture_pack(ns.path, slug=ns.slug)
         print(f"wrote fixture {ns.path}")

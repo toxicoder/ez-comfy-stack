@@ -146,6 +146,8 @@ Commands:
   blender           Host Blender sidecar (dies if compose is up)
   export-guides     Dump a 1280x704 / 120f guide pack (dies if compose is up)
   house-views       Dump 1024x1280 Instagram 4:5 clay stills + GLB (dies if compose is up)
+                    --install-inputs copies an existing dump into COMFY_OUTPUT_DIR/input
+                    (no Blender; compose may stay up)
   asset-ls [--json] [--output-dir DIR]
                     Read-only Asset Bible catalog (COMFY_OUTPUT_DIR/assets)
                     Coming later: asset-new / asset-iterate / asset-promote
