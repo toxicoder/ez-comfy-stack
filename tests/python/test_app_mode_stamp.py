@@ -18,6 +18,7 @@ from _stamp_app_mode import (
     STAMP_SPECS,
     infer_suite_inputs,
     stamp_app_mode,
+    widget_config,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -187,3 +188,119 @@ def test_widget_help_text_has_no_banned_models() -> None:
     blob = json.dumps(DEFAULT_WIDGET_DESCRIPTIONS)
     for needle in ("MiniMax", "klein-9b", "FLUX.2-dev", "Seedance", "Kling"):
         assert needle not in blob
+
+
+def _labels(graph: dict) -> list[str]:
+    spec = STAMP_SPECS[str(graph["id"])]
+    labels: list[str] = []
+    for entry in infer_suite_inputs(graph, spec):
+        name = entry[1]
+        config = entry[2] if len(entry) > 2 else {}
+        labels.append((config or {}).get("label") or name)
+    return labels
+
+
+def test_unwired_or_bypassed_loadimage_is_not_an_app_input() -> None:
+    hero = _widget_names(_load("klein-still-hero-lab-example.json"))
+    assert "image" not in hero
+    thumb = _widget_names(_load("klein-thumbnail-lab-example.json"))
+    assert "image" not in thumb
+    t2v = _widget_names(_load("wan-t2v-5s-lab-example.json"))
+    assert "image" not in t2v
+    flf = _widget_names(_load("wan-flf-5s-lab-example.json"))
+    assert flf.count("image") == 1
+    vace = _widget_names(_load("wan-vace-join-lab-example.json"))
+    assert vace.count("image") == 1
+
+
+def test_wired_edit_and_i2v_keep_image() -> None:
+    tweak = _widget_names(_load("klein-character-tweak-lab-example.json"))
+    assert "image" in tweak
+    i2v = _widget_names(_load("wan-i2v-5s-lab-example.json"))
+    assert "image" in i2v
+    clay = _widget_names(_load("klein-from-clay-lab-example.json"))
+    assert "image" in clay
+
+
+def test_i2v_hides_style_t2v_keeps_it() -> None:
+    i2v = _widget_names(_load("wan-i2v-5s-lab-example.json"))
+    assert "style" not in i2v
+    ltx_i2v = _widget_names(_load("ltx-i2v-5s-lab-example.json"))
+    assert "style" not in ltx_i2v
+    t2v = _widget_names(_load("wan-t2v-5s-lab-example.json"))
+    assert "style" in t2v
+    ltx_t2v = _widget_names(_load("ltx-t2v-5s-lab-example.json"))
+    assert "style" in ltx_t2v
+    still = _widget_names(_load("klein-still-draft-lab-example.json"))
+    assert "style" in still
+
+
+def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
+    names = _widget_names(_load("prompt-forge-lab-example.json"))
+    assert names.count("style") == 3
+    labels = _labels(_load("prompt-forge-lab-example.json"))
+    assert "Klein prompt" in labels
+    assert "Wan prompt" in labels
+    assert "LTX prompt" in labels
+    assert len(labels) == len(set(labels)), labels
+
+
+def test_beat_sheet_labels_are_node_titles() -> None:
+    graph = _load("beat-sheet-lab-example.json")
+    labels = _labels(graph)
+    titles = [
+        n.get("title")
+        for n in graph["nodes"]
+        if n.get("type") == "PrimitiveNode"
+    ]
+    assert labels == titles
+    assert len(set(labels)) == 18
+
+
+def test_music_exposes_duration_and_vocal_mode() -> None:
+    names = _widget_names(_load("music-rap-draft-lab-example.json"))
+    assert names[0] == "tags"
+    assert "lyrics" in names
+    assert "seconds" in names
+    assert "mode" in names
+    assert names.index("enhance") < names.index("seconds")
+    labels = _labels(_load("music-rap-draft-lab-example.json"))
+    assert "Duration (seconds)" in labels
+    assert "Vocal / instrumental" in labels
+
+
+def test_podcast_exposes_voices_and_hides_refs_and_bed_lyrics() -> None:
+    names = _widget_names(_load("podcast-audio-first-lab-example.json"))
+    assert "prompt" in names
+    assert "tags" in names
+    assert "seconds" in names
+    assert "speaker_a_voice" in names
+    assert "speaker_b_voice" in names
+    assert "speed" in names
+    assert "lyrics" not in names
+    assert "backend" not in names
+    assert "speaker_a_ref" not in names
+    labels = _labels(_load("podcast-audio-first-lab-example.json"))
+    assert "Script" in labels
+    assert "Bed tags" in labels
+    assert "Rewrite script" in labels
+    assert "Rewrite bed" in labels
+    assert len(labels) == len(set(labels)), labels
+    radio = _widget_names(_load("podcast-radio-drama-lab-example.json"))
+    assert radio.count("tags") == 2
+    assert radio.count("seconds") == 2
+    assert "announcer_voice" in radio
+    assert "include_announcer" in radio
+    assert "lyrics" not in radio
+    radio_labels = _labels(_load("podcast-radio-drama-lab-example.json"))
+    assert "Sting tags" in radio_labels
+    assert "Bed tags" in radio_labels
+    assert len(radio_labels) == len(set(radio_labels)), radio_labels
+
+
+def test_widget_config_carries_label_and_prompt_height() -> None:
+    cfg = widget_config("prompt")
+    assert cfg is not None
+    assert cfg["label"] == "Prompt"
+    assert cfg["height"] == 140
+    assert "description" in cfg

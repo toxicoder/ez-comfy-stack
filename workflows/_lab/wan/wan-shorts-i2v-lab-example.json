@@ -771,35 +771,33 @@
           "15:prompt",
           "prompt",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model."
-          }
-        ],
-        [
-          "15:style",
-          "style",
-          {
-            "description": "Optional look. The start image owns look on I2V."
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Prompt",
+            "height": 140
           }
         ],
         [
           "15:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite prompt"
           }
         ],
         [
           "4:image",
           "image",
           {
-            "description": "Start frame or reference still."
+            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
+            "label": "First frame"
           }
         ],
         [
           "10:seed",
           "seed",
           {
-            "description": "Fix to iterate; randomize to explore."
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
           }
         ]
       ],
