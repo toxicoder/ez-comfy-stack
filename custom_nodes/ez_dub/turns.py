@@ -53,10 +53,13 @@ def normalize_turn(raw: object, index: int) -> dict[str, Any]:
         t0, t1 = t1, t0
     speaker = str(raw.get("speaker") or "spk00").strip() or "spk00"
     tid = raw.get("id")
-    try:
-        ident = int(tid)
-    except (TypeError, ValueError):
+    if tid is None:
         ident = index
+    else:
+        try:
+            ident = int(tid)
+        except (TypeError, ValueError):
+            ident = index
     return {
         "id": ident,
         "speaker": speaker,
@@ -94,7 +97,8 @@ def parse_payload(raw: object) -> dict[str, Any]:
             data = loaded
         else:
             return empty_payload(status="invalid json")
-    turns_raw = data.get("turns") if isinstance(data.get("turns"), list) else []
+    raw_turns = data.get("turns")
+    turns_raw: list[Any] = raw_turns if isinstance(raw_turns, list) else []
     turns = [normalize_turn(item, i + 1) for i, item in enumerate(turns_raw)]
     stage = str(data.get("stage") or DEFAULT_STAGE).strip().lower()
     if stage not in STAGES:

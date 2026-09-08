@@ -70,7 +70,7 @@ When adding or editing shell (including `tests/bats/*.bash` helpers and `tests/*
 
 - Prefer `"${var}"`, `[[ … ]]`, `$(…)`, process substitution over `find | while`
 - Document functions with **Globals / Arguments / Outputs / Returns**
-- Run `make fmt` and `make lint` (ShellCheck warnings are defects)
+- Run `make fmt` and `make lint` (ShellCheck warnings and Pyright errors are defects)
 - Do not use `eval` or aliases in scripts
 - See conventions for intentional deviations (`env bash`, modular script length)
 - Coverage: new functions must be **named and exercised under `tests/`** in the same commit
@@ -81,6 +81,8 @@ make test
 make coverage
 make lint
 ```
+
+**Pyright (Pylance)** runs inside `make test`, `make coverage`, and `make lint`. Type errors are defects. Do not consider a task complete while Pyright reports errors — fix the types; do not skip the gate. Install with `pip install -r tests/requirements.txt`.
 
 ## Safety callouts
 

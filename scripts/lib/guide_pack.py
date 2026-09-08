@@ -195,7 +195,8 @@ def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]
         size = png_size(path)
         if size != (PACK_WIDTH, PACK_HEIGHT):
             defects.append(f"{name} size {size} is not {PACK_WIDTH}x{PACK_HEIGHT}")
-    layers = shot.get("layers") if isinstance(shot.get("layers"), list) else []
+    raw_layers = shot.get("layers")
+    layers: list[Any] = raw_layers if isinstance(raw_layers, list) else []
     if "rgb" in layers:
         rgb_n = _count_frames(pack_dir / "rgb")
         if require_full_seq and rgb_n not in {0, PACK_FRAMES}:

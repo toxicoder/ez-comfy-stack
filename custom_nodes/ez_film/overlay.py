@@ -137,10 +137,11 @@ def overlay_qc(
             json.dumps(report, indent=2) + "\n", encoding="utf-8"
         )
         return report
+    assert exe is not None
     dest.mkdir(parents=True, exist_ok=True)
     overlay = dest / "overlay.png"
     blend = blend_argv(clay, look, overlay)
-    blend[0] = exe  # type: ignore[index]
+    blend[0] = exe
     proc = _run(blend, run=run)
     if proc.returncode != 0 or not overlay.is_file():
         report["defects"].append(

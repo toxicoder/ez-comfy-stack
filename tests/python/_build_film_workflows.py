@@ -656,7 +656,7 @@ def build_one_click_film(
     _add_link(graph, ltx_audio_vae, 0, ltx_empty, "audio_vae", "VAE")
 
     by_id = {n["id"]: n for n in graph["nodes"]}
-    prev_last = None
+    prev_last: dict | None = None
     for index in range(18):
         base = SHOT_ID_BASE + index * SHOT_ID_STRIDE
         pos = by_id[base]
@@ -679,6 +679,7 @@ def build_one_click_film(
         if index == 0:
             _add_link(graph, unload, 0, i2v, "image", "IMAGE")
         else:
+            assert prev_last is not None
             _add_link(graph, prev_last, 0, i2v, "image", "IMAGE")
         _add_link(graph, i2v, 0, cond, "positive", "CONDITIONING")
         _add_link(graph, i2v, 1, cond, "negative", "CONDITIONING")

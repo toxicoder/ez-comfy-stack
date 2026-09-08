@@ -112,9 +112,11 @@ Key pages (branch-relative source): [How the studio works](docs/learn/index.md) 
 ## Development
 
 ```bash
+pip install -r tests/requirements.txt   # pytest, pytest-cov, pyright
 make test
 make coverage
-make lint
+make lint          # ShellCheck + shfmt + Pyright (Pylance)
+make typecheck     # Pyright only
 make docs
 ```
 

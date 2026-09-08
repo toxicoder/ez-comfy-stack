@@ -325,7 +325,7 @@ def test_film_concat_node(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
         return out_mp4
 
     with patch.object(film_nodes, "stitch_film", side_effect=fake_stitch):
-        packed = EZFilmConcat().run("go-see", 90.0, **shots)
+        packed = EZFilmConcat().run("go-see", 90.0, 0, "", **shots)
     assert packed["result"][0].endswith("ez_gosee_90s.mp4")
     assert packed["ui"]["gifs"][0]["filename"] == "ez_gosee_90s.mp4"
     assert packed["ui"]["gifs"][0]["format"] == "video/h264-mp4"
@@ -349,6 +349,7 @@ def test_write_preview_html_and_x264_fallback(tmp_path: Path) -> None:
     publish = tmp_path / "films" / "gosee" / "publish"
     publish.mkdir(parents=True)
     copied = copy_publish_master(str(mp4), "go-see", tmp_path)
+    assert copied is not None
     assert copied == publish / "master.mp4"
     assert copied.is_file()
     shots = [str(tmp_path / f"s{i:02d}.mp4") for i in range(18)]

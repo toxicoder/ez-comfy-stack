@@ -1,0 +1,31 @@
+{
+  "include": [
+    "custom_nodes",
+    "docker",
+    "docs",
+    "scripts/lib",
+    "studio-ui",
+    "tests/python",
+    "tools"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "site",
+    "coverage",
+    ".venv",
+    "venv"
+  ],
+  "extraPaths": [
+    "custom_nodes",
+    "docker",
+    "docker/pythonpath",
+    "scripts/lib",
+    "studio-ui",
+    "tests/python",
+    "docs"
+  ],
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "standard",
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none"
+}

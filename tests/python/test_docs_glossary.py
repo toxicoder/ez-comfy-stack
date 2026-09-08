@@ -203,13 +203,13 @@ def test_inject_dialog_once_when_terms_wrapped(gloss) -> None:
     out = gloss.apply_glossary(html, page_url="getting-started/", terms=terms)
     assert out.count('id="ez-glossary-data"') == 1
     assert out.count("ez-glossary-dialog") >= 1
-    payload = json.loads(
-        re.search(
-            r'<script type="application/json" id="ez-glossary-data">(.*?)</script>',
-            out,
-            re.DOTALL,
-        ).group(1)
+    match = re.search(
+        r'<script type="application/json" id="ez-glossary-data">(.*?)</script>',
+        out,
+        re.DOTALL,
     )
+    assert match is not None
+    payload = json.loads(match.group(1))
     assert payload["klein"]["title"] == "Klein 4B"
     assert payload["klein"]["short"] == "Apache still-image model."
     assert payload["klein"]["see_also"] == ["wan"]
