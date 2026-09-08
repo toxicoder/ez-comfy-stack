@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Which *-lab-example graph to load for a still, 5 s clip, GIF, creator plate, or 90s film.">
+        <meta name="description" content="Which *-lab-example graph to load for a still, 5 s clip, GIF, creator plate, 90s film, or local audio.">
       
       
       
@@ -1673,7 +1673,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>Which graph for which job</li>
-<li>Seeded <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> / Apps (Lane A vs Lane B) / 90s / creator tables</li>
+<li>Seeded <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> / Apps (Lane A vs Lane B) / 90s / creator / audio tables</li>
 <li>Notes that apply to every <code>*-lab-example</code></li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1712,7 +1712,7 @@
   Plate --&gt; C["klein-thumbnail / packshot / cover"]</code></pre>
 <hr />
 <h2 id="catalog">Catalog<a class="headerlink" href="#catalog" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:8"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><input id="__tabbed_1_7" name="__tabbed_1" type="radio" /><input id="__tabbed_1_8" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Still (Klein 4B)</label><label for="__tabbed_1_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_1_3">AV hero (LTX-2.5)</label><label for="__tabbed_1_4">Apps (Lane A / Lane B)</label><label for="__tabbed_1_5">90s shorts</label><label for="__tabbed_1_6">Creator toolkit</label><label for="__tabbed_1_7">DCC (clay → print)</label><label for="__tabbed_1_8">License</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:9"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><input id="__tabbed_1_7" name="__tabbed_1" type="radio" /><input id="__tabbed_1_8" name="__tabbed_1" type="radio" /><input id="__tabbed_1_9" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Still (Klein 4B)</label><label for="__tabbed_1_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_1_3">AV hero (LTX-2.5)</label><label for="__tabbed_1_4">Apps (Lane A / Lane B)</label><label for="__tabbed_1_5">90s shorts</label><label for="__tabbed_1_6">Creator toolkit</label><label for="__tabbed_1_7">Audio (podcast / rap)</label><label for="__tabbed_1_8">DCC (clay → print)</label><label for="__tabbed_1_9">License</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -2086,6 +2086,55 @@
 <tr>
 <td><strong>ltx-hook-av-lab-example</strong></td>
 <td>~5 s AV cold open</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tabbed-block">
+<p>Occupancy <strong>audio</strong>. Opt-in weights (<code>download-podcast</code> / <code>download-music</code>). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Playbook: <a href="../podcast/">Local podcast</a>, <a href="../music/">Local music</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>podcast-audio-first-lab-example</strong></td>
+<td>Two-host episode. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> stock voices + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> instrumental bed. Prefix <code>ez_podcast_ep</code></td>
+</tr>
+<tr>
+<td><strong>podcast-radio-drama-lab-example</strong></td>
+<td>One-graph radio drama. Sting + bed stay instrumental. Prefix <code>ez_radio_ep</code></td>
+</tr>
+<tr>
+<td><strong>music-rap-draft-lab-example</strong></td>
+<td>ACE-Step rap draft <strong>32 s</strong> boom-bap 88 (<code>ez_rap_draft</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-full-lab-example</strong></td>
+<td>ACE-Step rap full <strong>96 s</strong> boom-bap 88 (<code>ez_rap_full</code>). Queue draft first</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-lab-coat-lab-example</strong></td>
+<td><strong>90 s</strong> diss, boom-bap 88. Nill Bye lab-coat roast of Rake (<code>ez_rap_nill_labcoat</code>). Queue on its own</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-peer-review-lab-example</strong></td>
+<td><strong>90 s</strong> diss, boom-bap 88, <code>[spoken word]</code> intro (<code>ez_rap_nill_review</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-feels-lab-example</strong></td>
+<td><strong>90 s</strong> diss, lo-fi 86 (<code>ez_rap_nill_feels</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-fake-cool-lab-example</strong></td>
+<td><strong>90 s</strong> diss, trap 140 (<code>ez_rap_nill_fakecool</code>)</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-hypothesis-lab-example</strong></td>
+<td><strong>90 s</strong> diss, boom-bap 92, seed 7 (<code>ez_rap_nill_hypothesis</code>)</td>
 </tr>
 </tbody>
 </table>

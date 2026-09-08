@@ -1054,15 +1054,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#two-graphs" class="md-nav__link">
+  <a href="#graphs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Two graphs
+        Graphs
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Two graphs">
+    <nav class="md-nav" aria-label="Graphs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1081,6 +1081,17 @@
     <span class="md-ellipsis">
       
         Full track
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#90s-nill-bye-diss-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        90s Nill Bye diss examples
       
     </span>
   </a>
@@ -1700,15 +1711,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#two-graphs" class="md-nav__link">
+  <a href="#graphs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Two graphs
+        Graphs
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Two graphs">
+    <nav class="md-nav" aria-label="Graphs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1727,6 +1738,17 @@
     <span class="md-ellipsis">
       
         Full track
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#90s-nill-bye-diss-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        90s Nill Bye diss examples
       
     </span>
   </a>
@@ -1817,6 +1839,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> the rap <strong>draft</strong> first, then the <strong>full</strong> track</li>
+<li>Five <strong>90 s</strong> Nill Bye vs Rake diss examples (Queue on their own)</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: tags, lyrics, rewrite, vocal/instrumental, duration</li>
 <li>Tags vs lyrics; <code>[verse]</code> / <code>[chorus]</code> / <code>[spoken word]</code> as vocal hints</li>
 <li>Original lyrics only — no “in the style of \&lt;living artist&gt;”</li>
@@ -1828,6 +1851,7 @@
 <p><strong>What this enables</strong></p>
 <ul>
 <li>A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs</li>
+<li>Five 90 s original diss takes (Nill Bye vs Rake) without cloud music APIs</li>
 <li>Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice</li>
 <li>Keeping the visual studio bootable when the music pack is missing</li>
 </ul>
@@ -1848,7 +1872,7 @@
   D-&gt;&gt;U: ez_rap_draft FLAC + MP3
   U-&gt;&gt;C: Queue full 96 s when the draft is good</code></pre>
 <p>Cover art is a <strong>later</strong> Klein session. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: do not load LTX + ACE-Step together.</p>
-<h2 id="two-graphs">Two graphs<a class="headerlink" href="#two-graphs" title="Permanent link">&para;</a></h2>
+<h2 id="graphs">Graphs<a class="headerlink" href="#graphs" title="Permanent link">&para;</a></h2>
 <p>Do <strong>not</strong> load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph.</p>
 <h3 id="draft-first-queue">Draft — first Queue<a class="headerlink" href="#draft-first-queue" title="Permanent link">&para;</a></h3>
 <p>Graph: <strong>music-rap-draft-lab-example</strong> (<code>extra.lab_profile</code> <code>us-safe-music</code>). Same role as <strong>klein-still-draft</strong>.</p>
@@ -1898,13 +1922,59 @@
 </ul>
 <h3 id="full-track">Full track<a class="headerlink" href="#full-track" title="Permanent link">&para;</a></h3>
 <p>Graph: <strong>music-rap-full-lab-example</strong>. App <strong>Duration (seconds)</strong> defaults to <strong>96</strong> s. Same sampler and model. Prefix <code>ez_rap_full</code>. Same voice + second verse + repeated chorus + <code>[outro]</code>. Human rewrite required before any release.</p>
+<h3 id="90s-nill-bye-diss-examples">90s Nill Bye diss examples<a class="headerlink" href="#90s-nill-bye-diss-examples" title="Permanent link">&para;</a></h3>
+<p>Five extra full-track graphs. Same AIO, sampler, occupancy <strong>audio</strong>, and Klein cover handoff as the 96 s full track. App <strong>Duration (seconds)</strong> defaults to <strong>90</strong>. Queue <strong>on their own</strong> — draft-first is the generic lane, not a prerequisite.</p>
+<p>Fictional MCs only: <strong>Nill Bye</strong> (science guy, mad) roasting <strong>Rake</strong> (in his feels; club-talk and fake-cool as a brand). Original lyrics. No living-MC names. No famous-hook paraphrases. Shipped bars stay short and SFW (roast the pose, not graphic content). ACE-Step vocal is an invented timbre. Human rewrite required before any release.</p>
+<table>
+<thead>
+<tr>
+<th>Graph</th>
+<th>Tags / bpm</th>
+<th>Prefix</th>
+<th>Take</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>music-rap-nill-bye-lab-coat-lab-example</strong></td>
+<td>boom-bap <strong>88</strong></td>
+<td><code>ez_rap_nill_labcoat</code></td>
+<td>Classroom lecture roast</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-peer-review-lab-example</strong></td>
+<td>boom-bap <strong>88</strong>, <code>[spoken word]</code> intro</td>
+<td><code>ez_rap_nill_review</code></td>
+<td>Claims fail review</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-feels-lab-example</strong></td>
+<td>lo-fi <strong>86</strong></td>
+<td><code>ez_rap_nill_feels</code></td>
+<td>Sad-boy diary as a brand</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-fake-cool-lab-example</strong></td>
+<td>trap <strong>140</strong></td>
+<td><code>ez_rap_nill_fakecool</code></td>
+<td>Club-talk is not a method</td>
+</tr>
+<tr>
+<td><strong>music-rap-nill-bye-hypothesis-lab-example</strong></td>
+<td>boom-bap <strong>92</strong>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> <strong>7</strong></td>
+<td><code>ez_rap_nill_hypothesis</code></td>
+<td>Data vs rumor</td>
+</tr>
+</tbody>
+</table>
+<p>Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.</p>
 <hr />
 <h2 id="tags-vs-lyrics">Tags vs lyrics<a class="headerlink" href="#tags-vs-lyrics" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Tags</strong> describe genre, drums, bass, booth, vocal character, and bpm.</li>
 <li><strong>Lyrics</strong> are the bars. Section labels <code>[intro]</code>, <code>[verse]</code>, <code>[chorus]</code>, <code>[outro]</code>, and <code>[spoken word]</code> are vocal <strong>hints</strong> operators may add — they are not a rights grant.</li>
 <li>Original lyrics only. Do not write “in the style of \&lt;living artist&gt;”. No living-MC names. No famous-hook paraphrases.</li>
-<li>Short percussive lines (about 6–10 syllables) slur less. Keep <code>language=en</code> on <code>TextEncodeAceStepAudio1.5</code> (combo, not free text). The seeded graph stores <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> control as <strong>fixed</strong> after the seed; re-open <strong>music-rap-draft-lab-example</strong> after a pull so those combos stay aligned.</li>
+<li>Short percussive lines (about 6–10 syllables) slur less. Keep <code>language=en</code> on <code>TextEncodeAceStepAudio1.5</code> (combo, not free text). The seeded graph stores seed control as <strong>fixed</strong> after the seed; re-open <strong>music-rap-draft-lab-example</strong> after a pull so those combos stay aligned.</li>
 </ul>
 <p>ACE-Step generates the vocal from lyrics + tags. That timbre is an <strong>invented identity</strong>, not a cloned MC. Do not add <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>-Audio-Suite to these graphs.</p>
 <hr />
@@ -1933,7 +2003,7 @@
 <li><code>./scripts/manage.sh download-music --tier turbo</code></li>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
 <li>Load <strong>music-rap-draft-lab-example</strong>. Enhance on. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_rap_draft_*.flac</code> / <code>ez_rap_draft_*.mp3</code></li>
-<li>Then load <strong>music-rap-full-lab-example</strong> (96 s)</li>
+<li>Then load <strong>music-rap-full-lab-example</strong> (96 s), <strong>or</strong> one <strong>music-rap-nill-bye-*-lab-example</strong> (90 s) on its own</li>
 <li>Cover in a <strong>later</strong> session: <strong>klein-thumbnail-lab-example</strong> or <strong>klein-podcast-cover-lab-example</strong></li>
 </ol>
 <p>Spark: the AIO is ~10 GB VRAM-adjacent work. Do <strong>not</strong> co-resident with LTX / Wan / Klein.</p>
