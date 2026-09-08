@@ -267,6 +267,7 @@ def test_web_directory_and_preview_js() -> None:
     assert "EZAceStepPromptEnhance" in body
     assert "EZRapLyrics" in body
     assert "EZPodcastScript" in body
+    assert "EZDubScript" in body
     assert "onNodeCreated" in body
     assert "CLIP prompt" in body
     assert "Enhance status" in body

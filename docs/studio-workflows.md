@@ -32,7 +32,7 @@ user/default/workflows/
     shorts/    film-*-90s-*-lab-example.json
     dcc/       clay → print, iclora envelope
     optional/  a14b, longcat stub
-    audio/     podcast-*, music-rap-*
+    audio/     podcast-*, dub-*, music-rap-*
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -180,12 +180,13 @@ flowchart TB
     | **ltx-interior-ambience-lab-example** | Interior room-tone AV |
     | **ltx-hook-av-lab-example** | ~5 s AV cold open |
 
-=== "Audio (podcast / rap)"
+=== "Audio (podcast / dub / rap)"
 
-    Occupancy **audio**. Opt-in weights (`download-podcast` / `download-music`). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Playbook: [Local podcast](podcast.md), [Local music](music.md).
+    Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Playbook: [Local podcast](podcast.md), [Local dub](dub.md), [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
+    | **dub-localize-lab-example** | Multi-speaker clone-and-translate. Rights gate. Duration-locked `ez_dub_yt` for YouTube Languages. Prefix `ez_dub_mix` |
     | **podcast-audio-first-lab-example** | Two-host episode. Kokoro stock voices + ACE-Step instrumental bed. Prefix `ez_podcast_ep` |
     | **podcast-radio-drama-lab-example** | One-graph radio drama. Sting + bed stay instrumental. Prefix `ez_radio_ep` |
     | **music-rap-draft-lab-example** | ACE-Step rap draft **32 s** boom-bap 88 (`ez_rap_draft`) |

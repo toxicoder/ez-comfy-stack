@@ -34,6 +34,10 @@ tags: [troubleshooting, comfyui, docker]
 | No MP4 preview, only PNGs | Old graph without VHS, or looking at SaveImage | Re-open seeded `wan-*` / `ltx-*`; open **Save video (MP4)** node |
 | LTX MP4 has no sound | Missing audio VAE decode → VHS | Re-open current **ltx-*-lab-example** |
 | Enhance did nothing | GGUF / llama.cpp missing (fail-soft) | Read **Enhance status**. `download-models` then restart |
+| Dub Queue says **rights refused** | **I have rights** is off (default) | Turn it on only when you own the recording or have speaker consent. [Local dub](dub.md) |
+| Dub empty mix / no transcript | faster-whisper or Chatterbox missing | `download-dub --tier asr` / `--tier clone`; optional `pip install faster-whisper` in the venv |
+| Dub URL ingest failed | yt-dlp missing, or ToS/network | `./scripts/utilities/dub-fetch.sh status` then install yt-dlp, or pass a local file |
+| YouTube rejects the extra audio | Duration mismatch or MLA not enabled | Use `ez_dub_yt.wav` (duration-locked). MLA is rolling out; check Studio → Languages |
 | VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
 | `export-guides` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [DCC guide pack](dcc-workflows.md) |
 | Guide pack QC refuses 1280×720 | LTX VAE grid is **1280×704** | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |

@@ -78,7 +78,34 @@
     "category": "Models",
     "short": "Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.",
     "long": "Chatterbox Turbo is an opt-in TTS (`download-podcast --tier chatterbox`). Keep the PerTh watermark. Do not add celebrity reference WAVs. Kokoro remains the Spark-safe default. See [Local podcast](podcast.md).",
-    "see_also": ["kokoro", "tts"]
+    "see_also": ["kokoro", "tts", "dub"]
+  },
+  {
+    "id": "dub",
+    "title": "Local dub",
+    "aliases": ["Local dub", "dub-localize"],
+    "category": "Audio",
+    "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
+    "long": "The **dub-localize-lab-example** App diarizes speakers, translates turns, and clones each voice (Chatterbox Multilingual V3). **I have rights** must be on. Occupancy audio. YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
+  },
+  {
+    "id": "chatterbox-ml",
+    "title": "Chatterbox Multilingual",
+    "aliases": ["Chatterbox Multilingual", "Chatterbox Multilingual V3"],
+    "category": "Models",
+    "short": "MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.",
+    "long": "Default engine for [Local dub](dub.md). Cross-lingual clone from a short ref extracted from this job, not a celebrity pack. Turbo English remains `download-podcast --tier chatterbox`.",
+    "see_also": ["chatterbox", "dub", "tts"]
+  },
+  {
+    "id": "multi-language-audio",
+    "title": "YouTube multi-language audio",
+    "aliases": ["multi-language audio", "MLA"],
+    "category": "Audio",
+    "short": "YouTube Studio Languages tab: upload an audio-only dub the same length as the video.",
+    "long": "YouTube does not reliably ingest extra AAC tracks muxed into an MP4. Export `ez_dub_yt.wav`, upload it under Languages → Audio, add the translated SRT, and use the synthetic/altered-content toggle. Eligibility varies by channel. See [Local dub](dub.md).",
+    "see_also": ["dub", "loudnorm"]
   },
   {
     "id": "clip",

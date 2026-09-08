@@ -40,7 +40,7 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Unique creator widgets: prompt first, then look / rewrite / seed. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
+| **App** | Unique creator widgets: prompt first, then look / rewrite / seed. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; dub adds source, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
 | **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
 
 Official persist is `extra.linearData` (`inputs` / `outputs`). The lab contract is `extra.lab_app_mode` (`lane`, `occupancy`, `handoff`, `frontend_min`). Do not require `extra.linearMode` — upstream does not write it.
@@ -62,7 +62,7 @@ One GB10 job. Cover art ≠ film ≠ podcast. Every App Note includes a one-line
 | `wan` | silent 5 s / GIF / bumper | LTX, podcast, music |
 | `ltx` | any AV 5 s | Wan, podcast, music, other LTX |
 | `film` | 90 s one-click | everything else on that Spark |
-| `audio` | podcast / rap | Klein / Wan / LTX session |
+| `audio` | podcast / dub / rap | Klein / Wan / LTX session |
 
 Prompt Enhance GGUF stays CPU-only (`n_gpu_layers=0`). Sidecar occupancy (Comfy XOR Blender) is unchanged: [Studio sidecars](studio-sidecars.md).
 
@@ -112,7 +112,7 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
 
-Audio Apps (`podcast-*`, `music-rap-*`) are occupancy **audio**. That includes the five **90 s** `music-rap-nill-bye-*-lab-example` diss takes ([Local music](music.md)). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md).
+Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`) are occupancy **audio**. That includes the five **90 s** `music-rap-nill-bye-*-lab-example` diss takes ([Local music](music.md)). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md).
 
 ---
 

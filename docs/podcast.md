@@ -15,6 +15,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 - Native ACE-Step instrumental beds
 - Voice consent, platform rules, and authorship
 - `download-podcast` usage, sequential Queue, and loudnorm
+- Clone-and-translate of a recorded show is a different lane: [Local dub](dub.md)
 
 **What this enables**
 
@@ -89,7 +90,7 @@ Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity 
 
 ## Voice consent and invented characters
 
-Hosts are **original characters**, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo.
+Hosts are **original characters**, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo. Translating a recorded podcast while keeping the original speakers is [Local dub](dub.md) (`dub-localize-lab-example`), with a rights attestation on every Queue.
 
 ---
 

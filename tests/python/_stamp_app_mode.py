@@ -195,6 +195,9 @@ ENHANCE_TYPES = (
 
 # App Mode widget order: the thing the user types first, then look, then Run knobs.
 WIDGET_ORDER = (
+    "source",
+    "have_rights",
+    "job_slug",
     "prompt",
     "tags",
     "lyrics",
@@ -205,6 +208,13 @@ WIDGET_ORDER = (
     "duration_hint",
     "audio_notes",
     "seconds",
+    "target_language",
+    "source_language",
+    "max_speakers",
+    "stage",
+    "engine",
+    "keep_bed",
+    "spoken_disclosure",
     "speaker_a_voice",
     "speaker_b_voice",
     "announcer_voice",
@@ -253,6 +263,16 @@ GENERIC_LABELS = {
     "announcer_voice": "Announcer",
     "include_announcer": "Include announcer",
     "speed": "Speaking speed",
+    "source": "Source",
+    "have_rights": "I have rights",
+    "job_slug": "Job slug",
+    "target_language": "Target language",
+    "source_language": "Source language",
+    "max_speakers": "Max speakers",
+    "stage": "Stage",
+    "engine": "Clone engine",
+    "keep_bed": "Keep original bed",
+    "spoken_disclosure": "Spoken disclosure",
 }
 DEFAULT_WIDGET_DESCRIPTIONS = {
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
@@ -280,6 +300,16 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "announcer_voice": "Kokoro built-in for Announcer: lines.",
     "include_announcer": "On: speak Announcer: lines. Off: skip them.",
     "speed": "TTS speed. 1.0 is the Kokoro default.",
+    "source": "Local wav/mp4 path or an http(s) URL you have rights to fetch.",
+    "have_rights": "Required. Off refuses Queue. No celebrity refs.",
+    "job_slug": "Job folder under COMFY_OUTPUT_DIR/dubs/<slug>.",
+    "target_language": "Language to speak. Spanish is the soccer-podcast default.",
+    "source_language": "auto detects from ASR. Pin when the show is mixed-language.",
+    "max_speakers": "0 = auto (cap 8). Hint when you know the cast size.",
+    "stage": "all = analyze+render. analyze writes JSON. render clones the widget.",
+    "engine": "chatterbox-ml (MIT, 23 langs, PerTh on) or qwen3tts (Apache).",
+    "keep_bed": "On: keep original ambience in gaps. Off: speech-only mix.",
+    "spoken_disclosure": "On: overlay a 3 s spoken bumper. Sidecar is always written.",
 }
 
 
@@ -353,6 +383,28 @@ def display_label(
         return title or "Duration (seconds)"
     if ntype == "EZPodcastScript":
         return {"prompt": "Script", "enhance": "Rewrite script"}.get(name, generic)
+    if ntype == "EZDubIngest":
+        return {
+            "source": "Source",
+            "have_rights": "I have rights",
+            "job_slug": "Job slug",
+        }.get(name, generic)
+    if ntype == "EZDubScript":
+        return {
+            "prompt": "Translation",
+            "enhance": "Rewrite translation",
+            "target_language": "Target language",
+            "source_language": "Source language",
+            "max_speakers": "Max speakers",
+            "stage": "Stage",
+        }.get(name, generic)
+    if ntype == "EZDubRender":
+        return {
+            "engine": "Clone engine",
+            "keep_bed": "Keep original bed",
+            "spoken_disclosure": "Spoken disclosure",
+            "speed": "Speaking speed",
+        }.get(name, generic)
     if ntype == "EZKokoroTTS":
         return {
             "speaker_a_voice": "Speaker A",
@@ -410,6 +462,10 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         return "Bed or sting length in seconds."
     if name == "prompt" and ntype == "EZPodcastScript":
         return "Speaker A/B lines. Disclosure prepends the spoken bumper."
+    if name == "prompt" and ntype == "EZDubScript":
+        return "Editable turns JSON. Rewrite translation fills text_target."
+    if name == "enhance" and ntype == "EZDubScript":
+        return "On: diarize + ASR + GGUF translate. Off: pin this JSON."
     return DEFAULT_WIDGET_DESCRIPTIONS.get(name)
 
 
@@ -631,6 +687,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     ),
     "podcast-audio-first-lab-example": _spec("audio", "audio"),
     "podcast-radio-drama-lab-example": _spec("audio", "audio"),
+    "dub-localize-lab-example": _spec("audio", "audio"),
     "music-rap-draft-lab-example": _spec("audio", "audio"),
     "music-rap-full-lab-example": _spec("audio", "audio"),
     "music-rap-nill-bye-lab-coat-lab-example": _spec("audio", "audio"),
@@ -776,6 +833,34 @@ def _collect_raw_inputs(
                 raw.append((nid, "image", node))
         elif ntype == "UNETLoader" and spec.get("expose_unet"):
             raw.append((nid, "unet_name", node))
+        elif ntype == "EZDubIngest":
+            raw.extend(
+                (
+                    (nid, "source", node),
+                    (nid, "have_rights", node),
+                    (nid, "job_slug", node),
+                )
+            )
+        elif ntype == "EZDubScript":
+            raw.extend(
+                (
+                    (nid, "prompt", node),
+                    (nid, "enhance", node),
+                    (nid, "target_language", node),
+                    (nid, "source_language", node),
+                    (nid, "max_speakers", node),
+                    (nid, "stage", node),
+                )
+            )
+        elif ntype == "EZDubRender":
+            raw.extend(
+                (
+                    (nid, "engine", node),
+                    (nid, "keep_bed", node),
+                    (nid, "spoken_disclosure", node),
+                    (nid, "speed", node),
+                )
+            )
         elif ntype == "EZKokoroTTS":
             raw.extend(
                 (

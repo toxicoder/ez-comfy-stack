@@ -78,7 +78,7 @@ sequenceDiagram
 docker/           Dockerfile + compose (us-safe-studio)
 scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
-scripts/utilities download-image, download-wan, download-ltx, download-llm, download-podcast, download-limit, concat-shots, spark-farm
+scripts/utilities download-image, download-wan, download-ltx, download-llm, download-podcast, download-dub, download-limit, concat-shots, spark-farm
 config/           Resource / headroom policy
 workflows/_lab/   Seeded lab ComfyUI graphs by lane (klein / wan / ltx / shorts / …); YAML shot lists stay in workflows/shorts/; private graphs belong in _user/
 docs/             MkDocs site
