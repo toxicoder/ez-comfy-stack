@@ -2448,8 +2448,8 @@
 </tr>
 <tr>
 <td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span> or locked inventory edited per shot, or an old graph</td>
-<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> and inventory once. View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code>. State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / GOLDEN / WARM / BEFORE on a cold canvas</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span> edited per shot, or an old graph</td>
+<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> once (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> is one prompt; dream-house inventory widgets stay empty). View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code> (shot first). State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / GOLDEN / WARM / BEFORE on a cold canvas</td>
 </tr>
 <tr>
 <td>Enhance rewrites a locked shorts identity</td>
@@ -2489,22 +2489,27 @@
 <tr>
 <td>Dream-house Queue too slow / only need a few rooms</td>
 <td>All ten SHOT groups enabled</td>
-<td>Bypass unused SHOT groups (Ctrl+B). Identity + inventory + seed stay shared; 02–10 do not consume shot 01’s pixels</td>
+<td>Bypass unused SHOT groups (Ctrl+B). Identity and seed stay shared; 02–10 do not consume shot 01’s pixels</td>
 </tr>
 <tr>
 <td>Dream-house 02–10 look like the same photo as 01</td>
 <td>Old graph still wraps 02–10 in <code>ReferenceLatent</code>, or the world bible still names a camera</td>
-<td>Pull latest, re-open <strong>klein-dream-house-lab-example</strong>. Confirm Prompt Join <code>lock=view</code> and no <code>Ref from 01</code> nodes. HOUSE IDENTITY must be camera-free; shot cards own the camera</td>
+<td>Pull latest, re-open <strong>klein-dream-house-lab-example</strong>. Confirm Prompt Join <code>lock=view</code>, no <code>Ref from 01</code> nodes, and the shot is first in the joined CLIP string. HOUSE IDENTITY must be camera-free; shot cards own the camera. If they are <em>similar facades</em> rather than copies, see the next row</td>
+</tr>
+<tr>
+<td>Dream-house stills are ten similar facades</td>
+<td>Old <code>place_10</code> roles (approach / context) or bible-first join</td>
+<td>Pull latest, re-open <strong>klein-dream-house-lab-example</strong>. Shot groups should read exterior, entrance, inside, lounge, kitchen, bath, bedroom, drone, day, night. Prompt Join <code>lock=view</code> front-loads the shot</td>
 </tr>
 <tr>
 <td>Dream-house interiors do not match the sofa seen through the glass</td>
-<td>Inventory edited on one shot, or a shot card invents new furniture</td>
-<td>Edit locked inventory once on every SHOT join (same sofa, island, table, bedding, tub, terrace chairs, data-staff). Shot 01 should show that sand linen sofa through the three-bay glass; living looks out the same glass</td>
+<td>HOUSE IDENTITY omitted the seating or outdoor lamps, or a shot card invents new furniture</td>
+<td>Name lounge, kitchen, bath, bedroom, outdoor lamps, and the view beyond the glass in HOUSE IDENTITY (App Mode is one prompt). Shot 01 should show that seating through the main opening; lounge looks out the same opening</td>
 </tr>
 <tr>
 <td>Dream-house rooms look like different penthouses</td>
 <td>Shot card restyles massing, or identity enhance drifted</td>
-<td>Keep HOUSE IDENTITY in <strong>identity</strong> mode. Shot cards are camera / room / weather only. Turn Enhance off only to pin a frozen bible. Do not Klein-t2i-enhance joined shot cards</td>
+<td>Keep HOUSE IDENTITY in <strong>identity</strong> mode. Shot cards are camera / room / lamp-state only. Turn Enhance off only to pin a frozen bible. Do not Klein-t2i-enhance joined shot cards. Day and night may change sky; massing, rooms, furniture, and surroundings must not</td>
 </tr>
 <tr>
 <td>OOM / multi-minute hang on a 90s (or 30s / 60s) <strong>latent</strong></td>
@@ -2534,7 +2539,7 @@
 <tr>
 <td>Lab graph is in Workflows but not in Apps</td>
 <td>Seeded as <code>*.json</code> (film default, or pre-<code>.app.json</code> volume)</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> graphs seed as <code>*-lab-example.app.json</code>. Pull latest and restart so the entrypoint re-copies and removes the old <code>.json</code> sibling. 90s films stay Workflows-only (<code>default_view: graph</code>). This is not <code>studio-ui</code>.</td>
+<td>App Mode graphs seed as <code>*-lab-example.app.json</code>. Pull latest and restart so the entrypoint re-copies and removes the old <code>.json</code> sibling. 90s films stay Workflows-only (<code>default_view: graph</code>). This is not <code>studio-ui</code>.</td>
 </tr>
 <tr>
 <td>Queuing a 90s film OOMs with Klein and LTX both resident</td>
