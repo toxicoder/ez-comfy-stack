@@ -41,6 +41,7 @@ FROZEN_MANAGE_VERBS=(
   logs
   download-models
   download-podcast
+  download-dub
   download-music
   download-limit
   clear-hf-locks
@@ -86,6 +87,7 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"doctor"* ]]
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"download-podcast"* ]]
+  [[ "${output}" == *"download-dub"* ]]
   [[ "${output}" == *"download-music"* ]]
   [[ "${output}" == *"print-shot"* ]]
   [[ "${output}" == *"film-resume"* ]]
@@ -322,11 +324,13 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"banned"* || "${output}" == *"US Excluded"* ]]
   run cmd_help
   [[ "${output}" == *"download-podcast"* ]]
+  [[ "${output}" == *"download-dub"* ]]
   [[ "${output}" == *"download-music"* ]]
   [[ "${output}" == *"Does not pull podcast"* ]]
   run cmd_doctor
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"podcast status"* ]]
+  [[ "${output}" == *"dub status"* ]]
   [[ "${output}" == *"music status"* ]]
   [[ "${output}" == *"not a doctor failure"* ]]
   [[ ! -e "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" ]]
@@ -337,6 +341,12 @@ FROZEN_MANAGE_VERBS=(
   run cmd_download_podcast --limit off --tier analog
   [ "${status}" -eq 0 ]
   [[ -e "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" ]]
+  run cmd_download_dub --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"asr"* ]]
+  run cmd_download_dub --limit off --tier asr
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/onnx/silero_vad.onnx" || -e "${MODELS_DIR}/comfy/whisper/model.bin" ]]
   run cmd_download_music --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"turbo"* ]]

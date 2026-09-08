@@ -155,6 +155,37 @@
       ]
     },
     {
+      "id": "download-dub",
+      "title": "download-dub --tier",
+      "description": "Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3. Missing pack is not a doctor failure.",
+      "argv": ["./scripts/manage.sh", "download-dub"],
+      "flags": [
+        {
+          "name": "tier",
+          "kind": "choice",
+          "required": true,
+          "default": "asr",
+          "choices": [
+            {"value": "asr", "label": "asr — Silero VAD + faster-whisper large-v3 (default)"},
+            {"value": "clone", "label": "clone — Chatterbox Multilingual V3 (MIT, PerTh on)"},
+            {"value": "all", "label": "all — asr + clone"}
+          ]
+        },
+        {
+          "name": "limit",
+          "kind": "choice-or-int",
+          "required": false,
+          "default": "auto",
+          "bind_var": "DOWNLOAD_LIMIT",
+          "int_label": "Mbps",
+          "choices": [
+            {"value": "auto", "label": "auto"},
+            {"value": "off", "label": "off (SSH risk)"}
+          ]
+        }
+      ]
+    },
+    {
       "id": "download-music",
       "title": "download-music --tier",
       "description": "Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep — do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.",

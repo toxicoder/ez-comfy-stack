@@ -87,7 +87,7 @@ def lane_for_stem(stem: str) -> str:
         return "wan"
     if name.startswith("ltx-"):
         return "ltx"
-    if name.startswith("podcast-") or name.startswith("music-"):
+    if name.startswith("podcast-") or name.startswith("music-") or name.startswith("dub-"):
         return "audio"
     if name.startswith("prompt-forge-") or name.startswith("beat-sheet-"):
         return "inspire"

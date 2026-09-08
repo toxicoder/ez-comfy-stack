@@ -43,6 +43,7 @@ id: doctor
 | `logs` | Follow compose logs (`logs --tail 100` works) | — |
 | `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap. **No `--tier`.** | Expect podcast/music weights (they are opt-in) |
 | `download-podcast [--tier analog\|…] [--limit auto\|N\|off]` | Opt-in pack id (`analog` = Kokoro). [Tiers](download-tiers.md) | Co-resident with LTX/Wan/Klein |
+| `download-dub [--tier asr\|clone\|all] [--limit auto\|N\|off]` | Opt-in ASR + Chatterbox Multilingual V3. [Local dub](dub.md) | Co-resident with LTX/Wan/Klein |
 | `download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]` | Opt-in size ladder; `turbo` shares dest with `download-podcast --tier acestep` | Co-resident with the visual session |
 | `download-limit …` | Proxy to `scripts/utilities/download-limit.sh` | Leave a wrap limit stuck; wrap **always clears on exit** |
 | `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` | Force-clear while `hf` is still writing |

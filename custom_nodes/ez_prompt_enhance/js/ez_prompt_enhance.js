@@ -8,6 +8,7 @@ const NODE_CLASSES = new Set([
   "EZAceStepPromptEnhance",
   "EZRapLyrics",
   "EZPodcastScript",
+  "EZDubScript",
 ]);
 
 const PREVIEW = "CLIP prompt";

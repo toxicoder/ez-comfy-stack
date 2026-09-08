@@ -107,8 +107,9 @@ ${MODELS_DIR}/
     text_encoders/
     vae/
     llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
-    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog)
-    tts/                # opt-in Kokoro voices + optional Chatterbox/Qwen3-TTS
+    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog) + Silero VAD (download-dub)
+    tts/                # opt-in Kokoro voices + Chatterbox / Qwen3-TTS / Chatterbox ML V3
+    whisper/            # opt-in faster-whisper large-v3 (download-dub --tier asr)
     checkpoints/        # opt-in ACE-Step 1.5 AIO (download-music --tier turbo / download-podcast --tier acestep)
   hub/                  # HF cache (optional)
 ```
@@ -241,6 +242,14 @@ Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models
 | `t3_turbo_v1.safetensors` | `tts/` | Optional Chatterbox Turbo |
 | `model.safetensors` | `tts/` | Optional Qwen3-TTS 0.6B |
 
+Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `silero_vad.onnx` | `onnx/` | Silero VAD (`--tier asr`) |
+| `model.bin` | `whisper/` | faster-whisper large-v3 (`--tier asr`) |
+| `t3_mtl23ls_v2.safetensors` / `s3gen.safetensors` | `tts/` | Chatterbox Multilingual V3 (`--tier clone`) |
+
 ### Example graphs
 
 Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Name pattern **`*-lab-example.json`**. App Mode graphs land as **`*-lab-example.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
@@ -248,6 +257,7 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | Graph | Notes |
 | --- | --- |
 | `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
+| `dub-localize-lab-example.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
 | `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
 | `music-rap-nill-bye-lab-coat-lab-example.json` | ACE-Step 90 s diss, boom-bap 88 (`ez_rap_nill_labcoat`) |

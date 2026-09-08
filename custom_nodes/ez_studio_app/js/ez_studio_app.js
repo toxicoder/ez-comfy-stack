@@ -24,6 +24,16 @@ const LABELS = {
   announcer_voice: "Announcer",
   include_announcer: "Include announcer",
   speed: "Speaking speed",
+  source: "Source",
+  have_rights: "I have rights",
+  job_slug: "Job slug",
+  target_language: "Target language",
+  source_language: "Source language",
+  max_speakers: "Max speakers",
+  stage: "Stage",
+  engine: "Clone engine",
+  keep_bed: "Keep original bed",
+  spoken_disclosure: "Spoken disclosure",
 };
 
 const OCCUPANCY_STOP = {
