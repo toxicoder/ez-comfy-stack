@@ -87,6 +87,7 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
     assert "wraparound terrace" in ident
     assert "three-bay" in ident
     assert "lounge" in ident
+    assert "cook wall" in ident
     assert "lantern" in ident or "path light" in ident
     assert "bay" in ident
     assert "24mm" not in ident

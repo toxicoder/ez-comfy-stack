@@ -611,6 +611,7 @@ ident_l=ident.lower()
 assert 'warm-glass' in ident_l and 'crown penthouse' in ident_l
 assert 'wraparound terrace' in ident_l and 'three-bay' in ident_l
 assert 'lounge' in ident_l
+assert 'cook wall' in ident_l
 assert 'lantern' in ident_l or 'path light' in ident_l
 assert '24mm' not in ident_l
 assert 'cedar' not in ident_l and 'cabin' not in ident_l
@@ -622,7 +623,7 @@ incoming={}
 for l in d['links']:
     incoming.setdefault((l[3], l[4]), []).append(l)
 banned=('pier','courtyard','pavilion','two-story','a-frame','glass box','outdoor kitchen','outdoor tub','cedar','alpine','gravel','hip roof')
-tour=('SHOT 01 exterior','SHOT 02 entrance','SHOT 03 inside','SHOT 04 lounge','SHOT 05 kitchen','SHOT 06 bath','SHOT 07 bedroom','SHOT 08 drone','SHOT 09 day','SHOT 10 night')
+tour=('SHOT 01 exterior','SHOT 02 entrance','SHOT 03 lounge','SHOT 04 kitchen','SHOT 05 dining','SHOT 06 bath','SHOT 07 bedroom','SHOT 08 terrace','SHOT 09 drone','SHOT 10 nook')
 assert [n.get('title') for n in sorted(joins, key=lambda n: n['id'])]==list(tour)
 for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     shot=join['widgets_values'][0]

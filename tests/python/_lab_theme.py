@@ -27,9 +27,10 @@ HOUSE_IDENTITY = (
     "and palms behind. One wraparound terrace sits outside a three-bay "
     "black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. "
     "Lounge at the glass with one sand linen sofa facing the bays, kitchen island "
-    "behind the sofa, dining beside the island, master bedroom and bath left of "
-    "the living volume. Warm teak terrace lanterns and low path lights on the "
-    "terrace. Palms on the terrace and a fern living wall beside the glass. "
+    "behind the sofa facing the cook wall, dining beside the island, master "
+    "bedroom and bath left of the living volume. Warm teak terrace lanterns "
+    "and low path lights on the terrace. Palms on the terrace and a fern "
+    "living wall beside the glass. "
     "Unmarked home, empty of lettering."
 )
 HOUSE_INVENTORY = (
