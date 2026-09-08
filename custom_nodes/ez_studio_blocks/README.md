@@ -13,3 +13,7 @@ into `$COMFY_HOME/custom_nodes/ez_studio_blocks/`.
 
 Source of truth: `tests/python/_build_studio_blocks.py`. Do not vendor official
 LTX Template blobs. US-safe weights only (Klein 4B / Wan 2.2 5B / LTX-2.5 distilled).
+
+90s film lab graphs still expand 18 concat-safe printers on the parent so
+VHS prefixes stay per-shot. Drop `ltx-film-shot` from the node library when
+composing a new graph; do not unpack official LTX Templates.
