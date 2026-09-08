@@ -20,7 +20,7 @@ teardown() {
   run bash "${SM}" --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"loudnorm"* ]]
-  [[ "${output}" == *"-15"* ]]
+  [[ "${output}" == *"15 dB"* ]]
   run mix_film_slug switchyard
   [ "${output}" = "switchyard" ]
   run mix_film_slug nope

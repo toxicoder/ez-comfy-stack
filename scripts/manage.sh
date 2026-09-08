@@ -155,7 +155,7 @@ Commands:
   film-animatic --film SLUG
                     Cheap 90s animatic from clay.mp4 or stills (host ffmpeg)
   stem-mix --film SLUG --shot ID --bg PATH
-                    Picture-lock stem mix; duck −15 dB; YouTube loudnorm
+                    Picture-lock stem mix; duck -15 dB; YouTube loudnorm
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
   download-longcat [--tier video|avatar|all]

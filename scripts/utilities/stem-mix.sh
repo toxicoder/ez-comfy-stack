@@ -2,7 +2,7 @@
 #
 # ## stem-mix
 #
-# Picture-lock stem mix (DX / BG / FX / MX). Duck −15 dB under DX, YouTube loudnorm.
+# Picture-lock stem mix (DX / BG / FX / MX). Duck -15 dB under DX, YouTube loudnorm.
 # Occupancy: operator must already have stopped Klein/Wan/LTX. This script is CPU ffmpeg.
 #
 # Usage:
@@ -47,7 +47,7 @@ mix_film_slug() {
 #######################################
 cmd_help() {
   echo "Usage: stem-mix.sh --film SLUG --shot ID --bg PATH [--dx PATH] [--fx PATH] [--mx PATH] [--video PATH]" >&2
-  echo "  Duck beds −15 dB under DX. YouTube loudnorm I=-14. Host ffmpeg." >&2
+  echo "  Duck beds -15 dB under DX. YouTube loudnorm I=-14. Host ffmpeg." >&2
   echo "  Writes films/<slug>/stems/<id>/mix.m4a (or mix.mp4 with --video)." >&2
   echo "  Stop Klein/Wan/LTX first (occupancy audio). Does not start Docker." >&2
   return 0
