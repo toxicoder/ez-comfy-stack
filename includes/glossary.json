@@ -392,7 +392,7 @@
     "aliases": ["App Mode"],
     "category": "Studio",
     "short": "ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.",
-    "long": "App Mode shows the creator widgets listed in `extra.linearData` (prompt first, then style, Enhance, seed; LoadImage on I2V; size/UNET only on the daily still). It is not a second frontend. Official persist is `linearData`; the lab contract is `lab_app_mode`. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
+    "long": "App Mode shows the creator widgets listed in `extra.linearData` (Prompt, Style, Rewrite prompt, seed; LoadImage on I2V; size/UNET only on the daily still). Persist is `[nodeId, widgetName, config]` with an integer node id — frontend 1.49.6+ upgrades that to a live WidgetId. Two-part `11:prompt` ids are dropped and the side panel looks empty. It is not a second frontend. The lab contract is `lab_app_mode`. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["lab-app-mode", "widget", "occupancy", "workflow"]
   },
   {

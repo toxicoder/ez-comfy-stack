@@ -109,7 +109,10 @@ class EZRapLyrics:
                         "dynamicPrompts": False,
                     },
                 ),
-                "enhance": ("BOOLEAN", {"default": True}),
+                "enhance": (
+                    "BOOLEAN",
+                    {"default": True, "label_on": "On", "label_off": "Off"},
+                ),
             }
         }
 

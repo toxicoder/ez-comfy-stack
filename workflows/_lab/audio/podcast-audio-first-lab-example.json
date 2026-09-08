@@ -860,7 +860,7 @@
     "linearData": {
       "inputs": [
         [
-          "2:prompt",
+          2,
           "prompt",
           {
             "description": "Speaker A/B lines. Disclosure prepends the spoken bumper.",
@@ -869,7 +869,7 @@
           }
         ],
         [
-          "15:tags",
+          15,
           "tags",
           {
             "description": "Genre-first ACE-Step tags.",
@@ -878,7 +878,7 @@
           }
         ],
         [
-          "2:enhance",
+          2,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -886,7 +886,7 @@
           }
         ],
         [
-          "15:enhance",
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -894,7 +894,7 @@
           }
         ],
         [
-          "7:seconds",
+          7,
           "seconds",
           {
             "description": "Bed or sting length in seconds.",
@@ -902,7 +902,7 @@
           }
         ],
         [
-          "4:speaker_a_voice",
+          4,
           "speaker_a_voice",
           {
             "description": "Kokoro built-in for Speaker A. Voice-clone refs stay graph-only.",
@@ -910,7 +910,7 @@
           }
         ],
         [
-          "4:speaker_b_voice",
+          4,
           "speaker_b_voice",
           {
             "description": "Kokoro built-in for Speaker B.",
@@ -918,7 +918,7 @@
           }
         ],
         [
-          "4:include_announcer",
+          4,
           "include_announcer",
           {
             "description": "On: speak Announcer: lines. Off: skip them.",
@@ -926,7 +926,7 @@
           }
         ],
         [
-          "4:speed",
+          4,
           "speed",
           {
             "description": "TTS speed. 1.0 is the Kokoro default.",
@@ -934,7 +934,7 @@
           }
         ],
         [
-          "8:seed",
+          8,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

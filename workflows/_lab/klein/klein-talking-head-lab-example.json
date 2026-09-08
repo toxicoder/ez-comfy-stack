@@ -1044,7 +1044,7 @@
     "linearData": {
       "inputs": [
         [
-          "19:prompt",
+          19,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -1053,7 +1053,7 @@
           }
         ],
         [
-          "19:enhance",
+          19,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -1061,7 +1061,7 @@
           }
         ],
         [
-          "19:audio_notes",
+          19,
           "audio_notes",
           {
             "description": "World SFX to interleave. No score unless you asked for music.",
@@ -1070,7 +1070,7 @@
           }
         ],
         [
-          "4:image",
+          4,
           "image",
           {
             "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
@@ -1078,7 +1078,7 @@
           }
         ],
         [
-          "9:seed",
+          9,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

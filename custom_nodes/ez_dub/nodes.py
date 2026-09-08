@@ -149,7 +149,10 @@ class EZDubScript:
                         "dynamicPrompts": False,
                     },
                 ),
-                "enhance": ("BOOLEAN", {"default": True}),
+                "enhance": (
+                    "BOOLEAN",
+                    {"default": True, "label_on": "On", "label_off": "Off"},
+                ),
                 "target_language": (list(TARGET_LANG_WIDGET), {"default": "es"}),
                 "source_language": (list(SOURCE_LANG_WIDGET), {"default": "auto"}),
                 "max_speakers": (

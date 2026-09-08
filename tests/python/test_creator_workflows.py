@@ -8,7 +8,7 @@ from pathlib import Path
 from ez_music.diss_examples import DISS_EXAMPLES
 
 from _lab_paths import WF, lab_json
-from _stamp_app_mode import STAMP_SPECS, suite_json_paths
+from _stamp_app_mode import STAMP_SPECS, linear_input_node_id, suite_json_paths
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -251,10 +251,11 @@ def test_suite_graphs_have_app_mode_and_resolving_linear_data() -> None:
         assert outputs, path.name
         by_id = {int(n["id"]): n for n in graph["nodes"]}
         for entry in inputs:
-            widget_id, widget_name = entry[0], entry[1]
-            node_id_s, name = str(widget_id).split(":", 1)
-            assert int(node_id_s) in by_id, (path.name, widget_id)
-            assert name == widget_name
+            node_id = linear_input_node_id(entry)
+            widget_name = entry[1]
+            assert isinstance(entry[0], int), (path.name, entry[0])
+            assert node_id in by_id, (path.name, entry[0])
+            assert widget_name == entry[1]
         for node_id in outputs:
             assert int(node_id) in by_id, (path.name, node_id)
 
@@ -373,7 +374,7 @@ def test_app_input_labels_are_unique_and_i2v_hides_noop_style() -> None:
         for entry in linear.get("inputs") or []:
             if entry[1] != "image":
                 continue
-            node = by_id[int(str(entry[0]).split(":", 1)[0])]
+            node = by_id[linear_input_node_id(entry)]
             linked = any(
                 str(out.get("name") or "").upper() == "IMAGE" and out.get("links")
                 for out in node.get("outputs") or []

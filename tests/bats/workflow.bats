@@ -191,7 +191,7 @@ import json, sys
 from pathlib import Path
 root = Path('${REPO_ROOT}')
 sys.path.insert(0, str(root / 'tests' / 'python'))
-from _stamp_app_mode import STAMP_SPECS, suite_json_paths
+from _stamp_app_mode import STAMP_SPECS, linear_input_node_id, suite_json_paths
 paths = suite_json_paths(root / 'workflows')
 assert len(paths) == len(STAMP_SPECS)
 for path in paths:
@@ -202,7 +202,8 @@ for path in paths:
     assert linear['inputs'] and linear['outputs'], path.name
     live = {int(n['id']) for n in graph['nodes']}
     for entry in linear['inputs']:
-        nid = int(str(entry[0]).split(':', 1)[0])
+        assert isinstance(entry[0], int), (path.name, entry[0])
+        nid = linear_input_node_id(entry)
         assert nid in live, (path.name, entry[0])
     for nid in linear['outputs']:
         assert int(nid) in live, (path.name, nid)
