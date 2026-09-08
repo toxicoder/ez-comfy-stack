@@ -10,7 +10,8 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 
 - How App Mode relates to the node graph
 - Apps sidebar (`.app.json`) vs Workflows
-- Occupancy (one GB10 job)
+- Creator widgets (unique labels, wired LoadImage only)
+- Occupancy (one GB10 job) — chip at the top of the widget list
 - Lane A (Inspire) vs Lane B (Produce)
 - Handoff chains (still → motion → AV)
 
@@ -23,7 +24,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 
 **Who this is for:** studio users after `klein-still-draft-lab-example` has been loaded once.
 
-Lab graphs are still the same host `*-lab-example.json` files. On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`. A small occupancy strip (bottom-left) shows which family is running, still N of M on multi-plate Apps, and the next handoff. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
+Lab graphs are still the same host `*-lab-example.json` files. On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`. A small occupancy chip sits at the top of the App widget list (under the menu if you are in graph view) and shows which family is running, still N of M on multi-plate Apps, and the next handoff. It does not cover Run. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
 
 ```mermaid
 flowchart LR
@@ -39,8 +40,8 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Prompt first, then style, Enhance, seed. LoadImage on I2V / tweak. Size and UNET only on **klein-still-daily**. | Daily Queue |
-| **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards | Debug, film one-click, unused plates |
+| **App** | Unique creator widgets: prompt first, then look / rewrite / seed. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
+| **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
 
 Official persist is `extra.linearData` (`inputs` / `outputs`). The lab contract is `extra.lab_app_mode` (`lane`, `occupancy`, `handoff`, `frontend_min`). Do not require `extra.linearMode` — upstream does not write it.
 

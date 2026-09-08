@@ -18,6 +18,12 @@ const LABELS = {
   mode: "Mode",
   duration_hint: "Duration / framing",
   value: "Shot card",
+  seconds: "Duration (seconds)",
+  speaker_a_voice: "Speaker A",
+  speaker_b_voice: "Speaker B",
+  announcer_voice: "Announcer",
+  include_announcer: "Include announcer",
+  speed: "Speaking speed",
 };
 
 const OCCUPANCY_STOP = {
@@ -32,19 +38,55 @@ const OCCUPANCY_STOP = {
 
 const SAVE_TYPES = new Set(["SaveImage", "VHS_VideoCombine", "SaveAudio", "SaveAudioMP3"]);
 
+const BANNER_ID = "ez-studio-app-banner";
+const CHIP = [
+  "padding:10px 12px",
+  "border-radius:10px",
+  "background:rgba(12,16,24,0.92)",
+  "color:#e8eef7",
+  "font:12px/1.4 ui-sans-serif,system-ui,sans-serif",
+  "box-shadow:0 8px 24px rgba(0,0,0,0.35)",
+  "pointer-events:none",
+].join(";");
+
 function labAppMode() {
   return app.graph?.extra?.lab_app_mode || null;
+}
+
+function stampedLabels() {
+  const labels = new Map();
+  const inputs = app.graph?.extra?.linearData?.inputs || [];
+  for (const entry of inputs) {
+    const widgetId = entry?.[0];
+    const config = entry?.[2];
+    if (typeof widgetId === "string" && config?.label) {
+      labels.set(widgetId, config.label);
+    }
+  }
+  return labels;
 }
 
 function relabelWidgets(node) {
   if (!node?.widgets) {
     return;
   }
+  const labels = stampedLabels();
   for (const widget of node.widgets) {
-    const label = LABELS[widget.name];
-    if (label) {
-      widget.label = label;
+    const stamped = labels.get(`${node.id}:${widget.name}`);
+    if (stamped) {
+      widget.label = stamped;
+      continue;
     }
+    const generic = LABELS[widget.name];
+    if (generic) {
+      widget.label = generic;
+    }
+  }
+}
+
+function relabelGraph() {
+  for (const node of app.graph?.nodes || []) {
+    relabelWidgets(node);
   }
 }
 
@@ -54,28 +96,43 @@ function countSaveNodes() {
 }
 
 function ensureBanner() {
-  let el = document.getElementById("ez-studio-app-banner");
+  let el = document.getElementById(BANNER_ID);
   if (el) {
     return el;
   }
   el = document.createElement("div");
-  el.id = "ez-studio-app-banner";
+  el.id = BANNER_ID;
+  el.setAttribute("role", "status");
+  document.body.appendChild(el);
+  return el;
+}
+
+function mountBanner(el) {
+  const host = document.querySelector("[data-testid=linear-widgets]");
+  if (host) {
+    el.style.cssText = [
+      "position:sticky",
+      "top:0",
+      "z-index:5",
+      "margin:8px 8px 4px",
+      CHIP,
+    ].join(";");
+    if (el.parentElement !== host) {
+      host.insertBefore(el, host.firstChild);
+    }
+    return;
+  }
   el.style.cssText = [
     "position:fixed",
     "left:12px",
-    "bottom:12px",
+    "top:56px",
     "z-index:40",
     "max-width:min(420px,calc(100vw - 24px))",
-    "padding:10px 12px",
-    "border-radius:10px",
-    "background:rgba(12,16,24,0.88)",
-    "color:#e8eef7",
-    "font:12px/1.4 ui-sans-serif,system-ui,sans-serif",
-    "box-shadow:0 8px 24px rgba(0,0,0,0.35)",
-    "pointer-events:none",
+    CHIP,
   ].join(";");
-  document.body.appendChild(el);
-  return el;
+  if (el.parentElement !== document.body) {
+    document.body.appendChild(el);
+  }
 }
 
 function renderBanner(status) {
@@ -86,6 +143,7 @@ function renderBanner(status) {
     return;
   }
   el.style.display = "block";
+  mountBanner(el);
   const occupancy = mode.occupancy || "none";
   const stop = OCCUPANCY_STOP[occupancy] || "check the Note";
   const handoff = (mode.handoff || []).slice(0, 3).join(" · ");
@@ -109,6 +167,20 @@ app.registerExtension({
   async setup() {
     let done = 0;
     const api = app.api;
+    const graph = app.graph;
+    if (graph?.addEventListener) {
+      graph.addEventListener("configured", () => {
+        relabelGraph();
+        renderBanner("");
+      });
+    }
+    const observer = new MutationObserver(() => {
+      const el = document.getElementById(BANNER_ID);
+      if (el && el.style.display !== "none") {
+        mountBanner(el);
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
     if (!api?.addEventListener) {
       renderBanner("");
       return;
@@ -135,6 +207,7 @@ app.registerExtension({
     api.addEventListener("execution_error", () => {
       renderBanner("Run failed — open the graph Note for occupancy and next steps.");
     });
+    relabelGraph();
     renderBanner("");
   },
 });

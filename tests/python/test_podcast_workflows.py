@@ -128,3 +128,41 @@ def test_radio_drama_graph() -> None:
     for needle in BANNED:
         assert needle not in blob, needle
     assert "one-graph film" in extra["lab_note"].lower()
+
+
+def _app_names(graph: dict) -> list[str]:
+    return [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
+
+
+def _app_labels(graph: dict) -> list[str]:
+    labels: list[str] = []
+    for entry in graph["extra"]["linearData"]["inputs"]:
+        config = entry[2] if len(entry) > 2 else {}
+        labels.append((config or {}).get("label") or entry[1])
+    return labels
+
+
+def test_podcast_apps_expose_voices_length_not_clone_refs() -> None:
+    audio = _load("podcast-audio-first-lab-example")
+    names = _app_names(audio)
+    assert "speaker_a_voice" in names
+    assert "speaker_b_voice" in names
+    assert "speed" in names
+    assert "seconds" in names
+    assert "lyrics" not in names
+    assert "backend" not in names
+    assert "speaker_a_ref" not in names
+    labels = _app_labels(audio)
+    assert "Script" in labels
+    assert "Bed tags" in labels
+    assert len(labels) == len(set(labels)), labels
+    radio = _load("podcast-radio-drama-lab-example")
+    radio_names = _app_names(radio)
+    assert radio_names.count("seconds") == 2
+    assert "announcer_voice" in radio_names
+    assert "include_announcer" in radio_names
+    assert "lyrics" not in radio_names
+    radio_labels = _app_labels(radio)
+    assert "Sting tags" in radio_labels
+    assert "Bed tags" in radio_labels
+    assert len(radio_labels) == len(set(radio_labels)), radio_labels

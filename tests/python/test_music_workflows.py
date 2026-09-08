@@ -95,3 +95,18 @@ def test_music_rap_full_graph() -> None:
     blob = json.dumps(graph)
     assert "[outro]" in blob
     assert blob.count("[chorus]") >= 2
+
+
+def test_music_apps_expose_duration_and_vocal_mode() -> None:
+    for stem in ("music-rap-draft-lab-example", "music-rap-full-lab-example"):
+        graph = _load(stem)
+        names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
+        assert "seconds" in names, stem
+        assert "mode" in names, stem
+        assert "backend" not in names, stem
+        labels = [
+            ((entry[2] or {}).get("label") if len(entry) > 2 else None) or entry[1]
+            for entry in graph["extra"]["linearData"]["inputs"]
+        ]
+        assert "Duration (seconds)" in labels, stem
+        assert "Vocal / instrumental" in labels, stem

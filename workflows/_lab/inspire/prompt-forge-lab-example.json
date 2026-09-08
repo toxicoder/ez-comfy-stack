@@ -219,112 +219,132 @@
           "2:prompt",
           "prompt",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model."
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Klein prompt",
+            "height": 140
           }
         ],
         [
           "3:prompt",
           "prompt",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model."
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Wan prompt",
+            "height": 140
           }
         ],
         [
           "4:prompt",
           "prompt",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model."
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "LTX prompt",
+            "height": 140
           }
         ],
         [
           "2:style",
           "style",
           {
-            "description": "Optional look. The start image owns look on I2V."
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "Klein style"
           }
         ],
         [
           "3:style",
           "style",
           {
-            "description": "Optional look. The start image owns look on I2V."
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "Wan style"
           }
         ],
         [
           "4:style",
           "style",
           {
-            "description": "Optional look. The start image owns look on I2V."
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "LTX style"
           }
         ],
         [
           "2:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite Klein"
           }
         ],
         [
           "3:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite Wan"
           }
         ],
         [
           "4:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite LTX"
           }
         ],
         [
           "2:mode",
           "mode",
           {
-            "description": "Rewrite family for this encoder."
+            "description": "Rewrite family for this encoder.",
+            "label": "Klein mode"
           }
         ],
         [
           "3:mode",
           "mode",
           {
-            "description": "Rewrite family for this encoder."
+            "description": "Rewrite family for this encoder.",
+            "label": "Wan mode"
           }
         ],
         [
           "4:mode",
           "mode",
           {
-            "description": "Rewrite family for this encoder."
+            "description": "Rewrite family for this encoder.",
+            "label": "LTX mode"
           }
         ],
         [
           "2:duration_hint",
           "duration_hint",
           {
-            "description": "Aspect or duration the rewriter should target."
+            "description": "Aspect or duration the rewriter should target.",
+            "label": "Klein duration / framing"
           }
         ],
         [
           "3:duration_hint",
           "duration_hint",
           {
-            "description": "Aspect or duration the rewriter should target."
+            "description": "Aspect or duration the rewriter should target.",
+            "label": "Wan duration / framing"
           }
         ],
         [
           "4:duration_hint",
           "duration_hint",
           {
-            "description": "Aspect or duration the rewriter should target."
+            "description": "Aspect or duration the rewriter should target.",
+            "label": "LTX duration / framing"
           }
         ],
         [
           "4:audio_notes",
           "audio_notes",
           {
-            "description": "World SFX to interleave. No score unless you asked for music."
+            "description": "World SFX to interleave. No score unless you asked for music.",
+            "label": "Audio notes",
+            "height": 80
           }
         ]
       ],

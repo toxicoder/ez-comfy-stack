@@ -1393,63 +1393,115 @@
           "2:prompt",
           "prompt",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model."
+            "description": "Speaker A/B lines. Disclosure prepends the spoken bumper.",
+            "label": "Script",
+            "height": 140
           }
         ],
         [
           "34:tags",
           "tags",
           {
-            "description": "Genre-first ACE-Step tags."
+            "description": "Genre-first ACE-Step tags.",
+            "label": "Sting tags",
+            "height": 80
           }
         ],
         [
           "35:tags",
           "tags",
           {
-            "description": "Genre-first ACE-Step tags."
-          }
-        ],
-        [
-          "34:lyrics",
-          "lyrics",
-          {
-            "description": "Lyrics, or [inst] for instrumental."
-          }
-        ],
-        [
-          "35:lyrics",
-          "lyrics",
-          {
-            "description": "Lyrics, or [inst] for instrumental."
+            "description": "Genre-first ACE-Step tags.",
+            "label": "Bed tags",
+            "height": 80
           }
         ],
         [
           "2:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite script"
           }
         ],
         [
           "34:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite sting"
           }
         ],
         [
           "35:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite bed"
+          }
+        ],
+        [
+          "8:seconds",
+          "seconds",
+          {
+            "description": "Bed or sting length in seconds.",
+            "label": "Sting length"
+          }
+        ],
+        [
+          "9:seconds",
+          "seconds",
+          {
+            "description": "Bed or sting length in seconds.",
+            "label": "Bed length"
+          }
+        ],
+        [
+          "4:speaker_a_voice",
+          "speaker_a_voice",
+          {
+            "description": "Kokoro built-in for Speaker A. Voice-clone refs stay graph-only.",
+            "label": "Speaker A"
+          }
+        ],
+        [
+          "4:speaker_b_voice",
+          "speaker_b_voice",
+          {
+            "description": "Kokoro built-in for Speaker B.",
+            "label": "Speaker B"
+          }
+        ],
+        [
+          "4:announcer_voice",
+          "announcer_voice",
+          {
+            "description": "Kokoro built-in for Announcer: lines.",
+            "label": "Announcer"
+          }
+        ],
+        [
+          "4:include_announcer",
+          "include_announcer",
+          {
+            "description": "On: speak Announcer: lines. Off: skip them.",
+            "label": "Include announcer"
+          }
+        ],
+        [
+          "4:speed",
+          "speed",
+          {
+            "description": "TTS speed. 1.0 is the Kokoro default.",
+            "label": "Speaking speed"
           }
         ],
         [
           "10:seed",
           "seed",
           {
-            "description": "Fix to iterate; randomize to explore."
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
           }
         ]
       ],

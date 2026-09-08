@@ -723,28 +723,50 @@
           "5:tags",
           "tags",
           {
-            "description": "Genre-first ACE-Step tags."
+            "description": "Genre-first ACE-Step tags.",
+            "label": "Tags",
+            "height": 80
           }
         ],
         [
           "5:lyrics",
           "lyrics",
           {
-            "description": "Lyrics, or [inst] for instrumental."
+            "description": "Lyrics, or [inst] for instrumental.",
+            "label": "Lyrics",
+            "height": 140
           }
         ],
         [
           "5:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite prompt"
+          }
+        ],
+        [
+          "5:mode",
+          "mode",
+          {
+            "description": "Vocal vs instrumental. Instrumental forces no-vocals tags and [inst] lyrics.",
+            "label": "Vocal / instrumental"
+          }
+        ],
+        [
+          "3:seconds",
+          "seconds",
+          {
+            "description": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
+            "label": "Duration (seconds)"
           }
         ],
         [
           "8:seed",
           "seed",
           {
-            "description": "Fix to iterate; randomize to explore."
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
           }
         ]
       ],

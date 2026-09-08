@@ -927,35 +927,42 @@
           "17:prompt",
           "prompt",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model."
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Prompt",
+            "height": 140
           }
         ],
         [
           "17:style",
           "style",
           {
-            "description": "Optional look. The start image owns look on I2V."
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "Style"
           }
         ],
         [
           "17:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite prompt"
           }
         ],
         [
           "17:audio_notes",
           "audio_notes",
           {
-            "description": "World SFX to interleave. No score unless you asked for music."
+            "description": "World SFX to interleave. No score unless you asked for music.",
+            "label": "Audio notes",
+            "height": 80
           }
         ],
         [
           "8:seed",
           "seed",
           {
-            "description": "Fix to iterate; randomize to explore."
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
           }
         ]
       ],

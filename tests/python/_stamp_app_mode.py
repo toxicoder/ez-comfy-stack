@@ -14,6 +14,7 @@ Do not require extra.linearMode (upstream does not write it; lab sugar only).
 from __future__ import annotations
 
 import json
+from collections import Counter
 from typing import Any, Mapping, Sequence
 
 FRONTEND_MIN = "1.41.13"
@@ -203,6 +204,12 @@ WIDGET_ORDER = (
     "mode",
     "duration_hint",
     "audio_notes",
+    "seconds",
+    "speaker_a_voice",
+    "speaker_b_voice",
+    "announcer_voice",
+    "include_announcer",
+    "speed",
     "image",
     "seed",
     "width",
@@ -213,14 +220,48 @@ WIDGET_ORDER = (
     "unet_name",
 )
 HIDDEN_APP_WIDGETS = frozenset({"shot", "inventory", "lock"})
+STYLE_IGNORED_MODES = frozenset({"i2v", "flf", "vace"})
+NODE_MODE_ALWAYS = 0
+WIDGET_HEIGHTS = {
+    "prompt": 140,
+    "lyrics": 140,
+    "tags": 80,
+    "audio_notes": 80,
+    "value": 72,
+}
+GENERIC_LABELS = {
+    "prompt": "Prompt",
+    "style": "Style",
+    "enhance": "Rewrite prompt",
+    "seed": "Seed",
+    "image": "Start image",
+    "tags": "Tags",
+    "lyrics": "Lyrics",
+    "audio_notes": "Audio notes",
+    "width": "Width",
+    "height": "Height",
+    "batch_size": "Batch",
+    "steps": "Steps",
+    "cfg": "CFG",
+    "unet_name": "Image model",
+    "mode": "Mode",
+    "duration_hint": "Duration / framing",
+    "value": "Shot card",
+    "seconds": "Duration (seconds)",
+    "speaker_a_voice": "Speaker A",
+    "speaker_b_voice": "Speaker B",
+    "announcer_voice": "Announcer",
+    "include_announcer": "Include announcer",
+    "speed": "Speaking speed",
+}
 DEFAULT_WIDGET_DESCRIPTIONS = {
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
-    "style": "Optional look. The start image owns look on I2V.",
+    "style": "Optional look. Hidden on I2V — the start image owns look.",
     "enhance": (
         "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
     ),
     "seed": "Fix to iterate; randomize to explore.",
-    "image": "Start frame or reference still.",
+    "image": "Start frame or reference still. Only shown when the LoadImage is wired.",
     "tags": "Genre-first ACE-Step tags.",
     "lyrics": "Lyrics, or [inst] for instrumental.",
     "audio_notes": "World SFX to interleave. No score unless you asked for music.",
@@ -233,39 +274,205 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "mode": "Rewrite family for this encoder.",
     "duration_hint": "Aspect or duration the rewriter should target.",
     "value": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+    "seconds": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
+    "speaker_a_voice": "Kokoro built-in for Speaker A. Voice-clone refs stay graph-only.",
+    "speaker_b_voice": "Kokoro built-in for Speaker B.",
+    "announcer_voice": "Kokoro built-in for Announcer: lines.",
+    "include_announcer": "On: speak Announcer: lines. Off: skip them.",
+    "speed": "TTS speed. 1.0 is the Kokoro default.",
 }
 
 
+def _enhance_mode(node: Mapping[str, Any]) -> str:
+    """Return the enhance node's mode widget (t2i / i2v / vocal / …)."""
+    ntype = node.get("type")
+    values = list(node.get("widgets_values") or [])
+    if ntype in (
+        "EZKleinPromptEnhance",
+        "EZWanPromptEnhance",
+        "EZLTXPromptEnhance",
+    ):
+        return str(values[2]) if len(values) > 2 else ""
+    if ntype == "EZAceStepPromptEnhance":
+        return str(values[3]) if len(values) > 3 else ""
+    return ""
+
+
+def _node_always(node: Mapping[str, Any]) -> bool:
+    return int(node.get("mode") or 0) == NODE_MODE_ALWAYS
+
+
+def _image_output_linked(node: Mapping[str, Any]) -> bool:
+    for out in node.get("outputs") or []:
+        if str(out.get("name") or "").upper() == "IMAGE" and out.get("links"):
+            return True
+    return False
+
+
+def _input_linked(node: Mapping[str, Any], name: str) -> bool:
+    for inp in node.get("inputs") or []:
+        if not isinstance(inp, dict):
+            continue
+        if inp.get("name") == name and inp.get("link") is not None:
+            return True
+        widget = inp.get("widget") or {}
+        if widget.get("name") == name and inp.get("link") is not None:
+            return True
+    return False
+
+
+def _primitive_widget_name(node: Mapping[str, Any]) -> str | None:
+    for out in node.get("outputs") or []:
+        widget = out.get("widget") or {}
+        name = widget.get("name")
+        if name:
+            return str(name)
+    return None
+
+
+def display_label(
+    node: Mapping[str, Any] | None,
+    name: str,
+    *,
+    collide: bool = False,
+) -> str:
+    """Human App Mode title. Unique when ``collide`` or the node already names it."""
+    generic = GENERIC_LABELS.get(name, name.replace("_", " ").capitalize())
+    if node is None:
+        return generic
+    ntype = str(node.get("type") or "")
+    title = str(node.get("title") or "").strip()
+    title_l = title.lower()
+    if ntype == "LoadImage" and name == "image":
+        return title or generic
+    if ntype == "PrimitiveNode" and name in {"value", "seconds"}:
+        if name == "seconds" or "duration" in title_l:
+            return "Duration (seconds)"
+        return title or generic
+    if ntype == "EmptyAceStep1.5LatentAudio" and name == "seconds":
+        return title or "Duration (seconds)"
+    if ntype == "EZPodcastScript":
+        return {"prompt": "Script", "enhance": "Rewrite script"}.get(name, generic)
+    if ntype == "EZKokoroTTS":
+        return {
+            "speaker_a_voice": "Speaker A",
+            "speaker_b_voice": "Speaker B",
+            "announcer_voice": "Announcer",
+            "include_announcer": "Include announcer",
+            "speed": "Speaking speed",
+        }.get(name, generic)
+    if ntype == "EZAceStepPromptEnhance":
+        kind = ""
+        if "sting" in title_l:
+            kind = "Sting"
+        elif "bed" in title_l:
+            kind = "Bed"
+        if kind:
+            return {
+                "tags": f"{kind} tags",
+                "lyrics": f"{kind} lyrics",
+                "enhance": f"Rewrite {kind.lower()}",
+                "mode": f"{kind} mode",
+            }.get(name, generic)
+        if name == "mode":
+            return "Vocal / instrumental"
+    if collide and ntype in ENHANCE_TYPES:
+        family = None
+        for token in ("Klein", "Wan", "LTX"):
+            if token.lower() in title_l:
+                family = token
+                break
+        if family:
+            return {
+                "prompt": f"{family} prompt",
+                "style": f"{family} style",
+                "enhance": f"Rewrite {family}",
+                "mode": f"{family} mode",
+                "duration_hint": f"{family} duration / framing",
+                "audio_notes": f"{family} audio notes",
+            }.get(name, generic)
+        if title:
+            return f"{title} — {generic}"
+    if collide and title:
+        return f"{title} — {generic}"
+    return generic
+
+
+def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str | None:
+    """Help text for one App Mode widget."""
+    ntype = (node or {}).get("type")
+    if name == "mode" and ntype == "EZAceStepPromptEnhance":
+        return (
+            "Vocal vs instrumental. Instrumental forces no-vocals tags and "
+            "[inst] lyrics."
+        )
+    if name == "seconds" and ntype == "EmptyAceStep1.5LatentAudio":
+        return "Bed or sting length in seconds."
+    if name == "prompt" and ntype == "EZPodcastScript":
+        return "Speaker A/B lines. Disclosure prepends the spoken bumper."
+    return DEFAULT_WIDGET_DESCRIPTIONS.get(name)
+
+
 def widget_config(
-    name: str, spec: Mapping[str, Any] | None = None
-) -> dict[str, str] | None:
-    """Return linearData InputWidgetConfig, or None when there is no help text."""
+    name: str,
+    spec: Mapping[str, Any] | None = None,
+    node: Mapping[str, Any] | None = None,
+    collide: bool = False,
+) -> dict[str, Any] | None:
+    """Return linearData InputWidgetConfig (description / label / height)."""
     overrides = (spec or {}).get("descriptions") or {}
-    text = overrides.get(name) or DEFAULT_WIDGET_DESCRIPTIONS.get(name)
-    if not text:
-        return None
-    return {"description": str(text)}
+    text = overrides.get(name) or widget_description(name, node)
+    label = display_label(node, name, collide=collide)
+    height = WIDGET_HEIGHTS.get(name)
+    config: dict[str, Any] = {}
+    if text:
+        config["description"] = str(text)
+    if label:
+        config["label"] = str(label)
+    if height:
+        config["height"] = int(height)
+    return config or None
 
 
 def _input_spec(
-    nid: NodeRef, name: str, spec: Mapping[str, Any] | None = None
+    nid: NodeRef,
+    name: str,
+    spec: Mapping[str, Any] | None = None,
+    node: Mapping[str, Any] | None = None,
+    collide: bool = False,
 ) -> InputSpec:
-    config = widget_config(name, spec)
+    config = widget_config(name, spec, node=node, collide=collide)
     if config:
         return (nid, name, config)
     return (nid, name)
 
 
-def _widget_rank(name: str) -> int:
+def _widget_rank(name: str, node: Mapping[str, Any] | None = None) -> int:
+    if name == "value" and node is not None:
+        title = str(node.get("title") or "").lower()
+        if "duration" in title:
+            name = "seconds"
     try:
         return WIDGET_ORDER.index(name)
     except ValueError:
         return len(WIDGET_ORDER)
 
 
-def order_app_inputs(inputs: Sequence[InputSpec]) -> list[InputSpec]:
+def order_app_inputs(
+    inputs: Sequence[InputSpec], graph: Mapping[str, Any] | None = None
+) -> list[InputSpec]:
     """Prompt / tags first. Stable for equal ranks (node order)."""
-    return sorted(inputs, key=lambda spec: _widget_rank(_parse_input(spec)[1]))
+
+    def _rank(spec: InputSpec) -> int:
+        ref, name, _config = _parse_input(spec)
+        node = None
+        if graph is not None:
+            hits = _find_nodes(dict(graph), ref)
+            if len(hits) == 1:
+                node = hits[0]
+        return _widget_rank(name, node)
+
+    return sorted(inputs, key=_rank)
 
 
 def _spec(
@@ -469,18 +676,20 @@ def ensure_occupancy_note(graph: dict, occupancy: str) -> None:
         break
 
 
-def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
-    """Creator widgets only: prompt first, no join-shot cards, no latent size except daily."""
-    inputs: list[InputSpec] = []
+def _collect_raw_inputs(
+    graph: dict, spec: Mapping[str, Any]
+) -> list[tuple[NodeRef, str, dict]]:
+    """(node id, widget name, node) in graph order. No labels yet."""
+    raw: list[tuple[NodeRef, str, dict]] = []
     if spec.get("film_minimal"):
         for node in graph.get("nodes") or []:
             if node.get("type") == "EZKleinPromptEnhance":
                 nid = node["id"]
-                inputs.extend(
+                raw.extend(
                     (
-                        _input_spec(nid, "prompt", spec),
-                        _input_spec(nid, "style", spec),
-                        _input_spec(nid, "enhance", spec),
+                        (nid, "prompt", node),
+                        (nid, "style", node),
+                        (nid, "enhance", node),
                     )
                 )
         sampler = next(
@@ -488,14 +697,14 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
             None,
         )
         if sampler is not None:
-            inputs.append(_input_spec(sampler["id"], "seed", spec))
-        return order_app_inputs(inputs)
+            raw.append((sampler["id"], "seed", sampler))
+        return raw
 
     if spec.get("primitive_strings"):
         for node in graph.get("nodes") or []:
             if node.get("type") == "PrimitiveNode":
-                inputs.append(_input_spec(node["id"], "value", spec))
-        return order_app_inputs(inputs)
+                raw.append((node["id"], "value", node))
+        return raw
 
     saw_seed = False
     saw_primary_enhance = False
@@ -503,71 +712,104 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
         ntype = node.get("type")
         nid = node["id"]
         if ntype == "EZAceStepPromptEnhance":
-            inputs.extend(
-                (
-                    _input_spec(nid, "tags", spec),
-                    _input_spec(nid, "lyrics", spec),
-                    _input_spec(nid, "enhance", spec),
-                )
-            )
+            mode = _enhance_mode(node)
+            raw.append((nid, "tags", node))
+            if mode != "instrumental":
+                raw.append((nid, "lyrics", node))
+            raw.append((nid, "enhance", node))
+            if mode != "instrumental":
+                raw.append((nid, "mode", node))
         elif ntype in ("EZRapLyrics", "EZPodcastScript"):
             widget = "lyrics" if ntype == "EZRapLyrics" else "prompt"
-            inputs.extend(
+            raw.extend(
                 (
-                    _input_spec(nid, widget, spec),
-                    _input_spec(nid, "enhance", spec),
+                    (nid, widget, node),
+                    (nid, "enhance", node),
                 )
             )
         elif ntype in ENHANCE_TYPES:
             if not spec.get("forge_widgets") and saw_primary_enhance:
                 continue
             saw_primary_enhance = True
-            inputs.extend(
-                (
-                    _input_spec(nid, "prompt", spec),
-                    _input_spec(nid, "style", spec),
-                    _input_spec(nid, "enhance", spec),
-                )
-            )
+            mode = _enhance_mode(node)
+            skip_style = (not spec.get("forge_widgets")) and mode in STYLE_IGNORED_MODES
+            raw.append((nid, "prompt", node))
+            if not skip_style:
+                raw.append((nid, "style", node))
+            raw.append((nid, "enhance", node))
             if spec.get("forge_widgets"):
-                inputs.extend(
+                raw.extend(
                     (
-                        _input_spec(nid, "mode", spec),
-                        _input_spec(nid, "duration_hint", spec),
+                        (nid, "mode", node),
+                        (nid, "duration_hint", node),
                     )
                 )
             if ntype == "EZLTXPromptEnhance":
-                inputs.append(_input_spec(nid, "audio_notes", spec))
+                raw.append((nid, "audio_notes", node))
         elif ntype == "EmptyFlux2LatentImage" and spec.get("expose_latent"):
-            if any(_parse_input(item)[1] == "width" for item in inputs):
+            if any(name == "width" for _nid, name, _node in raw):
                 continue
-            inputs.extend(
+            raw.extend(
                 (
-                    _input_spec(nid, "width", spec),
-                    _input_spec(nid, "height", spec),
-                    _input_spec(nid, "batch_size", spec),
+                    (nid, "width", node),
+                    (nid, "height", node),
+                    (nid, "batch_size", node),
                 )
             )
         elif ntype == "KSampler" and not saw_seed:
-            inputs.append(_input_spec(nid, "seed", spec))
+            raw.append((nid, "seed", node))
             if spec.get("sampler_steps_cfg"):
-                inputs.extend(
+                raw.extend(
                     (
-                        _input_spec(nid, "steps", spec),
-                        _input_spec(nid, "cfg", spec),
+                        (nid, "steps", node),
+                        (nid, "cfg", node),
                     )
                 )
             saw_seed = True
         elif ntype == "LoadImage":
-            inputs.append(_input_spec(nid, "image", spec))
+            if _node_always(node) and _image_output_linked(node):
+                raw.append((nid, "image", node))
         elif ntype == "UNETLoader" and spec.get("expose_unet"):
-            inputs.append(_input_spec(nid, "unet_name", spec))
-    cleaned = [
+            raw.append((nid, "unet_name", node))
+        elif ntype == "EZKokoroTTS":
+            raw.extend(
+                (
+                    (nid, "speaker_a_voice", node),
+                    (nid, "speaker_b_voice", node),
+                    (nid, "include_announcer", node),
+                )
+            )
+            values = list(node.get("widgets_values") or [])
+            include = bool(values[3]) if len(values) > 3 else False
+            if include:
+                raw.append((nid, "announcer_voice", node))
+            raw.append((nid, "speed", node))
+        elif ntype == "EmptyAceStep1.5LatentAudio":
+            if not _input_linked(node, "seconds"):
+                raw.append((nid, "seconds", node))
+        elif ntype == "PrimitiveNode":
+            widget = _primitive_widget_name(node) or "value"
+            title_l = str(node.get("title") or "").lower()
+            if widget == "seconds" or "duration" in title_l:
+                raw.append((nid, widget, node))
+    return [
         item
-        for item in inputs
-        if _parse_input(item)[1] not in HIDDEN_APP_WIDGETS
+        for item in raw
+        if item[1] not in HIDDEN_APP_WIDGETS
     ]
-    return order_app_inputs(cleaned)
+
+
+def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
+    """Creator widgets only: prompt first, no join-shot cards, no latent size except daily."""
+    raw = _collect_raw_inputs(graph, spec)
+    counts = Counter(name for _nid, name, _node in raw)
+    inputs: list[InputSpec] = []
+    for nid, name, node in raw:
+        collide = counts[name] > 1
+        inputs.append(
+            _input_spec(nid, name, spec, node=node, collide=collide)
+        )
+    return order_app_inputs(inputs, graph)
 
 
 def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> list[int]:

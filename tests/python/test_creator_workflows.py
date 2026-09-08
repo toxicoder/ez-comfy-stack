@@ -329,3 +329,64 @@ def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
             latent_stems.append(graph["id"])
     assert latent_stems == ["klein-still-daily-lab-example"]
 
+
+def _app_labels(graph: dict) -> list[str]:
+    labels: list[str] = []
+    for entry in (graph.get("extra") or {}).get("linearData", {}).get("inputs") or []:
+        name = entry[1]
+        config = entry[2] if len(entry) > 2 else {}
+        labels.append((config or {}).get("label") or name)
+    return labels
+
+
+def _enhance_mode(graph: dict) -> str:
+    for node in graph.get("nodes") or []:
+        ntype = node.get("type")
+        values = list(node.get("widgets_values") or [])
+        if ntype in (
+            "EZKleinPromptEnhance",
+            "EZWanPromptEnhance",
+            "EZLTXPromptEnhance",
+        ):
+            return str(values[2]) if len(values) > 2 else ""
+        if ntype == "EZAceStepPromptEnhance":
+            return str(values[3]) if len(values) > 3 else ""
+    return ""
+
+
+def test_app_input_labels_are_unique_and_i2v_hides_noop_style() -> None:
+    dead_image = []
+    style_on_i2v = []
+    for path in suite_json_paths(WF):
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        extra = graph.get("extra") or {}
+        if extra.get("lab_app_mode", {}).get("default_view") != "app":
+            continue
+        labels = _app_labels(graph)
+        assert labels, graph["id"]
+        assert len(labels) == len(set(labels)), (graph["id"], labels)
+        linear = extra.get("linearData") or {}
+        names = [entry[1] for entry in linear.get("inputs") or []]
+        by_id = {int(n["id"]): n for n in graph["nodes"]}
+        for entry in linear.get("inputs") or []:
+            if entry[1] != "image":
+                continue
+            node = by_id[int(str(entry[0]).split(":", 1)[0])]
+            linked = any(
+                str(out.get("name") or "").upper() == "IMAGE" and out.get("links")
+                for out in node.get("outputs") or []
+            )
+            live = int(node.get("mode") or 0) == 0
+            if not (linked and live):
+                dead_image.append(graph["id"])
+        if (
+            graph["id"] != "prompt-forge-lab-example"
+            and _enhance_mode(graph) in {"i2v", "flf", "vace"}
+            and "style" in names
+        ):
+            style_on_i2v.append(graph["id"])
+        assert "backend" not in names, graph["id"]
+        assert "speaker_a_ref" not in names, graph["id"]
+    assert dead_image == []
+    assert style_on_i2v == []
+

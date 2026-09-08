@@ -75,6 +75,14 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["lane"] == "inspire"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
     assert "klein-still-draft-lab-example" in extra["lab_app_mode"]["handoff"]
+    labels = []
+    for entry in extra["linearData"]["inputs"]:
+        config = entry[2] if len(entry) > 2 else {}
+        labels.append((config or {}).get("label") or entry[1])
+    assert "Klein prompt" in labels
+    assert "Wan prompt" in labels
+    assert "LTX prompt" in labels
+    assert len(labels) == len(set(labels)), labels
     _assert_no_overlap(graph)
 
 
@@ -145,4 +153,10 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     assert "MODELS_DIR" not in blob
     for needle in BANNED:
         assert needle not in blob
+    labels = []
+    for entry in graph["extra"]["linearData"]["inputs"]:
+        config = entry[2] if len(entry) > 2 else {}
+        labels.append((config or {}).get("label") or entry[1])
+    titles = [n.get("title") for n in primitives]
+    assert labels == titles
     _assert_no_overlap(graph)

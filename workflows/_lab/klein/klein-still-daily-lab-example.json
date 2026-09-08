@@ -586,70 +586,81 @@
           "11:prompt",
           "prompt",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model."
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Prompt",
+            "height": 140
           }
         ],
         [
           "11:style",
           "style",
           {
-            "description": "Optional look. The start image owns look on I2V."
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "Style"
           }
         ],
         [
           "11:enhance",
           "enhance",
           {
-            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite prompt"
           }
         ],
         [
           "7:seed",
           "seed",
           {
-            "description": "Fix to iterate; randomize to explore."
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
           }
         ],
         [
           "6:width",
           "width",
           {
-            "description": "Latent width in pixels."
+            "description": "Latent width in pixels.",
+            "label": "Width"
           }
         ],
         [
           "6:height",
           "height",
           {
-            "description": "Latent height in pixels."
+            "description": "Latent height in pixels.",
+            "label": "Height"
           }
         ],
         [
           "6:batch_size",
           "batch_size",
           {
-            "description": "How many stills in one Run."
+            "description": "How many stills in one Run.",
+            "label": "Batch"
           }
         ],
         [
           "7:steps",
           "steps",
           {
-            "description": "Sampler steps. Distilled Klein stays at 4 unless you swapped to base."
+            "description": "Sampler steps. Distilled Klein stays at 4 unless you swapped to base.",
+            "label": "Steps"
           }
         ],
         [
           "7:cfg",
           "cfg",
           {
-            "description": "Guidance. Distilled Klein stays at 1.0 unless you swapped to base."
+            "description": "Guidance. Distilled Klein stays at 1.0 unless you swapped to base.",
+            "label": "CFG"
           }
         ],
         [
           "1:unet_name",
           "unet_name",
           {
-            "description": "Click to swap Klein 4B distilled / NVFP4 / base."
+            "description": "Click to swap Klein 4B distilled / NVFP4 / base.",
+            "label": "Image model"
           }
         ]
       ],

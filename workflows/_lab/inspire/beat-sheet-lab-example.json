@@ -1775,126 +1775,162 @@
           "2:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 1 enter",
+            "height": 72
           }
         ],
         [
           "4:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 1 traverse",
+            "height": 72
           }
         ],
         [
           "6:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 1 exit",
+            "height": 72
           }
         ],
         [
           "8:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 2 enter",
+            "height": 72
           }
         ],
         [
           "10:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 2 traverse",
+            "height": 72
           }
         ],
         [
           "12:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 2 exit",
+            "height": 72
           }
         ],
         [
           "14:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 3 enter",
+            "height": 72
           }
         ],
         [
           "16:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 3 traverse",
+            "height": 72
           }
         ],
         [
           "18:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 3 exit",
+            "height": 72
           }
         ],
         [
           "20:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 4 enter",
+            "height": 72
           }
         ],
         [
           "22:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 4 traverse",
+            "height": 72
           }
         ],
         [
           "24:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 4 exit",
+            "height": 72
           }
         ],
         [
           "26:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 5 enter",
+            "height": 72
           }
         ],
         [
           "28:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 5 traverse",
+            "height": 72
           }
         ],
         [
           "30:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 5 exit",
+            "height": 72
           }
         ],
         [
           "32:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 6 enter",
+            "height": 72
           }
         ],
         [
           "34:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 6 traverse",
+            "height": 72
           }
         ],
         [
           "36:value",
           "value",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml."
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 6 exit",
+            "height": 72
           }
         ]
       ],
