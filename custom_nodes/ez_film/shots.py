@@ -52,6 +52,7 @@ OPTIONAL_SHOT_KEYS = (
     "look",
     "print_mode",
     "audio_lock",
+    "end_state",
 )
 
 
@@ -186,6 +187,7 @@ def apply_shot_card_defaults(parsed: dict[str, Any]) -> dict[str, Any]:
         shot["script"] = str(shot.get("script") or "")
         shot["dialogue"] = str(shot.get("dialogue") or "")
         shot["audio_world"] = str(shot.get("audio_world") or "")
+        shot["end_state"] = str(shot.get("end_state") or "")
         shot["look"] = str(shot.get("look") or "")
         shot["print_mode"] = str(shot.get("print_mode") or "")
         shot["camera"] = normalize_camera(str(shot.get("camera") or ""))
@@ -257,6 +259,7 @@ def parse_shots_yaml(text: str) -> dict[str, Any]:
             "script": _optional_scalar(body, "script"),
             "dialogue": _optional_scalar(body, "dialogue"),
             "audio_world": _optional_scalar(body, "audio_world"),
+            "end_state": _optional_scalar(body, "end_state"),
             "camera": _optional_scalar(body, "camera"),
             "clay": _optional_scalar(body, "clay", DEFAULT_CLAY),
             "look": _optional_scalar(body, "look"),
@@ -335,6 +338,8 @@ def write_shots_yaml(parsed: dict[str, Any]) -> str:
         lines.append(f"    dialogue: {_yaml_quote(shot.get('dialogue') or '')}")
         if shot.get("audio_world"):
             lines.append(f"    audio_world: {_yaml_quote(shot['audio_world'])}")
+        if shot.get("end_state"):
+            lines.append(f"    end_state: {_yaml_quote(shot['end_state'])}")
         lines.append(_emit_block("ltx_i2v", shot["ltx_i2v"], "    "))
         lines.append(_emit_block("wan_i2v", shot["wan_i2v"], "    "))
     return "\n".join(lines) + "\n"

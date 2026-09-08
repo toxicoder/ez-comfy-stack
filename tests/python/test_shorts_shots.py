@@ -93,7 +93,10 @@ def test_eighteen_shots_and_chain() -> None:
         assert meta["publish_cap_s"] == "90.00"
         assert meta["print"] == "ltx"
         assert meta["identity_seed"] == "42"
-        assert meta["identity_enhance"] == "true"
+        if film == "go-see":
+            assert meta["identity_enhance"] == "false"
+        else:
+            assert meta["identity_enhance"] == "true"
         shots = parsed["shots"]
         assert len(shots) == 18, (film, len(shots))
         prefixes = [s["prefix"] for s in shots]
@@ -217,8 +220,33 @@ def test_creative_locks() -> None:
     assert "body-cam" in go
     assert "parkour" in go.lower()
     assert "gloves" in go.lower()
+    assert "dead sprint" in go.lower()
+    assert "laugh" not in go.lower()
     for needle in ("Faith", "Mirror's Edge", "Mirrors Edge", "barrel-roll", "backflip"):
         assert needle not in go, needle
+    parsed = parse_shots_yaml(go)
+    stunts = (
+        "sprint",
+        "flip",
+        "vault",
+        "wall-run",
+        "leap",
+        "dive",
+        "slide",
+        "climb",
+        "hold",
+        "burst",
+    )
+    for shot in parsed["shots"]:
+        blob = shot["ltx_i2v"].lower()
+        assert "no speech" in blob, shot["prefix"]
+        assert any(token in blob for token in stunts), shot["prefix"]
+        if shot["prefix"] != "ez_gosee_b6_s3":
+            assert shot["end_state"], shot["prefix"]
+    for i, shot in enumerate(parsed["shots"][:-1]):
+        token = shot["end_state"].lower()
+        nxt = parsed["shots"][i + 1]["ltx_i2v"].lower()
+        assert token in nxt, (shot["prefix"], token)
     here = _path("still-here").read_text(encoding="utf-8")
     assert "ceramic mug" in here
     assert "two-note" in here or "invented" in here
@@ -364,7 +392,14 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert any(n.get("type") == "EZUnloadModels" for n in graph["nodes"])
         concat = next(n for n in graph["nodes"] if n.get("type") == "EZFilmConcat")
         assert concat["widgets_values"][0] == film
-        assert "preview" in (concat.get("title") or "").lower()
+        assert len(concat["widgets_values"]) >= 3
+        title = (concat.get("title") or "").lower()
+        assert "play" in title or "preview" in title or "download" in title
+        if film == "go-see":
+            assert concat["widgets_values"][2] == 8
+            assert concat["pos"][0] < 400
+        else:
+            assert concat["widgets_values"][2] == 0
         identity = next(
             n
             for n in graph["nodes"]
@@ -384,7 +419,6 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert not any(n.get("type") == "LoadImage" for n in graph["nodes"])
         ltx_enh = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
         assert len(ltx_enh) == 18
-        assert all(n["widgets_values"][1] is True for n in ltx_enh)
         klein_sampler = next(
             n
             for n in graph["nodes"]
@@ -393,9 +427,15 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert klein_sampler["widgets_values"][0] == 42
         assert klein_sampler["widgets_values"][3] == 1.0
         enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        assert enhance["widgets_values"][1] is True
-        assert enhance["widgets_values"][2] == "identity"
         assert enhance["widgets_values"][0] == parsed["identity"]
+        if film == "go-see":
+            assert all(n["widgets_values"][1] is False for n in ltx_enh)
+            assert enhance["widgets_values"][1] is False
+            assert enhance["widgets_values"][2] == "t2i"
+        else:
+            assert all(n["widgets_values"][1] is True for n in ltx_enh)
+            assert enhance["widgets_values"][1] is True
+            assert enhance["widgets_values"][2] == "identity"
         ltx_pos = [
             n
             for n in graph["nodes"]

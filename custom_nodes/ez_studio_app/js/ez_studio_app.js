@@ -47,7 +47,13 @@ const OCCUPANCY_STOP = {
   audio: "Klein / Wan / LTX session",
 };
 
-const SAVE_TYPES = new Set(["SaveImage", "VHS_VideoCombine", "SaveAudio", "SaveAudioMP3"]);
+const SAVE_TYPES = new Set([
+  "SaveImage",
+  "VHS_VideoCombine",
+  "SaveAudio",
+  "SaveAudioMP3",
+  "EZFilmConcat",
+]);
 
 const BANNER_ID = "ez-studio-app-banner";
 const CHIP = [

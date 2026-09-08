@@ -833,7 +833,7 @@
     "aliases": ["concat-shots"],
     "category": "Film",
     "short": "Host ffmpeg stitch for 5 s takes. In-graph EZFilmConcat is the one-click 90s path.",
-    "long": "`concat-shots.sh --film go-see --yes` is the host fallback. `--xfade` is audio-only and refuses Wan-silent shots. See [90s shorts](shorts.md).",
+    "long": "`concat-shots.sh --film go-see --yes` is the host fallback. It writes a faststart H.264 master plus `ez_*_90s.html`. `--xfade` is audio-only and refuses Wan-silent shots. See [90s shorts](shorts.md).",
     "see_also": ["last-frame", "film-accept"]
   },
   {
