@@ -8,8 +8,9 @@ tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 
 **What's on this page**
 
-- The only DCC ↔ Comfy handshake (`guides/<slug>/<shot>/`)
+- The only DCC ↔ Comfy **print** handshake (`guides/<slug>/<shot>/`)
 - Occupancy: stop Comfy before a dump
+- Instagram clay stills are a different pack (`house-views`, 1024×1280)
 - Script desk, overlay QC, animatic, stem mix
 - Klein-from-clay on today's pack
 - Opt-in LTX IC-LoRA Union Control (not `download-models`)
@@ -102,6 +103,15 @@ Official 2.5 Union Control distilled widgets `ltx-2.3-22b-ic-lora-union-control-
 | **D** Laptop-DCC / Spark-Comfy | Default ergonomics on one GB10. |
 
 Godot is a first-class blocking engine in a later PR, not a second Blender. OpenToonz / Krita are plate emitters into the same pack, not v1 engines.
+
+## Instagram clay stills (not this pack)
+
+`house-views` is a **different** contract: ten 1024×1280 Workbench stills + greybox GLB under `assets/sets/<slug>/`, then **klein-dream-house-clay-lab-example**. Do not dump Instagram 4:5 into `guides/` or reuse `ez.guide.shot.v1` (that QC is 1280×704 / 120 frames). Playbook: [Dream-house tours](learn/dream-house.md).
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh house-views --slug lab-penthouse
+```
 
 Do not run a live Blender MCP socket and Comfy on the same GB10.
 

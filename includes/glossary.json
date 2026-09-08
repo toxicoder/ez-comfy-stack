@@ -898,5 +898,14 @@
     "short": "DCC handshake: 1280×704 clay/depth/first+last for a 5.00s print.",
     "long": "The only DCC ↔ Comfy print handshake. Lives under `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot>/`. Size is the LTX VAE grid (**1280×704**, never 1280×720). 120 frames @ 24 fps. Occupancy XOR: stop Comfy before `export-guides`. See [DCC guide pack](dcc-workflows.md).",
     "see_also": ["ltx", "occupancy", "sidecar"]
+  },
+  {
+    "id": "house-views",
+    "title": "house-views",
+    "aliases": ["house-views", "dream-house clay", "clay tour"],
+    "category": "Studio",
+    "short": "Blender greybox + ten 1024×1280 Instagram clay stills. Occupancy XOR.",
+    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024×1280**), not the LTX guide pack. Stop Comfy first. Queue **klein-dream-house-clay-lab-example** to restyle. No Blender → **klein-dream-house-lab-example**. See [Dream-house tours](learn/dream-house.md).",
+    "see_also": ["guide-pack", "occupancy", "sidecar", "klein"]
   }
 ]

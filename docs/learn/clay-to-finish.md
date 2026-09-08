@@ -64,7 +64,7 @@ Printers stay **5.00 s / 1280×704 / 120 frames @ 24 fps**. Do not type a 90 s l
 
 | If | Skip |
 | --- | --- |
-| No Blender / Path D not ready | Clay. Look plate owns composition. Overlay QC is skipped, not faked. |
+| No Blender / Path D not ready | Clay. Look plate owns composition. Overlay QC is skipped, not faked. Same skip for the Instagram clay tour — use **klein-dream-house-lab-example** instead of faking `house-views`. |
 | Empty dialogue | DX stem |
 | Shorts “world SFX, no score” | MX. Do not load ACE-Step next to LTX. |
 | Talking-head / VO-locked picture | Union Control. Use A2V freeze (`klein-talking-head-lab-example`). Mouths will not match. |
@@ -73,7 +73,9 @@ Printers stay **5.00 s / 1280×704 / 120 frames @ 24 fps**. Do not type a 90 s l
 
 ## Occupancy
 
-One GB10 job. `export-guides` dies if compose is up (exit 2). `overlay-qc`, `film-animatic`, and `stem-mix` are host ffmpeg and **may** run while Comfy is up. Stop the visual session before ACE-Step.
+One GB10 job. `export-guides` and `house-views` die if compose is up (exit 2). `overlay-qc`, `film-animatic`, and `stem-mix` are host ffmpeg and **may** run while Comfy is up. Stop the visual session before ACE-Step.
+
+Instagram stills of one place (not a 5.00s print): [Dream-house tours](dream-house.md). That dump is 1024×1280, not the LTX 1280×704 pack.
 
 Safety is unchanged: `restart: "no"`, type **yes** on start, headroom, download-limit clear-on-exit.
 

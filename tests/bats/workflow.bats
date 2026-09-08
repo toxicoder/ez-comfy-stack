@@ -516,13 +516,15 @@ assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_no
 }
 
 @test "operator app graphs: still settings, gif ping-pong loop, dream-house pack" {
-  local daily gif house
+  local daily gif house clay
   daily="$(lab_wf klein-still-daily-lab-example.json)"
   gif="$(lab_wf wan-gif-loop-lab-example.json)"
   house="$(lab_wf klein-dream-house-lab-example.json)"
+  clay="$(lab_wf klein-dream-house-clay-lab-example.json)"
   [[ -f ${daily} ]]
   [[ -f ${gif} ]]
   [[ -f ${house} ]]
+  [[ -f ${clay} ]]
   run python3 -c "
 import json
 s=json.load(open('${daily}'))
@@ -652,6 +654,25 @@ ntext=str(note['widgets_values'][0]).lower()
 assert 'world bible' in ntext or 'camera-free' in ntext or 'one place' in ntext
 assert 'walkthrough' in ntext or 'virtual tour' in ntext
 assert 'referencelatent' in ntext or 'new views' in ntext or 'independent t2i' in ntext
+"
+  [ "${status}" -eq 0 ]
+  run python3 -c "
+import json
+d=json.load(open('${clay}'))
+assert d.get('id')=='klein-dream-house-clay-lab-example'
+assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1024, 1280] for n in d['nodes'])
+assert sum(1 for n in d['nodes'] if n.get('type')=='ReferenceLatent')==10
+assert sum(1 for n in d['nodes'] if n.get('type')=='LoadImage')==10
+saves=[n for n in d['nodes'] if n.get('type')=='SaveImage']
+prefs=sorted(n['widgets_values'][0] for n in saves)
+assert prefs==[f'ez_dream_house_clay_{i:02d}' for i in range(1,11)]
+loads=sorted((n for n in d['nodes'] if n.get('type')=='LoadImage'), key=lambda n: n['id'])
+assert [n['widgets_values'][0] for n in loads]==[f'ez_house_clay_{i:02d}.png' for i in range(1,11)]
+enh=next(n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance')
+assert enh['widgets_values'][2]=='identity'
+note=str(next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))['widgets_values'][0]).lower()
+assert 'house-views' in note
+assert 'occupancy' in note
 "
   [ "${status}" -eq 0 ]
 }

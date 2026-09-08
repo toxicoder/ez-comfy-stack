@@ -94,3 +94,4 @@ def test_iclora_not_in_download_models_help() -> None:
     chunk = help_text[start : start + 800]
     assert "iclora" not in chunk
     assert "export-guides" in help_text
+    assert "house-views" in help_text

@@ -26,7 +26,7 @@ Sidebar tree after start:
 ```text
 user/default/workflows/
   _lab/
-    klein/     stills, plates, identity, platform pack, dream-house, …
+    klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, …
     wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
     ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
     shorts/    film-*-90s-*-lab-example.json
@@ -105,6 +105,7 @@ flowchart TB
     | **klein-identity-sheet-lab-example** | 3-angle sheet of the identity you type, seed **42**, **1280×704** |
     | **klein-storyboard-6up-lab-example** | Six new cameras of one scene (`ez_board_01`…`06`) |
     | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills: virtual tour of one place (tower, foyer, rooms, terrace, drone, study) |
+    | **klein-dream-house-clay-lab-example** | Same tour as Klein **edit** of Blender clay (`ez_house_clay_01`…`10`). Dump with `house-views` first. Prefix `ez_dream_house_clay_*` |
     | **klein-character-draft-lab-example** | Character still, 1024×1280, style dropdown, prefix `ez_character` |
     | **klein-character-tweak-lab-example** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |
     | **klein-hook-still-lab-example** | Vertical 9:16 hook still |
@@ -213,6 +214,7 @@ flowchart TB
     | Workflow | What it does |
     | --- | --- |
     | **klein-from-clay-lab-example** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Then `overlay-qc`. Occupancy: dump while Comfy is **down**. |
+    | **klein-dream-house-clay-lab-example** | Instagram 4:5 Path B: ten Klein edits of `house-views` clay (1024×1280). Not an LTX pack. |
     | **ltx-iclora-depth-5s-lab-example** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
     | **audio-finish-lab-example** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck −15 dB, YouTube loudnorm). |
 

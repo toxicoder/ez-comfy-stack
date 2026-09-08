@@ -178,6 +178,15 @@ def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
     assert "width" not in names
 
 
+def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
+    names = _widget_names(_load("klein-dream-house-clay-lab-example.json"))
+    assert names.count("prompt") == 1
+    assert names[0] == "prompt"
+    assert "image" not in names
+    for hidden in HIDDEN_APP_WIDGETS:
+        assert hidden not in names
+
+
 def test_beat_sheet_exposes_only_shot_cards() -> None:
     names = _widget_names(_load("beat-sheet-lab-example.json"))
     assert names == ["value"] * 22

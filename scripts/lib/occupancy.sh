@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # ## occupancy
 #
-# Shared compose-up refuse for host GPU sidecars (Blender, NVENC, guide dump).
+# Shared compose-up refuse for host GPU sidecars (Blender, NVENC, guide dump,
+# house-views).
 # Source after scripts/lib/compose.sh. Not executable.
 #
 # Safety:
