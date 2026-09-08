@@ -2407,6 +2407,11 @@
 <td><code>./scripts/manage.sh download-music --tier turbo</code> <strong>or</strong> <code>download-podcast --tier acestep</code> (same dest). Lab file is <code>ace_step_1.5_turbo_aio.safetensors</code> under <code>comfy/checkpoints/</code></td>
 </tr>
 <tr>
+<td><strong>ACE tags + lyrics</strong> Invalid input: keyscale=<code>true</code>, language=<code>C minor</code>, timesignature=<code>en</code></td>
+<td>Seed <code>control_after_generate</code> slot missing; combo widgets shifted by one</td>
+<td>Pull latest. <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>_lab/</code> rsyncs. Re-open <strong>music-rap-draft-lab-example</strong> (or the podcast ACE graph). Do not keep a canvas loaded before the rsync. Seed control stays <strong>fixed</strong></td>
+</tr>
+<tr>
 <td>Rap bars slur / mush</td>
 <td>Lines too long, or language not <code>en</code></td>
 <td>Shorten to ~6–10 syllables; keep <code>language=en</code> on <code>TextEncodeAceStepAudio1.5</code>. Re-open <strong>music-rap-draft-lab-example</strong></td>
