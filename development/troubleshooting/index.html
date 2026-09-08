@@ -2663,6 +2663,11 @@
 <td>App Mode graphs seed as <code>*-lab-example.app.json</code>. Pull latest and restart so the entrypoint re-copies and removes the old <code>.json</code> sibling. 90s films stay Workflows-only (<code>default_view: graph</code>). This is not <code>studio-ui</code>.</td>
 </tr>
 <tr>
+<td>App panel shows occupancy / Run but no Prompt, Style, or Rewrite</td>
+<td>Old <code>linearData</code> used two-part ids (<code>"11:prompt"</code>). ComfyUI frontend 1.49.6 treats a colon as a subgraph locator and drops the widget</td>
+<td>Pull latest, <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>_lab/</code> reseeds. Hard-refresh the Comfy tab. The first <code>linearData.inputs</code> id must be a number (<code>11</code>), not <code>11:prompt</code></td>
+</tr>
+<tr>
 <td>App Mode shows three identical Prompt boxes / 18 “Shot card”s</td>
 <td>Old JSON or <code>ez_studio_app</code> JS not copied</td>
 <td>Pull latest, restart so graphs restamp unique <code>label</code>s and <code>custom_nodes/ez_studio_app/js</code> copies. Prompt Forge should read Klein / Wan / LTX; beat sheet should read Beat 1 enter …</td>
