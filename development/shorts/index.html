@@ -1818,6 +1818,7 @@
 <ul>
 <li>Why 18 × 5.00s shots instead of one 90s denoise</li>
 <li>One-click Comfy graph per film (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> identity + 18 <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> prints + stitch)</li>
+<li>Play/download: overlay, <code>ez_*_90s.html</code>, studio-ui <code>/watch/&lt;slug&gt;</code></li>
 <li>Shot maps for go-see (first-person parkour), still-here, and switchyard</li>
 <li>Model-native Klein / LTX prompts (<a href="../prompting/">Prompting</a>)</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="spark-farm" data-href="../glossary/#spark-farm" title="Independent Sparks as parallel 5 s workers with one weight copy. No NCCL.">Spark farm</span>: optional parallel 5s Queues, local concat</li>
@@ -1830,8 +1831,8 @@
 <ul>
 <li>Three continuous ~90s films (first-person parkour go-see, still-here, switchyard) on the <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="us-safe" data-href="../glossary/#us-safe" title="Local weights this lab will download for a US casual-commercial operator. Not legal advice.">US-safe</span> local pack</strong></li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="last-frame" data-href="../glossary/#last-frame" title="Shot N&#x27;s last PNG becomes shot N+1&#x27;s I2V start. How 90s films work without a 90s denoise.">Last-frame continuity</span> without a 90s denoise</li>
-<li>A 90.00s publish cap (in-graph <code>EZFilmConcat</code>, or host <code>ffmpeg -t 90</code>)</li>
-<li>One <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> per film — identity, 18 prints, stitch, preview, save</li>
+<li>A 90.00s publish cap (in-graph <code>EZFilmConcat</code> faststart H.264, or host <code>ffmpeg -t 90</code>)</li>
+<li>One <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> per film — identity, 18 prints, stitch, play, download</li>
 </ul>
 <p><strong>Who this is for:</strong> studio users who already Queued a 5 s LTX <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">clip</span>. Concepts: <a href="../learn/pipeline/">Klein, Wan, and LTX</a>.</p>
 <div class="admonition success">
@@ -1840,9 +1841,9 @@
 <li>Stack is up (<code>manage.sh start</code>, type <strong>yes</strong>). LTX-2.5 weights on disk.</li>
 <li>Optional: fill <strong>beat-sheet-lab-example</strong> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">occupancy</span> <strong>none</strong>, no <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span>) then <code>./scripts/manage.sh shot-sheet run --film go-see</code> — writes <code>films/&lt;slug&gt;/shots.yaml</code>. Lab YAML is not copied by the entrypoint.</li>
 <li>Load <strong>film-go-see-90s-run-lab-example</strong> (or still-here / switchyard).</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="prompt-enhance" data-href="../glossary/#prompt-enhance" title="In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.">Prompt enhance</span> is <strong>on</strong> (Klein identity mode + 18 LTX <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">i2v</span> rewrites). Leave LTX <strong>1280×704</strong>. Queue <strong>once</strong>.</li>
+<li><strong>go-see</strong> pins <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> <strong>off</strong> so the body-cam bible is what CLIP encodes. still-here / switchyard keep Enhance <strong>on</strong>. Leave LTX <strong>1280×704</strong>. Queue <strong>once</strong>.</li>
 <li>Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.</li>
-<li>The stitched MP4 is <strong>already on disk</strong>: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code> (container <code>/outputs</code>). Open <strong>Save 90s film (MP4) — open node for preview</strong> to watch or download it from the Comfy tab.</li>
+<li>The stitched MP4 is <strong>already on disk</strong>: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code> (container <code>/outputs</code>), plus <code>ez_gosee_90s.html</code>. A <strong>90s film ready</strong> overlay offers play and download. Optional board: <code>docker compose --profile studio-ui up studio-ui</code> then http://localhost:8190/watch/gosee</li>
 <li>Copy off the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span>: <code>scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .</code></li>
 </ol>
 <p>Do <strong>not</strong> set 241+ frames. Resume after a dropped SSH session: <code>film-resume</code> (below).</p>
@@ -1900,7 +1901,7 @@
   Klein --&gt; Unload["Unload models"]
   Unload --&gt; Shot["LTX 5.00s AV ×18 last-frame chain"]
   Shot --&gt; Concat["EZFilmConcat · cap 90s"]
-  Concat --&gt; Preview["Open 90s MP4 node for preview"]</code></pre>
+  Concat --&gt; Preview["Overlay · HTML sidecar · /watch"]</code></pre>
 <hr />
 <h2 id="models-us-safe-local-pack-only">Models (US-safe local pack only)<a class="headerlink" href="#models-us-safe-local-pack-only" title="Permanent link">&para;</a></h2>
 <table>
@@ -1922,13 +1923,13 @@
 <tr>
 <td>Print + synced world audio</td>
 <td>Groups <strong>3–8</strong> (beats)</td>
-<td>LTX-2.5 distilled I2V</td>
+<td>LTX-2.5 distilled <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">I2V</span></td>
 <td>Community License (not Apache)</td>
 </tr>
 <tr>
 <td>Stitch + preview</td>
-<td>Group <strong>9. Publish 90s MP4</strong></td>
-<td><code>EZFilmConcat</code> (ffmpeg AAC + YouTube <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span>)</td>
+<td>Group <strong>9. Publish 90s MP4</strong> (left column)</td>
+<td><code>EZFilmConcat</code> (H.264 CRF 18 + AAC + YouTube <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span> + faststart)</td>
 <td>—</td>
 </tr>
 <tr>
@@ -1952,9 +1953,9 @@
 <p>Each film graph ships <strong>Klein identity + 18 LTX 5.00s printers + in-graph stitch</strong>. Prompts are baked from <code>{film}.shots.yaml</code> (Klein <code>identity_look</code>, LTX <code>ltx_i2v</code>). Host JSON lives at <code>workflows/_lab/shorts/</code>; YAML shot lists stay at <code>workflows/shorts/*.shots.yaml</code> (not copied into Comfy). The entrypoint rsyncs JSON into <code>user/default/workflows/_lab/shorts/</code>. Restart so <code>custom_nodes/ez_film</code> is copied with the other in-tree packs.</p>
 <ol>
 <li>Load one film graph (<code>film-go-see-90s-run-lab-example</code> / <code>film-still-here-90s-lab-example</code> / <code>film-switchyard-90s-lab-example</code>).</li>
-<li>Queue <strong>once</strong>. Klein runs first (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> <strong>on</strong>, identity mode, 4-step). Models unload. Then 18 × <strong>5.00s</strong> LTX prints chain last-frame → next start (each shot has LTX Prompt Enhance on). Leave LTX <strong>1280×704</strong>.</li>
+<li>Queue <strong>once</strong>. Klein runs first (4-step). Models unload. Then 18 × <strong>5.00s</strong> LTX prints chain last-frame → next start. <strong>go-see</strong> pins Enhance <strong>off</strong> on identity and every LTX shot; the other two films keep Enhance <strong>on</strong>. Leave LTX <strong>1280×704</strong>.</li>
 <li>Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">Headroom</span> preflight still applies at start.</li>
-<li>After Queue, the stitched file is already written to <code>${COMFY_OUTPUT_DIR}/ez_&lt;slug&gt;_90s.mp4</code> (container <code>/outputs</code>). Open <strong>Save 90s film (MP4) — open node for preview</strong> to watch or download it. Per-shot files remain as <code>ez_&lt;slug&gt;_bN_sM_ltx_video_*.mp4</code>. Copy off the Spark with <code>scp</code>.</li>
+<li>After Queue, the stitched file is already written to <code>${COMFY_OUTPUT_DIR}/ez_&lt;slug&gt;_90s.mp4</code> (H.264 + AAC + faststart) plus <code>ez_&lt;slug&gt;_90s.html</code>. A <strong>90s film ready</strong> overlay plays and downloads it. Per-shot files remain as <code>ez_&lt;slug&gt;_bN_sM_ltx_video_*.mp4</code>. Copy off the Spark with <code>scp</code>. Optional: studio-ui <code>/watch/&lt;slug&gt;</code>.</li>
 <li>Optional silent rehearsal of one frame: <strong>wan-i2v-shot-lab-example</strong>. Optional single-shot iterate: <strong>ltx-i2v-shot-lab-example</strong>.
 Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</code> (<code>state.json</code>, <code>shots/NN.mp4</code>). A dropped SSH session is not a two-hour requeue:</li>
 </ol>
@@ -1970,8 +1971,8 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--dry-run
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--yes
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Optional audio acrossfade (0.10 s). Video stays stream-copy. LTX shots only</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># (Wan-silent has no audio stream — --xfade refuses).</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Optional audio acrossfade (0.10 s). Video is a hard cut (H.264). LTX shots only</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># (Wan-silent has no audio stream — --xfade refuses). go-see in-graph uses 0.08 s.</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--xfade<span class="w"> </span><span class="m">10</span><span class="w"> </span>--yes
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Listen to go-see with and without --xfade 10; default remains the hard-cut golden.</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
@@ -2031,7 +2032,7 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">go-see</label><label for="__tabbed_1_2">still-here</label><label for="__tabbed_1_3">switchyard</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>First-person <strong>parkour</strong> body-cam. Identity lock: sun-washed teal running-coat sleeves + matching gloves + warm gold-cyan holographic glyph motes in frame (data-staff slung on the back). Arms always; boots/knees on vaults, drops, and wall-runs. Never a standing third-person wizard. <strong>No score</strong> (breath + world).</p>
+<p>First-person <strong>parkour</strong> body-cam. Identity lock: sun-washed teal running-coat sleeves + matching gloves + warm gold-cyan holographic glyph motes in frame (data-staff slung on the back). Eye-level, arms always in the lower third; boots/knees on vaults, drops, and wall-runs. Dead sprint from frame 1. One signature stunt per 5 s; each shot lands on a readable plant for the next I2V. Never a standing third-person wizard. <strong>No score, no speech</strong> (breath + world foley).</p>
 <table>
 <thead>
 <tr>
@@ -2046,30 +2047,30 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <tr>
 <td>1</td>
 <td>Golden-hour tropical rooftops</td>
-<td>Sprint + gap leap</td>
-<td>Vault bulkhead + wall-run</td>
-<td>Drop toward bay skybridge</td>
+<td>Dead sprint</td>
+<td>Tucked front flip across the gap</td>
+<td>Kong vault + wall-run drop</td>
 </tr>
 <tr>
 <td>2</td>
 <td>Waterfront maglev / bay skybridge</td>
-<td>Spine sprint</td>
-<td>Gantry leaps</td>
+<td>Grating sprint</td>
+<td>Cat leap between gantries</td>
 <td>Dive into hanging gardens</td>
 </tr>
 <tr>
 <td>3</td>
 <td>Hanging tropical gardens</td>
-<td>Wall-run glass</td>
-<td>Vault palm terraces</td>
-<td>Water curtain toward causeway</td>
+<td>Glass wall-run</td>
+<td>Tic-tac / speed vault</td>
+<td>Burst through water curtain</td>
 </tr>
 <tr>
 <td>4</td>
 <td>Tropical storm causeway</td>
 <td>Rain sprint</td>
-<td>Leap a squall gap</td>
-<td>Vault toward coastal cliffs</td>
+<td>Precision leap a squall gap</td>
+<td>Dash vault toward cliffs</td>
 </tr>
 <tr>
 <td>5</td>
@@ -2083,7 +2084,7 @@ Shot-level resume lives under <code>${COMFY_OUTPUT_DIR}/films/&lt;slug&gt;/</cod
 <td>Warm-night bay overlook</td>
 <td>Last sprint</td>
 <td>Leap to rail</td>
-<td>Hold + quiet laugh</td>
+<td>Hold + breath only</td>
 </tr>
 </tbody>
 </table>

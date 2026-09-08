@@ -2559,8 +2559,8 @@
 </tr>
 <tr>
 <td>Where is my 90s MP4? / how do I download it?</td>
-<td>Looking only at SaveImage PNGs, or never opening group <strong>9. Publish 90s MP4</strong></td>
-<td>The stitch is already written: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code> (or <code>ez_stillhere_90s.mp4</code> / <code>ez_switchyard_90s.mp4</code>). Open <strong>Save 90s film (MP4) — open node for preview</strong> for an inline player and download control. Confirm: <code>ls "${COMFY_OUTPUT_DIR}/ez_*_90s.mp4"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. Copy off the Spark with <code>scp</code>. <code>cleanup</code> does not delete this folder — <a href="../shorts/">90s shorts</a></td>
+<td>Looking only at SaveImage PNGs, or an old concat-copy file that browsers refuse</td>
+<td>After Queue a <strong>90s film ready</strong> overlay plays and downloads the master. Files: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code> (H.264 + AAC + faststart) and <code>ez_gosee_90s.html</code>. Optional: <code>docker compose --profile studio-ui up studio-ui</code> then http://localhost:8190/watch/gosee. Confirm: <code>ls "${COMFY_OUTPUT_DIR}/ez_*_90s.mp4"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. Copy off the Spark with <code>scp</code>. <code>cleanup</code> does not delete this folder — <a href="../shorts/">90s shorts</a></td>
 </tr>
 <tr>
 <td>LTX MP4 plays but has no sound</td>
@@ -2620,7 +2620,7 @@
 <tr>
 <td>One-click 90s film Queue runs for a long time</td>
 <td>18 sequential LTX 5s prints</td>
-<td>Expected. Open <strong>Save 90s film (MP4)</strong> when it finishes. A true hang is 0 GPU / 241+ frames</td>
+<td>Expected. The <strong>90s film ready</strong> overlay appears when stitch finishes. A true hang is 0 GPU / 241+ frames</td>
 </tr>
 <tr>
 <td>90s film / shot graph missing in the Comfy UI</td>
