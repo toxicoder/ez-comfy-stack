@@ -1696,7 +1696,7 @@
 <li>Following <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> Still → Hero → Silent 5s → AV 5s without renaming files</li>
 </ul>
 <p><strong>Who this is for:</strong> studio users after <code>klein-still-draft-lab-example</code> has been loaded once.</p>
-<p>Lab graphs are still the same host <code>*-lab-example.json</code> files. On <code>start</code> they <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> into Comfy as <code>*.app.json</code> when App Mode is the default view, so they appear under <strong>Apps</strong> as well as <strong>Workflows</strong>. <a href="../learn/comfyui/#graph-and-app">App Mode</a> is a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> surface on that JSON (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> frontend <strong>1.41.13+</strong>). It is <strong>not</strong> a second frontend and not <code>studio-ui</code>.</p>
+<p>Lab graphs are still the same host <code>*-lab-example.json</code> files. On <code>start</code> they <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> into Comfy as <code>*.app.json</code> when App Mode is the default view, so they appear under <strong>Apps</strong> as well as <strong>Workflows</strong>. <a href="../learn/comfyui/#graph-and-app">App Mode</a> is a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> surface on that JSON (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> frontend <strong>1.41.13+</strong>). It is <strong>not</strong> a second frontend and not <code>studio-ui</code>. A small occupancy strip (bottom-left) shows which family is running, still N of M on multi-plate Apps, and the next handoff. Restart the container after a pull so <code>custom_nodes/ez_studio_app</code> is copied.</p>
 <pre class="mermaid"><code>flowchart LR
   Load["Load *-lab-example"] --&gt; App["App Mode widgets"]
   App --&gt; Queue["Queue"]
@@ -1715,12 +1715,12 @@
 <tbody>
 <tr>
 <td><strong>App</strong></td>
-<td>Prompt, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span>, style, seed, size, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span></td>
+<td>Prompt first, then style, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span>, seed. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">I2V</span> / tweak. Size and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span> only on <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">klein</span>-still-daily</strong>.</td>
 <td>Daily <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span></td>
 </tr>
 <tr>
 <td><strong>Graph</strong></td>
-<td>Groups, bypass (Ctrl+B), <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vhs" data-href="../glossary/#vhs" title="Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview.">VHS</span> preview, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">CLIP</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vae" data-href="../glossary/#vae" title="Encoder/decoder between pixels and latent space. Each model family has its own.">VAE</span></td>
+<td>Groups, bypass (Ctrl+B), <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vhs" data-href="../glossary/#vhs" title="Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview.">VHS</span> preview, UNET/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">CLIP</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vae" data-href="../glossary/#vae" title="Encoder/decoder between pixels and latent space. Each model family has its own.">VAE</span>, hidden shot cards</td>
 <td>Debug, film one-click, unused plates</td>
 </tr>
 </tbody>
@@ -1768,7 +1768,7 @@
 <tr>
 <td><code>audio</code></td>
 <td>podcast / rap</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / Wan / LTX session</td>
+<td>Klein / Wan / LTX session</td>
 </tr>
 </tbody>
 </table>
@@ -1794,15 +1794,15 @@
 </tr>
 <tr>
 <td><strong>klein-storyboard-6up-lab-example</strong></td>
-<td>Six new cameras of one rooftop (<code>ez_board_01</code>…<code>06</code>)</td>
+<td>Six new cameras of one scene (<code>ez_board_01</code>…<code>06</code>)</td>
 </tr>
 <tr>
 <td><strong>klein-dream-house-lab-example</strong></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span>. Ten 4:5 stills of one wizard penthouse, independent <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">T2I</span>, identity-mode enhance on the bible</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span>. Ten 4:5 stills of <strong>one place</strong> (type any place; default placeholder is the lab penthouse)</td>
 </tr>
 <tr>
 <td><strong>klein-style-lock-lab-example</strong></td>
-<td>One penthouse, four cameras, locked inventory</td>
+<td>One place, four cameras</td>
 </tr>
 <tr>
 <td><strong>klein-lighting-trio-lab-example</strong></td>
@@ -1823,6 +1823,14 @@
 <tr>
 <td><strong>klein-hook-still-lab-example</strong></td>
 <td>Vertical 9:16 first-frame hook (<code>ez_hook_still</code>)</td>
+</tr>
+<tr>
+<td><strong>klein-character-draft-lab-example</strong></td>
+<td>Character still. Prompt + style, 1024×1280, prefix <code>ez_character</code></td>
+</tr>
+<tr>
+<td><strong>klein-character-tweak-lab-example</strong></td>
+<td>Edit that still. LoadImage + change prompt, ReferenceLatent, prefix <code>ez_character_tweak</code></td>
 </tr>
 <tr>
 <td><strong>prompt-forge-lab-example</strong></td>
@@ -1882,7 +1890,7 @@
 <td><code>ez_shorts_still</code> 432×768</td>
 </tr>
 <tr>
-<td><strong>wan-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">i2v</span>-5s-lab-example</strong></td>
+<td><strong>wan-i2v-5s-lab-example</strong></td>
 <td>wan</td>
 <td>Silent 5 s, 121 frames, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> draft-only</td>
 </tr>
@@ -1927,6 +1935,10 @@
 <tr>
 <td>Spark Still</td>
 <td>Platform Pack (<code>klein-platform-pack</code>) → Silent 5s / Hook AV</td>
+</tr>
+<tr>
+<td>Character Draft</td>
+<td>Character Tweak → Identity Sheet → Silent 5s</td>
 </tr>
 <tr>
 <td>Hook Still</td>
