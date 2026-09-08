@@ -16,6 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tests/requirements.txt
+
       - name: Cache shfmt
         id: cache-shfmt
         uses: actions/cache@v5
@@ -33,6 +39,9 @@ jobs:
             sudo install -m 755 /tmp/shfmt /usr/local/bin/shfmt
           fi
 
+      - name: Install Pyright
+        run: pip install -r tests/requirements.txt
+
       - name: Lint
         run: make lint
 
@@ -48,6 +57,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+          cache-dependency-path: tests/requirements.txt
 
       - name: Install test tools
         run: |
@@ -55,7 +65,7 @@ jobs:
           sudo apt-get update
           # bats + GNU parallel for bats --jobs; shellcheck not needed here
           sudo apt-get install -y bats parallel
-          pip install pytest pytest-cov
+          pip install -r tests/requirements.txt
 
       - name: Coverage gate
         run: make coverage

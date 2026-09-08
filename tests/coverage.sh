@@ -6,10 +6,11 @@
 #
 # Gates:
 #   1. Python — pytest-cov on patch_get_free_memory + patch_unified_memory_copy + ez_ltx_spatial with --cov-fail-under=100
-#   2. Shell function inventory — every function under scripts/ and docker/**/*.sh
+#   2. Pyright (Pylance) — first-party Python typecheck (tests/typecheck.sh)
+#   3. Shell function inventory — every function under scripts/ and docker/**/*.sh
 #      must be named under tests/ (strict; production-only refs do not count)
-#   3. Full BATS suite
-#   4. Optional kcov when available (non-fatal on hosts without kcov)
+#   4. Full BATS suite
+#   5. Optional kcov when available (non-fatal on hosts without kcov)
 #
 # Hermetic: no Docker daemon, GPU, sudo, or network required.
 #
@@ -61,6 +62,8 @@ main() {
       --cov-report=term-missing \
       --cov-fail-under=100 || FAIL=1
   fi
+
+  bash tests/typecheck.sh || FAIL=1
 
   echo "=== Shell function inventory (strict: must appear under tests/) ==="
   FUNCS="$(list_production_functions)"
@@ -123,7 +126,7 @@ main() {
     echo "Coverage gate FAILED" >&2
     exit 1
   fi
-  echo "Coverage gate PASSED (100% Python + strict shell inventory + BATS)"
+  echo "Coverage gate PASSED (100% Python + Pyright + strict shell inventory + BATS)"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then

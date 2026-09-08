@@ -7,6 +7,7 @@ import html
 import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from typing import Any, TypedDict
 from urllib.parse import parse_qs, urlparse
 
 FILMS = Path("/films/films")
@@ -17,6 +18,15 @@ if not GUIDES.is_dir():
     alt = Path("/films/guides")
     if alt.is_dir():
         GUIDES = alt
+
+class FilmRow(TypedDict):
+    slug: str
+    film: str
+    ok: str
+    total: str
+    audio_policy: str
+    shots: list[dict[str, str]]
+
 
 PUBLISH_FILES = {
     "gosee": "ez_gosee_90s.mp4",
@@ -78,8 +88,8 @@ def _shot_lights(dest: Path, slug: str, sid: str, row: dict) -> dict[str, str]:
     }
 
 
-def _rows() -> list[dict[str, object]]:
-    rows: list[dict[str, object]] = []
+def _rows() -> list[FilmRow]:
+    rows: list[FilmRow] = []
     if not FILMS.is_dir():
         return rows
     for state in sorted(FILMS.glob("*/state.json")):
@@ -274,7 +284,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(payload)
 
-    def log_message(self, fmt: str, *args: object) -> None:
+    def log_message(self, format: str, *args: Any) -> None:
         return
 
 

@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from _lab_paths import lab_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -60,7 +62,7 @@ def test_film_graphs_carry_ltx_disclosure() -> None:
         assert any(n.get("type") == "EZFilmDisclosure" for n in graph["nodes"]), name
 
 
-def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: object) -> None:
+def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
     sys.path.insert(0, str(ROOT / "studio-ui"))

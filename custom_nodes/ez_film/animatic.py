@@ -119,6 +119,7 @@ def build_animatic(
         report["defects"].append("ffmpeg missing")
     if report["defects"]:
         return report
+    assert exe is not None
     publish = dest / "publish"
     publish.mkdir(parents=True, exist_ok=True)
     concat_list = publish / "animatic.concat.txt"

@@ -34,8 +34,8 @@ def _link_endpoints(graph: dict) -> tuple[set[int], set[int]]:
     for link in graph.get("links") or []:
         if isinstance(link, dict):
             lid = int(link.get("id") or link.get("link") or 0)
-            origin = int(link.get("origin_id") or link.get("from"))
-            target = int(link.get("target_id") or link.get("to"))
+            origin = int(link.get("origin_id") or link.get("from") or 0)
+            target = int(link.get("target_id") or link.get("to") or 0)
         else:
             lid = int(link[0])
             origin = int(link[1])

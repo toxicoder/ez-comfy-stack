@@ -7,8 +7,10 @@ Thanks for improving **ez-comfy-stack**.
 1. Branch from latest `development`  
 2. Prefer TDD (`make test` / `make coverage`)  
 3. **Commit tests with the production files they cover** (same commit)  
-4. Run `make lint` and `make docs`  
+4. Run `make lint` (ShellCheck + shfmt + Pyright) and `make docs`  
 5. Open a PR into `development`
+
+Install Python test tools once: `pip install -r tests/requirements.txt`.
 
 To ship a keeper from a live `_user` graph (does **not** commit):
 
@@ -25,7 +27,7 @@ Destination is `workflows/_lab/<lane>/<id>.json`. The file must end in `-lab-exa
 flowchart TB
   A["Branch from development"] --> B["TDD: red → green → refactor"]
   B --> C["Commit tests + production together"]
-  C --> D["make lint · make docs · make coverage"]
+  C --> D["make lint · make docs · make coverage<br/>Pyright inside lint + coverage"]
   D --> E["PR into development"]
 ```
 
@@ -50,8 +52,8 @@ flowchart LR
 ## PR checklist
 
 - [ ] Tests updated in the same commits as the code they exercise  
-- [ ] `make coverage` passes (100% gate)  
-- [ ] `make lint` clean  
+- [ ] `make coverage` passes (100% gate + Pyright)  
+- [ ] `make lint` clean (ShellCheck, shfmt, Pyright)  
 - [ ] `make docs` (mkdocs strict)  
 - [ ] Safety impact called out if Docker/resources/download-limit changed  
 - [ ] Docs updated for operator-facing changes  

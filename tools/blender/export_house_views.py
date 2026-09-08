@@ -56,7 +56,7 @@ def parse_export_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(raw)
 
 
-def _look_at(bpy: object, obj: object, target: tuple[float, float, float]) -> None:
+def _look_at(bpy: Any, obj: Any, target: tuple[float, float, float]) -> None:
     mathutils = __import__("mathutils")
     loc = obj.location
     direction = mathutils.Vector(target) - loc
@@ -66,13 +66,13 @@ def _look_at(bpy: object, obj: object, target: tuple[float, float, float]) -> No
 
 
 def _new_mesh(
-    bpy: object,
+    bpy: Any,
     name: str,
     primitive: str,
     location: tuple[float, float, float],
     scale: tuple[float, float, float],
     color: tuple[float, float, float],
-) -> object:
+) -> Any:
     if primitive == "cylinder":
         bpy.ops.mesh.primitive_cylinder_add(
             radius=1.0, depth=2.0, location=location
@@ -100,7 +100,7 @@ def _wall_on(
     return wall not in openings
 
 
-def _add_room(bpy: object, room: dict[str, Any]) -> None:
+def _add_room(bpy: Any, room: dict[str, Any]) -> None:
     x, y, z, sx, sy, sz = room["box"]
     openings = room["openings"]
     rid = room["id"]
@@ -163,7 +163,7 @@ def _add_room(bpy: object, room: dict[str, Any]) -> None:
         )
 
 
-def construct_scene(bpy: object, layout: dict) -> None:
+def construct_scene(bpy: Any, layout: dict) -> None:
     """Build greybox rooms, props, and named cameras from a layout."""
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
@@ -195,7 +195,7 @@ def construct_scene(bpy: object, layout: dict) -> None:
         _look_at(bpy, obj, tuple(cam["look"]))
 
 
-def _configure_workbench(bpy: object, width: int, height: int) -> None:
+def _configure_workbench(bpy: Any, width: int, height: int) -> None:
     scene = bpy.context.scene
     scene.render.resolution_x = int(width)
     scene.render.resolution_y = int(height)
@@ -218,7 +218,7 @@ def _configure_workbench(bpy: object, width: int, height: int) -> None:
 
 
 def _render_camera(
-    bpy: object, camera_name: str, dest: Path, folder: str
+    bpy: Any, camera_name: str, dest: Path, folder: str
 ) -> Path:
     scene = bpy.context.scene
     obj = bpy.data.objects.get(camera_name)

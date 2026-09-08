@@ -1,0 +1,5 @@
+# Hermetic test + typecheck tools (local make test/coverage/lint, CI).
+# Pin exact versions so CI matches contributor laptops.
+pytest==8.4.2
+pytest-cov==7.1.0
+pyright==1.1.411

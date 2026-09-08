@@ -199,6 +199,7 @@ def mix_stems(
         report["defects"].append("ffmpeg missing")
     if report["defects"]:
         return report
+    assert exe is not None
     dest_dir.mkdir(parents=True, exist_ok=True)
     out = dest_dir / ("mix.mp4" if video is not None else "mix.m4a")
     ordered: list[Path] = []

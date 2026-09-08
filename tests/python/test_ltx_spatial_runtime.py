@@ -156,10 +156,10 @@ def _install_ltx_stubs(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
             return (x, device)
 
     nodes_lt = sys.modules["comfy_extras.nodes_lt"]
-    nodes_lt.LTXVImgToVideo = LTXVImgToVideo
-    nodes_lt.EmptyLTXVLatentVideo = EmptyLTXVLatentVideo
+    setattr(nodes_lt, "LTXVImgToVideo", LTXVImgToVideo)
+    setattr(nodes_lt, "EmptyLTXVLatentVideo", EmptyLTXVLatentVideo)
     vae_mod = sys.modules["comfy.ldm.lightricks.vae.causal_video_autoencoder"]
-    vae_mod.VideoVAE = VideoVAE
+    setattr(vae_mod, "VideoVAE", VideoVAE)
     return {
         "LTXVImgToVideo": LTXVImgToVideo,
         "EmptyLTXVLatentVideo": EmptyLTXVLatentVideo,
