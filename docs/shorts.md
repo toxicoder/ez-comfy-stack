@@ -30,7 +30,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 !!! success "First 90s film"
 
     1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
-    2. Optional: fill **beat-sheet-lab-example** (occupancy **none**, no UNET) and paste into host `workflows/shorts/<slug>.shots.yaml` — YAML is not copied by the entrypoint.
+    2. Optional: fill **beat-sheet-lab-example** (occupancy **none**, no UNET) then `./scripts/manage.sh shot-sheet run --film go-see` — writes `films/<slug>/shots.yaml`. Lab YAML is not copied by the entrypoint.
     3. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
     4. Prompt enhance is **on** (Klein identity mode + 18 LTX i2v rewrites). Leave LTX **1280×704**. Queue **once**.
     5. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.

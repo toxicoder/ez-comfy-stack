@@ -24,6 +24,10 @@ Klein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance 
 
 LoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.
 
+After Queue, overlay-qc the look against clay (host ffmpeg; compose may stay up):
+
+  ./scripts/manage.sh overlay-qc --film <slug> --shot <id> --look PATH
+
 Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).
 
 Prompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.
@@ -46,6 +50,8 @@ Depth is wired by default. LoRA (opt-in, not download-models):
 Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
 
 This envelope keeps the lab 5.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.
+
+Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupancy audio). Joint AV is a world bed, not a master.
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 """

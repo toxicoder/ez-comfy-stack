@@ -43,34 +43,28 @@ Turn Enhance off to pin the widget text.
 
 BEAT_NOTE = """## beat-sheet-lab-example
 
-Beat Sheet v1 — 6 beats × enter / traverse / exit (18 STRING widgets). Occupancy: none — stop nothing GPU.
+Script desk — 6 beats × enter / traverse / exit. Occupancy: none — stop nothing GPU.
 
-This graph does not print video. Paste the filled cards into host YAML:
+This graph does not print video. Fill Logline, Script, Audio policy, Score, then the 18 cards
+(`action | camera | world SFX | dialogue`). Write YAML on the host:
 
-  workflows/shorts/<slug>.shots.yaml
+  ./scripts/manage.sh shot-sheet run --film <slug>
 
-The entrypoint does **not** copy YAML. Edit on the host. Then Queue **film-go-see-90s-run-lab-example** (or still-here / switchyard).
+That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**
+copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
 
-go-see.shots.yaml contract (keep these keys):
+Next: klein-identity-sheet-lab-example, or export-guides if clay is required, then
+klein-from-clay-lab-example.
 
-  film
-  slug
-  frames: 120
-  fps: 24
-  duration_s: 5.00
-  beats: 6
-  shots_per_beat: 3
-  total_shots: 18
-  publish_cap_s: 90.00
-  print: ltx
-  identity_seed
-  identity_enhance: true
-  identity_look
-  shots[]{beat, shot, prefix, load_from, ltx_i2v, wan_i2v}
+Shot-card keys (defaults fail-closed):
 
-Shot 1 of beat 1 load_from: identity
-Later shots load_from: <prev_prefix>_last
-Example: ez_gosee_b1_s1 then ez_gosee_b1_s1_last.
+  audio_policy: world-only | stems | a2v-lock
+  score: none | acestep-instrumental
+  clay: skip | required
+  audio_lock: none | a2v
+  camera: dolly in | tracking | fixed camera | …
+
+Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 
 Do not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).
 """
@@ -204,12 +198,14 @@ def build_prompt_forge() -> dict:
 
 
 def build_beat_sheet() -> dict:
-    note_h = 420.0
+    note_h = 460.0
     card_w, card_h = 420.0, 160.0
+    desk_h = 140.0
     enh_h = 280.0
     gap = 40.0
+    desk_y = LAB_NODE_Y0 + note_h + GROUP_TITLE_INSET + 20.0
     row_stride = card_h + enh_h + GROUP_TITLE_INSET + gap + 50.0
-    cards_y0 = LAB_NODE_Y0 + note_h + 80.0
+    cards_y0 = desk_y + desk_h + 80.0
     nodes = [
         _node(
             1,
@@ -230,9 +226,47 @@ def build_beat_sheet() -> dict:
             1380,
             note_h + GROUP_TITLE_INSET,
             "#3f789e",
-        )
+        ),
+        _group(
+            2,
+            "DESK",
+            20,
+            desk_y - GROUP_TITLE_INSET,
+            1380,
+            desk_h + GROUP_TITLE_INSET,
+            "#3f789e",
+        ),
     ]
     nid = 2
+    desk_cards = (
+        ("Logline", "One-line premise. Approve before any UNET."),
+        ("Script", "Spoken and visual beats. Words are cheap; prints are not."),
+        ("Audio policy", "world-only"),
+        ("Score", "none"),
+    )
+    for col, (title, placeholder) in enumerate(desk_cards):
+        x = 40 + col * (card_w + gap)
+        nodes.append(
+            _node(
+                nid,
+                "PrimitiveNode",
+                [x, desk_y],
+                [card_w, desk_h],
+                title,
+                [placeholder, "fixed"],
+                nid - 1,
+                [
+                    {
+                        "name": "STRING",
+                        "type": "STRING",
+                        "links": None,
+                        "widget": {"name": "value"},
+                        "slot_index": 0,
+                    }
+                ],
+            )
+        )
+        nid += 1
     links: list[list] = []
     lid = 1
     for beat in range(1, 7):
@@ -240,7 +274,7 @@ def build_beat_sheet() -> dict:
         group_top = row_y - GROUP_TITLE_INSET
         groups.append(
             _group(
-                beat + 1,
+                beat + 2,
                 f"BEAT {beat}",
                 20,
                 group_top,
@@ -253,7 +287,7 @@ def build_beat_sheet() -> dict:
             x = 40 + col * (card_w + gap)
             title = f"Beat {beat} {role}"
             placeholder = (
-                f"{role} beat {beat} — paste into workflows/shorts/<slug>.shots.yaml"
+                f"{role} beat {beat} — action | camera | world SFX | dialogue"
             )
             prim_id = nid
             nodes.append(
@@ -313,7 +347,7 @@ def build_beat_sheet() -> dict:
         "extra": {
             "lab_profile": "beat-sheet-lab-example",
             "lab_note": BEAT_NOTE,
-            "lab_description": "No-UNET beat sheet: 6 beats x enter/traverse/exit for shots.yaml",
+            "lab_description": "Script desk: logline, audio policy, 18 shot cards → shot-sheet YAML",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,

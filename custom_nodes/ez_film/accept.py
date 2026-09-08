@@ -15,6 +15,7 @@ from typing import Any, Callable
 
 from .jobstore import DURATION_S, DURATION_TOL, load_state, shot_mp4
 from .shots import SHOT_COUNT, film_slug
+from .stems import LUFS_TARGET, LUFS_TOL, lufs_in_band, parse_lufs
 
 ACCEPT_WIDTH = 1280
 ACCEPT_HEIGHT = 704
@@ -129,12 +130,53 @@ def probe_has_audio(
     return "audio" in (proc.stdout or "").lower()
 
 
+def stem_mix_path(dest: Path, sid: str) -> Path | None:
+    """Return stems/<id>/mix.m4a or mix.mp4 when present."""
+    folder = dest / "stems" / sid
+    for name in ("mix.mp4", "mix.m4a", "mix.wav"):
+        path = folder / name
+        if path.is_file():
+            return path
+    return None
+
+
+def probe_lufs(
+    path: Path,
+    *,
+    ffmpeg: str | None = None,
+    run: RunFn = subprocess.run,
+) -> float | None:
+    """Measure integrated loudness via ffmpeg loudnorm JSON, or None."""
+    exe = ffmpeg or shutil.which("ffmpeg")
+    if not exe or not path.is_file():
+        return None
+    try:
+        proc = _run(
+            [
+                exe,
+                "-i",
+                str(path),
+                "-af",
+                "loudnorm=I=-14:LRA=11:TP=-1.5:print_format=json",
+                "-f",
+                "null",
+                "-",
+            ],
+            run=run,
+        )
+    except OSError:
+        return None
+    return parse_lufs((proc.stderr or "") + (proc.stdout or ""))
+
+
 def accept_shot(
     dest: Path,
     row: dict[str, Any],
     *,
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
+    audio_policy: str = "world-only",
+    probe_lufs_fn: Callable[..., float | None] | None = None,
 ) -> list[str]:
     """Return defect strings for one shot (empty = pass)."""
     sid = str(row.get("id") or "")
@@ -155,6 +197,17 @@ def accept_shot(
     backend = str(row.get("backend") or "ltx")
     if backend != "wan" and not probe_has_audio(mp4, ffprobe=ffprobe, run=run):
         defects.append(f"{sid}: missing audio (LTX shots must mux world audio)")
+    if audio_policy == "stems":
+        mix = stem_mix_path(dest, sid)
+        if mix is None:
+            defects.append(f"{sid}: missing stem mix under stems/{sid}/")
+        else:
+            measurer = probe_lufs_fn or probe_lufs
+            lufs = measurer(mix, run=run)
+            if lufs is None or not lufs_in_band(lufs):
+                defects.append(
+                    f"{sid}: stem loudness {lufs!r} (need {LUFS_TARGET}±{LUFS_TOL} LUFS)"
+                )
     return defects
 
 
@@ -163,15 +216,26 @@ def accept_film(
     *,
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
+    probe_lufs_fn: Callable[..., float | None] | None = None,
 ) -> dict[str, Any]:
     """Fail closed: all 18 shots ok, 5.00s, 1280×704, LTX audio present."""
     state = load_state(dest)
     defects: list[str] = []
     shots = list(state.get("shots") or [])
+    audio_policy = str(state.get("audio_policy") or "world-only")
     if len(shots) != SHOT_COUNT:
         defects.append(f"shot count {len(shots)} (need {SHOT_COUNT})")
     for row in shots:
-        defects.extend(accept_shot(dest, row, ffprobe=ffprobe, run=run))
+        defects.extend(
+            accept_shot(
+                dest,
+                row,
+                ffprobe=ffprobe,
+                run=run,
+                audio_policy=audio_policy,
+                probe_lufs_fn=probe_lufs_fn,
+            )
+        )
     report = {
         "film": state.get("film"),
         "slug": state.get("slug"),

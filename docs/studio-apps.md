@@ -87,7 +87,7 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein-character-draft-lab-example** | Character still. Prompt + style, 1024×1280, prefix `ez_character` |
 | **klein-character-tweak-lab-example** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
 | **prompt-forge-lab-example** | No UNET. Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
-| **beat-sheet-lab-example** | No UNET. 6×3 STRING cards; paste into `workflows/shorts/<slug>.shots.yaml`. Occupancy **none** |
+| **beat-sheet-lab-example** | Script desk. Logline, audio policy, 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
 
 ---
 
@@ -112,7 +112,7 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
 
-Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`) are occupancy **audio**. That includes the five **90 s** `music-rap-nill-bye-*-lab-example` diss takes ([Local music](music.md)). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md).
+Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`, **audio-finish-lab-example**) are occupancy **audio**. That includes the five **90 s** `music-rap-nill-bye-*-lab-example` diss takes ([Local music](music.md)). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md).
 
 ---
 
@@ -125,6 +125,8 @@ Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`) are occupancy **audio**. That i
 | Character Draft | Character Tweak → Identity Sheet → Silent 5s |
 | Hook Still | `wan-shorts-i2v` → `ltx-shorts-i2v` |
 | Storyboard 6-up | `wan-i2v-shot` / `ltx-i2v-shot` |
+| Beat sheet (script desk) | `shot-sheet` → identity sheet / clay dump / `klein-from-clay` |
+| Klein-from-clay | `overlay-qc` → `ltx-iclora-depth` → `audio-finish` / `stem-mix` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |
 
 Set I2V **LoadImage** to the still prefix you just saved (`ez_still_draft_*.png`, `ez_hook_still_*.png`, …). I2V graphs also Queue on Comfy’s `example.png`.

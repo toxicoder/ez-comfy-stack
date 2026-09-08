@@ -765,6 +765,42 @@
     "see_also": ["last-frame", "film-accept"]
   },
   {
+    "id": "shot-card",
+    "title": "Shot card",
+    "aliases": ["shot card", "shot-card"],
+    "category": "Film",
+    "short": "Per-shot YAML extras: script, camera, clay required, audio policy, stems.",
+    "long": "`shot-sheet` writes `films/<slug>/shots.yaml` with fail-closed defaults (`clay: skip`, `audio_policy: world-only`). Lab `workflows/shorts/*.shots.yaml` stay golden fixtures. See [Clay to finish](learn/clay-to-finish.md).",
+    "see_also": ["guide-pack", "film-accept"]
+  },
+  {
+    "id": "overlay-qc",
+    "title": "overlay-qc",
+    "aliases": ["overlay-qc", "overlay QC"],
+    "category": "Film",
+    "short": "50% blend of clay first.png vs Klein look plate. Fail-closed 1280×704.",
+    "long": "Host ffmpeg; compose may stay up. Writes `overlay.png` and `score.json`. Human still picks; the score only ranks. See [Clay to finish](learn/clay-to-finish.md).",
+    "see_also": ["guide-pack", "occupancy"]
+  },
+  {
+    "id": "film-animatic",
+    "title": "film-animatic",
+    "aliases": ["film-animatic", "animatic"],
+    "category": "Film",
+    "short": "Cheap 90s pacing gate from clay.mp4 or held stills. Host ffmpeg.",
+    "long": "`manage.sh film-animatic --film go-see` concats clay clips or 5.00 s still holds, cap 90 s. Not a 90 s denoise. See [Clay to finish](learn/clay-to-finish.md).",
+    "see_also": ["guide-pack", "shot-card"]
+  },
+  {
+    "id": "stem-mix",
+    "title": "stem-mix",
+    "aliases": ["stem-mix", "audio finish"],
+    "category": "Audio",
+    "short": "Picture-lock mix: DX / BG / FX / MX, duck −15 dB, YouTube loudnorm −14 LUFS.",
+    "long": "LTX joint AV is the world bed, not the master. Occupancy audio — stop Klein / Wan / LTX first. `film-accept` checks stem LUFS when `audio_policy: stems`. See [Clay to finish](learn/clay-to-finish.md).",
+    "see_also": ["loudnorm", "film-accept"]
+  },
+  {
     "id": "loudnorm",
     "title": "loudnorm",
     "aliases": ["loudnorm"],

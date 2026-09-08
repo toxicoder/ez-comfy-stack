@@ -54,8 +54,12 @@ id: doctor
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
 | `blender` | Host Blender sidecar; dies if compose is up | Run next to Comfy |
 | `export-guides` | Dump a 1280×704 / 120f guide pack; dies if compose is up | 1280×720; dump while Comfy is up |
+| `shot-sheet` | Write `films/<slug>/shots.yaml` with shot-card defaults | Overwrite lab YAML without `--lab-example` |
+| `overlay-qc` | 50% clay/look overlay (host ffmpeg; compose may stay up) | Skip size QC; auto-accept the score |
+| `film-animatic` | Cheap 90s animatic from clay.mp4 or stills | Treat as a 90s denoise |
+| `stem-mix` | Picture-lock stems; duck −15 dB; YouTube loudnorm | Mix ACE-Step next to LTX |
 | `asset-ls` | Read-only [Asset Bible](asset-bible.md) catalog (`COMFY_OUTPUT_DIR/assets`) | Store assets in `MODELS_DIR` or `guides/` |
-| `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio) | `--skip-accept` as a habit |
+| `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio; stems LUFS when `audio_policy: stems`) | `--skip-accept` as a habit |
 | `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache | DreamX-World; NCCL |
 | `spark-timing` | Kitchen wall-clock table (`record --klein N --wan N --ltx N`) | Record on `pytorch-fallback` |
 | `models-status` / `reap-models` | Disk bible / MODELS_DIR cache cleanup (never `cleanup` weights) | `cleanup` when you meant reap |

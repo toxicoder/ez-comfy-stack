@@ -1,7 +1,7 @@
 {
   "id": "beat-sheet-lab-example",
   "revision": 1,
-  "last_node_id": 37,
+  "last_node_id": 41,
   "last_link_id": 18,
   "nodes": [
     {
@@ -13,7 +13,7 @@
       ],
       "size": [
         1340,
-        420.0
+        460.0
       ],
       "flags": {},
       "order": 0,
@@ -24,7 +24,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## beat-sheet-lab-example\n\nBeat Sheet v1 \u2014 6 beats \u00d7 enter / traverse / exit (18 STRING widgets). Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Paste the filled cards into host YAML:\n\n  workflows/shorts/<slug>.shots.yaml\n\nThe entrypoint does **not** copy YAML. Edit on the host. Then Queue **film-go-see-90s-run-lab-example** (or still-here / switchyard).\n\ngo-see.shots.yaml contract (keep these keys):\n\n  film\n  slug\n  frames: 120\n  fps: 24\n  duration_s: 5.00\n  beats: 6\n  shots_per_beat: 3\n  total_shots: 18\n  publish_cap_s: 90.00\n  print: ltx\n  identity_seed\n  identity_enhance: true\n  identity_look\n  shots[]{beat, shot, prefix, load_from, ltx_i2v, wan_i2v}\n\nShot 1 of beat 1 load_from: identity\nLater shots load_from: <prev_prefix>_last\nExample: ez_gosee_b1_s1 then ez_gosee_b1_s1_last.\n\nDo not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## beat-sheet-lab-example\n\nScript desk \u2014 6 beats \u00d7 enter / traverse / exit. Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Fill Logline, Script, Audio policy, Score, then the 18 cards\n(`action | camera | world SFX | dialogue`). Write YAML on the host:\n\n  ./scripts/manage.sh shot-sheet run --film <slug>\n\nThat writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**\ncopy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.\n\nNext: klein-identity-sheet-lab-example, or export-guides if clay is required, then\nklein-from-clay-lab-example.\n\nShot-card keys (defaults fail-closed):\n\n  audio_policy: world-only | stems | a2v-lock\n  score: none | acestep-instrumental\n  clay: skip | required\n  audio_lock: none | a2v\n  camera: dolly in | tracking | fixed camera | \u2026\n\nShot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.\n\nDo not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).\n"
       ],
       "title": "Operator note"
     },
@@ -33,14 +33,154 @@
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        580.0
+        616.0
+      ],
+      "size": [
+        420.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "One-line premise. Approve before any UNET.",
+        "fixed"
+      ],
+      "title": "Logline"
+    },
+    {
+      "id": 3,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        616.0
+      ],
+      "size": [
+        420.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "Spoken and visual beats. Words are cheap; prints are not.",
+        "fixed"
+      ],
+      "title": "Script"
+    },
+    {
+      "id": 4,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        616.0
+      ],
+      "size": [
+        420.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "world-only",
+        "fixed"
+      ],
+      "title": "Audio policy"
+    },
+    {
+      "id": 5,
+      "type": "PrimitiveNode",
+      "pos": [
+        1420.0,
+        616.0
+      ],
+      "size": [
+        420.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "none",
+        "fixed"
+      ],
+      "title": "Score"
+    },
+    {
+      "id": 6,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        836.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 1,
+      "order": 5,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -60,24 +200,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 1 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 1 enter"
     },
     {
-      "id": 3,
+      "id": 7,
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        790.0
+        1046.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 2,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -101,7 +241,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "enter beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 1 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -111,18 +251,18 @@
       "title": "Beat 1 enter LTX enhance"
     },
     {
-      "id": 4,
+      "id": 8,
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        580.0
+        836.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 3,
+      "order": 7,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -142,24 +282,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 1 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 1 traverse"
     },
     {
-      "id": 5,
+      "id": 9,
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        790.0
+        1046.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 4,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -183,7 +323,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "traverse beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 1 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -193,18 +333,18 @@
       "title": "Beat 1 traverse LTX enhance"
     },
     {
-      "id": 6,
+      "id": 10,
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        580.0
+        836.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 5,
+      "order": 9,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -224,24 +364,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 1 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 1 exit"
     },
     {
-      "id": 7,
+      "id": 11,
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        790.0
+        1046.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 6,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -265,7 +405,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "exit beat 1 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 1 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -275,18 +415,18 @@
       "title": "Beat 1 exit LTX enhance"
     },
     {
-      "id": 8,
+      "id": 12,
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        1166.0
+        1422.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 7,
+      "order": 11,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -306,24 +446,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 2 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 2 enter"
     },
     {
-      "id": 9,
+      "id": 13,
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        1376.0
+        1632.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 8,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -347,7 +487,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "enter beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 2 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -357,18 +497,18 @@
       "title": "Beat 2 enter LTX enhance"
     },
     {
-      "id": 10,
+      "id": 14,
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        1166.0
+        1422.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 9,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -388,24 +528,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 2 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 2 traverse"
     },
     {
-      "id": 11,
+      "id": 15,
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        1376.0
+        1632.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 10,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -429,7 +569,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "traverse beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 2 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -439,18 +579,18 @@
       "title": "Beat 2 traverse LTX enhance"
     },
     {
-      "id": 12,
+      "id": 16,
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        1166.0
+        1422.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 11,
+      "order": 15,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -470,24 +610,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 2 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 2 exit"
     },
     {
-      "id": 13,
+      "id": 17,
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        1376.0
+        1632.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 12,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
@@ -511,7 +651,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "exit beat 2 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 2 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -521,18 +661,18 @@
       "title": "Beat 2 exit LTX enhance"
     },
     {
-      "id": 14,
+      "id": 18,
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        1752.0
+        2008.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 13,
+      "order": 17,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -552,24 +692,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 3 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 3 enter"
     },
     {
-      "id": 15,
+      "id": 19,
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        1962.0
+        2218.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 14,
+      "order": 18,
       "mode": 0,
       "inputs": [
         {
@@ -593,7 +733,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "enter beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 3 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -603,18 +743,18 @@
       "title": "Beat 3 enter LTX enhance"
     },
     {
-      "id": 16,
+      "id": 20,
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        1752.0
+        2008.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 15,
+      "order": 19,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -634,24 +774,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 3 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 3 traverse"
     },
     {
-      "id": 17,
+      "id": 21,
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        1962.0
+        2218.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 16,
+      "order": 20,
       "mode": 0,
       "inputs": [
         {
@@ -675,7 +815,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "traverse beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 3 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -685,18 +825,18 @@
       "title": "Beat 3 traverse LTX enhance"
     },
     {
-      "id": 18,
+      "id": 22,
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        1752.0
+        2008.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 17,
+      "order": 21,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -716,24 +856,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 3 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 3 exit"
     },
     {
-      "id": 19,
+      "id": 23,
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        1962.0
+        2218.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 18,
+      "order": 22,
       "mode": 0,
       "inputs": [
         {
@@ -757,7 +897,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "exit beat 3 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 3 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -767,18 +907,18 @@
       "title": "Beat 3 exit LTX enhance"
     },
     {
-      "id": 20,
+      "id": 24,
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        2338.0
+        2594.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 19,
+      "order": 23,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -798,24 +938,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 4 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 4 enter"
     },
     {
-      "id": 21,
+      "id": 25,
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        2548.0
+        2804.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 20,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
@@ -839,7 +979,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "enter beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 4 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -849,18 +989,18 @@
       "title": "Beat 4 enter LTX enhance"
     },
     {
-      "id": 22,
+      "id": 26,
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        2338.0
+        2594.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 21,
+      "order": 25,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -880,24 +1020,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 4 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 4 traverse"
     },
     {
-      "id": 23,
+      "id": 27,
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        2548.0
+        2804.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 22,
+      "order": 26,
       "mode": 0,
       "inputs": [
         {
@@ -921,7 +1061,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "traverse beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 4 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -931,18 +1071,18 @@
       "title": "Beat 4 traverse LTX enhance"
     },
     {
-      "id": 24,
+      "id": 28,
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        2338.0
+        2594.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 23,
+      "order": 27,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -962,24 +1102,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 4 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 4 exit"
     },
     {
-      "id": 25,
+      "id": 29,
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        2548.0
+        2804.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 24,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
@@ -1003,7 +1143,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "exit beat 4 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 4 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1013,18 +1153,18 @@
       "title": "Beat 4 exit LTX enhance"
     },
     {
-      "id": 26,
+      "id": 30,
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        2924.0
+        3180.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 25,
+      "order": 29,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1044,24 +1184,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 5 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 5 enter"
     },
     {
-      "id": 27,
+      "id": 31,
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        3134.0
+        3390.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 26,
+      "order": 30,
       "mode": 0,
       "inputs": [
         {
@@ -1085,7 +1225,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "enter beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 5 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1095,18 +1235,18 @@
       "title": "Beat 5 enter LTX enhance"
     },
     {
-      "id": 28,
+      "id": 32,
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        2924.0
+        3180.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 27,
+      "order": 31,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1126,24 +1266,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 5 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 5 traverse"
     },
     {
-      "id": 29,
+      "id": 33,
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        3134.0
+        3390.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 28,
+      "order": 32,
       "mode": 0,
       "inputs": [
         {
@@ -1167,7 +1307,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "traverse beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 5 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1177,18 +1317,18 @@
       "title": "Beat 5 traverse LTX enhance"
     },
     {
-      "id": 30,
+      "id": 34,
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        2924.0
+        3180.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 29,
+      "order": 33,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1208,24 +1348,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 5 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 5 exit"
     },
     {
-      "id": 31,
+      "id": 35,
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        3134.0
+        3390.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 30,
+      "order": 34,
       "mode": 0,
       "inputs": [
         {
@@ -1249,7 +1389,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "exit beat 5 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 5 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1259,18 +1399,18 @@
       "title": "Beat 5 exit LTX enhance"
     },
     {
-      "id": 32,
+      "id": 36,
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        3510.0
+        3766.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 31,
+      "order": 35,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1290,24 +1430,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "enter beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 6 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 6 enter"
     },
     {
-      "id": 33,
+      "id": 37,
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        3720.0
+        3976.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 32,
+      "order": 36,
       "mode": 0,
       "inputs": [
         {
@@ -1331,7 +1471,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "enter beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "enter beat 6 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1341,18 +1481,18 @@
       "title": "Beat 6 enter LTX enhance"
     },
     {
-      "id": 34,
+      "id": 38,
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        3510.0
+        3766.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 33,
+      "order": 37,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1372,24 +1512,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "traverse beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 6 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 6 traverse"
     },
     {
-      "id": 35,
+      "id": 39,
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        3720.0
+        3976.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 34,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -1413,7 +1553,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "traverse beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "traverse beat 6 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1423,18 +1563,18 @@
       "title": "Beat 6 traverse LTX enhance"
     },
     {
-      "id": 36,
+      "id": 40,
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        3510.0
+        3766.0
       ],
       "size": [
         420.0,
         160.0
       ],
       "flags": {},
-      "order": 35,
+      "order": 39,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1454,24 +1594,24 @@
         "Node name for S&R": "PrimitiveNode"
       },
       "widgets_values": [
-        "exit beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 6 \u2014 action | camera | world SFX | dialogue",
         "fixed"
       ],
       "title": "Beat 6 exit"
     },
     {
-      "id": 37,
+      "id": 41,
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        3720.0
+        3976.0
       ],
       "size": [
         420.0,
         280.0
       ],
       "flags": {},
-      "order": 36,
+      "order": 40,
       "mode": 0,
       "inputs": [
         {
@@ -1495,7 +1635,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "exit beat 6 \u2014 paste into workflows/shorts/<slug>.shots.yaml",
+        "exit beat 6 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
@@ -1508,22 +1648,6 @@
   "links": [
     [
       1,
-      2,
-      0,
-      3,
-      0,
-      "STRING"
-    ],
-    [
-      2,
-      4,
-      0,
-      5,
-      0,
-      "STRING"
-    ],
-    [
-      3,
       6,
       0,
       7,
@@ -1531,7 +1655,7 @@
       "STRING"
     ],
     [
-      4,
+      2,
       8,
       0,
       9,
@@ -1539,7 +1663,7 @@
       "STRING"
     ],
     [
-      5,
+      3,
       10,
       0,
       11,
@@ -1547,7 +1671,7 @@
       "STRING"
     ],
     [
-      6,
+      4,
       12,
       0,
       13,
@@ -1555,7 +1679,7 @@
       "STRING"
     ],
     [
-      7,
+      5,
       14,
       0,
       15,
@@ -1563,7 +1687,7 @@
       "STRING"
     ],
     [
-      8,
+      6,
       16,
       0,
       17,
@@ -1571,7 +1695,7 @@
       "STRING"
     ],
     [
-      9,
+      7,
       18,
       0,
       19,
@@ -1579,7 +1703,7 @@
       "STRING"
     ],
     [
-      10,
+      8,
       20,
       0,
       21,
@@ -1587,7 +1711,7 @@
       "STRING"
     ],
     [
-      11,
+      9,
       22,
       0,
       23,
@@ -1595,7 +1719,7 @@
       "STRING"
     ],
     [
-      12,
+      10,
       24,
       0,
       25,
@@ -1603,7 +1727,7 @@
       "STRING"
     ],
     [
-      13,
+      11,
       26,
       0,
       27,
@@ -1611,7 +1735,7 @@
       "STRING"
     ],
     [
-      14,
+      12,
       28,
       0,
       29,
@@ -1619,7 +1743,7 @@
       "STRING"
     ],
     [
-      15,
+      13,
       30,
       0,
       31,
@@ -1627,7 +1751,7 @@
       "STRING"
     ],
     [
-      16,
+      14,
       32,
       0,
       33,
@@ -1635,7 +1759,7 @@
       "STRING"
     ],
     [
-      17,
+      15,
       34,
       0,
       35,
@@ -1643,10 +1767,26 @@
       "STRING"
     ],
     [
-      18,
+      16,
       36,
       0,
       37,
+      0,
+      "STRING"
+    ],
+    [
+      17,
+      38,
+      0,
+      39,
+      0,
+      "STRING"
+    ],
+    [
+      18,
+      40,
+      0,
+      41,
       0,
       "STRING"
     ]
@@ -1659,7 +1799,7 @@
         20,
         24,
         1380,
-        476.0
+        516.0
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1667,12 +1807,12 @@
     },
     {
       "id": 2,
-      "title": "BEAT 1",
+      "title": "DESK",
       "bounding": [
         20,
-        524.0,
+        560.0,
         1380,
-        566.0
+        196.0
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1680,10 +1820,10 @@
     },
     {
       "id": 3,
-      "title": "BEAT 2",
+      "title": "BEAT 1",
       "bounding": [
         20,
-        1110.0,
+        780.0,
         1380,
         566.0
       ],
@@ -1693,10 +1833,10 @@
     },
     {
       "id": 4,
-      "title": "BEAT 3",
+      "title": "BEAT 2",
       "bounding": [
         20,
-        1696.0,
+        1366.0,
         1380,
         566.0
       ],
@@ -1706,10 +1846,10 @@
     },
     {
       "id": 5,
-      "title": "BEAT 4",
+      "title": "BEAT 3",
       "bounding": [
         20,
-        2282.0,
+        1952.0,
         1380,
         566.0
       ],
@@ -1719,10 +1859,10 @@
     },
     {
       "id": 6,
-      "title": "BEAT 5",
+      "title": "BEAT 4",
       "bounding": [
         20,
-        2868.0,
+        2538.0,
         1380,
         566.0
       ],
@@ -1732,10 +1872,23 @@
     },
     {
       "id": 7,
+      "title": "BEAT 5",
+      "bounding": [
+        20,
+        3124.0,
+        1380,
+        566.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 8,
       "title": "BEAT 6",
       "bounding": [
         20,
-        3454.0,
+        3710.0,
         1380,
         566.0
       ],
@@ -1747,8 +1900,8 @@
   "config": {},
   "extra": {
     "lab_profile": "beat-sheet-lab-example",
-    "lab_note": "## beat-sheet-lab-example\n\nBeat Sheet v1 \u2014 6 beats \u00d7 enter / traverse / exit (18 STRING widgets). Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Paste the filled cards into host YAML:\n\n  workflows/shorts/<slug>.shots.yaml\n\nThe entrypoint does **not** copy YAML. Edit on the host. Then Queue **film-go-see-90s-run-lab-example** (or still-here / switchyard).\n\ngo-see.shots.yaml contract (keep these keys):\n\n  film\n  slug\n  frames: 120\n  fps: 24\n  duration_s: 5.00\n  beats: 6\n  shots_per_beat: 3\n  total_shots: 18\n  publish_cap_s: 90.00\n  print: ltx\n  identity_seed\n  identity_enhance: true\n  identity_look\n  shots[]{beat, shot, prefix, load_from, ltx_i2v, wan_i2v}\n\nShot 1 of beat 1 load_from: identity\nLater shots load_from: <prev_prefix>_last\nExample: ez_gosee_b1_s1 then ez_gosee_b1_s1_last.\n\nDo not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "No-UNET beat sheet: 6 beats x enter/traverse/exit for shots.yaml",
+    "lab_note": "## beat-sheet-lab-example\n\nScript desk \u2014 6 beats \u00d7 enter / traverse / exit. Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Fill Logline, Script, Audio policy, Score, then the 18 cards\n(`action | camera | world SFX | dialogue`). Write YAML on the host:\n\n  ./scripts/manage.sh shot-sheet run --film <slug>\n\nThat writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**\ncopy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.\n\nNext: klein-identity-sheet-lab-example, or export-guides if clay is required, then\nklein-from-clay-lab-example.\n\nShot-card keys (defaults fail-closed):\n\n  audio_policy: world-only | stems | a2v-lock\n  score: none | acestep-instrumental\n  clay: skip | required\n  audio_lock: none | a2v\n  camera: dolly in | tracking | fixed camera | \u2026\n\nShot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.\n\nDo not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).\n",
+    "lab_description": "Script desk: logline, audio policy, 18 shot cards \u2192 shot-sheet YAML",
     "ds": {
       "scale": 1,
       "offset": [
@@ -1764,9 +1917,9 @@
       "occupancy": "none",
       "enhance_off_identity": false,
       "handoff": [
-        "film-go-see-90s-run-lab-example",
-        "film-still-here-90s-lab-example",
-        "film-switchyard-90s-lab-example"
+        "klein-identity-sheet-lab-example",
+        "klein-from-clay-lab-example",
+        "film-go-see-90s-run-lab-example"
       ]
     },
     "linearData": {
@@ -1776,7 +1929,16 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 1 enter",
+            "label": "Logline",
+            "height": 72
+          }
+        ],
+        [
+          "3:value",
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Script",
             "height": 72
           }
         ],
@@ -1785,7 +1947,16 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 1 traverse",
+            "label": "Audio policy",
+            "height": 72
+          }
+        ],
+        [
+          "5:value",
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Score",
             "height": 72
           }
         ],
@@ -1794,7 +1965,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 1 exit",
+            "label": "Beat 1 enter",
             "height": 72
           }
         ],
@@ -1803,7 +1974,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 2 enter",
+            "label": "Beat 1 traverse",
             "height": 72
           }
         ],
@@ -1812,7 +1983,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 2 traverse",
+            "label": "Beat 1 exit",
             "height": 72
           }
         ],
@@ -1821,7 +1992,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 2 exit",
+            "label": "Beat 2 enter",
             "height": 72
           }
         ],
@@ -1830,7 +2001,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 3 enter",
+            "label": "Beat 2 traverse",
             "height": 72
           }
         ],
@@ -1839,7 +2010,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 3 traverse",
+            "label": "Beat 2 exit",
             "height": 72
           }
         ],
@@ -1848,7 +2019,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 3 exit",
+            "label": "Beat 3 enter",
             "height": 72
           }
         ],
@@ -1857,7 +2028,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 4 enter",
+            "label": "Beat 3 traverse",
             "height": 72
           }
         ],
@@ -1866,7 +2037,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 4 traverse",
+            "label": "Beat 3 exit",
             "height": 72
           }
         ],
@@ -1875,7 +2046,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 4 exit",
+            "label": "Beat 4 enter",
             "height": 72
           }
         ],
@@ -1884,7 +2055,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 5 enter",
+            "label": "Beat 4 traverse",
             "height": 72
           }
         ],
@@ -1893,7 +2064,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 5 traverse",
+            "label": "Beat 4 exit",
             "height": 72
           }
         ],
@@ -1902,7 +2073,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 5 exit",
+            "label": "Beat 5 enter",
             "height": 72
           }
         ],
@@ -1911,7 +2082,7 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 6 enter",
+            "label": "Beat 5 traverse",
             "height": 72
           }
         ],
@@ -1920,12 +2091,30 @@
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-            "label": "Beat 6 traverse",
+            "label": "Beat 5 exit",
             "height": 72
           }
         ],
         [
           "36:value",
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 6 enter",
+            "height": 72
+          }
+        ],
+        [
+          "38:value",
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 6 traverse",
+            "height": 72
+          }
+        ],
+        [
+          "40:value",
           "value",
           {
             "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
@@ -1936,7 +2125,9 @@
       ],
       "outputs": [
         2,
+        3,
         4,
+        5,
         6,
         8,
         10,
@@ -1952,7 +2143,9 @@
         30,
         32,
         34,
-        36
+        36,
+        38,
+        40
       ]
     },
     "linearMode": true

@@ -57,6 +57,10 @@ FROZEN_MANAGE_VERBS=(
   download-3d
   blender
   export-guides
+  shot-sheet
+  overlay-qc
+  film-animatic
+  stem-mix
   film-accept
   download-longcat
   download-dreamx
@@ -69,6 +73,17 @@ FROZEN_MANAGE_VERBS=(
 
 @test "cmd_disk_wizard --plan is read-only" {
   run cmd_disk_wizard --plan
+  [ "${status}" -eq 0 ]
+}
+
+@test "clay film desk verbs dispatch" {
+  run type cmd_shot_sheet
+  [ "${status}" -eq 0 ]
+  run type cmd_overlay_qc
+  [ "${status}" -eq 0 ]
+  run type cmd_film_animatic
+  [ "${status}" -eq 0 ]
+  run type cmd_stem_mix
   [ "${status}" -eq 0 ]
 }
 

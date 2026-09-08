@@ -17,7 +17,15 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
-from ez_film.shots import DFR_TEMPLATE, LTX_PRINT_TEMPLATE, parse_shots_yaml, print_template  # noqa: E402
+from ez_film.shots import (  # noqa: E402
+    DFR_TEMPLATE,
+    ICLORA_TEMPLATE,
+    LTX_PRINT_TEMPLATE,
+    parse_shots_yaml,
+    print_template,
+    scaffold_shot_sheet,
+    write_shots_yaml,
+)
 
 SHORTS = ROOT / "workflows" / "shorts"
 
@@ -52,7 +60,16 @@ def _path(film: str) -> Path:
 def test_print_template_ltx_and_dfr() -> None:
     assert print_template("ltx") == LTX_PRINT_TEMPLATE
     assert print_template("dfr") == DFR_TEMPLATE
+    assert print_template("ltx-iclora-depth") == ICLORA_TEMPLATE
+    assert print_template("wan-flf") == "wan-flf-5s-lab-example.json"
+    assert print_template("dcc-final") == "dcc-final"
     assert DFR_TEMPLATE.startswith("templates/ltx-2.5/")
+    try:
+        print_template("nope")
+    except ValueError as exc:
+        assert "ltx-iclora-depth" in str(exc)
+    else:
+        raise AssertionError("print_template must refuse unknown modes")
 
 
 def test_three_shot_bibles_exist() -> None:
@@ -88,6 +105,12 @@ def test_eighteen_shots_and_chain() -> None:
                 assert shot["load_from"] == f"{shots[i - 1]['prefix']}_last"
         assert parsed["identity"].strip()
         assert LTX_CLOSE in text
+        assert parsed["meta"]["audio_policy"] == "world-only"
+        assert parsed["meta"]["score"] == "none"
+        for shot in shots:
+            assert shot["clay"] == "skip"
+            assert shot["audio_lock"] == "none"
+            assert shot["dialogue"] == ""
 
 
 def test_klein_identity_is_model_native() -> None:
@@ -146,6 +169,37 @@ def test_ltx_i2v_prompts_are_model_native() -> None:
             wan_l = wan.lower()
             for word in WAN_AUDIO_WORDS:
                 assert word not in wan_l, (film, shot["prefix"], word)
+
+
+def test_shot_card_invalid_audio_policy_fails() -> None:
+    text = _path("go-see").read_text(encoding="utf-8")
+    text = "audio_policy: karaoke\n" + text
+    try:
+        parse_shots_yaml(text)
+    except ValueError as exc:
+        assert "audio_policy" in str(exc)
+    else:
+        raise AssertionError("invalid audio_policy must fail closed")
+
+
+def test_shot_card_roundtrip_defaults() -> None:
+    text = _path("go-see").read_text(encoding="utf-8")
+    parsed = parse_shots_yaml(text)
+    parsed["meta"]["audio_policy"] = "stems"
+    parsed["shots"][0]["clay"] = "required"
+    parsed["shots"][0]["camera"] = "fixed"
+    parsed["shots"][0]["script"] = "Sprint the terrace."
+    out = write_shots_yaml(parsed)
+    again = parse_shots_yaml(out)
+    assert again["meta"]["audio_policy"] == "stems"
+    assert again["shots"][0]["clay"] == "required"
+    assert again["shots"][0]["camera"] == "fixed camera"
+    assert again["shots"][0]["script"] == "Sprint the terrace."
+    assert len(again["shots"]) == 18
+    scaffold = scaffold_shot_sheet(text)
+    sc = parse_shots_yaml(scaffold)
+    assert sc["meta"]["audio_policy"] == "world-only"
+    assert "audio_policy: world-only" in scaffold
 
 
 def test_shorts_yaml_has_no_banned_models() -> None:
