@@ -2023,7 +2023,7 @@
 <li>Core principles</li>
 <li>Repo layout and ownership</li>
 <li>Shell style (Google Shell Style Guide + project deviations)</li>
-<li>Docker, testing, coverage gate, and branching rules</li>
+<li>Docker, testing, coverage gate, Pyright (Pylance), and branching rules</li>
 <li>Docs publish and <strong>human-readable formatting</strong> patterns</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -2055,7 +2055,7 @@
 </tr>
 <tr>
 <td>Hermetic tests</td>
-<td>BATS/pytest without real Spark</td>
+<td>BATS/pytest/Pyright without real Spark</td>
 </tr>
 <tr>
 <td>Docs as code</td>
@@ -2067,7 +2067,7 @@
 </tr>
 <tr>
 <td>Style as gate</td>
-<td>ShellCheck + shfmt on every change</td>
+<td>ShellCheck + shfmt + Pyright (Pylance) on every change</td>
 </tr>
 </tbody>
 </table>
@@ -2177,6 +2177,10 @@
 <tr>
 <td>ShellCheck</td>
 <td>Clean at warning level (<code>make lint</code>)</td>
+</tr>
+<tr>
+<td>Pyright</td>
+<td>Clean at <code>standard</code> (<code>make typecheck</code> / <code>make lint</code>)</td>
 </tr>
 <tr>
 <td>SUID/SGID</td>
@@ -2323,15 +2327,17 @@
 <h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
 <ul>
 <li>TDD for behavior changes  </li>
-<li>BATS for shell; pytest for Python  </li>
+<li>BATS for shell; pytest for Python; <strong>Pyright</strong> (Pylance's type checker) for first-party Python  </li>
 <li><strong>Hermetic by default</strong>: <code>test_helper.bash</code> sets <code>LAB_HERMETIC=1</code>, speed/probe mocks, and <code>HF_PROGRESS=0</code> (no real curl/speedtest, no progress-monitor sleeps)</li>
 <li><strong>Parallel BATS</strong>: <code>bats --jobs</code> across files when GNU <code>parallel</code> is installed (<code>BATS_JOBS</code> override); serialize within files</li>
 <li><code>make coverage</code> enforces:</li>
 <li><strong>100% Python line coverage</strong> on <code>patch_get_free_memory</code> and <code>patch_unified_memory_copy</code></li>
+<li><strong>Pyright</strong> clean at <code>standard</code> (<code>tests/typecheck.sh</code>; Comfy/torch/bpy imports are not required)</li>
 <li><strong>Strict shell inventory</strong>: every function in <code>scripts/**/*.sh</code> and <code>docker/**/*.sh</code> must be <strong>named under <code>tests/</code></strong> (production-only references do not count)</li>
 <li>Full BATS suite green  </li>
 <li><strong>Tests ship with production code</strong> — same commit as the files under test  </li>
 <li><strong>Test shell style</strong>: <code>tests/bats/*.bats</code>, <code>tests/bats/*.bash</code>, and <code>tests/*.sh</code> follow the Google Shell Style Guide where applicable (quoted <code>"${var}"</code>, <code>[[ … ]]</code>, Google-style helper comments in <code>test_helper.bash</code>, 2-space indent / shfmt for <code>.sh</code> runners)</li>
+<li>Install test tools: <code>pip install -r tests/requirements.txt</code> (pytest, pytest-cov, pyright)</li>
 </ul>
 <pre class="mermaid"><code>flowchart LR
   Red["Red&lt;br/&gt;failing BATS / pytest"] --&gt; Green["Green&lt;br/&gt;minimum production change"]
@@ -2339,10 +2345,12 @@
   Refactor --&gt; Commit["Same commit&lt;br/&gt;tests + production"]</code></pre>
 <pre class="mermaid"><code>flowchart TB
   Cov["make coverage"] --&gt; Py["100% line · UM patches"]
+  Cov --&gt; Pyright["Pyright standard · first-party Python"]
   Cov --&gt; Shell["Every scripts/** + docker/** function&lt;br/&gt;named under tests/"]
   Cov --&gt; Bats["Full BATS suite green"]
   Lint["make lint"] --&gt; SC["ShellCheck warnings = defects"]
-  Lint --&gt; Fmt["shfmt"]</code></pre>
+  Lint --&gt; Fmt["shfmt"]
+  Lint --&gt; Pyright</code></pre>
 <h2 id="branches">Branches<a class="headerlink" href="#branches" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Feature work from <code>development</code>: <code>feature/&lt;short-description&gt;</code>  </li>
