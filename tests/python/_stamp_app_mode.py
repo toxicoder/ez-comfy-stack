@@ -690,11 +690,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "dub-localize-lab-example": _spec("audio", "audio"),
     "music-rap-draft-lab-example": _spec("audio", "audio"),
     "music-rap-full-lab-example": _spec("audio", "audio"),
-    "music-rap-nill-bye-lab-coat-lab-example": _spec("audio", "audio"),
-    "music-rap-nill-bye-peer-review-lab-example": _spec("audio", "audio"),
-    "music-rap-nill-bye-feels-lab-example": _spec("audio", "audio"),
-    "music-rap-nill-bye-fake-cool-lab-example": _spec("audio", "audio"),
-    "music-rap-nill-bye-hypothesis-lab-example": _spec("audio", "audio"),
     "klein-from-clay-lab-example": _spec(
         "dcc",
         "klein",
@@ -712,6 +707,26 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     ),
     "wan-i2v-a14b-lab-example": _spec("produce", "wan", default_view="graph"),
 }
+
+NILL_BYE_STAMP_STEMS = (
+    "music-rap-nill-bye-lab-coat-lab-example",
+    "music-rap-nill-bye-peer-review-lab-example",
+    "music-rap-nill-bye-feels-lab-example",
+    "music-rap-nill-bye-fake-cool-lab-example",
+    "music-rap-nill-bye-hypothesis-lab-example",
+    "music-rap-nill-bye-control-group-lab-example",
+    "music-rap-nill-bye-sample-size-lab-example",
+    "music-rap-nill-bye-placebo-lab-example",
+    "music-rap-nill-bye-error-bars-lab-example",
+    "music-rap-nill-bye-lab-notebook-lab-example",
+    "music-rap-nill-bye-office-hours-lab-example",
+    "music-rap-nill-bye-grant-denied-lab-example",
+    "music-rap-nill-bye-contamination-lab-example",
+    "music-rap-nill-bye-double-blind-lab-example",
+    "music-rap-nill-bye-replicate-lab-example",
+)
+for _nill_bye_stem in NILL_BYE_STAMP_STEMS:
+    STAMP_SPECS[_nill_bye_stem] = _spec("audio", "audio")
 
 STUB_IDS = frozenset({"longcat-video-lab-example"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {

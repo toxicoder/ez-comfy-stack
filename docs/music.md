@@ -9,7 +9,7 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 **What's on this page**
 
 - Queue the rap **draft** first, then the **full** track
-- Five **90 s** Nill Bye vs Rake diss examples (Queue on their own)
+- Fifteen **180 s** Nill Bye vs Rake diss examples under `_lab/audio/nill-bye/` (Queue on their own)
 - App Mode: tags, lyrics, rewrite, vocal/instrumental, duration
 - Tags vs lyrics; `[verse]` / `[chorus]` / `[spoken word]` as vocal hints
 - Original lyrics only — no “in the style of \<living artist\>”
@@ -21,7 +21,7 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 **What this enables**
 
 - A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs
-- Five 90 s original diss takes (Nill Bye vs Rake) without cloud music APIs
+- Fifteen 180 s original diss takes (Nill Bye vs Rake) without cloud music APIs
 - Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - Keeping the visual studio bootable when the music pack is missing
 
@@ -78,9 +78,9 @@ Canned style swaps (tags widget only — not extra files):
 
 Graph: **music-rap-full-lab-example**. App **Duration (seconds)** defaults to **96** s. Same sampler and model. Prefix `ez_rap_full`. Same voice + second verse + repeated chorus + `[outro]`. Human rewrite required before any release.
 
-### 90s Nill Bye diss examples
+### 180s Nill Bye diss examples
 
-Five extra full-track graphs. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **90**. Queue **on their own** — draft-first is the generic lane, not a prerequisite.
+Fifteen extra full-track graphs under **`_lab/audio/nill-bye/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic lane, not a prerequisite. A longer Queue is expected (this is still an ACE-Step audio latent, not a video 90 s denoise).
 
 Fictional MCs only: **Nill Bye** (science guy, mad) roasting **Rake** (in his feels; club-talk and fake-cool as a brand). Original lyrics. No living-MC names. No famous-hook paraphrases. Shipped bars stay short and SFW (roast the pose, not graphic content). ACE-Step vocal is an invented timbre. Human rewrite required before any release.
 
@@ -91,6 +91,16 @@ Fictional MCs only: **Nill Bye** (science guy, mad) roasting **Rake** (in his fe
 | **music-rap-nill-bye-feels-lab-example** | lo-fi **86** | `ez_rap_nill_feels` | Sad-boy diary as a brand |
 | **music-rap-nill-bye-fake-cool-lab-example** | trap **140** | `ez_rap_nill_fakecool` | Club-talk is not a method |
 | **music-rap-nill-bye-hypothesis-lab-example** | boom-bap **92**, seed **7** | `ez_rap_nill_hypothesis` | Data vs rumor |
+| **music-rap-nill-bye-control-group-lab-example** | boom-bap **88** | `ez_rap_nill_control` | Rake is the uncontrolled variable |
+| **music-rap-nill-bye-sample-size-lab-example** | boom-bap **92**, seed **11** | `ez_rap_nill_samplesize` | One night is not a study |
+| **music-rap-nill-bye-placebo-lab-example** | trap **140** | `ez_rap_nill_placebo` | The flex is a sugar pill |
+| **music-rap-nill-bye-error-bars-lab-example** | boom-bap **88**, seed **17** | `ez_rap_nill_errorbars` | Confidence is a vibe, not a CI |
+| **music-rap-nill-bye-lab-notebook-lab-example** | boom-bap **92**, seed **19** | `ez_rap_nill_notebook` | Receipts vs group-chat lore |
+| **music-rap-nill-bye-office-hours-lab-example** | lo-fi **86**, seed **23** | `ez_rap_nill_office` | Extra help for a failing brand |
+| **music-rap-nill-bye-grant-denied-lab-example** | boom-bap **88**, `[spoken word]` intro, seed **29** | `ez_rap_nill_grant` | No funding for feelings |
+| **music-rap-nill-bye-contamination-lab-example** | trap **140**, seed **31** | `ez_rap_nill_contam` | Club talk leaked into the sample |
+| **music-rap-nill-bye-double-blind-lab-example** | boom-bap **92**, seed **37** | `ez_rap_nill_doubleblind` | Even the booth knows you are faking |
+| **music-rap-nill-bye-replicate-lab-example** | boom-bap **88**, seed **7** | `ez_rap_nill_replicate` | Cannot reproduce the night |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
@@ -143,7 +153,7 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 1. `./scripts/manage.sh download-music --tier turbo`
 2. `./scripts/manage.sh start` — type **yes**
 3. Load **music-rap-draft-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
-4. Then load **music-rap-full-lab-example** (96 s), **or** one **music-rap-nill-bye-*-lab-example** (90 s) on its own
+4. Then load **music-rap-full-lab-example** (96 s), **or** one **music-rap-nill-bye-*-lab-example** (180 s) from `_lab/audio/nill-bye/` on its own
 5. Cover in a **later** session: **klein-thumbnail-lab-example** or **klein-podcast-cover-lab-example**
 
 Spark: the AIO is ~10 GB VRAM-adjacent work. Do **not** co-resident with LTX / Wan / Klein.
