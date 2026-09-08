@@ -40,8 +40,8 @@ KLEIN_NEG = KLEIN_NEG_STILL
 HOUSE_SHOTS = [
     (item["label"], item["shot"]) for item in load_view_pack("place_10")
 ]
-# Klein prefers ~150 words; join adds lock + shot after the bible.
-JOINED_WORD_CAP = 180
+# Klein prefers ~150 words for a single still; join adds lock + shot + closer.
+JOINED_WORD_CAP = 220
 GIF_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
     "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
@@ -78,7 +78,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 HOUSE_NOTE = """## klein-dream-house-lab-example
 
 Ten Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY — the default placeholder is the lab penthouse.
-HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings). Enhance extracts only the rooms and furniture you named — name lounge, kitchen, dining, bath, bedroom, terrace, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough (exterior, entrance, lounge, kitchen, dining, bath, bedroom, terrace, drone, nook), not a penthouse template. Each card is one room or angle with its own backdrop — kitchen and bath do not reuse the lounge skyline. Prompt Join lock=view front-loads the shot. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
+HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings). Enhance extracts only the rooms and furniture you named — name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study), not a penthouse template. Each card is one room or angle with its own backdrop — only lounge looks out the main opening; kitchen, dining, bedroom, bath, and study keep interior walls. Prompt Join lock=view front-loads the shot and closes with “this still is only the room and backdrop the shot names.” Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
 Identity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.
 Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.
 If materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.

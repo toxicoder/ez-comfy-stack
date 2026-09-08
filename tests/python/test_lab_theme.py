@@ -157,7 +157,10 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
     for blob in (house, style):
         assert "warm-glass" in blob
         assert "crown penthouse" in blob
+        assert "full-floor" in blob
+        assert "skyscraper" in blob
         assert "three-bay" in blob
+        assert "compact" not in blob
         assert "cedar" not in blob
         assert "alpine" not in blob
         assert "charcoal-glass" not in blob

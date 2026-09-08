@@ -624,7 +624,7 @@ incoming={}
 for l in d['links']:
     incoming.setdefault((l[3], l[4]), []).append(l)
 banned=('pier','courtyard','pavilion','two-story','a-frame','glass box','outdoor kitchen','outdoor tub','cedar','alpine','gravel','hip roof')
-tour=('SHOT 01 exterior','SHOT 02 entrance','SHOT 03 lounge','SHOT 04 kitchen','SHOT 05 dining','SHOT 06 bath','SHOT 07 bedroom','SHOT 08 terrace','SHOT 09 drone','SHOT 10 nook')
+tour=('SHOT 01 tower','SHOT 02 foyer','SHOT 03 lounge','SHOT 04 kitchen','SHOT 05 dining','SHOT 06 bedroom','SHOT 07 bath','SHOT 08 terrace','SHOT 09 drone','SHOT 10 study')
 assert [n.get('title') for n in sorted(joins, key=lambda n: n['id'])]==list(tour)
 for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     shot=join['widgets_values'][0]
@@ -633,7 +633,7 @@ for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     assert lock=='view'
     assert inv.strip()==''
     full=shot+' '+ident
-    assert len(full.split())<=180, (join.get('title'), len(full.split()))
+    assert len(full.split())<=220, (join.get('title'), len(full.split()))
     sl=shot.lower()
     assert 'penthouse' not in sl
     assert 'techno wizard' not in sl

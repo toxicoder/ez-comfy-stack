@@ -228,7 +228,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-platform-pack-lab-example\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still \u2192 this pack \u2192 Silent 5s / Hook AV.\n"
+        "## klein-platform-pack-lab-example\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still \u2192 this pack \u2192 Silent 5s / Hook AV.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -316,7 +316,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Bold YouTube thumbnail still, 16:9. Subject large and readable. Clean of burned-in words. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Bold YouTube thumbnail still, 16:9. Subject large and readable. Clean of burned-in words. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. This still is only the room and backdrop the shot names. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. This still is only the room and backdrop the shot names."
       ],
       "title": "Positive thumb"
     },
@@ -571,7 +571,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Instagram 1:1 square. Subject centered, warm key, unmarked surfaces. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Instagram 1:1 square. Subject centered, warm key, unmarked surfaces. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. This still is only the room and backdrop the shot names. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. This still is only the room and backdrop the shot names."
       ],
       "title": "Positive ig"
     },
@@ -826,7 +826,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Instagram 4:5 portrait. Headroom for a caption, unmarked surfaces. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Instagram 4:5 portrait. Headroom for a caption, unmarked surfaces. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. This still is only the room and backdrop the shot names. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. This still is only the room and backdrop the shot names."
       ],
       "title": "Positive portrait"
     },
@@ -1081,7 +1081,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Vertical 9:16 Shorts still. Caption headroom at the top. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Vertical 9:16 Shorts still. Caption headroom at the top. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. This still is only the room and backdrop the shot names. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. This still is only the room and backdrop the shot names."
       ],
       "title": "Positive shorts"
     },
@@ -1336,7 +1336,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Blog / Open Graph hero ~1.9:1. Subject left-weighted, quiet right third. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Blog / Open Graph hero ~1.9:1. Subject left-weighted, quiet right third. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. This still is only the room and backdrop the shot names. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. This still is only the room and backdrop the shot names."
       ],
       "title": "Positive og"
     },
@@ -1591,7 +1591,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Ultra-wide channel banner ~3:1. Horizon low, empty sky band for a name overlay. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. Each room keeps only the outlook that camera would see. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering."
+        "Ultra-wide channel banner ~3:1. Horizon low, empty sky band for a name overlay. Same building, rooms, furniture placement, and materials. New photograph from a different camera in a walkthrough of this place. This still is only the room and backdrop the shot names. A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. This still is only the room and backdrop the shot names."
       ],
       "title": "Positive banner"
     },
@@ -2363,7 +2363,7 @@
   "extra": {
     "lab_profile": "klein-platform-pack-lab-example",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein-platform-pack-lab-example\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still \u2192 this pack \u2192 Silent 5s / Hook AV.\n",
+    "lab_note": "## klein-platform-pack-lab-example\n\nOne identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.\n\nPrefixes and sizes (copy of the single-plate graphs):\n- ez_pack_thumb 1280x720\n- ez_pack_ig 1024x1024 (1:1)\n- ez_pack_portrait 1024x1280 (Instagram 4:5)\n- ez_pack_shorts 432x768 (9:16)\n- ez_pack_og 1216x640\n- ez_pack_banner 1536x512 (~3:1)\n\nUnused SHOT groups may be bypassed (Ctrl+B). Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: Spark Still \u2192 this pack \u2192 Silent 5s / Hook AV.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Six Klein platform plates from one identity; independent T2I per aspect",
     "ds": {
       "scale": 1,

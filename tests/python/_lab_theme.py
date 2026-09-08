@@ -22,23 +22,23 @@ STYLE_LOCK_VIDEO = "photoreal shot"
 # Shot cards own lens, time, and weather. Do not name a camera here.
 # Outdoor lamps are fixtures (inventory), not a time of day.
 HOUSE_IDENTITY = (
-    f"A {STYLE_LOCK} of one compact warm-glass crown penthouse on a tall "
-    "unmarked tropical coastal tower over a bright bay, unmarked glass towers "
-    "and palms behind. One wraparound terrace sits outside a three-bay "
-    "black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. "
-    "Lounge at the glass with one sand linen sofa facing the bays, kitchen island "
-    "behind the sofa facing the cook wall, dining beside the island, master "
-    "bedroom and bath left of the living volume. Warm teak terrace lanterns "
-    "and low path lights on the terrace. Palms on the terrace and a fern "
-    "living wall beside the glass. "
-    "Unmarked home, empty of lettering."
+    f"A {STYLE_LOCK} of one full-floor warm-glass crown penthouse on a very "
+    "tall unmarked tropical coastal tower in a dense city of unmarked glass "
+    "skyscrapers, a bright bay only as a distant slot between towers. A wide "
+    "wraparound terrace sits outside a three-bay black-framed glass wall. "
+    "Teak floors, pale stone, coral-teal edge light. Lounge at the glass with "
+    "one sand linen sofa facing the towers. Kitchen island faces a solid teak "
+    "cook wall. Dining faces an interior stone wall. Master bedroom faces the "
+    "headboard wall. Bath is an interior wet room with frosted glass. Study "
+    "faces a teak shelf wall. Warm teak terrace lanterns and low path lights. "
+    "Palms on the terrace. Unmarked home, empty of lettering."
 )
 HOUSE_INVENTORY = (
     "one sand linen sofa facing the three-bay glass, pale-stone kitchen island "
     "with warm-teak cabinets, teak dining table, linen bedding at the "
-    "bay-window bedroom, freestanding stone tub facing frosted glass, two "
-    "teak terrace chairs, compact unmarked data-staff, warm teak terrace "
-    "lanterns, low path lights"
+    "headboard wall, freestanding stone tub facing frosted glass, teak study "
+    "desk at a shelf wall, two teak terrace chairs, compact unmarked "
+    "data-staff, warm teak terrace lanterns, low path lights"
 )
 
 ROOFTOP_INVENTORY = (

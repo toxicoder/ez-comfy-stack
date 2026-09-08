@@ -81,6 +81,9 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "surround" in ident_l or "landscape" in ident_l
     assert "fixture" in ident_l or "lantern" in ident_l
     assert "adjacen" in ident_l
+    assert "interior wall" in ident_l
+    assert "paste" in ident_l
+    assert "window" in ident_l
     flf = client.load_system_prompt("wan_flf")
     assert "first-last" in flf.lower() or "first last" in flf.lower() or "end frame" in flf.lower()
     assert "audio" in flf.lower()
@@ -216,26 +219,27 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert len(pack10) == 10
     labels = [card["label"] for card in pack10]
     assert labels == [
-        "01 exterior",
-        "02 entrance",
+        "01 tower",
+        "02 foyer",
         "03 lounge",
         "04 kitchen",
         "05 dining",
-        "06 bath",
-        "07 bedroom",
+        "06 bedroom",
+        "07 bath",
         "08 terrace",
         "09 drone",
-        "10 nook",
+        "10 study",
     ]
     blobs = {card["label"]: card["shot"].lower() for card in pack10}
-    three_quarter = [
-        lab for lab, text in blobs.items() if "three-quarter" in text and "ground-level" in text
-    ]
-    assert three_quarter == ["01 exterior"]
-    assert "dusk" in blobs["01 exterior"]
-    assert "establishing" in blobs["01 exterior"] or "only" in blobs["01 exterior"]
-    assert "entrance" in blobs["02 entrance"] and "way in" in blobs["02 entrance"]
-    assert "behind the camera" in blobs["02 entrance"]
+    assert "ground-level" not in blobs["01 tower"]
+    assert "three-quarter" not in blobs["01 tower"]
+    assert "looking up" in blobs["01 tower"]
+    assert "street" in blobs["01 tower"]
+    assert "canyon" in blobs["01 tower"] or "neighboring" in blobs["01 tower"]
+    assert "dusk" in blobs["01 tower"]
+    assert "elevator" in blobs["02 foyer"] or "landing" in blobs["02 foyer"]
+    assert "way in" in blobs["02 foyer"]
+    assert "behind the camera" in blobs["02 foyer"]
     assert "seating" in blobs["03 lounge"] and "main opening" in blobs["03 lounge"]
     toward_opening = [
         lab
@@ -247,22 +251,32 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert toward_opening == ["03 lounge"]
     assert "kitchen" in blobs["04 kitchen"]
     assert "cabinets" in blobs["04 kitchen"] or "work surface" in blobs["04 kitchen"]
-    assert "behind the camera" in blobs["04 kitchen"]
+    assert "cook wall" in blobs["04 kitchen"]
+    assert "fills the entire backdrop" in blobs["04 kitchen"]
     assert "dining" in blobs["05 dining"]
-    assert "out of frame" in blobs["05 dining"]
-    assert "bathroom" in blobs["06 bath"] or "bathing" in blobs["06 bath"]
-    assert "frosted" in blobs["06 bath"] or "opaque" in blobs["06 bath"]
-    assert "bedroom" in blobs["07 bedroom"] and "bedding" in blobs["07 bedroom"]
-    assert "headboard" in blobs["07 bedroom"]
+    assert "interior wall" in blobs["05 dining"]
+    assert "fills the entire backdrop" in blobs["05 dining"]
+    assert "bedroom" in blobs["06 bedroom"] and "bedding" in blobs["06 bedroom"]
+    assert "headboard" in blobs["06 bedroom"]
+    assert "fills the entire backdrop" in blobs["06 bedroom"]
+    assert "bathroom" in blobs["07 bath"] or "bathing" in blobs["07 bath"]
+    assert "frosted" in blobs["07 bath"] or "opaque" in blobs["07 bath"]
+    assert "fills the entire backdrop" in blobs["07 bath"]
     assert "along" in blobs["08 terrace"]
+    assert "tower" in blobs["08 terrace"]
     assert "overhead" in blobs["09 drone"] or "drone" in blobs["09 drone"]
     assert "looking down" in blobs["09 drone"] or "roof" in blobs["09 drone"]
-    assert "corner" in blobs["10 nook"] or "planted" in blobs["10 nook"]
-    assert "sliver" in blobs["10 nook"]
+    assert "skyline" in blobs["09 drone"] or "roofs" in blobs["09 drone"]
+    assert "study" in blobs["10 study"]
+    assert "desk" in blobs["10 study"] or "shelf" in blobs["10 study"]
+    assert "fills the entire backdrop" in blobs["10 study"]
+    for lab in ("04 kitchen", "05 dining", "06 bedroom", "07 bath", "10 study"):
+        assert "fills the entire backdrop" in blobs[lab]
     joined_cards = " ".join(blobs.values())
     assert "just inside" not in joined_cards
     assert "daylight exterior" not in joined_cards
     assert "night exterior" not in joined_cards
+    assert "nook" not in joined_cards
     assert blobs["03 lounge"] != blobs["04 kitchen"]
     assert blobs["05 dining"] != blobs["08 terrace"]
 
@@ -467,7 +481,10 @@ def test_ez_prompt_join_identity_and_shot() -> None:
     assert "walkthrough" in view[0]
     assert "Same building" in view[0]
     assert "furniture placement" in view[0]
-    assert "outlook that camera would see" in view[0]
+    closer = "This still is only the room and backdrop the shot names."
+    assert view[0].count(closer) == 2
+    assert view[0].endswith(closer)
+    assert "outlook that camera would see" not in view[0]
     assert "sky, and background" not in view[0]
     trimmed = join.run("  House.  ", "  Dusk deck.  ")[0]
     assert trimmed.startswith("Dusk deck.")
@@ -475,6 +492,7 @@ def test_ez_prompt_join_identity_and_shot() -> None:
     only = join.run("Identity only.", "")
     assert only[0].startswith("Identity only.")
     assert "different camera" in only[0]
+    assert only[0].count(closer) == 1
     shot_only = join.run("", "Shot only.")[0]
     assert shot_only.startswith("Shot only.")
     assert "different camera" in shot_only
@@ -484,13 +502,15 @@ def test_ez_prompt_join_identity_and_shot() -> None:
     assert "Cabin." in locked[0]
     assert "Locked inventory (do not change): cedar siding, hip roof." in locked[0]
     assert "different camera" in locked[0]
-    assert locked[0].endswith("cedar siding, hip roof.")
+    assert locked[0].count(closer) == 2
+    assert locked[0].endswith(closer)
     state = join.run("Cabin.", "Warm key.", "mug", "state")
     assert state[0].startswith("Cabin.")
     assert "camera framing" in state[0]
     assert "The shot names the only change." in state[0]
     assert "mug" in state[0]
     assert state[0].endswith("Warm key.")
+    assert closer not in state[0]
     types = EZPromptJoin.INPUT_TYPES()["required"]["lock"][0]
     assert types[0] == "view"
     assert "state" in types
@@ -518,14 +538,19 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert "photoreal still" in ident_l
     assert "warm-glass" in ident_l
     assert "crown penthouse" in ident_l
+    assert "full-floor" in ident_l
+    assert "dense" in ident_l
+    assert "skyscraper" in ident_l
     assert "wraparound terrace" in ident_l
     assert "three-bay" in ident_l
     assert "teak" in ident_l
-    assert "fern" in ident_l or "living wall" in ident_l
     assert "coral-teal" in ident_l
     assert "lounge" in ident_l
+    assert "study" in ident_l
     assert "lantern" in ident_l or "path light" in ident_l
     assert "bay" in ident_l
+    assert "compact" not in ident_l
+    assert "fern" not in ident_l
     assert "24mm" not in ident_l
     assert "golden-hour" not in ident_l and "golden hour" not in ident_l
     assert "cedar" not in ident_l
@@ -540,16 +565,16 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert len(joins) == 10
     join_titles = [n["title"] for n in sorted(joins, key=lambda n: n["id"])]
     assert join_titles == [
-        "SHOT 01 exterior",
-        "SHOT 02 entrance",
+        "SHOT 01 tower",
+        "SHOT 02 foyer",
         "SHOT 03 lounge",
         "SHOT 04 kitchen",
         "SHOT 05 dining",
-        "SHOT 06 bath",
-        "SHOT 07 bedroom",
+        "SHOT 06 bedroom",
+        "SHOT 07 bath",
         "SHOT 08 terrace",
         "SHOT 09 drone",
-        "SHOT 10 nook",
+        "SHOT 10 study",
     ]
     assert "cook wall" in ident_l
     positives = {
@@ -596,17 +621,20 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         joined = client.join_prompt(ident_text, shot, inventory, lock)
         assert joined.startswith(shot)
         assert ident_text in joined
-        assert len(joined.split()) <= 180
+        assert len(joined.split()) <= 220
         assert not any(b in shot_l for b in banned)
         text = positives[f"Positive {i + 1:02d}"]
         assert text.startswith(shot)
         assert ident_text in text
         assert "different camera" in text
         assert "walkthrough" in text
-        assert "outlook that camera would see" in text
+        closer = "This still is only the room and backdrop the shot names."
+        assert joined.count(closer) == 2
+        assert text.count(closer) == 2
+        assert "outlook that camera would see" not in text
         assert "sky, and background" not in text
         assert "linen sofa" in text
-        assert len(text.split()) <= 180
+        assert len(text.split()) <= 220
     assert inventories == {""}
     assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 0
     assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 0
