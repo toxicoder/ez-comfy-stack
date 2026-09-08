@@ -22,6 +22,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"1024x1280"* ]]
   [[ "${output}" == *"Dockerfile"* ]]
+  [[ "${output}" == *"/inputs"* ]]
+  [[ "${output}" == *"--install-inputs"* ]]
   run cmd_help
   [ "${status}" -eq 0 ]
   touch "${TEST_TMP_DIR}/compose_running"
@@ -62,10 +64,16 @@ teardown() {
   parse_args --engine blender --slug lab-penthouse --width 1024 --height 1280
   [ "${SLUG}" = "lab-penthouse" ]
   [ "${ENGINE}" = "blender" ]
+  [ "${INSTALL_INPUTS}" -eq 0 ]
   run default_out_dir
   [[ "${output}" == *"/assets/sets/lab-penthouse" ]]
+  run default_input_dir
+  [[ "${output}" == *"/input" ]]
+  [[ "${output}" != *"/input/input" ]]
   run default_layout
   [[ "${output}" == *"house_layout.yaml" ]]
+  parse_args --slug lab-penthouse --install-inputs
+  [ "${INSTALL_INPUTS}" -eq 1 ]
   run parse_args --nope
   [ "${status}" -ne 0 ]
 }
@@ -98,4 +106,35 @@ teardown() {
   [[ "${output}" == *"house views ok"* ]]
   run validate_pack_dir "${dest}"
   [ "${status}" -eq 0 ]
+  [ -f "${COMFY_OUTPUT_DIR}/input/ez_house_clay_01.png" ]
+  [ -f "${COMFY_OUTPUT_DIR}/input/ez_house_clay_10.png" ]
+}
+
+@test "house-views --install-inputs copies without blender while compose is up" {
+  touch "${TEST_TMP_DIR}/compose_running"
+  local dest input
+  dest="${TEST_TMP_DIR}/assets/sets/lab-penthouse"
+  input="${COMFY_OUTPUT_DIR}/input"
+  python3 "${REPO_ROOT}/scripts/lib/house_layout.py" fixture "${dest}" --slug lab-penthouse
+  SLUG=lab-penthouse
+  OUT_DIR="${dest}"
+  INPUT_DIR="${input}"
+  INSTALL_INPUTS=1
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"installed clay"* ]]
+  [ -f "${input}/ez_house_clay_01.png" ]
+  [ -f "${input}/ez_house_clay_10.png" ]
+  run copy_clay_inputs "${dest}" "${input}"
+  [ "${status}" -eq 0 ]
+}
+
+@test "house-views --install-inputs fails closed when pack clay is missing" {
+  touch "${TEST_TMP_DIR}/compose_running"
+  SLUG=lab-penthouse
+  OUT_DIR="${TEST_TMP_DIR}/missing-pack"
+  INSTALL_INPUTS=1
+  run cmd_install_inputs
+  [ "${status}" -eq 1 ]
+  [[ "${output}" == *"failed to copy clay"* ]] || [[ "${output}" == *"missing clay"* ]]
 }

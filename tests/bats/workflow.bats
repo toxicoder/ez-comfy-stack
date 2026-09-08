@@ -673,6 +673,8 @@ assert enh['widgets_values'][2]=='identity'
 note=str(next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))['widgets_values'][0]).lower()
 assert 'house-views' in note
 assert 'occupancy' in note
+assert 'input' in note
+assert 'install-inputs' in note
 "
   [ "${status}" -eq 0 ]
 }

@@ -10,7 +10,7 @@ tags: [learn, klein, dream-house, blender, clay, instagram]
 
 - Two doors to a ten-still Instagram 4:5 walkthrough
 - When to use language persistence vs a 3D greybox
-- Occupancy: stop Comfy before `house-views`
+- Occupancy: stop Comfy before a Blender `house-views` dump (`--install-inputs` may run while Comfy is up)
 - Skip rule when Blender is missing
 
 **What this enables**
@@ -61,7 +61,13 @@ TRELLIS.2 is a hero-piece tool, not a walkable house. Do not TRELLIS a full-scen
 # Queue workflows/_lab/klein/klein-dream-house-clay-lab-example.json
 ```
 
-Dump lives under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, `mesh/house.glb`, `views/`, `depth/`). Clay copies `ez_house_clay_01.png` … `10.png` land in that folder and in `COMFY_OUTPUT_DIR` so LoadImage finds them.
+Dump lives under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, `mesh/house.glb`, `views/`, `depth/`). Clay copies `ez_house_clay_01.png` … `10.png` land in that folder and in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`) so LoadImage finds them. LoadImage does **not** list the output root.
+
+Already dumped but Clay 01–10 show **Missing Inputs** / “no file selected”? Copy without Blender (compose may stay up), then reload the graph:
+
+```bash
+./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
+```
 
 Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned bible). `--layout` overrides. v1 does not invent a unique floorplan from prose.
 
@@ -72,13 +78,13 @@ Default layout is `schemas/house_layout.yaml` (lab penthouse matching the canned
 | If | Skip |
 | --- | --- |
 | No host Blender | Clay tour. Use the T2I dream-house. Do not fake clay |
-| Compose is up | `house-views` (exit 2). `./scripts/manage.sh stop` first |
+| Compose is up | Blender `house-views` dump (exit 2). `./scripts/manage.sh stop` first. `--install-inputs` may run while compose is up |
 | You only needed a language bible | Clay dump. Queue **klein-dream-house-lab-example** |
 
 ---
 
 ## Occupancy
 
-One GB10 job. `house-views` dies if compose is up (exit 2), same XOR as `export-guides`. Do not Queue the clay graph and a dump in one session. `restart: "no"`, type **yes** on start, headroom, and download-limit clear-on-exit are unchanged. Blender is never in the Dockerfile.
+One GB10 job. A Blender `house-views` dump dies if compose is up (exit 2), same XOR as `export-guides`. `--install-inputs` is host `cp` and may run while Comfy is up. Do not Queue the clay graph and a Blender dump in one session. `restart: "no"`, type **yes** on start, headroom, and download-limit clear-on-exit are unchanged. Blender is never in the Dockerfile.
 
 Related: [Clay to finish](clay-to-finish.md) (film Path B), [DCC guide pack](../dcc-workflows.md) (1280×704 / 120f LTX packs — different contract), [Asset Bible](../asset-bible.md), [Prompting](../prompting.md).

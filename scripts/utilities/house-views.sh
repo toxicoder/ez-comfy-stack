@@ -36,6 +36,7 @@ SLUG=""
 LAYOUT=""
 OUT_DIR=""
 INPUT_DIR=""
+INSTALL_INPUTS=0
 WIDTH=1024
 HEIGHT=1280
 
@@ -50,8 +51,11 @@ HEIGHT=1280
 #######################################
 cmd_help() {
   echo "Usage: house-views.sh --slug SLUG [--layout FILE] [--out DIR] [--input-dir DIR]" >&2
+  echo "       house-views.sh --slug SLUG --install-inputs [--out DIR] [--input-dir DIR]" >&2
   echo "  Host Blender dump of a 1024x1280 Instagram 4:5 clay tour (ten cameras)." >&2
-  echo "  Refuses if compose is up (exit 2). Never in docker/Dockerfile." >&2
+  echo "  Clay copies go to COMFY_OUTPUT_DIR/input (container /inputs) for LoadImage." >&2
+  echo "  --install-inputs copies an existing dump into input/ (no Blender; compose may stay up)." >&2
+  echo "  Dump refuses if compose is up (exit 2). Never in docker/Dockerfile." >&2
   echo "  Godot is P2. Default layout: schemas/house_layout.yaml" >&2
   echo "  See docs/learn/dream-house.md" >&2
   return 0
@@ -60,7 +64,7 @@ cmd_help() {
 #######################################
 # Parse CLI into globals.
 # Globals:
-#   ENGINE, SLUG, LAYOUT, OUT_DIR, INPUT_DIR, WIDTH, HEIGHT
+#   ENGINE, SLUG, LAYOUT, OUT_DIR, INPUT_DIR, INSTALL_INPUTS, WIDTH, HEIGHT
 # Arguments:
 #   $@
 # Outputs:
@@ -90,6 +94,9 @@ parse_args() {
       --input-dir)
         INPUT_DIR="${2:?}"
         shift
+        ;;
+      --install-inputs)
+        INSTALL_INPUTS=1
         ;;
       --width)
         WIDTH="${2:?}"
@@ -130,6 +137,66 @@ parse_args() {
 #######################################
 default_out_dir() {
   echo "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/assets/sets/${SLUG}"
+}
+
+#######################################
+# Default LoadImage directory (COMFY_OUTPUT_DIR/input → /inputs).
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   None
+# Outputs:
+#   Absolute directory
+# Returns:
+#   0
+#######################################
+default_input_dir() {
+  echo "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/input"
+}
+
+#######################################
+# Copy pack ez_house_clay_NN.png into the LoadImage input directory.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  pack directory
+#   $2  input directory
+# Outputs:
+#   helper text on stdout/stderr
+# Returns:
+#   copy-inputs status
+#######################################
+copy_clay_inputs() {
+  local pack="${1}"
+  local input="${2}"
+  python3 "${REPO_ROOT}/scripts/lib/house_layout.py" copy-inputs "${pack}" "${input}"
+}
+
+#######################################
+# Copy an existing dump into LoadImage input/ (no Blender, no occupancy XOR).
+# Globals:
+#   SLUG, OUT_DIR, INPUT_DIR
+# Arguments:
+#   None
+# Outputs:
+#   log/err
+# Returns:
+#   0 ok; 1 missing pack or copy fail
+#######################################
+cmd_install_inputs() {
+  local dest input
+  if [[ -z ${OUT_DIR} && -z ${SLUG} ]]; then
+    err "Usage: house-views.sh --slug SLUG --install-inputs"
+    return 1
+  fi
+  dest="${OUT_DIR:-$(default_out_dir)}"
+  input="${INPUT_DIR:-$(default_input_dir)}"
+  copy_clay_inputs "${dest}" "${input}" || {
+    err "failed to copy clay into LoadImage input dir ${input}"
+    return 1
+  }
+  log "installed clay into ${input}"
+  return 0
 }
 
 #######################################
@@ -211,7 +278,7 @@ validate_pack_dir() {
 #######################################
 # Dump a pack with host Blender, then fail-closed QC.
 # Globals:
-#   ENGINE, SLUG, LAYOUT, OUT_DIR, INPUT_DIR, WIDTH, HEIGHT, REPO_ROOT
+#   ENGINE, SLUG, LAYOUT, OUT_DIR, INPUT_DIR, INSTALL_INPUTS, WIDTH, HEIGHT, REPO_ROOT
 # Arguments:
 #   None
 # Outputs:
@@ -220,6 +287,10 @@ validate_pack_dir() {
 #   0 ok; 1 usage/missing/QC; 2 occupancy
 #######################################
 cmd_run() {
+  if [[ ${INSTALL_INPUTS} -eq 1 ]]; then
+    cmd_install_inputs
+    return $?
+  fi
   refuse_if_comfy_running "house views dump (occupancy)" || return $?
   if [[ -z ${SLUG} ]]; then
     err "Usage: house-views.sh --slug SLUG [--layout FILE]"
@@ -239,7 +310,7 @@ cmd_run() {
     return 1
   fi
   mkdir -p "${dest}"
-  input="${INPUT_DIR:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
+  input="${INPUT_DIR:-$(default_input_dir)}"
   local -a bcmd=(blender --background --python "${REPO_ROOT}/tools/blender/export_house_views.py" --)
   bcmd+=(--out "${dest}" --layout "${layout}" --slug "${SLUG}" --engine "${ENGINE}")
   bcmd+=(--width "${WIDTH}" --height "${HEIGHT}" --input-dir "${input}")
@@ -250,6 +321,10 @@ cmd_run() {
   }
   validate_pack_dir "${dest}" || {
     err "house views QC failed (size/cameras/layers)"
+    return 1
+  }
+  copy_clay_inputs "${dest}" "${input}" || {
+    err "failed to copy clay into LoadImage input dir ${input}"
     return 1
   }
   log "house views ok: ${dest}"

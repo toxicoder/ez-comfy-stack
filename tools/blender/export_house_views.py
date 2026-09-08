@@ -27,6 +27,7 @@ from house_layout import (  # noqa: E402
     PLACE_10_IDS,
     HouseLayoutError,
     clay_copy_name,
+    copy_clay_to_input_dir,
     dump_asset_yaml,
     load_layout,
     validate_views_dir,
@@ -289,15 +290,10 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
     )
     (dest / "asset.yaml").write_text(dump_asset_yaml(slug), encoding="utf-8")
 
-    input_dir = Path(ns.input_dir) if ns.input_dir else None
-    if input_dir is not None:
-        input_dir.mkdir(parents=True, exist_ok=True)
-        for index in range(len(PLACE_10_IDS)):
-            src = dest / clay_copy_name(index)
-            if src.is_file():
-                shutil.copy2(src, input_dir / clay_copy_name(index))
+    if ns.input_dir:
+        copy_clay_to_input_dir(dest, ns.input_dir)
 
-    validate_views_dir(dest)
+    validate_views_dir(dest, input_dir=ns.input_dir or None)
     print(f"{CLAY_PREFIX} pack ok: {dest}", file=sys.stderr)
 
 

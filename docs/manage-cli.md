@@ -54,7 +54,7 @@ id: doctor
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
 | `blender` | Host Blender sidecar; dies if compose is up | Run next to Comfy |
 | `export-guides` | Dump a 1280×704 / 120f guide pack; dies if compose is up | 1280×720; dump while Comfy is up |
-| `house-views` | Dump 1024×1280 Instagram 4:5 clay stills + GLB; dies if compose is up | Reuse `export-guides`; dump while Comfy is up; Godot |
+| `house-views` | Dump 1024×1280 Instagram 4:5 clay stills + GLB; copies LoadImage plates into `COMFY_OUTPUT_DIR/input`. Dies if compose is up. `--install-inputs` copies an existing dump into `input/` (no Blender; compose may stay up) | Reuse `export-guides`; dump while Comfy is up; Godot |
 | `shot-sheet` | Write `films/<slug>/shots.yaml` with shot-card defaults | Overwrite lab YAML without `--lab-example` |
 | `overlay-qc` | 50% clay/look overlay (host ffmpeg; compose may stay up) | Skip size QC; auto-accept the score |
 | `film-animatic` | Cheap 90s animatic from clay.mp4 or stills | Treat as a 90s denoise |

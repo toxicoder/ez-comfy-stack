@@ -116,6 +116,35 @@ def test_godot_engine_not_in_v1_engines() -> None:
     assert "godot" not in hl.ENGINES
 
 
+def test_copy_clay_to_input_dir_and_validate_input(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    pack = tmp_path / "pack"
+    hl.write_fixture_pack(pack, slug="lab-penthouse")
+    dest = tmp_path / "input"
+    written = hl.copy_clay_to_input_dir(pack, dest)
+    assert [path.name for path in written] == [
+        f"ez_house_clay_{i:02d}.png" for i in range(1, 11)
+    ]
+    assert hl.png_size(dest / "ez_house_clay_01.png") == (1024, 1280)
+    views = hl.validate_views_dir(pack, require_glb=False, input_dir=dest)
+    assert views["id"] == "lab-penthouse"
+    (dest / "ez_house_clay_01.png").unlink()
+    with pytest.raises(hl.HouseLayoutError, match="LoadImage"):
+        hl.validate_views_dir(pack, require_glb=False, input_dir=dest)
+    (pack / "ez_house_clay_05.png").unlink()
+    with pytest.raises(hl.HouseLayoutError, match="ez_house_clay_05"):
+        hl.copy_clay_to_input_dir(pack, dest)
+    assert hl._cli(["copy-inputs", str(tmp_path / "missing"), str(dest)]) == 1
+    capsys.readouterr()
+    pack2 = tmp_path / "pack2"
+    hl.write_fixture_pack(pack2)
+    inp2 = tmp_path / "input2"
+    assert hl._cli(["copy-inputs", str(pack2), str(inp2)]) == 0
+    assert "10 clay" in capsys.readouterr().out
+    assert (inp2 / "ez_house_clay_10.png").is_file()
+
+
 def test_house_layout_cli_validate_and_export_helpers_named(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
@@ -138,3 +167,8 @@ def test_house_layout_cli_validate_and_export_helpers_named(
         "_wall_on",
     ):
         assert f"def {name}(" in text
+    assert "copy_clay_to_input_dir" in text
+    lib_text = (ROOT / "scripts" / "lib" / "house_layout.py").read_text(
+        encoding="utf-8"
+    )
+    assert "def copy_clay_to_input_dir(" in lib_text
