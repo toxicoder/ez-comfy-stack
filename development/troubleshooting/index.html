@@ -2073,9 +2073,9 @@
 <td>Install Blender on the host, or skip clay and Queue <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">klein</span>-dream-house-lab-example</strong>. Never add Blender to the Dockerfile</td>
 </tr>
 <tr>
-<td>House clay Queue missing <code>ez_house_clay_01.png</code></td>
-<td>Dump not copied into <code>COMFY_OUTPUT_DIR</code></td>
-<td>Re-run <code>house-views</code>; LoadImage names are <code>ez_house_clay_01.png</code> … <code>10.png</code></td>
+<td>House clay <strong>Missing Inputs</strong> / “no file selected” on Clay 01–10</td>
+<td>Plates not in <code>${COMFY_OUTPUT_DIR}/input</code> (LoadImage does not see <code>/outputs</code>)</td>
+<td>If the pack exists: <code>./scripts/manage.sh house-views --slug lab-penthouse --install-inputs</code> (compose may stay up), then reload. Otherwise stop, <code>house-views</code>, start. Names are <code>ez_house_clay_01.png</code> … <code>10.png</code></td>
 </tr>
 <tr>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="guide-pack" data-href="../glossary/#guide-pack" title="DCC handshake: 1280×704 clay/depth/first+last for a 5.00s print.">Guide pack</span> QC refuses 1280×720</td>

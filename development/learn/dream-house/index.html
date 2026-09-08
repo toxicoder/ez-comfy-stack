@@ -1802,7 +1802,7 @@
 <ul>
 <li>Two doors to a ten-still Instagram 4:5 walkthrough</li>
 <li>When to use language persistence vs a 3D greybox</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: stop Comfy before <code>house-views</code></li>
+<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../../glossary/#occupancy" title="One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.">Occupancy</span>: stop Comfy before a Blender <code>house-views</code> dump (<code>--install-inputs</code> may run while Comfy is up)</li>
 <li>Skip rule when Blender is missing</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1856,7 +1856,10 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">   </span><span class="c1"># type yes</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Queue workflows/_lab/klein/klein-dream-house-clay-lab-example.json</span>
 </code></pre></div>
-<p>Dump lives under <code>${COMFY_OUTPUT_DIR}/assets/sets/&lt;slug&gt;/</code> (layout, <code>mesh/house.glb</code>, <code>views/</code>, <code>depth/</code>). Clay copies <code>ez_house_clay_01.png</code> … <code>10.png</code> land in that folder and in <code>COMFY_OUTPUT_DIR</code> so <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> finds them.</p>
+<p>Dump lives under <code>${COMFY_OUTPUT_DIR}/assets/sets/&lt;slug&gt;/</code> (layout, <code>mesh/house.glb</code>, <code>views/</code>, <code>depth/</code>). Clay copies <code>ez_house_clay_01.png</code> … <code>10.png</code> land in that folder and in <code>${COMFY_OUTPUT_DIR}/input</code> (container <code>/inputs</code>) so <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> finds them. LoadImage does <strong>not</strong> list the output root.</p>
+<p>Already dumped but Clay 01–10 show <strong>Missing Inputs</strong> / “no file selected”? Copy without Blender (compose may stay up), then reload the graph:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>house-views<span class="w"> </span>--slug<span class="w"> </span>lab-penthouse<span class="w"> </span>--install-inputs
+</code></pre></div>
 <p>Default layout is <code>schemas/house_layout.yaml</code> (lab penthouse matching the canned bible). <code>--layout</code> overrides. v1 does not invent a unique floorplan from prose.</p>
 <hr />
 <h2 id="skip-rules">Skip rules<a class="headerlink" href="#skip-rules" title="Permanent link">&para;</a></h2>
@@ -1874,7 +1877,7 @@
 </tr>
 <tr>
 <td>Compose is up</td>
-<td><code>house-views</code> (exit 2). <code>./scripts/manage.sh stop</code> first</td>
+<td>Blender <code>house-views</code> dump (exit 2). <code>./scripts/manage.sh stop</code> first. <code>--install-inputs</code> may run while compose is up</td>
 </tr>
 <tr>
 <td>You only needed a language bible</td>
@@ -1884,7 +1887,7 @@
 </table>
 <hr />
 <h2 id="occupancy">Occupancy<a class="headerlink" href="#occupancy" title="Permanent link">&para;</a></h2>
-<p>One <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> job. <code>house-views</code> dies if compose is up (exit 2), same XOR as <code>export-guides</code>. Do not Queue the clay graph and a dump in one session. <code>restart: "no"</code>, type <strong>yes</strong> on start, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit are unchanged. Blender is never in the Dockerfile.</p>
+<p>One <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> job. A Blender <code>house-views</code> dump dies if compose is up (exit 2), same XOR as <code>export-guides</code>. <code>--install-inputs</code> is host <code>cp</code> and may run while Comfy is up. Do not Queue the clay graph and a Blender dump in one session. <code>restart: "no"</code>, type <strong>yes</strong> on start, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../../glossary/#download-limit" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit are unchanged. Blender is never in the Dockerfile.</p>
 <p>Related: <a href="../clay-to-finish/">Clay to finish</a> (film Path B), <a href="../../dcc-workflows/">DCC guide pack</a> (1280×704 / 120f <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> packs — different contract), <a href="../../asset-bible/">Asset Bible</a>, <a href="../../prompting/">Prompting</a>.</p>
 
 
