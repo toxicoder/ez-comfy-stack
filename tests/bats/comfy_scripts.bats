@@ -292,15 +292,19 @@ teardown() {
   mkdir -p "${src}/ez_prompt_enhance" "${src}/ez_ltx_spatial" "${src}/not_a_pack"
   echo 'ok' >"${src}/ez_prompt_enhance/__init__.py"
   echo 'ok' >"${src}/ez_ltx_spatial/__init__.py"
+  mkdir -p "${src}/ez_studio_blocks/subgraphs"
+  echo 'ok' >"${src}/ez_studio_blocks/__init__.py"
+  echo '{}' >"${src}/ez_studio_blocks/subgraphs/klein-t2i-backbone.json"
   echo 'skip' >"${src}/not_a_pack/readme.txt"
   echo 'file' >"${src}/stray.txt"
   run install_all_lab_custom_nodes "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/ez_prompt_enhance/__init__.py ]]
   [[ -f ${dest}/ez_ltx_spatial/__init__.py ]]
+  [[ -f ${dest}/ez_studio_blocks/subgraphs/klein-t2i-backbone.json ]]
   [[ ! -d ${dest}/not_a_pack ]]
   [[ ! -f ${dest}/stray.txt ]]
-  [[ "${output}" == *"installed 2 custom node pack"* ]]
+  [[ "${output}" == *"installed 3 custom node pack"* ]]
   run install_all_lab_custom_nodes "${TEST_TMP_DIR}/missing-root" "${TEST_TMP_DIR}/ComfyUI/custom_nodes_missing"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"optional mount"* ]]

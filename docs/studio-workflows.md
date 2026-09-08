@@ -37,6 +37,8 @@ user/default/workflows/
   _user/       your graphs (never overwritten)
 ```
 
+Reusable printer blocks live in the node library after start (`custom_nodes/ez_studio_blocks/subgraphs/`): **klein-t2i-backbone**, **wan-i2v-5s**, **ltx-av-5s**, **ltx-film-shot**. Drop them from the subgraph menu instead of copy-pasting chains.
+
 ```mermaid
 flowchart TB
   Need{"What do you need?"} --> Still["A still"]
