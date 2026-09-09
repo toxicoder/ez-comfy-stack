@@ -78,7 +78,7 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein-identity-sheet-lab-example** | Front / three-quarter / profile. 1280×704, Enhance on (identity mode) |
 | **klein-storyboard-6up-lab-example** | Six new cameras of one scene (`ez_board_01`…`06`) |
 | **klein-dream-house-lab-example** | Virtual tour. Ten 4:5 stills of **one place**, one room or angle each (tower, foyer, rooms, terrace, drone, study; default placeholder is a full-floor penthouse in a dense city) |
-| **klein-dream-house-clay-lab-example** | Same walkthrough as Klein edit of `house-views` clay. Stop Comfy, dump, then Queue. Prefix `ez_dream_house_clay_01`…`10` |
+| **klein-dream-house-clay-lab-example** | Same walkthrough as Klein edit of clay plates (`ez_house_clay_01`…`10`). `start` seeds LoadImage; optional `house-views` dump. Prefix `ez_dream_house_clay_01`…`10` |
 | **klein-style-lock-lab-example** | One place, four cameras |
 | **klein-lighting-trio-lab-example** | Same subject, three lights |
 | **klein-camera-angles-lab-example** | Wide / medium / close |
@@ -129,7 +129,7 @@ Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`, **audio-finish-lab-example**) a
 | Beat sheet (script desk) | `shot-sheet` → identity sheet / clay dump / `klein-from-clay` |
 | Klein-from-clay | `overlay-qc` → `ltx-iclora-depth` → `audio-finish` / `stem-mix` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |
-| Clay dream-house | `house-views` dump → **klein-dream-house-clay-lab-example** → same loop kit |
+| Clay dream-house | `start` (or `house-views` dump) → **klein-dream-house-clay-lab-example** → same loop kit |
 
 Set I2V **LoadImage** to the still prefix you just saved (`ez_still_draft_*.png`, `ez_hook_still_*.png`, …). I2V graphs also Queue on Comfy’s `example.png`.
 

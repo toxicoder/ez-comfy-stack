@@ -37,6 +37,7 @@ LAYOUT=""
 OUT_DIR=""
 INPUT_DIR=""
 INSTALL_INPUTS=0
+SEED_INPUTS=0
 WIDTH=1024
 HEIGHT=1280
 
@@ -52,9 +53,12 @@ HEIGHT=1280
 cmd_help() {
   echo "Usage: house-views.sh --slug SLUG [--layout FILE] [--out DIR] [--input-dir DIR]" >&2
   echo "       house-views.sh --slug SLUG --install-inputs [--out DIR] [--input-dir DIR]" >&2
+  echo "       house-views.sh [--slug SLUG] --seed-inputs [--out DIR] [--input-dir DIR] [--layout FILE]" >&2
   echo "  Host Blender dump of a 1024x1280 Instagram 4:5 clay tour (ten cameras)." >&2
   echo "  Clay copies go to COMFY_OUTPUT_DIR/input (container /inputs) for LoadImage." >&2
   echo "  --install-inputs copies an existing dump into input/ (no Blender; compose may stay up)." >&2
+  echo "  --seed-inputs copies a pack when present, else renders the layout (no Blender;" >&2
+  echo "  compose may stay up). Does not overwrite valid existing ez_house_clay_NN.png." >&2
   echo "  Dump refuses if compose is up (exit 2). Never in docker/Dockerfile." >&2
   echo "  Godot is P2. Default layout: schemas/house_layout.yaml" >&2
   echo "  See docs/learn/dream-house.md" >&2
@@ -64,7 +68,7 @@ cmd_help() {
 #######################################
 # Parse CLI into globals.
 # Globals:
-#   ENGINE, SLUG, LAYOUT, OUT_DIR, INPUT_DIR, INSTALL_INPUTS, WIDTH, HEIGHT
+#   ENGINE, SLUG, LAYOUT, OUT_DIR, INPUT_DIR, INSTALL_INPUTS, SEED_INPUTS, WIDTH, HEIGHT
 # Arguments:
 #   $@
 # Outputs:
@@ -97,6 +101,9 @@ parse_args() {
         ;;
       --install-inputs)
         INSTALL_INPUTS=1
+        ;;
+      --seed-inputs)
+        SEED_INPUTS=1
         ;;
       --width)
         WIDTH="${2:?}"
@@ -200,6 +207,41 @@ cmd_install_inputs() {
 }
 
 #######################################
+# Ensure LoadImage plates exist (copy pack or render layout).
+# No Blender, no occupancy XOR. Does not overwrite valid plates.
+# Globals:
+#   SLUG, OUT_DIR, INPUT_DIR, LAYOUT, REPO_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   log/err
+# Returns:
+#   0 ok; 1 seed fail
+#######################################
+cmd_seed_inputs() {
+  local dest input layout slug
+  slug="${SLUG:-lab-penthouse}"
+  SLUG="${slug}"
+  dest="${OUT_DIR:-$(default_out_dir)}"
+  input="${INPUT_DIR:-$(default_input_dir)}"
+  layout="${LAYOUT:-$(default_layout)}"
+  local -a argv=(
+    python3 "${REPO_ROOT}/scripts/lib/house_layout.py" seed-inputs "${input}"
+    --slug "${slug}"
+    --layout "${layout}"
+  )
+  if [[ -d ${dest} ]]; then
+    argv+=(--pack "${dest}")
+  fi
+  "${argv[@]}" || {
+    err "failed to seed clay into LoadImage input dir ${input}"
+    return 1
+  }
+  log "seeded clay into ${input}"
+  return 0
+}
+
+#######################################
 # Default layout YAML (shipped penthouse).
 # Globals:
 #   REPO_ROOT
@@ -278,7 +320,7 @@ validate_pack_dir() {
 #######################################
 # Dump a pack with host Blender, then fail-closed QC.
 # Globals:
-#   ENGINE, SLUG, LAYOUT, OUT_DIR, INPUT_DIR, INSTALL_INPUTS, WIDTH, HEIGHT, REPO_ROOT
+#   ENGINE, SLUG, LAYOUT, OUT_DIR, INPUT_DIR, INSTALL_INPUTS, SEED_INPUTS, WIDTH, HEIGHT, REPO_ROOT
 # Arguments:
 #   None
 # Outputs:
@@ -287,6 +329,10 @@ validate_pack_dir() {
 #   0 ok; 1 usage/missing/QC; 2 occupancy
 #######################################
 cmd_run() {
+  if [[ ${SEED_INPUTS} -eq 1 ]]; then
+    cmd_seed_inputs
+    return $?
+  fi
   if [[ ${INSTALL_INPUTS} -eq 1 ]]; then
     cmd_install_inputs
     return $?

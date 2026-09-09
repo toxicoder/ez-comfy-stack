@@ -64,7 +64,7 @@ Printers stay **5.00 s / 1280×704 / 120 frames @ 24 fps**. Do not type a 90 s l
 
 | If | Skip |
 | --- | --- |
-| No Blender / Path D not ready | Clay. Look plate owns composition. Overlay QC is skipped, not faked. Same skip for the Instagram clay tour — use **klein-dream-house-lab-example** instead of faking `house-views`. |
+| No Blender / Path D not ready | Film clay dump. Look plate owns composition. Overlay QC is skipped, not faked. Instagram clay tour still Queues on `start` / `--seed-inputs` layout plates; language-only → **klein-dream-house-lab-example**. |
 | Empty dialogue | DX stem |
 | Shorts “world SFX, no score” | MX. Do not load ACE-Step next to LTX. |
 | Talking-head / VO-locked picture | Union Control. Use A2V freeze (`klein-talking-head-lab-example`). Mouths will not match. |

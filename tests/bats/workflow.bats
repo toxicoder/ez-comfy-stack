@@ -675,6 +675,7 @@ assert 'house-views' in note
 assert 'occupancy' in note
 assert 'input' in note
 assert 'install-inputs' in note
+assert 'seed-inputs' in note
 "
   [ "${status}" -eq 0 ]
 }
