@@ -65,20 +65,23 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
 ### Permissions
 
-`doctor`, `download-models`, and download utilities require `MODELS_DIR` to be **writable by the current user**.
+`doctor` requires `MODELS_DIR` to be **writable by the current user** (check only; no sudo). Nested `${MODELS_DIR}/comfy` can still be root-owned after a container start — that is a **warning**, not a hard doctor failure.
 
-=== "Preferred (setup)"
+`setup`, `download-models`, and `start` **sudo-heal** `${MODELS_DIR}/comfy` and its layout subdirs when they are not writable. They do **not** recurse `chown` over HF snapshots under `MODELS_DIR`. Do not prefix `download-models` with `sudo` (download-limit uses sudo internally; `hf` must stay on the login user's PATH).
+
+=== "Preferred (setup / download-models)"
 
     ```bash
     ./scripts/manage.sh setup
-    # sudo mkdir -p + chown for MODELS_DIR when needed
+    ./scripts/manage.sh download-models
+    # sudo mkdir -p + chown for MODELS_DIR and MODELS_DIR/comfy when needed
     ```
 
-=== "Manual"
+=== "Manual last resort"
 
     ```bash
-    sudo mkdir -p "${MODELS_DIR}"
-    sudo chown "$USER:$USER" "${MODELS_DIR}"
+    sudo mkdir -p "${MODELS_DIR}/comfy"
+    sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy"
     ```
 
 === "Home path"

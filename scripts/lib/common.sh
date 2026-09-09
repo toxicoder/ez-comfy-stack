@@ -734,6 +734,139 @@ prepare_comfy_output_dir() {
 }
 
 #######################################
+# Comfy layout subdirectories under MODELS_DIR/comfy (host bind-mount).
+# Includes the container link_all_models set plus opt-in downloaders.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   One subdirectory name per line on stdout
+# Returns:
+#   0
+#######################################
+lab_comfy_layout_subdirs() {
+  cat <<'EOF'
+checkpoints
+diffusion_models
+text_encoders
+vae
+loras
+clip
+clip_vision
+unet
+controlnet
+embeddings
+upscale_models
+audio_encoders
+llm
+onnx
+tts
+whisper
+3d
+Fun_Models
+EOF
+}
+
+#######################################
+# Soft-warn when MODELS_DIR/comfy (or a layout subdir) exists but is not writable.
+# Doctor stays a check: download-models / setup / start sudo-heal.
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   $1 - Models root (default MODELS_DIR or /mnt/models)
+# Outputs:
+#   warn on stderr when nested comfy layout is not writable
+# Returns:
+#   0
+#######################################
+warn_unwritable_comfy_layout() {
+  local root="${1:-${MODELS_DIR:-/mnt/models}}"
+  local comfy="${root}/comfy"
+  local sub
+  if [[ ! -d ${comfy} ]]; then
+    return 0
+  fi
+  if [[ ! -w ${comfy} ]]; then
+    warn "MODELS_DIR/comfy=${comfy} is not writable — download-models / setup / start will sudo-heal"
+    return 0
+  fi
+  while IFS= read -r sub; do
+    [[ -z ${sub} ]] && continue
+    if [[ -d ${comfy}/${sub} && ! -w ${comfy}/${sub} ]]; then
+      warn "MODELS_DIR/comfy/${sub} is not writable — download-models / setup / start will sudo-heal"
+      return 0
+    fi
+  done < <(lab_comfy_layout_subdirs)
+  return 0
+}
+
+#######################################
+# Create MODELS_DIR/comfy and layout subdirs; sudo-chown the tree when needed.
+# Does not recurse chown over HF snapshots under MODELS_DIR.
+# Skips sudo when LAB_NO_SUDO=1 (tests / restricted environments).
+# Globals:
+#   LAB_NO_SUDO, MODELS_DIR
+# Arguments:
+#   $1 - Models root (default MODELS_DIR or /mnt/models)
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 when comfy layout dirs exist and are writable; 1 on failure
+#######################################
+prepare_comfy_layout() {
+  local root="${1:-${MODELS_DIR:-/mnt/models}}"
+  local comfy sub d
+  local -a dirs=()
+  local ready=1
+  prepare_writable_host_dir MODELS_DIR "${root}" || return 1
+  comfy="${root}/comfy"
+  dirs=("${comfy}")
+  while IFS= read -r sub; do
+    [[ -z ${sub} ]] && continue
+    dirs+=("${comfy}/${sub}")
+  done < <(lab_comfy_layout_subdirs)
+  mkdir -p "${dirs[@]}" 2>/dev/null || true
+  for d in "${dirs[@]}"; do
+    if [[ ! -d ${d} || ! -w ${d} ]]; then
+      ready=0
+      break
+    fi
+  done
+  if [[ ${ready} -eq 1 ]]; then
+    return 0
+  fi
+  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
+    err "MODELS_DIR/comfy=${comfy} not writable and LAB_NO_SUDO=1 (cannot sudo)"
+    return 1
+  fi
+  log "Healing comfy layout with sudo: ${comfy}"
+  if ! sudo mkdir -p "${comfy}"; then
+    err "sudo mkdir -p '${comfy}' failed"
+    return 1
+  fi
+  if ! sudo chown "$(id -u):$(id -g)" "${comfy}"; then
+    err "sudo chown failed for '${comfy}'"
+    return 1
+  fi
+  mkdir -p "${dirs[@]}" 2>/dev/null || true
+  if ! sudo chown -R "$(id -u):$(id -g)" "${comfy}"; then
+    err "sudo chown -R failed for '${comfy}'"
+    return 1
+  fi
+  for d in "${dirs[@]}"; do
+    if [[ ! -d ${d} || ! -w ${d} ]]; then
+      err "MODELS_DIR/comfy=${comfy} is not writable."
+      err "  ./scripts/manage.sh setup"
+      err "  # or: sudo chown -R $(id -u):$(id -g) '${comfy}'"
+      return 1
+    fi
+  done
+  log "comfy layout ready: ${comfy}"
+  return 0
+}
+
+#######################################
 # Home directory for a login name (passwd database; no eval).
 # Globals:
 #   None

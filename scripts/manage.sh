@@ -243,7 +243,7 @@ EOF
   export MODELS_DIR
 
   log "MODELS_DIR=${MODELS_DIR}"
-  if prepare_models_dir "${MODELS_DIR}"; then
+  if prepare_comfy_layout "${MODELS_DIR}"; then
     log "models dir ready: ${MODELS_DIR}"
   else
     ok=1
@@ -370,6 +370,7 @@ cmd_doctor() {
   log "MODELS_DIR=${MODELS_DIR}"
   if ensure_models_dir "${MODELS_DIR}"; then
     log "models dir exists and is writable"
+    warn_unwritable_comfy_layout "${MODELS_DIR}"
   else
     ok=1
   fi
@@ -692,7 +693,7 @@ EOF
       fi
       ;;
   esac
-  ensure_models_dir "${MODELS_DIR}" || return 1
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   check_hf_cli
   if [[ ${drop_incomplete} -eq 1 ]]; then
     log "dropping incomplete HF partials under ${MODELS_DIR} (--drop-incomplete)"
@@ -814,7 +815,7 @@ EOF
       fi
       ;;
   esac
-  ensure_models_dir "${MODELS_DIR}" || return 1
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
     warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
@@ -905,7 +906,7 @@ EOF
       fi
       ;;
   esac
-  ensure_models_dir "${MODELS_DIR}" || return 1
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
     warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
@@ -997,7 +998,7 @@ EOF
       fi
       ;;
   esac
-  ensure_models_dir "${MODELS_DIR}" || return 1
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
     warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"

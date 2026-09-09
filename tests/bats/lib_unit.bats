@@ -297,6 +297,40 @@ teardown() {
   [ -d "${TEST_TMP_DIR}/prepared_output2" ]
   chmod 755 "${ro}"
 
+  run lab_comfy_layout_subdirs
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"diffusion_models"* ]]
+  [[ "${output}" == *"text_encoders"* ]]
+  [[ "${output}" == *"vae"* ]]
+  [[ "${output}" == *"llm"* ]]
+  run prepare_comfy_layout "${TEST_TMP_DIR}/layout_models"
+  [ "${status}" -eq 0 ]
+  [ -d "${TEST_TMP_DIR}/layout_models/comfy/diffusion_models" ]
+  [ -d "${TEST_TMP_DIR}/layout_models/comfy/llm" ]
+  [ -w "${TEST_TMP_DIR}/layout_models/comfy/diffusion_models" ]
+  run warn_unwritable_comfy_layout "${TEST_TMP_DIR}/layout_models"
+  [ "${status}" -eq 0 ]
+  mkdir -p "${TEST_TMP_DIR}/layout_blocked/comfy"
+  chmod a-w "${TEST_TMP_DIR}/layout_blocked/comfy"
+  export LAB_NO_SUDO=1
+  run prepare_comfy_layout "${TEST_TMP_DIR}/layout_blocked"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  run warn_unwritable_comfy_layout "${TEST_TMP_DIR}/layout_blocked"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  [[ "${output}" == *"sudo-heal"* ]]
+  chmod u+w "${TEST_TMP_DIR}/layout_blocked/comfy"
+  unset LAB_NO_SUDO
+  mkdir -p "${TEST_TMP_DIR}/layout_heal/comfy"
+  chmod a-w "${TEST_TMP_DIR}/layout_heal/comfy"
+  install_sudo_heal_mock
+  run prepare_comfy_layout "${TEST_TMP_DIR}/layout_heal"
+  [ "${status}" -eq 0 ]
+  [ -w "${TEST_TMP_DIR}/layout_heal/comfy" ]
+  [ -w "${TEST_TMP_DIR}/layout_heal/comfy/diffusion_models" ]
+  export LAB_NO_SUDO=1
+
   run run_with_signal_forwarding true
   [ "${status}" -eq 0 ]
   run run_with_signal_forwarding bash -c 'exit 3'

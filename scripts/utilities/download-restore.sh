@@ -131,7 +131,7 @@ tier_files_ready() {
 link_into_comfy() {
   local tier="${1}"
   local src="${MODELS_DIR}/comfy/upscale_models"
-  mkdir -p "${src}"
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   local dir f base dest
   dir=$(tier_dir "${tier}")
   [[ -d ${dir} ]] || return 0
@@ -179,7 +179,7 @@ cmd_run() {
     exit 1
   fi
   check_hf_cli
-  ensure_models_dir "${MODELS_DIR}" || exit 1
+  prepare_comfy_layout "${MODELS_DIR}" || exit 1
   dir="$(tier_dir "${TIER}")"
   if tier_files_ready "${TIER}"; then
     log "skip ${TIER}: already present"

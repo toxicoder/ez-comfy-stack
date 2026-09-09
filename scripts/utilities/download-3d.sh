@@ -212,7 +212,7 @@ tier_files_ready() {
 link_into_comfy() {
   local tier="${1}"
   local src="${MODELS_DIR}/comfy"
-  mkdir -p "${src}/3d" "${src}/diffusion_models"
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   local dir f base dest
   dir=$(tier_dir "${tier}")
   [[ -d ${dir} ]] || return 0
@@ -282,7 +282,7 @@ cmd_status() {
 cmd_run() {
   local tier repo dir
   check_hf_cli
-  ensure_models_dir "${MODELS_DIR}" || exit 1
+  prepare_comfy_layout "${MODELS_DIR}" || exit 1
   for tier in $(tiers_to_process); do
     refuse_banned_3d_tier "${tier}" || exit 1
     repo=$(tier_repo "${tier}")

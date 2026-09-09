@@ -219,7 +219,7 @@ LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache — a token in `.env` is **
 # 1. echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
 # 2. Open https://huggingface.co/Lightricks/LTX-2.5 as THAT user and click Agree
 # 3. Fine-grained tokens need gated-repo read
-# Do not prefix with sudo — download-limit uses sudo internally.
+# Do not prefix with sudo — download-limit and comfy/ ownership heal use sudo internally.
 ./scripts/manage.sh download-models
 # Manual cap (Mbps; 40 ≈ 5 MB/s). Overrides DOWNLOAD_LIMIT for this run:
 # ./scripts/manage.sh download-models --limit 40
@@ -230,7 +230,7 @@ LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache — a token in `.env` is **
 | **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` + `download-llm` |
 | **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
 | **CLI** | Modern **`hf download`** (auto-installed by `setup` / `download-models`) |
-| **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks |
+| **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks. Cache hits still need a writable `comfy/`; `download-models` sudo-heals nested ownership (no manual `chown`). |
 | **LTX size** | Selective `Lightricks/LTX-2.5` distilled set (status floor ~**30 GB**), not the Kijai 2.3 monorepo (~400 GB) |
 
 `download-models` **exits non-zero** until every lab basename is present under `${MODELS_DIR}/comfy/`:

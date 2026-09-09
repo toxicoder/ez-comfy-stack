@@ -111,9 +111,14 @@ teardown() {
   [[ "${output}" == *"Clone ComfyUI"* ]]
 
   mkdir -p "${COMFY_HOME}/models"
+  export HOST_UID
+  HOST_UID="$(id -u)"
+  export HOST_GID
+  HOST_GID="$(id -g)"
   run link_models diffusion_models
   [ "${status}" -eq 0 ]
   [[ -L "${COMFY_HOME}/models/diffusion_models" ]]
+  [[ -d ${MODELS_ROOT}/comfy/diffusion_models ]]
 
   # Empty existing dir path branch
   rm -f "${COMFY_HOME}/models/vae"
