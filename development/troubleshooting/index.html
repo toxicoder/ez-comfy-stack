@@ -1561,6 +1561,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#docs-site" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docs site
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#studio-user-canvas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1823,6 +1834,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#docs-site" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docs site
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#studio-user-canvas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1979,6 +2001,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>Symptom → cause → action by theme</li>
+<li>Docs copy-paste still showing <code>${SPARK_HOST}</code></li>
 <li>Decision tree for common failures</li>
 <li>Useful log commands and reset paths</li>
 </ul>
@@ -1992,6 +2015,23 @@
 </code></pre></div>
 <p>Many rows below are hard failures <code>doctor</code> already reports. Prefer <code>./scripts/manage.sh setup</code> when Docker or <code>MODELS_DIR</code> is missing.</p>
 </div>
+<h2 id="docs-site">Docs site<a class="headerlink" href="#docs-site" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Copy still shows <code>${SPARK_HOST}</code> / <code>${MODELS_DIR}</code></td>
+<td>Docs JS blocked, or a hard-cached <code>commands.js</code></td>
+<td>Hard-refresh the docs tab. Highlighted chips (dotted underline) are the same session fields as <strong>Your <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span></strong> — click to edit. Not a Spark/<code>doctor</code> failure. Values stay in this browser only</td>
+</tr>
+</tbody>
+</table>
 <h2 id="studio-user-canvas">Studio user (canvas)<a class="headerlink" href="#studio-user-canvas" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2159,7 +2199,7 @@
 </tbody>
 </table>
 <h3 id="docker-missing-on-dgx-spark">Docker missing on DGX Spark<a class="headerlink" href="#docker-missing-on-dgx-spark" title="Permanent link">&para;</a></h3>
-<p>Docker is usually pre-installed on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">DGX Spark</span>, but updates or OS reimages can remove it. Prefer <strong>apt Docker CE</strong> (not snap) so the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nvidia-container-toolkit" data-href="../glossary/#nvidia-container-toolkit" title="Lets Docker see the GPU. Required on the Spark host before start.">NVIDIA Container Toolkit</span> can attach GPUs.</p>
+<p>Docker is usually pre-installed on DGX Spark, but updates or OS reimages can remove it. Prefer <strong>apt Docker CE</strong> (not snap) so the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nvidia-container-toolkit" data-href="../glossary/#nvidia-container-toolkit" title="Lets Docker see the GPU. Required on the Spark host before start.">NVIDIA Container Toolkit</span> can attach GPUs.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># sudo password + type yes if prompted</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>newgrp<span class="w"> </span>docker<span class="w">   </span><span class="c1"># if permission denied in this shell</span>

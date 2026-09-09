@@ -2067,7 +2067,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>What success looks like</li>
-<li>Session variables (Your <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> panel or shell exports)</li>
+<li>Session variables (Your <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> panel, in-place chips, or shell exports)</li>
 <li>Prerequisites checklist</li>
 <li>Setup, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="doctor" data-href="../glossary/#doctor" title="Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.">doctor</span>, download, start, first still, stop</li>
 <li>Optional: build the Docker image locally instead of pulling <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ghcr" data-href="../glossary/#ghcr" title="GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.">GHCR</span></li>
@@ -2115,8 +2115,8 @@
 <h2 id="session-variables">Session variables<a class="headerlink" href="#session-variables" title="Permanent link">&para;</a></h2>
 <p>Two ways to fill Spark IP / paths so copy-paste works:</p>
 <ol>
-<li><strong>Your Spark</strong> panel (top of every docs page) — stored in this browser, applied to copyable commands site-wide.</li>
-<li><strong>Shell exports</strong> on the Spark (below) — <code>manage.sh</code> still loads <code>.env</code>; these exports are for <em>your</em> shell (<code>ls</code>, <code>ssh -L</code>, the browser URL).</li>
+<li><strong>Your Spark</strong> panel (top of every docs page) <strong>or a highlighted chip</strong> in any copyable command — stored in this browser, applied site-wide. Click a dotted token (Spark IP, path, port) to edit in place; the panel and every other chip update together. Copy buttons paste the filled-in values.</li>
+<li><strong>Shell exports</strong> on the Spark (markdown source below) — <code>manage.sh</code> still loads <code>.env</code>; these exports are for <em>your</em> shell (<code>ls</code>, <code>ssh -L</code>, the browser URL) when docs JS is off.</li>
 </ol>
 <p>Defaults match <code>.env.example</code>. Set <code>SPARK_HOST</code> to this machine’s LAN IP or DNS if you will open the UI from another computer.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
@@ -2392,7 +2392,7 @@
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># type: yes</span>
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>./scripts/manage.sh<span class="w"> </span>status
 </code></pre></div>
-<p>Open <strong><code>http://${SPARK_HOST}:${COMFY_PORT}</code></strong> (Your Spark panel fills the IP when you copy).</p>
+<p>Open <strong><code>http://${SPARK_HOST}:${COMFY_PORT}</code></strong> (click the highlighted host/port, or use Your Spark — copy uses those values).</p>
 <p>From a laptop (Spark is remote):</p>
 <div class="ez-cmd-builder" data-ez-cmd="ssh-forward">
 <noscript><pre><code>ssh -L 8188:127.0.0.1:8188 spark@127.0.0.1</code></pre></noscript>
