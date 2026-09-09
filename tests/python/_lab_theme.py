@@ -199,27 +199,33 @@ STORYBOARD = (
 
 GOSEE_IDENTITY = (
     f"A {STYLE_LOCK}, first-person eye-level body-cam already at a dead sprint across a "
-    "golden-hour tropical rooftop terrace. Unmarked sun-washed teal running-coat sleeves "
-    "with faint circuit-thread seams and matching gloves occupy the lower third, left glove "
-    "pumping through the lower-left. Warm gold-cyan holographic glyph motes bloom at the "
-    "wrists. A compact unmarked data-staff is slung across the back. Unmarked palms and "
-    "glass towers rush toward a bright bay; a rooftop gap sits in the center distance. "
-    "Wide 24mm body-cam, slight barrel, framed for YouTube 16:9. Clean unmarked surfaces, "
-    "empty of lettering."
+    "golden-hour tropical rooftop terrace. An original techno wizard kit fills the lower "
+    "third: ink-black fitted running-layer sleeves and matte-black gloves; the left glove "
+    "pumps hip-to-chest as the right knee drives. An open short storm-cloak in matte charcoal "
+    "with a warm-gold inner lining streams at the frame edges. Tiny warm-gold rune sparks "
+    "bloom at the wrists only. A compact unmarked data-staff is slung across the back. "
+    "Unmarked palms and glass towers rush toward a bright bay; a rooftop gap sits in the "
+    "center distance. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in "
+    "YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
 )
 GOSEE_WAN_I2V_01 = (
     "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. "
-    "Teal sleeves and gloves pump at the lower third, horizon bobbing. Head snaps toward "
-    "a rooftop gap until it fills the frame. Continuous tracking, locked identity, no cut."
+    "Contralateral arm pump in the lower third, elbows bent, hands swinging hip to chest, "
+    "horizon bobbing. Open short storm-cloak streams at the edges. Head snaps toward a "
+    "rooftop gap until it fills the frame. Continuous tracking, locked identity, no cut. "
+    "Full-bleed photographic plate, bare frame edges, locked identity."
 )
 GOSEE_LTX_I2V_01 = (
     "The start image holds as the first frame. The eye-level body-cam is already at a dead "
-    "sprint across the sunlit terrace; teal sleeves and gloves pump through the lower third "
-    "while the horizon bobs with each race-pace stride. Glyph motes streak from the wrists. "
-    "Warm wind shoves the coat, grit ticks under the boots, and close-mic breath sits on "
-    "every footfall. The head snaps toward a rooftop gap dead ahead until that gap fills "
-    "the center of the frame, left glove still pumping. Continuous first-person take, no "
-    "cut. No speech. No music and no score."
+    "sprint across the sunlit terrace; ink-black sleeves and matte-black gloves pump through "
+    "the lower third in a contralateral arm swing, elbows bent near ninety degrees, hands "
+    "traveling hip to chest as the horizon bobs with each race-pace stride. The open short "
+    "storm-cloak streams behind and snaps at the edges, warm-gold lining flashing. Warm wind "
+    "shoves the storm-cloak, grit ticks under the boots, and close-mic breath sits on every "
+    "footfall. The head stays level and snaps toward a rooftop gap dead ahead until that gap "
+    "fills the center of the frame, left glove still pumping. Continuous first-person take, "
+    "no cut. The frame stays a full-bleed photographic plate with bare edges and a clean "
+    "unmarked lens. No speech. No music and no score."
 )
 LAZY_FORGE = "A techno wizard on a sunny tropical city rooftop."
 

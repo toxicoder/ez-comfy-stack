@@ -215,7 +215,7 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
 
 === "go-see"
 
-    First-person **parkour** body-cam. Identity lock: sun-washed teal running-coat sleeves + matching gloves + warm gold-cyan holographic glyph motes in frame (data-staff slung on the back). Eye-level, arms always in the lower third; boots/knees on vaults, drops, and wall-runs. Dead sprint from frame 1. One signature stunt per 5 s; each shot lands on a readable plant for the next I2V. Never a standing third-person wizard. **No score, no speech** (breath + world foley).
+    First-person **parkour** body-cam. Identity lock: ink-black fitted running layers + matte-black gloves + open short storm-cloak with warm-gold lining + warm-gold rune sparks at the wrists only (data-staff slung on the back). Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens. Never a teal jumpsuit, never circuit embroidery, never player chrome or a game interface. Eye-level, arms always in the lower third; boots/knees on vaults, drops, and wall-runs. Dead sprint from frame 1. One signature stunt per 5 s; each shot lands on a readable plant for the next I2V. Never a standing third-person wizard. **No score, no speech** (breath + world foley).
 
     | Beat | Place | s1 enter | s2 traverse | s3 exit |
     | --- | --- | --- | --- | --- |
