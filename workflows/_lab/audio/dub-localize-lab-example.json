@@ -13,7 +13,7 @@
       ],
       "size": [
         420,
-        160
+        260
       ],
       "flags": {},
       "order": 0,
@@ -40,9 +40,10 @@
         "Node name for S&R": "EZDubIngest"
       },
       "widgets_values": [
-        "",
+        "(none)",
         false,
-        "episode"
+        "episode",
+        ""
       ],
       "title": "ez_dub_ingest"
     },
@@ -219,7 +220,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. Source: local wav/mp4/mkv path, or an http(s) URL (`yt-dlp` optional). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL`.\n3. Stage **all** runs diarize + ASR + translate + clone. Stage **analyze** writes JSON for you to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) is the default clone. Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`).\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone`. Missing pack is not a doctor failure.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.\n3. Stage **all** runs diarize + ASR + translate + clone. Stage **analyze** writes JSON for you to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) is the default clone. Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`).\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone`. Missing pack is not a doctor failure.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     }
@@ -274,7 +275,7 @@
         20,
         24,
         460,
-        280
+        380
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -310,7 +311,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-dub",
-    "lab_note": "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. Source: local wav/mp4/mkv path, or an http(s) URL (`yt-dlp` optional). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL`.\n3. Stage **all** runs diarize + ASR + translate + clone. Stage **analyze** writes JSON for you to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) is the default clone. Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`).\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone`. Missing pack is not a doctor failure.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_note": "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.\n3. Stage **all** runs diarize + ASR + translate + clone. Stage **analyze** writes JSON for you to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) is the default clone. Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`).\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone`. Missing pack is not a doctor failure.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
     "lab_description": "US-safe multi-speaker dub: rights-gated ingest, diarize, translate, Chatterbox ML V3 clone, duration-locked YouTube track",
     "ds": {
       "scale": 1,
@@ -334,8 +335,24 @@
           1,
           "source",
           {
-            "description": "Local wav/mp4 path or an http(s) URL you have rights to fetch.",
-            "label": "Source"
+            "description": "Audio or video already in COMFY_OUTPUT_DIR/input (container /inputs). Default (none).",
+            "label": "Source file"
+          }
+        ],
+        [
+          1,
+          "upload",
+          {
+            "description": "Upload wav/mp3/mp4/mkv into input/. Requires I have rights on Queue.",
+            "label": "Upload media"
+          }
+        ],
+        [
+          1,
+          "source_url",
+          {
+            "description": "Optional http(s) URL you have rights to fetch. Overrides Source file when set.",
+            "label": "Source URL"
           }
         ],
         [

@@ -39,6 +39,35 @@ def test_pack_imports_without_whisper() -> None:
     assert enhance["default"] is True
     assert enhance["label_on"] == "On"
     assert enhance["label_off"] == "Off"
+    assert ez_dub.WEB_DIRECTORY == "./js"
+    js = CUSTOM / "ez_dub" / "js" / "ez_dub_ingest.js"
+    body = js.read_text(encoding="utf-8")
+    assert "EZDubIngest" in body
+    assert "/upload/image" in body
+    assert "Upload media" in body
+    assert "audio/*" in body
+    assert "video/*" in body
+
+
+def test_ingest_source_is_input_combo(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    spec = EZDubIngest.INPUT_TYPES()["required"]
+    source = spec["source"]
+    assert isinstance(source[0], list)
+    assert source[0][0] == pipeline.SOURCE_NONE
+    assert "source_url" in spec
+    assert spec["source_url"][0] == "STRING"
+    assert spec["source_url"][1]["default"] == ""
+    inp = tmp_path / "input"
+    inp.mkdir()
+    (inp / "keep-me.wav").write_bytes(b"RIFF")
+    (inp / "notes.txt").write_text("skip", encoding="utf-8")
+    (inp / "clip.mp4").write_bytes(b"ftyp")
+    names = pipeline.list_input_media()
+    assert names == ["clip.mp4", "keep-me.wav"]
+    options = pipeline.source_combo_options()
+    assert options[0] == pipeline.SOURCE_NONE
+    assert options[1:] == names
 
 
 def test_disclosure_string_exact() -> None:
@@ -67,6 +96,41 @@ def test_ingest_rights_false_does_not_write(tmp_path: Path, monkeypatch) -> None
     out = EZDubIngest().run(str(wav), False, "episode")
     assert out["result"][0] == ""
     assert out["ui"]["passthrough"][0] == "rights refused"
+    assert not (tmp_path / "dubs" / "episode" / "source.wav").is_file()
+
+
+def test_resolve_media_source_basename_url_and_none(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    inp = tmp_path / "input"
+    inp.mkdir()
+    wav = inp / "show.wav"
+    dub_audio.write_wav(wav, [0.1] * 100, 24000)
+    assert pipeline.resolve_media_source("show.wav") == str(wav)
+    assert pipeline.resolve_media_source("show.wav [input]") == str(wav)
+    abs_wav = tmp_path / "elsewhere.wav"
+    dub_audio.write_wav(abs_wav, [0.2] * 100, 24000)
+    assert pipeline.resolve_media_source(str(abs_wav)) == str(abs_wav)
+    url = "https://example.invalid/owned.wav"
+    assert pipeline.resolve_media_source(pipeline.SOURCE_NONE, url) == url
+    assert pipeline.resolve_media_source("show.wav", url) == url
+    try:
+        pipeline.resolve_media_source(pipeline.SOURCE_NONE)
+        raise AssertionError("expected empty source")
+    except FileNotFoundError as exc:
+        assert "empty source" in str(exc)
+    try:
+        pipeline.resolve_media_source("missing.wav")
+        raise AssertionError("expected missing source")
+    except FileNotFoundError as exc:
+        assert "source missing" in str(exc)
+
+
+def test_ingest_none_source_fail_soft(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    out = EZDubIngest().run(pipeline.SOURCE_NONE, True, "episode")
+    assert "empty source" in out["ui"]["passthrough"][0]
     assert not (tmp_path / "dubs" / "episode" / "source.wav").is_file()
 
 
@@ -251,10 +315,18 @@ def test_fetch_hook_ingest(tmp_path: Path, monkeypatch) -> None:
         dest, status = pipeline.ingest(
             "https://example.invalid/video", True, "url-job", root=tmp_path
         )
+        via_url = EZDubIngest().run(
+            pipeline.SOURCE_NONE,
+            True,
+            "url-job-2",
+            "https://example.invalid/video",
+        )
     finally:
         pipeline.fetch_hook = None
     assert status == "ok"
     assert (dest / "source.wav").is_file()
+    assert via_url["result"][0] == "url-job-2"
+    assert (tmp_path / "dubs" / "url-job-2" / "source.wav").is_file()
 
 
 def test_banned_strings_absent_from_pack() -> None:

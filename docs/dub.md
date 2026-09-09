@@ -9,7 +9,7 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 **What's on this page**
 
 - Rights gate (required) vs the original-character podcast lane
-- App Mode: file or URL, languages, stage, clone engine
+- App Mode: source file dropdown + upload (or URL), languages, stage, clone engine
 - Cascade: ingest → diarize → ASR → translate → clone → duration lock
 - YouTube Studio multi-language audio upload (audio-only file + SRT)
 - `download-dub` usage, sequential Queue, and loudnorm
@@ -100,7 +100,9 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 
 | Widget | Role |
 | --- | --- |
-| **Source** | Local wav/mp4/mkv/mp3 path, or http(s) URL |
+| **Source file** | Dropdown of wav/mp4/mkv/mp3 already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`). Default `(none)` |
+| **Upload media** | Choose a local file; Comfy stores it in `input/` |
+| **Source URL** | Optional http(s) you have rights to fetch. Overrides Source file when set |
 | **I have rights** | Required. Off refuses Queue |
 | **Job slug** | `${COMFY_OUTPUT_DIR}/dubs/<slug>/` |
 | **Target language** | Default Spanish |
@@ -116,7 +118,7 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 1. `download-dub --tier asr` then `--tier clone`
 2. Optional: `faster-whisper` (and Chatterbox) in the Comfy venv
 3. `./scripts/manage.sh start` — type **yes**
-4. Load **dub-localize-lab-example**. Set Source. Turn **I have rights** on. Queue
+4. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. Queue
 5. Files under `${COMFY_OUTPUT_DIR}` as `ez_dub_mix_*.flac` / `ez_dub_yt_*.mp3` plus `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`
 6. Loudness:
 
@@ -130,7 +132,7 @@ URL helper (host, writes `${COMFY_OUTPUT_DIR}/input`, survives `cleanup`):
 ./scripts/utilities/dub-fetch.sh run --url 'https://www.youtube.com/watch?v=YOUR_VIDEO'
 ```
 
-Then set Source to that wav/mp4 path.
+Reload the App if it was already open, then pick that wav/mp4 in **Source file**.
 
 ## YouTube multi-language audio
 

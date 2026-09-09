@@ -64,6 +64,10 @@ LANG_NAMES: dict[str, str] = {
 LANG_CODES = tuple(LANG_NAMES.keys())
 SOURCE_LANG_WIDGET = ("auto",) + LANG_CODES
 TARGET_LANG_WIDGET = LANG_CODES
+SOURCE_NONE = "(none)"
+AUDIO_SUFFIXES = (".wav", ".mp3", ".flac", ".ogg", ".m4a", ".aac")
+VIDEO_SUFFIXES = (".mp4", ".mkv", ".mov", ".webm")
+MEDIA_SUFFIXES = AUDIO_SUFFIXES + VIDEO_SUFFIXES
 
 # Tests inject these. Production stays None (fail-soft).
 fetch_hook: Callable[[str, Path], Path] | None = None
@@ -84,6 +88,115 @@ def is_url(source: object) -> bool:
     text = (source if isinstance(source, str) else str(source or "")).strip()
     lowered = text.lower()
     return lowered.startswith("http://") or lowered.startswith("https://")
+
+
+def input_directory() -> Path:
+    """Comfy input dir, then ``COMFY_OUTPUT_DIR/input``, then ``/inputs``.
+
+    Returns:
+        Directory path (may not exist yet).
+    """
+    try:
+        import folder_paths  # type: ignore[import-not-found]
+
+        path = Path(folder_paths.get_input_directory())
+        if str(path):
+            return path
+    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+        pass
+    env = (os.environ.get("COMFY_OUTPUT_DIR") or os.environ.get("COMFY_OUTPUT") or "").strip()
+    if env:
+        return Path(env) / "input"
+    if Path("/inputs").is_dir():
+        return Path("/inputs")
+    return Path("input")
+
+
+def list_input_media(root: Path | None = None) -> list[str]:
+    """Audio and video filenames in the Comfy input folder (not recursive).
+
+    Arguments:
+        root: Override directory (tests). Default is ``input_directory()``.
+    Returns:
+        Sorted basenames with a media suffix. Missing dirs yield ``[]``.
+    """
+    folder = root if root is not None else input_directory()
+    if not folder.is_dir():
+        return []
+    names: list[str] = []
+    for entry in folder.iterdir():
+        if not entry.is_file():
+            continue
+        if entry.name.startswith("."):
+            continue
+        if entry.suffix.lower() not in MEDIA_SUFFIXES:
+            continue
+        names.append(entry.name)
+    names.sort(key=str.lower)
+    return names
+
+
+def source_combo_options(root: Path | None = None) -> list[str]:
+    """Combo values: ``(none)`` first, then ``list_input_media``.
+
+    Arguments:
+        root: Override directory (tests).
+    Returns:
+        Non-empty list so the node can load with an empty input folder.
+    """
+    return [SOURCE_NONE, *list_input_media(root)]
+
+
+def _strip_annotated_name(name: str) -> str:
+    """Drop a Comfy `` [input]`` annotation from a combo value."""
+    if name.endswith("]") and " [" in name:
+        return name.rsplit(" [", 1)[0]
+    return name
+
+
+def resolve_media_source(
+    source: object,
+    source_url: object = "",
+    *,
+    input_dir: Path | None = None,
+) -> str:
+    """Turn App widgets into a path or URL for ``ingest``.
+
+    Arguments:
+        source: Combo basename, ``(none)``, or an existing path.
+        source_url: Optional http(s) override.
+        input_dir: Override input folder (tests).
+    Returns:
+        URL string or an existing filesystem path as a string.
+    Raises:
+        FileNotFoundError: empty ``(none)`` or missing file.
+    """
+    url = (source_url if isinstance(source_url, str) else str(source_url or "")).strip()
+    if url and is_url(url):
+        return url
+    text = (source if isinstance(source, str) else str(source or "")).strip()
+    if not text or text == SOURCE_NONE:
+        raise FileNotFoundError("empty source")
+    if is_url(text):
+        return text
+    path = Path(text).expanduser()
+    if path.is_file():
+        return str(path)
+    folder = input_dir if input_dir is not None else input_directory()
+    candidate = folder / _strip_annotated_name(text)
+    if candidate.is_file():
+        return str(candidate)
+    try:
+        import folder_paths  # type: ignore[import-not-found]
+
+        annotated = folder_paths.get_annotated_filepath(text)
+        if annotated:
+            found = Path(annotated)
+            if found.is_file():
+                return str(found)
+    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+        pass
+    raise FileNotFoundError(f"source missing: {path}")
 
 
 def language_name(code: object) -> str:

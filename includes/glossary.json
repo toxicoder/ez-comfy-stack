@@ -86,7 +86,7 @@
     "aliases": ["Local dub", "dub-localize"],
     "category": "Audio",
     "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
-    "long": "The **dub-localize-lab-example** App diarizes speakers, translates turns, and clones each voice (Chatterbox Multilingual V3). **I have rights** must be on. Occupancy audio. YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "long": "The **dub-localize-lab-example** App diarizes speakers, translates turns, and clones each voice (Chatterbox Multilingual V3). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
     "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
   },
   {

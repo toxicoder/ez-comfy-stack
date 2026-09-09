@@ -13,6 +13,7 @@ from .pipeline import (
     ENGINES,
     LANG_CODES,
     SOURCE_LANG_WIDGET,
+    SOURCE_NONE,
     STAGE_ALL,
     STAGE_ANALYZE,
     STAGE_RENDER,
@@ -22,6 +23,8 @@ from .pipeline import (
     ingest,
     language_name,
     render_mix,
+    resolve_media_source,
+    source_combo_options,
     synthesize_turn,
 )
 from .rights import RightsError
@@ -82,18 +85,19 @@ class EZDubIngest:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
-                "source": (
+                "source": (source_combo_options(), {"default": SOURCE_NONE}),
+                "have_rights": ("BOOLEAN", {"default": False}),
+                "job_slug": (
+                    "STRING",
+                    {"default": "episode", "dynamicPrompts": False},
+                ),
+                "source_url": (
                     "STRING",
                     {
                         "default": "",
                         "multiline": False,
                         "dynamicPrompts": False,
                     },
-                ),
-                "have_rights": ("BOOLEAN", {"default": False}),
-                "job_slug": (
-                    "STRING",
-                    {"default": "episode", "dynamicPrompts": False},
                 ),
             }
         }
@@ -104,14 +108,16 @@ class EZDubIngest:
     CATEGORY = "ez-comfy/dub"
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "Extracts audio from an operator-owned file path or URL. "
-        "Queue refuses unless I have rights is on. No celebrity refs."
+        "Extracts audio from a file in Comfy input/ (select or upload) "
+        "or an optional http(s) URL. Queue refuses unless I have rights "
+        "is on. No celebrity refs."
     )
 
-    def run(self, source, have_rights=False, job_slug="episode"):
+    def run(self, source, have_rights=False, job_slug="episode", source_url=""):
         slug = sanitize_slug(job_slug)
         try:
-            dest, status = ingest(source, have_rights, slug)
+            resolved = resolve_media_source(source, source_url)
+            dest, status = ingest(resolved, have_rights, slug)
         except RightsError as exc:
             return {
                 "ui": {"text": (str(exc),), "passthrough": ("rights refused",)},
