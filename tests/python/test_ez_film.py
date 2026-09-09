@@ -115,7 +115,8 @@ def test_parse_go_see_yaml() -> None:
     parsed = parse_shots_yaml((SHORTS / "go-see.shots.yaml").read_text(encoding="utf-8"))
     assert parsed["meta"]["film"] == "go-see"
     assert parsed["meta"]["total_shots"] == "18"
-    assert "sun-washed teal" in parsed["identity"]
+    assert "storm-cloak" in parsed["identity"]
+    assert "ink-black" in parsed["identity"]
     assert "olive windbreaker" not in parsed["identity"]
     assert "body-cam" in parsed["identity"]
     assert len(parsed["shots"]) == 18

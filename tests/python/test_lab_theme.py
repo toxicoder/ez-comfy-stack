@@ -166,8 +166,10 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
         assert "alpine" not in blob
         assert "charcoal-glass" not in blob
     film = lab_json("film-go-see-90s-run-lab-example.json").read_text(encoding="utf-8").lower()
-    assert "sun-washed teal" in film
+    assert "storm-cloak" in film
+    assert "ink-black" in film
     assert "parkour" in film
+    assert "teal" not in film
     assert "windbreaker" not in film
     assert "electric-cyan" not in film
     for path in _graphs():

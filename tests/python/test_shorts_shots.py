@@ -214,7 +214,29 @@ def test_shorts_yaml_has_no_banned_models() -> None:
 
 def test_creative_locks() -> None:
     go = _path("go-see").read_text(encoding="utf-8")
-    assert "sun-washed teal" in go
+    assert "storm-cloak" in go
+    assert "ink-black" in go
+    assert "warm-gold" in go
+    assert "techno wizard" in go.lower()
+    assert "teal" not in go.lower()
+    assert "cyan" not in go.lower()
+    assert "jumpsuit" not in go.lower()
+    assert "circuit" not in go.lower()
+    assert "bare frame edges" in go
+    assert "full-bleed" in go
+    assert "clean unmarked lens" in go
+    for needle in (
+        "HUD",
+        "minimap",
+        "crosshair",
+        "health bar",
+        "rec-dot",
+        "timecode",
+        "watermark",
+        "subtitle bar",
+        "playback chrome",
+    ):
+        assert needle.lower() not in go.lower(), needle
     assert "olive windbreaker" not in go
     assert "First-person" in go or "first-person" in go
     assert "body-cam" in go
