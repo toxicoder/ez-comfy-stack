@@ -198,8 +198,23 @@ def resolve_media_source(
     raise FileNotFoundError(f"source missing: {path}")
 
 
-TRANSLATE_MAX_TOKENS = 256
-CLONE_MISSING_STATUS = "clone engine missing — original bed only"
+TRANSLATE_MAX_TOKENS = 512
+CLONE_MISSING_STATUS = (
+    "clone engine missing — pip install chatterbox-tts and "
+    "./scripts/manage.sh download-dub --tier clone"
+)
+NO_TURNS_STATUS = "no turns — ASR/translate did not run"
+ASR_WHEEL_STATUS = "faster-whisper not installed — pip install faster-whisper"
+ASR_PACK_STATUS = (
+    "ASR pack missing — run ./scripts/manage.sh download-dub --tier asr"
+)
+CLONE_REQUIRED_FILES = (
+    "ve.pt",
+    "s3gen.pt",
+    "grapheme_mtl_merged_expanded_v1.json",
+    "t3_mtl23ls_v3.safetensors",
+)
+WHISPER_REQUIRED_FILES = ("model.bin", "config.json")
 
 
 def language_code(code: object) -> str:
@@ -410,11 +425,8 @@ def fetch_url(url: str, dest_dir: Path) -> Path:
 
 
 def extract_audio(src: Path, dest: Path, rate: int = SAMPLE_RATE) -> None:
-    """Copy WAV or ffmpeg-extract mono PCM to dest."""
+    """ffmpeg-extract mono 16-bit PCM to dest (never copy a WAV as-is)."""
     dest.parent.mkdir(parents=True, exist_ok=True)
-    if src.suffix.lower() == ".wav" and src.is_file():
-        shutil.copy(src, dest)
-        return
     code, err = _run(
         [
             "ffmpeg",
@@ -425,6 +437,8 @@ def extract_audio(src: Path, dest: Path, rate: int = SAMPLE_RATE) -> None:
             "1",
             "-ar",
             str(int(rate) or SAMPLE_RATE),
+            "-c:a",
+            "pcm_s16le",
             str(dest),
         ]
     )
@@ -500,107 +514,103 @@ def analyze_pcm(
     max_speakers: int = 0,
     language: str = "auto",
     wav_path: Path | None = None,
-) -> tuple[list[dict[str, Any]], str]:
-    """VAD + cluster + optional ASR hook.
+) -> tuple[list[dict[str, Any]], str, str]:
+    """ASR segments become turns; cluster speakers from those slices.
+
+    Energy VAD is not the turn source. Missing Whisper returns empty turns
+    plus an operator-facing reason (never unlabeled empty-text windows).
 
     Returns:
-        ``(turns, detected_language)``. ``detected_language`` is empty when
-        ASR did not report a code.
+        ``(turns, detected_language, reason)``.
     """
-    spans = energy_vad(samples, rate)
-    if not spans:
-        return [], ""
-    vectors: list[list[float]] = []
-    chunks: list[list[float]] = []
-    embed = embed_hook or _default_embed
-    for t0, t1 in spans:
-        chunk = _slice_pcm(samples, rate, t0, t1)
-        chunks.append(chunk)
-        vectors.append(embed(chunk, rate))
-    speakers = cluster_embeddings(vectors, max_speakers=max_speakers)
-    turns: list[dict[str, Any]] = []
-    for i, ((t0, t1), speaker, chunk) in enumerate(
-        zip(spans, speakers, chunks), start=1
-    ):
-        turns.append(
-            {
-                "id": i,
-                "speaker": speaker,
-                "t0": t0,
-                "t1": t1,
-                "text": "",
-                "text_target": "",
-                "overlap": False,
-                "rms": rms(chunk),
-            }
-        )
-    turns = assign_overlap(turns)
     hook = asr_hook
+    detected = ""
+    raw: list[dict[str, Any]] = []
     if hook is not None and wav_path is not None:
         asr_turns = hook(wav_path, language)
-        if asr_turns:
-            normalized = [
-                normalize_turn(item, i + 1) for i, item in enumerate(asr_turns)
-            ]
-            return normalized, ""
-    detected = ""
-    if hook is None:
-        detected = _try_faster_whisper(turns, wav_path, language)
-    return turns, detected
+        raw = [normalize_turn(item, i + 1) for i, item in enumerate(asr_turns or [])]
+        if not raw:
+            return [], "", "no speech"
+    elif wav_path is not None:
+        raw, detected, reason = _whisper_segments(wav_path, language)
+        if reason:
+            return [], detected, reason
+    else:
+        return [], "", "missing source.wav"
+    embed = embed_hook or _default_embed
+    vectors: list[list[float]] = []
+    for turn in raw:
+        chunk = _slice_pcm(samples, rate, float(turn["t0"]), float(turn["t1"]))
+        turn["rms"] = rms(chunk)
+        vectors.append(embed(chunk, rate))
+    speakers = cluster_embeddings(vectors, max_speakers=max_speakers)
+    for turn, speaker in zip(raw, speakers):
+        turn["speaker"] = speaker
+    return assign_overlap(raw), detected, ""
 
 
-def _try_faster_whisper(
-    turns: list[dict[str, Any]], wav_path: Path | None, language: str
-) -> str:
-    """Fill ``text`` from faster-whisper. Returns the detected ISO code."""
-    if wav_path is None or not wav_path.is_file():
-        return ""
+def _whisper_segments(
+    wav_path: Path, language: str
+) -> tuple[list[dict[str, Any]], str, str]:
+    """Transcribe the whole file. Turns are Whisper segments with text."""
+    if not wav_path.is_file():
+        return [], "", "missing source.wav"
     try:
         from faster_whisper import WhisperModel
     except ImportError:
-        _log(
-            "faster-whisper not installed — optional runtime: pip install "
-            "faster-whisper (invalidates a baked venv layer if you rebuild)"
-        )
-        return ""
+        _log(ASR_WHEEL_STATUS)
+        return [], "", ASR_WHEEL_STATUS
     model_dir = _whisper_dir()
+    if not model_dir:
+        _log(ASR_PACK_STATUS)
+        return [], "", ASR_PACK_STATUS
     try:
-        model = WhisperModel(model_dir or "large-v3", device="cpu")
+        model = WhisperModel(model_dir, device="cpu")
         lang = None if language in {"", "auto"} else language
         segments, info = model.transcribe(
             str(wav_path), language=lang, word_timestamps=False
         )
     except Exception as exc:  # noqa: BLE001 — fail-soft
-        _log(f"faster-whisper failed: {exc}")
-        return ""
-    segs = list(segments)
-    for turn in turns:
-        bits: list[str] = []
-        for seg in segs:
-            start = float(getattr(seg, "start", 0.0) or 0.0)
-            end = float(getattr(seg, "end", start) or start)
-            if end < turn["t0"] or start > turn["t1"]:
-                continue
-            bits.append(str(getattr(seg, "text", "") or "").strip())
-        if bits:
-            turn["text"] = " ".join(bits)
+        reason = f"faster-whisper failed: {exc}"
+        _log(reason)
+        return [], "", reason
+    turns: list[dict[str, Any]] = []
+    for i, seg in enumerate(list(segments), start=1):
+        text = str(getattr(seg, "text", "") or "").strip()
+        start = float(getattr(seg, "start", 0.0) or 0.0)
+        end = float(getattr(seg, "end", start) or start)
+        if not text or end <= start:
+            continue
+        turns.append(
+            {
+                "id": i,
+                "speaker": "spk00",
+                "t0": start,
+                "t1": end,
+                "text": text,
+                "text_target": "",
+                "overlap": False,
+                "rms": 0.0,
+            }
+        )
     detected = str(getattr(info, "language", "") or "").strip().lower()
-    return language_code(detected) if detected else ""
+    code = language_code(detected) if detected else ""
+    if not turns:
+        return [], code, "no speech"
+    return turns, code, ""
 
 
 def _whisper_dir() -> str:
-    for key in ("MODELS_ROOT", "MODELS_DIR"):
-        root = (os.environ.get(key) or "").strip()
-        if not root:
-            continue
-        for rel in (
-            "comfy/whisper",
-            "Systran__faster-whisper-large-v3_whisper",
-            "Systran__faster-whisper-large-v3_asr",
-        ):
-            path = os.path.join(root, rel)
-            if os.path.isdir(path):
-                return path
+    """First directory that has both ``model.bin`` and ``config.json``."""
+    for root in _model_roots():
+        candidates = (
+            Path(root) / "Systran__faster-whisper-large-v3_whisper",
+            Path(root) / "comfy" / "whisper",
+            Path(root) / "Systran__faster-whisper-large-v3_asr",
+        )
+        for folder in candidates:
+            if all((folder / name).is_file() for name in WHISPER_REQUIRED_FILES):
+                return str(folder)
     return ""
 
 
@@ -628,7 +638,7 @@ def _translate_user_message(text: str, source: str, target: str) -> str:
     tgt = language_code(target)
     tgt_name = language_name(tgt)
     return (
-        f"Translate from {src_name} to {tgt_name} ({tgt}). "
+        f"/no_think\nTranslate from {src_name} to {tgt_name} ({tgt}). "
         "Output only the translated sentence.\n\n"
         f"Source: {text}"
     )
@@ -776,22 +786,31 @@ def _model_roots() -> list[str]:
     return roots
 
 
+def clone_dir_is_complete(folder: Path) -> bool:
+    """True when ``from_local`` can load multilingual V3 from this directory."""
+    return all((folder / name).is_file() for name in CLONE_REQUIRED_FILES)
+
+
 def clone_ckpt_dir() -> Path | None:
-    """First directory that looks like a Chatterbox multilingual snapshot."""
-    names = (
-        "t3_mtl23ls_v3.safetensors",
-        "t3_mtl23ls_v2.safetensors",
-    )
+    """First complete Chatterbox multilingual V3 snapshot (not t3-only comfy/tts)."""
     for root in _model_roots():
         candidates = (
-            Path(root) / "comfy" / "tts",
             Path(root) / "ResembleAI__chatterbox_clone",
+            Path(root) / "comfy" / "tts",
             Path(root) / "tts",
         )
         for folder in candidates:
-            if any((folder / name).is_file() for name in names):
+            if clone_dir_is_complete(folder):
                 return folder
     return None
+
+
+def _from_local_multilingual(loader: Callable[..., Any], ckpt: str, device: str) -> Any:
+    """Call ``from_local`` with T3 V3; older wheels omit ``t3_model``."""
+    try:
+        return loader(ckpt, device=device, t3_model="v3")
+    except TypeError:
+        return loader(ckpt, device=device)
 
 
 def _try_chatterbox(
@@ -829,7 +848,7 @@ def _try_chatterbox(
                 SAMPLE_RATE,
                 "chatterbox-tts missing from_local — upgrade chatterbox-tts",
             )
-        model: Any = loader(str(ckpt), device=device)
+        model: Any = _from_local_multilingual(loader, str(ckpt), device)
         generate = getattr(model, "generate", None)
         if not callable(generate):
             return [], SAMPLE_RATE, "chatterbox missing generate"
@@ -887,12 +906,13 @@ def synthesize_turn(
     language: str,
     ref_wav: str,
     engine: str,
-) -> tuple[list[float], int]:
+) -> tuple[list[float], int, str]:
     """Clone one line. Tests inject ``tts_hook``. ``language`` is an ISO code."""
     hook = tts_hook
     lang = language_code(language)
     if hook is not None:
-        return hook(text, lang, ref_wav, engine)
+        pcm, sr = hook(text, lang, ref_wav, engine)
+        return pcm, sr, ""
     name = engine if engine in ENGINES else ENGINE_CHATTERBOX
     if name == ENGINE_QWEN3TTS:
         pcm, sr, err = _try_qwen3tts(text, lang, ref_wav)
@@ -900,7 +920,7 @@ def synthesize_turn(
         pcm, sr, err = _try_chatterbox(text, lang, ref_wav)
     if err:
         _log(err)
-    return pcm, sr
+    return pcm, sr, err
 
 
 def render_mix(
@@ -922,7 +942,7 @@ def render_mix(
     del speed  # reserved for engine-specific TTS speed
     turns = list(payload.get("turns") or [])
     if not turns:
-        return list(samples), rate, "no turns"
+        return [], rate, NO_TURNS_STATUS
     refs = _extract_refs(samples, rate, turns, dest / "speakers")
     lang = language_code(payload.get("target_language") or "es")
     clones: list[dict[str, Any]] = []
@@ -931,30 +951,33 @@ def render_mix(
     flags: list[str] = []
     had_spoken = False
     cloned = False
+    cloned_n = 0
+    last_err = ""
     for i, turn in enumerate(turns):
-        nxt_t0 = turns[i + 1]["t0"] if i + 1 < len(turns) else (len(samples) / rate)
+        nxt_t0 = turns[i + 1]["t0"] if i + 1 < len(turns) else (len(samples) / max(rate, 1))
         spill = max(0.0, float(nxt_t0) - float(turn["t1"]))
         spoken = str(turn.get("text_target") or turn.get("text") or "").strip()
         ref = refs.get(str(turn["speaker"]))
-        pcm: list[float] = []
-        sr = rate
-        if spoken:
-            had_spoken = True
-            pcm, sr = synthesize_turn(
-                spoken,
-                lang,
-                str(ref) if ref else "",
-                engine if engine in ENGINES else ENGINE_CHATTERBOX,
-            )
-            if pcm:
-                cloned = True
-            else:
-                flags.append(f"turn {turn['id']} clone missing")
-            if sr != rate and pcm:
-                from .align import resample_linear
+        if not spoken:
+            continue
+        had_spoken = True
+        pcm, sr, err = synthesize_turn(
+            spoken,
+            lang,
+            str(ref) if ref else "",
+            engine if engine in ENGINES else ENGINE_CHATTERBOX,
+        )
+        if not pcm:
+            flags.append(f"turn {turn['id']} clone missing")
+            if err:
+                last_err = err
+            continue
+        cloned = True
+        cloned_n += 1
+        if sr != rate:
+            from .align import resample_linear
 
-                pcm = resample_linear(pcm, int(round(len(pcm) * rate / sr)))
-                sr = rate
+            pcm = resample_linear(pcm, int(round(len(pcm) * rate / max(sr, 1))))
         fitted, meta = fit_turn(
             pcm,
             rate,
@@ -965,13 +988,6 @@ def render_mix(
             flags.append(f"turn {turn['id']} trimmed")
         write_wav(render_dir / f"turn_{int(turn['id']):04d}.wav", fitted, rate)
         clones.append({"t0": turn["t0"], "pcm": fitted})
-    mix = build_timeline(samples, clones, rate, keep_bed=keep_bed)
-    room = collect_room_tone(samples, turns, rate)
-    mix, lock_flags = lock_duration(mix, len(samples), room=room, rate=rate)
-    if spoken_disclosure:
-        flags.append("disclosure sidecar")
-    write_wav(dest / "ez_dub_mix.wav", mix, rate)
-    write_wav(dest / "ez_dub_yt.wav", mix, rate)
     src_lang = str(payload.get("source_language") or "en")
     tgt_lang = str(payload.get("target_language") or "es")
     (dest / f"ez_dub.{src_lang}.srt").write_text(
@@ -982,13 +998,45 @@ def render_mix(
     )
     (dest / "ez_dub.disclosure.txt").write_text(DISCLOSURE_TEXT + "\n", encoding="utf-8")
     write_json(dest / "translation.json", payload)
-    status = "ok"
+    if not had_spoken:
+        status = "no spoken text — ASR produced empty turns"
+        save_state(
+            dest,
+            {
+                "slug": dest.name,
+                "stage": "export",
+                "status": status,
+                "error": None,
+                "flags": flags,
+            },
+        )
+        return [], rate, status
+    if not cloned:
+        status = last_err or CLONE_MISSING_STATUS
+        flags.append(status)
+        save_state(
+            dest,
+            {
+                "slug": dest.name,
+                "stage": "export",
+                "status": status,
+                "error": None,
+                "flags": flags,
+            },
+        )
+        return [], rate, status
+    mix = build_timeline(samples, clones, rate, keep_bed=keep_bed)
+    room = collect_room_tone(samples, turns, rate)
+    mix, lock_flags = lock_duration(mix, len(samples), room=room, rate=rate)
+    if spoken_disclosure:
+        flags.append("disclosure sidecar")
+    write_wav(dest / "ez_dub_mix.wav", mix, rate)
+    write_wav(dest / "ez_dub_yt.wav", mix, rate)
+    status = f"ok; {len(refs)} speakers, {cloned_n} turns cloned"
     if lock_flags.get("trimmed"):
         flags.append("duration trimmed")
-    if had_spoken and not cloned:
-        status = CLONE_MISSING_STATUS
-    elif flags:
-        status = "; ".join(flags)
+    if flags:
+        status = status + "; " + "; ".join(flags)
     save_state(
         dest,
         {
@@ -1034,7 +1082,7 @@ def analyze_job(
         )
         return payload, "missing source.wav"
     samples, rate = read_wav(wav)
-    turns, detected = analyze_pcm(
+    turns, detected, asr_reason = analyze_pcm(
         samples,
         rate,
         max_speakers=max_speakers,
@@ -1044,14 +1092,38 @@ def analyze_job(
     src = language_code(source_language)
     if src == "auto" and detected:
         src = language_code(detected)
+    if asr_reason and not turns:
+        payload = empty_payload(
+            target_language=target_language,
+            source_language=src,
+            stage=name,
+            status=asr_reason,
+        )
+        write_json(dest / "turns.json", [])
+        write_json(dest / "translation.json", payload)
+        save_state(
+            dest,
+            {
+                "slug": dest.name,
+                "stage": "translate",
+                "status": asr_reason,
+                "source_language": source_language,
+                "target_language": target_language,
+                "error": None,
+                "flags": [],
+            },
+        )
+        return payload, asr_reason
     turns, reason = translate_turns(
         turns, target_language, src, enhance=enhance
     )
+    n_spk = len({str(t.get("speaker") or "") for t in turns})
+    status = reason or f"{n_spk} speakers, {len(turns)} turns"
     payload = {
         "target_language": target_language,
         "source_language": src,
         "stage": name,
-        "status": reason,
+        "status": status,
         "turns": turns,
     }
     write_json(dest / "turns.json", turns)
@@ -1061,11 +1133,11 @@ def analyze_job(
         {
             "slug": dest.name,
             "stage": "translate",
-            "status": reason or "ok",
+            "status": status,
             "source_language": source_language,
             "target_language": target_language,
             "error": None,
             "flags": [],
         },
     )
-    return payload, reason
+    return payload, status

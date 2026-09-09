@@ -29,16 +29,16 @@ US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occu
 
 1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.
 2. **Source file**: pick wav/mp4/mkv already in `${{COMFY_OUTPUT_DIR}}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.
-3. Stage **all** runs diarize + ASR + per-turn GGUF translate + clone. Stage **analyze** writes JSON for you to edit; then Queue with Rewrite translation **off** and Stage **render**. After Queue, `text_target` must be the target language (status lists passthrough counts if the 4B copied a turn).
-4. Chatterbox Multilingual (MIT, PerTh on) is the default clone — pass ISO `language_id` (`es`, not `Spanish`). Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`). Missing clone engine: mix status `clone engine missing — original bed only`.
-5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, and disclosure.txt.
+3. Stage **all**: faster-whisper segments become turns, speakers are clustered, per-speaker clone refs are written under `dubs/<slug>/speakers/`, then per-turn GGUF translate + Chatterbox V3 clone. Stage **analyze** writes JSON for you to edit; then Queue with Rewrite translation **off** and Stage **render**. After Queue, `text_target` must be the target language (status lists passthrough counts if the 4B copied a turn).
+4. Chatterbox Multilingual V3 (MIT, PerTh on) — ISO `language_id` (`es`, not `Spanish`). Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON), not t3-only `comfy/tts`. Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`). Missing ASR/clone: empty mix + status (never the original recording).
+5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, speaker refs, and disclosure.txt.
 6. YouTube Studio: Languages → Add language → upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.
 7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (−14 LUFS).
 8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.
 
 Disclosure sidecar: {DISCLOSURE_TEXT}
 
-Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone`. Missing pack is not a doctor failure.
+Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone`. In the Comfy venv: `pip install faster-whisper chatterbox-tts`. Missing pack is not a doctor failure.
 """
 
 

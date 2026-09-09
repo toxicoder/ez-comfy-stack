@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import shutil
 import sys
 from pathlib import Path
 
@@ -28,6 +29,26 @@ from ez_dub.nodes import (  # noqa: E402
     SEED_SCRIPT,
 )
 from ez_dub.rights import RightsError, as_bool, require_rights  # noqa: E402
+
+
+def _passthrough_ffmpeg(monkeypatch) -> None:
+    """Copy ffmpeg -i SRC to DEST so ingest tests do not need a real ffmpeg."""
+
+    def _run(cmd: list[str]) -> tuple[int, str]:
+        if not cmd or cmd[0] != "ffmpeg":
+            return 127, "missing"
+        src = ""
+        dest = cmd[-1]
+        for i, tok in enumerate(cmd):
+            if tok == "-i" and i + 1 < len(cmd):
+                src = cmd[i + 1]
+        if not src:
+            return 1, "no input"
+        Path(dest).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(src, dest)
+        return 0, ""
+
+    monkeypatch.setattr(pipeline, "_run", _run)
 
 
 def test_pack_imports_without_whisper() -> None:
@@ -136,6 +157,7 @@ def test_ingest_none_source_fail_soft(tmp_path: Path, monkeypatch) -> None:
 
 def test_ingest_wav_and_script_pin(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
     tone = [0.4 * math.sin(2 * math.pi * 220 * i / 24000) for i in range(24000)]
     wav = tmp_path / "in.wav"
     dub_audio.write_wav(wav, [0.0] * 8000 + tone + [0.0] * 8000, 24000)
@@ -311,6 +333,7 @@ def test_render_analyze_stage_skips(tmp_path: Path, monkeypatch) -> None:
 
 def test_fetch_hook_ingest(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
     wav = tmp_path / "remote.wav"
     dub_audio.write_wav(wav, [0.2] * 4800, 24000)
 
@@ -404,8 +427,11 @@ def test_translate_turns_per_turn_fills_spanish(monkeypatch) -> None:
     assert "Spanish" in calls[0][0]
     assert "(es)" in calls[0][0]
     assert "Welcome back to the tape." in calls[0][0]
+    assert "/no_think" in calls[0][0]
+    assert "/no_think" in pipeline.load_translate_prompt()
     assert '"turns"' not in calls[0][0]
     assert calls[0][1] == pipeline.TRANSLATE_MAX_TOKENS
+    assert pipeline.TRANSLATE_MAX_TOKENS == 512
 
 
 def test_translate_turns_empty_model_is_passthrough_not_success(monkeypatch) -> None:
@@ -449,11 +475,14 @@ def test_synthesize_turn_passes_iso_code() -> None:
 
     pipeline.tts_hook = _tts
     try:
-        pcm, rate = pipeline.synthesize_turn("Hola", "Spanish", "", ENGINE_CHATTERBOX)
+        pcm, rate, err = pipeline.synthesize_turn(
+            "Hola", "Spanish", "", ENGINE_CHATTERBOX
+        )
     finally:
         pipeline.tts_hook = None
     assert rate == 24000
     assert pcm
+    assert err == ""
     assert seen == ["es"]
 
 
@@ -475,8 +504,10 @@ def test_render_missing_engine_status(tmp_path: Path, monkeypatch) -> None:
         spoken_disclosure=False,
     )
     assert out_rate == rate
-    assert len(mix) == len(samples)
-    assert status == pipeline.CLONE_MISSING_STATUS
+    assert mix == []
+    assert mix != samples
+    assert "chatterbox" in status.lower() or "clone" in status.lower()
+    assert not (dest / "ez_dub_yt.wav").is_file()
 
 
 def test_wav_roundtrip(tmp_path: Path) -> None:
@@ -487,3 +518,163 @@ def test_wav_roundtrip(tmp_path: Path) -> None:
     assert rate == 16000
     assert len(got) == 4
     assert abs(got[1] - 0.5) < 0.02
+
+
+def test_clone_ckpt_dir_requires_complete_snapshot(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("MODELS_DIR", str(tmp_path))
+    monkeypatch.delenv("MODELS_ROOT", raising=False)
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    tts = tmp_path / "comfy" / "tts"
+    tts.mkdir(parents=True)
+    (tts / "t3_mtl23ls_v3.safetensors").write_bytes(b"x")
+    assert pipeline.clone_ckpt_dir() is None
+    snap = tmp_path / "ResembleAI__chatterbox_clone"
+    snap.mkdir()
+    for name in pipeline.CLONE_REQUIRED_FILES:
+        (snap / name).write_bytes(b"x")
+    assert pipeline.clone_ckpt_dir() == snap
+
+
+def test_whisper_dir_requires_config(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("MODELS_DIR", str(tmp_path))
+    monkeypatch.delenv("MODELS_ROOT", raising=False)
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    partial = tmp_path / "comfy" / "whisper"
+    partial.mkdir(parents=True)
+    (partial / "model.bin").write_bytes(b"x")
+    assert pipeline._whisper_dir() == ""
+    snap = tmp_path / "Systran__faster-whisper-large-v3_whisper"
+    snap.mkdir()
+    (snap / "model.bin").write_bytes(b"x")
+    (snap / "config.json").write_text("{}", encoding="utf-8")
+    assert pipeline._whisper_dir() == str(snap)
+
+
+def test_from_local_passes_t3_v3() -> None:
+    seen: dict[str, str] = {}
+
+    def loader(ckpt: str, device: str = "cpu", t3_model: str = "v2"):
+        seen["ckpt"] = ckpt
+        seen["device"] = device
+        seen["t3_model"] = t3_model
+        return object()
+
+    pipeline._from_local_multilingual(loader, "/ckpt", "cuda")
+    assert seen["t3_model"] == "v3"
+    assert seen["ckpt"] == "/ckpt"
+
+
+def test_from_local_old_wheel_without_t3_model() -> None:
+    seen: dict[str, str] = {}
+
+    def loader(ckpt: str, device: str = "cpu"):
+        del ckpt
+        seen["device"] = device
+        return object()
+
+    pipeline._from_local_multilingual(loader, "/ckpt", "cpu")
+    assert seen["device"] == "cpu"
+
+
+def test_analyze_pcm_uses_asr_segments_as_turns(tmp_path: Path) -> None:
+    rate = 24000
+    samples = [0.2] * rate * 4
+    wav = tmp_path / "s.wav"
+    dub_audio.write_wav(wav, samples, rate)
+
+    def _asr(path: Path, language: str) -> list[dict]:
+        del path, language
+        return [
+            {"t0": 0.0, "t1": 1.0, "text": "Hello there"},
+            {"t0": 1.2, "t1": 2.4, "text": "We stay on the match"},
+        ]
+
+    pipeline.asr_hook = _asr
+    try:
+        turns, _detected, reason = pipeline.analyze_pcm(
+            samples, rate, wav_path=wav
+        )
+    finally:
+        pipeline.asr_hook = None
+    assert reason == ""
+    assert len(turns) == 2
+    assert turns[0]["text"] == "Hello there"
+    assert turns[0]["speaker"].startswith("spk")
+    assert turns[1]["text"] == "We stay on the match"
+
+
+def test_analyze_pcm_without_asr_is_empty_reason(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("MODELS_DIR", str(tmp_path))
+    monkeypatch.delenv("MODELS_ROOT", raising=False)
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    rate = 24000
+    samples = [0.4] * rate
+    wav = tmp_path / "s.wav"
+    dub_audio.write_wav(wav, samples, rate)
+    turns, _detected, reason = pipeline.analyze_pcm(samples, rate, wav_path=wav)
+    assert turns == []
+    assert "faster-whisper" in reason or "ASR pack" in reason
+
+
+def test_analyze_job_missing_asr_status(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    monkeypatch.setenv("MODELS_DIR", str(tmp_path))
+    monkeypatch.delenv("MODELS_ROOT", raising=False)
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    dub_audio.write_wav(dest / "source.wav", [0.2] * 24000, 24000)
+    payload, reason = pipeline.analyze_job(
+        dest,
+        target_language="es",
+        source_language="en",
+        max_speakers=0,
+        enhance=True,
+        stage="all",
+    )
+    assert payload["turns"] == []
+    assert "faster-whisper" in reason or "ASR pack" in reason
+
+
+def test_render_no_turns_does_not_return_source(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.4] * rate
+    mix, out_rate, status = pipeline.render_mix(
+        samples,
+        rate,
+        {"turns": [], "target_language": "es"},
+        dest,
+        spoken_disclosure=False,
+    )
+    assert out_rate == rate
+    assert mix == []
+    assert mix != samples
+    assert status == pipeline.NO_TURNS_STATUS
+    assert not (dest / "ez_dub_yt.wav").is_file()
+
+
+def test_extract_audio_always_ffmpeg(tmp_path: Path, monkeypatch) -> None:
+    src = tmp_path / "in.wav"
+    dest = tmp_path / "out.wav"
+    dub_audio.write_wav(src, [0.1] * 100, 24000)
+    seen: list[list[str]] = []
+
+    def _run(cmd: list[str]) -> tuple[int, str]:
+        seen.append(list(cmd))
+        Path(cmd[-1]).write_bytes(src.read_bytes())
+        return 0, ""
+
+    monkeypatch.setattr(pipeline, "_run", _run)
+    pipeline.extract_audio(src, dest)
+    assert seen
+    assert seen[0][0] == "ffmpeg"
+    assert "-c:a" in seen[0]
+    assert "pcm_s16le" in seen[0]
+    assert dest.is_file()

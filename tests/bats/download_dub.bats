@@ -55,15 +55,23 @@ teardown() {
   [ "${output}" = "" ]
   run dub_tier_min_gb vad
   [ "${output}" = "0" ]
+  run dub_tier_min_gb clone
+  [ "${output}" = "4" ]
   run dub_tier_min_gb x
   [ "${output}" = "0" ]
   run dub_tier_include_patterns vad
   [[ "${output}" == *"silero_vad.onnx"* ]]
   run dub_tier_include_patterns whisper
   [[ "${output}" == *"model.bin"* ]]
+  [[ "${output}" == *"config.json"* ]]
+  [[ "${output}" == *"vocabulary.json"* ]]
   run dub_tier_include_patterns clone
   [[ "${output}" == *"t3_mtl23ls_v3.safetensors"* ]]
-  [[ "${output}" == *"t3_mtl23ls_v2.safetensors"* ]]
+  [[ "${output}" == *"ve.pt"* ]]
+  [[ "${output}" == *"s3gen.pt"* ]]
+  [[ "${output}" == *"grapheme_mtl_merged_expanded_v1.json"* ]]
+  [[ "${output}" != *"t3_mtl23ls_v2.safetensors"* ]]
+  [[ "${output}" != *"s3gen.safetensors"* ]]
   TIER=asr
   run dub_tiers_to_process
   [[ "${output}" == *"vad"* && "${output}" == *"whisper"* ]]
@@ -74,9 +82,17 @@ teardown() {
   [ "${output}" = "onnx" ]
   run dub_comfy_dest_subdir model.bin
   [ "${output}" = "whisper" ]
-  run dub_comfy_dest_subdir t3_mtl23ls_v2.safetensors
+  run dub_comfy_dest_subdir config.json
+  [ "${output}" = "whisper" ]
+  run dub_comfy_dest_subdir tokenizer.json
+  [ "${output}" = "whisper" ]
+  run dub_comfy_dest_subdir ve.pt
+  [ "${output}" = "tts" ]
+  run dub_comfy_dest_subdir s3gen.pt
   [ "${output}" = "tts" ]
   run dub_comfy_dest_subdir t3_mtl23ls_v3.safetensors
+  [ "${output}" = "tts" ]
+  run dub_comfy_dest_subdir grapheme_mtl_merged_expanded_v1.json
   [ "${output}" = "tts" ]
   dub_parse_args status --tier asr --json
   [ "${CMD}" = "status" ]
@@ -106,6 +122,9 @@ teardown() {
   [ "${status}" -eq 0 ]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DP}\" run --tier asr"
   [ "${status}" -eq 0 ]
+  [[ -L "${MODELS_DIR}/comfy/whisper/model.bin" ]]
+  [[ -L "${MODELS_DIR}/comfy/whisper/config.json" ]]
+  [[ -L "${MODELS_DIR}/comfy/onnx/silero_vad.onnx" ]]
   LAB_MOCK_HF_DOWNLOAD=fail
   TIER=asr
   rm -rf "$(dub_tier_dir vad)" "$(dub_tier_dir whisper)"
@@ -116,7 +135,10 @@ teardown() {
 @test "download-dub clone mock links safetensors and cleanup dry-run" {
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DP}\" run --tier clone"
   [ "${status}" -eq 0 ]
-  [[ -L "${MODELS_DIR}/comfy/tts/t3_mtl23ls_v2.safetensors" ]]
+  [[ -L "${MODELS_DIR}/comfy/tts/t3_mtl23ls_v3.safetensors" ]]
+  [[ -L "${MODELS_DIR}/comfy/tts/ve.pt" ]]
+  [[ -L "${MODELS_DIR}/comfy/tts/s3gen.pt" ]]
+  [[ -L "${MODELS_DIR}/comfy/tts/grapheme_mtl_merged_expanded_v1.json" ]]
   tdir="$(dub_tier_dir clone)"
   echo extra >"${tdir}/junk.bin"
   TIER=clone

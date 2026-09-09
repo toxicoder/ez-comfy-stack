@@ -294,7 +294,7 @@ class EZDubRender:
         engine: str,
     ) -> None:
         """Fit a 3 s spoken bumper over the start without changing duration."""
-        bumper, sr = synthesize_turn(
+        bumper, sr, _err = synthesize_turn(
             DISCLOSURE_TEXT,
             "en",
             "",

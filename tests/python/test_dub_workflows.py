@@ -97,3 +97,7 @@ def test_dub_localize_graph() -> None:
     note = graph["extra"]["lab_note"]
     assert "Source file" in note
     assert "Upload media" in note
+    assert "ve.pt" in note
+    assert "faster-whisper" in note
+    assert "original bed only" not in note
+    assert "Prompt enhance is on by default" not in note
