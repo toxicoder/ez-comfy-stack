@@ -91,23 +91,27 @@ CLAY_LOCK = (
 
 HOUSE_CLAY_NOTE = """## klein-dream-house-clay-lab-example
 
-Ten Instagram 4:5 Klein **edits** of a Blender greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
+Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
 
-Stop Comfy, dump clay, then Queue:
+`manage.sh start` seeds ez_house_clay_01.png … 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 … 10.
+
+Workbench dump (optional, higher quality) — stop Comfy first:
 
   ./scripts/manage.sh stop
   ./scripts/manage.sh house-views --slug lab-penthouse
   ./scripts/manage.sh start
 
-LoadImage names are ez_house_clay_01.png … ez_house_clay_10.png (copied next to the dump and into COMFY_OUTPUT_DIR/input — container /inputs). Prefix ez_dream_house_clay_01 … 10.
-
-Already dumped but Clay 01–10 say no file selected? Copy without Blender (compose may stay up):
+Copy an existing dump without Blender (compose may stay up):
 
   ./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
 
+Reseed LoadImage plates without Blender (compose may stay up):
+
+  ./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs
+
 HOUSE IDENTITY is the same camera-free world bible as klein-dream-house-lab-example. Shot cards are the place_10 walkthrough. Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 
-No host Blender → skip this graph; use klein-dream-house-lab-example (language tour). Do not fake clay. Occupancy XOR: do not dump while compose is up.
+Language-only tour (no geometry) → klein-dream-house-lab-example. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
 Optional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).
 """
 

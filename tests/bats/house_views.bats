@@ -24,6 +24,7 @@ teardown() {
   [[ "${output}" == *"Dockerfile"* ]]
   [[ "${output}" == *"/inputs"* ]]
   [[ "${output}" == *"--install-inputs"* ]]
+  [[ "${output}" == *"--seed-inputs"* ]]
   run cmd_help
   [ "${status}" -eq 0 ]
   touch "${TEST_TMP_DIR}/compose_running"
@@ -65,6 +66,7 @@ teardown() {
   [ "${SLUG}" = "lab-penthouse" ]
   [ "${ENGINE}" = "blender" ]
   [ "${INSTALL_INPUTS}" -eq 0 ]
+  [ "${SEED_INPUTS}" -eq 0 ]
   run default_out_dir
   [[ "${output}" == *"/assets/sets/lab-penthouse" ]]
   run default_input_dir
@@ -74,6 +76,8 @@ teardown() {
   [[ "${output}" == *"house_layout.yaml" ]]
   parse_args --slug lab-penthouse --install-inputs
   [ "${INSTALL_INPUTS}" -eq 1 ]
+  parse_args --slug lab-penthouse --seed-inputs
+  [ "${SEED_INPUTS}" -eq 1 ]
   run parse_args --nope
   [ "${status}" -ne 0 ]
 }
@@ -126,6 +130,24 @@ teardown() {
   [ -f "${input}/ez_house_clay_01.png" ]
   [ -f "${input}/ez_house_clay_10.png" ]
   run copy_clay_inputs "${dest}" "${input}"
+  [ "${status}" -eq 0 ]
+}
+
+@test "house-views --seed-inputs renders without blender while compose is up" {
+  touch "${TEST_TMP_DIR}/compose_running"
+  local input
+  input="${COMFY_OUTPUT_DIR}/input"
+  SLUG=lab-penthouse
+  INPUT_DIR="${input}"
+  LAYOUT="${REPO_ROOT}/schemas/house_layout.yaml"
+  SEED_INPUTS=1
+  INSTALL_INPUTS=0
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"seeded clay"* ]]
+  [ -f "${input}/ez_house_clay_01.png" ]
+  [ -f "${input}/ez_house_clay_10.png" ]
+  run cmd_seed_inputs
   [ "${status}" -eq 0 ]
 }
 

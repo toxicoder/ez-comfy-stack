@@ -905,7 +905,7 @@
     "aliases": ["house-views", "dream-house clay", "clay tour"],
     "category": "Studio",
     "short": "Blender greybox + ten 1024×1280 Instagram clay stills. Occupancy XOR.",
-    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024×1280**), not the LTX guide pack. Stop Comfy first. Queue **klein-dream-house-clay-lab-example** to restyle. No Blender → **klein-dream-house-lab-example**. See [Dream-house tours](learn/dream-house.md).",
+    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024×1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **klein-dream-house-clay-lab-example** can Queue without Blender. Language-only tour → **klein-dream-house-lab-example**. See [Dream-house tours](learn/dream-house.md).",
     "see_also": ["guide-pack", "occupancy", "sidecar", "klein"]
   }
 ]

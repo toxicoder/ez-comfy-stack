@@ -22,6 +22,7 @@ from asset_bible import (  # noqa: E402
     refuse_models_dir,
 )
 from guide_pack import png_size, write_solid_png  # noqa: E402
+from house_clay_render import render_clay_plate  # noqa: E402
 
 SCHEMA_LAYOUT = "ez.house.layout.v1"
 SCHEMA_VIEWS = "ez.house.views.v1"
@@ -106,6 +107,84 @@ def copy_clay_to_input_dir(
         out = target / name
         shutil.copy2(src, out)
         written.append(out)
+    return written
+
+
+def default_layout_path() -> Path:
+    """Shipped lab-penthouse layout YAML.
+
+    Returns:
+        Absolute path to schemas/house_layout.yaml.
+    """
+    return Path(__file__).resolve().parents[2] / "schemas" / "house_layout.yaml"
+
+
+def clay_plate_valid(path: str | Path) -> bool:
+    """True when path is a 1024x1280 PNG.
+
+    Args:
+        path: Candidate LoadImage plate.
+
+    Returns:
+        Whether Comfy LoadImage can use this file at lab size.
+    """
+    dest = Path(path)
+    return dest.is_file() and png_size(dest) == (PACK_WIDTH, PACK_HEIGHT)
+
+
+def seed_clay_to_input_dir(
+    input_dir: str | Path,
+    *,
+    pack_dir: str | Path | None = None,
+    layout_path: str | Path | None = None,
+    slug: str = "lab-penthouse",
+) -> list[Path]:
+    """Ensure ez_house_clay_NN.png exist in Comfy LoadImage input/.
+
+    Never overwrites a valid existing plate. Copies from a views pack when
+    that file is present; otherwise renders the layout cameras.
+
+    Args:
+        input_dir: Host COMFY_OUTPUT_DIR/input (container /inputs).
+        pack_dir: Optional assets/sets/<slug> with clay copies. When omitted,
+            uses input_dir.parent/assets/sets/<slug> if that directory exists.
+        layout_path: Layout YAML. Default: shipped schemas/house_layout.yaml.
+        slug: Set id for pack discovery.
+
+    Returns:
+        Paths under input_dir, in place_10 order.
+
+    Raises:
+        HouseLayoutError: MODELS_DIR target, missing layout, or render failure.
+    """
+    target = refuse_output_dir(input_dir)
+    target.mkdir(parents=True, exist_ok=True)
+    pack: Path | None = Path(pack_dir) if pack_dir else None
+    if pack is None:
+        candidate = target.parent / "assets" / "sets" / slug
+        if candidate.is_dir():
+            pack = candidate
+    layout_file = Path(layout_path) if layout_path else default_layout_path()
+    layout: dict[str, Any] | None = None
+    written: list[Path] = []
+    for index in range(len(PLACE_10_IDS)):
+        name = clay_copy_name(index)
+        dest = target / name
+        if clay_plate_valid(dest):
+            written.append(dest)
+            continue
+        src = pack / name if pack is not None else None
+        if src is not None and clay_plate_valid(src):
+            shutil.copy2(src, dest)
+            written.append(dest)
+            continue
+        if layout is None:
+            layout = load_layout(layout_file)
+        try:
+            render_clay_plate(layout, index, dest)
+        except (ValueError, OSError) as exc:
+            raise HouseLayoutError(str(exc)) from exc
+        written.append(dest)
     return written
 
 
@@ -625,6 +704,14 @@ def _cli(argv: list[str] | None = None) -> int:
     )
     p_copy.add_argument("pack")
     p_copy.add_argument("input_dir")
+    p_seed = sub.add_parser(
+        "seed-inputs",
+        help="ensure ez_house_clay_NN.png in LoadImage input/ (copy or render)",
+    )
+    p_seed.add_argument("input_dir")
+    p_seed.add_argument("--pack", default="")
+    p_seed.add_argument("--layout", default="")
+    p_seed.add_argument("--slug", default="lab-penthouse")
     ns = parser.parse_args(argv)
     try:
         if ns.cmd == "validate":
@@ -640,6 +727,15 @@ def _cli(argv: list[str] | None = None) -> int:
         if ns.cmd == "copy-inputs":
             written = copy_clay_to_input_dir(ns.pack, ns.input_dir)
             print(f"ok {len(written)} clay plates → {ns.input_dir}")
+            return 0
+        if ns.cmd == "seed-inputs":
+            written = seed_clay_to_input_dir(
+                ns.input_dir,
+                pack_dir=ns.pack or None,
+                layout_path=ns.layout or None,
+                slug=ns.slug,
+            )
+            print(f"ok {len(written)} clay plates seeded → {ns.input_dir}")
             return 0
         write_fixture_pack(ns.path, slug=ns.slug)
         print(f"wrote fixture {ns.path}")

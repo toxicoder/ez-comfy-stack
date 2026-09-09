@@ -105,7 +105,7 @@ flowchart TB
     | **klein-identity-sheet-lab-example** | 3-angle sheet of the identity you type, seed **42**, **1280×704** |
     | **klein-storyboard-6up-lab-example** | Six new cameras of one scene (`ez_board_01`…`06`) |
     | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills: virtual tour of one place (tower, foyer, rooms, terrace, drone, study) |
-    | **klein-dream-house-clay-lab-example** | Same tour as Klein **edit** of Blender clay (`ez_house_clay_01`…`10`). Dump with `house-views` first. Prefix `ez_dream_house_clay_*` |
+    | **klein-dream-house-clay-lab-example** | Same tour as Klein **edit** of clay (`ez_house_clay_01`…`10`). `start` seeds plates; optional `house-views` dump. Prefix `ez_dream_house_clay_*` |
     | **klein-character-draft-lab-example** | Character still, 1024×1280, style dropdown, prefix `ez_character` |
     | **klein-character-tweak-lab-example** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |
     | **klein-hook-still-lab-example** | Vertical 9:16 hook still |

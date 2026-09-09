@@ -148,6 +148,8 @@ Commands:
   house-views       Dump 1024x1280 Instagram 4:5 clay stills + GLB (dies if compose is up)
                     --install-inputs copies an existing dump into COMFY_OUTPUT_DIR/input
                     (no Blender; compose may stay up)
+                    --seed-inputs copies a pack or renders layout into input/ (no Blender;
+                    compose may stay up). start also seeds missing plates.
   asset-ls [--json] [--output-dir DIR]
                     Read-only Asset Bible catalog (COMFY_OUTPUT_DIR/assets)
                     Coming later: asset-new / asset-iterate / asset-promote

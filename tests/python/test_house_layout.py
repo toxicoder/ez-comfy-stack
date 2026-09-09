@@ -172,3 +172,77 @@ def test_house_layout_cli_validate_and_export_helpers_named(
         encoding="utf-8"
     )
     assert "def copy_clay_to_input_dir(" in lib_text
+    assert "def seed_clay_to_input_dir(" in lib_text
+    assert "def clay_plate_valid(" in lib_text
+    assert "def default_layout_path(" in lib_text
+    render_text = (ROOT / "scripts" / "lib" / "house_clay_render.py").read_text(
+        encoding="utf-8"
+    )
+    assert "def render_clay_plate(" in render_text
+    assert "def layout_boxes(" in render_text
+    ast.parse(render_text)
+
+
+def test_seed_clay_renders_distinct_plates(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    written = hl.seed_clay_to_input_dir(dest, layout_path=SCHEMA_YAML)
+    names = [path.name for path in written]
+    assert names == [f"ez_house_clay_{i:02d}.png" for i in range(1, 11)]
+    first = dest / "ez_house_clay_01.png"
+    second = dest / "ez_house_clay_02.png"
+    tenth = dest / "ez_house_clay_10.png"
+    assert hl.png_size(first) == (1024, 1280)
+    assert hl.png_size(second) == (1024, 1280)
+    assert hl.png_size(tenth) == (1024, 1280)
+    assert first.read_bytes() != second.read_bytes()
+    assert first.stat().st_size > 2000
+    assert hl.clay_plate_valid(first)
+
+
+def test_seed_clay_skips_existing_and_copies_pack(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    from guide_pack import write_solid_png
+
+    dest = tmp_path / "input"
+    dest.mkdir()
+    keep = dest / "ez_house_clay_01.png"
+    write_solid_png(keep, 1024, 1280, (10, 20, 30))
+    before = keep.read_bytes()
+    pack = tmp_path / "pack"
+    hl.write_fixture_pack(pack, slug="lab-penthouse")
+    written = hl.seed_clay_to_input_dir(
+        dest, pack_dir=pack, layout_path=SCHEMA_YAML
+    )
+    assert len(written) == 10
+    assert keep.read_bytes() == before
+    copied = dest / "ez_house_clay_02.png"
+    assert copied.read_bytes() == (pack / "ez_house_clay_02.png").read_bytes()
+    assert (
+        hl._cli(["seed-inputs", str(tmp_path / "cli-in"), "--layout", str(SCHEMA_YAML)])
+        == 0
+    )
+    out = capsys.readouterr().out
+    assert "seeded" in out
+    assert (tmp_path / "cli-in" / "ez_house_clay_10.png").is_file()
+
+
+def test_seed_clay_discovers_pack_and_refuses_models_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    out_root = tmp_path / "comfy-output"
+    pack = out_root / "assets" / "sets" / "lab-penthouse"
+    inp = out_root / "input"
+    hl.write_fixture_pack(pack, slug="lab-penthouse")
+    written = hl.seed_clay_to_input_dir(inp, slug="lab-penthouse")
+    assert (inp / "ez_house_clay_01.png").read_bytes() == (
+        pack / "ez_house_clay_01.png"
+    ).read_bytes()
+    assert len(written) == 10
+    models = tmp_path / "models"
+    models.mkdir()
+    monkeypatch.setenv("MODELS_DIR", str(models))
+    with pytest.raises(hl.HouseLayoutError, match="MODELS_DIR"):
+        hl.seed_clay_to_input_dir(models / "input")
+    assert hl.default_layout_path() == SCHEMA_YAML
+    assert hl._cli(["seed-inputs", str(models / "blocked")]) == 1

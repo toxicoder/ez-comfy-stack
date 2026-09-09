@@ -824,6 +824,10 @@ exit 0
   [ "${status}" -ne 0 ]
   run stack_start
   [ "${status}" -eq 0 ]
+  [ -f "${COMFY_OUTPUT_DIR}/input/ez_house_clay_01.png" ]
+  [ -f "${COMFY_OUTPUT_DIR}/input/ez_house_clay_10.png" ]
+  run seed_house_clay_inputs
+  [ "${status}" -eq 0 ]
   run stack_follow_until_ready
   [ "${status}" -eq 0 ]
   run stack_port_open 9

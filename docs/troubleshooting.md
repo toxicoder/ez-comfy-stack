@@ -48,8 +48,8 @@ tags: [troubleshooting, comfyui, docker]
 | VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
 | `export-guides` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [DCC guide pack](dcc-workflows.md) |
 | `house-views` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [Dream-house tours](learn/dream-house.md) |
-| `house-views` blender not on PATH | Host DCC missing | Install Blender on the host, or skip clay and Queue **klein-dream-house-lab-example**. Never add Blender to the Dockerfile |
-| House clay **Missing Inputs** / “no file selected” on Clay 01–10 | Plates not in `${COMFY_OUTPUT_DIR}/input` (LoadImage does not see `/outputs`) | If the pack exists: `./scripts/manage.sh house-views --slug lab-penthouse --install-inputs` (compose may stay up), then reload. Otherwise stop, `house-views`, start. Names are `ez_house_clay_01.png` … `10.png` |
+| `house-views` blender not on PATH | Host DCC missing | Workbench dump needs host Blender. The clay App still Queues on `start` / `--seed-inputs` layout plates. Language-only tour: **klein-dream-house-lab-example**. Never add Blender to the Dockerfile |
+| House clay **Missing Inputs** / “no file selected” on Clay 01–10 | Plates not in `${COMFY_OUTPUT_DIR}/input` (LoadImage does not see `/outputs`) | `./scripts/manage.sh start` seeds them. While compose is up: `./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs` (or `--install-inputs` if the pack exists), then reload the App. Names are `ez_house_clay_01.png` … `10.png` |
 | Guide pack QC refuses 1280×720 | LTX VAE grid is **1280×704** | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |
 | `overlay-qc` size mismatch | Look plate not 1280×704 | Re-Queue **klein-from-clay** at 1280×704. Do not stretch. [Clay to finish](learn/clay-to-finish.md) |
 | `film-animatic` missing sources | No clay.mp4 and no first.png | Dump a guide pack or hold Klein stills under `stills/NN.png` |
