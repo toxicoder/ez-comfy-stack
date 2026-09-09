@@ -9,7 +9,7 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 **What's on this page**
 
 - Queue the rap **draft** first, then the **full** track
-- Fifteen **180 s** Nill Bye vs Rake diss examples under `_lab/audio/nill-bye/` (Queue on their own)
+- Forty-five **180 s** Nill Bye vs Rake diss examples under `_lab/audio/nill-bye/` (Queue on their own; lab catalog, style pack, trap/EDM pack)
 - App Mode: tags, lyrics, rewrite, vocal/instrumental, duration
 - Tags vs lyrics; `[verse]` / `[chorus]` / `[spoken word]` as vocal hints
 - Original lyrics only — no “in the style of \<living artist\>”
@@ -22,7 +22,7 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 **What this enables**
 
 - A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs
-- Fifteen 180 s original diss takes (Nill Bye vs Rake) without cloud music APIs
+- Forty-five 180 s original diss takes (Nill Bye vs Rake) without cloud music APIs
 - Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - Keeping the visual studio bootable when the music pack is missing
 - Muxing a cover still + FLAC into a YouTube MP4 without changing the rap graphs
@@ -82,9 +82,13 @@ Graph: **music-rap-full-lab-example**. App **Duration (seconds)** defaults to **
 
 ### 180s Nill Bye diss examples
 
-Fifteen extra full-track graphs under **`_lab/audio/nill-bye/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic lane, not a prerequisite. A longer Queue is expected (this is still an ACE-Step audio latent, not a video 90 s denoise).
+Forty-five extra full-track graphs under **`_lab/audio/nill-bye/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic lane, not a prerequisite. A longer Queue is expected (this is still an ACE-Step audio latent, not a video 90 s denoise).
 
 Fictional MCs only: **Nill Bye** (science guy, mad) roasting **Rake** (in his feels; club-talk and fake-cool as a brand). Original lyrics. No living-MC names. No famous-hook paraphrases. Shipped bars stay short and SFW (roast the pose, not graphic content). ACE-Step vocal is an invented timbre. Human rewrite required before any release.
+
+Style and trap/EDM packs keep the same dry-booth voice (`male rap vocals, dry booth, no autotune`). Trap/EDM graphs are rap **over** club beds — not autotune EDM vocals.
+
+#### Lab catalog
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
@@ -103,6 +107,50 @@ Fictional MCs only: **Nill Bye** (science guy, mad) roasting **Rake** (in his fe
 | **music-rap-nill-bye-contamination-lab-example** | trap **140**, seed **31** | `ez_rap_nill_contam` | Club talk leaked into the sample |
 | **music-rap-nill-bye-double-blind-lab-example** | boom-bap **92**, seed **37** | `ez_rap_nill_doubleblind` | Even the booth knows you are faking |
 | **music-rap-nill-bye-replicate-lab-example** | boom-bap **88**, seed **7** | `ez_rap_nill_replicate` | Cannot reproduce the night |
+
+#### Style pack
+
+Same invented vocal. Wider beds (jazz hop through folk) and diss angles. Not trap/EDM.
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-rap-nill-bye-citation-needed-lab-example** | jazz hop **90**, seed **41** | `ez_rap_nill_cite` | Claims with no source |
+| **music-rap-nill-bye-p-hacking-lab-example** | g-funk **98**, seed **43** | `ez_rap_nill_phack` | Cherry-picked night |
+| **music-rap-nill-bye-null-result-lab-example** | reggae **92**, seed **47** | `ez_rap_nill_null` | Flex found nothing |
+| **music-rap-nill-bye-expired-reagent-lab-example** | neo-soul **84**, seed **53** | `ez_rap_nill_expired` | Cool past the date |
+| **music-rap-nill-bye-lab-safety-lab-example** | rap rock **168**, seed **59** | `ez_rap_nill_safety` | Skipped the goggles |
+| **music-rap-nill-bye-rumor-mill-lab-example** | industrial **108**, seed **61** | `ez_rap_nill_rumor` | Gossip vs measurement |
+| **music-rap-nill-bye-gym-selfie-lab-example** | afrobeat **110**, seed **67** | `ez_rap_nill_gym` | Pose vs work |
+| **music-rap-nill-bye-rented-drip-lab-example** | synthwave **104**, seed **71** | `ez_rap_nill_drip` | Costume cool |
+| **music-rap-nill-bye-clout-diet-lab-example** | trip-hop **86**, seed **73** | `ez_rap_nill_clout` | Likes as calories |
+| **music-rap-nill-bye-mood-forecast-lab-example** | cinematic **76**, seed **79** | `ez_rap_nill_forecast` | Weather of feelings |
+| **music-rap-nill-bye-algorithm-lab-example** | funk **114**, seed **83** | `ez_rap_nill_algo` | Chasing the feed |
+| **music-rap-nill-bye-story-time-lab-example** | blues **74**, `[spoken word]` intro, seed **89** | `ez_rap_nill_story` | Bedtime rumor |
+| **music-rap-nill-bye-caption-lab-example** | chiptune **100**, seed **97** | `ez_rap_nill_caption` | Caption vs data |
+| **music-rap-nill-bye-energy-drink-lab-example** | brass band **120**, seed **101** | `ez_rap_nill_fuel` | Fake fuel |
+| **music-rap-nill-bye-campfire-lab-example** | folk **82**, seed **103** | `ez_rap_nill_camp` | Campfire rumor |
+
+#### Trap / EDM pack
+
+Same dry booth. Rap over club beds (no autotune).
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-rap-nill-bye-false-drop-lab-example** | dark trap **140**, seed **107** | `ez_rap_nill_drop` | Fake drop, no method |
+| **music-rap-nill-bye-velvet-rope-lab-example** | festival trap **150**, seed **109** | `ez_rap_nill_rope` | VIP pose, empty list |
+| **music-rap-nill-bye-fog-machine-lab-example** | rage **148**, seed **113** | `ez_rap_nill_fog` | Fog for a missing show |
+| **music-rap-nill-bye-guest-list-lab-example** | phonk **132**, seed **127** | `ez_rap_nill_guest` | Name not on the list |
+| **music-rap-nill-bye-sparkler-lab-example** | trap **145**, seed **131** | `ez_rap_nill_spark` | Sparkler science |
+| **music-rap-nill-bye-bottle-service-lab-example** | house **126**, seed **137** | `ez_rap_nill_bottle` | Rented bottles |
+| **music-rap-nill-bye-strobe-claim-lab-example** | techno **132**, seed **139** | `ez_rap_nill_strobe` | Strobe, no substance |
+| **music-rap-nill-bye-amen-rumor-lab-example** | drum and bass **174**, seed **149** | `ez_rap_nill_amen` | Fast rumor, empty bar |
+| **music-rap-nill-bye-wobble-alibi-lab-example** | dubstep **140**, seed **151** | `ez_rap_nill_wobble` | Alibi in the wobble |
+| **music-rap-nill-bye-supersaw-flex-lab-example** | future bass **148**, seed **157** | `ez_rap_nill_saw` | Flex is a saw patch |
+| **music-rap-nill-bye-laser-show-lab-example** | electro house **128**, seed **163** | `ez_rap_nill_laser` | Lights, no paper |
+| **music-rap-nill-bye-two-step-lab-example** | UK garage **130**, seed **167** | `ez_rap_nill_twostep` | Two-step alibi |
+| **music-rap-nill-bye-jersey-bounce-lab-example** | jersey club **140**, seed **173** | `ez_rap_nill_jersey` | Bounce with no proof |
+| **music-rap-nill-bye-kick-split-lab-example** | hardstyle **150**, seed **179** | `ez_rap_nill_kick` | Kick-split myth |
+| **music-rap-nill-bye-uplift-rumor-lab-example** | trance **138**, seed **181** | `ez_rap_nill_uplift` | Uplifting rumor |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 

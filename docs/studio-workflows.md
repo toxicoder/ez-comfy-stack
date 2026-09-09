@@ -33,7 +33,7 @@ user/default/workflows/
     dcc/       clay → print, iclora envelope
     optional/  a14b, longcat stub
     audio/     podcast-*, dub-*, music-rap-draft/full
-      nill-bye/  fifteen 180 s music-rap-nill-bye-* diss takes
+      nill-bye/  forty-five 180 s music-rap-nill-bye-* diss takes
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -208,6 +208,46 @@ flowchart TB
     | **music-rap-nill-bye-contamination-lab-example** | **180 s** diss, trap 140, seed 31 (`ez_rap_nill_contam`) |
     | **music-rap-nill-bye-double-blind-lab-example** | **180 s** diss, boom-bap 92, seed 37 (`ez_rap_nill_doubleblind`) |
     | **music-rap-nill-bye-replicate-lab-example** | **180 s** diss, boom-bap 88, seed 7 (`ez_rap_nill_replicate`) |
+
+    Style pack (same dry booth; not trap/EDM). Queue on its own. Full table: [Local music](music.md).
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-rap-nill-bye-citation-needed-lab-example** | **180 s** jazz hop 90 (`ez_rap_nill_cite`). Citation needed |
+    | **music-rap-nill-bye-p-hacking-lab-example** | **180 s** g-funk 98 (`ez_rap_nill_phack`) |
+    | **music-rap-nill-bye-null-result-lab-example** | **180 s** reggae 92 (`ez_rap_nill_null`) |
+    | **music-rap-nill-bye-expired-reagent-lab-example** | **180 s** neo-soul 84 (`ez_rap_nill_expired`) |
+    | **music-rap-nill-bye-lab-safety-lab-example** | **180 s** rap rock 168 (`ez_rap_nill_safety`) |
+    | **music-rap-nill-bye-rumor-mill-lab-example** | **180 s** industrial 108 (`ez_rap_nill_rumor`) |
+    | **music-rap-nill-bye-gym-selfie-lab-example** | **180 s** afrobeat 110 (`ez_rap_nill_gym`) |
+    | **music-rap-nill-bye-rented-drip-lab-example** | **180 s** synthwave 104 (`ez_rap_nill_drip`) |
+    | **music-rap-nill-bye-clout-diet-lab-example** | **180 s** trip-hop 86 (`ez_rap_nill_clout`) |
+    | **music-rap-nill-bye-mood-forecast-lab-example** | **180 s** cinematic 76 (`ez_rap_nill_forecast`) |
+    | **music-rap-nill-bye-algorithm-lab-example** | **180 s** funk 114 (`ez_rap_nill_algo`) |
+    | **music-rap-nill-bye-story-time-lab-example** | **180 s** blues 74, `[spoken word]` intro (`ez_rap_nill_story`) |
+    | **music-rap-nill-bye-caption-lab-example** | **180 s** chiptune 100 (`ez_rap_nill_caption`) |
+    | **music-rap-nill-bye-energy-drink-lab-example** | **180 s** brass band 120 (`ez_rap_nill_fuel`) |
+    | **music-rap-nill-bye-campfire-lab-example** | **180 s** folk 82 (`ez_rap_nill_camp`) |
+
+    Trap / EDM pack (rap **over** club beds, no autotune). Queue on its own.
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-rap-nill-bye-false-drop-lab-example** | **180 s** dark trap 140 (`ez_rap_nill_drop`) |
+    | **music-rap-nill-bye-velvet-rope-lab-example** | **180 s** festival trap 150 (`ez_rap_nill_rope`) |
+    | **music-rap-nill-bye-fog-machine-lab-example** | **180 s** rage 148 (`ez_rap_nill_fog`) |
+    | **music-rap-nill-bye-guest-list-lab-example** | **180 s** phonk 132 (`ez_rap_nill_guest`) |
+    | **music-rap-nill-bye-sparkler-lab-example** | **180 s** trap 145 (`ez_rap_nill_spark`) |
+    | **music-rap-nill-bye-bottle-service-lab-example** | **180 s** house 126 (`ez_rap_nill_bottle`) |
+    | **music-rap-nill-bye-strobe-claim-lab-example** | **180 s** techno 132 (`ez_rap_nill_strobe`) |
+    | **music-rap-nill-bye-amen-rumor-lab-example** | **180 s** drum and bass 174 (`ez_rap_nill_amen`) |
+    | **music-rap-nill-bye-wobble-alibi-lab-example** | **180 s** dubstep 140 (`ez_rap_nill_wobble`) |
+    | **music-rap-nill-bye-supersaw-flex-lab-example** | **180 s** future bass 148 (`ez_rap_nill_saw`) |
+    | **music-rap-nill-bye-laser-show-lab-example** | **180 s** electro house 128 (`ez_rap_nill_laser`) |
+    | **music-rap-nill-bye-two-step-lab-example** | **180 s** UK garage 130 (`ez_rap_nill_twostep`) |
+    | **music-rap-nill-bye-jersey-bounce-lab-example** | **180 s** jersey club 140 (`ez_rap_nill_jersey`) |
+    | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`ez_rap_nill_kick`) |
+    | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`ez_rap_nill_uplift`) |
 
 === "DCC (clay → print)"
 

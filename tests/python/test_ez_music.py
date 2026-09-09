@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
@@ -13,7 +15,13 @@ if str(CUSTOM) not in sys.path:
 
 import ez_music  # noqa: E402
 from ez_music import nodes  # noqa: E402
-from ez_music.diss_examples import DISS_DURATION_S, DISS_EXAMPLES  # noqa: E402
+from ez_music.diss_examples import (  # noqa: E402
+    DISS_DURATION_S,
+    DISS_EXAMPLES,
+    NILL_VOICE,
+    format_diss_lyrics,
+    nill_tags,
+)
 from ez_music.nodes import (  # noqa: E402
     DRAFT_LYRICS,
     EZRapLyrics,
@@ -65,16 +73,96 @@ EXPECTED_NILL_BYE_TITLES = (
     "contamination",
     "double blind",
     "replicate or retract",
+    "citation needed",
+    "p-hacking",
+    "null result",
+    "expired reagent",
+    "lab safety",
+    "rumor mill",
+    "gym selfie",
+    "rented drip",
+    "clout diet",
+    "mood forecast",
+    "algorithm",
+    "story time",
+    "caption vs data",
+    "energy drink",
+    "campfire rumor",
+    "false drop",
+    "velvet rope",
+    "fog machine",
+    "guest list",
+    "sparkler science",
+    "bottle service",
+    "strobe claim",
+    "amen rumor",
+    "wobble alibi",
+    "supersaw flex",
+    "laser show",
+    "two-step alibi",
+    "jersey bounce",
+    "kick-split myth",
+    "uplifting rumor",
 )
+SPOKEN_WORD_TITLES = frozenset({"peer review", "grant denied", "story time"})
+VARIETY_EDM_NEEDLES = (
+    "trap",
+    "808",
+    "edm",
+    "house",
+    "techno",
+    "trance",
+    "dubstep",
+    "drum and bass",
+    "jersey",
+    "phonk",
+    "hardstyle",
+    "garage",
+    "future bass",
+    "electro",
+)
+TRAP_EDM_GENRES = (
+    "trap",
+    "phonk",
+    "rage",
+    "house",
+    "techno",
+    "drum and bass",
+    "dubstep",
+    "future bass",
+    "electro",
+    "garage",
+    "jersey club",
+    "hardstyle",
+    "trance",
+)
+
+
+def test_nill_tags_lock_dry_booth_voice() -> None:
+    tags = nill_tags("jazz hop", "brushed drums", bpm=90)
+    assert tags == (
+        "jazz hop, brushed drums, male rap vocals, dry booth, no autotune, 90 bpm"
+    )
+
+
+def test_format_diss_lyrics_requires_three_verses() -> None:
+    with pytest.raises(ValueError, match="at least 3 verses"):
+        format_diss_lyrics(
+            intro="yeah",
+            verses=("one", "two"),
+            chorus="hook",
+            outro="cut",
+        )
 
 
 def test_nill_bye_diss_examples_are_original_180s() -> None:
     assert DISS_DURATION_S == 180.0
-    assert len(DISS_EXAMPLES) == 15
+    assert len(DISS_EXAMPLES) == 45
     prefixes: list[str] = []
     stems: list[str] = []
     seeds: list[int] = []
-    spoken = 0
+    series_counts = {"lab": 0, "variety": 0, "trap-edm": 0}
+    spoken_titles: set[str] = set()
     for ex in DISS_EXAMPLES:
         assert ex["duration"] == DISS_DURATION_S
         lyrics = ex["lyrics"]
@@ -89,6 +177,18 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         assert ex["stem"].startswith("music-rap-nill-bye-")
         assert ex["stem"].endswith("-lab-example")
         assert ex["prefix"].startswith("ez_rap_nill_")
+        assert ex["series"] in series_counts
+        series_counts[ex["series"]] += 1
+        if ex["series"] != "lab":
+            for token in NILL_VOICE.split(", "):
+                assert token in ex["tags"], (ex["stem"], token)
+        if ex["series"] == "variety":
+            low = ex["tags"].lower()
+            for needle in VARIETY_EDM_NEEDLES:
+                assert needle not in low, (ex["stem"], needle)
+        if ex["series"] == "trap-edm":
+            low = ex["tags"].lower()
+            assert any(genre in low for genre in TRAP_EDM_GENRES), ex["stem"]
         for needle in LIVING_MC_NEEDLES:
             assert needle not in lyrics
             assert needle not in ex["tags"]
@@ -97,10 +197,11 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         stems.append(ex["stem"])
         seeds.append(int(ex["seed"]))
         if "[spoken word]" in lyrics:
-            spoken += 1
-    assert len(set(prefixes)) == 15
-    assert len(set(stems)) == 15
-    assert spoken == 2
+            spoken_titles.add(ex["title"])
+    assert len(set(prefixes)) == 45
+    assert len(set(stems)) == 45
+    assert series_counts == {"lab": 15, "variety": 15, "trap-edm": 15}
+    assert spoken_titles == SPOKEN_WORD_TITLES
     assert any(seed != 42 for seed in seeds)
     assert tuple(ex["title"] for ex in DISS_EXAMPLES) == EXPECTED_NILL_BYE_TITLES
     assert "Rake walks in with a club report" in DISS_EXAMPLES[0]["lyrics"]
