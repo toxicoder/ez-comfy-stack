@@ -1,6 +1,7 @@
 /**
  * Your Spark variables + ezcmd flag builders (localStorage).
  * Copy uses data-clipboard-text so Material Clipboard.js gets substituted text.
+ * Token split matches docs/commands.py split_var_template — keep in sync.
  */
 (function () {
   "use strict";
@@ -8,7 +9,13 @@
   var VARS_KEY = "ez-comfy.cmdvars";
   var FLAGS_PREFIX = "ez-comfy.cmdflags.";
   var PANEL_KEY = "ez-comfy.cmdpanel";
-  var VAR_TOKEN = /\$\{([A-Z][A-Z0-9_]*)\}/g;
+  // Keep in sync with docs/commands.py _VAR_TOKEN_RE.
+  var VAR_TOKEN = /\$\{([A-Z][A-Z0-9_]*)(?::-([^}]*))?\}/g;
+
+  var currentData = null;
+  var currentValues = {};
+  var currentDefaults = {};
+  var chipDelegated = false;
 
   /**
    * Run fn on Material document$ or DOM ready (same pattern as glossary.js).
@@ -116,18 +123,50 @@
   }
 
   /**
+   * Spec: docs/commands.py split_var_template (not recursive).
+   * @param {string} template
+   * @param {object} values
+   * @returns {Array<{text: string, id: string|null}>}
+   */
+  function splitVarTemplate(template, values) {
+    var parts = [];
+    var last = 0;
+    VAR_TOKEN.lastIndex = 0;
+    var match;
+    while ((match = VAR_TOKEN.exec(template)) !== null) {
+      var name = match[1];
+      if (!Object.prototype.hasOwnProperty.call(values, name)) {
+        continue;
+      }
+      if (match.index > last) {
+        parts.push({ text: template.slice(last, match.index), id: null });
+      }
+      parts.push({ text: values[name], id: name });
+      last = match.index + match[0].length;
+    }
+    var tail = template.slice(last);
+    if (tail) {
+      parts.push({ text: tail, id: null });
+    } else if (!parts.length) {
+      parts.push({ text: template, id: null });
+    }
+    return parts;
+  }
+
+  /**
    * Spec: docs/commands.py substitute_vars (not recursive).
    * @param {string} template
    * @param {object} values
    * @returns {string}
    */
   function substituteVars(template, values) {
-    return template.replace(VAR_TOKEN, function (match, name) {
-      if (Object.prototype.hasOwnProperty.call(values, name)) {
-        return values[name];
-      }
-      return match;
-    });
+    var parts = splitVarTemplate(template, values);
+    var out = "";
+    var i;
+    for (i = 0; i < parts.length; i += 1) {
+      out += parts[i].text;
+    }
+    return out;
   }
 
   /**
@@ -136,10 +175,10 @@
    * @returns {boolean}
    */
   function templateHasVars(template, values) {
-    VAR_TOKEN.lastIndex = 0;
-    var match;
-    while ((match = VAR_TOKEN.exec(template)) !== null) {
-      if (Object.prototype.hasOwnProperty.call(values, match[1])) {
+    var parts = splitVarTemplate(template, values);
+    var i;
+    for (i = 0; i < parts.length; i += 1) {
+      if (parts[i].id) {
         return true;
       }
     }
@@ -243,86 +282,306 @@
   }
 
   /**
-   * Replace ${VAR} inside a single text node when the whole token is there.
    * @param {Element} code
-   * @param {object} values
-   * @returns {boolean} false when a fallback full-text rewrite is needed
+   * @returns {boolean}
    */
-  function replaceTokensInTextNodes(code, values) {
-    var walker = document.createTreeWalker(code, NodeFilter.SHOW_TEXT, null);
-    var nodes = [];
-    var node;
-    while ((node = walker.nextNode())) {
-      nodes.push(node);
+  function shouldSkipCode(code) {
+    if (code.closest(".ez-cmd-builder")) {
+      return true;
     }
-    var changed = false;
-    var failed = false;
-    nodes.forEach(function (textNode) {
-      var src = textNode.nodeValue || "";
-      if (!src.includes("${")) {
-        return;
-      }
-      VAR_TOKEN.lastIndex = 0;
-      if (!VAR_TOKEN.test(src)) {
-        if (src.indexOf("${") >= 0) {
-          failed = true;
-        }
-        return;
-      }
-      VAR_TOKEN.lastIndex = 0;
-      var next = src.replace(VAR_TOKEN, function (match, name) {
-        if (Object.prototype.hasOwnProperty.call(values, name)) {
-          changed = true;
-          return values[name];
-        }
-        return match;
-      });
-      if (next !== src) {
-        textNode.nodeValue = next;
+    if (code.closest(".ez-spark-panel")) {
+      return true;
+    }
+    if (code.closest(".ez-glossary-dialog")) {
+      return true;
+    }
+    if (code.closest(".mermaid")) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @param {string} name
+   * @param {string} value
+   * @returns {HTMLElement}
+   */
+  function makeVarChip(name, value) {
+    var span = document.createElement("span");
+    span.className = "ez-var";
+    span.setAttribute("data-ez-var", name);
+    span.setAttribute("contenteditable", "true");
+    span.setAttribute("spellcheck", "false");
+    span.setAttribute("role", "textbox");
+    span.setAttribute(
+      "aria-label",
+      name + ", session variable, click to edit"
+    );
+    span.title = name + " — session variable, click to edit";
+    span.textContent = value;
+    return span;
+  }
+
+  /**
+   * @param {Element} code
+   * @param {string} template
+   * @param {object} values
+   */
+  function renderTemplateInto(code, template, values) {
+    var parts = splitVarTemplate(template, values);
+    var frag = document.createDocumentFragment();
+    parts.forEach(function (part) {
+      if (part.id) {
+        frag.appendChild(makeVarChip(part.id, part.text));
+      } else if (part.text) {
+        frag.appendChild(document.createTextNode(part.text));
       }
     });
-    return changed && !failed;
+    code.replaceChildren(frag);
   }
 
   /**
-   * Bind one existing fence: snapshot template, substitute, copy text.
+   * Bind one existing code node: snapshot template, chips, copy text.
    * @param {Element} code
    * @param {object} values
    */
-  function bindFence(code, values) {
+  function bindCode(code, values) {
+    if (shouldSkipCode(code)) {
+      return;
+    }
     var template = code.getAttribute("data-ez-src");
-    if (template) {
-      var again = substituteVars(template, values);
-      code.textContent = again;
-      setClipboardText(code, again);
-      return;
+    if (!template) {
+      template = code.textContent || "";
+      if (!templateHasVars(template, values)) {
+        return;
+      }
+      code.setAttribute("data-ez-src", template);
+      code.setAttribute("data-ez-bound", "1");
     }
-    template = code.textContent || "";
-    if (!templateHasVars(template, values)) {
-      return;
-    }
-    code.setAttribute("data-ez-src", template);
-    code.setAttribute("data-ez-bound", "1");
-    var rendered = substituteVars(template, values);
-    if (!replaceTokensInTextNodes(code, values)) {
-      code.textContent = rendered;
-    }
-    setClipboardText(code, rendered);
+    renderTemplateInto(code, template, values);
+    setClipboardText(code, substituteVars(template, values));
   }
 
   /**
-   * Re-apply substitution to every auto-bound fence.
+   * Auto-bind every article code node that contains session tokens.
    * @param {object} values
    */
-  function rebindFences(values) {
-    var nodes = document.querySelectorAll("pre code");
-    for (var i = 0; i < nodes.length; i += 1) {
-      var code = nodes[i];
-      if (code.closest(".ez-cmd-builder")) {
+  function rebindCodes(values) {
+    var article = document.querySelector("article.md-content__inner");
+    var root = article || document;
+    var nodes = root.querySelectorAll("code");
+    var i;
+    for (i = 0; i < nodes.length; i += 1) {
+      bindCode(nodes[i], values);
+    }
+  }
+
+  /**
+   * Push currentValues to panel inputs, chips, clipboards, and ezcmd.
+   * @param {Element|null} exceptEl
+   */
+  function applyValues(exceptEl) {
+    var panel = document.querySelector(".ez-spark-panel");
+    var i;
+    if (panel) {
+      var inputs = panel.querySelectorAll("input[name]");
+      for (i = 0; i < inputs.length; i += 1) {
+        if (inputs[i] === exceptEl) {
+          continue;
+        }
+        var id = inputs[i].name;
+        if (Object.prototype.hasOwnProperty.call(currentValues, id)) {
+          inputs[i].value = currentValues[id];
+        }
+      }
+    }
+    var chips = document.querySelectorAll("span.ez-var[data-ez-var]");
+    for (i = 0; i < chips.length; i += 1) {
+      if (chips[i] === exceptEl) {
         continue;
       }
-      bindFence(code, values);
+      var vid = chips[i].getAttribute("data-ez-var");
+      var want = Object.prototype.hasOwnProperty.call(currentValues, vid)
+        ? currentValues[vid]
+        : "";
+      if (chips[i].textContent !== want) {
+        chips[i].textContent = want;
+      }
     }
+    var bound = document.querySelectorAll("code[data-ez-src]");
+    for (i = 0; i < bound.length; i += 1) {
+      setClipboardText(
+        bound[i],
+        substituteVars(bound[i].getAttribute("data-ez-src") || "", currentValues)
+      );
+    }
+    if (currentData) {
+      hydrateAll(currentData, currentValues);
+    }
+  }
+
+  /**
+   * @param {EventTarget|null} target
+   * @returns {Element|null}
+   */
+  function closestChip(target) {
+    if (!target || !target.closest) {
+      return null;
+    }
+    return target.closest("span.ez-var[data-ez-var]");
+  }
+
+  /**
+   * @param {Element} chip
+   * @returns {string}
+   */
+  function stripChipText(chip) {
+    return (chip.textContent || "").replace(/\n/g, "");
+  }
+
+  /**
+   * @param {Element} chip
+   */
+  function selectAll(chip) {
+    var range = document.createRange();
+    range.selectNodeContents(chip);
+    var sel = window.getSelection();
+    if (!sel) {
+      return;
+    }
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  /**
+   * @param {string} name
+   * @param {string} raw
+   * @param {Element|null} exceptEl
+   * @param {boolean} persist
+   */
+  function commitVar(name, raw, exceptEl, persist) {
+    if (!Object.prototype.hasOwnProperty.call(currentDefaults, name)) {
+      return;
+    }
+    currentValues[name] = raw;
+    if (persist) {
+      saveVars(currentValues);
+    }
+    applyValues(exceptEl);
+  }
+
+  /**
+   * Delegate chip edit + just-in-time clipboard (once per page JS lifetime).
+   */
+  function ensureChipDelegation() {
+    if (chipDelegated) {
+      return;
+    }
+    chipDelegated = true;
+
+    document.addEventListener("focusin", function (ev) {
+      var chip = closestChip(ev.target);
+      if (!chip) {
+        return;
+      }
+      chip.setAttribute("data-ez-draft", chip.textContent || "");
+      window.setTimeout(function () {
+        if (document.activeElement === chip) {
+          selectAll(chip);
+        }
+      }, 0);
+    });
+
+    document.addEventListener("input", function (ev) {
+      var chip = closestChip(ev.target);
+      if (!chip) {
+        return;
+      }
+      var name = chip.getAttribute("data-ez-var");
+      var text = stripChipText(chip);
+      if (chip.textContent !== text) {
+        chip.textContent = text;
+      }
+      commitVar(name, text, chip, true);
+    });
+
+    document.addEventListener("keydown", function (ev) {
+      var chip = closestChip(ev.target);
+      if (!chip) {
+        return;
+      }
+      if (ev.key === "Enter") {
+        ev.preventDefault();
+        chip.blur();
+      }
+      if (ev.key === "Escape") {
+        ev.preventDefault();
+        var name = chip.getAttribute("data-ez-var");
+        var draft = chip.getAttribute("data-ez-draft");
+        var revert = draft;
+        if (revert === null || typeof revert === "undefined") {
+          revert = currentDefaults[name] || "";
+        }
+        chip.textContent = revert;
+        commitVar(name, revert, null, true);
+        chip.blur();
+      }
+    });
+
+    document.addEventListener("focusout", function (ev) {
+      var chip = closestChip(ev.target);
+      if (!chip) {
+        return;
+      }
+      var name = chip.getAttribute("data-ez-var");
+      var next = stripChipText(chip).trim() || currentDefaults[name] || "";
+      chip.textContent = next;
+      commitVar(name, next, null, true);
+    });
+
+    document.addEventListener(
+      "paste",
+      function (ev) {
+        var chip = closestChip(ev.target);
+        if (!chip) {
+          return;
+        }
+        ev.preventDefault();
+        var pasted = "";
+        if (ev.clipboardData) {
+          pasted = ev.clipboardData.getData("text/plain") || "";
+        }
+        pasted = pasted.replace(/\s+/g, " ").trim();
+        if (document.queryCommandSupported && document.queryCommandSupported("insertText")) {
+          document.execCommand("insertText", false, pasted);
+        } else {
+          chip.textContent = pasted;
+          commitVar(chip.getAttribute("data-ez-var"), pasted, chip, true);
+        }
+      },
+      true
+    );
+
+    function stampClipboardButton(ev) {
+      var btn = ev.target && ev.target.closest ? ev.target.closest(".md-clipboard") : null;
+      if (!btn) {
+        return;
+      }
+      var root = btn.closest(".highlight") || btn.closest("pre") || btn.parentElement;
+      if (!root) {
+        return;
+      }
+      var code = root.querySelector("code[data-ez-src]");
+      if (!code) {
+        return;
+      }
+      btn.setAttribute(
+        "data-clipboard-text",
+        substituteVars(code.getAttribute("data-ez-src") || "", currentValues)
+      );
+    }
+    document.addEventListener("pointerdown", stampClipboardButton, true);
+    document.addEventListener("click", stampClipboardButton, true);
   }
 
   /**
@@ -341,10 +600,8 @@
   /**
    * Inject the Your Spark panel once per article.
    * @param {object} data
-   * @param {object} values
-   * @param {function(object): void} onChange
    */
-  function injectPanel(data, values, onChange) {
+  function injectPanel(data) {
     var article = document.querySelector("article.md-content__inner");
     if (!article || article.getAttribute("data-ez-spark") === "1") {
       return;
@@ -372,7 +629,7 @@
 
     var hint = el("p", "ez-spark-panel__hint");
     hint.textContent =
-      "Values replace ${SPARK_HOST} (and friends) in copyable commands on every docs page. Not sent to any server. Never put HF_TOKEN here.";
+      "Values replace ${SPARK_HOST} (and friends) in copyable commands on every docs page. Highlighted chips are the same fields — click to edit. Not sent to any server. Never put HF_TOKEN here.";
     panel.appendChild(hint);
 
     var grid = el("div", "ez-spark-panel__grid");
@@ -385,13 +642,19 @@
       input.autocomplete = "off";
       input.spellcheck = false;
       input.name = row.id;
-      input.value = values[row.id] || row.default;
+      input.value = currentValues[row.id] || row.default;
       input.setAttribute("aria-label", row.label);
+      input.addEventListener("input", function () {
+        currentValues[row.id] = input.value;
+        saveVars(currentValues);
+        applyValues(input);
+      });
       input.addEventListener("change", function () {
-        values[row.id] = input.value.trim() || row.default;
-        input.value = values[row.id];
-        saveVars(values);
-        onChange(values);
+        var next = input.value.trim() || row.default;
+        currentValues[row.id] = next;
+        input.value = next;
+        saveVars(currentValues);
+        applyValues(input);
       });
       label.appendChild(caption);
       label.appendChild(input);
@@ -407,18 +670,14 @@
     reset.addEventListener("click", function () {
       var fresh = defaultVars(data);
       Object.keys(fresh).forEach(function (id) {
-        values[id] = fresh[id];
+        currentValues[id] = fresh[id];
       });
       try {
         localStorage.removeItem(VARS_KEY);
       } catch (err) {
         /* ignore */
       }
-      var inputs = grid.querySelectorAll("input");
-      for (var i = 0; i < inputs.length; i += 1) {
-        inputs[i].value = values[inputs[i].name];
-      }
-      onChange(values);
+      applyValues(null);
     });
     actions.appendChild(reset);
     panel.appendChild(actions);
@@ -619,22 +878,20 @@
   }
 
   /**
-   * Page boot: panel, auto-bind fences, hydrate recipes.
+   * Page boot: panel, auto-bind code, hydrate recipes.
    */
   function init() {
     var data = payload();
     if (!data) {
       return;
     }
-    var values = loadVars(data);
-    function refresh(next) {
-      values = next;
-      rebindFences(values);
-      hydrateAll(data, values);
-    }
-    injectPanel(data, values, refresh);
-    rebindFences(values);
-    hydrateAll(data, values);
+    currentData = data;
+    currentDefaults = defaultVars(data);
+    currentValues = loadVars(data);
+    ensureChipDelegation();
+    injectPanel(data);
+    rebindCodes(currentValues);
+    hydrateAll(data, currentValues);
   }
 
   boot(init);
