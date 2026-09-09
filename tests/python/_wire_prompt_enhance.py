@@ -73,7 +73,9 @@ def enhance_pin_off(graph_id: str) -> bool:
     gid = str(graph_id or "")
     if gid in PIN_ENHANCE_OFF:
         return True
-    return gid.startswith("music-rap-nill-bye-")
+    return gid.startswith("music-rap-nill-bye-") or gid.startswith(
+        "music-edm-drive-through-"
+    )
 SHIFT = 460
 ENHANCE_H = 420
 

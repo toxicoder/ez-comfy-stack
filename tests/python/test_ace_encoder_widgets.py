@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from ez_music.diss_examples import DISS_EXAMPLES
+from ez_music.edm_examples import EDM_EXAMPLES
 
 from _ace_widgets_contract import assert_ace_encoder_widgets, iter_ace_encoders
 from _lab_paths import lab_example_paths, lab_json
@@ -34,8 +35,10 @@ def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
         ("music-rap-draft-lab-example", 32.0, 88),
         ("music-rap-full-lab-example", 96.0, 88),
     ]
-    for ex in DISS_EXAMPLES:
-        cases.append((ex["stem"], float(ex["duration"]), int(ex["bpm"])))
+    for diss in DISS_EXAMPLES:
+        cases.append((diss["stem"], float(diss["duration"]), int(diss["bpm"])))
+    for edm in EDM_EXAMPLES:
+        cases.append((edm["stem"], float(edm["duration"]), int(edm["bpm"])))
     for stem, duration, bpm in cases:
         graph = _load(lab_json(stem))
         enc = next(iter_ace_encoders(graph))

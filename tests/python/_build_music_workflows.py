@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build US-safe ACE-Step rap lab graphs (draft, full, 180s diss takes).
+"""Build US-safe ACE-Step music lab graphs (rap draft/full, diss, EDM).
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -29,6 +29,7 @@ from ez_music.diss_examples import (  # noqa: E402
     TRAP_TAGS,
     DissExample,
 )
+from ez_music.edm_examples import EDM_EXAMPLES, EdmExample  # noqa: E402
 from ez_music.nodes import DRAFT_LYRICS, FULL_LYRICS  # noqa: E402
 
 ACE_CKPT = "ace_step_1.5_turbo_aio.safetensors"
@@ -233,7 +234,26 @@ Beat-only pass: append instrumental, no vocals, and replace lyrics with [inst].
 """
 
 
-def _build_rap(
+def _edm_note(ex: EdmExample) -> str:
+    duration_s = int(ex["duration"])
+    return f"""## {ex["stem"]}
+
+US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Instrumental arrangement score in `[inst]` blocks: vast melody, then a ~30 s multi-instrument drop, then the cycle repeats. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+
+1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
+2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[intro]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.
+3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing the score.
+4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
+5. ACE-Step timbre is **invented**, not a cloned act.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language en, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
+7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
+8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
+9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
+10. Do not co-resident with LTX / Wan / Klein on this Spark.
+"""
+
+
+def _build_ace(
     stem: str,
     duration: float,
     lyrics: str,
@@ -244,6 +264,8 @@ def _build_rap(
     tags: str = ACE_TAGS,
     bpm: int = 88,
     seed: int = 42,
+    ace_mode: str = "vocal",
+    enhance_title: str = "ez_rap_prompt",
 ) -> dict:
     g = Graph(stem)
     g.add(
@@ -301,8 +323,8 @@ def _build_rap(
         "EZAceStepPromptEnhance",
         [500, 80],
         [400, 360],
-        "ez_rap_prompt",
-        [tags, lyrics, False, "vocal"],
+        enhance_title,
+        [tags, lyrics, False, ace_mode],
         outputs=[
             g.out("tags", "STRING", []),
             g.out("lyrics", "STRING", []),
@@ -416,7 +438,7 @@ def _build_rap(
 
 
 def build_draft() -> dict:
-    return _build_rap(
+    return _build_ace(
         "music-rap-draft-lab-example",
         32.0,
         DRAFT_LYRICS,
@@ -427,7 +449,7 @@ def build_draft() -> dict:
 
 
 def build_full() -> dict:
-    return _build_rap(
+    return _build_ace(
         "music-rap-full-lab-example",
         96.0,
         FULL_LYRICS,
@@ -438,7 +460,7 @@ def build_full() -> dict:
 
 
 def build_diss(ex: DissExample) -> dict:
-    return _build_rap(
+    return _build_ace(
         ex["stem"],
         float(ex["duration"]),
         ex["lyrics"],
@@ -451,15 +473,38 @@ def build_diss(ex: DissExample) -> dict:
     )
 
 
+def build_edm(ex: EdmExample) -> dict:
+    return _build_ace(
+        ex["stem"],
+        float(ex["duration"]),
+        ex["lyrics"],
+        ex["prefix"],
+        _edm_note(ex),
+        ex["description"],
+        tags=ex["tags"],
+        bpm=int(ex["bpm"]),
+        seed=int(ex["seed"]),
+        ace_mode="instrumental",
+        enhance_title="ez_edm_prompt",
+    )
+
+
 def main() -> None:
     graphs = {
         "music-rap-draft-lab-example.json": build_draft(),
         "music-rap-full-lab-example.json": build_full(),
     }
-    for ex in DISS_EXAMPLES:
-        graphs[f"{ex['stem']}.json"] = build_diss(ex)
+    for diss in DISS_EXAMPLES:
+        graphs[f"{diss['stem']}.json"] = build_diss(diss)
+    for edm in EDM_EXAMPLES:
+        graphs[f"{edm['stem']}.json"] = build_edm(edm)
     for name, graph in graphs.items():
-        subdir = "nill-bye" if name.startswith("music-rap-nill-bye-") else None
+        if name.startswith("music-rap-nill-bye-"):
+            subdir: str | None = "nill-bye"
+        elif name.startswith("music-edm-drive-through-"):
+            subdir = "drive-through"
+        else:
+            subdir = None
         path = lab_dest(name, subdir=subdir)
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")

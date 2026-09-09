@@ -57,7 +57,8 @@ def lab_dest(stem: str, *, lane: str | None = None, subdir: str | None = None) -
     """Path to write a lab graph. Creates the lane directory.
 
     ``subdir`` is an optional single path component under the lane
-    (for example ``nill-bye`` → ``_lab/audio/nill-bye/``).
+    (for example ``nill-bye`` → ``_lab/audio/nill-bye/``,
+    ``drive-through`` → ``_lab/audio/drive-through/``).
     """
     name = Path(stem).name
     if not name.endswith(".json"):
