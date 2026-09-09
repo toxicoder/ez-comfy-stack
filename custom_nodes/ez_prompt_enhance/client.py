@@ -622,14 +622,20 @@ def _get_llama() -> tuple[Any | None, str | None]:
     return _LLM, None
 
 
-def _generate(llm: Any, system: str, user: str) -> str:
+def _generate(
+    llm: Any,
+    system: str,
+    user: str,
+    max_tokens: int = DEFAULT_MAX_TOKENS,
+) -> str:
+    tokens = int(max_tokens) if int(max_tokens) > 0 else DEFAULT_MAX_TOKENS
     body = llm.create_chat_completion(
         messages=[
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ],
         temperature=0,
-        max_tokens=DEFAULT_MAX_TOKENS,
+        max_tokens=tokens,
     )
     try:
         content = body["choices"][0]["message"]["content"]
@@ -640,15 +646,23 @@ def _generate(llm: Any, system: str, user: str) -> str:
     return strip_model_wrapping(content)
 
 
-def complete(system: str, user: str) -> tuple[str, str | None]:
+def complete(
+    system: str,
+    user: str,
+    *,
+    max_tokens: int | None = None,
+) -> tuple[str, str | None]:
     """Run one local chat completion. Empty text plus a reason on any failure."""
     llm, reason = _get_llama()
     if llm is None:
         return "", reason or REASON_LLAMA_UNAVAILABLE
     timeout = _timeout_s()
+    tokens = DEFAULT_MAX_TOKENS if max_tokens is None else int(max_tokens)
+    if tokens < 1:
+        tokens = DEFAULT_MAX_TOKENS
     try:
         with ThreadPoolExecutor(max_workers=1) as pool:
-            future = pool.submit(_generate, llm, system, user)
+            future = pool.submit(_generate, llm, system, user, tokens)
             text = future.result(timeout=timeout)
     except FuturesTimeout:
         _log(f"local LLM timed out after {timeout}s")

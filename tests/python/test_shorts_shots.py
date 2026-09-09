@@ -450,13 +450,11 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert klein_sampler["widgets_values"][3] == 1.0
         enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
         assert enhance["widgets_values"][0] == parsed["identity"]
+        assert all(n["widgets_values"][1] is False for n in ltx_enh)
+        assert enhance["widgets_values"][1] is False
         if film == "go-see":
-            assert all(n["widgets_values"][1] is False for n in ltx_enh)
-            assert enhance["widgets_values"][1] is False
             assert enhance["widgets_values"][2] == "t2i"
         else:
-            assert all(n["widgets_values"][1] is True for n in ltx_enh)
-            assert enhance["widgets_values"][1] is True
             assert enhance["widgets_values"][2] == "identity"
         ltx_pos = [
             n

@@ -432,6 +432,15 @@ def test_generate_uses_temperature_zero() -> None:
     assert client._generate(_FakeLlama(), "sys", "user") == "rewritten"
 
 
+def test_generate_honors_max_tokens() -> None:
+    class _FakeLlama:
+        def create_chat_completion(self, **kwargs: object) -> dict:
+            assert kwargs["max_tokens"] == 256
+            return {"choices": [{"message": {"content": "hola"}}]}
+
+    assert client._generate(_FakeLlama(), "sys", "user", 256) == "hola"
+
+
 def test_n_gpu_layers_refused_without_allow(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("EZ_LLM_N_GPU_LAYERS", "99")
     monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
@@ -803,12 +812,13 @@ def test_ace_step_enhance_node_defaults_and_modes() -> None:
 
 
 def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
-    """Every lab CLIP/ACE positive prompt comes from an EZ enhance node, enhance on.
+    """Every lab CLIP/ACE positive prompt comes from an EZ enhance node.
 
-    go-see pins Enhance off so the body-cam bible is encoded as written.
+    Authored/structured graphs pin Enhance off; lazy CLIP printers stay on.
     """
-    skip_ids = {"longcat-video-lab-example"}
-    pin_off_ids = {"film-go-see-90s-run-lab-example"}
+    from _wire_prompt_enhance import enhance_pin_off
+
+    skip_ids = {"longcat-video-lab-example", "audio-finish-lab-example"}
     enhance_types = {
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
@@ -825,6 +835,7 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
         gid = str(graph.get("id") or path.stem)
         if gid in skip_ids:
             continue
+        pin_off = enhance_pin_off(gid)
         by_id = {int(n["id"]): n for n in graph["nodes"]}
         links = {int(link[0]): link for link in graph.get("links") or []}
         for node in graph["nodes"]:
@@ -836,7 +847,7 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
                 )
                 if ntype == "EZAceStepPromptEnhance":
                     flag = values[2] if len(values) > 2 else True
-                if gid in pin_off_ids:
+                if pin_off:
                     if flag is not False:
                         missing.append(
                             f"{path.name}: {ntype}#{node['id']} enhance={flag!r}"

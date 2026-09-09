@@ -42,6 +42,38 @@ BLURB = (
     "the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn "
     "Enhance off to use the widget text as-is. Optional style dropdown."
 )
+PIN_OFF_BLURB = (
+    "Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, "
+    "or film shots) is encoded as written. Turn Enhance on only if you want the "
+    "4B rewriter."
+)
+PIN_ENHANCE_OFF = frozenset(
+    {
+        "film-go-see-90s-run-lab-example",
+        "film-still-here-90s-lab-example",
+        "film-switchyard-90s-lab-example",
+        "klein-talking-head-lab-example",
+        "wan-gif-loop-lab-example",
+        "wan-bumper-loop-lab-example",
+        "wan-sticker-loop-lab-example",
+        "wan-orbit-i2v-lab-example",
+        "wan-push-in-i2v-lab-example",
+        "wan-parallax-i2v-lab-example",
+        "ltx-iclora-depth-5s-lab-example",
+        "podcast-audio-first-lab-example",
+        "podcast-radio-drama-lab-example",
+        "music-rap-draft-lab-example",
+        "music-rap-full-lab-example",
+    }
+)
+
+
+def enhance_pin_off(graph_id: str) -> bool:
+    """True when seeded JSON should pin Enhance off (authored / structured text)."""
+    gid = str(graph_id or "")
+    if gid in PIN_ENHANCE_OFF:
+        return True
+    return gid.startswith("music-rap-nill-bye-")
 SHIFT = 460
 ENHANCE_H = 420
 
@@ -133,14 +165,26 @@ def set_neg(graph: dict[str, Any], text: str) -> None:
             node["widgets_values"] = [text]
 
 
-def _rewrite_enhance_blurb(body: str) -> str:
+def _rewrite_enhance_blurb(body: str, *, pin_off: bool = False) -> str:
     lines = [
         line
         for line in body.splitlines()
         if "XAI_API_KEY" not in line and "leave Enhance off" not in line
     ]
     text = "\n".join(lines).rstrip()
-    if "Prompt enhance is on by default" not in text:
+    if pin_off:
+        text = (
+            text.replace("Prompt enhance is on by default", "Prompt enhance is **off**")
+            .replace("Prompt enhance is **on**", "Prompt enhance is **off**")
+            .replace("enhance **on**", "enhance **off**")
+            .replace("Enhance **on**", "Enhance **off**")
+            .replace("Identity-mode enhance is on.", "Identity-mode enhance is off.")
+            .replace("enhance is **on**", "enhance is **off**")
+        )
+        if "Prompt enhance is **off**" not in text and "Enhance **off**" not in text:
+            text = text + "\n" + PIN_OFF_BLURB
+        return text + "\n"
+    if "Prompt enhance is on by default" not in text and "Prompt enhance is **off**" not in text:
         text = text + "\n" + BLURB
     return text + "\n"
 
@@ -204,14 +248,17 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
 
 
 def append_note(graph: dict[str, Any]) -> None:
+    pin_off = enhance_pin_off(str(graph.get("id") or ""))
     for node in graph["nodes"]:
         if node.get("type") in ("Note", "MarkdownNote"):
             values = node.get("widgets_values") or [""]
-            node["widgets_values"] = [_rewrite_enhance_blurb(str(values[0]))]
+            node["widgets_values"] = [
+                _rewrite_enhance_blurb(str(values[0]), pin_off=pin_off)
+            ]
     extra = graph.setdefault("extra", {})
     note = str(extra.get("lab_note") or "")
     if note:
-        extra["lab_note"] = _rewrite_enhance_blurb(note)
+        extra["lab_note"] = _rewrite_enhance_blurb(note, pin_off=pin_off)
 
 
 def ensure_enhance(
@@ -572,7 +619,7 @@ def insert_ace_enhance(graph: dict[str, Any]) -> None:
             "widgets_values": [
                 tags,
                 lyrics,
-                True,
+                not enhance_pin_off(str(graph.get("id") or "")),
                 "instrumental" if instrumental else "vocal",
             ],
             "title": f"{title} enhance" if title else "ACE-Step Prompt Enhance",
@@ -615,21 +662,70 @@ def insert_ace_enhance(graph: dict[str, Any]) -> None:
     _push_notes_clear(graph)
 
 
-def enable_lab_graph(graph: dict[str, Any]) -> None:
-    """Force enhance on, identity modes, and ACE tags."""
-    insert_ace_enhance(graph)
-    normalize_enhance_widgets(graph)
+def _set_node_enhance(node: dict[str, Any], on: bool) -> None:
+    """Write the enhance boolean on one EZ *PromptEnhance / writer node."""
+    ntype = node.get("type")
+    values = list(node.get("widgets_values") or [])
+    flag = bool(on)
+    if ntype in (
+        "EZKleinPromptEnhance",
+        "EZWanPromptEnhance",
+        "EZLTXPromptEnhance",
+        "EZRapLyrics",
+        "EZPodcastScript",
+        "EZDubScript",
+    ):
+        while len(values) < 2:
+            values.append(flag)
+        values[1] = flag
+        node["widgets_values"] = values
+    elif ntype == "EZAceStepPromptEnhance":
+        while len(values) < 3:
+            values.append(flag)
+        values[2] = flag
+        node["widgets_values"] = values
+
+
+def apply_enhance_policy(graph: dict[str, Any]) -> None:
+    """Pin Enhance off on authored/structured graphs. Leave lazy printers alone."""
+    gid = str(graph.get("id") or "")
+    if not enhance_pin_off(gid):
+        return
+    for node in graph.get("nodes") or []:
+        ntype = node.get("type")
+        if ntype == "EZDubScript":
+            continue
+        if ntype in (
+            "EZKleinPromptEnhance",
+            "EZWanPromptEnhance",
+            "EZLTXPromptEnhance",
+            "EZAceStepPromptEnhance",
+            "EZRapLyrics",
+            "EZPodcastScript",
+        ):
+            _set_node_enhance(node, False)
     extra = graph.setdefault("extra", {})
     for key in ("lab_note", "lab_description"):
         raw = extra.get(key)
-        if isinstance(raw, str):
-            extra[key] = (
-                raw.replace("Enhance off (compiler-enforced).", "Identity-mode enhance is on.")
-                .replace("Enhance is **off**", "Enhance is **on**")
-                .replace("Enhance **off**", "Enhance **on**")
-                .replace("Enhance off.", "Enhance on.")
-            )
-    if isinstance(extra.get("lab_app_mode"), dict):
+        if isinstance(raw, str) and raw.strip():
+            extra[key] = _rewrite_enhance_blurb(raw, pin_off=True)
+    for node in graph.get("nodes") or []:
+        if node.get("type") not in ("Note", "MarkdownNote"):
+            continue
+        values = node.get("widgets_values") or [""]
+        node["widgets_values"] = [_rewrite_enhance_blurb(str(values[0]), pin_off=True)]
+    if isinstance(extra.get("lab_app_mode"), dict) and gid.startswith("film-"):
+        extra["lab_app_mode"]["enhance_off_identity"] = True
+
+
+def enable_lab_graph(graph: dict[str, Any]) -> None:
+    """Wire ACE tags, normalize widgets, then apply the on/off enhance policy."""
+    insert_ace_enhance(graph)
+    normalize_enhance_widgets(graph)
+    apply_enhance_policy(graph)
+    extra = graph.setdefault("extra", {})
+    gid = str(graph.get("id") or "")
+    if isinstance(extra.get("lab_app_mode"), dict) and not enhance_pin_off(gid):
         extra["lab_app_mode"]["enhance_off_identity"] = False
     if isinstance(extra.get("lab_dcc"), dict) and "enhance" in extra["lab_dcc"]:
         extra["lab_dcc"]["enhance"] = True

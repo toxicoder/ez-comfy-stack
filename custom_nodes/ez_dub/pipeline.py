@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 import shutil
 import subprocess
@@ -22,7 +21,7 @@ from .audio import read_wav, write_wav
 from .jobstore import dub_dir, save_state, write_json
 from .rights import require_rights
 from .srt import turns_to_srt
-from .turns import assign_overlap, empty_payload, normalize_turn, parse_payload
+from .turns import assign_overlap, empty_payload, normalize_turn
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 DISCLOSURE_TEXT = (
@@ -199,15 +198,37 @@ def resolve_media_source(
     raise FileNotFoundError(f"source missing: {path}")
 
 
-def language_name(code: object) -> str:
-    """Map a widget code to a Chatterbox language name."""
+TRANSLATE_MAX_TOKENS = 256
+CLONE_MISSING_STATUS = "clone engine missing — original bed only"
+
+
+def language_code(code: object) -> str:
+    """Map a widget value to an ISO 639-1 code (Chatterbox ``language_id``).
+
+    Arguments:
+        code: Widget ISO code, language name, or ``auto``.
+    Returns:
+        ``auto``, a two-letter code, or ``en`` when unknown.
+    """
     raw = (code if isinstance(code, str) else str(code or "en")).strip().lower()
+    if raw in {"", "auto"}:
+        return "auto"
     if raw in LANG_NAMES:
-        return LANG_NAMES[raw]
+        return raw
     for key, name in LANG_NAMES.items():
         if raw == name.lower():
-            return name
-    return LANG_NAMES["en"]
+            return key
+    if len(raw) == 2 and raw.isalpha():
+        return raw
+    return "en"
+
+
+def language_name(code: object) -> str:
+    """Map a widget code to an English language name (display only)."""
+    raw = language_code(code)
+    if raw == "auto":
+        return "the source language"
+    return LANG_NAMES.get(raw, LANG_NAMES["en"])
 
 
 def load_translate_prompt() -> str:
@@ -479,11 +500,16 @@ def analyze_pcm(
     max_speakers: int = 0,
     language: str = "auto",
     wav_path: Path | None = None,
-) -> list[dict[str, Any]]:
-    """VAD + cluster + optional ASR hook."""
+) -> tuple[list[dict[str, Any]], str]:
+    """VAD + cluster + optional ASR hook.
+
+    Returns:
+        ``(turns, detected_language)``. ``detected_language`` is empty when
+        ASR did not report a code.
+    """
     spans = energy_vad(samples, rate)
     if not spans:
-        return []
+        return [], ""
     vectors: list[list[float]] = []
     chunks: list[list[float]] = []
     embed = embed_hook or _default_embed
@@ -513,17 +539,22 @@ def analyze_pcm(
     if hook is not None and wav_path is not None:
         asr_turns = hook(wav_path, language)
         if asr_turns:
-            return [normalize_turn(item, i + 1) for i, item in enumerate(asr_turns)]
+            normalized = [
+                normalize_turn(item, i + 1) for i, item in enumerate(asr_turns)
+            ]
+            return normalized, ""
+    detected = ""
     if hook is None:
-        _try_faster_whisper(turns, wav_path, language)
-    return turns
+        detected = _try_faster_whisper(turns, wav_path, language)
+    return turns, detected
 
 
 def _try_faster_whisper(
     turns: list[dict[str, Any]], wav_path: Path | None, language: str
-) -> None:
+) -> str:
+    """Fill ``text`` from faster-whisper. Returns the detected ISO code."""
     if wav_path is None or not wav_path.is_file():
-        return
+        return ""
     try:
         from faster_whisper import WhisperModel
     except ImportError:
@@ -531,15 +562,17 @@ def _try_faster_whisper(
             "faster-whisper not installed — optional runtime: pip install "
             "faster-whisper (invalidates a baked venv layer if you rebuild)"
         )
-        return
+        return ""
     model_dir = _whisper_dir()
     try:
         model = WhisperModel(model_dir or "large-v3", device="cpu")
         lang = None if language in {"", "auto"} else language
-        segments, _info = model.transcribe(str(wav_path), language=lang, word_timestamps=False)
+        segments, info = model.transcribe(
+            str(wav_path), language=lang, word_timestamps=False
+        )
     except Exception as exc:  # noqa: BLE001 — fail-soft
         _log(f"faster-whisper failed: {exc}")
-        return
+        return ""
     segs = list(segments)
     for turn in turns:
         bits: list[str] = []
@@ -551,6 +584,8 @@ def _try_faster_whisper(
             bits.append(str(getattr(seg, "text", "") or "").strip())
         if bits:
             turn["text"] = " ".join(bits)
+    detected = str(getattr(info, "language", "") or "").strip().lower()
+    return language_code(detected) if detected else ""
 
 
 def _whisper_dir() -> str:
@@ -569,6 +604,36 @@ def _whisper_dir() -> str:
     return ""
 
 
+def _copy_source_targets(turns: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Copy ``text`` into empty ``text_target`` fields."""
+    out: list[dict[str, Any]] = []
+    for turn in turns:
+        item = dict(turn)
+        if not str(item.get("text_target") or "").strip():
+            item["text_target"] = str(item.get("text") or "")
+        out.append(item)
+    return out
+
+
+def _same_language(source: str, target: str) -> bool:
+    src = language_code(source)
+    tgt = language_code(target)
+    if src in {"", "auto"}:
+        return False
+    return src == tgt
+
+
+def _translate_user_message(text: str, source: str, target: str) -> str:
+    src_name = language_name(source)
+    tgt = language_code(target)
+    tgt_name = language_name(tgt)
+    return (
+        f"Translate from {src_name} to {tgt_name} ({tgt}). "
+        "Output only the translated sentence.\n\n"
+        f"Source: {text}"
+    )
+
+
 def translate_turns(
     turns: list[dict[str, Any]],
     target_language: str,
@@ -576,63 +641,63 @@ def translate_turns(
     *,
     enhance: bool = True,
 ) -> tuple[list[dict[str, Any]], str]:
-    """Fill ``text_target``. Missing GGUF copies source text."""
+    """Fill ``text_target`` one turn at a time. Missing GGUF copies source text."""
+    tgt = language_code(target_language)
+    src = language_code(source_language)
     if not enhance:
-        out = []
-        for turn in turns:
-            item = dict(turn)
-            if not str(item.get("text_target") or "").strip():
-                item["text_target"] = str(item.get("text") or "")
-            out.append(item)
-        return out, "enhance off"
+        return _copy_source_targets(turns), "enhance off"
+    if _same_language(src, tgt):
+        return _copy_source_targets(turns), "same language"
     hook = translate_hook
     if hook is not None:
-        return hook(turns, target_language, source_language), ""
-    copied = []
-    for turn in turns:
-        item = dict(turn)
-        if not str(item.get("text_target") or "").strip():
-            item["text_target"] = str(item.get("text") or "")
-        copied.append(item)
+        return hook(turns, tgt, src), ""
+    spoken = [t for t in turns if str(t.get("text") or "").strip()]
+    if not spoken:
+        return [dict(t) for t in turns], "no turns"
     try:
         from ez_prompt_enhance.client import _close_llm
         from ez_prompt_enhance.client import complete
     except Exception as exc:  # noqa: BLE001 — fail-soft
         _log(f"prompt enhance client unavailable: {exc}")
-        return copied, "llama.cpp unavailable"
-    payload = {
-        "source_language": source_language,
-        "target_language": target_language,
-        "turns": [
-            {
-                "id": t["id"],
-                "speaker": t["speaker"],
-                "text": t.get("text") or "",
-            }
-            for t in turns
-        ],
-    }
+        return _copy_source_targets(turns), "llama.cpp unavailable"
     system = load_translate_prompt()
+    translated = 0
+    passthrough = 0
+    last_reason = ""
+    merged: list[dict[str, Any]] = []
     try:
-        rewritten, reason = complete(system, json.dumps(payload, ensure_ascii=False))
+        for turn in turns:
+            item = dict(turn)
+            source_text = str(item.get("text") or "").strip()
+            if not source_text:
+                item["text_target"] = str(item.get("text_target") or "")
+                merged.append(item)
+                continue
+            rewritten, reason = complete(
+                system,
+                _translate_user_message(source_text, src, tgt),
+                max_tokens=TRANSLATE_MAX_TOKENS,
+            )
+            cleaned = (rewritten or "").strip()
+            if not cleaned or (cleaned == source_text):
+                item["text_target"] = source_text
+                passthrough += 1
+                last_reason = reason or "passthrough"
+                merged.append(item)
+                continue
+            item["text_target"] = cleaned
+            translated += 1
+            merged.append(item)
     finally:
         try:
             _close_llm()
         except Exception as exc:  # noqa: BLE001 — unload is best-effort
             _log(f"writer unload failed: {exc}")
-    if not (rewritten or "").strip():
-        return copied, reason or "passthrough"
-    parsed = parse_payload(rewritten)
-    by_id = {int(t["id"]): t for t in parsed["turns"]}
-    merged = []
-    for turn in turns:
-        item = dict(turn)
-        hit = by_id.get(int(turn["id"]))
-        if hit and str(hit.get("text_target") or "").strip():
-            item["text_target"] = hit["text_target"]
-        elif not str(item.get("text_target") or "").strip():
-            item["text_target"] = str(item.get("text") or "")
-        merged.append(item)
+    total = translated + passthrough
+    if passthrough and translated:
+        return merged, f"translated {translated}/{total}; {passthrough} passthrough"
+    if passthrough:
+        return merged, last_reason or "passthrough"
     return merged, ""
 
 
@@ -668,20 +733,174 @@ def _extract_refs(
     return refs
 
 
+def _pcm_list(wav: object) -> list[float]:
+    """Flatten a TTS tensor/array/list into mono float PCM."""
+    if wav is None:
+        return []
+    data: Any = wav
+    try:
+        data = data.detach().cpu().float().reshape(-1)
+    except Exception:  # noqa: BLE001 — not a tensor
+        pass
+    try:
+        data = data.tolist()
+    except Exception:  # noqa: BLE001 — already a list
+        pass
+    if isinstance(data, (int, float)):
+        return [float(data)]
+    if not isinstance(data, (list, tuple)):
+        return []
+    out: list[float] = []
+    stack: list[Any] = list(data)
+    while stack:
+        item = stack.pop(0)
+        if isinstance(item, (list, tuple)):
+            stack = list(item) + stack
+            continue
+        try:
+            out.append(float(item))
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+def _model_roots() -> list[str]:
+    roots: list[str] = []
+    for key in ("MODELS_ROOT", "MODELS_DIR"):
+        value = (os.environ.get(key) or "").strip()
+        if value and value not in roots:
+            roots.append(value)
+    for fallback in ("/models", "/mnt/models"):
+        if fallback not in roots:
+            roots.append(fallback)
+    return roots
+
+
+def clone_ckpt_dir() -> Path | None:
+    """First directory that looks like a Chatterbox multilingual snapshot."""
+    names = (
+        "t3_mtl23ls_v3.safetensors",
+        "t3_mtl23ls_v2.safetensors",
+    )
+    for root in _model_roots():
+        candidates = (
+            Path(root) / "comfy" / "tts",
+            Path(root) / "ResembleAI__chatterbox_clone",
+            Path(root) / "tts",
+        )
+        for folder in candidates:
+            if any((folder / name).is_file() for name in names):
+                return folder
+    return None
+
+
+def _try_chatterbox(
+    text: str, language_id: str, ref_wav: str
+) -> tuple[list[float], int, str]:
+    """Lazy Chatterbox Multilingual generate. Empty PCM plus a reason on miss."""
+    try:
+        from chatterbox.mtl_tts import ChatterboxMultilingualTTS
+    except ImportError:
+        return (
+            [],
+            SAMPLE_RATE,
+            "chatterbox-tts not installed — optional runtime: pip install chatterbox-tts",
+        )
+    ckpt = clone_ckpt_dir()
+    if ckpt is None:
+        return (
+            [],
+            SAMPLE_RATE,
+            "clone pack missing — run ./scripts/manage.sh download-dub --tier clone",
+        )
+    device = "cpu"
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            device = "cuda"
+    except Exception:  # noqa: BLE001 — CPU is the safe default
+        device = "cpu"
+    try:
+        loader = getattr(ChatterboxMultilingualTTS, "from_local", None)
+        if not callable(loader):
+            return (
+                [],
+                SAMPLE_RATE,
+                "chatterbox-tts missing from_local — upgrade chatterbox-tts",
+            )
+        model: Any = loader(str(ckpt), device=device)
+        generate = getattr(model, "generate", None)
+        if not callable(generate):
+            return [], SAMPLE_RATE, "chatterbox missing generate"
+        kwargs: dict[str, Any] = {"language_id": language_id}
+        ref = (ref_wav or "").strip()
+        if ref and Path(ref).is_file():
+            kwargs["audio_prompt_path"] = ref
+        wav = generate(text, **kwargs)
+        pcm = _pcm_list(wav)
+        rate = int(getattr(model, "sr", SAMPLE_RATE) or SAMPLE_RATE)
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        return [], SAMPLE_RATE, f"chatterbox failed: {exc}"
+    if not pcm:
+        return [], rate, "chatterbox returned empty audio"
+    return pcm, rate, ""
+
+
+def _bind_generate(module_name: str) -> Callable[[str], Any] | None:
+    """Return ``model.generate`` from an optional TTS module, or None."""
+    try:
+        module = __import__(module_name, fromlist=["Qwen3TTS"])
+        loaded = module.Qwen3TTS.from_pretrained()
+        method = getattr(loaded, "generate", None)
+    except Exception:  # noqa: BLE001 — optional runtime
+        return None
+    if not callable(method):
+        return None
+    return method
+
+
+def _try_qwen3tts(
+    text: str, language_id: str, ref_wav: str
+) -> tuple[list[float], int, str]:
+    """Lazy Qwen3-TTS generate. Empty PCM plus a reason on miss."""
+    del language_id, ref_wav
+    generate = _bind_generate("qwen_tts") or _bind_generate("qwen3_tts")
+    if generate is None:
+        return (
+            [],
+            SAMPLE_RATE,
+            "qwen3tts extra not installed — download-podcast --tier qwen3tts",
+        )
+    try:
+        wav = generate(text)
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        return [], SAMPLE_RATE, f"qwen3tts failed: {exc}"
+    pcm = _pcm_list(wav)
+    if not pcm:
+        return [], SAMPLE_RATE, "qwen3tts returned empty audio"
+    return pcm, SAMPLE_RATE, ""
+
+
 def synthesize_turn(
     text: str,
     language: str,
     ref_wav: str,
     engine: str,
 ) -> tuple[list[float], int]:
-    """Clone one line. Tests inject ``tts_hook``."""
+    """Clone one line. Tests inject ``tts_hook``. ``language`` is an ISO code."""
     hook = tts_hook
+    lang = language_code(language)
     if hook is not None:
-        return hook(text, language, ref_wav, engine)
-    _log(
-        f"{engine} extra not used without a runtime install; returning silence"
-    )
-    return [], SAMPLE_RATE
+        return hook(text, lang, ref_wav, engine)
+    name = engine if engine in ENGINES else ENGINE_CHATTERBOX
+    if name == ENGINE_QWEN3TTS:
+        pcm, sr, err = _try_qwen3tts(text, lang, ref_wav)
+    else:
+        pcm, sr, err = _try_chatterbox(text, lang, ref_wav)
+    if err:
+        _log(err)
+    return pcm, sr
 
 
 def render_mix(
@@ -705,11 +924,13 @@ def render_mix(
     if not turns:
         return list(samples), rate, "no turns"
     refs = _extract_refs(samples, rate, turns, dest / "speakers")
-    lang = language_name(payload.get("target_language") or "es")
+    lang = language_code(payload.get("target_language") or "es")
     clones: list[dict[str, Any]] = []
     render_dir = dest / "render"
     render_dir.mkdir(parents=True, exist_ok=True)
     flags: list[str] = []
+    had_spoken = False
+    cloned = False
     for i, turn in enumerate(turns):
         nxt_t0 = turns[i + 1]["t0"] if i + 1 < len(turns) else (len(samples) / rate)
         spill = max(0.0, float(nxt_t0) - float(turn["t1"]))
@@ -718,12 +939,17 @@ def render_mix(
         pcm: list[float] = []
         sr = rate
         if spoken:
+            had_spoken = True
             pcm, sr = synthesize_turn(
                 spoken,
                 lang,
                 str(ref) if ref else "",
                 engine if engine in ENGINES else ENGINE_CHATTERBOX,
             )
+            if pcm:
+                cloned = True
+            else:
+                flags.append(f"turn {turn['id']} clone missing")
             if sr != rate and pcm:
                 from .align import resample_linear
 
@@ -759,7 +985,9 @@ def render_mix(
     status = "ok"
     if lock_flags.get("trimmed"):
         flags.append("duration trimmed")
-    if flags:
+    if had_spoken and not cloned:
+        status = CLONE_MISSING_STATUS
+    elif flags:
         status = "; ".join(flags)
     save_state(
         dest,
@@ -806,19 +1034,22 @@ def analyze_job(
         )
         return payload, "missing source.wav"
     samples, rate = read_wav(wav)
-    turns = analyze_pcm(
+    turns, detected = analyze_pcm(
         samples,
         rate,
         max_speakers=max_speakers,
         language=source_language,
         wav_path=wav,
     )
+    src = language_code(source_language)
+    if src == "auto" and detected:
+        src = language_code(detected)
     turns, reason = translate_turns(
-        turns, target_language, source_language, enhance=enhance
+        turns, target_language, src, enhance=enhance
     )
     payload = {
         "target_language": target_language,
-        "source_language": source_language,
+        "source_language": src,
         "stage": name,
         "status": reason,
         "turns": turns,

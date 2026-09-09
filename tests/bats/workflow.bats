@@ -570,7 +570,7 @@ assert float(wv['frame_rate'])==12
 assert wv['save_output'] is True
 assert 'ez_gif_loop' in str(wv['filename_prefix'])
 enh=next(n for n in g['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert enh['widgets_values'][1] is True
+assert enh['widgets_values'][1] is False
 assert enh['widgets_values'][2]=='i2v'
 motion=enh['widgets_values'][0].lower()
 assert 'locked' in motion or 'lock' in motion

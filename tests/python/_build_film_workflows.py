@@ -236,26 +236,16 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
 
 
 def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str:
-    if film == "go-see":
-        enhance_line = (
-            "Prompt enhance is **off** so the pinned body-cam bible is what CLIP "
-            "encodes. Turn Enhance on only if you want the 4B rewriter."
-        )
-        klein_line = (
-            "Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, "
-            "t2i mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + "
-            "video/audio VAEs (print)."
-        )
-    else:
-        enhance_line = (
-            "Prompt enhance is on by default. After Queue, each Enhance node shows "
-            "the CLIP string used. Turn Enhance off to pin widget text."
-        )
-        klein_line = (
-            "Models: Klein 4B distilled FP8 (identity, 4-step, Enhance **on**, "
-            "identity mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + "
-            "video/audio VAEs (print)."
-        )
+    enhance_line = (
+        "Prompt enhance is **off** so the pinned identity and each baked LTX I2V "
+        "paragraph are encoded as written. Turn Enhance on only if you want the "
+        "4B rewriter."
+    )
+    klein_line = (
+        "Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, "
+        "t2i mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + "
+        "video/audio VAEs (print)."
+    )
     return f"""## {stem}
 
 {LTX_CANVAS_LANDSCAPE}
@@ -494,22 +484,13 @@ def build_one_click_film(
             node["title"] = "Operator note — one-click 90s film"
             node["size"] = [960, 280]
         if node.get("type") == "EZKleinPromptEnhance":
-            if film == "go-see":
-                node["widgets_values"] = [
-                    identity,
-                    False,
-                    "t2i",
-                    "YouTube 16:9 still",
-                    "none",
-                ]
-            else:
-                node["widgets_values"] = [
-                    identity,
-                    True,
-                    "identity",
-                    "YouTube 16:9 still",
-                    "none",
-                ]
+            node["widgets_values"] = [
+                identity,
+                False,
+                "t2i" if film == "go-see" else "identity",
+                "YouTube 16:9 still",
+                "none",
+            ]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
             node["widgets_values"] = [identity]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":
@@ -630,7 +611,7 @@ def build_one_click_film(
                 shot["ltx_i2v"],
                 shot["prefix"],
                 42 + index,
-                enhance=film != "go-see",
+                enhance=False,
             )
         )
 

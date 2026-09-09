@@ -731,13 +731,25 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "ltx-weather-broll-lab-example": _spec("produce", "ltx"),
     "ltx-interior-ambience-lab-example": _spec("produce", "ltx"),
     "film-go-see-90s-run-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True
+        "film",
+        "film",
+        default_view="graph",
+        film_minimal=True,
+        enhance_off_identity=True,
     ),
     "film-still-here-90s-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True
+        "film",
+        "film",
+        default_view="graph",
+        film_minimal=True,
+        enhance_off_identity=True,
     ),
     "film-switchyard-90s-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True
+        "film",
+        "film",
+        default_view="graph",
+        film_minimal=True,
+        enhance_off_identity=True,
     ),
     "podcast-audio-first-lab-example": _spec("audio", "audio"),
     "podcast-radio-drama-lab-example": _spec("audio", "audio"),
@@ -1026,6 +1038,9 @@ def stamp_suite_graph(graph: dict) -> dict:
     """Stamp a known suite graph. No-op when graph id is not in STAMP_SPECS."""
     spec = STAMP_SPECS.get(str(graph.get("id") or ""))
     if spec is None:
+        from _wire_prompt_enhance import apply_enhance_policy
+
+        apply_enhance_policy(graph)
         return apply_lab_completeness_flags(graph)
     outputs = infer_suite_outputs(graph, spec)
     if not outputs:
@@ -1044,6 +1059,9 @@ def stamp_suite_graph(graph: dict) -> dict:
         default_view=spec["default_view"],
         enhance_off_identity=spec["enhance_off_identity"],
     )
+    from _wire_prompt_enhance import apply_enhance_policy
+
+    apply_enhance_policy(graph)
     return apply_lab_completeness_flags(graph)
 
 
