@@ -2634,7 +2634,17 @@
 <tr>
 <td>Podcast script unchanged with Enhance on / GGUF fail-soft</td>
 <td>Same as prompt enhance: missing GGUF or llama.cpp</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">Widget</span> text is passed through. <code>./scripts/manage.sh download-models</code> for the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct GGUF. Enhance defaults <strong>off</strong> on podcast graphs so Queue works offline</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">Widget</span> text is passed through. <code>./scripts/manage.sh download-models</code> for the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct GGUF. Seeded podcast graphs pin Enhance <strong>off</strong> so <code>Speaker A:</code> / <code>Speaker B:</code> stay parser input</td>
+</tr>
+<tr>
+<td>Dub SRT / mix still in the source language</td>
+<td>Translation used to copy <code>text</code> into <code>text_target</code> on JSON parse failure; clone engine was a stub so <code>keep_bed</code> left the original recording</td>
+<td>Pull latest. Rewrite translation <strong>on</strong>, Stage <strong>all</strong>. After Queue, <code>text_target</code> must differ when source ≠ target (status lists passthrough counts). Clone needs <code>download-dub --tier clone</code> plus <code>pip install chatterbox-tts</code>. Chatterbox <code>language_id</code> is ISO (<code>es</code>, not <code>Spanish</code>). Missing engine status: <code>clone engine missing — original bed only</code></td>
+</tr>
+<tr>
+<td>Rap bars slur / tags BPM fights the encoder</td>
+<td>Enhance rewrote ACE tags/lyrics (BPM, language, <code>[verse]</code>)</td>
+<td>Seeded rap graphs pin Enhance <strong>off</strong>. Turn Rewrite prompt on only for a lazy tags line</td>
 </tr>
 <tr>
 <td>Master is not −16 LUFS</td>

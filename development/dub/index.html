@@ -1973,7 +1973,7 @@
 </tr>
 <tr>
 <td>Translate</td>
-<td>On-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span></td>
+<td>On-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>, <strong>one turn at a time</strong> (ISO source → target names in the prompt)</td>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache 2.0</span></td>
 <td>already in <code>download-models</code></td>
 </tr>
@@ -2051,7 +2051,7 @@
 </tr>
 <tr>
 <td><strong>Rewrite translation</strong></td>
-<td>On: diarize + ASR + GGUF. Off: pin the JSON</td>
+<td>On: diarize + ASR + per-turn GGUF into <code>text_target</code>. Off: pin the JSON</td>
 </tr>
 <tr>
 <td><strong>Stage</strong></td>
@@ -2113,7 +2113,7 @@
 
   U-&gt;&gt;I: Source + I have rights
   I-&gt;&gt;S: job slug
-  S-&gt;&gt;S: VAD + diarize + ASR + GGUF
+  S-&gt;&gt;S: VAD + diarize + ASR + per-turn GGUF
   S-&gt;&gt;R: translation JSON
   R-&gt;&gt;U: duration-locked mix + SRT + disclosure</code></pre>
 <p>Cover art is a <strong>later</strong> Klein session. Occupancy: do not load LTX + this together.</p>

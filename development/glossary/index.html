@@ -4370,7 +4370,7 @@
 <p>Fix a seed when you iterate a prompt so lighting and identity do not jump. Identity sheets pin seed 42. Random seeds are for discovery, not for matching a still into I2V. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
 <p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#identity-still">identity still</a></p>
 <h3 id="prompt-enhance">Prompt Enhance<a class="headerlink" href="#prompt-enhance" title="Permanent link">&para;</a></h3>
-<p>Klein/Wan/LTX/ACE-Step Prompt Enhance defaults <strong>on</strong> for every lab graph, including identity bibles and 90s films. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See <a href="../prompting/">Prompting</a>.</p>
+<p>Klein/Wan/LTX Prompt Enhance defaults <strong>on</strong> for lazy CLIP printers and identity bibles you type. Seeded graphs pin it <strong>off</strong> for 90s films, talking-head, loops, camera-verb I2V, podcast scripts, and ACE tags/lyrics so the rewriter cannot mutate those inputs. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See <a href="../prompting/">Prompting</a>.</p>
 <p><strong>See also:</strong> <a href="#enhance">Enhance</a> · <a href="#gguf">GGUF</a> · <a href="#qwen">Qwen3-4B</a></p>
 <h3 id="world-bible">world bible<a class="headerlink" href="#world-bible" title="Permanent link">&para;</a></h3>
 <p>Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (<code>lock=view</code>) or change only light (<code>lock=state</code>). Each view shot names its own room backdrop so interiors do not reuse one skyline. Identity-mode enhance keeps the bible camera-free. See <a href="../prompting/">Prompting</a>.</p>
@@ -4521,7 +4521,7 @@
 <p><strong>See also:</strong> <a href="#last-frame">last-frame continuity</a> · <a href="#film-accept">film-accept</a></p>
 <h2 id="audio">Audio<a class="headerlink" href="#audio" title="Permanent link">&para;</a></h2>
 <h3 id="dub">Local dub<a class="headerlink" href="#dub" title="Permanent link">&para;</a></h3>
-<p>The <strong>dub-localize-lab-example</strong> App diarizes speakers, translates turns, and clones each voice (Chatterbox Multilingual V3). Pick or upload a file from <code>input/</code> (or set a Source URL). <strong>I have rights</strong> must be on. Occupancy audio. YouTube Studio wants the audio-only <code>ez_dub_yt</code> file, not a muxed multi-track MP4. See <a href="../dub/">Local dub</a>.</p>
+<p>The <strong>dub-localize-lab-example</strong> App diarizes speakers, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual, <code>language_id</code> like <code>es</code>). Pick or upload a file from <code>input/</code> (or set a Source URL). <strong>I have rights</strong> must be on. Occupancy audio. YouTube Studio wants the audio-only <code>ez_dub_yt</code> file, not a muxed multi-track MP4. See <a href="../dub/">Local dub</a>.</p>
 <p><strong>Also called:</strong> <code>dub-localize</code></p>
 <p><strong>See also:</strong> <a href="#chatterbox">Chatterbox</a> · <a href="#tts">TTS</a> · <a href="#occupancy">occupancy</a> · <a href="#disclosure">disclosure bumper</a> · <a href="#multi-language-audio">YouTube multi-language audio</a></p>
 <h3 id="multi-language-audio">YouTube multi-language audio<a class="headerlink" href="#multi-language-audio" title="Permanent link">&para;</a></h3>
