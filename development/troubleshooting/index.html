@@ -2626,6 +2626,11 @@
 <td>After Queue a <strong>90s film ready</strong> overlay plays and downloads the master. Files: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code> (H.264 + AAC + faststart) and <code>ez_gosee_90s.html</code>. Optional: <code>docker compose --profile studio-ui up studio-ui</code> then http://localhost:8190/watch/gosee. Confirm: <code>ls "${COMFY_OUTPUT_DIR}/ez_*_90s.mp4"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. Copy off the Spark with <code>scp</code>. <code>cleanup</code> does not delete this folder — <a href="../shorts/">90s shorts</a></td>
 </tr>
 <tr>
+<td><strong>EZFilmConcat</strong> <code>xfade requires audio</code> / path ends in <code>.png</code></td>
+<td>VHS_FILENAMES lists the metadata PNG first, then silent <code>.mp4</code>, then muxed <code>*-audio.mp4</code>. Old <code>ez_film</code> took the PNG. go-see <code>xfade_cs=8</code> then refuses</td>
+<td>The 18 LTX prints already finished — <strong>do not</strong> re-Queue the full graph. Pull latest, <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>ez_film</code> copies. Stitch existing files: <code>./scripts/utilities/concat-shots.sh --film go-see --xfade 8 --yes</code>. Confirm: <code>ls "${COMFY_OUTPUT_DIR}"/ez_gosee_b*_s*_ltx_video*-audio.mp4</code>. After the pack update you can also Queue <strong>only</strong> EZFilmConcat (node 900)</td>
+</tr>
+<tr>
 <td>LTX MP4 plays but has no sound</td>
 <td>Graph missing <code>LTXVAudioVAEDecode</code> → VHS audio, or old seeded JSON</td>
 <td>Pull latest workflows; confirm the canvas has <strong>Audio VAE Decode</strong> linked into <strong>Save video (MP4)</strong>. Re-copy via container restart. World audio is muxed into the MP4 — there is no separate WAV by default</td>
