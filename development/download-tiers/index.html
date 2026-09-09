@@ -2178,8 +2178,8 @@
 <td><code>download-dub</code></td>
 <td><code>asr</code> <code>clone</code> <code>all</code></td>
 <td><code>asr</code></td>
-<td>Silero VAD + faster-whisper; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span>. Missing pack is not a doctor failure</td>
-<td>asr ~3 GB; clone ~2 GB</td>
+<td>Silero VAD + faster-whisper (full CTranslate2 dir); <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span> (<code>ve.pt</code> + <code>s3gen.pt</code> + T3). Missing pack is not a doctor failure</td>
+<td>asr ~3 GB; clone ~4 GB</td>
 <td>no</td>
 </tr>
 <tr>
@@ -2273,7 +2273,7 @@
 
 <hr />
 <h2 id="dub-asr-multilingual-clone">Dub — ASR + multilingual clone<a class="headerlink" href="#dub-asr-multilingual-clone" title="Permanent link">&para;</a></h2>
-<p><code>asr</code> is Silero VAD + faster-whisper large-v3. <code>clone</code> is Chatterbox Multilingual V3 (MIT, PerTh on). Doctor does <strong>not</strong> fail when these are missing. Occupancy <strong>audio</strong>. Playbook: <a href="../dub/">Local dub</a>.</p>
+<p><code>asr</code> is Silero VAD + faster-whisper large-v3 (<code>model.bin</code> <strong>and</strong> <code>config.json</code>). <code>clone</code> is Chatterbox Multilingual V3 (MIT, PerTh on): <code>ve.pt</code>, <code>s3gen.pt</code>, T3 V3, tokenizer JSON. Doctor does <strong>not</strong> fail when these are missing. Occupancy <strong>audio</strong>. Playbook: <a href="../dub/">Local dub</a>.</p>
 <div class="ez-cmd-builder" data-ez-cmd="download-dub">
 <noscript><pre><code>./scripts/manage.sh download-dub --tier asr --limit auto</code></pre></noscript>
 </div>

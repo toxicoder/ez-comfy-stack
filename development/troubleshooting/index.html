@@ -2094,8 +2094,13 @@
 </tr>
 <tr>
 <td>Dub empty mix / no transcript</td>
-<td>faster-whisper or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> missing</td>
-<td><code>download-dub --tier asr</code> / <code>--tier clone</code>; optional <code>pip install faster-whisper</code> in the venv</td>
+<td>faster-whisper or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> missing, or ASR/clone snapshot incomplete</td>
+<td><code>download-dub --tier asr</code> (needs <code>model.bin</code> <strong>and</strong> <code>config.json</code>) then <code>--tier clone</code> (<code>ve.pt</code>, <code>s3gen.pt</code>, T3 V3, tokenizer JSON). In the Comfy venv: <code>pip install faster-whisper chatterbox-tts</code>. Status names the miss.</td>
+</tr>
+<tr>
+<td>Dub mix is the original <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">clip</span></td>
+<td>Old fail-soft returned the source when turns/clone were empty</td>
+<td>Pull latest. Queue must not write <code>ez_dub_yt</code> from <code>source.wav</code>. Empty mix + status means ASR/clone still missing.</td>
 </tr>
 <tr>
 <td>Dub URL ingest failed</td>
@@ -2421,7 +2426,7 @@
 <tr>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nunchaku" data-href="../glossary/#nunchaku" title="Optional quantized engine. Lab graphs do not require it; PyPI nunchaku is the wrong package.">Nunchaku</span> import spam / <code>nunchaku 0.16.1</code> / missing <code>nunchaku.models</code></td>
 <td>Wrong <strong>PyPI</strong> package (<code>nunchaku</code> stats lib) or no aarch64 wheel on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span></td>
-<td>Lab graphs do <strong>not</strong> need Nunchaku. Restart after image refresh (removes wrong package). Do <strong>not</strong> <code>pip install nunchaku</code> from PyPI. Optional real engine: GitHub wheels only (<code>NUNCHAKU_WHEEL_URL=…</code> or x86_64 cu/torch match). Spark aarch64: skip; use core <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">CLIP</span>/VAE loaders</td>
+<td>Lab graphs do <strong>not</strong> need Nunchaku. Restart after image refresh (removes wrong package). Do <strong>not</strong> <code>pip install nunchaku</code> from PyPI. Optional real engine: GitHub wheels only (<code>NUNCHAKU_WHEEL_URL=…</code> or x86_64 cu/torch match). Spark aarch64: skip; use core <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span>/CLIP/VAE loaders</td>
 </tr>
 <tr>
 <td>Nunchaku missing</td>
@@ -2643,8 +2648,8 @@
 </tr>
 <tr>
 <td>Dub SRT / mix still in the source language</td>
-<td>Translation used to copy <code>text</code> into <code>text_target</code> on JSON parse failure; clone engine was a stub so <code>keep_bed</code> left the original recording</td>
-<td>Pull latest. Rewrite translation <strong>on</strong>, Stage <strong>all</strong>. After Queue, <code>text_target</code> must differ when source ≠ target (status lists passthrough counts). Clone needs <code>download-dub --tier clone</code> plus <code>pip install chatterbox-tts</code>. Chatterbox <code>language_id</code> is ISO (<code>es</code>, not <code>Spanish</code>). Missing engine status: <code>clone engine missing — original bed only</code></td>
+<td>ASR never filled <code>text</code> (incomplete Whisper pack or missing wheel), or GGUF passthrough</td>
+<td>Pull latest. Rewrite translation <strong>on</strong>, Stage <strong>all</strong>. After Queue, <code>text_target</code> must differ when source ≠ target. Whisper needs <code>config.json</code> next to <code>model.bin</code>. Clone needs the complete V3 snapshot plus <code>pip install chatterbox-tts</code>. Chatterbox <code>language_id</code> is ISO (<code>es</code>, not <code>Spanish</code>). Missing engine: empty mix, not the original recording.</td>
 </tr>
 <tr>
 <td>Rap bars slur / tags BPM fights the encoder</td>

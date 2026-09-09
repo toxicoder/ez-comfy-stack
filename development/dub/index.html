@@ -1960,14 +1960,14 @@
 </thead>
 <tbody>
 <tr>
-<td>VAD</td>
-<td>Silero VAD ONNX (energy VAD fallback)</td>
+<td>ASR / turns</td>
+<td>faster-whisper large-v3 segments (speaker cluster from those slices)</td>
 <td>MIT</td>
 <td><code>download-dub --tier asr</code></td>
 </tr>
 <tr>
-<td>ASR</td>
-<td>faster-whisper large-v3</td>
+<td>VAD helper</td>
+<td>Silero VAD ONNX on disk; energy VAD is not the turn source</td>
 <td>MIT</td>
 <td><code>download-dub --tier asr</code></td>
 </tr>
@@ -1979,7 +1979,7 @@
 </tr>
 <tr>
 <td>Clone</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span> (23 languages, PerTh on)</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span> (<code>from_local</code> + ISO <code>language_id</code>, PerTh on)</td>
 <td>MIT</td>
 <td><code>download-dub --tier clone</code></td>
 </tr>
@@ -1991,7 +1991,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>faster-whisper</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span>, and <code>yt-dlp</code> are <strong>optional runtime</strong> installs inside the container venv. They are <strong>not</strong> baked in <code>phase-nodes.sh</code>. The graph still loads if a wheel is missing; Queue fail-softs until you install it and download the pack.</p>
+<p><code>faster-whisper</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span>, and <code>yt-dlp</code> are <strong>optional runtime</strong> installs inside the container venv. They are <strong>not</strong> baked in <code>phase-nodes.sh</code>. The graph still loads if a wheel is missing; Queue writes an <strong>empty mix</strong> plus a status line (never the original recording) until you install the wheel and download the complete pack.</p>
 <p>Chatterbox languages: Arabic, Danish, German, Greek, English, Spanish, Finnish, French, Hebrew, Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian, Polish, Portuguese, Russian, Swedish, Swahili, Turkish, Chinese. Soccer EN→ES is first-class.</p>
 <p>Banned: F5-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>, XTTS, Fish, Higgs, NLLB, SeamlessM4T, ElevenLabs, Wav2Lip, TTS-Audio-Suite.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
@@ -2073,10 +2073,10 @@
 </table>
 <h2 id="sequential-queue">Sequential Queue<a class="headerlink" href="#sequential-queue" title="Permanent link">&para;</a></h2>
 <ol>
-<li><code>download-dub --tier asr</code> then <code>--tier clone</code></li>
-<li>Optional: <code>faster-whisper</code> (and Chatterbox) in the Comfy venv</li>
+<li><code>download-dub --tier asr</code> then <code>--tier clone</code> (clone is <code>ve.pt</code> + <code>s3gen.pt</code> + T3 V3 + tokenizer JSON, not t3-only)</li>
+<li>In the Comfy venv: <code>pip install faster-whisper chatterbox-tts</code></li>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
-<li>Load <strong>dub-localize-lab-example</strong>. Pick <strong>Source file</strong> or <strong>Upload media</strong> (or set <strong>Source URL</strong>). Turn <strong>I have rights</strong> on. Queue</li>
+<li>Load <strong>dub-localize-lab-example</strong>. Pick <strong>Source file</strong> or <strong>Upload media</strong> (or set <strong>Source URL</strong>). Turn <strong>I have rights</strong> on. Queue. Status must list speaker/turn counts, not <code>ASR pack missing</code> / <code>clone engine missing</code>.</li>
 <li>Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_dub_mix_*.flac</code> / <code>ez_dub_yt_*.mp3</code> plus <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt.wav</code></li>
 <li>Loudness:</li>
 </ol>
@@ -2113,8 +2113,9 @@
 
   U-&gt;&gt;I: Source + I have rights
   I-&gt;&gt;S: job slug
-  S-&gt;&gt;S: VAD + diarize + ASR + per-turn GGUF
+  S-&gt;&gt;S: ffmpeg mono PCM + Whisper turns + speaker cluster + per-turn GGUF
   S-&gt;&gt;R: translation JSON
+  R-&gt;&gt;R: per-speaker refs + Chatterbox V3 clone
   R-&gt;&gt;U: duration-locked mix + SRT + disclosure</code></pre>
 <p>Cover art is a <strong>later</strong> Klein session. Occupancy: do not load LTX + this together.</p>
 <p>Start still requires typing <code>yes</code>. Compose <code>restart: "no"</code> is unchanged.</p>
