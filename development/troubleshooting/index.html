@@ -2194,12 +2194,17 @@
 <tr>
 <td><code>MODELS_DIR … not writable</code></td>
 <td><code>${MODELS_DIR}</code> missing or root-owned</td>
-<td><code>./scripts/manage.sh setup</code> <strong>or</strong> <code>sudo mkdir -p "${MODELS_DIR}" &amp;&amp; sudo chown "$USER:$USER" "${MODELS_DIR}"</code> <strong>or</strong> <code>MODELS_DIR=$HOME/models</code></td>
+<td><code>./scripts/manage.sh setup</code> (sudo mkdir + chown). Last resort: <code>sudo mkdir -p "${MODELS_DIR}" &amp;&amp; sudo chown "$USER:$USER" "${MODELS_DIR}"</code> <strong>or</strong> <code>MODELS_DIR=$HOME/models</code></td>
+</tr>
+<tr>
+<td><code>mkdir: …/comfy/…: Permission denied</code> during <code>download-models</code></td>
+<td>Nested <code>comfy/</code> is root-owned (container <code>mkdir</code> on the bind-mount) while <code>${MODELS_DIR}</code> itself is writable</td>
+<td>Re-run <code>./scripts/manage.sh download-models</code> — it sudo-heals <code>${MODELS_DIR}/comfy</code>. Same heal on <code>setup</code> / <code>start</code>. Last resort: <code>sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy"</code></td>
 </tr>
 <tr>
 <td><code>ln: … comfy/llm/….gguf: Permission denied</code> then <code>GGUF ready</code></td>
 <td>Relink into a nested dir the user cannot write; the GGUF is already present</td>
-<td>Start is OK — Enhance works if that path exists. To heal ownership: <code>./scripts/manage.sh setup</code> <strong>or</strong> <code>sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy/llm"</code>. Do not abort start</td>
+<td>Start is OK — Enhance works if that path exists. Heal: <code>./scripts/manage.sh download-models</code> <strong>or</strong> <code>setup</code> / <code>start</code> (sudo-chown <code>comfy/</code>). Do not abort start</td>
 </tr>
 <tr>
 <td>Pending / can't start container</td>
@@ -2236,11 +2241,12 @@
 <h3 id="models_dir-permission-denied">MODELS_DIR permission denied<a class="headerlink" href="#models_dir-permission-denied" title="Permanent link">&para;</a></h3>
 <p>Default cache is <code>/mnt/models</code> (shared with nvidia-dgx-spark-lab). Prefer bootstrap:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/manage.sh<span class="w"> </span>setup
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># creates/chowns MODELS_DIR with sudo when needed</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># creates/chowns MODELS_DIR and MODELS_DIR/comfy with sudo when needed</span>
 </code></pre></div>
-<p>Manual equivalent:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
+<p><code>download-models</code> and <code>start</code> also sudo-heal nested <code>comfy/</code> (HF snapshots at the top level can be writable while <code>comfy/</code> is still root-owned). Do not prefix those commands with <code>sudo</code>.</p>
+<p>Manual last resort:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">/comfy"</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># or in .env:</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># MODELS_DIR=$HOME/models</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>./scripts/manage.sh<span class="w"> </span>doctor

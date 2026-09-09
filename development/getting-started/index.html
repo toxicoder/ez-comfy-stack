@@ -2280,7 +2280,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># 1. echo 'HF_TOKEN=hf_...' &gt;&gt; .env   # or: hf auth login</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># 2. Open https://huggingface.co/Lightricks/LTX-2.5 as THAT user and click Agree</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># 3. Fine-grained tokens need gated-repo read</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Do not prefix with sudo — download-limit uses sudo internally.</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Do not prefix with sudo — download-limit and comfy/ ownership heal use sudo internally.</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>./scripts/manage.sh<span class="w"> </span>download-models
 <a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># Manual cap (Mbps; 40 ≈ 5 MB/s). Overrides DOWNLOAD_LIMIT for this run:</span>
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># ./scripts/manage.sh download-models --limit 40</span>
@@ -2307,7 +2307,7 @@
 </tr>
 <tr>
 <td><strong>Layout</strong></td>
-<td>Weights under <code>${MODELS_DIR}</code> with relative <code>comfy/</code> symlinks</td>
+<td>Weights under <code>${MODELS_DIR}</code> with relative <code>comfy/</code> symlinks. Cache hits still need a writable <code>comfy/</code>; <code>download-models</code> sudo-heals nested ownership (no manual <code>chown</code>).</td>
 </tr>
 <tr>
 <td><strong>LTX size</strong></td>
