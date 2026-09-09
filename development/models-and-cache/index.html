@@ -3101,7 +3101,7 @@
 <h3 id="prebuild-version-pins-validated">Prebuild version pins (validated)<a class="headerlink" href="#prebuild-version-pins-validated" title="Permanent link">&para;</a></h3>
 <details class="abstract">
 <summary>Pin table and bump procedure</summary>
-<p>Defaults are intentional tags so GHCR rebuilds are reproducible. Validated <strong>2026-07-29</strong>:</p>
+<p>Defaults are intentional tags so GHCR rebuilds are reproducible. Validated <strong>2026-07-29</strong> (Comfy pin <strong>2026-09-08</strong>):</p>
 <table>
 <thead>
 <tr>
@@ -3118,8 +3118,8 @@
 </tr>
 <tr>
 <td><code>COMFYUI_REF</code></td>
-<td><code>v0.34.0</code></td>
-<td>Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the <strong>comfy</strong> image stage after this bump (torch stage stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
+<td><code>v0.34.6</code></td>
+<td>Newest <strong>patch tag</strong> on the v0.34 stable line (<code>8fed378</code>, 2026-09-07) — not GitHub <strong>Latest</strong> (<code>v0.34.0</code>). Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Frontend still 1.49.6. Rebuild the <strong>comfy</strong> image stage after this bump (torch stage stays cached). Spark free-memory patch still matches <code>mem_free_cuda, _ = torch.cuda.mem_get_info(dev)</code> in <code>comfy/model_management.py</code>.</td>
 </tr>
 <tr>
 <td><code>COMFYUI_MANAGER_REF</code></td>
