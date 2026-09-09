@@ -11,7 +11,7 @@ tags: [conventions, contributing, safety, shell, google-style]
 - Core principles
 - Repo layout and ownership
 - Shell style (Google Shell Style Guide + project deviations)
-- Docker, testing, coverage gate, Pyright (Pylance), and branching rules
+- Docker, testing, coverage gate, Pyright (Pylance) + mypy, and branching rules
 - Docs publish and **human-readable formatting** patterns
 
 **What this enables**
@@ -27,10 +27,10 @@ tags: [conventions, contributing, safety, shell, google-style]
 | Stability first | SSH stays usable under load |
 | Explicit resources | Docker mem limits always set |
 | No auto-start | `restart: "no"` |
-| Hermetic tests | BATS/pytest/Pyright without real Spark |
+| Hermetic tests | BATS/pytest/Pyright/mypy without real Spark |
 | Docs as code | MkDocs pages with required sections |
 | Keep it small | No K8s/Ansible/dashboard/Bazel |
-| Style as gate | ShellCheck + shfmt + Pyright (Pylance) on every change |
+| Style as gate | ShellCheck + shfmt + Pyright (Pylance) + mypy on every change |
 
 ## Repo layout
 
@@ -83,6 +83,7 @@ This project follows that guide for executables and libraries, with the **intent
 | Entry scripts | `*.sh`, executable, `set -euo pipefail` |
 | ShellCheck | Clean at warning level (`make lint`) |
 | Pyright | Clean at `standard` (`make typecheck` / `make lint`) |
+| mypy | Clean (`make typecheck` / `make lint`; `mypy.ini`) |
 | SUID/SGID | Forbidden |
 
 ### Intentional deviations from Google
@@ -196,17 +197,17 @@ flowchart TB
 ## Testing
 
 - TDD for behavior changes  
-- BATS for shell; pytest for Python; **Pyright** (Pylance's type checker) for first-party Python  
+- BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python  
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `make coverage` enforces:
   - **100% Python line coverage** on `patch_get_free_memory` and `patch_unified_memory_copy`
-  - **Pyright** clean at `standard` (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
+  - **Pyright** clean at `standard` and **mypy** clean (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (production-only references do not count)
   - Full BATS suite green  
 - **Tests ship with production code** — same commit as the files under test  
 - **Test shell style**: `tests/bats/*.bats`, `tests/bats/*.bash`, and `tests/*.sh` follow the Google Shell Style Guide where applicable (quoted `"${var}"`, `[[ … ]]`, Google-style helper comments in `test_helper.bash`, 2-space indent / shfmt for `.sh` runners)
-- Install test tools: `pip install -r tests/requirements.txt` (pytest, pytest-cov, pyright)
+- Install test tools: `pip install -r tests/requirements.txt` (pytest, pytest-cov, pyright, mypy)
 
 ```mermaid
 flowchart LR
@@ -218,7 +219,7 @@ flowchart LR
 ```mermaid
 flowchart TB
   Cov["make coverage"] --> Py["100% line · UM patches"]
-  Cov --> Pyright["Pyright standard · first-party Python"]
+  Cov --> Pyright["Pyright standard + mypy · first-party Python"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>named under tests/"]
   Cov --> Bats["Full BATS suite green"]
   Lint["make lint"] --> SC["ShellCheck warnings = defects"]

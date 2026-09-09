@@ -6,7 +6,7 @@
 #
 # Gates:
 #   1. Python — pytest-cov on patch_get_free_memory + patch_unified_memory_copy + ez_ltx_spatial with --cov-fail-under=100
-#   2. Pyright (Pylance) — first-party Python typecheck (tests/typecheck.sh)
+#   2. Pyright (Pylance) + mypy — first-party Python typecheck (tests/typecheck.sh)
 #   3. Shell function inventory — every function under scripts/ and docker/**/*.sh
 #      must be named under tests/ (strict; production-only refs do not count)
 #   4. Full BATS suite
@@ -126,7 +126,7 @@ main() {
     echo "Coverage gate FAILED" >&2
     exit 1
   fi
-  echo "Coverage gate PASSED (100% Python + Pyright + strict shell inventory + BATS)"
+  echo "Coverage gate PASSED (100% Python + Pyright + mypy + strict shell inventory + BATS)"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then

@@ -40,19 +40,21 @@ def read_wav(path: Path | str) -> tuple[list[float], int]:
         rate = handle.getframerate() or SAMPLE_RATE
         nframes = handle.getnframes()
         raw = handle.readframes(nframes)
+    ints: list[int]
     if width == 2:
         count = len(raw) // 2
-        ints = struct.unpack("<" + "h" * count, raw[: count * 2])
+        unpacked = struct.unpack("<" + "h" * count, raw[: count * 2])
+        ints = [int(v) for v in unpacked]
         scale = 32768.0
     elif width == 1:
-        ints = tuple(b - 128 for b in raw)
+        ints = [int(b) - 128 for b in raw]
         scale = 128.0
     else:
         # 24/32-bit: take little-endian 16-bit of each frame as a fallback.
         step = width
         ints = []
         for i in range(0, len(raw) - 1, step):
-            ints.append(struct.unpack_from("<h", raw, i)[0])
+            ints.append(int(struct.unpack_from("<h", raw, i)[0]))
         scale = 32768.0
     if channels <= 1:
         return [float(v) / scale for v in ints], int(rate)

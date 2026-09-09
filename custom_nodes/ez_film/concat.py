@@ -557,7 +557,9 @@ def probe_has_audio(
         ffprobe=ffprobe,
         run=run,
     )
-    return bool(text) and "audio" in text.lower()
+    if not text:
+        return False
+    return "audio" in text.lower()
 
 
 def probe_audio_hz(

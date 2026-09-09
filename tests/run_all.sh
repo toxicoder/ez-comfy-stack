@@ -6,13 +6,14 @@
 #
 # Purpose:
 #   Run BATS for all suites under tests/bats, Python tests (preferring
-#   pytest-cov when installed), then Pyright (Pylance) on first-party Python.
+#   pytest-cov when installed), then Pyright (Pylance) and mypy on first-party
+#   Python.
 #
 # Style:
 #   Google Shell Style Guide (project deviations in docs/project-conventions.md).
 #
 # Requirements:
-#   bats, python3, pytest (optional pytest-cov), pyright
+#   bats, python3, pytest (optional pytest-cov), pyright, mypy
 #   (pip install -r tests/requirements.txt). GNU parallel recommended for
 #   bats --jobs. No GPU or Hugging Face network.
 #
@@ -78,7 +79,7 @@ else
   python3 -m pytest tests/python -q
 fi
 
-echo "==> Pyright (Pylance)"
+echo "==> Typecheck (Pyright + mypy)"
 bash tests/typecheck.sh
 
 echo "==> All tests passed"

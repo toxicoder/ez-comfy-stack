@@ -98,7 +98,7 @@ def _wrap_classmethod_wh(cls: type, name: str, width_index: int) -> bool:
     return True
 
 
-def _wrap_video_vae_encode(cls: type) -> bool:
+def _wrap_video_vae_encode(cls: Any) -> bool:
     orig = getattr(cls, "encode", None)
     if orig is None or _is_wrapped(orig):
         return False
@@ -123,7 +123,7 @@ def _wrap_video_vae_encode(cls: type) -> bool:
         return orig_fn(self, cropped, device)
 
     _mark_wrapped(encode)
-    cls.encode = encode
+    setattr(cls, "encode", encode)
     return True
 
 
