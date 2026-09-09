@@ -118,7 +118,7 @@ def test_music_rap_full_graph() -> None:
 
 
 def test_music_rap_nill_bye_diss_graphs() -> None:
-    assert len(DISS_EXAMPLES) == 15
+    assert len(DISS_EXAMPLES) == 45
     assert tuple(ex["stem"] for ex in DISS_EXAMPLES) == NILL_BYE_STAMP_STEMS
     for ex in DISS_EXAMPLES:
         stem = ex["stem"]
@@ -140,7 +140,7 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
         note = graph["extra"]["lab_note"]
         assert "180" in note
         assert "on its own" in note.lower() or "queue on its own" in note.lower()
-        if ex["title"] in {"peer review", "grant denied"}:
+        if ex["title"] in {"peer review", "grant denied", "story time"}:
             assert "[spoken word]" in blob
 
 

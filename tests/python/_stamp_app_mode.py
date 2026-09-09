@@ -774,23 +774,19 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "wan-i2v-a14b-lab-example": _spec("produce", "wan", default_view="graph"),
 }
 
-NILL_BYE_STAMP_STEMS = (
-    "music-rap-nill-bye-lab-coat-lab-example",
-    "music-rap-nill-bye-peer-review-lab-example",
-    "music-rap-nill-bye-feels-lab-example",
-    "music-rap-nill-bye-fake-cool-lab-example",
-    "music-rap-nill-bye-hypothesis-lab-example",
-    "music-rap-nill-bye-control-group-lab-example",
-    "music-rap-nill-bye-sample-size-lab-example",
-    "music-rap-nill-bye-placebo-lab-example",
-    "music-rap-nill-bye-error-bars-lab-example",
-    "music-rap-nill-bye-lab-notebook-lab-example",
-    "music-rap-nill-bye-office-hours-lab-example",
-    "music-rap-nill-bye-grant-denied-lab-example",
-    "music-rap-nill-bye-contamination-lab-example",
-    "music-rap-nill-bye-double-blind-lab-example",
-    "music-rap-nill-bye-replicate-lab-example",
-)
+def _nill_bye_stems() -> tuple[str, ...]:
+    import sys
+    from pathlib import Path
+
+    custom = Path(__file__).resolve().parents[2] / "custom_nodes"
+    if str(custom) not in sys.path:
+        sys.path.insert(0, str(custom))
+    from ez_music.diss_examples import DISS_EXAMPLES
+
+    return tuple(ex["stem"] for ex in DISS_EXAMPLES)
+
+
+NILL_BYE_STAMP_STEMS = _nill_bye_stems()
 for _nill_bye_stem in NILL_BYE_STAMP_STEMS:
     STAMP_SPECS[_nill_bye_stem] = _spec("audio", "audio")
 

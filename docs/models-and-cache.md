@@ -258,21 +258,7 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `dub-localize-lab-example.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
 | `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-lab-coat-lab-example.json` | ACE-Step 180 s diss, boom-bap 88 (`ez_rap_nill_labcoat`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-peer-review-lab-example.json` | ACE-Step 180 s diss, boom-bap 88 (`ez_rap_nill_review`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-feels-lab-example.json` | ACE-Step 180 s diss, lo-fi 86 (`ez_rap_nill_feels`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-fake-cool-lab-example.json` | ACE-Step 180 s diss, trap 140 (`ez_rap_nill_fakecool`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-hypothesis-lab-example.json` | ACE-Step 180 s diss, boom-bap 92 (`ez_rap_nill_hypothesis`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-control-group-lab-example.json` | ACE-Step 180 s diss, boom-bap 88 (`ez_rap_nill_control`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-sample-size-lab-example.json` | ACE-Step 180 s diss, boom-bap 92 (`ez_rap_nill_samplesize`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-placebo-lab-example.json` | ACE-Step 180 s diss, trap 140 (`ez_rap_nill_placebo`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-error-bars-lab-example.json` | ACE-Step 180 s diss, boom-bap 88 (`ez_rap_nill_errorbars`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-lab-notebook-lab-example.json` | ACE-Step 180 s diss, boom-bap 92 (`ez_rap_nill_notebook`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-office-hours-lab-example.json` | ACE-Step 180 s diss, lo-fi 86 (`ez_rap_nill_office`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-grant-denied-lab-example.json` | ACE-Step 180 s diss, boom-bap 88 (`ez_rap_nill_grant`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-contamination-lab-example.json` | ACE-Step 180 s diss, trap 140 (`ez_rap_nill_contam`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-double-blind-lab-example.json` | ACE-Step 180 s diss, boom-bap 92 (`ez_rap_nill_doubleblind`) |
-| `_lab/audio/nill-bye/music-rap-nill-bye-replicate-lab-example.json` | ACE-Step 180 s diss, boom-bap 88 (`ez_rap_nill_replicate`) |
+| `_lab/audio/nill-bye/music-rap-nill-bye-*-lab-example.json` | Forty-five ACE-Step 180 s Nill Bye diss takes (lab / style / trap-EDM). Catalog: [Local music](music.md) |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
 | `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
