@@ -78,7 +78,7 @@ dub_tier_min_gb() {
   case "${1}" in
     vad) echo 0 ;;
     whisper) echo 2 ;;
-    clone) echo 1 ;;
+    clone) echo 4 ;;
     *) echo 0 ;;
   esac
 }
@@ -100,10 +100,23 @@ dub_tier_include_patterns() {
       printf '%s\n' "src/silero_vad/data/silero_vad.onnx"
       ;;
     whisper)
-      printf '%s\n' "model.bin"
+      printf '%s\n' \
+        "model.bin" \
+        "config.json" \
+        "tokenizer.json" \
+        "vocabulary.json" \
+        "preprocessor_config.json"
       ;;
     clone)
-      printf '%s\n' "t3_mtl23ls_v3.safetensors" "t3_mtl23ls_v2.safetensors" "s3gen.safetensors"
+      # Chatterbox from_local needs this exact set (ve.pt + s3gen.pt, not
+      # s3gen.safetensors). Pin multilingual V3 T3; skip the 2 GB V2 twin.
+      printf '%s\n' \
+        "ve.pt" \
+        "s3gen.pt" \
+        "t3_mtl23ls_v3.safetensors" \
+        "grapheme_mtl_merged_expanded_v1.json" \
+        "Cangjie5_TC.json" \
+        "conds.pt"
       ;;
     *)
       return 0
@@ -184,7 +197,9 @@ dub_comfy_dest_subdir() {
   local base="${1}"
   case "${base}" in
     *.onnx) echo "onnx" ;;
-    model.bin) echo "whisper" ;;
+    model.bin | config.json | tokenizer.json | vocabulary.json | preprocessor_config.json)
+      echo "whisper"
+      ;;
     *) echo "tts" ;;
   esac
 }
@@ -236,18 +251,6 @@ dub_tier_files_ready() {
   local dir pat f
   dir="$(dub_tier_dir "${tier}")"
   if [[ ! -d ${dir} ]]; then
-    return 1
-  fi
-  if [[ ${tier} == clone ]]; then
-    if [[ ! -f ${dir}/s3gen.safetensors || ! -s ${dir}/s3gen.safetensors ]]; then
-      return 1
-    fi
-    if [[ -f ${dir}/t3_mtl23ls_v3.safetensors && -s ${dir}/t3_mtl23ls_v3.safetensors ]]; then
-      return 0
-    fi
-    if [[ -f ${dir}/t3_mtl23ls_v2.safetensors && -s ${dir}/t3_mtl23ls_v2.safetensors ]]; then
-      return 0
-    fi
     return 1
   fi
   while IFS= read -r pat; do
@@ -334,7 +337,8 @@ dub_link_into_comfy() {
     fi
   done < <(
     find "${dir}" -type f \( \
-      -name '*.safetensors' -o -name '*.onnx' -o -name 'model.bin' \
+      -name '*.safetensors' -o -name '*.onnx' -o -name '*.pt' \
+      -o -name 'model.bin' -o -name '*.json' \
       \) 2>/dev/null
   )
 }
@@ -396,7 +400,7 @@ dub_parse_args() {
       -h | --help)
         echo "Usage: $0 status|run|cleanup [--tier asr|clone|all] [--json]" >&2
         echo "  asr = Silero VAD + faster-whisper large-v3. Not part of download-models." >&2
-        echo "  clone = Chatterbox Multilingual V3 (MIT, PerTh on)." >&2
+        echo "  clone = Chatterbox Multilingual V3 snapshot (ve.pt + s3gen.pt + T3 V3)." >&2
         echo "  cleanup options: --dry-run (default) | --yes" >&2
         exit 0
         ;;

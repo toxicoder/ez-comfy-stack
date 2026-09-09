@@ -58,13 +58,13 @@ Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera l
 
 | Stage | Default | License | Download |
 | --- | --- | --- | --- |
-| VAD | Silero VAD ONNX (energy VAD fallback) | MIT | `download-dub --tier asr` |
-| ASR | faster-whisper large-v3 | MIT | `download-dub --tier asr` |
+| ASR / turns | faster-whisper large-v3 segments (speaker cluster from those slices) | MIT | `download-dub --tier asr` |
+| VAD helper | Silero VAD ONNX on disk; energy VAD is not the turn source | MIT | `download-dub --tier asr` |
 | Translate | On-box Qwen3-4B-Instruct GGUF, **one turn at a time** (ISO source → target names in the prompt) | Apache 2.0 | already in `download-models` |
-| Clone | Chatterbox Multilingual V3 (23 languages, PerTh on) | MIT | `download-dub --tier clone` |
+| Clone | Chatterbox Multilingual V3 (`from_local` + ISO `language_id`, PerTh on) | MIT | `download-dub --tier clone` |
 | Clone alt | Qwen3-TTS 0.6B | Apache 2.0 | `download-podcast --tier qwen3tts` |
 
-`faster-whisper`, Chatterbox, and `yt-dlp` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh`. The graph still loads if a wheel is missing; Queue fail-softs until you install it and download the pack.
+`faster-whisper`, Chatterbox, and `yt-dlp` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh`. The graph still loads if a wheel is missing; Queue writes an **empty mix** plus a status line (never the original recording) until you install the wheel and download the complete pack.
 
 Chatterbox languages: Arabic, Danish, German, Greek, English, Spanish, Finnish, French, Hebrew, Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian, Polish, Portuguese, Russian, Swedish, Swahili, Turkish, Chinese. Soccer EN→ES is first-class.
 
@@ -115,10 +115,10 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 
 ## Sequential Queue
 
-1. `download-dub --tier asr` then `--tier clone`
-2. Optional: `faster-whisper` (and Chatterbox) in the Comfy venv
+1. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON, not t3-only)
+2. In the Comfy venv: `pip install faster-whisper chatterbox-tts`
 3. `./scripts/manage.sh start` — type **yes**
-4. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. Queue
+4. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. Queue. Status must list speaker/turn counts, not `ASR pack missing` / `clone engine missing`.
 5. Files under `${COMFY_OUTPUT_DIR}` as `ez_dub_mix_*.flac` / `ez_dub_yt_*.mp3` plus `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`
 6. Loudness:
 
@@ -170,8 +170,9 @@ sequenceDiagram
 
   U->>I: Source + I have rights
   I->>S: job slug
-  S->>S: VAD + diarize + ASR + per-turn GGUF
+  S->>S: ffmpeg mono PCM + Whisper turns + speaker cluster + per-turn GGUF
   S->>R: translation JSON
+  R->>R: per-speaker refs + Chatterbox V3 clone
   R->>U: duration-locked mix + SRT + disclosure
 ```
 

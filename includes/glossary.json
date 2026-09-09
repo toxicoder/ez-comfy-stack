@@ -86,7 +86,7 @@
     "aliases": ["Local dub", "dub-localize"],
     "category": "Audio",
     "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
-    "long": "The **dub-localize-lab-example** App diarizes speakers, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual, `language_id` like `es`). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "long": "The **dub-localize-lab-example** App transcribes with faster-whisper (segments become turns), clusters speakers, writes per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. Missing ASR/clone yields an empty mix plus status, not the original recording. YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
     "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
   },
   {
