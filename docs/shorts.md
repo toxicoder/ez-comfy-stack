@@ -124,6 +124,7 @@ FILM=go-see   # or still-here | switchyard
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
 # Optional audio acrossfade (0.10 s). Video is a hard cut (H.264). LTX shots only
 # (Wan-silent has no audio stream — --xfade refuses). go-see in-graph uses 0.08 s.
+# Stitch uses VHS's last/most-complete file per shot (`{prefix}_{n}-audio.mp4`).
 ./scripts/utilities/concat-shots.sh --film "${FILM}" --xfade 10 --yes
 # Listen to go-see with and without --xfade 10; default remains the hard-cut golden.
 

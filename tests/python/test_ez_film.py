@@ -132,14 +132,37 @@ def test_resolve_shot_path_payloads() -> None:
     assert resolve_shot_path("/tmp/a.mp4") == "/tmp/a.mp4"
     assert resolve_shot_path(Path("/tmp/b.mp4")) == "/tmp/b.mp4"
     assert resolve_shot_path((True, ["/tmp/c.mp4"])) == "/tmp/c.mp4"
-    assert resolve_shot_path(["/tmp/d.mp4", "/tmp/e.mp4"]) == "/tmp/d.mp4"
+    assert resolve_shot_path(["/tmp/d.mp4", "/tmp/e.mp4"]) == "/tmp/e.mp4"
     assert resolve_shot_path({"filename": "/tmp/f.mp4"}) == "/tmp/f.mp4"
+    png = "/outputs/ez_gosee_b1_s1_ltx_video_00006.png"
+    silent = "/outputs/ez_gosee_b1_s1_ltx_video_00006.mp4"
+    muxed = "/outputs/ez_gosee_b1_s1_ltx_video_00006-audio.mp4"
+    assert resolve_shot_path((True, [png, silent, muxed])) == muxed
+    assert resolve_shot_path((True, [png, silent])) == silent
+    with pytest.raises(ValueError, match="no MP4"):
+        resolve_shot_path((True, [png]))
     with pytest.raises(ValueError):
         resolve_shot_path(None)
     with pytest.raises(ValueError):
         resolve_shot_path("")
     with pytest.raises(ValueError):
         resolve_shot_path([])
+    with pytest.raises(ValueError, match="unusable"):
+        resolve_shot_path(1)
+    with pytest.raises(ValueError, match="no filename"):
+        resolve_shot_path({"x": "y"})
+
+
+def test_resolve_shot_path_png_sibling_audio(tmp_path: Path) -> None:
+    png = tmp_path / "ez_gosee_b1_s1_ltx_video_00006.png"
+    silent = tmp_path / "ez_gosee_b1_s1_ltx_video_00006.mp4"
+    muxed = tmp_path / "ez_gosee_b1_s1_ltx_video_00006-audio.mp4"
+    png.write_bytes(b"png")
+    silent.write_bytes(b"silent")
+    muxed.write_bytes(b"audio")
+    assert resolve_shot_path(str(png)) == str(muxed)
+    muxed.unlink()
+    assert resolve_shot_path(str(png)) == str(silent)
 
 
 def test_concat_list_escapes_quotes() -> None:
@@ -210,6 +233,10 @@ def test_stitch_film_runs_ffmpeg_and_checks_cap(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="expected 18"):
         stitch_film(shots[:3], out, 90.0, ffmpeg="ffmpeg", run=fake_run)
+
+    shots[0] = str(tmp_path / "ez_gosee_b1_s1_ltx_video_00006.png")
+    with pytest.raises(RuntimeError, match="image, not an MP4"):
+        stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run)
 
 
 def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
@@ -338,6 +365,38 @@ def test_film_concat_node(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
     assert "<video" in text
     assert "download" in text
     assert "ez_gosee_90s.mp4" in text
+
+
+def test_film_concat_node_picks_vhs_audio_mp4(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    shots: dict[str, object] = {}
+    expected: list[str] = []
+    for index in range(1, 19):
+        prefix = tmp_path / f"ez_gosee_b1_s{index:02d}_ltx_video_00006"
+        png = prefix.with_suffix(".png")
+        silent = prefix.with_suffix(".mp4")
+        muxed = tmp_path / f"{prefix.name}-audio.mp4"
+        png.write_bytes(b"png")
+        silent.write_bytes(b"silent")
+        muxed.write_bytes(b"audio")
+        shots[f"shot_{index:02d}"] = (True, [str(png), str(silent), str(muxed)])
+        expected.append(str(muxed))
+
+    captured: list[list[str]] = []
+
+    def fake_stitch(paths, out_mp4, cap, xfade_cs=0):
+        captured.append(list(paths))
+        assert cap == DEFAULT_CAP_SECONDS
+        assert xfade_cs == 8
+        Path(out_mp4).write_bytes(b"out")
+        return out_mp4
+
+    with patch.object(film_nodes, "stitch_film", side_effect=fake_stitch):
+        packed = EZFilmConcat().run("go-see", 90.0, 8, "", **shots)
+    assert captured == [expected]
+    assert packed["result"][0].endswith("ez_gosee_90s.mp4")
 
 
 def test_write_preview_html_and_x264_fallback(tmp_path: Path) -> None:

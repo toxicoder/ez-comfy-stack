@@ -20,7 +20,7 @@
 # Environment:
 #   COMFY_OUTPUT_DIR — default /mnt/comfy-output
 #   Default glob: ez_shot_0{1..6}*.mp4
-#   --film: ez_<slug>_b{1..6}_s{1..3}_ltx_video*.mp4 (fallback _wan_video)
+#   --film: ez_<slug>_b{1..6}_s{1..3}_ltx_video*.mp4 (prefers *-audio.mp4; fallback _wan_video)
 #   --cap-seconds: publish cap (default 90)
 #
 # Safety:
@@ -147,6 +147,42 @@ first_glob() {
 }
 
 #######################################
+# Latest VHS muxed MP4 for a glob, else latest silent MP4.
+# Prefers *-audio.mp4 (VideoHelperSuite muxed AV) over the silent
+# intermediate. Highest counter wins (LC_ALL=C sort, last match).
+# Globals:
+#   None
+# Arguments:
+#   $1  glob (e.g. /out/ez_gosee_b1_s1_ltx_video*.mp4)
+# Outputs:
+#   path or nothing
+# Returns:
+#   0
+#######################################
+best_shot_mp4() {
+  local pattern="${1}"
+  local dir name f
+  local audio="" latest=""
+  dir="$(dirname "${pattern}")"
+  name="$(basename "${pattern}")"
+  [[ -d ${dir} ]] || return 0
+  while IFS= read -r f; do
+    [[ -z ${f} ]] && continue
+    latest="${f}"
+    if [[ ${f} == *-audio.mp4 ]]; then
+      audio="${f}"
+    fi
+  done < <(find "${dir}" -maxdepth 1 -type f -name "${name}" 2>/dev/null | LC_ALL=C sort)
+  if [[ -n ${audio} ]]; then
+    printf '%s\n' "${audio}"
+    return 0
+  fi
+  if [[ -n ${latest} ]]; then
+    printf '%s\n' "${latest}"
+  fi
+}
+
+#######################################
 # Collect 18 US-safe short MP4s in beat/shot order.
 # Prefers LTX print; falls back to Wan rehearsal.
 # Globals:
@@ -161,8 +197,8 @@ list_film_shot_files() {
   slug="$(film_slug "${FILM}")" || return 1
   for b in 1 2 3 4 5 6; do
     for s in 1 2 3; do
-      ltx="$(first_glob "${SHOT_DIR}/ez_${slug}_b${b}_s${s}_ltx_video"*.mp4)"
-      wan="$(first_glob "${SHOT_DIR}/ez_${slug}_b${b}_s${s}_wan_video"*.mp4)"
+      ltx="$(best_shot_mp4 "${SHOT_DIR}/ez_${slug}_b${b}_s${s}_ltx_video*.mp4")"
+      wan="$(best_shot_mp4 "${SHOT_DIR}/ez_${slug}_b${b}_s${s}_wan_video*.mp4")"
       if [[ -n ${ltx} ]]; then
         printf '%s\n' "${ltx}"
       elif [[ -n ${wan} ]]; then
