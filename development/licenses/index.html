@@ -2449,7 +2449,7 @@
 <li>Create or edit <code>.env</code> with <code>HF_TOKEN=hf_...</code> (or <code>hf auth login</code>)</li>
 <li>In a browser, as <strong>that same user</strong>, open https://huggingface.co/Lightricks/LTX-2.5 and click <strong>Agree</strong></li>
 <li>Fine-grained tokens need <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gated" data-href="../glossary/#gated" title="Hugging Face repo that requires a license click plus a token. LTX-2.5 is gated.">gated repo</span></strong> read</li>
-<li><code>hf auth whoami</code> then <code>./scripts/manage.sh download-models</code></li>
+<li><code>./scripts/manage.sh download-models</code> (<code>hf</code> is auto-installed; token in <code>.env</code> is enough — no extra <code>hf auth login</code> if <code>HF_TOKEN</code> is set)</li>
 </ol>
 <p>A token in <code>.env</code> is <strong>not</strong> the same as accepting the Lightricks license. First-run path: <a href="../getting-started/">Getting Started</a>.</p>
 <h2 id="why-these-defaults">Why these defaults<a class="headerlink" href="#why-these-defaults" title="Permanent link">&para;</a></h2>

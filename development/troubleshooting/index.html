@@ -2277,9 +2277,14 @@
 <td>Prefer working <code>download-limit</code>; lower fixed Mbps; <code>download-limit clear</code> if half-applied</td>
 </tr>
 <tr>
+<td><code>Required tool missing: hf</code></td>
+<td>Host has no modern Hugging Face CLI</td>
+<td>Pull latest; <code>setup</code> / <code>download-models</code> auto-install <code>hf</code>. Do not <code>sudo</code> the whole command (sudo PATH hides <code>~/.local/bin</code>). Manual fallback: <code>pipx install huggingface_hub</code></td>
+</tr>
+<tr>
 <td><code>huggingface-cli is deprecated</code> / 0 GB after download-models</td>
 <td>Scripts used stub CLI</td>
-<td>Pull latest; ensure <code>hf</code> on PATH (<code>pipx install huggingface_hub</code>); re-run download-models</td>
+<td>Pull latest; auto-install prefers <code>hf</code> over the stub; re-run download-models</td>
 </tr>
 <tr>
 <td>Download failed / gated license</td>
