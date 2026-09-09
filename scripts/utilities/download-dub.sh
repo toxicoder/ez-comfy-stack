@@ -103,7 +103,7 @@ dub_tier_include_patterns() {
       printf '%s\n' "model.bin"
       ;;
     clone)
-      printf '%s\n' "t3_mtl23ls_v2.safetensors" "s3gen.safetensors"
+      printf '%s\n' "t3_mtl23ls_v3.safetensors" "t3_mtl23ls_v2.safetensors" "s3gen.safetensors"
       ;;
     *)
       return 0
@@ -236,6 +236,18 @@ dub_tier_files_ready() {
   local dir pat f
   dir="$(dub_tier_dir "${tier}")"
   if [[ ! -d ${dir} ]]; then
+    return 1
+  fi
+  if [[ ${tier} == clone ]]; then
+    if [[ ! -f ${dir}/s3gen.safetensors || ! -s ${dir}/s3gen.safetensors ]]; then
+      return 1
+    fi
+    if [[ -f ${dir}/t3_mtl23ls_v3.safetensors && -s ${dir}/t3_mtl23ls_v3.safetensors ]]; then
+      return 0
+    fi
+    if [[ -f ${dir}/t3_mtl23ls_v2.safetensors && -s ${dir}/t3_mtl23ls_v2.safetensors ]]; then
+      return 0
+    fi
     return 1
   fi
   while IFS= read -r pat; do

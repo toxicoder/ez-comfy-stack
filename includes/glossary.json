@@ -86,7 +86,7 @@
     "aliases": ["Local dub", "dub-localize"],
     "category": "Audio",
     "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
-    "long": "The **dub-localize-lab-example** App diarizes speakers, translates turns, and clones each voice (Chatterbox Multilingual V3). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "long": "The **dub-localize-lab-example** App diarizes speakers, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual, `language_id` like `es`). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
     "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
   },
   {
@@ -446,7 +446,7 @@
     "aliases": ["Prompt Enhance"],
     "category": "Studio",
     "short": "In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.",
-    "long": "Klein/Wan/LTX/ACE-Step Prompt Enhance defaults **on** for every lab graph, including identity bibles and 90s films. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
+    "long": "Klein/Wan/LTX Prompt Enhance defaults **on** for lazy CLIP printers and identity bibles you type. Seeded graphs pin it **off** for 90s films, talking-head, loops, camera-verb I2V, podcast scripts, and ACE tags/lyrics so the rewriter cannot mutate those inputs. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
     "see_also": ["enhance", "gguf", "qwen"]
   },
   {

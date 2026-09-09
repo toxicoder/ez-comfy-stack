@@ -33,7 +33,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
     1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
     2. Optional: fill **beat-sheet-lab-example** (occupancy **none**, no UNET) then `./scripts/manage.sh shot-sheet run --film go-see` — writes `films/<slug>/shots.yaml`. Lab YAML is not copied by the entrypoint.
     3. Load **film-go-see-90s-run-lab-example** (or still-here / switchyard).
-    4. **go-see** pins Enhance **off** so the body-cam bible is what CLIP encodes. still-here / switchyard keep Enhance **on**. Leave LTX **1280×704**. Queue **once**.
+    4. All three films pin Enhance **off** so the identity and each baked LTX paragraph are encoded as written. Leave LTX **1280×704**. Queue **once**.
     5. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
     6. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`), plus `ez_gosee_90s.html`. A **90s film ready** overlay offers play and download. Optional board: `docker compose --profile studio-ui up studio-ui` then http://localhost:8190/watch/gosee
     7. Copy off the Spark: `scp "${SPARK_USER}@${SPARK_HOST}:${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4" .`
@@ -102,7 +102,7 @@ LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional exper
 Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/shorts/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/shorts/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
 
 1. Load one film graph (`film-go-see-90s-run-lab-example` / `film-still-here-90s-lab-example` / `film-switchyard-90s-lab-example`).
-2. Queue **once**. Klein runs first (4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start. **go-see** pins Enhance **off** on identity and every LTX shot; the other two films keep Enhance **on**. Leave LTX **1280×704**.
+2. Queue **once**. Klein runs first (4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start. All three films pin Enhance **off** on identity and every LTX shot. Leave LTX **1280×704**.
 3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
 4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (H.264 + AAC + faststart) plus `ez_<slug>_90s.html`. A **90s film ready** overlay plays and downloads it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`. Optional: studio-ui `/watch/<slug>`.
 5. Optional silent rehearsal of one frame: **wan-i2v-shot-lab-example**. Optional single-shot iterate: **ltx-i2v-shot-lab-example**.

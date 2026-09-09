@@ -62,6 +62,7 @@ teardown() {
   run dub_tier_include_patterns whisper
   [[ "${output}" == *"model.bin"* ]]
   run dub_tier_include_patterns clone
+  [[ "${output}" == *"t3_mtl23ls_v3.safetensors"* ]]
   [[ "${output}" == *"t3_mtl23ls_v2.safetensors"* ]]
   TIER=asr
   run dub_tiers_to_process
@@ -74,6 +75,8 @@ teardown() {
   run dub_comfy_dest_subdir model.bin
   [ "${output}" = "whisper" ]
   run dub_comfy_dest_subdir t3_mtl23ls_v2.safetensors
+  [ "${output}" = "tts" ]
+  run dub_comfy_dest_subdir t3_mtl23ls_v3.safetensors
   [ "${output}" = "tts" ]
   dub_parse_args status --tier asr --json
   [ "${CMD}" = "status" ]

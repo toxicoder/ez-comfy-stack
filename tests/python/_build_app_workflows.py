@@ -72,7 +72,7 @@ Easy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-w
 LoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.
 Motion: locked camera plus breeze / fabric / city lights. Do not prompt a walk or a one-way dolly.
 Do not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
+Prompt enhance is **off** so the locked-camera cyclic motion stays ping-pong safe. Turn Enhance on only if you want the 4B rewriter.
 """
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
@@ -292,7 +292,7 @@ def build_gif_loop() -> dict:
     save = _node(graph, "SaveImage")
     save["widgets_values"] = ["ez_gif_loop_frames"]
     enh = _node(graph, "EZWanPromptEnhance")
-    enh["widgets_values"] = [GIF_MOTION, True, "i2v", "4 seconds, 12 fps, looping GIF", "none"]
+    enh["widgets_values"] = [GIF_MOTION, False, "i2v", "4 seconds, 12 fps, looping GIF", "none"]
     motion = _node(graph, "CLIPTextEncode", "Motion / prompt")
     motion["widgets_values"] = [GIF_MOTION]
     neg = _node(graph, "CLIPTextEncode", "Negative")

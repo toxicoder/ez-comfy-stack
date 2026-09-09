@@ -70,6 +70,8 @@ def test_talking_head_graph() -> None:
     assert "Wav2Lip" not in blob
     assert "wav2lip" not in blob.lower()
     assert any(n.get("type") == "VHS_VideoCombine" for n in graph["nodes"])
+    ltx = next(n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance")
+    assert ltx["widgets_values"][1] is False
 
 
 def test_identity_sheet_seed_and_size() -> None:

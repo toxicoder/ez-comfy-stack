@@ -60,7 +60,7 @@ Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera l
 | --- | --- | --- | --- |
 | VAD | Silero VAD ONNX (energy VAD fallback) | MIT | `download-dub --tier asr` |
 | ASR | faster-whisper large-v3 | MIT | `download-dub --tier asr` |
-| Translate | On-box Qwen3-4B-Instruct GGUF | Apache 2.0 | already in `download-models` |
+| Translate | On-box Qwen3-4B-Instruct GGUF, **one turn at a time** (ISO source → target names in the prompt) | Apache 2.0 | already in `download-models` |
 | Clone | Chatterbox Multilingual V3 (23 languages, PerTh on) | MIT | `download-dub --tier clone` |
 | Clone alt | Qwen3-TTS 0.6B | Apache 2.0 | `download-podcast --tier qwen3tts` |
 
@@ -107,7 +107,7 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 | **Job slug** | `${COMFY_OUTPUT_DIR}/dubs/<slug>/` |
 | **Target language** | Default Spanish |
 | **Source language** | `auto` or pin |
-| **Rewrite translation** | On: diarize + ASR + GGUF. Off: pin the JSON |
+| **Rewrite translation** | On: diarize + ASR + per-turn GGUF into `text_target`. Off: pin the JSON |
 | **Stage** | `all` / `analyze` / `render` |
 | **Clone engine** | chatterbox-ml or qwen3tts |
 | **Keep original bed** | Gaps keep ambience |
@@ -170,7 +170,7 @@ sequenceDiagram
 
   U->>I: Source + I have rights
   I->>S: job slug
-  S->>S: VAD + diarize + ASR + GGUF
+  S->>S: VAD + diarize + ASR + per-turn GGUF
   S->>R: translation JSON
   R->>U: duration-locked mix + SRT + disclosure
 ```

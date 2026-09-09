@@ -41,7 +41,7 @@ DRAFT_NOTE = f"""## music-rap-draft-lab-example
 US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue — do not load Klein + Wan + LTX + ACE-Step together.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
-2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.
+2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
@@ -63,7 +63,7 @@ US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1,
 
 1. Queue **music-rap-draft-lab-example** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
-3. Prompt enhance is **on**. Edit lyrics before Queue. Human rewrite required before any release.
+3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit lyrics before Queue. Human rewrite required before any release.
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No “in the style of <living artist>”.
 5. ACE-Step vocal is an invented timbre, not a clone.
 6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.
@@ -219,7 +219,7 @@ def _diss_note(ex: DissExample) -> str:
 US-safe rap **{duration_s} s diss** take: **{ex["title"]}**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
-2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.
+2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
@@ -302,7 +302,7 @@ def _build_rap(
         [500, 80],
         [400, 360],
         "ez_rap_prompt",
-        [tags, lyrics, True, "vocal"],
+        [tags, lyrics, False, "vocal"],
         outputs=[
             g.out("tags", "STRING", []),
             g.out("lyrics", "STRING", []),

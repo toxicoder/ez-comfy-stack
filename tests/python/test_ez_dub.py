@@ -247,11 +247,21 @@ def test_jobstore_roundtrip(tmp_path: Path) -> None:
     assert jobstore.sanitize_slug("***") == "episode"
 
 
+def test_pcm_list_flattens_nested() -> None:
+    assert pipeline._pcm_list(None) == []
+    assert pipeline._pcm_list(0.5) == [0.5]
+    assert pipeline._pcm_list([[0.1, 0.2], [0.3]]) == [0.1, 0.2, 0.3]
+
+
 def test_is_url_and_language_name() -> None:
     assert pipeline.is_url("https://youtube.com/watch?v=abc")
     assert not pipeline.is_url("/tmp/file.wav")
     assert pipeline.language_name("es") == "Spanish"
     assert pipeline.language_name("Spanish") == "Spanish"
+    assert pipeline.language_code("es") == "es"
+    assert pipeline.language_code("Spanish") == "es"
+    assert pipeline.language_code("auto") == "auto"
+    assert pipeline.language_code("") == "auto"
 
 
 def test_render_uses_tts_hook(tmp_path: Path, monkeypatch) -> None:
@@ -347,6 +357,126 @@ def test_banned_strings_absent_from_pack() -> None:
         "SeamlessM4T",
     ):
         assert needle not in blob, needle
+
+
+def _two_en_turns() -> list[dict]:
+    return [
+        {
+            "id": 1,
+            "speaker": "spk00",
+            "t0": 0.0,
+            "t1": 1.0,
+            "text": "Welcome back to the tape.",
+            "text_target": "",
+            "overlap": False,
+            "rms": 0.1,
+        },
+        {
+            "id": 2,
+            "speaker": "spk01",
+            "t0": 1.2,
+            "t1": 2.4,
+            "text": "Today we stay on the match.",
+            "text_target": "",
+            "overlap": False,
+            "rms": 0.1,
+        },
+    ]
+
+
+def test_translate_turns_per_turn_fills_spanish(monkeypatch) -> None:
+    calls: list[tuple[str, int | None]] = []
+
+    def _complete(system: str, user: str, *, max_tokens: int | None = None):
+        del system
+        calls.append((user, max_tokens))
+        if "Welcome" in user:
+            return "Bienvenidos de nuevo a la cinta.", None
+        return "Hoy nos quedamos en el partido.", None
+
+    monkeypatch.setattr("ez_prompt_enhance.client.complete", _complete)
+    monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
+    out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=True)
+    assert reason == ""
+    assert out[0]["text_target"] == "Bienvenidos de nuevo a la cinta."
+    assert out[1]["text_target"] == "Hoy nos quedamos en el partido."
+    assert len(calls) == 2
+    assert "Spanish" in calls[0][0]
+    assert "(es)" in calls[0][0]
+    assert "Welcome back to the tape." in calls[0][0]
+    assert '"turns"' not in calls[0][0]
+    assert calls[0][1] == pipeline.TRANSLATE_MAX_TOKENS
+
+
+def test_translate_turns_empty_model_is_passthrough_not_success(monkeypatch) -> None:
+    def _complete(system: str, user: str, *, max_tokens: int | None = None):
+        del system, user, max_tokens
+        return "", "timeout or empty model output"
+
+    monkeypatch.setattr("ez_prompt_enhance.client.complete", _complete)
+    monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
+    out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=True)
+    assert reason
+    assert "passthrough" in reason or "timeout" in reason
+    assert out[0]["text_target"] == "Welcome back to the tape."
+    assert out[1]["text_target"] == "Today we stay on the match."
+
+
+def test_translate_turns_same_language_skips_llm(monkeypatch) -> None:
+    def _complete(system: str, user: str, *, max_tokens: int | None = None):
+        del system, user, max_tokens
+        raise AssertionError("LLM should not run when source == target")
+
+    monkeypatch.setattr("ez_prompt_enhance.client.complete", _complete)
+    out, reason = pipeline.translate_turns(_two_en_turns(), "en", "en", enhance=True)
+    assert reason == "same language"
+    assert out[0]["text_target"] == "Welcome back to the tape."
+
+
+def test_translate_turns_enhance_off_copies() -> None:
+    out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=False)
+    assert reason == "enhance off"
+    assert out[0]["text_target"] == "Welcome back to the tape."
+
+
+def test_synthesize_turn_passes_iso_code() -> None:
+    seen: list[str] = []
+
+    def _tts(text, language, ref_wav, engine):
+        del text, ref_wav, engine
+        seen.append(language)
+        return [0.1] * 80, 24000
+
+    pipeline.tts_hook = _tts
+    try:
+        pcm, rate = pipeline.synthesize_turn("Hola", "Spanish", "", ENGINE_CHATTERBOX)
+    finally:
+        pipeline.tts_hook = None
+    assert rate == 24000
+    assert pcm
+    assert seen == ["es"]
+
+
+def test_render_missing_engine_status(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(SEED_SCRIPT)
+    mix, out_rate, status = pipeline.render_mix(
+        samples,
+        rate,
+        payload,
+        dest,
+        engine=ENGINE_CHATTERBOX,
+        keep_bed=True,
+        spoken_disclosure=False,
+    )
+    assert out_rate == rate
+    assert len(mix) == len(samples)
+    assert status == pipeline.CLONE_MISSING_STATUS
 
 
 def test_wav_roundtrip(tmp_path: Path) -> None:

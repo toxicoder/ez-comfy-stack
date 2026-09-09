@@ -41,7 +41,7 @@ Graph: **podcast-audio-first-lab-example** (`extra.lab_profile` `us-safe-podcast
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
-| SCRIPT | App **Script** + **Rewrite script**. In-tree `EZPodcastScript` (enhance **on**). Missing GGUF passes the widget through | `ez_podcast_script` |
+| SCRIPT | App **Script** + **Rewrite script**. In-tree `EZPodcastScript` (enhance **off** so `Speaker A:` / `Speaker B:` stay parser input). Missing GGUF passes the widget through | `ez_podcast_script` |
 | DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
 | VOICES | App **Speaker A / B**, **Include announcer**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only | `ez_podcast_voice` |
 | BEDS | App **Bed tags**, **Rewrite bed**, **Bed length (seconds)**. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden) | `ez_podcast_bed` |

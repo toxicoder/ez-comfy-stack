@@ -12,7 +12,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 - Canned lab-example text (already rewritten)
 - GIF loop motion and dream-house world bible (one place prompt; one shot per room or angle; Prompt Join lock=view). Clay tour: same bible, Klein restyles Blender stills
 - Character draft then tweak (style dropdown; generated still as the next reference)
-- Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507, Enhance **on** by default, including identity bibles and 90s films)
+- Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507). Seeded graphs pin Enhance **on** for lazy CLIP printers and **off** when the string is already a recipe, script, or film shot.
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
 - After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
 
@@ -24,7 +24,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 !!! tip "Lab graphs already ship model-native prompts"
 
-    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text **and** Prompt Enhance **on**. Turn Enhance **off** only to pin widget text. **prompt-forge-lab-example** previews Klein / Wan / LTX rewrites with no UNET (occupancy **llm**). Copy the family you need into Spark Still. The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
+    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **prompt-forge-lab-example** previews Klein / Wan / LTX rewrites with no UNET (occupancy **llm**). Copy the family you need into Spark Still. The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
 
 ```mermaid
 flowchart TB
@@ -86,7 +86,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "LTX-2.5 AV"
 
-    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). **go-see** pins Enhance **off** so the body-cam bible is encoded as written; still-here / switchyard keep Enhance on.
+    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). All three 90s films pin Enhance **off** so the identity and each shot paragraph are encoded as written.
 
     First-person body-cam (go-see): one signature stunt per 5 s; eye-level; sleeves and gloves in the lower third; look at the landing before a jump; dip on impact then recover; land the last frame on a readable plant for the next I2V. Close-mic breath + surface foley beside the move. No speech. Identity still is already at a dead sprint.
 
@@ -111,7 +111,19 @@ STRING out → CLIPTextEncode `text` input.
 3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
 4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.
 
-**Enhance defaults to true** on every lab graph, including identity bibles and 90s films. Turn it **off** to pin the source widget. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE (the start image owns look).
+**Enhance defaults to true on the node** (a dragged node still rewrites). Seeded JSON pins it **off** when a rewrite would mutate structured input:
+
+| Pin Enhance **off** | Why |
+| --- | --- |
+| 90s films (identity + 18 LTX shots) | Baked `shots.yaml`; rewriter changes camera and foley |
+| Talking-head LTX I2V | A2V freeze recipe |
+| GIF / bumper / sticker loops | Ping-pong needs cyclic locked-camera motion |
+| Orbit / push-in / parallax I2V | The canned camera verb **is** the param |
+| IC-LoRA depth | Clay already locked camera |
+| Podcast script + ACE beds | `Speaker A:` labels and instrumental tags are parser input |
+| Rap tags + lyrics (draft, full, nill-bye) | `[verse]`/`[chorus]`, BPM, `language=en` vs encoder widgets |
+
+Lazy Klein stills, identity bibles you type, Klein edit, generic 5s Wan/LTX printers, Prompt Forge, and Beat Sheet stay **on**. Dub **Rewrite translation** stays on — that path translates turns, it does not CLIP-rewrite. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE (the start image owns look). Do not Klein-t2i-enhance Prompt Join shot cards.
 
 ```mermaid
 flowchart TD

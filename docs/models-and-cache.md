@@ -246,7 +246,7 @@ Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
 | --- | --- | --- |
 | `silero_vad.onnx` | `onnx/` | Silero VAD (`--tier asr`) |
 | `model.bin` | `whisper/` | faster-whisper large-v3 (`--tier asr`) |
-| `t3_mtl23ls_v2.safetensors` / `s3gen.safetensors` | `tts/` | Chatterbox Multilingual V3 (`--tier clone`) |
+| `t3_mtl23ls_v3.safetensors` (V2 fallback) / `s3gen.safetensors` | `tts/` | Chatterbox Multilingual (`--tier clone`; V3 preferred) |
 
 ### Example graphs
 

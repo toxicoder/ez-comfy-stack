@@ -21,7 +21,6 @@ from .pipeline import (
     TARGET_LANG_WIDGET,
     analyze_job,
     ingest,
-    language_name,
     render_mix,
     resolve_media_source,
     source_combo_options,
@@ -297,7 +296,7 @@ class EZDubRender:
         """Fit a 3 s spoken bumper over the start without changing duration."""
         bumper, sr = synthesize_turn(
             DISCLOSURE_TEXT,
-            language_name("en"),
+            "en",
             "",
             engine if engine in ENGINES else ENGINE_CHATTERBOX,
         )
