@@ -85,6 +85,9 @@ services:
       LAB_DISABLE_TORCH_NATIVE_TRITON: ${LAB_DISABLE_TORCH_NATIVE_TRITON:-0}
       # Host media bind-mount (SaveImage / SaveVideo / VHS). Default /mnt/comfy-output.
       COMFY_OUTPUT_DIR: ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}
+      # Host uid/gid so link_models chowns bind-mount dirs it creates as root
+      HOST_UID: ${HOST_UID:-}
+      HOST_GID: ${HOST_GID:-}
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
     volumes:

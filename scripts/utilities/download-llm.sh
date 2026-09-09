@@ -178,7 +178,7 @@ link_llm_into_comfy() {
   dir="$(llm_dir)"
   f="${dir}/$(llm_filename)"
   src="${MODELS_DIR}/comfy/llm"
-  mkdir -p "${src}"
+  mkdir -p "${src}" 2>/dev/null || true
   [[ -f ${f} ]] || return 0
   dest="${src}/$(llm_filename)"
   if ln_sfn_relative "${f}" "${dest}"; then
@@ -261,7 +261,7 @@ cmd_status() {
 cmd_run() {
   local dir
   check_hf_cli
-  ensure_models_dir "${MODELS_DIR}" || exit 1
+  prepare_comfy_layout "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
   dir="$(llm_dir)"
   if llm_files_ready; then

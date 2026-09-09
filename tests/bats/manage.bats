@@ -408,6 +408,30 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
 }
 
+@test "download-models heals unwritable comfy layout and links lab weights" {
+  export LAB_MOCK_HF_DOWNLOAD=1
+  export DOWNLOAD_LIMIT=off
+  mkdir -p "${MODELS_DIR}/comfy"
+  chmod a-w "${MODELS_DIR}/comfy"
+  unset LAB_NO_SUDO
+  install_sudo_heal_mock
+  run cmd_download_models
+  chmod -R u+w "${MODELS_DIR}/comfy" 2>/dev/null || true
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/diffusion_models/flux-2-klein-4b-fp8.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf" ]]
+}
+
+@test "doctor warns when comfy layout is not writable" {
+  mkdir -p "${MODELS_DIR}/comfy"
+  chmod a-w "${MODELS_DIR}/comfy"
+  run cmd_doctor
+  chmod u+w "${MODELS_DIR}/comfy" 2>/dev/null || true
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  [[ "${output}" == *"sudo-heal"* ]]
+}
+
 @test "download-models --limit accepts manual Mbps and overrides env" {
   export LAB_MOCK_HF_DOWNLOAD=1
   export DOWNLOAD_LIMIT=auto

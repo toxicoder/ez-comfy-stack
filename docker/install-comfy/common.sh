@@ -246,6 +246,9 @@ link_models() {
   local comfy_dir="${COMFY_HOME}/models/${sub}"
   local target=""
   mkdir -p "${host_dir}" "${COMFY_HOME}/models"
+  if [[ -n ${HOST_UID:-} ]]; then
+    chown "${HOST_UID}:${HOST_GID:-${HOST_UID}}" "${host_dir}" 2>/dev/null || true
+  fi
 
   # Already correctly linked?
   if [[ -L ${comfy_dir} ]]; then

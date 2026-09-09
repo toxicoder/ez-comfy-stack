@@ -71,8 +71,9 @@ Concepts: [ComfyUI basics](learn/comfyui.md). Full tables below.
 | `docker missing` in doctor | Docker not installed / snap-only | `./scripts/manage.sh setup --install-docker` (sudo apt CE + compose); then `newgrp docker` or re-login |
 | docker permission denied | Not in `docker` group this session | `sudo usermod -aG docker $USER` then `newgrp docker` or re-login SSH |
 | docker daemon not reachable | dockerd not running | `sudo systemctl start docker` |
-| `MODELS_DIR … not writable` | `${MODELS_DIR}` missing or root-owned | `./scripts/manage.sh setup` **or** `sudo mkdir -p "${MODELS_DIR}" && sudo chown "$USER:$USER" "${MODELS_DIR}"` **or** `MODELS_DIR=$HOME/models` |
-| `ln: … comfy/llm/….gguf: Permission denied` then `GGUF ready` | Relink into a nested dir the user cannot write; the GGUF is already present | Start is OK — Enhance works if that path exists. To heal ownership: `./scripts/manage.sh setup` **or** `sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy/llm"`. Do not abort start |
+| `MODELS_DIR … not writable` | `${MODELS_DIR}` missing or root-owned | `./scripts/manage.sh setup` (sudo mkdir + chown). Last resort: `sudo mkdir -p "${MODELS_DIR}" && sudo chown "$USER:$USER" "${MODELS_DIR}"` **or** `MODELS_DIR=$HOME/models` |
+| `mkdir: …/comfy/…: Permission denied` during `download-models` | Nested `comfy/` is root-owned (container `mkdir` on the bind-mount) while `${MODELS_DIR}` itself is writable | Re-run `./scripts/manage.sh download-models` — it sudo-heals `${MODELS_DIR}/comfy`. Same heal on `setup` / `start`. Last resort: `sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy"` |
+| `ln: … comfy/llm/….gguf: Permission denied` then `GGUF ready` | Relink into a nested dir the user cannot write; the GGUF is already present | Start is OK — Enhance works if that path exists. Heal: `./scripts/manage.sh download-models` **or** `setup` / `start` (sudo-chown `comfy/`). Do not abort start |
 | Pending / can't start container | Docker/GPU runtime | `nvidia-smi`, Container Toolkit install |
 | `failed to fetch oauth token: denied` / `nvcr.io` Access Denied on `start` | NGC base image pull without login | Pull latest (default bases are **Docker Hub** `nvidia/cuda` **runtime** for builder and final). Rebuild: `./scripts/manage.sh start`. If you set `CUDA_BASE_IMAGE` / `CUDA_RUNTIME_IMAGE` to `nvcr.io/...`, run `docker login nvcr.io` (user `$oauthtoken`, password = NGC API key) |
 
@@ -106,14 +107,16 @@ Default cache is `/mnt/models` (shared with nvidia-dgx-spark-lab). Prefer bootst
 
 ```bash
 ./scripts/manage.sh setup
-# creates/chowns MODELS_DIR with sudo when needed
+# creates/chowns MODELS_DIR and MODELS_DIR/comfy with sudo when needed
 ```
 
-Manual equivalent:
+`download-models` and `start` also sudo-heal nested `comfy/` (HF snapshots at the top level can be writable while `comfy/` is still root-owned). Do not prefix those commands with `sudo`.
+
+Manual last resort:
 
 ```bash
-sudo mkdir -p "${MODELS_DIR:-/mnt/models}"
-sudo chown "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
+sudo mkdir -p "${MODELS_DIR:-/mnt/models}/comfy"
+sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 # or in .env:
 # MODELS_DIR=$HOME/models
 ./scripts/manage.sh doctor

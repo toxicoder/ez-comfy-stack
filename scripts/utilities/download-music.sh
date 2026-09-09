@@ -360,7 +360,7 @@ prune_empty_dirs() {
 link_into_comfy() {
   local tier="${1}"
   local src="${MODELS_DIR}/comfy"
-  mkdir -p "${src}/checkpoints" "${src}/diffusion_models" "${src}/text_encoders" "${src}/vae"
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   local dir base dest dest_sub f rel
   dir=$(tier_dir "${tier}")
   [[ -d ${dir} ]] || return 0
@@ -520,7 +520,7 @@ cmd_status() {
 #######################################
 cmd_run() {
   check_hf_cli
-  ensure_models_dir "${MODELS_DIR}" || exit 1
+  prepare_comfy_layout "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
   local tier repo ok=0 fail=0 pat dir
   local -a include_args=()
