@@ -491,7 +491,7 @@ class EZKokoroTTS:
         return samples, int(rate or SAMPLE_RATE_KOKORO)
 
 
-NODE_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS: dict[str, Any] = {
     "EZPodcastScript": EZPodcastScript,
     "EZPodcastDisclosure": EZPodcastDisclosure,
     "EZKokoroTTS": EZKokoroTTS,

@@ -315,7 +315,7 @@ class EZDubRender:
             samples[i] = samples[i] * (1.0 - gain) + sample * gain
 
 
-NODE_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS: dict[str, Any] = {
     "EZDubIngest": EZDubIngest,
     "EZDubScript": EZDubScript,
     "EZDubRender": EZDubRender,

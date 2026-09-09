@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 from _lab_paths import lab_json
 
@@ -45,7 +46,7 @@ SHIFT = 460
 ENHANCE_H = 420
 
 
-def overlap_hits(graph: dict) -> list[str]:
+def overlap_hits(graph: dict[str, Any]) -> list[str]:
     pad = 20
     boxes = []
     for node in graph["nodes"]:
@@ -73,7 +74,7 @@ def overlap_hits(graph: dict) -> list[str]:
     return hits
 
 
-def next_ids(graph: dict) -> tuple[int, int]:
+def next_ids(graph: dict[str, Any]) -> tuple[int, int]:
     nid = max(int(n["id"]) for n in graph["nodes"]) + 1
     lid = 1
     if graph.get("links"):
@@ -81,7 +82,7 @@ def next_ids(graph: dict) -> tuple[int, int]:
     return nid, lid
 
 
-def shift_x(graph: dict, min_x: float, delta: int) -> None:
+def shift_x(graph: dict[str, Any], min_x: float, delta: int) -> None:
     for node in graph["nodes"]:
         if node["pos"][0] >= min_x:
             node["pos"][0] = node["pos"][0] + delta
@@ -94,7 +95,7 @@ def shift_x(graph: dict, min_x: float, delta: int) -> None:
             box[2] = width + delta
 
 
-def remove_node(graph: dict, node_id: int) -> None:
+def remove_node(graph: dict[str, Any], node_id: int) -> None:
     graph["nodes"] = [n for n in graph["nodes"] if int(n["id"]) != node_id]
     graph["links"] = [
         link
@@ -112,21 +113,21 @@ def remove_node(graph: dict, node_id: int) -> None:
                 inp["link"] = None
 
 
-def clip_by_title(graph: dict, title: str) -> dict:
+def clip_by_title(graph: dict[str, Any], title: str) -> dict[str, Any]:
     for node in graph["nodes"]:
         if node.get("type") == "CLIPTextEncode" and node.get("title") == title:
             return node
     raise SystemExit(f"missing CLIP {title} in {graph.get('id')}")
 
 
-def _node_of_type(graph: dict, ntype: str) -> dict | None:
+def _node_of_type(graph: dict[str, Any], ntype: str) -> dict[str, Any] | None:
     for node in graph["nodes"]:
         if node.get("type") == ntype:
             return node
     return None
 
 
-def set_neg(graph: dict, text: str) -> None:
+def set_neg(graph: dict[str, Any], text: str) -> None:
     for node in graph["nodes"]:
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":
             node["widgets_values"] = [text]
@@ -154,7 +155,7 @@ def _as_enhance_flag(value: object) -> bool:
     return True
 
 
-def normalize_enhance_widgets(graph: dict) -> None:
+def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
     """Pad enhance-node widgets. Default enhance true. Identity titles use identity mode."""
     graph_id = str(graph.get("id") or "")
     for node in graph["nodes"]:
@@ -202,7 +203,7 @@ def normalize_enhance_widgets(graph: dict) -> None:
             node["widgets_values"] = [text, True, *rest]
 
 
-def append_note(graph: dict) -> None:
+def append_note(graph: dict[str, Any]) -> None:
     for node in graph["nodes"]:
         if node.get("type") in ("Note", "MarkdownNote"):
             values = node.get("widgets_values") or [""]
@@ -214,8 +215,8 @@ def append_note(graph: dict) -> None:
 
 
 def ensure_enhance(
-    graph: dict,
-    clip: dict,
+    graph: dict[str, Any],
+    clip: dict[str, Any],
     *,
     ntype: str,
     title: str,
@@ -238,8 +239,8 @@ def ensure_enhance(
 
 
 def wire_enhance(
-    graph: dict,
-    clip: dict,
+    graph: dict[str, Any],
+    clip: dict[str, Any],
     *,
     ntype: str,
     title: str,
@@ -292,7 +293,7 @@ def wire_enhance(
     _push_notes_clear(graph)
 
 
-def _push_notes_clear(graph: dict) -> None:
+def _push_notes_clear(graph: dict[str, Any]) -> None:
     for _ in range(24):
         hits = overlap_hits(graph)
         if not hits:
@@ -310,14 +311,14 @@ def _push_notes_clear(graph: dict) -> None:
     raise SystemExit(f"could not clear note overlaps: {overlap_hits(graph)}")
 
 
-def save(path: Path, graph: dict) -> None:
+def save(path: Path, graph: dict[str, Any]) -> None:
     hits = overlap_hits(graph)
     if hits:
         raise SystemExit(f"overlap in {path.name}: {hits}")
     path.write_text(json.dumps(graph, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
 
 
-def load(path: Path) -> dict:
+def load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -430,7 +431,7 @@ def ltx_t2v(path: Path) -> None:
     save(path, graph)
 
 
-def _clip_text_source(graph: dict, clip: dict) -> dict | None:
+def _clip_text_source(graph: dict[str, Any], clip: dict[str, Any]) -> dict[str, Any] | None:
     text_inp = next((i for i in clip.get("inputs") or [] if i.get("name") == "text"), None)
     if not text_inp or text_inp.get("link") is None:
         return None
@@ -442,10 +443,10 @@ def _clip_text_source(graph: dict, clip: dict) -> dict | None:
     return None
 
 
-def insert_join_shot_enhance(graph: dict) -> None:
+def insert_join_shot_enhance(graph: dict[str, Any]) -> None:
     """Klein t2i enhance between Prompt Join and CLIP so CLIP shows the rewrite."""
     by_id = {int(n["id"]): n for n in graph["nodes"]}
-    pending: list[tuple[dict, dict]] = []
+    pending: list[tuple[dict[str, Any], dict[str, Any]]] = []
     for clip in graph["nodes"]:
         if clip.get("type") != "CLIPTextEncode":
             continue
@@ -468,7 +469,7 @@ def insert_join_shot_enhance(graph: dict) -> None:
         origin_x, origin_y = clip["pos"][0], clip["pos"][1]
         nid, lid = next_ids(graph)
         join_to_enh = lid + 1
-        enhance = {
+        enhance: dict[str, Any] = {
             "id": nid,
             "type": "EZKleinPromptEnhance",
             "pos": [origin_x - 440, origin_y],
@@ -530,7 +531,7 @@ def insert_join_shot_enhance(graph: dict) -> None:
     _push_notes_clear(graph)
 
 
-def insert_ace_enhance(graph: dict) -> None:
+def insert_ace_enhance(graph: dict[str, Any]) -> None:
     """Wire EZAceStepPromptEnhance into ACE-Step encoders that lack tags/lyrics links."""
     for enc in list(graph["nodes"]):
         if enc.get("type") != "TextEncodeAceStepAudio1.5":
@@ -614,7 +615,7 @@ def insert_ace_enhance(graph: dict) -> None:
     _push_notes_clear(graph)
 
 
-def enable_lab_graph(graph: dict) -> None:
+def enable_lab_graph(graph: dict[str, Any]) -> None:
     """Force enhance on, identity modes, and ACE tags."""
     insert_ace_enhance(graph)
     normalize_enhance_widgets(graph)
