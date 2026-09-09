@@ -227,6 +227,8 @@ ENHANCE_TYPES = (
 # App Mode widget order: the thing the user types first, then look, then Run knobs.
 WIDGET_ORDER = (
     "source",
+    "upload",
+    "source_url",
     "have_rights",
     "job_slug",
     "prompt",
@@ -294,7 +296,9 @@ GENERIC_LABELS = {
     "announcer_voice": "Announcer",
     "include_announcer": "Include announcer",
     "speed": "Speaking speed",
-    "source": "Source",
+    "source": "Source file",
+    "upload": "Upload media",
+    "source_url": "Source URL",
     "have_rights": "I have rights",
     "job_slug": "Job slug",
     "target_language": "Target language",
@@ -331,7 +335,14 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "announcer_voice": "Kokoro built-in for Announcer: lines.",
     "include_announcer": "On: speak Announcer: lines. Off: skip them.",
     "speed": "TTS speed. 1.0 is the Kokoro default.",
-    "source": "Local wav/mp4 path or an http(s) URL you have rights to fetch.",
+    "source": (
+        "Audio or video already in COMFY_OUTPUT_DIR/input (container /inputs). "
+        "Default (none)."
+    ),
+    "upload": "Upload wav/mp3/mp4/mkv into input/. Requires I have rights on Queue.",
+    "source_url": (
+        "Optional http(s) URL you have rights to fetch. Overrides Source file when set."
+    ),
     "have_rights": "Required. Off refuses Queue. No celebrity refs.",
     "job_slug": "Job folder under COMFY_OUTPUT_DIR/dubs/<slug>.",
     "target_language": "Language to speak. Spanish is the soccer-podcast default.",
@@ -416,7 +427,9 @@ def display_label(
         return {"prompt": "Script", "enhance": "Rewrite script"}.get(name, generic)
     if ntype == "EZDubIngest":
         return {
-            "source": "Source",
+            "source": "Source file",
+            "upload": "Upload media",
+            "source_url": "Source URL",
             "have_rights": "I have rights",
             "job_slug": "Job slug",
         }.get(name, generic)
@@ -900,6 +913,8 @@ def _collect_raw_inputs(
             raw.extend(
                 (
                     (nid, "source", node),
+                    (nid, "upload", node),
+                    (nid, "source_url", node),
                     (nid, "have_rights", node),
                     (nid, "job_slug", node),
                 )

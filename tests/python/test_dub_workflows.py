@@ -62,7 +62,9 @@ def test_dub_localize_graph() -> None:
     assert DISCLOSURE in blob
     assert "I have rights" in blob or "have_rights" in blob
     ingest = next(n for n in graph["nodes"] if n["type"] == "EZDubIngest")
+    assert ingest["widgets_values"][0] == "(none)"
     assert ingest["widgets_values"][1] is False
+    assert ingest["widgets_values"][3] == ""
     script = next(n for n in graph["nodes"] if n["type"] == "EZDubScript")
     assert script["widgets_values"][1] is True
     assert script["widgets_values"][2] == "es"
@@ -79,12 +81,19 @@ def test_dub_localize_graph() -> None:
     for needle in BANNED:
         assert needle not in blob, needle
     names = _app_names(graph)
-    assert "source" in names
+    assert names[0] == "source"
+    assert "upload" in names
+    assert "source_url" in names
     assert "have_rights" in names
     assert "target_language" in names
-    assert names[0] in {"source", "have_rights", "prompt"}
     labels = _app_labels(graph)
+    assert "Source file" in labels
+    assert "Upload media" in labels
+    assert "Source URL" in labels
     assert "I have rights" in labels
     assert "Target language" in labels
     assert "Translation" in labels or "Rewrite translation" in labels
     assert len(labels) == len(set(labels)), labels
+    note = graph["extra"]["lab_note"]
+    assert "Source file" in note
+    assert "Upload media" in note

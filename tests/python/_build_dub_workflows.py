@@ -21,14 +21,14 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
-from ez_dub.nodes import DISCLOSURE_TEXT, SEED_SCRIPT  # noqa: E402
+from ez_dub.nodes import DISCLOSURE_TEXT, SEED_SCRIPT, SOURCE_NONE  # noqa: E402
 
 DUB_NOTE = f"""## dub-localize-lab-example
 
 US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** — stop Klein / Wan / LTX first.
 
 1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.
-2. Source: local wav/mp4/mkv path, or an http(s) URL (`yt-dlp` optional). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL`.
+2. **Source file**: pick wav/mp4/mkv already in `${{COMFY_OUTPUT_DIR}}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.
 3. Stage **all** runs diarize + ASR + translate + clone. Stage **analyze** writes JSON for you to edit; then Queue with Rewrite translation **off** and Stage **render**.
 4. Chatterbox Multilingual V3 (MIT, PerTh on) is the default clone. Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`).
 5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, and disclosure.txt.
@@ -140,9 +140,9 @@ def build_dub_localize() -> dict:
         1,
         "EZDubIngest",
         [40, 80],
-        [420, 160],
+        [420, 260],
         "ez_dub_ingest",
-        ["", False, "episode"],
+        [SOURCE_NONE, False, "episode", ""],
         outputs=[
             g.out("job_id", "STRING", [], slot=0),
             g.out("audio", "AUDIO", [], slot=1),
@@ -209,7 +209,7 @@ def build_dub_localize() -> dict:
             ),
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
-                _group(1, "INPUT", 20, LAB_GROUP_Y0, 460, 280, "#3f789e"),
+                _group(1, "INPUT", 20, LAB_GROUP_Y0, 460, 380, "#3f789e"),
                 _group(2, "PROMPT", 480, LAB_GROUP_Y0, 480, 700, "#3f789e"),
                 _group(3, "OUTPUT", 980, LAB_GROUP_Y0, 460, 860, "#3f789e"),
             ],

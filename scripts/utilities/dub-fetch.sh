@@ -5,8 +5,9 @@
 # Optional URL ingest for the dub lane (yt-dlp). Writes into COMFY_OUTPUT_DIR/input.
 #
 # Purpose:
-#   Pull operator-owned / licensed media so EZDubIngest can use a local path.
-#   YouTube ToS still applies. Not baked into the Docker image.
+#   Pull operator-owned / licensed media into COMFY_OUTPUT_DIR/input so
+#   EZDubIngest Source file can select it. YouTube ToS still applies.
+#   Not baked into the Docker image.
 #
 # Audience:
 #   Operators on the Spark host.
