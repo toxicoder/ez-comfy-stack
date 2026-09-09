@@ -25,6 +25,8 @@ X264_CRF = "18"
 PIX_FMT = "yuv420p"
 MOVFLAGS = "+faststart"
 FPS = "24"
+VIDEO_SUFFIXES = (".mp4", ".webm", ".mkv", ".mov", ".m4v")
+IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
 
 
 def log(message: str) -> None:
@@ -86,38 +88,105 @@ def find_ffprobe() -> str | None:
     return shutil.which("ffprobe")
 
 
+def _is_video_path(path: str) -> bool:
+    """True when ``path`` has a video suffix."""
+    return Path(path).suffix.lower() in VIDEO_SUFFIXES
+
+
+def _is_image_path(path: str) -> bool:
+    """True when ``path`` has an image suffix (VHS metadata PNG)."""
+    return Path(path).suffix.lower() in IMAGE_SUFFIXES
+
+
+def _is_muxed_audio_path(path: str) -> bool:
+    """True when ``path`` is a VHS muxed ``*-audio.<videoext>`` file."""
+    return _is_video_path(path) and Path(path).stem.endswith("-audio")
+
+
+def _sibling_video(path: str) -> str | None:
+    """Muxed ``{stem}-audio.mp4`` then silent ``{stem}.mp4`` next to an image."""
+    if not _is_image_path(path):
+        return None
+    image = Path(path)
+    muxed = image.with_name(f"{image.stem}-audio.mp4")
+    if muxed.is_file():
+        return str(muxed)
+    silent = image.with_suffix(".mp4")
+    if silent.is_file():
+        return str(silent)
+    return None
+
+
+def _path_strings(value: object) -> list[str]:
+    """Flatten a VHS_FILENAMES payload into path strings.
+
+    Arguments:
+        value: str path, ``(saved, [paths])`` tuple, list, dict, or Path.
+    Returns:
+        Path strings in payload order (empty when unusable).
+    """
+    if value is None:
+        return []
+    if isinstance(value, Path):
+        return [str(value)]
+    if isinstance(value, str):
+        text = value.strip()
+        return [text] if text else []
+    if isinstance(value, dict):
+        for key in ("filename", "path", "file"):
+            raw = value.get(key)
+            if raw:
+                return _path_strings(raw)
+        return []
+    if isinstance(value, (list, tuple)):
+        if not value:
+            return []
+        if len(value) == 2 and isinstance(value[0], bool):
+            return _path_strings(value[1])
+        out: list[str] = []
+        for item in value:
+            out.extend(_path_strings(item))
+        return out
+    return []
+
+
 def resolve_shot_path(value: object) -> str:
-    """First MP4 path from a VHS_FILENAMES payload or a plain path.
+    """Most-complete video path from a VHS_FILENAMES payload or a plain path.
+
+    VideoHelperSuite writes files in creation order: metadata PNG, silent
+    MP4, then muxed ``*-audio.mp4``. VHS documents ``output[1][-1]`` as the
+    most complete file. Prefer that muxed AV, then the last video suffix,
+    then a sibling MP4 next to a PNG.
 
     Arguments:
         value: str path, ``(saved, [paths])`` tuple, list, or dict.
     Returns:
         Path string.
     Raises:
-        ValueError: empty / unusable payload.
+        ValueError: empty / unusable payload or no video in the list.
     """
     if value is None:
         raise ValueError("missing shot file")
-    if isinstance(value, Path):
-        return str(value)
-    if isinstance(value, str):
-        text = value.strip()
-        if not text:
-            raise ValueError("empty shot path")
-        return text
+    if not isinstance(value, (Path, str, dict, list, tuple)):
+        raise ValueError(f"unusable shot payload: {type(value).__name__}")
     if isinstance(value, dict):
-        for key in ("filename", "path", "file"):
-            raw = value.get(key)
-            if raw:
-                return resolve_shot_path(raw)
-        raise ValueError("shot dict has no filename")
-    if isinstance(value, (list, tuple)):
-        if not value:
-            raise ValueError("empty shot list")
-        if len(value) == 2 and isinstance(value[0], bool):
-            return resolve_shot_path(value[1])
-        return resolve_shot_path(value[0])
-    raise ValueError(f"unusable shot payload: {type(value).__name__}")
+        paths = _path_strings(value)
+        if not paths:
+            raise ValueError("shot dict has no filename")
+    else:
+        paths = _path_strings(value)
+        if not paths:
+            raise ValueError("empty shot path")
+    muxed = [path for path in paths if _is_muxed_audio_path(path)]
+    if muxed:
+        return muxed[-1]
+    videos = [path for path in paths if _is_video_path(path)]
+    if videos:
+        return videos[-1]
+    sibling = _sibling_video(paths[-1])
+    if sibling:
+        return sibling
+    raise ValueError(f"no MP4 in shot payload (got {paths[-1]})")
 
 
 def encoder_missing(stderr: str) -> bool:
@@ -598,7 +667,7 @@ def stitch_film(
     faststart still set.
 
     Arguments:
-        shot_paths: Exactly 18 MP4 paths in beat/shot order.
+        shot_paths: Exactly 18 MP4 paths in beat/shot order (not VHS metadata PNGs).
         out_mp4: Destination path.
         cap_seconds: Publish cap (default 90).
         ffmpeg: Override ffmpeg path.
@@ -613,6 +682,12 @@ def stitch_film(
     """
     if len(shot_paths) != SHOT_COUNT:
         raise ValueError(f"expected {SHOT_COUNT} shots, found {len(shot_paths)}")
+    for path in shot_paths:
+        if _is_image_path(path):
+            raise RuntimeError(
+                f"shot is an image, not an MP4 ({path}); "
+                "VHS_FILENAMES first file is a metadata PNG — use the muxed *-audio.mp4"
+            )
     if xfade_cs < 0 or xfade_cs > 50:
         raise ValueError(f"xfade_cs must be 0–50, got {xfade_cs}")
     exe = ffmpeg or find_ffmpeg()
