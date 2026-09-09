@@ -1911,7 +1911,7 @@
 <p><strong>What's on this page</strong></p>
 <ul>
 <li>Rights gate (required) vs the original-character podcast lane</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: file or URL, languages, stage, clone engine</li>
+<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: source file dropdown + upload (or URL), languages, stage, clone engine</li>
 <li>Cascade: ingest → diarize → ASR → translate → clone → duration lock</li>
 <li>YouTube Studio <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="multi-language-audio" data-href="../glossary/#multi-language-audio" title="YouTube Studio Languages tab: upload an audio-only dub the same length as the video.">multi-language audio</span> upload (audio-only file + SRT)</li>
 <li><code>download-dub</code> usage, sequential <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span></li>
@@ -2022,8 +2022,16 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Source</strong></td>
-<td>Local wav/mp4/mkv/mp3 path, or http(s) URL</td>
+<td><strong>Source file</strong></td>
+<td>Dropdown of wav/mp4/mkv/mp3 already in <code>${COMFY_OUTPUT_DIR}/input</code> (container <code>/inputs</code>). Default <code>(none)</code></td>
+</tr>
+<tr>
+<td><strong>Upload media</strong></td>
+<td>Choose a local file; Comfy stores it in <code>input/</code></td>
+</tr>
+<tr>
+<td><strong>Source URL</strong></td>
+<td>Optional http(s) you have rights to fetch. Overrides Source file when set</td>
 </tr>
 <tr>
 <td><strong>I have rights</strong></td>
@@ -2068,7 +2076,7 @@
 <li><code>download-dub --tier asr</code> then <code>--tier clone</code></li>
 <li>Optional: <code>faster-whisper</code> (and Chatterbox) in the Comfy venv</li>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
-<li>Load <strong>dub-localize-lab-example</strong>. Set Source. Turn <strong>I have rights</strong> on. Queue</li>
+<li>Load <strong>dub-localize-lab-example</strong>. Pick <strong>Source file</strong> or <strong>Upload media</strong> (or set <strong>Source URL</strong>). Turn <strong>I have rights</strong> on. Queue</li>
 <li>Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_dub_mix_*.flac</code> / <code>ez_dub_yt_*.mp3</code> plus <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt.wav</code></li>
 <li>Loudness:</li>
 </ol>
@@ -2077,7 +2085,7 @@
 <p>URL helper (host, writes <code>${COMFY_OUTPUT_DIR}/input</code>, survives <code>cleanup</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/utilities/dub-fetch.sh<span class="w"> </span>run<span class="w"> </span>--url<span class="w"> </span><span class="s1">'https://www.youtube.com/watch?v=YOUR_VIDEO'</span>
 </code></pre></div>
-<p>Then set Source to that wav/mp4 path.</p>
+<p>Reload the App if it was already open, then pick that wav/mp4 in <strong>Source file</strong>.</p>
 <h2 id="youtube-multi-language-audio">YouTube multi-language audio<a class="headerlink" href="#youtube-multi-language-audio" title="Permanent link">&para;</a></h2>
 <p>Do <strong>not</strong> rely on muxing two AAC tracks into one MP4 as the YouTube path. Studio wants an <strong>audio-only</strong> file roughly the same length as the video.</p>
 <ol>

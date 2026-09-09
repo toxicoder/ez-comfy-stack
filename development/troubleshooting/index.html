@@ -2078,6 +2078,21 @@
 <td>Turn it on only when you own the recording or have speaker consent. <a href="../dub/">Local dub</a></td>
 </tr>
 <tr>
+<td>Dub <strong>Source file</strong> is <code>(none)</code> / empty source</td>
+<td>Nothing selected in the dropdown</td>
+<td><strong>Upload media</strong>, or pick a file already in <code>${COMFY_OUTPUT_DIR}/input</code>. Do not type a host path</td>
+</tr>
+<tr>
+<td>Dub file not in the Source dropdown</td>
+<td>File is under <code>/outputs</code>, or the App was open before <code>dub-fetch</code></td>
+<td>Put media in <code>${COMFY_OUTPUT_DIR}/input</code> (container <code>/inputs</code>). Reload the App. <a href="../dub/">Local dub</a></td>
+</tr>
+<tr>
+<td>Dub <strong>Upload media</strong> missing</td>
+<td>Pack JS not copied, or the browser is holding an old frontend</td>
+<td>Restart the container so entrypoint copies <code>ez_dub/js/</code>. Hard-refresh the Comfy tab</td>
+</tr>
+<tr>
 <td>Dub empty mix / no transcript</td>
 <td>faster-whisper or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> missing</td>
 <td><code>download-dub --tier asr</code> / <code>--tier clone</code>; optional <code>pip install faster-whisper</code> in the venv</td>
@@ -2085,7 +2100,7 @@
 <tr>
 <td>Dub URL ingest failed</td>
 <td>yt-dlp missing, or ToS/network</td>
-<td><code>./scripts/utilities/dub-fetch.sh status</code> then install yt-dlp, or pass a local file</td>
+<td><code>./scripts/utilities/dub-fetch.sh status</code> then install yt-dlp, or <strong>Upload media</strong> / pick a local file</td>
 </tr>
 <tr>
 <td>YouTube rejects the extra audio</td>
