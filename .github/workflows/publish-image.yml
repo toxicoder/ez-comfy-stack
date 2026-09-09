@@ -73,7 +73,7 @@ jobs:
             CUDA_RUNTIME_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
             TORCH_VERSION=2.14.0
             TORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
-            COMFYUI_REF=v0.34.0
+            COMFYUI_REF=v0.34.6
             COMFYUI_MANAGER_REF=4.2.2
             COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
             COMFYUI_VHS_REF=

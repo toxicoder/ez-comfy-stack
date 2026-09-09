@@ -498,12 +498,12 @@ flowchart TB
 
 ??? abstract "Pin table and bump procedure"
 
-    Defaults are intentional tags so GHCR rebuilds are reproducible. Validated **2026-07-29**:
+    Defaults are intentional tags so GHCR rebuilds are reproducible. Validated **2026-07-29** (Comfy pin **2026-09-08**):
 
     | Pin | Default | Why this value |
     | --- | --- | --- |
     | `TORCH_VERSION` | `2.14.0` | cu130 aarch64 wheel from `https://download.pytorch.org/whl/cu130`. Declared only in the **torch** stage. Bump here (and compose / publish-image / `install-comfy/core.sh`) when rebuilding the multi‑GB layer. |
-    | `COMFYUI_REF` | `v0.34.0` | Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the **comfy** image stage after this bump (torch stage stays cached). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
+    | `COMFYUI_REF` | `v0.34.6` | Newest **patch tag** on the v0.34 stable line (`8fed378`, 2026-09-07) — not GitHub **Latest** (`v0.34.0`). Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Frontend still 1.49.6. Rebuild the **comfy** image stage after this bump (torch stage stays cached). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
     | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
     | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for lab **`VHS_VideoCombine`** MP4. **Required** for `wan-*-lab-example` / `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |
