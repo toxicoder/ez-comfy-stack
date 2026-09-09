@@ -98,11 +98,46 @@ def test_substitute_vars_replaces_known_only(cmd) -> None:
     assert nested == "host=${COMFY_PORT}"
 
 
+def test_substitute_vars_replaces_bash_default_form(cmd) -> None:
+    """${NAME:-default} is the same slot as ${NAME}; unknown :- form stays."""
+    values = {"SPARK_HOST": "10.1.2.3", "SPARK_USER": "alx"}
+    line = 'export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"'
+    assert cmd.substitute_vars(line, values) == 'export SPARK_HOST="10.1.2.3"'
+    user = 'export SPARK_USER="${SPARK_USER:-$USER}"'
+    assert cmd.substitute_vars(user, values) == 'export SPARK_USER="alx"'
+    assert cmd.substitute_vars("echo ${FOO:-x}", values) == "echo ${FOO:-x}"
+    mixed = 'ssh ${SPARK_USER}@${SPARK_HOST:-127.0.0.1}'
+    assert cmd.substitute_vars(mixed, values) == "ssh alx@10.1.2.3"
+
+
 def test_template_has_vars(cmd) -> None:
     """Auto-bind only when a session ${VAR} is present."""
     assert cmd.template_has_vars("ssh ${SPARK_USER}@${SPARK_HOST}")
+    assert cmd.template_has_vars('export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"')
     assert not cmd.template_has_vars("./scripts/manage.sh doctor")
     assert not cmd.template_has_vars("echo ${NOT_A_SESSION}")
+    assert not cmd.template_has_vars("echo ${NOT_A_SESSION:-x}")
+
+
+def test_split_var_template_parts(cmd) -> None:
+    """Chip renderer splits literals vs known session slots."""
+    values = {"MODELS_DIR": "/mnt/models", "SPARK_HOST": "10.1.2.3"}
+    parts = cmd.split_var_template("ls ${MODELS_DIR}/x", values)
+    assert parts == [("ls ", None), ("/mnt/models", "MODELS_DIR"), ("/x", None)]
+    bash = cmd.split_var_template(
+        'export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"', values
+    )
+    assert bash == [
+        ('export SPARK_HOST="', None),
+        ("10.1.2.3", "SPARK_HOST"),
+        ('"', None),
+    ]
+    unknown = cmd.split_var_template("a ${FOO} b ${SPARK_HOST}", values)
+    assert unknown == [("a ${FOO} b ", None), ("10.1.2.3", "SPARK_HOST")]
+    empty = cmd.split_var_template("", values)
+    assert "".join(text for text, _id in empty) == ""
+    plain = cmd.split_var_template("./scripts/manage.sh doctor", values)
+    assert plain == [("./scripts/manage.sh doctor", None)]
 
 
 def test_render_command_omits_unchecked_bool(cmd, builder) -> None:
@@ -207,10 +242,25 @@ def test_mkdocs_wires_commands_js(cmd) -> None:
     assert "ez-comfy.cmdvars" in js
     assert "data-clipboard-text" in js
     assert "document$.subscribe" in js
+    assert "data-ez-var" in js
+    assert "contenteditable" in js
+    assert 'querySelectorAll("code")' in js
+    assert 'querySelectorAll("pre code")' not in js
+    assert r"(?::-([^}]*))?" in js
+    assert 'addEventListener("input"' in js
+    assert ".ez-var" in js
     css = EXTRA_CSS.read_text(encoding="utf-8")
     assert ".ez-spark-panel" in css
     assert ".ez-cmd-builder" in css
+    assert ".ez-var" in css
+    assert "cursor: text" in css
     assert CONVENTIONS.read_text(encoding="utf-8").find("ezcmd") != -1
+    conventions = CONVENTIONS.read_text(encoding="utf-8")
+    assert "${VAR:-" in conventions or "${NAME:-" in conventions
+    assert "ez-var" in conventions
+    assert "inline" in conventions.lower()
+    getting = (DOCS / "getting-started.md").read_text(encoding="utf-8")
+    assert "click" in getting.lower() and "edit" in getting.lower()
 
 
 def test_download_tiers_page_states_pack_not_quality() -> None:

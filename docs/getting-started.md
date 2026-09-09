@@ -9,7 +9,7 @@ tags: [getting-started, docker, comfyui]
 **What's on this page**
 
 - What success looks like
-- Session variables (Your Spark panel or shell exports)
+- Session variables (Your Spark panel, in-place chips, or shell exports)
 - Prerequisites checklist
 - Setup, doctor, download, start, first still, stop
 - Optional: build the Docker image locally instead of pulling GHCR
@@ -43,8 +43,8 @@ tags: [getting-started, docker, comfyui]
 
 Two ways to fill Spark IP / paths so copy-paste works:
 
-1. **Your Spark** panel (top of every docs page) — stored in this browser, applied to copyable commands site-wide.
-2. **Shell exports** on the Spark (below) — `manage.sh` still loads `.env`; these exports are for *your* shell (`ls`, `ssh -L`, the browser URL).
+1. **Your Spark** panel (top of every docs page) **or a highlighted chip** in any copyable command — stored in this browser, applied site-wide. Click a dotted token (Spark IP, path, port) to edit in place; the panel and every other chip update together. Copy buttons paste the filled-in values.
+2. **Shell exports** on the Spark (markdown source below) — `manage.sh` still loads `.env`; these exports are for *your* shell (`ls`, `ssh -L`, the browser URL) when docs JS is off.
 
 Defaults match `.env.example`. Set `SPARK_HOST` to this machine’s LAN IP or DNS if you will open the UI from another computer.
 
@@ -279,7 +279,7 @@ If Comfy shows **Missing Models** on **klein-still-draft-lab-example**, re-run d
 ./scripts/manage.sh status
 ```
 
-Open **`http://${SPARK_HOST}:${COMFY_PORT}`** (Your Spark panel fills the IP when you copy).
+Open **`http://${SPARK_HOST}:${COMFY_PORT}`** (click the highlighted host/port, or use Your Spark — copy uses those values).
 
 From a laptop (Spark is remote):
 

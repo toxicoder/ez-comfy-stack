@@ -9,6 +9,7 @@ tags: [troubleshooting, comfyui, docker]
 **What's on this page**
 
 - Symptom → cause → action by theme
+- Docs copy-paste still showing `${SPARK_HOST}`
 - Decision tree for common failures
 - Useful log commands and reset paths
 
@@ -23,6 +24,12 @@ tags: [troubleshooting, comfyui, docker]
     ```
 
     Many rows below are hard failures `doctor` already reports. Prefer `./scripts/manage.sh setup` when Docker or `MODELS_DIR` is missing.
+
+## Docs site
+
+| Symptom | Likely cause | Action |
+| --- | --- | --- |
+| Copy still shows `${SPARK_HOST}` / `${MODELS_DIR}` | Docs JS blocked, or a hard-cached `commands.js` | Hard-refresh the docs tab. Highlighted chips (dotted underline) are the same session fields as **Your Spark** — click to edit. Not a Spark/`doctor` failure. Values stay in this browser only |
 
 ## Studio user (canvas)
 

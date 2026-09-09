@@ -20,7 +20,7 @@ tags: [manage, cli, operator, reference]
 
 **Who this is for:** operators who already cloned the repo. First install: [Getting Started](getting-started.md).
 
-Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HOST`, `MODELS_DIR`, …) are for *your* shell (browser URL, `ssh -L`, `ls`). The **Your Spark** panel on these docs fills the same keys when you copy a command.
+Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HOST`, `MODELS_DIR`, …) are for *your* shell (browser URL, `ssh -L`, `ls`). The **Your Spark** panel (or a highlighted chip in a copyable command) on these docs fills the same keys when you copy.
 
 ```ezcmd
 id: doctor

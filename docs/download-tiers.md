@@ -19,7 +19,7 @@ tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 - Avoiding a 40 GB Fun InP pull when you wanted Wan 5B
 - Copying a command with **your** `--tier` and `--limit` already filled in
 
-The **Your Spark** panel at the top of every docs page stores `SPARK_HOST` and friends in this browser. Copy buttons use those values. `--limit` defaults follow `DOWNLOAD_LIMIT` unless you override it on the widget.
+The **Your Spark** panel at the top of every docs page stores `SPARK_HOST` and friends in this browser. Highlighted chips in copyable commands are the same fields — click to edit. Copy buttons use those values. `--limit` defaults follow `DOWNLOAD_LIMIT` unless you override it on the widget.
 
 ---
 
