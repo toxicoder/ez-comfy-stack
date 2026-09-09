@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="US-safe RAP-FIRST ACE-Step draft and full-track lane on one DGX Spark.">
+        <meta name="description" content="US-safe RAP-FIRST ACE-Step draft and full-track lane, plus Drive-through EDM, on one DGX Spark.">
       
       
       
@@ -1221,6 +1221,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#180s-drive-through-edm-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        180s Drive-through EDM examples
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1917,6 +1928,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#180s-drive-through-edm-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        180s Drive-through EDM examples
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2002,8 +2024,9 @@
 <ul>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> the rap <strong>draft</strong> first, then the <strong>full</strong> track</li>
 <li>Forty-five <strong>180 s</strong> Nill Bye vs Rake diss examples under <code>_lab/audio/nill-bye/</code> (Queue on their own; lab catalog, style pack, trap/EDM pack)</li>
+<li>Fifteen <strong>180 s</strong> Drive-through instrumental EDM examples under <code>_lab/audio/drive-through/</code> (Queue on their own; vast melody then a ~30 s drop, twice)</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: tags, lyrics, rewrite, vocal/instrumental, duration</li>
-<li>Tags vs lyrics; <code>[verse]</code> / <code>[chorus]</code> / <code>[spoken word]</code> as vocal hints</li>
+<li>Tags vs lyrics; <code>[verse]</code> / <code>[chorus]</code> / <code>[spoken word]</code> as vocal hints; EDM uses <code>[inst]</code> / <code>[intro]</code> / <code>[outro]</code></li>
 <li>Original lyrics only — no “in the style of \&lt;living artist&gt;”</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> vocal = invented identity, not a clone</li>
 <li>DistroKid / Spotify / YouTube / USCO Part 2 disclosure</li>
@@ -2015,6 +2038,7 @@
 <ul>
 <li>A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs</li>
 <li>Forty-five 180 s original diss takes (Nill Bye vs Rake) without cloud music APIs</li>
+<li>Fifteen 180 s original Drive-through EDM takes (instrumental, high BPM, ~30 s drops) without cloud music APIs</li>
 <li>Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice</li>
 <li>Keeping the visual studio bootable when the music pack is missing</li>
 <li>Muxing a cover still + FLAC into a YouTube MP4 without changing the rap graphs</li>
@@ -2402,11 +2426,118 @@
 </tbody>
 </table>
 <p>Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.</p>
+<h3 id="180s-drive-through-edm-examples">180s Drive-through EDM examples<a class="headerlink" href="#180s-drive-through-edm-examples" title="Permanent link">&para;</a></h3>
+<p>Fifteen extra full-track graphs under <strong><code>_lab/audio/drive-through/</code></strong>. Same AIO, sampler, occupancy <strong>audio</strong>, and Klein cover handoff as the 96 s full track. App <strong>Duration (seconds)</strong> defaults to <strong>180</strong>. App <strong>Vocal / instrumental</strong> defaults to <strong>instrumental</strong>. Queue <strong>on their own</strong> — draft-first is the generic rap lane, not a prerequisite. A longer Queue is expected.</p>
+<p>Fictional act only: <strong>Drive-through</strong> (hardcore, pure of heart). Original instrumental arrangements. No living-DJ names. No famous-hook paraphrases. Tags lock <code>instrumental, no vocals</code>. Lyrics are an arrangement score in <code>[inst]</code> blocks: adventurous / vast melody, a ~30 s multi-instrument drop, a break, then the cycle repeats. ACE-Step timbre is invented. Human selection and edit required before any release.</p>
+<p>This is <strong>not</strong> the Nill Bye trap/EDM pack. Those graphs are rap <strong>over</strong> club beds with a dry booth. Drive-through is instrumental EDM.</p>
+<table>
+<thead>
+<tr>
+<th>Graph</th>
+<th>Tags / bpm</th>
+<th>Prefix</th>
+<th>Take</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>music-edm-drive-through-open-lane-lab-example</strong></td>
+<td>future bass <strong>148</strong>, seed <strong>191</strong></td>
+<td><code>ez_edm_drive_openlane</code></td>
+<td>Horizon plucks, then a 30 s stacked-bass drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-night-window-lab-example</strong></td>
+<td>bass house <strong>140</strong>, seed <strong>193</strong></td>
+<td><code>ez_edm_drive_night</code></td>
+<td>City-light chords, then a kick-heavy drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-on-ramp-lab-example</strong></td>
+<td>hardstyle <strong>150</strong>, seed <strong>197</strong></td>
+<td><code>ez_edm_drive_onramp</code></td>
+<td>Acceleration melody, reverse-bass drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-skyline-pass-lab-example</strong></td>
+<td>uplifting trance <strong>138</strong>, seed <strong>199</strong></td>
+<td><code>ez_edm_drive_skyline</code></td>
+<td>Wide pads, 30 s trance drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-freight-pulse-lab-example</strong></td>
+<td>drum and bass <strong>174</strong>, seed <strong>211</strong></td>
+<td><code>ez_edm_drive_freight</code></td>
+<td>Amen bed, neurofunk 30 s drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-heart-lane-lab-example</strong></td>
+<td>melodic bass <strong>140</strong>, seed <strong>223</strong></td>
+<td><code>ez_edm_drive_heart</code></td>
+<td>Pure-heart theme, heavy but clean drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-overpass-lab-example</strong></td>
+<td>riddim / dubstep <strong>140</strong>, seed <strong>227</strong></td>
+<td><code>ez_edm_drive_overpass</code></td>
+<td>Sparse build, wobble drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-second-wave-lab-example</strong></td>
+<td>brostep <strong>150</strong>, seed <strong>241</strong></td>
+<td><code>ez_edm_drive_second</code></td>
+<td>Repeat-the-process anthem</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-keep-going-lab-example</strong></td>
+<td>hybrid trap <strong>150</strong>, seed <strong>251</strong></td>
+<td><code>ez_edm_drive_keep</code></td>
+<td>Inspiring climb, trap-EDM drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-tunnel-bass-lab-example</strong></td>
+<td>hard techno <strong>145</strong>, seed <strong>257</strong></td>
+<td><code>ez_edm_drive_tunnel</code></td>
+<td>Tunnel pulse, industrial drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-horizon-kick-lab-example</strong></td>
+<td>rawstyle <strong>160</strong>, seed <strong>263</strong></td>
+<td><code>ez_edm_drive_horizon</code></td>
+<td>High-BPM kick-split drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-clean-wreckage-lab-example</strong></td>
+<td>complex bass <strong>140</strong>, seed <strong>269</strong></td>
+<td><code>ez_edm_drive_wreck</code></td>
+<td>Hardcore, multi-instrument, still clean</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-exit-seven-lab-example</strong></td>
+<td>complextro <strong>140</strong>, seed <strong>233</strong></td>
+<td><code>ez_edm_drive_exit</code></td>
+<td>Adventure riff, 30 s electro drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-wide-open-lab-example</strong></td>
+<td>big room <strong>150</strong>, seed <strong>239</strong></td>
+<td><code>ez_edm_drive_wide</code></td>
+<td>Festival supersaw, mainstage drop</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-dawn-receipt-lab-example</strong></td>
+<td>progressive house <strong>128</strong>, seed <strong>229</strong></td>
+<td><code>ez_edm_drive_dawn</code></td>
+<td>Sunrise build, peak-time drop</td>
+</tr>
+</tbody>
+</table>
+<p>Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.</p>
 <hr />
 <h2 id="tags-vs-lyrics">Tags vs lyrics<a class="headerlink" href="#tags-vs-lyrics" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Tags</strong> describe genre, drums, bass, booth, vocal character, and bpm.</li>
-<li><strong>Lyrics</strong> are the bars. Section labels <code>[intro]</code>, <code>[verse]</code>, <code>[chorus]</code>, <code>[outro]</code>, and <code>[spoken word]</code> are vocal <strong>hints</strong> operators may add — they are not a rights grant.</li>
+<li><strong>Lyrics</strong> are the bars (rap) or the arrangement score (Drive-through EDM). Section labels <code>[intro]</code>, <code>[verse]</code>, <code>[chorus]</code>, <code>[outro]</code>, and <code>[spoken word]</code> are vocal <strong>hints</strong> operators may add — they are not a rights grant. EDM graphs use <code>[inst]</code> for the bed, build, and ~30 s drops.</li>
 <li>Original lyrics only. Do not write “in the style of \&lt;living artist&gt;”. No living-MC names. No famous-hook paraphrases.</li>
 <li>Short percussive lines (about 6–10 syllables) slur less. Keep <code>language=en</code> on <code>TextEncodeAceStepAudio1.5</code> (combo, not free text). The seeded graph stores seed control as <strong>fixed</strong> after the seed; re-open <strong>music-rap-draft-lab-example</strong> after a pull so those combos stay aligned.</li>
 </ul>
@@ -2437,7 +2568,7 @@
 <li><code>./scripts/manage.sh download-music --tier turbo</code></li>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
 <li>Load <strong>music-rap-draft-lab-example</strong>. Enhance on. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_rap_draft_*.flac</code> / <code>ez_rap_draft_*.mp3</code></li>
-<li>Then load <strong>music-rap-full-lab-example</strong> (96 s), <strong>or</strong> one <strong>music-rap-nill-bye-*-lab-example</strong> (180 s) from <code>_lab/audio/nill-bye/</code> on its own</li>
+<li>Then load <strong>music-rap-full-lab-example</strong> (96 s), <strong>or</strong> one <strong>music-rap-nill-bye-*-lab-example</strong> (180 s) from <code>_lab/audio/nill-bye/</code> on its own, <strong>or</strong> one <strong>music-edm-drive-through-*-lab-example</strong> (180 s, instrumental) from <code>_lab/audio/drive-through/</code> on its own</li>
 <li>Cover in a <strong>later</strong> session: <strong>klein-thumbnail-lab-example</strong> or <strong>klein-podcast-cover-lab-example</strong></li>
 <li>Optional YouTube still-image video (host ffmpeg; graphs still save FLAC + MP3):</li>
 </ol>

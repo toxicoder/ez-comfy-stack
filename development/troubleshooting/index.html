@@ -2637,6 +2637,16 @@
 <td>Keep boom-bap tags, append <code>instrumental, no vocals</code>, replace lyrics with <code>[inst]</code>. There is no third instrumental JSON</td>
 </tr>
 <tr>
+<td>Drive-through EDM sings the arrangement score</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App mode</span> is vocal, or lyrics used <code>[verse]</code>/<code>[chorus]</code></td>
+<td>Keep <strong>Vocal / instrumental</strong> on instrumental. Re-open a <strong>music-edm-drive-through-*-lab-example</strong> under <code>_lab/audio/drive-through/</code>. Score stays in <code>[inst]</code> / <code>[intro]</code> / <code>[outro]</code>; short lines (~6–10 syllables)</td>
+</tr>
+<tr>
+<td>Drive-through drop is mush / no 30 s hit</td>
+<td>Arrangement lines too long, or Enhance rewrote <code>[inst]</code></td>
+<td>Seeded EDM graphs pin Enhance <strong>off</strong>. Short percussive lines in the drop blocks; do not turn Rewrite prompt on unless you want the 4B rewriter</td>
+</tr>
+<tr>
 <td><code>kokoro-onnx</code> / <code>onnxruntime</code> import miss on aarch64</td>
 <td>Optional runtime wheel not installed (not baked in the image)</td>
 <td>Inside the container venv: <code>pip install kokoro-onnx onnxruntime</code> (CPU). Baking that into the image invalidates <strong>venv-extra</strong> (not the multi‑GB torch layer). Visual graphs still Queue without it</td>
@@ -2694,7 +2704,7 @@
 <tr>
 <td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span> edited per shot, or an old graph</td>
-<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> once (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> is one prompt; dream-house inventory widgets stay empty). View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code> (shot first). State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / GOLDEN / WARM / BEFORE on a cold canvas</td>
+<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> once (App Mode is one prompt; dream-house inventory widgets stay empty). View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code> (shot first). State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / GOLDEN / WARM / BEFORE on a cold canvas</td>
 </tr>
 <tr>
 <td>Enhance rewrites a locked shorts identity</td>

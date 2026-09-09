@@ -1777,9 +1777,10 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    dcc/       clay → print, iclora envelope
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    optional/  a14b, longcat stub
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    audio/     podcast-*, dub-*, music-rap-draft/full
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      nill-bye/  forty-five 180 s music-rap-nill-bye-* diss takes
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    inspire/   prompt-forge, beat-sheet
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  _user/       your graphs (never overwritten)
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      nill-bye/       forty-five 180 s music-rap-nill-bye-* diss takes
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      drive-through/  fifteen 180 s music-edm-drive-through-* EDM takes
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    inspire/   prompt-forge, beat-sheet
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  _user/       your graphs (never overwritten)
 </code></pre></div>
 <p>Reusable printer blocks live in the node library after start (<code>custom_nodes/ez_studio_blocks/subgraphs/</code>): <strong>klein-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">t2i</span>-backbone</strong>, <strong>wan-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">i2v</span>-5s</strong>, <strong>ltx-av-5s</strong>, <strong>ltx-film-shot</strong>. Drop them from the subgraph menu instead of copy-pasting chains.</p>
 <pre class="mermaid"><code>flowchart TB
@@ -1797,7 +1798,7 @@
   Plate --&gt; C["klein-thumbnail / packshot / cover"]</code></pre>
 <hr />
 <h2 id="catalog">Catalog<a class="headerlink" href="#catalog" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:9"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><input id="__tabbed_1_7" name="__tabbed_1" type="radio" /><input id="__tabbed_1_8" name="__tabbed_1" type="radio" /><input id="__tabbed_1_9" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Still (Klein 4B)</label><label for="__tabbed_1_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_1_3">AV hero (LTX-2.5)</label><label for="__tabbed_1_4">Apps (Lane A / Lane B)</label><label for="__tabbed_1_5">90s shorts</label><label for="__tabbed_1_6">Creator toolkit</label><label for="__tabbed_1_7">Audio (podcast / dub / rap)</label><label for="__tabbed_1_8">DCC (clay → print)</label><label for="__tabbed_1_9">License</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:9"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><input id="__tabbed_1_7" name="__tabbed_1" type="radio" /><input id="__tabbed_1_8" name="__tabbed_1" type="radio" /><input id="__tabbed_1_9" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Still (Klein 4B)</label><label for="__tabbed_1_2">Motion (Wan 2.2 5B)</label><label for="__tabbed_1_3">AV hero (LTX-2.5)</label><label for="__tabbed_1_4">Apps (Lane A / Lane B)</label><label for="__tabbed_1_5">90s shorts</label><label for="__tabbed_1_6">Creator toolkit</label><label for="__tabbed_1_7">Audio (podcast / dub / rap / EDM)</label><label for="__tabbed_1_8">DCC (clay → print)</label><label for="__tabbed_1_9">License</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -2410,6 +2411,77 @@
 <tr>
 <td><strong>music-rap-nill-bye-uplift-rumor-lab-example</strong></td>
 <td><strong>180 s</strong> trance 138 (<code>ez_rap_nill_uplift</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Drive-through EDM pack (instrumental, not rap over a club bed). Queue on its own. Full table: <a href="../music/">Local music</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>music-edm-drive-through-open-lane-lab-example</strong></td>
+<td><strong>180 s</strong> future bass 148 (<code>ez_edm_drive_openlane</code>). Vast melody, ~30 s drop, repeat</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-night-window-lab-example</strong></td>
+<td><strong>180 s</strong> bass house 140 (<code>ez_edm_drive_night</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-on-ramp-lab-example</strong></td>
+<td><strong>180 s</strong> hardstyle 150 (<code>ez_edm_drive_onramp</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-skyline-pass-lab-example</strong></td>
+<td><strong>180 s</strong> uplifting trance 138 (<code>ez_edm_drive_skyline</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-freight-pulse-lab-example</strong></td>
+<td><strong>180 s</strong> drum and bass 174 (<code>ez_edm_drive_freight</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-heart-lane-lab-example</strong></td>
+<td><strong>180 s</strong> melodic bass 140 (<code>ez_edm_drive_heart</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-overpass-lab-example</strong></td>
+<td><strong>180 s</strong> riddim / dubstep 140 (<code>ez_edm_drive_overpass</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-second-wave-lab-example</strong></td>
+<td><strong>180 s</strong> brostep 150 (<code>ez_edm_drive_second</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-keep-going-lab-example</strong></td>
+<td><strong>180 s</strong> hybrid trap 150 (<code>ez_edm_drive_keep</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-tunnel-bass-lab-example</strong></td>
+<td><strong>180 s</strong> hard techno 145 (<code>ez_edm_drive_tunnel</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-horizon-kick-lab-example</strong></td>
+<td><strong>180 s</strong> rawstyle 160 (<code>ez_edm_drive_horizon</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-clean-wreckage-lab-example</strong></td>
+<td><strong>180 s</strong> complex bass 140 (<code>ez_edm_drive_wreck</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-exit-seven-lab-example</strong></td>
+<td><strong>180 s</strong> complextro 140 (<code>ez_edm_drive_exit</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-wide-open-lab-example</strong></td>
+<td><strong>180 s</strong> big room 150 (<code>ez_edm_drive_wide</code>)</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-dawn-receipt-lab-example</strong></td>
+<td><strong>180 s</strong> progressive house 128 (<code>ez_edm_drive_dawn</code>)</td>
 </tr>
 </tbody>
 </table>
