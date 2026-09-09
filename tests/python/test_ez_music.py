@@ -22,6 +22,13 @@ from ez_music.diss_examples import (  # noqa: E402
     format_diss_lyrics,
     nill_tags,
 )
+from ez_music.edm_examples import (  # noqa: E402
+    DRIVE_LOCK,
+    EDM_DURATION_S,
+    EDM_EXAMPLES,
+    drive_tags,
+    format_edm_arrangement,
+)
 from ez_music.nodes import (  # noqa: E402
     DRAFT_LYRICS,
     EZRapLyrics,
@@ -31,6 +38,18 @@ from ez_music.nodes import (  # noqa: E402
 )
 
 LIVING_MC_NEEDLES = ("Drake", "Kendrick", "Eminem", "Suno", "Udio", "Bill Nye")
+LIVING_EDM_NEEDLES = (
+    "Avicii",
+    "Skrillex",
+    "Deadmau5",
+    "Tiësto",
+    "Tiesto",
+    "Garrix",
+    "Guetta",
+    "Marshmello",
+    "Suno",
+    "Udio",
+)
 
 
 def test_pack_imports_without_extra_pip() -> None:
@@ -209,6 +228,113 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
     assert "Rake in his feels like a full-time job" in DISS_EXAMPLES[2]["lyrics"]
     assert "Rake talk club like a uniform" in DISS_EXAMPLES[3]["lyrics"]
     assert "Hypothesis: Rake is cool" in DISS_EXAMPLES[4]["lyrics"]
+
+
+EXPECTED_DRIVE_THROUGH_TITLES = (
+    "open lane",
+    "night window",
+    "on-ramp",
+    "skyline pass",
+    "freight pulse",
+    "heart lane",
+    "overpass",
+    "second wave",
+    "keep going",
+    "tunnel bass",
+    "horizon kick",
+    "clean wreckage",
+    "exit seven",
+    "wide open",
+    "dawn receipt",
+)
+DRIVE_INSPIRE_NEEDLES = ("vast", "horizon", "open", "heart")
+
+
+def _valid_edm_kwargs() -> dict[str, str]:
+    return {
+        "intro": "glow",
+        "melody": "vast sky open",
+        "build": "snare up",
+        "drop": "thirty second drop\nheavy bass",
+        "break_": "heart on the horizon",
+        "build2": "snare back",
+        "drop2": "thirty second drop\nheavier bass",
+        "outro": "cut",
+    }
+
+
+def test_drive_tags_lock_instrumental_bed() -> None:
+    tags = drive_tags("future bass", "supersaw", bpm=148)
+    assert tags == (
+        "future bass, supersaw, instrumental, no vocals, original composition, 148 bpm"
+    )
+    for token in DRIVE_LOCK.split(", "):
+        assert token in tags
+
+
+def test_format_edm_arrangement_requires_thirty_second_drops() -> None:
+    kwargs = _valid_edm_kwargs()
+    kwargs["drop"] = "heavy drop\nno duration"
+    with pytest.raises(ValueError, match="thirty seconds"):
+        format_edm_arrangement(**kwargs)
+
+
+def test_format_edm_arrangement_requires_inspire_lock() -> None:
+    kwargs = _valid_edm_kwargs()
+    kwargs["melody"] = "dark pad only"
+    with pytest.raises(ValueError, match="vast/horizon/open/heart"):
+        format_edm_arrangement(**kwargs)
+
+
+def test_drive_through_edm_examples_are_original_180s() -> None:
+    assert EDM_DURATION_S == 180.0
+    assert len(EDM_EXAMPLES) == 15
+    prefixes: list[str] = []
+    stems: list[str] = []
+    bpms: list[int] = []
+    for ex in EDM_EXAMPLES:
+        assert ex["duration"] == EDM_DURATION_S
+        assert ex["series"] == "drive-through"
+        lyrics = ex["lyrics"]
+        assert "[intro]" in lyrics
+        assert "[outro]" in lyrics
+        assert lyrics.count("[inst]") >= 6
+        assert "[verse]" not in lyrics
+        assert "[chorus]" not in lyrics
+        assert "[spoken word]" not in lyrics
+        assert "Drive-through" in lyrics
+        assert lyrics.lower().count("thirty second drop") >= 2
+        inst_blocks = [block.strip() for block in lyrics.split("[inst]\n")[1:]]
+        assert len(inst_blocks) >= 6
+        melody, _, _, break_, _, _ = (block.split("\n\n")[0] for block in inst_blocks[:6])
+        for block in (melody, break_):
+            low = block.lower()
+            assert any(needle in low for needle in DRIVE_INSPIRE_NEEDLES), (
+                ex["stem"],
+                block,
+            )
+        for token in DRIVE_LOCK.split(", "):
+            assert token in ex["tags"], (ex["stem"], token)
+        assert str(ex["bpm"]) in ex["tags"]
+        assert ex["stem"].startswith("music-edm-drive-through-")
+        assert ex["stem"].endswith("-lab-example")
+        assert ex["prefix"].startswith("ez_edm_drive_")
+        for needle in (*LIVING_MC_NEEDLES, *LIVING_EDM_NEEDLES):
+            assert needle not in lyrics
+            assert needle not in ex["tags"]
+            assert needle not in ex["description"]
+        prefixes.append(ex["prefix"])
+        stems.append(ex["stem"])
+        bpms.append(int(ex["bpm"]))
+    assert len(set(prefixes)) == 15
+    assert len(set(stems)) == 15
+    assert min(bpms) >= 128
+    assert max(bpms) >= 160
+    assert sum(1 for bpm in bpms if bpm >= 138) == 14
+    assert tuple(ex["title"] for ex in EDM_EXAMPLES) == EXPECTED_DRIVE_THROUGH_TITLES
+    assert "open lane ahead" in EDM_EXAMPLES[0]["lyrics"]
+    assert "night window open" in EDM_EXAMPLES[1]["lyrics"]
+    assert "on-ramp rising" in EDM_EXAMPLES[2]["lyrics"]
 
 
 def test_writer_prompt_forbids_living_mcs() -> None:

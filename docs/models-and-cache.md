@@ -259,6 +259,7 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
 | `_lab/audio/nill-bye/music-rap-nill-bye-*-lab-example.json` | Forty-five ACE-Step 180 s Nill Bye diss takes (lab / style / trap-EDM). Catalog: [Local music](music.md) |
+| `_lab/audio/drive-through/music-edm-drive-through-*-lab-example.json` | Fifteen ACE-Step 180 s Drive-through instrumental EDM takes. Catalog: [Local music](music.md) |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
 | `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |

@@ -70,6 +70,21 @@ def test_nill_bye_graphs_live_under_audio_nill_bye() -> None:
     assert stray == [], stray
 
 
+def test_drive_through_graphs_live_under_audio_drive_through() -> None:
+    nested = LAB_ROOT / "audio" / "drive-through"
+    audio = LAB_ROOT / "audio"
+    hits = [
+        path
+        for path in lab_example_paths()
+        if path.name.startswith("music-edm-drive-through-")
+    ]
+    assert hits
+    for path in hits:
+        assert path.parent == nested, path
+    stray = list(audio.glob("music-edm-drive-through-*-lab-example.json"))
+    assert stray == [], stray
+
+
 def test_lab_dest_nested_subdir() -> None:
     path = lab_dest(
         "music-rap-nill-bye-lab-coat-lab-example.json",
@@ -77,6 +92,16 @@ def test_lab_dest_nested_subdir() -> None:
     )
     assert path == (
         LAB_ROOT / "audio" / "nill-bye" / "music-rap-nill-bye-lab-coat-lab-example.json"
+    )
+    edm = lab_dest(
+        "music-edm-drive-through-open-lane-lab-example.json",
+        subdir="drive-through",
+    )
+    assert edm == (
+        LAB_ROOT
+        / "audio"
+        / "drive-through"
+        / "music-edm-drive-through-open-lane-lab-example.json"
     )
 
 

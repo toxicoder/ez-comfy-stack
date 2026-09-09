@@ -588,6 +588,7 @@ def _spec(
     forge_widgets: bool = False,
     primitive_strings: bool = False,
     hide_images: bool = False,
+    ace_instrumental_score: bool = False,
 ) -> dict[str, Any]:
     return {
         "lane": lane,
@@ -602,6 +603,7 @@ def _spec(
         "forge_widgets": forge_widgets,
         "primitive_strings": primitive_strings,
         "hide_images": hide_images,
+        "ace_instrumental_score": ace_instrumental_score,
     }
 
 
@@ -790,6 +792,25 @@ NILL_BYE_STAMP_STEMS = _nill_bye_stems()
 for _nill_bye_stem in NILL_BYE_STAMP_STEMS:
     STAMP_SPECS[_nill_bye_stem] = _spec("audio", "audio")
 
+
+def _drive_through_stems() -> tuple[str, ...]:
+    import sys
+    from pathlib import Path
+
+    custom = Path(__file__).resolve().parents[2] / "custom_nodes"
+    if str(custom) not in sys.path:
+        sys.path.insert(0, str(custom))
+    from ez_music.edm_examples import EDM_EXAMPLES
+
+    return tuple(ex["stem"] for ex in EDM_EXAMPLES)
+
+
+DRIVE_THROUGH_STAMP_STEMS = _drive_through_stems()
+for _drive_through_stem in DRIVE_THROUGH_STAMP_STEMS:
+    STAMP_SPECS[_drive_through_stem] = _spec(
+        "audio", "audio", ace_instrumental_score=True
+    )
+
 STUB_IDS = frozenset({"longcat-video-lab-example"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
     "ltx-iclora-depth-5s-lab-example": ("EZFilmDisclosure",),
@@ -864,11 +885,12 @@ def _collect_raw_inputs(
         nid = node["id"]
         if ntype == "EZAceStepPromptEnhance":
             mode = _enhance_mode(node)
+            show_score = mode != "instrumental" or spec.get("ace_instrumental_score")
             raw.append((nid, "tags", node))
-            if mode != "instrumental":
+            if show_score:
                 raw.append((nid, "lyrics", node))
             raw.append((nid, "enhance", node))
-            if mode != "instrumental":
+            if show_score:
                 raw.append((nid, "mode", node))
         elif ntype in ("EZRapLyrics", "EZPodcastScript"):
             widget = "lyrics" if ntype == "EZRapLyrics" else "prompt"

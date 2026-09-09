@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from ez_music.diss_examples import DISS_EXAMPLES
+from ez_music.edm_examples import EDM_EXAMPLES
 
 from _lab_paths import WF, lab_json
 from _stamp_app_mode import STAMP_SPECS, linear_input_node_id, suite_json_paths
@@ -47,7 +48,9 @@ CREATORS = (
     ("podcast-radio-drama-lab-example", "ez_radio_ep", False),
     ("music-rap-draft-lab-example", "ez_rap_draft", False),
     ("music-rap-full-lab-example", "ez_rap_full", False),
-) + tuple((ex["stem"], ex["prefix"], False) for ex in DISS_EXAMPLES)
+) + tuple((ex["stem"], ex["prefix"], False) for ex in DISS_EXAMPLES) + tuple(
+    (ex["stem"], ex["prefix"], False) for ex in EDM_EXAMPLES
+)
 
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev")
 

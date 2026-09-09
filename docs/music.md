@@ -1,7 +1,7 @@
 ---
 title: Local music
-description: US-safe RAP-FIRST ACE-Step draft and full-track lane on one DGX Spark.
-tags: [music, rap, ace-step, us-safe, disclosure]
+description: US-safe RAP-FIRST ACE-Step draft and full-track lane, plus Drive-through EDM, on one DGX Spark.
+tags: [music, rap, edm, ace-step, us-safe, disclosure]
 ---
 
 # Local music
@@ -10,8 +10,9 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 
 - Queue the rap **draft** first, then the **full** track
 - Forty-five **180 s** Nill Bye vs Rake diss examples under `_lab/audio/nill-bye/` (Queue on their own; lab catalog, style pack, trap/EDM pack)
+- Fifteen **180 s** Drive-through instrumental EDM examples under `_lab/audio/drive-through/` (Queue on their own; vast melody then a ~30 s drop, twice)
 - App Mode: tags, lyrics, rewrite, vocal/instrumental, duration
-- Tags vs lyrics; `[verse]` / `[chorus]` / `[spoken word]` as vocal hints
+- Tags vs lyrics; `[verse]` / `[chorus]` / `[spoken word]` as vocal hints; EDM uses `[inst]` / `[intro]` / `[outro]`
 - Original lyrics only — no “in the style of \<living artist\>”
 - ACE-Step vocal = invented identity, not a clone
 - DistroKid / Spotify / YouTube / USCO Part 2 disclosure
@@ -23,6 +24,7 @@ tags: [music, rap, ace-step, us-safe, disclosure]
 
 - A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs
 - Forty-five 180 s original diss takes (Nill Bye vs Rake) without cloud music APIs
+- Fifteen 180 s original Drive-through EDM takes (instrumental, high BPM, ~30 s drops) without cloud music APIs
 - Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - Keeping the visual studio bootable when the music pack is missing
 - Muxing a cover still + FLAC into a YouTube MP4 without changing the rap graphs
@@ -154,12 +156,40 @@ Same dry booth. Rap over club beds (no autotune).
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
+### 180s Drive-through EDM examples
+
+Fifteen extra full-track graphs under **`_lab/audio/drive-through/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. App **Vocal / instrumental** defaults to **instrumental**. Queue **on their own** — draft-first is the generic rap lane, not a prerequisite. A longer Queue is expected.
+
+Fictional act only: **Drive-through** (hardcore, pure of heart). Original instrumental arrangements. No living-DJ names. No famous-hook paraphrases. Tags lock `instrumental, no vocals`. Lyrics are an arrangement score in `[inst]` blocks: adventurous / vast melody, a ~30 s multi-instrument drop, a break, then the cycle repeats. ACE-Step timbre is invented. Human selection and edit required before any release.
+
+This is **not** the Nill Bye trap/EDM pack. Those graphs are rap **over** club beds with a dry booth. Drive-through is instrumental EDM.
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-edm-drive-through-open-lane-lab-example** | future bass **148**, seed **191** | `ez_edm_drive_openlane` | Horizon plucks, then a 30 s stacked-bass drop |
+| **music-edm-drive-through-night-window-lab-example** | bass house **140**, seed **193** | `ez_edm_drive_night` | City-light chords, then a kick-heavy drop |
+| **music-edm-drive-through-on-ramp-lab-example** | hardstyle **150**, seed **197** | `ez_edm_drive_onramp` | Acceleration melody, reverse-bass drop |
+| **music-edm-drive-through-skyline-pass-lab-example** | uplifting trance **138**, seed **199** | `ez_edm_drive_skyline` | Wide pads, 30 s trance drop |
+| **music-edm-drive-through-freight-pulse-lab-example** | drum and bass **174**, seed **211** | `ez_edm_drive_freight` | Amen bed, neurofunk 30 s drop |
+| **music-edm-drive-through-heart-lane-lab-example** | melodic bass **140**, seed **223** | `ez_edm_drive_heart` | Pure-heart theme, heavy but clean drop |
+| **music-edm-drive-through-overpass-lab-example** | riddim / dubstep **140**, seed **227** | `ez_edm_drive_overpass` | Sparse build, wobble drop |
+| **music-edm-drive-through-second-wave-lab-example** | brostep **150**, seed **241** | `ez_edm_drive_second` | Repeat-the-process anthem |
+| **music-edm-drive-through-keep-going-lab-example** | hybrid trap **150**, seed **251** | `ez_edm_drive_keep` | Inspiring climb, trap-EDM drop |
+| **music-edm-drive-through-tunnel-bass-lab-example** | hard techno **145**, seed **257** | `ez_edm_drive_tunnel` | Tunnel pulse, industrial drop |
+| **music-edm-drive-through-horizon-kick-lab-example** | rawstyle **160**, seed **263** | `ez_edm_drive_horizon` | High-BPM kick-split drop |
+| **music-edm-drive-through-clean-wreckage-lab-example** | complex bass **140**, seed **269** | `ez_edm_drive_wreck` | Hardcore, multi-instrument, still clean |
+| **music-edm-drive-through-exit-seven-lab-example** | complextro **140**, seed **233** | `ez_edm_drive_exit` | Adventure riff, 30 s electro drop |
+| **music-edm-drive-through-wide-open-lab-example** | big room **150**, seed **239** | `ez_edm_drive_wide` | Festival supersaw, mainstage drop |
+| **music-edm-drive-through-dawn-receipt-lab-example** | progressive house **128**, seed **229** | `ez_edm_drive_dawn` | Sunrise build, peak-time drop |
+
+Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
+
 ---
 
 ## Tags vs lyrics
 
 - **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
-- **Lyrics** are the bars. Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant.
+- **Lyrics** are the bars (rap) or the arrangement score (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant. EDM graphs use `[inst]` for the bed, build, and ~30 s drops.
 - Original lyrics only. Do not write “in the style of \<living artist\>”. No living-MC names. No famous-hook paraphrases.
 - Short percussive lines (about 6–10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **music-rap-draft-lab-example** after a pull so those combos stay aligned.
 
@@ -203,7 +233,7 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 1. `./scripts/manage.sh download-music --tier turbo`
 2. `./scripts/manage.sh start` — type **yes**
 3. Load **music-rap-draft-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
-4. Then load **music-rap-full-lab-example** (96 s), **or** one **music-rap-nill-bye-*-lab-example** (180 s) from `_lab/audio/nill-bye/` on its own
+4. Then load **music-rap-full-lab-example** (96 s), **or** one **music-rap-nill-bye-*-lab-example** (180 s) from `_lab/audio/nill-bye/` on its own, **or** one **music-edm-drive-through-*-lab-example** (180 s, instrumental) from `_lab/audio/drive-through/` on its own
 5. Cover in a **later** session: **klein-thumbnail-lab-example** or **klein-podcast-cover-lab-example**
 6. Optional YouTube still-image video (host ffmpeg; graphs still save FLAC + MP3):
 

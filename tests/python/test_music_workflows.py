@@ -6,10 +6,15 @@ import json
 from pathlib import Path
 
 from ez_music.diss_examples import DISS_EXAMPLES
+from ez_music.edm_examples import EDM_EXAMPLES
 
 from _ace_widgets_contract import assert_ace_encoder_widgets
 from _lab_paths import lab_json
-from _stamp_app_mode import NILL_BYE_STAMP_STEMS, STAMP_SPECS
+from _stamp_app_mode import (
+    DRIVE_THROUGH_STAMP_STEMS,
+    NILL_BYE_STAMP_STEMS,
+    STAMP_SPECS,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -46,6 +51,7 @@ def _assert_shared(
     bpm: int = 88,
     seed: int = 42,
     tags: str | None = None,
+    ace_mode: str = "vocal",
 ) -> None:
     assert graph["id"] == stem
     extra = graph["extra"]
@@ -56,8 +62,15 @@ def _assert_shared(
     assert titles == {"MODEL", "DURATION", "PROMPT", "OUTPUT"}
     blob = json.dumps(graph)
     assert prefix in blob
-    assert "[verse]" in blob
-    assert "[chorus]" in blob
+    if ace_mode == "vocal":
+        assert "[verse]" in blob
+        assert "[chorus]" in blob
+    else:
+        assert "[inst]" in blob
+        assert "[intro]" in blob
+        assert "[outro]" in blob
+        assert "[verse]" not in blob
+        assert "[chorus]" not in blob
     for needle in BANNED:
         assert needle not in blob, (stem, needle)
     ckpt = next(n for n in graph["nodes"] if n["type"] == "CheckpointLoaderSimple")
@@ -90,7 +103,7 @@ def _assert_shared(
     assert mp3["widgets_values"][0] == prefix
     ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
     assert ace["widgets_values"][2] is False
-    assert ace["widgets_values"][3] == "vocal"
+    assert ace["widgets_values"][3] == ace_mode
     if tags is not None:
         assert ace["widgets_values"][0] == tags
         assert widgets[0] == tags
@@ -152,11 +165,48 @@ def test_nill_bye_stems_are_stamped_audio() -> None:
         assert STAMP_SPECS[stem]["occupancy"] == "audio"
 
 
+def test_music_edm_drive_through_graphs() -> None:
+    assert len(EDM_EXAMPLES) == 15
+    assert tuple(ex["stem"] for ex in EDM_EXAMPLES) == DRIVE_THROUGH_STAMP_STEMS
+    for ex in EDM_EXAMPLES:
+        stem = ex["stem"]
+        graph = _load(stem)
+        _assert_shared(
+            graph,
+            stem,
+            ex["prefix"],
+            float(ex["duration"]),
+            bpm=int(ex["bpm"]),
+            seed=int(ex["seed"]),
+            tags=ex["tags"],
+            ace_mode="instrumental",
+        )
+        blob = json.dumps(graph)
+        assert blob.lower().count("thirty second drop") >= 2
+        assert "Drive-through" in blob
+        note = graph["extra"]["lab_note"]
+        assert "180" in note
+        assert "on its own" in note.lower() or "queue on its own" in note.lower()
+        assert "instrumental" in note.lower()
+        ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
+        assert ace["title"] == "ez_edm_prompt"
+
+
+def test_drive_through_stems_are_stamped_audio() -> None:
+    stems = {ex["stem"] for ex in EDM_EXAMPLES}
+    assert stems <= set(STAMP_SPECS)
+    for stem in stems:
+        assert STAMP_SPECS[stem]["lane"] == "audio"
+        assert STAMP_SPECS[stem]["occupancy"] == "audio"
+        assert STAMP_SPECS[stem]["ace_instrumental_score"] is True
+
+
 def test_music_apps_expose_duration_and_vocal_mode() -> None:
     stems = [
         "music-rap-draft-lab-example",
         "music-rap-full-lab-example",
         *[ex["stem"] for ex in DISS_EXAMPLES],
+        *[ex["stem"] for ex in EDM_EXAMPLES],
     ]
     for stem in stems:
         graph = _load(stem)

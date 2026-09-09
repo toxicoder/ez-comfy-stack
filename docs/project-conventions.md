@@ -50,7 +50,7 @@ flowchart TB
   Manage --> Docker
 ```
 
-Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`) and keep the `*-lab-example.json` suffix. Nested folders under a lane are allowed (Nill Bye diss graphs: `_lab/audio/nill-bye/`). Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` and must not be committed.
+Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`) and keep the `*-lab-example.json` suffix. Nested folders under a lane are allowed (Nill Bye diss graphs: `_lab/audio/nill-bye/`; Drive-through EDM: `_lab/audio/drive-through/`). Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` and must not be committed.
 
 ## Shell style
 
