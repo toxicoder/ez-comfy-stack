@@ -182,4 +182,4 @@ Do not vendor or default:
 - Celebrity names in tags/lyrics, `LoadAudio` of copyrighted songs, “cover this Drake track”
 - Required `XAI_API_KEY`
 
-Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.0`.
+Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.6`.

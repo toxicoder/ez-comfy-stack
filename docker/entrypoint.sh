@@ -759,7 +759,7 @@ main() {
     ${install_cmd}
   elif [[ -f ${stamp} && -x ${venv}/bin/python ]]; then
     vol_pin="$(tr -d '\n' <"${comfy_home}/.lab-comfyui-ref" 2>/dev/null || true)"
-    want="${COMFYUI_REF:-v0.34.0}"
+    want="${COMFYUI_REF:-v0.34.6}"
     if [[ ${vol_pin} != "${want}" ]]; then
       ep_log "Comfy pin needs sync (${vol_pin:-unset} → ${want})"
       if prebuilt_ready; then

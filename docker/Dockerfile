@@ -27,9 +27,9 @@
 #   Override CUDA_BASE_IMAGE to a devel tag if you must compile CUDA extensions.
 #   NGC: CUDA_BASE_IMAGE / CUDA_RUNTIME_IMAGE after docker login nvcr.io.
 #
-# Pins (validated 2026-07-29; Comfy bump 2026-08-26; torch pin 2026-09-03):
+# Pins (validated 2026-07-29; Comfy bump 2026-09-08; torch pin 2026-09-03):
 #   TORCH_VERSION=2.14.0  (cu130 index)
-#   COMFYUI_REF=v0.34.0  COMFYUI_MANAGER_REF=4.2.2  COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
+#   COMFYUI_REF=v0.34.6  COMFYUI_MANAGER_REF=4.2.2  COMFYUI_NUNCHAKU_NODE_REF=v1.2.1
 #   COMFYUI_VHS_REF= (empty = VideoHelperSuite main; required for LTX lab MP4)
 
 ARG CUDA_BASE_IMAGE=nvidia/cuda:13.0.0-runtime-ubuntu24.04
@@ -93,7 +93,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 FROM torch AS comfy
 
 ARG EZ_COMFY_PREBUILD=1
-ARG COMFYUI_REF=v0.34.0
+ARG COMFYUI_REF=v0.34.6
 ENV COMFYUI_REF=${COMFYUI_REF}
 
 COPY --chmod=755 install-comfy/common.sh install-comfy/phase-comfy.sh \
