@@ -1,6 +1,6 @@
 """Canned 180s Drive-through EDM takes for ACE-Step lab graphs.
 
-Fictional act only. Original instrumental arrangements. No living-artist names.
+Fictional act only. Original dance arrangements. No living-artist names.
 """
 
 from __future__ import annotations
@@ -8,11 +8,20 @@ from __future__ import annotations
 from typing import Literal, TypedDict
 
 EDM_DURATION_S = 180.0
-DRIVE_LOCK = "instrumental, no vocals, original composition"
+DRIVE_LOCK = "instrumental, no vocals, no singing, original composition"
+DRIVE_TREAT_LOCK = "sparse vocal chop, DJ shout, no rap, original composition"
 EdmSeries = Literal["drive-through"]
+EdmAceMode = Literal["instrumental", "vocal"]
 
-_DROP_DURATION_NEEDLES = ("thirty second", "30 second")
-_INSPIRE_NEEDLES = ("vast", "horizon", "open", "heart")
+SCORE_LABELS = frozenset({"intro", "inst", "outro", "chorus"})
+DROP_WEIGHT_NEEDLES = (
+    "heavy",
+    "wreck",
+    "harder",
+    "stacked",
+    "full send",
+    "mainstage",
+)
 
 
 class EdmExample(TypedDict):
@@ -26,67 +35,64 @@ class EdmExample(TypedDict):
     prefix: str
     description: str
     lyrics: str
+    ace_mode: EdmAceMode
 
 
-def drive_tags(*parts: str, bpm: int) -> str:
-    """Join style tags with the locked instrumental Drive-through bed and bpm."""
-    return ", ".join([*parts, DRIVE_LOCK, f"{bpm} bpm"])
+def drive_tags(*parts: str, bpm: int, treat: bool = False) -> str:
+    """Join style tags with the Drive-through bed lock and bpm.
+
+    Arguments:
+        parts: Genre and production tags for this take.
+        bpm: Tempo written into the tags line.
+        treat: If True, use the sparse DJ-shout lock instead of no-vocals.
+    Returns:
+        Comma-separated ACE-Step tags line.
+    """
+    lock = DRIVE_TREAT_LOCK if treat else DRIVE_LOCK
+    return ", ".join([*parts, lock, f"{bpm} bpm"])
 
 
-def _desc(take: str) -> str:
+def _desc(take: str, *, treat: bool = False) -> str:
+    vocal = "sparse DJ vocal chop" if treat else "instrumental"
     return (
         f"US-safe EDM 180s: Drive-through {take}, "
-        "ACE-Step 1.5 turbo AIO, instrumental, invented timbre"
+        f"ACE-Step 1.5 turbo AIO, {vocal}, invented timbre"
     )
 
 
-def format_edm_arrangement(
-    *,
-    intro: str,
-    melody: str,
-    build: str,
-    drop: str,
-    break_: str,
-    build2: str,
-    drop2: str,
-    outro: str,
-) -> str:
-    """Build a 180s instrumental score: melody, 30s drop, break, repeat.
+def format_edm_score(*sections: tuple[str, str]) -> str:
+    """Build a 180s ACE-Step score from labeled sections.
+
+    Labels are intro, inst, outro, and chorus (DJ-shout treats only).
+    This is not the Nill Bye verse/chorus loop and not a fixed
+    melody-drop-break-drop skeleton.
 
     Arguments:
-        intro: Atmosphere before the first melody.
-        melody: Adventurous / inspiring bed (must invoke vast/horizon/open/heart).
-        build: Tension into drop 1.
-        drop: First ~30 s hard drop (must name a thirty-second drop).
-        break_: Return to the vast bed (same inspire needles as melody).
-        build2: Tension into drop 2.
-        drop2: Second ~30 s hard drop (same duration needle as drop).
-        outro: Tail after the second drop.
+        sections: (label, body) pairs. Bodies are production cues.
     Returns:
-        ACE-Step lyrics with [intro], six [inst] blocks, and [outro].
+        ACE-Step lyrics with labeled blocks.
     Raises:
-        ValueError: if a drop is not ~30 s, or melody/break skip the inspire lock.
+        ValueError: too few sections, unknown label, empty body, fewer
+            than two named drops, or a drop without a weight needle.
     """
-    for name, block in (("drop", drop), ("drop2", drop2)):
-        low = block.lower()
-        if "drop" not in low:
-            raise ValueError(f"{name} must name a drop")
-        if not any(needle in low for needle in _DROP_DURATION_NEEDLES):
-            raise ValueError(f"{name} must last about thirty seconds")
-    for name, block in (("melody", melody), ("break_", break_)):
-        low = block.lower()
-        if not any(needle in low for needle in _INSPIRE_NEEDLES):
-            raise ValueError(f"{name} must invoke vast/horizon/open/heart")
-    parts = [
-        "[intro]\n" + intro.strip(),
-        "[inst]\n" + melody.strip(),
-        "[inst]\n" + build.strip(),
-        "[inst]\n" + drop.strip(),
-        "[inst]\n" + break_.strip(),
-        "[inst]\n" + build2.strip(),
-        "[inst]\n" + drop2.strip(),
-        "[outro]\n" + outro.strip(),
-    ]
+    if len(sections) < 3:
+        raise ValueError("score needs at least three sections")
+    drop_count = 0
+    parts: list[str] = []
+    for label, body in sections:
+        if label not in SCORE_LABELS:
+            raise ValueError(f"unknown score label {label}")
+        text = body.strip()
+        if not text:
+            raise ValueError(f"{label} body is empty")
+        low = text.lower()
+        if "drop" in low:
+            drop_count += 1
+            if not any(needle in low for needle in DROP_WEIGHT_NEEDLES):
+                raise ValueError("drop must hit a weight needle")
+        parts.append(f"[{label}]\n{text}")
+    if drop_count < 2:
+        raise ValueError("score needs at least two named drops")
     return "\n\n".join(parts)
 
 

@@ -236,13 +236,35 @@ Beat-only pass: append instrumental, no vocals, and replace lyrics with [inst].
 
 def _edm_note(ex: EdmExample) -> str:
     duration_s = int(ex["duration"])
+    treat = ex["ace_mode"] == "vocal"
+    if treat:
+        score_blurb = (
+            "Live rave-set take. Sparse DJ vocal chop in one short chorus "
+            "block; bed and drops stay `[inst]`. Not a rap verse."
+        )
+        mode_blurb = (
+            "Keep App **Vocal / instrumental** on vocal so the shout renders. "
+            "`[inst]` lines are instrument cues so ACE does not sing the bed."
+        )
+        labels_blurb = "`[inst]` / `[intro]` / `[outro]` and the one chorus chop"
+    else:
+        score_blurb = (
+            "Live rave-set take. Instrumental arrangement score in `[inst]` "
+            "blocks: dance-floor flow unique to this take, heavy drops, "
+            "mix-in/out. Vocals are a rare DJ treat on other graphs, not here."
+        )
+        mode_blurb = (
+            "Keep App **Vocal / instrumental** on instrumental so ACE does "
+            "not sing the score."
+        )
+        labels_blurb = "`[inst]` / `[intro]` / `[outro]`"
     return f"""## {ex["stem"]}
 
-US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Instrumental arrangement score in `[inst]` blocks: vast melody, then a ~30 s multi-instrument drop, then the cycle repeats. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. {score_blurb} Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
-2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[intro]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.
-3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing the score.
+2. Prompt enhance is **off** so tags, BPM, language, and {labels_blurb} stay as written. Turn Enhance on only if you want the 4B rewriter.
+3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. {mode_blurb}
 4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language en, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
@@ -484,7 +506,7 @@ def build_edm(ex: EdmExample) -> dict:
         tags=ex["tags"],
         bpm=int(ex["bpm"]),
         seed=int(ex["seed"]),
-        ace_mode="instrumental",
+        ace_mode=ex["ace_mode"],
         enhance_title="ez_edm_prompt",
     )
 

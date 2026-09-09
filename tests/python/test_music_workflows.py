@@ -52,6 +52,7 @@ def _assert_shared(
     seed: int = 42,
     tags: str | None = None,
     ace_mode: str = "vocal",
+    edm_vocal_treat: bool = False,
 ) -> None:
     assert graph["id"] == stem
     extra = graph["extra"]
@@ -62,12 +63,15 @@ def _assert_shared(
     assert titles == {"MODEL", "DURATION", "PROMPT", "OUTPUT"}
     blob = json.dumps(graph)
     assert prefix in blob
-    if ace_mode == "vocal":
+    if ace_mode == "vocal" and edm_vocal_treat:
+        assert "[chorus]" in blob
+        assert "[inst]" in blob
+        assert "[verse]" not in blob
+    elif ace_mode == "vocal":
         assert "[verse]" in blob
         assert "[chorus]" in blob
     else:
         assert "[inst]" in blob
-        assert "[intro]" in blob
         assert "[outro]" in blob
         assert "[verse]" not in blob
         assert "[chorus]" not in blob
@@ -171,6 +175,7 @@ def test_music_edm_drive_through_graphs() -> None:
     for ex in EDM_EXAMPLES:
         stem = ex["stem"]
         graph = _load(stem)
+        treat = ex["ace_mode"] == "vocal"
         _assert_shared(
             graph,
             stem,
@@ -179,15 +184,22 @@ def test_music_edm_drive_through_graphs() -> None:
             bpm=int(ex["bpm"]),
             seed=int(ex["seed"]),
             tags=ex["tags"],
-            ace_mode="instrumental",
+            ace_mode=ex["ace_mode"],
+            edm_vocal_treat=treat,
         )
         blob = json.dumps(graph)
-        assert blob.lower().count("thirty second drop") >= 2
         assert "Drive-through" in blob
+        assert "[verse]" not in blob
         note = graph["extra"]["lab_note"]
         assert "180" in note
         assert "on its own" in note.lower() or "queue on its own" in note.lower()
-        assert "instrumental" in note.lower()
+        assert "rave" in note.lower() or "live" in note.lower()
+        if treat:
+            assert "vocal" in note.lower()
+            assert blob.lower().count("[chorus]") >= 1
+        else:
+            assert "instrumental" in note.lower()
+            assert "[chorus]" not in blob
         ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
         assert ace["title"] == "ez_edm_prompt"
 
