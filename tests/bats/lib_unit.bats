@@ -422,6 +422,119 @@ exit 1
   unset LAB_MOCK_HF_IDENTITY
 }
 
+#######################################
+# Isolate HOME/PATH so host pipx hf does not leak into CLI discovery tests.
+# Globals:
+#   TEST_TMP_DIR, PATH, HOME
+# Arguments:
+#   None
+# Returns:
+#   0, or skips when a host hf remains on the stripped PATH
+#######################################
+isolate_hf_cli_env() {
+  export HOME="${TEST_TMP_DIR}/hf_home"
+  mkdir -p "${HOME}"
+  rm -f "${TEST_TMP_DIR}/bin/hf" "${TEST_TMP_DIR}/bin/huggingface-cli"
+  export PATH="${TEST_TMP_DIR}/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+  hash -r 2>/dev/null || true
+  unset LAB_MOCK_HF_INSTALL
+  unset LAB_MOCK_SUDO_HOME
+  unset SUDO_USER
+  if command -v hf >/dev/null 2>&1; then
+    skip "host hf is on stripped PATH ($(command -v hf))"
+  fi
+}
+
+@test "common: find_hf_bin resolve_hf_on_path install_hf_cli check_hf_cli" {
+  isolate_hf_cli_env
+
+  run hf_cli_user_home "$(id -un)"
+  [ "${status}" -eq 0 ]
+  [[ -d "${output}" ]]
+  run hf_cli_user_home "definitely-not-a-real-user-xyz-ez-comfy"
+  [ "${status}" -ne 0 ]
+
+  run hf_cli_search_homes
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"${HOME}"* ]]
+
+  run hf_cli_install_home
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${HOME}" ]
+
+  run find_hf_bin
+  [ "${status}" -ne 0 ]
+  run resolve_hf_on_path
+  [ "${status}" -ne 0 ]
+
+  local local_hf
+  local_hf="${HOME}/.local/bin/hf"
+  mkdir -p "${HOME}/.local/bin"
+  cat >"${local_hf}" <<'EOF'
+#!/usr/bin/env bash
+exit 0
+EOF
+  chmod +x "${local_hf}"
+  run find_hf_bin
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${local_hf}" ]
+  resolve_hf_on_path
+  [ "$(command -v hf)" = "${local_hf}" ]
+  run check_hf_cli
+  [ "${status}" -eq 0 ]
+  rm -f "${local_hf}"
+  hash -r 2>/dev/null || true
+  isolate_hf_cli_env
+
+  local sudo_home sudo_hf
+  sudo_home="${TEST_TMP_DIR}/sudo_home"
+  sudo_hf="${sudo_home}/.local/bin/hf"
+  mkdir -p "${sudo_home}/.local/bin"
+  cat >"${sudo_hf}" <<'EOF'
+#!/usr/bin/env bash
+exit 0
+EOF
+  chmod +x "${sudo_hf}"
+  export LAB_MOCK_SUDO_HOME="${sudo_home}"
+  run hf_cli_search_homes
+  [[ "${output}" == *"${sudo_home}"* ]]
+  run find_hf_bin
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${sudo_hf}" ]
+  unset LAB_MOCK_SUDO_HOME
+  rm -rf "${sudo_home}"
+  isolate_hf_cli_env
+
+  install_mock_bin huggingface-cli 'echo stub; exit 1'
+  run find_hf_bin
+  [ "${status}" -ne 0 ]
+  export LAB_MOCK_HF_INSTALL=1
+  run install_hf_cli
+  [ "${status}" -eq 0 ]
+  [[ -x "${HOME}/.local/bin/hf" ]]
+  run check_hf_cli
+  [ "${status}" -eq 0 ]
+  run find_hf_bin
+  [ "${output}" = "${HOME}/.local/bin/hf" ]
+  unset LAB_MOCK_HF_INSTALL
+  rm -f "${HOME}/.local/bin/hf" "${TEST_TMP_DIR}/bin/huggingface-cli"
+  isolate_hf_cli_env
+
+  export LAB_HERMETIC=1
+  unset LAB_MOCK_HF_INSTALL
+  run check_hf_cli
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"Required tool missing: hf"* ]]
+
+  export LAB_MOCK_HF_INSTALL=fail
+  run install_hf_cli
+  [ "${status}" -ne 0 ]
+  run check_hf_cli
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"Required tool missing: hf"* ]]
+  unset LAB_MOCK_HF_INSTALL
+}
+
 @test "common: count_hf_incomplete for resume state" {
   local d="${TEST_TMP_DIR}/inc_root"
   mkdir -p "${d}/.cache/huggingface/download"

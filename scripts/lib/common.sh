@@ -734,18 +734,322 @@ prepare_comfy_output_dir() {
 }
 
 #######################################
-# Ensure Hugging Face CLI is available (prefer modern `hf`).
+# Home directory for a login name (passwd database; no eval).
 # Globals:
 #   None
 # Arguments:
+#   $1 - User name
+# Outputs:
+#   Home path on stdout
+# Returns:
+#   0 when found; 1 when the user does not exist
+#######################################
+hf_cli_user_home() {
+  local user="${1:-}"
+  local home=""
+  [[ -n ${user} ]] || return 1
+  if command -v python3 >/dev/null 2>&1; then
+    home="$(python3 -c 'import pwd, sys
+try:
+    print(pwd.getpwnam(sys.argv[1]).pw_dir)
+except KeyError:
+    pass' "${user}" 2>/dev/null || true)"
+  fi
+  [[ -n ${home} ]] || return 1
+  printf '%s\n' "${home}"
+}
+
+#######################################
+# Home directories to search for an existing `hf` binary.
+# Includes $HOME and, when sudo invoked us, the original user's home.
+# Globals:
+#   HOME, SUDO_USER, LAB_MOCK_SUDO_HOME
+# Arguments:
 #   None
 # Outputs:
-#   Error on stderr when missing
+#   One home path per line
 # Returns:
-#   0 when hf or huggingface-cli is on PATH; exits 1 via die when missing
+#   0
+#######################################
+hf_cli_search_homes() {
+  local sudo_home=""
+  printf '%s\n' "${HOME}"
+  if [[ -n ${LAB_MOCK_SUDO_HOME:-} ]]; then
+    printf '%s\n' "${LAB_MOCK_SUDO_HOME}"
+    return 0
+  fi
+  if [[ -n ${SUDO_USER:-} ]]; then
+    sudo_home="$(hf_cli_user_home "${SUDO_USER}" 2>/dev/null || true)"
+    if [[ -n ${sudo_home} && ${sudo_home} != "${HOME}" ]]; then
+      printf '%s\n' "${sudo_home}"
+    fi
+  fi
+  return 0
+}
+
+#######################################
+# Home directory that should own a new hf CLI install.
+# When running as root via sudo, install into SUDO_USER's home so a later
+# non-sudo download-models still finds the binary.
+# Globals:
+#   HOME, EUID, SUDO_USER
+# Arguments:
+#   None
+# Outputs:
+#   Home path on stdout
+# Returns:
+#   0
+#######################################
+hf_cli_install_home() {
+  local sudo_home=""
+  if [[ ${EUID} -eq 0 && -n ${SUDO_USER:-} && ${SUDO_USER} != "root" ]]; then
+    sudo_home="$(hf_cli_user_home "${SUDO_USER}" 2>/dev/null || true)"
+    if [[ -n ${sudo_home} ]]; then
+      printf '%s\n' "${sudo_home}"
+      return 0
+    fi
+  fi
+  printf '%s\n' "${HOME}"
+}
+
+#######################################
+# Locate a modern `hf` binary (PATH, ~/.local/bin, official venv, pipx).
+# Ignores the deprecated `huggingface-cli` stub.
+# Globals:
+#   HOME, PATH, SUDO_USER, LAB_MOCK_SUDO_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Absolute or PATH-resolved hf path on stdout when found
+# Returns:
+#   0 when found; 1 when missing
+#######################################
+find_hf_bin() {
+  local candidate home
+  if candidate=$(command -v hf 2>/dev/null); then
+    printf '%s\n' "${candidate}"
+    return 0
+  fi
+  while IFS= read -r home; do
+    [[ -n ${home} ]] || continue
+    for candidate in \
+      "${home}/.local/bin/hf" \
+      "${home}/.hf-cli/venv/bin/hf" \
+      "${home}/.local/pipx/venvs/huggingface-hub/bin/hf" \
+      "${home}/.local/pipx/venvs/huggingface_hub/bin/hf" \
+      "${home}/.local/share/pipx/venvs/huggingface-hub/bin/hf" \
+      "${home}/.local/share/pipx/venvs/huggingface_hub/bin/hf"; do
+      if [[ -x ${candidate} ]]; then
+        printf '%s\n' "${candidate}"
+        return 0
+      fi
+    done
+  done < <(hf_cli_search_homes)
+  return 1
+}
+
+#######################################
+# Ensure `hf` is invocable as the bare command on PATH.
+# If only an absolute path exists, prepends its directory to PATH.
+# Globals:
+#   PATH (may be modified)
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 when hf is invocable; 1 otherwise
+#######################################
+resolve_hf_on_path() {
+  local bin dir
+  if command -v hf >/dev/null 2>&1; then
+    return 0
+  fi
+  if ! bin=$(find_hf_bin); then
+    return 1
+  fi
+  dir="$(dirname "${bin}")"
+  export PATH="${dir}:${PATH}"
+  hash -r 2>/dev/null || true
+  command -v hf >/dev/null 2>&1
+}
+
+#######################################
+# Install the modern Hugging Face `hf` CLI into the target user's home.
+# Isolated venv at ~/.hf-cli (official layout), then pipx, pip --user,
+# apt python3-venv retry, then a console-script wrapper if the module imports.
+# Hermetic tests never hit the network. LAB_MOCK_HF_INSTALL=1 writes a stub.
+# Globals:
+#   HOME, EUID, SUDO_USER, PATH, LAB_HERMETIC, LAB_MOCK_HF_INSTALL, LAB_NO_SUDO
+# Arguments:
+#   None
+# Outputs:
+#   Status via log/warn
+# Returns:
+#   0 when hf is on PATH afterward; 1 otherwise
+#######################################
+install_hf_cli() {
+  local home bindir venv_dir errf python
+  if [[ ${LAB_MOCK_HF_INSTALL:-} == "fail" ]]; then
+    return 1
+  fi
+  home="$(hf_cli_install_home)"
+  bindir="${home}/.local/bin"
+  venv_dir="${home}/.hf-cli/venv"
+
+  if [[ ${LAB_MOCK_HF_INSTALL:-} == "1" ]]; then
+    mkdir -p "${bindir}"
+    cat >"${bindir}/hf" <<'EOF'
+#!/usr/bin/env bash
+exit 0
+EOF
+    chmod +x "${bindir}/hf"
+    export PATH="${bindir}:${PATH}"
+    hash -r 2>/dev/null || true
+    log "LAB_MOCK_HF_INSTALL: mock hf at ${bindir}/hf"
+    return 0
+  fi
+  if [[ ${LAB_HERMETIC:-0} == "1" ]]; then
+    return 1
+  fi
+
+  python="$(command -v python3 2>/dev/null || true)"
+  mkdir -p "${bindir}" "${home}/.hf-cli"
+  export PATH="${bindir}:${PATH}"
+  errf="$(mktemp)"
+  log "hf CLI not found; attempting install…"
+
+  # Nested helpers are indented so the coverage inventory does not collect them.
+  # shellcheck disable=SC2317,SC2329
+  _hf_cli_try() {
+    local desc="${1}"
+    shift
+    log "  try: ${desc}"
+    if "$@" >"${errf}" 2>&1; then
+      return 0
+    fi
+    warn "  failed: ${desc}: $(tail -n 2 "${errf}" | tr '\n' ' ')"
+    return 1
+  }
+
+  if [[ -n ${python} ]]; then
+    if [[ ! -x ${venv_dir}/bin/python ]]; then
+      _hf_cli_try "python3 -m venv ${venv_dir}" \
+        env HOME="${home}" "${python}" -m venv "${venv_dir}" || true
+    fi
+    if [[ -x ${venv_dir}/bin/python ]]; then
+      _hf_cli_try "venv pip install huggingface_hub" \
+        env HOME="${home}" "${venv_dir}/bin/python" -m pip install \
+        -U -q --disable-pip-version-check huggingface_hub || true
+      if [[ -x ${venv_dir}/bin/hf ]]; then
+        ln -sfn "${venv_dir}/bin/hf" "${bindir}/hf"
+        chmod +x "${bindir}/hf" 2>/dev/null || true
+      fi
+    fi
+  fi
+
+  if ! command -v hf >/dev/null 2>&1 && command -v pipx >/dev/null 2>&1; then
+    _hf_cli_try "pipx install huggingface_hub" \
+      env HOME="${home}" PIPX_BIN_DIR="${bindir}" pipx install huggingface_hub || true
+  fi
+
+  if ! command -v hf >/dev/null 2>&1 && [[ -n ${python} ]]; then
+    _hf_cli_try "pip --user huggingface_hub" \
+      env HOME="${home}" PYTHONUSERBASE="${home}/.local" \
+      "${python}" -m pip install --user -q huggingface_hub || true
+    if ! command -v hf >/dev/null 2>&1; then
+      _hf_cli_try "pip --user --break-system-packages huggingface_hub" \
+        env HOME="${home}" PYTHONUSERBASE="${home}/.local" \
+        "${python}" -m pip install --user --break-system-packages -q huggingface_hub || true
+    fi
+  fi
+
+  if ! command -v hf >/dev/null 2>&1 &&
+    [[ ${LAB_NO_SUDO:-} != "1" ]] &&
+    command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+    if command -v apt-get >/dev/null 2>&1; then
+      _hf_cli_try "apt python3-venv python3-pip" \
+        sudo -n apt-get install -y python3-venv python3-pip || true
+    elif command -v dnf >/dev/null 2>&1; then
+      _hf_cli_try "dnf python3-pip" \
+        sudo -n dnf install -y python3-pip python3-virtualenv || true
+    fi
+    if [[ -n ${python} && ! -x ${venv_dir}/bin/hf ]]; then
+      rm -rf "${venv_dir}"
+      _hf_cli_try "python3 -m venv retry" \
+        env HOME="${home}" "${python}" -m venv "${venv_dir}" || true
+      if [[ -x ${venv_dir}/bin/python ]]; then
+        _hf_cli_try "venv pip install huggingface_hub retry" \
+          env HOME="${home}" "${venv_dir}/bin/python" -m pip install \
+          -U -q --disable-pip-version-check huggingface_hub || true
+        if [[ -x ${venv_dir}/bin/hf ]]; then
+          ln -sfn "${venv_dir}/bin/hf" "${bindir}/hf"
+        fi
+      fi
+    fi
+  fi
+
+  if ! command -v hf >/dev/null 2>&1 && [[ -n ${python} ]] &&
+    env HOME="${home}" "${python}" -c 'import huggingface_hub' 2>/dev/null; then
+    log "huggingface_hub importable; installing ${bindir}/hf wrapper"
+    cat >"${bindir}/hf" <<'EOF'
+#!/usr/bin/env python3
+import sys
+from importlib.metadata import entry_points
+
+def _load():
+    eps = entry_points()
+    if hasattr(eps, "select"):
+        group = eps.select(group="console_scripts")
+    else:
+        group = eps.get("console_scripts", [])
+    for ep in group:
+        if ep.name == "hf":
+            return ep.load()
+    raise SystemExit("hf console script not found in huggingface_hub")
+
+if __name__ == "__main__":
+    sys.exit(_load()())
+EOF
+    chmod +x "${bindir}/hf"
+  fi
+
+  if [[ ${EUID} -eq 0 && -n ${SUDO_USER:-} && ${SUDO_USER} != "root" ]]; then
+    chown -R "${SUDO_USER}:" "${home}/.hf-cli" 2>/dev/null || true
+    chown "${SUDO_USER}:" "${bindir}/hf" 2>/dev/null || true
+  fi
+
+  rm -f "${errf}"
+  hash -r 2>/dev/null || true
+  if command -v hf >/dev/null 2>&1; then
+    log "hf CLI ready: $(command -v hf)"
+    return 0
+  fi
+  return 1
+}
+
+#######################################
+# Ensure Hugging Face CLI is available (modern `hf`, not huggingface-cli stub).
+# Discovers well-known locations (including SUDO_USER home) then auto-installs.
+# Globals:
+#   PATH, EUID, LAB_HERMETIC, LAB_MOCK_HF_INSTALL, _HF_ROOT_WARNED
+# Arguments:
+#   None
+# Outputs:
+#   Status via log/warn; error on stderr when missing
+# Returns:
+#   0 when hf is on PATH; exits 1 via die when missing
 #######################################
 check_hf_cli() {
-  if command -v hf >/dev/null 2>&1 || command -v huggingface-cli >/dev/null 2>&1; then
+  if [[ ${EUID} -eq 0 && ${_HF_ROOT_WARNED:-0} != "1" ]]; then
+    warn "Running as root. Prefer ./scripts/manage.sh without sudo (download-limit uses sudo internally). Downloaded weights may become root-owned."
+    _HF_ROOT_WARNED=1
+  fi
+  if resolve_hf_on_path; then
+    return 0
+  fi
+  if install_hf_cli && resolve_hf_on_path; then
+    log "hf CLI ready: $(command -v hf)"
     return 0
   fi
   die "Required tool missing: hf (pipx install huggingface_hub  OR  pip install -U 'huggingface_hub[cli]')"

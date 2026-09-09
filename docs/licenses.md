@@ -107,7 +107,7 @@ LTX-2.5 is gated. Klein 4B and Wan 5B are Apache and do not need a license click
 1. Create or edit `.env` with `HF_TOKEN=hf_...` (or `hf auth login`)
 2. In a browser, as **that same user**, open https://huggingface.co/Lightricks/LTX-2.5 and click **Agree**
 3. Fine-grained tokens need **gated repo** read
-4. `hf auth whoami` then `./scripts/manage.sh download-models`
+4. `./scripts/manage.sh download-models` (`hf` is auto-installed; token in `.env` is enough — no extra `hf auth login` if `HF_TOKEN` is set)
 
 A token in `.env` is **not** the same as accepting the Lightricks license. First-run path: [Getting Started](getting-started.md).
 

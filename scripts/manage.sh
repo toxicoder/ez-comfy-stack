@@ -99,7 +99,7 @@ ez-comfy-stack manage — unified Visual Generative AI (local US-safe studio via
 Commands:
   help              Show this help
   setup [--install-docker] [--yes]
-                    Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, doctor
+                    Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, hf CLI, doctor
   doctor            Preflight: docker, GPU, free RAM/disk, attention, models, output dir, license policy
   status [--json]   Stack status (attention + host_free_gib when --json)
   start             Start studio stack (requires yes)
@@ -180,8 +180,8 @@ EOF
 #######################################
 # Bootstrap host prerequisites for doctor/download/start.
 # Creates .env from example if missing; prepares MODELS_DIR (sudo mkdir/chown);
-# installs Docker CE when missing (confirm / --install-docker); soft-checks GPU;
-# then runs doctor.
+# installs Docker CE when missing (confirm / --install-docker); installs hf CLI
+# when missing; soft-checks GPU; then runs doctor.
 # Side effects: May write .env; may sudo for MODELS_DIR and package install.
 # Globals:
 #   REPO_ROOT, MODELS_DIR, LAB_NO_SUDO, SETUP_INSTALL_DOCKER, SETUP_YES
@@ -297,6 +297,13 @@ EOF
   else
     warn "wondershaper not found (download-limit will try to install or soft-fail)"
   fi
+  if resolve_hf_on_path; then
+    log "hf: $(command -v hf)"
+  elif install_hf_cli && resolve_hf_on_path; then
+    log "hf CLI installed: $(command -v hf)"
+  else
+    warn "hf CLI missing — download-models will attempt install"
+  fi
 
   log "Re-running doctor..."
   if ! cmd_doctor; then
@@ -318,9 +325,9 @@ EOF
 
 #######################################
 # Run operator preflight checks without starting the stack.
-# Validates Docker + Compose, optional nvidia-smi, MEM_LIMIT budget warning,
-# host free RAM/disk headroom, MODELS_DIR presence, flux/ltx readiness JSON,
-# and existence of the compose file.
+# Validates Docker + Compose, optional nvidia-smi, hf CLI presence (soft),
+# MEM_LIMIT budget warning, host free RAM/disk headroom, MODELS_DIR presence,
+# flux/ltx readiness JSON, and existence of the compose file.
 # Side effects: May invoke docker, nvidia-smi, download-*-status (no network pull).
 # Globals:
 #   See file header / caller environment.
@@ -348,6 +355,11 @@ cmd_doctor() {
     nvidia-smi -L 2>/dev/null | head -5 || true
   else
     warn "nvidia-smi not found (ok for offline tests; required on Spark)"
+  fi
+  if resolve_hf_on_path; then
+    log "hf: $(command -v hf)"
+  else
+    warn "hf CLI not found — setup / download-models will auto-install"
   fi
   check_mem_limit_vs_headroom || true
   if ! check_host_headroom; then
@@ -659,6 +671,7 @@ Usage: manage.sh download-models [--limit auto|N|off] [--drop-incomplete]
   --drop-incomplete  delete *.incomplete then download (stuck 0 MiB/s resume)
   MiniMax H3 is banned (US Excluded Territory). See docs/licenses.md
   Does not pull podcast, dub, or music weights (download-podcast / download-dub / download-music).
+  Do not prefix with sudo (download-limit uses sudo internally; hf CLI is auto-installed).
 EOF
         return 0
         ;;
@@ -678,6 +691,7 @@ EOF
       ;;
   esac
   ensure_models_dir "${MODELS_DIR}" || return 1
+  check_hf_cli
   if [[ ${drop_incomplete} -eq 1 ]]; then
     log "dropping incomplete HF partials under ${MODELS_DIR} (--drop-incomplete)"
     remove_hf_incomplete "${MODELS_DIR}" >/dev/null
