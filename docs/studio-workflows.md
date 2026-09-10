@@ -34,7 +34,7 @@ user/default/workflows/
     optional/  a14b, longcat stub
     audio/     podcast-*, dub-*, music-rap-draft/full
       nill-bye/       forty-five 180 s music-rap-nill-bye-* diss takes
-      drive-through/  fifteen 180 s music-edm-drive-through-* EDM takes
+      drive-through/  thirty 180 s music-edm-drive-through-* EDM takes
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -250,25 +250,40 @@ flowchart TB
     | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`ez_rap_nill_kick`) |
     | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`ez_rap_nill_uplift`) |
 
-    Drive-through EDM pack (live rave set, not rap over a club bed). Queue on its own; table order is the set list. Full table: [Local music](music.md).
+    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list. Drop early, dirty pyro on every drop. Full table: [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
-    | **music-edm-drive-through-night-window-lab-example** | **180 s** bass house 145 (`ez_edm_drive_night`). Opener, kick from bar 1 |
+    | **music-edm-drive-through-night-window-lab-example** | **180 s** bass house 145 (`ez_edm_drive_night`). Opener, dirty 808 pyro |
     | **music-edm-drive-through-open-lane-lab-example** | **180 s** festival bass 152 (`ez_edm_drive_openlane`). Drop-first ID |
-    | **music-edm-drive-through-exit-seven-lab-example** | **180 s** electro house 142 (`ez_edm_drive_exit`). Filter mix-in |
-    | **music-edm-drive-through-skyline-pass-lab-example** | **180 s** uplifting trance 145 (`ez_edm_drive_skyline`) |
-    | **music-edm-drive-through-on-ramp-lab-example** | **180 s** hardstyle 155 (`ez_edm_drive_onramp`) |
-    | **music-edm-drive-through-tunnel-bass-lab-example** | **180 s** hard techno 150 (`ez_edm_drive_tunnel`). Three drops |
+    | **music-edm-drive-through-exit-seven-lab-example** | **180 s** electro house 142 (`ez_edm_drive_exit`). Filter mix-in, dirty pyro |
+    | **music-edm-drive-through-skyline-pass-lab-example** | **180 s** progressive house 145 (`ez_edm_drive_skyline`). Drop-first anthem |
+    | **music-edm-drive-through-on-ramp-lab-example** | **180 s** festival bass 155 (`ez_edm_drive_onramp`). Reverse-bass pyro |
+    | **music-edm-drive-through-tunnel-bass-lab-example** | **180 s** dirty bass 150 (`ez_edm_drive_tunnel`). Three pyro drops |
     | **music-edm-drive-through-wide-open-lab-example** | **180 s** big room 150 (`ez_edm_drive_wide`). DJ shout treat |
-    | **music-edm-drive-through-overpass-lab-example** | **180 s** rave bass 150 (`ez_edm_drive_overpass`). Half-time then four-floor |
+    | **music-edm-drive-through-overpass-lab-example** | **180 s** riddim 150 (`ez_edm_drive_overpass`). Drop-first wobble pyro |
     | **music-edm-drive-through-second-wave-lab-example** | **180 s** festival remix 150 (`ez_edm_drive_second`). Vocal-chop treat |
-    | **music-edm-drive-through-freight-pulse-lab-example** | **180 s** drum and bass 176 (`ez_edm_drive_freight`) |
-    | **music-edm-drive-through-keep-going-lab-example** | **180 s** UK hardcore 170 (`ez_edm_drive_keep`). Triple-drop peak |
-    | **music-edm-drive-through-horizon-kick-lab-example** | **180 s** rawstyle 165 (`ez_edm_drive_horizon`) |
-    | **music-edm-drive-through-clean-wreckage-lab-example** | **180 s** hard dance 150 (`ez_edm_drive_wreck`) |
-    | **music-edm-drive-through-heart-lane-lab-example** | **180 s** melodic techno 145 (`ez_edm_drive_heart`) |
-    | **music-edm-drive-through-dawn-receipt-lab-example** | **180 s** peak-time house 140 (`ez_edm_drive_dawn`). Closer |
+    | **music-edm-drive-through-freight-pulse-lab-example** | **180 s** drumstep 176 (`ez_edm_drive_freight`) |
+    | **music-edm-drive-through-keep-going-lab-example** | **180 s** drumstep 170 (`ez_edm_drive_keep`). Triple pyro peak |
+    | **music-edm-drive-through-horizon-kick-lab-example** | **180 s** festival bass 165 (`ez_edm_drive_horizon`). Drop-first reverse bass |
+    | **music-edm-drive-through-clean-wreckage-lab-example** | **180 s** dirty electro 150 (`ez_edm_drive_wreck`). Three pyro wrecks |
+    | **music-edm-drive-through-heart-lane-lab-example** | **180 s** future bass 145 (`ez_edm_drive_heart`). Drop-first warm 808 |
+    | **music-edm-drive-through-dawn-receipt-lab-example** | **180 s** progressive house 140 (`ez_edm_drive_dawn`). Hour-1 closer |
+    | **music-edm-drive-through-rumble-strip-lab-example** | **180 s** bass house 140 (`ez_edm_drive_rumble`). Hour-2 opener |
+    | **music-edm-drive-through-low-lane-lab-example** | **180 s** festival bass 144 (`ez_edm_drive_low`). Chest sub pyro |
+    | **music-edm-drive-through-warm-merge-lab-example** | **180 s** future bass 148 (`ez_edm_drive_warm`) |
+    | **music-edm-drive-through-colour-span-lab-example** | **180 s** complextro 150 (`ez_edm_drive_colour`) |
+    | **music-edm-drive-through-garage-ticket-lab-example** | **180 s** festival trap 140 (`ez_edm_drive_garage`) |
+    | **music-edm-drive-through-liquid-grade-lab-example** | **180 s** drumstep 174 (`ez_edm_drive_liquid`) |
+    | **music-edm-drive-through-jump-bay-lab-example** | **180 s** brostep 150 (`ez_edm_drive_jump`). Dirty growl pyro |
+    | **music-edm-drive-through-psy-median-lab-example** | **180 s** big room 145 (`ez_edm_drive_psy`) |
+    | **music-edm-drive-through-groove-mile-lab-example** | **180 s** slap house 144 (`ez_edm_drive_groove`) |
+    | **music-edm-drive-through-donk-ramp-lab-example** | **180 s** dirty electro 150 (`ez_edm_drive_donk`) |
+    | **music-edm-drive-through-bounce-booth-lab-example** | **180 s** melbourne bounce 140 (`ez_edm_drive_bounce`) |
+    | **music-edm-drive-through-toll-growl-lab-example** | **180 s** tearout 150 (`ez_edm_drive_toll`) |
+    | **music-edm-drive-through-night-oil-lab-example** | **180 s** hybrid trap 142 (`ez_edm_drive_oil`) |
+    | **music-edm-drive-through-chest-pass-lab-example** | **180 s** festival bass 150 (`ez_edm_drive_chest`) |
+    | **music-edm-drive-through-sunrise-sub-lab-example** | **180 s** progressive house 140 (`ez_edm_drive_sunsub`). Encore closer |
 
 === "DCC (clay → print)"
 

@@ -22,6 +22,19 @@ DROP_WEIGHT_NEEDLES = (
     "full send",
     "mainstage",
 )
+BASS_NEEDLES = (
+    "bass",
+    "808",
+    "sub",
+    "reese",
+    "wobble",
+    "growl",
+)
+DROP_SHOW_NEEDLES = (
+    "dirty",
+    "pyro",
+    "fireworks",
+)
 
 
 class EdmExample(TypedDict):
@@ -58,6 +71,47 @@ def _desc(take: str, *, treat: bool = False) -> str:
         f"US-safe EDM 180s: Drive-through {take}, "
         f"ACE-Step 1.5 turbo AIO, {vocal}, invented timbre"
     )
+
+
+def _ex(
+    slug: str,
+    title: str,
+    bpm: int,
+    seed: int,
+    prefix: str,
+    take: str,
+    lyrics: str,
+    *tag_parts: str,
+    treat: bool = False,
+) -> EdmExample:
+    """Build one Drive-through catalog row.
+
+    Arguments:
+        slug: Kebab title used in the lab stem.
+        title: Operator-facing take name.
+        bpm: Tempo written into tags and the ACE encoder.
+        seed: Fixed ACE / sampler seed.
+        prefix: SaveAudio filename prefix (`ez_edm_drive_*`).
+        take: Short blurb for the lab description.
+        lyrics: Arrangement score from ``format_edm_score``.
+        tag_parts: Genre and production tags (bass + festival language).
+        treat: If True, sparse DJ-shout lock and vocal ACE mode.
+    Returns:
+        One ``EdmExample`` row.
+    """
+    return {
+        "stem": f"music-edm-drive-through-{slug}-lab-example",
+        "series": "drive-through",
+        "title": title,
+        "tags": drive_tags(*tag_parts, bpm=bpm, treat=treat),
+        "bpm": bpm,
+        "duration": EDM_DURATION_S,
+        "seed": seed,
+        "prefix": prefix,
+        "description": _desc(take, treat=treat),
+        "lyrics": lyrics,
+        "ace_mode": "vocal" if treat else "instrumental",
+    }
 
 
 def format_edm_score(*sections: tuple[str, str]) -> str:
@@ -98,8 +152,9 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
 
 def _catalog() -> tuple[EdmExample, ...]:
     from .edm_drive_through import EDM_DRIVE_THROUGH
+    from .edm_drive_through_bass import EDM_DRIVE_THROUGH_BASS
 
-    return EDM_DRIVE_THROUGH
+    return EDM_DRIVE_THROUGH + EDM_DRIVE_THROUGH_BASS
 
 
 EDM_EXAMPLES: tuple[EdmExample, ...] = _catalog()
