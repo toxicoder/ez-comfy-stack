@@ -8,5 +8,7 @@
 !install-comfy/**
 !patch_get_free_memory.py
 !patch_unified_memory_copy.py
+!patch_magcache_compat.py
+!seed_clay_inputs.py
 !pythonpath/
 !pythonpath/**

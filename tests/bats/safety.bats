@@ -74,15 +74,78 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
-@test "dockerignore allowlists pythonpath for runtime COPY" {
+@test "dockerignore allowlists every Dockerfile COPY from the build context" {
   local di="${REPO_ROOT}/docker/.dockerignore"
+  local df="${REPO_ROOT}/docker/Dockerfile"
   [[ -f ${di} ]]
-  # Whitelist-only context: without these lines, COPY pythonpath/ fails at build
+  [[ -f ${df} ]]
+  # Whitelist-only context (`*` then `!exceptions`). Directory trees need both
+  # `!dir/` and `!dir/**` or COPY dir/ fails at build (pythonpath, install-comfy).
   run grep -E '^!pythonpath/' "${di}"
   [ "$status" -eq 0 ]
   run grep -E '^!pythonpath/\*\*' "${di}"
   [ "$status" -eq 0 ]
   [[ -f ${REPO_ROOT}/docker/pythonpath/sitecustomize.py ]]
+  run grep -E '^!patch_magcache_compat\.py$' "${di}"
+  [ "$status" -eq 0 ]
+  run grep -E '^!seed_clay_inputs\.py$' "${di}"
+  [ "$status" -eq 0 ]
+  [[ -f ${REPO_ROOT}/docker/patch_magcache_compat.py ]]
+  [[ -f ${REPO_ROOT}/docker/seed_clay_inputs.py ]]
+  # Guard future COPY lines: every context source must have a `!` exception.
+  run python3 -c '
+import pathlib
+import re
+import sys
+
+df_text = pathlib.Path(sys.argv[1]).read_text()
+di_lines = pathlib.Path(sys.argv[2]).read_text().splitlines()
+exceptions = [ln[1:] for ln in di_lines if ln.startswith("!")]
+
+joined = []
+buf = ""
+for raw in df_text.splitlines():
+    s = raw.rstrip()
+    if buf:
+        s = buf + " " + s.lstrip()
+        buf = ""
+    if s.endswith("\\"):
+        buf = s[:-1].rstrip()
+        continue
+    joined.append(s)
+
+sources = []
+for line in joined:
+    if not re.match(r"^\s*COPY\s+", line):
+        continue
+    if "--from=" in line:
+        continue
+    rest = re.sub(r"^\s*COPY\s+", "", line)
+    parts = [tok for tok in rest.split() if not tok.startswith("--")]
+    if len(parts) < 2:
+        continue
+    sources.extend(parts[:-1])
+
+
+def allowed(src):
+    names = {src, src.rstrip("/"), src.rstrip("/") + "/"}
+    if names.intersection(exceptions):
+        return True
+    parts = src.rstrip("/").split("/")
+    for i in range(len(parts) - 1):
+        parent = "/".join(parts[: i + 1])
+        if f"{parent}/**" in exceptions or f"{parent}/" in exceptions:
+            return True
+    return False
+
+
+missing = [src for src in sources if not allowed(src)]
+if missing:
+    sys.stdout.write("\n".join(missing))
+    sys.exit(1)
+' "${df}" "${di}"
+  [ "$status" -eq 0 ]
+  [ -z "${output}" ]
 }
 
 @test "Dockerfile layer order keeps multi-GB prebuild cache stable" {
