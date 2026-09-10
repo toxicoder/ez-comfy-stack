@@ -280,7 +280,7 @@ mux_layer() {
 #   0 ok; 1 usage/missing/QC; 2 occupancy
 #######################################
 cmd_run() {
-  refuse_if_comfy_running "guide pack dump (occupancy)" || return $?
+  refuse_if_heavy_gpu "guide pack dump (occupancy)" || return $?
   if [[ -z ${FILM} || -z ${SHOT_ID} ]]; then
     err "Usage: blender-guide.sh --film SLUG --shot ID [--blend FILE]"
     return 1

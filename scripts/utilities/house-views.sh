@@ -337,7 +337,7 @@ cmd_run() {
     cmd_install_inputs
     return $?
   fi
-  refuse_if_comfy_running "house views dump (occupancy)" || return $?
+  refuse_if_heavy_gpu "house views dump (occupancy)" || return $?
   if [[ -z ${SLUG} ]]; then
     err "Usage: house-views.sh --slug SLUG [--layout FILE]"
     return 1

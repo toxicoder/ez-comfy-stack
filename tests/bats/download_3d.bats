@@ -43,7 +43,14 @@ teardown() {
   run tier_repo da3-large
   [ "${output}" = "" ]
   run tier_include_patterns trellis2
-  [[ "${output}" == *"ss_flow_img_dit_xl.safetensors"* ]]
+  [[ "${output}" == *"trellis_2_int8_convrot.safetensors"* ]]
+  [[ "${output}" == *"dino_v3_vit_l.safetensors"* ]]
+  run trellis_comfy_dest trellis_2_int8_convrot.safetensors
+  [[ "${output}" == *"/diffusion_models/"* ]]
+  run trellis_comfy_dest dino_v3_vit_l.safetensors
+  [[ "${output}" == *"/clip_vision/"* ]]
+  run trellis_comfy_dest trellis_2_shape_vae_bf16.safetensors
+  [[ "${output}" == *"/vae/"* ]]
   run tier_include_patterns da3-base
   [[ "${output}" == *"model.safetensors"* ]]
   TIER=all
@@ -57,7 +64,9 @@ teardown() {
   [ "${CMD}" = "status" ]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${D3}\" run --tier trellis2"
   [ "${status}" -eq 0 ]
-  [[ -e ${MODELS_DIR}/comfy/3d/ss_flow_img_dit_xl.safetensors ]]
+  [[ -e ${MODELS_DIR}/comfy/diffusion_models/trellis_2_int8_convrot.safetensors ]]
+  [[ -e ${MODELS_DIR}/comfy/vae/trellis_2_shape_vae_bf16.safetensors ]]
+  [[ -e ${MODELS_DIR}/comfy/clip_vision/dino_v3_vit_l.safetensors ]]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${D3}\" run --tier da3-base"
   [ "${status}" -eq 0 ]
   [[ -e ${MODELS_DIR}/comfy/diffusion_models/model.safetensors ]]
@@ -66,11 +75,15 @@ teardown() {
 @test "download-3d link_into_comfy cmd_status cache hit" {
   local tdir
   tdir="$(tier_dir trellis2)"
-  mkdir -p "${tdir}/ckpts"
-  echo t >"${tdir}/ckpts/ss_flow_img_dit_xl.safetensors"
+  mkdir -p "${tdir}/diffusion_models" "${tdir}/vae" "${tdir}/clip_vision"
+  echo t >"${tdir}/diffusion_models/trellis_2_int8_convrot.safetensors"
+  echo t >"${tdir}/vae/trellis_2_shape_vae_bf16.safetensors"
+  echo t >"${tdir}/vae/trellis_2_texture_vae_bf16.safetensors"
+  echo t >"${tdir}/clip_vision/dino_v3_vit_l.safetensors"
   run link_into_comfy trellis2
   [ "${status}" -eq 0 ]
-  [[ -L ${MODELS_DIR}/comfy/3d/ss_flow_img_dit_xl.safetensors ]]
+  [[ -L ${MODELS_DIR}/comfy/diffusion_models/trellis_2_int8_convrot.safetensors ]]
+  [[ -L ${MODELS_DIR}/comfy/clip_vision/dino_v3_vit_l.safetensors ]]
   TIER=trellis2
   run cmd_status
   [ "${status}" -eq 0 ]

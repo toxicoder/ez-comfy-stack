@@ -10,7 +10,7 @@ tags: [learn, blender, dcc, clay, klein, ltx, wan, stills, video]
 
 - Two dump contracts: 5.00s shot pack vs single-frame still pack
 - Still Apps (clay plates, canny restyle) and video envelopes (depth, canny, shorts, FLF)
-- Occupancy: stop Comfy before a dump
+- Occupancy: park Comfy (`blender-desk`) before a dump, or stop Compose
 - Skip rules when Blender is missing
 
 **What this enables**
@@ -21,7 +21,7 @@ tags: [learn, blender, dcc, clay, klein, ltx, wan, stills, video]
 
 **Who this is for:** studio users who already Queued Klein-from-clay or a 5 s LTX clip and want a Blender-shaped desk for both stills and video.
 
-Blender stays on the **host**. It is never in `docker/Dockerfile`. Do not run a live Blender MCP socket and Comfy on the same GB10.
+Blender stays on the **host**. It is never in `docker/Dockerfile`. Park Comfy (`occupancy enter blender-desk`) for Workbench dumps. Do not run Cycles CUDA next to a loaded denoise. [Occupancy desk](../occupancy.md).
 
 ```mermaid
 flowchart TB
@@ -45,9 +45,9 @@ flowchart TB
 Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One camera, one plate.
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
-./scripts/manage.sh start   # type yes
+./scripts/manage.sh occupancy enter klein --yes
 # Apps → klein-from-clay-plates  (or klein-from-canny)
 ```
 
@@ -66,10 +66,10 @@ Not the 5.00s pack. Not the ten-camera [dream-house tour](dream-house.md). One c
 ## Video (Path B)
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
-./scripts/manage.sh start
-# klein-from-clay → overlay-qc → ltx-iclora-depth (or canny) → stem-mix
+./scripts/manage.sh occupancy enter klein --yes
+# klein-from-clay → overlay-qc → occupancy enter ltx --yes → ltx-iclora-depth
 ```
 
 Portrait 5.00s: `--width 768 --height 1280`, then **ltx-iclora-depth-shorts**. Silent first-last: **wan-flf-from-guide** after `download-wan --tier fun-inp`.
@@ -89,4 +89,4 @@ Path D: dump on the laptop, rsync `guides/`, Spark only runs Comfy.
 | Talking-head / VO-locked picture | Union Control. Use A2V freeze (`klein-talking-head-lab-example`) |
 | Engine-final Cycles beauty | Path A (`dcc-final`) — not this suite |
 
-Occupancy: one GB10 job. `export-guides` and `blender-stills` die if compose is up (exit 2). Safety is unchanged: `restart: "no"`, type **yes** on start, headroom, download-limit clear-on-exit.
+Occupancy: one GB10 heavy job. `export-guides` and `blender-stills` die (exit 2) if Compose is up and **not** parked. Safety is unchanged: `restart: "no"`, type **yes** on start, headroom, download-limit clear-on-exit.

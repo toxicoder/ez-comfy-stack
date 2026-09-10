@@ -20,16 +20,15 @@ tags: [sidecar, blender, splat, trellis, 3d, occupancy]
 
 !!! warning "Occupancy"
 
-    GB10 is one GPU. Stop Comfy before Blender, SuperSplat, TRELLIS, or VACE. Sidecars are **not** `docker compose` services.
+    GB10 is one heavy GPU job. Park Comfy (`occupancy enter blender-desk`) for Workbench dumps. Stop Blender before TRELLIS / LTX / Wan. SuperSplat and NVENC still want Compose **down**. Sidecars are **not** `docker compose` services. [Occupancy desk](occupancy.md).
 
 ```mermaid
 flowchart TB
   G["GB10"] --> M{"One heavy job"}
-  M --> C["ComfyUI compose"]
-  M --> B["Host Blender"]
-  M --> S["SuperSplat viewer"]
-  M --> T["TRELLIS / DA3 / NVENC"]
-  C -.->|XOR| B
+  M --> C["ComfyUI denoise"]
+  M --> B["blender-desk Workbench"]
+  M --> S["SuperSplat / NVENC"]
+  C -.->|park /free| B
 ```
 
 ---
@@ -48,12 +47,13 @@ Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D
 Generated meshes, previews, and scene instances are **outputs** in the [Asset Bible](asset-bible.md) under `COMFY_OUTPUT_DIR/assets/` — never in `MODELS_DIR` or `guides/`.
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
-./scripts/manage.sh blender                      # dies if compose is up
+./scripts/manage.sh blender                      # Workbench; dies if Comfy is heavy
 ./scripts/manage.sh export-guides --film go-see --shot 12   # same occupancy
 ./scripts/manage.sh blender-stills --film go-see --plate mug --size 1024x1024
 ./scripts/manage.sh house-views --slug lab-penthouse        # Instagram 4:5 clay; same occupancy
+./scripts/manage.sh occupancy enter trellis --yes
 ```
 
 Guide packs: [DCC guide pack](dcc-workflows.md). Clay is Workbench; beauty is Path A. Never 1280×720.

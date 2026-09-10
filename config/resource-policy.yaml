@@ -37,6 +37,18 @@ stack:
   ports:
     comfyui: 8188
 
+# One heavy GPU job on GB10. blender-desk parks Comfy via POST /free
+# (Workbench only). NVENC stays XOR with compose-up. Do not lower
+# mem_limit / min_host_free_gib for blender-desk.
+occupancy:
+  modes:
+    idle: {compose: down, blender: off, heavy: false}
+    blender-desk: {compose: parked, blender: workbench, heavy: false}
+    klein: {compose: up, blender: off, heavy: true}
+    trellis: {compose: up, blender: off, heavy: true}
+    wan: {compose: up, blender: off, heavy: true}
+    ltx: {compose: up, blender: off, heavy: true}
+
 # Default download-models pack (image fast + wan 5b + ltx 2.5).
 # Optional fallbacks (zimage, wan a14b, ltx 2.3) are not listed here.
 models:

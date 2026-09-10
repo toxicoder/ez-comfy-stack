@@ -228,7 +228,7 @@
           "required": true,
           "default": "trellis2",
           "choices": [
-            {"value": "trellis2", "label": "trellis2 — native TRELLIS.2 MIT (~8 GB)"},
+            {"value": "trellis2", "label": "trellis2 — Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"},
             {"value": "da3-base", "label": "da3-base — Depth Anything 3 BASE Apache (~1 GB)"},
             {"value": "all", "label": "all — trellis2 + da3-base"}
           ]
@@ -294,6 +294,28 @@
       "description": "Prompt-enhance GGUF (Qwen3-4B-Instruct Q4_K_M). No --tier. Already in download-models.",
       "argv": ["./scripts/utilities/download-llm.sh", "run"],
       "flags": []
+    },
+    {
+      "id": "occupancy",
+      "title": "occupancy enter",
+      "description": "Park Comfy for blender-desk (POST /free) or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up.",
+      "argv": ["./scripts/manage.sh", "occupancy", "enter"],
+      "flags": [
+        {
+          "name": "mode",
+          "kind": "choice",
+          "required": true,
+          "default": "blender-desk",
+          "choices": [
+            {"value": "blender-desk", "label": "blender-desk — park Comfy, Workbench dumps"},
+            {"value": "klein", "label": "klein — stop Blender, Queue stills"},
+            {"value": "trellis", "label": "trellis — stop Blender, Queue TRELLIS.2"},
+            {"value": "wan", "label": "wan — stop Blender, Queue silent motion"},
+            {"value": "ltx", "label": "ltx — stop Blender, Queue AV print"},
+            {"value": "idle", "label": "idle — stop Blender and Compose"}
+          ]
+        }
+      ]
     },
     {
       "id": "ssh-forward",

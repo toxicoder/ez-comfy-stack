@@ -401,7 +401,7 @@
     "aliases": ["lab_app_mode"],
     "category": "Studio",
     "short": "Lab extra on *-lab-example graphs: lane, occupancy, handoff, frontend_min.",
-    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
+    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc/optional, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
     "see_also": ["app-mode", "occupancy", "lab-example"]
   },
   {
@@ -535,8 +535,8 @@
     "title": "occupancy",
     "aliases": ["occupancy"],
     "category": "Hardware and safety",
-    "short": "One heavy GPU job: Comfy or Blender or SuperSplat or ACE-Step, not several at once.",
-    "long": "GB10 is one GPU. Stop compose before host Blender/NVENC/proxies. Do not load Klein + Wan + LTX + ACE-Step in one session. Cover art is a separate graph. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`) are on every App Note — stop the other family before Queue. See [ComfyUI Apps](studio-apps.md) and [Studio sidecars](studio-sidecars.md).",
+    "short": "One heavy GPU job. Park Comfy for blender-desk Workbench; stop Blender before TRELLIS/LTX.",
+    "long": "GB10 is one GPU. `occupancy enter blender-desk` parks Comfy (`POST /free`) for host Workbench dumps. NVENC/proxies still want Compose down. Do not load Klein + Wan + LTX + TRELLIS in one session. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`/`trellis`) are on App Notes. See [Occupancy desk](occupancy.md) and [Studio sidecars](studio-sidecars.md).",
     "see_also": ["sidecar", "ace-step", "gb10", "app-mode"]
   },
   {
@@ -824,7 +824,7 @@
     "aliases": ["sidecar"],
     "category": "Film",
     "short": "Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.",
-    "long": "Sidecars stay off the Docker image on purpose. `manage.sh blender` dies if compose is up. See [Studio sidecars](studio-sidecars.md).",
+    "long": "Sidecars stay off the Docker image on purpose. `manage.sh blender` dies if Comfy is a heavy job; park with `occupancy enter blender-desk`. See [Occupancy desk](occupancy.md).",
     "see_also": ["occupancy", "trellis"]
   },
   {
@@ -913,8 +913,8 @@
     "title": "blender-stills",
     "aliases": ["blender-stills", "still pack", "ez.guide.still.v1"],
     "category": "Studio",
-    "short": "Single-frame clay/depth/canny dump at creator sizes. Occupancy XOR.",
-    "long": "Host Blender dumps `ez.guide.still.v1` under `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/`. Sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, not LTX). Not the 5.00s shot pack and not `house-views`. Stop Comfy first. `--install-inputs` copies `first.png` into `input/` while compose may stay up. Apps: **klein-from-clay-plates**, **klein-from-canny**. See [Blender creator suite](learn/blender-creator.md).",
+    "short": "Single-frame clay/depth/canny dump at creator sizes. Occupancy: blender-desk.",
+    "long": "Host Blender dumps `ez.guide.still.v1` under `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/`. Sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, not LTX). Not the 5.00s shot pack and not `house-views`. Park Comfy (`occupancy enter blender-desk`) first. `--install-inputs` copies `first.png` into `input/` while compose may stay up. Apps: **klein-from-clay-plates**, **klein-from-canny**. See [Blender creator suite](learn/blender-creator.md).",
     "see_also": ["guide-pack", "house-views", "occupancy", "sidecar", "klein"]
   }
 ]

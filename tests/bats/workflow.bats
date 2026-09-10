@@ -158,7 +158,8 @@ for g in (w, l):
     run grep -E 'z_image_turbo|FLUX\.2-dev|klein-9b|flux-2-klein-9b|MiniMax|Seedance|Kling' "${wf}"
     [ "${status}" -ne 0 ]
     # DCC envelopes were not in the old top-level AABB glob; groups test still covers them.
-    if [[ ${wf} == */_lab/dcc/* ]]; then
+    # TRELLIS native stages stack vertically by design (shape under structure).
+    if [[ ${wf} == */_lab/dcc/* || ${wf} == */klein-trellis2-lab-example.json ]]; then
       continue
     fi
     run python3 -c "
@@ -498,10 +499,12 @@ clips=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode']
 ace=[n for n in d['nodes'] if n.get('type')=='TextEncodeAceStepAudio1.5']
 zero=[n for n in d['nodes'] if n.get('type')=='ConditioningZeroOut']
 unets=[n for n in d['nodes'] if n.get('type')=='UNETLoader']
+trellis=[n for n in d['nodes'] if n.get('type')=='Trellis2Conditioning']
 # Visual graphs use two CLIP encodes. Podcast beds use two ACE encodes.
 # Rap graphs follow Comfy-Org ACE-Step 1.5: one encode + ConditioningZeroOut.
 # No-UNET inspire Apps (Prompt Forge / Beat Sheet) have neither.
-if unets:
+# Native TRELLIS uses Trellis2Conditioning, not CLIPTextEncode.
+if unets and not trellis:
     assert len(clips)>=2 or len(ace)>=2 or (len(ace)>=1 and len(zero)>=1), p
 for n in clips:
     text=(n.get('widgets_values') or [''])[0]

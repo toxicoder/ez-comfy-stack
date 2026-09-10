@@ -18,28 +18,36 @@ tags: [blender, sidecar, occupancy, gb10]
 - Optional DCC pass on the same Spark after Comfy is stopped
 - No Blender layer in `docker/Dockerfile` (image stays Comfy + torch)
 
-!!! danger "Stop Comfy first"
+!!! danger "One heavy GPU job"
 
-    `blender.sh` **dies** if the studio compose project is running (same occupancy rule as NVENC proxies). `restart: "no"` is unchanged.
+    `blender.sh` **dies** if Compose is up and **not** parked. Park first:
+
+    ```bash
+    ./scripts/manage.sh occupancy enter blender-desk
+    ./scripts/manage.sh blender -- --background
+    ```
+
+    NVENC proxies still die if compose is up (encoder is a GPU job). Cycles CUDA while Compose is up is refused. `restart: "no"` is unchanged. See [Occupancy desk](occupancy.md).
 
 ---
 
 ## Operator path
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender -- --background
 # or: ./scripts/utilities/blender.sh -- /path/to/scene.blend
 ./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend
 ./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
+# hammer: ./scripts/manage.sh occupancy idle
 ```
 
-If `blender` is not on `PATH`, the script prints an install hint and exits 1. This stack does **not** apt/pip/Docker-install Blender.
+If `blender` is not on `PATH`, the script prints an install hint and exits 1. This stack does **not** apt/pip/Docker-install Blender. Ubuntu aarch64 `blender` is enough for Workbench. Community GB10 CUDA builds are Path A Cycles **after** `occupancy idle` only.
 
-Exit **2** means compose is still up:
+Exit **2** means Compose is a heavy job (not parked, or the queue is busy):
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender
 ```
 

@@ -61,7 +61,8 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | Wan 2.2 A14B T2V/I2V | Comfy-Org/Wan_2.2_ComfyUI_Repackaged | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Wan 2.2 Fun InP A14B | alibaba-pai/Wan2.2-Fun-A14B-InP | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | SeedVR2-3B | ByteDance-Seed/SeedVR2-3B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
-| TRELLIS.2 native | microsoft/TRELLIS.2 | MIT | Yes | Yes | none | MIT NOTICE | No extra ban beyond MIT. No nvdiffrast/nvdiffrec | No |
+| TRELLIS.2 native | Comfy-Org/TRELLIS.2 | MIT | Yes | Yes | none | MIT NOTICE | No extra ban beyond MIT. No nvdiffrast/nvdiffrec | No |
+| DINOv3 ViT-L (TRELLIS companion) | Comfy-Org/TRELLIS.2 (clip_vision) | DINOv3 License | Yes | Yes if you comply with the DINOv3 license | none | DINOv3 LICENSE with the pack | card | No |
 | DA3-BASE | depth-anything/DA3-BASE | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Wan 2.1 VACE 1.3B | Wan-AI/Wan2.1-VACE-1.3B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Wan 2.2 S2V 14B | Wan-AI/Wan2.2-S2V-14B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
@@ -96,7 +97,7 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | TTS-Audio-Suite | diodiogod/TTS-Audio-Suite | mixed NC / research pack | No | No | n/a | n/a | n/a | No |
 | OldTimeRadio | jbrick2070/ComfyUI-OldTimeRadio | H3 / FLUX-dev / NC optional lanes | No | No | n/a | n/a | n/a | No |
 
-TRELLIS.2 footnote: companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download. Native TRELLIS Comfy basenames such as `trellis_2_int8_convrot` are opt-in via `download-3d` only — do not treat them as `download-models`.
+TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + shape/texture VAEs + `dino_v3_vit_l`). Original research weights: microsoft/TRELLIS.2. Companion encoder DINOv3 (Meta custom license, commercial-friendly) is not a default download — it ships inside opt-in `download-3d --tier trellis2`. Native TRELLIS Comfy basenames such as `trellis_2_int8_convrot` are opt-in via `download-3d` only — do not treat them as `download-models`.
 
 The same table is in repo-root `LICENSE-MODELS.md` so tests can grep either file.
 

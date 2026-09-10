@@ -111,7 +111,7 @@ flowchart TB
   X --> S["SuperSplat / NLE / NVENC"]
 ```
 
-`manage.sh blender`, `film-proxies`, and NVENC preview **die if compose is up**. Cover art is a separate Klein session from podcast/rap.
+`manage.sh blender` **dies if Compose is a heavy job** (not parked). Park with `occupancy enter blender-desk` for Workbench. `film-proxies` and NVENC preview still **die if compose is up**. Cover art is a separate Klein session from podcast/rap. [Occupancy desk](../occupancy.md).
 
 ---
 

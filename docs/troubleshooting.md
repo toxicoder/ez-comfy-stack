@@ -202,7 +202,7 @@ sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | LTX Director missing | GPL clone is opt-in | `LAB_ENABLE_LTX_DIRECTOR=1` then restart. Never MiniMax H3 Director |
 | studio-ui empty / port closed | Profile not started; default `start` skips it | `docker compose --profile studio-ui up studio-ui`. No GPU. Compile a film first |
 | take-promote missing file | No `takes/<id>/tNNN.mp4` | Print the shot (take increments on `running`), then promote |
-| `blender` exit 2 / occupancy | Compose still up | `./scripts/manage.sh stop` then retry. Host Blender is never in the Dockerfile |
+| `blender` exit 2 / occupancy | Compose is a heavy job (not parked, or queue busy) | `./scripts/manage.sh occupancy enter blender-desk` then retry. Hammer: `occupancy idle`. Host Blender is never in the Dockerfile |
 | `download-3d --tier da3-large` refused | DA3-LARGE is banned | Use `--tier da3-base`. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused |
 | TRELLIS / VACE OOM next to LTX | Two heavy jobs | Stop Comfy or unload LTX first. VACE join is 17 frames (`1+8n`); MagCache off |
 | SuperSplat missing in the image | Host viewer, not Docker | [Splat sidecar](splat-sidecar.md). Do not add it to `docker/Dockerfile` |

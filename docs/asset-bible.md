@@ -23,7 +23,7 @@ tags: [asset-bible, 3d, trellis, klein, scene, catalog]
 
     There is **no** US-safe default-pack model that emits a textured city from one sentence. Whole-scene **fast draft** is Construct (primitives + HDRI + instanced bible assets). Whole-scene **hero** is Construct layout + Gen hero pieces. TRELLIS-on-a-full-scene-still is **DRAFT-ONLY**.
 
-This does **not** replace ez_film, the 5.00s printer, or occupancy. `restart: "no"`, heavy confirm, headroom, and download-limit are unchanged. No Blender in Docker. No MCP binary. No new default weights.
+This does **not** replace ez_film, the 5.00s printer, or occupancy. `restart: "no"`, heavy confirm, headroom, and download-limit are unchanged. No Blender in Docker. MCP is the in-tree typed server (`blender-mcp`), not a third-party binary. No new default weights.
 
 ```mermaid
 flowchart TB
@@ -47,7 +47,7 @@ flowchart TB
 | **Gen** | Klein still → TRELLIS.2 | Hero *pieces* (a mug, a jacket, a hero mesh) |
 | **Construct** | `scene.json` shopping list | Layout: primitives, HDRI, **instances of bible slugs** |
 
-`mcp-construct` is still reserved (no MCP binary). **`bpy-primitive`** now has one operator verb: `./scripts/manage.sh house-views` builds a greybox set under `assets/sets/<slug>/` (layout + GLB + ten 1024×1280 clay stills). Host Blender stays a [sidecar](blender-gb10-sidecar.md) (dies if compose is up). Playbook: [Dream-house tours](learn/dream-house.md).
+`mcp-construct` is the in-tree [Blender MCP](occupancy.md) (`manage.sh blender-mcp`). Typed tools only — no `execute_code`. **`bpy-primitive`** now has one operator verb: `./scripts/manage.sh house-views` builds a greybox set under `assets/sets/<slug>/` (layout + GLB + ten 1024×1280 clay stills). Host Blender stays a [sidecar](blender-gb10-sidecar.md) (dies if compose is up). Playbook: [Dream-house tours](learn/dream-house.md).
 
 ---
 
@@ -81,4 +81,4 @@ Schema and a sample scene that **instances slugs** (no embedded mesh bytes): rep
 ./scripts/utilities/asset-ls.sh --output-dir "${COMFY_OUTPUT_DIR}/assets"
 ```
 
-Empty catalog is success. Occupancy for Gen (Klein + TRELLIS) is the same one-heavy-job rule as [Studio sidecars](studio-sidecars.md). TRELLIS.2 remains opt-in `download-3d`, not `download-models`. See [Model licenses](licenses.md).
+Empty catalog is success. Occupancy for Gen (Klein + TRELLIS) is `occupancy enter trellis` after a still — [Occupancy desk](occupancy.md). TRELLIS.2 remains opt-in `download-3d`, not `download-models`. See [Model licenses](licenses.md).
