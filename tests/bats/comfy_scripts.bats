@@ -97,6 +97,12 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'ComfyUI-MagCache' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'apply_magcache_compat_patch' "${REPO_ROOT}/docker/install-comfy.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'patch_magcache_compat' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'configure_nunchaku_pack' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
   run grep -F 'LAB_ENABLE_LTX_DIRECTOR' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'ComfyUI-OpenCut' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
@@ -727,6 +733,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"not found"* || "${output}" == *"patch"* || -z ${output} ]]
 
+  run apply_magcache_compat_patch
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || "${output}" == *"magcache"* || -z ${output} ]]
+
   # finalize with mocked strip deps
   run phase_finalize
   [ "${status}" -eq 0 ]
@@ -1165,4 +1175,120 @@ PY
   export WHISPER_IMPORT_RC=1
   run install_dub_asr_wheel "${py}"
   [ "${status}" -eq 0 ]
+}
+
+@test "comfy_runtime_python prefers VIRTUAL_ENV over volume venv" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export DUB_PIP_LOG="${TEST_TMP_DIR}/dub_pip_live.log"
+  : >"${DUB_PIP_LOG}"
+  cat >"${TEST_TMP_DIR}/live-python" <<'PY'
+#!/usr/bin/env bash
+log="${DUB_PIP_LOG:?}"
+if [[ ${1} == -c ]]; then
+  case "${2}" in
+    *WhisperModel*) exit "${WHISPER_IMPORT_RC:-1}" ;;
+    *ChatterboxMultilingualTTS*) exit "${CLONE_IMPORT_RC:-1}" ;;
+  esac
+  exit 0
+fi
+if [[ ${1} == -m && ${2} == pip ]]; then
+  printf '%s\n' "$*" >>"${log}"
+  exit 0
+fi
+exit 0
+PY
+  chmod +x "${TEST_TMP_DIR}/live-python"
+  export VIRTUAL_ENV="${TEST_TMP_DIR}/livevenv"
+  mkdir -p "${VIRTUAL_ENV}/bin" "${COMFY_HOME}/.venv/bin"
+  cp "${TEST_TMP_DIR}/live-python" "${VIRTUAL_ENV}/bin/python"
+  printf '#!/usr/bin/env bash\nexit 1\n' >"${COMFY_HOME}/.venv/bin/python"
+  chmod +x "${VIRTUAL_ENV}/bin/python" "${COMFY_HOME}/.venv/bin/python"
+  export WHISPER_IMPORT_RC=1
+  export CLONE_IMPORT_RC=1
+  run comfy_runtime_python
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == "${VIRTUAL_ENV}/bin/python" ]]
+  run ensure_dub_wheels
+  [ "${status}" -eq 0 ]
+  grep -q 'faster-whisper' "${DUB_PIP_LOG}"
+  unset VIRTUAL_ENV
+}
+
+@test "ensure_user_custom_node_stub writes empty pack and keeps operator init" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local dest="${TEST_TMP_DIR}/custom_nodes/_user"
+  run ensure_user_custom_node_stub "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/__init__.py ]]
+  grep -q 'NODE_CLASS_MAPPINGS' "${dest}/__init__.py"
+  echo 'keep = True' >"${dest}/__init__.py"
+  run ensure_user_custom_node_stub "${dest}"
+  [ "${status}" -eq 0 ]
+  grep -q 'keep = True' "${dest}/__init__.py"
+}
+
+@test "configure_nunchaku_pack disables when engine missing and re-enables" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export COMFY_HOME="${TEST_TMP_DIR}/nunchaku_home"
+  mkdir -p "${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku" "${COMFY_HOME}/.venv/bin"
+  echo pack >"${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku/__init__.py"
+  cat >"${COMFY_HOME}/.venv/bin/python" <<'PY'
+#!/usr/bin/env bash
+if [[ ${1} == -c && ${2} == *nunchaku* ]]; then
+  exit "${NUNCHAKU_IMPORT_RC:-1}"
+fi
+exit 0
+PY
+  chmod +x "${COMFY_HOME}/.venv/bin/python"
+  export NUNCHAKU_IMPORT_RC=1
+  run nunchaku_engine_importable "${COMFY_HOME}/.venv/bin/python"
+  [ "${status}" -ne 0 ]
+  run configure_nunchaku_pack
+  [ "${status}" -eq 0 ]
+  [[ -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku.disabled ]]
+  [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku ]]
+  [[ "${output}" == *"disabled"* ]]
+  run configure_nunchaku_pack
+  [ "${status}" -eq 0 ]
+  export NUNCHAKU_IMPORT_RC=0
+  run configure_nunchaku_pack
+  [ "${status}" -eq 0 ]
+  [[ -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku ]]
+  [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku.disabled ]]
+  [[ "${output}" == *"enabled"* ]]
+}
+
+@test "seed_clay_inputs_if_missing writes plates via LAB_SEED_CLAY_PY" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export LAB_SEED_CLAY_PY="${REPO_ROOT}/docker/seed_clay_inputs.py"
+  export LAB_INPUTS_MOUNT="${TEST_TMP_DIR}/clay_inputs"
+  run seed_clay_inputs_if_missing
+  [ "${status}" -eq 0 ]
+  [[ -f ${LAB_INPUTS_MOUNT}/ez_house_clay_01.png ]]
+  [[ -f ${LAB_INPUTS_MOUNT}/ez_house_clay_10.png ]]
+  export LAB_SEED_CLAY_PY="${TEST_TMP_DIR}/missing_seed.py"
+  run seed_clay_inputs_if_missing
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"missing"* ]]
+}
+
+@test "entrypoint main writes _user stub" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  mkdir -p "${VENV}/bin"
+  printf '#!/usr/bin/env bash\necho ok\n' >"${VENV}/bin/python"
+  chmod +x "${VENV}/bin/python"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  : >"${STAMP}"
+  export LAB_ENTRYPOINT_INSTALL_CMD="true"
+  export LAB_ENTRYPOINT_NO_EXEC=1
+  export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs_stub"
+  run main
+  [ "${status}" -eq 0 ]
+  [[ -f ${COMFY_HOME}/custom_nodes/_user/__init__.py ]]
+  grep -q 'NODE_CLASS_MAPPINGS' "${COMFY_HOME}/custom_nodes/_user/__init__.py"
 }

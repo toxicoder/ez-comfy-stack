@@ -57,9 +57,9 @@ services:
       HF_TOKEN: ${HF_TOKEN:-}
       # On-box prompt-enhance GGUF (CPU llama.cpp). Never bake weights into the image.
       EZ_LLM_GGUF: ${EZ_LLM_GGUF:-/models/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf}
-      EZ_LLM_N_THREADS: ${EZ_LLM_N_THREADS:-4}
+      EZ_LLM_N_THREADS: ${EZ_LLM_N_THREADS:-8}
       EZ_LLM_N_CTX: ${EZ_LLM_N_CTX:-4096}
-      EZ_LLM_TIMEOUT_S: ${EZ_LLM_TIMEOUT_S:-60}
+      EZ_LLM_TIMEOUT_S: ${EZ_LLM_TIMEOUT_S:-180}
       EZ_LLM_N_GPU_LAYERS: ${EZ_LLM_N_GPU_LAYERS:-0}
       EZ_LLM_UNLOAD: ${EZ_LLM_UNLOAD:-0}
       LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
@@ -112,6 +112,8 @@ services:
       - ./install-comfy:/opt/ez-comfy/install-comfy:ro
       - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
       - ./patch_unified_memory_copy.py:/opt/ez-comfy/patch_unified_memory_copy.py:ro
+      - ./patch_magcache_compat.py:/opt/ez-comfy/patch_magcache_compat.py:ro
+      - ./seed_clay_inputs.py:/opt/ez-comfy/seed_clay_inputs.py:ro
       - ./pythonpath:/opt/ez-comfy/pythonpath:ro
     gpus: all
     shm_size: "16gb"

@@ -134,11 +134,15 @@ install_dub_runtime_wheels() {
 #######################################
 check_dub_runtime_wheels() {
   local py
-  py="/comfy-state/ComfyUI/.venv/bin/python"
   if ! compose_is_running; then
     log "dub wheel import: skipped (stack stopped)"
     return 0
   fi
+  py="/opt/comfy-prebuilt/.venv/bin/python"
+  if ! compose_run exec -T comfyui test -x "${py}"; then
+    py="/comfy-state/ComfyUI/.venv/bin/python"
+  fi
+  log "dub wheel import: python=${py}"
   if compose_run exec -T comfyui "${py}" -c \
     'from faster_whisper import WhisperModel'; then
     log "dub wheels: faster-whisper WhisperModel import ok"

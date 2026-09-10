@@ -368,6 +368,25 @@ apply_unified_memory_copy_patch() {
 }
 
 #######################################
+# Wrap MagCache's LTX RoPE import so Wan MagCache loads on ComfyUI v0.34+.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 (patch failures are soft)
+#######################################
+apply_magcache_compat_patch() {
+  if [[ -f /opt/ez-comfy/patch_magcache_compat.py ]]; then
+    python3 /opt/ez-comfy/patch_magcache_compat.py "${COMFY_HOME}" || warn "magcache compat patch failed"
+  else
+    warn "patch_magcache_compat.py not found in image"
+  fi
+}
+
+#######################################
 # Strip bloat from a prebuilt Comfy tree (image size / seed speed).
 # Removes VCS metadata, bytecode caches, and common non-runtime dirs.
 # Safe for runtime: does not delete Python packages or model links.
