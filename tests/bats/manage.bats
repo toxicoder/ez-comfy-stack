@@ -74,6 +74,7 @@ FROZEN_MANAGE_VERBS=(
   audio-still-video
   occupancy
   blender-mcp
+  research-mcp
   blender-llm
 )
 
@@ -292,6 +293,8 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"blender-desk"* ]]
   run cmd_blender_mcp --help
+  [ "${status}" -eq 0 ]
+  run cmd_research_mcp --help
   [ "${status}" -eq 0 ]
   run cmd_blender_llm --help
   [ "${status}" -eq 0 ]

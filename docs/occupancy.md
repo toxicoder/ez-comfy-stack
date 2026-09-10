@@ -12,6 +12,7 @@ tags: [occupancy, blender, trellis, safety, gb10]
 - Modes: idle, blender-desk, klein, trellis, wan, ltx
 - Park Comfy with `POST /free` instead of `stop` for Workbench dumps
 - What stays XOR (NVENC, Cycles CUDA, LTX next to TRELLIS)
+- In-tree MCP: blender-mcp (desk) and research-mcp (CPU research; Path D)
 
 **What this enables**
 
@@ -69,7 +70,9 @@ If `/free` fails, Workbench may still contend for unified memory — `occupancy 
 
 ## MCP (mcp-construct)
 
-In-tree `blender-mcp` is a small typed-tool server (primitives, camera, keyframes, GLB, guide dumps). **No** `execute_code`, **no** telemetry, **no** cloud 3D APIs.
+In-tree MCP servers are typed-tool stdio processes. **No** `execute_code`, **no** telemetry. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the launch path).
+
+**blender-mcp** wraps occupancy and host Blender (primitives, camera, keyframes, GLB, guide dumps). **No** cloud 3D APIs. bpy tools need blender-desk.
 
 ```bash
 ./scripts/manage.sh occupancy enter blender-desk
@@ -80,4 +83,13 @@ In-tree `blender-mcp` is a small typed-tool server (primitives, camera, keyframe
 
 Qwen3-4B will place primitives. Cinematic scenes: Path D — laptop Grok/Cursor as the MCP client over SSH, Spark only runs blender-mcp. If `llama-cli` is missing, `blender-llm` prints that hint and exits 1.
 
-Related: [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [Hardware, memory, and safety](learn/hardware.md).
+**research-mcp** is the creative-process desk (chat, web search, sequential research subagents, `list_lab_apps` / `describe_app`). Occupancy **llm**: CPU GGUF (`n_gpu_layers=0`). It does **not** refuse a GPU Comfy session and does **not** map `idle` → `blender-desk`. Unified memory still contends — prefer a gap between Klein/Wan/LTX Queues for long research. Same pipeline as **research-chat-lab-example**. HTTPS search is SSRF-guarded (no arbitrary `fetch_url` tool).
+
+```bash
+./scripts/manage.sh research-mcp --stdio
+./scripts/manage.sh research-mcp --call research '{"message":"night rooftop lighting"}'
+```
+
+Path D: laptop agent is the MCP client; Spark runs `research-mcp`. Briefs land under `${COMFY_OUTPUT_DIR}/research/` (never `MODELS_DIR`). Copy prompt ingredients into Prompt Forge, then Spark Still. MCP does not Queue Comfy.
+
+Related: [ComfyUI Apps](studio-apps.md), [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [Hardware, memory, and safety](learn/hardware.md).

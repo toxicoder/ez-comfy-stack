@@ -24,7 +24,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 !!! tip "Lab graphs already ship model-native prompts"
 
-    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **prompt-forge-lab-example** previews Klein / Wan / LTX rewrites with no UNET (occupancy **llm**). Copy the family you need into Spark Still. The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
+    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **research-chat-lab-example** is a no-UNET creative desk (occupancy **llm**): chat or planner+search subagents, then copy prompt ingredients into **prompt-forge-lab-example**. Prompt Forge previews Klein / Wan / LTX rewrites with no UNET. Copy the family you need into Spark Still. The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
 
 ```mermaid
 flowchart TB

@@ -2,6 +2,9 @@ import { app } from "../../scripts/app.js";
 
 const LABELS = {
   prompt: "Prompt",
+  web_search: "Web search",
+  subagents: "Subagents",
+  history: "History",
   style: "Style",
   enhance: "Rewrite prompt",
   seed: "Seed",

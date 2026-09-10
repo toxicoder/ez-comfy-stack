@@ -1,0 +1,184 @@
+{
+  "id": "research-chat-lab-example",
+  "revision": 1,
+  "last_node_id": 2,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        720,
+        340.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## research-chat-lab-example\n\nCreative research desk \u2014 chat LLM with web search and sequential research\nsubagents. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 stop nothing GPU. One GB10 job.\nUses the on-box Qwen3-4B-Instruct GGUF (CPU, n_gpu_layers=0). No new download flag.\nWeb search is SSRF-safe HTTPS (Wikipedia + DuckDuckGo HTML). Fail-soft if the\nnetwork or GGUF is missing.\n\n1. Type a question (look, camera, lighting, world, reference).\n2. Mode **research** (planner + search subagents) or **chat** (one turn).\n3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into\n   **prompt-forge-lab-example**, then **klein-still-draft-lab-example**.\n\nLaptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same\npipeline as this App. Does not queue Comfy. Does not refuse a GPU session.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "EZCreativeResearch",
+      "pos": [
+        40,
+        476.0
+      ],
+      "size": [
+        720,
+        420.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "reply",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZCreativeResearch"
+      },
+      "widgets_values": [
+        "What lighting and camera language fits a night rooftop still of a techno wizard in a tropical city?",
+        "research",
+        true,
+        2,
+        ""
+      ],
+      "title": "Creative research"
+    }
+  ],
+  "links": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        760,
+        396.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "RESEARCH",
+      "bounding": [
+        20,
+        420.0,
+        760,
+        476.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "research-chat-lab-example",
+    "lab_note": "## research-chat-lab-example\n\nCreative research desk \u2014 chat LLM with web search and sequential research\nsubagents. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 stop nothing GPU. One GB10 job.\nUses the on-box Qwen3-4B-Instruct GGUF (CPU, n_gpu_layers=0). No new download flag.\nWeb search is SSRF-safe HTTPS (Wikipedia + DuckDuckGo HTML). Fail-soft if the\nnetwork or GGUF is missing.\n\n1. Type a question (look, camera, lighting, world, reference).\n2. Mode **research** (planner + search subagents) or **chat** (one turn).\n3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into\n   **prompt-forge-lab-example**, then **klein-still-draft-lab-example**.\n\nLaptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same\npipeline as this App. Does not queue Comfy. Does not refuse a GPU session.\n",
+    "lab_description": "No-UNET creative research chat: web search + sequential subagents",
+    "lab_mcp": {
+      "server": "research-mcp",
+      "tools": [
+        "chat",
+        "web_search",
+        "research"
+      ],
+      "workflow": "workflows/_lab/inspire/research-chat-lab-example.json"
+    },
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "llm",
+      "enhance_off_identity": false,
+      "handoff": [
+        "prompt-forge-lab-example",
+        "klein-still-draft-lab-example"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          2,
+          "prompt",
+          {
+            "description": "Question or note for the creative-process desk.",
+            "label": "Message",
+            "height": 140
+          }
+        ],
+        [
+          2,
+          "mode",
+          {
+            "description": "chat is one turn. research runs planner + search subagents.",
+            "label": "Mode"
+          }
+        ],
+        [
+          2,
+          "web_search",
+          {
+            "description": "On: Wikipedia + DuckDuckGo snippets. Off: on-box GGUF only.",
+            "label": "Web search"
+          }
+        ],
+        [
+          2,
+          "subagents",
+          {
+            "description": "Planner search count (1\u20133). Sequential CPU workers.",
+            "label": "Subagents"
+          }
+        ],
+        [
+          2,
+          "history",
+          {
+            "description": "Optional prior turns. One Queue per message \u2014 not a streaming chat.",
+            "label": "History",
+            "height": 80
+          }
+        ]
+      ],
+      "outputs": [
+        2
+      ]
+    },
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "EZCreativeResearch"
+    ]
+  },
+  "version": 0.4
+}

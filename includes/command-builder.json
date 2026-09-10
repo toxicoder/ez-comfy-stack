@@ -318,6 +318,13 @@
       ]
     },
     {
+      "id": "research-mcp",
+      "title": "research-mcp",
+      "description": "In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF. No execute_code. Does not refuse a GPU session.",
+      "argv": ["./scripts/manage.sh", "research-mcp"],
+      "flags": []
+    },
+    {
       "id": "ssh-forward",
       "title": "SSH port-forward",
       "description": "Laptop tunnel to ComfyUI on the Spark. Then open http://127.0.0.1:${COMFY_PORT}.",

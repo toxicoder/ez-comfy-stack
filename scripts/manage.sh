@@ -318,6 +318,7 @@ Commands:
                     Occupancy desk: park Comfy (POST /free) for blender-desk, or
                     enter klein|trellis|wan|ltx|idle. Does not start Compose.
   blender-mcp       In-tree Blender MCP (typed tools; bpy needs blender-desk)
+  research-mcp      In-tree research MCP (chat, web search, lab-app list; CPU GGUF)
   blender-llm       Optional host Qwen3-4B CPU client; Path D if llama.cpp missing
   blender           Host Blender sidecar (Workbench in blender-desk; dies if Comfy is heavy)
   export-guides     Dump a 1280x704 (or 768x1280) / 120f guide pack (dies if Comfy is heavy)
@@ -1338,6 +1339,13 @@ cmd_blender_mcp() {
 }
 
 #######################################
+# In-tree creative research MCP (typed tools, occupancy-aware).
+#######################################
+cmd_research_mcp() {
+  bash "${REPO_ROOT}/scripts/utilities/research-mcp.sh" "$@"
+}
+
+#######################################
 # Optional on-box Qwen3-4B CPU client for blender-mcp.
 #######################################
 cmd_blender_llm() {
@@ -1596,6 +1604,7 @@ main() {
     download-3d) cmd_download_3d "$@" ;;
     occupancy) cmd_occupancy "$@" ;;
     blender-mcp) cmd_blender_mcp "$@" ;;
+    research-mcp) cmd_research_mcp "$@" ;;
     blender-llm) cmd_blender_llm "$@" ;;
     blender) cmd_blender "$@" ;;
     export-guides) cmd_export_guides "$@" ;;

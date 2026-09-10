@@ -882,6 +882,24 @@
     "see_also": ["ltx", "gated", "us-safe"]
   },
   {
+    "id": "research-chat",
+    "title": "Research Chat",
+    "aliases": ["Research Chat", "research-chat", "research-chat-lab-example"],
+    "category": "Studio",
+    "short": "Inspire App: CPU chat + web search + sequential research subagents. Occupancy llm.",
+    "long": "No-UNET creative-process desk (`research-chat-lab-example`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1–3 sequential search workers, then a synthesizer brief (prompt ingredients → Prompt Forge → Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `./scripts/manage.sh research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
+    "see_also": ["prompt-enhance", "occupancy", "qwen"]
+  },
+  {
+    "id": "research-mcp",
+    "title": "research-mcp",
+    "aliases": ["research-mcp"],
+    "category": "Studio",
+    "short": "In-tree MCP for chat, web search, research, and lab-app discovery. No execute_code.",
+    "long": "Typed stdio MCP (`./scripts/manage.sh research-mcp`). Tools: occupancy_status, list_lab_apps, describe_app, chat, web_search, research. Does not Queue Comfy, does not refuse a GPU session, does not map idle to blender-desk. No arbitrary URL fetch. Official Comfy Cloud MCP is out of tree. See [Occupancy desk](occupancy.md).",
+    "see_also": ["research-chat", "occupancy"]
+  },
+  {
     "id": "h3",
     "title": "MiniMax H3",
     "aliases": ["MiniMax H3"],

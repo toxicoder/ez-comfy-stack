@@ -57,7 +57,7 @@ One GB10 job. Cover art ≠ film ≠ podcast. Every App Note includes a one-line
 
 | Occupancy | Allowed | Must be stopped |
 | --- | --- | --- |
-| `none` / `llm` | Prompt Forge, Beat Sheet | nothing GPU |
+| `none` / `llm` | Prompt Forge, Research Chat, Beat Sheet | nothing GPU |
 | `klein` | still Apps + Platform Pack | Wan, LTX, podcast, music |
 | `wan` | silent 5 s / GIF / bumper | LTX, podcast, music |
 | `ltx` | any AV 5 s | Wan, podcast, music, other LTX |
@@ -88,6 +88,7 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein-character-draft-lab-example** | Character still. Prompt + style, 1024×1280, prefix `ez_character` |
 | **klein-character-tweak-lab-example** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
 | **prompt-forge-lab-example** | No UNET. Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
+| **research-chat-lab-example** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
 | **beat-sheet-lab-example** | Script desk. Logline, audio policy, 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
 
 ---
@@ -142,6 +143,7 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | Character Draft | Character Tweak → Identity Sheet → Silent 5s |
 | Hook Still | `wan-shorts-i2v` → `ltx-shorts-i2v` |
 | Storyboard 6-up | `wan-i2v-shot` / `ltx-i2v-shot` |
+| Research Chat | Prompt Forge → Spark Still (`klein-still-draft`) |
 | Beat sheet (script desk) | `shot-sheet` → identity sheet / clay dump / `klein-from-clay` |
 | Klein-from-clay | `overlay-qc` → `ltx-iclora-depth` → `audio-finish` / `stem-mix` |
 | Klein-from-clay | Silent 5s (`wan-i2v-5s`) |
