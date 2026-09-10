@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # ## occupancy
 #
 # Mode machine for one heavy GPU job on GB10.
