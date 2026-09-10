@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 SCHEMA = "ez.guide.shot.v1"
+STILL_SCHEMA = "ez.guide.still.v1"
 ENGINES = ("blender", "godot", "opentoonz", "krita", "mixed")
 PRINTS = (
     "ltx-iclora-depth",
@@ -25,11 +26,46 @@ PRINTS = (
     "wan-denk-cn",
     "dcc-final",
 )
+STILL_PRINTS = ("klein-from-clay", "klein-from-canny")
 PACK_WIDTH = 1280
 PACK_HEIGHT = 704
 PACK_FRAMES = 120
 PACK_FPS = 24
 LAYER_KEYS = ("rgb", "depth", "canny", "normal", "id", "pose", "motion", "first", "last")
+STILL_LAYER_KEYS = ("rgb", "depth", "canny", "normal", "first")
+STILL_SIZES = (
+    (1280, 704),
+    (768, 1280),
+    (1024, 1280),
+    (1024, 1024),
+    (1280, 720),
+)
+STILL_LTX_SIZES = ((1280, 704), (768, 1280))
+DEFAULT_LAYERS = ["rgb", "depth", "canny", "first", "last"]
+SEQ_OR_MP4 = {
+    "rgb": "clay.mp4",
+    "depth": "depth.mp4",
+    "canny": "canny.mp4",
+    "normal": "normal.mp4",
+}
+
+
+def layers_for_print(print_mode: str, *, include_normal: bool = False) -> list[str]:
+    """Return Path B dump layers for a named print mode.
+
+    Args:
+        print_mode: One of PRINTS.
+        include_normal: Append the optional EEVEE normal pass.
+
+    Returns:
+        Layer names in dump order.
+    """
+    layers = list(DEFAULT_LAYERS)
+    if include_normal and "normal" not in layers:
+        layers.append("normal")
+    if print_mode not in PRINTS:
+        return layers
+    return layers
 
 
 class GuidePackError(ValueError):
@@ -174,12 +210,15 @@ def validate_shot(data: dict[str, Any]) -> list[str]:
             width, height = int(size[0]), int(size[1])
         except (TypeError, ValueError):
             width, height = 0, 0
-        if (width, height) != (PACK_WIDTH, PACK_HEIGHT):
+        if (width, height) not in {(PACK_WIDTH, PACK_HEIGHT), (768, 1280)}:
             defects.append(
-                f"size must be [{PACK_WIDTH}, {PACK_HEIGHT}] (not 1280x720), got {size!r}"
+                f"size must be [{PACK_WIDTH}, {PACK_HEIGHT}] or [768, 1280] "
+                f"(not 1280x720), got {size!r}"
             )
     else:
-        defects.append(f"size must be [{PACK_WIDTH}, {PACK_HEIGHT}], got {size!r}")
+        defects.append(
+            f"size must be [{PACK_WIDTH}, {PACK_HEIGHT}] or [768, 1280], got {size!r}"
+        )
     layers = data.get("layers")
     if not isinstance(layers, list) or not layers:
         defects.append("layers must be a non-empty list")
@@ -196,6 +235,36 @@ def _count_frames(folder: Path) -> int:
     return sum(1 for p in folder.iterdir() if p.suffix.lower() in {".png", ".exr"})
 
 
+def _pack_size(shot: dict[str, Any]) -> tuple[int, int]:
+    size = shot.get("size")
+    if isinstance(size, list) and len(size) == 2:
+        try:
+            return int(size[0]), int(size[1])
+        except (TypeError, ValueError):
+            return PACK_WIDTH, PACK_HEIGHT
+    return PACK_WIDTH, PACK_HEIGHT
+
+
+def _require_seq_or_mp4(
+    pack_dir: Path,
+    layer: str,
+    *,
+    require_full_seq: bool,
+    frames: int = PACK_FRAMES,
+) -> list[str]:
+    """Fail-closed sequence or muxed MP4 for one video layer."""
+    mp4_name = SEQ_OR_MP4.get(layer)
+    if mp4_name is None:
+        return []
+    count = _count_frames(pack_dir / layer)
+    defects: list[str] = []
+    if require_full_seq and count not in {0, frames}:
+        defects.append(f"{layer}/ frame count {count} is not {frames}")
+    if require_full_seq and count == 0 and not (pack_dir / mp4_name).is_file():
+        defects.append(f"missing {layer}/ sequence and {mp4_name}")
+    return defects
+
+
 def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]:
     """Fail-closed QC for a dumped pack directory."""
     defects: list[str] = []
@@ -206,35 +275,34 @@ def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]
     except GuidePackError as exc:
         return [str(exc)]
     defects.extend(validate_shot(shot))
+    expect_w, expect_h = _pack_size(shot)
+    if (expect_w, expect_h) not in {(PACK_WIDTH, PACK_HEIGHT), (768, 1280)}:
+        expect_w, expect_h = PACK_WIDTH, PACK_HEIGHT
     for name in ("first.png", "last.png"):
         path = pack_dir / name
         if not path.is_file():
             defects.append(f"missing {name}")
             continue
         size = png_size(path)
-        if size != (PACK_WIDTH, PACK_HEIGHT):
-            defects.append(f"{name} size {size} is not {PACK_WIDTH}x{PACK_HEIGHT}")
+        if size != (expect_w, expect_h):
+            defects.append(f"{name} size {size} is not {expect_w}x{expect_h}")
     raw_layers = shot.get("layers")
     layers: list[Any] = raw_layers if isinstance(raw_layers, list) else []
-    if "rgb" in layers:
-        rgb_n = _count_frames(pack_dir / "rgb")
-        if require_full_seq and rgb_n not in {0, PACK_FRAMES}:
-            defects.append(f"rgb/ frame count {rgb_n} is not {PACK_FRAMES}")
-        if require_full_seq and rgb_n == 0 and not (pack_dir / "clay.mp4").is_file():
-            defects.append("missing rgb/ sequence and clay.mp4")
-    if "depth" in layers:
-        depth_n = _count_frames(pack_dir / "depth")
-        if require_full_seq and depth_n not in {0, PACK_FRAMES}:
-            defects.append(f"depth/ frame count {depth_n} is not {PACK_FRAMES}")
-        if require_full_seq and depth_n == 0 and not (pack_dir / "depth.mp4").is_file():
-            defects.append("missing depth/ sequence and depth.mp4")
+    frames = int(shot.get("frames") or PACK_FRAMES)
+    for layer in ("rgb", "depth", "canny", "normal"):
+        if layer in layers:
+            defects.extend(
+                _require_seq_or_mp4(
+                    pack_dir, layer, require_full_seq=require_full_seq, frames=frames
+                )
+            )
     return defects
 
 
 def dump_shot_yaml(data: dict[str, Any]) -> str:
     """Serialize a validated shot dict to restricted YAML."""
     size = data.get("size") or [PACK_WIDTH, PACK_HEIGHT]
-    layers = data.get("layers") or ["rgb", "depth", "canny", "first", "last"]
+    layers = data.get("layers") or list(DEFAULT_LAYERS)
     layer_s = ", ".join(str(x) for x in layers)
     size_s = f"[{int(size[0])}, {int(size[1])}]"
     lines = [
@@ -263,6 +331,134 @@ def write_shot_yaml(path: Path, data: dict[str, Any]) -> None:
     path.write_text(dump_shot_yaml(data), encoding="utf-8")
 
 
+def dump_still_yaml(data: dict[str, Any]) -> str:
+    """Serialize a validated still dict to restricted YAML."""
+    size = data.get("size") or [PACK_WIDTH, PACK_HEIGHT]
+    layers = data.get("layers") or ["rgb", "depth", "canny", "first"]
+    layer_s = ", ".join(str(x) for x in layers)
+    size_s = f"[{int(size[0])}, {int(size[1])}]"
+    lines = [
+        f"schema: {data.get('schema', STILL_SCHEMA)}",
+        f"slug: {data.get('slug', '')}",
+        f"plate: {data.get('plate', '')}",
+        f"engine: {data.get('engine', 'blender')}",
+        f"print: {data.get('print', 'klein-from-clay')}",
+        f"size: {size_s}",
+        f"layers: [{layer_s}]",
+    ]
+    for key in ("blend", "camera"):
+        if data.get(key):
+            lines.append(f"{key}: {data[key]}")
+    return "\n".join(lines) + "\n"
+
+
+def write_still_yaml(path: Path, data: dict[str, Any]) -> None:
+    """Write still.yaml after validating fields."""
+    defects = validate_still(data)
+    if defects:
+        raise GuidePackError("; ".join(defects))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(dump_still_yaml(data), encoding="utf-8")
+
+
+def load_still(path: Path) -> dict[str, Any]:
+    """Read still.yaml from a pack directory or file."""
+    still_path = path / "still.yaml" if path.is_dir() else path
+    if not still_path.is_file():
+        raise GuidePackError(f"missing still.yaml at {still_path}")
+    return parse_shot_yaml(still_path.read_text(encoding="utf-8"))
+
+
+def validate_still(data: dict[str, Any]) -> list[str]:
+    """Return defect strings for ez.guide.still.v1 (empty means ok)."""
+    defects: list[str] = []
+    if data.get("schema") != STILL_SCHEMA:
+        defects.append(f"schema must be {STILL_SCHEMA}, got {data.get('schema')!r}")
+    if not str(data.get("slug") or "").strip():
+        defects.append("slug is required")
+    if not str(data.get("plate") or "").strip():
+        defects.append("plate is required")
+    engine = data.get("engine")
+    if engine not in ENGINES:
+        defects.append(f"engine must be one of {ENGINES}, got {engine!r}")
+    print_mode = data.get("print")
+    if print_mode not in STILL_PRINTS:
+        defects.append(f"print must be one of {STILL_PRINTS}, got {print_mode!r}")
+    size = data.get("size")
+    if isinstance(size, list) and len(size) == 2:
+        try:
+            width, height = int(size[0]), int(size[1])
+        except (TypeError, ValueError):
+            width, height = 0, 0
+        if (width, height) not in STILL_SIZES:
+            defects.append(
+                f"size must be one of {list(STILL_SIZES)} (720/1080 LTX feeders refused), "
+                f"got {size!r}"
+            )
+    else:
+        defects.append(f"size must be [W, H] one of {list(STILL_SIZES)}, got {size!r}")
+    layers = data.get("layers")
+    if not isinstance(layers, list) or not layers:
+        defects.append("layers must be a non-empty list")
+    else:
+        for layer in layers:
+            if layer not in STILL_LAYER_KEYS:
+                defects.append(f"unknown still layer {layer!r}")
+    return defects
+
+
+def validate_still_pack(pack_dir: Path) -> list[str]:
+    """Fail-closed QC for a single-frame still pack."""
+    defects: list[str] = []
+    if not pack_dir.is_dir():
+        return [f"missing still pack directory {pack_dir}"]
+    try:
+        still = load_still(pack_dir)
+    except GuidePackError as exc:
+        return [str(exc)]
+    defects.extend(validate_still(still))
+    size = still.get("size")
+    expect: tuple[int, int] | None = None
+    if isinstance(size, list) and len(size) == 2:
+        try:
+            expect = (int(size[0]), int(size[1]))
+        except (TypeError, ValueError):
+            expect = None
+    first = pack_dir / "first.png"
+    if not first.is_file():
+        defects.append("missing first.png")
+    elif expect is not None:
+        got = png_size(first)
+        if got != expect:
+            defects.append(f"first.png size {got} is not {expect[0]}x{expect[1]}")
+    raw_layers = still.get("layers")
+    layers: list[Any] = raw_layers if isinstance(raw_layers, list) else []
+    for layer, filename in (("depth", "depth.png"), ("canny", "canny.png"), ("normal", "normal.png")):
+        if layer not in layers:
+            continue
+        path = pack_dir / filename
+        if not path.is_file():
+            defects.append(f"missing {filename}")
+            continue
+        if expect is not None:
+            got = png_size(path)
+            if got != expect:
+                defects.append(f"{filename} size {got} is not {expect[0]}x{expect[1]}")
+    return defects
+
+
+def parse_size_token(token: str) -> tuple[int, int] | None:
+    """Parse ``1280x704`` into a size tuple, or None."""
+    text = token.lower().replace("×", "x").strip()
+    if "x" not in text:
+        return None
+    left, right = text.split("x", 1)
+    try:
+        return int(left), int(right)
+    except ValueError:
+        return None
+
+
 def _cli(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="guide_pack")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -273,9 +469,18 @@ def _cli(argv: list[str] | None = None) -> int:
         action="store_true",
         help="do not require a full 120-frame sequence (CI fixtures)",
     )
+    p_still = sub.add_parser("validate-still", help="validate a still pack directory")
+    p_still.add_argument("pack")
     args = parser.parse_args(argv)
     if args.cmd == "validate":
         defects = validate_pack(Path(args.pack), require_full_seq=not args.fixture)
+        if defects:
+            print(json.dumps({"ok": False, "defects": defects}))
+            return 1
+        print(json.dumps({"ok": True, "defects": []}))
+        return 0
+    if args.cmd == "validate-still":
+        defects = validate_still_pack(Path(args.pack))
         if defects:
             print(json.dumps({"ok": False, "defects": defects}))
             return 1

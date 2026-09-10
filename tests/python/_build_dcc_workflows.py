@@ -12,11 +12,9 @@ import json
 import sys
 from pathlib import Path
 
-from _lab_paths import LAB_ROOT, lab_json
+from _lab_layout import GROUP_TITLE_INSET, group as _group, ensure_group_title_inset
+from _lab_paths import lab_dest, lab_json
 from _stamp_app_mode import stamp_suite_graph
-
-ROOT = Path(__file__).resolve().parents[2]
-DCC = LAB_ROOT / "dcc"
 
 KLEIN_NOTE = """## klein-from-clay-lab-example
 
@@ -56,6 +54,94 @@ Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupan
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 """
 
+CANNY_STILL_NOTE = """## klein-from-canny-lab-example
+
+Klein 4B **edit** of a DCC line-art plate (guide pack ``canny/`` first frame, or still ``canny.png``). Enhance **on**. Seed **42**. Size **1280x704**.
+
+LoadImage: ``canny.png`` (copy from ``guides/<slug>/<shot>/canny/`` or ``blender-stills --install-inputs``). Prefix ``ez_canny_hero``.
+
+Keep the silhouette and camera from the line art. Finish materials and light. Do not redesign layout.
+
+Unload before LTX. Occupancy: klein. Handoff: ltx-iclora-canny-5s.
+"""
+
+CLAY_PLATES_NOTE = """## klein-from-clay-plates-lab-example
+
+One clay still, four Klein **edit** plates. Enhance **on**. Seed **42**. Ctrl+B unused SHOT groups.
+
+Prefixes and sizes:
+- ez_clay_pack_hero 1280x704 (LTX feeder)
+- ez_clay_pack_packshot 1024x1024 (1:1)
+- ez_clay_pack_ig 1024x1280 (Instagram 4:5)
+- ez_clay_pack_shorts 768x1280 (9:16 / LTX portrait)
+
+LoadImage: clay ``first.png``. Each plate scales the clay to its latent. Occupancy: klein.
+Handoff: wan-i2v-5s / wan-shorts-i2v / ltx-iclora-depth-shorts.
+"""
+
+LTX_CANNY_NOTE = """## ltx-iclora-canny-5s-lab-example
+
+Lab envelope for Path B **canny**-guided 5.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+
+This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
+
+  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
+
+Switch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):
+
+  ./scripts/manage.sh download-ltx --tier iclora
+  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
+
+Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
+
+LoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.
+
+LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
+"""
+
+LTX_SHORTS_NOTE = """## ltx-iclora-depth-shorts-lab-example
+
+Lab envelope for Path B depth-guided **portrait** 5.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+
+Dump the pack with:
+
+  ./scripts/manage.sh export-guides --film SLUG --shot ID --width 768 --height 1280 --print ltx-iclora-depth
+
+Queue Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json. Depth default. Opt-in ``download-ltx --tier iclora``. Refuse 19B Union.
+
+Prefix ``ez_iclora_depth_shorts``. Occupancy: ltx. Handoff: audio-finish.
+"""
+
+WAN_FLF_GUIDE_NOTE = """## wan-flf-from-guide-lab-example
+
+Silent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:
+
+  ./scripts/manage.sh download-wan --tier fun-inp
+
+Unload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV print.
+
+Prefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pack is 1280x704; the latent node resizes.
+"""
+
+CLAY_PLATES = (
+    ("hero", "ez_clay_pack_hero", 1280, 704),
+    ("packshot", "ez_clay_pack_packshot", 1024, 1024),
+    ("ig", "ez_clay_pack_ig", 1024, 1280),
+    ("shorts", "ez_clay_pack_shorts", 768, 1280),
+)
+
+CLAY_FINISH = (
+    "Keep the clay blocking, camera, and silhouette from the start image. "
+    "Finish as a photoreal still: physically plausible light, natural materials, "
+    "unmarked surfaces empty of lettering. "
+    "Do not redesign layout."
+)
+CANNY_FINISH = (
+    "Keep the line-art silhouette, camera, and layout from the start image. "
+    "Finish as a photoreal still inside those edges. Unmarked surfaces. "
+    "Do not invent new geometry."
+)
+
 
 def _load(name: str) -> dict:
     return json.loads(lab_json(name).read_text(encoding="utf-8"))
@@ -64,7 +150,39 @@ def _load(name: str) -> dict:
 def _save(graph: dict, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     stamp_suite_graph(graph)
+    ensure_group_title_inset(graph)
     dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+
+
+def _max_ids(graph: dict) -> tuple[int, int]:
+    max_id = max(int(n["id"]) for n in graph["nodes"])
+    max_link = 0
+    for link in graph.get("links") or []:
+        max_link = max(max_link, int(link[0]))
+    return max_id, max_link
+
+
+def _append_out_link(node: dict, slot: int, link_id: int) -> None:
+    outs = node["outputs"][slot]
+    links = outs.get("links")
+    if not isinstance(links, list):
+        links = []
+    links.append(link_id)
+    outs["links"] = links
+
+
+def _add_link(
+    graph: dict,
+    link_id: int,
+    from_id: int,
+    from_slot: int,
+    to_id: int,
+    to_slot: int,
+    ltype: str,
+) -> None:
+    graph.setdefault("links", []).append(
+        [link_id, from_id, from_slot, to_id, to_slot, ltype]
+    )
 
 
 def build_klein_from_clay() -> dict:
@@ -272,13 +390,505 @@ def build_ltx_iclora() -> dict:
     return graph
 
 
+def _retitle_note(graph: dict, text: str) -> None:
+    extra = graph.setdefault("extra", {})
+    extra["lab_note"] = text
+    for node in graph["nodes"]:
+        if node.get("type") == "Note":
+            node["widgets_values"] = [text]
+            node["title"] = "Operator note"
+
+
+def build_klein_from_canny() -> dict:
+    graph = build_klein_from_clay()
+    graph["id"] = "klein-from-canny-lab-example"
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "klein-from-canny-lab-example"
+    extra["lab_description"] = (
+        "Klein 4B edit of DCC canny.png. Enhance on. 1280x704. Seed 42."
+    )
+    extra["lab_dcc"] = {
+        "enhance": True,
+        "mode": "edit",
+        "seed": 42,
+        "size": [1280, 704],
+        "prefix": "ez_canny_hero",
+        "guide": "canny",
+    }
+    _retitle_note(graph, CANNY_STILL_NOTE)
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        if ntype == "EZKleinPromptEnhance":
+            widgets = list(node.get("widgets_values") or [])
+            while len(widgets) < 5:
+                widgets.append("")
+            widgets[0] = CANNY_FINISH
+            widgets[1] = True
+            widgets[2] = "edit"
+            widgets[3] = "YouTube 16:9 still from line art"
+            widgets[4] = "none"
+            node["widgets_values"] = widgets
+        elif ntype == "CLIPTextEncode" and node.get("title") != "Negative":
+            node["widgets_values"] = [CANNY_FINISH]
+        elif ntype == "SaveImage":
+            node["widgets_values"] = ["ez_canny_hero"]
+            node["title"] = "Save canny hero"
+        elif ntype == "LoadImage":
+            node["widgets_values"] = ["canny.png", "image"]
+            node["title"] = "Canny first.png (guide pack)"
+        elif ntype == "VAEEncode":
+            node["title"] = "Encode canny plate"
+        elif ntype == "ReferenceLatent":
+            node["title"] = "Positive + canny plate"
+    return graph
+
+
+def _insert_image_scale(graph: dict, width: int, height: int, title: str) -> int:
+    """Rewire LoadImage → ImageScale → VAEEncode. Returns ImageScale id."""
+    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
+    encode = next(n for n in graph["nodes"] if n.get("type") == "VAEEncode")
+    pix = next(inp for inp in encode["inputs"] if inp.get("name") == "pixels")
+    old_link = pix.get("link")
+    max_id, max_link = _max_ids(graph)
+    scale_id = max_id + 1
+    link_in = max_link + 1
+    link_out = max_link + 2
+    graph["nodes"].append(
+        {
+            "id": scale_id,
+            "type": "ImageScale",
+            "pos": [1880, 420],
+            "size": [280, 130],
+            "flags": {},
+            "order": 19,
+            "mode": 0,
+            "inputs": [{"name": "image", "type": "IMAGE", "link": link_in}],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [link_out],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "ImageScale"},
+            "widgets_values": ["lanczos", int(width), int(height), "center"],
+            "title": title,
+        }
+    )
+    graph["links"] = [link for link in graph.get("links") or [] if int(link[0]) != old_link]
+    load_out = load["outputs"][0]
+    load_links = [lid for lid in (load_out.get("links") or []) if lid != old_link]
+    load_out["links"] = load_links + [link_in]
+    pix["link"] = link_out
+    _add_link(graph, link_in, int(load["id"]), 0, scale_id, 0, "IMAGE")
+    _add_link(graph, link_out, scale_id, 0, int(encode["id"]), 0, "IMAGE")
+    graph["last_node_id"] = scale_id
+    graph["last_link_id"] = link_out
+    return scale_id
+
+
+def _append_clay_plate(
+    graph: dict,
+    *,
+    label: str,
+    prefix: str,
+    width: int,
+    height: int,
+    y: int,
+) -> None:
+    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
+    vae = next(n for n in graph["nodes"] if n.get("type") == "VAELoader")
+    unet = next(n for n in graph["nodes"] if n.get("type") == "UNETLoader")
+    pos = next(
+        n
+        for n in graph["nodes"]
+        if n.get("type") == "CLIPTextEncode" and n.get("title") != "Negative"
+    )
+    neg = next(
+        n
+        for n in graph["nodes"]
+        if n.get("type") == "CLIPTextEncode" and n.get("title") == "Negative"
+    )
+    max_id, max_link = _max_ids(graph)
+    scale_id = max_id + 1
+    encode_id = max_id + 2
+    ref_id = max_id + 3
+    lat_id = max_id + 4
+    ks_id = max_id + 5
+    dec_id = max_id + 6
+    save_id = max_id + 7
+    l_img = max_link + 1
+    l_scale = max_link + 2
+    l_vae = max_link + 3
+    l_cond = max_link + 4
+    l_lat = max_link + 5
+    l_pos = max_link + 6
+    l_model = max_link + 7
+    l_neg = max_link + 8
+    l_empty = max_link + 9
+    l_dec = max_link + 10
+    l_vae2 = max_link + 11
+    l_save = max_link + 12
+    x0 = 520
+    graph["nodes"].extend(
+        [
+            {
+                "id": scale_id,
+                "type": "ImageScale",
+                "pos": [x0, y],
+                "size": [280, 130],
+                "flags": {},
+                "order": scale_id,
+                "mode": 0,
+                "inputs": [{"name": "image", "type": "IMAGE", "link": l_img}],
+                "outputs": [
+                    {"name": "IMAGE", "type": "IMAGE", "links": [l_scale], "slot_index": 0}
+                ],
+                "properties": {"Node name for S&R": "ImageScale"},
+                "widgets_values": ["lanczos", width, height, "center"],
+                "title": f"Scale {label}",
+            },
+            {
+                "id": encode_id,
+                "type": "VAEEncode",
+                "pos": [x0 + 320, y],
+                "size": [240, 80],
+                "flags": {},
+                "order": encode_id,
+                "mode": 0,
+                "inputs": [
+                    {"name": "pixels", "type": "IMAGE", "link": l_scale},
+                    {"name": "vae", "type": "VAE", "link": l_vae},
+                ],
+                "outputs": [
+                    {"name": "LATENT", "type": "LATENT", "links": [l_lat], "slot_index": 0}
+                ],
+                "properties": {"Node name for S&R": "VAEEncode"},
+                "widgets_values": [],
+                "title": f"Encode {label}",
+            },
+            {
+                "id": ref_id,
+                "type": "ReferenceLatent",
+                "pos": [x0 + 600, y],
+                "size": [280, 80],
+                "flags": {},
+                "order": ref_id,
+                "mode": 0,
+                "inputs": [
+                    {"name": "conditioning", "type": "CONDITIONING", "link": l_cond},
+                    {"name": "latent", "type": "LATENT", "link": l_lat, "shape": 7},
+                ],
+                "outputs": [
+                    {
+                        "name": "CONDITIONING",
+                        "type": "CONDITIONING",
+                        "links": [l_pos],
+                        "slot_index": 0,
+                    }
+                ],
+                "properties": {"Node name for S&R": "ReferenceLatent"},
+                "widgets_values": [],
+                "title": f"Positive + {label}",
+            },
+            {
+                "id": lat_id,
+                "type": "EmptyFlux2LatentImage",
+                "pos": [x0 + 920, y],
+                "size": [280, 106],
+                "flags": {},
+                "order": lat_id,
+                "mode": 0,
+                "inputs": [],
+                "outputs": [
+                    {"name": "LATENT", "type": "LATENT", "links": [l_empty], "slot_index": 0}
+                ],
+                "properties": {"Node name for S&R": "EmptyFlux2LatentImage"},
+                "widgets_values": [width, height, 1],
+                "title": f"Size {width}x{height}",
+            },
+            {
+                "id": ks_id,
+                "type": "KSampler",
+                "pos": [x0 + 1240, y],
+                "size": [320, 262],
+                "flags": {},
+                "order": ks_id,
+                "mode": 0,
+                "inputs": [
+                    {"name": "model", "type": "MODEL", "link": l_model},
+                    {"name": "positive", "type": "CONDITIONING", "link": l_pos},
+                    {"name": "negative", "type": "CONDITIONING", "link": l_neg},
+                    {"name": "latent_image", "type": "LATENT", "link": l_empty},
+                ],
+                "outputs": [
+                    {"name": "LATENT", "type": "LATENT", "links": [l_dec], "slot_index": 0}
+                ],
+                "properties": {"Node name for S&R": "KSampler"},
+                "widgets_values": [42, "fixed", 4, 1.0, "euler", "simple", 1.0],
+                "title": f"Sampler {label}",
+            },
+            {
+                "id": dec_id,
+                "type": "VAEDecode",
+                "pos": [x0 + 1600, y],
+                "size": [240, 46],
+                "flags": {},
+                "order": dec_id,
+                "mode": 0,
+                "inputs": [
+                    {"name": "samples", "type": "LATENT", "link": l_dec},
+                    {"name": "vae", "type": "VAE", "link": l_vae2},
+                ],
+                "outputs": [
+                    {"name": "IMAGE", "type": "IMAGE", "links": [l_save], "slot_index": 0}
+                ],
+                "properties": {"Node name for S&R": "VAEDecode"},
+                "widgets_values": [],
+                "title": f"Decode {label}",
+            },
+            {
+                "id": save_id,
+                "type": "SaveImage",
+                "pos": [x0 + 1880, y],
+                "size": [280, 270],
+                "flags": {},
+                "order": save_id,
+                "mode": 0,
+                "inputs": [{"name": "images", "type": "IMAGE", "link": l_save}],
+                "outputs": [],
+                "properties": {"Node name for S&R": "SaveImage"},
+                "widgets_values": [prefix],
+                "title": f"Save {label}",
+            },
+        ]
+    )
+    _append_out_link(load, 0, l_img)
+    _append_out_link(vae, 0, l_vae)
+    _append_out_link(vae, 0, l_vae2)
+    _append_out_link(unet, 0, l_model)
+    _append_out_link(pos, 0, l_cond)
+    _append_out_link(neg, 0, l_neg)
+    _add_link(graph, l_img, int(load["id"]), 0, scale_id, 0, "IMAGE")
+    _add_link(graph, l_scale, scale_id, 0, encode_id, 0, "IMAGE")
+    _add_link(graph, l_vae, int(vae["id"]), 0, encode_id, 1, "VAE")
+    _add_link(graph, l_cond, int(pos["id"]), 0, ref_id, 0, "CONDITIONING")
+    _add_link(graph, l_lat, encode_id, 0, ref_id, 1, "LATENT")
+    _add_link(graph, l_pos, ref_id, 0, ks_id, 1, "CONDITIONING")
+    _add_link(graph, l_model, int(unet["id"]), 0, ks_id, 0, "MODEL")
+    _add_link(graph, l_neg, int(neg["id"]), 0, ks_id, 2, "CONDITIONING")
+    _add_link(graph, l_empty, lat_id, 0, ks_id, 3, "LATENT")
+    _add_link(graph, l_dec, ks_id, 0, dec_id, 0, "LATENT")
+    _add_link(graph, l_vae2, int(vae["id"]), 0, dec_id, 1, "VAE")
+    _add_link(graph, l_save, dec_id, 0, save_id, 0, "IMAGE")
+    graph["last_node_id"] = save_id
+    graph["last_link_id"] = l_save
+    groups = graph.setdefault("groups", [])
+    groups.append(
+        _group(
+            20 + len(groups),
+            f"SHOT {label}",
+            x0 - 20,
+            y - GROUP_TITLE_INSET,
+            2200,
+            340,
+            "#3f789e",
+        )
+    )
+
+
+def build_klein_from_clay_plates() -> dict:
+    graph = build_klein_from_clay()
+    graph["id"] = "klein-from-clay-plates-lab-example"
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "klein-from-clay-plates-lab-example"
+    extra["lab_description"] = (
+        "Klein 4B edit of one clay still into four creator plates. Enhance on. Seed 42."
+    )
+    extra["lab_dcc"] = {
+        "enhance": True,
+        "mode": "edit",
+        "seed": 42,
+        "plates": [
+            {"id": label, "prefix": prefix, "size": [width, height]}
+            for label, prefix, width, height in CLAY_PLATES
+        ],
+    }
+    _retitle_note(graph, CLAY_PLATES_NOTE)
+    hero_w, hero_h = CLAY_PLATES[0][2], CLAY_PLATES[0][3]
+    _insert_image_scale(graph, hero_w, hero_h, "Scale hero")
+    for node in graph["nodes"]:
+        if node.get("type") == "SaveImage":
+            node["widgets_values"] = [CLAY_PLATES[0][1]]
+            node["title"] = "Save hero"
+        elif node.get("type") == "EmptyFlux2LatentImage":
+            node["widgets_values"] = [hero_w, hero_h, 1]
+            node["title"] = f"Size {hero_w}x{hero_h}"
+    for i, (label, prefix, width, height) in enumerate(CLAY_PLATES[1:], start=1):
+        _append_clay_plate(
+            graph,
+            label=label,
+            prefix=prefix,
+            width=width,
+            height=height,
+            y=80 + i * 380,
+        )
+    return graph
+
+
+def _set_ltx_canvas(graph: dict, width: int, height: int) -> None:
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        widgets = node.get("widgets_values")
+        if ntype == "LTXVImgToVideo" and isinstance(widgets, list) and len(widgets) >= 2:
+            widgets[0] = width
+            widgets[1] = height
+        elif ntype in {"EmptyLTXVLatentVideo", "LTXVEmptyLatentAudio"} and isinstance(
+            widgets, list
+        ):
+            if widgets and isinstance(widgets[0], int) and widgets[0] in {1280, 768}:
+                widgets[0] = width
+            if len(widgets) > 1 and isinstance(widgets[1], int) and widgets[1] in {704, 1280}:
+                widgets[1] = height
+
+
+def _set_vhs_prefix(graph: dict, prefix: str) -> None:
+    for node in graph["nodes"]:
+        if node.get("type") != "VHS_VideoCombine":
+            continue
+        widgets = node.get("widgets_values")
+        if isinstance(widgets, dict):
+            widgets["filename_prefix"] = prefix
+        elif isinstance(widgets, list) and widgets:
+            widgets[0] = prefix
+        node["widgets_values"] = widgets
+
+
+def build_ltx_iclora_canny() -> dict:
+    graph = build_ltx_iclora()
+    graph["id"] = "ltx-iclora-canny-5s-lab-example"
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "ltx-iclora-canny-5s-lab-example"
+    extra["lab_description"] = (
+        "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default"
+    )
+    extra["lab_iclora"] = dict(extra.get("lab_iclora") or {})
+    extra["lab_iclora"]["depth_default"] = False
+    extra["lab_iclora"]["canny_default"] = True
+    extra["lab_iclora"]["guide"] = "canny.mp4"
+    _retitle_note(graph, LTX_CANNY_NOTE)
+    _set_vhs_prefix(graph, "ez_iclora_canny")
+    return graph
+
+
+def build_ltx_iclora_depth_shorts() -> dict:
+    graph = build_ltx_iclora()
+    graph["id"] = "ltx-iclora-depth-shorts-lab-example"
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "ltx-iclora-depth-shorts-lab-example"
+    extra["lab_description"] = (
+        "LTX-2.5 IC-LoRA Union Control envelope, 768x1280, 120 frames, depth default"
+    )
+    extra["lab_iclora"] = dict(extra.get("lab_iclora") or {})
+    extra["lab_iclora"]["size"] = [768, 1280]
+    extra["lab_iclora"]["guide"] = "depth.mp4"
+    extra["lab_iclora"]["portrait"] = True
+    _retitle_note(graph, LTX_SHORTS_NOTE)
+    _set_ltx_canvas(graph, 768, 1280)
+    _set_vhs_prefix(graph, "ez_iclora_depth_shorts")
+    return graph
+
+
+def build_wan_flf_from_guide() -> dict:
+    graph = copy.deepcopy(_load("wan-flf-5s-lab-example.json"))
+    graph["id"] = "wan-flf-from-guide-lab-example"
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "wan-flf-from-guide-lab-example"
+    extra["lab_description"] = (
+        "Wan Fun InP first-last-frame from guide first.png + last.png. MagCache off."
+    )
+    extra["lab_dcc"] = {
+        "print": "wan-flf",
+        "first": "first.png",
+        "last": "last.png",
+        "prefix": "ez_flf_guide",
+        "magcache": False,
+    }
+    extra.pop("lab_magcache", None)
+    _retitle_note(graph, WAN_FLF_GUIDE_NOTE)
+    first = None
+    last = None
+    latent = None
+    for node in graph["nodes"]:
+        if node.get("type") == "LoadImage" and "End" not in str(node.get("title") or ""):
+            node["widgets_values"] = ["first.png", "image"]
+            node["title"] = "Guide first.png"
+            first = node
+        elif node.get("type") == "LoadImage":
+            node["widgets_values"] = ["last.png", "image"]
+            node["title"] = "Guide last.png"
+            last = node
+        elif node.get("type") == "Wan22ImageToVideoLatent":
+            latent = node
+        elif node.get("type") == "VHS_VideoCombine":
+            widgets = node.get("widgets_values")
+            if isinstance(widgets, dict):
+                widgets["filename_prefix"] = "ez_flf_guide"
+            elif isinstance(widgets, list) and widgets:
+                widgets[0] = "ez_flf_guide"
+            node["widgets_values"] = widgets
+        elif node.get("type") == "SaveImage":
+            node["widgets_values"] = ["ez_flf_guide_frame"]
+    if first is None or last is None or latent is None:
+        raise SystemExit("wan-flf-from-guide: missing first/last/latent nodes")
+    inputs = latent.setdefault("inputs", [])
+    end_inp = next((inp for inp in inputs if inp.get("name") == "end_image"), None)
+    max_id, max_link = _max_ids(graph)
+    link_end = max_link + 1
+    if end_inp is None:
+        inputs.append(
+            {"name": "end_image", "shape": 7, "type": "IMAGE", "link": link_end}
+        )
+    else:
+        end_inp["link"] = link_end
+    end_slot = next(
+        i for i, inp in enumerate(inputs) if inp.get("name") == "end_image"
+    )
+    last_out = last["outputs"][0]
+    last_links = last_out.get("links")
+    if not isinstance(last_links, list):
+        last_links = []
+    last_out["links"] = list(last_links) + [link_end]
+    _add_link(graph, link_end, int(last["id"]), 0, int(latent["id"]), end_slot, "IMAGE")
+    graph["last_link_id"] = link_end
+    blob = json.dumps(graph)
+    if '"type": "MagCache"' in blob:
+        raise SystemExit("wan-flf-from-guide must not include MagCache nodes")
+    return graph
+
+
 def main() -> int:
     klein = build_klein_from_clay()
+    canny = build_klein_from_canny()
+    plates = build_klein_from_clay_plates()
     ltx = build_ltx_iclora()
-    _save(klein, DCC / "klein-from-clay-lab-example.json")
-    _save(ltx, DCC / "ltx-iclora-depth-5s-lab-example.json")
-    print(f"wrote {DCC / 'klein-from-clay-lab-example.json'}")
-    print(f"wrote {DCC / 'ltx-iclora-depth-5s-lab-example.json'}")
+    ltx_canny = build_ltx_iclora_canny()
+    ltx_shorts = build_ltx_iclora_depth_shorts()
+    flf = build_wan_flf_from_guide()
+    written = [
+        ("klein-from-clay-lab-example.json", klein),
+        ("klein-from-canny-lab-example.json", canny),
+        ("klein-from-clay-plates-lab-example.json", plates),
+        ("ltx-iclora-depth-5s-lab-example.json", ltx),
+        ("ltx-iclora-canny-5s-lab-example.json", ltx_canny),
+        ("ltx-iclora-depth-shorts-lab-example.json", ltx_shorts),
+        ("wan-flf-from-guide-lab-example.json", flf),
+    ]
+    for name, graph in written:
+        dest = lab_dest(name, lane="dcc")
+        _save(graph, dest)
+        print(f"wrote {dest}")
     return 0
 
 

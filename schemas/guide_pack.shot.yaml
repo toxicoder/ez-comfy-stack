@@ -1,5 +1,6 @@
 # ez.guide.shot.v1 — DCC ↔ Comfy print handshake.
-# Size is the LTX VAE grid. Never 1280x720. Frames 120 @ 24 fps = 5.00s.
+# Size is the LTX VAE grid: 1280x704 landscape or 768x1280 portrait. Never 1280x720.
+# Frames 120 @ 24 fps = 5.00s. Path B dumps clay (rgb) + mist depth + Workbench canny.
 schema: ez.guide.shot.v1
 slug: go-see
 shot_id: "12"

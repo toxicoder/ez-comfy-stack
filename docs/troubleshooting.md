@@ -52,10 +52,13 @@ tags: [troubleshooting, comfyui, docker]
 | YouTube rejects the extra audio | Duration mismatch or MLA not enabled | Use `ez_dub_yt.wav` (duration-locked). MLA is rolling out; check Studio → Languages |
 | VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |
 | `export-guides` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [DCC guide pack](dcc-workflows.md) |
+| `blender-stills` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [Blender creator suite](learn/blender-creator.md) |
+| `blender-stills` size refuse | 1920×1080 or other off-contract size | Use 1280×704, 768×1280, 1024×1280, 1024×1024, or 1280×720 (thumb only) |
 | `house-views` exit 2 | Compose is up (occupancy) | `./scripts/manage.sh stop` then dump. [Dream-house tours](learn/dream-house.md) |
 | `house-views` blender not on PATH | Host DCC missing | Workbench dump needs host Blender. The clay App still Queues on `start` / `--seed-inputs` layout plates. Language-only tour: **klein-dream-house-lab-example**. Never add Blender to the Dockerfile |
 | House clay **Missing Inputs** / “no file selected” on Clay 01–10 | Plates not in `${COMFY_OUTPUT_DIR}/input` (LoadImage does not see `/outputs`) | Restart so the entrypoint backstop writes `ez_house_clay_01.png` … `10.png` into `/inputs`. `./scripts/manage.sh start` still prefers layout-accurate plates. While compose is up: `./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs` (or `--install-inputs` if the pack exists), then reload the App |
-| Guide pack QC refuses 1280×720 | LTX VAE grid is **1280×704** | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |
+| Guide pack QC refuses 1280×720 | LTX VAE grid is **1280×704** (or 768×1280 portrait) | Re-export at 704. `ez_ltx_spatial` is a backstop, not the plan |
+| Guide pack QC missing canny | Dump predates outline pass | Re-run `export-guides`. Canny is Workbench outline, always dumped |
 | `overlay-qc` size mismatch | Look plate not 1280×704 | Re-Queue **klein-from-clay** at 1280×704. Do not stretch. [Clay to finish](learn/clay-to-finish.md) |
 | `film-animatic` missing sources | No clay.mp4 and no first.png | Dump a guide pack or hold Klein stills under `stills/NN.png` |
 | `stem-mix` / `film-accept` stem loudness | Missing mix or not −14 ± 2 LUFS | Pass `--bg` from the LTX print; stop LTX first. Occupancy **audio** |

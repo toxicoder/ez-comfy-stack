@@ -57,6 +57,7 @@ FROZEN_MANAGE_VERBS=(
   download-3d
   blender
   export-guides
+  blender-stills
   house-views
   shot-sheet
   overlay-qc
@@ -88,6 +89,8 @@ FROZEN_MANAGE_VERBS=(
   run type cmd_stem_mix
   [ "${status}" -eq 0 ]
   run type cmd_house_views
+  [ "${status}" -eq 0 ]
+  run type cmd_blender_stills
   [ "${status}" -eq 0 ]
 }
 

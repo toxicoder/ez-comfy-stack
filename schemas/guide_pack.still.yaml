@@ -1,0 +1,13 @@
+# ez.guide.still.v1 — single-frame DCC clay/depth/canny for creator plates.
+# Not the 5.00s shot pack (ez.guide.shot.v1). Not house-views (Instagram tour).
+# Allowed sizes: 1280x704 (LTX hero), 768x1280 (shorts), 1024x1280 (IG 4:5),
+# 1024x1024 (packshot), 1280x720 (thumbnail — Klein only, never LTX).
+schema: ez.guide.still.v1
+slug: go-see
+plate: mug
+engine: blender          # blender | godot | opentoonz | krita | mixed
+print: klein-from-clay   # klein-from-clay | klein-from-canny
+size: [1024, 1024]
+layers: [rgb, depth, canny, first]
+blend: scenes/mug.blend
+camera: CAM_packshot

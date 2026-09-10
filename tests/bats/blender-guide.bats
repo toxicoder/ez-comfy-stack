@@ -57,10 +57,11 @@ teardown() {
 }
 
 @test "blender-guide parse_args normalize_shot_id default_out_dir" {
-  parse_args --engine blender --film go-see --shot 12 --frames 120 --width 1280 --height 704
+  parse_args --engine blender --film go-see --shot 12 --frames 120 --width 1280 --height 704 --print ltx-iclora-canny
   [ "${FILM}" = "go-see" ]
   [ "${SHOT_ID}" = "12" ]
   [ "${ENGINE}" = "blender" ]
+  [ "${PRINT_MODE}" = "ltx-iclora-canny" ]
   run normalize_shot_id 12
   [ "${output}" = "12" ]
   run normalize_shot_id 3
@@ -73,12 +74,17 @@ teardown() {
   [ "${status}" -ne 0 ]
 }
 
+@test "blender-guide mux_layer skips missing seq" {
+  run mux_layer "${TEST_TMP_DIR}/missing-seq" "${TEST_TMP_DIR}/out.mp4"
+  [ "${status}" -eq 0 ]
+}
+
 @test "blender-guide mock blender copies fixture then QC" {
   rm -f "${TEST_TMP_DIR}/compose_running"
   local dest
   dest="${TEST_TMP_DIR}/guides/go-see/12"
   mkdir -p "${dest}"
-  install_mock_bin blender "dest=\"${dest}\"; fixture=\"${REPO_ROOT}/tests/fixtures/dcc/suzanne-12\"; mkdir -p \"\${dest}\"; cp \"\${fixture}/shot.yaml\" \"\${fixture}/first.png\" \"\${fixture}/last.png\" \"\${dest}/\"; : >\"\${dest}/clay.mp4\"; : >\"\${dest}/depth.mp4\"; echo blender-ok; exit 0"
+  install_mock_bin blender "dest=\"${dest}\"; fixture=\"${REPO_ROOT}/tests/fixtures/dcc/suzanne-12\"; mkdir -p \"\${dest}\"; cp \"\${fixture}/shot.yaml\" \"\${fixture}/first.png\" \"\${fixture}/last.png\" \"\${dest}/\"; : >\"\${dest}/clay.mp4\"; : >\"\${dest}/depth.mp4\"; : >\"\${dest}/canny.mp4\"; echo blender-ok; exit 0"
   FILM=go-see
   SHOT_ID=12
   OUT_DIR="${dest}"

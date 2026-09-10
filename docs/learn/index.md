@@ -113,7 +113,8 @@ Learn the models: [Klein, Wan, and LTX](pipeline.md). Learn the math-lite versio
 4. [Prompting](../prompting.md) — how each model reads text
 5. [Still to motion to AV](../visual-generative-ai.md) — the daily playbook
 6. [Clay to finish](clay-to-finish.md) — script → clay → look → print → stems
-7. [Dream-house tours](dream-house.md) — language T2I vs Blender greybox + Klein restyle
-8. [Workflow catalog](../studio-workflows.md) — which graph for a thumbnail, GIF, or 90s film
+7. [Blender creator suite](blender-creator.md) — stills + 5.00s packs from host Blender
+8. [Dream-house tours](dream-house.md) — language T2I vs Blender greybox + Klein restyle
+9. [Workflow catalog](../studio-workflows.md) — which graph for a thumbnail, GIF, or 90s film
 
 Something broke: [Troubleshooting](../troubleshooting.md). Before reboot: [Reboot safety](../reboot-safety.md).

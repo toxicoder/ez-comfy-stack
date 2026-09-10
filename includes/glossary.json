@@ -895,8 +895,8 @@
     "title": "Guide pack",
     "aliases": ["guide pack", "guide-pack", "DCC guide pack"],
     "category": "Studio",
-    "short": "DCC handshake: 1280×704 clay/depth/first+last for a 5.00s print.",
-    "long": "The only DCC ↔ Comfy print handshake. Lives under `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot>/`. Size is the LTX VAE grid (**1280×704**, never 1280×720). 120 frames @ 24 fps. Occupancy XOR: stop Comfy before `export-guides`. See [DCC guide pack](dcc-workflows.md).",
+    "short": "DCC handshake: 1280×704 clay/depth/canny/first+last for a 5.00s print.",
+    "long": "The DCC ↔ Comfy print handshake. Lives under `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot>/`. Size is the LTX VAE grid (**1280×704** or **768×1280**, never 1280×720). 120 frames @ 24 fps. Workbench clay + mist depth + outline canny. Occupancy XOR: stop Comfy before `export-guides`. See [DCC guide pack](dcc-workflows.md).",
     "see_also": ["ltx", "occupancy", "sidecar"]
   },
   {
@@ -907,5 +907,14 @@
     "short": "Blender greybox + ten 1024×1280 Instagram clay stills. Occupancy XOR.",
     "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024×1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **klein-dream-house-clay-lab-example** can Queue without Blender. Language-only tour → **klein-dream-house-lab-example**. See [Dream-house tours](learn/dream-house.md).",
     "see_also": ["guide-pack", "occupancy", "sidecar", "klein"]
+  },
+  {
+    "id": "blender-stills",
+    "title": "blender-stills",
+    "aliases": ["blender-stills", "still pack", "ez.guide.still.v1"],
+    "category": "Studio",
+    "short": "Single-frame clay/depth/canny dump at creator sizes. Occupancy XOR.",
+    "long": "Host Blender dumps `ez.guide.still.v1` under `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/`. Sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, not LTX). Not the 5.00s shot pack and not `house-views`. Stop Comfy first. `--install-inputs` copies `first.png` into `input/` while compose may stay up. Apps: **klein-from-clay-plates**, **klein-from-canny**. See [Blender creator suite](learn/blender-creator.md).",
+    "see_also": ["guide-pack", "house-views", "occupancy", "sidecar", "klein"]
   }
 ]

@@ -30,7 +30,7 @@ user/default/workflows/
     wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
     ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
     shorts/    film-*-90s-*-lab-example.json
-    dcc/       clay → print, iclora envelope
+    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide
     optional/  a14b, longcat stub
     audio/     podcast-*, dub-*, music-rap-draft/full
       nill-bye/       forty-five 180 s music-rap-nill-bye-* diss takes
@@ -290,11 +290,16 @@ flowchart TB
     | Workflow | What it does |
     | --- | --- |
     | **klein-from-clay-lab-example** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Then `overlay-qc`. Occupancy: dump while Comfy is **down**. |
+    | **klein-from-clay-plates-lab-example** | One clay still → four plates (hero 704, packshot 1:1, IG 4:5, shorts 9:16). Prefix `ez_clay_pack_*`. |
+    | **klein-from-canny-lab-example** | Klein 4B edit of `canny.png`. Prefix `ez_canny_hero`. Handoff: `ltx-iclora-canny`. |
     | **klein-dream-house-clay-lab-example** | Instagram 4:5 Path B: ten Klein edits of `house-views` clay (1024×1280). Not an LTX pack. |
     | **ltx-iclora-depth-5s-lab-example** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
+    | **ltx-iclora-canny-5s-lab-example** | Same envelope; wire `canny.mp4`. |
+    | **ltx-iclora-depth-shorts-lab-example** | Depth envelope at **768×1280**. Dump with `export-guides --width 768 --height 1280`. |
+    | **wan-flf-from-guide-lab-example** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
     | **audio-finish-lab-example** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck −15 dB, YouTube loudnorm). |
 
-    Operator loop: [DCC guide pack](dcc-workflows.md). Playbook: [Clay to finish](learn/clay-to-finish.md).
+    Operator loop: [DCC guide pack](dcc-workflows.md). Playbook: [Clay to finish](learn/clay-to-finish.md). Stills: [Blender creator suite](learn/blender-creator.md).
 
 === "License"
 

@@ -223,7 +223,12 @@ Commands:
   download-3d [--tier trellis2|da3-base|all]
                     Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   blender           Host Blender sidecar (dies if compose is up)
-  export-guides     Dump a 1280x704 / 120f guide pack (dies if compose is up)
+  export-guides     Dump a 1280x704 (or 768x1280) / 120f guide pack (dies if compose is up)
+                    --print ltx-iclora-depth|ltx-iclora-canny|wan-flf. Dumps clay+depth+canny.
+  blender-stills    Dump a single-frame clay/depth/canny still (dies if compose is up)
+                    --size 1280x704|768x1280|1024x1280|1024x1024|1280x720
+                    --install-inputs copies first.png into COMFY_OUTPUT_DIR/input
+                    (no Blender; compose may stay up)
   house-views       Dump 1024x1280 Instagram 4:5 clay stills + GLB (dies if compose is up)
                     --install-inputs copies an existing dump into COMFY_OUTPUT_DIR/input
                     (no Blender; compose may stay up)
@@ -1240,6 +1245,19 @@ cmd_export_guides() {
 }
 
 #######################################
+# Occupancy-gated Blender still-pack dump (P0). Godot is P2.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  blender-stills.sh flags
+# Returns:
+#   blender-stills status (2 if compose is up)
+#######################################
+cmd_blender_stills() {
+  bash "${REPO_ROOT}/scripts/utilities/blender-stills.sh" "$@"
+}
+
+#######################################
 # Occupancy-gated Blender Instagram clay dump (P0). Godot is P2.
 # Globals:
 #   REPO_ROOT
@@ -1458,6 +1476,7 @@ main() {
     download-3d) cmd_download_3d "$@" ;;
     blender) cmd_blender "$@" ;;
     export-guides) cmd_export_guides "$@" ;;
+    blender-stills) cmd_blender_stills "$@" ;;
     house-views) cmd_house_views "$@" ;;
     asset-ls) cmd_asset_ls "$@" ;;
     film-accept) cmd_film_accept "$@" ;;

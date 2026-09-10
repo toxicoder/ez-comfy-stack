@@ -15,6 +15,12 @@ WF = ROOT / "workflows"
 LTX_SPATIAL_TYPES = ("LTXVImgToVideo", "EmptyLTXVLatentVideo")
 BROADCAST_ILLEGAL = {720, 1080}
 PORTRAIT_SHORTS = "ltx-shorts-i2v-lab-example"
+PORTRAIT_STEMS = frozenset(
+    {
+        PORTRAIT_SHORTS,
+        "ltx-iclora-depth-shorts-lab-example",
+    }
+)
 LANDSCAPE_SIZE = (1280, 704)
 PORTRAIT_SIZE = (768, 1280)
 
@@ -55,7 +61,7 @@ def test_ltx_lab_defaults_are_1280x704_or_portrait_768x1280() -> None:
         graph = json.loads(path.read_text(encoding="utf-8"))
         for node in _spatial_nodes(graph):
             size = (int(node["widgets_values"][0]), int(node["widgets_values"][1]))
-            if path.stem == PORTRAIT_SHORTS:
+            if path.stem in PORTRAIT_STEMS:
                 assert size == PORTRAIT_SIZE, (path.name, size)
                 seen_portrait = True
             else:
@@ -74,7 +80,7 @@ def test_ltx_operator_notes_state_div32_canvas() -> None:
         note = graph.get("extra", {}).get("lab_note") or ""
         if "divisible by 32" not in note:
             missing.append(f"{path.name}: lab_note missing ÷32 rule")
-        if path.stem == PORTRAIT_SHORTS:
+        if path.stem in PORTRAIT_STEMS:
             if "768x1280" not in note and "768×1280" not in note:
                 missing.append(f"{path.name}: lab_note missing 768x1280")
         else:

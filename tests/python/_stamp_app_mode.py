@@ -763,11 +763,39 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "dcc",
         "klein",
         "ltx-iclora-depth-5s-lab-example",
+        "wan-i2v-5s-lab-example",
+    ),
+    "klein-from-canny-lab-example": _spec(
+        "dcc",
+        "klein",
+        "ltx-iclora-canny-5s-lab-example",
+    ),
+    "klein-from-clay-plates-lab-example": _spec(
+        "dcc",
+        "klein",
+        "wan-i2v-5s-lab-example",
+        "wan-shorts-i2v-lab-example",
+        "ltx-iclora-depth-shorts-lab-example",
     ),
     "ltx-iclora-depth-5s-lab-example": _spec(
         "dcc",
         "ltx",
         "audio-finish-lab-example",
+    ),
+    "ltx-iclora-canny-5s-lab-example": _spec(
+        "dcc",
+        "ltx",
+        "audio-finish-lab-example",
+    ),
+    "ltx-iclora-depth-shorts-lab-example": _spec(
+        "dcc",
+        "ltx",
+        "audio-finish-lab-example",
+    ),
+    "wan-flf-from-guide-lab-example": _spec(
+        "dcc",
+        "wan",
+        "ltx-iclora-depth-5s-lab-example",
     ),
     "audio-finish-lab-example": _spec(
         "audio",
@@ -815,6 +843,8 @@ for _drive_through_stem in DRIVE_THROUGH_STAMP_STEMS:
 STUB_IDS = frozenset({"longcat-video-lab-example"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
     "ltx-iclora-depth-5s-lab-example": ("EZFilmDisclosure",),
+    "ltx-iclora-canny-5s-lab-example": ("EZFilmDisclosure",),
+    "ltx-iclora-depth-shorts-lab-example": ("EZFilmDisclosure",),
     "audio-finish-lab-example": ("SaveAudio", "PrimitiveNode"),
     "wan-i2v-a14b-lab-example": ("UNETLoader",),
     "podcast-radio-drama-lab-example": ("UNETLoader", "VHS_VideoCombine"),

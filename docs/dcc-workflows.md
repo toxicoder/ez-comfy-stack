@@ -8,18 +8,20 @@ tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 
 **What's on this page**
 
-- The only DCC ↔ Comfy **print** handshake (`guides/<slug>/<shot>/`)
+- The DCC ↔ Comfy **print** handshake (`guides/<slug>/<shot>/`)
+- Single-frame still packs (`guides/<slug>/stills/<plate>/`)
 - Occupancy: stop Comfy before a dump
 - Instagram clay stills are a different pack (`house-views`, 1024×1280)
 - Script desk, overlay QC, animatic, stem mix
-- Klein-from-clay on today's pack
-- Opt-in LTX IC-LoRA Union Control (not `download-models`)
+- Klein-from-clay / plates / canny Apps
+- Opt-in LTX IC-LoRA Union Control (depth, canny, shorts) and Wan FLF from the pack
 - Path A / B / D
 
 **What this enables**
 
 - A 5.00s LTX print that keeps the camera you blocked
-- Fail-closed packs (1280×704, 120 frames @ 24 fps) before Comfy sees them
+- Creator stills (hero, packshot, IG, shorts) from one clay plate
+- Fail-closed packs (1280×704 or 768×1280, 120 frames @ 24 fps) before Comfy sees them
 - Laptop DCC / Spark Comfy as the default on one GB10
 
 This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar occupancy rule. Blender stays on the host — never in `docker/Dockerfile` or Compose.
@@ -34,7 +36,7 @@ This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar
 
 ```bash
 ./scripts/manage.sh stop
-./scripts/manage.sh export-guides --engine blender --film go-see --shot 12 --blend /path/to/shot.blend
+./scripts/manage.sh export-guides --engine blender --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
 ./scripts/manage.sh start          # type yes
 # Queue workflows/_lab/dcc/klein-from-clay-lab-example.json on first.png
 ./scripts/manage.sh overlay-qc --film go-see --shot 12 --look /path/to/ez_clay_hero.png
@@ -68,25 +70,46 @@ rsync -a guides/go-see/12/ spark-0:/mnt/comfy-output/guides/go-see/12/
 
 | File | Rule |
 | --- | --- |
-| `shot.yaml` | `ez.guide.shot.v1` — 120 frames, 24 fps, **1280×704** |
+| `shot.yaml` | `ez.guide.shot.v1` — 120 frames, 24 fps, **1280×704** or **768×1280** |
 | `first.png` / `last.png` | Exact LTX VAE grid. Never 1280×720 |
 | `rgb/` + `clay.mp4` | Workbench / unshaded clay. Not Cycles beauty |
 | `depth/` + `depth.mp4` | Mist 0–1, near=white / far=black. Raw metric Z is a QC fail |
-| `canny/` | Freestyle / line-art when present |
-| `camera.json` | Optional per-frame extrinsics |
+| `canny/` + `canny.mp4` | Workbench outline / Freestyle line-art (always dumped) |
+| `normal/` | Optional EEVEE Normal (`--include-normal`); omitted when EEVEE is missing |
+| `camera.json` | Per-frame extrinsics (`pos` / `rot` / `fov`) |
 
 QC is fail-closed: wrong size, wrong frame count, or compose-up → non-zero, pack not marked ok.
 
 Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later PR).
 
+## Still packs (not 120 frames)
+
+`${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/` — `ez.guide.still.v1`. Allowed sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, Klein only).
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
+./scripts/manage.sh start
+# Queue klein-from-clay-plates or klein-from-canny
+```
+
+`--install-inputs` copies `first.png` into `${COMFY_OUTPUT_DIR}/input` (compose may stay up). Playbook: [Blender creator suite](learn/blender-creator.md).
+
 ## Graphs
 
-| Graph | Weights | Notes |
+| Graph | Occupancy | Notes |
 | --- | --- | --- |
 | **beat-sheet-lab-example** | none | Script desk. Logline, audio policy, 18 cards. `shot-sheet` writes YAML. |
-| **klein-from-clay-lab-example** | Default Klein 4B | Edit mode, Enhance **on**, seed **42**, 1280×704. Overlay-qc after Queue. |
-| **ltx-iclora-depth-5s-lab-example** | Default LTX-2.5 distilled + opt-in Union LoRA | Lab envelope. Official control graph is Comfy **Templates → LTX-2.5** (`LTX-2.5_ICLoRA_Union_Control_Distilled.json`). This tree does not vendor UUID subgraphs. Joint AV is a world bed. |
+| **klein-from-clay-lab-example** | klein | Edit `first.png`, Enhance **on**, seed **42**, 1280×704. Overlay-qc after Queue. |
+| **klein-from-clay-plates-lab-example** | klein | One clay still → hero / packshot / IG / shorts. Ctrl+B unused groups. |
+| **klein-from-canny-lab-example** | klein | Edit `canny.png`, 1280×704, prefix `ez_canny_hero`. |
+| **ltx-iclora-depth-5s-lab-example** | ltx | Envelope. Templates → LTX-2.5 Union Control. Depth default. Distilled-only. Refuse 19B. MagCache off. |
+| **ltx-iclora-canny-5s-lab-example** | ltx | Same envelope; wire `canny.mp4`. |
+| **ltx-iclora-depth-shorts-lab-example** | ltx | Same envelope at **768×1280**. Dump with `--width 768 --height 1280`. |
+| **wan-flf-from-guide-lab-example** | wan | Fun InP `first.png` + `last.png`. Opt-in `download-wan --tier fun-inp`. MagCache off. |
 | **audio-finish-lab-example** | audio | Stem mix desk. Host `stem-mix.sh`. ACE-Step group stays off. |
+
+Print modes `wan-vace`, `wan-denk-cn`, and `dcc-final` stay valid on `shot.yaml` but are **not** lab printers in this suite (VACE stays 17-frame join; Fun Control / Path A beauty are later).
 
 ```bash
 ./scripts/manage.sh download-ltx --tier iclora   # not download-models
@@ -122,4 +145,4 @@ Do not run a live Blender MCP socket and Comfy on the same GB10.
 - Unload Klein before LTX. IC-LoRA is not part of `download-models`.
 - `overlay-qc` / `film-animatic` / `stem-mix` do not start Docker and do not weaken occupancy XOR for dumps.
 
-Related: [Clay to finish](learn/clay-to-finish.md), [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [90s shorts](shorts.md), [Model licenses](licenses.md).
+Related: [Blender creator suite](learn/blender-creator.md), [Clay to finish](learn/clay-to-finish.md), [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [90s shorts](shorts.md), [Model licenses](licenses.md).

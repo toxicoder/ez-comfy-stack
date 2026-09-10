@@ -40,6 +40,8 @@ CAMERA=""
 FRAMES=120
 WIDTH=1280
 HEIGHT=704
+PRINT_MODE="ltx-iclora-depth"
+INCLUDE_NORMAL=0
 
 #######################################
 # Print usage.
@@ -52,7 +54,9 @@ HEIGHT=704
 #######################################
 cmd_help() {
   echo "Usage: blender-guide.sh --film SLUG --shot ID [--blend FILE] [--out DIR] [--camera NAME]" >&2
-  echo "  Host Blender dump of a 1280x704 / 120f / 24fps guide pack." >&2
+  echo "       [--print ltx-iclora-depth|ltx-iclora-canny|wan-flf] [--include-normal]" >&2
+  echo "  Host Blender dump of a 1280x704 (or 768x1280) / 120f / 24fps guide pack." >&2
+  echo "  Dumps Workbench clay, mist depth, and outline canny. Optional EEVEE normal." >&2
   echo "  Refuses if compose is up (exit 2). Never in docker/Dockerfile." >&2
   echo "  See docs/dcc-workflows.md" >&2
   return 0
@@ -61,7 +65,8 @@ cmd_help() {
 #######################################
 # Parse CLI into globals.
 # Globals:
-#   ENGINE, FILM, SHOT_ID, BLEND, OUT_DIR, CAMERA, FRAMES, WIDTH, HEIGHT
+#   ENGINE, FILM, SHOT_ID, BLEND, OUT_DIR, CAMERA, FRAMES, WIDTH, HEIGHT,
+#   PRINT_MODE, INCLUDE_NORMAL
 # Arguments:
 #   $@
 # Outputs:
@@ -107,6 +112,13 @@ parse_args() {
       --height)
         HEIGHT="${2:?}"
         shift
+        ;;
+      --print)
+        PRINT_MODE="${2:?}"
+        shift
+        ;;
+      --include-normal)
+        INCLUDE_NORMAL=1
         ;;
       -h | --help)
         cmd_help
@@ -228,9 +240,38 @@ validate_pack_dir() {
 }
 
 #######################################
+# Mux a PNG sequence to MP4 when ffmpeg is on PATH (software encode).
+# Globals:
+#   REPO_ROOT, WIDTH, HEIGHT
+# Arguments:
+#   $1  sequence directory
+#   $2  output mp4 path
+# Returns:
+#   0 always (mux is convenience; PNG seq already satisfies QC)
+#######################################
+mux_layer() {
+  local seq="${1}"
+  local mp4="${2}"
+  if [[ ! -d ${seq} ]]; then
+    return 0
+  fi
+  if ! compgen -G "${seq}/*.png" >/dev/null; then
+    return 0
+  fi
+  if ! command -v ffmpeg >/dev/null 2>&1; then
+    return 0
+  fi
+  bash "${REPO_ROOT}/scripts/utilities/pack-frames.sh" \
+    --in "${seq}" --out "${mp4}" --width "${WIDTH}" --height "${HEIGHT}" ||
+    warn "mux skipped for ${mp4}"
+  return 0
+}
+
+#######################################
 # Dump a pack with host Blender, then fail-closed QC.
 # Globals:
-#   ENGINE, FILM, SHOT_ID, BLEND, OUT_DIR, CAMERA, FRAMES, WIDTH, HEIGHT, REPO_ROOT
+#   ENGINE, FILM, SHOT_ID, BLEND, OUT_DIR, CAMERA, FRAMES, WIDTH, HEIGHT,
+#   PRINT_MODE, INCLUDE_NORMAL, REPO_ROOT
 # Arguments:
 #   None
 # Outputs:
@@ -267,14 +308,22 @@ cmd_run() {
   fi
   bcmd+=(--background --python "${REPO_ROOT}/tools/blender/export_guide_pack.py" --)
   bcmd+=(--out "${dest}" --film "${FILM}" --shot "${sid}" --frames "${FRAMES}" --width "${WIDTH}" --height "${HEIGHT}")
+  bcmd+=(--print "${PRINT_MODE}")
   if [[ -n ${CAMERA} ]]; then
     bcmd+=(--camera "${CAMERA}")
+  fi
+  if [[ ${INCLUDE_NORMAL} -eq 1 ]]; then
+    bcmd+=(--include-normal)
   fi
   log "dumping guide pack → ${dest}"
   "${bcmd[@]}" || {
     err "Blender guide dump failed"
     return 1
   }
+  mux_layer "${dest}/rgb" "${dest}/clay.mp4"
+  mux_layer "${dest}/depth" "${dest}/depth.mp4"
+  mux_layer "${dest}/canny" "${dest}/canny.mp4"
+  mux_layer "${dest}/normal" "${dest}/normal.mp4"
   validate_pack_dir "${dest}" || {
     err "guide pack QC failed (size/frames/layers)"
     return 1
