@@ -805,12 +805,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         primitive_strings=True,
     ),
     "wan-i2v-a14b-lab-example": _spec("produce", "wan", default_view="graph"),
-    "klein-trellis2-lab-example": _spec(
-        "optional",
-        "trellis",
-        default_view="graph",
-        expose_unet=True,
-    ),
 }
 
 def _nill_bye_stems() -> tuple[str, ...]:

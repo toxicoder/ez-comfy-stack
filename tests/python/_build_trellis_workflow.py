@@ -11,7 +11,9 @@ import json
 from typing import Any
 
 from _lab_paths import lab_dest
-from _stamp_app_mode import stamp_suite_graph
+from _stamp_app_mode import apply_lab_completeness_flags
+from _stamp_app_mode import ensure_occupancy_note
+from _stamp_app_mode import stamp_app_mode
 
 NOTE = """## klein-trellis2-lab-example
 
@@ -439,7 +441,17 @@ def build_trellis() -> dict[str, Any]:
         },
         "version": 0.4,
     }
-    return stamp_suite_graph(graph)
+    ensure_occupancy_note(graph, "trellis")
+    stamp_app_mode(
+        graph,
+        inputs=[("Klein still", "image")],
+        outputs=["Save GLB"],
+        lane="optional",
+        occupancy="trellis",
+        default_view="graph",
+        enhance_off_identity=True,
+    )
+    return apply_lab_completeness_flags(graph)
 
 
 def main() -> None:

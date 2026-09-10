@@ -1303,34 +1303,14 @@
       "frontend_min": "1.41.13",
       "lane": "optional",
       "occupancy": "trellis",
-      "enhance_off_identity": false,
+      "enhance_off_identity": true,
       "handoff": []
     },
     "linearData": {
       "inputs": [
         [
           2,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Klein still"
-          }
-        ],
-        [
-          10,
-          "seed",
-          {
-            "description": "Fix to iterate; randomize to explore.",
-            "label": "Seed"
-          }
-        ],
-        [
-          5,
-          "unet_name",
-          {
-            "description": "Click to swap Klein 4B distilled / NVFP4 / base.",
-            "label": "Image model"
-          }
+          "image"
         ]
       ],
       "outputs": [
