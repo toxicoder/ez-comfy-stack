@@ -117,6 +117,7 @@ nav:
       - DCC guide pack: dcc-workflows.md
       - Splat sidecar: splat-sidecar.md
   - Operate:
+      - Occupancy desk: occupancy.md
       - manage.sh reference: manage-cli.md
       - Models and cache: models-and-cache.md
       - Disk wizard: disk-wizard.md

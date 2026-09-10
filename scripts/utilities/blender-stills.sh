@@ -288,7 +288,7 @@ cmd_run() {
     cmd_install_inputs
     return $?
   fi
-  refuse_if_comfy_running "Blender stills dump (occupancy)" || return $?
+  refuse_if_heavy_gpu "Blender stills dump (occupancy)" || return $?
   if [[ -z ${FILM} || -z ${PLATE} ]]; then
     err "Usage: blender-stills.sh --film SLUG --plate NAME [--blend FILE] [--size WxH]"
     return 1

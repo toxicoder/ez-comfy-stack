@@ -72,6 +72,7 @@ FROZEN_MANAGE_VERBS=(
   disk-wizard
   asset-ls
   audio-still-video
+  occupancy
 )
 
 @test "cmd_disk_wizard --plan is read-only" {
@@ -285,6 +286,9 @@ FROZEN_MANAGE_VERBS=(
   run cmd_download_3d --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"trellis2"* ]]
+  run cmd_occupancy --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"blender-desk"* ]]
   run cmd_blender --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"host Blender"* ]]

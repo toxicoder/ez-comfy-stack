@@ -246,14 +246,17 @@ Commands:
                     Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
   download-3d [--tier trellis2|da3-base|all]
                     Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
-  blender           Host Blender sidecar (dies if compose is up)
-  export-guides     Dump a 1280x704 (or 768x1280) / 120f guide pack (dies if compose is up)
+  occupancy status|enter MODE [--yes] [--json]
+                    Occupancy desk: park Comfy (POST /free) for blender-desk, or
+                    enter klein|trellis|wan|ltx|idle. Does not start Compose.
+  blender           Host Blender sidecar (Workbench in blender-desk; dies if Comfy is heavy)
+  export-guides     Dump a 1280x704 (or 768x1280) / 120f guide pack (dies if Comfy is heavy)
                     --print ltx-iclora-depth|ltx-iclora-canny|wan-flf. Dumps clay+depth+canny.
-  blender-stills    Dump a single-frame clay/depth/canny still (dies if compose is up)
+  blender-stills    Dump a single-frame clay/depth/canny still (dies if Comfy is heavy)
                     --size 1280x704|768x1280|1024x1280|1024x1024|1280x720
                     --install-inputs copies first.png into COMFY_OUTPUT_DIR/input
                     (no Blender; compose may stay up)
-  house-views       Dump 1024x1280 Instagram 4:5 clay stills + GLB (dies if compose is up)
+  house-views       Dump 1024x1280 Instagram 4:5 clay stills + GLB (dies if Comfy is heavy)
                     --install-inputs copies an existing dump into COMFY_OUTPUT_DIR/input
                     (no Blender; compose may stay up)
                     --seed-inputs copies a pack or renders layout into input/ (no Blender;
@@ -1250,7 +1253,14 @@ cmd_download_3d() {
 }
 
 #######################################
-# Host Blender sidecar (refuses if compose is up).
+# Occupancy desk (park / enter / status).
+#######################################
+cmd_occupancy() {
+  bash "${REPO_ROOT}/scripts/utilities/occupancy.sh" "$@"
+}
+
+#######################################
+# Host Blender sidecar (refuses if Comfy is a heavy job).
 #######################################
 cmd_blender() {
   bash "${REPO_ROOT}/scripts/utilities/blender.sh" "$@"
@@ -1499,6 +1509,7 @@ main() {
     promote-workflow) cmd_promote_workflow "$@" ;;
     download-restore) cmd_download_restore "$@" ;;
     download-3d) cmd_download_3d "$@" ;;
+    occupancy) cmd_occupancy "$@" ;;
     blender) cmd_blender "$@" ;;
     export-guides) cmd_export_guides "$@" ;;
     blender-stills) cmd_blender_stills "$@" ;;

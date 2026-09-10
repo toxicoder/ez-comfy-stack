@@ -35,6 +35,8 @@ teardown() {
   run refuse_if_comfy_running
   [ "${status}" -eq 2 ]
   run cmd_run --help
+  [ "${status}" -eq 0 ]
+  run cmd_run -- --background
   [ "${status}" -eq 2 ]
   [[ "${output}" == *"occupancy"* ]]
 }
@@ -45,4 +47,13 @@ teardown() {
   run cmd_run -- --background --version
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"blender-args:--background --version"* ]]
+}
+
+@test "blender execs when compose is parked blender-desk" {
+  touch "${TEST_TMP_DIR}/compose_running"
+  occupancy_write blender-desk true 0 0
+  install_mock_bin blender 'echo blender-parked:"$*"; exit 0'
+  run cmd_run -- --background --version
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"blender-parked:--background --version"* ]]
 }

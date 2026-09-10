@@ -296,6 +296,28 @@
       "flags": []
     },
     {
+      "id": "occupancy",
+      "title": "occupancy enter",
+      "description": "Park Comfy for blender-desk (POST /free) or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up.",
+      "argv": ["./scripts/manage.sh", "occupancy", "enter"],
+      "flags": [
+        {
+          "name": "mode",
+          "kind": "choice",
+          "required": true,
+          "default": "blender-desk",
+          "choices": [
+            {"value": "blender-desk", "label": "blender-desk — park Comfy, Workbench dumps"},
+            {"value": "klein", "label": "klein — stop Blender, Queue stills"},
+            {"value": "trellis", "label": "trellis — stop Blender, Queue TRELLIS.2"},
+            {"value": "wan", "label": "wan — stop Blender, Queue silent motion"},
+            {"value": "ltx", "label": "ltx — stop Blender, Queue AV print"},
+            {"value": "idle", "label": "idle — stop Blender and Compose"}
+          ]
+        }
+      ]
+    },
+    {
       "id": "ssh-forward",
       "title": "SSH port-forward",
       "description": "Laptop tunnel to ComfyUI on the Spark. Then open http://127.0.0.1:${COMFY_PORT}.",

@@ -26,18 +26,18 @@ tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 
 This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar occupancy rule. Blender stays on the host — never in `docker/Dockerfile` or Compose.
 
-!!! danger "Stop Comfy first"
+!!! danger "One heavy GPU job"
 
-    Pack writing is a host GPU job. `export-guides` **dies** (exit 2) if compose is up. Same XOR as `manage.sh blender`. `restart: "no"` is unchanged.
+    Pack writing is a host GPU job. `export-guides` **dies** (exit 2) if Compose is up and not parked. Park with `occupancy enter blender-desk`, or `occupancy idle`. `restart: "no"` is unchanged. [Occupancy desk](occupancy.md).
 
 ---
 
 ## Operator loop (Path B)
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh export-guides --engine blender --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
-./scripts/manage.sh start          # type yes
+./scripts/manage.sh occupancy enter klein --yes
 # Queue workflows/_lab/dcc/klein-from-clay-lab-example.json on first.png
 ./scripts/manage.sh overlay-qc --film go-see --shot 12 --look /path/to/ez_clay_hero.png
 # After download-ltx --tier iclora: Templates → LTX-2.5 Union Control, depth from depth.mp4
@@ -87,9 +87,9 @@ Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later
 `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/` — `ez.guide.still.v1`. Allowed sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, Klein only).
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
-./scripts/manage.sh start
+./scripts/manage.sh occupancy enter klein --yes
 # Queue klein-from-clay-plates or klein-from-canny
 ```
 
@@ -132,11 +132,11 @@ Godot is a first-class blocking engine in a later PR, not a second Blender. Open
 `house-views` is a **different** contract: ten 1024×1280 Workbench stills + greybox GLB under `assets/sets/<slug>/`, then **klein-dream-house-clay-lab-example**. Do not dump Instagram 4:5 into `guides/` or reuse `ez.guide.shot.v1` (that QC is 1280×704 / 120 frames). Playbook: [Dream-house tours](learn/dream-house.md).
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh house-views --slug lab-penthouse
 ```
 
-Do not run a live Blender MCP socket and Comfy on the same GB10.
+Park Comfy before a live Blender MCP socket (`occupancy enter blender-desk`). Do not run Cycles CUDA next to a loaded denoise.
 
 ## Safety
 

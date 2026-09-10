@@ -2,8 +2,9 @@
 #
 # ## blender
 #
-# Host Blender sidecar. Dies if compose is up (occupancy). Never in
-# docker/Dockerfile — GB10 DCC stays on the host. See docs/blender-gb10-sidecar.md.
+# Host Blender sidecar. Dies if compose is a heavy job (occupancy).
+# blender-desk (parked via POST /free) allows Workbench. Never in
+# docker/Dockerfile — GB10 DCC stays on the host. See docs/occupancy.md.
 #
 # Usage:
 #   ./scripts/utilities/blender.sh [--] [blender args]
@@ -35,20 +36,23 @@ source "${REPO_ROOT}/scripts/lib/occupancy.sh"
 #   blender exit; 1 missing binary; 2 compose running
 #######################################
 cmd_run() {
-  refuse_if_comfy_running "Blender (occupancy)" || return $?
   if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
-    echo "Usage: blender.sh [--] [args]  (host Blender; refuses if compose is up)" >&2
-    echo "  Never in docker/Dockerfile. See docs/blender-gb10-sidecar.md" >&2
+    echo "Usage: blender.sh [--] [args]  (host Blender; Workbench in blender-desk)" >&2
+    echo "  Never in docker/Dockerfile. occupancy enter blender-desk if compose is up." >&2
+    echo "  See docs/occupancy.md and docs/blender-gb10-sidecar.md" >&2
     return 0
   fi
+  refuse_if_heavy_gpu "Blender (occupancy)" || return $?
   if [[ ${1:-} == "--" ]]; then
     shift
   fi
+  refuse_cycles_while_compose "$@" || return $?
   if ! command -v blender >/dev/null 2>&1; then
     err "blender not on PATH. Host install only — never in docker/Dockerfile."
     err "See docs/blender-gb10-sidecar.md"
     return 1
   fi
+  occupancy_set_blender_pid $$
   exec blender "$@"
 }
 

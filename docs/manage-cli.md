@@ -52,10 +52,11 @@ id: doctor
 | `print-shot` / `film-resume` / `film-export-otio` / `film-proxies` / `take-promote` | 90s jobstore ([90s shorts](shorts.md)) | `film-proxies` while compose is up |
 | `download-restore` | Opt-in SeedVR2-3B | Treat as part of `download-models` |
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
-| `blender` | Host Blender sidecar; dies if compose is up | Run next to Comfy |
-| `export-guides` | Dump a 1280×704 (or 768×1280) / 120f clay+depth+canny pack; dies if compose is up. `--print ltx-iclora-depth\|ltx-iclora-canny\|wan-flf` | 1280×720; dump while Comfy is up |
-| `blender-stills` | Dump a single-frame clay/depth/canny still; dies if compose is up. `--size 1280x704\|768x1280\|1024x1280\|1024x1024\|1280x720`. `--install-inputs` copies `first.png` into `input/` (no Blender; compose may stay up) | 1080p; dump while Comfy is up; reuse `house-views` |
-| `house-views` | Dump 1024×1280 Instagram 4:5 clay stills + GLB; copies LoadImage plates into `COMFY_OUTPUT_DIR/input`. Dies if compose is up. `--install-inputs` copies an existing dump into `input/` (no Blender; compose may stay up). `--seed-inputs` copies a pack or renders the layout into `input/` (no Blender; compose may stay up). `start` also seeds missing plates | Reuse `export-guides`; dump while Comfy is up; Godot |
+| `occupancy status\|enter MODE` | Park Comfy (`blender-desk`) or enter `klein`/`trellis`/`wan`/`ltx`/`idle`. Does not start Compose. [Occupancy desk](occupancy.md) | Cycles CUDA next to a denoise; skip `--yes` when Blender is still up |
+| `blender` | Host Blender sidecar; Workbench in blender-desk; dies if Comfy is heavy | Cycles GPU while Compose is up |
+| `export-guides` | Dump a 1280×704 (or 768×1280) / 120f clay+depth+canny pack; dies if Comfy is heavy. `--print ltx-iclora-depth\|ltx-iclora-canny\|wan-flf` | 1280×720; dump while Comfy is unparked |
+| `blender-stills` | Dump a single-frame clay/depth/canny still; dies if Comfy is heavy. `--size 1280x704\|768x1280\|1024x1280\|1024x1024\|1280x720`. `--install-inputs` copies `first.png` into `input/` (no Blender; compose may stay up) | 1080p; dump while Comfy is unparked; reuse `house-views` |
+| `house-views` | Dump 1024×1280 Instagram 4:5 clay stills + GLB; copies LoadImage plates into `COMFY_OUTPUT_DIR/input`. Dies if Comfy is heavy. `--install-inputs` copies an existing dump into `input/` (no Blender; compose may stay up). `--seed-inputs` copies a pack or renders the layout into `input/` (no Blender; compose may stay up). `start` also seeds missing plates | Reuse `export-guides`; dump while Comfy is unparked; Godot |
 | `shot-sheet` | Write `films/<slug>/shots.yaml` with shot-card defaults | Overwrite lab YAML without `--lab-example` |
 | `overlay-qc` | 50% clay/look overlay (host ffmpeg; compose may stay up) | Skip size QC; auto-accept the score |
 | `film-animatic` | Cheap 90s animatic from clay.mp4 or stills | Treat as a 90s denoise |
