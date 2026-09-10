@@ -259,7 +259,7 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
 | `_lab/audio/nill-bye/phaseN/music-rap-nill-bye-*-lab-example.json` | Forty-five ACE-Step 180 s Nill Bye diss takes (phase0 lab / phase1 style / phase2 trap-EDM). Prefix `Nill Bye - Song Title - vN`. Catalog: [Local music](music.md) |
-| `_lab/audio/drive-through/phaseN/music-edm-drive-through-*-lab-example.json` | Sixty-five ACE-Step 180 s Drive-through rave-set EDM takes (phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty; sixty-three instrumental, two DJ-shout treats). Prefix `Drive-through - Song Title - vN`. American festival EDM, drop-early dirty pyro, chest-sub bass. Catalog: [Local music](music.md) |
+| `_lab/audio/drive-through/phaseN/music-edm-drive-through-*-lab-example.json` | Eighty-five ACE-Step 180 s Drive-through rave-set EDM takes (phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty, phase4 Secret Homage; eighty-three instrumental, two DJ-shout treats). Prefix `Drive-through - Song Title - vN`. American festival EDM, drop-early dirty pyro, chest-sub bass. Catalog: [Local music](music.md) |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
 | `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |

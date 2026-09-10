@@ -196,7 +196,7 @@ def _node_fingerprint(graph: dict) -> tuple[tuple[int, float, float], ...]:
 
 
 def test_music_edm_drive_through_graphs() -> None:
-    assert len(EDM_EXAMPLES) == 65
+    assert len(EDM_EXAMPLES) == 85
     assert tuple(ex["stem"] for ex in EDM_EXAMPLES) == DRIVE_THROUGH_STAMP_STEMS
     for ex in EDM_EXAMPLES:
         stem = ex["stem"]

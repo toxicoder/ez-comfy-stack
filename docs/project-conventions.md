@@ -50,7 +50,7 @@ flowchart TB
   Manage --> Docker
 ```
 
-Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`) and keep the `*-lab-example.json` suffix. Nested folders under a lane are allowed. Artist music catalogs nest as `_lab/audio/<artist>/phaseN/` (Nill Bye: `nill-bye/phase0|1|2/`; Drive-through: `drive-through/phase0|1|2|3/`). A new change group goes in the next `phaseN/`; SaveAudio prefix is `Artist - Song Title - vN` (N matches the folder). JSON stems stay unique repo-wide — a later take of the same title appends `-vN` to the slug. Do not leave new graphs at the artist folder root. Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` and must not be committed.
+Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`) and keep the `*-lab-example.json` suffix. Nested folders under a lane are allowed. Artist music catalogs nest as `_lab/audio/<artist>/phaseN/` (Nill Bye: `nill-bye/phase0|1|2/`; Drive-through: `drive-through/phase0|1|2|3|4/`). A new change group goes in the next `phaseN/`; SaveAudio prefix is `Artist - Song Title - vN` (N matches the folder). JSON stems stay unique repo-wide — a later take of the same title appends `-vN` to the slug. Do not leave new graphs at the artist folder root. Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` and must not be committed.
 
 ## Shell style
 
