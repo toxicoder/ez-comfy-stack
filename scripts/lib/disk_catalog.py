@@ -7,6 +7,8 @@ import argparse
 import json
 import os
 import sys
+import time
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +35,31 @@ VALID_RISK = frozenset(RISK_PENALTY)
 VALID_RECLAIM = frozenset(
     {"delete", "quarantine", "docker-prune", "hf-prune", "reap-models", "none"}
 )
+
+# Keep in sync with disk_skip_dir_name / disk_walk_root in disk_scan.sh.
+SKIP_DIR_NAMES = frozenset(
+    {
+        ".git",
+        "node_modules",
+        "__pycache__",
+        ".venv",
+        "venv",
+        ".tox",
+        ".disk-quarantine",
+        ".reap-quarantine",
+    }
+)
+SKIP_BASENAMES = frozenset(
+    {
+        ".disk-wizard-plan.json",
+        ".disk-wizard.log",
+        ".reap-log",
+        ".reap-models.log",
+    }
+)
+WALK_PROGRESS_EVERY = 500
+PROGRESS_PREFIX = "[ez-comfy]"
+_PROGRESS_REWRITE = False
 
 
 def _empty_sig() -> dict[str, Any]:
@@ -307,6 +334,155 @@ def rank_candidates(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     )
 
 
+def progress_interval_s() -> float:
+    """Heartbeat interval from DISK_WIZARD_PROGRESS_INTERVAL (0 disables).
+
+    Returns:
+        Seconds between in-root heartbeats. Default 2.
+    """
+    raw = os.environ.get("DISK_WIZARD_PROGRESS_INTERVAL", "2")
+    try:
+        return float(raw)
+    except ValueError:
+        return 2.0
+
+
+def emit_walk_progress(msg: str, *, rewrite: bool = False) -> None:
+    """Write a survey progress line to stderr.
+
+    TTY heartbeats rewrite the current line; non-TTY (pipes, CI) always
+    emit a full newline so captured logs stay readable.
+
+    Args:
+        msg: Body without the ``[ez-comfy]`` prefix.
+        rewrite: When True and stderr is a TTY, rewrite the current line.
+    """
+    global _PROGRESS_REWRITE
+    if rewrite and sys.stderr.isatty():
+        sys.stderr.write(f"\r\033[K{PROGRESS_PREFIX} {msg}")
+        sys.stderr.flush()
+        _PROGRESS_REWRITE = True
+        return
+    if _PROGRESS_REWRITE:
+        sys.stderr.write("\n")
+        _PROGRESS_REWRITE = False
+    sys.stderr.write(f"{PROGRESS_PREFIX} {msg}\n")
+    sys.stderr.flush()
+
+
+def _file_row(path: str) -> dict[str, Any]:
+    """JSONL row for one walked path.
+
+    Args:
+        path: File or symlink path.
+
+    Returns:
+        Mapping with path, size_bytes, broken_symlink.
+    """
+    broken = os.path.islink(path) and not os.path.exists(path)
+    size = 0
+    if not broken:
+        try:
+            size = int(os.path.getsize(path))
+        except OSError:
+            size = 0
+    return {"path": path, "size_bytes": size, "broken_symlink": broken}
+
+
+def walk_root_files(
+    root: str,
+    max_depth: int = 6,
+    *,
+    skip_dirs: frozenset[str] | None = None,
+    skip_basenames: frozenset[str] | None = None,
+) -> Iterator[dict[str, Any]]:
+    """Yield file/symlink rows under root, depth-capped, with skip-dir prune.
+
+    Matches ``find ROOT -maxdepth N \\( -type f -o -type l \\)`` and does not
+    follow directory symlinks. Skip dir names are not descended at any depth.
+
+    Args:
+        root: Directory to walk.
+        max_depth: Inclusive depth (root is 0; files in root are 1).
+        skip_dirs: Directory basenames to prune. Default SKIP_DIR_NAMES.
+        skip_basenames: File basenames to omit. Default SKIP_BASENAMES.
+
+    Yields:
+        JSONL-ready row mappings.
+    """
+    dirs = skip_dirs if skip_dirs is not None else SKIP_DIR_NAMES
+    bases = skip_basenames if skip_basenames is not None else SKIP_BASENAMES
+    if max_depth < 1 or not os.path.isdir(root):
+        return
+
+    def rec(dirpath: str, depth: int) -> Iterator[dict[str, Any]]:
+        child_depth = depth + 1
+        if child_depth > max_depth:
+            return
+        try:
+            entries = os.scandir(dirpath)
+        except OSError:
+            return
+        with entries:
+            for entry in entries:
+                name = entry.name
+                try:
+                    is_link = entry.is_symlink()
+                    is_dir = False if is_link else entry.is_dir(follow_symlinks=False)
+                    is_file = False if is_link else entry.is_file(follow_symlinks=False)
+                except OSError:
+                    continue
+                if is_dir:
+                    if name in dirs:
+                        continue
+                    yield from rec(entry.path, child_depth)
+                    continue
+                if is_link or is_file:
+                    if name in bases:
+                        continue
+                    yield _file_row(entry.path)
+
+    yield from rec(root, 0)
+
+
+def walk_roots_to_stdout(roots: list[str], max_depth: int) -> int:
+    """Walk roots, write JSONL to stdout, progress to stderr.
+
+    Args:
+        roots: Directories to scan (missing paths skipped).
+        max_depth: Inclusive find-style max depth.
+
+    Returns:
+        Number of JSONL rows written.
+    """
+    total = 0
+    interval = progress_interval_s()
+    for root in roots:
+        if not root or not os.path.isdir(root):
+            continue
+        emit_walk_progress(f"Scanning {root} (max depth {max_depth})…")
+        started = time.monotonic()
+        count = 0
+        last_hb = started
+        for row in walk_root_files(root, max_depth):
+            print(json.dumps(row, sort_keys=True), flush=False)
+            count += 1
+            total += 1
+            if interval <= 0:
+                continue
+            now = time.monotonic()
+            if count % WALK_PROGRESS_EVERY == 0 or (now - last_hb) >= interval:
+                emit_walk_progress(
+                    f"  still scanning {root}: {count} paths…",
+                    rewrite=True,
+                )
+                last_hb = now
+        sys.stdout.flush()
+        elapsed = time.monotonic() - started
+        emit_walk_progress(f"  {root}: {count} paths ({elapsed:.1f}s)")
+    return total
+
+
 def _load_keep_refuse(manifest: Path) -> tuple[set[str], list[str]]:
     """Load default keep-set and refuse list from the model manifest.
 
@@ -326,7 +502,7 @@ def _load_keep_refuse(manifest: Path) -> tuple[set[str], list[str]]:
 
 
 def _cli(argv: list[str] | None = None) -> int:
-    """CLI: json | classify | rank.
+    """CLI: json | classify | rank | walk.
 
     Args:
         argv: Optional argument list.
@@ -344,7 +520,13 @@ def _cli(argv: list[str] | None = None) -> int:
     p_cl.add_argument("--size", type=int, default=0)
     p_cl.add_argument("--broken-symlink", action="store_true")
     sub.add_parser("rank")
+    p_walk = sub.add_parser("walk")
+    p_walk.add_argument("roots", nargs="+")
+    p_walk.add_argument("--max-depth", type=int, default=6)
     args = parser.parse_args(argv)
+    if args.cmd == "walk":
+        walk_roots_to_stdout(list(args.roots), int(args.max_depth))
+        return 0
     cat = load_catalog(Path(args.catalog))
     keep: set[str] = set()
     refuse: list[str] = []

@@ -6,6 +6,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "lib"))
 
@@ -148,3 +150,105 @@ def test_rank_score_safe_beats_review() -> None:
     review = dc.rank_score(1000, 10, "review")
     danger = dc.rank_score(1000, 10, "dangerous")
     assert safe > review > danger
+
+
+def test_walk_prunes_nested_skip_dirs(tmp_path: Path) -> None:
+    """node_modules / .venv descendants are not yielded at any depth."""
+    (tmp_path / "keep.bin").write_text("ok")
+    nested = tmp_path / "node_modules" / "pkg"
+    nested.mkdir(parents=True)
+    (nested / "x.js").write_text("no")
+    venv_pkg = tmp_path / ".venv" / "lib"
+    venv_pkg.mkdir(parents=True)
+    (venv_pkg / "mod.py").write_text("no")
+    rows = list(dc.walk_root_files(str(tmp_path), max_depth=6))
+    rels = [str(Path(r["path"]).relative_to(tmp_path)) for r in rows]
+    assert "keep.bin" in rels
+    assert not any("node_modules" in Path(rel).parts for rel in rels)
+    assert not any(".venv" in Path(rel).parts for rel in rels)
+
+
+def test_walk_respects_max_depth(tmp_path: Path) -> None:
+    """Files deeper than max_depth are omitted (find -maxdepth semantics)."""
+    cur = tmp_path
+    for i in range(8):
+        cur = cur / f"d{i}"
+        cur.mkdir()
+        (cur / "f.bin").write_text("x")
+    rows = list(dc.walk_root_files(str(tmp_path), max_depth=6))
+    rels = [str(Path(r["path"]).relative_to(tmp_path)) for r in rows]
+    depths = [len(Path(rel).parts) for rel in rels]
+    assert depths
+    assert max(depths) <= 6
+    assert 6 in depths
+    assert not any("d5" in Path(rel).parts for rel in rels)
+
+
+def test_walk_skips_plan_basename_and_broken_symlink(tmp_path: Path) -> None:
+    """Wizard logs are omitted; broken symlinks are size 0."""
+    (tmp_path / ".disk-wizard-plan.json").write_text("{}")
+    (tmp_path / "ok.bin").write_text("x")
+    (tmp_path / "broken.lnk").symlink_to(tmp_path / "missing-target")
+    rows = list(dc.walk_root_files(str(tmp_path), max_depth=6))
+    by_name = {Path(r["path"]).name: r for r in rows}
+    assert ".disk-wizard-plan.json" not in by_name
+    assert "ok.bin" in by_name
+    broken = by_name["broken.lnk"]
+    assert broken["broken_symlink"] is True
+    assert broken["size_bytes"] == 0
+
+
+def test_cli_walk_emits_jsonl_and_progress(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """walk CLI writes JSONL on stdout and Scanning on stderr."""
+    (tmp_path / "a.bin").write_text("hi")
+    rc = dc._cli(  # noqa: SLF001
+        [
+            "--catalog",
+            str(CATALOG),
+            "walk",
+            "--max-depth",
+            "2",
+            str(tmp_path),
+        ]
+    )
+    assert rc == 0
+    captured = capsys.readouterr()
+    rows = [json.loads(line) for line in captured.out.splitlines() if line.strip()]
+    assert any(str(r.get("path", "")).endswith("a.bin") for r in rows)
+    assert "Scanning" in captured.err
+
+
+def test_progress_interval_parses_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    """DISK_WIZARD_PROGRESS_INTERVAL=0 disables heartbeats; bad values default."""
+    monkeypatch.delenv("DISK_WIZARD_PROGRESS_INTERVAL", raising=False)
+    assert dc.progress_interval_s() == 2.0
+    monkeypatch.setenv("DISK_WIZARD_PROGRESS_INTERVAL", "0")
+    assert dc.progress_interval_s() == 0.0
+    monkeypatch.setenv("DISK_WIZARD_PROGRESS_INTERVAL", "not-a-float")
+    assert dc.progress_interval_s() == 2.0
+
+
+def test_emit_walk_progress_newline(capsys: pytest.CaptureFixture[str]) -> None:
+    """Non-TTY progress is a full prefixed line (BATS/CI)."""
+    dc.emit_walk_progress("Scanning /tmp/models (max depth 6)…")
+    err = capsys.readouterr().err
+    assert err.startswith("[ez-comfy] Scanning")
+    assert err.endswith("\n")
+    dc.emit_walk_progress("  still scanning /tmp/models: 12 paths…", rewrite=True)
+    err2 = capsys.readouterr().err
+    assert "still scanning" in err2
+    assert err2.endswith("\n")
+
+
+def test_walk_roots_to_stdout_skips_missing(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Missing roots are skipped; existing roots emit JSONL."""
+    (tmp_path / "a.bin").write_text("x")
+    n = dc.walk_roots_to_stdout([str(tmp_path / "missing"), str(tmp_path)], 2)
+    captured = capsys.readouterr()
+    assert n == 1
+    assert "Scanning" in captured.err
+    assert json.loads(captured.out.splitlines()[0])["path"].endswith("a.bin")

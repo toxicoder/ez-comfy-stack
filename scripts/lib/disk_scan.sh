@@ -133,6 +133,7 @@ disk_realpath_under_any() {
 #######################################
 disk_file_size_bytes() {
   local path="${1}"
+  local sz
   if [[ -L ${path} && ! -e ${path} ]]; then
     echo 0
     return 0
@@ -141,7 +142,11 @@ disk_file_size_bytes() {
     echo 0
     return 0
   fi
-  python3 -c 'import os,sys; print(os.path.getsize(sys.argv[1]))' "${path}" 2>/dev/null || echo 0
+  case "$(uname -s)" in
+    Darwin) sz="$(stat -f %z "${path}" 2>/dev/null || true)" ;;
+    *) sz="$(stat -c %s "${path}" 2>/dev/null || true)" ;;
+  esac
+  echo "${sz:-0}"
 }
 
 #######################################
@@ -172,24 +177,21 @@ disk_skip_dir_name() {
 disk_walk_root() {
   local root="${1}"
   local depth="${DISK_WIZARD_MAX_DEPTH:-6}"
-  local p base
+  local p
   [[ -d ${root} ]] || return 0
+  # Prune skip dirs at any depth (keep in sync with disk_catalog.SKIP_DIR_NAMES).
   while IFS= read -r p; do
     [[ -z ${p} ]] && continue
-    base="$(basename "$(dirname "${p}")")"
-    if disk_skip_dir_name "${base}"; then
-      continue
-    fi
-    case "${p}" in
-      */.disk-quarantine/* | */.reap-quarantine/*) continue ;;
-    esac
     case "$(basename "${p}")" in
       .disk-wizard-plan.json | .disk-wizard.log | .reap-log | .reap-models.log)
         continue
         ;;
     esac
     printf '%s\n' "${p}"
-  done < <(find "${root}" -maxdepth "${depth}" \( -type f -o -type l \) 2>/dev/null)
+  done < <(find "${root}" -maxdepth "${depth}" \
+    \( -name .git -o -name node_modules -o -name __pycache__ -o -name .venv \
+    -o -name venv -o -name .tox -o -name .disk-quarantine -o -name .reap-quarantine \) -prune \
+    -o \( -type f -o -type l \) -print 2>/dev/null)
 }
 
 #######################################

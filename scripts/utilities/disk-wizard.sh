@@ -164,30 +164,32 @@ disk_rank_candidates() {
 
 #######################################
 # Build JSONL of walked files plus docker mock objects.
+# One Python walk for all roots (stderr progress); docker objects appended.
+# Globals:
+#   REPO_ROOT, DISK_WIZARD_MAX_DEPTH
 # Outputs:
-#   JSONL
+#   JSONL on stdout; scan progress on stderr
 # Returns:
 #   0
 #######################################
 disk_survey_jsonl() {
-  local root p size broken
+  local depth root docker_blob
+  local -a roots=()
+  depth="${DISK_WIZARD_MAX_DEPTH:-6}"
   while IFS= read -r root; do
     [[ -z ${root} ]] && continue
-    while IFS= read -r p; do
-      [[ -z ${p} ]] && continue
-      size="$(disk_file_size_bytes "${p}")"
-      broken=false
-      if [[ -L ${p} && ! -e ${p} ]]; then
-        broken=true
-      fi
-      printf '{"path":%s,"size_bytes":%s,"broken_symlink":%s}\n' \
-        "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "${p}")" \
-        "${size}" \
-        "${broken}"
-    done < <(disk_walk_root "${root}")
+    roots+=("${root}")
   done < <(disk_allowed_roots)
 
-  local docker_blob
+  if [[ ${#roots[@]} -gt 0 ]]; then
+    python3 "${REPO_ROOT}/scripts/lib/disk_catalog.py" \
+      --catalog "$(disk_catalog_path)" \
+      walk \
+      --max-depth "${depth}" \
+      -- "${roots[@]}"
+  fi
+
+  log "Querying Docker disk usage (docker system df; can take a while)…"
   docker_blob="$(disk_docker_df || true)"
   if [[ -n ${docker_blob} ]]; then
     python3 -c '
@@ -219,15 +221,24 @@ for line in raw.splitlines():
 # Globals:
 #   JSON_FLAG
 # Outputs:
-#   report
+#   Progress on stderr; human plan or JSON on stdout
 # Returns:
 #   0
 #######################################
 disk_survey() {
-  local ranked dest
-  ranked="$(disk_survey_jsonl | disk_rank_candidates)"
+  local ranked dest jsonl n
+  log "Starting read-only disk survey (can take a while on a full host; nothing is deleted)…"
+  disk_df_report >&2 || true
+  jsonl="$(disk_survey_jsonl)"
+  n=0
+  if [[ -n ${jsonl} ]]; then
+    n="$(printf '%s\n' "${jsonl}" | grep -c . || true)"
+  fi
+  log "Ranking ${n} candidates…"
+  ranked="$(printf '%s\n' "${jsonl}" | disk_rank_candidates)"
   dest="$(disk_plan_file)"
   printf '%s\n' "${ranked}" >"${dest}"
+  log "Plan written to ${dest}"
   if [[ ${JSON_FLAG} -eq 1 ]]; then
     printf '%s\n' "${ranked}"
     return 0
@@ -242,7 +253,6 @@ disk_survey() {
 #######################################
 disk_print_plan() {
   local json="${1}"
-  disk_df_report >&2 || true
   python3 -c '
 import json, sys
 
@@ -294,7 +304,6 @@ disk_wizard_steps() {
   echo >&2
   echo "Step A items are safe junk. Step B is skipped unless you pass --apply after editing the plan." >&2
   echo "This invocation is guidance + plan only. Re-run with --apply --yes to act." >&2
-  echo "Plan written to $(disk_plan_file)" >&2
 }
 
 #######################################

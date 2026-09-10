@@ -10,7 +10,7 @@ tags: [disk, wizard, docker, huggingface, ollama, safety]
 
 - What the wizard will and will not touch
 - How it differs from `cleanup` and `reap-models`
-- Plan → explain → apply
+- Plan → explain → apply (stderr progress while scanning)
 - Restore from quarantine
 
 **What this enables**
@@ -63,6 +63,8 @@ Never offered: `docker system prune -a --volumes`. That would eat other stacks' 
 ./scripts/manage.sh disk-wizard --apply --yes
 ./scripts/manage.sh disk-wizard restore --from .disk-quarantine/<utc>
 ```
+
+`--plan` (and `--json`) print **stderr progress immediately**: start banner, `df`, each allowed root as it is scanned, a heartbeat on large trees, Docker `system df`, then ranking. A full Spark (`~/.cache`, `/tmp`, Docker) can still take a while — it will not sit silent. `--json` keeps a single JSON array on **stdout**; progress stays on stderr. Heartbeat interval: `DISK_WIZARD_PROGRESS_INTERVAL` seconds (default `2`; `0` disables in-root heartbeats, not the per-root lines).
 
 ---
 
