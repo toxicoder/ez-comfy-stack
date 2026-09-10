@@ -178,6 +178,7 @@ flowchart LR
   - Validated pins: `TORCH_VERSION`, `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see models-and-cache.md)
   - BuildKit `# syntax=docker/dockerfile:1`, `COPY --link`, `COPY --chmod`, pip + apt cache mounts
   - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
+  - `docker/.dockerignore` is **whitelist-only** (`*` then `!exceptions`). Every `COPY` source from the build context must have a matching `!` line or GHCR/`docker build` fails with `not found`
 - GHCR channel by long-lived branch: publish tags `us-safe-studio` (`main`) and `us-safe-studio-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel). Old `flux-to-ltx*` tags freeze on the previous image.  
 - Scripts as real files (not inline ConfigMap YAML)  
 - Host model cache + named volume for Comfy state  
