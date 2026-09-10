@@ -2404,6 +2404,11 @@
 <td>Confirm tag matches branch (<code>:us-safe-studio</code> on <code>main</code>, <code>:us-safe-studio-development</code> on <code>development</code>/feature — see <code>doctor</code>). Run <code>publish-image</code> on that long-lived branch; make GHCR package public; or <code>EZ_COMFY_IMAGE=…</code> / force local build: <a href="../getting-started/#build-the-image-locally-optional">Getting Started — build locally</a></td>
 </tr>
 <tr>
+<td>Image build: <code>COPY … not found</code> / <code>failed to calculate checksum</code> for <code>patch_*.py</code> or <code>seed_clay_inputs.py</code></td>
+<td><code>docker/.dockerignore</code> is whitelist-only (<code>*</code> then <code>!exceptions</code>); a new runtime <code>COPY</code> was added without a matching <code>!file</code></td>
+<td>Add <code>!the-file.py</code> next to the other patch allowlists in <code>docker/.dockerignore</code>. <code>tests/bats/safety.bats</code> asserts every Dockerfile context <code>COPY</code> is allowlisted</td>
+</tr>
+<tr>
 <td>First start still runs multi-GB pip</td>
 <td>Thin image / no prebuilt / force cold</td>
 <td>Check logs for “Seeding … prebuilt”. Rebuild with <code>EZ_COMFY_PREBUILD=1</code> or pull GHCR tag. Unset <code>LAB_FORCE_COLD_INSTALL</code></td>
