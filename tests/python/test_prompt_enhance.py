@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sys
+import types
 from pathlib import Path
 from unittest.mock import patch
 
@@ -398,6 +399,83 @@ def test_missing_llama_import_passthrough(monkeypatch: pytest.MonkeyPatch, tmp_p
         out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
     assert out.text == "lazy bike"
     assert out.reason == client.REASON_LLAMA_UNAVAILABLE
+    assert "restart" in out.status
+    assert "rebuild" not in out.status
+
+
+def test_llama_oserror_import_passthrough(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    gguf = tmp_path / "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    gguf.write_bytes(b"fake")
+    monkeypatch.setenv("EZ_LLM_GGUF", str(gguf))
+    client._close_llm()
+
+    class _Boom(types.ModuleType):
+        def __getattr__(self, name: str) -> object:
+            raise OSError("libllama.so")
+
+    with patch.dict(sys.modules, {"llama_cpp": _Boom("llama_cpp")}):
+        out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
+    assert out.text == "lazy bike"
+    assert out.reason == client.REASON_LLAMA_UNAVAILABLE
+
+
+def test_llama_typeerror_retries_without_chat_format(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    gguf = tmp_path / "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    gguf.write_bytes(b"fake")
+    monkeypatch.setenv("EZ_LLM_GGUF", str(gguf))
+    client._close_llm()
+    calls: list[dict[str, object]] = []
+
+    class _FakeLlama:
+        def __init__(self, **kwargs: object) -> None:
+            calls.append(dict(kwargs))
+            if "chat_format" in kwargs:
+                raise TypeError("unexpected keyword argument 'chat_format'")
+
+    fake = types.ModuleType("llama_cpp")
+    setattr(fake, "Llama", _FakeLlama)
+    with patch.dict(sys.modules, {"llama_cpp": fake}):
+        handle, reason = client._get_llama()
+    client._close_llm()
+    assert reason is None
+    assert handle is not None
+    assert len(calls) == 2
+    assert calls[0].get("chat_format") == "chatml"
+    assert "chat_format" not in calls[1]
+
+
+def test_llama_constructor_error_is_load_failed(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    gguf = tmp_path / "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    gguf.write_bytes(b"fake")
+    monkeypatch.setenv("EZ_LLM_GGUF", str(gguf))
+    client._close_llm()
+
+    class _BoomLlama:
+        def __init__(self, **kwargs: object) -> None:
+            del kwargs
+            raise RuntimeError("jinja generation tag")
+
+    fake = types.ModuleType("llama_cpp")
+    setattr(fake, "Llama", _BoomLlama)
+    with patch.dict(sys.modules, {"llama_cpp": fake}):
+        handle, reason = client._get_llama()
+    client._close_llm()
+    assert handle is None
+    assert reason == client.REASON_LLM_LOAD_FAILED
+    assert client.status_for_reason(reason) == "GGUF failed to load"
+
+
+def test_status_for_reason_llama_points_at_restart() -> None:
+    text = client.status_for_reason(client.REASON_LLAMA_UNAVAILABLE)
+    assert "restart" in text
+    assert "CPU wheel" in text
+    assert "rebuild" not in text
 
 
 def test_empty_model_output_passthrough(monkeypatch: pytest.MonkeyPatch) -> None:

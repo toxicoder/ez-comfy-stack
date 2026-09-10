@@ -890,6 +890,7 @@ def translate_turns(
         from ez_prompt_enhance.client import REASON_EMPTY
         from ez_prompt_enhance.client import REASON_GGUF_MISSING
         from ez_prompt_enhance.client import REASON_LLAMA_UNAVAILABLE
+        from ez_prompt_enhance.client import REASON_LLM_LOAD_FAILED
         from ez_prompt_enhance.client import _close_llm
         from ez_prompt_enhance.client import complete
     except Exception as exc:  # noqa: BLE001 — fail-soft
@@ -923,7 +924,11 @@ def translate_turns(
                 temperature=TRANSLATE_TEMPERATURE,
                 timeout_s=timeout,
             )
-            if reason in {REASON_GGUF_MISSING, REASON_LLAMA_UNAVAILABLE}:
+            if reason in {
+                REASON_GGUF_MISSING,
+                REASON_LLAMA_UNAVAILABLE,
+                REASON_LLM_LOAD_FAILED,
+            }:
                 fatal = reason
                 item["text_target"] = source_text
                 passthrough += 1

@@ -494,6 +494,36 @@ def test_translate_turns_per_turn_fills_spanish(monkeypatch) -> None:
     assert pipeline.TRANSLATE_MAX_TOKENS == 512
 
 
+def test_translate_turns_llama_unavailable_copies_all(monkeypatch) -> None:
+    calls = {"n": 0}
+
+    def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
+        del system, user, max_tokens, kwargs
+        calls["n"] += 1
+        return "", "llama.cpp unavailable"
+
+    monkeypatch.setattr("ez_prompt_enhance.client.complete", _complete)
+    monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
+    out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=True)
+    assert reason == "llama.cpp unavailable"
+    assert out[0]["text_target"] == "Welcome back to the tape."
+    assert out[1]["text_target"] == "Today we stay on the match."
+    assert calls["n"] == 1
+
+
+def test_translate_turns_gguf_load_failed_copies_all(monkeypatch) -> None:
+    def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
+        del system, user, max_tokens, kwargs
+        return "", "GGUF failed to load"
+
+    monkeypatch.setattr("ez_prompt_enhance.client.complete", _complete)
+    monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
+    out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=True)
+    assert reason == "GGUF failed to load"
+    assert out[0]["text_target"] == "Welcome back to the tape."
+    assert out[1]["text_target"] == "Today we stay on the match."
+
+
 def test_translate_turns_empty_model_is_passthrough_not_success(monkeypatch) -> None:
     def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
         del system, user, max_tokens, kwargs

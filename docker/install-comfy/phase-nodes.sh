@@ -235,11 +235,16 @@ ensure_lab_video_nodes() {
   return 0
 }
 
+# Official llama-cpp-python CPU wheels (aarch64 manylinux py3-none). PyPI is
+# sdist-only; --only-binary against PyPI always misses on DGX Spark.
+LLAMA_CPP_CPU_INDEX="https://abetlen.github.io/llama-cpp-python/whl/cpu"
+
 #######################################
 # Install llama-cpp-python with CUDA off so prompt enhance stays on the CPU.
-# Fail-soft: Enhance nodes pass through if this wheel is missing.
+# Prefer the official CPU extra-index (binaries). Compile only when cmake is
+# already on PATH. Fail-soft: Enhance/dub translation pass through if missing.
 # Globals:
-#   None
+#   LLAMA_CPP_CPU_INDEX
 # Arguments:
 #   None
 # Outputs:
@@ -248,8 +253,14 @@ ensure_lab_video_nodes() {
 #   0 always (soft-fail)
 #######################################
 install_llama_cpp_cpu() {
-  if pip_install --only-binary=:all: llama-cpp-python; then
+  local cpu_index="${LLAMA_CPP_CPU_INDEX}"
+  if pip_install --only-binary=:all: --extra-index-url "${cpu_index}" \
+    llama-cpp-python; then
     log "llama-cpp-python (CPU wheel) installed for prompt enhance"
+    return 0
+  fi
+  if ! command -v cmake >/dev/null 2>&1; then
+    warn "llama-cpp-python CPU wheel miss and cmake missing — pass through until restart heals the wheel"
     return 0
   fi
   log "No llama-cpp-python wheel; compiling with GGML_CUDA=OFF"
@@ -257,7 +268,7 @@ install_llama_cpp_cpu() {
     log "llama-cpp-python (CPU) installed for prompt enhance"
     return 0
   fi
-  warn "llama-cpp-python install failed — Prompt Enhance will pass through until rebuilt"
+  warn "llama-cpp-python install failed — Prompt Enhance will pass through until the CPU wheel is installed"
   return 0
 }
 

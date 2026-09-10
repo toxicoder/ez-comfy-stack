@@ -49,6 +49,7 @@ FLAVOR_LTX = "ltx"
 REASON_ENHANCE_OFF = "enhance off"
 REASON_GGUF_MISSING = "GGUF missing"
 REASON_LLAMA_UNAVAILABLE = "llama.cpp unavailable"
+REASON_LLM_LOAD_FAILED = "GGUF failed to load"
 REASON_EMPTY = "timeout or empty model output"
 REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
 REASON_STYLE_IGNORED_FLF = "style ignored in flf (start and end frames own look)"
@@ -129,7 +130,11 @@ def status_for_reason(reason: str | None) -> str:
     if reason == REASON_GGUF_MISSING:
         return "GGUF missing — run ./scripts/manage.sh download-models"
     if reason == REASON_LLAMA_UNAVAILABLE:
-        return "llama.cpp unavailable — rebuild the image"
+        return (
+            "llama.cpp unavailable — restart so the entrypoint installs the CPU wheel"
+        )
+    if reason == REASON_LLM_LOAD_FAILED:
+        return "GGUF failed to load"
     if reason == REASON_EMPTY:
         return "timeout or empty model output"
     return reason
@@ -600,23 +605,32 @@ def _get_llama() -> tuple[Any | None, str | None]:
     _close_llm()
     try:
         from llama_cpp import Llama
-    except ImportError:
+    except (ImportError, OSError):
         _log("llama-cpp-python not installed — passing prompt through")
         return None, REASON_LLAMA_UNAVAILABLE
+    kwargs: dict[str, Any] = {
+        "model_path": path,
+        "n_ctx": _n_ctx(),
+        "n_threads": _n_threads(),
+        "n_gpu_layers": _n_gpu_layers(),
+        "verbose": False,
+    }
     try:
-        _LLM = Llama(
-            model_path=path,
-            n_ctx=_n_ctx(),
-            n_threads=_n_threads(),
-            n_gpu_layers=_n_gpu_layers(),
-            chat_format="chatml",
-            verbose=False,
-        )
+        _LLM = Llama(chat_format="chatml", **kwargs)
+    except TypeError as exc:
+        _log(f"Llama chat_format unsupported ({exc}); retrying without it")
+        try:
+            _LLM = Llama(**kwargs)
+        except Exception as retry_exc:  # noqa: BLE001 — fail-soft
+            _log(f"failed to load GGUF {path}: {retry_exc}")
+            _LLM = None
+            _LLM_PATH = ""
+            return None, REASON_LLM_LOAD_FAILED
     except Exception as exc:  # noqa: BLE001 — fail-soft
         _log(f"failed to load GGUF {path}: {exc}")
         _LLM = None
         _LLM_PATH = ""
-        return None, REASON_LLAMA_UNAVAILABLE
+        return None, REASON_LLM_LOAD_FAILED
     _LLM_PATH = path
     _log(f"loaded local LLM {path} (cpu, n_threads={_n_threads()})")
     return _LLM, None
