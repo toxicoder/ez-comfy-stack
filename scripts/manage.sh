@@ -54,6 +54,23 @@ export MODELS_DIR
 COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output}
 export COMFY_OUTPUT_DIR
 DOWNLOAD_LIMIT=${DOWNLOAD_LIMIT:-auto}
+# PyPI chatterbox-tts==0.1.7 predates from_local(..., t3_model="v3") (PR #516).
+CHATTERBOX_TTS_REF="${CHATTERBOX_TTS_REF:-5de7a54aa4e5e2baadb0182dde554908b48b85c2}"
+
+#######################################
+# GitHub archive URL for the Chatterbox V3-capable source tree.
+# Globals:
+#   CHATTERBOX_TTS_REF
+# Arguments:
+#   None
+# Outputs:
+#   HTTPS zip URL on stdout
+# Returns:
+#   0
+#######################################
+chatterbox_tts_zip_url() {
+  echo "https://github.com/resemble-ai/chatterbox/archive/${CHATTERBOX_TTS_REF}.zip"
+}
 
 #######################################
 # Relink the prompt-enhance GGUF into MODELS_DIR/comfy/llm/ if the snapshot
@@ -83,7 +100,8 @@ ensure_prompt_enhance_gguf() {
 
 #######################################
 # Pip-install dub wheels into the running Comfy venv. ASR first, then clone
-# with --no-deps so chatterbox-tts cannot pin torch==2.6.0. No-op when stopped.
+# from the Chatterbox V3 GitHub zip with --no-deps so it cannot pin
+# torch==2.6.0. No-op when stopped.
 # Globals:
 #   None (uses compose_is_running / compose_run)
 # Arguments:
@@ -94,13 +112,14 @@ ensure_prompt_enhance_gguf() {
 #   0
 #######################################
 install_dub_runtime_wheels() {
-  local py
+  local py zip
   py="/comfy-state/ComfyUI/.venv/bin/python"
+  zip="$(chatterbox_tts_zip_url)"
   if ! compose_is_running; then
     log "dub wheels: stack stopped — start, then re-run download-dub, or rebuild the image"
     return 0
   fi
-  log "dub wheels: pip install faster-whisper, then chatterbox-tts --no-deps"
+  log "dub wheels: pip install faster-whisper, then chatterbox V3 zip --no-deps"
   if compose_run exec -T comfyui "${py}" -m pip install \
     --upgrade-strategy only-if-needed faster-whisper; then
     log "dub wheels: faster-whisper installed"
@@ -109,10 +128,12 @@ install_dub_runtime_wheels() {
   fi
   compose_run exec -T comfyui "${py}" -m pip install \
     --upgrade-strategy only-if-needed \
-    librosa s3tokenizer resemble-perth conformer pykakasi pyloudnorm omegaconf ||
+    librosa s3tokenizer resemble-perth conformer pykakasi pyloudnorm omegaconf \
+    spacy-pkuseg ||
     warn "dub wheels: chatterbox extras pip failed"
-  if compose_run exec -T comfyui "${py}" -m pip install --no-deps chatterbox-tts; then
-    log "dub wheels: chatterbox-tts installed --no-deps (did not pin torch)"
+  if compose_run exec -T comfyui "${py}" -m pip install \
+    --upgrade --force-reinstall --no-deps "${zip}"; then
+    log "dub wheels: chatterbox-tts V3 installed --no-deps (did not pin torch)"
   else
     warn "dub wheels: chatterbox-tts --no-deps failed — clone will fail-soft"
   fi
@@ -133,7 +154,7 @@ install_dub_runtime_wheels() {
 #   0
 #######################################
 check_dub_runtime_wheels() {
-  local py
+  local py t3_check
   if ! compose_is_running; then
     log "dub wheel import: skipped (stack stopped)"
     return 0
@@ -149,11 +170,14 @@ check_dub_runtime_wheels() {
   else
     warn "dub ASR wheel missing — download-dub --tier asr (stack up) or restart"
   fi
-  if compose_run exec -T comfyui "${py}" -c \
-    'from chatterbox.mtl_tts import ChatterboxMultilingualTTS'; then
-    log "dub wheels: chatterbox.mtl_tts import ok"
+  t3_check="from inspect import signature; "
+  t3_check+="from chatterbox.mtl_tts import ChatterboxMultilingualTTS; "
+  t3_check+="assert 't3_model' in signature("
+  t3_check+="ChatterboxMultilingualTTS.from_local).parameters"
+  if compose_run exec -T comfyui "${py}" -c "${t3_check}"; then
+    log "dub wheels: chatterbox.mtl_tts t3_model=v3 import ok"
   else
-    warn "dub clone wheel missing — chatterbox-tts --no-deps (do not pin torch==2.6.0)"
+    warn "dub clone wheel missing t3_model=v3 — V3 zip --no-deps (do not pin torch)"
   fi
   return 0
 }
@@ -194,9 +218,9 @@ Commands:
                     analog = Kokoro-82M ONNX only. Missing pack is not a doctor failure.
   download-dub [--tier asr|clone|all] [--limit auto|N|off]
                     Opt-in Silero VAD + faster-whisper + Chatterbox Multilingual V3
-                    When the stack is up, pip-installs faster-whisper then
-                    chatterbox-tts --no-deps (does not pin torch). Missing pack
-                    is not a doctor failure.
+                    When the stack is up, pip-installs faster-whisper then the
+                    Chatterbox V3 GitHub zip --no-deps (does not pin torch).
+                    Missing pack is not a doctor failure.
   download-music [--tier turbo|xl|all] [--limit auto|N|off]
                     Opt-in ACE-Step 1.5 music AIO (bandwidth limited)
                     turbo = ace_step_1.5_turbo_aio.safetensors (~10 GB). Shares dest with download-podcast --tier acestep.
@@ -923,7 +947,7 @@ EOF
 #######################################
 # Opt-in dub weights under MODELS_DIR with the same download-limit wrap.
 # Missing ASR/clone pack is not a doctor failure. Does not change download-models.
-# With compose up, pip-installs faster-whisper then chatterbox-tts --no-deps.
+# With compose up, pip-installs faster-whisper then the Chatterbox V3 zip.
 # Globals:
 #   DOWNLOAD_LIMIT, MODELS_DIR, REPO_ROOT
 # Arguments:
@@ -973,8 +997,9 @@ cmd_download_dub() {
 Usage: manage.sh download-dub [--tier asr|clone|all] [--limit auto|N|off]
   Opt-in. Default asr = Silero VAD + faster-whisper large-v3.
   clone = Chatterbox Multilingual V3 (MIT, PerTh on).
-  When compose is up, pip-installs faster-whisper then chatterbox-tts --no-deps
-  (does not pin torch==2.6.0 over the lab venv).
+  When compose is up, pip-installs faster-whisper then the Chatterbox V3
+  GitHub zip --no-deps --force-reinstall (does not pin torch==2.6.0; PyPI
+  0.1.7 has no t3_model=v3).
   Does not run as part of download-models.
   --limit auto|N|off  same wrap as download-models (always clears on exit)
 EOF

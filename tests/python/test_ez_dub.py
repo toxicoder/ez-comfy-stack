@@ -494,7 +494,9 @@ def test_translate_turns_per_turn_fills_spanish(monkeypatch) -> None:
     assert pipeline.TRANSLATE_MAX_TOKENS == 512
 
 
-def test_translate_turns_llama_unavailable_copies_all(monkeypatch) -> None:
+def test_translate_turns_llama_unavailable_leaves_targets_empty(
+    monkeypatch,
+) -> None:
     calls = {"n": 0}
 
     def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
@@ -506,12 +508,14 @@ def test_translate_turns_llama_unavailable_copies_all(monkeypatch) -> None:
     monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
     out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=True)
     assert reason == "llama.cpp unavailable"
-    assert out[0]["text_target"] == "Welcome back to the tape."
-    assert out[1]["text_target"] == "Today we stay on the match."
+    assert out[0]["text_target"] == ""
+    assert out[1]["text_target"] == ""
     assert calls["n"] == 1
 
 
-def test_translate_turns_gguf_load_failed_copies_all(monkeypatch) -> None:
+def test_translate_turns_gguf_load_failed_leaves_targets_empty(
+    monkeypatch,
+) -> None:
     def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
         del system, user, max_tokens, kwargs
         return "", "GGUF failed to load"
@@ -520,8 +524,8 @@ def test_translate_turns_gguf_load_failed_copies_all(monkeypatch) -> None:
     monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
     out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=True)
     assert reason == "GGUF failed to load"
-    assert out[0]["text_target"] == "Welcome back to the tape."
-    assert out[1]["text_target"] == "Today we stay on the match."
+    assert out[0]["text_target"] == ""
+    assert out[1]["text_target"] == ""
 
 
 def test_translate_turns_empty_model_is_passthrough_not_success(monkeypatch) -> None:
@@ -727,6 +731,42 @@ def test_from_local_old_wheel_without_t3_model() -> None:
         assert "t3_model" in str(exc)
 
 
+def test_preflight_clone_names_missing_t3_model(monkeypatch) -> None:
+    class _Loader:
+        @staticmethod
+        def from_local(ckpt_dir: str, device: str):
+            del ckpt_dir, device
+            return object()
+
+    mtl = types.ModuleType("chatterbox.mtl_tts")
+    setattr(mtl, "ChatterboxMultilingualTTS", _Loader)
+    chatterbox = types.ModuleType("chatterbox")
+    monkeypatch.setitem(sys.modules, "chatterbox", chatterbox)
+    monkeypatch.setitem(sys.modules, "chatterbox.mtl_tts", mtl)
+    monkeypatch.setattr(pipeline, "clone_ckpt_dir", lambda: Path("/ckpt"))
+    assert pipeline.preflight_clone() == pipeline.T3_MODEL_STATUS
+
+
+def test_preflight_translate_names_llama_miss(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "ez_prompt_enhance.client._get_llama",
+        lambda: (None, "llama.cpp unavailable"),
+    )
+    reason = pipeline.preflight_translate()
+    assert "llama.cpp unavailable" in reason
+    assert "restart" in reason.lower()
+
+
+def test_preflight_translate_names_gguf_miss(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "ez_prompt_enhance.client._get_llama",
+        lambda: (None, "GGUF missing"),
+    )
+    reason = pipeline.preflight_translate()
+    assert "GGUF missing" in reason
+    assert "download-models" in reason
+
+
 def test_analyze_pcm_uses_asr_segments_as_turns(tmp_path: Path) -> None:
     rate = 24000
     samples = [0.2] * rate * 4
@@ -774,6 +814,7 @@ def test_analyze_job_missing_asr_status(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.delenv("MODELS_ROOT", raising=False)
     monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    monkeypatch.setattr(pipeline, "preflight_translate", lambda: "")
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     dub_audio.write_wav(dest / "source.wav", [0.2] * 24000, 24000)
@@ -936,6 +977,205 @@ def test_speaker_embed_energy_fallback_without_chatterbox(
     monkeypatch.setattr(pipeline, "_get_voice_encoder", lambda: None)
     vec = pipeline.speaker_embed([0.2] * 800, 24000)
     assert len(vec) == 4
+
+
+def test_analyze_job_fails_before_asr_when_llama_missing(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    dub_audio.write_wav(dest / "source.wav", [0.2] * 24000, 24000)
+    calls = {"asr": 0}
+
+    def _asr(path: Path, language: str) -> list[dict]:
+        del path, language
+        calls["asr"] += 1
+        return [{"t0": 0.0, "t1": 1.0, "text": "Hello"}]
+
+    monkeypatch.setattr(
+        pipeline,
+        "preflight_translate",
+        lambda: pipeline.TRANSLATE_LLAMA_STATUS,
+    )
+    pipeline.asr_hook = _asr
+    try:
+        payload, reason = pipeline.analyze_job(
+            dest,
+            target_language="es",
+            source_language="en",
+            max_speakers=0,
+            enhance=True,
+            stage="all",
+        )
+    finally:
+        pipeline.asr_hook = None
+    assert calls["asr"] == 0
+    assert payload["turns"] == []
+    assert "llama.cpp unavailable" in reason
+    assert payload["status"] == reason
+
+
+def test_analyze_job_same_language_skips_translate_preflight(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    dub_audio.write_wav(dest / "source.wav", [0.2] * 24000, 24000)
+
+    def _asr(path: Path, language: str) -> list[dict]:
+        del path, language
+        return [{"t0": 0.0, "t1": 1.0, "text": "Hello there"}]
+
+    def _preflight() -> str:
+        raise AssertionError("translate preflight must not run for same language")
+
+    monkeypatch.setattr(pipeline, "preflight_translate", _preflight)
+    pipeline.asr_hook = _asr
+    try:
+        payload, reason = pipeline.analyze_job(
+            dest,
+            target_language="en",
+            source_language="en",
+            max_speakers=0,
+            enhance=True,
+            stage="all",
+        )
+    finally:
+        pipeline.asr_hook = None
+    assert payload["turns"]
+    assert "same language" in reason
+
+
+def test_analyze_job_enhance_off_skips_translate_preflight(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    dub_audio.write_wav(dest / "source.wav", [0.2] * 24000, 24000)
+
+    def _preflight() -> str:
+        raise AssertionError("translate preflight must not run when enhance is off")
+
+    monkeypatch.setattr(pipeline, "preflight_translate", _preflight)
+    widget = {
+        "turns": _two_en_turns(),
+        "target_language": "es",
+        "source_language": "en",
+        "status": "pinned",
+    }
+    payload, reason = pipeline.analyze_job(
+        dest,
+        target_language="es",
+        source_language="en",
+        max_speakers=0,
+        enhance=False,
+        stage="all",
+        widget_payload=widget,
+    )
+    assert reason == "enhance off"
+    assert payload["turns"]
+
+
+def test_render_mix_refuses_untranslated_llama_miss(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    source = (
+        "I grew up in a small town where the rhythm of daily life was marked "
+        "by the steady hum of the train passing through our station."
+    )
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "1 speakers, 10 turns; llama.cpp unavailable",
+        "turns": [
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 1.04,
+                "t1": 9.34,
+                "text": source,
+                "text_target": source,
+                "overlap": False,
+                "rms": 0.01,
+            }
+        ],
+    }
+    mix, out_rate, status = pipeline.render_mix(
+        samples,
+        rate,
+        payload,
+        dest,
+        engine=ENGINE_CHATTERBOX,
+        keep_bed=True,
+        spoken_disclosure=False,
+    )
+    assert out_rate == rate
+    assert mix == []
+    assert "llama.cpp unavailable" in status
+    assert not (dest / "ez_dub_yt.wav").is_file()
+
+
+def test_render_mix_skips_source_text_when_target_empty(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 4
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    seen: list[str] = []
+
+    def _tts(text: str, language: str, ref_wav: str, engine: str):
+        del language, ref_wav, engine
+        seen.append(text)
+        return [0.1] * 80, rate
+
+    pipeline.tts_hook = _tts
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "",
+        "turns": [
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 0.0,
+                "t1": 1.5,
+                "text": "Welcome back to the tape.",
+                "text_target": "",
+                "overlap": False,
+                "rms": 0.1,
+            }
+        ],
+    }
+    try:
+        mix, _rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert mix == []
+    assert seen == []
+    assert "spoken" in status.lower() or "clone" in status.lower()
+    assert not (dest / "ez_dub_yt.wav").is_file()
 
 
 def test_analyze_job_render_empty_widget_is_no_turns(tmp_path: Path, monkeypatch) -> None:

@@ -294,8 +294,9 @@ install_faster_whisper_wheel() {
 }
 
 #######################################
-# Optional chatterbox-tts for local dub clone. Fail-soft. --no-deps so the
-# package cannot pin torch==2.6.0 / transformers==5.2.0 over the lab venv.
+# Optional chatterbox-tts for local dub clone. Fail-soft. Install the GitHub
+# zip (PyPI 0.1.7 has no t3_model=v3) with --no-deps so the package cannot pin
+# torch==2.6.0 / transformers==5.2.0 over the lab venv.
 # Globals:
 #   None
 # Arguments:
@@ -306,6 +307,7 @@ install_faster_whisper_wheel() {
 #   0 always (soft-fail)
 #######################################
 install_chatterbox_wheel() {
+  local zip
   local -a extras=(
     librosa
     s3tokenizer
@@ -314,11 +316,13 @@ install_chatterbox_wheel() {
     pykakasi
     pyloudnorm
     omegaconf
+    spacy-pkuseg
   )
+  zip="$(chatterbox_tts_zip_url)"
   pip_install --upgrade-strategy only-if-needed "${extras[@]}" ||
     warn "chatterbox extras pip failed — clone may still miss"
-  if pip_install --no-deps chatterbox-tts; then
-    log "chatterbox-tts installed --no-deps (did not pin torch)"
+  if pip_install --upgrade --force-reinstall --no-deps "${zip}"; then
+    log "chatterbox-tts V3 source installed --no-deps (did not pin torch)"
     return 0
   fi
   warn "chatterbox-tts --no-deps failed — clone status will name the miss"
