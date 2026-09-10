@@ -3076,7 +3076,7 @@
 <tr>
 <td><code>COMFYUI_NUNCHAKU_NODE_REF</code></td>
 <td><code>v1.2.1</code></td>
-<td>Latest plugin release; aligned with <code>NUNCHAKU_VERSION=1.2.1</code>. <strong>Optional</strong> on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> (no official aarch64 engine wheels); <code>*-lab-example</code> graphs do not require it.</td>
+<td>Latest plugin release; aligned with <code>NUNCHAKU_VERSION=1.2.1</code>. <strong>Optional</strong> on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> (no official aarch64 engine wheels). When the engine is missing, start moves the pack to <code>ComfyUI-nunchaku.disabled</code> so Comfy does not import it. <code>*-lab-example</code> graphs use core UNET/CLIP/VAE loaders.</td>
 </tr>
 <tr>
 <td><code>COMFYUI_VHS_REF</code></td>
@@ -3091,7 +3091,7 @@
 <tr>
 <td><code>COMFYUI_MAGCACHE_REF</code></td>
 <td><code>47bdd2a…</code></td>
-<td><a href="https://github.com/Zehong-Ma/ComfyUI-MagCache">Zehong-Ma/ComfyUI-MagCache</a> commit pin (no release tag). Wan 5B draft extra only.</td>
+<td><a href="https://github.com/Zehong-Ma/ComfyUI-MagCache">Zehong-Ma/ComfyUI-MagCache</a> commit pin (no release tag). Wan 5B draft extra only. ComfyUI v0.34 dropped module-level <code>precompute_freqs_cis</code>; <code>docker/patch_magcache_compat.py</code> wraps that import on start so Wan <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> still loads. MagCache-on-LTX stays unsupported.</td>
 </tr>
 <tr>
 <td><code>COMFYUI_LTX_DIRECTOR_REF</code></td>

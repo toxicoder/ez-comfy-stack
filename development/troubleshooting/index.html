@@ -2069,8 +2069,8 @@
 </tr>
 <tr>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> did nothing</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> / llama.cpp missing (fail-soft)</td>
-<td>Read <strong>Enhance status</strong>. <code>download-models</code> then restart</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> / llama.cpp missing, or local LLM timed out</td>
+<td>Read <strong>Enhance status</strong>. <code>download-models</code> then restart. Default timeout is <strong>180s</strong> (<code>EZ_LLM_TIMEOUT_S</code>) on <strong>8</strong> CPU threads (<code>EZ_LLM_N_THREADS</code>)</td>
 </tr>
 <tr>
 <td>Dub <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> says <strong>rights refused</strong></td>
@@ -2099,8 +2099,8 @@
 </tr>
 <tr>
 <td>Dub status <code>faster-whisper not installed</code></td>
-<td>Combined pip failed (chatterbox torch pin) or the named volume predates the wheel bake</td>
-<td><code>git pull</code>, stack <strong>up</strong>, <code>./scripts/manage.sh download-dub --tier asr</code> <strong>or</strong> restart. Status should include the ImportError detail (e.g. <code>onnxruntime</code>). Then Queue; <strong>Dub status</strong> must list speaker/turn counts, not the wheel miss.</td>
+<td>Combined pip failed (chatterbox torch pin), named volume predates the wheel bake, or pip landed in the volume venv while Comfy runs <code>/opt/comfy-prebuilt/.venv</code></td>
+<td><code>git pull</code>, stack <strong>up</strong> (entrypoint heals the interpreter Comfy actually execs). <code>./scripts/manage.sh download-dub --tier asr</code>. Status should include the ImportError detail (e.g. <code>onnxruntime</code>). Then Queue; <strong>Dub status</strong> must list speaker/turn counts, not the wheel miss.</td>
 </tr>
 <tr>
 <td>Dub mix is the original <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">clip</span></td>
@@ -2140,7 +2140,7 @@
 <tr>
 <td>House clay <strong>Missing Inputs</strong> / “no file selected” on Clay 01–10</td>
 <td>Plates not in <code>${COMFY_OUTPUT_DIR}/input</code> (LoadImage does not see <code>/outputs</code>)</td>
-<td><code>./scripts/manage.sh start</code> seeds them. While compose is up: <code>./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs</code> (or <code>--install-inputs</code> if the pack exists), then reload the App. Names are <code>ez_house_clay_01.png</code> … <code>10.png</code></td>
+<td>Restart so the entrypoint backstop writes <code>ez_house_clay_01.png</code> … <code>10.png</code> into <code>/inputs</code>. <code>./scripts/manage.sh start</code> still prefers layout-accurate plates. While compose is up: <code>./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs</code> (or <code>--install-inputs</code> if the pack exists), then reload the App</td>
 </tr>
 <tr>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="guide-pack" data-href="../glossary/#guide-pack" title="DCC handshake: 1280×704 clay/depth/first+last for a 5.00s print.">Guide pack</span> QC refuses 1280×720</td>
@@ -2431,12 +2431,17 @@
 <tr>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nunchaku" data-href="../glossary/#nunchaku" title="Optional quantized engine. Lab graphs do not require it; PyPI nunchaku is the wrong package.">Nunchaku</span> import spam / <code>nunchaku 0.16.1</code> / missing <code>nunchaku.models</code></td>
 <td>Wrong <strong>PyPI</strong> package (<code>nunchaku</code> stats lib) or no aarch64 wheel on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span></td>
-<td>Lab graphs do <strong>not</strong> need Nunchaku. Restart after image refresh (removes wrong package). Do <strong>not</strong> <code>pip install nunchaku</code> from PyPI. Optional real engine: GitHub wheels only (<code>NUNCHAKU_WHEEL_URL=…</code> or x86_64 cu/torch match). Spark aarch64: skip; use core <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span>/CLIP/VAE loaders</td>
+<td>Lab graphs do <strong>not</strong> need Nunchaku. Restart: entrypoint moves <code>ComfyUI-nunchaku</code> to <code>ComfyUI-nunchaku.disabled</code> when the engine is missing (Comfy skips <code>*.disabled</code>). Do <strong>not</strong> <code>pip install nunchaku</code> from PyPI. Optional real engine: GitHub wheels only (<code>NUNCHAKU_WHEEL_URL=…</code> or x86_64 cu/torch match). Spark aarch64: skip; use core <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span>/CLIP/VAE loaders</td>
 </tr>
 <tr>
 <td>Nunchaku missing</td>
 <td>aarch64 wheel unavailable</td>
 <td>Fail-soft; <strong>*-lab-example</strong> Flux / LTX paths still work</td>
+</tr>
+<tr>
+<td><code>Cannot import …/custom_nodes/_user</code> / missing <code>__init__.py</code></td>
+<td>Empty host bind <code>${COMFY_OUTPUT_DIR}/custom-nodes-user</code></td>
+<td>Restart. Entrypoint writes an empty stub <code>__init__.py</code> when missing; never overwrites an operator pack</td>
 </tr>
 </tbody>
 </table>
@@ -2477,9 +2482,9 @@
 <td><code>./scripts/manage.sh stop</code> then retry. Proxies never rewrite masters</td>
 </tr>
 <tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> node missing on Wan draft</td>
-<td>Fail-soft clone; upstream dropdown may lack <code>wan2.2_ti2v_5B</code></td>
-<td>Graph still Queues without MagCache. See <code>extra.lab_magcache</code> on <code>wan-i2v-5s-lab-example</code>. Hero LTX graphs must not contain MagCache</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> node missing on Wan draft / <code>precompute_freqs_cis</code> ImportError</td>
+<td>ComfyUI v0.34 moved the LTX RoPE helper; MagCache still imports the old name</td>
+<td>Restart (entrypoint wraps the import). Wan 5B MagCache loads; MagCache-on-LTX stays unsupported. Graph still Queues without MagCache. See <code>extra.lab_magcache</code> on <code>wan-i2v-5s-lab-example</code>. Hero LTX graphs must not contain MagCache</td>
 </tr>
 <tr>
 <td>LTX Director missing</td>
@@ -2699,7 +2704,7 @@
 <tr>
 <td>Enhance on but prompt unchanged / <strong>Enhance status</strong> says GGUF missing</td>
 <td>Snapshot not downloaded, or <code>comfy/llm/</code> link missing/broken. Fail-soft: style still applies, generation still runs; the 4B rewriter did not</td>
-<td>Not an error in the CLIP string. <strong>CLIP prompt</strong> is what CLIP encoded; <strong>Enhance status</strong> is the reason. Run <code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). <code>doctor</code>/<code>start</code> relink a snapshot already under <code>MODELS_DIR/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/</code>. Restart the container after the pull. Rebuild the image if llama-cpp-python failed. Logs: <code>[ez_prompt_enhance]</code>. Default timeout 60s (<code>EZ_LLM_TIMEOUT_S</code>). Do not drop a GGUF into Comfy Manager</td>
+<td>Not an error in the CLIP string. <strong>CLIP prompt</strong> is what CLIP encoded; <strong>Enhance status</strong> is the reason. Run <code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). <code>doctor</code>/<code>start</code> relink a snapshot already under <code>MODELS_DIR/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/</code>. Restart the container after the pull. Rebuild the image if llama-cpp-python failed. Logs: <code>[ez_prompt_enhance]</code>. Default timeout <strong>180s</strong> (<code>EZ_LLM_TIMEOUT_S</code>), <strong>8</strong> CPU threads (<code>EZ_LLM_N_THREADS</code>). Status <code>timeout or empty model output</code> means raise those env vars and restart — do not drop a GGUF into Comfy Manager</td>
 </tr>
 <tr>
 <td>Enhance CLIP prompt box stays empty after Queue</td>
