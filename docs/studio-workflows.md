@@ -250,25 +250,25 @@ flowchart TB
     | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`ez_rap_nill_kick`) |
     | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`ez_rap_nill_uplift`) |
 
-    Drive-through EDM pack (instrumental, not rap over a club bed). Queue on its own. Full table: [Local music](music.md).
+    Drive-through EDM pack (live rave set, not rap over a club bed). Queue on its own; table order is the set list. Full table: [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
-    | **music-edm-drive-through-open-lane-lab-example** | **180 s** future bass 148 (`ez_edm_drive_openlane`). Vast melody, ~30 s drop, repeat |
-    | **music-edm-drive-through-night-window-lab-example** | **180 s** bass house 140 (`ez_edm_drive_night`) |
-    | **music-edm-drive-through-on-ramp-lab-example** | **180 s** hardstyle 150 (`ez_edm_drive_onramp`) |
-    | **music-edm-drive-through-skyline-pass-lab-example** | **180 s** uplifting trance 138 (`ez_edm_drive_skyline`) |
-    | **music-edm-drive-through-freight-pulse-lab-example** | **180 s** drum and bass 174 (`ez_edm_drive_freight`) |
-    | **music-edm-drive-through-heart-lane-lab-example** | **180 s** melodic bass 140 (`ez_edm_drive_heart`) |
-    | **music-edm-drive-through-overpass-lab-example** | **180 s** riddim / dubstep 140 (`ez_edm_drive_overpass`) |
-    | **music-edm-drive-through-second-wave-lab-example** | **180 s** brostep 150 (`ez_edm_drive_second`) |
-    | **music-edm-drive-through-keep-going-lab-example** | **180 s** hybrid trap 150 (`ez_edm_drive_keep`) |
-    | **music-edm-drive-through-tunnel-bass-lab-example** | **180 s** hard techno 145 (`ez_edm_drive_tunnel`) |
-    | **music-edm-drive-through-horizon-kick-lab-example** | **180 s** rawstyle 160 (`ez_edm_drive_horizon`) |
-    | **music-edm-drive-through-clean-wreckage-lab-example** | **180 s** complex bass 140 (`ez_edm_drive_wreck`) |
-    | **music-edm-drive-through-exit-seven-lab-example** | **180 s** complextro 140 (`ez_edm_drive_exit`) |
-    | **music-edm-drive-through-wide-open-lab-example** | **180 s** big room 150 (`ez_edm_drive_wide`) |
-    | **music-edm-drive-through-dawn-receipt-lab-example** | **180 s** progressive house 128 (`ez_edm_drive_dawn`) |
+    | **music-edm-drive-through-night-window-lab-example** | **180 s** bass house 145 (`ez_edm_drive_night`). Opener, kick from bar 1 |
+    | **music-edm-drive-through-open-lane-lab-example** | **180 s** festival bass 152 (`ez_edm_drive_openlane`). Drop-first ID |
+    | **music-edm-drive-through-exit-seven-lab-example** | **180 s** electro house 142 (`ez_edm_drive_exit`). Filter mix-in |
+    | **music-edm-drive-through-skyline-pass-lab-example** | **180 s** uplifting trance 145 (`ez_edm_drive_skyline`) |
+    | **music-edm-drive-through-on-ramp-lab-example** | **180 s** hardstyle 155 (`ez_edm_drive_onramp`) |
+    | **music-edm-drive-through-tunnel-bass-lab-example** | **180 s** hard techno 150 (`ez_edm_drive_tunnel`). Three drops |
+    | **music-edm-drive-through-wide-open-lab-example** | **180 s** big room 150 (`ez_edm_drive_wide`). DJ shout treat |
+    | **music-edm-drive-through-overpass-lab-example** | **180 s** rave bass 150 (`ez_edm_drive_overpass`). Half-time then four-floor |
+    | **music-edm-drive-through-second-wave-lab-example** | **180 s** festival remix 150 (`ez_edm_drive_second`). Vocal-chop treat |
+    | **music-edm-drive-through-freight-pulse-lab-example** | **180 s** drum and bass 176 (`ez_edm_drive_freight`) |
+    | **music-edm-drive-through-keep-going-lab-example** | **180 s** UK hardcore 170 (`ez_edm_drive_keep`). Triple-drop peak |
+    | **music-edm-drive-through-horizon-kick-lab-example** | **180 s** rawstyle 165 (`ez_edm_drive_horizon`) |
+    | **music-edm-drive-through-clean-wreckage-lab-example** | **180 s** hard dance 150 (`ez_edm_drive_wreck`) |
+    | **music-edm-drive-through-heart-lane-lab-example** | **180 s** melodic techno 145 (`ez_edm_drive_heart`) |
+    | **music-edm-drive-through-dawn-receipt-lab-example** | **180 s** peak-time house 140 (`ez_edm_drive_dawn`). Closer |
 
 === "DCC (clay → print)"
 

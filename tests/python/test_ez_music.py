@@ -24,10 +24,12 @@ from ez_music.diss_examples import (  # noqa: E402
 )
 from ez_music.edm_examples import (  # noqa: E402
     DRIVE_LOCK,
+    DRIVE_TREAT_LOCK,
+    DROP_WEIGHT_NEEDLES,
     EDM_DURATION_S,
     EDM_EXAMPLES,
     drive_tags,
-    format_edm_arrangement,
+    format_edm_score,
 )
 from ez_music.nodes import (  # noqa: E402
     DRAFT_LYRICS,
@@ -231,59 +233,126 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
 
 
 EXPECTED_DRIVE_THROUGH_TITLES = (
-    "open lane",
     "night window",
-    "on-ramp",
+    "open lane",
+    "exit seven",
     "skyline pass",
-    "freight pulse",
-    "heart lane",
+    "on-ramp",
+    "tunnel bass",
+    "wide open",
     "overpass",
     "second wave",
+    "freight pulse",
     "keep going",
-    "tunnel bass",
     "horizon kick",
     "clean wreckage",
-    "exit seven",
-    "wide open",
+    "heart lane",
     "dawn receipt",
 )
-DRIVE_INSPIRE_NEEDLES = ("vast", "horizon", "open", "heart")
+DRIVE_TREAT_TITLES = frozenset({"wide open", "second wave"})
 
 
-def _valid_edm_kwargs() -> dict[str, str]:
-    return {
-        "intro": "glow",
-        "melody": "vast sky open",
-        "build": "snare up",
-        "drop": "thirty second drop\nheavy bass",
-        "break_": "heart on the horizon",
-        "build2": "snare back",
-        "drop2": "thirty second drop\nheavier bass",
-        "outro": "cut",
-    }
+def _valid_edm_sections() -> list[tuple[str, str]]:
+    return [
+        ("intro", "kick in"),
+        ("inst", "heavy drop\nstacked bass"),
+        ("inst", "harder drop\nwreck hats"),
+        ("outro", "blend out"),
+    ]
+
+
+def _score_labels(lyrics: str) -> tuple[str, ...]:
+    labels: list[str] = []
+    for line in lyrics.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("[") and stripped.endswith("]"):
+            labels.append(stripped[1:-1])
+    return tuple(labels)
+
+
+def _drop_blocks(lyrics: str) -> list[str]:
+    blocks: list[str] = []
+    current: list[str] = []
+    for line in lyrics.splitlines():
+        if line.startswith("[") and current:
+            blocks.append("\n".join(current))
+            current = [line]
+        else:
+            current.append(line)
+    if current:
+        blocks.append("\n".join(current))
+    return [block for block in blocks if "drop" in block.lower()]
 
 
 def test_drive_tags_lock_instrumental_bed() -> None:
     tags = drive_tags("future bass", "supersaw", bpm=148)
     assert tags == (
-        "future bass, supersaw, instrumental, no vocals, original composition, 148 bpm"
+        "future bass, supersaw, instrumental, no vocals, no singing, "
+        "original composition, 148 bpm"
     )
     for token in DRIVE_LOCK.split(", "):
         assert token in tags
 
 
-def test_format_edm_arrangement_requires_thirty_second_drops() -> None:
-    kwargs = _valid_edm_kwargs()
-    kwargs["drop"] = "heavy drop\nno duration"
-    with pytest.raises(ValueError, match="thirty seconds"):
-        format_edm_arrangement(**kwargs)
+def test_drive_tags_lock_vocal_treat() -> None:
+    tags = drive_tags("big room", "festival", bpm=150, treat=True)
+    assert tags == (
+        "big room, festival, sparse vocal chop, DJ shout, no rap, "
+        "original composition, 150 bpm"
+    )
+    for token in DRIVE_TREAT_LOCK.split(", "):
+        assert token in tags
+    assert "no vocals" not in tags
+    assert "no singing" not in tags
 
 
-def test_format_edm_arrangement_requires_inspire_lock() -> None:
-    kwargs = _valid_edm_kwargs()
-    kwargs["melody"] = "dark pad only"
-    with pytest.raises(ValueError, match="vast/horizon/open/heart"):
-        format_edm_arrangement(**kwargs)
+def test_format_edm_score_requires_weighted_drops() -> None:
+    sections = _valid_edm_sections()
+    sections[1] = ("inst", "named drop\nno weight")
+    with pytest.raises(ValueError, match="weight needle"):
+        format_edm_score(*sections)
+
+
+def test_format_edm_score_requires_two_drops() -> None:
+    sections = _valid_edm_sections()
+    sections[1] = ("inst", "hats only")
+    with pytest.raises(ValueError, match="two named drops"):
+        format_edm_score(*sections)
+
+
+def test_format_edm_score_rejects_unknown_label() -> None:
+    sections = _valid_edm_sections()
+    sections[0] = ("verse", "bars")
+    with pytest.raises(ValueError, match="unknown score label"):
+        format_edm_score(*sections)
+
+
+def test_format_edm_score_rejects_empty_body() -> None:
+    sections = _valid_edm_sections()
+    sections[0] = ("intro", "   ")
+    with pytest.raises(ValueError, match="body is empty"):
+        format_edm_score(*sections)
+
+
+def test_format_edm_score_rejects_short_score() -> None:
+    with pytest.raises(ValueError, match="at least three sections"):
+        format_edm_score(
+            ("inst", "heavy drop\nstacked bass"),
+            ("outro", "cut"),
+        )
+
+
+def test_format_edm_score_allows_chorus_treat() -> None:
+    score = format_edm_score(
+        ("intro", "mix in"),
+        ("chorus", "hands up"),
+        ("inst", "heavy drop\nstacked kick"),
+        ("inst", "harder drop\nmainstage wreck"),
+        ("outro", "blend out"),
+    )
+    assert "[chorus]" in score
+    assert "[verse]" not in score
+    assert score.count("drop") >= 2
 
 
 def test_drive_through_edm_examples_are_original_180s() -> None:
@@ -292,29 +361,46 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
     prefixes: list[str] = []
     stems: list[str] = []
     bpms: list[int] = []
+    signatures: list[tuple[str, ...]] = []
+    triple_drops = 0
+    treat_titles: list[str] = []
     for ex in EDM_EXAMPLES:
         assert ex["duration"] == EDM_DURATION_S
         assert ex["series"] == "drive-through"
         lyrics = ex["lyrics"]
-        assert "[intro]" in lyrics
         assert "[outro]" in lyrics
-        assert lyrics.count("[inst]") >= 6
+        assert "[inst]" in lyrics
         assert "[verse]" not in lyrics
-        assert "[chorus]" not in lyrics
         assert "[spoken word]" not in lyrics
         assert "Drive-through" in lyrics
-        assert lyrics.lower().count("thirty second drop") >= 2
-        inst_blocks = [block.strip() for block in lyrics.split("[inst]\n")[1:]]
-        assert len(inst_blocks) >= 6
-        melody, _, _, break_, _, _ = (block.split("\n\n")[0] for block in inst_blocks[:6])
-        for block in (melody, break_):
+        labels = _score_labels(lyrics)
+        assert labels[-1] == "outro"
+        signatures.append(labels)
+        drops = _drop_blocks(lyrics)
+        assert len(drops) >= 2, (ex["stem"], len(drops))
+        if len(drops) >= 3:
+            triple_drops += 1
+        for block in drops:
             low = block.lower()
-            assert any(needle in low for needle in DRIVE_INSPIRE_NEEDLES), (
+            assert any(needle in low for needle in DROP_WEIGHT_NEEDLES), (
                 ex["stem"],
                 block,
             )
-        for token in DRIVE_LOCK.split(", "):
-            assert token in ex["tags"], (ex["stem"], token)
+        treat = ex["title"] in DRIVE_TREAT_TITLES
+        if treat:
+            assert "[chorus]" in lyrics
+            assert lyrics.count("[chorus]") == 1
+            assert ex["ace_mode"] == "vocal"
+            for token in DRIVE_TREAT_LOCK.split(", "):
+                assert token in ex["tags"], (ex["stem"], token)
+            treat_titles.append(ex["title"])
+        else:
+            assert "[chorus]" not in lyrics
+            assert "[intro]" in lyrics or labels[0] == "inst"
+            assert ex["ace_mode"] == "instrumental"
+            for token in DRIVE_LOCK.split(", "):
+                assert token in ex["tags"], (ex["stem"], token)
+        assert "rave" in ex["tags"]
         assert str(ex["bpm"]) in ex["tags"]
         assert ex["stem"].startswith("music-edm-drive-through-")
         assert ex["stem"].endswith("-lab-example")
@@ -328,13 +414,18 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         bpms.append(int(ex["bpm"]))
     assert len(set(prefixes)) == 15
     assert len(set(stems)) == 15
-    assert min(bpms) >= 128
-    assert max(bpms) >= 160
-    assert sum(1 for bpm in bpms if bpm >= 138) == 14
+    assert min(bpms) >= 140
+    assert max(bpms) >= 170
+    assert sum(1 for bpm in bpms if bpm >= 145) >= 12
+    assert triple_drops >= 4
+    assert len(set(signatures)) >= 8
+    for left, right in zip(signatures, signatures[1:]):
+        assert left != right
+    assert frozenset(treat_titles) == DRIVE_TREAT_TITLES
     assert tuple(ex["title"] for ex in EDM_EXAMPLES) == EXPECTED_DRIVE_THROUGH_TITLES
-    assert "open lane ahead" in EDM_EXAMPLES[0]["lyrics"]
-    assert "night window open" in EDM_EXAMPLES[1]["lyrics"]
-    assert "on-ramp rising" in EDM_EXAMPLES[2]["lyrics"]
+    assert "four on the floor" in EDM_EXAMPLES[0]["lyrics"]
+    assert "full send drop" in EDM_EXAMPLES[1]["lyrics"]
+    assert "filter mix-in" in EDM_EXAMPLES[2]["lyrics"]
 
 
 def test_writer_prompt_forbids_living_mcs() -> None:
