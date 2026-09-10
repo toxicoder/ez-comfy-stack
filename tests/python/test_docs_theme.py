@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MKDOCS_YML = ROOT / "mkdocs.yml"
 EXTRA_CSS = ROOT / "docs" / "stylesheets" / "extra.css"
 TABLES_JS = ROOT / "docs" / "javascripts" / "tables.js"
+PUBLISHED_JS = ROOT / "docs" / "javascripts" / "published.js"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
 
 
@@ -49,6 +50,7 @@ def test_mkdocs_wires_extra_css() -> None:
     assert "javascripts/glossary.js" in text
     assert "javascripts/commands.js" in text
     assert "javascripts/tables.js" in text
+    assert "javascripts/published.js" in text
     assert "content.tooltips" in text
 
 
@@ -154,3 +156,38 @@ def test_conventions_document_sticky_header() -> None:
     assert "overflow" in text.lower()
     assert "ez-table-pin" in text or "clone" in text.lower()
     assert ".md-header" in text or "md-header" in text
+    assert "ez-published-chip" in text
+    assert "EZ_DOCS_PUBLISHED_AT" in text
+    assert "Last published" in text or "last published" in text.lower()
+
+
+def test_extra_css_styles_published_chip() -> None:
+    """Published chip is a pill beside the title; label hides without display:none."""
+    css = _read(EXTRA_CSS)
+    assert re.search(
+        r"\.ez-published-chip\s*\{[^}]*float:\s*right",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"\.ez-published-chip\s*\{[^}]*border-radius:\s*999px",
+        css,
+        re.S,
+    )
+    assert "--md-primary-fg-color" in css
+    assert ".ez-published-chip__label" in css
+    assert re.search(r"clip:\s*rect\(0,\s*0,\s*0,\s*0\)", css)
+    assert re.search(r"display\s*:\s*none", css) is None
+
+
+def test_published_js_rewrites_relative_time() -> None:
+    """published.js upgrades the chip time label; datetime stays the source."""
+    js = _read(PUBLISHED_JS)
+    assert "document$.subscribe" in js
+    assert ".ez-published-chip time[datetime]" in js or "datetime" in js
+    assert "just now" in js
+    assert "minute" in js
+    assert "hour" in js
+    assert "day" in js
+    assert "14" in js
+    assert "textContent" in js

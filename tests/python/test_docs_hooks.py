@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
@@ -40,7 +41,13 @@ def hooks(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.delenv("MIKE_DOCS_VERSION", raising=False)
     monkeypatch.delenv("EZ_DOCS_VERSION", raising=False)
     monkeypatch.delenv("EZ_DOCS_GIT_REF", raising=False)
-    return _load_hooks()
+    monkeypatch.delenv("EZ_DOCS_PUBLISHED_AT", raising=False)
+    monkeypatch.delenv("SOURCE_DATE_EPOCH", raising=False)
+    module = _load_hooks()
+    monkeypatch.setattr(
+        module, "_git_head_committer_date", lambda: None, raising=False
+    )
+    return module
 
 
 def test_docs_version_prefers_mike(hooks, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -223,3 +230,139 @@ def test_on_post_page_skips_banner_for_latest(
     html = "<html><body><h1>Title</h1></body></html>"
     out = hooks.on_post_page(html)
     assert "ez-docs-dev-banner" not in out
+
+
+def test_published_at_parses_iso_z(hooks, monkeypatch: pytest.MonkeyPatch) -> None:
+    """EZ_DOCS_PUBLISHED_AT ISO-8601 with Z becomes aware UTC."""
+    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-09-10T14:32:00Z")
+    got = hooks.published_at()
+    assert got == datetime(2026, 9, 10, 14, 32, tzinfo=timezone.utc)
+
+
+def test_published_at_parses_unix_seconds(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Integer unix seconds in EZ_DOCS_PUBLISHED_AT are accepted."""
+    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "1694332800")
+    got = hooks.published_at()
+    assert got == datetime.fromtimestamp(1694332800, tz=timezone.utc)
+
+
+def test_published_at_prefers_env_over_epoch(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """EZ_DOCS_PUBLISHED_AT wins over SOURCE_DATE_EPOCH."""
+    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-01-02T00:00:00Z")
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1694332800")
+    got = hooks.published_at()
+    assert got == datetime(2026, 1, 2, tzinfo=timezone.utc)
+
+
+def test_published_at_uses_source_date_epoch(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """SOURCE_DATE_EPOCH is used when EZ_DOCS_PUBLISHED_AT is unset."""
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1694332800")
+    got = hooks.published_at()
+    assert got == datetime.fromtimestamp(1694332800, tz=timezone.utc)
+
+
+def test_published_at_uses_git_helper(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Git HEAD committer date is the last fallback."""
+    stamp = datetime(2026, 4, 1, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(hooks, "_git_head_committer_date", lambda: stamp)
+    assert hooks.published_at() == stamp
+
+
+def test_published_at_invalid_env_skips(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Invalid EZ_DOCS_PUBLISHED_AT does not fail the build; chip is omitted."""
+    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "not-a-date")
+    assert hooks.published_at() is None
+
+
+def test_published_at_none_when_unset(hooks) -> None:
+    """No env and no git helper → no timestamp (do not use now())."""
+    assert hooks.published_at() is None
+
+
+def test_format_published_label_english_day(hooks) -> None:
+    """Visible date is English, no locale, no zero-padded day."""
+    dt = datetime(2026, 9, 4, 8, 5, tzinfo=timezone.utc)
+    assert hooks.format_published_label(dt) == "4 Sep 2026"
+
+
+def test_on_post_page_injects_published_chip(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Chip is prepended to article.md-content__inner when a stamp exists."""
+    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-09-10T14:32:00Z")
+    html = (
+        '<html><body><article class="md-content__inner md-typeset">'
+        "<h1>Hi</h1></article></body></html>"
+    )
+    out = hooks.on_post_page(html)
+    assert "ez-published-chip" in out
+    assert 'role="status"' in out
+    assert "<time datetime=" in out
+    assert "2026-09-10T14:32:00+00:00" in out
+    assert "10 Sep 2026" in out
+    assert "Last published" in out
+    article_at = out.index("md-content__inner")
+    chip_at = out.index("ez-published-chip")
+    h1_at = out.index("<h1>")
+    assert article_at < chip_at < h1_at
+
+
+def test_on_post_page_skips_chip_without_stamp(hooks) -> None:
+    """No resolved timestamp means no chip (never datetime.now())."""
+    html = (
+        '<html><body><article class="md-content__inner md-typeset">'
+        "<h1>Hi</h1></article></body></html>"
+    )
+    out = hooks.on_post_page(html)
+    assert "ez-published-chip" not in out
+
+
+def test_on_post_page_does_not_duplicate_chip(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A page that already has the chip is left with a single instance."""
+    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-09-10T14:32:00Z")
+    html = (
+        '<article class="md-content__inner">'
+        '<span class="ez-published-chip">keep</span>'
+        "<h1>Hi</h1></article>"
+    )
+    out = hooks.on_post_page(html)
+    assert out.count("ez-published-chip") == 1
+    assert "keep" in out
+
+
+def test_on_post_page_chip_on_latest(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """latest alias still gets the published chip (banner stays off)."""
+    monkeypatch.setenv("MIKE_DOCS_VERSION", "latest")
+    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-09-10T14:32:00Z")
+    html = "<html><body><h1>Title</h1></body></html>"
+    out = hooks.on_post_page(html)
+    assert "ez-published-chip" in out
+    assert "ez-docs-dev-banner" not in out
+
+
+def test_on_post_page_chip_and_dev_banner(
+    hooks, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Development alias keeps the banner and adds the chip before h1."""
+    monkeypatch.setenv("MIKE_DOCS_VERSION", "development")
+    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-09-10T14:32:00Z")
+    html = "<html><body><h1>Title</h1></body></html>"
+    out = hooks.on_post_page(html)
+    assert "ez-docs-dev-banner" in out
+    assert "ez-published-chip" in out
+    assert out.index("ez-docs-dev-banner") < out.index("ez-published-chip")
+    assert out.index("ez-published-chip") < out.index("<h1>")

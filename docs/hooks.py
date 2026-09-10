@@ -15,14 +15,20 @@ Branch-aware site artifacts (mike aliases ``latest`` / ``development``):
   ``glossary.md``).
 - When ``MIKE_DOCS_VERSION`` or ``EZ_DOCS_VERSION`` is ``development``, injects
   a small banner so readers know they are on the development docs alias.
+- ``on_post_page`` injects a site-wide last-published chip from
+  ``EZ_DOCS_PUBLISHED_AT``, then ``SOURCE_DATE_EPOCH``, then git HEAD. Invalid
+  or missing stamps omit the chip (never ``datetime.now()``).
 """
 
 from __future__ import annotations
 
+import html
 import importlib.util
 import os
 import re
+import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -68,6 +74,17 @@ def _glossary_mod() -> Any:
     return _GLOSSARY_MOD
 
 _REPO = "toxicoder/ez-comfy-stack"
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+_UNSET = object()
+_published_cache: datetime | None | object = _UNSET
+
+_CALENDAR_SVG = (
+    '<svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" '
+    'viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+    '<path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 '
+    '2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path>'
+    "</svg>"
+)
 
 # Operator docs placeholder: stamped to docs_git_ref() at build time so Setup
 # (and similar) matches the published docs alias without hardcoding a branch.
@@ -104,6 +121,164 @@ def docs_version() -> str:
     return (
         os.environ.get("MIKE_DOCS_VERSION") or os.environ.get("EZ_DOCS_VERSION") or ""
     ).strip().lower()
+
+
+def _parse_datetime(raw: str) -> datetime | None:
+    """Parse an ISO-8601 stamp or integer unix seconds as aware UTC.
+
+    Args:
+        raw: Env or git value (already stripped).
+
+    Returns:
+        Timezone-aware UTC datetime, or ``None`` when unparsable.
+    """
+    if not raw:
+        return None
+    if re.fullmatch(r"-?\d+", raw):
+        try:
+            return datetime.fromtimestamp(int(raw), tz=timezone.utc)
+        except (OverflowError, OSError, ValueError):
+            return None
+    iso = raw.replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(iso)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _git_head_committer_date() -> datetime | None:
+    """Return git HEAD committer date for this repository, if available.
+
+    Returns:
+        Aware UTC datetime from ``%cI``, or ``None`` on any git failure.
+    """
+    try:
+        proc = subprocess.run(
+            ["git", "-C", str(_REPO_ROOT), "log", "-1", "--format=%cI"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=2,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if proc.returncode != 0:
+        return None
+    return _parse_datetime(proc.stdout.strip())
+
+
+def published_at() -> datetime | None:
+    """Return the site-wide docs publish stamp for this build.
+
+    Resolution order (cached for the process):
+
+    1. ``EZ_DOCS_PUBLISHED_AT`` (ISO-8601 or unix seconds). A set but invalid
+       value skips later fallbacks so a typo cannot silently show git HEAD.
+    2. ``SOURCE_DATE_EPOCH`` (unix seconds).
+    3. Git HEAD committer date.
+    4. ``None`` — callers omit the chip. Never uses wall-clock now.
+
+    Returns:
+        Aware UTC datetime, or ``None`` when no stamp can be resolved.
+    """
+    global _published_cache
+    if _published_cache is not _UNSET:
+        return _published_cache if isinstance(_published_cache, datetime) else None
+
+    env_raw = os.environ.get("EZ_DOCS_PUBLISHED_AT")
+    if env_raw is not None and env_raw.strip() != "":
+        stamp = _parse_datetime(env_raw.strip())
+        _published_cache = stamp
+        return stamp
+
+    epoch_raw = (os.environ.get("SOURCE_DATE_EPOCH") or "").strip()
+    if epoch_raw:
+        stamp = _parse_datetime(epoch_raw)
+        if stamp is not None:
+            _published_cache = stamp
+            return stamp
+
+    stamp = _git_head_committer_date()
+    _published_cache = stamp
+    return stamp
+
+
+def format_published_label(stamp: datetime) -> str:
+    """Return an English calendar label (no locale, no zero-padded day).
+
+    Args:
+        stamp: Aware datetime (converted to UTC).
+
+    Returns:
+        Label such as ``4 Sep 2026``.
+    """
+    utc = stamp.astimezone(timezone.utc)
+    return f"{utc.day} {utc.strftime('%b %Y')}"
+
+
+def render_published_chip(stamp: datetime) -> str:
+    """Return the last-published chip HTML for ``stamp``.
+
+    Args:
+        stamp: Site-wide publish datetime.
+
+    Returns:
+        HTML for a ``ez-published-chip`` status pill.
+    """
+    utc = stamp.astimezone(timezone.utc)
+    label = format_published_label(utc)
+    iso = utc.isoformat(timespec="seconds")
+    title = html.escape(f"Last published {label}, {utc.strftime('%H:%M')} UTC")
+    visible = html.escape(label)
+    return (
+        f'<span class="ez-published-chip" role="status" title="{title}">'
+        f"{_CALENDAR_SVG}"
+        f'<span class="ez-published-chip__label">Last published</span>'
+        f'<span class="ez-published-chip__sep" aria-hidden="true">·</span>'
+        f'<time datetime="{html.escape(iso, quote=True)}">{visible}</time>'
+        f"</span>"
+    )
+
+
+def _inject_published_chip(output: str) -> str:
+    """Insert the last-published chip into article chrome when a stamp exists.
+
+    Prefers the opening ``article.md-content__inner`` tag (same region as the
+    development banner), then the first ``h1``. Skips when the chip is already
+    present or ``published_at()`` is ``None``.
+
+    Args:
+        output: Rendered HTML page.
+
+    Returns:
+        HTML with at most one published chip.
+    """
+    if "ez-published-chip" in output:
+        return output
+    stamp = published_at()
+    if stamp is None:
+        return output
+    chip = render_published_chip(stamp)
+    html2, n = re.subn(
+        r'(<article\b[^>]*class="[^"]*md-content__inner[^"]*"[^>]*>)',
+        r"\1" + chip,
+        output,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+    if n:
+        return html2
+    html2, n = re.subn(
+        r"(<h1\b[^>]*>)",
+        chip + r"\1",
+        output,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+    return html2 if n else output
 
 
 def docs_git_ref() -> str:
@@ -199,18 +374,21 @@ def on_page_markdown(markdown: str, **kwargs: Any) -> str:
 
 
 def on_post_page(output: str, **kwargs: Any) -> str:
-    """Stamp refs, inject the development banner, then wrap glossary terms.
+    """Stamp refs, inject publish chip and development banner, wrap glossary.
 
     Args:
         output: Rendered HTML page content from MkDocs.
         **kwargs: MkDocs hook metadata; ``page`` is used for glossary hrefs.
 
     Returns:
-        HTML with branch stamps, optional development banner, and glossary
-        term triggers plus a definition dialog when terms matched.
+        HTML with branch stamps, optional last-published chip, optional
+        development banner, and glossary term triggers plus a definition
+        dialog when terms matched.
     """
     page = kwargs.get("page")
     output = stamp_docs_git_ref_placeholder(stamp_git_ref(output))
+    # Chip first so the development banner prepends ahead of it.
+    output = _inject_published_chip(output)
 
     if docs_version() == "development" and "ez-docs-dev-banner" not in output:
         html2, n = re.subn(
@@ -224,7 +402,7 @@ def on_post_page(output: str, **kwargs: Any) -> str:
             output = html2
         else:
             html2, n = re.subn(
-                r"(<h1\b[^>]*>)",
+                r'(<span\b[^>]*class="[^"]*ez-published-chip[^"]*"[^>]*>)',
                 _DEV_BANNER + r"\1",
                 output,
                 count=1,
@@ -232,6 +410,16 @@ def on_post_page(output: str, **kwargs: Any) -> str:
             )
             if n:
                 output = html2
+            else:
+                html2, n = re.subn(
+                    r"(<h1\b[^>]*>)",
+                    _DEV_BANNER + r"\1",
+                    output,
+                    count=1,
+                    flags=re.IGNORECASE,
+                )
+                if n:
+                    output = html2
 
     output = _commands_mod().inject_command_assets(output)
     return _glossary_mod().apply_glossary(output, page)
