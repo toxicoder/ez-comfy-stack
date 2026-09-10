@@ -368,7 +368,8 @@ apply_unified_memory_copy_patch() {
 }
 
 #######################################
-# Wrap MagCache's LTX RoPE import so Wan MagCache loads on ComfyUI v0.34+.
+# Wrap MagCache LTX RoPE imports (nodes.py + nodes_calibration.py) and
+# fail-soft the calibration import so Wan MagCache loads on ComfyUI v0.34+.
 # Globals:
 #   COMFY_HOME
 # Arguments:

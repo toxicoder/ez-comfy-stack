@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import shutil
 import sys
+import types
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -159,9 +160,12 @@ def test_ingest_rights_false_does_not_write(tmp_path: Path, monkeypatch) -> None
     wav = tmp_path / "in.wav"
     dub_audio.write_wav(wav, [0.1, -0.1] * 100, 24000)
     out = EZDubIngest().run(str(wav), False, "episode")
-    assert out["result"][0] == ""
+    assert out["result"][0] == "episode"
     assert out["ui"]["passthrough"][0] == "rights refused"
-    assert not (tmp_path / "dubs" / "episode" / "source.wav").is_file()
+    dest = tmp_path / "dubs" / "episode"
+    assert not (dest / "source.wav").is_file()
+    state = jobstore.load_state(dest)
+    assert state["status"] == "rights refused"
 
 
 def test_resolve_media_source_basename_url_and_none(
@@ -196,7 +200,9 @@ def test_ingest_none_source_fail_soft(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     out = EZDubIngest().run(pipeline.SOURCE_NONE, True, "episode")
     assert "empty source" in out["ui"]["passthrough"][0]
-    assert not (tmp_path / "dubs" / "episode" / "source.wav").is_file()
+    dest = tmp_path / "dubs" / "episode"
+    assert not (dest / "source.wav").is_file()
+    assert "empty source" in jobstore.load_state(dest)["status"]
 
 
 def test_ingest_wav_and_script_pin(tmp_path: Path, monkeypatch) -> None:
@@ -999,3 +1005,169 @@ def test_synthesize_turn_splits_long_text() -> None:
     assert err == ""
     assert len(seen) > 1
     assert all(len(chunk) <= pipeline.CLONE_TEXT_LIMIT for chunk in seen)
+
+
+def test_script_render_surface_rights_refuse(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    wav = tmp_path / "in.wav"
+    dub_audio.write_wav(wav, [0.1] * 100, 24000)
+    ingested = EZDubIngest().run(str(wav), False, "match-day")
+    assert ingested["result"][0] == "match-day"
+    scripted = EZDubScript().run(SEED_SCRIPT, True, "es", "auto", 0, "all", "match-day")
+    assert scripted["ui"]["passthrough"][0] == "rights refused"
+    payload = dub_turns.parse_payload(scripted["result"][0])
+    assert payload["turns"] == []
+    assert payload["status"] == "rights refused"
+    rendered = EZDubRender().run(
+        scripted["result"][0], ENGINE_CHATTERBOX, True, False, 1.0, "match-day"
+    )
+    assert rendered["ui"]["passthrough"][0] == "rights refused"
+
+
+def test_script_surfaces_empty_source(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    EZDubIngest().run(pipeline.SOURCE_NONE, True, "episode")
+    scripted = EZDubScript().run(SEED_SCRIPT, True, "es", "auto", 0, "all", "episode")
+    assert "empty source" in scripted["ui"]["passthrough"][0]
+
+
+def test_analyze_job_missing_wav_operator_status(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    payload, reason = pipeline.analyze_job(
+        dest,
+        target_language="es",
+        source_language="auto",
+        max_speakers=0,
+        enhance=True,
+        stage="all",
+    )
+    assert payload["turns"] == []
+    assert reason == pipeline.MISSING_SOURCE_STATUS
+    assert "I have rights" in reason
+    rendered = EZDubRender().run(SEED_SCRIPT, ENGINE_CHATTERBOX, True, False, 1.0, "ep")
+    assert rendered["ui"]["passthrough"][0] == pipeline.MISSING_SOURCE_STATUS
+
+
+def test_missing_source_status_prefers_error_when_status_generic(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    jobstore.save_state(
+        dest,
+        {
+            "slug": "ep",
+            "stage": "ingest",
+            "status": "pending",
+            "error": "ffmpeg extract failed: boom",
+            "flags": [],
+        },
+    )
+    assert pipeline.missing_source_status(dest) == "ffmpeg extract failed: boom"
+
+
+def test_output_root_prefers_folder_paths(monkeypatch) -> None:
+    fake = types.SimpleNamespace(get_output_directory=lambda: "/comfy/output")
+    monkeypatch.setitem(sys.modules, "folder_paths", fake)
+    assert jobstore.output_root() == Path("/comfy/output")
+
+
+def test_output_root_empty_folder_paths_falls_through(
+    tmp_path: Path, monkeypatch
+) -> None:
+    fake = types.SimpleNamespace(get_output_directory=lambda: "")
+    monkeypatch.setitem(sys.modules, "folder_paths", fake)
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert jobstore.output_root() == tmp_path
+
+
+def test_output_root_folder_paths_error(tmp_path: Path, monkeypatch) -> None:
+    def _boom() -> str:
+        raise RuntimeError("no comfy")
+
+    fake = types.SimpleNamespace(get_output_directory=_boom)
+    monkeypatch.setitem(sys.modules, "folder_paths", fake)
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert jobstore.output_root() == tmp_path
+
+
+def test_output_root_prefers_container_outputs(monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", "/mnt/comfy-output")
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return True
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert jobstore.output_root() == Path("/outputs")
+
+
+def test_output_root_host_default(monkeypatch) -> None:
+    monkeypatch.delenv("COMFY_OUTPUT_DIR", raising=False)
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert jobstore.output_root() == Path("/mnt/comfy-output")
+
+
+def test_record_ingest_failure_defaults_error(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = jobstore.dub_dir("ep")
+    jobstore.record_ingest_failure(dest, "empty source")
+    state = jobstore.load_state(dest)
+    assert state["status"] == "empty source"
+    assert state["error"] == "empty source"
+
+
+def test_analyze_pcm_without_wav_path_is_missing_source() -> None:
+    turns, detected, reason = pipeline.analyze_pcm([0.1] * 100, 24000)
+    assert turns == []
+    assert detected == ""
+    assert reason == pipeline.MISSING_SOURCE_STATUS
+
+
+def test_output_root_comfy_output_alias(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.delenv("COMFY_OUTPUT_DIR", raising=False)
+    monkeypatch.setenv("COMFY_OUTPUT", str(tmp_path))
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert jobstore.output_root() == tmp_path

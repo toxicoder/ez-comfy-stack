@@ -6,7 +6,7 @@ from typing import Any
 
 from .align import SAMPLE_RATE, fit_turn
 from .audio import audio_from_pcm, empty_audio, read_wav
-from .jobstore import dub_dir, output_root, sanitize_slug
+from .jobstore import dub_dir, record_ingest_failure, sanitize_slug
 from .pipeline import (
     DISCLOSURE_TEXT,
     ENGINE_CHATTERBOX,
@@ -21,6 +21,7 @@ from .pipeline import (
     TARGET_LANG_WIDGET,
     analyze_job,
     ingest,
+    missing_source_status,
     render_mix,
     resolve_media_source,
     source_combo_options,
@@ -93,15 +94,18 @@ class EZDubIngest:
 
     def run(self, source, have_rights=False, job_slug="episode", source_url=""):
         slug = sanitize_slug(job_slug)
+        dest = dub_dir(slug)
         try:
             resolved = resolve_media_source(source, source_url)
             dest, status = ingest(resolved, have_rights, slug)
         except RightsError as exc:
+            record_ingest_failure(dest, "rights refused", str(exc))
             return {
                 "ui": {"text": (str(exc),), "passthrough": ("rights refused",)},
-                "result": ("", empty_audio()),
+                "result": (slug, empty_audio()),
             }
         except Exception as exc:  # noqa: BLE001 — fail-soft
+            record_ingest_failure(dest, str(exc), str(exc))
             return {
                 "ui": {"text": (str(exc),), "passthrough": (str(exc),)},
                 "result": (slug, empty_audio()),
@@ -245,7 +249,7 @@ class EZDubRender:
         dest = dub_dir(slug)
         wav = dest / "source.wav"
         if not wav.is_file():
-            return _pack_audio([], SAMPLE_RATE, "missing source.wav")
+            return _pack_audio([], SAMPLE_RATE, missing_source_status(dest))
         samples, rate = read_wav(wav)
         mix, rate, status = render_mix(
             samples,

@@ -18,7 +18,7 @@ from .align import (
     rms,
 )
 from .audio import read_wav, write_wav
-from .jobstore import dub_dir, save_state, write_json
+from .jobstore import dub_dir, load_state, save_state, write_json
 from .rights import require_rights
 from .srt import turns_to_srt
 from .turns import assign_overlap, empty_payload, normalize_turn
@@ -208,6 +208,11 @@ CLONE_MISSING_STATUS = (
 )
 T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 — upgrade chatterbox-tts"
 NO_TURNS_STATUS = "no turns — ASR/translate did not run"
+MISSING_SOURCE_STATUS = (
+    "missing source.wav — pick Source file or Upload media, "
+    "turn I have rights on, then Queue"
+)
+_GENERIC_INGEST_STATUS = frozenset({"", "pending", "ok", "ingest"})
 ASR_WHEEL_STATUS = "faster-whisper not installed — pip install faster-whisper"
 ASR_PACK_STATUS = (
     "ASR pack missing — run ./scripts/manage.sh download-dub --tier asr"
@@ -708,7 +713,7 @@ def analyze_pcm(
         if reason:
             return [], detected, reason
     else:
-        return [], "", "missing source.wav"
+        return [], "", MISSING_SOURCE_STATUS
     vectors: list[list[float]] = []
     for turn in raw:
         chunk = _slice_pcm(samples, rate, float(turn["t0"]), float(turn["t1"]))
@@ -769,7 +774,7 @@ def _whisper_segments(
 ) -> tuple[list[dict[str, Any]], str, str]:
     """Transcribe the whole file. Turns are Whisper segments with text."""
     if not wav_path.is_file():
-        return [], "", "missing source.wav"
+        return [], "", MISSING_SOURCE_STATUS
     model, miss = _get_whisper()
     if model is None:
         _log(miss or asr_wheel_status())
@@ -1360,6 +1365,25 @@ def render_mix(
     return mix, rate, status
 
 
+def missing_source_status(dest: Path) -> str:
+    """Operator-facing reason when ``source.wav`` is absent.
+
+    Arguments:
+        dest: Job directory that may contain ``state.json`` from a failed ingest.
+
+    Returns:
+        Persisted ingest error/status, or :data:`MISSING_SOURCE_STATUS`.
+    """
+    state = load_state(dest)
+    status = str(state.get("status") or "").strip()
+    error = str(state.get("error") or "").strip()
+    if status and status not in _GENERIC_INGEST_STATUS:
+        return status
+    if error and error not in _GENERIC_INGEST_STATUS:
+        return error
+    return MISSING_SOURCE_STATUS
+
+
 def analyze_job(
     dest: Path,
     *,
@@ -1393,13 +1417,14 @@ def analyze_job(
         payload["target_language"] = target_language
         return payload, "enhance off"
     if not wav.is_file():
+        reason = missing_source_status(dest)
         payload = empty_payload(
             target_language=target_language,
             source_language=source_language,
             stage=name,
-            status="missing source.wav",
+            status=reason,
         )
-        return payload, "missing source.wav"
+        return payload, reason
     samples, rate = read_wav(wav)
     turns, detected, asr_reason = analyze_pcm(
         samples,
