@@ -2007,9 +2007,9 @@
 </tr>
 <tr>
 <td>Translate</td>
-<td>On-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>, <strong>one turn at a time</strong> (ISO source → target, temp 0.3, 120 s timeout)</td>
+<td>On-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>, <strong>one turn at a time</strong> (ISO source → target, temp 0.3, 120 s timeout). Needs <code>llama-cpp-python</code> CPU wheel</td>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache 2.0</span></td>
-<td>already in <code>download-models</code></td>
+<td>GGUF already in <code>download-models</code>; wheel via image extra-index or restart heal</td>
 </tr>
 <tr>
 <td>Clone</td>
@@ -2025,7 +2025,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>faster-whisper</code> and <code>chatterbox-tts</code> are fail-soft-baked in <code>phase-nodes.sh</code> (like llama.cpp). They install <strong>separately</strong>: ASR first, then <code>chatterbox-tts --no-deps</code> so Chatterbox cannot pin <code>torch==2.6.0</code> over the lab 2.14 cu130 venv. <code>download-dub</code> pip-installs the same way into a <strong>running</strong> container. Restart also heals an existing <code>ez-comfy-state</code> volume (entrypoint import-checks, then pip). <code>yt-dlp</code> stays optional for URL ingest. The graph still loads if a wheel is missing; Queue writes an <strong>empty mix</strong> plus <strong>Dub status</strong> (never the original recording). On <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">DGX Spark</span>, CTranslate2 PyPI wheels are <strong>CPU-only</strong>; Whisper loads CPU int8 first.</p>
+<p><code>faster-whisper</code>, <code>chatterbox-tts</code>, and <code>llama-cpp-python</code> are fail-soft-baked in <code>phase-nodes.sh</code>. ASR and clone install <strong>separately</strong>: ASR first, then <code>chatterbox-tts --no-deps</code> so Chatterbox cannot pin <code>torch==2.6.0</code> over the lab 2.14 cu130 venv. llama-cpp-python is the <strong>official CPU extra-index</strong> (<code>--only-binary</code>, no CUDA extra-index) because PyPI is sdist-only and the image has no cmake. <code>download-dub</code> pip-installs ASR/clone into a <strong>running</strong> container. Restart also heals an existing <code>ez-comfy-state</code> volume (entrypoint import-checks, then pip for Whisper, Chatterbox, and llama-cpp). <code>yt-dlp</code> stays optional for URL ingest. The graph still loads if a wheel is missing; Queue writes an <strong>empty mix</strong> plus <strong>Dub status</strong> (never the original recording). Missing llama.cpp copies source <code>text</code> into <code>text_target</code>. On <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">DGX Spark</span>, CTranslate2 PyPI wheels are <strong>CPU-only</strong>; Whisper loads CPU int8 first.</p>
 <p>Chatterbox languages: Arabic, Danish, German, Greek, English, Spanish, Finnish, French, Hebrew, Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian, Polish, Portuguese, Russian, Swedish, Swahili, Turkish, Chinese. Soccer EN→ES is first-class.</p>
 <p>Banned: F5-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>, XTTS, Fish, Higgs, NLLB, SeamlessM4T, ElevenLabs, Wav2Lip, TTS-Audio-Suite.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
@@ -2088,7 +2088,7 @@
 </tr>
 <tr>
 <td><strong>Dub status</strong></td>
-<td>After Queue: speaker/turn counts, or the blocking miss (<code>faster-whisper not installed</code>, <code>clone pack missing</code>, GGUF passthrough)</td>
+<td>After Queue: speaker/turn counts, or the blocking miss (<code>faster-whisper not installed</code>, <code>clone pack missing</code>, <code>llama.cpp unavailable</code>, GGUF passthrough)</td>
 </tr>
 <tr>
 <td><strong>Stage</strong></td>
@@ -2111,10 +2111,10 @@
 <h2 id="sequential-queue">Sequential Queue<a class="headerlink" href="#sequential-queue" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
-<li><code>download-dub --tier asr</code> then <code>--tier clone</code> (clone is <code>ve.pt</code> + <code>s3gen.pt</code> + T3 V3 + tokenizer JSON + <code>conds.pt</code>, not t3-only). With the stack up this pip-installs faster-whisper, then chatterbox-tts <code>--no-deps</code>. Restart heals wheels on an existing volume without a rebuild.</li>
+<li><code>download-dub --tier asr</code> then <code>--tier clone</code> (clone is <code>ve.pt</code> + <code>s3gen.pt</code> + T3 V3 + tokenizer JSON + <code>conds.pt</code>, not t3-only). With the stack up this pip-installs faster-whisper, then chatterbox-tts <code>--no-deps</code>. Restart heals Whisper, Chatterbox, and the llama-cpp-python <strong>CPU wheel</strong> on an existing volume without a rebuild. Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>.</li>
 <li>Load <strong>dub-localize-lab-example</strong>. Pick <strong>Source file</strong> or <strong>Upload media</strong> (or set <strong>Source URL</strong>). Turn <strong>I have rights</strong> on. Queue once (Stage <strong>all</strong>, Rewrite translation <strong>on</strong>).</li>
 <li>Ingest Dub status must be <strong><code>ok</code></strong>. If script JSON says <code>missing source.wav</code> / empty <code>turns</code>, ingest never wrote the wav — rights still off, source still <code>(none)</code>, or extract failed. Read ingest status first.</li>
-<li><strong>Dub status</strong> must list speaker/turn counts (and <code>translated N/M</code>), not <code>ASR pack missing</code> / <code>clone engine missing</code> / GGUF passthrough. The Translation JSON <code>text_target</code> fields must be the target language.</li>
+<li><strong>Dub status</strong> must list speaker/turn counts (and <code>translated N/M</code>), not <code>ASR pack missing</code> / <code>clone engine missing</code> / <code>llama.cpp unavailable</code> / GGUF passthrough. The Translation JSON <code>text_target</code> fields must be the target language. <code>llama.cpp unavailable</code> after a restart means the CPU extra-index pip failed — read <code>[entrypoint]</code> / <code>[comfy-install]</code> logs.</li>
 <li>Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_dub_mix_*.flac</code> / <code>ez_dub_yt_*.mp3</code> plus <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt.wav</code></li>
 <li>Loudness:</li>
 </ol>
