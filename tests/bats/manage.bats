@@ -371,9 +371,16 @@ FROZEN_MANAGE_VERBS=(
   run cmd_download_dub --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"asr"* ]]
+  [[ "${output}" == *"faster-whisper"* ]]
   run cmd_download_dub --limit off --tier asr
   [ "${status}" -eq 0 ]
   [[ -e "${MODELS_DIR}/comfy/onnx/silero_vad.onnx" || -e "${MODELS_DIR}/comfy/whisper/model.bin" ]]
+  run install_dub_runtime_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"stack stopped"* || "${output}" == *"dub wheels"* ]]
+  run check_dub_runtime_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"skipped"* || "${output}" == *"import"* ]]
   run cmd_download_music --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"turbo"* ]]

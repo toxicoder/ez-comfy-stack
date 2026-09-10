@@ -306,7 +306,7 @@ def test_web_directory_and_preview_js() -> None:
     assert "EZAceStepPromptEnhance" in body
     assert "EZRapLyrics" in body
     assert "EZPodcastScript" in body
-    assert "EZDubScript" in body
+    assert "EZDubScript" not in body
     assert "onNodeCreated" in body
     assert "CLIP prompt" in body
     assert "Enhance status" in body
@@ -439,6 +439,52 @@ def test_generate_honors_max_tokens() -> None:
             return {"choices": [{"message": {"content": "hola"}}]}
 
     assert client._generate(_FakeLlama(), "sys", "user", 256) == "hola"
+
+
+def test_generate_honors_temperature() -> None:
+    class _FakeLlama:
+        def create_chat_completion(self, **kwargs: object) -> dict:
+            assert kwargs["temperature"] == 0.3
+            assert kwargs["max_tokens"] == 512
+            return {"choices": [{"message": {"content": "Bienvenidos"}}]}
+
+    assert client._generate(_FakeLlama(), "sys", "user", 512, 0.3) == "Bienvenidos"
+
+
+def test_complete_passes_timeout_and_temperature(monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: dict[str, object] = {}
+
+    class _Handle:
+        pass
+
+    def _fake_get_llama() -> tuple[object, None]:
+        return _Handle(), None
+
+    def _fake_generate(
+        llm: object,
+        system: str,
+        user: str,
+        max_tokens: int = 800,
+        temperature: float = 0.0,
+    ) -> str:
+        del llm, system, user
+        seen["max_tokens"] = max_tokens
+        seen["temperature"] = temperature
+        return "Hola"
+
+    monkeypatch.setattr(client, "_get_llama", _fake_get_llama)
+    monkeypatch.setattr(client, "_generate", _fake_generate)
+    text, reason = client.complete(
+        "sys",
+        "user",
+        max_tokens=512,
+        temperature=0.3,
+        timeout_s=120,
+    )
+    assert text == "Hola"
+    assert reason is None
+    assert seen["max_tokens"] == 512
+    assert seen["temperature"] == 0.3
 
 
 def test_n_gpu_layers_refused_without_allow(monkeypatch: pytest.MonkeyPatch) -> None:

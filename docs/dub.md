@@ -10,7 +10,7 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 
 - Rights gate (required) vs the original-character podcast lane
 - App Mode: source file dropdown + upload (or URL), languages, stage, clone engine
-- Cascade: ingest → diarize → ASR → translate → clone → duration lock
+- Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → translate → clone → duration lock
 - YouTube Studio multi-language audio upload (audio-only file + SRT)
 - `download-dub` usage, sequential Queue, and loudnorm
 - Optional still-image MP4 when you have no source video (host `audio-still-video`)
@@ -58,13 +58,14 @@ Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera l
 
 | Stage | Default | License | Download |
 | --- | --- | --- | --- |
-| ASR / turns | faster-whisper large-v3 segments (speaker cluster from those slices) | MIT | `download-dub --tier asr` |
-| VAD helper | Silero VAD ONNX on disk; energy VAD is not the turn source | MIT | `download-dub --tier asr` |
-| Translate | On-box Qwen3-4B-Instruct GGUF, **one turn at a time** (ISO source → target names in the prompt) | Apache 2.0 | already in `download-models` |
-| Clone | Chatterbox Multilingual V3 (`from_local` + ISO `language_id`, PerTh on) | MIT | `download-dub --tier clone` |
+| ASR / turns | faster-whisper large-v3 segments (`vad_filter` when the wheel supports it) | MIT | `download-dub --tier asr` |
+| Speakers | Chatterbox `VoiceEncoder` + `ve.pt` (same embedding the clone uses). Energy fingerprint if the wheel is missing | MIT | `download-dub --tier clone` |
+| VAD helper | faster-whisper Silero filter; ONNX on disk is the download leftover | MIT | `download-dub --tier asr` |
+| Translate | On-box Qwen3-4B-Instruct GGUF, **one turn at a time** (ISO source → target, temp 0.3, 120 s timeout) | Apache 2.0 | already in `download-models` |
+| Clone | Chatterbox Multilingual V3 (cached `from_local` + ISO `language_id`, PerTh on). Lines over 300 characters split | MIT | `download-dub --tier clone` |
 | Clone alt | Qwen3-TTS 0.6B | Apache 2.0 | `download-podcast --tier qwen3tts` |
 
-`faster-whisper`, Chatterbox, and `yt-dlp` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh`. The graph still loads if a wheel is missing; Queue writes an **empty mix** plus a status line (never the original recording) until you install the wheel and download the complete pack.
+`faster-whisper` and `chatterbox-tts` are fail-soft-baked in `phase-nodes.sh` (like llama.cpp). `download-dub` also pip-installs them into a **running** container so you do not have to rebuild. `yt-dlp` stays optional for URL ingest. The graph still loads if a wheel is missing; Queue writes an **empty mix** plus **Dub status** (never the original recording). On DGX Spark, CTranslate2 PyPI wheels are **CPU-only**.
 
 Chatterbox languages: Arabic, Danish, German, Greek, English, Spanish, Finnish, French, Hebrew, Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian, Polish, Portuguese, Russian, Swedish, Swahili, Turkish, Chinese. Soccer EN→ES is first-class.
 
@@ -80,17 +81,15 @@ id: download-dub
 
 ```bash
 ./scripts/manage.sh download-dub --tier asr        # Silero VAD + faster-whisper large-v3
-./scripts/manage.sh download-dub --tier clone      # Chatterbox Multilingual V3
+./scripts/manage.sh download-dub --tier clone      # Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt)
 ./scripts/manage.sh download-dub --tier all
 # same --limit auto|N|off wrap as download-models (always clears on exit)
+# with compose up, also: pip install faster-whisper chatterbox-tts in the container
 ```
 
-Optional runtime (container venv; invalidates a baked layer if you rebuild):
+URL ingest on the host (optional):
 
 ```bash
-pip install faster-whisper
-# clone engine: follow the Chatterbox card; keep PerTh on
-# URL ingest on the host:
 pip install yt-dlp
 ```
 
@@ -107,7 +106,8 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 | **Job slug** | `${COMFY_OUTPUT_DIR}/dubs/<slug>/` |
 | **Target language** | Default Spanish |
 | **Source language** | `auto` or pin |
-| **Rewrite translation** | On: diarize + ASR + per-turn GGUF into `text_target`. Off: pin the JSON |
+| **Rewrite translation** | On: ASR + speaker cluster + per-turn GGUF into `text_target`. Off: pin the JSON |
+| **Dub status** | After Queue: speaker/turn counts, or the blocking miss (`faster-whisper not installed`, `clone pack missing`, GGUF passthrough) |
 | **Stage** | `all` / `analyze` / `render` |
 | **Clone engine** | chatterbox-ml or qwen3tts |
 | **Keep original bed** | Gaps keep ambience |
@@ -115,10 +115,10 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 
 ## Sequential Queue
 
-1. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON, not t3-only)
-2. In the Comfy venv: `pip install faster-whisper chatterbox-tts`
-3. `./scripts/manage.sh start` — type **yes**
-4. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. Queue. Status must list speaker/turn counts, not `ASR pack missing` / `clone engine missing`.
+1. `./scripts/manage.sh start` — type **yes**
+2. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON + `conds.pt`, not t3-only). With the stack up this also pip-installs the wheels.
+3. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. Queue once (Stage **all**, Rewrite translation **on**).
+4. **Dub status** must list speaker/turn counts (and `translated N/M`), not `ASR pack missing` / `clone engine missing` / GGUF passthrough. The Translation JSON `text_target` fields must be the target language.
 5. Files under `${COMFY_OUTPUT_DIR}` as `ez_dub_mix_*.flac` / `ez_dub_yt_*.mp3` plus `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`
 6. Loudness:
 
@@ -170,9 +170,9 @@ sequenceDiagram
 
   U->>I: Source + I have rights
   I->>S: job slug
-  S->>S: ffmpeg mono PCM + Whisper turns + speaker cluster + per-turn GGUF
+  S->>S: ffmpeg mono PCM + Whisper turns + ve.pt speaker cluster + per-turn GGUF
   S->>R: translation JSON
-  R->>R: per-speaker refs + Chatterbox V3 clone
+  R->>R: per-speaker refs + cached Chatterbox V3 clone
   R->>U: duration-locked mix + SRT + disclosure
 ```
 

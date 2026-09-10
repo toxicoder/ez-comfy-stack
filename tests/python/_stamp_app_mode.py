@@ -212,6 +212,7 @@ OUTPUT_TYPES = (
     "VHS_VideoCombine",
     "SaveAudio",
     "SaveAudioMP3",
+    "EZDubRender",
 )
 
 ENHANCE_TYPES = (

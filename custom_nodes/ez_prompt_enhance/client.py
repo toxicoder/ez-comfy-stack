@@ -627,14 +627,18 @@ def _generate(
     system: str,
     user: str,
     max_tokens: int = DEFAULT_MAX_TOKENS,
+    temperature: float = 0.0,
 ) -> str:
     tokens = int(max_tokens) if int(max_tokens) > 0 else DEFAULT_MAX_TOKENS
+    temp = float(temperature)
+    if temp < 0.0:
+        temp = 0.0
     body = llm.create_chat_completion(
         messages=[
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ],
-        temperature=0,
+        temperature=temp,
         max_tokens=tokens,
     )
     try:
@@ -651,18 +655,31 @@ def complete(
     user: str,
     *,
     max_tokens: int | None = None,
+    temperature: float | None = None,
+    timeout_s: int | None = None,
 ) -> tuple[str, str | None]:
     """Run one local chat completion. Empty text plus a reason on any failure."""
     llm, reason = _get_llama()
     if llm is None:
         return "", reason or REASON_LLAMA_UNAVAILABLE
-    timeout = _timeout_s()
+    if timeout_s is None:
+        timeout = _timeout_s()
+    else:
+        try:
+            timeout = int(timeout_s)
+        except (TypeError, ValueError):
+            timeout = _timeout_s()
+        if timeout < 1:
+            timeout = _timeout_s()
     tokens = DEFAULT_MAX_TOKENS if max_tokens is None else int(max_tokens)
     if tokens < 1:
         tokens = DEFAULT_MAX_TOKENS
+    temp = 0.0 if temperature is None else float(temperature)
+    if temp < 0.0:
+        temp = 0.0
     try:
         with ThreadPoolExecutor(max_workers=1) as pool:
-            future = pool.submit(_generate, llm, system, user, tokens)
+            future = pool.submit(_generate, llm, system, user, tokens, temp)
             text = future.result(timeout=timeout)
     except FuturesTimeout:
         _log(f"local LLM timed out after {timeout}s")

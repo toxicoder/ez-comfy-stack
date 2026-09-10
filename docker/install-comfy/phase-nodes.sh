@@ -229,6 +229,27 @@ install_llama_cpp_cpu() {
 }
 
 #######################################
+# Optional faster-whisper + chatterbox-tts for local dub. Fail-soft.
+# Does not pull weights (download-dub). Missing wheels → empty mix + Dub status.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_dub_wheels() {
+  if pip_install faster-whisper chatterbox-tts; then
+    log "faster-whisper + chatterbox-tts installed for local dub"
+    return 0
+  fi
+  warn "dub wheels failed — Queue writes empty mix until: pip install faster-whisper chatterbox-tts"
+  return 0
+}
+
+#######################################
 # Optional ABI-matched SageAttention wheel. Default is Kitchen (--use-ck-attention).
 # Never pip-installs the PyPI package ``sageattention`` (silent aarch64 fallback).
 # Globals:
@@ -309,4 +330,5 @@ phase_nodes() {
   install_sage_wheel_if_pinned
   install_nunchaku_wheel
   install_llama_cpp_cpu
+  install_dub_wheels
 }

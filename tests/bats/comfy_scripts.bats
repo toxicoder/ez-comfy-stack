@@ -42,6 +42,20 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "install_dub_wheels is fail-soft" {
+  run grep -F 'install_dub_wheels' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'faster-whisper' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  pip_install() { return 1; }
+  run install_dub_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"empty mix"* || "${output}" == *"failed"* ]]
+  pip_install() { return 0; }
+  run install_dub_wheels
+  [ "${status}" -eq 0 ]
+}
+
 @test "install-comfy phase_nodes and ensure_lab_video_nodes require VideoHelperSuite" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"

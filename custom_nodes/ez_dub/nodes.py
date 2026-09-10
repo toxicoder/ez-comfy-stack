@@ -29,32 +29,11 @@ from .pipeline import (
 from .rights import RightsError
 from .turns import dumps_payload, parse_payload
 
-SEED_TURNS = [
-    {
-        "id": 1,
-        "speaker": "spk00",
-        "t0": 0.4,
-        "t1": 2.8,
-        "text": "Welcome back to the tape.",
-        "text_target": "Bienvenidos de nuevo a la cinta.",
-        "overlap": False,
-        "rms": 0.1,
-    },
-    {
-        "id": 2,
-        "speaker": "spk01",
-        "t0": 3.0,
-        "t1": 6.2,
-        "text": "Today we stay on the match in front of us.",
-        "text_target": "Hoy nos quedamos en el partido que tenemos delante.",
-        "overlap": False,
-        "rms": 0.1,
-    },
-]
+SEED_TURNS: list[dict[str, Any]] = []
 SEED_SCRIPT = dumps_payload(
     {
         "target_language": "es",
-        "source_language": "en",
+        "source_language": "auto",
         "stage": STAGE_ALL,
         "status": "",
         "turns": SEED_TURNS,
@@ -278,7 +257,7 @@ class EZDubRender:
             spoken_disclosure=bool(spoken_disclosure),
             speed=float(speed) if speed else 1.0,
         )
-        if spoken_disclosure:
+        if spoken_disclosure and mix:
             self._overlay_disclosure(mix, rate, engine)
             from .audio import write_wav
 
