@@ -6,10 +6,14 @@ or import fails soft and the original prompt is passed through.
 
 from __future__ import annotations
 
+import importlib
 import json
 import os
+import platform
 import re
+import subprocess
 import sys
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
 from dataclasses import dataclass
@@ -51,6 +55,21 @@ REASON_GGUF_MISSING = "GGUF missing"
 REASON_LLAMA_UNAVAILABLE = "llama.cpp unavailable"
 REASON_LLM_LOAD_FAILED = "GGUF failed to load"
 REASON_EMPTY = "timeout or empty model output"
+
+LLAMA_CPP_CPU_VERSION = "0.3.35"
+LLAMA_CPP_CPU_PKG = f"llama-cpp-python=={LLAMA_CPP_CPU_VERSION}"
+LLAMA_CPP_CPU_INDEX = "https://abetlen.github.io/llama-cpp-python/whl/cpu"
+PYPI_SIMPLE_INDEX = "https://pypi.org/simple"
+LLAMA_CPP_OPERATOR_PYTHON = (
+    "/comfy-state/ComfyUI/.venv/bin/python"
+)
+HEAL_PIP_TIMEOUT_S = 120
+
+_LLM: Any = None
+_LLM_PATH = ""
+_HEAL_LOCK = threading.Lock()
+_HEAL_TRIED = False
+_HEAL_ERROR = ""
 REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
 REASON_STYLE_IGNORED_FLF = "style ignored in flf (start and end frames own look)"
 REASON_STYLE_IGNORED_VACE = "style ignored in vace (both clips own look)"
@@ -60,8 +79,6 @@ STYLE_IGNORED_MODES = {
     "vace": REASON_STYLE_IGNORED_VACE,
 }
 
-_LLM: Any = None
-_LLM_PATH = ""
 _STYLES: dict[str, dict[str, Any]] | None = None
 _VIEWS: dict[str, list[dict[str, str]]] | None = None
 
@@ -116,6 +133,123 @@ def _log(message: str) -> None:
     print(f"[ez_prompt_enhance] {message}", file=sys.stderr)
 
 
+def llama_cpp_direct_wheel_url() -> str:
+    """GitHub release manylinux wheel for this CPU arch, or empty."""
+    machine = platform.machine().lower()
+    if machine in {"aarch64", "arm64"}:
+        tag = "manylinux2014_aarch64.manylinux_2_17_aarch64"
+    elif machine in {"x86_64", "amd64"}:
+        tag = "manylinux2014_x86_64.manylinux_2_17_x86_64"
+    else:
+        return ""
+    return (
+        "https://github.com/abetlen/llama-cpp-python/releases/download/"
+        f"v{LLAMA_CPP_CPU_VERSION}/llama_cpp_python-{LLAMA_CPP_CPU_VERSION}"
+        f"-py3-none-{tag}.whl"
+    )
+
+
+def llama_cpp_cpu_pip_index_args() -> list[str]:
+    """pip install operands: CPU extra-index as --index-url, pin, binaries only."""
+    return [
+        "--only-binary=:all:",
+        "--index-url",
+        LLAMA_CPP_CPU_INDEX,
+        "--extra-index-url",
+        PYPI_SIMPLE_INDEX,
+        LLAMA_CPP_CPU_PKG,
+    ]
+
+
+def llama_cpp_operator_pip_command() -> str:
+    """Exact docker exec pip line for a blocking Dub / Enhance status."""
+    args = " ".join(llama_cpp_cpu_pip_index_args())
+    return (
+        f"docker exec ez-comfy-studio {LLAMA_CPP_OPERATOR_PYTHON} "
+        f"-m pip install {args}"
+    )
+
+
+def llama_cpp_unavailable_status() -> str:
+    """Operator-facing next step when Llama cannot import after heal."""
+    cmd = llama_cpp_operator_pip_command()
+    detail = _HEAL_ERROR.strip()
+    if detail:
+        return f"llama.cpp unavailable — CPU wheel pip failed ({detail}). {cmd}"
+    return f"llama.cpp unavailable — CPU wheel pip failed. {cmd}"
+
+
+def reset_llama_runtime_for_tests() -> None:
+    """Clear cached LLM handle and CPU-wheel heal state (unit tests only)."""
+    global _HEAL_TRIED, _HEAL_ERROR
+    _close_llm()
+    _HEAL_TRIED = False
+    _HEAL_ERROR = ""
+
+
+def _pip_install(args: list[str]) -> subprocess.CompletedProcess[str]:
+    """Run ``python -m pip install`` on this interpreter. Tests patch this."""
+    return subprocess.run(
+        [sys.executable, "-m", "pip", "install", *args],
+        capture_output=True,
+        text=True,
+        timeout=HEAL_PIP_TIMEOUT_S,
+        check=False,
+    )
+
+
+def _short_pip_error(proc: subprocess.CompletedProcess[str]) -> str:
+    text = (proc.stderr or proc.stdout or "").strip()
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if not lines:
+        return f"pip exit {proc.returncode}"
+    return lines[-1][:200]
+
+
+def _forget_llama_module() -> None:
+    for name in list(sys.modules):
+        if name == "llama_cpp" or name.startswith("llama_cpp."):
+            sys.modules.pop(name, None)
+    importlib.invalidate_caches()
+
+
+def _load_llama_class() -> Any | None:
+    """Return llama_cpp.Llama, or None when the CPU wheel is missing."""
+    try:
+        from llama_cpp import Llama
+    except (ImportError, OSError):
+        return None
+    return Llama
+
+
+def _heal_llama_cpp_cpu() -> str:
+    """Install the CPU wheel once per process. Empty string on success."""
+    global _HEAL_TRIED, _HEAL_ERROR
+    with _HEAL_LOCK:
+        if _HEAL_TRIED:
+            return _HEAL_ERROR
+        _HEAL_TRIED = True
+        _log("llama-cpp-python missing — installing CPU wheel")
+        proc = _pip_install(llama_cpp_cpu_pip_index_args())
+        if proc.returncode != 0:
+            wheel = llama_cpp_direct_wheel_url()
+            if wheel:
+                _log("CPU extra-index pip missed; trying direct wheel")
+                proc = _pip_install([wheel])
+        if proc.returncode != 0:
+            _HEAL_ERROR = _short_pip_error(proc)
+            _log(f"llama-cpp-python CPU wheel pip failed: {_HEAL_ERROR}")
+            return _HEAL_ERROR
+        _forget_llama_module()
+        if _load_llama_class() is None:
+            _HEAL_ERROR = "import failed after pip"
+            _log(f"llama-cpp-python installed but import failed: {_HEAL_ERROR}")
+            return _HEAL_ERROR
+        _HEAL_ERROR = ""
+        _log("llama-cpp-python CPU wheel installed")
+        return ""
+
+
 def status_for_reason(reason: str | None) -> str:
     """Operator-facing Enhance status (never mixed into CLIP text).
 
@@ -130,9 +264,7 @@ def status_for_reason(reason: str | None) -> str:
     if reason == REASON_GGUF_MISSING:
         return "GGUF missing — run ./scripts/manage.sh download-models"
     if reason == REASON_LLAMA_UNAVAILABLE:
-        return (
-            "llama.cpp unavailable — restart so the entrypoint installs the CPU wheel"
-        )
+        return llama_cpp_unavailable_status()
     if reason == REASON_LLM_LOAD_FAILED:
         return "GGUF failed to load"
     if reason == REASON_EMPTY:
@@ -603,11 +735,16 @@ def _get_llama() -> tuple[Any | None, str | None]:
     if _LLM is not None and _LLM_PATH == path:
         return _LLM, None
     _close_llm()
-    try:
-        from llama_cpp import Llama
-    except (ImportError, OSError):
-        _log("llama-cpp-python not installed — passing prompt through")
-        return None, REASON_LLAMA_UNAVAILABLE
+    llama_cls = _load_llama_class()
+    if llama_cls is None:
+        heal_err = _heal_llama_cpp_cpu()
+        if heal_err:
+            _log(f"llama-cpp-python not installed — {heal_err}")
+            return None, REASON_LLAMA_UNAVAILABLE
+        llama_cls = _load_llama_class()
+        if llama_cls is None:
+            _log("llama-cpp-python not installed — passing prompt through")
+            return None, REASON_LLAMA_UNAVAILABLE
     kwargs: dict[str, Any] = {
         "model_path": path,
         "n_ctx": _n_ctx(),
@@ -616,11 +753,11 @@ def _get_llama() -> tuple[Any | None, str | None]:
         "verbose": False,
     }
     try:
-        _LLM = Llama(chat_format="chatml", **kwargs)
+        _LLM = llama_cls(chat_format="chatml", **kwargs)
     except TypeError as exc:
         _log(f"Llama chat_format unsupported ({exc}); retrying without it")
         try:
-            _LLM = Llama(**kwargs)
+            _LLM = llama_cls(**kwargs)
         except Exception as retry_exc:  # noqa: BLE001 — fail-soft
             _log(f"failed to load GGUF {path}: {retry_exc}")
             _LLM = None

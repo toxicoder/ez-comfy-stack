@@ -127,6 +127,7 @@ ENV COMFYUI_MANAGER_REF=${COMFYUI_MANAGER_REF} \
     COMFYUI_LTX_DIRECTOR_REF=${COMFYUI_LTX_DIRECTOR_REF}
 
 COPY --chmod=755 install-comfy/phase-nodes.sh install-comfy/phase-finalize.sh \
+    install-comfy/llama-cpp-cpu.sh \
     /opt/ez-comfy/install-comfy/
 RUN --mount=type=cache,target=/root/.cache/pip \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \

@@ -235,16 +235,18 @@ ensure_lab_video_nodes() {
   return 0
 }
 
-# Official llama-cpp-python CPU wheels (aarch64 manylinux py3-none). PyPI is
-# sdist-only; --only-binary against PyPI always misses on DGX Spark.
-LLAMA_CPP_CPU_INDEX="https://abetlen.github.io/llama-cpp-python/whl/cpu"
+# Official llama-cpp-python CPU wheels. PyPI is sdist-only; --only-binary
+# against PyPI always misses on DGX Spark. Pins live in llama-cpp-cpu.sh.
+# shellcheck source=llama-cpp-cpu.sh disable=SC1091
+source "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/llama-cpp-cpu.sh"
 
 #######################################
-# Install llama-cpp-python with CUDA off so prompt enhance stays on the CPU.
-# Prefer the official CPU extra-index (binaries). Compile only when cmake is
-# already on PATH. Fail-soft: Enhance/dub translation pass through if missing.
+# Install llama-cpp-python CPU wheel so prompt enhance stays off the GPU.
+# CPU extra-index is --index-url (not only extra-index) so pip does not stop
+# on PyPI's sdist. Direct GitHub wheel URL is the fallback. No cmake, no CUDA
+# extra-index. Fail-soft: Enhance/dub pass through if missing; Queue can heal.
 # Globals:
-#   LLAMA_CPP_CPU_INDEX
+#   LLAMA_CPP_CPU_INDEX, PYPI_SIMPLE_INDEX, LLAMA_CPP_CPU_PKG
 # Arguments:
 #   None
 # Outputs:
@@ -253,22 +255,21 @@ LLAMA_CPP_CPU_INDEX="https://abetlen.github.io/llama-cpp-python/whl/cpu"
 #   0 always (soft-fail)
 #######################################
 install_llama_cpp_cpu() {
-  local cpu_index="${LLAMA_CPP_CPU_INDEX}"
-  if pip_install --only-binary=:all: --extra-index-url "${cpu_index}" \
-    llama-cpp-python; then
+  local wheel
+  local -a args=()
+  while IFS= read -r tok; do
+    args+=("${tok}")
+  done < <(llama_cpp_cpu_pip_index_args)
+  if pip_install "${args[@]}"; then
     log "llama-cpp-python (CPU wheel) installed for prompt enhance"
     return 0
   fi
-  if ! command -v cmake >/dev/null 2>&1; then
-    warn "llama-cpp-python CPU wheel miss and cmake missing — pass through until restart heals the wheel"
+  wheel="$(llama_cpp_direct_wheel_url)"
+  if [[ -n ${wheel} ]] && pip_install --only-binary=:all: "${wheel}"; then
+    log "llama-cpp-python (CPU wheel) installed from GitHub release"
     return 0
   fi
-  log "No llama-cpp-python wheel; compiling with GGML_CUDA=OFF"
-  if CMAKE_ARGS="-DGGML_CUDA=OFF" pip_install llama-cpp-python; then
-    log "llama-cpp-python (CPU) installed for prompt enhance"
-    return 0
-  fi
-  warn "llama-cpp-python install failed — Prompt Enhance will pass through until the CPU wheel is installed"
+  warn "llama-cpp-python CPU wheel pip failed — Enhance/dub will pass through until Queue heals the wheel"
   return 0
 }
 

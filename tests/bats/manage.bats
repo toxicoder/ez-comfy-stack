@@ -454,9 +454,23 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"faster-whisper"* ]]
   [[ "${output}" == *"--no-deps"* || "$(cat "${TEST_TMP_DIR}/docker_calls.log")" == *"--no-deps"* ]]
   grep -q 'faster-whisper' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q 'from llama_cpp import Llama' "${TEST_TMP_DIR}/docker_calls.log"
   grep -q -- '--no-deps' "${TEST_TMP_DIR}/docker_calls.log"
   grep -q -- '--force-reinstall' "${TEST_TMP_DIR}/docker_calls.log"
   grep -q 'resemble-ai/chatterbox' "${TEST_TMP_DIR}/docker_calls.log"
+  run grep -F 'install_llama_cpp_runtime_wheel' "${MANAGE_SH}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'comfy_volume_python' "${MANAGE_SH}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'LLAMA_CPP_CPU_VERSION="0.3.35"' \
+    "${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'llama-cpp-python==' \
+    "${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh"
+  [ "${status}" -eq 0 ]
+  if grep -E 'cu11|cu12|cu13' "${TEST_TMP_DIR}/docker_calls.log"; then
+    return 1
+  fi
   run chatterbox_tts_zip_url
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"resemble-ai/chatterbox/archive"* ]]

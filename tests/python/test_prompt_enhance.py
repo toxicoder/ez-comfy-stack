@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import types
+from collections.abc import Iterator
 from pathlib import Path
 from unittest.mock import patch
 
@@ -25,6 +27,24 @@ from ez_prompt_enhance.nodes import (  # noqa: E402
     EZWanPromptEnhance,
     NODE_CLASS_MAPPINGS,
 )
+
+
+def _no_network_pip(args: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.CompletedProcess(
+        args=["pip", "install", *args],
+        returncode=1,
+        stdout="",
+        stderr="test: pip disabled",
+    )
+
+
+@pytest.fixture(autouse=True)
+def _reset_llama_runtime(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
+    """Reset llama.cpp state and block host pip (hermetic)."""
+    client.reset_llama_runtime_for_tests()
+    monkeypatch.setattr(client, "_pip_install", _no_network_pip)
+    yield
+    client.reset_llama_runtime_for_tests()
 
 
 _STYLE_WOVEN_FIELDS = ("medium", "light", "color", "texture", "camera", "suffix")
@@ -399,7 +419,10 @@ def test_missing_llama_import_passthrough(monkeypatch: pytest.MonkeyPatch, tmp_p
         out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
     assert out.text == "lazy bike"
     assert out.reason == client.REASON_LLAMA_UNAVAILABLE
-    assert "restart" in out.status
+    assert "CPU wheel pip failed" in out.status
+    assert "docker exec" in out.status
+    assert "llama-cpp-python==0.3.35" in out.status
+    assert "restart" not in out.status
     assert "rebuild" not in out.status
 
 
@@ -471,11 +494,81 @@ def test_llama_constructor_error_is_load_failed(
     assert client.status_for_reason(reason) == "GGUF failed to load"
 
 
-def test_status_for_reason_llama_points_at_restart() -> None:
+def test_llama_cpp_direct_wheel_url_is_manylinux() -> None:
+    url = client.llama_cpp_direct_wheel_url()
+    assert url.startswith("https://github.com/abetlen/llama-cpp-python/releases/")
+    assert client.LLAMA_CPP_CPU_VERSION in url
+    assert "manylinux" in url
+    assert "cu12" not in url
+    assert "cu13" not in url
+
+
+def test_status_for_reason_llama_points_at_pip() -> None:
     text = client.status_for_reason(client.REASON_LLAMA_UNAVAILABLE)
-    assert "restart" in text
-    assert "CPU wheel" in text
+    assert "CPU wheel pip failed" in text
+    assert "docker exec" in text
+    assert "--index-url" in text
+    assert "llama-cpp-python==0.3.35" in text
+    assert "restart" not in text
     assert "rebuild" not in text
+    assert "cu12" not in text
+    assert "cu13" not in text
+
+
+def test_heal_llama_cpp_tries_index_then_direct_wheel(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[list[str]] = []
+
+    def _pip(args: list[str]) -> subprocess.CompletedProcess[str]:
+        calls.append(list(args))
+        return subprocess.CompletedProcess(
+            args=["pip", "install", *args],
+            returncode=1,
+            stdout="",
+            stderr="ERROR: No matching distribution found for llama-cpp-python",
+        )
+
+    monkeypatch.setattr(client, "_pip_install", _pip)
+    err = client._heal_llama_cpp_cpu()
+    assert "No matching distribution" in err
+    assert len(calls) == 2
+    assert "--index-url" in calls[0]
+    assert client.LLAMA_CPP_CPU_INDEX in calls[0]
+    assert client.PYPI_SIMPLE_INDEX in calls[0]
+    assert client.LLAMA_CPP_CPU_PKG in calls[0]
+    assert "--only-binary=:all:" in calls[0]
+    joined = " ".join(calls[0])
+    assert "cu12" not in joined
+    assert "cu13" not in joined
+    assert any("github.com/abetlen/llama-cpp-python" in item for item in calls[1])
+
+
+def test_get_llama_heals_cpu_wheel_then_loads(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    gguf = tmp_path / "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    gguf.write_bytes(b"fake")
+    monkeypatch.setenv("EZ_LLM_GGUF", str(gguf))
+    client.reset_llama_runtime_for_tests()
+    fake = types.ModuleType("llama_cpp")
+
+    class _FakeLlama:
+        def __init__(self, **kwargs: object) -> None:
+            del kwargs
+
+    setattr(fake, "Llama", _FakeLlama)
+
+    def _heal() -> str:
+        sys.modules["llama_cpp"] = fake
+        return ""
+
+    monkeypatch.setattr(client, "_heal_llama_cpp_cpu", _heal)
+    with patch.dict(sys.modules, {"llama_cpp": None}):
+        handle, reason = client._get_llama()
+    client._close_llm()
+    assert reason is None
+    assert handle is not None
 
 
 def test_empty_model_output_passthrough(monkeypatch: pytest.MonkeyPatch) -> None:

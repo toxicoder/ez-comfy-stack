@@ -146,7 +146,7 @@ When Enhance is **on** and a style is selected (t2i / t2v / Klein edit / identit
 
 After Queue the node is an output: the **CLIP prompt** widget is the CLIP string (no `[passthrough:` prefix). **Enhance status** is empty when the rewriter ran, or a next step when it did not.
 
-Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand — `./scripts/manage.sh download-models` plus a restart heals `comfy/llm/` and `doctor`/`start` relink a snapshot that is already on disk. **Enhance status** `llama.cpp unavailable` means the CPU wheel is missing: restart so the entrypoint installs `llama-cpp-python` from the official CPU extra-index (PyPI is sdist-only; no CUDA extra-index). Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'`.
+Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand — `./scripts/manage.sh download-models` plus a restart heals `comfy/llm/` and `doctor`/`start` relink a snapshot that is already on disk. **Enhance status** `llama.cpp unavailable` means the CPU wheel is missing: Queue self-heals `llama-cpp-python` from the official CPU extra-index (`--index-url`, pin `0.3.35`; PyPI is sdist-only; no CUDA extra-index). If status still names a `docker exec … pip install` command, run that line. Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'`.
 
 !!! warning "CPU-only local LLM"
 

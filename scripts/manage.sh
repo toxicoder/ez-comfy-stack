@@ -99,9 +99,9 @@ ensure_prompt_enhance_gguf() {
 }
 
 #######################################
-# Pip-install dub wheels into the running Comfy venv. ASR first, then clone
-# from the Chatterbox V3 GitHub zip with --no-deps so it cannot pin
-# torch==2.6.0. No-op when stopped.
+# Pip-install dub wheels into the running Comfy venv. ASR first, then the
+# llama-cpp-python CPU wheel, then clone from the Chatterbox V3 GitHub zip
+# with --no-deps so it cannot pin torch==2.6.0. No-op when stopped.
 # Globals:
 #   None (uses compose_is_running / compose_run)
 # Arguments:
@@ -113,19 +113,20 @@ ensure_prompt_enhance_gguf() {
 #######################################
 install_dub_runtime_wheels() {
   local py zip
-  py="/comfy-state/ComfyUI/.venv/bin/python"
+  py="$(comfy_volume_python)"
   zip="$(chatterbox_tts_zip_url)"
   if ! compose_is_running; then
     log "dub wheels: stack stopped — start, then re-run download-dub, or rebuild the image"
     return 0
   fi
-  log "dub wheels: pip install faster-whisper, then chatterbox V3 zip --no-deps"
+  log "dub wheels: pip install faster-whisper, llama-cpp-python CPU wheel, then chatterbox V3 zip --no-deps"
   if compose_run exec -T comfyui "${py}" -m pip install \
     --upgrade-strategy only-if-needed faster-whisper; then
     log "dub wheels: faster-whisper installed"
   else
     warn "dub wheels: faster-whisper pip failed — Queue writes empty mix until WhisperModel imports"
   fi
+  install_llama_cpp_runtime_wheel "${py}"
   compose_run exec -T comfyui "${py}" -m pip install \
     --upgrade-strategy only-if-needed \
     librosa s3tokenizer resemble-perth conformer pykakasi pyloudnorm omegaconf \
@@ -142,8 +143,68 @@ install_dub_runtime_wheels() {
 }
 
 #######################################
-# Soft-check that dub ASR/clone wheels import inside the running container.
-# ASR and clone are checked separately so one miss does not hide the other.
+# Interpreter Comfy execs after entrypoint activates the volume venv.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Absolute container python path on stdout
+# Returns:
+#   0
+#######################################
+comfy_volume_python() {
+  printf '%s\n' "/comfy-state/ComfyUI/.venv/bin/python"
+}
+
+#######################################
+# pip-install llama-cpp-python CPU wheel into the running Comfy venv.
+# CPU extra-index as --index-url, then the arch GitHub wheel URL.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $1  container python path
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_llama_cpp_runtime_wheel() {
+  local py="${1:?}"
+  local wheel
+  local -a args=()
+  # shellcheck source=../../docker/install-comfy/llama-cpp-cpu.sh disable=SC1091
+  source "${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh"
+  if compose_run exec -T comfyui "${py}" -c 'from llama_cpp import Llama'; then
+    log "dub wheels: llama-cpp-python Llama already importable"
+    return 0
+  fi
+  while IFS= read -r tok; do
+    args+=("${tok}")
+  done < <(llama_cpp_cpu_pip_index_args)
+  log "dub wheels: pip install llama-cpp-python CPU wheel"
+  if compose_run exec -T comfyui "${py}" -m pip install "${args[@]}"; then
+    if compose_run exec -T comfyui "${py}" -c 'from llama_cpp import Llama'; then
+      log "dub wheels: llama-cpp-python CPU wheel installed"
+      return 0
+    fi
+  fi
+  wheel="$(llama_cpp_direct_wheel_url)"
+  if [[ -n ${wheel} ]] &&
+    compose_run exec -T comfyui "${py}" -m pip install --only-binary=:all: "${wheel}"; then
+    if compose_run exec -T comfyui "${py}" -c 'from llama_cpp import Llama'; then
+      log "dub wheels: llama-cpp-python CPU wheel installed from GitHub release"
+      return 0
+    fi
+  fi
+  warn "dub wheels: llama-cpp-python CPU wheel pip failed — Queue will retry; status names the pip command"
+  return 0
+}
+
+#######################################
+# Soft-check that dub ASR/clone/llama.cpp wheels import in the volume venv.
+# ASR, llama.cpp, and clone are checked separately so one miss does not hide
+# the others.
 # Globals:
 #   None
 # Arguments:
@@ -159,9 +220,9 @@ check_dub_runtime_wheels() {
     log "dub wheel import: skipped (stack stopped)"
     return 0
   fi
-  py="/opt/comfy-prebuilt/.venv/bin/python"
+  py="$(comfy_volume_python)"
   if ! compose_run exec -T comfyui test -x "${py}"; then
-    py="/comfy-state/ComfyUI/.venv/bin/python"
+    py="/opt/comfy-prebuilt/.venv/bin/python"
   fi
   log "dub wheel import: python=${py}"
   if compose_run exec -T comfyui "${py}" -c \
@@ -169,6 +230,11 @@ check_dub_runtime_wheels() {
     log "dub wheels: faster-whisper WhisperModel import ok"
   else
     warn "dub ASR wheel missing — download-dub --tier asr (stack up) or restart"
+  fi
+  if compose_run exec -T comfyui "${py}" -c 'from llama_cpp import Llama'; then
+    log "dub wheels: llama-cpp-python Llama import ok"
+  else
+    warn "dub llama.cpp wheel missing — download-dub (stack up) or Queue self-heals"
   fi
   t3_check="from inspect import signature; "
   t3_check+="from chatterbox.mtl_tts import ChatterboxMultilingualTTS; "
@@ -218,8 +284,8 @@ Commands:
                     analog = Kokoro-82M ONNX only. Missing pack is not a doctor failure.
   download-dub [--tier asr|clone|all] [--limit auto|N|off]
                     Opt-in Silero VAD + faster-whisper + Chatterbox Multilingual V3
-                    When the stack is up, pip-installs faster-whisper then the
-                    Chatterbox V3 GitHub zip --no-deps (does not pin torch).
+                    When the stack is up, pip-installs faster-whisper, the
+                    llama-cpp-python CPU wheel, then Chatterbox V3 --no-deps.
                     Missing pack is not a doctor failure.
   download-music [--tier turbo|xl|all] [--limit auto|N|off]
                     Opt-in ACE-Step 1.5 music AIO (bandwidth limited)
@@ -952,7 +1018,8 @@ EOF
 #######################################
 # Opt-in dub weights under MODELS_DIR with the same download-limit wrap.
 # Missing ASR/clone pack is not a doctor failure. Does not change download-models.
-# With compose up, pip-installs faster-whisper then the Chatterbox V3 zip.
+# With compose up, pip-installs faster-whisper, the llama-cpp-python CPU
+# wheel, then the Chatterbox V3 zip.
 # Globals:
 #   DOWNLOAD_LIMIT, MODELS_DIR, REPO_ROOT
 # Arguments:
@@ -1002,9 +1069,9 @@ cmd_download_dub() {
 Usage: manage.sh download-dub [--tier asr|clone|all] [--limit auto|N|off]
   Opt-in. Default asr = Silero VAD + faster-whisper large-v3.
   clone = Chatterbox Multilingual V3 (MIT, PerTh on).
-  When compose is up, pip-installs faster-whisper then the Chatterbox V3
-  GitHub zip --no-deps --force-reinstall (does not pin torch==2.6.0; PyPI
-  0.1.7 has no t3_model=v3).
+  When compose is up, pip-installs faster-whisper, the llama-cpp-python
+  CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall
+  (does not pin torch==2.6.0; PyPI 0.1.7 has no t3_model=v3).
   Does not run as part of download-models.
   --limit auto|N|off  same wrap as download-models (always clears on exit)
 EOF

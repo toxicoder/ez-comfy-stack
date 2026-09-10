@@ -747,6 +747,13 @@ def test_preflight_clone_names_missing_t3_model(monkeypatch) -> None:
     assert pipeline.preflight_clone() == pipeline.T3_MODEL_STATUS
 
 
+def test_translate_llama_status_names_pip_not_restart() -> None:
+    assert "llama.cpp unavailable" in pipeline.TRANSLATE_LLAMA_STATUS
+    assert "docker exec" in pipeline.TRANSLATE_LLAMA_STATUS
+    assert "llama-cpp-python==0.3.35" in pipeline.TRANSLATE_LLAMA_STATUS
+    assert "restart so the entrypoint" not in pipeline.TRANSLATE_LLAMA_STATUS
+
+
 def test_preflight_translate_names_llama_miss(monkeypatch) -> None:
     monkeypatch.setattr(
         "ez_prompt_enhance.client._get_llama",
@@ -754,7 +761,8 @@ def test_preflight_translate_names_llama_miss(monkeypatch) -> None:
     )
     reason = pipeline.preflight_translate()
     assert "llama.cpp unavailable" in reason
-    assert "restart" in reason.lower()
+    assert "pip" in reason.lower()
+    assert "docker exec" in reason
 
 
 def test_preflight_translate_names_gguf_miss(monkeypatch) -> None:
