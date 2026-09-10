@@ -60,6 +60,14 @@ SUB_WEIGHT_NEEDLES = (
     "808",
     "rumble",
 )
+SECRET_HOMAGE_NEEDLES = (
+    "dirty dubstep",
+    "brostep",
+    "riddim",
+    "tearout",
+    "half-time",
+    "wobble",
+)
 MOTION_NEEDLES = (
     "hats",
     "bass",
@@ -203,12 +211,14 @@ def _catalog() -> tuple[EdmExample, ...]:
     from .edm_drive_through_afterparty import EDM_DRIVE_THROUGH_AFTERPARTY
     from .edm_drive_through_bass import EDM_DRIVE_THROUGH_BASS
     from .edm_drive_through_headliner import EDM_DRIVE_THROUGH_HEADLINER
+    from .edm_drive_through_secret_homage import EDM_DRIVE_THROUGH_SECRET_HOMAGE
 
     return (
         EDM_DRIVE_THROUGH
         + EDM_DRIVE_THROUGH_BASS
         + EDM_DRIVE_THROUGH_HEADLINER
         + EDM_DRIVE_THROUGH_AFTERPARTY
+        + EDM_DRIVE_THROUGH_SECRET_HOMAGE
     )
 
 

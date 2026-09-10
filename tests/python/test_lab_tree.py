@@ -90,7 +90,7 @@ def test_drive_through_graphs_live_under_audio_drive_through_phase() -> None:
         assert path.parent.parent == artist, path
         assert path.parent.name.startswith("phase"), path
         phases.add(path.parent.name)
-    assert phases == {"phase0", "phase1", "phase2", "phase3"}
+    assert phases == {"phase0", "phase1", "phase2", "phase3", "phase4"}
     stray = list(artist.glob("music-edm-drive-through-*-lab-example.json"))
     assert stray == [], stray
     stray_audio = list(audio.glob("music-edm-drive-through-*-lab-example.json"))

@@ -10,7 +10,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 
 - Queue the rap **draft** first, then the **full** track
 - Forty-five **180 s** Nill Bye vs Rake diss examples under `_lab/audio/nill-bye/phaseN/` (Queue on their own; phase0 lab catalog, phase1 style pack, phase2 trap/EDM pack; exclusive bars per take)
-- Sixty-five **180 s** Drive-through rave-set EDM examples under `_lab/audio/drive-through/phaseN/` (Queue on their own; phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty; American festival EDM, drop early, dirty pyro on every drop, chest-sub bass; vocals are a rare DJ treat on two graphs)
+- Eighty-five **180 s** Drive-through rave-set EDM examples under `_lab/audio/drive-through/phaseN/` (Queue on their own; phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty, phase4 Secret Homage; American festival EDM, drop early, dirty pyro on every drop, chest-sub bass; vocals are a rare DJ treat on two graphs)
 - Queued files are `Artist - Song Title - vN` (N matches the phase folder)
 - App Mode: tags, lyrics, rewrite, vocal/instrumental, duration
 - Tags vs lyrics; `[verse]` / `[chorus]` / `[spoken word]` as vocal hints; EDM uses `[inst]` / `[intro]` / `[outro]`, plus one short `[chorus]` chop on the two DJ-shout treats
@@ -25,7 +25,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 
 - A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs
 - Forty-five 180 s original diss takes (Nill Bye vs Rake) with exclusive verses and punchlines, without cloud music APIs
-- Sixty-five 180 s original Drive-through EDM takes (American festival EDM, BPM 140–176, drop-early dirty pyro, chest-sub bass; sixty-three instrumental, two DJ-shout treats) without cloud music APIs
+- Eighty-five 180 s original Drive-through EDM takes (American festival EDM, BPM 140–176, drop-early dirty pyro, chest-sub bass; eighty-three instrumental, two DJ-shout treats) without cloud music APIs
 - Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - Keeping the visual studio bootable when the music pack is missing
 - Muxing a cover still + FLAC into a YouTube MP4 without changing the rap graphs
@@ -161,9 +161,9 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 ### 180s Drive-through EDM examples
 
-Sixty-five extra full-track graphs under **`_lab/audio/drive-through/phase0|phase1|phase2|phase3/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic rap lane, not a prerequisite. A longer Queue is expected. SaveAudio prefix is **`Drive-through - Song Title - vN`** (N = phase).
+Eighty-five extra full-track graphs under **`_lab/audio/drive-through/phase0|phase1|phase2|phase3|phase4/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic rap lane, not a prerequisite. A longer Queue is expected. SaveAudio prefix is **`Drive-through - Song Title - vN`** (N = phase).
 
-Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live rave DJ set**. Original **American festival EDM** arrangements (bass house, big room, future bass, brostep, festival trap, drumstep, bounce house, color bass, riddim — not techno). No living-DJ names. No famous-hook paraphrases. Sixty-three takes lock `instrumental, no vocals, no singing` (App **Vocal / instrumental** = instrumental). Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, one short `[chorus]` chop, no `[verse]`. Arrangement scores are production cues in `[inst]` blocks — unique flow per take, drop in the first or second section, dirty pyro on every drop, chest-sub / low 808, fast section changes, mix-in/out — not a Nill Bye verse/chorus loop and not the same melody-drop-break-drop skeleton on every graph. Some takes add dual-action pedal bass (sub swell + driven punch). Phase2 and phase3 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release.
+Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live rave DJ set**. Original **American festival EDM** arrangements (bass house, big room, future bass, brostep, festival trap, drumstep, bounce house, color bass, riddim, dirty dubstep — not techno). No living-DJ names. No famous-hook paraphrases. Eighty-three takes lock `instrumental, no vocals, no singing` (App **Vocal / instrumental** = instrumental). Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, one short `[chorus]` chop, no `[verse]`. Arrangement scores are production cues in `[inst]` blocks — unique flow per take, drop in the first or second section, dirty pyro on every drop, chest-sub / low 808, fast section changes, mix-in/out — not a Nill Bye verse/chorus loop and not the same melody-drop-break-drop skeleton on every graph. Some takes add dual-action pedal bass (sub swell + driven punch). Phase2, phase3, and phase4 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release.
 
 This is **not** the Nill Bye trap/EDM pack. Those graphs are rap **over** club beds with a dry booth. Drive-through is dance EDM (mostly instrumental).
 
@@ -258,6 +258,33 @@ Harder chest-sub afterparty (BPM 150–176). All instrumental. Dual-action pedal
 | **music-edm-drive-through-clutch-slam-lab-example** | tearout **168**, seed **577** | `Drive-through - Clutch Slam - v3` | Dual-action tearout |
 | **music-edm-drive-through-trailer-hitch-lab-example** | festival bass **165**, seed **587** | `Drive-through - Trailer Hitch - v3` | Hour-4 closer |
 
+#### phase4 — Secret Homage
+
+Early dirty-bass album (BPM 140–176). Half-time dubstep, brostep, riddim, tearout, drumstep, hybrid trap. All instrumental. Layouts cycle the same five Comfy placements as phase2 and phase3.
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-edm-drive-through-hush-lane-lab-example** | dirty dubstep **140**, seed **593** | `Drive-through - Hush Lane - v4` | Album opener, half-time wobble pyro |
+| **music-edm-drive-through-cipher-lock-lab-example** | brostep **140**, seed **599** | `Drive-through - Cipher Lock - v4` | Drop-first growl wreck |
+| **music-edm-drive-through-ghost-dock-lab-example** | riddim **140**, seed **601** | `Drive-through - Ghost Dock - v4` | Wobble riddim pyro |
+| **music-edm-drive-through-sealed-ramp-lab-example** | tearout **145**, seed **607** | `Drive-through - Sealed Ramp - v4` | Tearout growl, four wrecks |
+| **music-edm-drive-through-fog-vault-lab-example** | electro house **142**, seed **613** | `Drive-through - Fog Vault - v4` | Dirty electro 808 pyro |
+| **music-edm-drive-through-dummy-light-lab-example** | festival bass **145**, seed **617** | `Drive-through - Dummy Light - v4` | Stacked 808 wall |
+| **music-edm-drive-through-quiet-wreck-lab-example** | dirty bass **140**, seed **619** | `Drive-through - Quiet Wreck - v4` | Half-time rumble, four wrecks |
+| **music-edm-drive-through-off-ledger-lab-example** | drumstep **174**, seed **631** | `Drive-through - Off Ledger - v4` | Amen + reese pyro |
+| **music-edm-drive-through-back-alley-lab-example** | neuro bass **172**, seed **641** | `Drive-through - Back Alley - v4` | Fast reese sub |
+| **music-edm-drive-through-cellar-kick-lab-example** | dirty dubstep **148**, seed **643** | `Drive-through - Cellar Kick - v4` | Wobble wrecks |
+| **music-edm-drive-through-hidden-booth-lab-example** | hybrid trap **140**, seed **647** | `Drive-through - Hidden Booth - v4` | Trap 808 wall |
+| **music-edm-drive-through-coded-sub-lab-example** | chest bass **140**, seed **653** | `Drive-through - Coded Sub - v4` | Dual-action pedal bass |
+| **music-edm-drive-through-shadow-coil-lab-example** | neuro bass **150**, seed **659** | `Drive-through - Shadow Coil - v4` | Reese coil wrecks |
+| **music-edm-drive-through-mute-pyro-lab-example** | dirty electro **150**, seed **661** | `Drive-through - Mute Pyro - v4` | Analog 808 pyro |
+| **music-edm-drive-through-unlisted-row-lab-example** | drumstep **176**, seed **673** | `Drive-through - Unlisted Row - v4` | Triple amen wreck |
+| **music-edm-drive-through-night-cipher-lab-example** | wave bass **140**, seed **677** | `Drive-through - Night Cipher - v4` | Low swell wrecks |
+| **music-edm-drive-through-blank-stencil-lab-example** | festival trap **140**, seed **683** | `Drive-through - Blank Stencil - v4` | Trap stamp 808 |
+| **music-edm-drive-through-blind-stamp-lab-example** | riddim **150**, seed **691** | `Drive-through - Blind Stamp - v4` | Wobble + sub crush |
+| **music-edm-drive-through-cold-cache-lab-example** | hybrid bass **142**, seed **701** | `Drive-through - Cold Cache - v4` | Hybrid 808 pyro |
+| **music-edm-drive-through-secret-homage-lab-example** | dirty dubstep **140**, seed **709** | `Drive-through - Secret Homage - v4` | Album closer, half-time stacked 808 |
+
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 ---
@@ -265,7 +292,7 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 ## Tags vs lyrics
 
 - **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
-- **Lyrics** are the bars (rap) or the arrangement score (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant. EDM graphs use `[inst]` for the bed, build, and drops. Sixty-three takes stay instrumental. Two rave-set treats add one short `[chorus]` DJ chop (never `[verse]`).
+- **Lyrics** are the bars (rap) or the arrangement score (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant. EDM graphs use `[inst]` for the bed, build, and drops. Eighty-three takes stay instrumental. Two rave-set treats add one short `[chorus]` DJ chop (never `[verse]`).
 - Original lyrics only. Do not write “in the style of \<living artist\>”. No living-MC names. No famous-hook paraphrases.
 - Short percussive lines (about 6–10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **music-rap-draft-lab-example** after a pull so those combos stay aligned.
 

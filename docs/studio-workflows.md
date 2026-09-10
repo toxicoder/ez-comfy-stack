@@ -34,7 +34,7 @@ user/default/workflows/
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast-*, dub-*, music-rap-draft/full
       nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
-      drive-through/phase0|1|2|3/ sixty-five 180 s music-edm-drive-through-* EDM takes
+      drive-through/phase0|1|2|3|4/ eighty-five 180 s music-edm-drive-through-* EDM takes
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -256,7 +256,7 @@ flowchart TB
     | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`Nill Bye - Kick-Split Myth - v2`) |
     | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`Nill Bye - Uplifting Rumor - v2`) |
 
-    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (`phase0/` hour 1, `phase1/` hour 2, `phase2/` hour 3 headliner, `phase3/` hour 4 afterparty). Drop early, dirty pyro on every drop, chest-sub bass. Phase2 and phase3 vary Comfy node placement across five layouts. Full table: [Local music](music.md).
+    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (`phase0/` hour 1, `phase1/` hour 2, `phase2/` hour 3 headliner, `phase3/` hour 4 afterparty, `phase4/` Secret Homage). Drop early, dirty pyro on every drop, chest-sub bass. Phase2, phase3, and phase4 vary Comfy node placement across five layouts. Full table: [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
@@ -325,6 +325,26 @@ flowchart TB
     | **music-edm-drive-through-asphalt-heart-lab-example** | **180 s** chest bass 155 (`Drive-through - Asphalt Heart - v3`) |
     | **music-edm-drive-through-clutch-slam-lab-example** | **180 s** tearout 168 (`Drive-through - Clutch Slam - v3`). Dual-action pedal |
     | **music-edm-drive-through-trailer-hitch-lab-example** | **180 s** festival bass 165 (`Drive-through - Trailer Hitch - v3`). Hour-4 closer |
+    | **music-edm-drive-through-hush-lane-lab-example** | **180 s** dirty dubstep 140 (`Drive-through - Hush Lane - v4`). Secret Homage opener |
+    | **music-edm-drive-through-cipher-lock-lab-example** | **180 s** brostep 140 (`Drive-through - Cipher Lock - v4`) |
+    | **music-edm-drive-through-ghost-dock-lab-example** | **180 s** riddim 140 (`Drive-through - Ghost Dock - v4`) |
+    | **music-edm-drive-through-sealed-ramp-lab-example** | **180 s** tearout 145 (`Drive-through - Sealed Ramp - v4`) |
+    | **music-edm-drive-through-fog-vault-lab-example** | **180 s** electro house 142 (`Drive-through - Fog Vault - v4`) |
+    | **music-edm-drive-through-dummy-light-lab-example** | **180 s** festival bass 145 (`Drive-through - Dummy Light - v4`) |
+    | **music-edm-drive-through-quiet-wreck-lab-example** | **180 s** dirty bass 140 (`Drive-through - Quiet Wreck - v4`) |
+    | **music-edm-drive-through-off-ledger-lab-example** | **180 s** drumstep 174 (`Drive-through - Off Ledger - v4`) |
+    | **music-edm-drive-through-back-alley-lab-example** | **180 s** neuro bass 172 (`Drive-through - Back Alley - v4`) |
+    | **music-edm-drive-through-cellar-kick-lab-example** | **180 s** dirty dubstep 148 (`Drive-through - Cellar Kick - v4`) |
+    | **music-edm-drive-through-hidden-booth-lab-example** | **180 s** hybrid trap 140 (`Drive-through - Hidden Booth - v4`) |
+    | **music-edm-drive-through-coded-sub-lab-example** | **180 s** chest bass 140 (`Drive-through - Coded Sub - v4`). Dual-action pedal |
+    | **music-edm-drive-through-shadow-coil-lab-example** | **180 s** neuro bass 150 (`Drive-through - Shadow Coil - v4`) |
+    | **music-edm-drive-through-mute-pyro-lab-example** | **180 s** dirty electro 150 (`Drive-through - Mute Pyro - v4`) |
+    | **music-edm-drive-through-unlisted-row-lab-example** | **180 s** drumstep 176 (`Drive-through - Unlisted Row - v4`) |
+    | **music-edm-drive-through-night-cipher-lab-example** | **180 s** wave bass 140 (`Drive-through - Night Cipher - v4`) |
+    | **music-edm-drive-through-blank-stencil-lab-example** | **180 s** festival trap 140 (`Drive-through - Blank Stencil - v4`) |
+    | **music-edm-drive-through-blind-stamp-lab-example** | **180 s** riddim 150 (`Drive-through - Blind Stamp - v4`) |
+    | **music-edm-drive-through-cold-cache-lab-example** | **180 s** hybrid bass 142 (`Drive-through - Cold Cache - v4`) |
+    | **music-edm-drive-through-secret-homage-lab-example** | **180 s** dirty dubstep 140 (`Drive-through - Secret Homage - v4`). Album closer |
 
 === "DCC (clay → print)"
 
