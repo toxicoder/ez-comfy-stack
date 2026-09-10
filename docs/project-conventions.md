@@ -250,7 +250,7 @@ flowchart LR
 - Stack is **MkDocs 1.x + Material** (`docs/requirements.txt`). Do **not** upgrade to MkDocs 2.x (incompatible with Material plugins/theme; no migration path). CI and `make docs` set `NO_MKDOCS_2_WARNING=1` to suppress Material’s advisory. Revisit only if migrating tooling (e.g. Zensical evaluation).
 - Keep the top nav on screen while scrolling: `navigation.tabs` **and** `navigation.tabs.sticky` in `mkdocs.yml`. Do **not** enable `header.autohide` (Material hides the tabs row on scroll without sticky).
 - Header compact-on-scroll lives in `docs/stylesheets/extra.css` (wired via `extra_css`). Do not fork Material `header.html` / `tabs.html` for this. All header controls stay visible; only padding/height shrinks after the page title scrolls away. The same stylesheet sets `.md-typeset { font-size: 0.875rem }` (Material default is `0.8rem`); do not raise `html` font-size or the rem-based header will grow with the article.
-- Sticky table headers also live in `extra.css`: `.md-typeset table thead th` pins under the lifted header (`--ez-sticky-table-top`, 4.8rem default / 4.2rem after compact-on-scroll). Keep `.md-typeset__scrollwrap { overflow: visible }` so the wrap does not become the sticky scrollport. Do not fork table templates.
+- Table headers: `docs/javascripts/tables.js` clones `.md-typeset table:not([class]) thead` into a `.ez-table-pin` overlay that sits under `.md-header` while scrolling, then releases so the last row and 25% of the previous row stay visible. Do **not** use `position: sticky` on `th` — Material’s `html { overflow-x: hidden }` plus `display: inline-block; overflow: auto` on the table prevent Chromium from pinning cells, and a sticky `top` offset paints `thead` over the body rows. Keep **`display: table`** and **overflow visible** on the table. Leave Material’s `.md-typeset__scrollwrap { overflow-x: auto }` so wide tables scroll inside the article. Do not fork table templates. Do not `position: fixed` the original thead (the overlay is the fixed clone).
 - Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
 - Branch-stamped at build time via `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION` (optional `EZ_DOCS_GIT_REF` override):
   - Edit links (`edit/<ref>/docs/`)
@@ -278,7 +278,7 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 - First occurrence per term **per page**; skip `code` / `pre` / headings / links / the glossary page itself
 - `docs/glossary.py` wraps HTML; `docs/javascripts/glossary.js` opens a native `<dialog>`
 - Do **not** enable Material `abbr` + snippets `auto_append` (hover-only, double-wraps)
-- Do **not** enable `content.instant` unless you re-test the glossary modal **and** `javascripts/commands.js` on client-side navigation
+- Do **not** enable `content.instant` unless you re-test the glossary modal, `javascripts/commands.js`, **and** `javascripts/tables.js` on client-side navigation
 
 **Rich formatting patterns** (MkDocs Material — see `mkdocs.yml`):
 
