@@ -34,7 +34,7 @@ user/default/workflows/
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast-*, dub-*, music-rap-draft/full
       nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
-      drive-through/phase0|1/    thirty 180 s music-edm-drive-through-* EDM takes
+      drive-through/phase0|1|2/  forty-five 180 s music-edm-drive-through-* EDM takes
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -256,7 +256,7 @@ flowchart TB
     | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`Nill Bye - Kick-Split Myth - v2`) |
     | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`Nill Bye - Uplifting Rumor - v2`) |
 
-    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (`phase0/` hour 1, then `phase1/` hour 2). Drop early, dirty pyro on every drop. Full table: [Local music](music.md).
+    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (`phase0/` hour 1, `phase1/` hour 2, `phase2/` hour 3 headliner). Drop early, dirty pyro on every drop. Phase2 varies Comfy node placement across five layouts. Full table: [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
@@ -290,6 +290,21 @@ flowchart TB
     | **music-edm-drive-through-night-oil-lab-example** | **180 s** hybrid trap 142 (`Drive-through - Night Oil - v1`) |
     | **music-edm-drive-through-chest-pass-lab-example** | **180 s** festival bass 150 (`Drive-through - Chest Pass - v1`) |
     | **music-edm-drive-through-sunrise-sub-lab-example** | **180 s** progressive house 140 (`Drive-through - Sunrise Sub - v1`). Encore closer |
+    | **music-edm-drive-through-lantern-merge-lab-example** | **180 s** bounce house 150 (`Drive-through - Lantern Merge - v2`). Hour-3 opener |
+    | **music-edm-drive-through-firefly-lane-lab-example** | **180 s** color bass 152 (`Drive-through - Firefly Lane - v2`) |
+    | **music-edm-drive-through-canopy-bounce-lab-example** | **180 s** bass house 148 (`Drive-through - Canopy Bounce - v2`) |
+    | **music-edm-drive-through-grove-wreck-lab-example** | **180 s** future riddim 150 (`Drive-through - Grove Wreck - v2`) |
+    | **music-edm-drive-through-moss-sub-lab-example** | **180 s** space bass 150 (`Drive-through - Moss Sub - v2`) |
+    | **music-edm-drive-through-fern-stack-lab-example** | **180 s** hybrid bass 155 (`Drive-through - Fern Stack - v2`) |
+    | **music-edm-drive-through-pollen-kick-lab-example** | **180 s** drumstep 174 (`Drive-through - Pollen Kick - v2`) |
+    | **music-edm-drive-through-cedar-growl-lab-example** | **180 s** riddim 150 (`Drive-through - Cedar Growl - v2`) |
+    | **music-edm-drive-through-moon-ramp-lab-example** | **180 s** wave bass 148 (`Drive-through - Moon Ramp - v2`) |
+    | **music-edm-drive-through-trail-bounce-lab-example** | **180 s** slap house 150 (`Drive-through - Trail Bounce - v2`) |
+    | **music-edm-drive-through-dew-wreck-lab-example** | **180 s** neuro bass 172 (`Drive-through - Dew Wreck - v2`) |
+    | **music-edm-drive-through-sap-stack-lab-example** | **180 s** festival bass 165 (`Drive-through - Sap Stack - v2`) |
+    | **music-edm-drive-through-glade-split-lab-example** | **180 s** dirty electro 150 (`Drive-through - Glade Split - v2`) |
+    | **music-edm-drive-through-root-chest-lab-example** | **180 s** chest bass 148 (`Drive-through - Root Chest - v2`) |
+    | **music-edm-drive-through-ember-crest-lab-example** | **180 s** festival bass 165 (`Drive-through - Ember Crest - v2`). Headliner closer |
 
 === "DCC (clay → print)"
 

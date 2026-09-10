@@ -213,6 +213,138 @@ def _sampler_widgets(seed: int = 42) -> list:
     return [seed, "fixed", 8, 1.0, "euler", "simple", 1.0]
 
 
+# Node ids 1-12 stay fixed. Values are [x, y] for each layout.
+# Groups: (id, title, x, y, w, h). Color is applied at dump.
+_ACE_LAYOUTS: dict[str, tuple[dict[int, list[float]], list[tuple]]] = {
+    "column": (
+        {
+            1: [40, 80],
+            2: [40, 220],
+            3: [40, 380],
+            4: [40, 520],
+            5: [500, 80],
+            6: [500, 520],
+            7: [940, 80],
+            8: [940, 180],
+            9: [1340, 80],
+            10: [1340, 180],
+            11: [1340, 300],
+            12: [1340, 440],
+        },
+        [
+            (1, "MODEL", 20, LAB_GROUP_Y0, 420, 280),
+            (2, "DURATION", 20, 380 - GROUP_TITLE_INSET, 420, 300),
+            (3, "PROMPT", 480, LAB_GROUP_Y0, 820, 1000),
+            (4, "OUTPUT", 1320, LAB_GROUP_Y0, 500, 940),
+        ],
+    ),
+    "wide-stage": (
+        {
+            1: [40, 80],
+            2: [40, 220],
+            3: [40, 380],
+            4: [40, 520],
+            5: [660, 80],
+            6: [660, 520],
+            7: [1140, 80],
+            8: [1140, 180],
+            9: [1680, 80],
+            10: [1680, 180],
+            11: [1680, 300],
+            12: [1680, 440],
+        },
+        [
+            (1, "MODEL", 20, LAB_GROUP_Y0, 420, 280),
+            (2, "DURATION", 20, 380 - GROUP_TITLE_INSET, 420, 300),
+            (3, "PROMPT", 640, LAB_GROUP_Y0, 860, 1000),
+            (4, "OUTPUT", 1660, LAB_GROUP_Y0, 500, 940),
+        ],
+    ),
+    "stacked-tower": (
+        {
+            1: [40, 80],
+            2: [40, 220],
+            3: [40, 380],
+            4: [40, 520],
+            5: [40, 680],
+            6: [40, 1080],
+            7: [480, 680],
+            8: [480, 780],
+            9: [920, 80],
+            10: [920, 180],
+            11: [920, 300],
+            12: [920, 440],
+        },
+        [
+            (1, "MODEL", 20, LAB_GROUP_Y0, 420, 280),
+            (2, "DURATION", 20, 380 - GROUP_TITLE_INSET, 420, 300),
+            (3, "PROMPT", 20, 680 - GROUP_TITLE_INSET, 820, 900),
+            (4, "OUTPUT", 900, LAB_GROUP_Y0, 500, 940),
+        ],
+    ),
+    "prompt-left": (
+        {
+            1: [900, 80],
+            2: [900, 220],
+            3: [900, 380],
+            4: [900, 520],
+            5: [40, 80],
+            6: [40, 520],
+            7: [480, 80],
+            8: [480, 180],
+            9: [1400, 80],
+            10: [1400, 180],
+            11: [1400, 300],
+            12: [1400, 440],
+        },
+        [
+            (1, "MODEL", 880, LAB_GROUP_Y0, 420, 280),
+            (2, "DURATION", 880, 380 - GROUP_TITLE_INSET, 420, 300),
+            (3, "PROMPT", 20, LAB_GROUP_Y0, 820, 1000),
+            (4, "OUTPUT", 1380, LAB_GROUP_Y0, 500, 940),
+        ],
+    ),
+    "output-rail": (
+        {
+            1: [580, 80],
+            2: [580, 220],
+            3: [580, 380],
+            4: [580, 520],
+            5: [1060, 80],
+            6: [1060, 520],
+            7: [1500, 80],
+            8: [1500, 180],
+            9: [40, 80],
+            10: [40, 180],
+            11: [40, 300],
+            12: [40, 440],
+        },
+        [
+            (1, "MODEL", 560, LAB_GROUP_Y0, 420, 280),
+            (2, "DURATION", 560, 380 - GROUP_TITLE_INSET, 420, 300),
+            (3, "PROMPT", 1040, LAB_GROUP_Y0, 820, 1000),
+            (4, "OUTPUT", 20, LAB_GROUP_Y0, 500, 940),
+        ],
+    ),
+}
+
+
+def _ace_layout(name: str) -> tuple[dict[int, list[float]], list[tuple]]:
+    """Return node positions and group boxes for one ACE graph layout.
+
+    Arguments:
+        name: Layout key (column, wide-stage, stacked-tower, prompt-left,
+            output-rail).
+    Returns:
+        (node_id -> [x, y], group tuples).
+    Raises:
+        ValueError: unknown layout name.
+    """
+    if name not in _ACE_LAYOUTS:
+        raise ValueError(f"unknown ACE layout {name}")
+    return _ACE_LAYOUTS[name]
+
+
 def _diss_note(ex: DissExample) -> str:
     duration_s = int(ex["duration"])
     return f"""## {ex["stem"]}
@@ -288,12 +420,14 @@ def _build_ace(
     seed: int = 42,
     ace_mode: str = "vocal",
     enhance_title: str = "ez_rap_prompt",
+    layout: str = "column",
 ) -> dict:
+    pos, group_specs = _ace_layout(layout)
     g = Graph(stem)
     g.add(
         1,
         "CheckpointLoaderSimple",
-        [40, 80],
+        pos[1],
         [360, 100],
         "ACE-Step 1.5 turbo AIO",
         [ACE_CKPT],
@@ -306,7 +440,7 @@ def _build_ace(
     g.add(
         2,
         "ModelSamplingAuraFlow",
-        [40, 220],
+        pos[2],
         [330, 60],
         "AuraFlow sampling",
         [3],
@@ -323,7 +457,7 @@ def _build_ace(
     g.add(
         3,
         "PrimitiveNode",
-        [40, 380],
+        pos[3],
         [280, 82],
         "Song Duration",
         [duration, "fixed"],
@@ -333,7 +467,7 @@ def _build_ace(
     g.add(
         4,
         "EmptyAceStep1.5LatentAudio",
-        [40, 520],
+        pos[4],
         [320, 82],
         "Latent length (seconds)",
         [duration, 1],
@@ -343,7 +477,7 @@ def _build_ace(
     g.add(
         5,
         "EZAceStepPromptEnhance",
-        [500, 80],
+        pos[5],
         [400, 360],
         enhance_title,
         [tags, lyrics, False, ace_mode],
@@ -355,7 +489,7 @@ def _build_ace(
     g.add(
         6,
         "TextEncodeAceStepAudio1.5",
-        [500, 520],
+        pos[6],
         [400, 420],
         "ACE tags + lyrics",
         _ace_widgets(lyrics, duration, seed, tags=tags, bpm=bpm),
@@ -370,7 +504,7 @@ def _build_ace(
     g.add(
         7,
         "ConditioningZeroOut",
-        [940, 80],
+        pos[7],
         [240, 46],
         "Negative (zero)",
         [],
@@ -380,7 +514,7 @@ def _build_ace(
     g.add(
         8,
         "KSampler",
-        [940, 180],
+        pos[8],
         [330, 262],
         "ACE sampler",
         _sampler_widgets(seed),
@@ -395,7 +529,7 @@ def _build_ace(
     g.add(
         9,
         "VAEDecodeAudio",
-        [1340, 80],
+        pos[9],
         [280, 60],
         "ACE decode",
         [],
@@ -405,7 +539,7 @@ def _build_ace(
     g.add(
         10,
         "SaveAudio",
-        [1340, 180],
+        pos[10],
         [320, 80],
         "FLAC master",
         [prefix],
@@ -414,7 +548,7 @@ def _build_ace(
     g.add(
         11,
         "SaveAudioMP3",
-        [1340, 300],
+        pos[11],
         [320, 100],
         "MP3 320k",
         [prefix, "320k"],
@@ -423,7 +557,7 @@ def _build_ace(
     g.add(
         12,
         "Note",
-        [1340, 440],
+        pos[12],
         [440, 500],
         "Operator note",
         [note],
@@ -450,10 +584,8 @@ def _build_ace(
             "lab_description": description,
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
-                _group(1, "MODEL", 20, LAB_GROUP_Y0, 420, 280, "#3f789e"),
-                _group(2, "DURATION", 20, 380 - GROUP_TITLE_INSET, 420, 300, "#3f789e"),
-                _group(3, "PROMPT", 480, LAB_GROUP_Y0, 820, 1000, "#3f789e"),
-                _group(4, "OUTPUT", 1320, LAB_GROUP_Y0, 500, 940, "#3f789e"),
+                _group(gid, title, x, y, w, h, "#3f789e")
+                for gid, title, x, y, w, h in group_specs
             ],
         }
     )
@@ -508,6 +640,7 @@ def build_edm(ex: EdmExample) -> dict:
         seed=int(ex["seed"]),
         ace_mode=ex["ace_mode"],
         enhance_title="ez_edm_prompt",
+        layout=ex["layout"],
     )
 
 

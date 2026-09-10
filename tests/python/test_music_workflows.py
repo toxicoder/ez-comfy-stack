@@ -171,8 +171,32 @@ def test_nill_bye_stems_are_stamped_audio() -> None:
         assert STAMP_SPECS[stem]["occupancy"] == "audio"
 
 
+COLUMN_NODE_POS = (
+    (1, 40.0, 80.0),
+    (2, 40.0, 220.0),
+    (3, 40.0, 380.0),
+    (4, 40.0, 520.0),
+    (5, 500.0, 80.0),
+    (6, 500.0, 520.0),
+    (7, 940.0, 80.0),
+    (8, 940.0, 180.0),
+    (9, 1340.0, 80.0),
+    (10, 1340.0, 180.0),
+    (11, 1340.0, 300.0),
+    (12, 1340.0, 440.0),
+)
+
+
+def _node_fingerprint(graph: dict) -> tuple[tuple[int, float, float], ...]:
+    nodes = sorted(graph["nodes"], key=lambda node: int(node["id"]))
+    return tuple(
+        (int(node["id"]), float(node["pos"][0]), float(node["pos"][1]))
+        for node in nodes
+    )
+
+
 def test_music_edm_drive_through_graphs() -> None:
-    assert len(EDM_EXAMPLES) == 30
+    assert len(EDM_EXAMPLES) == 45
     assert tuple(ex["stem"] for ex in EDM_EXAMPLES) == DRIVE_THROUGH_STAMP_STEMS
     for ex in EDM_EXAMPLES:
         stem = ex["stem"]
@@ -206,6 +230,18 @@ def test_music_edm_drive_through_graphs() -> None:
         assert ace["title"] == "ez_edm_prompt"
         rel = lab_json(stem).relative_to(LAB_ROOT)
         assert rel.parts[:3] == ("audio", "drive-through", f"phase{ex['phase']}")
+
+
+def test_drive_through_phase2_layouts_vary() -> None:
+    fingerprints: set[tuple[tuple[int, float, float], ...]] = set()
+    for ex in EDM_EXAMPLES:
+        graph = _load(ex["stem"])
+        fingerprint = _node_fingerprint(graph)
+        if ex["phase"] < 2:
+            assert fingerprint == COLUMN_NODE_POS, ex["stem"]
+        else:
+            fingerprints.add(fingerprint)
+    assert len(fingerprints) >= 5
 
 
 def test_drive_through_stems_are_stamped_audio() -> None:

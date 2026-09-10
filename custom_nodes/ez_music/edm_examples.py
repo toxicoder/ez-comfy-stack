@@ -16,6 +16,9 @@ EdmSeries = Literal["drive-through"]
 EdmAceMode = Literal["instrumental", "vocal"]
 
 SCORE_LABELS = frozenset({"intro", "inst", "outro", "chorus"})
+EDM_LAYOUTS = frozenset(
+    {"column", "wide-stage", "stacked-tower", "prompt-left", "output-rail"}
+)
 DROP_WEIGHT_NEEDLES = (
     "heavy",
     "wreck",
@@ -37,6 +40,12 @@ DROP_SHOW_NEEDLES = (
     "pyro",
     "fireworks",
 )
+HEADLINER_BOUNCE_NEEDLES = (
+    "bounce",
+    "chest",
+    "body",
+    "808",
+)
 
 
 class EdmExample(TypedDict):
@@ -52,6 +61,7 @@ class EdmExample(TypedDict):
     description: str
     lyrics: str
     ace_mode: EdmAceMode
+    layout: str
 
 
 def drive_tags(*parts: str, bpm: int, treat: bool = False) -> str:
@@ -86,6 +96,7 @@ def _ex(
     lyrics: str,
     *tag_parts: str,
     treat: bool = False,
+    layout: str = "column",
 ) -> EdmExample:
     """Build one Drive-through catalog row.
 
@@ -99,9 +110,14 @@ def _ex(
         lyrics: Arrangement score from ``format_edm_score``.
         tag_parts: Genre and production tags (bass + festival language).
         treat: If True, sparse DJ-shout lock and vocal ACE mode.
+        layout: Comfy node placement name (phase2 experiments; default column).
     Returns:
         One ``EdmExample`` row.
+    Raises:
+        ValueError: unknown layout name.
     """
+    if layout not in EDM_LAYOUTS:
+        raise ValueError(f"unknown layout {layout}")
     return {
         "stem": f"music-edm-drive-through-{slug}-lab-example",
         "series": "drive-through",
@@ -115,6 +131,7 @@ def _ex(
         "description": _desc(take, treat=treat),
         "lyrics": lyrics,
         "ace_mode": "vocal" if treat else "instrumental",
+        "layout": layout,
     }
 
 
@@ -157,8 +174,9 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
 def _catalog() -> tuple[EdmExample, ...]:
     from .edm_drive_through import EDM_DRIVE_THROUGH
     from .edm_drive_through_bass import EDM_DRIVE_THROUGH_BASS
+    from .edm_drive_through_headliner import EDM_DRIVE_THROUGH_HEADLINER
 
-    return EDM_DRIVE_THROUGH + EDM_DRIVE_THROUGH_BASS
+    return EDM_DRIVE_THROUGH + EDM_DRIVE_THROUGH_BASS + EDM_DRIVE_THROUGH_HEADLINER
 
 
 EDM_EXAMPLES: tuple[EdmExample, ...] = _catalog()
