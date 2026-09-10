@@ -31,6 +31,9 @@ from ez_music.edm_examples import (  # noqa: E402
     DROP_WEIGHT_NEEDLES,
     EDM_DURATION_S,
     EDM_EXAMPLES,
+    EDM_LAYOUTS,
+    HEADLINER_BOUNCE_NEEDLES,
+    _ex,
     drive_tags,
     format_edm_score,
 )
@@ -58,6 +61,13 @@ LIVING_EDM_NEEDLES = (
     "Garrix",
     "Guetta",
     "Marshmello",
+    "Rezz",
+    "Tipper",
+    "Subtronics",
+    "LSDream",
+    "GRiZ",
+    "Zeds Dead",
+    "Electric Forest",
     "Suno",
     "Udio",
 )
@@ -302,6 +312,21 @@ EXPECTED_DRIVE_THROUGH_TITLES = (
     "night oil",
     "chest pass",
     "sunrise sub",
+    "lantern merge",
+    "firefly lane",
+    "canopy bounce",
+    "grove wreck",
+    "moss sub",
+    "fern stack",
+    "pollen kick",
+    "cedar growl",
+    "moon ramp",
+    "trail bounce",
+    "dew wreck",
+    "sap stack",
+    "glade split",
+    "root chest",
+    "ember crest",
 )
 DRIVE_TREAT_TITLES = frozenset({"wide open", "second wave"})
 
@@ -397,6 +422,22 @@ def test_format_edm_score_rejects_empty_body() -> None:
         format_edm_score(*sections)
 
 
+def test_edm_example_rejects_unknown_layout() -> None:
+    with pytest.raises(ValueError, match="unknown layout"):
+        _ex(
+            "nope",
+            "nope",
+            150,
+            2,
+            0,
+            "nope",
+            format_edm_score(*_valid_edm_sections()),
+            "bass house",
+            "rave",
+            layout="diagonal",
+        )
+
+
 def test_format_edm_score_rejects_short_score() -> None:
     with pytest.raises(ValueError, match="at least three sections"):
         format_edm_score(
@@ -420,12 +461,14 @@ def test_format_edm_score_allows_chorus_treat() -> None:
 
 def test_drive_through_edm_examples_are_original_180s() -> None:
     assert EDM_DURATION_S == 180.0
-    assert len(EDM_EXAMPLES) == 30
+    assert len(EDM_EXAMPLES) == 45
     prefixes: list[str] = []
     stems: list[str] = []
+    seeds: list[int] = []
     bpms: list[int] = []
     signatures: list[tuple[str, ...]] = []
     triple_drops = 0
+    phase2_triple = 0
     treat_titles: list[str] = []
     for ex in EDM_EXAMPLES:
         assert ex["duration"] == EDM_DURATION_S
@@ -440,6 +483,7 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         assert "techno" not in lyrics.lower(), ex["stem"]
         assert _hits_needles(ex["tags"], BASS_NEEDLES), (ex["stem"], ex["tags"])
         assert _hits_needles(lyrics, BASS_NEEDLES), (ex["stem"], lyrics)
+        assert ex["layout"] in EDM_LAYOUTS, ex["stem"]
         labels = _score_labels(lyrics)
         assert labels[-1] == "outro"
         signatures.append(labels)
@@ -459,6 +503,25 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
                 block,
             )
             assert _hits_needles(block, DROP_SHOW_NEEDLES), (ex["stem"], block)
+        if ex["phase"] < 2:
+            assert ex["layout"] == "column", ex["stem"]
+        else:
+            assert int(ex["bpm"]) >= 148, ex["stem"]
+            assert _hits_needles(ex["tags"], HEADLINER_BOUNCE_NEEDLES), (
+                ex["stem"],
+                ex["tags"],
+            )
+            assert _hits_needles(lyrics, HEADLINER_BOUNCE_NEEDLES), (
+                ex["stem"],
+                lyrics,
+            )
+            for block in drops:
+                assert _hits_needles(block, HEADLINER_BOUNCE_NEEDLES), (
+                    ex["stem"],
+                    block,
+                )
+            if len(drops) >= 3:
+                phase2_triple += 1
         treat = ex["title"] in DRIVE_TREAT_TITLES
         if treat:
             assert "[chorus]" in lyrics
@@ -488,15 +551,23 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
             assert needle not in ex["description"]
         prefixes.append(ex["prefix"])
         stems.append(ex["stem"])
+        seeds.append(int(ex["seed"]))
         bpms.append(int(ex["bpm"]))
-    assert len(set(prefixes)) == 30
-    assert len(set(stems)) == 30
-    assert [ex["phase"] for ex in EDM_EXAMPLES] == [0] * 15 + [1] * 15
+    assert len(set(prefixes)) == 45
+    assert len(set(stems)) == 45
+    assert len(set(seeds)) == 45
+    assert [ex["phase"] for ex in EDM_EXAMPLES] == [0] * 15 + [1] * 15 + [2] * 15
+    phase2 = [ex for ex in EDM_EXAMPLES if ex["phase"] == 2]
+    assert len(phase2) == 15
+    assert min(int(ex["bpm"]) for ex in phase2) >= 148
+    assert sum(1 for ex in phase2 if int(ex["bpm"]) >= 165) >= 4
+    assert {ex["layout"] for ex in phase2} == EDM_LAYOUTS
+    assert phase2_triple >= 12
     assert min(bpms) >= 140
     assert max(bpms) >= 170
     assert sum(1 for bpm in bpms if bpm >= 145) >= 12
-    assert triple_drops >= 4
-    assert len(set(signatures)) >= 8
+    assert triple_drops >= 16
+    assert len(set(signatures)) >= 12
     for left, right in zip(signatures, signatures[1:]):
         assert left != right
     assert frozenset(treat_titles) == DRIVE_TREAT_TITLES
