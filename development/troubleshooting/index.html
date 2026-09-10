@@ -2126,10 +2126,10 @@
 <tr>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> did nothing</td>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> / llama.cpp missing, or local LLM timed out</td>
-<td>Read <strong>Enhance status</strong>. <code>GGUF missing</code> → <code>download-models</code> then restart. <code>llama.cpp unavailable</code> → <strong>restart</strong> (entrypoint installs the CPU wheel; no image rebuild). Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>. Default timeout is <strong>180s</strong> (<code>EZ_LLM_TIMEOUT_S</code>) on <strong>8</strong> CPU threads (<code>EZ_LLM_N_THREADS</code>)</td>
+<td>Read <strong>Enhance status</strong>. <code>GGUF missing</code> → <code>download-models</code> then restart. <code>llama.cpp unavailable</code> → <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> self-heals the CPU wheel; if status still has a <code>docker exec … pip install</code> line, run it (no image rebuild). Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>. Default timeout is <strong>180s</strong> (<code>EZ_LLM_TIMEOUT_S</code>) on <strong>8</strong> CPU threads (<code>EZ_LLM_N_THREADS</code>)</td>
 </tr>
 <tr>
-<td>Dub <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> says <strong>rights refused</strong></td>
+<td>Dub Queue says <strong>rights refused</strong></td>
 <td><strong>I have rights</strong> is off (default)</td>
 <td>Turn it on only when you own the recording or have speaker consent. <a href="../dub/">Local dub</a></td>
 </tr>
@@ -2156,7 +2156,7 @@
 <tr>
 <td>Dub status <code>llama.cpp unavailable</code> / English <code>text_target</code></td>
 <td>CPU wheel missing; Queue used to copy source into <code>text_target</code> and clone English as the target</td>
-<td>Pull latest. Restart so entrypoint installs <code>llama-cpp-python</code> from the official CPU extra-index. Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>. Queue now <strong>stops before ASR</strong> when Rewrite translation is on and source ≠ target (empty mix + that status).</td>
+<td>Pull latest. Queue self-heals <code>llama-cpp-python</code> (CPU extra-index as <code>--index-url</code>, then GitHub wheel). If <strong>Dub status</strong> still names a <code>docker exec … pip install</code> command, run that line. Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>. Queue <strong>stops before ASR</strong> when Rewrite translation is on and source ≠ target (empty mix + that status).</td>
 </tr>
 <tr>
 <td>Dub status <code>chatterbox-tts missing t3_model=v3</code></td>
@@ -2760,7 +2760,7 @@
 <tr>
 <td>Podcast script unchanged with Enhance on / GGUF fail-soft</td>
 <td>Same as prompt enhance: missing GGUF or llama.cpp</td>
-<td>Widget text is passed through. <code>./scripts/manage.sh download-models</code> for the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct GGUF. <code>llama.cpp unavailable</code> → restart (CPU wheel). Seeded podcast graphs pin Enhance <strong>off</strong> so <code>Speaker A:</code> / <code>Speaker B:</code> stay parser input</td>
+<td>Widget text is passed through. <code>./scripts/manage.sh download-models</code> for the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct GGUF. <code>llama.cpp unavailable</code> → Queue self-heals the CPU wheel; run the <code>docker exec … pip install</code> line if status still names it. Seeded podcast graphs pin Enhance <strong>off</strong> so <code>Speaker A:</code> / <code>Speaker B:</code> stay parser input</td>
 </tr>
 <tr>
 <td>Dub SRT / mix still in the source language</td>
@@ -2795,7 +2795,7 @@
 <tr>
 <td>Enhance on but prompt unchanged / <strong>Enhance status</strong> says GGUF missing</td>
 <td>Snapshot not downloaded, or <code>comfy/llm/</code> link missing/broken. Fail-soft: style still applies, generation still runs; the 4B rewriter did not</td>
-<td>Not an error in the CLIP string. <strong>CLIP prompt</strong> is what CLIP encoded; <strong>Enhance status</strong> is the reason. Run <code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). <code>doctor</code>/<code>start</code> relink a snapshot already under <code>MODELS_DIR/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/</code>. Restart the container after the pull. <strong>Enhance status</strong> <code>llama.cpp unavailable</code> is a missing CPU wheel, not a missing GGUF — restart so the entrypoint pip-installs <code>llama-cpp-python</code> from the official CPU extra-index (PyPI has no wheel; do not rebuild only for this). Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>. Logs: <code>[ez_prompt_enhance]</code>. Default timeout <strong>180s</strong> (<code>EZ_LLM_TIMEOUT_S</code>), <strong>8</strong> CPU threads (<code>EZ_LLM_N_THREADS</code>). Status <code>timeout or empty model output</code> means raise those env vars and restart — do not drop a GGUF into Comfy Manager</td>
+<td>Not an error in the CLIP string. <strong>CLIP prompt</strong> is what CLIP encoded; <strong>Enhance status</strong> is the reason. Run <code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). <code>doctor</code>/<code>start</code> relink a snapshot already under <code>MODELS_DIR/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/</code>. Restart the container after the pull. <strong>Enhance status</strong> <code>llama.cpp unavailable</code> is a missing CPU wheel, not a missing GGUF — Queue self-heals <code>llama-cpp-python</code> from the official CPU extra-index (<code>--index-url</code>; PyPI has no wheel; do not rebuild only for this). If status still names a <code>docker exec … pip install</code> command, run that line. Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>. Logs: <code>[ez_prompt_enhance]</code>. Default timeout <strong>180s</strong> (<code>EZ_LLM_TIMEOUT_S</code>), <strong>8</strong> CPU threads (<code>EZ_LLM_N_THREADS</code>). Status <code>timeout or empty model output</code> means raise those env vars and restart — do not drop a GGUF into Comfy Manager</td>
 </tr>
 <tr>
 <td>Enhance CLIP prompt box stays empty after Queue</td>
