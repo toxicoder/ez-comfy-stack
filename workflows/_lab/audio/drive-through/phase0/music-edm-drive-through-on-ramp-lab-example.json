@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "festival bass, dirty electro, reverse bass, 808 punch, rave, heavy drop, instrumental, no vocals, no singing, original composition, 155 bpm",
-        "[intro]\nreverse swell\nDrive-through\n\n[inst]\nheavy dirty drop\nreverse bass wreck\nfireworks crash\n\n[inst]\nhats iron\nbass cut\n\n[inst]\nharder dirty drop\ndouble 808 split\nmainstage pyro\n\n[inst]\nscreech tail\nhats iron\n\n[inst]\nfull send drop\nstacked reverse wreck\nchest pyro\n\n[outro]\nkick out\nblend next",
+        "festival bass, dirty electro, reverse bass, 808 punch, chest sub, rave, heavy drop, instrumental, no vocals, no singing, original composition, 155 bpm",
+        "[intro]\nreverse swell\nDrive-through\n\n[inst]\nheavy dirty drop\nreverse bass wreck\nfireworks crash\n\n[inst]\nhats iron\nbass cut\n\n[inst]\nharder dirty drop\ndouble 808 split\nmainstage pyro\n\n[inst]\nhats roll\nsub cut\n\n[inst]\nfull send drop\nstacked reverse wreck\nchest pyro\n\n[outro]\nkick out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "festival bass, dirty electro, reverse bass, 808 punch, rave, heavy drop, instrumental, no vocals, no singing, original composition, 155 bpm",
-        "[intro]\nreverse swell\nDrive-through\n\n[inst]\nheavy dirty drop\nreverse bass wreck\nfireworks crash\n\n[inst]\nhats iron\nbass cut\n\n[inst]\nharder dirty drop\ndouble 808 split\nmainstage pyro\n\n[inst]\nscreech tail\nhats iron\n\n[inst]\nfull send drop\nstacked reverse wreck\nchest pyro\n\n[outro]\nkick out\nblend next",
+        "festival bass, dirty electro, reverse bass, 808 punch, chest sub, rave, heavy drop, instrumental, no vocals, no singing, original composition, 155 bpm",
+        "[intro]\nreverse swell\nDrive-through\n\n[inst]\nheavy dirty drop\nreverse bass wreck\nfireworks crash\n\n[inst]\nhats iron\nbass cut\n\n[inst]\nharder dirty drop\ndouble 808 split\nmainstage pyro\n\n[inst]\nhats roll\nsub cut\n\n[inst]\nfull send drop\nstacked reverse wreck\nchest pyro\n\n[outro]\nkick out\nblend next",
         197,
         "fixed",
         155,

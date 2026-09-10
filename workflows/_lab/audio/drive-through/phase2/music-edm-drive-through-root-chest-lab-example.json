@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "chest bass, four on the floor, bounce 808, body bass, rave, festival pyro, instrumental, no vocals, no singing, original composition, 148 bpm",
-        "[inst]\nheavy chest drop\nbounce sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats only\nair\n\n[inst]\nharder chest drop\nstacked 808 wall\nmainstage pyro\n\n[inst]\nbass cut\nhats skip\n\n[inst]\nfull send drop\nbody chest wreck\nchest pyro\n\n[inst]\nfilter ride\nair\n\n[inst]\nharder stacked drop\nbounce 808 wreck\nmainstage pyro\n\n[inst]\nhats bounce\nspace\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nroot out\nblend next",
+        "chest bass, four on the floor, bounce 808, dual-action pedal bass, body bass, rave, festival pyro, instrumental, no vocals, no singing, original composition, 148 bpm",
+        "[inst]\nheavy chest drop\nbounce sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder chest drop\ndual-action pedal bass\nstacked 808 wall\nmainstage pyro\n\n[inst]\npedal swell\nhats cut\n\n[inst]\nfull send drop\nbody chest wreck\nchest pyro\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder stacked drop\nbounce 808 wreck\nmainstage pyro\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nroot out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "chest bass, four on the floor, bounce 808, body bass, rave, festival pyro, instrumental, no vocals, no singing, original composition, 148 bpm",
-        "[inst]\nheavy chest drop\nbounce sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats only\nair\n\n[inst]\nharder chest drop\nstacked 808 wall\nmainstage pyro\n\n[inst]\nbass cut\nhats skip\n\n[inst]\nfull send drop\nbody chest wreck\nchest pyro\n\n[inst]\nfilter ride\nair\n\n[inst]\nharder stacked drop\nbounce 808 wreck\nmainstage pyro\n\n[inst]\nhats bounce\nspace\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nroot out\nblend next",
+        "chest bass, four on the floor, bounce 808, dual-action pedal bass, body bass, rave, festival pyro, instrumental, no vocals, no singing, original composition, 148 bpm",
+        "[inst]\nheavy chest drop\nbounce sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder chest drop\ndual-action pedal bass\nstacked 808 wall\nmainstage pyro\n\n[inst]\npedal swell\nhats cut\n\n[inst]\nfull send drop\nbody chest wreck\nchest pyro\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder stacked drop\nbounce 808 wreck\nmainstage pyro\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nroot out\nblend next",
         443,
         "fixed",
         148,

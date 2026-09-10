@@ -211,7 +211,7 @@
       },
       "widgets_values": [
         "festival trap, trap 808, dirty bass, four on the floor, rave, festival pyro, instrumental, no vocals, no singing, original composition, 140 bpm",
-        "[inst]\nheavy dirty drop\ntrap 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats roll\nbass cut\n\n[inst]\nharder dirty drop\nstacked trap bass\nmainstage pyro\n\n[inst]\nfull send drop\nchest 808 wall\nfestival pyro\n\n[outro]\nhats stop\nblend next",
+        "[inst]\nheavy dirty drop\ntrap 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats roll\nbass cut\n\n[inst]\nharder dirty drop\nstacked trap bass\nmainstage pyro\n\n[inst]\nhats skip\nchest cut\n\n[inst]\nfull send drop\nchest 808 wall\nfestival pyro\n\n[outro]\nhats stop\nblend next",
         false,
         "instrumental"
       ],
@@ -278,7 +278,7 @@
       },
       "widgets_values": [
         "festival trap, trap 808, dirty bass, four on the floor, rave, festival pyro, instrumental, no vocals, no singing, original composition, 140 bpm",
-        "[inst]\nheavy dirty drop\ntrap 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats roll\nbass cut\n\n[inst]\nharder dirty drop\nstacked trap bass\nmainstage pyro\n\n[inst]\nfull send drop\nchest 808 wall\nfestival pyro\n\n[outro]\nhats stop\nblend next",
+        "[inst]\nheavy dirty drop\ntrap 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats roll\nbass cut\n\n[inst]\nharder dirty drop\nstacked trap bass\nmainstage pyro\n\n[inst]\nhats skip\nchest cut\n\n[inst]\nfull send drop\nchest 808 wall\nfestival pyro\n\n[outro]\nhats stop\nblend next",
         293,
         "fixed",
         140,

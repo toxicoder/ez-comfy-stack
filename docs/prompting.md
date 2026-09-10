@@ -122,7 +122,7 @@ STRING out → CLIPTextEncode `text` input.
 | IC-LoRA depth | Clay already locked camera |
 | Podcast script + ACE beds | `Speaker A:` labels and instrumental tags are parser input |
 | Rap tags + lyrics (draft, full, nill-bye) | `[verse]`/`[chorus]`, BPM, `language=en` vs encoder widgets |
-| Drive-through EDM arrangement scores | `[inst]`/`[intro]`/`[outro]`, BPM; forty-three takes stay instrumental; two rave-set treats add one short `[chorus]` chop (no `[verse]`) |
+| Drive-through EDM arrangement scores | `[inst]`/`[intro]`/`[outro]`, BPM; sixty-three takes stay instrumental; two rave-set treats add one short `[chorus]` chop (no `[verse]`) |
 
 Lazy Klein stills, identity bibles you type, Klein edit, generic 5s Wan/LTX printers, Prompt Forge, and Beat Sheet stay **on**. Dub **Rewrite translation** stays on — that path translates turns, it does not CLIP-rewrite. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE (the start image owns look). Do not Klein-t2i-enhance Prompt Join shot cards.
 

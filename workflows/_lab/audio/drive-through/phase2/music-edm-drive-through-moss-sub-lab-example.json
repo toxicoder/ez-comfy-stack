@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "space bass, four on the floor, chest sub, rolling 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[inst]\nheavy space drop\nchest sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nharder bounce drop\nrolling 808 wall\nmainstage pyro\n\n[outro]\nmoss out\nblend next",
+        "space bass, four on the floor, chest sub, dual-action pedal bass, rolling 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[inst]\nheavy space drop\nchest sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\npedal swell\n\n[inst]\nharder bounce drop\ndual-action pedal bass\nrolling 808 wall\nmainstage pyro\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nfull send drop\nbody 808 wreck\nfestival pyro\n\n[outro]\nmoss out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "space bass, four on the floor, chest sub, rolling 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[inst]\nheavy space drop\nchest sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nharder bounce drop\nrolling 808 wall\nmainstage pyro\n\n[outro]\nmoss out\nblend next",
+        "space bass, four on the floor, chest sub, dual-action pedal bass, rolling 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[inst]\nheavy space drop\nchest sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\npedal swell\n\n[inst]\nharder bounce drop\ndual-action pedal bass\nrolling 808 wall\nmainstage pyro\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nfull send drop\nbody 808 wreck\nfestival pyro\n\n[outro]\nmoss out\nblend next",
         389,
         "fixed",
         150,

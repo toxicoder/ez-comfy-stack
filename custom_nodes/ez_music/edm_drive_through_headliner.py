@@ -3,6 +3,7 @@
 Fictional act. Original dance arrangements. No living-artist names.
 American festival EDM: drop early, dirty pyro on every drop, all instrumental.
 Deeper bounce bass, heavier stacked drops, high-BPM headliner energy.
+Harder chest-sub bass, fast section changes, no high-pitch sparkle leads.
 """
 
 from __future__ import annotations
@@ -14,24 +15,27 @@ HEADLINER_PHASE = 2
 
 LANTERN_MERGE_LYRICS = format_edm_score(
     ("inst", "heavy bounce drop\nchest 808 wreck\nDrive-through\nfireworks crash"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "harder bounce drop\nstacked 808 bounce\nmainstage pyro"),
+    ("inst", "hats bounce\nchest cut"),
     ("inst", "full send drop\nbody bass wreck\nfestival pyro"),
     ("outro", "filter down\nblend next"),
 )
 
 FIREFLY_LANE_LYRICS = format_edm_score(
-    ("intro", "spark in\nDrive-through"),
+    ("intro", "filter in\nDrive-through"),
     ("inst", "heavy color drop\nbounce 808 wreck\nfireworks crash"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "harder stacked drop\nchest color wreck\nmainstage pyro"),
     ("inst", "full send drop\ndirty bounce 808\nfestival pyro"),
-    ("outro", "spark out\nblend next"),
+    ("outro", "filter out\nblend next"),
 )
 
 CANOPY_BOUNCE_LYRICS = format_edm_score(
     ("inst", "heavy bounce drop\nchest 808 wreck\nDrive-through\nfireworks crash"),
     ("inst", "hats bounce\nbass cut"),
     ("inst", "harder bounce drop\nstacked body 808\nchest pyro"),
-    ("inst", "hats skip\nair"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "full send drop\nbounce bass wreck\nmainstage pyro"),
     ("outro", "canopy out\nblend next"),
 )
@@ -40,13 +44,18 @@ GROVE_WRECK_LYRICS = format_edm_score(
     ("inst", "heavy riddim drop\nwobble 808 wreck\nDrive-through\nfireworks crash"),
     ("inst", "hats metal\nbass cut"),
     ("inst", "harder stacked drop\nchest growl wreck\nmainstage pyro"),
+    ("inst", "hats skip\nbounce cut"),
     ("inst", "full send drop\nbounce sub wreck\nfestival pyro"),
+    ("inst", "harder dirty drop\nchest 808 wreck\nchest pyro"),
     ("outro", "grove out\nblend next"),
 )
 
 MOSS_SUB_LYRICS = format_edm_score(
     ("inst", "heavy space drop\nchest sub wreck\nDrive-through\nfireworks crash"),
-    ("inst", "harder bounce drop\nrolling 808 wall\nmainstage pyro"),
+    ("inst", "hats skip\npedal swell"),
+    ("inst", "harder bounce drop\ndual-action pedal bass\nrolling 808 wall\nmainstage pyro"),
+    ("inst", "hats bounce\nbass cut"),
+    ("inst", "full send drop\nbody 808 wreck\nfestival pyro"),
     ("outro", "moss out\nblend next"),
 )
 
@@ -54,7 +63,7 @@ FERN_STACK_LYRICS = format_edm_score(
     ("inst", "heavy hybrid drop\nstacked 808 wreck\nDrive-through\nfireworks crash"),
     ("inst", "hats bounce\nbass cut"),
     ("inst", "harder stacked drop\nchest bounce wreck\nmainstage pyro"),
-    ("inst", "filter ride\nair"),
+    ("inst", "hats skip\n808 cut"),
     ("inst", "full send drop\nbody 808 stack\nchest pyro"),
     ("inst", "harder dirty drop\nbounce bass wreck\nfestival pyro"),
     ("outro", "fern out\nblend next"),
@@ -62,7 +71,7 @@ FERN_STACK_LYRICS = format_edm_score(
 
 POLLEN_KICK_LYRICS = format_edm_score(
     ("inst", "heavy amen drop\nbounce 808 wreck\nDrive-through\nfireworks crash"),
-    ("inst", "amen chops\nair"),
+    ("inst", "amen chops\nhats cut"),
     ("inst", "harder stacked drop\nreese 808 wreck\nchest pyro"),
     ("inst", "hats razor\nbass wind"),
     ("inst", "full send drop\nstacked amen 808 wreck\nmainstage pyro"),
@@ -85,7 +94,7 @@ MOON_RAMP_LYRICS = format_edm_score(
     ("inst", "heavy wave drop\nbounce 808 wreck\nfireworks crash"),
     ("inst", "hats skip\nbass cut"),
     ("inst", "harder bounce drop\nchest 808 wall\nmainstage pyro"),
-    ("inst", "filter ride\nair"),
+    ("inst", "hats roll\n808 cut"),
     ("inst", "full send drop\nbody wave wreck\nfestival pyro"),
     ("outro", "wave out\nblend next"),
 )
@@ -93,7 +102,7 @@ MOON_RAMP_LYRICS = format_edm_score(
 TRAIL_BOUNCE_LYRICS = format_edm_score(
     ("intro", "trail in\nDrive-through"),
     ("inst", "heavy bounce drop\nslap 808 wreck\nfireworks crash"),
-    ("inst", "hats bounce\nair"),
+    ("inst", "hats bounce\nbass cut"),
     ("inst", "harder stacked drop\nchest bounce wreck\nmainstage pyro"),
     ("inst", "bass cut\nhats skip"),
     ("inst", "full send drop\nbody 808 wreck\nchest pyro"),
@@ -103,11 +112,11 @@ TRAIL_BOUNCE_LYRICS = format_edm_score(
 
 DEW_WRECK_LYRICS = format_edm_score(
     ("inst", "heavy neuro drop\nreese 808 wreck\nDrive-through\nfireworks crash"),
-    ("inst", "amen chops\nglitch"),
+    ("inst", "amen chops\nhats cut"),
     ("inst", "harder stacked drop\nchest reese wreck\nmainstage pyro"),
     ("inst", "hats razor\nbass wind"),
     ("inst", "full send drop\nbounce 808 wreck\nchest pyro"),
-    ("inst", "break chops\nair"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "harder dirty drop\nstacked neuro 808 wreck\nmainstage pyro"),
     ("inst", "full send drop\nbody reese wreck\nfestival pyro"),
     ("outro", "dew out\nblend next"),
@@ -118,7 +127,7 @@ SAP_STACK_LYRICS = format_edm_score(
     ("inst", "heavy stacked drop\nchest 808 wreck\nfireworks crash"),
     ("inst", "hats skip\nbass cut"),
     ("inst", "harder stacked drop\nbounce 808 wall\nmainstage pyro"),
-    ("inst", "filter ride\nair"),
+    ("inst", "hats roll\n808 cut"),
     ("inst", "full send drop\nbody bass wreck\nchest pyro"),
     ("inst", "harder dirty drop\nstacked 808 wreck\nfestival pyro"),
     ("outro", "sap out\nblend next"),
@@ -129,22 +138,21 @@ GLADE_SPLIT_LYRICS = format_edm_score(
     ("inst", "heavy electro drop\nbounce 808 wreck\nfireworks crash"),
     ("inst", "hats analog\nbass cut"),
     ("inst", "harder stacked drop\nchest analog wreck\nmainstage pyro"),
-    ("inst", "filter ride\nair"),
+    ("inst", "hats skip\n808 cut"),
     ("inst", "full send drop\ndouble 808 wreck\nchest pyro"),
-    ("inst", "hats bounce\nspace"),
+    ("inst", "hats bounce\nbass cut"),
     ("inst", "harder dirty drop\nbody electro wreck\nfestival pyro"),
     ("outro", "glade out\nblend next"),
 )
 
 ROOT_CHEST_LYRICS = format_edm_score(
     ("inst", "heavy chest drop\nbounce sub wreck\nDrive-through\nfireworks crash"),
-    ("inst", "hats only\nair"),
-    ("inst", "harder chest drop\nstacked 808 wall\nmainstage pyro"),
-    ("inst", "bass cut\nhats skip"),
+    ("inst", "hats skip\nbass cut"),
+    ("inst", "harder chest drop\ndual-action pedal bass\nstacked 808 wall\nmainstage pyro"),
+    ("inst", "pedal swell\nhats cut"),
     ("inst", "full send drop\nbody chest wreck\nchest pyro"),
-    ("inst", "filter ride\nair"),
+    ("inst", "hats bounce\nbass cut"),
     ("inst", "harder stacked drop\nbounce 808 wreck\nmainstage pyro"),
-    ("inst", "hats bounce\nspace"),
     ("inst", "full send drop\nchest sub wreck\nfestival pyro"),
     ("outro", "root out\nblend next"),
 )
@@ -154,9 +162,8 @@ EMBER_CREST_LYRICS = format_edm_score(
     ("inst", "heavy festival drop\nbounce 808 wreck\nfireworks crash"),
     ("inst", "hats skip\nbass cut"),
     ("inst", "harder stacked drop\nchest 808 wall\nmainstage pyro"),
-    ("inst", "filter ride\nair"),
+    ("inst", "hats bounce\n808 cut"),
     ("inst", "full send drop\nbody bass wreck\nchest pyro"),
-    ("inst", "hats bounce\nspace"),
     ("inst", "harder dirty drop\nstacked bounce wreck\nmainstage pyro"),
     ("inst", "full send drop\nchest sub wreck\nfestival pyro"),
     ("outro", "crest out\nsky paid"),
@@ -192,6 +199,7 @@ EDM_DRIVE_THROUGH_HEADLINER: tuple[EdmExample, ...] = (
         "four on the floor",
         "bounce bass",
         "dirty 808",
+        "chest sub",
         "rave",
         "festival pyro",
         layout="stacked-tower",
@@ -239,6 +247,7 @@ EDM_DRIVE_THROUGH_HEADLINER: tuple[EdmExample, ...] = (
         "space bass",
         "four on the floor",
         "chest sub",
+        "dual-action pedal bass",
         "rolling 808",
         "rave",
         "festival pyro",
@@ -272,6 +281,7 @@ EDM_DRIVE_THROUGH_HEADLINER: tuple[EdmExample, ...] = (
         "festival",
         "amen break",
         "bounce 808",
+        "chest sub",
         "rave",
         "dirty pyro",
         layout="stacked-tower",
@@ -336,6 +346,7 @@ EDM_DRIVE_THROUGH_HEADLINER: tuple[EdmExample, ...] = (
         "drumstep",
         "reese bass",
         "bounce 808",
+        "chest sub",
         "rave",
         "festival pyro",
         layout="wide-stage",
@@ -383,6 +394,7 @@ EDM_DRIVE_THROUGH_HEADLINER: tuple[EdmExample, ...] = (
         "chest bass",
         "four on the floor",
         "bounce 808",
+        "dual-action pedal bass",
         "body bass",
         "rave",
         "festival pyro",

@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "color bass, four on the floor, bounce bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 152 bpm",
-        "[intro]\nspark in\nDrive-through\n\n[inst]\nheavy color drop\nbounce 808 wreck\nfireworks crash\n\n[inst]\nharder stacked drop\nchest color wreck\nmainstage pyro\n\n[inst]\nfull send drop\ndirty bounce 808\nfestival pyro\n\n[outro]\nspark out\nblend next",
+        "color bass, four on the floor, bounce bass, dirty 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 152 bpm",
+        "[intro]\nfilter in\nDrive-through\n\n[inst]\nheavy color drop\nbounce 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder stacked drop\nchest color wreck\nmainstage pyro\n\n[inst]\nfull send drop\ndirty bounce 808\nfestival pyro\n\n[outro]\nfilter out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "color bass, four on the floor, bounce bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 152 bpm",
-        "[intro]\nspark in\nDrive-through\n\n[inst]\nheavy color drop\nbounce 808 wreck\nfireworks crash\n\n[inst]\nharder stacked drop\nchest color wreck\nmainstage pyro\n\n[inst]\nfull send drop\ndirty bounce 808\nfestival pyro\n\n[outro]\nspark out\nblend next",
+        "color bass, four on the floor, bounce bass, dirty 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 152 bpm",
+        "[intro]\nfilter in\nDrive-through\n\n[inst]\nheavy color drop\nbounce 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder stacked drop\nchest color wreck\nmainstage pyro\n\n[inst]\nfull send drop\ndirty bounce 808\nfestival pyro\n\n[outro]\nfilter out\nblend next",
         373,
         "fixed",
         152,

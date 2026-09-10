@@ -2,6 +2,7 @@
 
 Fictional act. Original dance arrangements. No living-artist names.
 American festival EDM: drop early, dirty pyro on every drop, vocals rare.
+Harder chest-sub bass, fast section changes, no high-pitch sparkle leads.
 """
 
 from __future__ import annotations
@@ -14,28 +15,34 @@ NIGHT_WINDOW_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nfour on the floor\nchest 808 wreck\nfireworks crash"),
     ("inst", "hats skip\nbass cut"),
     ("inst", "harder dirty drop\nstacked rolling bass\nmainstage pyro"),
+    ("inst", "hats roll\nsub cut"),
+    ("inst", "full send drop\nlow rumble wreck\nchest pyro"),
     ("outro", "filter down\nkick holds\nblend next"),
 )
 
 OPEN_LANE_LYRICS = format_edm_score(
     ("inst", "full send drop\nfestival bass in\ndirty 808 pyro"),
-    ("inst", "hats only\nbass cut\nair"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "harder stacked drop\n808 punch\nfireworks wreck"),
+    ("inst", "hats roll\nchest cut"),
+    ("inst", "heavy dirty drop\nlow sub wall\nmainstage pyro"),
     ("outro", "blend out\nDrive-through"),
 )
 
 EXIT_SEVEN_LYRICS = format_edm_score(
     ("intro", "filter mix-in\nDrive-through"),
-    ("inst", "stacked dirty drop\nanalog bass wreck\nchest pyro"),
+    ("inst", "stacked dirty drop\nchest bass wreck\nchest pyro"),
     ("inst", "harder dirty drop\n808 wall\nfireworks crash"),
+    ("inst", "hats skip\nbass cut"),
+    ("inst", "full send drop\nlow rumble wreck\nmainstage pyro"),
     ("outro", "filter blend\nkick into next"),
 )
 
 SKYLINE_PASS_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nDrive-through\nrolling bass wall\nfireworks crash"),
-    ("inst", "pads thin\nbass cut"),
-    ("inst", "harder dirty drop\nstacked supersaw\nmainstage pyro"),
-    ("inst", "hats only\nair"),
+    ("inst", "hats skip\nbass cut"),
+    ("inst", "harder dirty drop\nstacked 808 wall\nmainstage pyro"),
+    ("inst", "hats roll\nchest cut"),
     ("inst", "full send drop\nchest 808 wreck\nfestival pyro"),
     ("outro", "gate close\nblend next"),
 )
@@ -45,23 +52,26 @@ ON_RAMP_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nreverse bass wreck\nfireworks crash"),
     ("inst", "hats iron\nbass cut"),
     ("inst", "harder dirty drop\ndouble 808 split\nmainstage pyro"),
-    ("inst", "screech tail\nhats iron"),
+    ("inst", "hats roll\nsub cut"),
     ("inst", "full send drop\nstacked reverse wreck\nchest pyro"),
     ("outro", "kick out\nblend next"),
 )
 
 TUNNEL_BASS_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nindustrial bass wreck\nDrive-through\nfireworks crash"),
-    ("inst", "harder dirty drop\nstacked 808 wreck\nmainstage pyro"),
+    ("inst", "harder dirty drop\ndual-action pedal bass\nchest punch\nmainstage pyro"),
+    ("inst", "hats skip\npedal swell"),
     ("inst", "full send drop\nchest sub wreck\nfestival pyro"),
     ("outro", "kick out\nblend next"),
 )
 
 WIDE_OPEN_LYRICS = format_edm_score(
-    ("intro", "mainstage air\nDrive-through"),
+    ("intro", "mainstage kick\nDrive-through"),
     ("inst", "heavy dirty drop\nstacked 808 wreck\nfireworks crash"),
     ("chorus", "hands up\nDrive-through"),
-    ("inst", "harder dirty drop\ndouble saw wreck\nmainstage pyro"),
+    ("inst", "harder dirty drop\nchest sub wreck\nmainstage pyro"),
+    ("inst", "hats skip\nbass cut"),
+    ("inst", "full send drop\nlow 808 wall\nfestival pyro"),
     ("outro", "kick holds\nblend next"),
 )
 
@@ -71,6 +81,8 @@ OVERPASS_LYRICS = format_edm_score(
     ("inst", "harder dirty drop\nstacked four-floor\nchest pyro"),
     ("inst", "hats ride\nbass growl"),
     ("inst", "full send drop\nmainstage wobble wreck\nfestival pyro"),
+    ("inst", "hats skip\nchest cut"),
+    ("inst", "harder dirty drop\nlow sub wreck\nchest pyro"),
     ("outro", "span out\nDrive-through\nblend next"),
 )
 
@@ -78,14 +90,16 @@ SECOND_WAVE_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nstacked growl wreck\nDrive-through\nfireworks crash"),
     ("chorus", "one more\nDrive-through"),
     ("inst", "harder double drop\nfull send bass wreck\nmainstage pyro"),
+    ("inst", "hats skip\nbass cut"),
+    ("inst", "full send drop\nchest 808 wreck\nfestival pyro"),
     ("outro", "process out\nblend next"),
 )
 
 FREIGHT_PULSE_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\namen wreck\nreese stack\nDrive-through"),
-    ("inst", "break chops\nglitch"),
+    ("inst", "amen chops\nhats cut"),
     ("inst", "harder dirty drop\ndouble amen wreck\nfireworks crash"),
-    ("inst", "razor hats\nreese wind"),
+    ("inst", "hats razor\nreese wind"),
     ("inst", "full send drop\nstacked amen wreck\nmainstage pyro"),
     ("inst", "harder dirty drop\nchest 808 wreck\nfestival pyro"),
     ("outro", "amen stop\nblend next"),
@@ -93,17 +107,20 @@ FREIGHT_PULSE_LYRICS = format_edm_score(
 
 KEEP_GOING_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nstacked 808 wreck\nDrive-through\nfireworks crash"),
-    ("inst", "hats only\nair"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "harder dirty drop\nfull send 170 wreck\nmainstage pyro"),
-    ("inst", "riser scream\nhats denser"),
+    ("inst", "hats denser\nsub cut"),
     ("inst", "full send drop\nchest sub wreck\nfestival pyro"),
     ("outro", "still going\nblend next"),
 )
 
 HORIZON_KICK_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nkick split wreck\nreverse bass\nfireworks crash"),
-    ("inst", "screech wind\nhats razor"),
+    ("inst", "hats razor\nbass cut"),
     ("inst", "harder dirty drop\nstacked reverse wreck\nmainstage pyro"),
+    ("inst", "hats skip\n808 cut"),
+    ("inst", "full send drop\nchest sub wreck\nfestival pyro"),
+    ("inst", "harder dirty drop\nlow rumble wreck\nchest pyro"),
     ("outro", "kick rest\nDrive-through\nblend next"),
 )
 
@@ -111,14 +128,16 @@ CLEAN_WRECKAGE_LYRICS = format_edm_score(
     ("intro", "bits gather\nDrive-through"),
     ("inst", "heavy dirty drop\nstacked 808 wreck\nfireworks crash"),
     ("inst", "harder dirty drop\nlead and kick stack\nchest pyro"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "full send drop\nmainstage crash\nfestival pyro"),
     ("outro", "dust rest\nblend next"),
 )
 
 HEART_LANE_LYRICS = format_edm_score(
     ("inst", "heavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash"),
-    ("inst", "groove returns\npads thin"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "harder dirty drop\nfull send kick wreck\nchest pyro"),
+    ("inst", "hats roll\nsub cut"),
     ("inst", "full send drop\nstacked rolling bass\nmainstage pyro"),
     ("outro", "kick rest\nblend next"),
 )
@@ -126,7 +145,9 @@ HEART_LANE_LYRICS = format_edm_score(
 DAWN_RECEIPT_LYRICS = format_edm_score(
     ("intro", "sunrise mix-in\nDrive-through"),
     ("inst", "heavy dirty drop\nwarm bass wreck\nfireworks crash"),
+    ("inst", "hats skip\nbass cut"),
     ("inst", "harder dirty drop\nmainstage gold wreck\nchest pyro"),
+    ("inst", "full send drop\nlow sub wreck\nfestival pyro"),
     ("outro", "blend out\nsky paid"),
 )
 
@@ -143,6 +164,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "four on the floor",
         "rolling bass",
         "dirty 808",
+        "chest sub",
         "rave",
         "festival pyro",
     ),
@@ -156,8 +178,9 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         OPEN_LANE_LYRICS,
         "festival bass",
         "four on the floor",
-        "supersaw",
+        "chest sub",
         "stacked 808",
+        "low rumble",
         "rave",
         "dirty drop",
     ),
@@ -173,6 +196,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "four on the floor",
         "analog bass",
         "dirty 808",
+        "chest sub",
         "rave",
         "festival pyro",
     ),
@@ -188,8 +212,9 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "four on the floor",
         "festival anthem",
         "rolling bass",
+        "chest sub",
         "rave",
-        "supersaw",
+        "hard festival",
     ),
     _ex(
         "on-ramp",
@@ -203,6 +228,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "dirty electro",
         "reverse bass",
         "808 punch",
+        "chest sub",
         "rave",
         "heavy drop",
     ),
@@ -217,6 +243,8 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "dirty bass",
         "four on the floor",
         "industrial bass",
+        "dual-action pedal bass",
+        "chest sub",
         "festival pyro",
         "rave",
         "heavy kick",
@@ -233,6 +261,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "festival",
         "four on the floor",
         "stacked 808",
+        "chest sub",
         "rave",
         "dirty pyro",
         treat=True,
@@ -264,6 +293,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "rave",
         "bass growl",
         "dirty 808",
+        "chest sub",
         "heavy drop",
         treat=True,
     ),
@@ -279,6 +309,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "festival",
         "amen break",
         "reese bass",
+        "chest sub",
         "rave",
         "dirty bass",
     ),
@@ -309,6 +340,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "dirty electro",
         "reverse bass",
         "808 punch",
+        "chest sub",
         "rave",
         "heavy drop",
     ),
@@ -322,7 +354,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         CLEAN_WRECKAGE_LYRICS,
         "dirty electro",
         "four on the floor",
-        "complextro",
+        "chest 808",
         "rave",
         "heavy sub",
     ),
@@ -337,6 +369,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "future bass",
         "four on the floor",
         "warm 808",
+        "chest sub",
         "rave",
         "festival",
     ),
@@ -351,6 +384,7 @@ EDM_DRIVE_THROUGH: tuple[EdmExample, ...] = (
         "progressive house",
         "four on the floor",
         "warm bass",
+        "chest sub",
         "rave",
         "festival pyro",
     ),

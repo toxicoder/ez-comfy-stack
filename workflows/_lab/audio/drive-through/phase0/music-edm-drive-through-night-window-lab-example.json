@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "bass house, four on the floor, rolling bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 145 bpm",
-        "[intro]\nkick in\nDrive-through\nblend open\n\n[inst]\nheavy dirty drop\nfour on the floor\nchest 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked rolling bass\nmainstage pyro\n\n[outro]\nfilter down\nkick holds\nblend next",
+        "bass house, four on the floor, rolling bass, dirty 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 145 bpm",
+        "[intro]\nkick in\nDrive-through\nblend open\n\n[inst]\nheavy dirty drop\nfour on the floor\nchest 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked rolling bass\nmainstage pyro\n\n[inst]\nhats roll\nsub cut\n\n[inst]\nfull send drop\nlow rumble wreck\nchest pyro\n\n[outro]\nfilter down\nkick holds\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "bass house, four on the floor, rolling bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 145 bpm",
-        "[intro]\nkick in\nDrive-through\nblend open\n\n[inst]\nheavy dirty drop\nfour on the floor\nchest 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked rolling bass\nmainstage pyro\n\n[outro]\nfilter down\nkick holds\nblend next",
+        "bass house, four on the floor, rolling bass, dirty 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 145 bpm",
+        "[intro]\nkick in\nDrive-through\nblend open\n\n[inst]\nheavy dirty drop\nfour on the floor\nchest 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked rolling bass\nmainstage pyro\n\n[inst]\nhats roll\nsub cut\n\n[inst]\nfull send drop\nlow rumble wreck\nchest pyro\n\n[outro]\nfilter down\nkick holds\nblend next",
         193,
         "fixed",
         145,

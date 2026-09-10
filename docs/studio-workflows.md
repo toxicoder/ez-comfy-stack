@@ -34,7 +34,7 @@ user/default/workflows/
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast-*, dub-*, music-rap-draft/full
       nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
-      drive-through/phase0|1|2/  forty-five 180 s music-edm-drive-through-* EDM takes
+      drive-through/phase0|1|2|3/ sixty-five 180 s music-edm-drive-through-* EDM takes
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -256,7 +256,7 @@ flowchart TB
     | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`Nill Bye - Kick-Split Myth - v2`) |
     | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`Nill Bye - Uplifting Rumor - v2`) |
 
-    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (`phase0/` hour 1, `phase1/` hour 2, `phase2/` hour 3 headliner). Drop early, dirty pyro on every drop. Phase2 varies Comfy node placement across five layouts. Full table: [Local music](music.md).
+    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (`phase0/` hour 1, `phase1/` hour 2, `phase2/` hour 3 headliner, `phase3/` hour 4 afterparty). Drop early, dirty pyro on every drop, chest-sub bass. Phase2 and phase3 vary Comfy node placement across five layouts. Full table: [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
@@ -278,7 +278,7 @@ flowchart TB
     | **music-edm-drive-through-rumble-strip-lab-example** | **180 s** bass house 140 (`Drive-through - Rumble Strip - v1`). Hour-2 opener |
     | **music-edm-drive-through-low-lane-lab-example** | **180 s** festival bass 144 (`Drive-through - Low Lane - v1`). Chest sub pyro |
     | **music-edm-drive-through-warm-merge-lab-example** | **180 s** future bass 148 (`Drive-through - Warm Merge - v1`) |
-    | **music-edm-drive-through-colour-span-lab-example** | **180 s** complextro 150 (`Drive-through - Colour Span - v1`) |
+    | **music-edm-drive-through-colour-span-lab-example** | **180 s** dirty electro 150 (`Drive-through - Colour Span - v1`) |
     | **music-edm-drive-through-garage-ticket-lab-example** | **180 s** festival trap 140 (`Drive-through - Garage Ticket - v1`) |
     | **music-edm-drive-through-liquid-grade-lab-example** | **180 s** drumstep 174 (`Drive-through - Liquid Grade - v1`) |
     | **music-edm-drive-through-jump-bay-lab-example** | **180 s** brostep 150 (`Drive-through - Jump Bay - v1`). Dirty growl pyro |
@@ -305,6 +305,26 @@ flowchart TB
     | **music-edm-drive-through-glade-split-lab-example** | **180 s** dirty electro 150 (`Drive-through - Glade Split - v2`) |
     | **music-edm-drive-through-root-chest-lab-example** | **180 s** chest bass 148 (`Drive-through - Root Chest - v2`) |
     | **music-edm-drive-through-ember-crest-lab-example** | **180 s** festival bass 165 (`Drive-through - Ember Crest - v2`). Headliner closer |
+    | **music-edm-drive-through-brake-fade-lab-example** | **180 s** dirty bass 150 (`Drive-through - Brake Fade - v3`). Hour-4 opener |
+    | **music-edm-drive-through-diesel-hum-lab-example** | **180 s** bass house 152 (`Drive-through - Diesel Hum - v3`). Dual-action pedal |
+    | **music-edm-drive-through-axle-grind-lab-example** | **180 s** tearout 155 (`Drive-through - Axle Grind - v3`) |
+    | **music-edm-drive-through-weigh-station-lab-example** | **180 s** festival bass 158 (`Drive-through - Weigh Station - v3`) |
+    | **music-edm-drive-through-black-ice-lab-example** | **180 s** riddim 160 (`Drive-through - Black Ice - v3`) |
+    | **music-edm-drive-through-high-beams-lab-example** | **180 s** hybrid bass 165 (`Drive-through - High Beams - v3`). Dual-action pedal |
+    | **music-edm-drive-through-chain-hook-lab-example** | **180 s** brostep 168 (`Drive-through - Chain Hook - v3`) |
+    | **music-edm-drive-through-grit-plate-lab-example** | **180 s** slap house 150 (`Drive-through - Grit Plate - v3`) |
+    | **music-edm-drive-through-steel-grate-lab-example** | **180 s** drumstep 172 (`Drive-through - Steel Grate - v3`) |
+    | **music-edm-drive-through-rest-bay-lab-example** | **180 s** chest bass 155 (`Drive-through - Rest Bay - v3`). Dual-action pedal |
+    | **music-edm-drive-through-haul-crate-lab-example** | **180 s** hybrid trap 170 (`Drive-through - Haul Crate - v3`) |
+    | **music-edm-drive-through-night-splice-lab-example** | **180 s** wave bass 152 (`Drive-through - Night Splice - v3`) |
+    | **music-edm-drive-through-torque-bay-lab-example** | **180 s** neuro bass 176 (`Drive-through - Torque Bay - v3`) |
+    | **music-edm-drive-through-spare-drum-lab-example** | **180 s** festival bass 165 (`Drive-through - Spare Drum - v3`). Dual-action pedal |
+    | **music-edm-drive-through-oil-pan-lab-example** | **180 s** bounce house 150 (`Drive-through - Oil Pan - v3`) |
+    | **music-edm-drive-through-curb-check-lab-example** | **180 s** drumstep 174 (`Drive-through - Curb Check - v3`) |
+    | **music-edm-drive-through-last-exit-lab-example** | **180 s** dirty bass 160 (`Drive-through - Last Exit - v3`). Dual-action pedal |
+    | **music-edm-drive-through-asphalt-heart-lab-example** | **180 s** chest bass 155 (`Drive-through - Asphalt Heart - v3`) |
+    | **music-edm-drive-through-clutch-slam-lab-example** | **180 s** tearout 168 (`Drive-through - Clutch Slam - v3`). Dual-action pedal |
+    | **music-edm-drive-through-trailer-hitch-lab-example** | **180 s** festival bass 165 (`Drive-through - Trailer Hitch - v3`). Hour-4 closer |
 
 === "DCC (clay → print)"
 

@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "melbourne bounce, four on the floor, bounce bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 140 bpm",
-        "[inst]\nheavy dirty drop\nbounce bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats bounce\nair\n\n[inst]\nharder dirty drop\nstacked bounce 808\nmainstage pyro\n\n[outro]\nbooth out\nblend next",
+        "melbourne bounce, four on the floor, bounce bass, dirty 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 140 bpm",
+        "[inst]\nheavy dirty drop\nbounce bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder dirty drop\nstacked bounce 808\nmainstage pyro\n\n[inst]\nhats skip\nchest cut\n\n[inst]\nfull send drop\nlow 808 wreck\nchest pyro\n\n[outro]\nbooth out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "melbourne bounce, four on the floor, bounce bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 140 bpm",
-        "[inst]\nheavy dirty drop\nbounce bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats bounce\nair\n\n[inst]\nharder dirty drop\nstacked bounce 808\nmainstage pyro\n\n[outro]\nbooth out\nblend next",
+        "melbourne bounce, four on the floor, bounce bass, dirty 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 140 bpm",
+        "[inst]\nheavy dirty drop\nbounce bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder dirty drop\nstacked bounce 808\nmainstage pyro\n\n[inst]\nhats skip\nchest cut\n\n[inst]\nfull send drop\nlow 808 wreck\nchest pyro\n\n[outro]\nbooth out\nblend next",
         337,
         "fixed",
         140,

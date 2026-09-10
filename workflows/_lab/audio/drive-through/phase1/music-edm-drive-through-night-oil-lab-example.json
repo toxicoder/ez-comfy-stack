@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "hybrid trap, festival trap, trap 808, dirty bass, rave, festival pyro, instrumental, no vocals, no singing, original composition, 142 bpm",
-        "[intro]\nnight oil\nDrive-through\n\n[inst]\nheavy dirty drop\nhybrid 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass rolls\n\n[inst]\nharder dirty drop\ntrap bass wall\nmainstage pyro\n\n[outro]\noil out\nblend next",
+        "hybrid trap, festival trap, trap 808, dirty bass, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 142 bpm",
+        "[intro]\nnight oil\nDrive-through\n\n[inst]\nheavy dirty drop\nhybrid 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass rolls\n\n[inst]\nharder dirty drop\ntrap bass wall\nmainstage pyro\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\noil out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "hybrid trap, festival trap, trap 808, dirty bass, rave, festival pyro, instrumental, no vocals, no singing, original composition, 142 bpm",
-        "[intro]\nnight oil\nDrive-through\n\n[inst]\nheavy dirty drop\nhybrid 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass rolls\n\n[inst]\nharder dirty drop\ntrap bass wall\nmainstage pyro\n\n[outro]\noil out\nblend next",
+        "hybrid trap, festival trap, trap 808, dirty bass, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 142 bpm",
+        "[intro]\nnight oil\nDrive-through\n\n[inst]\nheavy dirty drop\nhybrid 808 wreck\nfireworks crash\n\n[inst]\nhats skip\nbass rolls\n\n[inst]\nharder dirty drop\ntrap bass wall\nmainstage pyro\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\noil out\nblend next",
         349,
         "fixed",
         142,

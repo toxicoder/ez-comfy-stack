@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "drumstep, festival, amen break, bounce 808, rave, dirty pyro, instrumental, no vocals, no singing, original composition, 174 bpm",
-        "[inst]\nheavy amen drop\nbounce 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\namen chops\nair\n\n[inst]\nharder stacked drop\nreese 808 wreck\nchest pyro\n\n[inst]\nhats razor\nbass wind\n\n[inst]\nfull send drop\nstacked amen 808 wreck\nmainstage pyro\n\n[inst]\nhats bounce\n808 punch\n\n[inst]\nharder dirty drop\nchest bounce wreck\nfestival pyro\n\n[outro]\namen stop\nblend next",
+        "drumstep, festival, amen break, bounce 808, chest sub, rave, dirty pyro, instrumental, no vocals, no singing, original composition, 174 bpm",
+        "[inst]\nheavy amen drop\nbounce 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\namen chops\nhats cut\n\n[inst]\nharder stacked drop\nreese 808 wreck\nchest pyro\n\n[inst]\nhats razor\nbass wind\n\n[inst]\nfull send drop\nstacked amen 808 wreck\nmainstage pyro\n\n[inst]\nhats bounce\n808 punch\n\n[inst]\nharder dirty drop\nchest bounce wreck\nfestival pyro\n\n[outro]\namen stop\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "drumstep, festival, amen break, bounce 808, rave, dirty pyro, instrumental, no vocals, no singing, original composition, 174 bpm",
-        "[inst]\nheavy amen drop\nbounce 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\namen chops\nair\n\n[inst]\nharder stacked drop\nreese 808 wreck\nchest pyro\n\n[inst]\nhats razor\nbass wind\n\n[inst]\nfull send drop\nstacked amen 808 wreck\nmainstage pyro\n\n[inst]\nhats bounce\n808 punch\n\n[inst]\nharder dirty drop\nchest bounce wreck\nfestival pyro\n\n[outro]\namen stop\nblend next",
+        "drumstep, festival, amen break, bounce 808, chest sub, rave, dirty pyro, instrumental, no vocals, no singing, original composition, 174 bpm",
+        "[inst]\nheavy amen drop\nbounce 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\namen chops\nhats cut\n\n[inst]\nharder stacked drop\nreese 808 wreck\nchest pyro\n\n[inst]\nhats razor\nbass wind\n\n[inst]\nfull send drop\nstacked amen 808 wreck\nmainstage pyro\n\n[inst]\nhats bounce\n808 punch\n\n[inst]\nharder dirty drop\nchest bounce wreck\nfestival pyro\n\n[outro]\namen stop\nblend next",
         401,
         "fixed",
         174,

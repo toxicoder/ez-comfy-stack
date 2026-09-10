@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "festival bass, four on the floor, chest sub, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[inst]\nheavy dirty drop\nchest sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats only\nair\n\n[inst]\nharder dirty drop\nstacked 808 wall\nmainstage pyro\n\n[inst]\nfull send drop\nbody bass wreck\nfestival pyro\n\n[outro]\npass out\nblend next",
+        "festival bass, four on the floor, chest sub, dual-action pedal bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[inst]\nheavy dirty drop\nchest sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\ndual-action pedal bass\nstacked 808 wall\nmainstage pyro\n\n[inst]\npedal swell\nhats cut\n\n[inst]\nfull send drop\nbody bass wreck\nfestival pyro\n\n[outro]\npass out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "festival bass, four on the floor, chest sub, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[inst]\nheavy dirty drop\nchest sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats only\nair\n\n[inst]\nharder dirty drop\nstacked 808 wall\nmainstage pyro\n\n[inst]\nfull send drop\nbody bass wreck\nfestival pyro\n\n[outro]\npass out\nblend next",
+        "festival bass, four on the floor, chest sub, dual-action pedal bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[inst]\nheavy dirty drop\nchest sub wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\ndual-action pedal bass\nstacked 808 wall\nmainstage pyro\n\n[inst]\npedal swell\nhats cut\n\n[inst]\nfull send drop\nbody bass wreck\nfestival pyro\n\n[outro]\npass out\nblend next",
         353,
         "fixed",
         150,

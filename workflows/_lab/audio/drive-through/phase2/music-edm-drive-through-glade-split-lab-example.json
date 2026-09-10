@@ -211,7 +211,7 @@
       },
       "widgets_values": [
         "dirty electro, four on the floor, bounce 808, analog bass, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[intro]\nsplit in\nDrive-through\n\n[inst]\nheavy electro drop\nbounce 808 wreck\nfireworks crash\n\n[inst]\nhats analog\nbass cut\n\n[inst]\nharder stacked drop\nchest analog wreck\nmainstage pyro\n\n[inst]\nfilter ride\nair\n\n[inst]\nfull send drop\ndouble 808 wreck\nchest pyro\n\n[inst]\nhats bounce\nspace\n\n[inst]\nharder dirty drop\nbody electro wreck\nfestival pyro\n\n[outro]\nglade out\nblend next",
+        "[intro]\nsplit in\nDrive-through\n\n[inst]\nheavy electro drop\nbounce 808 wreck\nfireworks crash\n\n[inst]\nhats analog\nbass cut\n\n[inst]\nharder stacked drop\nchest analog wreck\nmainstage pyro\n\n[inst]\nhats skip\n808 cut\n\n[inst]\nfull send drop\ndouble 808 wreck\nchest pyro\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder dirty drop\nbody electro wreck\nfestival pyro\n\n[outro]\nglade out\nblend next",
         false,
         "instrumental"
       ],
@@ -278,7 +278,7 @@
       },
       "widgets_values": [
         "dirty electro, four on the floor, bounce 808, analog bass, rave, festival pyro, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[intro]\nsplit in\nDrive-through\n\n[inst]\nheavy electro drop\nbounce 808 wreck\nfireworks crash\n\n[inst]\nhats analog\nbass cut\n\n[inst]\nharder stacked drop\nchest analog wreck\nmainstage pyro\n\n[inst]\nfilter ride\nair\n\n[inst]\nfull send drop\ndouble 808 wreck\nchest pyro\n\n[inst]\nhats bounce\nspace\n\n[inst]\nharder dirty drop\nbody electro wreck\nfestival pyro\n\n[outro]\nglade out\nblend next",
+        "[intro]\nsplit in\nDrive-through\n\n[inst]\nheavy electro drop\nbounce 808 wreck\nfireworks crash\n\n[inst]\nhats analog\nbass cut\n\n[inst]\nharder stacked drop\nchest analog wreck\nmainstage pyro\n\n[inst]\nhats skip\n808 cut\n\n[inst]\nfull send drop\ndouble 808 wreck\nchest pyro\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder dirty drop\nbody electro wreck\nfestival pyro\n\n[outro]\nglade out\nblend next",
         439,
         "fixed",
         150,

@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "future bass, four on the floor, warm 808, rave, festival, instrumental, no vocals, no singing, original composition, 145 bpm",
-        "[inst]\nheavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\ngroove returns\npads thin\n\n[inst]\nharder dirty drop\nfull send kick wreck\nchest pyro\n\n[inst]\nfull send drop\nstacked rolling bass\nmainstage pyro\n\n[outro]\nkick rest\nblend next",
+        "future bass, four on the floor, warm 808, chest sub, rave, festival, instrumental, no vocals, no singing, original composition, 145 bpm",
+        "[inst]\nheavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nfull send kick wreck\nchest pyro\n\n[inst]\nhats roll\nsub cut\n\n[inst]\nfull send drop\nstacked rolling bass\nmainstage pyro\n\n[outro]\nkick rest\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "future bass, four on the floor, warm 808, rave, festival, instrumental, no vocals, no singing, original composition, 145 bpm",
-        "[inst]\nheavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\ngroove returns\npads thin\n\n[inst]\nharder dirty drop\nfull send kick wreck\nchest pyro\n\n[inst]\nfull send drop\nstacked rolling bass\nmainstage pyro\n\n[outro]\nkick rest\nblend next",
+        "future bass, four on the floor, warm 808, chest sub, rave, festival, instrumental, no vocals, no singing, original composition, 145 bpm",
+        "[inst]\nheavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nfull send kick wreck\nchest pyro\n\n[inst]\nhats roll\nsub cut\n\n[inst]\nfull send drop\nstacked rolling bass\nmainstage pyro\n\n[outro]\nkick rest\nblend next",
         223,
         "fixed",
         145,

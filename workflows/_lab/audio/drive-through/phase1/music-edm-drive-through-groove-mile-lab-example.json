@@ -211,7 +211,7 @@
       },
       "widgets_values": [
         "slap house, four on the floor, bounce bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 144 bpm",
-        "[inst]\nheavy dirty drop\nslap bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder dirty drop\nstacked 808 bounce\nchest pyro\n\n[inst]\nfilter ride\nair\n\n[inst]\nfull send drop\nbody bass wreck\nmainstage pyro\n\n[outro]\nblend next",
+        "[inst]\nheavy dirty drop\nslap bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder dirty drop\nstacked 808 bounce\nchest pyro\n\n[inst]\nhats skip\nfilter cut\n\n[inst]\nfull send drop\nbody bass wreck\nmainstage pyro\n\n[outro]\nblend next",
         false,
         "instrumental"
       ],
@@ -278,7 +278,7 @@
       },
       "widgets_values": [
         "slap house, four on the floor, bounce bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 144 bpm",
-        "[inst]\nheavy dirty drop\nslap bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder dirty drop\nstacked 808 bounce\nchest pyro\n\n[inst]\nfilter ride\nair\n\n[inst]\nfull send drop\nbody bass wreck\nmainstage pyro\n\n[outro]\nblend next",
+        "[inst]\nheavy dirty drop\nslap bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats bounce\nbass cut\n\n[inst]\nharder dirty drop\nstacked 808 bounce\nchest pyro\n\n[inst]\nhats skip\nfilter cut\n\n[inst]\nfull send drop\nbody bass wreck\nmainstage pyro\n\n[outro]\nblend next",
         317,
         "fixed",
         144,
