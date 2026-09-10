@@ -624,6 +624,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../learn/blender-creator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blender creator suite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../learn/dream-house/" class="md-nav__link">
         
   
@@ -1395,6 +1423,17 @@
     <span class="md-ellipsis">
       
         house-views
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blender-stills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        blender-stills
       
     </span>
   </a>
@@ -3581,6 +3620,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#blender-stills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        blender-stills
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4392,13 +4442,17 @@
 <p>Enhance defaults on for every lab graph. Turn it off to pin widget text. Identity mode keeps world bibles camera-free. I2V / FLF / VACE ignore style — the start frames own look. See <a href="../prompting/">Prompting</a>.</p>
 <p><strong>See also:</strong> <a href="#prompt-enhance">Prompt Enhance</a> · <a href="#world-bible">world bible</a></p>
 <h3 id="guide-pack">Guide pack<a class="headerlink" href="#guide-pack" title="Permanent link">&para;</a></h3>
-<p>The only DCC ↔ Comfy print handshake. Lives under <code>${COMFY_OUTPUT_DIR}/guides/&lt;slug&gt;/&lt;shot&gt;/</code>. Size is the LTX VAE grid (<strong>1280×704</strong>, never 1280×720). 120 frames @ 24 fps. Occupancy XOR: stop Comfy before <code>export-guides</code>. See <a href="../dcc-workflows/">DCC guide pack</a>.</p>
+<p>The DCC ↔ Comfy print handshake. Lives under <code>${COMFY_OUTPUT_DIR}/guides/&lt;slug&gt;/&lt;shot&gt;/</code>. Size is the LTX VAE grid (<strong>1280×704</strong> or <strong>768×1280</strong>, never 1280×720). 120 frames @ 24 fps. Workbench clay + mist depth + outline canny. Occupancy XOR: stop Comfy before <code>export-guides</code>. See <a href="../dcc-workflows/">DCC guide pack</a>.</p>
 <p><strong>Also called:</strong> <code>guide pack</code>, <code>guide-pack</code>, <code>DCC guide pack</code></p>
 <p><strong>See also:</strong> <a href="#ltx">LTX-2.5</a> · <a href="#occupancy">occupancy</a> · <a href="#sidecar">sidecar</a></p>
 <h3 id="house-views">house-views<a class="headerlink" href="#house-views" title="Permanent link">&para;</a></h3>
 <p>Host Blender constructs a <code>bpy-primitive</code> set under <code>${COMFY_OUTPUT_DIR}/assets/sets/&lt;slug&gt;/</code> (layout, GLB, clay, depth). Size is Instagram 4:5 (<strong>1024×1280</strong>), not the LTX guide pack. Stop Comfy first for the dump. <code>manage.sh start</code> seeds LoadImage plates (copy pack or render layout) so <strong>klein-dream-house-clay-lab-example</strong> can Queue without Blender. Language-only tour → <strong>klein-dream-house-lab-example</strong>. See <a href="../learn/dream-house/">Dream-house tours</a>.</p>
 <p><strong>Also called:</strong> <code>dream-house clay</code>, <code>clay tour</code></p>
 <p><strong>See also:</strong> <a href="#guide-pack">Guide pack</a> · <a href="#occupancy">occupancy</a> · <a href="#sidecar">sidecar</a> · <a href="#klein">Klein 4B</a></p>
+<h3 id="blender-stills">blender-stills<a class="headerlink" href="#blender-stills" title="Permanent link">&para;</a></h3>
+<p>Host Blender dumps <code>ez.guide.still.v1</code> under <code>${COMFY_OUTPUT_DIR}/guides/&lt;slug&gt;/stills/&lt;plate&gt;/</code>. Sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, not LTX). Not the 5.00s shot pack and not <code>house-views</code>. Stop Comfy first. <code>--install-inputs</code> copies <code>first.png</code> into <code>input/</code> while compose may stay up. Apps: <strong>klein-from-clay-plates</strong>, <strong>klein-from-canny</strong>. See <a href="../learn/blender-creator/">Blender creator suite</a>.</p>
+<p><strong>Also called:</strong> <code>still pack</code>, <code>ez.guide.still.v1</code></p>
+<p><strong>See also:</strong> <a href="#guide-pack">Guide pack</a> · <a href="#house-views">house-views</a> · <a href="#occupancy">occupancy</a> · <a href="#sidecar">sidecar</a> · <a href="#klein">Klein 4B</a></p>
 <h2 id="hardware-and-safety">Hardware and safety<a class="headerlink" href="#hardware-and-safety" title="Permanent link">&para;</a></h2>
 <h3 id="dgx-spark">DGX Spark<a class="headerlink" href="#dgx-spark" title="Permanent link">&para;</a></h3>
 <p>ez-comfy-stack is a sample studio for a <strong>single</strong> DGX Spark. Independent Sparks may share MODELS_DIR (Spark farm) but there is no in-tree NCCL. SSH recoverability drives restart: no, headroom, and download-limit. See <a href="../learn/hardware/">Hardware, memory, and safety</a>.</p>
