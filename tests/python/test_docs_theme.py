@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 MKDOCS_YML = ROOT / "mkdocs.yml"
 EXTRA_CSS = ROOT / "docs" / "stylesheets" / "extra.css"
+TABLES_JS = ROOT / "docs" / "javascripts" / "tables.js"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
 
 
@@ -47,6 +48,7 @@ def test_mkdocs_wires_extra_css() -> None:
     assert "extra_javascript:" in text
     assert "javascripts/glossary.js" in text
     assert "javascripts/commands.js" in text
+    assert "javascripts/tables.js" in text
     assert "content.tooltips" in text
 
 
@@ -77,36 +79,65 @@ def test_extra_css_bumps_typeset_font_not_html() -> None:
 
 
 def test_extra_css_sticks_table_headers_under_tabs() -> None:
-    """Table thead stays under the sticky header; wrap does not steal the scrollport."""
+    """Cloned header overlay sits under the navbar; table is a real table box."""
     css = _read(EXTRA_CSS)
+    assert re.search(
+        r"\.ez-table-pin\s*\{[^}]*position:\s*fixed",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"\.ez-table-pin\s*\{[^}]*z-index:\s*3\b",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"\.ez-table-pin\s*\{[^}]*background-color:\s*var\(--md-default-bg-color\)",
+        css,
+        re.S,
+    )
     assert re.search(
         r"thead\s+th\s*\{[^}]*position:\s*sticky",
         css,
         re.S,
-    )
-    assert "--ez-sticky-table-top" in css
-    assert "4.8rem" in css
-    assert "4.2rem" in css
+    ) is None
+    # Material display:inline-block + overflow:auto on the table is more
+    # specific than the wrap's display:table and steals the scrollport.
     assert re.search(
-        r"html:has\(\.md-header__title--active\)\s*\{[^}]*--ez-sticky-table-top:\s*4\.2rem",
+        r"\.md-typeset table:not\(\[class\]\)\s*,\s*"
+        r"html \.md-typeset__table table\s*\{[^}]*overflow:\s*visible",
         css,
         re.S,
     )
     assert re.search(
-        r"thead\s+th\s*\{[^}]*background-color:\s*var\(--md-default-bg-color\)",
+        r"\.md-typeset table:not\(\[class\]\)\s*,\s*"
+        r"html \.md-typeset__table table\s*\{[^}]*display:\s*table",
         css,
         re.S,
     )
     assert re.search(
-        r"\.md-typeset__scrollwrap\s*\{[^}]*overflow:\s*visible",
+        r"thead\s+th\s*\{[^}]*transition:",
         css,
         re.S,
-    )
-    assert re.search(
-        r"thead\s+th\s*\{[^}]*z-index:\s*[12]\b",
-        css,
-        re.S,
-    )
+    ) is None
+
+
+def test_tables_js_clamps_header_above_tail_rows() -> None:
+    """tables.js measures .md-header and keeps last row + 25% of previous clear."""
+    js = _read(TABLES_JS)
+    assert "document$.subscribe" in js
+    assert ".md-header" in js
+    assert "getBoundingClientRect" in js
+    assert "0.25" in js
+    assert "ez-table-pin" in js
+    assert "cloneNode" in js
+    assert "aria-hidden" in js
+    assert "requestAnimationFrame" in js
+    assert "table:not([class])" in js
+    assert "thead.style.position" not in js
+    assert "thead" in js
+    assert "scroll" in js
+    assert "resize" in js
 
 
 def test_conventions_document_sticky_header() -> None:
@@ -118,3 +149,8 @@ def test_conventions_document_sticky_header() -> None:
     assert "0.875rem" in text
     assert "thead" in text
     assert "sticky table" in text.lower() or "table header" in text.lower()
+    assert "tables.js" in text
+    assert "0.25" in text or "25%" in text
+    assert "overflow" in text.lower()
+    assert "ez-table-pin" in text or "clone" in text.lower()
+    assert ".md-header" in text or "md-header" in text

@@ -44,6 +44,7 @@ extra_css:
 extra_javascript:
   - javascripts/glossary.js
   - javascripts/commands.js
+  - javascripts/tables.js
 
 # Reload serve when the glossary JSON (outside docs/) changes.
 watch:
