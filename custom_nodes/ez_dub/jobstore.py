@@ -27,12 +27,50 @@ def sanitize_slug(slug: object, default: str = "episode") -> str:
 
 
 def output_root() -> Path:
-    """Resolve COMFY_OUTPUT_DIR (container or host)."""
+    """Resolve the Comfy output directory (container mount or host).
+
+    Compose passes the host path as ``COMFY_OUTPUT_DIR`` (``/mnt/comfy-output``)
+    while the bind-mount inside the container is ``/outputs``. Prefer Comfy's
+    output folder, then ``/outputs`` when that directory exists.
+
+    Returns:
+        Directory that should hold ``dubs/<slug>/``.
+    """
+    try:
+        import folder_paths  # type: ignore[import-not-found]
+
+        raw = folder_paths.get_output_directory()
+        if raw:
+            return Path(raw)
+    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+        pass
+    if Path("/outputs").is_dir():
+        return Path("/outputs")
     for key in ("COMFY_OUTPUT_DIR", "COMFY_OUTPUT"):
         value = (os.environ.get(key) or "").strip()
         if value:
             return Path(value)
     return Path("/mnt/comfy-output")
+
+
+def record_ingest_failure(dest: Path, status: str, error: str | None = None) -> None:
+    """Persist an ingest miss without writing ``source.wav``.
+
+    Arguments:
+        dest: Job directory (``dubs/<slug>``).
+        status: Short operator-facing reason (Dub status).
+        error: Optional longer error; defaults to ``status``.
+    """
+    save_state(
+        dest,
+        {
+            "slug": dest.name,
+            "stage": "ingest",
+            "status": status,
+            "error": error if error is not None else status,
+            "flags": [],
+        },
+    )
 
 
 def dub_dir(slug: object, root: Path | None = None) -> Path:
