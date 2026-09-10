@@ -33,8 +33,8 @@ user/default/workflows/
     dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast-*, dub-*, music-rap-draft/full
-      nill-bye/       forty-five 180 s music-rap-nill-bye-* diss takes
-      drive-through/  thirty 180 s music-edm-drive-through-* EDM takes
+      nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
+      drive-through/phase0|1/    thirty 180 s music-edm-drive-through-* EDM takes
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -186,7 +186,7 @@ flowchart TB
 
 === "Audio (podcast / dub / rap / EDM)"
 
-    Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Graphs still save FLAC + MP3; YouTube still-image MP4 is host `audio-still-video` after Queue. Playbook: [Local podcast](podcast.md), [Local dub](dub.md), [Local music](music.md).
+    Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Graphs still save FLAC + MP3; YouTube still-image MP4 is host `audio-still-video` after Queue. Nill Bye / Drive-through takes nest under `_lab/audio/<artist>/phaseN/` and save as `Artist - Song Title - vN`. Playbook: [Local podcast](podcast.md), [Local dub](dub.md), [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
@@ -195,96 +195,101 @@ flowchart TB
     | **podcast-radio-drama-lab-example** | One-graph radio drama. Sting + bed stay instrumental. Prefix `ez_radio_ep` |
     | **music-rap-draft-lab-example** | ACE-Step rap draft **32 s** boom-bap 88 (`ez_rap_draft`) |
     | **music-rap-full-lab-example** | ACE-Step rap full **96 s** boom-bap 88 (`ez_rap_full`). Queue draft first |
-    | **music-rap-nill-bye-lab-coat-lab-example** | **180 s** diss, boom-bap 88. Nill Bye lab-coat roast of Rake (`ez_rap_nill_labcoat`). `_lab/audio/nill-bye/`. Queue on its own |
-    | **music-rap-nill-bye-peer-review-lab-example** | **180 s** diss, boom-bap 88, `[spoken word]` intro (`ez_rap_nill_review`) |
-    | **music-rap-nill-bye-feels-lab-example** | **180 s** diss, lo-fi 86 (`ez_rap_nill_feels`) |
-    | **music-rap-nill-bye-fake-cool-lab-example** | **180 s** diss, trap 140 (`ez_rap_nill_fakecool`) |
-    | **music-rap-nill-bye-hypothesis-lab-example** | **180 s** diss, boom-bap 92, seed 7 (`ez_rap_nill_hypothesis`) |
-    | **music-rap-nill-bye-control-group-lab-example** | **180 s** diss, boom-bap 88 (`ez_rap_nill_control`). Uncontrolled variable |
-    | **music-rap-nill-bye-sample-size-lab-example** | **180 s** diss, boom-bap 92, seed 11 (`ez_rap_nill_samplesize`) |
-    | **music-rap-nill-bye-placebo-lab-example** | **180 s** diss, trap 140, seed 13 (`ez_rap_nill_placebo`) |
-    | **music-rap-nill-bye-error-bars-lab-example** | **180 s** diss, boom-bap 88, seed 17 (`ez_rap_nill_errorbars`) |
-    | **music-rap-nill-bye-lab-notebook-lab-example** | **180 s** diss, boom-bap 92, seed 19 (`ez_rap_nill_notebook`) |
-    | **music-rap-nill-bye-office-hours-lab-example** | **180 s** diss, lo-fi 86, seed 23 (`ez_rap_nill_office`) |
-    | **music-rap-nill-bye-grant-denied-lab-example** | **180 s** diss, boom-bap 88, `[spoken word]` intro, seed 29 (`ez_rap_nill_grant`) |
-    | **music-rap-nill-bye-contamination-lab-example** | **180 s** diss, trap 140, seed 31 (`ez_rap_nill_contam`) |
-    | **music-rap-nill-bye-double-blind-lab-example** | **180 s** diss, boom-bap 92, seed 37 (`ez_rap_nill_doubleblind`) |
-    | **music-rap-nill-bye-replicate-lab-example** | **180 s** diss, boom-bap 88, seed 7 (`ez_rap_nill_replicate`) |
 
-    Style pack (same dry booth; not trap/EDM). Queue on its own. Full table: [Local music](music.md).
+    phase0 — Nill Bye lab catalog. Queue on its own. Full table: [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
-    | **music-rap-nill-bye-citation-needed-lab-example** | **180 s** jazz hop 90 (`ez_rap_nill_cite`). Citation needed |
-    | **music-rap-nill-bye-p-hacking-lab-example** | **180 s** g-funk 98 (`ez_rap_nill_phack`) |
-    | **music-rap-nill-bye-null-result-lab-example** | **180 s** reggae 92 (`ez_rap_nill_null`) |
-    | **music-rap-nill-bye-expired-reagent-lab-example** | **180 s** neo-soul 84 (`ez_rap_nill_expired`) |
-    | **music-rap-nill-bye-lab-safety-lab-example** | **180 s** rap rock 168 (`ez_rap_nill_safety`) |
-    | **music-rap-nill-bye-rumor-mill-lab-example** | **180 s** industrial 108 (`ez_rap_nill_rumor`) |
-    | **music-rap-nill-bye-gym-selfie-lab-example** | **180 s** afrobeat 110 (`ez_rap_nill_gym`) |
-    | **music-rap-nill-bye-rented-drip-lab-example** | **180 s** synthwave 104 (`ez_rap_nill_drip`) |
-    | **music-rap-nill-bye-clout-diet-lab-example** | **180 s** trip-hop 86 (`ez_rap_nill_clout`) |
-    | **music-rap-nill-bye-mood-forecast-lab-example** | **180 s** cinematic 76 (`ez_rap_nill_forecast`) |
-    | **music-rap-nill-bye-algorithm-lab-example** | **180 s** funk 114 (`ez_rap_nill_algo`) |
-    | **music-rap-nill-bye-story-time-lab-example** | **180 s** blues 74, `[spoken word]` intro (`ez_rap_nill_story`) |
-    | **music-rap-nill-bye-caption-lab-example** | **180 s** chiptune 100 (`ez_rap_nill_caption`) |
-    | **music-rap-nill-bye-energy-drink-lab-example** | **180 s** brass band 120 (`ez_rap_nill_fuel`) |
-    | **music-rap-nill-bye-campfire-lab-example** | **180 s** folk 82 (`ez_rap_nill_camp`) |
+    | **music-rap-nill-bye-lab-coat-lab-example** | **180 s** diss, boom-bap 88. Nill Bye lab-coat roast of Rake (`Nill Bye - Lab Coat Lecture - v0`). `_lab/audio/nill-bye/phase0/` |
+    | **music-rap-nill-bye-peer-review-lab-example** | **180 s** diss, boom-bap 88, `[spoken word]` intro (`Nill Bye - Peer Review - v0`) |
+    | **music-rap-nill-bye-feels-lab-example** | **180 s** diss, lo-fi 86 (`Nill Bye - In His Feels - v0`) |
+    | **music-rap-nill-bye-fake-cool-lab-example** | **180 s** diss, trap 140 (`Nill Bye - Fake Cool - v0`) |
+    | **music-rap-nill-bye-hypothesis-lab-example** | **180 s** diss, boom-bap 92, seed 7 (`Nill Bye - Hypothesis vs Rumor - v0`) |
+    | **music-rap-nill-bye-control-group-lab-example** | **180 s** diss, boom-bap 88 (`Nill Bye - Control Group - v0`). Uncontrolled variable |
+    | **music-rap-nill-bye-sample-size-lab-example** | **180 s** diss, boom-bap 92, seed 11 (`Nill Bye - Sample Size - v0`) |
+    | **music-rap-nill-bye-placebo-lab-example** | **180 s** diss, trap 140, seed 13 (`Nill Bye - Placebo - v0`) |
+    | **music-rap-nill-bye-error-bars-lab-example** | **180 s** diss, boom-bap 88, seed 17 (`Nill Bye - Error Bars - v0`) |
+    | **music-rap-nill-bye-lab-notebook-lab-example** | **180 s** diss, boom-bap 92, seed 19 (`Nill Bye - Lab Notebook - v0`) |
+    | **music-rap-nill-bye-office-hours-lab-example** | **180 s** diss, lo-fi 86, seed 23 (`Nill Bye - Office Hours - v0`) |
+    | **music-rap-nill-bye-grant-denied-lab-example** | **180 s** diss, boom-bap 88, `[spoken word]` intro, seed 29 (`Nill Bye - Grant Denied - v0`) |
+    | **music-rap-nill-bye-contamination-lab-example** | **180 s** diss, trap 140, seed 31 (`Nill Bye - Contamination - v0`) |
+    | **music-rap-nill-bye-double-blind-lab-example** | **180 s** diss, boom-bap 92, seed 37 (`Nill Bye - Double Blind - v0`) |
+    | **music-rap-nill-bye-replicate-lab-example** | **180 s** diss, boom-bap 88, seed 7 (`Nill Bye - Replicate or Retract - v0`) |
 
-    Trap / EDM pack (rap **over** club beds, no autotune). Queue on its own.
-
-    | Workflow | What it does |
-    | --- | --- |
-    | **music-rap-nill-bye-false-drop-lab-example** | **180 s** dark trap 140 (`ez_rap_nill_drop`) |
-    | **music-rap-nill-bye-velvet-rope-lab-example** | **180 s** festival trap 150 (`ez_rap_nill_rope`) |
-    | **music-rap-nill-bye-fog-machine-lab-example** | **180 s** rage 148 (`ez_rap_nill_fog`) |
-    | **music-rap-nill-bye-guest-list-lab-example** | **180 s** phonk 132 (`ez_rap_nill_guest`) |
-    | **music-rap-nill-bye-sparkler-lab-example** | **180 s** trap 145 (`ez_rap_nill_spark`) |
-    | **music-rap-nill-bye-bottle-service-lab-example** | **180 s** house 126 (`ez_rap_nill_bottle`) |
-    | **music-rap-nill-bye-strobe-claim-lab-example** | **180 s** techno 132 (`ez_rap_nill_strobe`) |
-    | **music-rap-nill-bye-amen-rumor-lab-example** | **180 s** drum and bass 174 (`ez_rap_nill_amen`) |
-    | **music-rap-nill-bye-wobble-alibi-lab-example** | **180 s** dubstep 140 (`ez_rap_nill_wobble`) |
-    | **music-rap-nill-bye-supersaw-flex-lab-example** | **180 s** future bass 148 (`ez_rap_nill_saw`) |
-    | **music-rap-nill-bye-laser-show-lab-example** | **180 s** electro house 128 (`ez_rap_nill_laser`) |
-    | **music-rap-nill-bye-two-step-lab-example** | **180 s** UK garage 130 (`ez_rap_nill_twostep`) |
-    | **music-rap-nill-bye-jersey-bounce-lab-example** | **180 s** jersey club 140 (`ez_rap_nill_jersey`) |
-    | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`ez_rap_nill_kick`) |
-    | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`ez_rap_nill_uplift`) |
-
-    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list. Drop early, dirty pyro on every drop. Full table: [Local music](music.md).
+    phase1 — Style pack (same dry booth; not trap/EDM). Queue on its own. Full table: [Local music](music.md).
 
     | Workflow | What it does |
     | --- | --- |
-    | **music-edm-drive-through-night-window-lab-example** | **180 s** bass house 145 (`ez_edm_drive_night`). Opener, dirty 808 pyro |
-    | **music-edm-drive-through-open-lane-lab-example** | **180 s** festival bass 152 (`ez_edm_drive_openlane`). Drop-first ID |
-    | **music-edm-drive-through-exit-seven-lab-example** | **180 s** electro house 142 (`ez_edm_drive_exit`). Filter mix-in, dirty pyro |
-    | **music-edm-drive-through-skyline-pass-lab-example** | **180 s** progressive house 145 (`ez_edm_drive_skyline`). Drop-first anthem |
-    | **music-edm-drive-through-on-ramp-lab-example** | **180 s** festival bass 155 (`ez_edm_drive_onramp`). Reverse-bass pyro |
-    | **music-edm-drive-through-tunnel-bass-lab-example** | **180 s** dirty bass 150 (`ez_edm_drive_tunnel`). Three pyro drops |
-    | **music-edm-drive-through-wide-open-lab-example** | **180 s** big room 150 (`ez_edm_drive_wide`). DJ shout treat |
-    | **music-edm-drive-through-overpass-lab-example** | **180 s** riddim 150 (`ez_edm_drive_overpass`). Drop-first wobble pyro |
-    | **music-edm-drive-through-second-wave-lab-example** | **180 s** festival remix 150 (`ez_edm_drive_second`). Vocal-chop treat |
-    | **music-edm-drive-through-freight-pulse-lab-example** | **180 s** drumstep 176 (`ez_edm_drive_freight`) |
-    | **music-edm-drive-through-keep-going-lab-example** | **180 s** drumstep 170 (`ez_edm_drive_keep`). Triple pyro peak |
-    | **music-edm-drive-through-horizon-kick-lab-example** | **180 s** festival bass 165 (`ez_edm_drive_horizon`). Drop-first reverse bass |
-    | **music-edm-drive-through-clean-wreckage-lab-example** | **180 s** dirty electro 150 (`ez_edm_drive_wreck`). Three pyro wrecks |
-    | **music-edm-drive-through-heart-lane-lab-example** | **180 s** future bass 145 (`ez_edm_drive_heart`). Drop-first warm 808 |
-    | **music-edm-drive-through-dawn-receipt-lab-example** | **180 s** progressive house 140 (`ez_edm_drive_dawn`). Hour-1 closer |
-    | **music-edm-drive-through-rumble-strip-lab-example** | **180 s** bass house 140 (`ez_edm_drive_rumble`). Hour-2 opener |
-    | **music-edm-drive-through-low-lane-lab-example** | **180 s** festival bass 144 (`ez_edm_drive_low`). Chest sub pyro |
-    | **music-edm-drive-through-warm-merge-lab-example** | **180 s** future bass 148 (`ez_edm_drive_warm`) |
-    | **music-edm-drive-through-colour-span-lab-example** | **180 s** complextro 150 (`ez_edm_drive_colour`) |
-    | **music-edm-drive-through-garage-ticket-lab-example** | **180 s** festival trap 140 (`ez_edm_drive_garage`) |
-    | **music-edm-drive-through-liquid-grade-lab-example** | **180 s** drumstep 174 (`ez_edm_drive_liquid`) |
-    | **music-edm-drive-through-jump-bay-lab-example** | **180 s** brostep 150 (`ez_edm_drive_jump`). Dirty growl pyro |
-    | **music-edm-drive-through-psy-median-lab-example** | **180 s** big room 145 (`ez_edm_drive_psy`) |
-    | **music-edm-drive-through-groove-mile-lab-example** | **180 s** slap house 144 (`ez_edm_drive_groove`) |
-    | **music-edm-drive-through-donk-ramp-lab-example** | **180 s** dirty electro 150 (`ez_edm_drive_donk`) |
-    | **music-edm-drive-through-bounce-booth-lab-example** | **180 s** melbourne bounce 140 (`ez_edm_drive_bounce`) |
-    | **music-edm-drive-through-toll-growl-lab-example** | **180 s** tearout 150 (`ez_edm_drive_toll`) |
-    | **music-edm-drive-through-night-oil-lab-example** | **180 s** hybrid trap 142 (`ez_edm_drive_oil`) |
-    | **music-edm-drive-through-chest-pass-lab-example** | **180 s** festival bass 150 (`ez_edm_drive_chest`) |
-    | **music-edm-drive-through-sunrise-sub-lab-example** | **180 s** progressive house 140 (`ez_edm_drive_sunsub`). Encore closer |
+    | **music-rap-nill-bye-citation-needed-lab-example** | **180 s** jazz hop 90 (`Nill Bye - Citation Needed - v1`). Citation needed |
+    | **music-rap-nill-bye-p-hacking-lab-example** | **180 s** g-funk 98 (`Nill Bye - P-Hacking - v1`) |
+    | **music-rap-nill-bye-null-result-lab-example** | **180 s** reggae 92 (`Nill Bye - Null Result - v1`) |
+    | **music-rap-nill-bye-expired-reagent-lab-example** | **180 s** neo-soul 84 (`Nill Bye - Expired Reagent - v1`) |
+    | **music-rap-nill-bye-lab-safety-lab-example** | **180 s** rap rock 168 (`Nill Bye - Lab Safety - v1`) |
+    | **music-rap-nill-bye-rumor-mill-lab-example** | **180 s** industrial 108 (`Nill Bye - Rumor Mill - v1`) |
+    | **music-rap-nill-bye-gym-selfie-lab-example** | **180 s** afrobeat 110 (`Nill Bye - Gym Selfie - v1`) |
+    | **music-rap-nill-bye-rented-drip-lab-example** | **180 s** synthwave 104 (`Nill Bye - Rented Drip - v1`) |
+    | **music-rap-nill-bye-clout-diet-lab-example** | **180 s** trip-hop 86 (`Nill Bye - Clout Diet - v1`) |
+    | **music-rap-nill-bye-mood-forecast-lab-example** | **180 s** cinematic 76 (`Nill Bye - Mood Forecast - v1`) |
+    | **music-rap-nill-bye-algorithm-lab-example** | **180 s** funk 114 (`Nill Bye - Algorithm - v1`) |
+    | **music-rap-nill-bye-story-time-lab-example** | **180 s** blues 74, `[spoken word]` intro (`Nill Bye - Story Time - v1`) |
+    | **music-rap-nill-bye-caption-lab-example** | **180 s** chiptune 100 (`Nill Bye - Caption vs Data - v1`) |
+    | **music-rap-nill-bye-energy-drink-lab-example** | **180 s** brass band 120 (`Nill Bye - Energy Drink - v1`) |
+    | **music-rap-nill-bye-campfire-lab-example** | **180 s** folk 82 (`Nill Bye - Campfire Rumor - v1`) |
+
+    phase2 — Trap / EDM pack (rap **over** club beds, no autotune). Queue on its own.
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-rap-nill-bye-false-drop-lab-example** | **180 s** dark trap 140 (`Nill Bye - False Drop - v2`) |
+    | **music-rap-nill-bye-velvet-rope-lab-example** | **180 s** festival trap 150 (`Nill Bye - Velvet Rope - v2`) |
+    | **music-rap-nill-bye-fog-machine-lab-example** | **180 s** rage 148 (`Nill Bye - Fog Machine - v2`) |
+    | **music-rap-nill-bye-guest-list-lab-example** | **180 s** phonk 132 (`Nill Bye - Guest List - v2`) |
+    | **music-rap-nill-bye-sparkler-lab-example** | **180 s** trap 145 (`Nill Bye - Sparkler Science - v2`) |
+    | **music-rap-nill-bye-bottle-service-lab-example** | **180 s** house 126 (`Nill Bye - Bottle Service - v2`) |
+    | **music-rap-nill-bye-strobe-claim-lab-example** | **180 s** techno 132 (`Nill Bye - Strobe Claim - v2`) |
+    | **music-rap-nill-bye-amen-rumor-lab-example** | **180 s** drum and bass 174 (`Nill Bye - Amen Rumor - v2`) |
+    | **music-rap-nill-bye-wobble-alibi-lab-example** | **180 s** dubstep 140 (`Nill Bye - Wobble Alibi - v2`) |
+    | **music-rap-nill-bye-supersaw-flex-lab-example** | **180 s** future bass 148 (`Nill Bye - Supersaw Flex - v2`) |
+    | **music-rap-nill-bye-laser-show-lab-example** | **180 s** electro house 128 (`Nill Bye - Laser Show - v2`) |
+    | **music-rap-nill-bye-two-step-lab-example** | **180 s** UK garage 130 (`Nill Bye - Two-Step Alibi - v2`) |
+    | **music-rap-nill-bye-jersey-bounce-lab-example** | **180 s** jersey club 140 (`Nill Bye - Jersey Bounce - v2`) |
+    | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`Nill Bye - Kick-Split Myth - v2`) |
+    | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`Nill Bye - Uplifting Rumor - v2`) |
+
+    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (`phase0/` hour 1, then `phase1/` hour 2). Drop early, dirty pyro on every drop. Full table: [Local music](music.md).
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-edm-drive-through-night-window-lab-example** | **180 s** bass house 145 (`Drive-through - Night Window - v0`). Opener, dirty 808 pyro |
+    | **music-edm-drive-through-open-lane-lab-example** | **180 s** festival bass 152 (`Drive-through - Open Lane - v0`). Drop-first ID |
+    | **music-edm-drive-through-exit-seven-lab-example** | **180 s** electro house 142 (`Drive-through - Exit Seven - v0`). Filter mix-in, dirty pyro |
+    | **music-edm-drive-through-skyline-pass-lab-example** | **180 s** progressive house 145 (`Drive-through - Skyline Pass - v0`). Drop-first anthem |
+    | **music-edm-drive-through-on-ramp-lab-example** | **180 s** festival bass 155 (`Drive-through - On-Ramp - v0`). Reverse-bass pyro |
+    | **music-edm-drive-through-tunnel-bass-lab-example** | **180 s** dirty bass 150 (`Drive-through - Tunnel Bass - v0`). Three pyro drops |
+    | **music-edm-drive-through-wide-open-lab-example** | **180 s** big room 150 (`Drive-through - Wide Open - v0`). DJ shout treat |
+    | **music-edm-drive-through-overpass-lab-example** | **180 s** riddim 150 (`Drive-through - Overpass - v0`). Drop-first wobble pyro |
+    | **music-edm-drive-through-second-wave-lab-example** | **180 s** festival remix 150 (`Drive-through - Second Wave - v0`). Vocal-chop treat |
+    | **music-edm-drive-through-freight-pulse-lab-example** | **180 s** drumstep 176 (`Drive-through - Freight Pulse - v0`) |
+    | **music-edm-drive-through-keep-going-lab-example** | **180 s** drumstep 170 (`Drive-through - Keep Going - v0`). Triple pyro peak |
+    | **music-edm-drive-through-horizon-kick-lab-example** | **180 s** festival bass 165 (`Drive-through - Horizon Kick - v0`). Drop-first reverse bass |
+    | **music-edm-drive-through-clean-wreckage-lab-example** | **180 s** dirty electro 150 (`Drive-through - Clean Wreckage - v0`). Three pyro wrecks |
+    | **music-edm-drive-through-heart-lane-lab-example** | **180 s** future bass 145 (`Drive-through - Heart Lane - v0`). Drop-first warm 808 |
+    | **music-edm-drive-through-dawn-receipt-lab-example** | **180 s** progressive house 140 (`Drive-through - Dawn Receipt - v0`). Hour-1 closer |
+    | **music-edm-drive-through-rumble-strip-lab-example** | **180 s** bass house 140 (`Drive-through - Rumble Strip - v1`). Hour-2 opener |
+    | **music-edm-drive-through-low-lane-lab-example** | **180 s** festival bass 144 (`Drive-through - Low Lane - v1`). Chest sub pyro |
+    | **music-edm-drive-through-warm-merge-lab-example** | **180 s** future bass 148 (`Drive-through - Warm Merge - v1`) |
+    | **music-edm-drive-through-colour-span-lab-example** | **180 s** complextro 150 (`Drive-through - Colour Span - v1`) |
+    | **music-edm-drive-through-garage-ticket-lab-example** | **180 s** festival trap 140 (`Drive-through - Garage Ticket - v1`) |
+    | **music-edm-drive-through-liquid-grade-lab-example** | **180 s** drumstep 174 (`Drive-through - Liquid Grade - v1`) |
+    | **music-edm-drive-through-jump-bay-lab-example** | **180 s** brostep 150 (`Drive-through - Jump Bay - v1`). Dirty growl pyro |
+    | **music-edm-drive-through-psy-median-lab-example** | **180 s** big room 145 (`Drive-through - Psy Median - v1`) |
+    | **music-edm-drive-through-groove-mile-lab-example** | **180 s** slap house 144 (`Drive-through - Groove Mile - v1`) |
+    | **music-edm-drive-through-donk-ramp-lab-example** | **180 s** dirty electro 150 (`Drive-through - Donk Ramp - v1`) |
+    | **music-edm-drive-through-bounce-booth-lab-example** | **180 s** melbourne bounce 140 (`Drive-through - Bounce Booth - v1`) |
+    | **music-edm-drive-through-toll-growl-lab-example** | **180 s** tearout 150 (`Drive-through - Toll Growl - v1`) |
+    | **music-edm-drive-through-night-oil-lab-example** | **180 s** hybrid trap 142 (`Drive-through - Night Oil - v1`) |
+    | **music-edm-drive-through-chest-pass-lab-example** | **180 s** festival bass 150 (`Drive-through - Chest Pass - v1`) |
+    | **music-edm-drive-through-sunrise-sub-lab-example** | **180 s** progressive house 140 (`Drive-through - Sunrise Sub - v1`). Encore closer |
 
 === "DCC (clay → print)"
 

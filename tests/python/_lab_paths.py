@@ -53,12 +53,34 @@ def lab_json(stem: str, *, root: Path | None = None) -> Path:
     return hits[0]
 
 
+def _subdir_parts(subdir: str) -> tuple[str, ...]:
+    """Relative nested components under a lab lane.
+
+    Arguments:
+        subdir: Slash-separated relative path (``nill-bye/phase0``).
+    Returns:
+        Path parts to join under the lane directory.
+    Raises:
+        ValueError: empty, absolute, or ``.`` / ``..`` components.
+    """
+    extra = Path(str(subdir).strip())
+    if extra.is_absolute():
+        raise ValueError(f"invalid lab subdir {subdir!r}")
+    parts = extra.parts
+    if not parts:
+        raise ValueError(f"invalid lab subdir {subdir!r}")
+    for part in parts:
+        if part in {".", ".."} or part.strip() == "" or "/" in part or "\\" in part:
+            raise ValueError(f"invalid lab subdir {subdir!r}")
+    return parts
+
+
 def lab_dest(stem: str, *, lane: str | None = None, subdir: str | None = None) -> Path:
     """Path to write a lab graph. Creates the lane directory.
 
-    ``subdir`` is an optional single path component under the lane
-    (for example ``nill-bye`` → ``_lab/audio/nill-bye/``,
-    ``drive-through`` → ``_lab/audio/drive-through/``).
+    ``subdir`` is an optional relative path under the lane
+    (for example ``nill-bye/phase0`` → ``_lab/audio/nill-bye/phase0/``,
+    ``drive-through/phase1`` → ``_lab/audio/drive-through/phase1/``).
     """
     name = Path(stem).name
     if not name.endswith(".json"):
@@ -68,10 +90,7 @@ def lab_dest(stem: str, *, lane: str | None = None, subdir: str | None = None) -
         raise ValueError(f"invalid lab lane {chosen!r}")
     dest_dir = LAB_ROOT / chosen
     if subdir is not None and str(subdir).strip() != "":
-        extra = Path(str(subdir).strip())
-        if extra.is_absolute() or extra.name != extra.as_posix() or extra.name in {".", ".."}:
-            raise ValueError(f"invalid lab subdir {subdir!r}")
-        dest_dir = dest_dir / extra.name
+        dest_dir = dest_dir.joinpath(*_subdir_parts(str(subdir)))
     dest = dest_dir / name
     dest.parent.mkdir(parents=True, exist_ok=True)
     return dest

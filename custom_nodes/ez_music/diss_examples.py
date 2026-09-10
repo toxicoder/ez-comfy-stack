@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from typing import Literal, TypedDict
 
+from .naming import NILL_BYE_ARTIST, music_output_prefix
+
 BOOM_BAP_TAGS_88 = (
     "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano "
     "stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm"
@@ -35,9 +37,15 @@ class DissExample(TypedDict):
     bpm: int
     duration: float
     seed: int
+    phase: int
     prefix: str
     description: str
     lyrics: str
+
+
+def nill_output_prefix(title: str, phase: int) -> str:
+    """SaveAudio prefix for a Nill Bye take."""
+    return music_output_prefix(NILL_BYE_ARTIST, title, phase)
 
 
 def nill_tags(*parts: str, bpm: int) -> str:

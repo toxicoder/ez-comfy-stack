@@ -20,6 +20,7 @@ from ez_music.diss_examples import (  # noqa: E402
     DISS_EXAMPLES,
     NILL_VOICE,
     format_diss_lyrics,
+    nill_output_prefix,
     nill_tags,
 )
 from ez_music.edm_examples import (  # noqa: E402
@@ -32,6 +33,12 @@ from ez_music.edm_examples import (  # noqa: E402
     EDM_EXAMPLES,
     drive_tags,
     format_edm_score,
+)
+from ez_music.naming import (  # noqa: E402
+    DRIVE_THROUGH_ARTIST,
+    NILL_BYE_ARTIST,
+    music_output_prefix,
+    title_case_song,
 )
 from ez_music.nodes import (  # noqa: E402
     DRAFT_LYRICS,
@@ -161,6 +168,29 @@ TRAP_EDM_GENRES = (
 )
 
 
+def test_title_case_song_and_output_prefix() -> None:
+    assert title_case_song("lab coat lecture") == "Lab Coat Lecture"
+    assert title_case_song("p-hacking") == "P-Hacking"
+    assert title_case_song("on-ramp") == "On-Ramp"
+    assert title_case_song("two-step alibi") == "Two-Step Alibi"
+    assert title_case_song("hypothesis vs rumor") == "Hypothesis vs Rumor"
+    assert title_case_song("replicate or retract") == "Replicate or Retract"
+    assert (
+        music_output_prefix(NILL_BYE_ARTIST, "lab coat lecture", 0)
+        == "Nill Bye - Lab Coat Lecture - v0"
+    )
+    assert (
+        music_output_prefix(DRIVE_THROUGH_ARTIST, "night window", 1)
+        == "Drive-through - Night Window - v1"
+    )
+    with pytest.raises(ValueError, match="empty"):
+        title_case_song("  ")
+    with pytest.raises(ValueError, match="artist"):
+        music_output_prefix("  ", "lab coat lecture", 0)
+    with pytest.raises(ValueError, match="phase"):
+        music_output_prefix(NILL_BYE_ARTIST, "lab coat lecture", -1)
+
+
 def test_nill_tags_lock_dry_booth_voice() -> None:
     tags = nill_tags("jazz hop", "brushed drums", bpm=90)
     assert tags == (
@@ -185,7 +215,9 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
     stems: list[str] = []
     seeds: list[int] = []
     series_counts = {"lab": 0, "variety": 0, "trap-edm": 0}
+    phase_counts = {0: 0, 1: 0, 2: 0}
     spoken_titles: set[str] = set()
+    series_phase = {"lab": 0, "variety": 1, "trap-edm": 2}
     for ex in DISS_EXAMPLES:
         assert ex["duration"] == DISS_DURATION_S
         lyrics = ex["lyrics"]
@@ -199,9 +231,13 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         assert str(ex["bpm"]) in ex["tags"]
         assert ex["stem"].startswith("music-rap-nill-bye-")
         assert ex["stem"].endswith("-lab-example")
-        assert ex["prefix"].startswith("ez_rap_nill_")
         assert ex["series"] in series_counts
+        assert ex["phase"] == series_phase[ex["series"]]
+        assert ex["prefix"] == nill_output_prefix(ex["title"], ex["phase"])
+        assert ex["prefix"].startswith("Nill Bye - ")
+        assert ex["prefix"].endswith(f" - v{ex['phase']}")
         series_counts[ex["series"]] += 1
+        phase_counts[ex["phase"]] += 1
         if ex["series"] != "lab":
             for token in NILL_VOICE.split(", "):
                 assert token in ex["tags"], (ex["stem"], token)
@@ -224,6 +260,7 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
     assert len(set(prefixes)) == 45
     assert len(set(stems)) == 45
     assert series_counts == {"lab": 15, "variety": 15, "trap-edm": 15}
+    assert phase_counts == {0: 15, 1: 15, 2: 15}
     assert spoken_titles == SPOKEN_WORD_TITLES
     assert any(seed != 42 for seed in seeds)
     assert tuple(ex["title"] for ex in DISS_EXAMPLES) == EXPECTED_NILL_BYE_TITLES
@@ -440,7 +477,11 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         assert str(ex["bpm"]) in ex["tags"]
         assert ex["stem"].startswith("music-edm-drive-through-")
         assert ex["stem"].endswith("-lab-example")
-        assert ex["prefix"].startswith("ez_edm_drive_")
+        assert ex["prefix"] == music_output_prefix(
+            DRIVE_THROUGH_ARTIST, ex["title"], ex["phase"]
+        )
+        assert ex["prefix"].startswith("Drive-through - ")
+        assert ex["prefix"].endswith(f" - v{ex['phase']}")
         for needle in (*LIVING_MC_NEEDLES, *LIVING_EDM_NEEDLES):
             assert needle not in lyrics
             assert needle not in ex["tags"]
@@ -450,6 +491,7 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         bpms.append(int(ex["bpm"]))
     assert len(set(prefixes)) == 30
     assert len(set(stems)) == 30
+    assert [ex["phase"] for ex in EDM_EXAMPLES] == [0] * 15 + [1] * 15
     assert min(bpms) >= 140
     assert max(bpms) >= 170
     assert sum(1 for bpm in bpms if bpm >= 145) >= 12

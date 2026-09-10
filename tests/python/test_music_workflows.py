@@ -9,7 +9,7 @@ from ez_music.diss_examples import DISS_EXAMPLES
 from ez_music.edm_examples import EDM_EXAMPLES
 
 from _ace_widgets_contract import assert_ace_encoder_widgets
-from _lab_paths import lab_json
+from _lab_paths import LAB_ROOT, lab_json
 from _stamp_app_mode import (
     DRIVE_THROUGH_STAMP_STEMS,
     NILL_BYE_STAMP_STEMS,
@@ -159,6 +159,8 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
         assert "on its own" in note.lower() or "queue on its own" in note.lower()
         if ex["title"] in {"peer review", "grant denied", "story time"}:
             assert "[spoken word]" in blob
+        rel = lab_json(stem).relative_to(LAB_ROOT)
+        assert rel.parts[:3] == ("audio", "nill-bye", f"phase{ex['phase']}")
 
 
 def test_nill_bye_stems_are_stamped_audio() -> None:
@@ -202,6 +204,8 @@ def test_music_edm_drive_through_graphs() -> None:
             assert "[chorus]" not in blob
         ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
         assert ace["title"] == "ez_edm_prompt"
+        rel = lab_json(stem).relative_to(LAB_ROOT)
+        assert rel.parts[:3] == ("audio", "drive-through", f"phase{ex['phase']}")
 
 
 def test_drive_through_stems_are_stamped_audio() -> None:
