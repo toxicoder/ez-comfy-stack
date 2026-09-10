@@ -5,14 +5,16 @@
 # Hermetic full-suite entrypoint for local developers and `make test`.
 #
 # Purpose:
-#   Run BATS for all suites under tests/bats, then Python tests for the Spark
-#   free-memory patch (preferring pytest-cov when installed).
+#   Run BATS for all suites under tests/bats, Python tests (preferring
+#   pytest-cov when installed), then Pyright (Pylance) and mypy on first-party
+#   Python.
 #
 # Style:
 #   Google Shell Style Guide (project deviations in docs/project-conventions.md).
 #
 # Requirements:
-#   bats, python3, pytest (optional pytest-cov). GNU parallel recommended for
+#   bats, python3, pytest (optional pytest-cov), pyright, mypy
+#   (pip install -r tests/requirements.txt). GNU parallel recommended for
 #   bats --jobs. No GPU or Hugging Face network.
 #
 # Environment:
@@ -71,10 +73,14 @@ echo "==> Python"
 export PYTHONPATH="${ROOT}/docker:${ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}"
 if python3 -c 'import pytest, pytest_cov' 2>/dev/null; then
   python3 -m pytest tests/python -q --cov=patch_get_free_memory \
-    --cov=patch_unified_memory_copy --cov=ez_ltx_spatial \
+    --cov=patch_unified_memory_copy --cov=patch_magcache_compat \
+    --cov=seed_clay_inputs --cov=ez_ltx_spatial \
     --cov-report=term-missing --cov-fail-under=100
 else
   python3 -m pytest tests/python -q
 fi
+
+echo "==> Typecheck (Pyright + mypy)"
+bash tests/typecheck.sh
 
 echo "==> All tests passed"

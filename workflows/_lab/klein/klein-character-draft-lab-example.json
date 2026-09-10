@@ -380,7 +380,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-character-draft-lab-example\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **klein-character-tweak-lab-example**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-character-draft-lab-example\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **klein-character-tweak-lab-example**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -516,7 +516,7 @@
         0
       ]
     },
-    "lab_note": "## klein-character-draft-lab-example\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **klein-character-tweak-lab-example**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## klein-character-draft-lab-example\n\nKlein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.\n\nHandoff: load **klein-character-tweak-lab-example**, pick `ez_character_*.png`, and prompt the change.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Klein 4B character still, 1024x1280, style on, prefix ez_character",
     "lab_app_mode": {
       "enabled": true,
@@ -534,7 +534,7 @@
     "linearData": {
       "inputs": [
         [
-          "11:prompt",
+          11,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -543,7 +543,7 @@
           }
         ],
         [
-          "11:style",
+          11,
           "style",
           {
             "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
@@ -551,7 +551,7 @@
           }
         ],
         [
-          "11:enhance",
+          11,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -559,7 +559,7 @@
           }
         ],
         [
-          "7:seed",
+          7,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

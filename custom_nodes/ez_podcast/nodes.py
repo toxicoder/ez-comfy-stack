@@ -272,7 +272,10 @@ class EZPodcastScript:
                         "dynamicPrompts": False,
                     },
                 ),
-                "enhance": ("BOOLEAN", {"default": True}),
+                "enhance": (
+                    "BOOLEAN",
+                    {"default": True, "label_on": "On", "label_off": "Off"},
+                ),
                 "flavor": ([FLAVOR_PODCAST, FLAVOR_RADIO], {"default": FLAVOR_PODCAST}),
             }
         }
@@ -488,7 +491,7 @@ class EZKokoroTTS:
         return samples, int(rate or SAMPLE_RATE_KOKORO)
 
 
-NODE_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS: dict[str, Any] = {
     "EZPodcastScript": EZPodcastScript,
     "EZPodcastDisclosure": EZPodcastDisclosure,
     "EZKokoroTTS": EZKokoroTTS,

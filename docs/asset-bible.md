@@ -47,7 +47,7 @@ flowchart TB
 | **Gen** | Klein still → TRELLIS.2 | Hero *pieces* (a mug, a jacket, a hero mesh) |
 | **Construct** | `scene.json` shopping list | Layout: primitives, HDRI, **instances of bible slugs** |
 
-`mcp-construct` and `bpy-primitive` are reserved pipeline ids. This pack does **not** vendor an MCP binary or install Blender in the image. Host Blender stays a [sidecar](blender-gb10-sidecar.md) (dies if compose is up).
+`mcp-construct` is still reserved (no MCP binary). **`bpy-primitive`** now has one operator verb: `./scripts/manage.sh house-views` builds a greybox set under `assets/sets/<slug>/` (layout + GLB + ten 1024×1280 clay stills). Host Blender stays a [sidecar](blender-gb10-sidecar.md) (dies if compose is up). Playbook: [Dream-house tours](learn/dream-house.md).
 
 ---
 
@@ -72,6 +72,7 @@ Schema and a sample scene that **instances slugs** (no embedded mesh bytes): rep
 | Verb | Status |
 | --- | --- |
 | `asset-ls` | **Shipped** — read-only catalog |
+| `house-views` | **Shipped** — occupancy-gated Blender greybox + Instagram clay stills (`bpy-primitive` sets) |
 | `asset-new` / `asset-iterate` / `asset-promote` | Coming (P-A1) |
 
 ```bash

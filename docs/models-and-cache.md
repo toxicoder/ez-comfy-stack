@@ -10,7 +10,7 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 
 - Default cache location and layout
 - Host persistence (weights, media, Comfy `user/`, operator custom nodes)
-- Download utilities, resume / stuck-partial recovery, and readiness checks
+- Download utilities, auto-install of `hf`, resume / stuck-partial recovery, and readiness checks
 - Pointer: `--tier` is a pack id ([Download tiers](download-tiers.md))
 - Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
 - Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
@@ -65,20 +65,23 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
 ### Permissions
 
-`doctor`, `download-models`, and download utilities require `MODELS_DIR` to be **writable by the current user**.
+`doctor` requires `MODELS_DIR` to be **writable by the current user** (check only; no sudo). Nested `${MODELS_DIR}/comfy` can still be root-owned after a container start — that is a **warning**, not a hard doctor failure.
 
-=== "Preferred (setup)"
+`setup`, `download-models`, and `start` **sudo-heal** `${MODELS_DIR}/comfy` and each layout subdir (and the dest dir of each relative symlink) when they are not writable. They do **not** recurse `chown` over HF snapshots under `MODELS_DIR`. Do not prefix `download-models` with `sudo` (download-limit uses sudo internally; `hf` must stay on the login user's PATH).
+
+=== "Preferred (setup / download-models)"
 
     ```bash
     ./scripts/manage.sh setup
-    # sudo mkdir -p + chown for MODELS_DIR when needed
+    ./scripts/manage.sh download-models
+    # sudo mkdir -p + chown for MODELS_DIR and MODELS_DIR/comfy when needed
     ```
 
-=== "Manual"
+=== "Manual last resort"
 
     ```bash
-    sudo mkdir -p "${MODELS_DIR}"
-    sudo chown "$USER:$USER" "${MODELS_DIR}"
+    sudo mkdir -p "${MODELS_DIR}/comfy"
+    sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy"
     ```
 
 === "Home path"
@@ -107,8 +110,9 @@ ${MODELS_DIR}/
     text_encoders/
     vae/
     llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
-    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog)
-    tts/                # opt-in Kokoro voices + optional Chatterbox/Qwen3-TTS
+    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog) + Silero VAD (download-dub)
+    tts/                # opt-in Kokoro voices + Chatterbox / Qwen3-TTS / Chatterbox ML V3
+    whisper/            # opt-in faster-whisper large-v3 (download-dub --tier asr)
     checkpoints/        # opt-in ACE-Step 1.5 AIO (download-music --tier turbo / download-podcast --tier acestep)
   hub/                  # HF cache (optional)
 ```
@@ -192,12 +196,7 @@ Per-utility status (read-only) still uses the default pack ids:
 
 `--tier fast` also pulls Klein companions (`te` + `vae`). Opt-in packs (Wan A14B, Fun InP, LTX 2.3, music, podcast, 3D, …) live on [Download tiers](download-tiers.md).
 
-Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`):
-
-```bash
-command -v hf || pipx install huggingface_hub
-# or: pip install -U 'huggingface_hub[cli]'
-```
+Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`). `setup` and `download-models` auto-install it into `~/.local/bin` (or the original user's home when the command is run with `sudo`). Do not prefix `download-models` with `sudo` — `download-limit` uses sudo internally.
 
 Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. `HF_PROGRESS=0` turns progress lines off; `HF_PROGRESS_INTERVAL=10` sets the tick (seconds).
 
@@ -241,6 +240,14 @@ Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models
 | `t3_turbo_v1.safetensors` | `tts/` | Optional Chatterbox Turbo |
 | `model.safetensors` | `tts/` | Optional Qwen3-TTS 0.6B |
 
+Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `silero_vad.onnx` | `onnx/` | Silero VAD (`--tier asr`) |
+| `model.bin` + `config.json` + `tokenizer.json` + `vocabulary.json` | `whisper/` | faster-whisper large-v3 (`--tier asr`; `model.bin` alone is not loadable) |
+| `ve.pt` + `s3gen.pt` + `t3_mtl23ls_v3.safetensors` + `grapheme_mtl_merged_expanded_v1.json` + `conds.pt` | `tts/` | Chatterbox Multilingual V3 (`--tier clone`; `from_local` also needs `Cangjie5_TC.json`) |
+
 ### Example graphs
 
 Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Name pattern **`*-lab-example.json`**. App Mode graphs land as **`*-lab-example.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
@@ -248,11 +255,15 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | Graph | Notes |
 | --- | --- |
 | `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
+| `dub-localize-lab-example.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
 | `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
+| `_lab/audio/nill-bye/music-rap-nill-bye-*-lab-example.json` | Forty-five ACE-Step 180 s Nill Bye diss takes (lab / style / trap-EDM). Catalog: [Local music](music.md) |
+| `_lab/audio/drive-through/music-edm-drive-through-*-lab-example.json` | Thirty ACE-Step 180 s Drive-through rave-set EDM takes (twenty-eight instrumental, two DJ-shout treats). American festival EDM, drop-early dirty pyro. Catalog: [Local music](music.md) |
 | `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
-| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (outside through rooms, drone, day/night) |
+| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
+| `klein-dream-house-clay-lab-example.json` | Ten IG 4:5 Klein edits of `house-views` clay (`ez_dream_house_clay_01`…`10`) |
 | `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |
 | `wan-t2v-5s-lab-example.json` | Wan 5B T2V smoke |
 | `wan-i2v-shot-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |
@@ -472,17 +483,17 @@ flowchart TB
 
 ??? abstract "Pin table and bump procedure"
 
-    Defaults are intentional tags so GHCR rebuilds are reproducible. Validated **2026-07-29**:
+    Defaults are intentional tags so GHCR rebuilds are reproducible. Validated **2026-07-29** (Comfy pin **2026-09-08**):
 
     | Pin | Default | Why this value |
     | --- | --- | --- |
     | `TORCH_VERSION` | `2.14.0` | cu130 aarch64 wheel from `https://download.pytorch.org/whl/cu130`. Declared only in the **torch** stage. Bump here (and compose / publish-image / `install-comfy/core.sh`) when rebuilding the multi‑GB layer. |
-    | `COMFYUI_REF` | `v0.34.0` | Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Rebuild the **comfy** image stage after this bump (torch stage stays cached). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
+    | `COMFYUI_REF` | `v0.34.6` | Newest **patch tag** on the v0.34 stable line (`8fed378`, 2026-09-07) — not GitHub **Latest** (`v0.34.0`). Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Frontend still 1.49.6. Rebuild the **comfy** image stage after this bump (torch stage stays cached). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Latest stable Manager tag; `requires-python >= 3.9`; no hard ComfyUI version floor. |
-    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels); `*-lab-example` graphs do not require it. |
+    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels). When the engine is missing, start moves the pack to `ComfyUI-nunchaku.disabled` so Comfy does not import it. `*-lab-example` graphs use core UNET/CLIP/VAE loaders. |
     | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for lab **`VHS_VideoCombine`** MP4. **Required** for `wan-*-lab-example` / `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |
     | `COMFYUI_OPENCUT_REF` | `0.5.0` | [jtydhr88/ComfyUI-OpenCut](https://github.com/jtydhr88/ComfyUI-OpenCut) MIT embed. Fail-soft. Not the Rust rewrite. |
-    | `COMFYUI_MAGCACHE_REF` | `47bdd2a…` | [Zehong-Ma/ComfyUI-MagCache](https://github.com/Zehong-Ma/ComfyUI-MagCache) commit pin (no release tag). Wan 5B draft extra only. |
+    | `COMFYUI_MAGCACHE_REF` | `47bdd2a…` | [Zehong-Ma/ComfyUI-MagCache](https://github.com/Zehong-Ma/ComfyUI-MagCache) commit pin (no release tag). Wan 5B draft extra only. ComfyUI v0.34 dropped module-level `precompute_freqs_cis`; `docker/patch_magcache_compat.py` wraps that import on start so Wan MagCache still loads. MagCache-on-LTX stays unsupported. |
     | `COMFYUI_LTX_DIRECTOR_REF` | `a3c809c…` | [WhatDreamsCost-ComfyUI](https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI) GPL clone **only** when `LAB_ENABLE_LTX_DIRECTOR=1`. Commit pin (no release tag). |
 
     **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, `docker/install-comfy/core.sh` (torch) and `docker/install-comfy/common.sh` (Comfy/node refs), then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).

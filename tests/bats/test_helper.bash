@@ -263,3 +263,47 @@ exit 0
 '
   : >"${TEST_TMP_DIR}/hf_calls.log"
 }
+
+#######################################
+# Install a sudo mock that heals directory writability without real root.
+# mkdir is passed through; chown becomes chmod -R u+w so hermetic tests can
+# simulate prepare_comfy_layout's sudo path.
+# Globals:
+#   TEST_TMP_DIR
+# Arguments:
+#   None
+# Outputs:
+#   Mock binary + sudo_calls.log
+# Returns:
+#   0
+#######################################
+install_sudo_heal_mock() {
+  install_mock_bin sudo '
+echo "sudo $*" >>"${TEST_TMP_DIR}/sudo_calls.log"
+if [[ ${1:-} == -n ]]; then
+  shift
+fi
+case "${1:-}" in
+  mkdir)
+    shift
+    mkdir "$@"
+    ;;
+  chown)
+    shift
+    if [[ ${1:-} == -R ]]; then
+      shift
+    fi
+    shift
+    chmod -R u+w "$@" 2>/dev/null || true
+    ;;
+  chmod)
+    shift
+    chmod "$@"
+    ;;
+  *)
+    exit 0
+    ;;
+esac
+'
+  : >"${TEST_TMP_DIR}/sudo_calls.log"
+}

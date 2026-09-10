@@ -23,7 +23,7 @@
 #
 # Environment:
 #   COMFY_HOME, COMFY_USER, MODELS_ROOT — defaults in install-comfy/common.sh
-#   COMFYUI_REF — ComfyUI git pin (default v0.34.0; empty = default branch)
+#   COMFYUI_REF — ComfyUI git pin (default v0.34.6; empty = default branch)
 #   COMFYUI_MANAGER_REF — Manager pin (default 4.2.2)
 #   COMFYUI_NUNCHAKU_NODE_REF — nunchaku node pin (default v1.2.1)
 #   COMFYUI_VHS_REF — VideoHelperSuite git ref (default empty = main; required for LTX MP4)
@@ -249,9 +249,10 @@ main() {
     ensure_lab_video_nodes || warn "VideoHelperSuite refresh failed — LTX lab MP4 may be unavailable"
     step 4 "${total}" "Remove wrong PyPI nunchaku if present"
     cleanup_wrong_nunchaku
-    step 5 "${total}" "Apply Spark free-memory and copy=False patches"
+    step 5 "${total}" "Apply Spark free-memory, copy=False, and MagCache compat patches"
     apply_free_memory_patch
     apply_unified_memory_copy_patch
+    apply_magcache_compat_patch
     step 6 "${total}" "Refresh complete"
   fi
 

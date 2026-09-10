@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 from _lab_paths import lab_json
 
@@ -41,11 +42,45 @@ BLURB = (
     "the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn "
     "Enhance off to use the widget text as-is. Optional style dropdown."
 )
+PIN_OFF_BLURB = (
+    "Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, "
+    "or film shots) is encoded as written. Turn Enhance on only if you want the "
+    "4B rewriter."
+)
+PIN_ENHANCE_OFF = frozenset(
+    {
+        "film-go-see-90s-run-lab-example",
+        "film-still-here-90s-lab-example",
+        "film-switchyard-90s-lab-example",
+        "klein-talking-head-lab-example",
+        "wan-gif-loop-lab-example",
+        "wan-bumper-loop-lab-example",
+        "wan-sticker-loop-lab-example",
+        "wan-orbit-i2v-lab-example",
+        "wan-push-in-i2v-lab-example",
+        "wan-parallax-i2v-lab-example",
+        "ltx-iclora-depth-5s-lab-example",
+        "podcast-audio-first-lab-example",
+        "podcast-radio-drama-lab-example",
+        "music-rap-draft-lab-example",
+        "music-rap-full-lab-example",
+    }
+)
+
+
+def enhance_pin_off(graph_id: str) -> bool:
+    """True when seeded JSON should pin Enhance off (authored / structured text)."""
+    gid = str(graph_id or "")
+    if gid in PIN_ENHANCE_OFF:
+        return True
+    return gid.startswith("music-rap-nill-bye-") or gid.startswith(
+        "music-edm-drive-through-"
+    )
 SHIFT = 460
 ENHANCE_H = 420
 
 
-def overlap_hits(graph: dict) -> list[str]:
+def overlap_hits(graph: dict[str, Any]) -> list[str]:
     pad = 20
     boxes = []
     for node in graph["nodes"]:
@@ -73,7 +108,7 @@ def overlap_hits(graph: dict) -> list[str]:
     return hits
 
 
-def next_ids(graph: dict) -> tuple[int, int]:
+def next_ids(graph: dict[str, Any]) -> tuple[int, int]:
     nid = max(int(n["id"]) for n in graph["nodes"]) + 1
     lid = 1
     if graph.get("links"):
@@ -81,7 +116,7 @@ def next_ids(graph: dict) -> tuple[int, int]:
     return nid, lid
 
 
-def shift_x(graph: dict, min_x: float, delta: int) -> None:
+def shift_x(graph: dict[str, Any], min_x: float, delta: int) -> None:
     for node in graph["nodes"]:
         if node["pos"][0] >= min_x:
             node["pos"][0] = node["pos"][0] + delta
@@ -94,7 +129,7 @@ def shift_x(graph: dict, min_x: float, delta: int) -> None:
             box[2] = width + delta
 
 
-def remove_node(graph: dict, node_id: int) -> None:
+def remove_node(graph: dict[str, Any], node_id: int) -> None:
     graph["nodes"] = [n for n in graph["nodes"] if int(n["id"]) != node_id]
     graph["links"] = [
         link
@@ -112,34 +147,46 @@ def remove_node(graph: dict, node_id: int) -> None:
                 inp["link"] = None
 
 
-def clip_by_title(graph: dict, title: str) -> dict:
+def clip_by_title(graph: dict[str, Any], title: str) -> dict[str, Any]:
     for node in graph["nodes"]:
         if node.get("type") == "CLIPTextEncode" and node.get("title") == title:
             return node
     raise SystemExit(f"missing CLIP {title} in {graph.get('id')}")
 
 
-def _node_of_type(graph: dict, ntype: str) -> dict | None:
+def _node_of_type(graph: dict[str, Any], ntype: str) -> dict[str, Any] | None:
     for node in graph["nodes"]:
         if node.get("type") == ntype:
             return node
     return None
 
 
-def set_neg(graph: dict, text: str) -> None:
+def set_neg(graph: dict[str, Any], text: str) -> None:
     for node in graph["nodes"]:
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":
             node["widgets_values"] = [text]
 
 
-def _rewrite_enhance_blurb(body: str) -> str:
+def _rewrite_enhance_blurb(body: str, *, pin_off: bool = False) -> str:
     lines = [
         line
         for line in body.splitlines()
         if "XAI_API_KEY" not in line and "leave Enhance off" not in line
     ]
     text = "\n".join(lines).rstrip()
-    if "Prompt enhance is on by default" not in text:
+    if pin_off:
+        text = (
+            text.replace("Prompt enhance is on by default", "Prompt enhance is **off**")
+            .replace("Prompt enhance is **on**", "Prompt enhance is **off**")
+            .replace("enhance **on**", "enhance **off**")
+            .replace("Enhance **on**", "Enhance **off**")
+            .replace("Identity-mode enhance is on.", "Identity-mode enhance is off.")
+            .replace("enhance is **on**", "enhance is **off**")
+        )
+        if "Prompt enhance is **off**" not in text and "Enhance **off**" not in text:
+            text = text + "\n" + PIN_OFF_BLURB
+        return text + "\n"
+    if "Prompt enhance is on by default" not in text and "Prompt enhance is **off**" not in text:
         text = text + "\n" + BLURB
     return text + "\n"
 
@@ -154,7 +201,7 @@ def _as_enhance_flag(value: object) -> bool:
     return True
 
 
-def normalize_enhance_widgets(graph: dict) -> None:
+def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
     """Pad enhance-node widgets. Default enhance true. Identity titles use identity mode."""
     graph_id = str(graph.get("id") or "")
     for node in graph["nodes"]:
@@ -163,7 +210,7 @@ def normalize_enhance_widgets(graph: dict) -> None:
         title = str(node.get("title") or "")
         if ntype in ("EZKleinPromptEnhance", "EZWanPromptEnhance"):
             prompt = values[0] if values else ""
-            enhance = True
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
             default_mode = "t2i" if ntype == "EZKleinPromptEnhance" else "t2v"
             mode = values[2] if len(values) > 2 else default_mode
             if ntype == "EZKleinPromptEnhance":
@@ -183,7 +230,7 @@ def normalize_enhance_widgets(graph: dict) -> None:
             node["widgets_values"] = [prompt, enhance, mode, hint, style if style else "none"]
         elif ntype == "EZLTXPromptEnhance":
             prompt = values[0] if values else ""
-            enhance = True
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
             mode = values[2] if len(values) > 2 else "t2v"
             hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
             audio = values[4] if len(values) > 4 else ""
@@ -202,20 +249,23 @@ def normalize_enhance_widgets(graph: dict) -> None:
             node["widgets_values"] = [text, True, *rest]
 
 
-def append_note(graph: dict) -> None:
+def append_note(graph: dict[str, Any]) -> None:
+    pin_off = enhance_pin_off(str(graph.get("id") or ""))
     for node in graph["nodes"]:
         if node.get("type") in ("Note", "MarkdownNote"):
             values = node.get("widgets_values") or [""]
-            node["widgets_values"] = [_rewrite_enhance_blurb(str(values[0]))]
+            node["widgets_values"] = [
+                _rewrite_enhance_blurb(str(values[0]), pin_off=pin_off)
+            ]
     extra = graph.setdefault("extra", {})
     note = str(extra.get("lab_note") or "")
     if note:
-        extra["lab_note"] = _rewrite_enhance_blurb(note)
+        extra["lab_note"] = _rewrite_enhance_blurb(note, pin_off=pin_off)
 
 
 def ensure_enhance(
-    graph: dict,
-    clip: dict,
+    graph: dict[str, Any],
+    clip: dict[str, Any],
     *,
     ntype: str,
     title: str,
@@ -238,8 +288,8 @@ def ensure_enhance(
 
 
 def wire_enhance(
-    graph: dict,
-    clip: dict,
+    graph: dict[str, Any],
+    clip: dict[str, Any],
     *,
     ntype: str,
     title: str,
@@ -292,7 +342,7 @@ def wire_enhance(
     _push_notes_clear(graph)
 
 
-def _push_notes_clear(graph: dict) -> None:
+def _push_notes_clear(graph: dict[str, Any]) -> None:
     for _ in range(24):
         hits = overlap_hits(graph)
         if not hits:
@@ -310,14 +360,14 @@ def _push_notes_clear(graph: dict) -> None:
     raise SystemExit(f"could not clear note overlaps: {overlap_hits(graph)}")
 
 
-def save(path: Path, graph: dict) -> None:
+def save(path: Path, graph: dict[str, Any]) -> None:
     hits = overlap_hits(graph)
     if hits:
         raise SystemExit(f"overlap in {path.name}: {hits}")
     path.write_text(json.dumps(graph, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
 
 
-def load(path: Path) -> dict:
+def load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -430,7 +480,7 @@ def ltx_t2v(path: Path) -> None:
     save(path, graph)
 
 
-def _clip_text_source(graph: dict, clip: dict) -> dict | None:
+def _clip_text_source(graph: dict[str, Any], clip: dict[str, Any]) -> dict[str, Any] | None:
     text_inp = next((i for i in clip.get("inputs") or [] if i.get("name") == "text"), None)
     if not text_inp or text_inp.get("link") is None:
         return None
@@ -442,10 +492,10 @@ def _clip_text_source(graph: dict, clip: dict) -> dict | None:
     return None
 
 
-def insert_join_shot_enhance(graph: dict) -> None:
+def insert_join_shot_enhance(graph: dict[str, Any]) -> None:
     """Klein t2i enhance between Prompt Join and CLIP so CLIP shows the rewrite."""
     by_id = {int(n["id"]): n for n in graph["nodes"]}
-    pending: list[tuple[dict, dict]] = []
+    pending: list[tuple[dict[str, Any], dict[str, Any]]] = []
     for clip in graph["nodes"]:
         if clip.get("type") != "CLIPTextEncode":
             continue
@@ -468,7 +518,7 @@ def insert_join_shot_enhance(graph: dict) -> None:
         origin_x, origin_y = clip["pos"][0], clip["pos"][1]
         nid, lid = next_ids(graph)
         join_to_enh = lid + 1
-        enhance = {
+        enhance: dict[str, Any] = {
             "id": nid,
             "type": "EZKleinPromptEnhance",
             "pos": [origin_x - 440, origin_y],
@@ -530,7 +580,7 @@ def insert_join_shot_enhance(graph: dict) -> None:
     _push_notes_clear(graph)
 
 
-def insert_ace_enhance(graph: dict) -> None:
+def insert_ace_enhance(graph: dict[str, Any]) -> None:
     """Wire EZAceStepPromptEnhance into ACE-Step encoders that lack tags/lyrics links."""
     for enc in list(graph["nodes"]):
         if enc.get("type") != "TextEncodeAceStepAudio1.5":
@@ -571,7 +621,7 @@ def insert_ace_enhance(graph: dict) -> None:
             "widgets_values": [
                 tags,
                 lyrics,
-                True,
+                not enhance_pin_off(str(graph.get("id") or "")),
                 "instrumental" if instrumental else "vocal",
             ],
             "title": f"{title} enhance" if title else "ACE-Step Prompt Enhance",
@@ -614,21 +664,70 @@ def insert_ace_enhance(graph: dict) -> None:
     _push_notes_clear(graph)
 
 
-def enable_lab_graph(graph: dict) -> None:
-    """Force enhance on, identity modes, and ACE tags."""
-    insert_ace_enhance(graph)
-    normalize_enhance_widgets(graph)
+def _set_node_enhance(node: dict[str, Any], on: bool) -> None:
+    """Write the enhance boolean on one EZ *PromptEnhance / writer node."""
+    ntype = node.get("type")
+    values = list(node.get("widgets_values") or [])
+    flag = bool(on)
+    if ntype in (
+        "EZKleinPromptEnhance",
+        "EZWanPromptEnhance",
+        "EZLTXPromptEnhance",
+        "EZRapLyrics",
+        "EZPodcastScript",
+        "EZDubScript",
+    ):
+        while len(values) < 2:
+            values.append(flag)
+        values[1] = flag
+        node["widgets_values"] = values
+    elif ntype == "EZAceStepPromptEnhance":
+        while len(values) < 3:
+            values.append(flag)
+        values[2] = flag
+        node["widgets_values"] = values
+
+
+def apply_enhance_policy(graph: dict[str, Any]) -> None:
+    """Pin Enhance off on authored/structured graphs. Leave lazy printers alone."""
+    gid = str(graph.get("id") or "")
+    if not enhance_pin_off(gid):
+        return
+    for node in graph.get("nodes") or []:
+        ntype = node.get("type")
+        if ntype == "EZDubScript":
+            continue
+        if ntype in (
+            "EZKleinPromptEnhance",
+            "EZWanPromptEnhance",
+            "EZLTXPromptEnhance",
+            "EZAceStepPromptEnhance",
+            "EZRapLyrics",
+            "EZPodcastScript",
+        ):
+            _set_node_enhance(node, False)
     extra = graph.setdefault("extra", {})
     for key in ("lab_note", "lab_description"):
         raw = extra.get(key)
-        if isinstance(raw, str):
-            extra[key] = (
-                raw.replace("Enhance off (compiler-enforced).", "Identity-mode enhance is on.")
-                .replace("Enhance is **off**", "Enhance is **on**")
-                .replace("Enhance **off**", "Enhance **on**")
-                .replace("Enhance off.", "Enhance on.")
-            )
-    if isinstance(extra.get("lab_app_mode"), dict):
+        if isinstance(raw, str) and raw.strip():
+            extra[key] = _rewrite_enhance_blurb(raw, pin_off=True)
+    for node in graph.get("nodes") or []:
+        if node.get("type") not in ("Note", "MarkdownNote"):
+            continue
+        values = node.get("widgets_values") or [""]
+        node["widgets_values"] = [_rewrite_enhance_blurb(str(values[0]), pin_off=True)]
+    if isinstance(extra.get("lab_app_mode"), dict) and gid.startswith("film-"):
+        extra["lab_app_mode"]["enhance_off_identity"] = True
+
+
+def enable_lab_graph(graph: dict[str, Any]) -> None:
+    """Wire ACE tags, normalize widgets, then apply the on/off enhance policy."""
+    insert_ace_enhance(graph)
+    normalize_enhance_widgets(graph)
+    apply_enhance_policy(graph)
+    extra = graph.setdefault("extra", {})
+    gid = str(graph.get("id") or "")
+    if isinstance(extra.get("lab_app_mode"), dict) and not enhance_pin_off(gid):
         extra["lab_app_mode"]["enhance_off_identity"] = False
     if isinstance(extra.get("lab_dcc"), dict) and "enhance" in extra["lab_dcc"]:
         extra["lab_dcc"]["enhance"] = True

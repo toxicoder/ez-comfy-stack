@@ -399,8 +399,9 @@ stack_follow_until_ready() {
 
 #######################################
 # Build images if needed and start the unified stack detached (`up -d --build`).
-# Exports default env for compose interpolation, ensures MODELS_DIR/comfy exists,
-# and logs cold-start expectations. Does not confirm with the user.
+# Exports default env for compose interpolation, heals MODELS_DIR/comfy layout
+# (HOST_UID/HOST_GID for container chown), and logs cold-start expectations.
+# Does not confirm with the user.
 # Side effects: Network/image pulls, container create/start, mkdir under MODELS_DIR.
 # Globals:
 #   See file header / caller environment.
@@ -514,8 +515,39 @@ stack_pull_image() {
 }
 
 #######################################
+# Seed ez_house_clay_01..10.png into COMFY_OUTPUT_DIR/input for LoadImage.
+# Copies a views pack when present; otherwise renders the shipped layout.
+# Warns on failure; never fails start (other Apps must still come up).
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   None
+# Outputs:
+#   log/warn on stderr
+# Returns:
+#   0 always
+#######################################
+seed_house_clay_inputs() {
+  local root input
+  root="$(lab_repo_root)"
+  input="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/input"
+  mkdir -p "${input}" || {
+    warn "could not create LoadImage input dir ${input}"
+    return 0
+  }
+  python3 "${root}/scripts/lib/house_layout.py" seed-inputs "${input}" \
+    --slug lab-penthouse || {
+    warn "house clay seed into ${input} failed — klein-dream-house-clay-lab-example LoadImage may be empty"
+    return 0
+  }
+  log "house clay plates ready in ${input}"
+  return 0
+}
+
+#######################################
 # Build images if needed and start the unified stack detached.
 # Prefers GHCR pull; falls back to compose build. Seeds volume from prebuilt.
+# Also seeds ez_house_clay_NN.png into LoadImage input/ before compose up.
 # Globals:
 #   See file header / caller environment.
 # Arguments:
@@ -536,9 +568,12 @@ stack_start() {
   local branch
   branch="$(stack_git_branch)"
   EZ_COMFY_IMAGE="$(stack_default_image)"
-  ensure_models_dir "${MODELS_DIR}" || return 1
-  mkdir -p "${MODELS_DIR}/comfy"
+  HOST_UID="$(id -u)"
+  HOST_GID="$(id -g)"
+  export HOST_UID HOST_GID
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   ensure_comfy_output_dir "${COMFY_OUTPUT_DIR}" || return 1
+  seed_house_clay_inputs
   log "══ start ══ unified us-safe-studio (mem_limit=${MEM_LIMIT})"
   log "Image: ${EZ_COMFY_IMAGE} (branch=${branch})"
   log "Outputs: ${COMFY_OUTPUT_DIR} → /outputs"

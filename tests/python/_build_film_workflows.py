@@ -31,9 +31,9 @@ LTX_CANVAS_LANDSCAPE = (
 )
 PREVIEW_BULLET = (
     "The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` "
-    "(container `/outputs`). After Queue, click **Save 90s film (MP4) — open node for "
-    "preview** for an inline preview and download control. Per-shot VHS nodes remain "
-    "for inspection."
+    "(container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After "
+    "Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes "
+    "remain for inspection. Optional board: studio-ui `/watch/<slug>`."
 )
 KLEIN_NEG_PHOTO = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
@@ -52,12 +52,12 @@ FILMS = (
         "go-see.shots.yaml",
         "first-person parkour",
         (
-            ("1", "Golden-hour tropical rooftops", "sprint + gap leap", "vault + wall-run", "drop to bay skybridge"),
-            ("2", "Waterfront maglev / bay skybridge", "spine sprint", "gantry leaps", "dive into gardens"),
-            ("3", "Hanging tropical gardens", "wall-run glass", "vault palm terraces", "water curtain to causeway"),
-            ("4", "Tropical storm causeway", "rain sprint", "leap a squall gap", "vault toward cliffs"),
+            ("1", "Golden-hour tropical rooftops", "dead sprint", "tucked front flip", "kong + wall-run drop"),
+            ("2", "Waterfront maglev / bay skybridge", "grating sprint", "cat leap", "dive into gardens"),
+            ("3", "Hanging tropical gardens", "glass wall-run", "tic-tac vaults", "water curtain burst"),
+            ("4", "Tropical storm causeway", "rain sprint", "precision leap", "dash vault to cliffs"),
             ("5", "Coastal jungle ridge", "ridge sprint", "slide a root arch", "climb-run to overlook"),
-            ("6", "Warm-night bay overlook", "last sprint", "leap to rail", "hold + laugh"),
+            ("6", "Warm-night bay overlook", "last sprint", "leap to rail", "hold + breath"),
         ),
     ),
     (
@@ -221,7 +221,8 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
         "per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional "
         f"host stitch: `./scripts/utilities/concat-shots.sh --film {film} --yes`.",
         "",
-        "18 × 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.",
+        "18 × 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score. "
+        "Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.",
         "",
         f"**Identity look:** {parsed['identity']}",
         "",
@@ -235,6 +236,16 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
 
 
 def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str:
+    enhance_line = (
+        "Prompt enhance is **off** so the pinned identity and each baked LTX I2V "
+        "paragraph are encoded as written. Turn Enhance on only if you want the "
+        "4B rewriter."
+    )
+    klein_line = (
+        "Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, "
+        "t2i mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + "
+        "video/audio VAEs (print)."
+    )
     return f"""## {stem}
 
 {LTX_CANVAS_LANDSCAPE}
@@ -242,17 +253,17 @@ def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str
 {PREVIEW_BULLET}
 
 One-click 90s film ({label}): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
-Models: Klein 4B distilled FP8 (identity, 4-step, Enhance **on**, identity mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
+{klein_line}
 LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
-3. The MP4 is already on disk at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4`. Open **Save 90s film (MP4) — open node for preview** to watch or download it. Copy off the Spark with scp.
+3. The MP4 is already on disk at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4`. A **90s film ready** overlay plays it; `ez_{slug}_90s.html` is a local player. Copy off the Spark with scp.
 4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
 Do not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.
-Prompt enhance is on by default. After Queue, each Enhance node shows the CLIP string used. Turn Enhance off to pin widget text.
+{enhance_line}
 """
 
 
@@ -262,7 +273,15 @@ def _shot_origin(index: int) -> tuple[float, float]:
     return BEAT_X + col * SHOT_DX, BEAT_Y0 + beat * BEAT_DY
 
 
-def _shot_nodes(index: int, slug: str, prompt: str, prefix: str, seed: int) -> list[dict]:
+def _shot_nodes(
+    index: int,
+    slug: str,
+    prompt: str,
+    prefix: str,
+    seed: int,
+    *,
+    enhance: bool = True,
+) -> list[dict]:
     ox, oy = _shot_origin(index)
     base = SHOT_ID_BASE + index * SHOT_ID_STRIDE
     nid_pos = base
@@ -285,7 +304,7 @@ def _shot_nodes(index: int, slug: str, prompt: str, prefix: str, seed: int) -> l
             [ox, oy],
             [420, 280],
             f"{title} enhance",
-            [prompt, True, "i2v", "5 seconds, 24 fps", "", "none"],
+            [prompt, enhance, "i2v", "5 seconds, 24 fps", "", "none"],
             [],
             [_out("prompt", "STRING", 0)],
         ),
@@ -465,7 +484,13 @@ def build_one_click_film(
             node["title"] = "Operator note — one-click 90s film"
             node["size"] = [960, 280]
         if node.get("type") == "EZKleinPromptEnhance":
-            node["widgets_values"] = [identity, True, "identity", "YouTube 16:9 still", "none"]
+            node["widgets_values"] = [
+                identity,
+                False,
+                "t2i" if film == "go-see" else "identity",
+                "YouTube 16:9 still",
+                "none",
+            ]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
             node["widgets_values"] = [identity]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":
@@ -555,20 +580,21 @@ def build_one_click_film(
         *(_inp(f"shot_{i:02d}", "VHS_FILENAMES") for i in range(1, 19)),
         _inp("disclosure", "STRING", widget="disclosure"),
     ]
+    xfade_cs = 8 if film == "go-see" else 0
     concat = _mk(
         ID_CONCAT,
         "EZFilmConcat",
-        [BEAT_X, BEAT_Y0 + 6 * BEAT_DY + 40],
-        [420, 140],
-        "Save 90s film (MP4) — open node for preview",
-        [film, 90.0],
+        [40, 2560],
+        [420, 180],
+        "Save 90s film (MP4) — play / download",
+        [film, 90.0, xfade_cs],
         concat_inputs,
         [_out("path", "STRING", 0)],
     )
     disclosure = _mk(
         ID_DISCLOSURE,
         "EZFilmDisclosure",
-        [BEAT_X + 480, BEAT_Y0 + 6 * BEAT_DY + 40],
+        [500, 2560],
         [420, 120],
         "LTX AI-media disclosure (end-card)",
         [""],
@@ -579,7 +605,14 @@ def build_one_click_film(
     shot_nodes: list[dict] = []
     for index, shot in enumerate(parsed["shots"]):
         shot_nodes.extend(
-            _shot_nodes(index, slug, shot["ltx_i2v"], shot["prefix"], 42 + index)
+            _shot_nodes(
+                index,
+                slug,
+                shot["ltx_i2v"],
+                shot["prefix"],
+                42 + index,
+                enhance=False,
+            )
         )
 
     graph["nodes"].extend(
@@ -604,7 +637,7 @@ def build_one_click_film(
     _add_link(graph, ltx_audio_vae, 0, ltx_empty, "audio_vae", "VAE")
 
     by_id = {n["id"]: n for n in graph["nodes"]}
-    prev_last = None
+    prev_last: dict | None = None
     for index in range(18):
         base = SHOT_ID_BASE + index * SHOT_ID_STRIDE
         pos = by_id[base]
@@ -627,6 +660,7 @@ def build_one_click_film(
         if index == 0:
             _add_link(graph, unload, 0, i2v, "image", "IMAGE")
         else:
+            assert prev_last is not None
             _add_link(graph, prev_last, 0, i2v, "image", "IMAGE")
         _add_link(graph, i2v, 0, cond, "positive", "CONDITIONING")
         _add_link(graph, i2v, 1, cond, "negative", "CONDITIONING")
@@ -670,9 +704,9 @@ def build_one_click_film(
         _group(
             9,
             "9. Publish 90s MP4",
-            BEAT_X - 20,
-            BEAT_Y0 + 6 * BEAT_DY + 40 - GROUP_TITLE_INSET,
-            2000,
+            20,
+            2560 - GROUP_TITLE_INSET,
+            1000,
             280,
             "#3f789e",
         )

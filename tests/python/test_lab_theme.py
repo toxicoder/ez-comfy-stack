@@ -87,6 +87,7 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
     assert "wraparound terrace" in ident
     assert "three-bay" in ident
     assert "lounge" in ident
+    assert "cook wall" in ident
     assert "lantern" in ident or "path light" in ident
     assert "bay" in ident
     assert "24mm" not in ident
@@ -152,17 +153,23 @@ def test_lab_identity_graphs_lock_techno_wizard() -> None:
 
 def test_exempt_packs_keep_their_own_subjects() -> None:
     house = lab_json("klein-dream-house-lab-example.json").read_text(encoding="utf-8").lower()
+    clay = lab_json("klein-dream-house-clay-lab-example.json").read_text(encoding="utf-8").lower()
     style = lab_json("klein-style-lock-lab-example.json").read_text(encoding="utf-8").lower()
-    for blob in (house, style):
+    for blob in (house, clay, style):
         assert "warm-glass" in blob
         assert "crown penthouse" in blob
+        assert "full-floor" in blob
+        assert "skyscraper" in blob
         assert "three-bay" in blob
+        assert "compact" not in blob
         assert "cedar" not in blob
         assert "alpine" not in blob
         assert "charcoal-glass" not in blob
     film = lab_json("film-go-see-90s-run-lab-example.json").read_text(encoding="utf-8").lower()
-    assert "sun-washed teal" in film
+    assert "storm-cloak" in film
+    assert "ink-black" in film
     assert "parkour" in film
+    assert "teal" not in film
     assert "windbreaker" not in film
     assert "electric-cyan" not in film
     for path in _graphs():

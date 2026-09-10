@@ -86,6 +86,8 @@ Columns: model | HF repo | license name | US self-host OK? | monetized YouTube O
 | Suno / Udio | (partner) | API-only / partner | No (not local weights) | No | n/a | n/a | n/a | No |
 | Chatterbox / Multilingual v3 / Turbo | ResembleAI/chatterbox | MIT | Yes | Yes | none | MIT; PerTh watermark stays on | No extra ban beyond MIT | No |
 | Qwen3-TTS 0.6B | Qwen/Qwen3-TTS-12Hz-0.6B-Base | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
+| faster-whisper large-v3 | Systran/faster-whisper-large-v3 | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
+| Silero VAD | snakers4/silero-vad | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
 | F5-TTS official weights | SWivid/F5-TTS | CC-BY-NC-4.0 | No | No | n/a | n/a | n/a | No |
 | Coqui XTTS v2 | coqui/XTTS-v2 | CPML | No | No | n/a | n/a | n/a | No |
 | Echo-TTS | (Echo-TTS card) | CC-BY-NC-SA | No | No | n/a | n/a | n/a | No |
@@ -105,7 +107,7 @@ LTX-2.5 is gated. Klein 4B and Wan 5B are Apache and do not need a license click
 1. Create or edit `.env` with `HF_TOKEN=hf_...` (or `hf auth login`)
 2. In a browser, as **that same user**, open https://huggingface.co/Lightricks/LTX-2.5 and click **Agree**
 3. Fine-grained tokens need **gated repo** read
-4. `hf auth whoami` then `./scripts/manage.sh download-models`
+4. `./scripts/manage.sh download-models` (`hf` is auto-installed; token in `.env` is enough — no extra `hf auth login` if `HF_TOKEN` is set)
 
 A token in `.env` is **not** the same as accepting the Lightricks license. First-run path: [Getting Started](getting-started.md).
 
@@ -143,7 +145,7 @@ Do not download, do not reference in lab graphs, do not pin Comfy for them:
 - Wav2Lip OSS
 - LTX-2 19B IC-LoRA Union Control (`Lightricks/LTX-2-19b-IC-LoRA-Union-Control`)
 
-Opt-in local podcast (not in `download-models`): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See [Local podcast](podcast.md). Opt-in local rap: same ACE-Step 1.5 turbo AIO via `download-music --tier turbo` (shared dest with `download-podcast --tier acestep`). See [Local music](music.md).
+Opt-in local podcast (not in `download-models`): Kokoro-82M Apache TTS, native ACE-Step 1.5 MIT instrumental beds, optional Chatterbox MIT / Qwen3-TTS Apache. See [Local podcast](podcast.md). Opt-in local dub: Silero VAD + faster-whisper large-v3 (MIT) + Chatterbox Multilingual V3 (MIT, PerTh on). See [Local dub](dub.md). Opt-in local rap: same ACE-Step 1.5 turbo AIO via `download-music --tier turbo` (shared dest with `download-podcast --tier acestep`). See [Local music](music.md).
 
 `./scripts/manage.sh download-models` **refuses** MiniMax H3.
 

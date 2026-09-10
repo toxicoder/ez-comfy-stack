@@ -381,7 +381,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## film-switchyard-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (night freight yard): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **on**, identity mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_switchyard_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film switchyard --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is on by default. After Queue, each Enhance node shows the CLIP string used. Turn Enhance off to pin widget text.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n"
+        "## film-switchyard-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s film (night freight yard): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_switchyard_90s.mp4`. A **90s film ready** overlay plays it; `ez_switchyard_90s.html` is a local player. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film switchyard --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n"
       ],
       "title": "Operator note \u2014 one-click 90s film"
     },
@@ -415,7 +415,7 @@
       },
       "widgets_values": [
         "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.",
-        true,
+        false,
         "identity",
         "YouTube 16:9 still",
         "none"
@@ -442,7 +442,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## switchyard 90s (night freight yard)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film switchyard --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel walk | rain walk | puddles | stop between cars |\n| 2 | Between cars | gloves on rail | coupling clank | look up |\n| 3 | Ladder | climb | continue | roof edge |\n| 4 | Roof walk | along cars | distant horn | look down |\n| 5 | Drop to gravel | splash | window glow | keep walking |\n| 6 | Lamp hold | stop | look down the string | quiet laugh |\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## switchyard 90s (night freight yard)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film switchyard --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel walk | rain walk | puddles | stop between cars |\n| 2 | Between cars | gloves on rail | coupling clank | look up |\n| 3 | Ladder | climb | continue | roof edge |\n| 4 | Roof walk | along cars | distant horn | look down |\n| 5 | Drop to gravel | splash | window glow | keep walking |\n| 6 | Lamp hold | stop | look down the string | quiet laugh |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "switchyard 90s shot map"
     },
@@ -824,12 +824,12 @@
       "id": 900,
       "type": "EZFilmConcat",
       "pos": [
-        2200,
-        5460
+        40,
+        2560
       ],
       "size": [
         420,
-        140
+        180
       ],
       "flags": {},
       "order": 900,
@@ -947,9 +947,10 @@
       },
       "widgets_values": [
         "switchyard",
-        90.0
+        90.0,
+        0
       ],
-      "title": "Save 90s film (MP4) \u2014 open node for preview"
+      "title": "Save 90s film (MP4) \u2014 play / download"
     },
     {
       "id": 211,
@@ -981,7 +982,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. The camera walks wet gravel between unmarked cars, rain ticking ballast. Breath sits in cold air under the lamp. Continuous walk, not a chase. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -1561,7 +1562,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Breath fogs in cold air over puddles; generic lamps smear on black water. Rain, a distant coupling, and close breath continue. The camera keeps walking. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -2141,7 +2142,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. The walk stops between the first unmarked cars. Rain, gravel crunch dying out, breath. The camera holds the gap. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -2721,7 +2722,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Between unmarked boxcars, gloves find a rusty ladder rail. Rain on steel and close breath. The camera eases toward the rail. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -3301,7 +3302,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Gravel, puddles, then a coupling clank down the string of cars. Rain and breath sit under the metal. The camera holds the gap. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -3881,7 +3882,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. The view tilts up the ladder; the car stays unmarked, empty of lettering. Rain on steel and breath. Slow tilt, continuous take. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -4461,7 +4462,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Gloves climb a generic boxcar ladder in the rain, rungs wet. Rungs, rain on steel, breath. The camera climbs with the hands. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -5041,7 +5042,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. The climb continues, gloves wet, the car still unmarked. Rungs, rain, breath. Camera keeps climbing. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -5621,7 +5622,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Hands reach the roof edge in rain and wind. Wind, rain, breath. The camera arrives at the roof. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -6201,7 +6202,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. A roof walk along the dark string of unmarked cars in rain. Rain, wind, breath. The camera walks the roof, slow. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -6781,7 +6782,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. A distant generic horn answers far off the yard \u2014 not a carrier identity \u2014 while rain and breath stay close. The camera keeps the roof walk. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -7361,7 +7362,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. The roof walk ends; the view looks down. Wind, rain, breath. The camera holds the look-down. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -7941,7 +7942,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Drop back to gravel, a puddle splash. Splash, gravel, rain, breath. The camera lands and walks. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -8521,7 +8522,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Walk toward a yard-office window glow, the wall empty of lettering. Gravel, rain, breath. Continuous walk. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -9101,7 +9102,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Window glow, still no readable sign, keep walking. Rain and breath. Continuous take. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -9681,7 +9682,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Stop under a lamp. Rain ticks the lamp housing; breath steadies. The camera holds. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -10261,7 +10262,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. Look down the dark string of unmarked cars. Rain, distant metal, breath. Slow pan along the string. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -10841,7 +10842,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. A quiet short laugh leaves the breath while rain keeps ticking the lamp. The camera holds the dark string of cars. No music and no score.",
-        true,
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -11394,8 +11395,8 @@
       "id": 901,
       "type": "EZFilmDisclosure",
       "pos": [
-        2680,
-        5460
+        500,
+        2560
       ],
       "size": [
         420,
@@ -15103,9 +15104,9 @@
       "id": 9,
       "title": "9. Publish 90s MP4",
       "bounding": [
-        2180,
-        5404,
-        2000,
+        20,
+        2504,
+        1000,
         280
       ],
       "color": "#3f789e",
@@ -15116,8 +15117,8 @@
   "config": {},
   "extra": {
     "lab_profile": "film-switchyard-90s-lab-example",
-    "lab_note": "## film-switchyard-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (night freight yard): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **on**, identity mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_switchyard_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film switchyard --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is on by default. After Queue, each Enhance node shows the CLIP string used. Turn Enhance off to pin widget text.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n",
-    "lab_description": "One-click 90s night freight yard: Klein identity + 18 LTX 5.00s AV shots + stitch",
+    "lab_note": "## film-switchyard-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s film (night freight yard): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_switchyard_90s.mp4`. A **90s film ready** overlay plays it; `ez_switchyard_90s.html` is a local player. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film switchyard --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n",
+    "lab_description": "One-click 90s night freight yard: Klein identity + 18 LTX 5.00s AV shots + stitch\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_film": "switchyard",
     "lab_slug": "switchyard",
     "lab_ltx_av": true,
@@ -15133,13 +15134,13 @@
       "frontend_min": "1.41.13",
       "lane": "film",
       "occupancy": "film",
-      "enhance_off_identity": false,
+      "enhance_off_identity": true,
       "handoff": []
     },
     "linearData": {
       "inputs": [
         [
-          "11:prompt",
+          11,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -15148,7 +15149,7 @@
           }
         ],
         [
-          "11:style",
+          11,
           "style",
           {
             "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
@@ -15156,7 +15157,7 @@
           }
         ],
         [
-          "11:enhance",
+          11,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -15164,7 +15165,7 @@
           }
         ],
         [
-          "7:seed",
+          7,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

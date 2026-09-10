@@ -548,7 +548,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-sticker-loop-lab-example\n\nLoopable sticker MP4 (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_sticker`.\nLoadImage: a cutout-friendly still.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## wan-sticker-loop-lab-example\n\nLoopable sticker MP4 (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_sticker`.\nLoadImage: a cutout-friendly still.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "Operator note"
     },
@@ -582,7 +582,7 @@
       },
       "widgets_values": [
         "Tight looping sticker motion. A small cyclic bounce or shimmer on the subject. Ping-pong friendly. Keep start-image identity locked. No walk, no dolly. Keep every object and surface from the start image; do not redesign.",
-        true,
+        false,
         "i2v",
         "looping sticker, 12 fps",
         "none"
@@ -760,9 +760,9 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-sticker-loop-lab-example\n\nLoopable sticker MP4 (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_sticker`.\nLoadImage: a cutout-friendly still.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## wan-sticker-loop-lab-example\n\nLoopable sticker MP4 (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_sticker`.\nLoadImage: a cutout-friendly still.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_profile": "wan-sticker-loop-lab-example",
-    "lab_description": "Wan 5B looping sticker MP4",
+    "lab_description": "Wan 5B looping sticker MP4\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
       "scale": 1,
       "offset": [
@@ -792,7 +792,7 @@
     "linearData": {
       "inputs": [
         [
-          "15:prompt",
+          15,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -801,7 +801,7 @@
           }
         ],
         [
-          "15:enhance",
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -809,7 +809,7 @@
           }
         ],
         [
-          "4:image",
+          4,
           "image",
           {
             "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
@@ -817,7 +817,7 @@
           }
         ],
         [
-          "10:seed",
+          10,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

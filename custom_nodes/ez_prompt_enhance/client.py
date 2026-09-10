@@ -22,17 +22,19 @@ VIEWS_PATH = Path(__file__).resolve().parent / "views.json"
 GGUF_FILENAME = "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
 SNAPSHOT_DIR = "unsloth__Qwen3-4B-Instruct-2507-GGUF_llm"
 DEFAULT_GGUF = f"/models/comfy/llm/{GGUF_FILENAME}"
-DEFAULT_TIMEOUT_S = 60
-DEFAULT_N_THREADS = 4
+DEFAULT_TIMEOUT_S = 180
+DEFAULT_N_THREADS = 8
 DEFAULT_N_CTX = 4096
 DEFAULT_MAX_TOKENS = 800
 STYLE_NONE = "none"
 LOCK_VIEW = "view"
 LOCK_STATE = "state"
 LOCK_IDS = (LOCK_VIEW, LOCK_STATE)
+LOCK_VIEW_CLOSER = "This still is only the room and backdrop the shot names."
 LOCK_VIEW_LINE = (
-    "Same building, rooms, furniture placement, materials, sky, and background. "
-    "New photograph from a different camera in a walkthrough of this place."
+    "Same building, rooms, furniture placement, and materials. "
+    "New photograph from a different camera in a walkthrough of this place. "
+    f"{LOCK_VIEW_CLOSER}"
 )
 LOCK_STATE_LINE = (
     "Keep this exact place, inventory, and camera framing. The shot names the only "
@@ -166,8 +168,9 @@ def join_prompt(
     Returns:
       One CLIP string, or empty when every field is blank.
       lock=view with a shot card front-loads the camera so Klein treats
-      the still as a new walkthrough frame. lock=state and identity-only
-      joins keep the bible first.
+      the still as a new walkthrough frame, then repeats that this still
+      is only the room and backdrop the shot names. lock=state and
+      identity-only joins keep the bible first.
     """
     bible = identity.strip() if isinstance(identity, str) else str(identity or "").strip()
     card = shot.strip() if isinstance(shot, str) else str(shot or "").strip()
@@ -188,6 +191,7 @@ def join_prompt(
             parts.append(bible)
         if inv_line:
             parts.append(inv_line)
+        parts.append(LOCK_VIEW_CLOSER)
         return " ".join(parts)
     if bible:
         parts.append(bible)
@@ -618,14 +622,24 @@ def _get_llama() -> tuple[Any | None, str | None]:
     return _LLM, None
 
 
-def _generate(llm: Any, system: str, user: str) -> str:
+def _generate(
+    llm: Any,
+    system: str,
+    user: str,
+    max_tokens: int = DEFAULT_MAX_TOKENS,
+    temperature: float = 0.0,
+) -> str:
+    tokens = int(max_tokens) if int(max_tokens) > 0 else DEFAULT_MAX_TOKENS
+    temp = float(temperature)
+    if temp < 0.0:
+        temp = 0.0
     body = llm.create_chat_completion(
         messages=[
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ],
-        temperature=0,
-        max_tokens=DEFAULT_MAX_TOKENS,
+        temperature=temp,
+        max_tokens=tokens,
     )
     try:
         content = body["choices"][0]["message"]["content"]
@@ -636,15 +650,36 @@ def _generate(llm: Any, system: str, user: str) -> str:
     return strip_model_wrapping(content)
 
 
-def complete(system: str, user: str) -> tuple[str, str | None]:
+def complete(
+    system: str,
+    user: str,
+    *,
+    max_tokens: int | None = None,
+    temperature: float | None = None,
+    timeout_s: int | None = None,
+) -> tuple[str, str | None]:
     """Run one local chat completion. Empty text plus a reason on any failure."""
     llm, reason = _get_llama()
     if llm is None:
         return "", reason or REASON_LLAMA_UNAVAILABLE
-    timeout = _timeout_s()
+    if timeout_s is None:
+        timeout = _timeout_s()
+    else:
+        try:
+            timeout = int(timeout_s)
+        except (TypeError, ValueError):
+            timeout = _timeout_s()
+        if timeout < 1:
+            timeout = _timeout_s()
+    tokens = DEFAULT_MAX_TOKENS if max_tokens is None else int(max_tokens)
+    if tokens < 1:
+        tokens = DEFAULT_MAX_TOKENS
+    temp = 0.0 if temperature is None else float(temperature)
+    if temp < 0.0:
+        temp = 0.0
     try:
         with ThreadPoolExecutor(max_workers=1) as pool:
-            future = pool.submit(_generate, llm, system, user)
+            future = pool.submit(_generate, llm, system, user, tokens, temp)
             text = future.result(timeout=timeout)
     except FuturesTimeout:
         _log(f"local LLM timed out after {timeout}s")

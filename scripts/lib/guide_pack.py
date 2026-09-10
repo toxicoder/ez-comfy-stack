@@ -36,10 +36,24 @@ class GuidePackError(ValueError):
     """Fail-closed guide pack defect."""
 
 
-def write_solid_png(path: Path, width: int, height: int, rgb: tuple[int, int, int]) -> None:
-    """Write a tiny valid RGB PNG (stdlib zlib). Used for fixtures and tests."""
+def write_rgb_png(path: Path, width: int, height: int, rgb: bytes) -> None:
+    """Write an RGB8 PNG (stdlib zlib). Filter none, no ancillary chunks.
+
+    Args:
+        path: Destination file.
+        width: Pixel width.
+        height: Pixel height.
+        rgb: Packed RGB bytes, length width*height*3.
+
+    Raises:
+        ValueError: Buffer length does not match width*height*3.
+    """
+    expected = width * height * 3
+    if len(rgb) != expected:
+        raise ValueError(f"rgb buffer length {len(rgb)} != {expected}")
     path.parent.mkdir(parents=True, exist_ok=True)
-    raw = b"".join(b"\x00" + bytes(rgb) * width for _ in range(height))
+    row = width * 3
+    raw = b"".join(b"\x00" + rgb[y * row : (y + 1) * row] for y in range(height))
     ihdr = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
 
     def chunk(tag: bytes, data: bytes) -> bytes:
@@ -52,6 +66,11 @@ def write_solid_png(path: Path, width: int, height: int, rgb: tuple[int, int, in
         + chunk(b"IDAT", zlib.compress(raw, 9))
         + chunk(b"IEND", b"")
     )
+
+
+def write_solid_png(path: Path, width: int, height: int, rgb: tuple[int, int, int]) -> None:
+    """Write a tiny valid RGB PNG (stdlib zlib). Used for fixtures and tests."""
+    write_rgb_png(path, width, height, bytes(rgb) * (width * height))
 
 
 def png_size(path: Path) -> tuple[int, int] | None:
@@ -195,7 +214,8 @@ def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]
         size = png_size(path)
         if size != (PACK_WIDTH, PACK_HEIGHT):
             defects.append(f"{name} size {size} is not {PACK_WIDTH}x{PACK_HEIGHT}")
-    layers = shot.get("layers") if isinstance(shot.get("layers"), list) else []
+    raw_layers = shot.get("layers")
+    layers: list[Any] = raw_layers if isinstance(raw_layers, list) else []
     if "rgb" in layers:
         rgb_n = _count_frames(pack_dir / "rgb")
         if require_full_seq and rgb_n not in {0, PACK_FRAMES}:

@@ -4,7 +4,16 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from _lab_paths import ALLOWED_LANES, LAB_ROOT, WF, lab_example_paths, lane_for_stem
+import pytest
+
+from _lab_paths import (
+    ALLOWED_LANES,
+    LAB_ROOT,
+    WF,
+    lab_dest,
+    lab_example_paths,
+    lane_for_stem,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -44,3 +53,59 @@ def test_quality_notice_not_json() -> None:
 
 def test_no_workflows_apps_directory() -> None:
     assert not (WF / "apps").exists()
+
+
+def test_nill_bye_graphs_live_under_audio_nill_bye() -> None:
+    nested = LAB_ROOT / "audio" / "nill-bye"
+    audio = LAB_ROOT / "audio"
+    hits = [
+        path
+        for path in lab_example_paths()
+        if path.name.startswith("music-rap-nill-bye-")
+    ]
+    assert hits
+    for path in hits:
+        assert path.parent == nested, path
+    stray = list(audio.glob("music-rap-nill-bye-*-lab-example.json"))
+    assert stray == [], stray
+
+
+def test_drive_through_graphs_live_under_audio_drive_through() -> None:
+    nested = LAB_ROOT / "audio" / "drive-through"
+    audio = LAB_ROOT / "audio"
+    hits = [
+        path
+        for path in lab_example_paths()
+        if path.name.startswith("music-edm-drive-through-")
+    ]
+    assert hits
+    for path in hits:
+        assert path.parent == nested, path
+    stray = list(audio.glob("music-edm-drive-through-*-lab-example.json"))
+    assert stray == [], stray
+
+
+def test_lab_dest_nested_subdir() -> None:
+    path = lab_dest(
+        "music-rap-nill-bye-lab-coat-lab-example.json",
+        subdir="nill-bye",
+    )
+    assert path == (
+        LAB_ROOT / "audio" / "nill-bye" / "music-rap-nill-bye-lab-coat-lab-example.json"
+    )
+    edm = lab_dest(
+        "music-edm-drive-through-open-lane-lab-example.json",
+        subdir="drive-through",
+    )
+    assert edm == (
+        LAB_ROOT
+        / "audio"
+        / "drive-through"
+        / "music-edm-drive-through-open-lane-lab-example.json"
+    )
+
+
+def test_lab_dest_rejects_bad_subdir() -> None:
+    for bad in ("..", ".", "foo/bar", "/abs"):
+        with pytest.raises(ValueError, match="subdir"):
+            lab_dest("music-rap-draft-lab-example.json", subdir=bad)

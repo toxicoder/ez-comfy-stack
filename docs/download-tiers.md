@@ -1,7 +1,7 @@
 ---
 title: Download tiers
 description: What --tier actually selects on each download command — pack ids, not a global quality ladder.
-tags: [download, tier, models, klein, wan, ltx, podcast, music]
+tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 ---
 
 # Download tiers
@@ -19,7 +19,7 @@ tags: [download, tier, models, klein, wan, ltx, podcast, music]
 - Avoiding a 40 GB Fun InP pull when you wanted Wan 5B
 - Copying a command with **your** `--tier` and `--limit` already filled in
 
-The **Your Spark** panel at the top of every docs page stores `SPARK_HOST` and friends in this browser. Copy buttons use those values. `--limit` defaults follow `DOWNLOAD_LIMIT` unless you override it on the widget.
+The **Your Spark** panel at the top of every docs page stores `SPARK_HOST` and friends in this browser. Highlighted chips in copyable commands are the same fields — click to edit. Copy buttons use those values. `--limit` defaults follow `DOWNLOAD_LIMIT` unless you override it on the widget.
 
 ---
 
@@ -50,6 +50,7 @@ Occupancy: unload LTX before Fun InP / TRELLIS / VACE / S2V / ACE-Step. One heav
 | `download-wan` | `5b` `a14b` `fun-inp` `vace` `s2v` | `5b` | **Different Wan graphs**. `all` = 5b+a14b+fun-inp (**not** vace/s2v) | 12 / 20 / 40 / 6 / 20 GB | `5b` only |
 | `download-ltx` | `2.5` `2.3` `iclora` `gemma` | `2.5` | **Generation** of LTX, not “better”. `2.3` is retired | ~30 GB distilled | `2.5` only |
 | `download-podcast` | `analog` `acestep` `chatterbox` `qwen3tts` `all` | `analog` | **Different audio packs**. Missing pack is not a doctor failure | analog tiny; acestep ~10 GB shared | no |
+| `download-dub` | `asr` `clone` `all` | `asr` | Silero VAD + faster-whisper (full CTranslate2 dir); Chatterbox Multilingual V3 (`ve.pt` + `s3gen.pt` + T3 + `conds.pt`). Wheels: faster-whisper then chatterbox `--no-deps`. Missing pack is not a doctor failure | asr ~3 GB; clone ~4 GB | no |
 | `download-music` | `turbo` `xl` `all` | `turbo` | Size ladder. `turbo` **shares dest** with `download-podcast --tier acestep` | ~10 GB AIO | no |
 | `download-3d` | `trellis2` `da3-base` `all` | `trellis2` | Opt-in 3D. `da3-large` refused | ~8 / ~1 GB | no |
 | `download-longcat` | `video` `avatar` `all` | `video` | Opt-in MIT LongCat; no NCCL | large | no |
@@ -113,6 +114,16 @@ id: download-ltx
 
 ```ezcmd
 id: download-podcast
+```
+
+---
+
+## Dub — ASR + multilingual clone
+
+`asr` is Silero VAD + faster-whisper large-v3 (`model.bin`, `config.json`, **and** `tokenizer.json`). `clone` is Chatterbox Multilingual V3 (MIT, PerTh on): `ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`. `download-dub` pip-installs `faster-whisper`, then `chatterbox-tts --no-deps` (does not pin torch 2.6 over the lab venv) when compose is up. Restart also heals missing wheels. Doctor does **not** fail when these are missing. Occupancy **audio**. Playbook: [Local dub](dub.md).
+
+```ezcmd
+id: download-dub
 ```
 
 ---

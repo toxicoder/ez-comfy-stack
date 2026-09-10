@@ -6,17 +6,19 @@
 #   Does not wrap Docker stack start/stop (use ./scripts/manage.sh for that).
 #
 # Requirements:
-#   bash, bats, python3, shellcheck, shfmt; pytest+pytest-cov for coverage;
-#   docs/requirements.txt (mkdocs-material + mike) for docs.
+#   bash, bats, python3, shellcheck, shfmt; tests/requirements.txt
+#   (pytest, pytest-cov, pyright, mypy) for tests/coverage/lint; docs/requirements.txt
+#   (mkdocs-material + mike) for docs.
 
-.PHONY: help test bats python coverage lint fmt docs doctor clean
+.PHONY: help test bats python coverage lint typecheck fmt docs doctor clean
 
 # @target help — list available Make targets
 help:
 	@echo "Targets:"
-	@echo "  make test       Run BATS + Python tests"
-	@echo "  make coverage   100% coverage gate"
-	@echo "  make lint       shellcheck + shfmt check"
+	@echo "  make test       Run BATS + Python tests + Pyright + mypy"
+	@echo "  make coverage   100% coverage gate + Pyright + mypy"
+	@echo "  make lint       shellcheck + shfmt check + Pyright + mypy"
+	@echo "  make typecheck  Pyright (Pylance) + mypy"
 	@echo "  make fmt        shfmt -w"
 	@echo "  make docs       mkdocs build --strict"
 	@echo "  make doctor     ./scripts/manage.sh doctor"
@@ -39,20 +41,25 @@ bats:
 
 # @target python — patch module unit tests with 100% coverage fail-under
 python:
-	PYTHONPATH=docker:custom_nodes python3 -m pytest tests/python -q --cov=patch_get_free_memory --cov=patch_unified_memory_copy --cov=ez_ltx_spatial --cov-fail-under=100
+	PYTHONPATH=docker:custom_nodes python3 -m pytest tests/python -q --cov=patch_get_free_memory --cov=patch_unified_memory_copy --cov=patch_magcache_compat --cov=seed_clay_inputs --cov=ez_ltx_spatial --cov-fail-under=100
 
-# @target coverage — Python 100% + shell function inventory + BATS
+# @target coverage — Python 100% + Pyright + mypy + shell function inventory + BATS
 coverage:
 	bash tests/coverage.sh
 
-# @target lint — ShellCheck + shfmt diff (no write)
+# @target typecheck — Pyright (Pylance) + mypy on first-party Python
+typecheck:
+	bash tests/typecheck.sh
+
+# @target lint — ShellCheck + shfmt diff (no write) + Pyright + mypy
 lint:
 	shellcheck -x scripts/manage.sh scripts/lib/*.sh scripts/utilities/*.sh docker/*.sh docker/install-comfy/*.sh
-	shfmt -d -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh
+	shfmt -d -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh tests/typecheck.sh
+	bash tests/typecheck.sh
 
 # @target fmt — apply shfmt -w to shell sources
 fmt:
-	shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh
+	shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh tests/typecheck.sh
 
 # @target docs — strict MkDocs Material build into site/ (publish is Actions + mike)
 # NO_MKDOCS_2_WARNING: suppress Material advisory; stack is pinned to mkdocs 1.x.
@@ -67,4 +74,4 @@ doctor:
 
 # @target clean — remove local build/test artifacts (not models or git state)
 clean:
-	rm -rf site coverage .coverage htmlcov .pytest_cache
+	rm -rf site coverage .coverage htmlcov .pytest_cache .mypy_cache

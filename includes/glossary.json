@@ -78,7 +78,34 @@
     "category": "Models",
     "short": "Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.",
     "long": "Chatterbox Turbo is an opt-in TTS (`download-podcast --tier chatterbox`). Keep the PerTh watermark. Do not add celebrity reference WAVs. Kokoro remains the Spark-safe default. See [Local podcast](podcast.md).",
-    "see_also": ["kokoro", "tts"]
+    "see_also": ["kokoro", "tts", "dub"]
+  },
+  {
+    "id": "dub",
+    "title": "Local dub",
+    "aliases": ["Local dub", "dub-localize"],
+    "category": "Audio",
+    "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
+    "long": "The **dub-localize-lab-example** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, writes per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts. Missing ASR/clone yields an empty mix plus that status, not the original recording. Wheels install separately (chatterbox `--no-deps` so torch 2.14 stays). YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
+  },
+  {
+    "id": "chatterbox-ml",
+    "title": "Chatterbox Multilingual",
+    "aliases": ["Chatterbox Multilingual", "Chatterbox Multilingual V3"],
+    "category": "Models",
+    "short": "MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.",
+    "long": "Default engine for [Local dub](dub.md). Cross-lingual clone from a short ref extracted from this job, not a celebrity pack. Turbo English remains `download-podcast --tier chatterbox`.",
+    "see_also": ["chatterbox", "dub", "tts"]
+  },
+  {
+    "id": "multi-language-audio",
+    "title": "YouTube multi-language audio",
+    "aliases": ["multi-language audio", "MLA"],
+    "category": "Audio",
+    "short": "YouTube Studio Languages tab: upload an audio-only dub the same length as the video.",
+    "long": "YouTube does not reliably ingest extra AAC tracks muxed into an MP4. Export `ez_dub_yt.wav`, upload it under Languages → Audio, add the translated SRT, and use the synthetic/altered-content toggle. Eligibility varies by channel. See [Local dub](dub.md).",
+    "see_also": ["dub", "loudnorm"]
   },
   {
     "id": "clip",
@@ -365,7 +392,7 @@
     "aliases": ["App Mode"],
     "category": "Studio",
     "short": "ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.",
-    "long": "App Mode shows the creator widgets listed in `extra.linearData` (prompt first, then style, Enhance, seed; LoadImage on I2V; size/UNET only on the daily still). It is not a second frontend. Official persist is `linearData`; the lab contract is `lab_app_mode`. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
+    "long": "App Mode shows the creator widgets listed in `extra.linearData` (Prompt, Style, Rewrite prompt, seed; LoadImage on I2V; size/UNET only on the daily still). Persist is `[nodeId, widgetName, config]` with an integer node id — frontend 1.49.6+ upgrades that to a live WidgetId. Two-part `11:prompt` ids are dropped and the side panel looks empty. It is not a second frontend. The lab contract is `lab_app_mode`. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["lab-app-mode", "widget", "occupancy", "workflow"]
   },
   {
@@ -419,7 +446,7 @@
     "aliases": ["Prompt Enhance"],
     "category": "Studio",
     "short": "In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.",
-    "long": "Klein/Wan/LTX/ACE-Step Prompt Enhance defaults **on** for every lab graph, including identity bibles and 90s films. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
+    "long": "Klein/Wan/LTX Prompt Enhance defaults **on** for lazy CLIP printers and identity bibles you type. Seeded graphs pin it **off** for 90s films, talking-head, loops, camera-verb I2V, podcast scripts, and ACE tags/lyrics so the rewriter cannot mutate those inputs. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
     "see_also": ["enhance", "gguf", "qwen"]
   },
   {
@@ -428,7 +455,7 @@
     "aliases": ["world bible"],
     "category": "Studio",
     "short": "Locked description of a place or character with no camera. Shared across shots.",
-    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Identity-mode enhance keeps the bible camera-free. See [Prompting](prompting.md).",
+    "long": "Dream-house and style-lock graphs keep massing, materials, and inventory in a bible. Shot cards add a new camera (`lock=view`) or change only light (`lock=state`). Each view shot names its own room backdrop so interiors do not reuse one skyline. Identity-mode enhance keeps the bible camera-free. See [Prompting](prompting.md).",
     "see_also": ["identity-still", "prompt-enhance"]
   },
   {
@@ -738,6 +765,51 @@
     "see_also": ["last-frame", "film-accept"]
   },
   {
+    "id": "shot-card",
+    "title": "Shot card",
+    "aliases": ["shot card", "shot-card"],
+    "category": "Film",
+    "short": "Per-shot YAML extras: script, camera, clay required, audio policy, stems.",
+    "long": "`shot-sheet` writes `films/<slug>/shots.yaml` with fail-closed defaults (`clay: skip`, `audio_policy: world-only`). Lab `workflows/shorts/*.shots.yaml` stay golden fixtures. See [Clay to finish](learn/clay-to-finish.md).",
+    "see_also": ["guide-pack", "film-accept"]
+  },
+  {
+    "id": "overlay-qc",
+    "title": "overlay-qc",
+    "aliases": ["overlay-qc", "overlay QC"],
+    "category": "Film",
+    "short": "50% blend of clay first.png vs Klein look plate. Fail-closed 1280×704.",
+    "long": "Host ffmpeg; compose may stay up. Writes `overlay.png` and `score.json`. Human still picks; the score only ranks. See [Clay to finish](learn/clay-to-finish.md).",
+    "see_also": ["guide-pack", "occupancy"]
+  },
+  {
+    "id": "film-animatic",
+    "title": "film-animatic",
+    "aliases": ["film-animatic", "animatic"],
+    "category": "Film",
+    "short": "Cheap 90s pacing gate from clay.mp4 or held stills. Host ffmpeg.",
+    "long": "`manage.sh film-animatic --film go-see` concats clay clips or 5.00 s still holds, cap 90 s. Not a 90 s denoise. See [Clay to finish](learn/clay-to-finish.md).",
+    "see_also": ["guide-pack", "shot-card"]
+  },
+  {
+    "id": "stem-mix",
+    "title": "stem-mix",
+    "aliases": ["stem-mix", "audio finish"],
+    "category": "Audio",
+    "short": "Picture-lock mix: DX / BG / FX / MX, duck −15 dB, YouTube loudnorm −14 LUFS.",
+    "long": "LTX joint AV is the world bed, not the master. Occupancy audio — stop Klein / Wan / LTX first. `film-accept` checks stem LUFS when `audio_policy: stems`. See [Clay to finish](learn/clay-to-finish.md).",
+    "see_also": ["loudnorm", "film-accept"]
+  },
+  {
+    "id": "audio-still-video",
+    "title": "audio-still-video",
+    "aliases": ["audio-still-video"],
+    "category": "Audio",
+    "short": "Mux a FLAC/MP3 master with a still into a YouTube MP4. Host ffmpeg.",
+    "long": "Post-Queue export only. Rap / podcast / dub graphs still save FLAC + MP3. `manage.sh audio-still-video --audio FILE --image FILE` loops the still (libx264, 1920×1080 letterbox default, AAC, +faststart). CPU encode; compose may stay up. Missing ffmpeg is a hard fail. See [Local music](music.md).",
+    "see_also": ["loudnorm"]
+  },
+  {
     "id": "loudnorm",
     "title": "loudnorm",
     "aliases": ["loudnorm"],
@@ -770,7 +842,7 @@
     "aliases": ["concat-shots"],
     "category": "Film",
     "short": "Host ffmpeg stitch for 5 s takes. In-graph EZFilmConcat is the one-click 90s path.",
-    "long": "`concat-shots.sh --film go-see --yes` is the host fallback. `--xfade` is audio-only and refuses Wan-silent shots. See [90s shorts](shorts.md).",
+    "long": "`concat-shots.sh --film go-see --yes` is the host fallback. It writes a faststart H.264 master plus `ez_*_90s.html`. `--xfade` is audio-only and refuses Wan-silent shots. See [90s shorts](shorts.md).",
     "see_also": ["last-frame", "film-accept"]
   },
   {
@@ -826,5 +898,14 @@
     "short": "DCC handshake: 1280×704 clay/depth/first+last for a 5.00s print.",
     "long": "The only DCC ↔ Comfy print handshake. Lives under `${COMFY_OUTPUT_DIR}/guides/<slug>/<shot>/`. Size is the LTX VAE grid (**1280×704**, never 1280×720). 120 frames @ 24 fps. Occupancy XOR: stop Comfy before `export-guides`. See [DCC guide pack](dcc-workflows.md).",
     "see_also": ["ltx", "occupancy", "sidecar"]
+  },
+  {
+    "id": "house-views",
+    "title": "house-views",
+    "aliases": ["house-views", "dream-house clay", "clay tour"],
+    "category": "Studio",
+    "short": "Blender greybox + ten 1024×1280 Instagram clay stills. Occupancy XOR.",
+    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024×1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **klein-dream-house-clay-lab-example** can Queue without Blender. Language-only tour → **klein-dream-house-lab-example**. See [Dream-house tours](learn/dream-house.md).",
+    "see_also": ["guide-pack", "occupancy", "sidecar", "klein"]
   }
 ]

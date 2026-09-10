@@ -6,12 +6,14 @@ import gc
 from typing import Any
 
 from .concat import (
+    copy_publish_master,
     log,
     output_directory,
     publish_path,
     resolve_shot_path,
     stitch_film,
     write_disclosure_sidecar,
+    write_preview_html,
 )
 from .shots import DEFAULT_CAP_SECONDS, FILM_CHOICES, SHOT_COUNT
 
@@ -106,9 +108,10 @@ class EZFilmConcat:
     CATEGORY = "ez-comfy/film"
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "Concat 18 LTX 5.00s MP4s in beat/shot order. Video stream-copy, "
-        "AAC + YouTube loudnorm, cap 90s. xfade_cs is audio-only acrossfade "
-        "(10 = 0.10s); 0 keeps the hard-cut golden. Open this node for preview."
+        "Concat 18 LTX 5.00s MP4s in beat/shot order. H.264 CRF 18 + AAC + "
+        "YouTube loudnorm + faststart, cap 90s. xfade_cs is audio-only "
+        "acrossfade (10 = 0.10s); 0 is a hard cut. A play/download overlay "
+        "appears when Queue finishes."
     )
 
     def run(
@@ -128,6 +131,8 @@ class EZFilmConcat:
         out_mp4 = str(publish_path(film, dest_dir))
         stitch_film(paths, out_mp4, float(cap_seconds), xfade_cs=int(xfade_cs))
         write_disclosure_sidecar(out_mp4, disclosure)
+        write_preview_html(out_mp4)
+        copy_publish_master(out_mp4, film, dest_dir)
         filename = publish_path(film, dest_dir).name
         return {
             "ui": {
@@ -188,6 +193,6 @@ NODE_CLASS_MAPPINGS = {
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "EZUnloadModels": "Unload models (pass IMAGE)",
-    "EZFilmConcat": "Save 90s film (MP4) — open node for preview",
+    "EZFilmConcat": "Save 90s film (MP4) — play / download",
     "EZFilmDisclosure": "LTX AI-media disclosure (end-card)",
 }

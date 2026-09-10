@@ -15,12 +15,15 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 - Native ACE-Step instrumental beds
 - Voice consent, platform rules, and authorship
 - `download-podcast` usage, sequential Queue, and loudnorm
+- Optional YouTube still-video: host `audio-still-video` after cover (not Apple Podcasts)
+- Clone-and-translate of a recorded show is a different lane: [Local dub](dub.md)
 
 **What this enables**
 
 - Queue a local two-host episode without cloud TTS or rented music
 - Keep the visual studio bootable when podcast extras are missing
 - Disclose synthetic voices in the mix, not only in a description box
+- Mux a cover still + episode FLAC into a YouTube MP4 without changing the episode graph
 
 !!! warning "Not legal advice"
 
@@ -38,7 +41,7 @@ Graph: **podcast-audio-first-lab-example** (`extra.lab_profile` `us-safe-podcast
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
-| SCRIPT | App **Script** + **Rewrite script**. In-tree `EZPodcastScript` (enhance **on**). Missing GGUF passes the widget through | `ez_podcast_script` |
+| SCRIPT | App **Script** + **Rewrite script**. In-tree `EZPodcastScript` (enhance **off** so `Speaker A:` / `Speaker B:` stay parser input). Missing GGUF passes the widget through | `ez_podcast_script` |
 | DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
 | VOICES | App **Speaker A / B**, **Include announcer**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only | `ez_podcast_voice` |
 | BEDS | App **Bed tags**, **Rewrite bed**, **Bed length (seconds)**. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden) | `ez_podcast_bed` |
@@ -67,7 +70,7 @@ This lab does **not** git-clone, pip-require, or default to:
 - **ComfyUI-OldTimeRadio** — optional lanes that pull US-excluded or non-commercial video models
 - Cloud ACE-Step forks, MiniMax Music, F5-TTS official weights, Coqui XTTS v2, Echo-TTS, Fish Audio S2, celebrity reference WAVs, ElevenLabs, or xAI TTS
 
-Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.0` (`TextEncodeAceStepAudio1.5`, `EmptyAceStep1.5LatentAudio`). Beds stay **instrumental** (`instrumental`, `no vocals` in tags; empty lyrics). Rap vocals with original lyrics live on [Local music](music.md) and reuse this same AIO dest — do not download it twice.
+Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.6` (`TextEncodeAceStepAudio1.5`, `EmptyAceStep1.5LatentAudio`). Beds stay **instrumental** (`instrumental`, `no vocals` in tags; empty lyrics). Rap vocals with original lyrics live on [Local music](music.md) and reuse this same AIO dest — do not download it twice.
 
 ---
 
@@ -89,7 +92,7 @@ Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity 
 
 ## Voice consent and invented characters
 
-Hosts are **original characters**, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo.
+Hosts are **original characters**, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo. Translating a recorded podcast while keeping the original speakers is [Local dub](dub.md) (`dub-localize-lab-example`), with a rights attestation on every Queue.
 
 ---
 
@@ -163,5 +166,15 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 ./scripts/utilities/podcast-loudnorm.sh run --in "${COMFY_OUTPUT_DIR}/ez_podcast_ep_00001_.flac"
 # --target youtube  → −14 LUFS; default podcast → −16 LUFS
 ```
+
+7. Optional YouTube still-image video (host ffmpeg; the graph still saves FLAC + MP3). Do this **after** loudnorm if you want −14 LUFS in the MP4; `audio-still-video` does not loudnorm unless `--loudnorm youtube`:
+
+```bash
+./scripts/manage.sh audio-still-video \
+  --audio "${COMFY_OUTPUT_DIR}/ez_podcast_ep_00001_-youtube-lufs.flac" \
+  --image "${COMFY_OUTPUT_DIR}/ez_podcast_00001_.png"
+```
+
+Apple Podcasts still wants the audio master. The MP4 is a YouTube convenience, not a talking-head.
 
 Start still requires typing `yes`. Compose `restart: "no"` is unchanged.

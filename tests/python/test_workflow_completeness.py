@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from _lab_paths import lab_example_paths
-from _stamp_app_mode import BANNED
+from _stamp_app_mode import BANNED, linear_input_node_id
 
 ROOT = Path(__file__).resolve().parents[2]
 NOTE_TYPES = {"Note", "MarkdownNote"}
@@ -34,8 +34,8 @@ def _link_endpoints(graph: dict) -> tuple[set[int], set[int]]:
     for link in graph.get("links") or []:
         if isinstance(link, dict):
             lid = int(link.get("id") or link.get("link") or 0)
-            origin = int(link.get("origin_id") or link.get("from"))
-            target = int(link.get("target_id") or link.get("to"))
+            origin = int(link.get("origin_id") or link.get("from") or 0)
+            target = int(link.get("target_id") or link.get("to") or 0)
         else:
             lid = int(link[0])
             origin = int(link[1])
@@ -97,7 +97,7 @@ def test_lab_graph_completeness(path: Path) -> None:
     if mode.get("enabled") is True:
         linear = extra.get("linearData") or {}
         for entry in linear.get("inputs") or []:
-            nid = int(str(entry[0]).split(":", 1)[0])
+            nid = linear_input_node_id(entry)
             assert nid in live, (path.name, entry[0])
         for nid in linear.get("outputs") or []:
             assert int(nid) in live, (path.name, nid)

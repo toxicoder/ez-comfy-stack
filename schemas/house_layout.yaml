@@ -1,0 +1,147 @@
+# ez.house.layout.v1 — greybox of one place for Instagram 4:5 clay stills.
+# Restricted YAML (scripts/lib/house_layout.py; no PyYAML).
+# Y-up meters. box is [x, y, z, sx, sy, sz] min-corner + size.
+# cameras must be the place_10 walkthrough in order (24mm / 35mm).
+schema: ez.house.layout.v1
+id: lab-penthouse
+kind: set
+pipeline: bpy-primitive
+size: [1024, 1280]
+hdri: none
+rooms:
+  - id: foyer
+    box: [-2.5, 0.0, -6.0, 5.0, 3.2, 2.5]
+    openings: [north]
+  - id: kitchen
+    box: [-8.0, 0.0, -3.5, 6.5, 3.2, 5.0]
+    openings: [east, north]
+  - id: lounge
+    box: [-8.0, 0.0, 1.5, 10.0, 3.2, 4.5]
+    openings: [north, south]
+  - id: dining
+    box: [2.0, 0.0, 1.5, 6.0, 3.2, 4.5]
+    openings: [west]
+  - id: bedroom
+    box: [2.5, 0.0, -1.5, 5.5, 3.2, 3.0]
+    openings: [west]
+  - id: bath
+    box: [2.5, 0.0, -3.5, 3.0, 3.2, 2.0]
+    openings: [west]
+  - id: study
+    box: [5.5, 0.0, -6.0, 2.5, 3.2, 4.5]
+    openings: [west]
+  - id: terrace
+    box: [-8.0, 0.0, 6.0, 16.0, 1.0, 3.0]
+    openings: [south, east, west]
+  - id: shaft
+    box: [-5.0, -72.0, -5.0, 10.0, 72.0, 10.0]
+    openings: []
+  - id: neighbor-a
+    box: [18.0, -72.0, 8.0, 8.0, 90.0, 8.0]
+    openings: []
+  - id: neighbor-b
+    box: [-22.0, -72.0, 12.0, 9.0, 85.0, 9.0]
+    openings: []
+  - id: neighbor-c
+    box: [12.0, -72.0, -24.0, 10.0, 78.0, 8.0]
+    openings: []
+  - id: neighbor-d
+    box: [-16.0, -72.0, -20.0, 7.0, 88.0, 9.0]
+    openings: []
+props:
+  - id: sofa
+    primitive: box
+    pose: [-4.0, 0.4, 3.5]
+    size: [2.4, 0.8, 1.0]
+    room: lounge
+  - id: island
+    primitive: box
+    pose: [-4.5, 0.45, -0.5]
+    size: [2.0, 0.9, 1.0]
+    room: kitchen
+  - id: table
+    primitive: box
+    pose: [4.5, 0.4, 3.5]
+    size: [1.8, 0.75, 1.0]
+    room: dining
+  - id: bed
+    primitive: box
+    pose: [5.5, 0.3, 0.0]
+    size: [2.2, 0.6, 1.8]
+    room: bedroom
+  - id: tub
+    primitive: cylinder
+    pose: [3.8, 0.4, -2.5]
+    size: [1.4, 0.6, 0.7]
+    room: bath
+  - id: desk
+    primitive: box
+    pose: [7.0, 0.4, -4.0]
+    size: [1.2, 0.75, 0.6]
+    room: study
+  - id: chair-a
+    primitive: box
+    pose: [-5.0, 0.4, 7.2]
+    size: [0.6, 0.8, 0.6]
+    room: terrace
+  - id: chair-b
+    primitive: box
+    pose: [-4.0, 0.4, 7.2]
+    size: [0.6, 0.8, 0.6]
+    room: terrace
+  - id: lantern
+    primitive: cylinder
+    pose: [-6.5, 0.6, 8.2]
+    size: [0.25, 1.2, 0.25]
+    room: terrace
+cameras:
+  - id: 01-tower
+    label: 01 tower
+    pos: [22.0, 1.7, 28.0]
+    look: [0.0, 40.0, 0.0]
+    lens_mm: 24
+  - id: 02-foyer
+    label: 02 foyer
+    pos: [0.0, 1.6, -5.7]
+    look: [0.0, 1.5, -3.2]
+    lens_mm: 24
+  - id: 03-lounge
+    label: 03 lounge
+    pos: [-3.0, 1.4, 2.2]
+    look: [-2.0, 1.4, 6.0]
+    lens_mm: 24
+  - id: 04-kitchen
+    label: 04 kitchen
+    pos: [-3.2, 1.5, -0.5]
+    look: [-8.0, 1.4, -0.8]
+    lens_mm: 35
+  - id: 05-dining
+    label: 05 dining
+    pos: [3.5, 1.5, 3.5]
+    look: [8.0, 1.4, 3.8]
+    lens_mm: 35
+  - id: 06-bedroom
+    label: 06 bedroom
+    pos: [3.8, 1.4, 0.0]
+    look: [8.0, 1.3, 0.0]
+    lens_mm: 35
+  - id: 07-bath
+    label: 07 bath
+    pos: [3.2, 1.5, -2.2]
+    look: [5.2, 1.4, -2.5]
+    lens_mm: 35
+  - id: 08-terrace
+    label: 08 terrace
+    pos: [-6.0, 1.5, 7.2]
+    look: [4.0, 1.4, 8.0]
+    lens_mm: 35
+  - id: 09-drone
+    label: 09 drone
+    pos: [2.0, 95.0, 4.0]
+    look: [0.0, 3.0, 0.0]
+    lens_mm: 24
+  - id: 10-study
+    label: 10 study
+    pos: [6.2, 1.5, -4.2]
+    look: [8.0, 1.4, -4.0]
+    lens_mm: 35

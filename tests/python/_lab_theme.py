@@ -22,22 +22,23 @@ STYLE_LOCK_VIDEO = "photoreal shot"
 # Shot cards own lens, time, and weather. Do not name a camera here.
 # Outdoor lamps are fixtures (inventory), not a time of day.
 HOUSE_IDENTITY = (
-    f"A {STYLE_LOCK} of one compact warm-glass crown penthouse on a tall "
-    "unmarked tropical coastal tower over a bright bay, unmarked glass towers "
-    "and palms behind. One wraparound terrace sits outside a three-bay "
-    "black-framed bay glass wall. Teak floors, pale stone, coral-teal edge light. "
-    "Lounge at the glass with one sand linen sofa facing the bays, kitchen island "
-    "behind the sofa, dining beside the island, master bedroom and bath left of "
-    "the living volume. Warm teak terrace lanterns and low path lights on the "
-    "terrace. Palms on the terrace and a fern living wall beside the glass. "
-    "Unmarked home, empty of lettering."
+    f"A {STYLE_LOCK} of one full-floor warm-glass crown penthouse on a very "
+    "tall unmarked tropical coastal tower in a dense city of unmarked glass "
+    "skyscrapers, a bright bay only as a distant slot between towers. A wide "
+    "wraparound terrace sits outside a three-bay black-framed glass wall. "
+    "Teak floors, pale stone, coral-teal edge light. Lounge at the glass with "
+    "one sand linen sofa facing the towers. Kitchen island faces a solid teak "
+    "cook wall. Dining faces an interior stone wall. Master bedroom faces the "
+    "headboard wall. Bath is an interior wet room with frosted glass. Study "
+    "faces a teak shelf wall. Warm teak terrace lanterns and low path lights. "
+    "Palms on the terrace. Unmarked home, empty of lettering."
 )
 HOUSE_INVENTORY = (
     "one sand linen sofa facing the three-bay glass, pale-stone kitchen island "
     "with warm-teak cabinets, teak dining table, linen bedding at the "
-    "bay-window bedroom, freestanding stone tub facing frosted glass, two "
-    "teak terrace chairs, compact unmarked data-staff, warm teak terrace "
-    "lanterns, low path lights"
+    "headboard wall, freestanding stone tub facing frosted glass, teak study "
+    "desk at a shelf wall, two teak terrace chairs, compact unmarked "
+    "data-staff, warm teak terrace lanterns, low path lights"
 )
 
 ROOFTOP_INVENTORY = (
@@ -197,27 +198,34 @@ STORYBOARD = (
 )
 
 GOSEE_IDENTITY = (
-    f"A {STYLE_LOCK}, first-person body-cam at golden hour. Unmarked sun-washed teal "
-    "running-coat sleeves with faint circuit-thread seams and matching gloves occupy the "
-    "lower edges of the frame, hands pumping as warm gold-cyan holographic glyph motes bloom "
-    "at the wrists. A compact unmarked data-staff is slung across the back. Tropical rooftops, "
-    "palms, and unmarked glass towers fill the view toward a bright bay. Eye-level 24mm "
-    "body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering."
+    f"A {STYLE_LOCK}, first-person eye-level body-cam already at a dead sprint across a "
+    "golden-hour tropical rooftop terrace. An original techno wizard kit fills the lower "
+    "third: ink-black fitted running-layer sleeves and matte-black gloves; the left glove "
+    "pumps hip-to-chest as the right knee drives. An open short storm-cloak in matte charcoal "
+    "with a warm-gold inner lining streams at the frame edges. Tiny warm-gold rune sparks "
+    "bloom at the wrists only. A compact unmarked data-staff is slung across the back. "
+    "Unmarked palms and glass towers rush toward a bright bay; a rooftop gap sits in the "
+    "center distance. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in "
+    "YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
 )
 GOSEE_WAN_I2V_01 = (
-    "First-person body-cam high-speed parkour sprint across a sunlit tropical terrace. "
-    "Sun-washed teal sleeves and gloves pump at the frame edges, glyph motes at the wrists. "
-    "Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, "
-    "locked identity, no cut."
+    "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. "
+    "Contralateral arm pump in the lower third, elbows bent, hands swinging hip to chest, "
+    "horizon bobbing. Open short storm-cloak streams at the edges. Head snaps toward a "
+    "rooftop gap until it fills the frame. Continuous tracking, locked identity, no cut. "
+    "Full-bleed photographic plate, bare frame edges, locked identity."
 )
 GOSEE_LTX_I2V_01 = (
-    "The start image holds as the first frame. The first-person body-cam surges into a "
-    "high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and "
-    "matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph "
-    "motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots "
-    "flash through the bottom of the frame as they land and the run never stops. Warm wind "
-    "shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. "
-    "Continuous body-cam tracking, no cut. No music and no score."
+    "The start image holds as the first frame. The eye-level body-cam is already at a dead "
+    "sprint across the sunlit terrace; ink-black sleeves and matte-black gloves pump through "
+    "the lower third in a contralateral arm swing, elbows bent near ninety degrees, hands "
+    "traveling hip to chest as the horizon bobs with each race-pace stride. The open short "
+    "storm-cloak streams behind and snaps at the edges, warm-gold lining flashing. Warm wind "
+    "shoves the storm-cloak, grit ticks under the boots, and close-mic breath sits on every "
+    "footfall. The head stays level and snaps toward a rooftop gap dead ahead until that gap "
+    "fills the center of the frame, left glove still pumping. Continuous first-person take, "
+    "no cut. The frame stays a full-bleed photographic plate with bare edges and a clean "
+    "unmarked lens. No speech. No music and no score."
 )
 LAZY_FORGE = "A techno wizard on a sunny tropical city rooftop."
 

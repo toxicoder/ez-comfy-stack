@@ -40,8 +40,8 @@ KLEIN_NEG = KLEIN_NEG_STILL
 HOUSE_SHOTS = [
     (item["label"], item["shot"]) for item in load_view_pack("place_10")
 ]
-# Klein prefers ~150 words; join adds lock + shot after the bible.
-JOINED_WORD_CAP = 180
+# Klein prefers ~150 words for a single still; join adds lock + shot + closer.
+JOINED_WORD_CAP = 220
 GIF_NEG = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
     "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
@@ -72,16 +72,47 @@ Easy loop: leave Infinite loop (ping-pong) ON. Turn ping-pong OFF only for one-w
 LoadImage default example.png so Queue works; after still-app set ez_still_app_*.png.
 Motion: locked camera plus breeze / fabric / city lights. Do not prompt a walk or a one-way dolly.
 Do not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
+Prompt enhance is **off** so the locked-camera cyclic motion stays ping-pong safe. Turn Enhance on only if you want the 4B rewriter.
 """
 
 HOUSE_NOTE = """## klein-dream-house-lab-example
 
 Ten Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY — the default placeholder is the lab penthouse.
-HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings). Enhance extracts only the rooms and furniture you named — name lounge, kitchen, bath, bedroom, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough (exterior, entrance, inside, lounge, kitchen, bath, bedroom, drone, day, night), not a penthouse template. Prompt Join lock=view front-loads the shot. Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
+HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings). Enhance extracts only the rooms and furniture you named — name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study), not a penthouse template. Each card is one room or angle with its own backdrop — only lounge looks out the main opening; kitchen, dining, bedroom, bath, and study keep interior walls. Prompt Join lock=view front-loads the shot and closes with “this still is only the room and backdrop the shot names.” Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
 Identity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.
-Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Day and night may change sky and lamp state; massing, rooms, furniture, and surroundings must not.
+Queue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.
 If materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.
+"""
+
+CLAY_LOCK = (
+    "Keep the clay blocking, camera, and silhouette from the start image. "
+    "Do not redesign layout."
+)
+
+HOUSE_CLAY_NOTE = """## klein-dream-house-clay-lab-example
+
+Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
+
+`manage.sh start` seeds ez_house_clay_01.png … 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 … 10.
+
+Workbench dump (optional, higher quality) — stop Comfy first:
+
+  ./scripts/manage.sh stop
+  ./scripts/manage.sh house-views --slug lab-penthouse
+  ./scripts/manage.sh start
+
+Copy an existing dump without Blender (compose may stay up):
+
+  ./scripts/manage.sh house-views --slug lab-penthouse --install-inputs
+
+Reseed LoadImage plates without Blender (compose may stay up):
+
+  ./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs
+
+HOUSE IDENTITY is the same camera-free world bible as klein-dream-house-lab-example. Shot cards are the place_10 walkthrough. Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
+
+Language-only tour (no geometry) → klein-dream-house-lab-example. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
+Optional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).
 """
 
 CHARACTER_DRAFT_NOTE = """## klein-character-draft-lab-example
@@ -186,6 +217,10 @@ def _assert_house_word_cap() -> None:
         n = len(text.split())
         if n > JOINED_WORD_CAP:
             raise SystemExit(f"joined prompt too long for {label}: {n} words")
+        clay = join_prompt(HOUSE_IDENTITY, shot, CLAY_LOCK, "view")
+        cn = len(clay.split())
+        if cn > JOINED_WORD_CAP + 40:
+            raise SystemExit(f"clay joined prompt too long for {label}: {cn} words")
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
@@ -257,7 +292,7 @@ def build_gif_loop() -> dict:
     save = _node(graph, "SaveImage")
     save["widgets_values"] = ["ez_gif_loop_frames"]
     enh = _node(graph, "EZWanPromptEnhance")
-    enh["widgets_values"] = [GIF_MOTION, True, "i2v", "4 seconds, 12 fps, looping GIF", "none"]
+    enh["widgets_values"] = [GIF_MOTION, False, "i2v", "4 seconds, 12 fps, looping GIF", "none"]
     motion = _node(graph, "CLIPTextEncode", "Motion / prompt")
     motion["widgets_values"] = [GIF_MOTION]
     neg = _node(graph, "CLIPTextEncode", "Negative")
@@ -582,7 +617,366 @@ def build_dream_house() -> dict:
             "lab_profile": "klein-dream-house-lab-example",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
-            "lab_description": "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, entrance, rooms, drone, day, night)",
+            "lab_description": "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, rooms, terrace, drone)",
+            "ds": {"scale": 1, "offset": [0, 0]},
+        },
+        "version": 0.4,
+    }
+
+
+def build_dream_house_clay() -> dict:
+    """Ten Klein edits of house-views clay stills (same bible, ReferenceLatent)."""
+    _assert_house_word_cap()
+    nodes: list[dict] = []
+    links: list[list] = []
+    link_id = 0
+
+    def add_link(src: int, src_slot: int, dst: int, dst_slot: int, ltype: str) -> int:
+        nonlocal link_id
+        link_id += 1
+        links.append([link_id, src, src_slot, dst, dst_slot, ltype])
+        return link_id
+
+    def out(name: str, ltype: str, link_ids: list[int]) -> dict:
+        return {
+            "name": name,
+            "type": ltype,
+            "links": link_ids,
+            "slot_index": 0,
+        }
+
+    unet_links: list[int] = []
+    clip_links: list[int] = []
+    vae_links: list[int] = []
+    ident_links: list[int] = []
+    neg_links: list[int] = []
+    latent_links: list[int] = []
+
+    nodes.append(
+        _base_node(
+            1,
+            "UNETLoader",
+            [40, 80],
+            [360, 82],
+            "Klein 4B distilled FP8",
+            ["flux-2-klein-4b-fp8.safetensors", "default"],
+            0,
+            outputs=[out("MODEL", "MODEL", unet_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            2,
+            "CLIPLoader",
+            [40, 212],
+            [360, 106],
+            "Qwen3-4B TE",
+            ["qwen_3_4b.safetensors", "flux2", "default"],
+            1,
+            outputs=[out("CLIP", "CLIP", clip_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            3,
+            "VAELoader",
+            [40, 368],
+            [360, 58],
+            "Flux2 VAE",
+            ["flux2-vae.safetensors"],
+            2,
+            outputs=[out("VAE", "VAE", vae_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            4,
+            "EZKleinPromptEnhance",
+            [40, 510],
+            [420, 420],
+            "HOUSE IDENTITY",
+            [HOUSE_IDENTITY, True, "identity", "Instagram 4:5 still", "none"],
+            3,
+            outputs=[out("prompt", "STRING", ident_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            5,
+            "CLIPTextEncode",
+            [40, 970],
+            [420, 120],
+            "Negative",
+            [KLEIN_NEG_STILL],
+            4,
+            inputs=[{"name": "clip", "type": "CLIP", "link": None}],
+            outputs=[out("CONDITIONING", "CONDITIONING", neg_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            6,
+            "EmptyFlux2LatentImage",
+            [40, 1150],
+            [280, 106],
+            "Instagram 4:5 1024x1280",
+            [1024, 1280, 1],
+            5,
+            outputs=[out("LATENT", "LATENT", latent_links)],
+        )
+    )
+    nodes.append(
+        _base_node(
+            7,
+            "Note",
+            [40, 1310],
+            [420, 420],
+            "Operator note",
+            [HOUSE_CLAY_NOTE],
+            6,
+        )
+    )
+
+    lid = add_link(2, 0, 5, 0, "CLIP")
+    nodes[4]["inputs"][0]["link"] = lid
+    clip_links.append(lid)
+
+    row_h = 380
+    shot_y0 = 80
+    for i, (label, shot) in enumerate(HOUSE_SHOTS):
+        y = shot_y0 + i * row_h
+        join_id = 20 + i * 10
+        clip_id = 21 + i * 10
+        load_id = 22 + i * 10
+        enc_id = 23 + i * 10
+        ref_id = 24 + i * 10
+        ks_id = 25 + i * 10
+        dec_id = 26 + i * 10
+        save_id = 27 + i * 10
+        prefix = f"ez_dream_house_clay_{i + 1:02d}"
+        clay_name = f"ez_house_clay_{i + 1:02d}.png"
+        full = join_prompt(HOUSE_IDENTITY, shot, CLAY_LOCK, "view")
+        n = 20 + i * 10
+
+        join_out: list[int] = []
+        clip_out: list[int] = []
+        load_out: list[int] = []
+        enc_out: list[int] = []
+        ref_out: list[int] = []
+        ks_out: list[int] = []
+        dec_out: list[int] = []
+
+        nodes.append(
+            _base_node(
+                join_id,
+                "EZPromptJoin",
+                [520, y],
+                [400, 180],
+                f"SHOT {label}",
+                [shot, CLAY_LOCK, "view"],
+                n,
+                inputs=[{"name": "identity", "type": "STRING", "link": None}],
+                outputs=[out("prompt", "STRING", join_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                clip_id,
+                "CLIPTextEncode",
+                [980, y],
+                [340, 120],
+                f"Positive {i + 1:02d}",
+                [full],
+                n + 1,
+                inputs=[
+                    {"name": "clip", "type": "CLIP", "link": None},
+                    {
+                        "name": "text",
+                        "type": "STRING",
+                        "link": None,
+                        "widget": {"name": "text"},
+                    },
+                ],
+                outputs=[out("CONDITIONING", "CONDITIONING", clip_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                load_id,
+                "LoadImage",
+                [1360, y],
+                [280, 80],
+                f"Clay {i + 1:02d} ({clay_name})",
+                [clay_name, "image"],
+                n + 2,
+                outputs=[out("IMAGE", "IMAGE", load_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                enc_id,
+                "VAEEncode",
+                [1680, y],
+                [220, 60],
+                f"Encode clay {i + 1:02d}",
+                [],
+                n + 3,
+                inputs=[
+                    {"name": "pixels", "type": "IMAGE", "link": None},
+                    {"name": "vae", "type": "VAE", "link": None},
+                ],
+                outputs=[out("LATENT", "LATENT", enc_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                ref_id,
+                "ReferenceLatent",
+                [1940, y],
+                [260, 80],
+                f"Positive + clay {i + 1:02d}",
+                [],
+                n + 4,
+                inputs=[
+                    {"name": "conditioning", "type": "CONDITIONING", "link": None},
+                    {"name": "latent", "type": "LATENT", "link": None, "shape": 7},
+                ],
+                outputs=[out("CONDITIONING", "CONDITIONING", ref_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                ks_id,
+                "KSampler",
+                [2240, y],
+                [300, 240],
+                f"Sampler {i + 1:02d}",
+                [42, "fixed", 4, 1.0, "euler", "simple", 1.0],
+                n + 5,
+                inputs=[
+                    {"name": "model", "type": "MODEL", "link": None},
+                    {"name": "positive", "type": "CONDITIONING", "link": None},
+                    {"name": "negative", "type": "CONDITIONING", "link": None},
+                    {"name": "latent_image", "type": "LATENT", "link": None},
+                ],
+                outputs=[out("LATENT", "LATENT", ks_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                dec_id,
+                "VAEDecode",
+                [2580, y],
+                [220, 46],
+                f"Decode {i + 1:02d}",
+                [],
+                n + 6,
+                inputs=[
+                    {"name": "samples", "type": "LATENT", "link": None},
+                    {"name": "vae", "type": "VAE", "link": None},
+                ],
+                outputs=[out("IMAGE", "IMAGE", dec_out)],
+            )
+        )
+        nodes.append(
+            _base_node(
+                save_id,
+                "SaveImage",
+                [2840, y],
+                [280, 80],
+                f"Save {i + 1:02d}",
+                [prefix],
+                n + 7,
+                inputs=[{"name": "images", "type": "IMAGE", "link": None}],
+            )
+        )
+
+        by_id = {node["id"]: node for node in nodes}
+
+        lid = add_link(4, 0, join_id, 0, "STRING")
+        by_id[join_id]["inputs"][0]["link"] = lid
+        ident_links.append(lid)
+
+        lid = add_link(join_id, 0, clip_id, 1, "STRING")
+        by_id[clip_id]["inputs"][1]["link"] = lid
+        join_out.append(lid)
+
+        lid = add_link(2, 0, clip_id, 0, "CLIP")
+        by_id[clip_id]["inputs"][0]["link"] = lid
+        clip_links.append(lid)
+
+        lid = add_link(load_id, 0, enc_id, 0, "IMAGE")
+        by_id[enc_id]["inputs"][0]["link"] = lid
+        load_out.append(lid)
+
+        lid = add_link(3, 0, enc_id, 1, "VAE")
+        by_id[enc_id]["inputs"][1]["link"] = lid
+        vae_links.append(lid)
+
+        lid = add_link(clip_id, 0, ref_id, 0, "CONDITIONING")
+        by_id[ref_id]["inputs"][0]["link"] = lid
+        clip_out.append(lid)
+
+        lid = add_link(enc_id, 0, ref_id, 1, "LATENT")
+        by_id[ref_id]["inputs"][1]["link"] = lid
+        enc_out.append(lid)
+
+        lid = add_link(1, 0, ks_id, 0, "MODEL")
+        by_id[ks_id]["inputs"][0]["link"] = lid
+        unet_links.append(lid)
+
+        lid = add_link(ref_id, 0, ks_id, 1, "CONDITIONING")
+        by_id[ks_id]["inputs"][1]["link"] = lid
+        ref_out.append(lid)
+
+        lid = add_link(5, 0, ks_id, 2, "CONDITIONING")
+        by_id[ks_id]["inputs"][2]["link"] = lid
+        neg_links.append(lid)
+
+        lid = add_link(6, 0, ks_id, 3, "LATENT")
+        by_id[ks_id]["inputs"][3]["link"] = lid
+        latent_links.append(lid)
+
+        lid = add_link(ks_id, 0, dec_id, 0, "LATENT")
+        by_id[dec_id]["inputs"][0]["link"] = lid
+        ks_out.append(lid)
+
+        lid = add_link(3, 0, dec_id, 1, "VAE")
+        by_id[dec_id]["inputs"][1]["link"] = lid
+        vae_links.append(lid)
+
+        lid = add_link(dec_id, 0, save_id, 0, "IMAGE")
+        by_id[save_id]["inputs"][0]["link"] = lid
+        dec_out.append(lid)
+
+    groups = [
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "HOUSE IDENTITY", 20, LAB_GROUP_Y0 + 430, 460, 360, "#a1309b"),
+    ]
+    for i, (label, _) in enumerate(HOUSE_SHOTS):
+        y = shot_y0 + i * row_h
+        groups.append(
+            _group(10 + i, f"SHOT {label}", 500, y - GROUP_TITLE_INSET, 2680, 360, "#3f789e")
+        )
+
+    last_id = max(n["id"] for n in nodes)
+    return {
+        "id": "klein-dream-house-clay-lab-example",
+        "revision": 1,
+        "last_node_id": last_id,
+        "last_link_id": link_id,
+        "nodes": nodes,
+        "links": links,
+        "groups": groups,
+        "config": {},
+        "extra": {
+            "lab_profile": "klein-dream-house-clay-lab-example",
+            "lab_flux_tier": "fast",
+            "lab_note": HOUSE_CLAY_NOTE,
+            "lab_description": (
+                "Ten Instagram 4:5 Klein edits of Blender clay views "
+                "(3D persistence, AI finish)"
+            ),
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,
@@ -936,16 +1330,21 @@ def main() -> None:
     still = build_still_app()
     gif = build_gif_loop()
     house = build_dream_house()
+    house_clay = build_dream_house_clay()
     pack = build_platform_pack()
     draft = build_character_draft()
     tweak = build_character_tweak()
     _dump(lab_json("klein-still-daily-lab-example.json"), still)
     _dump(lab_json("wan-gif-loop-lab-example.json"), gif)
     _dump(lab_json("klein-dream-house-lab-example.json"), house)
+    _dump(lab_dest("klein-dream-house-clay-lab-example"), house_clay)
     _dump(lab_json("klein-platform-pack-lab-example.json"), pack)
     _dump(lab_dest("klein-character-draft-lab-example"), draft)
     _dump(lab_dest("klein-character-tweak-lab-example"), tweak)
-    print("wrote still-app, gif-loop, dream-house, platform-pack, character draft/tweak")
+    print(
+        "wrote still-app, gif-loop, dream-house, dream-house-clay, "
+        "platform-pack, character draft/tweak"
+    )
 
 
 if __name__ == "__main__":

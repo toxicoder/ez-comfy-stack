@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from _lab_paths import lab_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -60,7 +62,7 @@ def test_film_graphs_carry_ltx_disclosure() -> None:
         assert any(n.get("type") == "EZFilmDisclosure" for n in graph["nodes"]), name
 
 
-def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: object) -> None:
+def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
     sys.path.insert(0, str(ROOT / "studio-ui"))
@@ -69,6 +71,7 @@ def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: object) -> None:
     monkeypatch.setattr(studio_server, "FILMS", tmp_path / "missing")
     html = studio_server._page().decode("utf-8")
     assert "No films yet" in html
+    assert "Jobstore lights only" in html
     dest = tmp_path / "gosee"
     dest.mkdir()
     (dest / "state.json").write_text(
@@ -78,4 +81,6 @@ def test_studio_ui_empty_state(tmp_path: Path, monkeypatch: object) -> None:
     monkeypatch.setattr(studio_server, "FILMS", tmp_path)
     html = studio_server._page().decode("utf-8")
     assert "gosee" in html
+    assert "clay" in html
+    assert "audio_policy" in html
     assert "1/2" in html

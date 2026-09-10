@@ -367,19 +367,19 @@ prune_empty_dirs() {
 link_into_comfy() {
   local tier="${1}"
   local src="${MODELS_DIR}/comfy"
-  mkdir -p "${src}/diffusion_models" "${src}/text_encoders" "${src}/vae" "${src}/checkpoints"
-  local dir base dest_sub dest rel
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
+  local dir base dest_sub dest rel failed=0
   dir=$(tier_dir "$tier")
   [[ -d ${dir} ]] || return 0
   if [[ ${tier} == "fun-inp" ]]; then
-    mkdir -p "${src}/Fun_Models"
+    prepare_writable_layout_dir "${src}/Fun_Models" || return 1
     dest="${src}/Fun_Models/Wan2.2-Fun-A14B-InP"
     if ln_sfn_relative "${dir}" "${dest}"; then
       log "linked Fun InP tree → comfy/Fun_Models/Wan2.2-Fun-A14B-InP"
-    else
-      warn "failed to link Fun InP tree"
+      return 0
     fi
-    return 0
+    warn "failed to link Fun InP tree"
+    return 1
   fi
   while read -r f; do
     base="$(basename "${f}")"
@@ -405,8 +405,10 @@ link_into_comfy() {
       log "linked ${base} → comfy/${dest_sub}/"
     else
       warn "failed to link ${base} → comfy/${dest_sub}/"
+      failed=1
     fi
   done < <(find "${dir}" -type f \( -name '*.safetensors' -o -name '*.sft' -o -name '*.gguf' \) 2>/dev/null)
+  return "${failed}"
 }
 
 #######################################
@@ -467,7 +469,7 @@ cmd_status() {
 #######################################
 cmd_run() {
   check_hf_cli
-  ensure_models_dir "${MODELS_DIR}" || exit 1
+  prepare_comfy_layout "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
   local tier repo ok=0 fail=0 pat dir
   local -a include_args=()
@@ -476,8 +478,11 @@ cmd_run() {
     dir="$(tier_dir "$tier")"
     if tier_files_ready "${tier}"; then
       log "skip ${tier}: already present at ${dir} (cache hit)"
-      link_into_comfy "$tier"
-      ok=$((ok + 1))
+      if link_into_comfy "$tier"; then
+        ok=$((ok + 1))
+      else
+        fail=$((fail + 1))
+      fi
       continue
     fi
     include_args=()
@@ -501,8 +506,11 @@ cmd_run() {
       HF_HOME="${MODELS_DIR}" hf_download "$repo" --local-dir "${dir}" || dl_rc=$?
     fi
     if [[ ${dl_rc} -eq 0 ]]; then
-      link_into_comfy "$tier"
-      ok=$((ok + 1))
+      if link_into_comfy "$tier"; then
+        ok=$((ok + 1))
+      else
+        fail=$((fail + 1))
+      fi
     else
       warn "Skipping remaining setup for ${repo} (see short error above)."
       warn "Partials kept under ${dir}; re-run to resume."

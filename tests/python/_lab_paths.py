@@ -53,15 +53,26 @@ def lab_json(stem: str, *, root: Path | None = None) -> Path:
     return hits[0]
 
 
-def lab_dest(stem: str, *, lane: str | None = None) -> Path:
-    """Path to write a lab graph. Creates the lane directory."""
+def lab_dest(stem: str, *, lane: str | None = None, subdir: str | None = None) -> Path:
+    """Path to write a lab graph. Creates the lane directory.
+
+    ``subdir`` is an optional single path component under the lane
+    (for example ``nill-bye`` → ``_lab/audio/nill-bye/``,
+    ``drive-through`` → ``_lab/audio/drive-through/``).
+    """
     name = Path(stem).name
     if not name.endswith(".json"):
         name = f"{name}.json"
     chosen = lane or lane_for_stem(name)
     if chosen not in ALLOWED_LANES:
         raise ValueError(f"invalid lab lane {chosen!r}")
-    dest = LAB_ROOT / chosen / name
+    dest_dir = LAB_ROOT / chosen
+    if subdir is not None and str(subdir).strip() != "":
+        extra = Path(str(subdir).strip())
+        if extra.is_absolute() or extra.name != extra.as_posix() or extra.name in {".", ".."}:
+            raise ValueError(f"invalid lab subdir {subdir!r}")
+        dest_dir = dest_dir / extra.name
+    dest = dest_dir / name
     dest.parent.mkdir(parents=True, exist_ok=True)
     return dest
 
@@ -87,7 +98,7 @@ def lane_for_stem(stem: str) -> str:
         return "wan"
     if name.startswith("ltx-"):
         return "ltx"
-    if name.startswith("podcast-") or name.startswith("music-"):
+    if name.startswith("podcast-") or name.startswith("music-") or name.startswith("dub-") or name.startswith("audio-"):
         return "audio"
     if name.startswith("prompt-forge-") or name.startswith("beat-sheet-"):
         return "inspire"

@@ -246,4 +246,15 @@ html:has(.md-header__title--active) {
 
 .ez-var {
   border-bottom: 1px dotted var(--md-accent-fg-color);
+  background: color-mix(in srgb, var(--md-accent-fg-color) 14%, transparent);
+  border-radius: 0.2em;
+  padding: 0 0.2em;
+  cursor: text;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.ez-var:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 1px;
 }

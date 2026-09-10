@@ -191,7 +191,7 @@ import json, sys
 from pathlib import Path
 root = Path('${REPO_ROOT}')
 sys.path.insert(0, str(root / 'tests' / 'python'))
-from _stamp_app_mode import STAMP_SPECS, suite_json_paths
+from _stamp_app_mode import STAMP_SPECS, linear_input_node_id, suite_json_paths
 paths = suite_json_paths(root / 'workflows')
 assert len(paths) == len(STAMP_SPECS)
 for path in paths:
@@ -202,7 +202,8 @@ for path in paths:
     assert linear['inputs'] and linear['outputs'], path.name
     live = {int(n['id']) for n in graph['nodes']}
     for entry in linear['inputs']:
-        nid = int(str(entry[0]).split(':', 1)[0])
+        assert isinstance(entry[0], int), (path.name, entry[0])
+        nid = linear_input_node_id(entry)
         assert nid in live, (path.name, entry[0])
     for nid in linear['outputs']:
         assert int(nid) in live, (path.name, nid)
@@ -515,13 +516,15 @@ assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_no
 }
 
 @test "operator app graphs: still settings, gif ping-pong loop, dream-house pack" {
-  local daily gif house
+  local daily gif house clay
   daily="$(lab_wf klein-still-daily-lab-example.json)"
   gif="$(lab_wf wan-gif-loop-lab-example.json)"
   house="$(lab_wf klein-dream-house-lab-example.json)"
+  clay="$(lab_wf klein-dream-house-clay-lab-example.json)"
   [[ -f ${daily} ]]
   [[ -f ${gif} ]]
   [[ -f ${house} ]]
+  [[ -f ${clay} ]]
   run python3 -c "
 import json
 s=json.load(open('${daily}'))
@@ -567,7 +570,7 @@ assert float(wv['frame_rate'])==12
 assert wv['save_output'] is True
 assert 'ez_gif_loop' in str(wv['filename_prefix'])
 enh=next(n for n in g['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert enh['widgets_values'][1] is True
+assert enh['widgets_values'][1] is False
 assert enh['widgets_values'][2]=='i2v'
 motion=enh['widgets_values'][0].lower()
 assert 'locked' in motion or 'lock' in motion
@@ -611,6 +614,7 @@ ident_l=ident.lower()
 assert 'warm-glass' in ident_l and 'crown penthouse' in ident_l
 assert 'wraparound terrace' in ident_l and 'three-bay' in ident_l
 assert 'lounge' in ident_l
+assert 'cook wall' in ident_l
 assert 'lantern' in ident_l or 'path light' in ident_l
 assert '24mm' not in ident_l
 assert 'cedar' not in ident_l and 'cabin' not in ident_l
@@ -622,7 +626,7 @@ incoming={}
 for l in d['links']:
     incoming.setdefault((l[3], l[4]), []).append(l)
 banned=('pier','courtyard','pavilion','two-story','a-frame','glass box','outdoor kitchen','outdoor tub','cedar','alpine','gravel','hip roof')
-tour=('SHOT 01 exterior','SHOT 02 entrance','SHOT 03 inside','SHOT 04 lounge','SHOT 05 kitchen','SHOT 06 bath','SHOT 07 bedroom','SHOT 08 drone','SHOT 09 day','SHOT 10 night')
+tour=('SHOT 01 tower','SHOT 02 foyer','SHOT 03 lounge','SHOT 04 kitchen','SHOT 05 dining','SHOT 06 bedroom','SHOT 07 bath','SHOT 08 terrace','SHOT 09 drone','SHOT 10 study')
 assert [n.get('title') for n in sorted(joins, key=lambda n: n['id'])]==list(tour)
 for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     shot=join['widgets_values'][0]
@@ -631,7 +635,7 @@ for i, join in enumerate(sorted(joins, key=lambda n: n['id'])):
     assert lock=='view'
     assert inv.strip()==''
     full=shot+' '+ident
-    assert len(full.split())<=180, (join.get('title'), len(full.split()))
+    assert len(full.split())<=220, (join.get('title'), len(full.split()))
     sl=shot.lower()
     assert 'penthouse' not in sl
     assert 'techno wizard' not in sl
@@ -650,6 +654,28 @@ ntext=str(note['widgets_values'][0]).lower()
 assert 'world bible' in ntext or 'camera-free' in ntext or 'one place' in ntext
 assert 'walkthrough' in ntext or 'virtual tour' in ntext
 assert 'referencelatent' in ntext or 'new views' in ntext or 'independent t2i' in ntext
+"
+  [ "${status}" -eq 0 ]
+  run python3 -c "
+import json
+d=json.load(open('${clay}'))
+assert d.get('id')=='klein-dream-house-clay-lab-example'
+assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1024, 1280] for n in d['nodes'])
+assert sum(1 for n in d['nodes'] if n.get('type')=='ReferenceLatent')==10
+assert sum(1 for n in d['nodes'] if n.get('type')=='LoadImage')==10
+saves=[n for n in d['nodes'] if n.get('type')=='SaveImage']
+prefs=sorted(n['widgets_values'][0] for n in saves)
+assert prefs==[f'ez_dream_house_clay_{i:02d}' for i in range(1,11)]
+loads=sorted((n for n in d['nodes'] if n.get('type')=='LoadImage'), key=lambda n: n['id'])
+assert [n['widgets_values'][0] for n in loads]==[f'ez_house_clay_{i:02d}.png' for i in range(1,11)]
+enh=next(n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance')
+assert enh['widgets_values'][2]=='identity'
+note=str(next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))['widgets_values'][0]).lower()
+assert 'house-views' in note
+assert 'occupancy' in note
+assert 'input' in note
+assert 'install-inputs' in note
+assert 'seed-inputs' in note
 "
   [ "${status}" -eq 0 ]
 }

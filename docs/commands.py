@@ -28,7 +28,9 @@ SESSION_VAR_IDS = (
 FLAG_KINDS = frozenset({"bool", "choice", "choice-or-int"})
 _ID_RE = re.compile(r"^[a-z0-9-]+$")
 _VAR_ID_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
-_VAR_TOKEN_RE = re.compile(r"\$\{([A-Z][A-Z0-9_]*)\}")
+# Keep in sync with docs/javascripts/commands.js VAR_TOKEN.
+# ${NAME} and ${NAME:-default} are the same session-variable slot.
+_VAR_TOKEN_RE = re.compile(r"\$\{([A-Z][A-Z0-9_]*)(?::-([^}]*))?\}")
 _EZCMD_FENCE_RE = re.compile(
     r"^```ezcmd[^\n]*\n(.*?)(?:\n)?^```[ \t]*$",
     re.MULTILINE | re.DOTALL,
@@ -215,11 +217,45 @@ def command_by_id(
     raise KeyError(cmd_id)
 
 
-def substitute_vars(template: str, values: Mapping[str, str]) -> str:
-    """Replace ``${NAME}`` tokens when NAME is in values. Unknown tokens stay.
+def split_var_template(
+    template: str, values: Mapping[str, str]
+) -> list[tuple[str, str | None]]:
+    """Split a template into ``(text, var_id)`` parts for chip rendering.
 
-    Not recursive: a value that contains ``${OTHER}`` is copied literally so
-    stored Spark IPs cannot rewrite the template.
+    Known ``${NAME}`` and ``${NAME:-default}`` become
+    ``(values[NAME], NAME)``. Unknown tokens stay inside the surrounding
+    literal. Spec for ``commands.js`` — keep the JS splitter in sync.
+
+    Args:
+        template: Source command, fence, or inline code text.
+        values: Variable id → replacement.
+
+    Returns:
+        Ordered parts. ``var_id`` is None for literals.
+    """
+    parts: list[tuple[str, str | None]] = []
+    last = 0
+    for match in _VAR_TOKEN_RE.finditer(template):
+        name = match.group(1)
+        if name not in values:
+            continue
+        if match.start() > last:
+            parts.append((template[last : match.start()], None))
+        parts.append((str(values[name]), name))
+        last = match.end()
+    tail = template[last:]
+    if tail:
+        parts.append((tail, None))
+    elif not parts:
+        parts.append((template, None))
+    return parts
+
+
+def substitute_vars(template: str, values: Mapping[str, str]) -> str:
+    """Replace ``${NAME}`` / ``${NAME:-default}`` when NAME is in values.
+
+    Unknown tokens stay. Not recursive: a value that contains ``${OTHER}``
+    is copied literally so stored Spark IPs cannot rewrite the template.
 
     Args:
         template: Source command or fence text.
@@ -228,28 +264,23 @@ def substitute_vars(template: str, values: Mapping[str, str]) -> str:
     Returns:
         Substituted string.
     """
-
-    def repl(match: re.Match[str]) -> str:
-        name = match.group(1)
-        if name in values:
-            return values[name]
-        return match.group(0)
-
-    return _VAR_TOKEN_RE.sub(repl, template)
+    return "".join(text for text, _var_id in split_var_template(template, values))
 
 
 def template_has_vars(template: str, var_ids: tuple[str, ...] | None = None) -> bool:
     """True when template contains at least one known ``${VAR}``.
 
+    ``${NAME:-default}`` counts. Unknown names do not.
+
     Args:
-        template: Fence text.
+        template: Fence or inline code text.
         var_ids: Variable ids. Default is the session set.
 
     Returns:
         Whether auto-bind should attach.
     """
     names = set(var_ids if var_ids is not None else SESSION_VAR_IDS)
-    return any(name in names for name in _VAR_TOKEN_RE.findall(template))
+    return any(match.group(1) in names for match in _VAR_TOKEN_RE.finditer(template))
 
 
 def _shell_quote(token: str) -> str:

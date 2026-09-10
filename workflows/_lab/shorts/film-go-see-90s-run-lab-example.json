@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still, first-person body-cam at golden hour. Unmarked sun-washed teal running-coat sleeves with faint circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as warm gold-cyan holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Tropical rooftops, palms, and unmarked glass towers fill the view toward a bright bay. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering."
+        "A photoreal still, first-person eye-level body-cam already at a dead sprint across a golden-hour tropical rooftop terrace. An original techno wizard kit fills the lower third: ink-black fitted running-layer sleeves and matte-black gloves; the left glove pumps hip-to-chest as the right knee drives. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the frame edges. Tiny warm-gold rune sparks bloom at the wrists only. A compact unmarked data-staff is slung across the back. Unmarked palms and glass towers rush toward a bright bay; a rooftop gap sits in the center distance. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
       ],
       "title": "Positive"
     },
@@ -381,7 +381,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## film-go-see-90s-run-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (first-person parkour): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **on**, identity mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is on by default. After Queue, each Enhance node shows the CLIP string used. Turn Enhance off to pin widget text.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n"
+        "## film-go-see-90s-run-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s film (first-person parkour): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`. A **90s film ready** overlay plays it; `ez_gosee_90s.html` is a local player. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n"
       ],
       "title": "Operator note \u2014 one-click 90s film"
     },
@@ -414,9 +414,9 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
-        "A photoreal still, first-person body-cam at golden hour. Unmarked sun-washed teal running-coat sleeves with faint circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as warm gold-cyan holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Tropical rooftops, palms, and unmarked glass towers fill the view toward a bright bay. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
-        true,
-        "identity",
+        "A photoreal still, first-person eye-level body-cam already at a dead sprint across a golden-hour tropical rooftop terrace. An original techno wizard kit fills the lower third: ink-black fitted running-layer sleeves and matte-black gloves; the left glove pumps hip-to-chest as the right knee drives. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the frame edges. Tiny warm-gold rune sparks bloom at the wrists only. A compact unmarked data-staff is slung across the back. Unmarked palms and glass towers rush toward a bright bay; a rooftop gap sits in the center distance. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.",
+        false,
+        "t2i",
         "YouTube 16:9 still",
         "none"
       ],
@@ -442,7 +442,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## go-see 90s (first-person parkour)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film go-see --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score.\n\n**Identity look:** A photoreal still, first-person body-cam at golden hour. Unmarked sun-washed teal running-coat sleeves with faint circuit-thread seams and matching gloves occupy the lower edges of the frame, hands pumping as warm gold-cyan holographic glyph motes bloom at the wrists. A compact unmarked data-staff is slung across the back. Tropical rooftops, palms, and unmarked glass towers fill the view toward a bright bay. Eye-level 24mm body-cam, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Golden-hour tropical rooftops | sprint + gap leap | vault + wall-run | drop to bay skybridge |\n| 2 | Waterfront maglev / bay skybridge | spine sprint | gantry leaps | dive into gardens |\n| 3 | Hanging tropical gardens | wall-run glass | vault palm terraces | water curtain to causeway |\n| 4 | Tropical storm causeway | rain sprint | leap a squall gap | vault toward cliffs |\n| 5 | Coastal jungle ridge | ridge sprint | slide a root arch | climb-run to overlook |\n| 6 | Warm-night bay overlook | last sprint | leap to rail | hold + laugh |\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## go-see 90s (first-person parkour)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film go-see --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal still, first-person eye-level body-cam already at a dead sprint across a golden-hour tropical rooftop terrace. An original techno wizard kit fills the lower third: ink-black fitted running-layer sleeves and matte-black gloves; the left glove pumps hip-to-chest as the right knee drives. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the frame edges. Tiny warm-gold rune sparks bloom at the wrists only. A compact unmarked data-staff is slung across the back. Unmarked palms and glass towers rush toward a bright bay; a rooftop gap sits in the center distance. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Golden-hour tropical rooftops | dead sprint | tucked front flip | kong + wall-run drop |\n| 2 | Waterfront maglev / bay skybridge | grating sprint | cat leap | dive into gardens |\n| 3 | Hanging tropical gardens | glass wall-run | tic-tac vaults | water curtain burst |\n| 4 | Tropical storm causeway | rain sprint | precision leap | dash vault to cliffs |\n| 5 | Coastal jungle ridge | ridge sprint | slide a root arch | climb-run to overlook |\n| 6 | Warm-night bay overlook | last sprint | leap to rail | hold + breath |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "go-see 90s shot map"
     },
@@ -824,12 +824,12 @@
       "id": 900,
       "type": "EZFilmConcat",
       "pos": [
-        2200,
-        5460
+        40,
+        2560
       ],
       "size": [
         420,
-        140
+        180
       ],
       "flags": {},
       "order": 900,
@@ -947,9 +947,10 @@
       },
       "widgets_values": [
         "go-see",
-        90.0
+        90.0,
+        8
       ],
-      "title": "Save 90s film (MP4) \u2014 open node for preview"
+      "title": "Save 90s film (MP4) \u2014 play / download"
     },
     {
       "id": 211,
@@ -980,8 +981,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The eye-level body-cam is already at a dead sprint across the sunlit terrace; ink-black sleeves and matte-black gloves pump through the lower third in a contralateral arm swing, elbows bent near ninety degrees, hands traveling hip to chest as the horizon bobs with each race-pace stride. The open short storm-cloak streams behind and snaps at the edges, warm-gold lining flashing. Warm wind shoves the storm-cloak, grit ticks under the boots, and close-mic breath sits on every footfall. The head stays level and snaps toward a rooftop gap dead ahead until that gap fills the center of the frame, left glove still pumping. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -1032,7 +1033,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score."
+        "The start image holds as the first frame. The eye-level body-cam is already at a dead sprint across the sunlit terrace; ink-black sleeves and matte-black gloves pump through the lower third in a contralateral arm swing, elbows bent near ninety degrees, hands traveling hip to chest as the horizon bobs with each race-pace stride. The open short storm-cloak streams behind and snaps at the edges, warm-gold lining flashing. Warm wind shoves the storm-cloak, grit ticks under the boots, and close-mic breath sits on every footfall. The head stays level and snaps toward a rooftop gap dead ahead until that gap fills the center of the frame, left glove still pumping. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b1 s1 LTX I2V"
     },
@@ -1560,8 +1561,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The same first-person body-cam keeps the high-speed parkour run onto the next unmarked roof, sun-washed teal sleeves flashing as both gloves plant a low HVAC bulkhead and vault through. Knees and boots cut the lower frame, then a short wall-run up an unmarked glass wall, hands sliding, glyph motes sparking. Fabric snaps in the warm wind while breath and running footfalls stay close. One continuous first-person take, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The head is already locked on the rooftop gap; both matte-black gloves complete one last contralateral pump, then the arms pull in as the camera launches into a tucked front flip, the horizon rolling once as boots kick through the lower frame. The open short storm-cloak streams upward then snaps on the landing. Wind roars past the ears, a hard close-mic inhale of breath hits on takeoff, and grit ticks off the lip. Boots slam the far terrace; the camera dips on impact, the arms reopen into a pump, and the sprint recovers, a low unmarked bulkhead now filling the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -1612,7 +1613,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The same first-person body-cam keeps the high-speed parkour run onto the next unmarked roof, sun-washed teal sleeves flashing as both gloves plant a low HVAC bulkhead and vault through. Knees and boots cut the lower frame, then a short wall-run up an unmarked glass wall, hands sliding, glyph motes sparking. Fabric snaps in the warm wind while breath and running footfalls stay close. One continuous first-person take, no cut. No music and no score."
+        "The start image holds as the first frame. The head is already locked on the rooftop gap; both matte-black gloves complete one last contralateral pump, then the arms pull in as the camera launches into a tucked front flip, the horizon rolling once as boots kick through the lower frame. The open short storm-cloak streams upward then snaps on the landing. Wind roars past the ears, a hard close-mic inhale of breath hits on takeoff, and grit ticks off the lip. Boots slam the far terrace; the camera dips on impact, the arms reopen into a pump, and the sprint recovers, a low unmarked bulkhead now filling the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b1 s2 LTX I2V"
     },
@@ -2140,8 +2141,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam sprints the last terrace edge, teal gloves pumping, then drops toward a glowing unmarked waterfront skybridge still sliding forward over the bay. Legs kick through the lower frame on the drop; the compact data-staff stays slung on the back. Warm wind rushes, grit ticks off the roof lip, and close breath rides the fall. Continuous first-person tracking into the bridge. No music and no score.",
-        true,
+        "The start image holds as the first frame. Both matte-black gloves reach, fingers wrapping the top of the low unmarked bulkhead, then the body kongs through as the hips pass between the planted arms, knees flashing the lower frame. A three-step wall-run climbs unmarked glass, one glove sliding for balance while the other pumps, the open short storm-cloak pressing flat then snapping free. Fabric snaps in the warm wind, glass ticks under the palms, and close-mic breath punches on the plant. The camera drops off the last terrace toward a glowing unmarked waterfront skybridge, legs kicking through the bottom as that skybridge fills the view. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -2192,7 +2193,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam sprints the last terrace edge, teal gloves pumping, then drops toward a glowing unmarked waterfront skybridge still sliding forward over the bay. Legs kick through the lower frame on the drop; the compact data-staff stays slung on the back. Warm wind rushes, grit ticks off the roof lip, and close breath rides the fall. Continuous first-person tracking into the bridge. No music and no score."
+        "The start image holds as the first frame. Both matte-black gloves reach, fingers wrapping the top of the low unmarked bulkhead, then the body kongs through as the hips pass between the planted arms, knees flashing the lower frame. A three-step wall-run climbs unmarked glass, one glove sliding for balance while the other pumps, the open short storm-cloak pressing flat then snapping free. Fabric snaps in the warm wind, glass ticks under the palms, and close-mic breath punches on the plant. The camera drops off the last terrace toward a glowing unmarked waterfront skybridge, legs kicking through the bottom as that skybridge fills the view. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b1 s3 LTX I2V"
     },
@@ -2720,8 +2721,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam lands into a high-speed parkour sprint along the unmarked maglev spine over the bay, sun-washed teal sleeves and gloves pumping at the edges, boots hammering metal grating. Unmarked glass towers streak past on both sides while the coat hem snaps. Wind, grating ticks, and close breath sit under the run. Continuous body-cam, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The eye-level body-cam lands onto the unmarked maglev skybridge and surges into a dead sprint along the metal spine; ink-black sleeves and matte-black gloves pump at the edges in a contralateral swing, elbows bent, hands passing hip to chest, boots hammering grating. The open short storm-cloak streams down the spine, warm-gold lining catching the bay light. Unmarked glass towers streak past. Wind shears, grating ticks each stride, and close-mic breath sits under the run. The next gantry gap fills the frame as the sprint never breaks. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -2772,7 +2773,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam lands into a high-speed parkour sprint along the unmarked maglev spine over the bay, sun-washed teal sleeves and gloves pumping at the edges, boots hammering metal grating. Unmarked glass towers streak past on both sides while the coat hem snaps. Wind, grating ticks, and close breath sit under the run. Continuous body-cam, no cut. No music and no score."
+        "The start image holds as the first frame. The eye-level body-cam lands onto the unmarked maglev skybridge and surges into a dead sprint along the metal spine; ink-black sleeves and matte-black gloves pump at the edges in a contralateral swing, elbows bent, hands passing hip to chest, boots hammering grating. The open short storm-cloak streams down the spine, warm-gold lining catching the bay light. Unmarked glass towers streak past. Wind shears, grating ticks each stride, and close-mic breath sits under the run. The next gantry gap fills the frame as the sprint never breaks. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b2 s1 LTX I2V"
     },
@@ -3300,8 +3301,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The same parkour body-cam leaps a gap between unmarked gantry segments, teal gloves grabbing a rail then pumping again as boots flash through the frame. Glyph motes flare on the grab. Metal ticks, wind shears, and breath stays close. One continuous first-person tracking leap, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The head snaps toward the gantry gap, then the parkour body-cam cat-leaps; both matte-black gloves reach and grab a rail, fingers wrapping the metal, the body swings through, boots flashing the lower frame. Warm-gold rune sparks flare on the grab. The open short storm-cloak snaps across the gap. Metal clangs, wind shears the gap, and a close-mic grunt of breath hits on the catch. The camera recovers into the sprint along the last gantry lip, arms returning to a contralateral pump, a vertical glass canyon opening below. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -3352,7 +3353,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The same parkour body-cam leaps a gap between unmarked gantry segments, teal gloves grabbing a rail then pumping again as boots flash through the frame. Glyph motes flare on the grab. Metal ticks, wind shears, and breath stays close. One continuous first-person tracking leap, no cut. No music and no score."
+        "The start image holds as the first frame. The head snaps toward the gantry gap, then the parkour body-cam cat-leaps; both matte-black gloves reach and grab a rail, fingers wrapping the metal, the body swings through, boots flashing the lower frame. Warm-gold rune sparks flare on the grab. The open short storm-cloak snaps across the gap. Metal clangs, wind shears the gap, and a close-mic grunt of breath hits on the catch. The camera recovers into the sprint along the last gantry lip, arms returning to a contralateral pump, a vertical glass canyon opening below. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b2 s2 LTX I2V"
     },
@@ -3880,8 +3881,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The high-speed parkour run dives off the last gantry, first-person body-cam pitching down into a vertical glass canyon of hanging gardens, sun-washed teal sleeves whipping at the edges. Boots kick the lower frame as the drop begins; palm terraces wait below. Wind roars, fabric snaps, breath sits close. Continuous first-person tracking into the canyon. No music and no score.",
-        true,
+        "The start image holds as the first frame. The high-speed parkour run dives off the last gantry, eye-level body-cam pitching down into a vertical glass canyon of hanging gardens, ink-black sleeves whipping at the edges while the open short storm-cloak streams upward, warm-gold lining flashing. Boots kick the lower frame as the drop begins; the arms open then pull in for a controlled fall. Wind roars, fabric snaps, and close-mic breath rides the fall. Palm terraces rush up until those palms fill the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -3932,7 +3933,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The high-speed parkour run dives off the last gantry, first-person body-cam pitching down into a vertical glass canyon of hanging gardens, sun-washed teal sleeves whipping at the edges. Boots kick the lower frame as the drop begins; palm terraces wait below. Wind roars, fabric snaps, breath sits close. Continuous first-person tracking into the canyon. No music and no score."
+        "The start image holds as the first frame. The high-speed parkour run dives off the last gantry, eye-level body-cam pitching down into a vertical glass canyon of hanging gardens, ink-black sleeves whipping at the edges while the open short storm-cloak streams upward, warm-gold lining flashing. Boots kick the lower frame as the drop begins; the arms open then pull in for a controlled fall. Wind roars, fabric snaps, and close-mic breath rides the fall. Palm terraces rush up until those palms fill the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b2 s3 LTX I2V"
     },
@@ -4460,8 +4461,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam hits a high-speed parkour wall-run on unmarked glass, teal gloves sliding, boots kicking along the canyon wall. Hanging tropical gardens streak past. Glass ticks under the gloves, wind tunnels through the canyon, and breath stays close to the lens. Continuous body-cam, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The first-person body-cam hits a long parkour wall-run on unmarked glass among the palms, inside boot kicking along the canyon wall while the outside matte-black glove slides for balance and the other arm keeps a tight pump. The open short storm-cloak presses to the back in the tunnel wind, then peels free at each step. Hanging tropical gardens streak past. Glass ticks under the gloves, wind tunnels through the canyon, and close-mic breath stays on the lens. A garden terrace lip fills the frame as the wall-run carries forward. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -4512,7 +4513,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam hits a high-speed parkour wall-run on unmarked glass, teal gloves sliding, boots kicking along the canyon wall. Hanging tropical gardens streak past. Glass ticks under the gloves, wind tunnels through the canyon, and breath stays close to the lens. Continuous body-cam, no cut. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam hits a long parkour wall-run on unmarked glass among the palms, inside boot kicking along the canyon wall while the outside matte-black glove slides for balance and the other arm keeps a tight pump. The open short storm-cloak presses to the back in the tunnel wind, then peels free at each step. Hanging tropical gardens streak past. Glass ticks under the gloves, wind tunnels through the canyon, and close-mic breath stays on the lens. A garden terrace lip fills the frame as the wall-run carries forward. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b3 s1 LTX I2V"
     },
@@ -5040,8 +5041,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam vaults hanging unmarked garden terraces, both teal-gloved hands planting, knees flashing through the lower frame, glyph rings flaring at the wrists. The first-person view never stops moving forward. Cloth slaps, breath sits close, and footfalls knock wet stone. Continuous tracking, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The parkour body-cam tic-tacs off the terrace lip and speed-vaults hanging unmarked garden terraces: the outside boot kicks the riser, then both matte-black gloves plant the next lip, fingers wrapping stone, hips passing, knees flashing through the lower frame as warm-gold rune sparks flare at the wrists. The open short storm-cloak slaps then streams. Cloth slaps, close-mic breath sits on the plant, and footfalls knock wet stone. A garden water curtain fills the frame dead ahead as the run never stops. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -5092,7 +5093,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam vaults hanging unmarked garden terraces, both teal-gloved hands planting, knees flashing through the lower frame, glyph rings flaring at the wrists. The first-person view never stops moving forward. Cloth slaps, breath sits close, and footfalls knock wet stone. Continuous tracking, no cut. No music and no score."
+        "The start image holds as the first frame. The parkour body-cam tic-tacs off the terrace lip and speed-vaults hanging unmarked garden terraces: the outside boot kicks the riser, then both matte-black gloves plant the next lip, fingers wrapping stone, hips passing, knees flashing through the lower frame as warm-gold rune sparks flare at the wrists. The open short storm-cloak slaps then streams. Cloth slaps, close-mic breath sits on the plant, and footfalls knock wet stone. A garden water curtain fills the frame dead ahead as the run never stops. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b3 s2 LTX I2V"
     },
@@ -5620,8 +5621,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The high-speed parkour body-cam bursts through a garden water curtain, sun-washed teal sleeves and gloves pumping, water exploding at the lens, then opens toward a storm-lit causeway over the bay. Boots splash the lower frame. Water, wind, splash, and close breath travel with the camera. Continuous first-person tracking. No music and no score.",
-        true,
+        "The start image holds as the first frame. The high-speed parkour body-cam bursts through the garden water curtain, ink-black sleeves and matte-black gloves pumping in a contralateral swing, water exploding at the lens, boots splashing the lower frame. The open short storm-cloak heavy with water snaps once then streams. Water, wind, splash, and close-mic breath travel with the camera. The view opens onto a storm-lit unmarked causeway over the bay until that causeway fills the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -5672,7 +5673,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The high-speed parkour body-cam bursts through a garden water curtain, sun-washed teal sleeves and gloves pumping, water exploding at the lens, then opens toward a storm-lit causeway over the bay. Boots splash the lower frame. Water, wind, splash, and close breath travel with the camera. Continuous first-person tracking. No music and no score."
+        "The start image holds as the first frame. The high-speed parkour body-cam bursts through the garden water curtain, ink-black sleeves and matte-black gloves pumping in a contralateral swing, water exploding at the lens, boots splashing the lower frame. The open short storm-cloak heavy with water snaps once then streams. Water, wind, splash, and close-mic breath travel with the camera. The view opens onto a storm-lit unmarked causeway over the bay until that causeway fills the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b3 s3 LTX I2V"
     },
@@ -6200,8 +6201,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam sprints a rain-slick unmarked causeway in high-speed parkour, teal sleeves pumping, glyph motes hissing in the tropical rain. Lightning blooms far off over the bay. Rain, wind, wet footfalls, and close breath sit on the lens. Continuous body-cam, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The first-person body-cam sprints a rain-slick unmarked causeway at a dead run, ink-black sleeves pumping contralateral, elbows bent, hands traveling hip to chest, warm-gold rune sparks hissing in the tropical rain. The open short storm-cloak streams heavy and snaps in the gusts, lining flashing gold. Lightning blooms far off over the bay. Rain ticks the storm-cloak, wet footfalls slap, wind shoves, and close-mic breath sits on the lens. A squall gap in the spans fills the center of the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -6252,7 +6253,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam sprints a rain-slick unmarked causeway in high-speed parkour, teal sleeves pumping, glyph motes hissing in the tropical rain. Lightning blooms far off over the bay. Rain, wind, wet footfalls, and close breath sit on the lens. Continuous body-cam, no cut. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam sprints a rain-slick unmarked causeway at a dead run, ink-black sleeves pumping contralateral, elbows bent, hands traveling hip to chest, warm-gold rune sparks hissing in the tropical rain. The open short storm-cloak streams heavy and snaps in the gusts, lining flashing gold. Lightning blooms far off over the bay. Rain ticks the storm-cloak, wet footfalls slap, wind shoves, and close-mic breath sits on the lens. A squall gap in the spans fills the center of the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b4 s1 LTX I2V"
     },
@@ -6780,8 +6781,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam leaps a gap in the squall between unmarked causeway spans, camera pitching, sun-washed teal sleeves and legs in the lower frame, gloves reaching then pumping on landing. Glyph motes streak. Wind shears the gap, rain ticks the coat, and breath stays close. One continuous first-person leap, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The head snaps toward the squall gap; the parkour body-cam leaps between unmarked causeway spans, camera pitching, ink-black sleeves and legs in the lower frame. Both gloves reach for balance then grab nothing and return to a pump on landing. The open short storm-cloak streams across the gap and snaps on impact. Warm-gold rune sparks streak. Wind shears the gap, rain ticks the storm-cloak, a close-mic inhale of breath hits on takeoff, and the camera dips on impact then recovers. Coastal cliffs open ahead as the sprint continues. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -6832,7 +6833,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam leaps a gap in the squall between unmarked causeway spans, camera pitching, sun-washed teal sleeves and legs in the lower frame, gloves reaching then pumping on landing. Glyph motes streak. Wind shears the gap, rain ticks the coat, and breath stays close. One continuous first-person leap, no cut. No music and no score."
+        "The start image holds as the first frame. The head snaps toward the squall gap; the parkour body-cam leaps between unmarked causeway spans, camera pitching, ink-black sleeves and legs in the lower frame. Both gloves reach for balance then grab nothing and return to a pump on landing. The open short storm-cloak streams across the gap and snaps on impact. Warm-gold rune sparks streak. Wind shears the gap, rain ticks the storm-cloak, a close-mic inhale of breath hits on takeoff, and the camera dips on impact then recovers. Coastal cliffs open ahead as the sprint continues. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b4 s2 LTX I2V"
     },
@@ -7360,8 +7361,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The high-speed parkour run vaults a last unmarked causeway lip, teal gloves planting, then sprints toward coastal cliffs opening ahead as the squall thins. Knees flash; the body-cam never stops. Wind, grit, and close breath ride the vault. Continuous first-person tracking into the cliffs. No music and no score.",
-        true,
+        "The start image holds as the first frame. The high-speed parkour run dash vaults a last unmarked causeway lip: both matte-black gloves plant the edge, fingers wrapping stone, the body dives through, knees flashing, then the arms push off and return to a contralateral pump as the sprint hits the coastal cliffs and the squall thins. The open short storm-cloak snaps over the lip. Wind, grit, and close-mic breath ride the vault. Unmarked ridge stone fills the frame under the boots as the body-cam never stops. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -7412,7 +7413,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The high-speed parkour run vaults a last unmarked causeway lip, teal gloves planting, then sprints toward coastal cliffs opening ahead as the squall thins. Knees flash; the body-cam never stops. Wind, grit, and close breath ride the vault. Continuous first-person tracking into the cliffs. No music and no score."
+        "The start image holds as the first frame. The high-speed parkour run dash vaults a last unmarked causeway lip: both matte-black gloves plant the edge, fingers wrapping stone, the body dives through, knees flashing, then the arms push off and return to a contralateral pump as the sprint hits the coastal cliffs and the squall thins. The open short storm-cloak snaps over the lip. Wind, grit, and close-mic breath ride the vault. Unmarked ridge stone fills the frame under the boots as the body-cam never stops. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b4 s3 LTX I2V"
     },
@@ -7940,8 +7941,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam sprints a coastal jungle ridge in high-speed parkour, sun-washed teal sleeves pumping, boots on wet stone, glyph motes throwing gold-cyan on unmarked cliff walls. Palms and the bay open toward an overlook far ahead. Wind, grit ticking, and close breath sit under the run. Continuous body-cam, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The first-person body-cam sprints a coastal jungle ridge at a dead run, ink-black sleeves pumping contralateral, elbows bent, hands swinging hip to chest, boots on wet stone, warm-gold rune sparks throwing amber on unmarked cliff walls. The open short storm-cloak streams along the ridge, lining flashing. Palms and the bay open toward an overlook far ahead. Wind, grit ticking, and close-mic breath sit under the run. A wet root arch fills the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -7992,7 +7993,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam sprints a coastal jungle ridge in high-speed parkour, sun-washed teal sleeves pumping, boots on wet stone, glyph motes throwing gold-cyan on unmarked cliff walls. Palms and the bay open toward an overlook far ahead. Wind, grit ticking, and close breath sit under the run. Continuous body-cam, no cut. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam sprints a coastal jungle ridge at a dead run, ink-black sleeves pumping contralateral, elbows bent, hands swinging hip to chest, boots on wet stone, warm-gold rune sparks throwing amber on unmarked cliff walls. The open short storm-cloak streams along the ridge, lining flashing. Palms and the bay open toward an overlook far ahead. Wind, grit ticking, and close-mic breath sit under the run. A wet root arch fills the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b5 s1 LTX I2V"
     },
@@ -8520,8 +8521,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam slides under a wet root arch, teal gloves grazing the wood, boots kicking through the lower frame, then pops back into a sprint. A scrape, wind through the arch, and close breath stay with the camera. Continuous first-person tracking. No music and no score.",
-        true,
+        "The start image holds as the first frame. The parkour body-cam slides under the wet root arch, one matte-black glove grazing the wood for a guide, the other hand low, boots kicking through the lower frame, then both arms pop back into a contralateral pump as the sprint resumes. The open short storm-cloak drags then snaps free of the arch. A scrape, wind through the arch, and close-mic breath stay with the camera. A serrated climb-line of wet stone fills the frame ahead. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -8572,7 +8573,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam slides under a wet root arch, teal gloves grazing the wood, boots kicking through the lower frame, then pops back into a sprint. A scrape, wind through the arch, and close breath stay with the camera. Continuous first-person tracking. No music and no score."
+        "The start image holds as the first frame. The parkour body-cam slides under the wet root arch, one matte-black glove grazing the wood for a guide, the other hand low, boots kicking through the lower frame, then both arms pop back into a contralateral pump as the sprint resumes. The open short storm-cloak drags then snaps free of the arch. A scrape, wind through the arch, and close-mic breath stay with the camera. A serrated climb-line of wet stone fills the frame ahead. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b5 s2 LTX I2V"
     },
@@ -9100,8 +9101,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The high-speed parkour body-cam climb-runs a serrated coastal ridge, teal gloves grabbing then pumping, boots kicking wet stone, warm city lights blooming ahead over the bay. Glyph motes throw gold-cyan on the cliff. Grit ticks each ledge, wind shears the ridge, and close breath sits on the lens. Continuous first-person climb-run toward the overlook. No music and no score.",
-        true,
+        "The start image holds as the first frame. The high-speed parkour body-cam climb-runs the serrated coastal ridge: matte-black gloves grab a ledge, fingers wrapping wet stone, then push off and return to a pump while boots kick the next hold in a wall-kick, warm city lights blooming ahead over the bay. The open short storm-cloak hangs then snaps on each pull. Warm-gold rune sparks throw amber on the cliff. Grit ticks each ledge, wind shears the ridge, and close-mic breath sits on the lens. The warm-night ridge opens with drops on both sides. Continuous first-person climb-run, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -9152,7 +9153,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The high-speed parkour body-cam climb-runs a serrated coastal ridge, teal gloves grabbing then pumping, boots kicking wet stone, warm city lights blooming ahead over the bay. Glyph motes throw gold-cyan on the cliff. Grit ticks each ledge, wind shears the ridge, and close breath sits on the lens. Continuous first-person climb-run toward the overlook. No music and no score."
+        "The start image holds as the first frame. The high-speed parkour body-cam climb-runs the serrated coastal ridge: matte-black gloves grab a ledge, fingers wrapping wet stone, then push off and return to a pump while boots kick the next hold in a wall-kick, warm city lights blooming ahead over the bay. The open short storm-cloak hangs then snaps on each pull. Warm-gold rune sparks throw amber on the cliff. Grit ticks each ledge, wind shears the ridge, and close-mic breath sits on the lens. The warm-night ridge opens with drops on both sides. Continuous first-person climb-run, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b5 s3 LTX I2V"
     },
@@ -9680,8 +9681,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam makes a last high-speed parkour sprint along the warm-night ridge, sun-washed teal sleeves and gloves pumping hard, glyph motes bright against unmarked sky. Unmarked stone drops away on both sides toward the bay. Wind, footfalls on stone, and close breath. Continuous body-cam, no cut. No music and no score.",
-        true,
+        "The start image holds as the first frame. The first-person body-cam makes a last all-out parkour sprint along the warm-night ridge, ink-black sleeves and matte-black gloves pumping hard in a contralateral swing, elbows bent, hands traveling hip to chest, warm-gold rune sparks bright against unmarked sky. The open short storm-cloak streams hard, lining flashing over the drop. Unmarked stone drops away on both sides toward the bay. Wind, footfalls on stone, and close-mic breath. An unmarked overlook rail fills the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -9732,7 +9733,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam makes a last high-speed parkour sprint along the warm-night ridge, sun-washed teal sleeves and gloves pumping hard, glyph motes bright against unmarked sky. Unmarked stone drops away on both sides toward the bay. Wind, footfalls on stone, and close breath. Continuous body-cam, no cut. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam makes a last all-out parkour sprint along the warm-night ridge, ink-black sleeves and matte-black gloves pumping hard in a contralateral swing, elbows bent, hands traveling hip to chest, warm-gold rune sparks bright against unmarked sky. The open short storm-cloak streams hard, lining flashing over the drop. Unmarked stone drops away on both sides toward the bay. Wind, footfalls on stone, and close-mic breath. An unmarked overlook rail fills the frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b6 s1 LTX I2V"
     },
@@ -10260,8 +10261,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam leaps onto an unmarked overlook, teal-gloved hands finding a weathered wooden rail as boots land in the lower frame. The first-person view settles forward over warm city lights and the ocean. A rail creak, distant wind, slowing footfalls, and close breath. Continuous take from leap to hold. No music and no score.",
-        true,
+        "The start image holds as the first frame. The parkour body-cam leaps onto an unmarked overlook; both matte-black gloves reach and find a weathered wooden rail, fingers wrapping the wood as boots land in the lower frame. The camera dips on impact and settles forward over warm city lights and the ocean. The open short storm-cloak settles against the back. A rail creak, distant wind, slowing footfalls, and close-mic breath. Both gloves stay on the rail as the hold begins. Continuous take from leap to hold. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -10312,7 +10313,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The parkour body-cam leaps onto an unmarked overlook, teal-gloved hands finding a weathered wooden rail as boots land in the lower frame. The first-person view settles forward over warm city lights and the ocean. A rail creak, distant wind, slowing footfalls, and close breath. Continuous take from leap to hold. No music and no score."
+        "The start image holds as the first frame. The parkour body-cam leaps onto an unmarked overlook; both matte-black gloves reach and find a weathered wooden rail, fingers wrapping the wood as boots land in the lower frame. The camera dips on impact and settles forward over warm city lights and the ocean. The open short storm-cloak settles against the back. A rail creak, distant wind, slowing footfalls, and close-mic breath. Both gloves stay on the rail as the hold begins. Continuous take from leap to hold. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b6 s2 LTX I2V"
     },
@@ -10840,8 +10841,8 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. Both sun-washed teal-gloved hands stay on the weathered unmarked rail, sleeves in the lower frame, holographic glyph motes settling while the first-person view holds warm city lights and the ocean. The high-speed parkour run is over. A short quiet laugh leaves the breath. Distant wind and a single rail creak sit under that breath. The camera is still. No music and no score.",
-        true,
+        "The start image holds as the first frame. Both matte-black gloved hands stay on the weathered unmarked rail, ink-black sleeves in the lower third, the open short storm-cloak settled with its warm-gold lining quiet while tiny rune sparks dim. The first-person view holds warm city lights and the ocean. The run is over. Close-mic breath slows. Distant wind and a single rail creak sit under that breath. The camera is still. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score.",
+        false,
         "i2v",
         "5 seconds, 24 fps",
         "",
@@ -10892,7 +10893,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. Both sun-washed teal-gloved hands stay on the weathered unmarked rail, sleeves in the lower frame, holographic glyph motes settling while the first-person view holds warm city lights and the ocean. The high-speed parkour run is over. A short quiet laugh leaves the breath. Distant wind and a single rail creak sit under that breath. The camera is still. No music and no score."
+        "The start image holds as the first frame. Both matte-black gloved hands stay on the weathered unmarked rail, ink-black sleeves in the lower third, the open short storm-cloak settled with its warm-gold lining quiet while tiny rune sparks dim. The first-person view holds warm city lights and the ocean. The run is over. Close-mic breath slows. Distant wind and a single rail creak sit under that breath. The camera is still. The frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No music and no score."
       ],
       "title": "b6 s3 LTX I2V"
     },
@@ -11394,8 +11395,8 @@
       "id": 901,
       "type": "EZFilmDisclosure",
       "pos": [
-        2680,
-        5460
+        500,
+        2560
       ],
       "size": [
         420,
@@ -15103,9 +15104,9 @@
       "id": 9,
       "title": "9. Publish 90s MP4",
       "bounding": [
-        2180,
-        5404,
-        2000,
+        20,
+        2504,
+        1000,
         280
       ],
       "color": "#3f789e",
@@ -15116,8 +15117,8 @@
   "config": {},
   "extra": {
     "lab_profile": "film-go-see-90s-run-lab-example",
-    "lab_note": "## film-go-see-90s-run-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`). After Queue, click **Save 90s film (MP4) \u2014 open node for preview** for an inline preview and download control. Per-shot VHS nodes remain for inspection.\n\nOne-click 90s film (first-person parkour): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity, 4-step, Enhance **on**, identity mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`. Open **Save 90s film (MP4) \u2014 open node for preview** to watch or download it. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is on by default. After Queue, each Enhance node shows the CLIP string used. Turn Enhance off to pin widget text.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n",
-    "lab_description": "One-click 90s first-person parkour: Klein identity + 18 LTX 5.00s AV shots + stitch",
+    "lab_note": "## film-go-see-90s-run-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s film (first-person parkour): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4`. A **90s film ready** overlay plays it; `ez_gosee_90s.html` is a local player. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film go-see --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n",
+    "lab_description": "One-click 90s first-person parkour: Klein identity + 18 LTX 5.00s AV shots + stitch\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_film": "go-see",
     "lab_slug": "gosee",
     "lab_ltx_av": true,
@@ -15133,13 +15134,13 @@
       "frontend_min": "1.41.13",
       "lane": "film",
       "occupancy": "film",
-      "enhance_off_identity": false,
+      "enhance_off_identity": true,
       "handoff": []
     },
     "linearData": {
       "inputs": [
         [
-          "11:prompt",
+          11,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -15148,7 +15149,7 @@
           }
         ],
         [
-          "11:style",
+          11,
           "style",
           {
             "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
@@ -15156,7 +15157,7 @@
           }
         ],
         [
-          "11:enhance",
+          11,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -15164,7 +15165,7 @@
           }
         ],
         [
-          "7:seed",
+          7,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

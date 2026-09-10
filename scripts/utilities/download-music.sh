@@ -360,8 +360,8 @@ prune_empty_dirs() {
 link_into_comfy() {
   local tier="${1}"
   local src="${MODELS_DIR}/comfy"
-  mkdir -p "${src}/checkpoints" "${src}/diffusion_models" "${src}/text_encoders" "${src}/vae"
-  local dir base dest dest_sub f rel
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
+  local dir base dest dest_sub f rel failed=0
   dir=$(tier_dir "${tier}")
   [[ -d ${dir} ]] || return 0
   while IFS= read -r f; do
@@ -380,10 +380,12 @@ link_into_comfy() {
       log "linked ${base} → comfy/${dest_sub}/"
     else
       warn "failed to link ${base} → comfy/${dest_sub}/"
+      failed=1
     fi
   done < <(
     find "${dir}" -type f -name '*.safetensors' 2>/dev/null
   )
+  return "${failed}"
 }
 
 #######################################
@@ -520,7 +522,7 @@ cmd_status() {
 #######################################
 cmd_run() {
   check_hf_cli
-  ensure_models_dir "${MODELS_DIR}" || exit 1
+  prepare_comfy_layout "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
   local tier repo ok=0 fail=0 pat dir
   local -a include_args=()
@@ -533,8 +535,11 @@ cmd_run() {
     dir="$(tier_dir "${tier}")"
     if tier_files_ready "${tier}"; then
       log "skip ${tier}: already present (cache hit; shared AIO dest with download-podcast --tier acestep)"
-      link_into_comfy "${tier}"
-      ok=$((ok + 1))
+      if link_into_comfy "${tier}"; then
+        ok=$((ok + 1))
+      else
+        fail=$((fail + 1))
+      fi
       continue
     fi
     include_args=()
@@ -553,8 +558,11 @@ cmd_run() {
     HF_HOME="${MODELS_DIR}" hf_download "${repo}" --local-dir "${dir}" \
       "${include_args[@]}" || dl_rc=$?
     if [[ ${dl_rc} -eq 0 ]]; then
-      link_into_comfy "${tier}"
-      ok=$((ok + 1))
+      if link_into_comfy "${tier}"; then
+        ok=$((ok + 1))
+      else
+        fail=$((fail + 1))
+      fi
     else
       warn "Skipping remaining setup for ${repo} (see short error above)."
       warn "Partials kept under ${dir}; re-run to resume."

@@ -93,6 +93,8 @@ nav:
       - ComfyUI basics: learn/comfyui.md
       - Image and video generation: learn/generation.md
       - Klein, Wan, and LTX: learn/pipeline.md
+      - Clay to finish: learn/clay-to-finish.md
+      - Dream-house tours: learn/dream-house.md
       - Hardware, memory, and safety: learn/hardware.md
       - Glossary: glossary.md
   - Start:
@@ -105,6 +107,7 @@ nav:
       - Workflow catalog: studio-workflows.md
       - 90s shorts: shorts.md
       - Local podcast: podcast.md
+      - Local dub: dub.md
       - Local music: music.md
       - Studio sidecars: studio-sidecars.md
       - Asset Bible: asset-bible.md

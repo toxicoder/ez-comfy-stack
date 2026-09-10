@@ -12,7 +12,7 @@
 #   remote-SSH operation.
 #
 # Usage:
-#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|cleanup
+#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|cleanup
 #   ./scripts/manage.sh reset-hf-partials [--yes] [--force]
 #   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 #
@@ -82,6 +82,83 @@ ensure_prompt_enhance_gguf() {
 }
 
 #######################################
+# Pip-install dub wheels into the running Comfy venv. ASR first, then clone
+# with --no-deps so chatterbox-tts cannot pin torch==2.6.0. No-op when stopped.
+# Globals:
+#   None (uses compose_is_running / compose_run)
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0
+#######################################
+install_dub_runtime_wheels() {
+  local py
+  py="/comfy-state/ComfyUI/.venv/bin/python"
+  if ! compose_is_running; then
+    log "dub wheels: stack stopped — start, then re-run download-dub, or rebuild the image"
+    return 0
+  fi
+  log "dub wheels: pip install faster-whisper, then chatterbox-tts --no-deps"
+  if compose_run exec -T comfyui "${py}" -m pip install \
+    --upgrade-strategy only-if-needed faster-whisper; then
+    log "dub wheels: faster-whisper installed"
+  else
+    warn "dub wheels: faster-whisper pip failed — Queue writes empty mix until WhisperModel imports"
+  fi
+  compose_run exec -T comfyui "${py}" -m pip install \
+    --upgrade-strategy only-if-needed \
+    librosa s3tokenizer resemble-perth conformer pykakasi pyloudnorm omegaconf ||
+    warn "dub wheels: chatterbox extras pip failed"
+  if compose_run exec -T comfyui "${py}" -m pip install --no-deps chatterbox-tts; then
+    log "dub wheels: chatterbox-tts installed --no-deps (did not pin torch)"
+  else
+    warn "dub wheels: chatterbox-tts --no-deps failed — clone will fail-soft"
+  fi
+  check_dub_runtime_wheels
+  return 0
+}
+
+#######################################
+# Soft-check that dub ASR/clone wheels import inside the running container.
+# ASR and clone are checked separately so one miss does not hide the other.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0
+#######################################
+check_dub_runtime_wheels() {
+  local py
+  if ! compose_is_running; then
+    log "dub wheel import: skipped (stack stopped)"
+    return 0
+  fi
+  py="/opt/comfy-prebuilt/.venv/bin/python"
+  if ! compose_run exec -T comfyui test -x "${py}"; then
+    py="/comfy-state/ComfyUI/.venv/bin/python"
+  fi
+  log "dub wheel import: python=${py}"
+  if compose_run exec -T comfyui "${py}" -c \
+    'from faster_whisper import WhisperModel'; then
+    log "dub wheels: faster-whisper WhisperModel import ok"
+  else
+    warn "dub ASR wheel missing — download-dub --tier asr (stack up) or restart"
+  fi
+  if compose_run exec -T comfyui "${py}" -c \
+    'from chatterbox.mtl_tts import ChatterboxMultilingualTTS'; then
+    log "dub wheels: chatterbox.mtl_tts import ok"
+  else
+    warn "dub clone wheel missing — chatterbox-tts --no-deps (do not pin torch==2.6.0)"
+  fi
+  return 0
+}
+
+#######################################
 # Print the human-facing command list and environment pointer to stdout.
 # Globals:
 #   See file header / caller environment.
@@ -99,7 +176,7 @@ ez-comfy-stack manage — unified Visual Generative AI (local US-safe studio via
 Commands:
   help              Show this help
   setup [--install-docker] [--yes]
-                    Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, doctor
+                    Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, hf CLI, doctor
   doctor            Preflight: docker, GPU, free RAM/disk, attention, models, output dir, license policy
   status [--json]   Stack status (attention + host_free_gib when --json)
   start             Start studio stack (requires yes)
@@ -111,10 +188,15 @@ Commands:
                     --limit N is a fixed Mbps cap (overrides DOWNLOAD_LIMIT for this run)
                     --drop-incomplete  delete *.incomplete then download (stuck resume)
                     Refuses MiniMax H3 (US Excluded Territory)
-                    Does not pull podcast or music weights (use download-podcast / download-music)
+                    Does not pull podcast, dub, or music weights (use download-podcast / download-dub / download-music)
   download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]
                     Opt-in Kokoro / ACE-Step / optional TTS (bandwidth limited)
                     analog = Kokoro-82M ONNX only. Missing pack is not a doctor failure.
+  download-dub [--tier asr|clone|all] [--limit auto|N|off]
+                    Opt-in Silero VAD + faster-whisper + Chatterbox Multilingual V3
+                    When the stack is up, pip-installs faster-whisper then
+                    chatterbox-tts --no-deps (does not pin torch). Missing pack
+                    is not a doctor failure.
   download-music [--tier turbo|xl|all] [--limit auto|N|off]
                     Opt-in ACE-Step 1.5 music AIO (bandwidth limited)
                     turbo = ace_step_1.5_turbo_aio.safetensors (~10 GB). Shares dest with download-podcast --tier acestep.
@@ -142,9 +224,24 @@ Commands:
                     Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   blender           Host Blender sidecar (dies if compose is up)
   export-guides     Dump a 1280x704 / 120f guide pack (dies if compose is up)
+  house-views       Dump 1024x1280 Instagram 4:5 clay stills + GLB (dies if compose is up)
+                    --install-inputs copies an existing dump into COMFY_OUTPUT_DIR/input
+                    (no Blender; compose may stay up)
+                    --seed-inputs copies a pack or renders layout into input/ (no Blender;
+                    compose may stay up). start also seeds missing plates.
   asset-ls [--json] [--output-dir DIR]
                     Read-only Asset Bible catalog (COMFY_OUTPUT_DIR/assets)
                     Coming later: asset-new / asset-iterate / asset-promote
+  shot-sheet status|run --film SLUG
+                    Write films/<slug>/shots.yaml (shot-card defaults). No Docker.
+  overlay-qc --film SLUG --shot ID --look PATH
+                    50% clay/look overlay (host ffmpeg; compose may stay up)
+  film-animatic --film SLUG
+                    Cheap 90s animatic from clay.mp4 or stills (host ffmpeg)
+  stem-mix --film SLUG --shot ID --bg PATH
+                    Picture-lock stem mix; duck -15 dB; YouTube loudnorm
+  audio-still-video --audio FILE --image FILE
+                    Mux a still + audio master to YouTube MP4 (host ffmpeg)
   film-accept <film>
                     Fail-closed gate before concat (5.00s, 1280×704, LTX audio)
   download-longcat [--tier video|avatar|all]
@@ -164,8 +261,8 @@ EOF
 #######################################
 # Bootstrap host prerequisites for doctor/download/start.
 # Creates .env from example if missing; prepares MODELS_DIR (sudo mkdir/chown);
-# installs Docker CE when missing (confirm / --install-docker); soft-checks GPU;
-# then runs doctor.
+# installs Docker CE when missing (confirm / --install-docker); installs hf CLI
+# when missing; soft-checks GPU; then runs doctor.
 # Side effects: May write .env; may sudo for MODELS_DIR and package install.
 # Globals:
 #   REPO_ROOT, MODELS_DIR, LAB_NO_SUDO, SETUP_INSTALL_DOCKER, SETUP_YES
@@ -225,7 +322,7 @@ EOF
   export MODELS_DIR
 
   log "MODELS_DIR=${MODELS_DIR}"
-  if prepare_models_dir "${MODELS_DIR}"; then
+  if prepare_comfy_layout "${MODELS_DIR}"; then
     log "models dir ready: ${MODELS_DIR}"
   else
     ok=1
@@ -281,6 +378,13 @@ EOF
   else
     warn "wondershaper not found (download-limit will try to install or soft-fail)"
   fi
+  if resolve_hf_on_path; then
+    log "hf: $(command -v hf)"
+  elif install_hf_cli && resolve_hf_on_path; then
+    log "hf CLI installed: $(command -v hf)"
+  else
+    warn "hf CLI missing — download-models will attempt install"
+  fi
 
   log "Re-running doctor..."
   if ! cmd_doctor; then
@@ -302,9 +406,9 @@ EOF
 
 #######################################
 # Run operator preflight checks without starting the stack.
-# Validates Docker + Compose, optional nvidia-smi, MEM_LIMIT budget warning,
-# host free RAM/disk headroom, MODELS_DIR presence, flux/ltx readiness JSON,
-# and existence of the compose file.
+# Validates Docker + Compose, optional nvidia-smi, hf CLI presence (soft),
+# MEM_LIMIT budget warning, host free RAM/disk headroom, MODELS_DIR presence,
+# flux/ltx readiness JSON, and existence of the compose file.
 # Side effects: May invoke docker, nvidia-smi, download-*-status (no network pull).
 # Globals:
 #   See file header / caller environment.
@@ -333,6 +437,11 @@ cmd_doctor() {
   else
     warn "nvidia-smi not found (ok for offline tests; required on Spark)"
   fi
+  if resolve_hf_on_path; then
+    log "hf: $(command -v hf)"
+  else
+    warn "hf CLI not found — setup / download-models will auto-install"
+  fi
   check_mem_limit_vs_headroom || true
   if ! check_host_headroom; then
     ok=1
@@ -340,6 +449,7 @@ cmd_doctor() {
   log "MODELS_DIR=${MODELS_DIR}"
   if ensure_models_dir "${MODELS_DIR}"; then
     log "models dir exists and is writable"
+    warn_unwritable_comfy_layout "${MODELS_DIR}"
   else
     ok=1
   fi
@@ -364,12 +474,14 @@ cmd_doctor() {
   else
     log "spark-timing: none — Queue klein-still-draft / wan-i2v-5s / ltx-i2v-5s then spark-timing record --klein N --wan N --ltx N"
   fi
-  local image_json wan_json ltx_json llm_json podcast_json music_json
+  local image_json wan_json ltx_json llm_json podcast_json dub_json dub_clone_json music_json
   image_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-image.sh" status --tier fast --json 2>/dev/null || echo '{}')
   wan_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-wan.sh" status --tier 5b --json 2>/dev/null || echo '{}')
   ltx_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" status --tier 2.5 --json 2>/dev/null || echo '{}')
   llm_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" status --json 2>/dev/null || echo '{}')
   podcast_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-podcast.sh" status --tier analog --json 2>/dev/null || echo '{}')
+  dub_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-dub.sh" status --tier asr --json 2>/dev/null || echo '{}')
+  dub_clone_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-dub.sh" status --tier clone --json 2>/dev/null || echo '{}')
   music_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-music.sh" status --tier turbo --json 2>/dev/null || echo '{}')
   log "MODELS_DIR pack disk:"
   log "  image status: ${image_json}"
@@ -377,6 +489,8 @@ cmd_doctor() {
   log "  ltx status: ${ltx_json}"
   log "  llm status: ${llm_json}"
   log "podcast status: ${podcast_json} (opt-in; missing pack is not a doctor failure)"
+  log "dub status asr: ${dub_json} clone: ${dub_clone_json} (opt-in; missing pack is not a doctor failure)"
+  check_dub_runtime_wheels
   log "music status: ${music_json} (opt-in; missing pack is not a doctor failure)"
   ensure_prompt_enhance_gguf
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
@@ -640,7 +754,8 @@ Usage: manage.sh download-models [--limit auto|N|off] [--drop-incomplete]
   --limit off   no throttle (not recommended over remote SSH)
   --drop-incomplete  delete *.incomplete then download (stuck 0 MiB/s resume)
   MiniMax H3 is banned (US Excluded Territory). See docs/licenses.md
-  Does not pull podcast or music weights (download-podcast / download-music).
+  Does not pull podcast, dub, or music weights (download-podcast / download-dub / download-music).
+  Do not prefix with sudo (download-limit uses sudo internally; hf CLI is auto-installed).
 EOF
         return 0
         ;;
@@ -659,7 +774,8 @@ EOF
       fi
       ;;
   esac
-  ensure_models_dir "${MODELS_DIR}" || return 1
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
+  check_hf_cli
   if [[ ${drop_incomplete} -eq 1 ]]; then
     log "dropping incomplete HF partials under ${MODELS_DIR} (--drop-incomplete)"
     remove_hf_incomplete "${MODELS_DIR}" >/dev/null
@@ -780,7 +896,7 @@ EOF
       fi
       ;;
   esac
-  ensure_models_dir "${MODELS_DIR}" || return 1
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
     warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
@@ -796,6 +912,101 @@ EOF
     return 1
   fi
   log "download-podcast: tier ${tier} ready under ${MODELS_DIR}/comfy"
+  return 0
+}
+
+#######################################
+# Opt-in dub weights under MODELS_DIR with the same download-limit wrap.
+# Missing ASR/clone pack is not a doctor failure. Does not change download-models.
+# With compose up, pip-installs faster-whisper then chatterbox-tts --no-deps.
+# Globals:
+#   DOWNLOAD_LIMIT, MODELS_DIR, REPO_ROOT
+# Arguments:
+#   Optional: --tier asr|clone|all
+#             --limit auto|N|off
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 on success; 1 on usage or download failure
+#######################################
+cmd_download_dub() {
+  local limit="${DOWNLOAD_LIMIT}"
+  local tier="asr"
+  local rc=0
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
+      --tier)
+        tier="${2:?}"
+        shift 2
+        ;;
+      --tier=*)
+        tier="${1#--tier=}"
+        shift
+        ;;
+      --limit)
+        if [[ $# -lt 2 || -z ${2} || ${2} == -* ]]; then
+          err "download-dub --limit requires auto|N|off"
+          return 1
+        fi
+        limit="${2}"
+        shift 2
+        ;;
+      --limit=*)
+        limit="${1#--limit=}"
+        if [[ -z ${limit} ]]; then
+          err "download-dub --limit requires auto|N|off"
+          return 1
+        fi
+        shift
+        ;;
+      asr | clone | all)
+        tier="${1}"
+        shift
+        ;;
+      -h | --help)
+        cat <<'EOF' >&2
+Usage: manage.sh download-dub [--tier asr|clone|all] [--limit auto|N|off]
+  Opt-in. Default asr = Silero VAD + faster-whisper large-v3.
+  clone = Chatterbox Multilingual V3 (MIT, PerTh on).
+  When compose is up, pip-installs faster-whisper then chatterbox-tts --no-deps
+  (does not pin torch==2.6.0 over the lab venv).
+  Does not run as part of download-models.
+  --limit auto|N|off  same wrap as download-models (always clears on exit)
+EOF
+        return 0
+        ;;
+      *)
+        err "Unknown download-dub flag: ${1}"
+        return 1
+        ;;
+    esac
+  done
+  case "${limit}" in
+    auto | off | 0) ;;
+    *)
+      if [[ ! ${limit} =~ ^[0-9]+$ || ${limit} -le 0 ]]; then
+        err "Invalid --limit '${limit}' (use auto, off, or a positive integer Mbps)"
+        return 1
+      fi
+      ;;
+  esac
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+  if [[ ${limit} == "off" || ${limit} == "0" ]]; then
+    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-dub.sh" run --tier "${tier}" || rc=$?
+  else
+    local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
+    local inner
+    inner="MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-dub.sh' run --tier '${tier}'"
+    bash "${dl}" wrap --limit "${limit}" -- bash -c "${inner}" || rc=$?
+  fi
+  if [[ ${rc} -ne 0 ]]; then
+    err "download-dub: tier ${tier} incomplete under ${MODELS_DIR}"
+    return 1
+  fi
+  log "download-dub: tier ${tier} ready under ${MODELS_DIR}/comfy"
+  install_dub_runtime_wheels
   return 0
 }
 
@@ -872,7 +1083,7 @@ EOF
       fi
       ;;
   esac
-  ensure_models_dir "${MODELS_DIR}" || return 1
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   clear_stale_hf_locks "${MODELS_DIR}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
     warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
@@ -1029,6 +1240,19 @@ cmd_export_guides() {
 }
 
 #######################################
+# Occupancy-gated Blender Instagram clay dump (P0). Godot is P2.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  house-views.sh flags
+# Returns:
+#   house-views status (2 if compose is up)
+#######################################
+cmd_house_views() {
+  bash "${REPO_ROOT}/scripts/utilities/house-views.sh" "$@"
+}
+
+#######################################
 # Read-only Asset Bible catalog (outputs under COMFY_OUTPUT_DIR/assets).
 # Globals:
 #   REPO_ROOT
@@ -1048,6 +1272,49 @@ cmd_asset_ls() {
 #######################################
 cmd_film_accept() {
   bash "${REPO_ROOT}/scripts/utilities/film-accept.sh" "$@"
+}
+
+#######################################
+# Write films/<slug>/shots.yaml with shot-card defaults.
+#######################################
+cmd_shot_sheet() {
+  bash "${REPO_ROOT}/scripts/utilities/shot-sheet.sh" "$@"
+}
+
+#######################################
+# Clay vs look overlay QC (host ffmpeg, no GPU).
+#######################################
+cmd_overlay_qc() {
+  bash "${REPO_ROOT}/scripts/utilities/overlay-qc.sh" "$@"
+}
+
+#######################################
+# Cheap 90s animatic from clay or held stills.
+#######################################
+cmd_film_animatic() {
+  bash "${REPO_ROOT}/scripts/utilities/film-animatic.sh" "$@"
+}
+
+#######################################
+# Picture-lock stem mix (CPU ffmpeg).
+#######################################
+cmd_stem_mix() {
+  bash "${REPO_ROOT}/scripts/utilities/stem-mix.sh" "$@"
+}
+
+#######################################
+# Mux a still + audio master to YouTube MP4 (CPU ffmpeg).
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  audio-still-video.sh flags (--audio, --image, --out, --size, --fit)
+# Outputs:
+#   Status on stderr; MP4 on disk
+# Returns:
+#   audio-still-video.sh status
+#######################################
+cmd_audio_still_video() {
+  bash "${REPO_ROOT}/scripts/utilities/audio-still-video.sh" "$@"
 }
 
 #######################################
@@ -1172,6 +1439,7 @@ main() {
     logs) cmd_logs "$@" ;;
     download-models) cmd_download_models "$@" ;;
     download-podcast) cmd_download_podcast "$@" ;;
+    download-dub) cmd_download_dub "$@" ;;
     download-music) cmd_download_music "$@" ;;
     download-h3 | queue-h3 | farm-h3 | stitch-h3)
       refuse_minimax_h3
@@ -1190,8 +1458,14 @@ main() {
     download-3d) cmd_download_3d "$@" ;;
     blender) cmd_blender "$@" ;;
     export-guides) cmd_export_guides "$@" ;;
+    house-views) cmd_house_views "$@" ;;
     asset-ls) cmd_asset_ls "$@" ;;
     film-accept) cmd_film_accept "$@" ;;
+    shot-sheet) cmd_shot_sheet "$@" ;;
+    overlay-qc) cmd_overlay_qc "$@" ;;
+    film-animatic) cmd_film_animatic "$@" ;;
+    stem-mix) cmd_stem_mix "$@" ;;
+    audio-still-video) cmd_audio_still_video "$@" ;;
     download-longcat) cmd_download_longcat "$@" ;;
     download-dreamx) cmd_download_dreamx "$@" ;;
     spark-timing) cmd_spark_timing "$@" ;;

@@ -1,0 +1,465 @@
+{
+  "id": "dub-localize-lab-example",
+  "revision": 1,
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "EZDubIngest",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        420,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "job_id",
+          "type": "STRING",
+          "links": [
+            1,
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDubIngest"
+      },
+      "widgets_values": [
+        "(none)",
+        false,
+        "episode",
+        ""
+      ],
+      "title": "ez_dub_ingest"
+    },
+    {
+      "id": 2,
+      "type": "EZDubScript",
+      "pos": [
+        500,
+        80
+      ],
+      "size": [
+        440,
+        360
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "job_id",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "script",
+          "type": "STRING",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDubScript"
+      },
+      "widgets_values": [
+        "{\n  \"target_language\": \"es\",\n  \"source_language\": \"auto\",\n  \"stage\": \"all\",\n  \"status\": \"\",\n  \"turns\": []\n}",
+        true,
+        "es",
+        "auto",
+        0,
+        "all"
+      ],
+      "title": "ez_dub_script"
+    },
+    {
+      "id": 3,
+      "type": "EZDubRender",
+      "pos": [
+        500,
+        480
+      ],
+      "size": [
+        440,
+        220
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "script",
+          "type": "STRING",
+          "link": 2
+        },
+        {
+          "name": "job_id",
+          "type": "STRING",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            4,
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDubRender"
+      },
+      "widgets_values": [
+        "chatterbox-ml",
+        true,
+        true,
+        1.0
+      ],
+      "title": "ez_dub_voice"
+    },
+    {
+      "id": 4,
+      "type": "SaveAudio",
+      "pos": [
+        1000,
+        80
+      ],
+      "size": [
+        320,
+        80
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 4
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudio"
+      },
+      "widgets_values": [
+        "ez_dub_mix"
+      ],
+      "title": "FLAC master"
+    },
+    {
+      "id": 5,
+      "type": "SaveAudioMP3",
+      "pos": [
+        1000,
+        200
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudioMP3"
+      },
+      "widgets_values": [
+        "ez_dub_yt",
+        "320k"
+      ],
+      "title": "YouTube MP3 320k"
+    },
+    {
+      "id": 6,
+      "type": "Note",
+      "pos": [
+        1000,
+        340
+      ],
+      "size": [
+        420,
+        480
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.\n3. Stage **all** (default): faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, per-speaker clone refs write under `dubs/<slug>/speakers/` (6\u201312 s), then per-turn GGUF translate + cached Chatterbox V3 clone. After Queue, **Dub status** lists speaker/turn counts. `text_target` must be the target language (status lists passthrough counts if the 4B copied a turn). Stage **analyze** writes JSON to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) \u2014 ISO `language_id` (`es`, not `Spanish`). Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`. Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`). Missing ASR/clone: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split.\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, speaker refs, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, then chatterbox-tts --no-deps so torch 2.14 stays). Restart also heals missing wheels. Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      1,
+      0,
+      3,
+      1,
+      "STRING"
+    ],
+    [
+      4,
+      3,
+      0,
+      4,
+      0,
+      "AUDIO"
+    ],
+    [
+      5,
+      3,
+      0,
+      5,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "INPUT",
+      "bounding": [
+        20,
+        24,
+        460,
+        380
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "PROMPT",
+      "bounding": [
+        480,
+        24,
+        480,
+        700
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "OUTPUT",
+      "bounding": [
+        980,
+        24,
+        460,
+        860
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "us-safe-dub",
+    "lab_note": "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.\n3. Stage **all** (default): faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, per-speaker clone refs write under `dubs/<slug>/speakers/` (6\u201312 s), then per-turn GGUF translate + cached Chatterbox V3 clone. After Queue, **Dub status** lists speaker/turn counts. `text_target` must be the target language (status lists passthrough counts if the 4B copied a turn). Stage **analyze** writes JSON to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) \u2014 ISO `language_id` (`es`, not `Spanish`). Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`. Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`). Missing ASR/clone: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split.\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, speaker refs, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, then chatterbox-tts --no-deps so torch 2.14 stays). Restart also heals missing wheels. Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe multi-speaker dub: rights-gated ingest, diarize, translate, Chatterbox ML V3 clone, duration-locked YouTube track",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "audio",
+      "occupancy": "audio",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          1,
+          "source",
+          {
+            "description": "Audio or video already in COMFY_OUTPUT_DIR/input (container /inputs). Default (none).",
+            "label": "Source file"
+          }
+        ],
+        [
+          1,
+          "upload",
+          {
+            "description": "Upload wav/mp3/mp4/mkv into input/. Requires I have rights on Queue.",
+            "label": "Upload media"
+          }
+        ],
+        [
+          1,
+          "source_url",
+          {
+            "description": "Optional http(s) URL you have rights to fetch. Overrides Source file when set.",
+            "label": "Source URL"
+          }
+        ],
+        [
+          1,
+          "have_rights",
+          {
+            "description": "Required. Off refuses Queue. No celebrity refs.",
+            "label": "I have rights"
+          }
+        ],
+        [
+          1,
+          "job_slug",
+          {
+            "description": "Job folder under COMFY_OUTPUT_DIR/dubs/<slug>.",
+            "label": "Job slug"
+          }
+        ],
+        [
+          2,
+          "prompt",
+          {
+            "description": "Editable turns JSON. Rewrite translation fills text_target.",
+            "label": "Translation",
+            "height": 140
+          }
+        ],
+        [
+          2,
+          "enhance",
+          {
+            "description": "On: diarize + ASR + GGUF translate. Off: pin this JSON.",
+            "label": "Rewrite translation"
+          }
+        ],
+        [
+          2,
+          "target_language",
+          {
+            "description": "Language to speak. Spanish is the soccer-podcast default.",
+            "label": "Target language"
+          }
+        ],
+        [
+          2,
+          "source_language",
+          {
+            "description": "auto detects from ASR. Pin when the show is mixed-language.",
+            "label": "Source language"
+          }
+        ],
+        [
+          2,
+          "max_speakers",
+          {
+            "description": "0 = auto (cap 8). Hint when you know the cast size.",
+            "label": "Max speakers"
+          }
+        ],
+        [
+          2,
+          "stage",
+          {
+            "description": "all = analyze+render. analyze writes JSON. render clones the widget.",
+            "label": "Stage"
+          }
+        ],
+        [
+          3,
+          "engine",
+          {
+            "description": "chatterbox-ml (MIT, 23 langs, PerTh on) or qwen3tts (Apache).",
+            "label": "Clone engine"
+          }
+        ],
+        [
+          3,
+          "keep_bed",
+          {
+            "description": "On: keep original ambience in gaps. Off: speech-only mix.",
+            "label": "Keep original bed"
+          }
+        ],
+        [
+          3,
+          "spoken_disclosure",
+          {
+            "description": "On: overlay a 3 s spoken bumper. Sidecar is always written.",
+            "label": "Spoken disclosure"
+          }
+        ],
+        [
+          3,
+          "speed",
+          {
+            "description": "TTS speed. 1.0 is the Kokoro default.",
+            "label": "Speaking speed"
+          }
+        ]
+      ],
+      "outputs": [
+        3,
+        4,
+        5
+      ]
+    },
+    "linearMode": true
+  },
+  "version": 0.4
+}

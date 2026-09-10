@@ -41,6 +41,7 @@ FROZEN_MANAGE_VERBS=(
   logs
   download-models
   download-podcast
+  download-dub
   download-music
   download-limit
   clear-hf-locks
@@ -56,6 +57,11 @@ FROZEN_MANAGE_VERBS=(
   download-3d
   blender
   export-guides
+  house-views
+  shot-sheet
+  overlay-qc
+  film-animatic
+  stem-mix
   film-accept
   download-longcat
   download-dreamx
@@ -64,10 +70,29 @@ FROZEN_MANAGE_VERBS=(
   reap-models
   disk-wizard
   asset-ls
+  audio-still-video
 )
 
 @test "cmd_disk_wizard --plan is read-only" {
   run cmd_disk_wizard --plan
+  [ "${status}" -eq 0 ]
+}
+
+@test "clay film desk verbs dispatch" {
+  run type cmd_shot_sheet
+  [ "${status}" -eq 0 ]
+  run type cmd_overlay_qc
+  [ "${status}" -eq 0 ]
+  run type cmd_film_animatic
+  [ "${status}" -eq 0 ]
+  run type cmd_stem_mix
+  [ "${status}" -eq 0 ]
+  run type cmd_house_views
+  [ "${status}" -eq 0 ]
+}
+
+@test "audio-still-video verb dispatches" {
+  run type cmd_audio_still_video
   [ "${status}" -eq 0 ]
 }
 
@@ -86,6 +111,7 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"doctor"* ]]
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"download-podcast"* ]]
+  [[ "${output}" == *"download-dub"* ]]
   [[ "${output}" == *"download-music"* ]]
   [[ "${output}" == *"print-shot"* ]]
   [[ "${output}" == *"film-resume"* ]]
@@ -267,6 +293,9 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"Asset Bible"* ]]
   run cmd_film_accept --help
   [ "${status}" -eq 0 ]
+  run cmd_audio_still_video --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"YouTube"* ]]
   run cmd_download_longcat --help
   [ "${status}" -eq 0 ]
   run cmd_download_dreamx --help
@@ -322,11 +351,13 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"banned"* || "${output}" == *"US Excluded"* ]]
   run cmd_help
   [[ "${output}" == *"download-podcast"* ]]
+  [[ "${output}" == *"download-dub"* ]]
   [[ "${output}" == *"download-music"* ]]
   [[ "${output}" == *"Does not pull podcast"* ]]
   run cmd_doctor
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"podcast status"* ]]
+  [[ "${output}" == *"dub status"* ]]
   [[ "${output}" == *"music status"* ]]
   [[ "${output}" == *"not a doctor failure"* ]]
   [[ ! -e "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" ]]
@@ -337,6 +368,23 @@ FROZEN_MANAGE_VERBS=(
   run cmd_download_podcast --limit off --tier analog
   [ "${status}" -eq 0 ]
   [[ -e "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx" ]]
+  run cmd_download_dub --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"asr"* ]]
+  [[ "${output}" == *"faster-whisper"* ]]
+  run cmd_download_dub --limit off --tier asr
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/onnx/silero_vad.onnx" || -e "${MODELS_DIR}/comfy/whisper/model.bin" ]]
+  run install_dub_runtime_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"stack stopped"* || "${output}" == *"dub wheels"* ]]
+  run check_dub_runtime_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"skipped"* || "${output}" == *"import"* ]]
+  run grep -F -- '--no-deps' "${MANAGE_SH}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'faster-whisper chatterbox-tts' "${MANAGE_SH}"
+  [ "${status}" -ne 0 ]
   run cmd_download_music --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"turbo"* ]]
@@ -369,6 +417,47 @@ FROZEN_MANAGE_VERBS=(
   export LAB_CONFIRM_TOKEN=DELETE
   run cmd_cleanup
   [ "${status}" -eq 0 ]
+}
+
+@test "download-models heals unwritable comfy layout and links lab weights" {
+  export LAB_MOCK_HF_DOWNLOAD=1
+  export DOWNLOAD_LIMIT=off
+  mkdir -p "${MODELS_DIR}/comfy"
+  chmod a-w "${MODELS_DIR}/comfy"
+  unset LAB_NO_SUDO
+  install_sudo_heal_mock
+  run cmd_download_models
+  chmod -R u+w "${MODELS_DIR}/comfy" 2>/dev/null || true
+  [ "${status}" -eq 0 ]
+  [[ -e "${MODELS_DIR}/comfy/diffusion_models/flux-2-klein-4b-fp8.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf" ]]
+}
+
+@test "install_dub_runtime_wheels splits ASR from chatterbox --no-deps" {
+  touch "${TEST_TMP_DIR}/compose_running"
+  : >"${TEST_TMP_DIR}/docker_calls.log"
+  run install_dub_runtime_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"faster-whisper"* ]]
+  [[ "${output}" == *"--no-deps"* || "$(cat "${TEST_TMP_DIR}/docker_calls.log")" == *"--no-deps"* ]]
+  grep -q 'faster-whisper' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q -- '--no-deps' "${TEST_TMP_DIR}/docker_calls.log"
+  if grep -E 'faster-whisper chatterbox-tts' "${TEST_TMP_DIR}/docker_calls.log"; then
+    return 1
+  fi
+  run check_dub_runtime_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"WhisperModel"* || "${output}" == *"import"* ]]
+}
+
+@test "doctor warns when comfy layout is not writable" {
+  mkdir -p "${MODELS_DIR}/comfy"
+  chmod a-w "${MODELS_DIR}/comfy"
+  run cmd_doctor
+  chmod u+w "${MODELS_DIR}/comfy" 2>/dev/null || true
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  [[ "${output}" == *"sudo-heal"* ]]
 }
 
 @test "download-models --limit accepts manual Mbps and overrides env" {

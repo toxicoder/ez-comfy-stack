@@ -27,7 +27,7 @@ services:
         # Validated pins (see docs/models-and-cache.md). Override to bump or set empty to float.
         TORCH_VERSION: ${TORCH_VERSION:-2.14.0}
         TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu130}
-        COMFYUI_REF: ${COMFYUI_REF:-v0.34.0}
+        COMFYUI_REF: ${COMFYUI_REF:-v0.34.6}
         COMFYUI_MANAGER_REF: ${COMFYUI_MANAGER_REF:-4.2.2}
         COMFYUI_NUNCHAKU_NODE_REF: ${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}
         # Empty = VideoHelperSuite main (required for LTX lab VHS_VideoCombine)
@@ -57,15 +57,15 @@ services:
       HF_TOKEN: ${HF_TOKEN:-}
       # On-box prompt-enhance GGUF (CPU llama.cpp). Never bake weights into the image.
       EZ_LLM_GGUF: ${EZ_LLM_GGUF:-/models/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf}
-      EZ_LLM_N_THREADS: ${EZ_LLM_N_THREADS:-4}
+      EZ_LLM_N_THREADS: ${EZ_LLM_N_THREADS:-8}
       EZ_LLM_N_CTX: ${EZ_LLM_N_CTX:-4096}
-      EZ_LLM_TIMEOUT_S: ${EZ_LLM_TIMEOUT_S:-60}
+      EZ_LLM_TIMEOUT_S: ${EZ_LLM_TIMEOUT_S:-180}
       EZ_LLM_N_GPU_LAYERS: ${EZ_LLM_N_GPU_LAYERS:-0}
       EZ_LLM_UNLOAD: ${EZ_LLM_UNLOAD:-0}
       LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
       LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
       # Runtime pin (must match build-arg). Stamp-present refresh syncs the volume when this changes.
-      COMFYUI_REF: ${COMFYUI_REF:-v0.34.0}
+      COMFYUI_REF: ${COMFYUI_REF:-v0.34.6}
       COMFYUI_OPENCUT_REF: ${COMFYUI_OPENCUT_REF:-0.5.0}
       COMFYUI_MAGCACHE_REF: ${COMFYUI_MAGCACHE_REF:-47bdd2aca97e568087c4e92d2d2f0426bdce7a37}
       COMFYUI_LTX_DIRECTOR_REF: ${COMFYUI_LTX_DIRECTOR_REF:-a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64}
@@ -85,6 +85,9 @@ services:
       LAB_DISABLE_TORCH_NATIVE_TRITON: ${LAB_DISABLE_TORCH_NATIVE_TRITON:-0}
       # Host media bind-mount (SaveImage / SaveVideo / VHS). Default /mnt/comfy-output.
       COMFY_OUTPUT_DIR: ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}
+      # Host uid/gid so link_models chowns bind-mount dirs it creates as root
+      HOST_UID: ${HOST_UID:-}
+      HOST_GID: ${HOST_GID:-}
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
     volumes:
@@ -109,6 +112,8 @@ services:
       - ./install-comfy:/opt/ez-comfy/install-comfy:ro
       - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
       - ./patch_unified_memory_copy.py:/opt/ez-comfy/patch_unified_memory_copy.py:ro
+      - ./patch_magcache_compat.py:/opt/ez-comfy/patch_magcache_compat.py:ro
+      - ./seed_clay_inputs.py:/opt/ez-comfy/seed_clay_inputs.py:ro
       - ./pythonpath:/opt/ez-comfy/pythonpath:ro
     gpus: all
     shm_size: "16gb"

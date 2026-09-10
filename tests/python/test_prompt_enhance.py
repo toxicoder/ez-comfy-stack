@@ -81,6 +81,9 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "surround" in ident_l or "landscape" in ident_l
     assert "fixture" in ident_l or "lantern" in ident_l
     assert "adjacen" in ident_l
+    assert "interior wall" in ident_l
+    assert "paste" in ident_l
+    assert "window" in ident_l
     flf = client.load_system_prompt("wan_flf")
     assert "first-last" in flf.lower() or "first last" in flf.lower() or "end frame" in flf.lower()
     assert "audio" in flf.lower()
@@ -216,31 +219,66 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert len(pack10) == 10
     labels = [card["label"] for card in pack10]
     assert labels == [
-        "01 exterior",
-        "02 entrance",
-        "03 inside",
-        "04 lounge",
-        "05 kitchen",
-        "06 bath",
-        "07 bedroom",
-        "08 drone",
-        "09 day",
-        "10 night",
+        "01 tower",
+        "02 foyer",
+        "03 lounge",
+        "04 kitchen",
+        "05 dining",
+        "06 bedroom",
+        "07 bath",
+        "08 terrace",
+        "09 drone",
+        "10 study",
     ]
     blobs = {card["label"]: card["shot"].lower() for card in pack10}
-    assert "ground-level" in blobs["01 exterior"] and "dusk" in blobs["01 exterior"]
-    assert "entrance" in blobs["02 entrance"] and "way in" in blobs["02 entrance"]
-    assert "just inside" in blobs["03 inside"]
-    assert "lounging" in blobs["04 lounge"] and "seating" in blobs["04 lounge"]
-    assert "kitchen" in blobs["05 kitchen"] and "work surface" in blobs["05 kitchen"]
-    assert "bathroom" in blobs["06 bath"] or "bathing" in blobs["06 bath"]
-    assert "bedroom" in blobs["07 bedroom"] and "bedding" in blobs["07 bedroom"]
-    assert "overhead" in blobs["08 drone"] or "drone" in blobs["08 drone"]
-    assert "daylight" in blobs["09 day"]
-    assert "night" in blobs["10 night"] and "lamps" in blobs["10 night"]
-    assert blobs["01 exterior"] != blobs["02 entrance"]
-    assert blobs["04 lounge"] != blobs["05 kitchen"]
-    assert blobs["09 day"] != blobs["10 night"]
+    assert "ground-level" not in blobs["01 tower"]
+    assert "three-quarter" not in blobs["01 tower"]
+    assert "looking up" in blobs["01 tower"]
+    assert "street" in blobs["01 tower"]
+    assert "canyon" in blobs["01 tower"] or "neighboring" in blobs["01 tower"]
+    assert "dusk" in blobs["01 tower"]
+    assert "elevator" in blobs["02 foyer"] or "landing" in blobs["02 foyer"]
+    assert "way in" in blobs["02 foyer"]
+    assert "behind the camera" in blobs["02 foyer"]
+    assert "seating" in blobs["03 lounge"] and "main opening" in blobs["03 lounge"]
+    toward_opening = [
+        lab
+        for lab, text in blobs.items()
+        if "toward the main opening" in text
+        or "looks out that opening" in text
+        or "out the main opening" in text
+    ]
+    assert toward_opening == ["03 lounge"]
+    assert "kitchen" in blobs["04 kitchen"]
+    assert "cabinets" in blobs["04 kitchen"] or "work surface" in blobs["04 kitchen"]
+    assert "cook wall" in blobs["04 kitchen"]
+    assert "fills the entire backdrop" in blobs["04 kitchen"]
+    assert "dining" in blobs["05 dining"]
+    assert "interior wall" in blobs["05 dining"]
+    assert "fills the entire backdrop" in blobs["05 dining"]
+    assert "bedroom" in blobs["06 bedroom"] and "bedding" in blobs["06 bedroom"]
+    assert "headboard" in blobs["06 bedroom"]
+    assert "fills the entire backdrop" in blobs["06 bedroom"]
+    assert "bathroom" in blobs["07 bath"] or "bathing" in blobs["07 bath"]
+    assert "frosted" in blobs["07 bath"] or "opaque" in blobs["07 bath"]
+    assert "fills the entire backdrop" in blobs["07 bath"]
+    assert "along" in blobs["08 terrace"]
+    assert "tower" in blobs["08 terrace"]
+    assert "overhead" in blobs["09 drone"] or "drone" in blobs["09 drone"]
+    assert "looking down" in blobs["09 drone"] or "roof" in blobs["09 drone"]
+    assert "skyline" in blobs["09 drone"] or "roofs" in blobs["09 drone"]
+    assert "study" in blobs["10 study"]
+    assert "desk" in blobs["10 study"] or "shelf" in blobs["10 study"]
+    assert "fills the entire backdrop" in blobs["10 study"]
+    for lab in ("04 kitchen", "05 dining", "06 bedroom", "07 bath", "10 study"):
+        assert "fills the entire backdrop" in blobs[lab]
+    joined_cards = " ".join(blobs.values())
+    assert "just inside" not in joined_cards
+    assert "daylight exterior" not in joined_cards
+    assert "night exterior" not in joined_cards
+    assert "nook" not in joined_cards
+    assert blobs["03 lounge"] != blobs["04 kitchen"]
+    assert blobs["05 dining"] != blobs["08 terrace"]
 
 
 def test_studio_app_chrome_pack_exists() -> None:
@@ -254,6 +292,7 @@ def test_studio_app_chrome_pack_exists() -> None:
     assert "lab_app_mode" in body
     assert "execution_start" in body
     assert "SaveImage" in body
+    assert "EZFilmConcat" in body
 
 
 def test_web_directory_and_preview_js() -> None:
@@ -267,6 +306,7 @@ def test_web_directory_and_preview_js() -> None:
     assert "EZAceStepPromptEnhance" in body
     assert "EZRapLyrics" in body
     assert "EZPodcastScript" in body
+    assert "EZDubScript" not in body
     assert "onNodeCreated" in body
     assert "CLIP prompt" in body
     assert "Enhance status" in body
@@ -392,6 +432,78 @@ def test_generate_uses_temperature_zero() -> None:
     assert client._generate(_FakeLlama(), "sys", "user") == "rewritten"
 
 
+def test_generate_honors_max_tokens() -> None:
+    class _FakeLlama:
+        def create_chat_completion(self, **kwargs: object) -> dict:
+            assert kwargs["max_tokens"] == 256
+            return {"choices": [{"message": {"content": "hola"}}]}
+
+    assert client._generate(_FakeLlama(), "sys", "user", 256) == "hola"
+
+
+def test_generate_honors_temperature() -> None:
+    class _FakeLlama:
+        def create_chat_completion(self, **kwargs: object) -> dict:
+            assert kwargs["temperature"] == 0.3
+            assert kwargs["max_tokens"] == 512
+            return {"choices": [{"message": {"content": "Bienvenidos"}}]}
+
+    assert client._generate(_FakeLlama(), "sys", "user", 512, 0.3) == "Bienvenidos"
+
+
+def test_complete_passes_timeout_and_temperature(monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: dict[str, object] = {}
+
+    class _Handle:
+        pass
+
+    def _fake_get_llama() -> tuple[object, None]:
+        return _Handle(), None
+
+    def _fake_generate(
+        llm: object,
+        system: str,
+        user: str,
+        max_tokens: int = 800,
+        temperature: float = 0.0,
+    ) -> str:
+        del llm, system, user
+        seen["max_tokens"] = max_tokens
+        seen["temperature"] = temperature
+        return "Hola"
+
+    monkeypatch.setattr(client, "_get_llama", _fake_get_llama)
+    monkeypatch.setattr(client, "_generate", _fake_generate)
+    text, reason = client.complete(
+        "sys",
+        "user",
+        max_tokens=512,
+        temperature=0.3,
+        timeout_s=120,
+    )
+    assert text == "Hola"
+    assert reason is None
+    assert seen["max_tokens"] == 512
+    assert seen["temperature"] == 0.3
+
+
+def test_timeout_and_thread_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("EZ_LLM_TIMEOUT_S", raising=False)
+    monkeypatch.delenv("EZ_LLM_N_THREADS", raising=False)
+    assert client.DEFAULT_TIMEOUT_S == 180
+    assert client.DEFAULT_N_THREADS == 8
+    assert client._timeout_s() == 180
+    assert client._n_threads() == 8
+    monkeypatch.setenv("EZ_LLM_TIMEOUT_S", "90")
+    monkeypatch.setenv("EZ_LLM_N_THREADS", "12")
+    assert client._timeout_s() == 90
+    assert client._n_threads() == 12
+    monkeypatch.setenv("EZ_LLM_TIMEOUT_S", "nope")
+    monkeypatch.setenv("EZ_LLM_N_THREADS", "0")
+    assert client._timeout_s() == 180
+    assert client._n_threads() == 8
+
+
 def test_n_gpu_layers_refused_without_allow(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("EZ_LLM_N_GPU_LAYERS", "99")
     monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
@@ -441,14 +553,18 @@ def test_ez_prompt_join_identity_and_shot() -> None:
     assert "walkthrough" in view[0]
     assert "Same building" in view[0]
     assert "furniture placement" in view[0]
-    assert "sky" in view[0]
-    assert "background" in view[0]
+    closer = "This still is only the room and backdrop the shot names."
+    assert view[0].count(closer) == 2
+    assert view[0].endswith(closer)
+    assert "outlook that camera would see" not in view[0]
+    assert "sky, and background" not in view[0]
     trimmed = join.run("  House.  ", "  Dusk deck.  ")[0]
     assert trimmed.startswith("Dusk deck.")
     assert "House." in trimmed
     only = join.run("Identity only.", "")
     assert only[0].startswith("Identity only.")
     assert "different camera" in only[0]
+    assert only[0].count(closer) == 1
     shot_only = join.run("", "Shot only.")[0]
     assert shot_only.startswith("Shot only.")
     assert "different camera" in shot_only
@@ -458,13 +574,15 @@ def test_ez_prompt_join_identity_and_shot() -> None:
     assert "Cabin." in locked[0]
     assert "Locked inventory (do not change): cedar siding, hip roof." in locked[0]
     assert "different camera" in locked[0]
-    assert locked[0].endswith("cedar siding, hip roof.")
+    assert locked[0].count(closer) == 2
+    assert locked[0].endswith(closer)
     state = join.run("Cabin.", "Warm key.", "mug", "state")
     assert state[0].startswith("Cabin.")
     assert "camera framing" in state[0]
     assert "The shot names the only change." in state[0]
     assert "mug" in state[0]
     assert state[0].endswith("Warm key.")
+    assert closer not in state[0]
     types = EZPromptJoin.INPUT_TYPES()["required"]["lock"][0]
     assert types[0] == "view"
     assert "state" in types
@@ -492,14 +610,19 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert "photoreal still" in ident_l
     assert "warm-glass" in ident_l
     assert "crown penthouse" in ident_l
+    assert "full-floor" in ident_l
+    assert "dense" in ident_l
+    assert "skyscraper" in ident_l
     assert "wraparound terrace" in ident_l
     assert "three-bay" in ident_l
     assert "teak" in ident_l
-    assert "fern" in ident_l or "living wall" in ident_l
     assert "coral-teal" in ident_l
     assert "lounge" in ident_l
+    assert "study" in ident_l
     assert "lantern" in ident_l or "path light" in ident_l
     assert "bay" in ident_l
+    assert "compact" not in ident_l
+    assert "fern" not in ident_l
     assert "24mm" not in ident_l
     assert "golden-hour" not in ident_l and "golden hour" not in ident_l
     assert "cedar" not in ident_l
@@ -512,6 +635,20 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert ident["widgets_values"][4] == "none"
     joins = [n for n in house["nodes"] if n.get("type") == "EZPromptJoin"]
     assert len(joins) == 10
+    join_titles = [n["title"] for n in sorted(joins, key=lambda n: n["id"])]
+    assert join_titles == [
+        "SHOT 01 tower",
+        "SHOT 02 foyer",
+        "SHOT 03 lounge",
+        "SHOT 04 kitchen",
+        "SHOT 05 dining",
+        "SHOT 06 bedroom",
+        "SHOT 07 bath",
+        "SHOT 08 terrace",
+        "SHOT 09 drone",
+        "SHOT 10 study",
+    ]
+    assert "cook wall" in ident_l
     positives = {
         n["title"]: n["widgets_values"][0]
         for n in house["nodes"]
@@ -556,15 +693,20 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         joined = client.join_prompt(ident_text, shot, inventory, lock)
         assert joined.startswith(shot)
         assert ident_text in joined
-        assert len(joined.split()) <= 180
+        assert len(joined.split()) <= 220
         assert not any(b in shot_l for b in banned)
         text = positives[f"Positive {i + 1:02d}"]
         assert text.startswith(shot)
         assert ident_text in text
         assert "different camera" in text
         assert "walkthrough" in text
+        closer = "This still is only the room and backdrop the shot names."
+        assert joined.count(closer) == 2
+        assert text.count(closer) == 2
+        assert "outlook that camera would see" not in text
+        assert "sky, and background" not in text
         assert "linen sofa" in text
-        assert len(text.split()) <= 180
+        assert len(text.split()) <= 220
     assert inventories == {""}
     assert sum(1 for n in house["nodes"] if n.get("type") == "VAEEncode") == 0
     assert sum(1 for n in house["nodes"] if n.get("type") == "ReferenceLatent") == 0
@@ -592,7 +734,12 @@ def test_node_mappings_modes_preview_and_style() -> None:
     wan = EZWanPromptEnhance()
     ltx = EZLTXPromptEnhance()
     assert klein.OUTPUT_NODE is True
-    assert klein.INPUT_TYPES()["required"]["enhance"][1]["default"] is True
+    enhance = klein.INPUT_TYPES()["required"]["enhance"][1]
+    assert enhance["default"] is True
+    assert enhance["label_on"] == "On"
+    assert enhance["label_off"] == "Off"
+    assert wan.INPUT_TYPES()["required"]["enhance"][1]["label_on"] == "On"
+    assert ltx.INPUT_TYPES()["required"]["enhance"][1]["label_off"] == "Off"
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
     assert len(styles) == 51
@@ -706,6 +853,8 @@ def test_ace_step_enhance_node_defaults_and_modes() -> None:
     ace = EZAceStepPromptEnhance()
     spec = ace.INPUT_TYPES()["required"]
     assert spec["enhance"][1]["default"] is True
+    assert spec["enhance"][1]["label_on"] == "On"
+    assert spec["enhance"][1]["label_off"] == "Off"
     assert spec["mode"][0] == ["vocal", "instrumental"]
     off = ace.run("boom bap, 88 bpm", "[verse]\nhi", False, "vocal")
     assert off["result"] == ("boom bap, 88 bpm", "[verse]\nhi")
@@ -726,8 +875,13 @@ def test_ace_step_enhance_node_defaults_and_modes() -> None:
 
 
 def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
-    """Every lab CLIP/ACE positive prompt comes from an EZ enhance node, enhance on."""
-    skip_ids = {"longcat-video-lab-example"}
+    """Every lab CLIP/ACE positive prompt comes from an EZ enhance node.
+
+    Authored/structured graphs pin Enhance off; lazy CLIP printers stay on.
+    """
+    from _wire_prompt_enhance import enhance_pin_off
+
+    skip_ids = {"longcat-video-lab-example", "audio-finish-lab-example"}
     enhance_types = {
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
@@ -744,6 +898,7 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
         gid = str(graph.get("id") or path.stem)
         if gid in skip_ids:
             continue
+        pin_off = enhance_pin_off(gid)
         by_id = {int(n["id"]): n for n in graph["nodes"]}
         links = {int(link[0]): link for link in graph.get("links") or []}
         for node in graph["nodes"]:
@@ -755,7 +910,12 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
                 )
                 if ntype == "EZAceStepPromptEnhance":
                     flag = values[2] if len(values) > 2 else True
-                if flag is not True:
+                if pin_off:
+                    if flag is not False:
+                        missing.append(
+                            f"{path.name}: {ntype}#{node['id']} enhance={flag!r}"
+                        )
+                elif flag is not True:
                     missing.append(f"{path.name}: {ntype}#{node['id']} enhance={flag!r}")
             if ntype not in encoder_types:
                 continue

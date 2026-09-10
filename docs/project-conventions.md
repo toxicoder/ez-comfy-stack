@@ -11,7 +11,7 @@ tags: [conventions, contributing, safety, shell, google-style]
 - Core principles
 - Repo layout and ownership
 - Shell style (Google Shell Style Guide + project deviations)
-- Docker, testing, coverage gate, and branching rules
+- Docker, testing, coverage gate, Pyright (Pylance) + mypy, and branching rules
 - Docs publish and **human-readable formatting** patterns
 
 **What this enables**
@@ -27,10 +27,10 @@ tags: [conventions, contributing, safety, shell, google-style]
 | Stability first | SSH stays usable under load |
 | Explicit resources | Docker mem limits always set |
 | No auto-start | `restart: "no"` |
-| Hermetic tests | BATS/pytest without real Spark |
+| Hermetic tests | BATS/pytest/Pyright/mypy without real Spark |
 | Docs as code | MkDocs pages with required sections |
 | Keep it small | No K8s/Ansible/dashboard/Bazel |
-| Style as gate | ShellCheck + shfmt on every change |
+| Style as gate | ShellCheck + shfmt + Pyright (Pylance) + mypy on every change |
 
 ## Repo layout
 
@@ -39,7 +39,7 @@ flowchart TB
   Root["ez-comfy-stack"]
   Root --> Manage["scripts/manage.sh<br/>operator CLI"]
   Root --> Lib["scripts/lib/*<br/>common · compose · paths · safety"]
-  Root --> Util["scripts/utilities/*<br/>download-image · download-wan · download-ltx · download-limit · concat-shots · spark-farm"]
+  Root --> Util["scripts/utilities/*<br/>download-image · download-wan · download-ltx · download-limit · download-dub · concat-shots · spark-farm"]
   Root --> Docker["docker/*<br/>compose · Dockerfile · entrypoint · patch"]
   Root --> Cfg["config/resource-policy.yaml"]
   Root --> Docs["docs/ · MkDocs"]
@@ -50,7 +50,7 @@ flowchart TB
   Manage --> Docker
 ```
 
-Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`) and keep the `*-lab-example.json` suffix. Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` and must not be committed.
+Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`) and keep the `*-lab-example.json` suffix. Nested folders under a lane are allowed (Nill Bye diss graphs: `_lab/audio/nill-bye/`; Drive-through EDM: `_lab/audio/drive-through/`). Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` and must not be committed.
 
 ## Shell style
 
@@ -82,6 +82,8 @@ This project follows that guide for executables and libraries, with the **intent
 | Libraries | `scripts/lib/*.sh` — `.sh` extension, **not** executable |
 | Entry scripts | `*.sh`, executable, `set -euo pipefail` |
 | ShellCheck | Clean at warning level (`make lint`) |
+| Pyright | Clean at `standard` (`make typecheck` / `make lint`) |
+| mypy | Clean (`make typecheck` / `make lint`; `mypy.ini`) |
 | SUID/SGID | Forbidden |
 
 ### Intentional deviations from Google
@@ -195,15 +197,17 @@ flowchart TB
 ## Testing
 
 - TDD for behavior changes  
-- BATS for shell; pytest for Python  
+- BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python  
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `make coverage` enforces:
   - **100% Python line coverage** on `patch_get_free_memory` and `patch_unified_memory_copy`
+  - **Pyright** clean at `standard` and **mypy** clean (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (production-only references do not count)
   - Full BATS suite green  
 - **Tests ship with production code** — same commit as the files under test  
 - **Test shell style**: `tests/bats/*.bats`, `tests/bats/*.bash`, and `tests/*.sh` follow the Google Shell Style Guide where applicable (quoted `"${var}"`, `[[ … ]]`, Google-style helper comments in `test_helper.bash`, 2-space indent / shfmt for `.sh` runners)
+- Install test tools: `pip install -r tests/requirements.txt` (pytest, pytest-cov, pyright, mypy)
 
 ```mermaid
 flowchart LR
@@ -215,10 +219,12 @@ flowchart LR
 ```mermaid
 flowchart TB
   Cov["make coverage"] --> Py["100% line · UM patches"]
+  Cov --> Pyright["Pyright standard + mypy · first-party Python"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>named under tests/"]
   Cov --> Bats["Full BATS suite green"]
   Lint["make lint"] --> SC["ShellCheck warnings = defects"]
   Lint --> Fmt["shfmt"]
+  Lint --> Pyright
 ```
 
 ## Branches
@@ -291,7 +297,7 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 
 **Getting Started** is the primary operator path: keep the happy path short; park image-layer, cold-start, and lab-internals content in collapsible blocks.
 
-**Session variables:** operator command fences should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`. `docs/javascripts/commands.js` substitutes those `${VAR}` tokens at runtime from `localStorage` (`ez-comfy.cmdvars`) and sets Material copy to `data-clipboard-text`.
+**Session variables:** operator command fences **and inline `code`** should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`. `docs/javascripts/commands.js` substitutes `${VAR}` and `${VAR:-default}` at runtime from `localStorage` (`ez-comfy.cmdvars`), renders each known token as an editable `.ez-var` chip, and sets Material copy to `data-clipboard-text`. Token split lives in `docs/commands.py` (`split_var_template`) — keep the JS regex in sync.
 
 **Interactive commands (`ezcmd`):** flagged download examples use a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json`. `docs/hooks.py` expands the fence (do not add `mkdocs-placeholder-plugin`; its `xNAMEx` tokens fight bash `${VAR}` and InnerHTML replace breaks Material search). Recipes and substitution live in `docs/commands.py` — keep `commands.js` aligned with `substitute_vars` / `render_command`. `--tier` is a per-utility **pack id**; document it on [Download tiers](download-tiers.md), not as a global quality flag.
 

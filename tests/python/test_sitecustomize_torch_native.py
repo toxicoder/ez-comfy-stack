@@ -36,12 +36,13 @@ def test_apply_disables_triton_when_flag_set(monkeypatch: pytest.MonkeyPatch) ->
         enabled = True
 
     pn = types.ModuleType("torch.backends.python_native")
-    pn.triton = _TritonCtl()
+    ctl = _TritonCtl()
+    setattr(pn, "triton", ctl)
 
     backends = types.ModuleType("torch.backends")
-    backends.python_native = pn
+    setattr(backends, "python_native", pn)
     torch_mod = types.ModuleType("torch")
-    torch_mod.backends = backends
+    setattr(torch_mod, "backends", backends)
 
     monkeypatch.setitem(sys.modules, "torch", torch_mod)
     monkeypatch.setitem(sys.modules, "torch.backends", backends)
@@ -49,7 +50,7 @@ def test_apply_disables_triton_when_flag_set(monkeypatch: pytest.MonkeyPatch) ->
 
     mod = _load_sitecustomize(monkeypatch, "1")
     mod.apply_lab_torch_native_policy()
-    assert pn.triton.enabled is False
+    assert ctl.enabled is False
 
 
 def test_apply_ignores_missing_torch(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -79,15 +80,16 @@ def test_apply_noop_when_flag_zero(monkeypatch: pytest.MonkeyPatch) -> None:
         enabled = True
 
     pn = types.ModuleType("torch.backends.python_native")
-    pn.triton = _TritonCtl()
+    ctl = _TritonCtl()
+    setattr(pn, "triton", ctl)
     backends = types.ModuleType("torch.backends")
-    backends.python_native = pn
+    setattr(backends, "python_native", pn)
     torch_mod = types.ModuleType("torch")
-    torch_mod.backends = backends
+    setattr(torch_mod, "backends", backends)
     monkeypatch.setitem(sys.modules, "torch", torch_mod)
     monkeypatch.setitem(sys.modules, "torch.backends", backends)
     monkeypatch.setitem(sys.modules, "torch.backends.python_native", pn)
 
     mod = _load_sitecustomize(monkeypatch, "0")
     mod.apply_lab_torch_native_policy()
-    assert pn.triton.enabled is True
+    assert ctl.enabled is True

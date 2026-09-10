@@ -216,7 +216,7 @@
     "linearData": {
       "inputs": [
         [
-          "2:prompt",
+          2,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -225,7 +225,7 @@
           }
         ],
         [
-          "3:prompt",
+          3,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -234,7 +234,7 @@
           }
         ],
         [
-          "4:prompt",
+          4,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -243,7 +243,7 @@
           }
         ],
         [
-          "2:style",
+          2,
           "style",
           {
             "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
@@ -251,7 +251,7 @@
           }
         ],
         [
-          "3:style",
+          3,
           "style",
           {
             "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
@@ -259,7 +259,7 @@
           }
         ],
         [
-          "4:style",
+          4,
           "style",
           {
             "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
@@ -267,7 +267,7 @@
           }
         ],
         [
-          "2:enhance",
+          2,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -275,7 +275,7 @@
           }
         ],
         [
-          "3:enhance",
+          3,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -283,7 +283,7 @@
           }
         ],
         [
-          "4:enhance",
+          4,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -291,55 +291,7 @@
           }
         ],
         [
-          "2:mode",
-          "mode",
-          {
-            "description": "Rewrite family for this encoder.",
-            "label": "Klein mode"
-          }
-        ],
-        [
-          "3:mode",
-          "mode",
-          {
-            "description": "Rewrite family for this encoder.",
-            "label": "Wan mode"
-          }
-        ],
-        [
-          "4:mode",
-          "mode",
-          {
-            "description": "Rewrite family for this encoder.",
-            "label": "LTX mode"
-          }
-        ],
-        [
-          "2:duration_hint",
-          "duration_hint",
-          {
-            "description": "Aspect or duration the rewriter should target.",
-            "label": "Klein duration / framing"
-          }
-        ],
-        [
-          "3:duration_hint",
-          "duration_hint",
-          {
-            "description": "Aspect or duration the rewriter should target.",
-            "label": "Wan duration / framing"
-          }
-        ],
-        [
-          "4:duration_hint",
-          "duration_hint",
-          {
-            "description": "Aspect or duration the rewriter should target.",
-            "label": "LTX duration / framing"
-          }
-        ],
-        [
-          "4:audio_notes",
+          4,
           "audio_notes",
           {
             "description": "World SFX to interleave. No score unless you asked for music.",

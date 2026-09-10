@@ -20,7 +20,7 @@ tags: [manage, cli, operator, reference]
 
 **Who this is for:** operators who already cloned the repo. First install: [Getting Started](getting-started.md).
 
-Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HOST`, `MODELS_DIR`, …) are for *your* shell (browser URL, `ssh -L`, `ls`). The **Your Spark** panel on these docs fills the same keys when you copy a command.
+Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HOST`, `MODELS_DIR`, …) are for *your* shell (browser URL, `ssh -L`, `ls`). The **Your Spark** panel (or a highlighted chip in a copyable command) on these docs fills the same keys when you copy.
 
 ```ezcmd
 id: doctor
@@ -34,8 +34,8 @@ id: doctor
 
 | Command | Purpose | Do not |
 | --- | --- | --- |
-| `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, then doctor | Skip doctor failures |
-| `doctor` | Preflight (docker, GPU, RAM/disk, dirs, license one-liner, spark-timing) | Treat missing weights as a hard fail (they are a warning) |
+| `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, `hf` CLI, then doctor | Skip doctor failures |
+| `doctor` | Preflight (docker, GPU, RAM/disk, dirs, `hf` CLI, license one-liner, spark-timing) | Treat missing weights as a hard fail (they are a warning) |
 | `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port | — |
 | `start` | Type `yes`; headroom; compose up | Weaken confirm or `restart: "no"` |
 | `stop` | Stop containers; keep models, outputs, volume | Reboot with the stack up |
@@ -43,6 +43,7 @@ id: doctor
 | `logs` | Follow compose logs (`logs --tail 100` works) | — |
 | `download-models [--limit auto\|N\|off] [--drop-incomplete]` | Default pack, throttled wrap. **No `--tier`.** | Expect podcast/music weights (they are opt-in) |
 | `download-podcast [--tier analog\|…] [--limit auto\|N\|off]` | Opt-in pack id (`analog` = Kokoro). [Tiers](download-tiers.md) | Co-resident with LTX/Wan/Klein |
+| `download-dub [--tier asr\|clone\|all] [--limit auto\|N\|off]` | Opt-in ASR + Chatterbox Multilingual V3. [Local dub](dub.md) | Co-resident with LTX/Wan/Klein |
 | `download-music [--tier turbo\|xl\|all] [--limit auto\|N\|off]` | Opt-in size ladder; `turbo` shares dest with `download-podcast --tier acestep` | Co-resident with the visual session |
 | `download-limit …` | Proxy to `scripts/utilities/download-limit.sh` | Leave a wrap limit stuck; wrap **always clears on exit** |
 | `clear-hf-locks` | Stale Hugging Face `.lock` files under `MODELS_DIR` | Force-clear while `hf` is still writing |
@@ -53,8 +54,14 @@ id: doctor
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
 | `blender` | Host Blender sidecar; dies if compose is up | Run next to Comfy |
 | `export-guides` | Dump a 1280×704 / 120f guide pack; dies if compose is up | 1280×720; dump while Comfy is up |
+| `house-views` | Dump 1024×1280 Instagram 4:5 clay stills + GLB; copies LoadImage plates into `COMFY_OUTPUT_DIR/input`. Dies if compose is up. `--install-inputs` copies an existing dump into `input/` (no Blender; compose may stay up). `--seed-inputs` copies a pack or renders the layout into `input/` (no Blender; compose may stay up). `start` also seeds missing plates | Reuse `export-guides`; dump while Comfy is up; Godot |
+| `shot-sheet` | Write `films/<slug>/shots.yaml` with shot-card defaults | Overwrite lab YAML without `--lab-example` |
+| `overlay-qc` | 50% clay/look overlay (host ffmpeg; compose may stay up) | Skip size QC; auto-accept the score |
+| `film-animatic` | Cheap 90s animatic from clay.mp4 or stills | Treat as a 90s denoise |
+| `stem-mix` | Picture-lock stems; duck −15 dB; YouTube loudnorm | Mix ACE-Step next to LTX |
+| `audio-still-video --audio FILE --image FILE` | Mux a still + audio master to YouTube MP4 (host ffmpeg; compose may stay up) | Treat as a denoise; use NVENC; edit audio lab graphs |
 | `asset-ls` | Read-only [Asset Bible](asset-bible.md) catalog (`COMFY_OUTPUT_DIR/assets`) | Store assets in `MODELS_DIR` or `guides/` |
-| `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio) | `--skip-accept` as a habit |
+| `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio; stems LUFS when `audio_policy: stems`) | `--skip-accept` as a habit |
 | `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache | DreamX-World; NCCL |
 | `spark-timing` | Kitchen wall-clock table (`record --klein N --wan N --ltx N`) | Record on `pytorch-fallback` |
 | `models-status` / `reap-models` | Disk bible / MODELS_DIR cache cleanup (never `cleanup` weights) | `cleanup` when you meant reap |

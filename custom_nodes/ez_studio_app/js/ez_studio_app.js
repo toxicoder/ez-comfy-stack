@@ -18,12 +18,25 @@ const LABELS = {
   mode: "Mode",
   duration_hint: "Duration / framing",
   value: "Shot card",
+  logline: "Logline",
   seconds: "Duration (seconds)",
   speaker_a_voice: "Speaker A",
   speaker_b_voice: "Speaker B",
   announcer_voice: "Announcer",
   include_announcer: "Include announcer",
   speed: "Speaking speed",
+  source: "Source file",
+  upload: "Upload media",
+  source_url: "Source URL",
+  have_rights: "I have rights",
+  job_slug: "Job slug",
+  target_language: "Target language",
+  source_language: "Source language",
+  max_speakers: "Max speakers",
+  stage: "Stage",
+  engine: "Clone engine",
+  keep_bed: "Keep original bed",
+  spoken_disclosure: "Spoken disclosure",
 };
 
 const OCCUPANCY_STOP = {
@@ -36,7 +49,13 @@ const OCCUPANCY_STOP = {
   audio: "Klein / Wan / LTX session",
 };
 
-const SAVE_TYPES = new Set(["SaveImage", "VHS_VideoCombine", "SaveAudio", "SaveAudioMP3"]);
+const SAVE_TYPES = new Set([
+  "SaveImage",
+  "VHS_VideoCombine",
+  "SaveAudio",
+  "SaveAudioMP3",
+  "EZFilmConcat",
+]);
 
 const BANNER_ID = "ez-studio-app-banner";
 const CHIP = [
@@ -54,14 +73,17 @@ function labAppMode() {
 }
 
 function stampedLabels() {
+  // Persist is [nodeId, widgetName, config]. App panel titles use widget.label.
   const labels = new Map();
   const inputs = app.graph?.extra?.linearData?.inputs || [];
   for (const entry of inputs) {
-    const widgetId = entry?.[0];
+    const nodeId = entry?.[0];
+    const widgetName = entry?.[1];
     const config = entry?.[2];
-    if (typeof widgetId === "string" && config?.label) {
-      labels.set(widgetId, config.label);
+    if (nodeId == null || !widgetName || !config?.label) {
+      continue;
     }
+    labels.set(`${nodeId}:${widgetName}`, config.label);
   }
   return labels;
 }

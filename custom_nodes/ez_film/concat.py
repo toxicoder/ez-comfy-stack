@@ -5,6 +5,7 @@ Hermetic at import: stdlib only. ffmpeg is resolved at call time.
 
 from __future__ import annotations
 
+import html
 import os
 import shutil
 import subprocess
@@ -18,6 +19,14 @@ from .shots import DEFAULT_CAP_SECONDS, SHOT_COUNT, film_slug
 LOUDNORM_FILTER = "loudnorm=I=-14:LRA=11:TP=-1.5"
 AAC_BITRATE = "192k"
 AAC_RATE = "48000"
+AUDIO_FILTER = f"aresample={AAC_RATE},{LOUDNORM_FILTER}"
+X264_PRESET = "veryfast"
+X264_CRF = "18"
+PIX_FMT = "yuv420p"
+MOVFLAGS = "+faststart"
+FPS = "24"
+VIDEO_SUFFIXES = (".mp4", ".webm", ".mkv", ".mov", ".m4v")
+IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
 
 
 def log(message: str) -> None:
@@ -79,38 +88,181 @@ def find_ffprobe() -> str | None:
     return shutil.which("ffprobe")
 
 
+def _is_video_path(path: str) -> bool:
+    """True when ``path`` has a video suffix."""
+    return Path(path).suffix.lower() in VIDEO_SUFFIXES
+
+
+def _is_image_path(path: str) -> bool:
+    """True when ``path`` has an image suffix (VHS metadata PNG)."""
+    return Path(path).suffix.lower() in IMAGE_SUFFIXES
+
+
+def _is_muxed_audio_path(path: str) -> bool:
+    """True when ``path`` is a VHS muxed ``*-audio.<videoext>`` file."""
+    return _is_video_path(path) and Path(path).stem.endswith("-audio")
+
+
+def _sibling_video(path: str) -> str | None:
+    """Muxed ``{stem}-audio.mp4`` then silent ``{stem}.mp4`` next to an image."""
+    if not _is_image_path(path):
+        return None
+    image = Path(path)
+    muxed = image.with_name(f"{image.stem}-audio.mp4")
+    if muxed.is_file():
+        return str(muxed)
+    silent = image.with_suffix(".mp4")
+    if silent.is_file():
+        return str(silent)
+    return None
+
+
+def _path_strings(value: object) -> list[str]:
+    """Flatten a VHS_FILENAMES payload into path strings.
+
+    Arguments:
+        value: str path, ``(saved, [paths])`` tuple, list, dict, or Path.
+    Returns:
+        Path strings in payload order (empty when unusable).
+    """
+    if value is None:
+        return []
+    if isinstance(value, Path):
+        return [str(value)]
+    if isinstance(value, str):
+        text = value.strip()
+        return [text] if text else []
+    if isinstance(value, dict):
+        for key in ("filename", "path", "file"):
+            raw = value.get(key)
+            if raw:
+                return _path_strings(raw)
+        return []
+    if isinstance(value, (list, tuple)):
+        if not value:
+            return []
+        if len(value) == 2 and isinstance(value[0], bool):
+            return _path_strings(value[1])
+        out: list[str] = []
+        for item in value:
+            out.extend(_path_strings(item))
+        return out
+    return []
+
+
 def resolve_shot_path(value: object) -> str:
-    """First MP4 path from a VHS_FILENAMES payload or a plain path.
+    """Most-complete video path from a VHS_FILENAMES payload or a plain path.
+
+    VideoHelperSuite writes files in creation order: metadata PNG, silent
+    MP4, then muxed ``*-audio.mp4``. VHS documents ``output[1][-1]`` as the
+    most complete file. Prefer that muxed AV, then the last video suffix,
+    then a sibling MP4 next to a PNG.
 
     Arguments:
         value: str path, ``(saved, [paths])`` tuple, list, or dict.
     Returns:
         Path string.
     Raises:
-        ValueError: empty / unusable payload.
+        ValueError: empty / unusable payload or no video in the list.
     """
     if value is None:
         raise ValueError("missing shot file")
-    if isinstance(value, Path):
-        return str(value)
-    if isinstance(value, str):
-        text = value.strip()
-        if not text:
-            raise ValueError("empty shot path")
-        return text
+    if not isinstance(value, (Path, str, dict, list, tuple)):
+        raise ValueError(f"unusable shot payload: {type(value).__name__}")
     if isinstance(value, dict):
-        for key in ("filename", "path", "file"):
-            raw = value.get(key)
-            if raw:
-                return resolve_shot_path(raw)
-        raise ValueError("shot dict has no filename")
-    if isinstance(value, (list, tuple)):
-        if not value:
-            raise ValueError("empty shot list")
-        if len(value) == 2 and isinstance(value[0], bool):
-            return resolve_shot_path(value[1])
-        return resolve_shot_path(value[0])
-    raise ValueError(f"unusable shot payload: {type(value).__name__}")
+        paths = _path_strings(value)
+        if not paths:
+            raise ValueError("shot dict has no filename")
+    else:
+        paths = _path_strings(value)
+        if not paths:
+            raise ValueError("empty shot path")
+    muxed = [path for path in paths if _is_muxed_audio_path(path)]
+    if muxed:
+        return muxed[-1]
+    videos = [path for path in paths if _is_video_path(path)]
+    if videos:
+        return videos[-1]
+    sibling = _sibling_video(paths[-1])
+    if sibling:
+        return sibling
+    raise ValueError(f"no MP4 in shot payload (got {paths[-1]})")
+
+
+def encoder_missing(stderr: str) -> bool:
+    """True when ffmpeg failed because libx264 is not in the build."""
+    text = (stderr or "").lower()
+    if "unknown encoder" in text:
+        return True
+    if "encoder not found" in text:
+        return True
+    return "libx264" in text and "not found" in text
+
+
+def write_preview_html(out_mp4: str) -> Path:
+    """Write a one-file HTML player next to the published MP4.
+
+    Arguments:
+        out_mp4: Published MP4 path.
+    Returns:
+        HTML sidecar path.
+    """
+    path = Path(out_mp4)
+    name = path.name
+    title = html.escape(path.stem)
+    src = html.escape(name)
+    sidecar = path.with_suffix(".html")
+    sidecar.write_text(
+        "<!doctype html>\n"
+        '<html lang="en">\n'
+        "<head>\n"
+        '  <meta charset="utf-8">\n'
+        '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f"  <title>{title}</title>\n"
+        "  <style>\n"
+        "    body{margin:0;background:#111;color:#eee;"
+        "font:16px/1.4 system-ui,sans-serif}\n"
+        "    main{max-width:1280px;margin:0 auto;padding:16px}\n"
+        "    video{width:100%;height:auto;background:#000}\n"
+        "    a{color:#8cf}\n"
+        "  </style>\n"
+        "</head>\n"
+        "<body>\n"
+        "  <main>\n"
+        f"    <h1>{title}</h1>\n"
+        f'    <video controls playsinline src="{src}"></video>\n'
+        f'    <p><a href="{src}" download>Download MP4</a></p>\n'
+        "  </main>\n"
+        "</body>\n"
+        "</html>\n",
+        encoding="utf-8",
+    )
+    return sidecar
+
+
+def copy_publish_master(
+    out_mp4: str, film: str, output_dir: Path | None = None
+) -> Path | None:
+    """Copy the master into ``films/<slug>/publish/`` when that dir exists.
+
+    Arguments:
+        out_mp4: Published MP4 path.
+        film: Film id.
+        output_dir: Override output directory.
+    Returns:
+        Destination path, or None when skipped.
+    """
+    dest = output_dir if output_dir is not None else output_directory()
+    publish = dest / "films" / film_slug(film) / "publish"
+    if not publish.is_dir():
+        return None
+    master = publish / "master.mp4"
+    try:
+        shutil.copy2(out_mp4, master)
+    except OSError as exc:
+        log(f"publish master copy skipped: {exc}")
+        return None
+    return master
 
 
 def write_disclosure_sidecar(out_mp4: str, text: str) -> Path | None:
@@ -143,16 +295,37 @@ def concat_list_line(path: str) -> str:
     return f"file '{escaped}'"
 
 
+def _concat_input_prefix(ffmpeg: str, list_path: str, cap_seconds: float) -> list[str]:
+    """Shared concat-demuxer input + duration cap."""
+    return [
+        ffmpeg,
+        "-y",
+        "-fflags",
+        "+genpts",
+        "-f",
+        "concat",
+        "-safe",
+        "0",
+        "-i",
+        list_path,
+        "-t",
+        str(cap_seconds),
+        "-avoid_negative_ts",
+        "make_zero",
+    ]
+
+
 def ffmpeg_stitch_argv(
     list_path: str,
     out_mp4: str,
     cap_seconds: float,
     ffmpeg: str,
 ) -> list[str]:
-    """Build the default stitch command (video copy, AAC + YouTube loudnorm).
+    """Build the default playable stitch (H.264 + AAC + faststart).
 
-    Hard-cut goldens depend on this argv. Audio acrossfade is a separate
-    three-step remux (see :func:`stitch_film` ``xfade_cs``).
+    Audio acrossfade is a separate three-step remux (see :func:`stitch_film`
+    ``xfade_cs``). If libx264 is missing, :func:`stitch_film` falls back to
+    :func:`ffmpeg_stitch_copy_argv`.
 
     Arguments:
         list_path: Concat demuxer list file.
@@ -162,18 +335,43 @@ def ffmpeg_stitch_argv(
     Returns:
         Argument vector.
     """
-    cap = str(cap_seconds)
     return [
-        ffmpeg,
-        "-y",
-        "-f",
-        "concat",
-        "-safe",
-        "0",
-        "-i",
-        list_path,
-        "-t",
-        cap,
+        *_concat_input_prefix(ffmpeg, list_path, cap_seconds),
+        "-r",
+        FPS,
+        "-c:v",
+        "libx264",
+        "-preset",
+        X264_PRESET,
+        "-crf",
+        X264_CRF,
+        "-pix_fmt",
+        PIX_FMT,
+        "-c:a",
+        "aac",
+        "-ar",
+        AAC_RATE,
+        "-ac",
+        "2",
+        "-b:a",
+        AAC_BITRATE,
+        "-af",
+        AUDIO_FILTER,
+        "-movflags",
+        MOVFLAGS,
+        out_mp4,
+    ]
+
+
+def ffmpeg_stitch_copy_argv(
+    list_path: str,
+    out_mp4: str,
+    cap_seconds: float,
+    ffmpeg: str,
+) -> list[str]:
+    """Fallback stitch: video copy, AAC + loudnorm + faststart."""
+    return [
+        *_concat_input_prefix(ffmpeg, list_path, cap_seconds),
         "-c:v",
         "copy",
         "-c:a",
@@ -185,7 +383,9 @@ def ffmpeg_stitch_argv(
         "-b:a",
         AAC_BITRATE,
         "-af",
-        LOUDNORM_FILTER,
+        AUDIO_FILTER,
+        "-movflags",
+        MOVFLAGS,
         out_mp4,
     ]
 
@@ -215,24 +415,36 @@ def audio_acrossfade_filter(n_inputs: int, duration_s: float) -> str:
                 f"[a{prev}][{index}:a]acrossfade=d={d}:c1=tri:c2=tri[{label}]"
             )
         chain = ";".join(parts)
-    return f"{chain};[ax]{LOUDNORM_FILTER}[a]"
+    return f"{chain};[ax]{AUDIO_FILTER}[a]"
 
 
 def ffmpeg_video_copy_argv(
     list_path: str, out_mp4: str, cap_seconds: float, ffmpeg: str
 ) -> list[str]:
-    """Concat demuxer, video copy, drop audio (step 1 of xfade remux)."""
+    """Concat demuxer, H.264 video, drop audio (step 1 of xfade remux)."""
     return [
-        ffmpeg,
-        "-y",
-        "-f",
-        "concat",
-        "-safe",
-        "0",
-        "-i",
-        list_path,
-        "-t",
-        str(cap_seconds),
+        *_concat_input_prefix(ffmpeg, list_path, cap_seconds),
+        "-r",
+        FPS,
+        "-c:v",
+        "libx264",
+        "-preset",
+        X264_PRESET,
+        "-crf",
+        X264_CRF,
+        "-pix_fmt",
+        PIX_FMT,
+        "-an",
+        out_mp4,
+    ]
+
+
+def ffmpeg_video_streamcopy_argv(
+    list_path: str, out_mp4: str, cap_seconds: float, ffmpeg: str
+) -> list[str]:
+    """Concat demuxer, video copy, drop audio (libx264 fallback)."""
+    return [
+        *_concat_input_prefix(ffmpeg, list_path, cap_seconds),
         "-c:v",
         "copy",
         "-an",
@@ -287,6 +499,8 @@ def ffmpeg_mux_copy_argv(
         "copy",
         "-c:a",
         "copy",
+        "-movflags",
+        MOVFLAGS,
         out_mp4,
     ]
 
@@ -343,7 +557,9 @@ def probe_has_audio(
         ffprobe=ffprobe,
         run=run,
     )
-    return bool(text) and "audio" in text.lower()
+    if not text:
+        return False
+    return "audio" in text.lower()
 
 
 def probe_audio_hz(
@@ -420,6 +636,19 @@ def _run_ffmpeg(argv: list[str], runner: Any) -> None:
         raise RuntimeError(f"ffmpeg stitch failed: {err.strip() or 'exit 1'}")
 
 
+def _run_with_x264_fallback(
+    playable: list[str], fallback: list[str], runner: Any
+) -> None:
+    """Run playable argv; retry fallback when libx264 is missing."""
+    try:
+        _run_ffmpeg(playable, runner)
+    except RuntimeError as exc:
+        if not encoder_missing(str(exc)):
+            raise
+        log("libx264 missing; falling back to stream-copy + faststart")
+        _run_ffmpeg(fallback, runner)
+
+
 def stitch_film(
     shot_paths: list[str],
     out_mp4: str,
@@ -432,12 +661,15 @@ def stitch_film(
 ) -> str:
     """Concat 18 shot MP4s, cap duration, fail if probe exceeds cap.
 
-    Default (``xfade_cs=0``) is concat-demuxer + ``-c:v copy`` (hard-cut golden).
-    ``xfade_cs`` is centiseconds of **audio** acrossfade (10 = 0.10 s); video
-    stays stream-copied. Wan-silent shots have no audio — xfade refuses.
+    Default (``xfade_cs=0``) is concat-demuxer + libx264 CRF 18 + AAC +
+    ``+faststart`` so browsers can play and download the master. ``xfade_cs``
+    is centiseconds of **audio** acrossfade (10 = 0.10 s); video is still a
+    hard cut, re-encoded the same way. Wan-silent shots have no audio —
+    xfade refuses. If ffmpeg lacks libx264, fall back to ``-c:v copy`` with
+    faststart still set.
 
     Arguments:
-        shot_paths: Exactly 18 MP4 paths in beat/shot order.
+        shot_paths: Exactly 18 MP4 paths in beat/shot order (not VHS metadata PNGs).
         out_mp4: Destination path.
         cap_seconds: Publish cap (default 90).
         ffmpeg: Override ffmpeg path.
@@ -452,6 +684,12 @@ def stitch_film(
     """
     if len(shot_paths) != SHOT_COUNT:
         raise ValueError(f"expected {SHOT_COUNT} shots, found {len(shot_paths)}")
+    for path in shot_paths:
+        if _is_image_path(path):
+            raise RuntimeError(
+                f"shot is an image, not an MP4 ({path}); "
+                "VHS_FILENAMES first file is a metadata PNG — use the muxed *-audio.mp4"
+            )
     if xfade_cs < 0 or xfade_cs > 50:
         raise ValueError(f"xfade_cs must be 0–50, got {xfade_cs}")
     exe = ffmpeg or find_ffmpeg()
@@ -466,8 +704,11 @@ def stitch_film(
             list_file.write(concat_list_line(path) + "\n")
         list_file.close()
         if xfade_cs == 0:
-            argv = ffmpeg_stitch_argv(list_file.name, out_mp4, cap_seconds, exe)
-            _run_ffmpeg(argv, runner)
+            _run_with_x264_fallback(
+                ffmpeg_stitch_argv(list_file.name, out_mp4, cap_seconds, exe),
+                ffmpeg_stitch_copy_argv(list_file.name, out_mp4, cap_seconds, exe),
+                runner,
+            )
         else:
             for path in shot_paths:
                 if not probe_has_audio(path, ffprobe=ffprobe, run=run):
@@ -478,8 +719,11 @@ def stitch_film(
             duration_s = xfade_cs / 100.0
             video_tmp = list_file.name + ".v.mp4"
             audio_tmp = list_file.name + ".a.m4a"
-            _run_ffmpeg(
+            _run_with_x264_fallback(
                 ffmpeg_video_copy_argv(list_file.name, video_tmp, cap_seconds, exe),
+                ffmpeg_video_streamcopy_argv(
+                    list_file.name, video_tmp, cap_seconds, exe
+                ),
                 runner,
             )
             _run_ffmpeg(

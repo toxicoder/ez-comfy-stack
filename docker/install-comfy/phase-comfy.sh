@@ -9,7 +9,7 @@
 # Defaults when shellcheck/lint analyze this file without common.sh sourced first.
 # Runtime always sources common.sh; ENV/Dockerfile may override.
 COMFYUI_REPO="${COMFYUI_REPO:-https://github.com/comfyanonymous/ComfyUI.git}"
-COMFYUI_REF="${COMFYUI_REF:-v0.34.0}"
+COMFYUI_REF="${COMFYUI_REF:-v0.34.6}"
 
 #######################################
 # Write a pip constraint file pinning already-installed torch/tv/ta.

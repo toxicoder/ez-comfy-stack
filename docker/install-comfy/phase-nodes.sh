@@ -178,6 +178,39 @@ install_nunchaku_wheel() {
 }
 
 #######################################
+# Hide ComfyUI-nunchaku when the SVDQuant engine is missing (Comfy skips *.disabled).
+# Re-enable the pack if a real engine later imports. Lab graphs use core loaders.
+# Globals:
+#   COMFY_HOME, CUSTOM
+# Arguments:
+#   None
+# Outputs:
+#   log
+# Returns:
+#   0 always
+#######################################
+configure_nunchaku_pack() {
+  local custom enabled disabled
+  custom="${CUSTOM:-${COMFY_HOME}/custom_nodes}"
+  enabled="${custom}/ComfyUI-nunchaku"
+  disabled="${custom}/ComfyUI-nunchaku.disabled"
+  mkdir -p "${custom}"
+  if nunchaku_is_real; then
+    if [[ -d ${disabled} && ! -d ${enabled} ]]; then
+      mv "${disabled}" "${enabled}"
+      log "nunchaku node enabled (engine importable)"
+    fi
+    return 0
+  fi
+  if [[ -d ${enabled} ]]; then
+    rm -rf "${disabled}"
+    mv "${enabled}" "${disabled}"
+    log "nunchaku node disabled (no engine wheel; lab graphs use core loaders)"
+  fi
+  return 0
+}
+
+#######################################
 # Ensure ComfyUI-VideoHelperSuite is present (required for LTX lab MP4 output).
 # Idempotent: safe on cold install and stamp-present refresh.
 # Globals:
@@ -226,6 +259,77 @@ install_llama_cpp_cpu() {
   fi
   warn "llama-cpp-python install failed — Prompt Enhance will pass through until rebuilt"
   return 0
+}
+
+#######################################
+# Optional faster-whisper for local dub ASR. Fail-soft. Independent of clone.
+# chatterbox-tts pins torch==2.6.0 — never install it on the same pip command.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_faster_whisper_wheel() {
+  if pip_install --upgrade-strategy only-if-needed faster-whisper; then
+    log "faster-whisper installed for local dub ASR"
+    return 0
+  fi
+  warn "faster-whisper pip failed — Queue writes empty mix until: pip install faster-whisper"
+  return 0
+}
+
+#######################################
+# Optional chatterbox-tts for local dub clone. Fail-soft. --no-deps so the
+# package cannot pin torch==2.6.0 / transformers==5.2.0 over the lab venv.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_chatterbox_wheel() {
+  local -a extras=(
+    librosa
+    s3tokenizer
+    resemble-perth
+    conformer
+    pykakasi
+    pyloudnorm
+    omegaconf
+  )
+  pip_install --upgrade-strategy only-if-needed "${extras[@]}" ||
+    warn "chatterbox extras pip failed — clone may still miss"
+  if pip_install --no-deps chatterbox-tts; then
+    log "chatterbox-tts installed --no-deps (did not pin torch)"
+    return 0
+  fi
+  warn "chatterbox-tts --no-deps failed — clone status will name the miss"
+  return 0
+}
+
+#######################################
+# Optional faster-whisper + chatterbox-tts for local dub. Fail-soft.
+# Installs ASR first so a clone miss cannot block transcription.
+# Does not pull weights (download-dub). Missing wheels → empty mix + Dub status.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_dub_wheels() {
+  install_faster_whisper_wheel
+  install_chatterbox_wheel
 }
 
 #######################################
@@ -308,5 +412,7 @@ phase_nodes() {
   fi
   install_sage_wheel_if_pinned
   install_nunchaku_wheel
+  configure_nunchaku_pack
   install_llama_cpp_cpu
+  install_dub_wheels
 }

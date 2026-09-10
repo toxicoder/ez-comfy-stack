@@ -97,6 +97,14 @@ teardown() {
   grep -q -- '-t 90' "${TEST_TMP_DIR}/ffmpeg.log"
   grep -q -- 'aac' "${TEST_TMP_DIR}/ffmpeg.log"
   grep -q -- 'loudnorm' "${TEST_TMP_DIR}/ffmpeg.log"
+  grep -q -- 'libx264' "${TEST_TMP_DIR}/ffmpeg.log"
+  grep -q -- 'faststart' "${TEST_TMP_DIR}/ffmpeg.log"
+  [[ -f "${COMFY_OUTPUT_DIR}/cap.html" ]]
+  run type concat_playable
+  [ "${status}" -eq 0 ]
+  run write_preview_html "${COMFY_OUTPUT_DIR}/cap.mp4"
+  [ "${status}" -eq 0 ]
+  [[ -f "${COMFY_OUTPUT_DIR}/cap.html" ]]
   run first_glob "${COMFY_OUTPUT_DIR}/ez_gosee_b1_s1_ltx_video*.mp4"
   [[ "${output}" == *"ltx_video"* ]]
   run probe_mp4_seconds "${COMFY_OUTPUT_DIR}/cap.mp4"
@@ -110,6 +118,51 @@ teardown() {
   run cmd_run
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"expected 18"* ]]
+}
+
+@test "concat-shots prefers latest VHS *-audio.mp4 over silent intermediates" {
+  local b s
+  for b in 1 2 3 4 5 6; do
+    for s in 1 2 3; do
+      : >"${COMFY_OUTPUT_DIR}/ez_gosee_b${b}_s${s}_ltx_video_00006.mp4"
+      : >"${COMFY_OUTPUT_DIR}/ez_gosee_b${b}_s${s}_ltx_video_00006-audio.mp4"
+      : >"${COMFY_OUTPUT_DIR}/ez_gosee_b${b}_s${s}_ltx_video_00007.mp4"
+      : >"${COMFY_OUTPUT_DIR}/ez_gosee_b${b}_s${s}_ltx_video_00007-audio.mp4"
+    done
+  done
+  FILM=go-see
+  FILE_CSV=""
+  SHOT_DIR="${COMFY_OUTPUT_DIR}"
+  run list_film_shot_files
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"_ltx_video_00007-audio.mp4"* ]]
+  [[ "${output}" != *"_ltx_video_00006"* ]]
+  local n
+  n="$(printf '%s\n' "${output}" | grep -cF '_00007-audio.mp4' || true)"
+  [ "${n}" -eq 18 ]
+  n="$(printf '%s\n' "${output}" | grep -cE '_ltx_video_00007\.mp4$' || true)"
+  [ "${n}" -eq 0 ]
+  run best_shot_mp4 "${COMFY_OUTPUT_DIR}/ez_gosee_b1_s1_ltx_video*.mp4"
+  [[ "${output}" == *"_ltx_video_00007-audio.mp4"* ]]
+}
+
+@test "concat-shots film falls back to Wan when no LTX mp4 exists" {
+  local b s
+  for b in 1 2 3 4 5 6; do
+    for s in 1 2 3; do
+      : >"${COMFY_OUTPUT_DIR}/ez_gosee_b${b}_s${s}_wan_video_00001.mp4"
+    done
+  done
+  FILM=go-see
+  FILE_CSV=""
+  SHOT_DIR="${COMFY_OUTPUT_DIR}"
+  run list_film_shot_files
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"_wan_video_00001.mp4"* ]]
+  [[ "${output}" != *"_ltx_video"* ]]
+  local n
+  n="$(printf '%s\n' "${output}" | grep -c '_wan_video')"
+  [ "${n}" -eq 18 ]
 }
 
 @test "concat-shots film duration over cap fails" {

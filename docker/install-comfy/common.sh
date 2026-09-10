@@ -18,7 +18,7 @@ INSTALL_T0="${INSTALL_T0:-}"
 COMFYUI_REPO="${COMFYUI_REPO:-https://github.com/comfyanonymous/ComfyUI.git}"
 # Validated pins (see docs/models-and-cache.md). Empty COMFYUI_REF floats default branch.
 # Not in core.sh: bumping these must not bust the torch COPY layer.
-COMFYUI_REF="${COMFYUI_REF:-v0.34.0}"
+COMFYUI_REF="${COMFYUI_REF:-v0.34.6}"
 COMFYUI_MANAGER_REF="${COMFYUI_MANAGER_REF:-4.2.2}"
 COMFYUI_NUNCHAKU_NODE_REF="${COMFYUI_NUNCHAKU_NODE_REF:-v1.2.1}"
 # Empty = clone default branch (main). Set to a tag/branch/SHA branch name when available.
@@ -227,12 +227,42 @@ clone_node() {
 }
 
 #######################################
+# Host uid:gid for layout dirs on the MODELS_ROOT bind-mount.
+# Prefers HOST_UID/HOST_GID from manage.sh start; else the mount owner.
+# Globals:
+#   HOST_UID, HOST_GID, MODELS_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   uid:gid on stdout (empty when unknown)
+# Returns:
+#   0
+#######################################
+layout_host_uid_gid() {
+  local uid gid root
+  uid="${HOST_UID:-}"
+  gid="${HOST_GID:-}"
+  if [[ -n ${uid} ]]; then
+    printf '%s:%s\n' "${uid}" "${gid:-${uid}}"
+    return 0
+  fi
+  root="${MODELS_ROOT:-/models}"
+  if [[ -d ${root} ]]; then
+    uid="$(stat -c '%u' "${root}" 2>/dev/null || stat -f '%u' "${root}" 2>/dev/null || true)"
+    gid="$(stat -c '%g' "${root}" 2>/dev/null || stat -f '%g' "${root}" 2>/dev/null || true)"
+  fi
+  if [[ -n ${uid} ]]; then
+    printf '%s:%s\n' "${uid}" "${gid:-${uid}}"
+  fi
+}
+
+#######################################
 # Symlink a Comfy models subdir to the host cache under MODELS_ROOT/comfy.
 # Host MODELS_ROOT/comfy is the source of truth for weights (download-models).
 # Always retarget COMFY_HOME/models/<sub> → host dir so prebuilt/seeded trees
 # cannot leave a real directory that hides host files from ComfyUI.
 # Globals:
-#   MODELS_ROOT, COMFY_HOME
+#   MODELS_ROOT, COMFY_HOME, HOST_UID, HOST_GID
 # Arguments:
 #   $1 - Subdirectory name (e.g. diffusion_models)
 # Outputs:
@@ -244,8 +274,13 @@ link_models() {
   local sub="${1}"
   local host_dir="${MODELS_ROOT}/comfy/${sub}"
   local comfy_dir="${COMFY_HOME}/models/${sub}"
-  local target=""
+  local target="" owner=""
   mkdir -p "${host_dir}" "${COMFY_HOME}/models"
+  owner="$(layout_host_uid_gid)"
+  if [[ -n ${owner} ]]; then
+    chown "${owner}" "${host_dir}" 2>/dev/null || true
+    chmod u+rwx "${host_dir}" 2>/dev/null || true
+  fi
 
   # Already correctly linked?
   if [[ -L ${comfy_dir} ]]; then
@@ -329,6 +364,25 @@ apply_unified_memory_copy_patch() {
     python3 /opt/ez-comfy/patch_unified_memory_copy.py "${COMFY_HOME}" || warn "um copy patch failed"
   else
     warn "patch_unified_memory_copy.py not found in image"
+  fi
+}
+
+#######################################
+# Wrap MagCache's LTX RoPE import so Wan MagCache loads on ComfyUI v0.34+.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 (patch failures are soft)
+#######################################
+apply_magcache_compat_patch() {
+  if [[ -f /opt/ez-comfy/patch_magcache_compat.py ]]; then
+    python3 /opt/ez-comfy/patch_magcache_compat.py "${COMFY_HOME}" || warn "magcache compat patch failed"
+  else
+    warn "patch_magcache_compat.py not found in image"
   fi
 }
 

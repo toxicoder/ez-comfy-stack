@@ -79,6 +79,10 @@ def test_png_size_and_write(tmp_path: Path) -> None:
     path = tmp_path / "first.png"
     gp.write_solid_png(path, 1280, 704, (80, 80, 90))
     assert gp.png_size(path) == (1280, 704)
+    gp.write_rgb_png(tmp_path / "tiny.png", 2, 2, bytes(range(12)))
+    assert gp.png_size(tmp_path / "tiny.png") == (2, 2)
+    with pytest.raises(ValueError, match="length"):
+        gp.write_rgb_png(tmp_path / "bad.png", 2, 2, b"short")
 
 
 def test_full_seq_require(tmp_path: Path) -> None:

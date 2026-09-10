@@ -813,7 +813,7 @@ Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klei
     enh = _node(g, "EZWanPromptEnhance")
     if I2V_LOCK.lower() not in motion.lower():
         motion = f"{motion.rstrip()} {I2V_LOCK}"
-    enh["widgets_values"] = [motion, True, "i2v", "looping bumper, 12 fps", "none"]
+    enh["widgets_values"] = [motion, False, "i2v", "looping bumper, 12 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     note = f"""## wan-bumper-loop-lab-example
 
@@ -1320,6 +1320,7 @@ def _wan_i2v(
     description: str,
     size: tuple[int, int] = (832, 480),
     length: int = 121,
+    enhance: bool = True,
 ) -> None:
     g = _load(lab_json("wan-i2v-5s-lab-example.json"))
     g["id"] = stem
@@ -1334,7 +1335,13 @@ def _wan_i2v(
     polish_video_graph(g)
     if I2V_LOCK.lower() not in motion.lower():
         motion = f"{motion.rstrip()} {I2V_LOCK}"
-    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, True, "i2v", "5 seconds, 24 fps", "none"]
+    _node(g, "EZWanPromptEnhance")["widgets_values"] = [
+        motion,
+        enhance,
+        "i2v",
+        "5 seconds, 24 fps",
+        "none",
+    ]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     _set_note(g, note, description)
     _dump(lab_json(stem), g)
@@ -1364,7 +1371,7 @@ def _wan_loop(
             n["title"] = "Save frames (secondary)"
     if I2V_LOCK.lower() not in motion.lower():
         motion = f"{motion.rstrip()} {I2V_LOCK}"
-    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, True, "i2v", "looping sticker, 12 fps", "none"]
+    _node(g, "EZWanPromptEnhance")["widgets_values"] = [motion, False, "i2v", "looping sticker, 12 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
     _set_note(g, note, description)
     _dump(lab_json(stem), g)
@@ -1681,6 +1688,7 @@ Prefix `ez_orbit_video`.
 {PREVIEW_BULLET}
 """,
         description="Wan 5B silent orbit I2V ~5s",
+        enhance=False,
     )
     _wan_i2v(
         stem="wan-push-in-i2v-lab-example",
@@ -1697,6 +1705,7 @@ Prefix `ez_pushin_video`.
 {PREVIEW_BULLET}
 """,
         description="Wan 5B silent push-in I2V ~5s",
+        enhance=False,
     )
     _wan_i2v(
         stem="wan-parallax-i2v-lab-example",
@@ -1713,6 +1722,7 @@ Prefix `ez_parallax_video`.
 {PREVIEW_BULLET}
 """,
         description="Wan 5B silent parallax I2V ~5s",
+        enhance=False,
     )
     _wan_loop(
         stem="wan-sticker-loop-lab-example",

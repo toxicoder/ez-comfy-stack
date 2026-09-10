@@ -8,8 +8,10 @@ tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 
 **What's on this page**
 
-- The only DCC ↔ Comfy handshake (`guides/<slug>/<shot>/`)
+- The only DCC ↔ Comfy **print** handshake (`guides/<slug>/<shot>/`)
 - Occupancy: stop Comfy before a dump
+- Instagram clay stills are a different pack (`house-views`, 1024×1280)
+- Script desk, overlay QC, animatic, stem mix
 - Klein-from-clay on today's pack
 - Opt-in LTX IC-LoRA Union Control (not `download-models`)
 - Path A / B / D
@@ -35,7 +37,22 @@ This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar
 ./scripts/manage.sh export-guides --engine blender --film go-see --shot 12 --blend /path/to/shot.blend
 ./scripts/manage.sh start          # type yes
 # Queue workflows/_lab/dcc/klein-from-clay-lab-example.json on first.png
+./scripts/manage.sh overlay-qc --film go-see --shot 12 --look /path/to/ez_clay_hero.png
 # After download-ltx --tier iclora: Templates → LTX-2.5 Union Control, depth from depth.mp4
+# Stop LTX. Stem mix (occupancy audio):
+./scripts/manage.sh stem-mix --film go-see --shot 12 --bg /path/to/print.mp4
+```
+
+Cheap pacing gate (host ffmpeg; compose may stay up):
+
+```bash
+./scripts/manage.sh film-animatic --film go-see
+```
+
+Script desk writes `films/<slug>/shots.yaml` (does not clobber lab YAML):
+
+```bash
+./scripts/manage.sh shot-sheet run --film go-see
 ```
 
 Default on one GB10 is **Path D**: block and MCP on the laptop, rsync `guides/` to the Spark, Spark only runs Comfy.
@@ -66,8 +83,10 @@ Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later
 
 | Graph | Weights | Notes |
 | --- | --- | --- |
-| **klein-from-clay-lab-example** | Default Klein 4B | Edit mode, Enhance **on**, seed **42**, 1280×704. Queues today. |
-| **ltx-iclora-depth-5s-lab-example** | Default LTX-2.5 distilled + opt-in Union LoRA | Lab envelope. Official control graph is Comfy **Templates → LTX-2.5** (`LTX-2.5_ICLoRA_Union_Control_Distilled.json`). This tree does not vendor UUID subgraphs. |
+| **beat-sheet-lab-example** | none | Script desk. Logline, audio policy, 18 cards. `shot-sheet` writes YAML. |
+| **klein-from-clay-lab-example** | Default Klein 4B | Edit mode, Enhance **on**, seed **42**, 1280×704. Overlay-qc after Queue. |
+| **ltx-iclora-depth-5s-lab-example** | Default LTX-2.5 distilled + opt-in Union LoRA | Lab envelope. Official control graph is Comfy **Templates → LTX-2.5** (`LTX-2.5_ICLoRA_Union_Control_Distilled.json`). This tree does not vendor UUID subgraphs. Joint AV is a world bed. |
+| **audio-finish-lab-example** | audio | Stem mix desk. Host `stem-mix.sh`. ACE-Step group stays off. |
 
 ```bash
 ./scripts/manage.sh download-ltx --tier iclora   # not download-models
@@ -85,6 +104,15 @@ Official 2.5 Union Control distilled widgets `ltx-2.3-22b-ic-lora-union-control-
 
 Godot is a first-class blocking engine in a later PR, not a second Blender. OpenToonz / Krita are plate emitters into the same pack, not v1 engines.
 
+## Instagram clay stills (not this pack)
+
+`house-views` is a **different** contract: ten 1024×1280 Workbench stills + greybox GLB under `assets/sets/<slug>/`, then **klein-dream-house-clay-lab-example**. Do not dump Instagram 4:5 into `guides/` or reuse `ez.guide.shot.v1` (that QC is 1280×704 / 120 frames). Playbook: [Dream-house tours](learn/dream-house.md).
+
+```bash
+./scripts/manage.sh stop
+./scripts/manage.sh house-views --slug lab-penthouse
+```
+
 Do not run a live Blender MCP socket and Comfy on the same GB10.
 
 ## Safety
@@ -92,5 +120,6 @@ Do not run a live Blender MCP socket and Comfy on the same GB10.
 - Do not weaken `restart: "no"`, heavy confirm, `mem_limit: 90g`, `min_host_free_gib: 28`, or download-limit clear-on-exit.
 - Never queue a DCC dump and a print in one session.
 - Unload Klein before LTX. IC-LoRA is not part of `download-models`.
+- `overlay-qc` / `film-animatic` / `stem-mix` do not start Docker and do not weaken occupancy XOR for dumps.
 
-Related: [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [90s shorts](shorts.md), [Model licenses](licenses.md).
+Related: [Clay to finish](learn/clay-to-finish.md), [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [90s shorts](shorts.md), [Model licenses](licenses.md).

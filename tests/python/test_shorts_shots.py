@@ -17,7 +17,15 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
-from ez_film.shots import DFR_TEMPLATE, LTX_PRINT_TEMPLATE, parse_shots_yaml, print_template  # noqa: E402
+from ez_film.shots import (  # noqa: E402
+    DFR_TEMPLATE,
+    ICLORA_TEMPLATE,
+    LTX_PRINT_TEMPLATE,
+    parse_shots_yaml,
+    print_template,
+    scaffold_shot_sheet,
+    write_shots_yaml,
+)
 
 SHORTS = ROOT / "workflows" / "shorts"
 
@@ -52,7 +60,16 @@ def _path(film: str) -> Path:
 def test_print_template_ltx_and_dfr() -> None:
     assert print_template("ltx") == LTX_PRINT_TEMPLATE
     assert print_template("dfr") == DFR_TEMPLATE
+    assert print_template("ltx-iclora-depth") == ICLORA_TEMPLATE
+    assert print_template("wan-flf") == "wan-flf-5s-lab-example.json"
+    assert print_template("dcc-final") == "dcc-final"
     assert DFR_TEMPLATE.startswith("templates/ltx-2.5/")
+    try:
+        print_template("nope")
+    except ValueError as exc:
+        assert "ltx-iclora-depth" in str(exc)
+    else:
+        raise AssertionError("print_template must refuse unknown modes")
 
 
 def test_three_shot_bibles_exist() -> None:
@@ -76,7 +93,10 @@ def test_eighteen_shots_and_chain() -> None:
         assert meta["publish_cap_s"] == "90.00"
         assert meta["print"] == "ltx"
         assert meta["identity_seed"] == "42"
-        assert meta["identity_enhance"] == "true"
+        if film == "go-see":
+            assert meta["identity_enhance"] == "false"
+        else:
+            assert meta["identity_enhance"] == "true"
         shots = parsed["shots"]
         assert len(shots) == 18, (film, len(shots))
         prefixes = [s["prefix"] for s in shots]
@@ -88,6 +108,12 @@ def test_eighteen_shots_and_chain() -> None:
                 assert shot["load_from"] == f"{shots[i - 1]['prefix']}_last"
         assert parsed["identity"].strip()
         assert LTX_CLOSE in text
+        assert parsed["meta"]["audio_policy"] == "world-only"
+        assert parsed["meta"]["score"] == "none"
+        for shot in shots:
+            assert shot["clay"] == "skip"
+            assert shot["audio_lock"] == "none"
+            assert shot["dialogue"] == ""
 
 
 def test_klein_identity_is_model_native() -> None:
@@ -148,6 +174,37 @@ def test_ltx_i2v_prompts_are_model_native() -> None:
                 assert word not in wan_l, (film, shot["prefix"], word)
 
 
+def test_shot_card_invalid_audio_policy_fails() -> None:
+    text = _path("go-see").read_text(encoding="utf-8")
+    text = "audio_policy: karaoke\n" + text
+    try:
+        parse_shots_yaml(text)
+    except ValueError as exc:
+        assert "audio_policy" in str(exc)
+    else:
+        raise AssertionError("invalid audio_policy must fail closed")
+
+
+def test_shot_card_roundtrip_defaults() -> None:
+    text = _path("go-see").read_text(encoding="utf-8")
+    parsed = parse_shots_yaml(text)
+    parsed["meta"]["audio_policy"] = "stems"
+    parsed["shots"][0]["clay"] = "required"
+    parsed["shots"][0]["camera"] = "fixed"
+    parsed["shots"][0]["script"] = "Sprint the terrace."
+    out = write_shots_yaml(parsed)
+    again = parse_shots_yaml(out)
+    assert again["meta"]["audio_policy"] == "stems"
+    assert again["shots"][0]["clay"] == "required"
+    assert again["shots"][0]["camera"] == "fixed camera"
+    assert again["shots"][0]["script"] == "Sprint the terrace."
+    assert len(again["shots"]) == 18
+    scaffold = scaffold_shot_sheet(text)
+    sc = parse_shots_yaml(scaffold)
+    assert sc["meta"]["audio_policy"] == "world-only"
+    assert "audio_policy: world-only" in scaffold
+
+
 def test_shorts_yaml_has_no_banned_models() -> None:
     for film, _slug in FILMS:
         text = _path(film).read_text(encoding="utf-8")
@@ -157,14 +214,61 @@ def test_shorts_yaml_has_no_banned_models() -> None:
 
 def test_creative_locks() -> None:
     go = _path("go-see").read_text(encoding="utf-8")
-    assert "sun-washed teal" in go
+    assert "storm-cloak" in go
+    assert "ink-black" in go
+    assert "warm-gold" in go
+    assert "techno wizard" in go.lower()
+    assert "teal" not in go.lower()
+    assert "cyan" not in go.lower()
+    assert "jumpsuit" not in go.lower()
+    assert "circuit" not in go.lower()
+    assert "bare frame edges" in go
+    assert "full-bleed" in go
+    assert "clean unmarked lens" in go
+    for needle in (
+        "HUD",
+        "minimap",
+        "crosshair",
+        "health bar",
+        "rec-dot",
+        "timecode",
+        "watermark",
+        "subtitle bar",
+        "playback chrome",
+    ):
+        assert needle.lower() not in go.lower(), needle
     assert "olive windbreaker" not in go
     assert "First-person" in go or "first-person" in go
     assert "body-cam" in go
     assert "parkour" in go.lower()
     assert "gloves" in go.lower()
+    assert "dead sprint" in go.lower()
+    assert "laugh" not in go.lower()
     for needle in ("Faith", "Mirror's Edge", "Mirrors Edge", "barrel-roll", "backflip"):
         assert needle not in go, needle
+    parsed = parse_shots_yaml(go)
+    stunts = (
+        "sprint",
+        "flip",
+        "vault",
+        "wall-run",
+        "leap",
+        "dive",
+        "slide",
+        "climb",
+        "hold",
+        "burst",
+    )
+    for shot in parsed["shots"]:
+        blob = shot["ltx_i2v"].lower()
+        assert "no speech" in blob, shot["prefix"]
+        assert any(token in blob for token in stunts), shot["prefix"]
+        if shot["prefix"] != "ez_gosee_b6_s3":
+            assert shot["end_state"], shot["prefix"]
+    for i, shot in enumerate(parsed["shots"][:-1]):
+        token = shot["end_state"].lower()
+        nxt = parsed["shots"][i + 1]["ltx_i2v"].lower()
+        assert token in nxt, (shot["prefix"], token)
     here = _path("still-here").read_text(encoding="utf-8")
     assert "ceramic mug" in here
     assert "two-note" in here or "invented" in here
@@ -310,7 +414,14 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert any(n.get("type") == "EZUnloadModels" for n in graph["nodes"])
         concat = next(n for n in graph["nodes"] if n.get("type") == "EZFilmConcat")
         assert concat["widgets_values"][0] == film
-        assert "preview" in (concat.get("title") or "").lower()
+        assert len(concat["widgets_values"]) >= 3
+        title = (concat.get("title") or "").lower()
+        assert "play" in title or "preview" in title or "download" in title
+        if film == "go-see":
+            assert concat["widgets_values"][2] == 8
+            assert concat["pos"][0] < 400
+        else:
+            assert concat["widgets_values"][2] == 0
         identity = next(
             n
             for n in graph["nodes"]
@@ -330,7 +441,6 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert not any(n.get("type") == "LoadImage" for n in graph["nodes"])
         ltx_enh = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
         assert len(ltx_enh) == 18
-        assert all(n["widgets_values"][1] is True for n in ltx_enh)
         klein_sampler = next(
             n
             for n in graph["nodes"]
@@ -339,9 +449,13 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert klein_sampler["widgets_values"][0] == 42
         assert klein_sampler["widgets_values"][3] == 1.0
         enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        assert enhance["widgets_values"][1] is True
-        assert enhance["widgets_values"][2] == "identity"
         assert enhance["widgets_values"][0] == parsed["identity"]
+        assert all(n["widgets_values"][1] is False for n in ltx_enh)
+        assert enhance["widgets_values"][1] is False
+        if film == "go-see":
+            assert enhance["widgets_values"][2] == "t2i"
+        else:
+            assert enhance["widgets_values"][2] == "identity"
         ltx_pos = [
             n
             for n in graph["nodes"]

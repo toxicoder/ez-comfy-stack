@@ -1,44 +1,44 @@
 {
   "place_10": [
     {
-      "label": "01 exterior",
-      "shot": "Ground-level three-quarter exterior of this place, eye-level 24mm, Instagram 4:5. Dusk, cozy outdoor lamps glowing. Openings readable from outside."
+      "label": "01 tower",
+      "shot": "Looking up from the street at this tall unmarked tower in a dense canyon of neighboring towers, 24mm, Instagram 4:5. Dusk, cozy outdoor lamps on the crown many floors above. Neighboring towers fill the frame. This is the only street establishing shot."
     },
     {
-      "label": "02 entrance",
-      "shot": "At the entrance looking in through the way in, 35mm, Instagram 4:5. Dusk, cozy outdoor lamps at the threshold. Door filling the frame at human height."
+      "label": "02 foyer",
+      "shot": "At the private elevator landing looking in through the way in, 24mm, Instagram 4:5. Dusk. Stone foyer filling the frame at human height. Interior walls as the backdrop; the city stays behind the camera."
     },
     {
-      "label": "03 inside",
-      "shot": "Just inside, looking through the main living volume out the main opening, 24mm, Instagram 4:5. Dusk, outdoor lamps visible through the glass."
+      "label": "03 lounge",
+      "shot": "From the lounging interior the bible named; if none, the primary seating interior. Seating in the foreground toward the main opening, 24mm, Instagram 4:5. Dusk. This is the only interior that looks out that opening."
     },
     {
-      "label": "04 lounge",
-      "shot": "From the lounging interior the bible named; if none, the primary seating interior from a new camera. Seating in the foreground toward the main opening, 35mm, Instagram 4:5. Dusk, outdoor lamps outside."
+      "label": "04 kitchen",
+      "shot": "From the kitchen the bible named; if none, a work interior. Work surface and cabinets fill the frame, 35mm, Instagram 4:5. Dusk. Cook space only; a solid cook wall fills the entire backdrop."
     },
     {
-      "label": "05 kitchen",
-      "shot": "From the kitchen the bible named; if none, a work interior. Work surface in the foreground, 35mm, Instagram 4:5. Dusk. Cook space only."
+      "label": "05 dining",
+      "shot": "From the dining interior the bible named; if none, a table interior. Dining surface in the foreground toward an interior wall, 35mm, Instagram 4:5. Dusk. Table room only; an interior wall fills the entire backdrop."
     },
     {
-      "label": "06 bath",
-      "shot": "From the bathroom the bible named; if none, a wet interior. Bathing fixture in the foreground, 35mm, Instagram 4:5. Warm practicals. Wet room only."
+      "label": "06 bedroom",
+      "shot": "From the master bedroom the bible named; if none, the private interior. Bedding in the foreground toward the headboard wall, 35mm, Instagram 4:5. Dusk. Private room only; the headboard wall fills the entire backdrop."
     },
     {
-      "label": "07 bedroom",
-      "shot": "From the master bedroom the bible named; if none, the private interior. Bedding in the foreground toward its opening, 35mm, Instagram 4:5. Dusk, outdoor lamps outside."
+      "label": "07 bath",
+      "shot": "From the bathroom the bible named; if none, a wet interior. Bathing fixture in the foreground, 35mm, Instagram 4:5. Warm practicals. Wet room only; frosted or opaque glass fills the entire backdrop."
     },
     {
-      "label": "08 drone",
-      "shot": "Overhead drone of this same place in its landscape, high above looking down, 24mm, Instagram 4:5. Dusk. Roof, terrace, and outdoor lamps readable from above. Same surroundings as the ground shots."
+      "label": "08 terrace",
+      "shot": "From the outdoor living the bible named; if none, the terrace or threshold. Lanterns and plantings in the foreground looking along the outdoor edge, 35mm, Instagram 4:5. Dusk. Along the terrace; neighboring tower sides fill the far edge."
     },
     {
-      "label": "09 day",
-      "shot": "Daylight exterior of this same place, ground-level three-quarter, 24mm, Instagram 4:5. Clear day sky. Outdoor lamps present but not the key light. Same massing and surroundings as dusk."
+      "label": "09 drone",
+      "shot": "Overhead drone of this same tower in a packed unmarked skyline, high above looking down, 24mm, Instagram 4:5. Dusk. Roof plan, terrace, outdoor lamps, and a dense grid of neighboring roofs."
     },
     {
-      "label": "10 night",
-      "shot": "Night exterior of this same place, ground-level three-quarter, 24mm, Instagram 4:5. Cozy outdoor lamps fully on against night sky. Same massing and surroundings. Interior glow through openings."
+      "label": "10 study",
+      "shot": "From the study the bible named; if none, a private work interior. Desk and shelves fill the frame, 35mm, Instagram 4:5. Dusk. Study only; a solid shelf wall fills the entire backdrop."
     }
   ],
   "place_4": [

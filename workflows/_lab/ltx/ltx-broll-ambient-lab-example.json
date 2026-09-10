@@ -924,7 +924,7 @@
     "linearData": {
       "inputs": [
         [
-          "17:prompt",
+          17,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -933,7 +933,7 @@
           }
         ],
         [
-          "17:style",
+          17,
           "style",
           {
             "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
@@ -941,7 +941,7 @@
           }
         ],
         [
-          "17:enhance",
+          17,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -949,7 +949,7 @@
           }
         ],
         [
-          "17:audio_notes",
+          17,
           "audio_notes",
           {
             "description": "World SFX to interleave. No score unless you asked for music.",
@@ -958,7 +958,7 @@
           }
         ],
         [
-          "8:seed",
+          8,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

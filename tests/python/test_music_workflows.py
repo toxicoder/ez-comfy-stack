@@ -5,8 +5,16 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from ez_music.diss_examples import DISS_EXAMPLES
+from ez_music.edm_examples import EDM_EXAMPLES
+
 from _ace_widgets_contract import assert_ace_encoder_widgets
 from _lab_paths import lab_json
+from _stamp_app_mode import (
+    DRIVE_THROUGH_STAMP_STEMS,
+    NILL_BYE_STAMP_STEMS,
+    STAMP_SPECS,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -34,7 +42,18 @@ def _load(stem: str) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None:
+def _assert_shared(
+    graph: dict,
+    stem: str,
+    prefix: str,
+    duration: float,
+    *,
+    bpm: int = 88,
+    seed: int = 42,
+    tags: str | None = None,
+    ace_mode: str = "vocal",
+    edm_vocal_treat: bool = False,
+) -> None:
     assert graph["id"] == stem
     extra = graph["extra"]
     assert extra["lab_profile"] == "us-safe-music"
@@ -44,8 +63,18 @@ def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None
     assert titles == {"MODEL", "DURATION", "PROMPT", "OUTPUT"}
     blob = json.dumps(graph)
     assert prefix in blob
-    assert "[verse]" in blob
-    assert "[chorus]" in blob
+    if ace_mode == "vocal" and edm_vocal_treat:
+        assert "[chorus]" in blob
+        assert "[inst]" in blob
+        assert "[verse]" not in blob
+    elif ace_mode == "vocal":
+        assert "[verse]" in blob
+        assert "[chorus]" in blob
+    else:
+        assert "[inst]" in blob
+        assert "[outro]" in blob
+        assert "[verse]" not in blob
+        assert "[chorus]" not in blob
     for needle in BANNED:
         assert needle not in blob, (stem, needle)
     ckpt = next(n for n in graph["nodes"] if n["type"] == "CheckpointLoaderSimple")
@@ -57,8 +86,9 @@ def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None
     assert prim["widgets_values"][0] == duration
     enc = next(n for n in graph["nodes"] if n["type"] == "TextEncodeAceStepAudio1.5")
     widgets = assert_ace_encoder_widgets(enc, where=stem)
+    assert widgets[2] == seed
     assert widgets[3] == "fixed"
-    assert widgets[4] == 88
+    assert widgets[4] == bpm
     assert widgets[5] == duration
     assert widgets[6] == "4"
     assert widgets[7] == "en"
@@ -66,6 +96,7 @@ def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None
     assert widgets[9] is True
     sampler = next(n for n in graph["nodes"] if n["type"] == "KSampler")
     sw = sampler["widgets_values"]
+    assert sw[0] == seed
     assert sw[2] == 8
     assert sw[3] in (1, 1.0)
     assert sw[4] == "euler"
@@ -75,8 +106,11 @@ def _assert_shared(graph: dict, stem: str, prefix: str, duration: float) -> None
     mp3 = next(n for n in graph["nodes"] if n["type"] == "SaveAudioMP3")
     assert mp3["widgets_values"][0] == prefix
     ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
-    assert ace["widgets_values"][2] is True
-    assert ace["widgets_values"][3] == "vocal"
+    assert ace["widgets_values"][2] is False
+    assert ace["widgets_values"][3] == ace_mode
+    if tags is not None:
+        assert ace["widgets_values"][0] == tags
+        assert widgets[0] == tags
     assert "Note" in {n["type"] for n in graph["nodes"]}
     assert "klein-thumbnail-lab-example" in extra["lab_note"]
     assert "klein-podcast-cover-lab-example" in extra["lab_note"]
@@ -100,8 +134,93 @@ def test_music_rap_full_graph() -> None:
     assert blob.count("[chorus]") >= 2
 
 
+def test_music_rap_nill_bye_diss_graphs() -> None:
+    assert len(DISS_EXAMPLES) == 45
+    assert tuple(ex["stem"] for ex in DISS_EXAMPLES) == NILL_BYE_STAMP_STEMS
+    for ex in DISS_EXAMPLES:
+        stem = ex["stem"]
+        graph = _load(stem)
+        _assert_shared(
+            graph,
+            stem,
+            ex["prefix"],
+            float(ex["duration"]),
+            bpm=int(ex["bpm"]),
+            seed=int(ex["seed"]),
+            tags=ex["tags"],
+        )
+        blob = json.dumps(graph)
+        assert "[outro]" in blob
+        assert "Nill Bye" in blob
+        assert "Rake" in blob
+        assert blob.count("[chorus]") >= 3
+        note = graph["extra"]["lab_note"]
+        assert "180" in note
+        assert "on its own" in note.lower() or "queue on its own" in note.lower()
+        if ex["title"] in {"peer review", "grant denied", "story time"}:
+            assert "[spoken word]" in blob
+
+
+def test_nill_bye_stems_are_stamped_audio() -> None:
+    stems = {ex["stem"] for ex in DISS_EXAMPLES}
+    assert stems <= set(STAMP_SPECS)
+    for stem in stems:
+        assert STAMP_SPECS[stem]["lane"] == "audio"
+        assert STAMP_SPECS[stem]["occupancy"] == "audio"
+
+
+def test_music_edm_drive_through_graphs() -> None:
+    assert len(EDM_EXAMPLES) == 30
+    assert tuple(ex["stem"] for ex in EDM_EXAMPLES) == DRIVE_THROUGH_STAMP_STEMS
+    for ex in EDM_EXAMPLES:
+        stem = ex["stem"]
+        graph = _load(stem)
+        treat = ex["ace_mode"] == "vocal"
+        _assert_shared(
+            graph,
+            stem,
+            ex["prefix"],
+            float(ex["duration"]),
+            bpm=int(ex["bpm"]),
+            seed=int(ex["seed"]),
+            tags=ex["tags"],
+            ace_mode=ex["ace_mode"],
+            edm_vocal_treat=treat,
+        )
+        blob = json.dumps(graph)
+        assert "Drive-through" in blob
+        assert "[verse]" not in blob
+        note = graph["extra"]["lab_note"]
+        assert "180" in note
+        assert "on its own" in note.lower() or "queue on its own" in note.lower()
+        assert "rave" in note.lower() or "live" in note.lower()
+        if treat:
+            assert "vocal" in note.lower()
+            assert blob.lower().count("[chorus]") >= 1
+        else:
+            assert "instrumental" in note.lower()
+            assert "[chorus]" not in blob
+        ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
+        assert ace["title"] == "ez_edm_prompt"
+
+
+def test_drive_through_stems_are_stamped_audio() -> None:
+    stems = {ex["stem"] for ex in EDM_EXAMPLES}
+    assert stems <= set(STAMP_SPECS)
+    for stem in stems:
+        assert STAMP_SPECS[stem]["lane"] == "audio"
+        assert STAMP_SPECS[stem]["occupancy"] == "audio"
+        assert STAMP_SPECS[stem]["ace_instrumental_score"] is True
+
+
 def test_music_apps_expose_duration_and_vocal_mode() -> None:
-    for stem in ("music-rap-draft-lab-example", "music-rap-full-lab-example"):
+    stems = [
+        "music-rap-draft-lab-example",
+        "music-rap-full-lab-example",
+        *[ex["stem"] for ex in DISS_EXAMPLES],
+        *[ex["stem"] for ex in EDM_EXAMPLES],
+    ]
+    for stem in stems:
         graph = _load(stem)
         names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
         assert "seconds" in names, stem

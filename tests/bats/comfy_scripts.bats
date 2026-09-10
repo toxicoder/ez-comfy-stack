@@ -42,12 +42,66 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "install_dub_wheels is fail-soft" {
+  run grep -F 'install_dub_wheels' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'faster-whisper' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  pip_install() { return 1; }
+  run install_dub_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"empty mix"* || "${output}" == *"failed"* ]]
+  pip_install() { return 0; }
+  run install_dub_wheels
+  [ "${status}" -eq 0 ]
+}
+
+@test "install_dub_wheels splits ASR from chatterbox --no-deps" {
+  run grep -F 'install_faster_whisper_wheel' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'install_chatterbox_wheel' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -E 'pip_install[^[:cntrl:]]*faster-whisper[^[:cntrl:]]*chatterbox' \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
+  run grep -F -- '--no-deps' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  pip_install() {
+    printf '%s\n' "$*" >>"${TEST_TMP_DIR}/pip_dub.log"
+    if [[ $* == *chatterbox-tts* && $* != *--no-deps* ]]; then
+      return 1
+    fi
+    if [[ $* == *chatterbox-tts* ]]; then
+      return 1
+    fi
+    return 0
+  }
+  : >"${TEST_TMP_DIR}/pip_dub.log"
+  run install_faster_whisper_wheel
+  [ "${status}" -eq 0 ]
+  run install_chatterbox_wheel
+  [ "${status}" -eq 0 ]
+  run install_dub_wheels
+  [ "${status}" -eq 0 ]
+  grep -q 'faster-whisper' "${TEST_TMP_DIR}/pip_dub.log"
+  grep -q -- '--no-deps' "${TEST_TMP_DIR}/pip_dub.log"
+  if grep -E 'faster-whisper.*chatterbox-tts' "${TEST_TMP_DIR}/pip_dub.log"; then
+    return 1
+  fi
+}
+
 @test "install-comfy phase_nodes and ensure_lab_video_nodes require VideoHelperSuite" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"
   run grep -F 'ComfyUI-VideoHelperSuite' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'ComfyUI-MagCache' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'apply_magcache_compat_patch' "${REPO_ROOT}/docker/install-comfy.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'patch_magcache_compat' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'configure_nunchaku_pack' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'LAB_ENABLE_LTX_DIRECTOR' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
@@ -111,9 +165,21 @@ teardown() {
   [[ "${output}" == *"Clone ComfyUI"* ]]
 
   mkdir -p "${COMFY_HOME}/models"
+  export HOST_UID
+  HOST_UID="$(id -u)"
+  export HOST_GID
+  HOST_GID="$(id -g)"
+  run layout_host_uid_gid
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"$(id -u)"* ]]
   run link_models diffusion_models
   [ "${status}" -eq 0 ]
   [[ -L "${COMFY_HOME}/models/diffusion_models" ]]
+  [[ -d ${MODELS_ROOT}/comfy/diffusion_models ]]
+  unset HOST_UID HOST_GID
+  run layout_host_uid_gid
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *":"* ]]
 
   # Empty existing dir path branch
   rm -f "${COMFY_HOME}/models/vae"
@@ -338,6 +404,12 @@ teardown() {
   run lab_workflow_lane "music-rap-draft-lab-example.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "audio" ]
+  run lab_workflow_lane "_lab/audio/nill-bye/music-rap-nill-bye-lab-coat-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "audio" ]
+  run lab_workflow_lane "_lab/audio/drive-through/music-edm-drive-through-open-lane-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "audio" ]
   run lab_workflow_lane "prompt-forge-lab-example.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "inspire" ]
@@ -361,6 +433,8 @@ teardown() {
     "${src}/_lab/shorts" \
     "${src}/_lab/dcc" \
     "${src}/_lab/optional" \
+    "${src}/_lab/audio/nill-bye" \
+    "${src}/_lab/audio/drive-through" \
     "${src}/_user" \
     "${src}/shorts" \
     "${src}/quality/ltx-2.5" \
@@ -370,6 +444,8 @@ teardown() {
   echo '{}' >"${src}/_lab/shorts/film-go-see-90s-run-lab-example.json"
   echo '{}' >"${src}/_lab/dcc/klein-from-clay-lab-example.json"
   echo '{}' >"${src}/_lab/optional/wan-i2v-a14b-lab-example.json"
+  echo '{}' >"${src}/_lab/audio/nill-bye/music-rap-nill-bye-lab-coat-lab-example.json"
+  echo '{}' >"${src}/_lab/audio/drive-through/music-edm-drive-through-open-lane-lab-example.json"
   echo '{}' >"${src}/_user/keep-me.json"
   echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
   echo 'notice' >"${src}/quality/ltx-2.5/NOTICE.md"
@@ -384,6 +460,8 @@ teardown() {
   [[ -f ${dest}/_lab/shorts/film-go-see-90s-run-lab-example.json ]]
   [[ -f ${dest}/_lab/dcc/klein-from-clay-lab-example.json ]]
   [[ -f ${dest}/_lab/optional/wan-i2v-a14b-lab-example.json ]]
+  [[ -f ${dest}/_lab/audio/nill-bye/music-rap-nill-bye-lab-coat-lab-example.json ]]
+  [[ -f ${dest}/_lab/audio/drive-through/music-edm-drive-through-open-lane-lab-example.json ]]
   [[ ! -f ${dest}/film-go-see-90s-run-lab-example.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
   [[ ! -f ${dest}/_lab/shorts/go-see.shots.yaml ]]
@@ -516,7 +594,7 @@ teardown() {
   echo stamp >"${STAMP}"
   echo v0.29.0 >"${COMFY_HOME}/.lab-comfyui-ref"
   echo fromimg >"${pre}/marker_pin.txt"
-  export COMFYUI_REF="v0.34.0"
+  export COMFYUI_REF="v0.34.6"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
   unset LAB_FORCE_COLD_INSTALL
@@ -655,6 +733,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"not found"* || "${output}" == *"patch"* || -z ${output} ]]
 
+  run apply_magcache_compat_patch
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || "${output}" == *"magcache"* || -z ${output} ]]
+
   # finalize with mocked strip deps
   run phase_finalize
   [ "${status}" -eq 0 ]
@@ -666,11 +748,11 @@ teardown() {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"
   mkdir -p "${COMFY_HOME}"
-  COMFYUI_REF="v0.34.0"
+  COMFYUI_REF="v0.34.6"
   run write_comfy_pin
   [ "${status}" -eq 0 ]
   run read_comfy_pin
-  [ "${output}" = "v0.34.0" ]
+  [ "${output}" = "v0.34.6" ]
   run comfy_pin_matches
   [ "${status}" -eq 0 ]
   COMFYUI_REF="v0.29.0"
@@ -685,7 +767,7 @@ teardown() {
   source "${REPO_ROOT}/docker/install-comfy.sh"
   mkdir -p "${COMFY_HOME}" "${VENV}/bin"
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
-  COMFYUI_REF="v0.34.0"
+  COMFYUI_REF="v0.34.6"
   write_comfy_pin
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
@@ -704,12 +786,12 @@ teardown() {
   mkdir -p "${LAB_PREBUILT_ROOT}"
   install_mock_bin pip 'echo pip; exit 0'
   install_mock_bin git 'echo "git $*"; dest="${@: -1}"; mkdir -p "${dest}" "${COMFY_HOME}/.git" 2>/dev/null || true; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
-  COMFYUI_REF="v0.34.0"
+  COMFYUI_REF="v0.34.6"
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"cloning"* || "${output}" == *"Syncing"* ]]
   run read_comfy_pin
-  [ "${output}" = "v0.34.0" ]
+  [ "${output}" = "v0.34.6" ]
 }
 
 @test "refresh_comfy_pin_if_needed reseeds from prebuilt when pin lags" {
@@ -726,7 +808,7 @@ teardown() {
   mkdir -p "${pre}/custom_nodes/_user" "${COMFY_HOME}/custom_nodes/_user"
   echo poison >"${pre}/custom_nodes/_user/poison.py"
   echo keep >"${COMFY_HOME}/custom_nodes/_user/mine.py"
-  COMFYUI_REF="v0.34.0"
+  COMFYUI_REF="v0.34.6"
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
   [[ -f ${COMFY_HOME}/from_image.txt ]]
@@ -746,7 +828,7 @@ teardown() {
   : >"${STAMP}"
   install_mock_bin git 'echo "git $*"; exit 0'
   install_mock_bin pip 'echo "pip $*"; exit 0'
-  COMFYUI_REF="v0.34.0"
+  COMFYUI_REF="v0.34.6"
   write_comfy_pin
   run main
   [ "${status}" -eq 0 ]
@@ -1032,4 +1114,181 @@ teardown() {
   run install_sage_wheel_if_pinned
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"failed"* || "${output}" == *"optional"* ]]
+}
+
+@test "ensure_dub_wheels installs ASR when WhisperModel missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export DUB_PIP_LOG="${TEST_TMP_DIR}/dub_pip.log"
+  : >"${DUB_PIP_LOG}"
+  cat >"${TEST_TMP_DIR}/fake-python" <<'PY'
+#!/usr/bin/env bash
+log="${DUB_PIP_LOG:?}"
+if [[ ${1} == -c ]]; then
+  case "${2}" in
+    *WhisperModel*) exit "${WHISPER_IMPORT_RC:-1}" ;;
+    *ChatterboxMultilingualTTS*) exit "${CLONE_IMPORT_RC:-1}" ;;
+  esac
+  exit 0
+fi
+if [[ ${1} == -m && ${2} == pip ]]; then
+  printf '%s\n' "$*" >>"${log}"
+  if [[ ${DUB_PIP_FAIL:-0} == 1 ]]; then
+    exit 1
+  fi
+  exit 0
+fi
+exit 0
+PY
+  chmod +x "${TEST_TMP_DIR}/fake-python"
+  export COMFY_HOME="${TEST_TMP_DIR}/comfy_dub"
+  mkdir -p "${COMFY_HOME}/.venv/bin"
+  cp "${TEST_TMP_DIR}/fake-python" "${COMFY_HOME}/.venv/bin/python"
+  chmod +x "${COMFY_HOME}/.venv/bin/python"
+  local py="${COMFY_HOME}/.venv/bin/python"
+
+  run grep -F 'ensure_dub_wheels' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run dub_python_can_import "${py}" "from faster_whisper import WhisperModel"
+  [ "${status}" -ne 0 ]
+  run install_dub_asr_wheel "${py}"
+  [ "${status}" -eq 0 ]
+  run install_dub_clone_wheel "${py}"
+  [ "${status}" -eq 0 ]
+  : >"${DUB_PIP_LOG}"
+  run ensure_dub_wheels
+  [ "${status}" -eq 0 ]
+  grep -q 'faster-whisper' "${DUB_PIP_LOG}"
+  grep -q -- '--no-deps' "${DUB_PIP_LOG}"
+  if grep -E 'faster-whisper.*chatterbox-tts' "${DUB_PIP_LOG}"; then
+    return 1
+  fi
+
+  : >"${DUB_PIP_LOG}"
+  export WHISPER_IMPORT_RC=0
+  export CLONE_IMPORT_RC=0
+  run ensure_dub_wheels
+  [ "${status}" -eq 0 ]
+  [[ ! -s ${DUB_PIP_LOG} ]]
+
+  export DUB_PIP_FAIL=1
+  export WHISPER_IMPORT_RC=1
+  run install_dub_asr_wheel "${py}"
+  [ "${status}" -eq 0 ]
+}
+
+@test "comfy_runtime_python prefers VIRTUAL_ENV over volume venv" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export DUB_PIP_LOG="${TEST_TMP_DIR}/dub_pip_live.log"
+  : >"${DUB_PIP_LOG}"
+  cat >"${TEST_TMP_DIR}/live-python" <<'PY'
+#!/usr/bin/env bash
+log="${DUB_PIP_LOG:?}"
+if [[ ${1} == -c ]]; then
+  case "${2}" in
+    *WhisperModel*) exit "${WHISPER_IMPORT_RC:-1}" ;;
+    *ChatterboxMultilingualTTS*) exit "${CLONE_IMPORT_RC:-1}" ;;
+  esac
+  exit 0
+fi
+if [[ ${1} == -m && ${2} == pip ]]; then
+  printf '%s\n' "$*" >>"${log}"
+  exit 0
+fi
+exit 0
+PY
+  chmod +x "${TEST_TMP_DIR}/live-python"
+  export VIRTUAL_ENV="${TEST_TMP_DIR}/livevenv"
+  mkdir -p "${VIRTUAL_ENV}/bin" "${COMFY_HOME}/.venv/bin"
+  cp "${TEST_TMP_DIR}/live-python" "${VIRTUAL_ENV}/bin/python"
+  printf '#!/usr/bin/env bash\nexit 1\n' >"${COMFY_HOME}/.venv/bin/python"
+  chmod +x "${VIRTUAL_ENV}/bin/python" "${COMFY_HOME}/.venv/bin/python"
+  export WHISPER_IMPORT_RC=1
+  export CLONE_IMPORT_RC=1
+  run comfy_runtime_python
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == "${VIRTUAL_ENV}/bin/python" ]]
+  run ensure_dub_wheels
+  [ "${status}" -eq 0 ]
+  grep -q 'faster-whisper' "${DUB_PIP_LOG}"
+  unset VIRTUAL_ENV
+}
+
+@test "ensure_user_custom_node_stub writes empty pack and keeps operator init" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local dest="${TEST_TMP_DIR}/custom_nodes/_user"
+  run ensure_user_custom_node_stub "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest}/__init__.py ]]
+  grep -q 'NODE_CLASS_MAPPINGS' "${dest}/__init__.py"
+  echo 'keep = True' >"${dest}/__init__.py"
+  run ensure_user_custom_node_stub "${dest}"
+  [ "${status}" -eq 0 ]
+  grep -q 'keep = True' "${dest}/__init__.py"
+}
+
+@test "configure_nunchaku_pack disables when engine missing and re-enables" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export COMFY_HOME="${TEST_TMP_DIR}/nunchaku_home"
+  mkdir -p "${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku" "${COMFY_HOME}/.venv/bin"
+  echo pack >"${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku/__init__.py"
+  cat >"${COMFY_HOME}/.venv/bin/python" <<'PY'
+#!/usr/bin/env bash
+if [[ ${1} == -c && ${2} == *nunchaku* ]]; then
+  exit "${NUNCHAKU_IMPORT_RC:-1}"
+fi
+exit 0
+PY
+  chmod +x "${COMFY_HOME}/.venv/bin/python"
+  export NUNCHAKU_IMPORT_RC=1
+  run nunchaku_engine_importable "${COMFY_HOME}/.venv/bin/python"
+  [ "${status}" -ne 0 ]
+  run configure_nunchaku_pack
+  [ "${status}" -eq 0 ]
+  [[ -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku.disabled ]]
+  [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku ]]
+  [[ "${output}" == *"disabled"* ]]
+  run configure_nunchaku_pack
+  [ "${status}" -eq 0 ]
+  export NUNCHAKU_IMPORT_RC=0
+  run configure_nunchaku_pack
+  [ "${status}" -eq 0 ]
+  [[ -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku ]]
+  [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku.disabled ]]
+  [[ "${output}" == *"enabled"* ]]
+}
+
+@test "seed_clay_inputs_if_missing writes plates via LAB_SEED_CLAY_PY" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export LAB_SEED_CLAY_PY="${REPO_ROOT}/docker/seed_clay_inputs.py"
+  export LAB_INPUTS_MOUNT="${TEST_TMP_DIR}/clay_inputs"
+  run seed_clay_inputs_if_missing
+  [ "${status}" -eq 0 ]
+  [[ -f ${LAB_INPUTS_MOUNT}/ez_house_clay_01.png ]]
+  [[ -f ${LAB_INPUTS_MOUNT}/ez_house_clay_10.png ]]
+  export LAB_SEED_CLAY_PY="${TEST_TMP_DIR}/missing_seed.py"
+  run seed_clay_inputs_if_missing
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"missing"* ]]
+}
+
+@test "entrypoint main writes _user stub" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  mkdir -p "${VENV}/bin"
+  printf '#!/usr/bin/env bash\necho ok\n' >"${VENV}/bin/python"
+  chmod +x "${VENV}/bin/python"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  : >"${STAMP}"
+  export LAB_ENTRYPOINT_INSTALL_CMD="true"
+  export LAB_ENTRYPOINT_NO_EXEC=1
+  export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs_stub"
+  run main
+  [ "${status}" -eq 0 ]
+  [[ -f ${COMFY_HOME}/custom_nodes/_user/__init__.py ]]
+  grep -q 'NODE_CLASS_MAPPINGS' "${COMFY_HOME}/custom_nodes/_user/__init__.py"
 }

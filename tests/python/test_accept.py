@@ -54,6 +54,36 @@ def test_accept_passes_with_injected_probes(tmp_path: Path, monkeypatch: pytest.
     assert report["defects"] == []
 
 
+def test_accept_stems_policy_requires_mix(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    dest = _compile(tmp_path)
+    state = js.load_state(dest)
+    state["audio_policy"] = "stems"
+    for row in state["shots"]:
+        sid = row["id"]
+        mp4 = dest / "shots" / f"{sid}.mp4"
+        mp4.parent.mkdir(parents=True, exist_ok=True)
+        mp4.write_bytes(b"x")
+        js.mark_shot(state, sid, "ok", mp4=f"shots/{sid}.mp4", backend="ltx")
+    js.save_state(dest, state)
+    monkeypatch.setattr(acc, "probe_duration_s", lambda *a, **k: 5.00)
+    monkeypatch.setattr(acc, "probe_wh", lambda *a, **k: (1280, 704))
+    monkeypatch.setattr(acc, "probe_has_audio", lambda *a, **k: True)
+    report = acc.accept_film(dest, probe_lufs_fn=lambda *a, **k: -14.0)
+    assert report["ok"] is False
+    assert any("stem mix" in d for d in report["defects"])
+    for row in state["shots"]:
+        mix_dir = dest / "stems" / row["id"]
+        mix_dir.mkdir(parents=True, exist_ok=True)
+        (mix_dir / "mix.m4a").write_bytes(b"x")
+    report = acc.accept_film(dest, probe_lufs_fn=lambda *a, **k: -14.0)
+    assert report["ok"] is True
+    report = acc.accept_film(dest, probe_lufs_fn=lambda *a, **k: -22.0)
+    assert report["ok"] is False
+    assert any("loudness" in d for d in report["defects"])
+
+
 def test_accept_cli_and_probes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     dest = _compile(tmp_path)
     assert acc._cli(["--dest", str(dest)]) == 1  # noqa: SLF001

@@ -158,7 +158,7 @@ tier_files_ready() {
 link_into_comfy() {
   local tier="${1}"
   local src="${MODELS_DIR}/comfy/diffusion_models"
-  mkdir -p "${src}"
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
   local dir f base dest
   dir=$(tier_dir "${tier}")
   [[ -d ${dir} ]] || return 0
@@ -208,7 +208,7 @@ cmd_run() {
   local tier repo dir
   refuse_context_parallel || true
   check_hf_cli
-  ensure_models_dir "${MODELS_DIR}" || exit 1
+  prepare_comfy_layout "${MODELS_DIR}" || exit 1
   for tier in $(tiers_to_process); do
     repo=$(tier_repo "${tier}")
     if [[ -z ${repo} ]]; then

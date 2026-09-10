@@ -1,6 +1,6 @@
 ---
 title: Workflow catalog
-description: Which *-lab-example graph to load for a still, 5 s clip, GIF, creator plate, or 90s film.
+description: Which *-lab-example graph to load for a still, 5 s clip, GIF, creator plate, 90s film, or local audio.
 tags: [comfyui, workflows, klein, wan, ltx, catalog]
 ---
 
@@ -9,7 +9,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 **What's on this page**
 
 - Which graph for which job
-- Seeded Klein / Wan / LTX / Apps (Lane A vs Lane B) / 90s / creator tables
+- Seeded Klein / Wan / LTX / Apps (Lane A vs Lane B) / 90s / creator / audio tables
 - Notes that apply to every `*-lab-example`
 
 **What this enables**
@@ -26,13 +26,15 @@ Sidebar tree after start:
 ```text
 user/default/workflows/
   _lab/
-    klein/     stills, plates, identity, platform pack, dream-house, …
+    klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, …
     wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
     ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
     shorts/    film-*-90s-*-lab-example.json
     dcc/       clay → print, iclora envelope
     optional/  a14b, longcat stub
-    audio/     podcast-*, music-rap-*
+    audio/     podcast-*, dub-*, music-rap-draft/full
+      nill-bye/       forty-five 180 s music-rap-nill-bye-* diss takes
+      drive-through/  thirty 180 s music-edm-drive-through-* EDM takes
     inspire/   prompt-forge, beat-sheet
   _user/       your graphs (never overwritten)
 ```
@@ -103,12 +105,13 @@ flowchart TB
     | **klein-still-draft-lab-example** | Spark Still. 768×432, Enhance on. Prefix `ez_still_draft` |
     | **klein-identity-sheet-lab-example** | 3-angle sheet of the identity you type, seed **42**, **1280×704** |
     | **klein-storyboard-6up-lab-example** | Six new cameras of one scene (`ez_board_01`…`06`) |
-    | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills: virtual tour of one place (outside, entrance, rooms, drone, day, night) |
+    | **klein-dream-house-lab-example** | World bible. Ten Instagram 4:5 stills: virtual tour of one place (tower, foyer, rooms, terrace, drone, study) |
+    | **klein-dream-house-clay-lab-example** | Same tour as Klein **edit** of clay (`ez_house_clay_01`…`10`). `start` seeds plates; optional `house-views` dump. Prefix `ez_dream_house_clay_*` |
     | **klein-character-draft-lab-example** | Character still, 1024×1280, style dropdown, prefix `ez_character` |
     | **klein-character-tweak-lab-example** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |
     | **klein-hook-still-lab-example** | Vertical 9:16 hook still |
     | **prompt-forge-lab-example** | No UNET. Klein / Wan / LTX enhance preview (occupancy **llm**) |
-    | **beat-sheet-lab-example** | No UNET. 18 STRING cards → paste into `shorts/<slug>.shots.yaml` (occupancy **none**) |
+    | **beat-sheet-lab-example** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |
 
     Lane B — Produce
 
@@ -180,14 +183,118 @@ flowchart TB
     | **ltx-interior-ambience-lab-example** | Interior room-tone AV |
     | **ltx-hook-av-lab-example** | ~5 s AV cold open |
 
+=== "Audio (podcast / dub / rap / EDM)"
+
+    Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Graphs still save FLAC + MP3; YouTube still-image MP4 is host `audio-still-video` after Queue. Playbook: [Local podcast](podcast.md), [Local dub](dub.md), [Local music](music.md).
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **dub-localize-lab-example** | Multi-speaker clone-and-translate. Pick or upload source media. Rights gate. **Dub status** after Queue. Duration-locked `ez_dub_yt` for YouTube Languages. Prefix `ez_dub_mix` |
+    | **podcast-audio-first-lab-example** | Two-host episode. Kokoro stock voices + ACE-Step instrumental bed. Prefix `ez_podcast_ep` |
+    | **podcast-radio-drama-lab-example** | One-graph radio drama. Sting + bed stay instrumental. Prefix `ez_radio_ep` |
+    | **music-rap-draft-lab-example** | ACE-Step rap draft **32 s** boom-bap 88 (`ez_rap_draft`) |
+    | **music-rap-full-lab-example** | ACE-Step rap full **96 s** boom-bap 88 (`ez_rap_full`). Queue draft first |
+    | **music-rap-nill-bye-lab-coat-lab-example** | **180 s** diss, boom-bap 88. Nill Bye lab-coat roast of Rake (`ez_rap_nill_labcoat`). `_lab/audio/nill-bye/`. Queue on its own |
+    | **music-rap-nill-bye-peer-review-lab-example** | **180 s** diss, boom-bap 88, `[spoken word]` intro (`ez_rap_nill_review`) |
+    | **music-rap-nill-bye-feels-lab-example** | **180 s** diss, lo-fi 86 (`ez_rap_nill_feels`) |
+    | **music-rap-nill-bye-fake-cool-lab-example** | **180 s** diss, trap 140 (`ez_rap_nill_fakecool`) |
+    | **music-rap-nill-bye-hypothesis-lab-example** | **180 s** diss, boom-bap 92, seed 7 (`ez_rap_nill_hypothesis`) |
+    | **music-rap-nill-bye-control-group-lab-example** | **180 s** diss, boom-bap 88 (`ez_rap_nill_control`). Uncontrolled variable |
+    | **music-rap-nill-bye-sample-size-lab-example** | **180 s** diss, boom-bap 92, seed 11 (`ez_rap_nill_samplesize`) |
+    | **music-rap-nill-bye-placebo-lab-example** | **180 s** diss, trap 140, seed 13 (`ez_rap_nill_placebo`) |
+    | **music-rap-nill-bye-error-bars-lab-example** | **180 s** diss, boom-bap 88, seed 17 (`ez_rap_nill_errorbars`) |
+    | **music-rap-nill-bye-lab-notebook-lab-example** | **180 s** diss, boom-bap 92, seed 19 (`ez_rap_nill_notebook`) |
+    | **music-rap-nill-bye-office-hours-lab-example** | **180 s** diss, lo-fi 86, seed 23 (`ez_rap_nill_office`) |
+    | **music-rap-nill-bye-grant-denied-lab-example** | **180 s** diss, boom-bap 88, `[spoken word]` intro, seed 29 (`ez_rap_nill_grant`) |
+    | **music-rap-nill-bye-contamination-lab-example** | **180 s** diss, trap 140, seed 31 (`ez_rap_nill_contam`) |
+    | **music-rap-nill-bye-double-blind-lab-example** | **180 s** diss, boom-bap 92, seed 37 (`ez_rap_nill_doubleblind`) |
+    | **music-rap-nill-bye-replicate-lab-example** | **180 s** diss, boom-bap 88, seed 7 (`ez_rap_nill_replicate`) |
+
+    Style pack (same dry booth; not trap/EDM). Queue on its own. Full table: [Local music](music.md).
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-rap-nill-bye-citation-needed-lab-example** | **180 s** jazz hop 90 (`ez_rap_nill_cite`). Citation needed |
+    | **music-rap-nill-bye-p-hacking-lab-example** | **180 s** g-funk 98 (`ez_rap_nill_phack`) |
+    | **music-rap-nill-bye-null-result-lab-example** | **180 s** reggae 92 (`ez_rap_nill_null`) |
+    | **music-rap-nill-bye-expired-reagent-lab-example** | **180 s** neo-soul 84 (`ez_rap_nill_expired`) |
+    | **music-rap-nill-bye-lab-safety-lab-example** | **180 s** rap rock 168 (`ez_rap_nill_safety`) |
+    | **music-rap-nill-bye-rumor-mill-lab-example** | **180 s** industrial 108 (`ez_rap_nill_rumor`) |
+    | **music-rap-nill-bye-gym-selfie-lab-example** | **180 s** afrobeat 110 (`ez_rap_nill_gym`) |
+    | **music-rap-nill-bye-rented-drip-lab-example** | **180 s** synthwave 104 (`ez_rap_nill_drip`) |
+    | **music-rap-nill-bye-clout-diet-lab-example** | **180 s** trip-hop 86 (`ez_rap_nill_clout`) |
+    | **music-rap-nill-bye-mood-forecast-lab-example** | **180 s** cinematic 76 (`ez_rap_nill_forecast`) |
+    | **music-rap-nill-bye-algorithm-lab-example** | **180 s** funk 114 (`ez_rap_nill_algo`) |
+    | **music-rap-nill-bye-story-time-lab-example** | **180 s** blues 74, `[spoken word]` intro (`ez_rap_nill_story`) |
+    | **music-rap-nill-bye-caption-lab-example** | **180 s** chiptune 100 (`ez_rap_nill_caption`) |
+    | **music-rap-nill-bye-energy-drink-lab-example** | **180 s** brass band 120 (`ez_rap_nill_fuel`) |
+    | **music-rap-nill-bye-campfire-lab-example** | **180 s** folk 82 (`ez_rap_nill_camp`) |
+
+    Trap / EDM pack (rap **over** club beds, no autotune). Queue on its own.
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-rap-nill-bye-false-drop-lab-example** | **180 s** dark trap 140 (`ez_rap_nill_drop`) |
+    | **music-rap-nill-bye-velvet-rope-lab-example** | **180 s** festival trap 150 (`ez_rap_nill_rope`) |
+    | **music-rap-nill-bye-fog-machine-lab-example** | **180 s** rage 148 (`ez_rap_nill_fog`) |
+    | **music-rap-nill-bye-guest-list-lab-example** | **180 s** phonk 132 (`ez_rap_nill_guest`) |
+    | **music-rap-nill-bye-sparkler-lab-example** | **180 s** trap 145 (`ez_rap_nill_spark`) |
+    | **music-rap-nill-bye-bottle-service-lab-example** | **180 s** house 126 (`ez_rap_nill_bottle`) |
+    | **music-rap-nill-bye-strobe-claim-lab-example** | **180 s** techno 132 (`ez_rap_nill_strobe`) |
+    | **music-rap-nill-bye-amen-rumor-lab-example** | **180 s** drum and bass 174 (`ez_rap_nill_amen`) |
+    | **music-rap-nill-bye-wobble-alibi-lab-example** | **180 s** dubstep 140 (`ez_rap_nill_wobble`) |
+    | **music-rap-nill-bye-supersaw-flex-lab-example** | **180 s** future bass 148 (`ez_rap_nill_saw`) |
+    | **music-rap-nill-bye-laser-show-lab-example** | **180 s** electro house 128 (`ez_rap_nill_laser`) |
+    | **music-rap-nill-bye-two-step-lab-example** | **180 s** UK garage 130 (`ez_rap_nill_twostep`) |
+    | **music-rap-nill-bye-jersey-bounce-lab-example** | **180 s** jersey club 140 (`ez_rap_nill_jersey`) |
+    | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`ez_rap_nill_kick`) |
+    | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`ez_rap_nill_uplift`) |
+
+    Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list. Drop early, dirty pyro on every drop. Full table: [Local music](music.md).
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-edm-drive-through-night-window-lab-example** | **180 s** bass house 145 (`ez_edm_drive_night`). Opener, dirty 808 pyro |
+    | **music-edm-drive-through-open-lane-lab-example** | **180 s** festival bass 152 (`ez_edm_drive_openlane`). Drop-first ID |
+    | **music-edm-drive-through-exit-seven-lab-example** | **180 s** electro house 142 (`ez_edm_drive_exit`). Filter mix-in, dirty pyro |
+    | **music-edm-drive-through-skyline-pass-lab-example** | **180 s** progressive house 145 (`ez_edm_drive_skyline`). Drop-first anthem |
+    | **music-edm-drive-through-on-ramp-lab-example** | **180 s** festival bass 155 (`ez_edm_drive_onramp`). Reverse-bass pyro |
+    | **music-edm-drive-through-tunnel-bass-lab-example** | **180 s** dirty bass 150 (`ez_edm_drive_tunnel`). Three pyro drops |
+    | **music-edm-drive-through-wide-open-lab-example** | **180 s** big room 150 (`ez_edm_drive_wide`). DJ shout treat |
+    | **music-edm-drive-through-overpass-lab-example** | **180 s** riddim 150 (`ez_edm_drive_overpass`). Drop-first wobble pyro |
+    | **music-edm-drive-through-second-wave-lab-example** | **180 s** festival remix 150 (`ez_edm_drive_second`). Vocal-chop treat |
+    | **music-edm-drive-through-freight-pulse-lab-example** | **180 s** drumstep 176 (`ez_edm_drive_freight`) |
+    | **music-edm-drive-through-keep-going-lab-example** | **180 s** drumstep 170 (`ez_edm_drive_keep`). Triple pyro peak |
+    | **music-edm-drive-through-horizon-kick-lab-example** | **180 s** festival bass 165 (`ez_edm_drive_horizon`). Drop-first reverse bass |
+    | **music-edm-drive-through-clean-wreckage-lab-example** | **180 s** dirty electro 150 (`ez_edm_drive_wreck`). Three pyro wrecks |
+    | **music-edm-drive-through-heart-lane-lab-example** | **180 s** future bass 145 (`ez_edm_drive_heart`). Drop-first warm 808 |
+    | **music-edm-drive-through-dawn-receipt-lab-example** | **180 s** progressive house 140 (`ez_edm_drive_dawn`). Hour-1 closer |
+    | **music-edm-drive-through-rumble-strip-lab-example** | **180 s** bass house 140 (`ez_edm_drive_rumble`). Hour-2 opener |
+    | **music-edm-drive-through-low-lane-lab-example** | **180 s** festival bass 144 (`ez_edm_drive_low`). Chest sub pyro |
+    | **music-edm-drive-through-warm-merge-lab-example** | **180 s** future bass 148 (`ez_edm_drive_warm`) |
+    | **music-edm-drive-through-colour-span-lab-example** | **180 s** complextro 150 (`ez_edm_drive_colour`) |
+    | **music-edm-drive-through-garage-ticket-lab-example** | **180 s** festival trap 140 (`ez_edm_drive_garage`) |
+    | **music-edm-drive-through-liquid-grade-lab-example** | **180 s** drumstep 174 (`ez_edm_drive_liquid`) |
+    | **music-edm-drive-through-jump-bay-lab-example** | **180 s** brostep 150 (`ez_edm_drive_jump`). Dirty growl pyro |
+    | **music-edm-drive-through-psy-median-lab-example** | **180 s** big room 145 (`ez_edm_drive_psy`) |
+    | **music-edm-drive-through-groove-mile-lab-example** | **180 s** slap house 144 (`ez_edm_drive_groove`) |
+    | **music-edm-drive-through-donk-ramp-lab-example** | **180 s** dirty electro 150 (`ez_edm_drive_donk`) |
+    | **music-edm-drive-through-bounce-booth-lab-example** | **180 s** melbourne bounce 140 (`ez_edm_drive_bounce`) |
+    | **music-edm-drive-through-toll-growl-lab-example** | **180 s** tearout 150 (`ez_edm_drive_toll`) |
+    | **music-edm-drive-through-night-oil-lab-example** | **180 s** hybrid trap 142 (`ez_edm_drive_oil`) |
+    | **music-edm-drive-through-chest-pass-lab-example** | **180 s** festival bass 150 (`ez_edm_drive_chest`) |
+    | **music-edm-drive-through-sunrise-sub-lab-example** | **180 s** progressive house 140 (`ez_edm_drive_sunsub`). Encore closer |
+
 === "DCC (clay → print)"
 
     | Workflow | What it does |
     | --- | --- |
-    | **klein-from-clay-lab-example** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Occupancy: dump while Comfy is **down**. |
-    | **ltx-iclora-depth-5s-lab-example** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. |
+    | **klein-from-clay-lab-example** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Then `overlay-qc`. Occupancy: dump while Comfy is **down**. |
+    | **klein-dream-house-clay-lab-example** | Instagram 4:5 Path B: ten Klein edits of `house-views` clay (1024×1280). Not an LTX pack. |
+    | **ltx-iclora-depth-5s-lab-example** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
+    | **audio-finish-lab-example** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck −15 dB, YouTube loudnorm). |
 
-    Operator loop: [DCC guide pack](dcc-workflows.md).
+    Operator loop: [DCC guide pack](dcc-workflows.md). Playbook: [Clay to finish](learn/clay-to-finish.md).
 
 === "License"
 

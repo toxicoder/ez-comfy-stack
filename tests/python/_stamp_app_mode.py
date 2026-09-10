@@ -5,8 +5,11 @@ Not imported by pytest collection (leading underscore). Tests import
 lab_note / lab_description.
 
 Official persist: extra.linearData = {inputs, outputs}
-  LinearInput = [widgetId, widgetName, config?]
-  widgetId = "{node.id}:{widgetName}" when the node exists
+  LinearInput = [nodeId, widgetName, config?]
+  nodeId = integer node.id (Comfy SerializedNodeId). Frontend 1.49.6+
+  upgrades this to a live WidgetId (graphId:nodeId:name) at load.
+  Do not persist "nodeId:widgetName" — the frontend treats a colon as a
+  subgraph locator and drops the input.
 Lab contract: extra.lab_app_mode
 Do not require extra.linearMode (upstream does not write it; lab sugar only).
 """
@@ -69,6 +72,34 @@ def _resolve_node(graph: dict, ref: NodeRef, *, kind: str) -> dict:
     return hits[0]
 
 
+def linear_input_node_id(entry: Sequence[Any]) -> int:
+    """Return the persisted node id from a linearData input tuple.
+
+    ComfyUI frontend 1.49.6+ accepts SerializedNodeId (int, or a digit
+    string with no colon) and upgrades it to a live WidgetId at load.
+    Two-part ``nodeId:widgetName`` strings are dropped by the frontend.
+
+    Args:
+        entry: ``[nodeId, widgetName, config?]``.
+
+    Returns:
+        Integer node id.
+
+    Raises:
+        ValueError: missing entry, or a colon-joined / non-numeric id.
+    """
+    if not isinstance(entry, (list, tuple)) or not entry:
+        raise ValueError(f"invalid linear input {entry!r}")
+    stored = entry[0]
+    if isinstance(stored, bool) or stored is None:
+        raise ValueError(f"invalid linear input id {stored!r}")
+    if isinstance(stored, int):
+        return stored
+    if isinstance(stored, str) and ":" not in stored and stored.lstrip("-").isdigit():
+        return int(stored)
+    raise ValueError(f"legacy or invalid linear input id {stored!r}")
+
+
 def _parse_input(spec: InputSpec) -> tuple[NodeRef, str, Mapping[str, Any] | None]:
     if not isinstance(spec, (tuple, list)) or len(spec) < 2:
         raise ValueError(f"invalid input spec {spec!r}")
@@ -95,6 +126,7 @@ def stamp_app_mode(
     Args:
         graph: Serialized Comfy graph (mutated in place).
         inputs: (node title|id|unique type, widgetName[, config]).
+            Persisted as [int(node.id), widgetName, config?].
         outputs: Node title|id|unique type for SaveImage / VHS_VideoCombine.
         lane: inspire | produce | audio | film | dcc.
         occupancy: llm | klein | wan | ltx | audio | film | none.
@@ -131,8 +163,7 @@ def stamp_app_mode(
     for spec in inputs:
         node_ref, widget_name, config = _parse_input(spec)
         node = _resolve_node(graph, node_ref, kind="input")
-        widget_id = f"{node['id']}:{widget_name}"
-        entry: list = [widget_id, widget_name]
+        entry: list = [int(node["id"]), widget_name]
         if config:
             entry.append(dict(config))
         linear_inputs.append(entry)
@@ -181,6 +212,7 @@ OUTPUT_TYPES = (
     "VHS_VideoCombine",
     "SaveAudio",
     "SaveAudioMP3",
+    "EZDubRender",
 )
 
 ENHANCE_TYPES = (
@@ -195,6 +227,11 @@ ENHANCE_TYPES = (
 
 # App Mode widget order: the thing the user types first, then look, then Run knobs.
 WIDGET_ORDER = (
+    "source",
+    "upload",
+    "source_url",
+    "have_rights",
+    "job_slug",
     "prompt",
     "tags",
     "lyrics",
@@ -205,6 +242,13 @@ WIDGET_ORDER = (
     "duration_hint",
     "audio_notes",
     "seconds",
+    "target_language",
+    "source_language",
+    "max_speakers",
+    "stage",
+    "engine",
+    "keep_bed",
+    "spoken_disclosure",
     "speaker_a_voice",
     "speaker_b_voice",
     "announcer_voice",
@@ -253,6 +297,18 @@ GENERIC_LABELS = {
     "announcer_voice": "Announcer",
     "include_announcer": "Include announcer",
     "speed": "Speaking speed",
+    "source": "Source file",
+    "upload": "Upload media",
+    "source_url": "Source URL",
+    "have_rights": "I have rights",
+    "job_slug": "Job slug",
+    "target_language": "Target language",
+    "source_language": "Source language",
+    "max_speakers": "Max speakers",
+    "stage": "Stage",
+    "engine": "Clone engine",
+    "keep_bed": "Keep original bed",
+    "spoken_disclosure": "Spoken disclosure",
 }
 DEFAULT_WIDGET_DESCRIPTIONS = {
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
@@ -280,6 +336,23 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "announcer_voice": "Kokoro built-in for Announcer: lines.",
     "include_announcer": "On: speak Announcer: lines. Off: skip them.",
     "speed": "TTS speed. 1.0 is the Kokoro default.",
+    "source": (
+        "Audio or video already in COMFY_OUTPUT_DIR/input (container /inputs). "
+        "Default (none)."
+    ),
+    "upload": "Upload wav/mp3/mp4/mkv into input/. Requires I have rights on Queue.",
+    "source_url": (
+        "Optional http(s) URL you have rights to fetch. Overrides Source file when set."
+    ),
+    "have_rights": "Required. Off refuses Queue. No celebrity refs.",
+    "job_slug": "Job folder under COMFY_OUTPUT_DIR/dubs/<slug>.",
+    "target_language": "Language to speak. Spanish is the soccer-podcast default.",
+    "source_language": "auto detects from ASR. Pin when the show is mixed-language.",
+    "max_speakers": "0 = auto (cap 8). Hint when you know the cast size.",
+    "stage": "all = analyze+render. analyze writes JSON. render clones the widget.",
+    "engine": "chatterbox-ml (MIT, 23 langs, PerTh on) or qwen3tts (Apache).",
+    "keep_bed": "On: keep original ambience in gaps. Off: speech-only mix.",
+    "spoken_disclosure": "On: overlay a 3 s spoken bumper. Sidecar is always written.",
 }
 
 
@@ -353,6 +426,30 @@ def display_label(
         return title or "Duration (seconds)"
     if ntype == "EZPodcastScript":
         return {"prompt": "Script", "enhance": "Rewrite script"}.get(name, generic)
+    if ntype == "EZDubIngest":
+        return {
+            "source": "Source file",
+            "upload": "Upload media",
+            "source_url": "Source URL",
+            "have_rights": "I have rights",
+            "job_slug": "Job slug",
+        }.get(name, generic)
+    if ntype == "EZDubScript":
+        return {
+            "prompt": "Translation",
+            "enhance": "Rewrite translation",
+            "target_language": "Target language",
+            "source_language": "Source language",
+            "max_speakers": "Max speakers",
+            "stage": "Stage",
+        }.get(name, generic)
+    if ntype == "EZDubRender":
+        return {
+            "engine": "Clone engine",
+            "keep_bed": "Keep original bed",
+            "spoken_disclosure": "Spoken disclosure",
+            "speed": "Speaking speed",
+        }.get(name, generic)
     if ntype == "EZKokoroTTS":
         return {
             "speaker_a_voice": "Speaker A",
@@ -410,6 +507,10 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         return "Bed or sting length in seconds."
     if name == "prompt" and ntype == "EZPodcastScript":
         return "Speaker A/B lines. Disclosure prepends the spoken bumper."
+    if name == "prompt" and ntype == "EZDubScript":
+        return "Editable turns JSON. Rewrite translation fills text_target."
+    if name == "enhance" and ntype == "EZDubScript":
+        return "On: diarize + ASR + GGUF translate. Off: pin this JSON."
     return DEFAULT_WIDGET_DESCRIPTIONS.get(name)
 
 
@@ -487,6 +588,8 @@ def _spec(
     film_minimal: bool = False,
     forge_widgets: bool = False,
     primitive_strings: bool = False,
+    hide_images: bool = False,
+    ace_instrumental_score: bool = False,
 ) -> dict[str, Any]:
     return {
         "lane": lane,
@@ -500,6 +603,8 @@ def _spec(
         "film_minimal": film_minimal,
         "forge_widgets": forge_widgets,
         "primitive_strings": primitive_strings,
+        "hide_images": hide_images,
+        "ace_instrumental_score": ace_instrumental_score,
     }
 
 
@@ -526,6 +631,14 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "wan-gif-loop-lab-example",
         "wan-bumper-loop-lab-example",
         "wan-sticker-loop-lab-example",
+    ),
+    "klein-dream-house-clay-lab-example": _spec(
+        "inspire",
+        "klein",
+        "wan-gif-loop-lab-example",
+        "wan-bumper-loop-lab-example",
+        "wan-sticker-loop-lab-example",
+        hide_images=True,
     ),
     "klein-style-lock-lab-example": _spec(
         "inspire", "klein"
@@ -559,9 +672,9 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "beat-sheet-lab-example": _spec(
         "inspire",
         "none",
+        "klein-identity-sheet-lab-example",
+        "klein-from-clay-lab-example",
         "film-go-see-90s-run-lab-example",
-        "film-still-here-90s-lab-example",
-        "film-switchyard-90s-lab-example",
         primitive_strings=True,
     ),
     "klein-still-daily-lab-example": _spec(
@@ -621,28 +734,88 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "ltx-weather-broll-lab-example": _spec("produce", "ltx"),
     "ltx-interior-ambience-lab-example": _spec("produce", "ltx"),
     "film-go-see-90s-run-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True
+        "film",
+        "film",
+        default_view="graph",
+        film_minimal=True,
+        enhance_off_identity=True,
     ),
     "film-still-here-90s-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True
+        "film",
+        "film",
+        default_view="graph",
+        film_minimal=True,
+        enhance_off_identity=True,
     ),
     "film-switchyard-90s-lab-example": _spec(
-        "film", "film", default_view="graph", film_minimal=True
+        "film",
+        "film",
+        default_view="graph",
+        film_minimal=True,
+        enhance_off_identity=True,
     ),
     "podcast-audio-first-lab-example": _spec("audio", "audio"),
     "podcast-radio-drama-lab-example": _spec("audio", "audio"),
+    "dub-localize-lab-example": _spec("audio", "audio"),
     "music-rap-draft-lab-example": _spec("audio", "audio"),
     "music-rap-full-lab-example": _spec("audio", "audio"),
     "klein-from-clay-lab-example": _spec(
-        "dcc", "klein"
+        "dcc",
+        "klein",
+        "ltx-iclora-depth-5s-lab-example",
     ),
-    "ltx-iclora-depth-5s-lab-example": _spec("dcc", "ltx"),
+    "ltx-iclora-depth-5s-lab-example": _spec(
+        "dcc",
+        "ltx",
+        "audio-finish-lab-example",
+    ),
+    "audio-finish-lab-example": _spec(
+        "audio",
+        "audio",
+        primitive_strings=True,
+    ),
     "wan-i2v-a14b-lab-example": _spec("produce", "wan", default_view="graph"),
 }
+
+def _nill_bye_stems() -> tuple[str, ...]:
+    import sys
+    from pathlib import Path
+
+    custom = Path(__file__).resolve().parents[2] / "custom_nodes"
+    if str(custom) not in sys.path:
+        sys.path.insert(0, str(custom))
+    from ez_music.diss_examples import DISS_EXAMPLES
+
+    return tuple(ex["stem"] for ex in DISS_EXAMPLES)
+
+
+NILL_BYE_STAMP_STEMS = _nill_bye_stems()
+for _nill_bye_stem in NILL_BYE_STAMP_STEMS:
+    STAMP_SPECS[_nill_bye_stem] = _spec("audio", "audio")
+
+
+def _drive_through_stems() -> tuple[str, ...]:
+    import sys
+    from pathlib import Path
+
+    custom = Path(__file__).resolve().parents[2] / "custom_nodes"
+    if str(custom) not in sys.path:
+        sys.path.insert(0, str(custom))
+    from ez_music.edm_examples import EDM_EXAMPLES
+
+    return tuple(ex["stem"] for ex in EDM_EXAMPLES)
+
+
+DRIVE_THROUGH_STAMP_STEMS = _drive_through_stems()
+for _drive_through_stem in DRIVE_THROUGH_STAMP_STEMS:
+    STAMP_SPECS[_drive_through_stem] = _spec(
+        "audio", "audio", ace_instrumental_score=True
+    )
 
 STUB_IDS = frozenset({"longcat-video-lab-example"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
     "ltx-iclora-depth-5s-lab-example": ("EZFilmDisclosure",),
+    "audio-finish-lab-example": ("SaveAudio", "PrimitiveNode"),
     "wan-i2v-a14b-lab-example": ("UNETLoader",),
     "podcast-radio-drama-lab-example": ("UNETLoader", "VHS_VideoCombine"),
     "prompt-forge-lab-example": (
@@ -713,11 +886,12 @@ def _collect_raw_inputs(
         nid = node["id"]
         if ntype == "EZAceStepPromptEnhance":
             mode = _enhance_mode(node)
+            show_score = mode != "instrumental" or spec.get("ace_instrumental_score")
             raw.append((nid, "tags", node))
-            if mode != "instrumental":
+            if show_score:
                 raw.append((nid, "lyrics", node))
             raw.append((nid, "enhance", node))
-            if mode != "instrumental":
+            if show_score:
                 raw.append((nid, "mode", node))
         elif ntype in ("EZRapLyrics", "EZPodcastScript"):
             widget = "lyrics" if ntype == "EZRapLyrics" else "prompt"
@@ -737,13 +911,6 @@ def _collect_raw_inputs(
             if not skip_style:
                 raw.append((nid, "style", node))
             raw.append((nid, "enhance", node))
-            if spec.get("forge_widgets"):
-                raw.extend(
-                    (
-                        (nid, "mode", node),
-                        (nid, "duration_hint", node),
-                    )
-                )
             if ntype == "EZLTXPromptEnhance":
                 raw.append((nid, "audio_notes", node))
         elif ntype == "EmptyFlux2LatentImage" and spec.get("expose_latent"):
@@ -767,10 +934,42 @@ def _collect_raw_inputs(
                 )
             saw_seed = True
         elif ntype == "LoadImage":
+            if spec.get("hide_images"):
+                continue
             if _node_always(node) and _image_output_linked(node):
                 raw.append((nid, "image", node))
         elif ntype == "UNETLoader" and spec.get("expose_unet"):
             raw.append((nid, "unet_name", node))
+        elif ntype == "EZDubIngest":
+            raw.extend(
+                (
+                    (nid, "source", node),
+                    (nid, "upload", node),
+                    (nid, "source_url", node),
+                    (nid, "have_rights", node),
+                    (nid, "job_slug", node),
+                )
+            )
+        elif ntype == "EZDubScript":
+            raw.extend(
+                (
+                    (nid, "prompt", node),
+                    (nid, "enhance", node),
+                    (nid, "target_language", node),
+                    (nid, "source_language", node),
+                    (nid, "max_speakers", node),
+                    (nid, "stage", node),
+                )
+            )
+        elif ntype == "EZDubRender":
+            raw.extend(
+                (
+                    (nid, "engine", node),
+                    (nid, "keep_bed", node),
+                    (nid, "spoken_disclosure", node),
+                    (nid, "speed", node),
+                )
+            )
         elif ntype == "EZKokoroTTS":
             raw.extend(
                 (
@@ -858,6 +1057,9 @@ def stamp_suite_graph(graph: dict) -> dict:
     """Stamp a known suite graph. No-op when graph id is not in STAMP_SPECS."""
     spec = STAMP_SPECS.get(str(graph.get("id") or ""))
     if spec is None:
+        from _wire_prompt_enhance import apply_enhance_policy
+
+        apply_enhance_policy(graph)
         return apply_lab_completeness_flags(graph)
     outputs = infer_suite_outputs(graph, spec)
     if not outputs:
@@ -876,6 +1078,9 @@ def stamp_suite_graph(graph: dict) -> dict:
         default_view=spec["default_view"],
         enhance_off_identity=spec["enhance_off_identity"],
     )
+    from _wire_prompt_enhance import apply_enhance_policy
+
+    apply_enhance_policy(graph)
     return apply_lab_completeness_flags(graph)
 
 

@@ -36,20 +36,24 @@ def test_compile_go_see(tmp_path: Path) -> None:
     dest = tmp_path / "films" / "gosee"
     state = js.compile_film(yaml_text, dest)
     assert state["slug"] == "gosee"
+    assert state["audio_policy"] == "world-only"
+    assert state["score"] == "none"
     assert (dest / "film.yaml").is_file()
+    assert (dest / "stems").is_dir()
     assert (dest / "state.json").is_file()
     ids = [row["id"] for row in state["shots"]]
     assert ids == [f"{i:02d}" for i in range(1, 19)]
     stub = json.loads((dest / "shots" / "01.json").read_text(encoding="utf-8"))
     assert stub["template"] == "ltx-i2v-5s-lab-example.json"
-    assert "sun-washed teal" in stub["identity"]
+    assert "storm-cloak" in stub["identity"]
+    assert "ink-black" in stub["identity"]
     assert "olive windbreaker" not in stub["identity"]
-    assert stub["identity_enhance"] is True
+    assert stub["identity_enhance"] is False
     assert stub["identity_seed"] == 42
     assert stub["print"] == "ltx"
     assert stub["card"]["id"] == "01"
     assert stub["card"]["status"] == "pending"
-    assert stub["card"]["camera"] == "dolly in"
+    assert stub["card"]["camera"] == "tracking"
     loaded = js.load_state(dest)
     assert js.get_shot(loaded, "12")["status"] == "pending"
     with pytest.raises(KeyError):

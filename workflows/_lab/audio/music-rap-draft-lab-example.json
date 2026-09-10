@@ -212,7 +212,7 @@
       "widgets_values": [
         "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
         "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
-        true,
+        false,
         "vocal"
       ],
       "title": "ez_rap_prompt"
@@ -516,7 +516,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## music-rap-draft-lab-example\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## music-rap-draft-lab-example\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     }
@@ -700,8 +700,8 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## music-rap-draft-lab-example\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **on** (on-box Qwen3-4B). After Queue, the ACE-Step Prompt Enhance node shows the tags and lyrics CLIP used. Turn Enhance off to pin widget text.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal",
+    "lab_note": "## music-rap-draft-lab-example\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
       "scale": 1,
       "offset": [
@@ -721,7 +721,7 @@
     "linearData": {
       "inputs": [
         [
-          "5:tags",
+          5,
           "tags",
           {
             "description": "Genre-first ACE-Step tags.",
@@ -730,7 +730,7 @@
           }
         ],
         [
-          "5:lyrics",
+          5,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -739,7 +739,7 @@
           }
         ],
         [
-          "5:enhance",
+          5,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -747,7 +747,7 @@
           }
         ],
         [
-          "5:mode",
+          5,
           "mode",
           {
             "description": "Vocal vs instrumental. Instrumental forces no-vocals tags and [inst] lyrics.",
@@ -755,7 +755,7 @@
           }
         ],
         [
-          "3:seconds",
+          3,
           "seconds",
           {
             "description": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
@@ -763,7 +763,7 @@
           }
         ],
         [
-          "8:seed",
+          8,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

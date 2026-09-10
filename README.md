@@ -5,7 +5,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/toxicoder/ez-comfy-stack/ci.yml?branch=development&style=for-the-badge&logo=github&label=CI)](https://github.com/toxicoder/ez-comfy-stack/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/toxicoder/ez-comfy-stack?style=for-the-badge)](LICENSE)
 
-**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with a **US-safe local studio** (Apache Klein 4B stills, Apache Wan 2.2 silent motion, LTX distilled AV), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling. Opt-in local podcast (Kokoro + native ACE-Step) and rap-first music lanes are documented in [Local podcast](docs/podcast.md) and [Local music](docs/music.md) and are **not** part of `download-models`.
+**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with a **US-safe local studio** (Apache Klein 4B stills, Apache Wan 2.2 silent motion, LTX distilled AV), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling. Opt-in local podcast (Kokoro + native ACE-Step) and rap-first music lanes (plus a Drive-through EDM pack) are documented in [Local podcast](docs/podcast.md) and [Local music](docs/music.md) and are **not** part of `download-models`.
 
 **Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) — MkDocs Material, published per branch via GitHub Pages.
 
@@ -78,7 +78,7 @@ sequenceDiagram
 docker/           Dockerfile + compose (us-safe-studio)
 scripts/manage.sh Operator CLI
 scripts/lib/      Shared shell helpers
-scripts/utilities download-image, download-wan, download-ltx, download-llm, download-podcast, download-limit, concat-shots, spark-farm
+scripts/utilities download-image, download-wan, download-ltx, download-llm, download-podcast, download-dub, download-limit, concat-shots, spark-farm
 config/           Resource / headroom policy
 workflows/_lab/   Seeded lab ComfyUI graphs by lane (klein / wan / ltx / shorts / …); YAML shot lists stay in workflows/shorts/; private graphs belong in _user/
 docs/             MkDocs site
@@ -112,9 +112,11 @@ Key pages (branch-relative source): [How the studio works](docs/learn/index.md) 
 ## Development
 
 ```bash
+pip install -r tests/requirements.txt   # pytest, pytest-cov, pyright, mypy
 make test
 make coverage
-make lint
+make lint          # ShellCheck + shfmt + Pyright (Pylance) + mypy
+make typecheck     # Pyright + mypy
 make docs
 ```
 

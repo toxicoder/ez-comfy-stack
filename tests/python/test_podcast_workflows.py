@@ -59,7 +59,7 @@ def test_audio_first_podcast_graph() -> None:
     assert "SETTINGS" in {g["title"] for g in graph["groups"]}
     assert "OUTPUT" in {g["title"] for g in graph["groups"]}
     script = next(n for n in graph["nodes"] if n["type"] == "EZPodcastScript")
-    assert script["widgets_values"][1] is True
+    assert script["widgets_values"][1] is False
     assert any(n["type"] == "EZPodcastDisclosure" for n in graph["nodes"])
     assert any(n["type"] == "EZKokoroTTS" for n in graph["nodes"])
     ace = list(iter_ace_encoders(graph))
@@ -108,7 +108,7 @@ def test_radio_drama_graph() -> None:
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
     script = next(n for n in graph["nodes"] if n["type"] == "EZPodcastScript")
-    assert script["widgets_values"][1] is True
+    assert script["widgets_values"][1] is False
     assert script["widgets_values"][2] == "radio_drama"
     tts = next(n for n in graph["nodes"] if n["type"] == "EZKokoroTTS")
     assert tts["widgets_values"][3] is True

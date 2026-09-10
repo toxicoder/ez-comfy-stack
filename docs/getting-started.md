@@ -9,7 +9,7 @@ tags: [getting-started, docker, comfyui]
 **What's on this page**
 
 - What success looks like
-- Session variables (Your Spark panel or shell exports)
+- Session variables (Your Spark panel, in-place chips, or shell exports)
 - Prerequisites checklist
 - Setup, doctor, download, start, first still, stop
 - Optional: build the Docker image locally instead of pulling GHCR
@@ -43,8 +43,8 @@ tags: [getting-started, docker, comfyui]
 
 Two ways to fill Spark IP / paths so copy-paste works:
 
-1. **Your Spark** panel (top of every docs page) — stored in this browser, applied to copyable commands site-wide.
-2. **Shell exports** on the Spark (below) — `manage.sh` still loads `.env`; these exports are for *your* shell (`ls`, `ssh -L`, the browser URL).
+1. **Your Spark** panel (top of every docs page) **or a highlighted chip** in any copyable command — stored in this browser, applied site-wide. Click a dotted token (Spark IP, path, port) to edit in place; the panel and every other chip update together. Copy buttons paste the filled-in values.
+2. **Shell exports** on the Spark (markdown source below) — `manage.sh` still loads `.env`; these exports are for *your* shell (`ls`, `ssh -L`, the browser URL) when docs JS is off.
 
 Defaults match `.env.example`. Set `SPARK_HOST` to this machine’s LAN IP or DNS if you will open the UI from another computer.
 
@@ -106,26 +106,22 @@ Sections below unpack each step. Feature work still branches from `development` 
 - [ ] **Docker** with Compose v2 (prefer apt `docker-ce`, not snap; user in `docker` group)
 - [ ] **Writable model cache** — default `/mnt/models`, or set `MODELS_DIR` in `.env`
 - [ ] **Writable media output dir** — default `/mnt/comfy-output`, or set `COMFY_OUTPUT_DIR` in `.env`
-- [ ] **git**, **python3**, **pip** / **pipx**
-- [ ] **Hugging Face CLI** — modern `hf` from `huggingface_hub` (**not** the deprecated `huggingface-cli` stub)
+- [ ] **git**, **python3**
 - [ ] **HF account** — accept the LTX-2.5 license; `HF_TOKEN` in `.env` or `hf auth login`
 
 ### At a glance
 
 | Kind | Items |
 | --- | --- |
-| **Required on host** | NVIDIA drivers, Container Toolkit, Docker + Compose v2, git, python3, pip/pipx |
-| **Optional / auto** | `wondershaper`, `speedtest-cli` (used by download-limit; HTB/`sch_htb` when shaping is available) |
+| **Required on host** | NVIDIA drivers, Container Toolkit, Docker + Compose v2, git, python3 |
+| **Optional / auto** | `hf` CLI (setup / download-models install it), `wondershaper`, `speedtest-cli` (HTB/`sch_htb` when shaping is available) |
 | **Accounts** | LTX-2.5 license click + `HF_TOKEN` (Klein 4B and Wan 5B are Apache) |
 | **Image base** | Public Docker Hub `nvidia/cuda` — **no** NGC / `nvcr.io` login required |
 
 ```bash
-# Prefer: ./scripts/manage.sh setup  (creates and chowns both dirs)
+# Prefer: ./scripts/manage.sh setup  (creates and chowns both dirs; installs hf CLI)
 sudo mkdir -p "${MODELS_DIR}" "${COMFY_OUTPUT_DIR}"
 sudo chown "$USER:$USER" "${MODELS_DIR}" "${COMFY_OUTPUT_DIR}"
-
-command -v hf || pipx install huggingface_hub
-# or: pip install -U 'huggingface_hub[cli]'
 ```
 
 ```mermaid
@@ -134,9 +130,10 @@ flowchart LR
     Drv["NVIDIA drivers"]
     CTK["NVIDIA Container Toolkit"]
     Dock["Docker + Compose v2"]
-    Git["git · python3 · pip"]
+    Git["git · python3"]
   end
   subgraph Optional["Optional / auto"]
+    HfCli["hf CLI"]
     WS["wondershaper"]
     ST["speedtest-cli"]
   end
@@ -222,8 +219,7 @@ LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache — a token in `.env` is **
 # 1. echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
 # 2. Open https://huggingface.co/Lightricks/LTX-2.5 as THAT user and click Agree
 # 3. Fine-grained tokens need gated-repo read
-hf auth whoami
-
+# Do not prefix with sudo — download-limit and comfy/ ownership heal use sudo internally.
 ./scripts/manage.sh download-models
 # Manual cap (Mbps; 40 ≈ 5 MB/s). Overrides DOWNLOAD_LIMIT for this run:
 # ./scripts/manage.sh download-models --limit 40
@@ -233,8 +229,8 @@ hf auth whoami
 | --- | --- |
 | **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` + `download-llm` |
 | **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
-| **CLI** | Modern **`hf download`** |
-| **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks |
+| **CLI** | Modern **`hf download`** (auto-installed by `setup` / `download-models`) |
+| **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks. Cache hits still need writable `comfy/<subdir>/` dirs; `download-models` sudo-heals each layout dir on link (no manual `chown`). |
 | **LTX size** | Selective `Lightricks/LTX-2.5` distilled set (status floor ~**30 GB**), not the Kijai 2.3 monorepo (~400 GB) |
 
 `download-models` **exits non-zero** until every lab basename is present under `${MODELS_DIR}/comfy/`:
@@ -279,7 +275,7 @@ If Comfy shows **Missing Models** on **klein-still-draft-lab-example**, re-run d
 ./scripts/manage.sh status
 ```
 
-Open **`http://${SPARK_HOST}:${COMFY_PORT}`** (Your Spark panel fills the IP when you copy).
+Open **`http://${SPARK_HOST}:${COMFY_PORT}`** (click the highlighted host/port, or use Your Spark — copy uses those values).
 
 From a laptop (Spark is remote):
 

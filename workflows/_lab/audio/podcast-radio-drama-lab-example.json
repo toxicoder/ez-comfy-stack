@@ -87,7 +87,7 @@
       },
       "widgets_values": [
         "Announcer: Tonight on the machine-only hour: a story that never left the rack.\nSpeaker A: The transmitter light is steady. We do not borrow a voice from the wire.\nSpeaker B: If the card goes dark, the play ends. That is the bargain.\nSpeaker A: Then say the line like you mean the cut, not the cloud.\nSpeaker B: Cue the bed. Keep it instrumental. We own the silence between words.\nAnnouncer: End of scene. The hosts are invented. The mix is local.",
-        true,
+        false,
         "radio_drama"
       ],
       "title": "ez_radio_script"
@@ -848,7 +848,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **on**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "Operator note"
     },
@@ -1013,7 +1013,7 @@
       "widgets_values": [
         "short instrumental sting, analog keys hit, no vocals, instrumental",
         "",
-        true,
+        false,
         "instrumental"
       ],
       "title": "ez_radio_sting enhance"
@@ -1057,7 +1057,7 @@
       "widgets_values": [
         "instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental",
         "",
-        true,
+        false,
         "instrumental"
       ],
       "title": "ez_radio_bed enhance"
@@ -1372,8 +1372,8 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-radio",
-    "lab_note": "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **on**). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off",
+    "lab_note": "## podcast-radio-drama-lab-example\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein-podcast-cover-lab-example.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
       "scale": 1,
       "offset": [
@@ -1393,7 +1393,7 @@
     "linearData": {
       "inputs": [
         [
-          "2:prompt",
+          2,
           "prompt",
           {
             "description": "Speaker A/B lines. Disclosure prepends the spoken bumper.",
@@ -1402,7 +1402,7 @@
           }
         ],
         [
-          "34:tags",
+          34,
           "tags",
           {
             "description": "Genre-first ACE-Step tags.",
@@ -1411,7 +1411,7 @@
           }
         ],
         [
-          "35:tags",
+          35,
           "tags",
           {
             "description": "Genre-first ACE-Step tags.",
@@ -1420,7 +1420,7 @@
           }
         ],
         [
-          "2:enhance",
+          2,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -1428,7 +1428,7 @@
           }
         ],
         [
-          "34:enhance",
+          34,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -1436,7 +1436,7 @@
           }
         ],
         [
-          "35:enhance",
+          35,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -1444,7 +1444,7 @@
           }
         ],
         [
-          "8:seconds",
+          8,
           "seconds",
           {
             "description": "Bed or sting length in seconds.",
@@ -1452,7 +1452,7 @@
           }
         ],
         [
-          "9:seconds",
+          9,
           "seconds",
           {
             "description": "Bed or sting length in seconds.",
@@ -1460,7 +1460,7 @@
           }
         ],
         [
-          "4:speaker_a_voice",
+          4,
           "speaker_a_voice",
           {
             "description": "Kokoro built-in for Speaker A. Voice-clone refs stay graph-only.",
@@ -1468,7 +1468,7 @@
           }
         ],
         [
-          "4:speaker_b_voice",
+          4,
           "speaker_b_voice",
           {
             "description": "Kokoro built-in for Speaker B.",
@@ -1476,7 +1476,7 @@
           }
         ],
         [
-          "4:announcer_voice",
+          4,
           "announcer_voice",
           {
             "description": "Kokoro built-in for Announcer: lines.",
@@ -1484,7 +1484,7 @@
           }
         ],
         [
-          "4:include_announcer",
+          4,
           "include_announcer",
           {
             "description": "On: speak Announcer: lines. Off: skip them.",
@@ -1492,7 +1492,7 @@
           }
         ],
         [
-          "4:speed",
+          4,
           "speed",
           {
             "description": "TTS speed. 1.0 is the Kokoro default.",
@@ -1500,7 +1500,7 @@
           }
         ],
         [
-          "10:seed",
+          10,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",

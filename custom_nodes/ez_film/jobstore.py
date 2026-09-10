@@ -54,10 +54,22 @@ def empty_shot(sid: str) -> dict[str, Any]:
     }
 
 
-def new_state(film: str, slug: str) -> dict[str, Any]:
+def new_state(
+    film: str,
+    slug: str,
+    *,
+    audio_policy: str = "world-only",
+    score: str = "none",
+) -> dict[str, Any]:
     """Fresh 18-shot pending state."""
     shots = [empty_shot(f"{i:02d}") for i in range(1, SHOT_COUNT + 1)]
-    return {"film": film, "slug": slug, "shots": shots}
+    return {
+        "film": film,
+        "slug": slug,
+        "audio_policy": audio_policy,
+        "score": score,
+        "shots": shots,
+    }
 
 
 def load_state(dest: Path) -> dict[str, Any]:
@@ -308,8 +320,14 @@ def compile_film(
     dest.mkdir(parents=True, exist_ok=True)
     (dest / "shots").mkdir(exist_ok=True)
     (dest / "takes").mkdir(exist_ok=True)
+    (dest / "stems").mkdir(exist_ok=True)
     (dest / "film.yaml").write_text(yaml_text, encoding="utf-8")
-    state = new_state(film, slug)
+    state = new_state(
+        film,
+        slug,
+        audio_policy=str(meta.get("audio_policy") or "world-only"),
+        score=str(meta.get("score") or "none"),
+    )
     for yaml_shot in parsed["shots"]:
         beat = int(yaml_shot["beat"])
         shot = int(yaml_shot["shot"])
@@ -326,7 +344,16 @@ def compile_film(
             "identity_seed": int(meta["identity_seed"]),
             "identity_enhance": meta["identity_enhance"].lower()
             in ("true", "1", "on", "yes"),
-            "card": shot_card(sid, status="pending"),
+            "card": shot_card(
+                sid,
+                status="pending",
+                camera=str(yaml_shot.get("camera") or "dolly in"),
+            ),
+            "clay": yaml_shot.get("clay") or "skip",
+            "dialogue": yaml_shot.get("dialogue") or "",
+            "audio_lock": yaml_shot.get("audio_lock") or "none",
+            "camera": yaml_shot.get("camera") or "",
+            "script": yaml_shot.get("script") or "",
         }
         (dest / "shots" / f"{sid}.json").write_text(
             json.dumps(payload, indent=2) + "\n", encoding="utf-8"

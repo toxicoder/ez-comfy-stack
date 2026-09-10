@@ -5,11 +5,12 @@
 # Enforce project coverage gates for CI (`make coverage`) and local pre-merge.
 #
 # Gates:
-#   1. Python — pytest-cov on patch_get_free_memory + patch_unified_memory_copy + ez_ltx_spatial with --cov-fail-under=100
-#   2. Shell function inventory — every function under scripts/ and docker/**/*.sh
+#   1. Python — pytest-cov on Spark patches + seed_clay_inputs + ez_ltx_spatial with --cov-fail-under=100
+#   2. Pyright (Pylance) + mypy — first-party Python typecheck (tests/typecheck.sh)
+#   3. Shell function inventory — every function under scripts/ and docker/**/*.sh
 #      must be named under tests/ (strict; production-only refs do not count)
-#   3. Full BATS suite
-#   4. Optional kcov when available (non-fatal on hosts without kcov)
+#   4. Full BATS suite
+#   5. Optional kcov when available (non-fatal on hosts without kcov)
 #
 # Hermetic: no Docker daemon, GPU, sudo, or network required.
 #
@@ -57,10 +58,14 @@ main() {
     PYTHONPATH="${ROOT}/docker:${ROOT}/custom_nodes" python3 -m pytest tests/python -q \
       --cov=patch_get_free_memory \
       --cov=patch_unified_memory_copy \
+      --cov=patch_magcache_compat \
+      --cov=seed_clay_inputs \
       --cov=ez_ltx_spatial \
       --cov-report=term-missing \
       --cov-fail-under=100 || FAIL=1
   fi
+
+  bash tests/typecheck.sh || FAIL=1
 
   echo "=== Shell function inventory (strict: must appear under tests/) ==="
   FUNCS="$(list_production_functions)"
@@ -123,7 +128,7 @@ main() {
     echo "Coverage gate FAILED" >&2
     exit 1
   fi
-  echo "Coverage gate PASSED (100% Python + strict shell inventory + BATS)"
+  echo "Coverage gate PASSED (100% Python + Pyright + mypy + strict shell inventory + BATS)"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
