@@ -1833,8 +1833,8 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    optional/  a14b, longcat stub, klein-trellis2
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    audio/     podcast-*, dub-*, music-rap-draft/full
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      nill-bye/       forty-five 180 s music-rap-nill-bye-* diss takes
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      drive-through/  thirty 180 s music-edm-drive-through-* EDM takes
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      drive-through/phase0|1/    thirty 180 s music-edm-drive-through-* EDM takes
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    inspire/   prompt-forge, beat-sheet
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  _user/       your graphs (never overwritten)
 </code></pre></div>
@@ -2241,7 +2241,7 @@
 </table>
 </div>
 <div class="tabbed-block">
-<p>Occupancy <strong>audio</strong>. Opt-in weights (<code>download-podcast</code> / <code>download-dub</code> / <code>download-music</code>). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Graphs still save FLAC + MP3; YouTube still-image MP4 is host <code>audio-still-video</code> after Queue. Playbook: <a href="../podcast/">Local podcast</a>, <a href="../dub/">Local dub</a>, <a href="../music/">Local music</a>.</p>
+<p>Occupancy <strong>audio</strong>. Opt-in weights (<code>download-podcast</code> / <code>download-dub</code> / <code>download-music</code>). Do not co-resident with Klein / Wan / LTX. Cover art is a later Klein session. Graphs still save FLAC + MP3; YouTube still-image MP4 is host <code>audio-still-video</code> after Queue. Nill Bye / Drive-through takes nest under <code>_lab/audio/&lt;artist&gt;/phaseN/</code> and save as <code>Artist - Song Title - vN</code>. Playbook: <a href="../podcast/">Local podcast</a>, <a href="../dub/">Local dub</a>, <a href="../music/">Local music</a>.</p>
 <table>
 <thead>
 <tr>
@@ -2270,69 +2270,80 @@
 <td><strong>music-rap-full-lab-example</strong></td>
 <td>ACE-Step rap full <strong>96 s</strong> boom-bap 88 (<code>ez_rap_full</code>). Queue draft first</td>
 </tr>
+</tbody>
+</table>
+<p>phase0 — Nill Bye lab catalog. Queue on its own. Full table: <a href="../music/">Local music</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td><strong>music-rap-nill-bye-lab-coat-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 88. Nill Bye lab-coat roast of Rake (<code>ez_rap_nill_labcoat</code>). <code>_lab/audio/nill-bye/</code>. Queue on its own</td>
+<td><strong>180 s</strong> diss, boom-bap 88. Nill Bye lab-coat roast of Rake (<code>Nill Bye - Lab Coat Lecture - v0</code>). <code>_lab/audio/nill-bye/phase0/</code></td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-peer-review-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 88, <code>[spoken word]</code> intro (<code>ez_rap_nill_review</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 88, <code>[spoken word]</code> intro (<code>Nill Bye - Peer Review - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-feels-lab-example</strong></td>
-<td><strong>180 s</strong> diss, lo-fi 86 (<code>ez_rap_nill_feels</code>)</td>
+<td><strong>180 s</strong> diss, lo-fi 86 (<code>Nill Bye - In His Feels - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-fake-cool-lab-example</strong></td>
-<td><strong>180 s</strong> diss, trap 140 (<code>ez_rap_nill_fakecool</code>)</td>
+<td><strong>180 s</strong> diss, trap 140 (<code>Nill Bye - Fake Cool - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-hypothesis-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 92, seed 7 (<code>ez_rap_nill_hypothesis</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 92, seed 7 (<code>Nill Bye - Hypothesis vs Rumor - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-control-group-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 88 (<code>ez_rap_nill_control</code>). Uncontrolled variable</td>
+<td><strong>180 s</strong> diss, boom-bap 88 (<code>Nill Bye - Control Group - v0</code>). Uncontrolled variable</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-sample-size-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 92, seed 11 (<code>ez_rap_nill_samplesize</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 92, seed 11 (<code>Nill Bye - Sample Size - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-placebo-lab-example</strong></td>
-<td><strong>180 s</strong> diss, trap 140, seed 13 (<code>ez_rap_nill_placebo</code>)</td>
+<td><strong>180 s</strong> diss, trap 140, seed 13 (<code>Nill Bye - Placebo - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-error-bars-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 88, seed 17 (<code>ez_rap_nill_errorbars</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 88, seed 17 (<code>Nill Bye - Error Bars - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-lab-notebook-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 92, seed 19 (<code>ez_rap_nill_notebook</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 92, seed 19 (<code>Nill Bye - Lab Notebook - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-office-hours-lab-example</strong></td>
-<td><strong>180 s</strong> diss, lo-fi 86, seed 23 (<code>ez_rap_nill_office</code>)</td>
+<td><strong>180 s</strong> diss, lo-fi 86, seed 23 (<code>Nill Bye - Office Hours - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-grant-denied-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 88, <code>[spoken word]</code> intro, seed 29 (<code>ez_rap_nill_grant</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 88, <code>[spoken word]</code> intro, seed 29 (<code>Nill Bye - Grant Denied - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-contamination-lab-example</strong></td>
-<td><strong>180 s</strong> diss, trap 140, seed 31 (<code>ez_rap_nill_contam</code>)</td>
+<td><strong>180 s</strong> diss, trap 140, seed 31 (<code>Nill Bye - Contamination - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-double-blind-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 92, seed 37 (<code>ez_rap_nill_doubleblind</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 92, seed 37 (<code>Nill Bye - Double Blind - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-replicate-lab-example</strong></td>
-<td><strong>180 s</strong> diss, boom-bap 88, seed 7 (<code>ez_rap_nill_replicate</code>)</td>
+<td><strong>180 s</strong> diss, boom-bap 88, seed 7 (<code>Nill Bye - Replicate or Retract - v0</code>)</td>
 </tr>
 </tbody>
 </table>
-<p>Style pack (same dry booth; not trap/EDM). Queue on its own. Full table: <a href="../music/">Local music</a>.</p>
+<p>phase1 — Style pack (same dry booth; not trap/EDM). Queue on its own. Full table: <a href="../music/">Local music</a>.</p>
 <table>
 <thead>
 <tr>
@@ -2343,67 +2354,67 @@
 <tbody>
 <tr>
 <td><strong>music-rap-nill-bye-citation-needed-lab-example</strong></td>
-<td><strong>180 s</strong> jazz hop 90 (<code>ez_rap_nill_cite</code>). Citation needed</td>
+<td><strong>180 s</strong> jazz hop 90 (<code>Nill Bye - Citation Needed - v1</code>). Citation needed</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-p-hacking-lab-example</strong></td>
-<td><strong>180 s</strong> g-funk 98 (<code>ez_rap_nill_phack</code>)</td>
+<td><strong>180 s</strong> g-funk 98 (<code>Nill Bye - P-Hacking - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-null-result-lab-example</strong></td>
-<td><strong>180 s</strong> reggae 92 (<code>ez_rap_nill_null</code>)</td>
+<td><strong>180 s</strong> reggae 92 (<code>Nill Bye - Null Result - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-expired-reagent-lab-example</strong></td>
-<td><strong>180 s</strong> neo-soul 84 (<code>ez_rap_nill_expired</code>)</td>
+<td><strong>180 s</strong> neo-soul 84 (<code>Nill Bye - Expired Reagent - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-lab-safety-lab-example</strong></td>
-<td><strong>180 s</strong> rap rock 168 (<code>ez_rap_nill_safety</code>)</td>
+<td><strong>180 s</strong> rap rock 168 (<code>Nill Bye - Lab Safety - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-rumor-mill-lab-example</strong></td>
-<td><strong>180 s</strong> industrial 108 (<code>ez_rap_nill_rumor</code>)</td>
+<td><strong>180 s</strong> industrial 108 (<code>Nill Bye - Rumor Mill - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-gym-selfie-lab-example</strong></td>
-<td><strong>180 s</strong> afrobeat 110 (<code>ez_rap_nill_gym</code>)</td>
+<td><strong>180 s</strong> afrobeat 110 (<code>Nill Bye - Gym Selfie - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-rented-drip-lab-example</strong></td>
-<td><strong>180 s</strong> synthwave 104 (<code>ez_rap_nill_drip</code>)</td>
+<td><strong>180 s</strong> synthwave 104 (<code>Nill Bye - Rented Drip - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-clout-diet-lab-example</strong></td>
-<td><strong>180 s</strong> trip-hop 86 (<code>ez_rap_nill_clout</code>)</td>
+<td><strong>180 s</strong> trip-hop 86 (<code>Nill Bye - Clout Diet - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-mood-forecast-lab-example</strong></td>
-<td><strong>180 s</strong> cinematic 76 (<code>ez_rap_nill_forecast</code>)</td>
+<td><strong>180 s</strong> cinematic 76 (<code>Nill Bye - Mood Forecast - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-algorithm-lab-example</strong></td>
-<td><strong>180 s</strong> funk 114 (<code>ez_rap_nill_algo</code>)</td>
+<td><strong>180 s</strong> funk 114 (<code>Nill Bye - Algorithm - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-story-time-lab-example</strong></td>
-<td><strong>180 s</strong> blues 74, <code>[spoken word]</code> intro (<code>ez_rap_nill_story</code>)</td>
+<td><strong>180 s</strong> blues 74, <code>[spoken word]</code> intro (<code>Nill Bye - Story Time - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-caption-lab-example</strong></td>
-<td><strong>180 s</strong> chiptune 100 (<code>ez_rap_nill_caption</code>)</td>
+<td><strong>180 s</strong> chiptune 100 (<code>Nill Bye - Caption vs Data - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-energy-drink-lab-example</strong></td>
-<td><strong>180 s</strong> brass band 120 (<code>ez_rap_nill_fuel</code>)</td>
+<td><strong>180 s</strong> brass band 120 (<code>Nill Bye - Energy Drink - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-campfire-lab-example</strong></td>
-<td><strong>180 s</strong> folk 82 (<code>ez_rap_nill_camp</code>)</td>
+<td><strong>180 s</strong> folk 82 (<code>Nill Bye - Campfire Rumor - v1</code>)</td>
 </tr>
 </tbody>
 </table>
-<p>Trap / EDM pack (rap <strong>over</strong> club beds, no autotune). Queue on its own.</p>
+<p>phase2 — Trap / EDM pack (rap <strong>over</strong> club beds, no autotune). Queue on its own.</p>
 <table>
 <thead>
 <tr>
@@ -2414,67 +2425,67 @@
 <tbody>
 <tr>
 <td><strong>music-rap-nill-bye-false-drop-lab-example</strong></td>
-<td><strong>180 s</strong> dark trap 140 (<code>ez_rap_nill_drop</code>)</td>
+<td><strong>180 s</strong> dark trap 140 (<code>Nill Bye - False Drop - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-velvet-rope-lab-example</strong></td>
-<td><strong>180 s</strong> festival trap 150 (<code>ez_rap_nill_rope</code>)</td>
+<td><strong>180 s</strong> festival trap 150 (<code>Nill Bye - Velvet Rope - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-fog-machine-lab-example</strong></td>
-<td><strong>180 s</strong> rage 148 (<code>ez_rap_nill_fog</code>)</td>
+<td><strong>180 s</strong> rage 148 (<code>Nill Bye - Fog Machine - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-guest-list-lab-example</strong></td>
-<td><strong>180 s</strong> phonk 132 (<code>ez_rap_nill_guest</code>)</td>
+<td><strong>180 s</strong> phonk 132 (<code>Nill Bye - Guest List - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-sparkler-lab-example</strong></td>
-<td><strong>180 s</strong> trap 145 (<code>ez_rap_nill_spark</code>)</td>
+<td><strong>180 s</strong> trap 145 (<code>Nill Bye - Sparkler Science - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-bottle-service-lab-example</strong></td>
-<td><strong>180 s</strong> house 126 (<code>ez_rap_nill_bottle</code>)</td>
+<td><strong>180 s</strong> house 126 (<code>Nill Bye - Bottle Service - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-strobe-claim-lab-example</strong></td>
-<td><strong>180 s</strong> techno 132 (<code>ez_rap_nill_strobe</code>)</td>
+<td><strong>180 s</strong> techno 132 (<code>Nill Bye - Strobe Claim - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-amen-rumor-lab-example</strong></td>
-<td><strong>180 s</strong> drum and bass 174 (<code>ez_rap_nill_amen</code>)</td>
+<td><strong>180 s</strong> drum and bass 174 (<code>Nill Bye - Amen Rumor - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-wobble-alibi-lab-example</strong></td>
-<td><strong>180 s</strong> dubstep 140 (<code>ez_rap_nill_wobble</code>)</td>
+<td><strong>180 s</strong> dubstep 140 (<code>Nill Bye - Wobble Alibi - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-supersaw-flex-lab-example</strong></td>
-<td><strong>180 s</strong> future bass 148 (<code>ez_rap_nill_saw</code>)</td>
+<td><strong>180 s</strong> future bass 148 (<code>Nill Bye - Supersaw Flex - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-laser-show-lab-example</strong></td>
-<td><strong>180 s</strong> electro house 128 (<code>ez_rap_nill_laser</code>)</td>
+<td><strong>180 s</strong> electro house 128 (<code>Nill Bye - Laser Show - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-two-step-lab-example</strong></td>
-<td><strong>180 s</strong> UK garage 130 (<code>ez_rap_nill_twostep</code>)</td>
+<td><strong>180 s</strong> UK garage 130 (<code>Nill Bye - Two-Step Alibi - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-jersey-bounce-lab-example</strong></td>
-<td><strong>180 s</strong> jersey club 140 (<code>ez_rap_nill_jersey</code>)</td>
+<td><strong>180 s</strong> jersey club 140 (<code>Nill Bye - Jersey Bounce - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-kick-split-lab-example</strong></td>
-<td><strong>180 s</strong> hardstyle 150 (<code>ez_rap_nill_kick</code>)</td>
+<td><strong>180 s</strong> hardstyle 150 (<code>Nill Bye - Kick-Split Myth - v2</code>)</td>
 </tr>
 <tr>
 <td><strong>music-rap-nill-bye-uplift-rumor-lab-example</strong></td>
-<td><strong>180 s</strong> trance 138 (<code>ez_rap_nill_uplift</code>)</td>
+<td><strong>180 s</strong> trance 138 (<code>Nill Bye - Uplifting Rumor - v2</code>)</td>
 </tr>
 </tbody>
 </table>
-<p>Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list. Drop early, dirty pyro on every drop. Full table: <a href="../music/">Local music</a>.</p>
+<p>Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (<code>phase0/</code> hour 1, then <code>phase1/</code> hour 2). Drop early, dirty pyro on every drop. Full table: <a href="../music/">Local music</a>.</p>
 <table>
 <thead>
 <tr>
@@ -2485,123 +2496,123 @@
 <tbody>
 <tr>
 <td><strong>music-edm-drive-through-night-window-lab-example</strong></td>
-<td><strong>180 s</strong> bass house 145 (<code>ez_edm_drive_night</code>). Opener, dirty 808 pyro</td>
+<td><strong>180 s</strong> bass house 145 (<code>Drive-through - Night Window - v0</code>). Opener, dirty 808 pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-open-lane-lab-example</strong></td>
-<td><strong>180 s</strong> festival bass 152 (<code>ez_edm_drive_openlane</code>). Drop-first ID</td>
+<td><strong>180 s</strong> festival bass 152 (<code>Drive-through - Open Lane - v0</code>). Drop-first ID</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-exit-seven-lab-example</strong></td>
-<td><strong>180 s</strong> electro house 142 (<code>ez_edm_drive_exit</code>). Filter mix-in, dirty pyro</td>
+<td><strong>180 s</strong> electro house 142 (<code>Drive-through - Exit Seven - v0</code>). Filter mix-in, dirty pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-skyline-pass-lab-example</strong></td>
-<td><strong>180 s</strong> progressive house 145 (<code>ez_edm_drive_skyline</code>). Drop-first anthem</td>
+<td><strong>180 s</strong> progressive house 145 (<code>Drive-through - Skyline Pass - v0</code>). Drop-first anthem</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-on-ramp-lab-example</strong></td>
-<td><strong>180 s</strong> festival bass 155 (<code>ez_edm_drive_onramp</code>). Reverse-bass pyro</td>
+<td><strong>180 s</strong> festival bass 155 (<code>Drive-through - On-Ramp - v0</code>). Reverse-bass pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-tunnel-bass-lab-example</strong></td>
-<td><strong>180 s</strong> dirty bass 150 (<code>ez_edm_drive_tunnel</code>). Three pyro drops</td>
+<td><strong>180 s</strong> dirty bass 150 (<code>Drive-through - Tunnel Bass - v0</code>). Three pyro drops</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-wide-open-lab-example</strong></td>
-<td><strong>180 s</strong> big room 150 (<code>ez_edm_drive_wide</code>). DJ shout treat</td>
+<td><strong>180 s</strong> big room 150 (<code>Drive-through - Wide Open - v0</code>). DJ shout treat</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-overpass-lab-example</strong></td>
-<td><strong>180 s</strong> riddim 150 (<code>ez_edm_drive_overpass</code>). Drop-first wobble pyro</td>
+<td><strong>180 s</strong> riddim 150 (<code>Drive-through - Overpass - v0</code>). Drop-first wobble pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-second-wave-lab-example</strong></td>
-<td><strong>180 s</strong> festival remix 150 (<code>ez_edm_drive_second</code>). Vocal-chop treat</td>
+<td><strong>180 s</strong> festival remix 150 (<code>Drive-through - Second Wave - v0</code>). Vocal-chop treat</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-freight-pulse-lab-example</strong></td>
-<td><strong>180 s</strong> drumstep 176 (<code>ez_edm_drive_freight</code>)</td>
+<td><strong>180 s</strong> drumstep 176 (<code>Drive-through - Freight Pulse - v0</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-keep-going-lab-example</strong></td>
-<td><strong>180 s</strong> drumstep 170 (<code>ez_edm_drive_keep</code>). Triple pyro peak</td>
+<td><strong>180 s</strong> drumstep 170 (<code>Drive-through - Keep Going - v0</code>). Triple pyro peak</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-horizon-kick-lab-example</strong></td>
-<td><strong>180 s</strong> festival bass 165 (<code>ez_edm_drive_horizon</code>). Drop-first reverse bass</td>
+<td><strong>180 s</strong> festival bass 165 (<code>Drive-through - Horizon Kick - v0</code>). Drop-first reverse bass</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-clean-wreckage-lab-example</strong></td>
-<td><strong>180 s</strong> dirty electro 150 (<code>ez_edm_drive_wreck</code>). Three pyro wrecks</td>
+<td><strong>180 s</strong> dirty electro 150 (<code>Drive-through - Clean Wreckage - v0</code>). Three pyro wrecks</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-heart-lane-lab-example</strong></td>
-<td><strong>180 s</strong> future bass 145 (<code>ez_edm_drive_heart</code>). Drop-first warm 808</td>
+<td><strong>180 s</strong> future bass 145 (<code>Drive-through - Heart Lane - v0</code>). Drop-first warm 808</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-dawn-receipt-lab-example</strong></td>
-<td><strong>180 s</strong> progressive house 140 (<code>ez_edm_drive_dawn</code>). Hour-1 closer</td>
+<td><strong>180 s</strong> progressive house 140 (<code>Drive-through - Dawn Receipt - v0</code>). Hour-1 closer</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-rumble-strip-lab-example</strong></td>
-<td><strong>180 s</strong> bass house 140 (<code>ez_edm_drive_rumble</code>). Hour-2 opener</td>
+<td><strong>180 s</strong> bass house 140 (<code>Drive-through - Rumble Strip - v1</code>). Hour-2 opener</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-low-lane-lab-example</strong></td>
-<td><strong>180 s</strong> festival bass 144 (<code>ez_edm_drive_low</code>). Chest sub pyro</td>
+<td><strong>180 s</strong> festival bass 144 (<code>Drive-through - Low Lane - v1</code>). Chest sub pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-warm-merge-lab-example</strong></td>
-<td><strong>180 s</strong> future bass 148 (<code>ez_edm_drive_warm</code>)</td>
+<td><strong>180 s</strong> future bass 148 (<code>Drive-through - Warm Merge - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-colour-span-lab-example</strong></td>
-<td><strong>180 s</strong> complextro 150 (<code>ez_edm_drive_colour</code>)</td>
+<td><strong>180 s</strong> complextro 150 (<code>Drive-through - Colour Span - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-garage-ticket-lab-example</strong></td>
-<td><strong>180 s</strong> festival trap 140 (<code>ez_edm_drive_garage</code>)</td>
+<td><strong>180 s</strong> festival trap 140 (<code>Drive-through - Garage Ticket - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-liquid-grade-lab-example</strong></td>
-<td><strong>180 s</strong> drumstep 174 (<code>ez_edm_drive_liquid</code>)</td>
+<td><strong>180 s</strong> drumstep 174 (<code>Drive-through - Liquid Grade - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-jump-bay-lab-example</strong></td>
-<td><strong>180 s</strong> brostep 150 (<code>ez_edm_drive_jump</code>). Dirty growl pyro</td>
+<td><strong>180 s</strong> brostep 150 (<code>Drive-through - Jump Bay - v1</code>). Dirty growl pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-psy-median-lab-example</strong></td>
-<td><strong>180 s</strong> big room 145 (<code>ez_edm_drive_psy</code>)</td>
+<td><strong>180 s</strong> big room 145 (<code>Drive-through - Psy Median - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-groove-mile-lab-example</strong></td>
-<td><strong>180 s</strong> slap house 144 (<code>ez_edm_drive_groove</code>)</td>
+<td><strong>180 s</strong> slap house 144 (<code>Drive-through - Groove Mile - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-donk-ramp-lab-example</strong></td>
-<td><strong>180 s</strong> dirty electro 150 (<code>ez_edm_drive_donk</code>)</td>
+<td><strong>180 s</strong> dirty electro 150 (<code>Drive-through - Donk Ramp - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-bounce-booth-lab-example</strong></td>
-<td><strong>180 s</strong> melbourne bounce 140 (<code>ez_edm_drive_bounce</code>)</td>
+<td><strong>180 s</strong> melbourne bounce 140 (<code>Drive-through - Bounce Booth - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-toll-growl-lab-example</strong></td>
-<td><strong>180 s</strong> tearout 150 (<code>ez_edm_drive_toll</code>)</td>
+<td><strong>180 s</strong> tearout 150 (<code>Drive-through - Toll Growl - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-night-oil-lab-example</strong></td>
-<td><strong>180 s</strong> hybrid trap 142 (<code>ez_edm_drive_oil</code>)</td>
+<td><strong>180 s</strong> hybrid trap 142 (<code>Drive-through - Night Oil - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-chest-pass-lab-example</strong></td>
-<td><strong>180 s</strong> festival bass 150 (<code>ez_edm_drive_chest</code>)</td>
+<td><strong>180 s</strong> festival bass 150 (<code>Drive-through - Chest Pass - v1</code>)</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-sunrise-sub-lab-example</strong></td>
-<td><strong>180 s</strong> progressive house 140 (<code>ez_edm_drive_sunsub</code>). Encore closer</td>
+<td><strong>180 s</strong> progressive house 140 (<code>Drive-through - Sunrise Sub - v1</code>). Encore closer</td>
 </tr>
 </tbody>
 </table>
