@@ -67,7 +67,7 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
 
 `doctor` requires `MODELS_DIR` to be **writable by the current user** (check only; no sudo). Nested `${MODELS_DIR}/comfy` can still be root-owned after a container start — that is a **warning**, not a hard doctor failure.
 
-`setup`, `download-models`, and `start` **sudo-heal** `${MODELS_DIR}/comfy` and its layout subdirs when they are not writable. They do **not** recurse `chown` over HF snapshots under `MODELS_DIR`. Do not prefix `download-models` with `sudo` (download-limit uses sudo internally; `hf` must stay on the login user's PATH).
+`setup`, `download-models`, and `start` **sudo-heal** `${MODELS_DIR}/comfy` and each layout subdir (and the dest dir of each relative symlink) when they are not writable. They do **not** recurse `chown` over HF snapshots under `MODELS_DIR`. Do not prefix `download-models` with `sudo` (download-limit uses sudo internally; `hf` must stay on the login user's PATH).
 
 === "Preferred (setup / download-models)"
 

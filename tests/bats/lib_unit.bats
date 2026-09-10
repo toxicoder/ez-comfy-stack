@@ -329,6 +329,29 @@ teardown() {
   [ "${status}" -eq 0 ]
   [ -w "${TEST_TMP_DIR}/layout_heal/comfy" ]
   [ -w "${TEST_TMP_DIR}/layout_heal/comfy/diffusion_models" ]
+
+  mkdir -p "${TEST_TMP_DIR}/layout_child/comfy/diffusion_models"
+  chmod a-w "${TEST_TMP_DIR}/layout_child/comfy/diffusion_models"
+  export LAB_NO_SUDO=1
+  run prepare_writable_layout_dir "${TEST_TMP_DIR}/layout_child/comfy/diffusion_models"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  unset LAB_NO_SUDO
+  install_sudo_heal_mock
+  run prepare_comfy_layout "${TEST_TMP_DIR}/layout_child"
+  [ "${status}" -eq 0 ]
+  [ -w "${TEST_TMP_DIR}/layout_child/comfy/diffusion_models" ]
+
+  local child_target="${TEST_TMP_DIR}/layout_link/snap/weight.safetensors"
+  local child_link="${TEST_TMP_DIR}/layout_link/comfy/diffusion_models/weight.safetensors"
+  mkdir -p "$(dirname "${child_target}")" "${TEST_TMP_DIR}/layout_link/comfy/diffusion_models"
+  echo w >"${child_target}"
+  chmod a-w "${TEST_TMP_DIR}/layout_link/comfy/diffusion_models"
+  unset LAB_NO_SUDO
+  install_sudo_heal_mock
+  run ln_sfn_relative "${child_target}" "${child_link}"
+  [ "${status}" -eq 0 ]
+  [[ -L ${child_link} ]]
   export LAB_NO_SUDO=1
 
   run run_with_signal_forwarding true

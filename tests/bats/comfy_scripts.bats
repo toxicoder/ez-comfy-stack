@@ -129,10 +129,17 @@ teardown() {
   HOST_UID="$(id -u)"
   export HOST_GID
   HOST_GID="$(id -g)"
+  run layout_host_uid_gid
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"$(id -u)"* ]]
   run link_models diffusion_models
   [ "${status}" -eq 0 ]
   [[ -L "${COMFY_HOME}/models/diffusion_models" ]]
   [[ -d ${MODELS_ROOT}/comfy/diffusion_models ]]
+  unset HOST_UID HOST_GID
+  run layout_host_uid_gid
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *":"* ]]
 
   # Empty existing dir path branch
   rm -f "${COMFY_HOME}/models/vae"
