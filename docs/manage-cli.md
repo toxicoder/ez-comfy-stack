@@ -54,6 +54,7 @@ id: doctor
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
 | `occupancy status\|enter MODE` | Park Comfy (`blender-desk`) or enter `klein`/`trellis`/`wan`/`ltx`/`idle`. Does not start Compose. [Occupancy desk](occupancy.md) | Cycles CUDA next to a denoise; skip `--yes` when Blender is still up |
 | `blender-mcp` | In-tree typed Blender MCP (stdio / `--call`). bpy tools need blender-desk | Vendor ahujasid; `execute_code`; telemetry |
+| `research-mcp` | In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF | `execute_code`; arbitrary URL fetch; GPU-offload llama |
 | `blender-llm` | Optional host Qwen3-4B CPU → blender-mcp. Path D if llama.cpp missing | GPU-offload next to Comfy |
 | `blender` | Host Blender sidecar; Workbench in blender-desk; dies if Comfy is heavy | Cycles GPU while Compose is up |
 | `export-guides` | Dump a 1280×704 (or 768×1280) / 120f clay+depth+canny pack; dies if Comfy is heavy. `--print ltx-iclora-depth\|ltx-iclora-canny\|wan-flf` | 1280×720; dump while Comfy is unparked |

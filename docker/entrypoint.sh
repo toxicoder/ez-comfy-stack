@@ -443,7 +443,7 @@ lab_workflow_lane() {
     wan-*) printf '%s\n' wan ;;
     ltx-*) printf '%s\n' ltx ;;
     podcast-* | music-*) printf '%s\n' audio ;;
-    prompt-forge-* | beat-sheet-*) printf '%s\n' inspire ;;
+    prompt-forge-* | beat-sheet-* | research-chat-*) printf '%s\n' inspire ;;
     *) return 1 ;;
   esac
 }

@@ -192,6 +192,15 @@ def test_beat_sheet_exposes_only_shot_cards() -> None:
     assert names == ["value"] * 22
 
 
+def test_research_chat_exposes_message_mode_search() -> None:
+    names = _widget_names(_load("research-chat-lab-example.json"))
+    assert names == ["prompt", "mode", "web_search", "subagents", "history"]
+    labels = _labels(_load("research-chat-lab-example.json"))
+    assert labels[0] == "Message"
+    assert "Web search" in labels
+    assert len(labels) == len(set(labels)), labels
+
+
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
     names = _widget_names(_load("prompt-forge-lab-example.json"))
     assert names[:3] == ["prompt", "prompt", "prompt"]

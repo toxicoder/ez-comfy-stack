@@ -135,6 +135,7 @@ def test_lab_graph_completeness(path: Path) -> None:
                 "EZKleinPromptEnhance",
                 "EZWanPromptEnhance",
                 "EZLTXPromptEnhance",
+                "EZCreativeResearch",
                 "PrimitiveNode",
             }
         )

@@ -473,6 +473,9 @@ teardown() {
   run lab_workflow_lane "beat-sheet-lab-example.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "inspire" ]
+  run lab_workflow_lane "research-chat-lab-example.json"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "inspire" ]
   run lab_workflow_lane "_lab/_user/keep-me.json"
   [ "${status}" -ne 0 ]
   run lab_workflow_lane "quality/NOTICE.md"

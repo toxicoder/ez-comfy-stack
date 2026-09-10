@@ -1,4 +1,4 @@
-"""Build no-UNET inspire Apps: Prompt Forge and Beat Sheet.
+"""Build no-UNET inspire Apps: Prompt Forge, Beat Sheet, Research Chat.
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -18,7 +18,7 @@ from _lab_layout import (
     group as _group,
 )
 from _lab_theme import LAZY_FORGE
-from _lab_paths import lab_json
+from _lab_paths import lab_dest, lab_json
 from _stamp_app_mode import stamp_suite_graph
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -68,6 +68,30 @@ Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 
 Do not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).
 """
+
+RESEARCH_NOTE = """## research-chat-lab-example
+
+Creative research desk — chat LLM with web search and sequential research
+subagents. No UNET, no VAE, no KSampler.
+
+Occupancy: llm — stop nothing GPU. One GB10 job.
+Uses the on-box Qwen3-4B-Instruct GGUF (CPU, n_gpu_layers=0). No new download flag.
+Web search is SSRF-safe HTTPS (Wikipedia + DuckDuckGo HTML). Fail-soft if the
+network or GGUF is missing.
+
+1. Type a question (look, camera, lighting, world, reference).
+2. Mode **research** (planner + search subagents) or **chat** (one turn).
+3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
+   **prompt-forge-lab-example**, then **klein-still-draft-lab-example**.
+
+Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
+pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
+"""
+
+RESEARCH_MESSAGE = (
+    "What lighting and camera language fits a night rooftop still of a techno "
+    "wizard in a tropical city?"
+)
 
 SHOT_ROLES = ("enter", "traverse", "exit")
 
@@ -355,9 +379,75 @@ def build_beat_sheet() -> dict:
     return graph
 
 
+def build_research_chat() -> dict:
+    note_h = 340.0
+    note_group_h = note_h + GROUP_TITLE_INSET
+    desk_group_top = LAB_GROUP_Y0 + note_group_h
+    desk_y = desk_group_top + GROUP_TITLE_INSET
+    desk_h = 420.0
+    note = _node(
+        1,
+        "Note",
+        [40, LAB_NODE_Y0],
+        [720, note_h],
+        "Operator note",
+        [RESEARCH_NOTE],
+        0,
+    )
+    desk = _node(
+        2,
+        "EZCreativeResearch",
+        [40, desk_y],
+        [720, desk_h],
+        "Creative research",
+        [RESEARCH_MESSAGE, "research", True, 2, ""],
+        1,
+        [{"name": "reply", "type": "STRING", "links": None, "slot_index": 0}],
+    )
+    graph = {
+        "id": "research-chat-lab-example",
+        "revision": 1,
+        "last_node_id": 2,
+        "last_link_id": 0,
+        "nodes": [note, desk],
+        "links": [],
+        "groups": [
+            _group(1, "NOTE", 20, LAB_GROUP_Y0, 760, note_group_h, "#3f789e"),
+            _group(
+                2,
+                "RESEARCH",
+                20,
+                desk_group_top,
+                760,
+                desk_h + GROUP_TITLE_INSET,
+                "#3f789e",
+            ),
+        ],
+        "config": {},
+        "extra": {
+            "lab_profile": "research-chat-lab-example",
+            "lab_note": RESEARCH_NOTE,
+            "lab_description": (
+                "No-UNET creative research chat: web search + sequential subagents"
+            ),
+            "lab_mcp": {
+                "server": "research-mcp",
+                "tools": ["chat", "web_search", "research"],
+                "workflow": (
+                    "workflows/_lab/inspire/research-chat-lab-example.json"
+                ),
+            },
+            "ds": {"scale": 1, "offset": [0, 0]},
+        },
+        "version": 0.4,
+    }
+    return graph
+
+
 def main() -> None:
     _dump(lab_json("prompt-forge-lab-example.json"), build_prompt_forge())
     _dump(lab_json("beat-sheet-lab-example.json"), build_beat_sheet())
+    _dump(lab_dest("research-chat-lab-example.json"), build_research_chat())
 
 
 if __name__ == "__main__":

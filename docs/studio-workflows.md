@@ -35,7 +35,7 @@ user/default/workflows/
     audio/     podcast-*, dub-*, music-rap-draft/full
       nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
       drive-through/phase0|1|2|3|4/ eighty-five 180 s music-edm-drive-through-* EDM takes
-    inspire/   prompt-forge, beat-sheet
+    inspire/   prompt-forge, research-chat, beat-sheet
   _user/       your graphs (never overwritten)
 ```
 
@@ -112,6 +112,7 @@ flowchart TB
     | **klein-character-tweak-lab-example** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |
     | **klein-hook-still-lab-example** | Vertical 9:16 hook still |
     | **prompt-forge-lab-example** | No UNET. Klein / Wan / LTX enhance preview (occupancy **llm**) |
+    | **research-chat-lab-example** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
     | **beat-sheet-lab-example** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |
 
     Lane B — Produce

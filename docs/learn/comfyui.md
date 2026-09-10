@@ -24,7 +24,7 @@ tags: [learn, comfyui, queue, workflow, studio]
 
 ## A graph, not a chat box
 
-ComfyUI is a **node graph**. Each box is a step (load weights, encode text, sample, decode, save). Wires carry images, latents, and strings. You do not type a prompt into a single chat field and hope — you change **widgets** on the nodes the lab already wired.
+ComfyUI is a **node graph**. Each box is a step (load weights, encode text, sample, decode, save). Wires carry images, latents, and strings. You do not type a prompt into a single streaming chat field and hope — you change **widgets** on the nodes the lab already wired. **research-chat-lab-example** is still that graph: one **Message** widget, then Queue (occupancy **llm**). It is not Comfy Cloud’s In-App Agent.
 
 ```mermaid
 flowchart LR

@@ -119,6 +119,10 @@ def lane_for_stem(stem: str) -> str:
         return "ltx"
     if name.startswith("podcast-") or name.startswith("music-") or name.startswith("dub-") or name.startswith("audio-"):
         return "audio"
-    if name.startswith("prompt-forge-") or name.startswith("beat-sheet-"):
+    if (
+        name.startswith("prompt-forge-")
+        or name.startswith("beat-sheet-")
+        or name.startswith("research-chat-")
+    ):
         return "inspire"
     raise ValueError(f"cannot map {stem!r} to a lab lane")

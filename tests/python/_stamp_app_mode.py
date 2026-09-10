@@ -235,6 +235,9 @@ WIDGET_ORDER = (
     "have_rights",
     "job_slug",
     "prompt",
+    "web_search",
+    "subagents",
+    "history",
     "tags",
     "lyrics",
     "value",
@@ -274,9 +277,13 @@ WIDGET_HEIGHTS = {
     "tags": 80,
     "audio_notes": 80,
     "value": 72,
+    "history": 80,
 }
 GENERIC_LABELS = {
     "prompt": "Prompt",
+    "web_search": "Web search",
+    "subagents": "Subagents",
+    "history": "History",
     "style": "Style",
     "enhance": "Rewrite prompt",
     "seed": "Seed",
@@ -314,6 +321,9 @@ GENERIC_LABELS = {
 }
 DEFAULT_WIDGET_DESCRIPTIONS = {
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
+    "web_search": "On: Wikipedia + DuckDuckGo snippets. Off: on-box GGUF only.",
+    "subagents": "Planner search count (1–3). Sequential CPU workers.",
+    "history": "Optional prior turns. One Queue per message — not a streaming chat.",
     "style": "Optional look. Hidden on I2V — the start image owns look.",
     "enhance": (
         "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
@@ -426,6 +436,14 @@ def display_label(
         return title or generic
     if ntype == "EmptyAceStep1.5LatentAudio" and name == "seconds":
         return title or "Duration (seconds)"
+    if ntype == "EZCreativeResearch":
+        return {
+            "prompt": "Message",
+            "mode": "Mode",
+            "web_search": "Web search",
+            "subagents": "Subagents",
+            "history": "History",
+        }.get(name, generic)
     if ntype == "EZPodcastScript":
         return {"prompt": "Script", "enhance": "Rewrite script"}.get(name, generic)
     if ntype == "EZDubIngest":
@@ -500,6 +518,18 @@ def display_label(
 def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str | None:
     """Help text for one App Mode widget."""
     ntype = (node or {}).get("type")
+    if ntype == "EZCreativeResearch":
+        return {
+            "prompt": "Question or note for the creative-process desk.",
+            "mode": "chat is one turn. research runs planner + search subagents.",
+            "web_search": (
+                "On: Wikipedia + DuckDuckGo snippets. Off: on-box GGUF only."
+            ),
+            "subagents": "Planner search count (1–3). Sequential CPU workers.",
+            "history": (
+                "Optional prior turns. One Queue per message — not a streaming chat."
+            ),
+        }.get(name)
     if name == "mode" and ntype == "EZAceStepPromptEnhance":
         return (
             "Vocal vs instrumental. Instrumental forces no-vocals tags and "
@@ -589,6 +619,7 @@ def _spec(
     sampler_steps_cfg: bool = False,
     film_minimal: bool = False,
     forge_widgets: bool = False,
+    research_widgets: bool = False,
     primitive_strings: bool = False,
     hide_images: bool = False,
     ace_instrumental_score: bool = False,
@@ -604,6 +635,7 @@ def _spec(
         "sampler_steps_cfg": sampler_steps_cfg,
         "film_minimal": film_minimal,
         "forge_widgets": forge_widgets,
+        "research_widgets": research_widgets,
         "primitive_strings": primitive_strings,
         "hide_images": hide_images,
         "ace_instrumental_score": ace_instrumental_score,
@@ -670,6 +702,13 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "llm",
         "klein-still-draft-lab-example",
         forge_widgets=True,
+    ),
+    "research-chat-lab-example": _spec(
+        "inspire",
+        "llm",
+        "prompt-forge-lab-example",
+        "klein-still-draft-lab-example",
+        research_widgets=True,
     ),
     "beat-sheet-lab-example": _spec(
         "inspire",
@@ -855,6 +894,7 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
     ),
+    "research-chat-lab-example": ("EZCreativeResearch",),
     "wan-flf-5s-lab-example": ("LoadImage",),
     "wan-vace-join-lab-example": ("LoadImage",),
 }
@@ -909,6 +949,21 @@ def _collect_raw_inputs(
         for node in graph.get("nodes") or []:
             if node.get("type") == "PrimitiveNode":
                 raw.append((node["id"], "value", node))
+        return raw
+
+    if spec.get("research_widgets"):
+        for node in graph.get("nodes") or []:
+            if node.get("type") == "EZCreativeResearch":
+                nid = node["id"]
+                raw.extend(
+                    (
+                        (nid, "prompt", node),
+                        (nid, "mode", node),
+                        (nid, "web_search", node),
+                        (nid, "subagents", node),
+                        (nid, "history", node),
+                    )
+                )
         return raw
 
     saw_seed = False
@@ -1040,6 +1095,8 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
         inputs.append(
             _input_spec(nid, name, spec, node=node, collide=collide)
         )
+    if spec.get("research_widgets"):
+        return inputs
     return order_app_inputs(inputs, graph)
 
 
@@ -1052,6 +1109,12 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
     ]
     if found:
         return found
+    if spec.get("research_widgets"):
+        return [
+            int(node["id"])
+            for node in graph.get("nodes") or []
+            if node.get("type") == "EZCreativeResearch"
+        ]
     if spec.get("forge_widgets"):
         return [
             int(node["id"])
