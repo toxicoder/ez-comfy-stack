@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "festival bass, four on the floor, supersaw, stacked 808, rave, dirty drop, instrumental, no vocals, no singing, original composition, 152 bpm",
-        "[inst]\nfull send drop\nfestival bass in\ndirty 808 pyro\n\n[inst]\nhats only\nbass cut\nair\n\n[inst]\nharder stacked drop\n808 punch\nfireworks wreck\n\n[outro]\nblend out\nDrive-through",
+        "festival bass, four on the floor, chest sub, stacked 808, low rumble, rave, dirty drop, instrumental, no vocals, no singing, original composition, 152 bpm",
+        "[inst]\nfull send drop\nfestival bass in\ndirty 808 pyro\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder stacked drop\n808 punch\nfireworks wreck\n\n[inst]\nhats roll\nchest cut\n\n[inst]\nheavy dirty drop\nlow sub wall\nmainstage pyro\n\n[outro]\nblend out\nDrive-through",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "festival bass, four on the floor, supersaw, stacked 808, rave, dirty drop, instrumental, no vocals, no singing, original composition, 152 bpm",
-        "[inst]\nfull send drop\nfestival bass in\ndirty 808 pyro\n\n[inst]\nhats only\nbass cut\nair\n\n[inst]\nharder stacked drop\n808 punch\nfireworks wreck\n\n[outro]\nblend out\nDrive-through",
+        "festival bass, four on the floor, chest sub, stacked 808, low rumble, rave, dirty drop, instrumental, no vocals, no singing, original composition, 152 bpm",
+        "[inst]\nfull send drop\nfestival bass in\ndirty 808 pyro\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder stacked drop\n808 punch\nfireworks wreck\n\n[inst]\nhats roll\nchest cut\n\n[inst]\nheavy dirty drop\nlow sub wall\nmainstage pyro\n\n[outro]\nblend out\nDrive-through",
         191,
         "fixed",
         152,

@@ -46,6 +46,33 @@ HEADLINER_BOUNCE_NEEDLES = (
     "body",
     "808",
 )
+HIGH_PITCH_NEEDLES = (
+    "supersaw",
+    "arp",
+    "sparkle",
+    "whistle",
+    "chipmunk",
+)
+SUB_WEIGHT_NEEDLES = (
+    "sub",
+    "chest",
+    "low",
+    "808",
+    "rumble",
+)
+MOTION_NEEDLES = (
+    "hats",
+    "bass",
+    "kick",
+    "cut",
+    "roll",
+    "amen",
+    "808",
+    "sub",
+    "pedal",
+)
+PAUSE_ONLY_TOKENS = frozenset({"air", "space"})
+PEDAL_BASS_NEEDLE = "dual-action pedal"
 
 
 class EdmExample(TypedDict):
@@ -110,7 +137,7 @@ def _ex(
         lyrics: Arrangement score from ``format_edm_score``.
         tag_parts: Genre and production tags (bass + festival language).
         treat: If True, sparse DJ-shout lock and vocal ACE mode.
-        layout: Comfy node placement name (phase2 experiments; default column).
+        layout: Comfy node placement name (phase2+ experiments; default column).
     Returns:
         One ``EdmExample`` row.
     Raises:
@@ -173,10 +200,16 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
 
 def _catalog() -> tuple[EdmExample, ...]:
     from .edm_drive_through import EDM_DRIVE_THROUGH
+    from .edm_drive_through_afterparty import EDM_DRIVE_THROUGH_AFTERPARTY
     from .edm_drive_through_bass import EDM_DRIVE_THROUGH_BASS
     from .edm_drive_through_headliner import EDM_DRIVE_THROUGH_HEADLINER
 
-    return EDM_DRIVE_THROUGH + EDM_DRIVE_THROUGH_BASS + EDM_DRIVE_THROUGH_HEADLINER
+    return (
+        EDM_DRIVE_THROUGH
+        + EDM_DRIVE_THROUGH_BASS
+        + EDM_DRIVE_THROUGH_HEADLINER
+        + EDM_DRIVE_THROUGH_AFTERPARTY
+    )
 
 
 EDM_EXAMPLES: tuple[EdmExample, ...] = _catalog()

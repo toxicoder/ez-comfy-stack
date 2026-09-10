@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "drumstep, festival, amen break, reese bass, rave, dirty bass, instrumental, no vocals, no singing, original composition, 176 bpm",
-        "[inst]\nheavy dirty drop\namen wreck\nreese stack\nDrive-through\n\n[inst]\nbreak chops\nglitch\n\n[inst]\nharder dirty drop\ndouble amen wreck\nfireworks crash\n\n[inst]\nrazor hats\nreese wind\n\n[inst]\nfull send drop\nstacked amen wreck\nmainstage pyro\n\n[inst]\nharder dirty drop\nchest 808 wreck\nfestival pyro\n\n[outro]\namen stop\nblend next",
+        "drumstep, festival, amen break, reese bass, chest sub, rave, dirty bass, instrumental, no vocals, no singing, original composition, 176 bpm",
+        "[inst]\nheavy dirty drop\namen wreck\nreese stack\nDrive-through\n\n[inst]\namen chops\nhats cut\n\n[inst]\nharder dirty drop\ndouble amen wreck\nfireworks crash\n\n[inst]\nhats razor\nreese wind\n\n[inst]\nfull send drop\nstacked amen wreck\nmainstage pyro\n\n[inst]\nharder dirty drop\nchest 808 wreck\nfestival pyro\n\n[outro]\namen stop\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "drumstep, festival, amen break, reese bass, rave, dirty bass, instrumental, no vocals, no singing, original composition, 176 bpm",
-        "[inst]\nheavy dirty drop\namen wreck\nreese stack\nDrive-through\n\n[inst]\nbreak chops\nglitch\n\n[inst]\nharder dirty drop\ndouble amen wreck\nfireworks crash\n\n[inst]\nrazor hats\nreese wind\n\n[inst]\nfull send drop\nstacked amen wreck\nmainstage pyro\n\n[inst]\nharder dirty drop\nchest 808 wreck\nfestival pyro\n\n[outro]\namen stop\nblend next",
+        "drumstep, festival, amen break, reese bass, chest sub, rave, dirty bass, instrumental, no vocals, no singing, original composition, 176 bpm",
+        "[inst]\nheavy dirty drop\namen wreck\nreese stack\nDrive-through\n\n[inst]\namen chops\nhats cut\n\n[inst]\nharder dirty drop\ndouble amen wreck\nfireworks crash\n\n[inst]\nhats razor\nreese wind\n\n[inst]\nfull send drop\nstacked amen wreck\nmainstage pyro\n\n[inst]\nharder dirty drop\nchest 808 wreck\nfestival pyro\n\n[outro]\namen stop\nblend next",
         211,
         "fixed",
         176,

@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "festival bass, dirty electro, reverse bass, 808 punch, rave, heavy drop, instrumental, no vocals, no singing, original composition, 165 bpm",
-        "[inst]\nheavy dirty drop\nkick split wreck\nreverse bass\nfireworks crash\n\n[inst]\nscreech wind\nhats razor\n\n[inst]\nharder dirty drop\nstacked reverse wreck\nmainstage pyro\n\n[outro]\nkick rest\nDrive-through\nblend next",
+        "festival bass, dirty electro, reverse bass, 808 punch, chest sub, rave, heavy drop, instrumental, no vocals, no singing, original composition, 165 bpm",
+        "[inst]\nheavy dirty drop\nkick split wreck\nreverse bass\nfireworks crash\n\n[inst]\nhats razor\nbass cut\n\n[inst]\nharder dirty drop\nstacked reverse wreck\nmainstage pyro\n\n[inst]\nhats skip\n808 cut\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[inst]\nharder dirty drop\nlow rumble wreck\nchest pyro\n\n[outro]\nkick rest\nDrive-through\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "festival bass, dirty electro, reverse bass, 808 punch, rave, heavy drop, instrumental, no vocals, no singing, original composition, 165 bpm",
-        "[inst]\nheavy dirty drop\nkick split wreck\nreverse bass\nfireworks crash\n\n[inst]\nscreech wind\nhats razor\n\n[inst]\nharder dirty drop\nstacked reverse wreck\nmainstage pyro\n\n[outro]\nkick rest\nDrive-through\nblend next",
+        "festival bass, dirty electro, reverse bass, 808 punch, chest sub, rave, heavy drop, instrumental, no vocals, no singing, original composition, 165 bpm",
+        "[inst]\nheavy dirty drop\nkick split wreck\nreverse bass\nfireworks crash\n\n[inst]\nhats razor\nbass cut\n\n[inst]\nharder dirty drop\nstacked reverse wreck\nmainstage pyro\n\n[inst]\nhats skip\n808 cut\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[inst]\nharder dirty drop\nlow rumble wreck\nchest pyro\n\n[outro]\nkick rest\nDrive-through\nblend next",
         263,
         "fixed",
         165,

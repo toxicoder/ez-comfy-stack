@@ -211,7 +211,7 @@
       },
       "widgets_values": [
         "drumstep, festival, four on the floor, heavy sub, rave, dirty pyro, instrumental, no vocals, no singing, original composition, 170 bpm",
-        "[inst]\nheavy dirty drop\nstacked 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats only\nair\n\n[inst]\nharder dirty drop\nfull send 170 wreck\nmainstage pyro\n\n[inst]\nriser scream\nhats denser\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nstill going\nblend next",
+        "[inst]\nheavy dirty drop\nstacked 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nfull send 170 wreck\nmainstage pyro\n\n[inst]\nhats denser\nsub cut\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nstill going\nblend next",
         false,
         "instrumental"
       ],
@@ -278,7 +278,7 @@
       },
       "widgets_values": [
         "drumstep, festival, four on the floor, heavy sub, rave, dirty pyro, instrumental, no vocals, no singing, original composition, 170 bpm",
-        "[inst]\nheavy dirty drop\nstacked 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats only\nair\n\n[inst]\nharder dirty drop\nfull send 170 wreck\nmainstage pyro\n\n[inst]\nriser scream\nhats denser\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nstill going\nblend next",
+        "[inst]\nheavy dirty drop\nstacked 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nfull send 170 wreck\nmainstage pyro\n\n[inst]\nhats denser\nsub cut\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nstill going\nblend next",
         251,
         "fixed",
         170,

@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "progressive house, four on the floor, festival anthem, rolling bass, rave, supersaw, instrumental, no vocals, no singing, original composition, 145 bpm",
-        "[inst]\nheavy dirty drop\nDrive-through\nrolling bass wall\nfireworks crash\n\n[inst]\npads thin\nbass cut\n\n[inst]\nharder dirty drop\nstacked supersaw\nmainstage pyro\n\n[inst]\nhats only\nair\n\n[inst]\nfull send drop\nchest 808 wreck\nfestival pyro\n\n[outro]\ngate close\nblend next",
+        "progressive house, four on the floor, festival anthem, rolling bass, chest sub, rave, hard festival, instrumental, no vocals, no singing, original composition, 145 bpm",
+        "[inst]\nheavy dirty drop\nDrive-through\nrolling bass wall\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked 808 wall\nmainstage pyro\n\n[inst]\nhats roll\nchest cut\n\n[inst]\nfull send drop\nchest 808 wreck\nfestival pyro\n\n[outro]\ngate close\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "progressive house, four on the floor, festival anthem, rolling bass, rave, supersaw, instrumental, no vocals, no singing, original composition, 145 bpm",
-        "[inst]\nheavy dirty drop\nDrive-through\nrolling bass wall\nfireworks crash\n\n[inst]\npads thin\nbass cut\n\n[inst]\nharder dirty drop\nstacked supersaw\nmainstage pyro\n\n[inst]\nhats only\nair\n\n[inst]\nfull send drop\nchest 808 wreck\nfestival pyro\n\n[outro]\ngate close\nblend next",
+        "progressive house, four on the floor, festival anthem, rolling bass, chest sub, rave, hard festival, instrumental, no vocals, no singing, original composition, 145 bpm",
+        "[inst]\nheavy dirty drop\nDrive-through\nrolling bass wall\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked 808 wall\nmainstage pyro\n\n[inst]\nhats roll\nchest cut\n\n[inst]\nfull send drop\nchest 808 wreck\nfestival pyro\n\n[outro]\ngate close\nblend next",
         199,
         "fixed",
         145,

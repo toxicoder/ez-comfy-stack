@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "neuro bass, drumstep, reese bass, bounce 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 172 bpm",
-        "[inst]\nheavy neuro drop\nreese 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\namen chops\nglitch\n\n[inst]\nharder stacked drop\nchest reese wreck\nmainstage pyro\n\n[inst]\nhats razor\nbass wind\n\n[inst]\nfull send drop\nbounce 808 wreck\nchest pyro\n\n[inst]\nbreak chops\nair\n\n[inst]\nharder dirty drop\nstacked neuro 808 wreck\nmainstage pyro\n\n[inst]\nfull send drop\nbody reese wreck\nfestival pyro\n\n[outro]\ndew out\nblend next",
+        "neuro bass, drumstep, reese bass, bounce 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 172 bpm",
+        "[inst]\nheavy neuro drop\nreese 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\namen chops\nhats cut\n\n[inst]\nharder stacked drop\nchest reese wreck\nmainstage pyro\n\n[inst]\nhats razor\nbass wind\n\n[inst]\nfull send drop\nbounce 808 wreck\nchest pyro\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked neuro 808 wreck\nmainstage pyro\n\n[inst]\nfull send drop\nbody reese wreck\nfestival pyro\n\n[outro]\ndew out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "neuro bass, drumstep, reese bass, bounce 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 172 bpm",
-        "[inst]\nheavy neuro drop\nreese 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\namen chops\nglitch\n\n[inst]\nharder stacked drop\nchest reese wreck\nmainstage pyro\n\n[inst]\nhats razor\nbass wind\n\n[inst]\nfull send drop\nbounce 808 wreck\nchest pyro\n\n[inst]\nbreak chops\nair\n\n[inst]\nharder dirty drop\nstacked neuro 808 wreck\nmainstage pyro\n\n[inst]\nfull send drop\nbody reese wreck\nfestival pyro\n\n[outro]\ndew out\nblend next",
+        "neuro bass, drumstep, reese bass, bounce 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 172 bpm",
+        "[inst]\nheavy neuro drop\nreese 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\namen chops\nhats cut\n\n[inst]\nharder stacked drop\nchest reese wreck\nmainstage pyro\n\n[inst]\nhats razor\nbass wind\n\n[inst]\nfull send drop\nbounce 808 wreck\nchest pyro\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked neuro 808 wreck\nmainstage pyro\n\n[inst]\nfull send drop\nbody reese wreck\nfestival pyro\n\n[outro]\ndew out\nblend next",
         431,
         "fixed",
         172,

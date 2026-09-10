@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "dirty electro, four on the floor, complextro, rave, heavy sub, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[intro]\nbits gather\nDrive-through\n\n[inst]\nheavy dirty drop\nstacked 808 wreck\nfireworks crash\n\n[inst]\nharder dirty drop\nlead and kick stack\nchest pyro\n\n[inst]\nfull send drop\nmainstage crash\nfestival pyro\n\n[outro]\ndust rest\nblend next",
+        "dirty electro, four on the floor, chest 808, rave, heavy sub, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[intro]\nbits gather\nDrive-through\n\n[inst]\nheavy dirty drop\nstacked 808 wreck\nfireworks crash\n\n[inst]\nharder dirty drop\nlead and kick stack\nchest pyro\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nfull send drop\nmainstage crash\nfestival pyro\n\n[outro]\ndust rest\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "dirty electro, four on the floor, complextro, rave, heavy sub, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[intro]\nbits gather\nDrive-through\n\n[inst]\nheavy dirty drop\nstacked 808 wreck\nfireworks crash\n\n[inst]\nharder dirty drop\nlead and kick stack\nchest pyro\n\n[inst]\nfull send drop\nmainstage crash\nfestival pyro\n\n[outro]\ndust rest\nblend next",
+        "dirty electro, four on the floor, chest 808, rave, heavy sub, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[intro]\nbits gather\nDrive-through\n\n[inst]\nheavy dirty drop\nstacked 808 wreck\nfireworks crash\n\n[inst]\nharder dirty drop\nlead and kick stack\nchest pyro\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nfull send drop\nmainstage crash\nfestival pyro\n\n[outro]\ndust rest\nblend next",
         269,
         "fixed",
         150,

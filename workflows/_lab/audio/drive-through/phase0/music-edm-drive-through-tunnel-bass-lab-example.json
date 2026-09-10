@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "dirty bass, four on the floor, industrial bass, festival pyro, rave, heavy kick, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[inst]\nheavy dirty drop\nindustrial bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nharder dirty drop\nstacked 808 wreck\nmainstage pyro\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nkick out\nblend next",
+        "dirty bass, four on the floor, industrial bass, dual-action pedal bass, chest sub, festival pyro, rave, heavy kick, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[inst]\nheavy dirty drop\nindustrial bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nharder dirty drop\ndual-action pedal bass\nchest punch\nmainstage pyro\n\n[inst]\nhats skip\npedal swell\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nkick out\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "dirty bass, four on the floor, industrial bass, festival pyro, rave, heavy kick, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[inst]\nheavy dirty drop\nindustrial bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nharder dirty drop\nstacked 808 wreck\nmainstage pyro\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nkick out\nblend next",
+        "dirty bass, four on the floor, industrial bass, dual-action pedal bass, chest sub, festival pyro, rave, heavy kick, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[inst]\nheavy dirty drop\nindustrial bass wreck\nDrive-through\nfireworks crash\n\n[inst]\nharder dirty drop\ndual-action pedal bass\nchest punch\nmainstage pyro\n\n[inst]\nhats skip\npedal swell\n\n[inst]\nfull send drop\nchest sub wreck\nfestival pyro\n\n[outro]\nkick out\nblend next",
         257,
         "fixed",
         150,

@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "future bass, four on the floor, warm 808, euphoric, rave, festival pyro, instrumental, no vocals, no singing, original composition, 148 bpm",
-        "[inst]\nheavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nchord bed\nhats air\n\n[inst]\nharder dirty drop\nstacked future bass\nmainstage pyro\n\n[outro]\nblend out",
+        "future bass, four on the floor, warm 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 148 bpm",
+        "[inst]\nheavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked future bass\nmainstage pyro\n\n[inst]\nhats roll\nchest cut\n\n[inst]\nfull send drop\nlow 808 wall\nchest pyro\n\n[outro]\nblend out",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "future bass, four on the floor, warm 808, euphoric, rave, festival pyro, instrumental, no vocals, no singing, original composition, 148 bpm",
-        "[inst]\nheavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nchord bed\nhats air\n\n[inst]\nharder dirty drop\nstacked future bass\nmainstage pyro\n\n[outro]\nblend out",
+        "future bass, four on the floor, warm 808, chest sub, rave, festival pyro, instrumental, no vocals, no singing, original composition, 148 bpm",
+        "[inst]\nheavy dirty drop\nwarm 808 wreck\nDrive-through\nfireworks crash\n\n[inst]\nhats skip\nbass cut\n\n[inst]\nharder dirty drop\nstacked future bass\nmainstage pyro\n\n[inst]\nhats roll\nchest cut\n\n[inst]\nfull send drop\nlow 808 wall\nchest pyro\n\n[outro]\nblend out",
         281,
         "fixed",
         148,
