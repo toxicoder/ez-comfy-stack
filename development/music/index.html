@@ -2024,7 +2024,7 @@
 <ul>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> the rap <strong>draft</strong> first, then the <strong>full</strong> track</li>
 <li>Forty-five <strong>180 s</strong> Nill Bye vs Rake diss examples under <code>_lab/audio/nill-bye/</code> (Queue on their own; lab catalog, style pack, trap/EDM pack; exclusive bars per take)</li>
-<li>Fifteen <strong>180 s</strong> Drive-through rave-set EDM examples under <code>_lab/audio/drive-through/</code> (Queue on their own; unique dance-floor flow per take, heavy drops; vocals are a rare DJ treat on two graphs)</li>
+<li>Thirty <strong>180 s</strong> Drive-through rave-set EDM examples under <code>_lab/audio/drive-through/</code> (Queue on their own; American festival EDM, drop early, dirty pyro on every drop; vocals are a rare DJ treat on two graphs)</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: tags, lyrics, rewrite, vocal/instrumental, duration</li>
 <li>Tags vs lyrics; <code>[verse]</code> / <code>[chorus]</code> / <code>[spoken word]</code> as vocal hints; EDM uses <code>[inst]</code> / <code>[intro]</code> / <code>[outro]</code>, plus one short <code>[chorus]</code> chop on the two DJ-shout treats</li>
 <li>Original lyrics only — no “in the style of \&lt;living artist&gt;”</li>
@@ -2038,7 +2038,7 @@
 <ul>
 <li>A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs</li>
 <li>Forty-five 180 s original diss takes (Nill Bye vs Rake) with exclusive verses and punchlines, without cloud music APIs</li>
-<li>Fifteen 180 s original Drive-through EDM takes (live rave-set flow, BPM 140–176, heavy drops; thirteen instrumental, two DJ-shout treats) without cloud music APIs</li>
+<li>Thirty 180 s original Drive-through EDM takes (American festival EDM, BPM 140–176, drop-early dirty pyro; twenty-eight instrumental, two DJ-shout treats) without cloud music APIs</li>
 <li>Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice</li>
 <li>Keeping the visual studio bootable when the music pack is missing</li>
 <li>Muxing a cover still + FLAC into a YouTube MP4 without changing the rap graphs</li>
@@ -2427,8 +2427,8 @@
 </table>
 <p>Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.</p>
 <h3 id="180s-drive-through-edm-examples">180s Drive-through EDM examples<a class="headerlink" href="#180s-drive-through-edm-examples" title="Permanent link">&para;</a></h3>
-<p>Fifteen extra full-track graphs under <strong><code>_lab/audio/drive-through/</code></strong>. Same AIO, sampler, occupancy <strong>audio</strong>, and Klein cover handoff as the 96 s full track. App <strong>Duration (seconds)</strong> defaults to <strong>180</strong>. Queue <strong>on their own</strong> — draft-first is the generic rap lane, not a prerequisite. A longer Queue is expected.</p>
-<p>Fictional act only: <strong>Drive-through</strong> (hardcore, pure of heart) playing a <strong>live rave DJ set</strong>. Original dance arrangements. No living-DJ names. No famous-hook paraphrases. Thirteen takes lock <code>instrumental, no vocals, no singing</code> (App <strong>Vocal / instrumental</strong> = instrumental). Two takes are sparse DJ-shout treats (<code>wide open</code>, <code>second wave</code>): App mode <strong>vocal</strong>, one short <code>[chorus]</code> chop, no <code>[verse]</code>. Arrangement scores are production cues in <code>[inst]</code> blocks — unique flow per take, two or more heavy drops, mix-in/out — not a Nill Bye verse/chorus loop and not the same melody-drop-break-drop skeleton on every graph. ACE-Step timbre is invented. Human selection and edit required before any release.</p>
+<p>Thirty extra full-track graphs under <strong><code>_lab/audio/drive-through/</code></strong>. Same AIO, sampler, occupancy <strong>audio</strong>, and Klein cover handoff as the 96 s full track. App <strong>Duration (seconds)</strong> defaults to <strong>180</strong>. Queue <strong>on their own</strong> — draft-first is the generic rap lane, not a prerequisite. A longer Queue is expected.</p>
+<p>Fictional act only: <strong>Drive-through</strong> (hardcore, pure of heart) playing a <strong>live rave DJ set</strong>. Original <strong>American festival EDM</strong> arrangements (bass house, big room, future bass, brostep, festival trap, drumstep — not techno). No living-DJ names. No famous-hook paraphrases. Twenty-eight takes lock <code>instrumental, no vocals, no singing</code> (App <strong>Vocal / instrumental</strong> = instrumental). Two takes are sparse DJ-shout treats (<code>wide open</code>, <code>second wave</code>): App mode <strong>vocal</strong>, one short <code>[chorus]</code> chop, no <code>[verse]</code>. Arrangement scores are production cues in <code>[inst]</code> blocks — unique flow per take, drop in the first or second section, dirty pyro on every drop, mix-in/out — not a Nill Bye verse/chorus loop and not the same melody-drop-break-drop skeleton on every graph. ACE-Step timbre is invented. Human selection and edit required before any release.</p>
 <p>This is <strong>not</strong> the Nill Bye trap/EDM pack. Those graphs are rap <strong>over</strong> club beds with a dry booth. Drive-through is dance EDM (mostly instrumental).</p>
 <p>Catalog order is the recommended live-set queue (each graph still Queues alone):</p>
 <table>
@@ -2445,91 +2445,181 @@
 <td><strong>music-edm-drive-through-night-window-lab-example</strong></td>
 <td>bass house <strong>145</strong>, seed <strong>193</strong></td>
 <td><code>ez_edm_drive_night</code></td>
-<td>Opener: kick from bar 1, two heavy house drops</td>
+<td>Opener: dirty 808 pyro from the first drop</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-open-lane-lab-example</strong></td>
 <td>festival bass <strong>152</strong>, seed <strong>191</strong></td>
 <td><code>ez_edm_drive_openlane</code></td>
-<td>Drop-first ID, second stacked wreck</td>
+<td>Drop-first ID, second stacked pyro wreck</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-exit-seven-lab-example</strong></td>
 <td>electro house <strong>142</strong>, seed <strong>233</strong></td>
 <td><code>ez_edm_drive_exit</code></td>
-<td>Filter mix-in, double electro drop</td>
+<td>Filter mix-in, two dirty electro pyro drops</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-skyline-pass-lab-example</strong></td>
-<td>uplifting trance <strong>145</strong>, seed <strong>199</strong></td>
+<td>progressive house <strong>145</strong>, seed <strong>199</strong></td>
 <td><code>ez_edm_drive_skyline</code></td>
-<td>Long build, two trance wrecks</td>
+<td>Drop-first anthem, three pyro wrecks</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-on-ramp-lab-example</strong></td>
-<td>hardstyle <strong>155</strong>, seed <strong>197</strong></td>
+<td>festival bass <strong>155</strong>, seed <strong>197</strong></td>
 <td><code>ez_edm_drive_onramp</code></td>
-<td>Kick-split tease, reverse-bass wrecks</td>
+<td>Reverse-bass dirty pyro, three wrecks</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-tunnel-bass-lab-example</strong></td>
-<td>hard techno <strong>150</strong>, seed <strong>257</strong></td>
+<td>dirty bass <strong>150</strong>, seed <strong>257</strong></td>
 <td><code>ez_edm_drive_tunnel</code></td>
-<td>Acid in immediately, three techno drops</td>
+<td>Drop-first industrial 808, three pyro drops</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-wide-open-lab-example</strong></td>
 <td>big room <strong>150</strong>, seed <strong>239</strong></td>
 <td><code>ez_edm_drive_wide</code></td>
-<td><strong>DJ shout treat</strong> (<code>hands up</code>) + stacked mainstage wrecks</td>
+<td><strong>DJ shout treat</strong> (<code>hands up</code>) + dirty mainstage pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-overpass-lab-example</strong></td>
-<td>rave bass <strong>150</strong>, seed <strong>227</strong></td>
+<td>riddim <strong>150</strong>, seed <strong>227</strong></td>
 <td><code>ez_edm_drive_overpass</code></td>
-<td>Half-time wobble, four-on-floor flip, three drops</td>
+<td>Drop-first wobble, four-floor pyro flip</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-second-wave-lab-example</strong></td>
 <td>festival remix <strong>150</strong>, seed <strong>241</strong></td>
 <td><code>ez_edm_drive_second</code></td>
-<td><strong>Remix vocal-chop treat</strong>, fake-out, double drop</td>
+<td><strong>Remix vocal-chop treat</strong>, drop-first growl pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-freight-pulse-lab-example</strong></td>
-<td>drum and bass <strong>176</strong>, seed <strong>211</strong></td>
+<td>drumstep <strong>176</strong>, seed <strong>211</strong></td>
 <td><code>ez_edm_drive_freight</code></td>
-<td>Amen wreck early, three neuro drops</td>
+<td>Drop-first amen, four dirty pyro wrecks</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-keep-going-lab-example</strong></td>
-<td>UK hardcore <strong>170</strong>, seed <strong>251</strong></td>
+<td>drumstep <strong>170</strong>, seed <strong>251</strong></td>
 <td><code>ez_edm_drive_keep</code></td>
-<td>Triple-drop hard-dance peak</td>
+<td>Drop-first 808 pyro, triple wreck</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-horizon-kick-lab-example</strong></td>
-<td>rawstyle <strong>165</strong>, seed <strong>263</strong></td>
+<td>festival bass <strong>165</strong>, seed <strong>263</strong></td>
 <td><code>ez_edm_drive_horizon</code></td>
-<td>Drop-first kick-split, stacked reverse bass</td>
+<td>Drop-first reverse bass pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-clean-wreckage-lab-example</strong></td>
-<td>hard dance <strong>150</strong>, seed <strong>269</strong></td>
+<td>dirty electro <strong>150</strong>, seed <strong>269</strong></td>
 <td><code>ez_edm_drive_wreck</code></td>
-<td>Three layered wrecks</td>
+<td>Immediate dirty electro, three pyro wrecks</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-heart-lane-lab-example</strong></td>
-<td>melodic techno <strong>145</strong>, seed <strong>223</strong></td>
+<td>future bass <strong>145</strong>, seed <strong>223</strong></td>
 <td><code>ez_edm_drive_heart</code></td>
-<td>Rolling groove, late full-send, encore drop</td>
+<td>Drop-first warm 808 pyro</td>
 </tr>
 <tr>
 <td><strong>music-edm-drive-through-dawn-receipt-lab-example</strong></td>
-<td>peak-time house <strong>140</strong>, seed <strong>229</strong></td>
+<td>progressive house <strong>140</strong>, seed <strong>229</strong></td>
 <td><code>ez_edm_drive_dawn</code></td>
-<td>Sunrise mix-in, two closer wrecks, blend out</td>
+<td>Hour-1 closer, two dirty pyro wrecks</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-rumble-strip-lab-example</strong></td>
+<td>bass house <strong>140</strong>, seed <strong>271</strong></td>
+<td><code>ez_edm_drive_rumble</code></td>
+<td>Hour-2 opener, drop-first chest 808 pyro</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-low-lane-lab-example</strong></td>
+<td>festival bass <strong>144</strong>, seed <strong>277</strong></td>
+<td><code>ez_edm_drive_low</code></td>
+<td>Chest sub pyro, three wrecks</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-warm-merge-lab-example</strong></td>
+<td>future bass <strong>148</strong>, seed <strong>281</strong></td>
+<td><code>ez_edm_drive_warm</code></td>
+<td>Drop-first warm 808 pyro</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-colour-span-lab-example</strong></td>
+<td>complextro <strong>150</strong>, seed <strong>283</strong></td>
+<td><code>ez_edm_drive_colour</code></td>
+<td>Dirty electro pyro, three wrecks</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-garage-ticket-lab-example</strong></td>
+<td>festival trap <strong>140</strong>, seed <strong>293</strong></td>
+<td><code>ez_edm_drive_garage</code></td>
+<td>Drop-first trap 808 pyro</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-liquid-grade-lab-example</strong></td>
+<td>drumstep <strong>174</strong>, seed <strong>307</strong></td>
+<td><code>ez_edm_drive_liquid</code></td>
+<td>Drop-first drumstep pyro</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-jump-bay-lab-example</strong></td>
+<td>brostep <strong>150</strong>, seed <strong>311</strong></td>
+<td><code>ez_edm_drive_jump</code></td>
+<td>Drop-first dirty growl pyro</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-psy-median-lab-example</strong></td>
+<td>big room <strong>145</strong>, seed <strong>313</strong></td>
+<td><code>ez_edm_drive_psy</code></td>
+<td>Mainstage 808 pyro, two wrecks</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-groove-mile-lab-example</strong></td>
+<td>slap house <strong>144</strong>, seed <strong>317</strong></td>
+<td><code>ez_edm_drive_groove</code></td>
+<td>Drop-first bounce 808 pyro</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-donk-ramp-lab-example</strong></td>
+<td>dirty electro <strong>150</strong>, seed <strong>331</strong></td>
+<td><code>ez_edm_drive_donk</code></td>
+<td>Complextro 808 pyro, three wrecks</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-bounce-booth-lab-example</strong></td>
+<td>melbourne bounce <strong>140</strong>, seed <strong>337</strong></td>
+<td><code>ez_edm_drive_bounce</code></td>
+<td>Drop-first bounce pyro</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-toll-growl-lab-example</strong></td>
+<td>tearout <strong>150</strong>, seed <strong>347</strong></td>
+<td><code>ez_edm_drive_toll</code></td>
+<td>Drop-first tearout pyro, four wrecks</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-night-oil-lab-example</strong></td>
+<td>hybrid trap <strong>142</strong>, seed <strong>349</strong></td>
+<td><code>ez_edm_drive_oil</code></td>
+<td>Hybrid 808 pyro, two wrecks</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-chest-pass-lab-example</strong></td>
+<td>festival bass <strong>150</strong>, seed <strong>353</strong></td>
+<td><code>ez_edm_drive_chest</code></td>
+<td>Drop-first chest sub pyro</td>
+</tr>
+<tr>
+<td><strong>music-edm-drive-through-sunrise-sub-lab-example</strong></td>
+<td>progressive house <strong>140</strong>, seed <strong>359</strong></td>
+<td><code>ez_edm_drive_sunsub</code></td>
+<td>Encore closer, two warm sub pyro wrecks</td>
 </tr>
 </tbody>
 </table>
@@ -2538,7 +2628,7 @@
 <h2 id="tags-vs-lyrics">Tags vs lyrics<a class="headerlink" href="#tags-vs-lyrics" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Tags</strong> describe genre, drums, bass, booth, vocal character, and bpm.</li>
-<li><strong>Lyrics</strong> are the bars (rap) or the arrangement score (Drive-through EDM). Section labels <code>[intro]</code>, <code>[verse]</code>, <code>[chorus]</code>, <code>[outro]</code>, and <code>[spoken word]</code> are vocal <strong>hints</strong> operators may add — they are not a rights grant. EDM graphs use <code>[inst]</code> for the bed, build, and drops. Thirteen takes stay instrumental. Two rave-set treats add one short <code>[chorus]</code> DJ chop (never <code>[verse]</code>).</li>
+<li><strong>Lyrics</strong> are the bars (rap) or the arrangement score (Drive-through EDM). Section labels <code>[intro]</code>, <code>[verse]</code>, <code>[chorus]</code>, <code>[outro]</code>, and <code>[spoken word]</code> are vocal <strong>hints</strong> operators may add — they are not a rights grant. EDM graphs use <code>[inst]</code> for the bed, build, and drops. Twenty-eight takes stay instrumental. Two rave-set treats add one short <code>[chorus]</code> DJ chop (never <code>[verse]</code>).</li>
 <li>Original lyrics only. Do not write “in the style of \&lt;living artist&gt;”. No living-MC names. No famous-hook paraphrases.</li>
 <li>Short percussive lines (about 6–10 syllables) slur less. Keep <code>language=en</code> on <code>TextEncodeAceStepAudio1.5</code> (combo, not free text). The seeded graph stores seed control as <strong>fixed</strong> after the seed; re-open <strong>music-rap-draft-lab-example</strong> after a pull so those combos stay aligned.</li>
 </ul>
