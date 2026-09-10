@@ -23,8 +23,10 @@ from ez_music.diss_examples import (  # noqa: E402
     nill_tags,
 )
 from ez_music.edm_examples import (  # noqa: E402
+    BASS_NEEDLES,
     DRIVE_LOCK,
     DRIVE_TREAT_LOCK,
+    DROP_SHOW_NEEDLES,
     DROP_WEIGHT_NEEDLES,
     EDM_DURATION_S,
     EDM_EXAMPLES,
@@ -248,6 +250,21 @@ EXPECTED_DRIVE_THROUGH_TITLES = (
     "clean wreckage",
     "heart lane",
     "dawn receipt",
+    "rumble strip",
+    "low lane",
+    "warm merge",
+    "colour span",
+    "garage ticket",
+    "liquid grade",
+    "jump bay",
+    "psy median",
+    "groove mile",
+    "donk ramp",
+    "bounce booth",
+    "toll growl",
+    "night oil",
+    "chest pass",
+    "sunrise sub",
 )
 DRIVE_TREAT_TITLES = frozenset({"wide open", "second wave"})
 
@@ -270,7 +287,7 @@ def _score_labels(lyrics: str) -> tuple[str, ...]:
     return tuple(labels)
 
 
-def _drop_blocks(lyrics: str) -> list[str]:
+def _section_blocks(lyrics: str) -> list[str]:
     blocks: list[str] = []
     current: list[str] = []
     for line in lyrics.splitlines():
@@ -281,7 +298,16 @@ def _drop_blocks(lyrics: str) -> list[str]:
             current.append(line)
     if current:
         blocks.append("\n".join(current))
-    return [block for block in blocks if "drop" in block.lower()]
+    return blocks
+
+
+def _drop_blocks(lyrics: str) -> list[str]:
+    return [block for block in _section_blocks(lyrics) if "drop" in block.lower()]
+
+
+def _hits_needles(text: str, needles: tuple[str, ...]) -> bool:
+    low = text.lower()
+    return any(needle in low for needle in needles)
 
 
 def test_drive_tags_lock_instrumental_bed() -> None:
@@ -357,7 +383,7 @@ def test_format_edm_score_allows_chorus_treat() -> None:
 
 def test_drive_through_edm_examples_are_original_180s() -> None:
     assert EDM_DURATION_S == 180.0
-    assert len(EDM_EXAMPLES) == 15
+    assert len(EDM_EXAMPLES) == 30
     prefixes: list[str] = []
     stems: list[str] = []
     bpms: list[int] = []
@@ -373,9 +399,18 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         assert "[verse]" not in lyrics
         assert "[spoken word]" not in lyrics
         assert "Drive-through" in lyrics
+        assert "techno" not in ex["tags"].lower(), ex["stem"]
+        assert "techno" not in lyrics.lower(), ex["stem"]
+        assert _hits_needles(ex["tags"], BASS_NEEDLES), (ex["stem"], ex["tags"])
+        assert _hits_needles(lyrics, BASS_NEEDLES), (ex["stem"], lyrics)
         labels = _score_labels(lyrics)
         assert labels[-1] == "outro"
         signatures.append(labels)
+        sections = _section_blocks(lyrics)
+        drop_at = next(
+            i for i, block in enumerate(sections) if "drop" in block.lower()
+        )
+        assert drop_at <= 1, (ex["stem"], drop_at, labels)
         drops = _drop_blocks(lyrics)
         assert len(drops) >= 2, (ex["stem"], len(drops))
         if len(drops) >= 3:
@@ -386,6 +421,7 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
                 ex["stem"],
                 block,
             )
+            assert _hits_needles(block, DROP_SHOW_NEEDLES), (ex["stem"], block)
         treat = ex["title"] in DRIVE_TREAT_TITLES
         if treat:
             assert "[chorus]" in lyrics
@@ -412,8 +448,8 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         prefixes.append(ex["prefix"])
         stems.append(ex["stem"])
         bpms.append(int(ex["bpm"]))
-    assert len(set(prefixes)) == 15
-    assert len(set(stems)) == 15
+    assert len(set(prefixes)) == 30
+    assert len(set(stems)) == 30
     assert min(bpms) >= 140
     assert max(bpms) >= 170
     assert sum(1 for bpm in bpms if bpm >= 145) >= 12

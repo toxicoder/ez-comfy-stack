@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "electro house, four on the floor, analog bass, complex arp, rave, heavy drop, instrumental, no vocals, no singing, original composition, 142 bpm",
-        "[intro]\nfilter mix-in\nDrive-through\nexit seven\n\n[inst]\nanalog bass\narp climb\nclap count\n\n[inst]\nstacked electro drop\ncomplextro wreck\nhard clap\n\n[inst]\nharder analog drop\narp wreck\nfull send\n\n[outro]\nfilter blend\nkick into next",
+        "electro house, four on the floor, analog bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 142 bpm",
+        "[intro]\nfilter mix-in\nDrive-through\n\n[inst]\nstacked dirty drop\nanalog bass wreck\nchest pyro\n\n[inst]\nharder dirty drop\n808 wall\nfireworks crash\n\n[outro]\nfilter blend\nkick into next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "electro house, four on the floor, analog bass, complex arp, rave, heavy drop, instrumental, no vocals, no singing, original composition, 142 bpm",
-        "[intro]\nfilter mix-in\nDrive-through\nexit seven\n\n[inst]\nanalog bass\narp climb\nclap count\n\n[inst]\nstacked electro drop\ncomplextro wreck\nhard clap\n\n[inst]\nharder analog drop\narp wreck\nfull send\n\n[outro]\nfilter blend\nkick into next",
+        "electro house, four on the floor, analog bass, dirty 808, rave, festival pyro, instrumental, no vocals, no singing, original composition, 142 bpm",
+        "[intro]\nfilter mix-in\nDrive-through\n\n[inst]\nstacked dirty drop\nanalog bass wreck\nchest pyro\n\n[inst]\nharder dirty drop\n808 wall\nfireworks crash\n\n[outro]\nfilter blend\nkick into next",
         233,
         "fixed",
         142,

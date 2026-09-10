@@ -170,7 +170,7 @@ def test_nill_bye_stems_are_stamped_audio() -> None:
 
 
 def test_music_edm_drive_through_graphs() -> None:
-    assert len(EDM_EXAMPLES) == 15
+    assert len(EDM_EXAMPLES) == 30
     assert tuple(ex["stem"] for ex in EDM_EXAMPLES) == DRIVE_THROUGH_STAMP_STEMS
     for ex in EDM_EXAMPLES:
         stem = ex["stem"]

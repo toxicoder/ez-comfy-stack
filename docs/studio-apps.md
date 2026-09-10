@@ -113,7 +113,7 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
 
-Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`, `music-edm-*`, **audio-finish-lab-example**) are occupancy **audio**. That includes the forty-five **180 s** `music-rap-nill-bye-*-lab-example` diss takes under `_lab/audio/nill-bye/` and the fifteen **180 s** `music-edm-drive-through-*-lab-example` rave-set EDM takes under `_lab/audio/drive-through/` ([Local music](music.md)). Graph outputs stay FLAC + MP3. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md).
+Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`, `music-edm-*`, **audio-finish-lab-example**) are occupancy **audio**. That includes the forty-five **180 s** `music-rap-nill-bye-*-lab-example` diss takes under `_lab/audio/nill-bye/` and the thirty **180 s** `music-edm-drive-through-*-lab-example` rave-set EDM takes under `_lab/audio/drive-through/` ([Local music](music.md)). Graph outputs stay FLAC + MP3. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md).
 
 ---
 

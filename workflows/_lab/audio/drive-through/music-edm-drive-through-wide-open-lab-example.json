@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "big room, festival, four on the floor, supersaw, rave, heavy kick, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
-        "[intro]\nmainstage air\nDrive-through\n\n[chorus]\nhands up\nDrive-through\n\n[inst]\ntom run\nsaw swell\n\n[inst]\nheavy big-room drop\nstacked supersaw wreck\nmainstage kick\n\n[inst]\nharder festival drop\ndouble saw wreck\nfull send clap\n\n[outro]\nkick holds\nblend next",
+        "big room, festival, four on the floor, stacked 808, rave, dirty pyro, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
+        "[intro]\nmainstage air\nDrive-through\n\n[inst]\nheavy dirty drop\nstacked 808 wreck\nfireworks crash\n\n[chorus]\nhands up\nDrive-through\n\n[inst]\nharder dirty drop\ndouble saw wreck\nmainstage pyro\n\n[outro]\nkick holds\nblend next",
         false,
         "vocal"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "big room, festival, four on the floor, supersaw, rave, heavy kick, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
-        "[intro]\nmainstage air\nDrive-through\n\n[chorus]\nhands up\nDrive-through\n\n[inst]\ntom run\nsaw swell\n\n[inst]\nheavy big-room drop\nstacked supersaw wreck\nmainstage kick\n\n[inst]\nharder festival drop\ndouble saw wreck\nfull send clap\n\n[outro]\nkick holds\nblend next",
+        "big room, festival, four on the floor, stacked 808, rave, dirty pyro, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
+        "[intro]\nmainstage air\nDrive-through\n\n[inst]\nheavy dirty drop\nstacked 808 wreck\nfireworks crash\n\n[chorus]\nhands up\nDrive-through\n\n[inst]\nharder dirty drop\ndouble saw wreck\nmainstage pyro\n\n[outro]\nkick holds\nblend next",
         239,
         "fixed",
         150,

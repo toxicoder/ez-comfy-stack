@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "hard dance, four on the floor, layered kick, rave, heavy sub, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[intro]\nbits gather\nDrive-through\n\n[inst]\nbass coils\nhats complex\n\n[inst]\nheavy hard-dance drop\nstacked kick wreck\nlayered lead\n\n[inst]\nbits denser\ncoil tighter\n\n[inst]\nharder wreck drop\nlead and kick stack\n\n[inst]\nfull send wreck drop\nmainstage crash\n\n[outro]\ndust rest\nblend next",
+        "dirty electro, four on the floor, complextro, rave, heavy sub, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[intro]\nbits gather\nDrive-through\n\n[inst]\nheavy dirty drop\nstacked 808 wreck\nfireworks crash\n\n[inst]\nharder dirty drop\nlead and kick stack\nchest pyro\n\n[inst]\nfull send drop\nmainstage crash\nfestival pyro\n\n[outro]\ndust rest\nblend next",
         false,
         "instrumental"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "hard dance, four on the floor, layered kick, rave, heavy sub, instrumental, no vocals, no singing, original composition, 150 bpm",
-        "[intro]\nbits gather\nDrive-through\n\n[inst]\nbass coils\nhats complex\n\n[inst]\nheavy hard-dance drop\nstacked kick wreck\nlayered lead\n\n[inst]\nbits denser\ncoil tighter\n\n[inst]\nharder wreck drop\nlead and kick stack\n\n[inst]\nfull send wreck drop\nmainstage crash\n\n[outro]\ndust rest\nblend next",
+        "dirty electro, four on the floor, complextro, rave, heavy sub, instrumental, no vocals, no singing, original composition, 150 bpm",
+        "[intro]\nbits gather\nDrive-through\n\n[inst]\nheavy dirty drop\nstacked 808 wreck\nfireworks crash\n\n[inst]\nharder dirty drop\nlead and kick stack\nchest pyro\n\n[inst]\nfull send drop\nmainstage crash\nfestival pyro\n\n[outro]\ndust rest\nblend next",
         269,
         "fixed",
         150,
@@ -701,7 +701,7 @@
   "extra": {
     "lab_profile": "us-safe-music",
     "lab_note": "## music-edm-drive-through-clean-wreckage-lab-example\n\nUS-safe EDM **180 s** take: **clean wreckage**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live rave-set take. Instrumental arrangement score in `[inst]` blocks: dance-floor flow unique to this take, heavy drops, mix-in/out. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[intro]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing the score.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language en, timesignature 4, generate_audio_codes true. Seed 269.\n7. Saves: `ez_edm_drive_wreck` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe EDM 180s: Drive-through clean-wreckage hard dance, ACE-Step 1.5 turbo AIO, instrumental, invented timbre\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_description": "US-safe EDM 180s: Drive-through clean-wreckage dirty electro, ACE-Step 1.5 turbo AIO, instrumental, invented timbre\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
       "scale": 1,
       "offset": [

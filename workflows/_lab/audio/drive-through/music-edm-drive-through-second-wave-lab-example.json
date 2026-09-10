@@ -210,8 +210,8 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
-        "festival remix, rave, bass growl, hard dance, heavy drop, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
-        "[intro]\nremix in\nDrive-through\n\n[inst]\ngrowl tease\nfake-out\n\n[chorus]\none more\nDrive-through\n\n[inst]\nheavy remix drop\nstacked growl wreck\n\n[inst]\nharder double drop\nfull send bass wreck\n\n[outro]\nprocess out\nblend next",
+        "festival remix, rave, bass growl, dirty 808, heavy drop, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
+        "[inst]\nheavy dirty drop\nstacked growl wreck\nDrive-through\nfireworks crash\n\n[chorus]\none more\nDrive-through\n\n[inst]\nharder double drop\nfull send bass wreck\nmainstage pyro\n\n[outro]\nprocess out\nblend next",
         false,
         "vocal"
       ],
@@ -277,8 +277,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "festival remix, rave, bass growl, hard dance, heavy drop, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
-        "[intro]\nremix in\nDrive-through\n\n[inst]\ngrowl tease\nfake-out\n\n[chorus]\none more\nDrive-through\n\n[inst]\nheavy remix drop\nstacked growl wreck\n\n[inst]\nharder double drop\nfull send bass wreck\n\n[outro]\nprocess out\nblend next",
+        "festival remix, rave, bass growl, dirty 808, heavy drop, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
+        "[inst]\nheavy dirty drop\nstacked growl wreck\nDrive-through\nfireworks crash\n\n[chorus]\none more\nDrive-through\n\n[inst]\nharder double drop\nfull send bass wreck\nmainstage pyro\n\n[outro]\nprocess out\nblend next",
         241,
         "fixed",
         150,
