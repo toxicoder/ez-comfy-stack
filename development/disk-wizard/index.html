@@ -1896,7 +1896,7 @@
 <ul>
 <li>What the wizard will and will not touch</li>
 <li>How it differs from <code>cleanup</code> and <code>reap-models</code></li>
-<li>Plan → explain → apply</li>
+<li>Plan → explain → apply (stderr progress while scanning)</li>
 <li>Restore from <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="quarantine" data-href="../glossary/#quarantine" title="Move-aside instead of delete so a leftover pack can be restored.">quarantine</span></li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -1965,6 +1965,7 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>--apply<span class="w"> </span>--yes
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>disk-wizard<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>.disk-quarantine/&lt;utc&gt;
 </code></pre></div>
+<p><code>--plan</code> (and <code>--json</code>) print <strong>stderr progress immediately</strong>: start banner, <code>df</code>, each allowed root as it is scanned, a heartbeat on large trees, Docker <code>system df</code>, then ranking. A full Spark (<code>~/.cache</code>, <code>/tmp</code>, Docker) can still take a while — it will not sit silent. <code>--json</code> keeps a single JSON array on <strong>stdout</strong>; progress stays on stderr. Heartbeat interval: <code>DISK_WIZARD_PROGRESS_INTERVAL</code> seconds (default <code>2</code>; <code>0</code> disables in-root heartbeats, not the per-root lines).</p>
 <hr />
 <h2 id="what-a-row-means">What a row means<a class="headerlink" href="#what-a-row-means" title="Permanent link">&para;</a></h2>
 <table>

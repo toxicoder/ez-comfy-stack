@@ -2512,7 +2512,7 @@
 <tr>
 <td>Disk full / leftover LTX-2.3 snapshot</td>
 <td>Leftover weights, HF hub, Docker layers, or other inference caches</td>
-<td><code>./scripts/manage.sh disk-wizard --plan</code> (host-wide, read-only). <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="models-dir" data-href="../glossary/#models-dir" title="Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.">MODELS_DIR</span> classes: <code>reap-models --plan</code> then <code>--apply --class superseded --quarantine --yes</code>. <code>cleanup</code> does <strong>not</strong> delete weights.</td>
+<td><code>./scripts/manage.sh disk-wizard --plan</code> (host-wide, read-only). stderr shows which root is scanning (<code>~/.cache</code>, <code>/tmp</code>, Docker <code>system df</code> can take a while; it is not hung). <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="models-dir" data-href="../glossary/#models-dir" title="Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.">MODELS_DIR</span> classes: <code>reap-models --plan</code> then <code>--apply --class superseded --quarantine --yes</code>. <code>cleanup</code> does <strong>not</strong> delete weights.</td>
 </tr>
 <tr>
 <td>I passed <code>--tier fast</code> expecting faster video</td>
