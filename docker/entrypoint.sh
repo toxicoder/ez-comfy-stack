@@ -747,6 +747,36 @@ dub_python_can_import() {
 }
 
 #######################################
+# Interpreter Comfy will exec (after venv activate). Prefer VIRTUAL_ENV.
+# Globals:
+#   VIRTUAL_ENV, COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Absolute python path on stdout
+# Returns:
+#   0 when a python exists; 1 otherwise
+#######################################
+comfy_runtime_python() {
+  local py
+  if [[ -n ${VIRTUAL_ENV:-} && -x ${VIRTUAL_ENV}/bin/python ]]; then
+    printf '%s\n' "${VIRTUAL_ENV}/bin/python"
+    return 0
+  fi
+  py="${COMFY_HOME:-/comfy-state/ComfyUI}/.venv/bin/python"
+  if [[ -x ${py} ]]; then
+    printf '%s\n' "${py}"
+    return 0
+  fi
+  py="$(command -v python 2>/dev/null || true)"
+  if [[ -n ${py} && -x ${py} ]]; then
+    printf '%s\n' "${py}"
+    return 0
+  fi
+  return 1
+}
+
+#######################################
 # pip-install faster-whisper into the Comfy venv. Fail-soft. Does not touch torch.
 # Globals:
 #   None
@@ -816,11 +846,11 @@ install_dub_clone_wheel() {
 #######################################
 ensure_dub_wheels() {
   local py
-  py="${COMFY_HOME:-/comfy-state/ComfyUI}/.venv/bin/python"
-  if [[ ! -x ${py} ]]; then
+  if ! py="$(comfy_runtime_python)"; then
     ep_log "dub wheels: venv python missing — skip"
     return 0
   fi
+  ep_log "dub wheels: python=${py}"
   if dub_python_can_import "${py}" "from faster_whisper import WhisperModel"; then
     ep_log "dub ASR: WhisperModel already importable"
   else
@@ -832,6 +862,113 @@ ensure_dub_wheels() {
   else
     install_dub_clone_wheel "${py}"
   fi
+  return 0
+}
+
+#######################################
+# Write an empty custom_nodes/_user pack so Comfy does not FileNotFoundError.
+# Never overwrites an operator __init__.py.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   $1  Optional _user directory (default $COMFY_HOME/custom_nodes/_user)
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always
+#######################################
+ensure_user_custom_node_stub() {
+  local dest init
+  dest="${1:-${COMFY_HOME:-/comfy-state/ComfyUI}/custom_nodes/_user}"
+  mkdir -p "${dest}"
+  init="${dest}/__init__.py"
+  if [[ -f ${init} ]]; then
+    ep_log "operator custom_nodes/_user already has __init__.py"
+    return 0
+  fi
+  cat >"${init}" <<'PY'
+NODE_CLASS_MAPPINGS = {}
+NODE_DISPLAY_NAME_MAPPINGS = {}
+PY
+  ep_log "wrote empty custom_nodes/_user stub (Comfy requires __init__.py)"
+  return 0
+}
+
+#######################################
+# True when the given python imports a real nunchaku SVDQuant engine.
+# Globals:
+#   None
+# Arguments:
+#   $1  Python interpreter
+# Outputs:
+#   None
+# Returns:
+#   0 if real engine; 1 otherwise
+#######################################
+nunchaku_engine_importable() {
+  local py="${1:?}"
+  dub_python_can_import "${py}" \
+    "import importlib.util, nunchaku, sys; sys.exit(0 if (hasattr(nunchaku, 'NunchakuFluxTransformer2dModel') or importlib.util.find_spec('nunchaku.models') is not None) else 1)"
+}
+
+#######################################
+# Hide ComfyUI-nunchaku when the engine is missing (Comfy skips *.disabled).
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always
+#######################################
+configure_nunchaku_pack() {
+  local custom enabled disabled py
+  custom="${COMFY_HOME:-/comfy-state/ComfyUI}/custom_nodes"
+  enabled="${custom}/ComfyUI-nunchaku"
+  disabled="${custom}/ComfyUI-nunchaku.disabled"
+  mkdir -p "${custom}"
+  py="$(comfy_runtime_python 2>/dev/null || true)"
+  if [[ -n ${py} ]] && nunchaku_engine_importable "${py}"; then
+    if [[ -d ${disabled} && ! -d ${enabled} ]]; then
+      mv "${disabled}" "${enabled}"
+      ep_log "nunchaku node enabled (engine importable)"
+    fi
+    return 0
+  fi
+  if [[ -d ${enabled} ]]; then
+    rm -rf "${disabled}"
+    mv "${enabled}" "${disabled}"
+    ep_log "nunchaku node disabled (no engine wheel; lab graphs use core loaders)"
+  fi
+  return 0
+}
+
+#######################################
+# Seed ez_house_clay_01..10.png into /inputs when missing or wrong size.
+# Host start still prefers layout-accurate plates. Fail-soft.
+# Globals:
+#   LAB_INPUTS_MOUNT
+# Arguments:
+#   None
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always
+#######################################
+seed_clay_inputs_if_missing() {
+  local dest="${LAB_INPUTS_MOUNT:-/inputs}"
+  local script="${LAB_SEED_CLAY_PY:-/opt/ez-comfy/seed_clay_inputs.py}"
+  if [[ ! -f ${script} ]]; then
+    ep_log "clay seed: seed_clay_inputs.py missing — skip"
+    return 0
+  fi
+  mkdir -p "${dest}"
+  if python3 "${script}" "${dest}"; then
+    ep_log "clay plates ready in ${dest}"
+    return 0
+  fi
+  ep_log "WARN: clay seed backstop failed — klein-dream-house-clay LoadImage may be empty"
   return 0
 }
 
@@ -900,12 +1037,15 @@ main() {
   # shellcheck disable=SC1091
   source "${venv}/bin/activate"
 
-  ep_log "phase 2/4: free-memory + unified-memory copy patches (best-effort)"
+  ep_log "phase 2/4: free-memory + unified-memory copy + MagCache compat patches (best-effort)"
   if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
     python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
   fi
   if [[ -f /opt/ez-comfy/patch_unified_memory_copy.py ]]; then
     python3 /opt/ez-comfy/patch_unified_memory_copy.py "${comfy_home}" || true
+  fi
+  if [[ -f /opt/ez-comfy/patch_magcache_compat.py ]]; then
+    python3 /opt/ez-comfy/patch_magcache_compat.py "${comfy_home}" || true
   fi
 
   ep_log "phase 3/4: install lab workflows and custom nodes"
@@ -913,6 +1053,8 @@ main() {
   install_all_lab_custom_nodes \
     "${LAB_CUSTOM_NODES_SRC:-/opt/ez-comfy/custom_nodes}" \
     "${comfy_home}/custom_nodes"
+  ensure_user_custom_node_stub "${comfy_home}/custom_nodes/_user"
+  configure_nunchaku_pack
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
   export TORCH_COMPILE_DISABLE="${TORCH_COMPILE_DISABLE:-1}"
@@ -923,6 +1065,7 @@ main() {
   cd "${comfy_home}"
   link_comfy_output_dir "${comfy_home}/output"
   link_comfy_input_dir "${comfy_home}/input"
+  seed_clay_inputs_if_missing
   ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs}; input ${LAB_INPUTS_MOUNT:-/inputs}; Kitchen attention)"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then
     ep_log "LAB_ENTRYPOINT_NO_EXEC=1; skipping exec"

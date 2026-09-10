@@ -487,6 +487,23 @@ def test_complete_passes_timeout_and_temperature(monkeypatch: pytest.MonkeyPatch
     assert seen["temperature"] == 0.3
 
 
+def test_timeout_and_thread_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("EZ_LLM_TIMEOUT_S", raising=False)
+    monkeypatch.delenv("EZ_LLM_N_THREADS", raising=False)
+    assert client.DEFAULT_TIMEOUT_S == 180
+    assert client.DEFAULT_N_THREADS == 8
+    assert client._timeout_s() == 180
+    assert client._n_threads() == 8
+    monkeypatch.setenv("EZ_LLM_TIMEOUT_S", "90")
+    monkeypatch.setenv("EZ_LLM_N_THREADS", "12")
+    assert client._timeout_s() == 90
+    assert client._n_threads() == 12
+    monkeypatch.setenv("EZ_LLM_TIMEOUT_S", "nope")
+    monkeypatch.setenv("EZ_LLM_N_THREADS", "0")
+    assert client._timeout_s() == 180
+    assert client._n_threads() == 8
+
+
 def test_n_gpu_layers_refused_without_allow(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("EZ_LLM_N_GPU_LAYERS", "99")
     monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)

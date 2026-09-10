@@ -178,6 +178,39 @@ install_nunchaku_wheel() {
 }
 
 #######################################
+# Hide ComfyUI-nunchaku when the SVDQuant engine is missing (Comfy skips *.disabled).
+# Re-enable the pack if a real engine later imports. Lab graphs use core loaders.
+# Globals:
+#   COMFY_HOME, CUSTOM
+# Arguments:
+#   None
+# Outputs:
+#   log
+# Returns:
+#   0 always
+#######################################
+configure_nunchaku_pack() {
+  local custom enabled disabled
+  custom="${CUSTOM:-${COMFY_HOME}/custom_nodes}"
+  enabled="${custom}/ComfyUI-nunchaku"
+  disabled="${custom}/ComfyUI-nunchaku.disabled"
+  mkdir -p "${custom}"
+  if nunchaku_is_real; then
+    if [[ -d ${disabled} && ! -d ${enabled} ]]; then
+      mv "${disabled}" "${enabled}"
+      log "nunchaku node enabled (engine importable)"
+    fi
+    return 0
+  fi
+  if [[ -d ${enabled} ]]; then
+    rm -rf "${disabled}"
+    mv "${enabled}" "${disabled}"
+    log "nunchaku node disabled (no engine wheel; lab graphs use core loaders)"
+  fi
+  return 0
+}
+
+#######################################
 # Ensure ComfyUI-VideoHelperSuite is present (required for LTX lab MP4 output).
 # Idempotent: safe on cold install and stamp-present refresh.
 # Globals:
@@ -379,6 +412,7 @@ phase_nodes() {
   fi
   install_sage_wheel_if_pinned
   install_nunchaku_wheel
+  configure_nunchaku_pack
   install_llama_cpp_cpu
   install_dub_wheels
 }

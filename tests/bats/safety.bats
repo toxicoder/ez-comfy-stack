@@ -121,6 +121,8 @@ teardown() {
   [[ "${torch_copy}" != *entrypoint* ]]
   [[ "${torch_copy}" != *patch_get_free_memory* ]]
   [[ "${torch_copy}" != *patch_unified_memory_copy* ]]
+  [[ "${torch_copy}" != *patch_magcache_compat* ]]
+  [[ "${torch_copy}" != *seed_clay_inputs* ]]
   [[ "${torch_copy}" != *install-comfy.sh* ]]
   [[ "${torch_pins}" == *TORCH_VERSION* ]]
   [[ "${torch_pins}" != *COMFYUI_REF* ]]
@@ -189,6 +191,10 @@ teardown() {
   run grep -E 'patch_get_free_memory\.py:/opt/ez-comfy/patch_get_free_memory\.py' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'patch_unified_memory_copy\.py:/opt/ez-comfy/patch_unified_memory_copy\.py' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'patch_magcache_compat\.py:/opt/ez-comfy/patch_magcache_compat\.py' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'seed_clay_inputs\.py:/opt/ez-comfy/seed_clay_inputs\.py' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'pythonpath:/opt/ez-comfy/pythonpath' "${compose}"
   [ "$status" -eq 0 ]
