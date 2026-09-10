@@ -70,6 +70,31 @@ llama_cpp_cpu_pip_index_args() {
 }
 
 #######################################
+# pip argv to replace a same-version wheel from the GitHub manylinux URL.
+# --no-deps keeps torch 2.14. Empty when the arch has no published wheel.
+# Globals:
+#   LLAMA_CPP_CPU_VERSION
+# Arguments:
+#   None
+# Outputs:
+#   pip install operands on stdout, or nothing when the URL is unknown
+# Returns:
+#   0
+#######################################
+llama_cpp_direct_wheel_pip_args() {
+  local wheel
+  wheel="$(llama_cpp_direct_wheel_url)"
+  if [[ -z ${wheel} ]]; then
+    return 0
+  fi
+  printf '%s\n' \
+    --force-reinstall \
+    --no-deps \
+    --only-binary=:all: \
+    "${wheel}"
+}
+
+#######################################
 # True when the interpreter can import llama_cpp.Llama.
 # Globals:
 #   None
@@ -99,7 +124,6 @@ llama_cpp_python_can_import() {
 #######################################
 install_llama_cpp_cpu_wheel() {
   local py="${1:?}"
-  local wheel
   local -a args=()
   while IFS= read -r tok; do
     args+=("${tok}")
@@ -108,9 +132,12 @@ install_llama_cpp_cpu_wheel() {
     llama_cpp_python_can_import "${py}"; then
     return 0
   fi
-  wheel="$(llama_cpp_direct_wheel_url)"
-  if [[ -n ${wheel} ]] &&
-    "${py}" -m pip install --only-binary=:all: "${wheel}" &&
+  args=()
+  while IFS= read -r tok; do
+    args+=("${tok}")
+  done < <(llama_cpp_direct_wheel_pip_args)
+  if [[ ${#args[@]} -gt 0 ]] &&
+    "${py}" -m pip install "${args[@]}" &&
     llama_cpp_python_can_import "${py}"; then
     return 0
   fi

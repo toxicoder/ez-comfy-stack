@@ -209,10 +209,11 @@ CLONE_MISSING_STATUS = (
 )
 T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 — upgrade chatterbox-tts"
 TRANSLATE_LLAMA_STATUS = (
-    "llama.cpp unavailable — CPU wheel pip failed. "
+    "llama.cpp unavailable — Llama did not import. "
     "docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -m pip install "
-    "--only-binary=:all: --index-url https://abetlen.github.io/llama-cpp-python/whl/cpu "
-    "--extra-index-url https://pypi.org/simple llama-cpp-python==0.3.35"
+    "--force-reinstall --no-deps --only-binary=:all: "
+    "https://github.com/abetlen/llama-cpp-python/releases/download/v0.3.35/"
+    "llama_cpp_python-0.3.35-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl"
 )
 TRANSLATE_BLOCKING_MARKERS = (
     "llama.cpp unavailable",
@@ -371,14 +372,27 @@ def preflight_clone() -> str:
     return ""
 
 
+def translate_llama_status() -> str:
+    """Operator-facing Dub status when Llama cannot import."""
+    try:
+        from ez_prompt_enhance.client import llama_cpp_unavailable_status
+    except Exception:  # noqa: BLE001 — missing pack is a dub hard miss
+        return TRANSLATE_LLAMA_STATUS
+    return llama_cpp_unavailable_status()
+
+
 def preflight_translate() -> str:
     """Empty when the on-box GGUF writer can load; otherwise a blocking reason."""
     try:
         from ez_prompt_enhance.client import _get_llama
         from ez_prompt_enhance.client import status_for_reason
     except Exception:  # noqa: BLE001 — missing pack is a dub hard miss
-        return TRANSLATE_LLAMA_STATUS
-    _handle, reason = _get_llama()
+        return translate_llama_status()
+    try:
+        _handle, reason = _get_llama()
+    except Exception as exc:  # noqa: BLE001 — ctypes load is RuntimeError
+        _log(f"llama.cpp preflight raised: {exc}")
+        return translate_llama_status()
     if not reason:
         return ""
     return status_for_reason(reason) or reason

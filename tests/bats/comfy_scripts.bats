@@ -50,6 +50,12 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'install_llama_cpp_cpu_wheel()' "${helper}"
   [ "${status}" -eq 0 ]
+  run grep -F -- '--force-reinstall' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F -- '--no-deps' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'llama_cpp_direct_wheel_pip_args' "${helper}"
+  [ "${status}" -eq 0 ]
   run grep -F 'GGML_CUDA=OFF' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -ne 0 ]
   run grep -E 'extra-index-url[^[:cntrl:]]*cu1' "${helper}"
@@ -68,6 +74,8 @@ teardown() {
   grep -q 'index-url' "${TEST_TMP_DIR}/pip_llama.log"
   grep -q 'llama-cpp-python==0.3.35' "${TEST_TMP_DIR}/pip_llama.log"
   grep -q 'only-binary' "${TEST_TMP_DIR}/pip_llama.log"
+  grep -q -- '--force-reinstall' "${TEST_TMP_DIR}/pip_llama.log"
+  grep -q -- '--no-deps' "${TEST_TMP_DIR}/pip_llama.log"
   grep -q 'github.com/abetlen/llama-cpp-python' "${TEST_TMP_DIR}/pip_llama.log"
   if grep -E 'cu11|cu12|cu13' "${TEST_TMP_DIR}/pip_llama.log"; then
     return 1
@@ -1215,6 +1223,8 @@ PY
   grep -q 'extra-index-url' "${DUB_PIP_LOG}"
   grep -q 'index-url' "${DUB_PIP_LOG}"
   grep -q 'only-binary' "${DUB_PIP_LOG}"
+  grep -q -- '--force-reinstall' "${DUB_PIP_LOG}"
+  grep -q -- '--no-deps' "${DUB_PIP_LOG}"
   grep -q 'github.com/abetlen/llama-cpp-python' "${DUB_PIP_LOG}"
   if grep -E 'cu11|cu12|cu13' "${DUB_PIP_LOG}"; then
     return 1
