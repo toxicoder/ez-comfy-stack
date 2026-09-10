@@ -65,7 +65,7 @@ Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera l
 | Clone | Chatterbox Multilingual V3 (cached `from_local` + ISO `language_id`, PerTh on). Lines over 300 characters split | MIT | `download-dub --tier clone` |
 | Clone alt | Qwen3-TTS 0.6B | Apache 2.0 | `download-podcast --tier qwen3tts` |
 
-`faster-whisper` and `chatterbox-tts` are fail-soft-baked in `phase-nodes.sh` (like llama.cpp). `download-dub` also pip-installs them into a **running** container so you do not have to rebuild. `yt-dlp` stays optional for URL ingest. The graph still loads if a wheel is missing; Queue writes an **empty mix** plus **Dub status** (never the original recording). On DGX Spark, CTranslate2 PyPI wheels are **CPU-only**.
+`faster-whisper` and `chatterbox-tts` are fail-soft-baked in `phase-nodes.sh` (like llama.cpp). They install **separately**: ASR first, then `chatterbox-tts --no-deps` so Chatterbox cannot pin `torch==2.6.0` over the lab 2.14 cu130 venv. `download-dub` pip-installs the same way into a **running** container. Restart also heals an existing `ez-comfy-state` volume (entrypoint import-checks, then pip). `yt-dlp` stays optional for URL ingest. The graph still loads if a wheel is missing; Queue writes an **empty mix** plus **Dub status** (never the original recording). On DGX Spark, CTranslate2 PyPI wheels are **CPU-only**; Whisper loads CPU int8 first.
 
 Chatterbox languages: Arabic, Danish, German, Greek, English, Spanish, Finnish, French, Hebrew, Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian, Polish, Portuguese, Russian, Swedish, Swahili, Turkish, Chinese. Soccer EN→ES is first-class.
 
@@ -84,7 +84,8 @@ id: download-dub
 ./scripts/manage.sh download-dub --tier clone      # Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt)
 ./scripts/manage.sh download-dub --tier all
 # same --limit auto|N|off wrap as download-models (always clears on exit)
-# with compose up, also: pip install faster-whisper chatterbox-tts in the container
+# with compose up: pip install faster-whisper, then chatterbox-tts --no-deps
+# (restart also heals missing wheels on an existing volume)
 ```
 
 URL ingest on the host (optional):
@@ -116,7 +117,7 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 ## Sequential Queue
 
 1. `./scripts/manage.sh start` — type **yes**
-2. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON + `conds.pt`, not t3-only). With the stack up this also pip-installs the wheels.
+2. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON + `conds.pt`, not t3-only). With the stack up this pip-installs faster-whisper, then chatterbox-tts `--no-deps`. Restart heals wheels on an existing volume without a rebuild.
 3. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. Queue once (Stage **all**, Rewrite translation **on**).
 4. **Dub status** must list speaker/turn counts (and `translated N/M`), not `ASR pack missing` / `clone engine missing` / GGUF passthrough. The Translation JSON `text_target` fields must be the target language.
 5. Files under `${COMFY_OUTPUT_DIR}` as `ez_dub_mix_*.flac` / `ez_dub_yt_*.mp3` plus `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`

@@ -229,7 +229,61 @@ install_llama_cpp_cpu() {
 }
 
 #######################################
+# Optional faster-whisper for local dub ASR. Fail-soft. Independent of clone.
+# chatterbox-tts pins torch==2.6.0 — never install it on the same pip command.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_faster_whisper_wheel() {
+  if pip_install --upgrade-strategy only-if-needed faster-whisper; then
+    log "faster-whisper installed for local dub ASR"
+    return 0
+  fi
+  warn "faster-whisper pip failed — Queue writes empty mix until: pip install faster-whisper"
+  return 0
+}
+
+#######################################
+# Optional chatterbox-tts for local dub clone. Fail-soft. --no-deps so the
+# package cannot pin torch==2.6.0 / transformers==5.2.0 over the lab venv.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_chatterbox_wheel() {
+  local -a extras=(
+    librosa
+    s3tokenizer
+    resemble-perth
+    conformer
+    pykakasi
+    pyloudnorm
+    omegaconf
+  )
+  pip_install --upgrade-strategy only-if-needed "${extras[@]}" ||
+    warn "chatterbox extras pip failed — clone may still miss"
+  if pip_install --no-deps chatterbox-tts; then
+    log "chatterbox-tts installed --no-deps (did not pin torch)"
+    return 0
+  fi
+  warn "chatterbox-tts --no-deps failed — clone status will name the miss"
+  return 0
+}
+
+#######################################
 # Optional faster-whisper + chatterbox-tts for local dub. Fail-soft.
+# Installs ASR first so a clone miss cannot block transcription.
 # Does not pull weights (download-dub). Missing wheels → empty mix + Dub status.
 # Globals:
 #   None
@@ -241,12 +295,8 @@ install_llama_cpp_cpu() {
 #   0 always (soft-fail)
 #######################################
 install_dub_wheels() {
-  if pip_install faster-whisper chatterbox-tts; then
-    log "faster-whisper + chatterbox-tts installed for local dub"
-    return 0
-  fi
-  warn "dub wheels failed — Queue writes empty mix until: pip install faster-whisper chatterbox-tts"
-  return 0
+  install_faster_whisper_wheel
+  install_chatterbox_wheel
 }
 
 #######################################

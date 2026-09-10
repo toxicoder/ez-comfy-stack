@@ -603,7 +603,66 @@ def test_whisper_dir_requires_config(tmp_path: Path, monkeypatch) -> None:
     snap.mkdir()
     (snap / "model.bin").write_bytes(b"x")
     (snap / "config.json").write_text("{}", encoding="utf-8")
+    assert pipeline._whisper_dir() == ""
+    (snap / "tokenizer.json").write_text("{}", encoding="utf-8")
     assert pipeline._whisper_dir() == str(snap)
+    assert "tokenizer.json" in pipeline.WHISPER_REQUIRED_FILES
+
+
+def test_asr_wheel_status_includes_import_detail() -> None:
+    assert pipeline.asr_wheel_status() == pipeline.ASR_WHEEL_STATUS
+    msg = pipeline.asr_wheel_status(ImportError("No module named 'onnxruntime'"))
+    assert msg.startswith(pipeline.ASR_WHEEL_STATUS)
+    assert "onnxruntime" in msg
+
+
+def test_preflight_asr_surfaces_importerror_detail(monkeypatch) -> None:
+    monkeypatch.setattr(
+        pipeline,
+        "_import_whisper_model",
+        lambda: (
+            None,
+            pipeline.asr_wheel_status(ImportError("No module named 'onnxruntime'")),
+        ),
+    )
+    reason = pipeline.preflight_asr()
+    assert "onnxruntime" in reason
+    assert "faster-whisper not installed" in reason
+
+
+def test_get_whisper_import_error_is_detailed(monkeypatch) -> None:
+    monkeypatch.setattr(
+        pipeline,
+        "_import_whisper_model",
+        lambda: (
+            None,
+            pipeline.asr_wheel_status(ImportError("No module named 'ctranslate2'")),
+        ),
+    )
+    pipeline._close_whisper()
+    model, miss = pipeline._get_whisper()
+    assert model is None
+    assert "ctranslate2" in miss
+
+
+def test_load_whisper_model_cpu_int8_first(monkeypatch) -> None:
+    seen: list[tuple[str, str]] = []
+
+    class Fake:
+        def __init__(
+            self,
+            model_dir: str,
+            device: str = "cuda",
+            compute_type: str = "float16",
+        ) -> None:
+            del model_dir
+            seen.append((device, compute_type))
+
+    monkeypatch.setattr(pipeline, "_import_whisper_model", lambda: (Fake, ""))
+    model = pipeline._load_whisper_model("/m")
+    assert isinstance(model, Fake)
+    assert seen == [("cpu", "int8")]
+    assert pipeline.WHISPER_LOAD_ATTEMPTS[0] == ("cpu", "int8")
 
 
 def test_from_local_passes_t3_v3() -> None:
