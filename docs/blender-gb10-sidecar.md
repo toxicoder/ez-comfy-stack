@@ -42,7 +42,7 @@ tags: [blender, sidecar, occupancy, gb10]
 # hammer: ./scripts/manage.sh occupancy idle
 ```
 
-If `blender` is not on `PATH`, the script prints an install hint and exits 1. This stack does **not** apt/pip/Docker-install Blender.
+If `blender` is not on `PATH`, the script prints an install hint and exits 1. This stack does **not** apt/pip/Docker-install Blender. Ubuntu aarch64 `blender` is enough for Workbench. Community GB10 CUDA builds are Path A Cycles **after** `occupancy idle` only.
 
 Exit **2** means Compose is a heavy job (not parked, or the queue is busy):
 

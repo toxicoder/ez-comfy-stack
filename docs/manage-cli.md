@@ -53,6 +53,8 @@ id: doctor
 | `download-restore` | Opt-in SeedVR2-3B | Treat as part of `download-models` |
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
 | `occupancy status\|enter MODE` | Park Comfy (`blender-desk`) or enter `klein`/`trellis`/`wan`/`ltx`/`idle`. Does not start Compose. [Occupancy desk](occupancy.md) | Cycles CUDA next to a denoise; skip `--yes` when Blender is still up |
+| `blender-mcp` | In-tree typed Blender MCP (stdio / `--call`). bpy tools need blender-desk | Vendor ahujasid; `execute_code`; telemetry |
+| `blender-llm` | Optional host Qwen3-4B CPU → blender-mcp. Path D if llama.cpp missing | GPU-offload next to Comfy |
 | `blender` | Host Blender sidecar; Workbench in blender-desk; dies if Comfy is heavy | Cycles GPU while Compose is up |
 | `export-guides` | Dump a 1280×704 (or 768×1280) / 120f clay+depth+canny pack; dies if Comfy is heavy. `--print ltx-iclora-depth\|ltx-iclora-canny\|wan-flf` | 1280×720; dump while Comfy is unparked |
 | `blender-stills` | Dump a single-frame clay/depth/canny still; dies if Comfy is heavy. `--size 1280x704\|768x1280\|1024x1280\|1024x1024\|1280x720`. `--install-inputs` copies `first.png` into `input/` (no Blender; compose may stay up) | 1080p; dump while Comfy is unparked; reuse `house-views` |

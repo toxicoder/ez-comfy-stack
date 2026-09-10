@@ -65,4 +65,19 @@ If `/free` fails, Workbench may still contend for unified memory — `occupancy 
 - Not lowering `mem_limit: 90g` or `min_host_free_gib: 28`
 - Not two denoises (Klein + LTX, TRELLIS + LTX, Wan + TRELLIS)
 
+---
+
+## MCP (mcp-construct)
+
+In-tree `blender-mcp` is a small typed-tool server (primitives, camera, keyframes, GLB, guide dumps). **No** `execute_code`, **no** telemetry, **no** cloud 3D APIs.
+
+```bash
+./scripts/manage.sh occupancy enter blender-desk
+./scripts/manage.sh blender-mcp --stdio
+# optional on-box 4B (CPU, same GGUF as prompt-enhance):
+./scripts/manage.sh blender-llm "greybox mug on a table, dump still mug"
+```
+
+Qwen3-4B will place primitives. Cinematic scenes: Path D — laptop Grok/Cursor as the MCP client over SSH, Spark only runs blender-mcp. If `llama-cli` is missing, `blender-llm` prints that hint and exits 1.
+
 Related: [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [Hardware, memory, and safety](learn/hardware.md).
