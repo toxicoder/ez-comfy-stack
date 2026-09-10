@@ -3119,7 +3119,7 @@
 <tr>
 <td><code>COMFYUI_MAGCACHE_REF</code></td>
 <td><code>47bdd2a…</code></td>
-<td><a href="https://github.com/Zehong-Ma/ComfyUI-MagCache">Zehong-Ma/ComfyUI-MagCache</a> commit pin (no release tag). Wan 5B draft extra only. ComfyUI v0.34 dropped module-level <code>precompute_freqs_cis</code>; <code>docker/patch_magcache_compat.py</code> wraps that import on start so Wan <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> still loads. MagCache-on-LTX stays unsupported.</td>
+<td><a href="https://github.com/Zehong-Ma/ComfyUI-MagCache">Zehong-Ma/ComfyUI-MagCache</a> commit pin (no release tag). Wan 5B draft extra only. ComfyUI v0.34 dropped module-level <code>precompute_freqs_cis</code>; <code>docker/patch_magcache_compat.py</code> wraps that import in every <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> module that still has it (<code>nodes.py</code> and <code>nodes_calibration.py</code>) and fail-softs the calibration import in <code>__init__.py</code>. Idempotency is per file so a volume that already wrapped <code>nodes.py</code> still gets calibration on the next start. MagCache-on-LTX stays unsupported.</td>
 </tr>
 <tr>
 <td><code>COMFYUI_LTX_DIRECTOR_REF</code></td>

@@ -2113,6 +2113,7 @@
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
 <li><code>download-dub --tier asr</code> then <code>--tier clone</code> (clone is <code>ve.pt</code> + <code>s3gen.pt</code> + T3 V3 + tokenizer JSON + <code>conds.pt</code>, not t3-only). With the stack up this pip-installs faster-whisper, then chatterbox-tts <code>--no-deps</code>. Restart heals wheels on an existing volume without a rebuild.</li>
 <li>Load <strong>dub-localize-lab-example</strong>. Pick <strong>Source file</strong> or <strong>Upload media</strong> (or set <strong>Source URL</strong>). Turn <strong>I have rights</strong> on. Queue once (Stage <strong>all</strong>, Rewrite translation <strong>on</strong>).</li>
+<li>Ingest Dub status must be <strong><code>ok</code></strong>. If script JSON says <code>missing source.wav</code> / empty <code>turns</code>, ingest never wrote the wav — rights still off, source still <code>(none)</code>, or extract failed. Read ingest status first.</li>
 <li><strong>Dub status</strong> must list speaker/turn counts (and <code>translated N/M</code>), not <code>ASR pack missing</code> / <code>clone engine missing</code> / GGUF passthrough. The Translation JSON <code>text_target</code> fields must be the target language.</li>
 <li>Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_dub_mix_*.flac</code> / <code>ez_dub_yt_*.mp3</code> plus <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt.wav</code></li>
 <li>Loudness:</li>

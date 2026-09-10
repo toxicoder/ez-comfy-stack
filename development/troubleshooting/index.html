@@ -2136,6 +2136,11 @@
 <td>Pull latest. Queue must not write <code>ez_dub_yt</code> from <code>source.wav</code>. Empty mix + status means ASR/clone still missing.</td>
 </tr>
 <tr>
+<td>Dub status <code>missing source.wav</code> / empty <code>turns</code></td>
+<td>Ingest never wrote <code>dubs/&lt;slug&gt;/source.wav</code>. <strong>I have rights</strong> defaults off; Source file defaults <code>(none)</code>. Script/render used to hide the ingest reason</td>
+<td>Read ingest Dub status first (<code>rights refused</code> / <code>empty source</code> / ffmpeg). Pick <strong>Source file</strong> or <strong>Upload media</strong>, turn <strong>I have rights</strong> on, Queue. Files live in <code>${COMFY_OUTPUT_DIR}/input</code> (container <code>/inputs</code>). After pull, script/render repeat the ingest reason. <a href="../dub/">Local dub</a></td>
+</tr>
+<tr>
 <td>Dub URL ingest failed</td>
 <td>yt-dlp missing, or ToS/network</td>
 <td><code>./scripts/utilities/dub-fetch.sh status</code> then install yt-dlp, or <strong>Upload media</strong> / pick a local file</td>
@@ -2531,8 +2536,8 @@
 </tr>
 <tr>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> node missing on Wan draft / <code>precompute_freqs_cis</code> ImportError</td>
-<td>ComfyUI v0.34 moved the LTX RoPE helper; MagCache still imports the old name</td>
-<td>Restart (entrypoint wraps the import). Wan 5B MagCache loads; MagCache-on-LTX stays unsupported. Graph still Queues without MagCache. See <code>extra.lab_magcache</code> on <code>wan-i2v-5s-lab-example</code>. Hero LTX graphs must not contain MagCache</td>
+<td>ComfyUI v0.34 moved the LTX RoPE helper. MagCache <code>__init__.py</code> also imports <code>nodes_calibration.py</code> with the same name. An older patch wrapped only <code>nodes.py</code> and then skipped the pack as “already applied”</td>
+<td>Pull latest and restart (bind-mounted patch wraps <strong>every</strong> MagCache <code>*.py</code> that still imports the helper, and fail-softs the calibration import). Wan 5B MagCache loads; MagCache-on-LTX stays unsupported. Graph still Queues without MagCache. See <code>extra.lab_magcache</code> on <code>wan-i2v-5s-lab-example</code>. Hero LTX graphs must not contain MagCache</td>
 </tr>
 <tr>
 <td>LTX Director missing</td>
