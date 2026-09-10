@@ -219,7 +219,12 @@ CLONE_REQUIRED_FILES = (
     "t3_mtl23ls_v3.safetensors",
     "conds.pt",
 )
-WHISPER_REQUIRED_FILES = ("model.bin", "config.json")
+WHISPER_REQUIRED_FILES = ("model.bin", "config.json", "tokenizer.json")
+# Spark CTranslate2 wheels are CPU-only; try int8 CPU before CUDA float16.
+WHISPER_LOAD_ATTEMPTS: tuple[tuple[str, str], ...] = (
+    ("cpu", "int8"),
+    ("cuda", "float16"),
+)
 S3_SR = 16000
 
 # Process-local handles. Tests reset these. Production loads once per Queue.
@@ -302,12 +307,27 @@ def split_clone_text(text: str, limit: int = CLONE_TEXT_LIMIT) -> list[str]:
     return chunks
 
 
+def asr_wheel_status(exc: BaseException | None = None) -> str:
+    """Operator-facing ASR miss. Include ImportError detail when present."""
+    if exc is None:
+        return ASR_WHEEL_STATUS
+    return f"{ASR_WHEEL_STATUS} ({exc})"
+
+
+def _import_whisper_model() -> tuple[Any | None, str]:
+    """Load WhisperModel or an operator-facing ImportError reason."""
+    try:
+        from faster_whisper import WhisperModel
+    except ImportError as exc:
+        return None, asr_wheel_status(exc)
+    return WhisperModel, ""
+
+
 def preflight_asr() -> str:
     """Empty when faster-whisper can load; otherwise an operator-facing reason."""
-    try:
-        from faster_whisper import WhisperModel  # noqa: F401
-    except ImportError:
-        return ASR_WHEEL_STATUS
+    _, miss = _import_whisper_model()
+    if miss:
+        return miss
     if not _whisper_dir():
         return ASR_PACK_STATUS
     return ""
@@ -707,13 +727,14 @@ def _close_whisper() -> None:
 
 
 def _load_whisper_model(model_dir: str) -> Any:
-    """Construct WhisperModel, trying CUDA then CPU int8."""
-    from faster_whisper import WhisperModel
-
+    """Construct WhisperModel, trying CPU int8 then CUDA float16."""
+    whisper_cls, miss = _import_whisper_model()
+    if whisper_cls is None:
+        raise ImportError(miss or ASR_WHEEL_STATUS)
     last: Exception | None = None
-    for device, compute in (("cuda", "float16"), ("cpu", "int8")):
+    for device, compute in WHISPER_LOAD_ATTEMPTS:
         try:
-            return WhisperModel(model_dir, device=device, compute_type=compute)
+            return whisper_cls(model_dir, device=device, compute_type=compute)
         except Exception as exc:  # noqa: BLE001 — try the next device
             last = exc
             _log(f"faster-whisper {device}/{compute} failed: {exc}")
@@ -725,10 +746,9 @@ def _load_whisper_model(model_dir: str) -> Any:
 def _get_whisper() -> tuple[Any | None, str]:
     """Cached faster-whisper handle plus a miss reason."""
     global _WHISPER, _WHISPER_DIR_CACHED
-    try:
-        from faster_whisper import WhisperModel  # noqa: F401
-    except ImportError:
-        return None, ASR_WHEEL_STATUS
+    _cls, miss = _import_whisper_model()
+    if _cls is None:
+        return None, miss or ASR_WHEEL_STATUS
     model_dir = _whisper_dir()
     if not model_dir:
         return None, ASR_PACK_STATUS
@@ -752,8 +772,8 @@ def _whisper_segments(
         return [], "", "missing source.wav"
     model, miss = _get_whisper()
     if model is None:
-        _log(miss or ASR_WHEEL_STATUS)
-        return [], "", miss or ASR_WHEEL_STATUS
+        _log(miss or asr_wheel_status())
+        return [], "", miss or asr_wheel_status()
     try:
         lang = None if language in {"", "auto"} else language
         try:
@@ -798,7 +818,7 @@ def _whisper_segments(
 
 
 def _whisper_dir() -> str:
-    """First directory that has both ``model.bin`` and ``config.json``."""
+    """First directory that has model.bin, config.json, and tokenizer.json."""
     for root in _model_roots():
         candidates = (
             Path(root) / "Systran__faster-whisper-large-v3_whisper",

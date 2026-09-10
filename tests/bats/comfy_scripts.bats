@@ -56,6 +56,40 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "install_dub_wheels splits ASR from chatterbox --no-deps" {
+  run grep -F 'install_faster_whisper_wheel' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'install_chatterbox_wheel' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -E 'pip_install[^[:cntrl:]]*faster-whisper[^[:cntrl:]]*chatterbox' \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
+  run grep -F -- '--no-deps' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  pip_install() {
+    printf '%s\n' "$*" >>"${TEST_TMP_DIR}/pip_dub.log"
+    if [[ $* == *chatterbox-tts* && $* != *--no-deps* ]]; then
+      return 1
+    fi
+    if [[ $* == *chatterbox-tts* ]]; then
+      return 1
+    fi
+    return 0
+  }
+  : >"${TEST_TMP_DIR}/pip_dub.log"
+  run install_faster_whisper_wheel
+  [ "${status}" -eq 0 ]
+  run install_chatterbox_wheel
+  [ "${status}" -eq 0 ]
+  run install_dub_wheels
+  [ "${status}" -eq 0 ]
+  grep -q 'faster-whisper' "${TEST_TMP_DIR}/pip_dub.log"
+  grep -q -- '--no-deps' "${TEST_TMP_DIR}/pip_dub.log"
+  if grep -E 'faster-whisper.*chatterbox-tts' "${TEST_TMP_DIR}/pip_dub.log"; then
+    return 1
+  fi
+}
+
 @test "install-comfy phase_nodes and ensure_lab_video_nodes require VideoHelperSuite" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"
@@ -1070,4 +1104,65 @@ teardown() {
   run install_sage_wheel_if_pinned
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"failed"* || "${output}" == *"optional"* ]]
+}
+
+@test "ensure_dub_wheels installs ASR when WhisperModel missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export DUB_PIP_LOG="${TEST_TMP_DIR}/dub_pip.log"
+  : >"${DUB_PIP_LOG}"
+  cat >"${TEST_TMP_DIR}/fake-python" <<'PY'
+#!/usr/bin/env bash
+log="${DUB_PIP_LOG:?}"
+if [[ ${1} == -c ]]; then
+  case "${2}" in
+    *WhisperModel*) exit "${WHISPER_IMPORT_RC:-1}" ;;
+    *ChatterboxMultilingualTTS*) exit "${CLONE_IMPORT_RC:-1}" ;;
+  esac
+  exit 0
+fi
+if [[ ${1} == -m && ${2} == pip ]]; then
+  printf '%s\n' "$*" >>"${log}"
+  if [[ ${DUB_PIP_FAIL:-0} == 1 ]]; then
+    exit 1
+  fi
+  exit 0
+fi
+exit 0
+PY
+  chmod +x "${TEST_TMP_DIR}/fake-python"
+  export COMFY_HOME="${TEST_TMP_DIR}/comfy_dub"
+  mkdir -p "${COMFY_HOME}/.venv/bin"
+  cp "${TEST_TMP_DIR}/fake-python" "${COMFY_HOME}/.venv/bin/python"
+  chmod +x "${COMFY_HOME}/.venv/bin/python"
+  local py="${COMFY_HOME}/.venv/bin/python"
+
+  run grep -F 'ensure_dub_wheels' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run dub_python_can_import "${py}" "from faster_whisper import WhisperModel"
+  [ "${status}" -ne 0 ]
+  run install_dub_asr_wheel "${py}"
+  [ "${status}" -eq 0 ]
+  run install_dub_clone_wheel "${py}"
+  [ "${status}" -eq 0 ]
+  : >"${DUB_PIP_LOG}"
+  run ensure_dub_wheels
+  [ "${status}" -eq 0 ]
+  grep -q 'faster-whisper' "${DUB_PIP_LOG}"
+  grep -q -- '--no-deps' "${DUB_PIP_LOG}"
+  if grep -E 'faster-whisper.*chatterbox-tts' "${DUB_PIP_LOG}"; then
+    return 1
+  fi
+
+  : >"${DUB_PIP_LOG}"
+  export WHISPER_IMPORT_RC=0
+  export CLONE_IMPORT_RC=0
+  run ensure_dub_wheels
+  [ "${status}" -eq 0 ]
+  [[ ! -s ${DUB_PIP_LOG} ]]
+
+  export DUB_PIP_FAIL=1
+  export WHISPER_IMPORT_RC=1
+  run install_dub_asr_wheel "${py}"
+  [ "${status}" -eq 0 ]
 }

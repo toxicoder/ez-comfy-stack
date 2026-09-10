@@ -729,6 +729,113 @@ install_all_lab_custom_nodes() {
 }
 
 #######################################
+# True when venv python can execute a one-liner import.
+# Globals:
+#   None
+# Arguments:
+#   $1  Python interpreter
+#   $2  Statement passed to python -c
+# Outputs:
+#   None
+# Returns:
+#   0 when the statement succeeds; 1 otherwise
+#######################################
+dub_python_can_import() {
+  local py="${1:?}"
+  local stmt="${2:?}"
+  "${py}" -c "${stmt}" >/dev/null 2>&1
+}
+
+#######################################
+# pip-install faster-whisper into the Comfy venv. Fail-soft. Does not touch torch.
+# Globals:
+#   None
+# Arguments:
+#   $1  venv python
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_dub_asr_wheel() {
+  local py="${1:?}"
+  ep_log "dub ASR: pip install faster-whisper"
+  if "${py}" -m pip install --upgrade-strategy only-if-needed faster-whisper; then
+    ep_log "dub ASR: faster-whisper installed"
+    return 0
+  fi
+  ep_log "WARN: faster-whisper pip failed — Queue writes empty mix"
+  return 0
+}
+
+#######################################
+# pip-install chatterbox extras then chatterbox-tts --no-deps. Fail-soft.
+# --no-deps so the package cannot pin torch==2.6.0 over the lab venv.
+# Globals:
+#   None
+# Arguments:
+#   $1  venv python
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_dub_clone_wheel() {
+  local py="${1:?}"
+  local -a extras=(
+    librosa
+    s3tokenizer
+    resemble-perth
+    conformer
+    pykakasi
+    pyloudnorm
+    omegaconf
+  )
+  ep_log "dub clone: extras then chatterbox-tts --no-deps (skip torch pin)"
+  "${py}" -m pip install --upgrade-strategy only-if-needed "${extras[@]}" || true
+  if "${py}" -m pip install --no-deps chatterbox-tts; then
+    ep_log "dub clone: chatterbox-tts --no-deps installed"
+    return 0
+  fi
+  ep_log "WARN: chatterbox-tts --no-deps failed"
+  return 0
+}
+
+#######################################
+# Heal missing dub wheels on an existing named volume. Import-check first.
+# Existing ez-comfy-state volumes are not re-seeded when COMFYUI_REF matches,
+# so baked image wheels never arrive unless we pip here or via download-dub.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always (soft-fail)
+#######################################
+ensure_dub_wheels() {
+  local py
+  py="${COMFY_HOME:-/comfy-state/ComfyUI}/.venv/bin/python"
+  if [[ ! -x ${py} ]]; then
+    ep_log "dub wheels: venv python missing — skip"
+    return 0
+  fi
+  if dub_python_can_import "${py}" "from faster_whisper import WhisperModel"; then
+    ep_log "dub ASR: WhisperModel already importable"
+  else
+    install_dub_asr_wheel "${py}"
+  fi
+  if dub_python_can_import "${py}" \
+    "from chatterbox.mtl_tts import ChatterboxMultilingualTTS"; then
+    ep_log "dub clone: ChatterboxMultilingualTTS already importable"
+  else
+    install_dub_clone_wheel "${py}"
+  fi
+  return 0
+}
+
+#######################################
 # Run install, seed, patch, and exec ComfyUI.
 # Globals:
 #   COMFY_HOME, VENV, LAB_*
@@ -812,6 +919,7 @@ main() {
   export OMP_NUM_THREADS="${OMP_NUM_THREADS:-20}"
   ensure_triton_build_env
   configure_torch_native_triton
+  ensure_dub_wheels
   cd "${comfy_home}"
   link_comfy_output_dir "${comfy_home}/output"
   link_comfy_input_dir "${comfy_home}/input"

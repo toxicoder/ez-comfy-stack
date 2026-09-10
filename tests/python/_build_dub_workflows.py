@@ -38,7 +38,7 @@ US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occu
 
 Disclosure sidecar: {DISCLOSURE_TEXT}
 
-Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (also pip-installs faster-whisper + chatterbox-tts into the running container). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
+Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, then chatterbox-tts --no-deps so torch 2.14 stays). Restart also heals missing wheels. Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.
 """
 
 

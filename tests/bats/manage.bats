@@ -381,6 +381,10 @@ FROZEN_MANAGE_VERBS=(
   run check_dub_runtime_wheels
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"skipped"* || "${output}" == *"import"* ]]
+  run grep -F -- '--no-deps' "${MANAGE_SH}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'faster-whisper chatterbox-tts' "${MANAGE_SH}"
+  [ "${status}" -ne 0 ]
   run cmd_download_music --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"turbo"* ]]
@@ -427,6 +431,23 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
   [[ -e "${MODELS_DIR}/comfy/diffusion_models/flux-2-klein-4b-fp8.safetensors" ]]
   [[ -e "${MODELS_DIR}/comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf" ]]
+}
+
+@test "install_dub_runtime_wheels splits ASR from chatterbox --no-deps" {
+  touch "${TEST_TMP_DIR}/compose_running"
+  : >"${TEST_TMP_DIR}/docker_calls.log"
+  run install_dub_runtime_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"faster-whisper"* ]]
+  [[ "${output}" == *"--no-deps"* || "$(cat "${TEST_TMP_DIR}/docker_calls.log")" == *"--no-deps"* ]]
+  grep -q 'faster-whisper' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q -- '--no-deps' "${TEST_TMP_DIR}/docker_calls.log"
+  if grep -E 'faster-whisper chatterbox-tts' "${TEST_TMP_DIR}/docker_calls.log"; then
+    return 1
+  fi
+  run check_dub_runtime_wheels
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"WhisperModel"* || "${output}" == *"import"* ]]
 }
 
 @test "doctor warns when comfy layout is not writable" {
