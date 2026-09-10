@@ -81,6 +81,9 @@ jobs:
             echo "No remote gh-pages yet; mike will create it on first deploy"
           fi
 
+      - name: Stamp docs publish time
+        run: echo "EZ_DOCS_PUBLISHED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+
       - name: Build documentation (strict)
         env:
           EZ_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}

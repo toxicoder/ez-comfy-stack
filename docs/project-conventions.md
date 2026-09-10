@@ -257,6 +257,7 @@ flowchart LR
   - This-repo GitHub `blob` / `tree` URLs
   - Operator Setup git ref: write `__DOCS_GIT_REF__` in source (e.g. `git clone -b __DOCS_GIT_REF__`); hooks stamp `main` or `development` to match the published alias
 - Operator docs that mean “the branch for **these** docs” must use `__DOCS_GIT_REF__`, not a hardcoded long-lived branch name. Contributor workflow text (“branch from `development`”) stays literal.
+- **Last published** chip (`.ez-published-chip`): site-wide build stamp for the mike alias, injected beside the page `h1` by `docs/hooks.py` (not per-page git history, not the Material header). Deploy sets `EZ_DOCS_PUBLISHED_AT` (UTC ISO) in `.github/workflows/deploy-docs.yml`; local / PR `make docs` falls back to `SOURCE_DATE_EPOCH` then git HEAD. Invalid or missing stamps omit the chip — never wall-clock `now()`. `javascripts/published.js` rewrites the visible `<time>` to a relative label (“2 days ago”); the `datetime` attribute stays absolute UTC. Do not fork `header.html` for this. Do not hide the chip with `display: none`.
 
 ### Docs formatting (human readability)
 
