@@ -2203,8 +2203,8 @@
 </tr>
 <tr>
 <td><code>mkdir: …/comfy/…: Permission denied</code> during <code>download-models</code></td>
-<td>Nested <code>comfy/</code> is root-owned (container <code>mkdir</code> on the bind-mount) while <code>${MODELS_DIR}</code> itself is writable</td>
-<td>Re-run <code>./scripts/manage.sh download-models</code> — it sudo-heals <code>${MODELS_DIR}/comfy</code>. Same heal on <code>setup</code> / <code>start</code>. Last resort: <code>sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy"</code></td>
+<td>Nested <code>comfy/&lt;subdir&gt;</code> is root-owned (container <code>mkdir</code> on the bind-mount) while snapshots under <code>${MODELS_DIR}</code> are writable. Cache-hit still needs a writable layout dir to symlink.</td>
+<td>Re-run <code>./scripts/manage.sh download-models</code> — linking now sudo-heals each layout dir (same heal on <code>setup</code> / <code>start</code>). Last resort: <code>sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy"</code></td>
 </tr>
 <tr>
 <td><code>ln: … comfy/llm/….gguf: Permission denied</code> then <code>GGUF ready</code></td>

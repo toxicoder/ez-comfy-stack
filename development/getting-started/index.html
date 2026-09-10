@@ -2307,7 +2307,7 @@
 </tr>
 <tr>
 <td><strong>Layout</strong></td>
-<td>Weights under <code>${MODELS_DIR}</code> with relative <code>comfy/</code> symlinks. Cache hits still need a writable <code>comfy/</code>; <code>download-models</code> sudo-heals nested ownership (no manual <code>chown</code>).</td>
+<td>Weights under <code>${MODELS_DIR}</code> with relative <code>comfy/</code> symlinks. Cache hits still need writable <code>comfy/&lt;subdir&gt;/</code> dirs; <code>download-models</code> sudo-heals each layout dir on link (no manual <code>chown</code>).</td>
 </tr>
 <tr>
 <td><strong>LTX size</strong></td>
