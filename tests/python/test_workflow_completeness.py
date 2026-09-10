@@ -123,6 +123,8 @@ def test_lab_graph_completeness(path: Path) -> None:
                 widgets = node.get("widgets_values") or {}
                 if isinstance(widgets, dict) and "save_output" in widgets:
                     assert widgets["save_output"] is True, path.name
+        elif occupancy == "trellis" or "MeshToFile3D" in types:
+            assert "MeshToFile3D" in types, path.name
         elif occupancy == "klein" or "SaveImage" in types:
             assert "SaveImage" in types, path.name
 

@@ -37,7 +37,7 @@ The **Your Spark** panel at the top of every docs page stores `SPARK_HOST` and f
 
 Banned names (`quality` on image, Klein 9B, FLUX.2-dev, DA3-LARGE, DreamX-World, MiniMax H3) stay refused — see [Model licenses](licenses.md).
 
-Occupancy: unload LTX before Fun InP / TRELLIS / VACE / S2V / ACE-Step. One heavy GPU job.
+Occupancy: `occupancy enter trellis` (unload LTX/Wan, stop Blender) before TRELLIS. Same one-heavy-job rule for Fun InP / VACE / S2V / ACE-Step.
 
 ---
 
@@ -52,7 +52,7 @@ Occupancy: unload LTX before Fun InP / TRELLIS / VACE / S2V / ACE-Step. One heav
 | `download-podcast` | `analog` `acestep` `chatterbox` `qwen3tts` `all` | `analog` | **Different audio packs**. Missing pack is not a doctor failure | analog tiny; acestep ~10 GB shared | no |
 | `download-dub` | `asr` `clone` `all` | `asr` | Silero VAD + faster-whisper (full CTranslate2 dir); Chatterbox Multilingual V3 (`ve.pt` + `s3gen.pt` + T3 + `conds.pt`). Wheels: faster-whisper then Chatterbox V3 GitHub zip `--no-deps`. Missing pack is not a doctor failure | asr ~3 GB; clone ~4 GB | no |
 | `download-music` | `turbo` `xl` `all` | `turbo` | Size ladder. `turbo` **shares dest** with `download-podcast --tier acestep` | ~10 GB AIO | no |
-| `download-3d` | `trellis2` `da3-base` `all` | `trellis2` | Opt-in 3D. `da3-large` refused | ~8 / ~1 GB | no |
+| `download-3d` | `trellis2` `da3-base` `all` | `trellis2` | Native Comfy-Org TRELLIS.2 INT8 + DINOv3 companion. `da3-large` refused | ~12 / ~1 GB | no |
 | `download-longcat` | `video` `avatar` `all` | `video` | Opt-in MIT LongCat; no NCCL | large | no |
 | `download-dreamx` | `creator` | `creator` | Apache Creator only; World refused | ~8 GB | no |
 | `download-restore` | `seedvr2-3b` | `seedvr2-3b` | Post-concat restore only | ~15 GB | no |

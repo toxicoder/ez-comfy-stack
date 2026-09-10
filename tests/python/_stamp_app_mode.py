@@ -21,8 +21,8 @@ from collections import Counter
 from typing import Any, Mapping, Sequence
 
 FRONTEND_MIN = "1.41.13"
-LANES = ("inspire", "produce", "audio", "film", "dcc")
-OCCUPANCIES = ("llm", "klein", "wan", "ltx", "audio", "film", "none")
+LANES = ("inspire", "produce", "audio", "film", "dcc", "optional")
+OCCUPANCIES = ("llm", "klein", "wan", "ltx", "trellis", "audio", "film", "none")
 DEFAULT_VIEWS = ("app", "graph")
 BANNED = (
     "MiniMax",
@@ -203,6 +203,7 @@ OCCUPANCY_STOP = {
     "klein": "Wan, LTX, podcast, music",
     "wan": "LTX, podcast, music",
     "ltx": "Wan, podcast, music, other LTX",
+    "trellis": "Blender desk, LTX, Wan, Klein denoise",
     "film": "everything else on that Spark",
     "audio": "Klein / Wan / LTX session",
 }
@@ -213,6 +214,7 @@ OUTPUT_TYPES = (
     "SaveAudio",
     "SaveAudioMP3",
     "EZDubRender",
+    "MeshToFile3D",
 )
 
 ENHANCE_TYPES = (
@@ -803,6 +805,12 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         primitive_strings=True,
     ),
     "wan-i2v-a14b-lab-example": _spec("produce", "wan", default_view="graph"),
+    "klein-trellis2-lab-example": _spec(
+        "optional",
+        "trellis",
+        default_view="graph",
+        expose_unet=True,
+    ),
 }
 
 def _nill_bye_stems() -> tuple[str, ...]:

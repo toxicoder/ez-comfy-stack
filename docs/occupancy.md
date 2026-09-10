@@ -16,7 +16,7 @@ tags: [occupancy, blender, trellis, safety, gb10]
 **What this enables**
 
 - Host Blender clay dumps without typing **yes** on a full `start` cycle every time
-- A later TRELLIS or LTX Queue after Blender is stopped
+- A later TRELLIS (`klein-trellis2-lab-example`) or LTX Queue after Blender is stopped
 - Unchanged `restart: "no"`, heavy confirm, `mem_limit: 90g`, headroom 28 GiB
 
 !!! danger "One heavy job"

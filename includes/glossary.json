@@ -401,7 +401,7 @@
     "aliases": ["lab_app_mode"],
     "category": "Studio",
     "short": "Lab extra on *-lab-example graphs: lane, occupancy, handoff, frontend_min.",
-    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
+    "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc/optional, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
     "see_also": ["app-mode", "occupancy", "lab-example"]
   },
   {

@@ -2,9 +2,9 @@
 #
 # ## download-3d
 #
-# Opt-in 3D packs: native TRELLIS.2 (MIT, no nvdiffrast) and DA3-BASE (Apache).
-# Never part of download-models. Unload LTX first. SuperSplat is a host viewer
-# (see docs/splat-sidecar.md), not this downloader.
+# Opt-in 3D packs: native Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast) and
+# DA3-BASE (Apache). Never part of download-models. occupancy enter trellis
+# first (unload LTX). SuperSplat is a host viewer (docs/splat-sidecar.md).
 #
 # Usage:
 #   ./scripts/utilities/download-3d.sh status|run [--tier trellis2|da3-base|all] [--json]
@@ -44,7 +44,7 @@ CMD="status"
 #######################################
 tier_repo() {
   case "${1}" in
-    trellis2) echo "microsoft/TRELLIS.2" ;;
+    trellis2) echo "Comfy-Org/TRELLIS.2" ;;
     da3-base) echo "depth-anything/DA3-BASE" ;;
     *) echo "" ;;
   esac
@@ -64,7 +64,12 @@ tier_repo() {
 tier_include_patterns() {
   case "${1}" in
     trellis2)
-      printf '%s\n' "ckpts/ss_flow_img_dit_xl.safetensors" "README.md"
+      printf '%s\n' \
+        "diffusion_models/trellis_2_int8_convrot.safetensors" \
+        "vae/trellis_2_shape_vae_bf16.safetensors" \
+        "vae/trellis_2_texture_vae_bf16.safetensors" \
+        "clip_vision/dino_v3_vit_l.safetensors" \
+        "README.md"
       ;;
     da3-base)
       printf '%s\n' "model.safetensors" "README.md"
@@ -154,8 +159,8 @@ parse_args() {
       status | run) CMD="${1}" ;;
       -h | --help)
         echo "Usage: $0 status|run [--tier trellis2|da3-base|all] [--json]" >&2
-        echo "  Native TRELLIS.2 (MIT, no nvdiffrast). DA3-BASE Apache. Not download-models." >&2
-        echo "  Unload LTX first. DA3-LARGE is refused. SuperSplat is host-only." >&2
+        echo "  Native Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast). DA3-BASE Apache." >&2
+        echo "  occupancy enter trellis first. DA3-LARGE / Pixal3D-as-default refused." >&2
         exit 0
         ;;
       *)
@@ -199,7 +204,37 @@ tier_files_ready() {
 }
 
 #######################################
-# Link weights into comfy/3d (TRELLIS) or comfy/diffusion_models (DA3).
+# Comfy dest path for a TRELLIS.2 native basename.
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   $1  basename
+# Outputs:
+#   Absolute dest on stdout
+# Returns:
+#   0
+#######################################
+trellis_comfy_dest() {
+  local base="${1}"
+  local src="${MODELS_DIR}/comfy"
+  case "${base}" in
+    trellis_2_int8_convrot.safetensors | trellis_2_bf16.safetensors)
+      echo "${src}/diffusion_models/${base}"
+      ;;
+    trellis_2_*vae*.safetensors)
+      echo "${src}/vae/${base}"
+      ;;
+    dino_v3*.safetensors)
+      echo "${src}/clip_vision/${base}"
+      ;;
+    *)
+      echo "${src}/3d/${base}"
+      ;;
+  esac
+}
+
+#######################################
+# Link weights into native Comfy folders (TRELLIS) or diffusion_models (DA3).
 # Globals:
 #   MODELS_DIR
 # Arguments:
@@ -222,6 +257,8 @@ link_into_comfy() {
     dest="${src}/3d/${base}"
     if [[ ${tier} == "da3-base" ]]; then
       dest="${src}/diffusion_models/${base}"
+    elif [[ ${tier} == "trellis2" ]]; then
+      dest="$(trellis_comfy_dest "${base}")"
     fi
     if ln_sfn_relative "${f}" "${dest}"; then
       log "linked ${base}"

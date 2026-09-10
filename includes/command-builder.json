@@ -228,7 +228,7 @@
           "required": true,
           "default": "trellis2",
           "choices": [
-            {"value": "trellis2", "label": "trellis2 — native TRELLIS.2 MIT (~8 GB)"},
+            {"value": "trellis2", "label": "trellis2 — Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"},
             {"value": "da3-base", "label": "da3-base — Depth Anything 3 BASE Apache (~1 GB)"},
             {"value": "all", "label": "all — trellis2 + da3-base"}
           ]

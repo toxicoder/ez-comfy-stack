@@ -245,7 +245,7 @@ Commands:
   download-restore [--tier seedvr2-3b]
                     Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
   download-3d [--tier trellis2|da3-base|all]
-                    Opt-in native TRELLIS.2 (MIT, no nvdiffrast) + DA3-BASE (Apache)
+                    Opt-in Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   occupancy status|enter MODE [--yes] [--json]
                     Occupancy desk: park Comfy (POST /free) for blender-desk, or
                     enter klein|trellis|wan|ltx|idle. Does not start Compose.

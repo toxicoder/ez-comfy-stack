@@ -31,7 +31,7 @@ user/default/workflows/
     ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
     shorts/    film-*-90s-*-lab-example.json
     dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide
-    optional/  a14b, longcat stub
+    optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast-*, dub-*, music-rap-draft/full
       nill-bye/       forty-five 180 s music-rap-nill-bye-* diss takes
       drive-through/  thirty 180 s music-edm-drive-through-* EDM takes
@@ -80,6 +80,7 @@ flowchart TB
     | **wan-flf-5s-lab-example** | Fun InP first-last-frame 5 s (opt-in `download-wan --tier fun-inp`). MagCache off |
     | **wan-vace-join-lab-example** | Wan 2.1 VACE 1.3B 17-frame join (`1+8n`). Opt-in `download-wan --tier vace`. MagCache off |
     | **wan-i2v-a14b-lab-example** | Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `_lab/optional/` |
+    | **klein-trellis2-lab-example** | Klein still → native TRELLIS.2 INT8 mesh (512). `download-3d --tier trellis2`. `occupancy enter trellis`. Under `_lab/optional/` |
     | **wan-t2v-5s-lab-example** | Silent T2V smoke, 121 frames (LoadImage bypassed) |
     | **wan-i2v-shot-lab-example** | Concat-safe **120** frames + last-frame SaveImage. 90s shots, or prefix `ez_shot_01..06` |
 

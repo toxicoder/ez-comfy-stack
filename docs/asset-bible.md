@@ -81,4 +81,4 @@ Schema and a sample scene that **instances slugs** (no embedded mesh bytes): rep
 ./scripts/utilities/asset-ls.sh --output-dir "${COMFY_OUTPUT_DIR}/assets"
 ```
 
-Empty catalog is success. Occupancy for Gen (Klein + TRELLIS) is the same one-heavy-job rule as [Studio sidecars](studio-sidecars.md). TRELLIS.2 remains opt-in `download-3d`, not `download-models`. See [Model licenses](licenses.md).
+Empty catalog is success. Occupancy for Gen (Klein + TRELLIS) is `occupancy enter trellis` after a still — [Occupancy desk](occupancy.md). TRELLIS.2 remains opt-in `download-3d`, not `download-models`. See [Model licenses](licenses.md).

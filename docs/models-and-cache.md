@@ -131,7 +131,7 @@ Opt-in packs (not `download-models`):
 ```bash
 ./scripts/utilities/download-wan.sh run --tier fun-inp   # Fun InP A14B FLF, ~47 GB Apache
 ./scripts/manage.sh download-restore --tier seedvr2-3b   # SeedVR2-3B post-concat, ~15 GB Apache
-./scripts/manage.sh download-3d --tier trellis2          # native TRELLIS.2 MIT, no nvdiffrast
+./scripts/manage.sh download-3d --tier trellis2          # Comfy-Org TRELLIS.2 INT8 + DINOv3, no nvdiffrast
 ./scripts/manage.sh download-3d --tier da3-base          # DA3-BASE Apache (DA3-LARGE refused)
 ./scripts/utilities/download-wan.sh run --tier vace      # Wan 2.1 VACE 1.3B join, ~6 GB Apache
 ./scripts/utilities/download-wan.sh run --tier a14b      # A14B FP8 silent hero; unload 5B first
