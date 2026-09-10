@@ -82,12 +82,23 @@ teardown() {
   [ "${status}" -ne 0 ]
   run grep -F -- '--no-deps' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
+  run grep -F -- '--force-reinstall' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'resemble-ai/chatterbox/archive' \
+    "${REPO_ROOT}/docker/install-comfy/common.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'chatterbox_tts_zip_url' \
+    "${REPO_ROOT}/docker/install-comfy/common.sh"
+  [ "${status}" -eq 0 ]
+  run chatterbox_tts_zip_url
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"resemble-ai/chatterbox/archive"* ]]
+  run grep -E 'pip_install --no-deps chatterbox-tts' \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
   pip_install() {
     printf '%s\n' "$*" >>"${TEST_TMP_DIR}/pip_dub.log"
-    if [[ $* == *chatterbox-tts* && $* != *--no-deps* ]]; then
-      return 1
-    fi
-    if [[ $* == *chatterbox-tts* ]]; then
+    if [[ $* == *resemble-ai/chatterbox* && $* != *--no-deps* ]]; then
       return 1
     fi
     return 0
@@ -101,7 +112,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   grep -q 'faster-whisper' "${TEST_TMP_DIR}/pip_dub.log"
   grep -q -- '--no-deps' "${TEST_TMP_DIR}/pip_dub.log"
-  if grep -E 'faster-whisper.*chatterbox-tts' "${TEST_TMP_DIR}/pip_dub.log"; then
+  grep -q -- '--force-reinstall' "${TEST_TMP_DIR}/pip_dub.log"
+  grep -q 'resemble-ai/chatterbox' "${TEST_TMP_DIR}/pip_dub.log"
+  grep -q 'spacy-pkuseg' "${TEST_TMP_DIR}/pip_dub.log"
+  if grep -E 'faster-whisper.*chatterbox' "${TEST_TMP_DIR}/pip_dub.log"; then
     return 1
   fi
 }
@@ -1205,6 +1219,7 @@ log="${DUB_PIP_LOG:?}"
 if [[ ${1} == -c ]]; then
   case "${2}" in
     *WhisperModel*) exit "${WHISPER_IMPORT_RC:-1}" ;;
+    *t3_model*) exit "${CLONE_T3_RC:-${CLONE_IMPORT_RC:-1}}" ;;
     *ChatterboxMultilingualTTS*) exit "${CLONE_IMPORT_RC:-1}" ;;
   esac
   exit 0
@@ -1227,6 +1242,10 @@ PY
 
   run grep -F 'ensure_dub_wheels' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'dub_chatterbox_has_t3_v3' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run dub_chatterbox_has_t3_v3 "${py}"
+  [ "${status}" -ne 0 ]
   run dub_python_can_import "${py}" "from faster_whisper import WhisperModel"
   [ "${status}" -ne 0 ]
   run install_dub_asr_wheel "${py}"
@@ -1238,16 +1257,26 @@ PY
   [ "${status}" -eq 0 ]
   grep -q 'faster-whisper' "${DUB_PIP_LOG}"
   grep -q -- '--no-deps' "${DUB_PIP_LOG}"
-  if grep -E 'faster-whisper.*chatterbox-tts' "${DUB_PIP_LOG}"; then
+  grep -q -- '--force-reinstall' "${DUB_PIP_LOG}"
+  grep -q 'resemble-ai/chatterbox' "${DUB_PIP_LOG}"
+  if grep -E 'faster-whisper.*chatterbox' "${DUB_PIP_LOG}"; then
     return 1
   fi
 
   : >"${DUB_PIP_LOG}"
   export WHISPER_IMPORT_RC=0
   export CLONE_IMPORT_RC=0
+  export CLONE_T3_RC=0
   run ensure_dub_wheels
   [ "${status}" -eq 0 ]
   [[ ! -s ${DUB_PIP_LOG} ]]
+
+  : >"${DUB_PIP_LOG}"
+  export CLONE_T3_RC=1
+  run ensure_dub_wheels
+  [ "${status}" -eq 0 ]
+  grep -q -- '--no-deps' "${DUB_PIP_LOG}"
+  grep -q 'resemble-ai/chatterbox' "${DUB_PIP_LOG}"
 
   export DUB_PIP_FAIL=1
   export WHISPER_IMPORT_RC=1
@@ -1266,6 +1295,7 @@ log="${DUB_PIP_LOG:?}"
 if [[ ${1} == -c ]]; then
   case "${2}" in
     *WhisperModel*) exit "${WHISPER_IMPORT_RC:-1}" ;;
+    *t3_model*) exit "${CLONE_T3_RC:-${CLONE_IMPORT_RC:-1}}" ;;
     *ChatterboxMultilingualTTS*) exit "${CLONE_IMPORT_RC:-1}" ;;
   esac
   exit 0

@@ -445,6 +445,11 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"--no-deps"* || "$(cat "${TEST_TMP_DIR}/docker_calls.log")" == *"--no-deps"* ]]
   grep -q 'faster-whisper' "${TEST_TMP_DIR}/docker_calls.log"
   grep -q -- '--no-deps' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q -- '--force-reinstall' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q 'resemble-ai/chatterbox' "${TEST_TMP_DIR}/docker_calls.log"
+  run chatterbox_tts_zip_url
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"resemble-ai/chatterbox/archive"* ]]
   if grep -E 'faster-whisper chatterbox-tts' "${TEST_TMP_DIR}/docker_calls.log"; then
     return 1
   fi

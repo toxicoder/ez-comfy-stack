@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 import os
 import shutil
 import subprocess
@@ -207,6 +208,14 @@ CLONE_MISSING_STATUS = (
     "./scripts/manage.sh download-dub --tier clone"
 )
 T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 — upgrade chatterbox-tts"
+TRANSLATE_LLAMA_STATUS = (
+    "llama.cpp unavailable — restart so the entrypoint installs the CPU wheel"
+)
+TRANSLATE_BLOCKING_MARKERS = (
+    "llama.cpp unavailable",
+    "GGUF missing",
+    "GGUF failed to load",
+)
 NO_TURNS_STATUS = "no turns — ASR/translate did not run"
 MISSING_SOURCE_STATUS = (
     "missing source.wav — pick Source file or Upload media, "
@@ -341,14 +350,55 @@ def preflight_asr() -> str:
 def preflight_clone() -> str:
     """Empty when Chatterbox V3 can load; otherwise an operator-facing reason."""
     try:
-        from chatterbox.mtl_tts import ChatterboxMultilingualTTS  # noqa: F401
+        from chatterbox.mtl_tts import ChatterboxMultilingualTTS
     except ImportError:
         return (
             "chatterbox-tts not installed — optional runtime: pip install chatterbox-tts"
         )
+    loader = getattr(ChatterboxMultilingualTTS, "from_local", None)
+    if not callable(loader):
+        return "chatterbox-tts missing from_local — upgrade chatterbox-tts"
+    try:
+        if "t3_model" not in inspect.signature(loader).parameters:
+            return T3_MODEL_STATUS
+    except (TypeError, ValueError):
+        return T3_MODEL_STATUS
     if clone_ckpt_dir() is None:
         return "clone pack missing — run ./scripts/manage.sh download-dub --tier clone"
     return ""
+
+
+def preflight_translate() -> str:
+    """Empty when the on-box GGUF writer can load; otherwise a blocking reason."""
+    try:
+        from ez_prompt_enhance.client import _get_llama
+        from ez_prompt_enhance.client import status_for_reason
+    except Exception:  # noqa: BLE001 — missing pack is a dub hard miss
+        return TRANSLATE_LLAMA_STATUS
+    _handle, reason = _get_llama()
+    if not reason:
+        return ""
+    return status_for_reason(reason) or reason
+
+
+def translate_blocking_status(status: str) -> str:
+    """Return ``status`` when it names a fatal translate miss; else empty."""
+    raw = (status or "").strip()
+    if not raw:
+        return ""
+    for marker in TRANSLATE_BLOCKING_MARKERS:
+        if marker in raw:
+            return raw
+    return ""
+
+
+def _translation_needed(
+    enhance: bool, source_language: str, target_language: str
+) -> bool:
+    """True when Queue must run the GGUF writer (cross-language, enhance on)."""
+    if not enhance:
+        return False
+    return not _same_language(source_language, target_language)
 
 
 def load_translate_prompt() -> str:
@@ -873,7 +923,11 @@ def translate_turns(
     *,
     enhance: bool = True,
 ) -> tuple[list[dict[str, Any]], str]:
-    """Fill ``text_target`` one turn at a time. Missing GGUF copies source text."""
+    """Fill ``text_target`` one turn at a time.
+
+    Fatal GGUF/llama.cpp misses leave ``text_target`` empty so render cannot
+    clone the source language as the target.
+    """
     tgt = language_code(target_language)
     src = language_code(source_language)
     if not enhance:
@@ -895,7 +949,7 @@ def translate_turns(
         from ez_prompt_enhance.client import complete
     except Exception as exc:  # noqa: BLE001 — fail-soft
         _log(f"prompt enhance client unavailable: {exc}")
-        return _copy_source_targets(turns), "llama.cpp unavailable"
+        return [dict(t) for t in turns], "llama.cpp unavailable"
     system = load_translate_prompt()
     timeout = dub_llm_timeout_s()
     translated = 0
@@ -912,7 +966,7 @@ def translate_turns(
                 merged.append(item)
                 continue
             if fatal:
-                item["text_target"] = source_text
+                item["text_target"] = ""
                 passthrough += 1
                 merged.append(item)
                 continue
@@ -930,7 +984,7 @@ def translate_turns(
                 REASON_LLM_LOAD_FAILED,
             }:
                 fatal = reason
-                item["text_target"] = source_text
+                item["text_target"] = ""
                 passthrough += 1
                 last_reason = reason
                 merged.append(item)
@@ -1256,9 +1310,17 @@ def render_mix(
         pace = 0.5
     if pace > 1.5:
         pace = 1.5
+    blocked = translate_blocking_status(str(payload.get("status") or ""))
+    if blocked:
+        return [], rate, blocked
     turns = list(payload.get("turns") or [])
     if not turns:
         return [], rate, NO_TURNS_STATUS
+    name = engine if engine in ENGINES else ENGINE_CHATTERBOX
+    if name == ENGINE_CHATTERBOX and tts_hook is None:
+        clone_miss = preflight_clone()
+        if clone_miss:
+            return [], rate, clone_miss
     refs = _extract_refs(samples, rate, turns, dest / "speakers")
     lang = language_code(payload.get("target_language") or "es")
     clones: list[dict[str, Any]] = []
@@ -1272,7 +1334,7 @@ def render_mix(
     for i, turn in enumerate(turns):
         nxt_t0 = turns[i + 1]["t0"] if i + 1 < len(turns) else (len(samples) / max(rate, 1))
         spill = max(0.0, float(nxt_t0) - float(turn["t1"]))
-        spoken = str(turn.get("text_target") or turn.get("text") or "").strip()
+        spoken = _spoken_clone_text(turn, payload)
         ref = refs.get(str(turn["speaker"]))
         if not spoken:
             continue
@@ -1370,6 +1432,50 @@ def render_mix(
     return mix, rate, status
 
 
+def _spoken_clone_text(turn: dict[str, Any], payload: dict[str, Any]) -> str:
+    """Target-language line for clone. Never fall back to source on a cross-language job."""
+    target = str(turn.get("text_target") or "").strip()
+    if target:
+        return target
+    src = language_code(payload.get("source_language") or "")
+    tgt = language_code(payload.get("target_language") or "es")
+    if _same_language(src, tgt):
+        return str(turn.get("text") or "").strip()
+    return ""
+
+
+def _fail_analyze(
+    dest: Path,
+    *,
+    target_language: str,
+    source_language: str,
+    stage: str,
+    reason: str,
+) -> tuple[dict[str, Any], str]:
+    """Persist an empty translation payload and a blocking Dub status."""
+    payload = empty_payload(
+        target_language=target_language,
+        source_language=source_language,
+        stage=stage,
+        status=reason,
+    )
+    write_json(dest / "turns.json", [])
+    write_json(dest / "translation.json", payload)
+    save_state(
+        dest,
+        {
+            "slug": dest.name,
+            "stage": "translate",
+            "status": reason,
+            "source_language": source_language,
+            "target_language": target_language,
+            "error": None,
+            "flags": [],
+        },
+    )
+    return payload, reason
+
+
 def missing_source_status(dest: Path) -> str:
     """Operator-facing reason when ``source.wav`` is absent.
 
@@ -1430,6 +1536,29 @@ def analyze_job(
             status=reason,
         )
         return payload, reason
+    if (
+        _translation_needed(enhance, source_language, target_language)
+        and translate_hook is None
+    ):
+        miss = preflight_translate()
+        if miss:
+            return _fail_analyze(
+                dest,
+                target_language=target_language,
+                source_language=source_language,
+                stage=name,
+                reason=miss,
+            )
+    if asr_hook is None:
+        asr_miss = preflight_asr()
+        if asr_miss:
+            return _fail_analyze(
+                dest,
+                target_language=target_language,
+                source_language=source_language,
+                stage=name,
+                reason=asr_miss,
+            )
     samples, rate = read_wav(wav)
     turns, detected, asr_reason = analyze_pcm(
         samples,
@@ -1442,27 +1571,13 @@ def analyze_job(
     if src == "auto" and detected:
         src = language_code(detected)
     if asr_reason and not turns:
-        payload = empty_payload(
+        return _fail_analyze(
+            dest,
             target_language=target_language,
             source_language=src,
             stage=name,
-            status=asr_reason,
+            reason=asr_reason,
         )
-        write_json(dest / "turns.json", [])
-        write_json(dest / "translation.json", payload)
-        save_state(
-            dest,
-            {
-                "slug": dest.name,
-                "stage": "translate",
-                "status": asr_reason,
-                "source_language": source_language,
-                "target_language": target_language,
-                "error": None,
-                "flags": [],
-            },
-        )
-        return payload, asr_reason
     turns, reason = translate_turns(
         turns, target_language, src, enhance=enhance
     )

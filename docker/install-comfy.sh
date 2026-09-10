@@ -30,6 +30,7 @@
 #   COMFYUI_OPENCUT_REF — OpenCut tag (default 0.5.0)
 #   COMFYUI_MAGCACHE_REF — MagCache commit SHA
 #   COMFYUI_LTX_DIRECTOR_REF — GPL Director commit SHA (clone only if LAB_ENABLE_LTX_DIRECTOR=1)
+#   CHATTERBOX_TTS_REF — resemble-ai/chatterbox SHA for Multilingual V3 (t3_model)
 #   LAB_PACKAGE_PARTS=1 — split tree into /opt/parts/{venv,app} (Docker only)
 #
 set -euo pipefail

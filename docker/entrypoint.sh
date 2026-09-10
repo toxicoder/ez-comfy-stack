@@ -746,6 +746,45 @@ dub_python_can_import() {
   "${py}" -c "${stmt}" >/dev/null 2>&1
 }
 
+# PyPI chatterbox-tts==0.1.7 predates from_local(..., t3_model="v3") (PR #516).
+CHATTERBOX_TTS_REF="${CHATTERBOX_TTS_REF:-5de7a54aa4e5e2baadb0182dde554908b48b85c2}"
+
+#######################################
+# GitHub archive URL for the Chatterbox V3-capable source tree.
+# Globals:
+#   CHATTERBOX_TTS_REF
+# Arguments:
+#   None
+# Outputs:
+#   HTTPS zip URL on stdout
+# Returns:
+#   0
+#######################################
+chatterbox_tts_zip_url() {
+  echo "https://github.com/resemble-ai/chatterbox/archive/${CHATTERBOX_TTS_REF}.zip"
+}
+
+#######################################
+# True when from_local accepts t3_model (Multilingual V3).
+# Globals:
+#   None
+# Arguments:
+#   $1  Python interpreter
+# Outputs:
+#   None
+# Returns:
+#   0 when t3_model is in the signature; 1 otherwise
+#######################################
+dub_chatterbox_has_t3_v3() {
+  local py="${1:?}"
+  local stmt
+  stmt="from inspect import signature; "
+  stmt+="from chatterbox.mtl_tts import ChatterboxMultilingualTTS; "
+  stmt+="assert 't3_model' in signature("
+  stmt+="ChatterboxMultilingualTTS.from_local).parameters"
+  dub_python_can_import "${py}" "${stmt}"
+}
+
 #######################################
 # Interpreter Comfy will exec (after venv activate). Prefer VIRTUAL_ENV.
 # Globals:
@@ -799,8 +838,8 @@ install_dub_asr_wheel() {
 }
 
 #######################################
-# pip-install chatterbox extras then chatterbox-tts --no-deps. Fail-soft.
-# --no-deps so the package cannot pin torch==2.6.0 over the lab venv.
+# pip-install chatterbox extras then the V3-capable GitHub zip --no-deps.
+# Fail-soft. --no-deps so the package cannot pin torch==2.6.0 over the lab venv.
 # Globals:
 #   None
 # Arguments:
@@ -812,6 +851,7 @@ install_dub_asr_wheel() {
 #######################################
 install_dub_clone_wheel() {
   local py="${1:?}"
+  local zip
   local -a extras=(
     librosa
     s3tokenizer
@@ -820,11 +860,13 @@ install_dub_clone_wheel() {
     pykakasi
     pyloudnorm
     omegaconf
+    spacy-pkuseg
   )
-  ep_log "dub clone: extras then chatterbox-tts --no-deps (skip torch pin)"
+  zip="$(chatterbox_tts_zip_url)"
+  ep_log "dub clone: extras then chatterbox V3 zip --no-deps (skip torch pin)"
   "${py}" -m pip install --upgrade-strategy only-if-needed "${extras[@]}" || true
-  if "${py}" -m pip install --no-deps chatterbox-tts; then
-    ep_log "dub clone: chatterbox-tts --no-deps installed"
+  if "${py}" -m pip install --upgrade --force-reinstall --no-deps "${zip}"; then
+    ep_log "dub clone: chatterbox-tts V3 --no-deps installed"
     return 0
   fi
   ep_log "WARN: chatterbox-tts --no-deps failed"
@@ -914,8 +956,9 @@ ensure_dub_wheels() {
     install_dub_asr_wheel "${py}"
   fi
   if dub_python_can_import "${py}" \
-    "from chatterbox.mtl_tts import ChatterboxMultilingualTTS"; then
-    ep_log "dub clone: ChatterboxMultilingualTTS already importable"
+    "from chatterbox.mtl_tts import ChatterboxMultilingualTTS" &&
+    dub_chatterbox_has_t3_v3 "${py}"; then
+    ep_log "dub clone: ChatterboxMultilingualTTS t3_model=v3 already importable"
   else
     install_dub_clone_wheel "${py}"
   fi
