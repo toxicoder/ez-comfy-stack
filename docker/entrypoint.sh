@@ -831,6 +831,63 @@ install_dub_clone_wheel() {
   return 0
 }
 
+# Official llama-cpp-python CPU wheels (aarch64 manylinux py3-none). PyPI is
+# sdist-only; --only-binary against PyPI always misses on DGX Spark.
+LLAMA_CPP_CPU_INDEX="https://abetlen.github.io/llama-cpp-python/whl/cpu"
+
+#######################################
+# pip-install llama-cpp-python CPU wheel into the Comfy venv. Fail-soft.
+# Binaries only (no compile). Does not touch torch. CUDA extra-index unused.
+# Globals:
+#   LLAMA_CPP_CPU_INDEX
+# Arguments:
+#   $1  venv python
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always (soft-fail)
+#######################################
+install_llama_cpp_cpu_wheel() {
+  local py="${1:?}"
+  local index="${LLAMA_CPP_CPU_INDEX}"
+  ep_log "llama.cpp: pip install llama-cpp-python (CPU extra-index, binaries only)"
+  if "${py}" -m pip install --only-binary=:all: --extra-index-url "${index}" \
+    llama-cpp-python; then
+    ep_log "llama.cpp: llama-cpp-python CPU wheel installed"
+    return 0
+  fi
+  ep_log "WARN: llama-cpp-python CPU wheel pip failed — Enhance/dub translation will pass through"
+  return 0
+}
+
+#######################################
+# Heal missing llama-cpp-python on an existing named volume. Import-check first.
+# Existing ez-comfy-state volumes are not re-seeded when COMFYUI_REF matches,
+# so baked image wheels never arrive unless we pip here.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always (soft-fail)
+#######################################
+ensure_llama_cpp_cpu() {
+  local py
+  if ! py="$(comfy_runtime_python)"; then
+    ep_log "llama.cpp: venv python missing — skip"
+    return 0
+  fi
+  ep_log "llama.cpp: python=${py}"
+  if dub_python_can_import "${py}" "from llama_cpp import Llama"; then
+    ep_log "llama.cpp: Llama already importable"
+    return 0
+  fi
+  install_llama_cpp_cpu_wheel "${py}"
+  return 0
+}
+
 #######################################
 # Heal missing dub wheels on an existing named volume. Import-check first.
 # Existing ez-comfy-state volumes are not re-seeded when COMFYUI_REF matches,
@@ -1061,6 +1118,7 @@ main() {
   export OMP_NUM_THREADS="${OMP_NUM_THREADS:-20}"
   ensure_triton_build_env
   configure_torch_native_triton
+  ensure_llama_cpp_cpu
   ensure_dub_wheels
   cd "${comfy_home}"
   link_comfy_output_dir "${comfy_home}/output"

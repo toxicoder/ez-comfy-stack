@@ -61,11 +61,11 @@ Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera l
 | ASR / turns | faster-whisper large-v3 segments (`vad_filter` when the wheel supports it) | MIT | `download-dub --tier asr` |
 | Speakers | Chatterbox `VoiceEncoder` + `ve.pt` (same embedding the clone uses). Energy fingerprint if the wheel is missing | MIT | `download-dub --tier clone` |
 | VAD helper | faster-whisper Silero filter; ONNX on disk is the download leftover | MIT | `download-dub --tier asr` |
-| Translate | On-box Qwen3-4B-Instruct GGUF, **one turn at a time** (ISO source → target, temp 0.3, 120 s timeout) | Apache 2.0 | already in `download-models` |
+| Translate | On-box Qwen3-4B-Instruct GGUF, **one turn at a time** (ISO source → target, temp 0.3, 120 s timeout). Needs `llama-cpp-python` CPU wheel | Apache 2.0 | GGUF already in `download-models`; wheel via image extra-index or restart heal |
 | Clone | Chatterbox Multilingual V3 (cached `from_local` + ISO `language_id`, PerTh on). Lines over 300 characters split | MIT | `download-dub --tier clone` |
 | Clone alt | Qwen3-TTS 0.6B | Apache 2.0 | `download-podcast --tier qwen3tts` |
 
-`faster-whisper` and `chatterbox-tts` are fail-soft-baked in `phase-nodes.sh` (like llama.cpp). They install **separately**: ASR first, then `chatterbox-tts --no-deps` so Chatterbox cannot pin `torch==2.6.0` over the lab 2.14 cu130 venv. `download-dub` pip-installs the same way into a **running** container. Restart also heals an existing `ez-comfy-state` volume (entrypoint import-checks, then pip). `yt-dlp` stays optional for URL ingest. The graph still loads if a wheel is missing; Queue writes an **empty mix** plus **Dub status** (never the original recording). On DGX Spark, CTranslate2 PyPI wheels are **CPU-only**; Whisper loads CPU int8 first.
+`faster-whisper`, `chatterbox-tts`, and `llama-cpp-python` are fail-soft-baked in `phase-nodes.sh`. ASR and clone install **separately**: ASR first, then `chatterbox-tts --no-deps` so Chatterbox cannot pin `torch==2.6.0` over the lab 2.14 cu130 venv. llama-cpp-python is the **official CPU extra-index** (`--only-binary`, no CUDA extra-index) because PyPI is sdist-only and the image has no cmake. `download-dub` pip-installs ASR/clone into a **running** container. Restart also heals an existing `ez-comfy-state` volume (entrypoint import-checks, then pip for Whisper, Chatterbox, and llama-cpp). `yt-dlp` stays optional for URL ingest. The graph still loads if a wheel is missing; Queue writes an **empty mix** plus **Dub status** (never the original recording). Missing llama.cpp copies source `text` into `text_target`. On DGX Spark, CTranslate2 PyPI wheels are **CPU-only**; Whisper loads CPU int8 first.
 
 Chatterbox languages: Arabic, Danish, German, Greek, English, Spanish, Finnish, French, Hebrew, Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian, Polish, Portuguese, Russian, Swedish, Swahili, Turkish, Chinese. Soccer EN→ES is first-class.
 
@@ -108,7 +108,7 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 | **Target language** | Default Spanish |
 | **Source language** | `auto` or pin |
 | **Rewrite translation** | On: ASR + speaker cluster + per-turn GGUF into `text_target`. Off: pin the JSON |
-| **Dub status** | After Queue: speaker/turn counts, or the blocking miss (`faster-whisper not installed`, `clone pack missing`, GGUF passthrough) |
+| **Dub status** | After Queue: speaker/turn counts, or the blocking miss (`faster-whisper not installed`, `clone pack missing`, `llama.cpp unavailable`, GGUF passthrough) |
 | **Stage** | `all` / `analyze` / `render` |
 | **Clone engine** | chatterbox-ml or qwen3tts |
 | **Keep original bed** | Gaps keep ambience |
@@ -117,10 +117,10 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 ## Sequential Queue
 
 1. `./scripts/manage.sh start` — type **yes**
-2. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON + `conds.pt`, not t3-only). With the stack up this pip-installs faster-whisper, then chatterbox-tts `--no-deps`. Restart heals wheels on an existing volume without a rebuild.
+2. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON + `conds.pt`, not t3-only). With the stack up this pip-installs faster-whisper, then chatterbox-tts `--no-deps`. Restart heals Whisper, Chatterbox, and the llama-cpp-python **CPU wheel** on an existing volume without a rebuild. Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'`.
 3. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. Queue once (Stage **all**, Rewrite translation **on**).
 4. Ingest Dub status must be **`ok`**. If script JSON says `missing source.wav` / empty `turns`, ingest never wrote the wav — rights still off, source still `(none)`, or extract failed. Read ingest status first.
-5. **Dub status** must list speaker/turn counts (and `translated N/M`), not `ASR pack missing` / `clone engine missing` / GGUF passthrough. The Translation JSON `text_target` fields must be the target language.
+5. **Dub status** must list speaker/turn counts (and `translated N/M`), not `ASR pack missing` / `clone engine missing` / `llama.cpp unavailable` / GGUF passthrough. The Translation JSON `text_target` fields must be the target language. `llama.cpp unavailable` after a restart means the CPU extra-index pip failed — read `[entrypoint]` / `[comfy-install]` logs.
 6. Files under `${COMFY_OUTPUT_DIR}` as `ez_dub_mix_*.flac` / `ez_dub_yt_*.mp3` plus `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`
 7. Loudness:
 

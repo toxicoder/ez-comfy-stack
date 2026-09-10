@@ -33,10 +33,26 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'GGML_CUDA=OFF' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
-  pip_install() { return 1; }
+  run grep -F 'https://abetlen.github.io/llama-cpp-python/whl/cpu' \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -E 'extra-index-url[^[:cntrl:]]*cu1' \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
+  pip_install() {
+    printf '%s\n' "$*" >>"${TEST_TMP_DIR}/pip_llama.log"
+    return 1
+  }
+  : >"${TEST_TMP_DIR}/pip_llama.log"
   run install_llama_cpp_cpu
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"pass through"* || "${output}" == *"failed"* ]]
+  grep -q 'extra-index-url' "${TEST_TMP_DIR}/pip_llama.log"
+  grep -q 'llama-cpp-python' "${TEST_TMP_DIR}/pip_llama.log"
+  grep -q 'only-binary' "${TEST_TMP_DIR}/pip_llama.log"
+  if grep -E 'cu11|cu12|cu13' "${TEST_TMP_DIR}/pip_llama.log"; then
+    return 1
+  fi
   pip_install() { return 0; }
   run install_llama_cpp_cpu
   [ "${status}" -eq 0 ]
@@ -1114,6 +1130,68 @@ teardown() {
   run install_sage_wheel_if_pinned
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"failed"* || "${output}" == *"optional"* ]]
+}
+
+@test "ensure_llama_cpp_cpu installs CPU wheel when Llama missing" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export DUB_PIP_LOG="${TEST_TMP_DIR}/llama_pip.log"
+  : >"${DUB_PIP_LOG}"
+  cat >"${TEST_TMP_DIR}/fake-python-llama" <<'PY'
+#!/usr/bin/env bash
+log="${DUB_PIP_LOG:?}"
+if [[ ${1} == -c ]]; then
+  case "${2}" in
+    *llama_cpp*|*Llama*) exit "${LLAMA_IMPORT_RC:-1}" ;;
+  esac
+  exit 0
+fi
+if [[ ${1} == -m && ${2} == pip ]]; then
+  printf '%s\n' "$*" >>"${log}"
+  if [[ ${LLAMA_PIP_FAIL:-0} == 1 ]]; then
+    exit 1
+  fi
+  exit 0
+fi
+exit 0
+PY
+  chmod +x "${TEST_TMP_DIR}/fake-python-llama"
+  export COMFY_HOME="${TEST_TMP_DIR}/comfy_llama"
+  mkdir -p "${COMFY_HOME}/.venv/bin"
+  cp "${TEST_TMP_DIR}/fake-python-llama" "${COMFY_HOME}/.venv/bin/python"
+  chmod +x "${COMFY_HOME}/.venv/bin/python"
+  unset VIRTUAL_ENV
+
+  run grep -F 'ensure_llama_cpp_cpu' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'https://abetlen.github.io/llama-cpp-python/whl/cpu' \
+    "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run grep -E 'extra-index-url[^[:cntrl:]]*cu1' \
+    "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -ne 0 ]
+
+  : >"${DUB_PIP_LOG}"
+  export LLAMA_IMPORT_RC=1
+  run ensure_llama_cpp_cpu
+  [ "${status}" -eq 0 ]
+  grep -q 'llama-cpp-python' "${DUB_PIP_LOG}"
+  grep -q 'extra-index-url' "${DUB_PIP_LOG}"
+  grep -q 'only-binary' "${DUB_PIP_LOG}"
+  if grep -E 'cu11|cu12|cu13' "${DUB_PIP_LOG}"; then
+    return 1
+  fi
+
+  : >"${DUB_PIP_LOG}"
+  export LLAMA_IMPORT_RC=0
+  run ensure_llama_cpp_cpu
+  [ "${status}" -eq 0 ]
+  [[ ! -s ${DUB_PIP_LOG} ]]
+
+  export LLAMA_PIP_FAIL=1
+  export LLAMA_IMPORT_RC=1
+  run install_llama_cpp_cpu_wheel "${COMFY_HOME}/.venv/bin/python"
+  [ "${status}" -eq 0 ]
 }
 
 @test "ensure_dub_wheels installs ASR when WhisperModel missing" {

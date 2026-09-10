@@ -120,7 +120,7 @@ id: download-podcast
 
 ## Dub — ASR + multilingual clone
 
-`asr` is Silero VAD + faster-whisper large-v3 (`model.bin`, `config.json`, **and** `tokenizer.json`). `clone` is Chatterbox Multilingual V3 (MIT, PerTh on): `ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`. `download-dub` pip-installs `faster-whisper`, then `chatterbox-tts --no-deps` (does not pin torch 2.6 over the lab venv) when compose is up. Restart also heals missing wheels. Doctor does **not** fail when these are missing. Occupancy **audio**. Playbook: [Local dub](dub.md).
+`asr` is Silero VAD + faster-whisper large-v3 (`model.bin`, `config.json`, **and** `tokenizer.json`). `clone` is Chatterbox Multilingual V3 (MIT, PerTh on): `ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`. `download-dub` pip-installs `faster-whisper`, then `chatterbox-tts --no-deps` (does not pin torch 2.6 over the lab venv) when compose is up. Restart also heals missing wheels, including `llama-cpp-python` from the official CPU extra-index (translation). Doctor does **not** fail when these are missing. Occupancy **audio**. Playbook: [Local dub](dub.md).
 
 ```ezcmd
 id: download-dub
