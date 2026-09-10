@@ -2,122 +2,134 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/asset-bible/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/blender-gb10-sidecar/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/dcc-workflows/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/disk-wizard/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/download-limit/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/download-tiers/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/latest/dub/</loc>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/getting-started/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/glossary/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/licenses/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/manage-cli/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/models-and-cache/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/music/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/podcast/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/project-conventions/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/prompting/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/reboot-safety/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/shorts/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/spark-farm/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/splat-sidecar/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/studio-apps/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/studio-sidecars/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/studio-workflows/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/troubleshooting/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/visual-generative-ai/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/learn/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/latest/learn/clay-to-finish/</loc>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/learn/comfyui/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/latest/learn/dream-house/</loc>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/learn/generation/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/learn/hardware/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/latest/learn/pipeline/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
 </urlset>
