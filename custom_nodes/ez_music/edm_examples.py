@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from typing import Literal, TypedDict
 
+from .naming import DRIVE_THROUGH_ARTIST, music_output_prefix
+
 EDM_DURATION_S = 180.0
 DRIVE_LOCK = "instrumental, no vocals, no singing, original composition"
 DRIVE_TREAT_LOCK = "sparse vocal chop, DJ shout, no rap, original composition"
@@ -45,6 +47,7 @@ class EdmExample(TypedDict):
     bpm: int
     duration: float
     seed: int
+    phase: int
     prefix: str
     description: str
     lyrics: str
@@ -78,7 +81,7 @@ def _ex(
     title: str,
     bpm: int,
     seed: int,
-    prefix: str,
+    phase: int,
     take: str,
     lyrics: str,
     *tag_parts: str,
@@ -91,7 +94,7 @@ def _ex(
         title: Operator-facing take name.
         bpm: Tempo written into tags and the ACE encoder.
         seed: Fixed ACE / sampler seed.
-        prefix: SaveAudio filename prefix (`ez_edm_drive_*`).
+        phase: Change-group index (``phaseN/`` under the artist folder).
         take: Short blurb for the lab description.
         lyrics: Arrangement score from ``format_edm_score``.
         tag_parts: Genre and production tags (bass + festival language).
@@ -107,7 +110,8 @@ def _ex(
         "bpm": bpm,
         "duration": EDM_DURATION_S,
         "seed": seed,
-        "prefix": prefix,
+        "phase": phase,
+        "prefix": music_output_prefix(DRIVE_THROUGH_ARTIST, title, phase),
         "description": _desc(take, treat=treat),
         "lyrics": lyrics,
         "ace_mode": "vocal" if treat else "instrumental",

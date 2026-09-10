@@ -55,8 +55,8 @@ def test_no_workflows_apps_directory() -> None:
     assert not (WF / "apps").exists()
 
 
-def test_nill_bye_graphs_live_under_audio_nill_bye() -> None:
-    nested = LAB_ROOT / "audio" / "nill-bye"
+def test_nill_bye_graphs_live_under_audio_nill_bye_phase() -> None:
+    artist = LAB_ROOT / "audio" / "nill-bye"
     audio = LAB_ROOT / "audio"
     hits = [
         path
@@ -64,14 +64,20 @@ def test_nill_bye_graphs_live_under_audio_nill_bye() -> None:
         if path.name.startswith("music-rap-nill-bye-")
     ]
     assert hits
+    phases: set[str] = set()
     for path in hits:
-        assert path.parent == nested, path
-    stray = list(audio.glob("music-rap-nill-bye-*-lab-example.json"))
+        assert path.parent.parent == artist, path
+        assert path.parent.name.startswith("phase"), path
+        phases.add(path.parent.name)
+    assert phases == {"phase0", "phase1", "phase2"}
+    stray = list(artist.glob("music-rap-nill-bye-*-lab-example.json"))
     assert stray == [], stray
+    stray_audio = list(audio.glob("music-rap-nill-bye-*-lab-example.json"))
+    assert stray_audio == [], stray_audio
 
 
-def test_drive_through_graphs_live_under_audio_drive_through() -> None:
-    nested = LAB_ROOT / "audio" / "drive-through"
+def test_drive_through_graphs_live_under_audio_drive_through_phase() -> None:
+    artist = LAB_ROOT / "audio" / "drive-through"
     audio = LAB_ROOT / "audio"
     hits = [
         path
@@ -79,33 +85,44 @@ def test_drive_through_graphs_live_under_audio_drive_through() -> None:
         if path.name.startswith("music-edm-drive-through-")
     ]
     assert hits
+    phases: set[str] = set()
     for path in hits:
-        assert path.parent == nested, path
-    stray = list(audio.glob("music-edm-drive-through-*-lab-example.json"))
+        assert path.parent.parent == artist, path
+        assert path.parent.name.startswith("phase"), path
+        phases.add(path.parent.name)
+    assert phases == {"phase0", "phase1"}
+    stray = list(artist.glob("music-edm-drive-through-*-lab-example.json"))
     assert stray == [], stray
+    stray_audio = list(audio.glob("music-edm-drive-through-*-lab-example.json"))
+    assert stray_audio == [], stray_audio
 
 
 def test_lab_dest_nested_subdir() -> None:
     path = lab_dest(
         "music-rap-nill-bye-lab-coat-lab-example.json",
-        subdir="nill-bye",
+        subdir="nill-bye/phase0",
     )
     assert path == (
-        LAB_ROOT / "audio" / "nill-bye" / "music-rap-nill-bye-lab-coat-lab-example.json"
+        LAB_ROOT
+        / "audio"
+        / "nill-bye"
+        / "phase0"
+        / "music-rap-nill-bye-lab-coat-lab-example.json"
     )
     edm = lab_dest(
         "music-edm-drive-through-open-lane-lab-example.json",
-        subdir="drive-through",
+        subdir="drive-through/phase0",
     )
     assert edm == (
         LAB_ROOT
         / "audio"
         / "drive-through"
+        / "phase0"
         / "music-edm-drive-through-open-lane-lab-example.json"
     )
 
 
 def test_lab_dest_rejects_bad_subdir() -> None:
-    for bad in ("..", ".", "foo/bar", "/abs"):
+    for bad in ("..", ".", "/abs", "foo/../bar"):
         with pytest.raises(ValueError, match="subdir"):
             lab_dest("music-rap-draft-lab-example.json", subdir=bad)

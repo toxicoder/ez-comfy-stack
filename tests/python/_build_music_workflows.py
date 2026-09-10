@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
-from _lab_paths import lab_dest
+from _lab_paths import LAB_ROOT, lab_dest
 from _stamp_app_mode import stamp_suite_graph
 from _wire_prompt_enhance import _rewrite_enhance_blurb
 
@@ -511,22 +511,40 @@ def build_edm(ex: EdmExample) -> dict:
     )
 
 
+def _clear_artist_root_json(artist: str) -> None:
+    """Remove leftover *-lab-example.json at the artist folder root."""
+    root = LAB_ROOT / "audio" / artist
+    if not root.is_dir():
+        return
+    for path in root.glob("*-lab-example.json"):
+        path.unlink()
+        print(f"removed {path.relative_to(ROOT)}")
+
+
 def main() -> None:
-    graphs = {
-        "music-rap-draft-lab-example.json": build_draft(),
-        "music-rap-full-lab-example.json": build_full(),
-    }
+    _clear_artist_root_json("nill-bye")
+    _clear_artist_root_json("drive-through")
+    placements: list[tuple[str, dict, str | None]] = [
+        ("music-rap-draft-lab-example.json", build_draft(), None),
+        ("music-rap-full-lab-example.json", build_full(), None),
+    ]
     for diss in DISS_EXAMPLES:
-        graphs[f"{diss['stem']}.json"] = build_diss(diss)
+        placements.append(
+            (
+                f"{diss['stem']}.json",
+                build_diss(diss),
+                f"nill-bye/phase{diss['phase']}",
+            )
+        )
     for edm in EDM_EXAMPLES:
-        graphs[f"{edm['stem']}.json"] = build_edm(edm)
-    for name, graph in graphs.items():
-        if name.startswith("music-rap-nill-bye-"):
-            subdir: str | None = "nill-bye"
-        elif name.startswith("music-edm-drive-through-"):
-            subdir = "drive-through"
-        else:
-            subdir = None
+        placements.append(
+            (
+                f"{edm['stem']}.json",
+                build_edm(edm),
+                f"drive-through/phase{edm['phase']}",
+            )
+        )
+    for name, graph, subdir in placements:
         path = lab_dest(name, subdir=subdir)
         path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")
