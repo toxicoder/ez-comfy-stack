@@ -171,7 +171,6 @@ comfy_volume_python() {
 #######################################
 install_llama_cpp_runtime_wheel() {
   local py="${1:?}"
-  local wheel
   local -a args=()
   # shellcheck source=../../docker/install-comfy/llama-cpp-cpu.sh disable=SC1091
   source "${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh"
@@ -189,9 +188,12 @@ install_llama_cpp_runtime_wheel() {
       return 0
     fi
   fi
-  wheel="$(llama_cpp_direct_wheel_url)"
-  if [[ -n ${wheel} ]] &&
-    compose_run exec -T comfyui "${py}" -m pip install --only-binary=:all: "${wheel}"; then
+  args=()
+  while IFS= read -r tok; do
+    args+=("${tok}")
+  done < <(llama_cpp_direct_wheel_pip_args)
+  if [[ ${#args[@]} -gt 0 ]] &&
+    compose_run exec -T comfyui "${py}" -m pip install "${args[@]}"; then
     if compose_run exec -T comfyui "${py}" -c 'from llama_cpp import Llama'; then
       log "dub wheels: llama-cpp-python CPU wheel installed from GitHub release"
       return 0

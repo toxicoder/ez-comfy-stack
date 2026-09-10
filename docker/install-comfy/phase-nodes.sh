@@ -255,7 +255,6 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/llama-cpp-cpu.sh"
 #   0 always (soft-fail)
 #######################################
 install_llama_cpp_cpu() {
-  local wheel
   local -a args=()
   while IFS= read -r tok; do
     args+=("${tok}")
@@ -264,8 +263,11 @@ install_llama_cpp_cpu() {
     log "llama-cpp-python (CPU wheel) installed for prompt enhance"
     return 0
   fi
-  wheel="$(llama_cpp_direct_wheel_url)"
-  if [[ -n ${wheel} ]] && pip_install --only-binary=:all: "${wheel}"; then
+  args=()
+  while IFS= read -r tok; do
+    args+=("${tok}")
+  done < <(llama_cpp_direct_wheel_pip_args)
+  if [[ ${#args[@]} -gt 0 ]] && pip_install "${args[@]}"; then
     log "llama-cpp-python (CPU wheel) installed from GitHub release"
     return 0
   fi

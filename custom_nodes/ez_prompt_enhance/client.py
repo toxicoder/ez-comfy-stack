@@ -70,6 +70,9 @@ _LLM_PATH = ""
 _HEAL_LOCK = threading.Lock()
 _HEAL_TRIED = False
 _HEAL_ERROR = ""
+_HEAL_PIP_FAILED = False
+_LAST_IMPORT_ERROR = ""
+_LLAMA_IMPORT_ERRORS = (ImportError, OSError, RuntimeError, FileNotFoundError)
 REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
 REASON_STYLE_IGNORED_FLF = "style ignored in flf (start and end frames own look)"
 REASON_STYLE_IGNORED_VACE = "style ignored in vace (both clips own look)"
@@ -161,41 +164,69 @@ def llama_cpp_cpu_pip_index_args() -> list[str]:
     ]
 
 
+def llama_cpp_direct_wheel_pip_args() -> list[str]:
+    """pip install operands: replace a same-version wheel from GitHub."""
+    wheel = llama_cpp_direct_wheel_url()
+    if not wheel:
+        return []
+    return [
+        "--force-reinstall",
+        "--no-deps",
+        "--only-binary=:all:",
+        wheel,
+    ]
+
+
 def llama_cpp_operator_pip_command() -> str:
     """Exact docker exec pip line for a blocking Dub / Enhance status."""
-    args = " ".join(llama_cpp_cpu_pip_index_args())
+    args = llama_cpp_direct_wheel_pip_args() or llama_cpp_cpu_pip_index_args()
     return (
         f"docker exec ez-comfy-studio {LLAMA_CPP_OPERATOR_PYTHON} "
-        f"-m pip install {args}"
+        f"-m pip install {' '.join(args)}"
     )
 
 
 def llama_cpp_unavailable_status() -> str:
     """Operator-facing next step when Llama cannot import after heal."""
     cmd = llama_cpp_operator_pip_command()
-    detail = _HEAL_ERROR.strip()
-    if detail:
-        return f"llama.cpp unavailable — CPU wheel pip failed ({detail}). {cmd}"
-    return f"llama.cpp unavailable — CPU wheel pip failed. {cmd}"
+    pip_detail = _HEAL_ERROR.strip()
+    import_detail = _LAST_IMPORT_ERROR.strip()
+    if _HEAL_PIP_FAILED and pip_detail:
+        return f"llama.cpp unavailable — CPU wheel pip failed ({pip_detail}). {cmd}"
+    if import_detail:
+        return f"llama.cpp unavailable — Llama import failed ({import_detail}). {cmd}"
+    if pip_detail:
+        return f"llama.cpp unavailable — Llama import failed ({pip_detail}). {cmd}"
+    return f"llama.cpp unavailable — Llama did not import. {cmd}"
 
 
 def reset_llama_runtime_for_tests() -> None:
     """Clear cached LLM handle and CPU-wheel heal state (unit tests only)."""
-    global _HEAL_TRIED, _HEAL_ERROR
+    global _HEAL_TRIED, _HEAL_ERROR, _HEAL_PIP_FAILED, _LAST_IMPORT_ERROR
     _close_llm()
     _HEAL_TRIED = False
     _HEAL_ERROR = ""
+    _HEAL_PIP_FAILED = False
+    _LAST_IMPORT_ERROR = ""
 
 
 def _pip_install(args: list[str]) -> subprocess.CompletedProcess[str]:
     """Run ``python -m pip install`` on this interpreter. Tests patch this."""
-    return subprocess.run(
-        [sys.executable, "-m", "pip", "install", *args],
-        capture_output=True,
-        text=True,
-        timeout=HEAL_PIP_TIMEOUT_S,
-        check=False,
-    )
+    try:
+        return subprocess.run(
+            [sys.executable, "-m", "pip", "install", *args],
+            capture_output=True,
+            text=True,
+            timeout=HEAL_PIP_TIMEOUT_S,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return subprocess.CompletedProcess(
+            args=[sys.executable, "-m", "pip", "install", *args],
+            returncode=1,
+            stdout="",
+            stderr=f"pip timed out after {HEAL_PIP_TIMEOUT_S}s",
+        )
 
 
 def _short_pip_error(proc: subprocess.CompletedProcess[str]) -> str:
@@ -215,39 +246,52 @@ def _forget_llama_module() -> None:
 
 def _load_llama_class() -> Any | None:
     """Return llama_cpp.Llama, or None when the CPU wheel is missing."""
+    global _LAST_IMPORT_ERROR
     try:
         from llama_cpp import Llama
-    except (ImportError, OSError):
+    except _LLAMA_IMPORT_ERRORS as exc:
+        _LAST_IMPORT_ERROR = str(exc).strip() or type(exc).__name__
+        _log(f"llama_cpp import failed: {_LAST_IMPORT_ERROR}")
         return None
+    _LAST_IMPORT_ERROR = ""
     return Llama
 
 
 def _heal_llama_cpp_cpu() -> str:
     """Install the CPU wheel once per process. Empty string on success."""
-    global _HEAL_TRIED, _HEAL_ERROR
+    global _HEAL_TRIED, _HEAL_ERROR, _HEAL_PIP_FAILED
     with _HEAL_LOCK:
         if _HEAL_TRIED:
             return _HEAL_ERROR
         _HEAL_TRIED = True
+        _HEAL_PIP_FAILED = False
         _log("llama-cpp-python missing — installing CPU wheel")
+
+        def _import_ok() -> bool:
+            _forget_llama_module()
+            return _load_llama_class() is not None
+
         proc = _pip_install(llama_cpp_cpu_pip_index_args())
+        if proc.returncode == 0 and _import_ok():
+            _HEAL_ERROR = ""
+            _log("llama-cpp-python CPU wheel installed")
+            return ""
+        wheel_args = llama_cpp_direct_wheel_pip_args()
+        if wheel_args:
+            _log("CPU extra-index pip missed or Llama still missing; trying direct wheel")
+            proc = _pip_install(wheel_args)
+            if proc.returncode == 0 and _import_ok():
+                _HEAL_ERROR = ""
+                _log("llama-cpp-python CPU wheel installed from GitHub release")
+                return ""
         if proc.returncode != 0:
-            wheel = llama_cpp_direct_wheel_url()
-            if wheel:
-                _log("CPU extra-index pip missed; trying direct wheel")
-                proc = _pip_install([wheel])
-        if proc.returncode != 0:
+            _HEAL_PIP_FAILED = True
             _HEAL_ERROR = _short_pip_error(proc)
             _log(f"llama-cpp-python CPU wheel pip failed: {_HEAL_ERROR}")
             return _HEAL_ERROR
-        _forget_llama_module()
-        if _load_llama_class() is None:
-            _HEAL_ERROR = "import failed after pip"
-            _log(f"llama-cpp-python installed but import failed: {_HEAL_ERROR}")
-            return _HEAL_ERROR
-        _HEAL_ERROR = ""
-        _log("llama-cpp-python CPU wheel installed")
-        return ""
+        _HEAL_ERROR = _LAST_IMPORT_ERROR or "import failed after pip"
+        _log(f"llama-cpp-python installed but import failed: {_HEAL_ERROR}")
+        return _HEAL_ERROR
 
 
 def status_for_reason(reason: str | None) -> str:

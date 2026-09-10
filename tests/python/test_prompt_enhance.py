@@ -421,7 +421,8 @@ def test_missing_llama_import_passthrough(monkeypatch: pytest.MonkeyPatch, tmp_p
     assert out.reason == client.REASON_LLAMA_UNAVAILABLE
     assert "CPU wheel pip failed" in out.status
     assert "docker exec" in out.status
-    assert "llama-cpp-python==0.3.35" in out.status
+    assert "--force-reinstall" in out.status
+    assert client.LLAMA_CPP_CPU_VERSION in out.status
     assert "restart" not in out.status
     assert "rebuild" not in out.status
 
@@ -442,6 +443,41 @@ def test_llama_oserror_import_passthrough(
         out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
     assert out.text == "lazy bike"
     assert out.reason == client.REASON_LLAMA_UNAVAILABLE
+
+
+def test_llama_runtimeerror_import_passthrough(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    gguf = tmp_path / "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    gguf.write_bytes(b"fake")
+    monkeypatch.setenv("EZ_LLM_GGUF", str(gguf))
+    client.reset_llama_runtime_for_tests()
+
+    class _Boom(types.ModuleType):
+        def __getattr__(self, name: str) -> object:
+            raise RuntimeError(
+                "Failed to load shared library 'libllama.so': "
+                "libc.musl-aarch64.so.1: cannot open shared object file"
+            )
+
+    def _pip(args: list[str]) -> subprocess.CompletedProcess[str]:
+        del args
+        return subprocess.CompletedProcess(
+            args=["pip", "install"],
+            returncode=0,
+            stdout="Requirement already satisfied: llama-cpp-python==0.3.35",
+            stderr="",
+        )
+
+    monkeypatch.setattr(client, "_pip_install", _pip)
+    monkeypatch.setattr(client, "_forget_llama_module", lambda: None)
+    with patch.dict(sys.modules, {"llama_cpp": _Boom("llama_cpp")}):
+        out = client.enhance_prompt("sys", "user", enhance=True, fallback="lazy bike")
+    assert out.text == "lazy bike"
+    assert out.reason == client.REASON_LLAMA_UNAVAILABLE
+    assert "libllama" in out.status
+    assert "force-reinstall" in out.status
+    assert "CPU wheel pip failed" not in out.status
 
 
 def test_llama_typeerror_retries_without_chat_format(
@@ -503,12 +539,28 @@ def test_llama_cpp_direct_wheel_url_is_manylinux() -> None:
     assert "cu13" not in url
 
 
-def test_status_for_reason_llama_points_at_pip() -> None:
+def test_llama_cpp_direct_wheel_pip_args_force_reinstall() -> None:
+    args = client.llama_cpp_direct_wheel_pip_args()
+    assert "--force-reinstall" in args
+    assert "--no-deps" in args
+    assert "--only-binary=:all:" in args
+    joined = " ".join(args)
+    assert "github.com/abetlen/llama-cpp-python" in joined
+    assert "manylinux" in joined
+    assert "musllinux" not in joined
+    assert "cu12" not in joined
+    assert "cu13" not in joined
+
+
+def test_status_for_reason_llama_points_at_force_reinstall() -> None:
     text = client.status_for_reason(client.REASON_LLAMA_UNAVAILABLE)
-    assert "CPU wheel pip failed" in text
+    assert "llama.cpp unavailable" in text
+    assert "Llama did not import" in text
+    assert "CPU wheel pip failed" not in text
     assert "docker exec" in text
-    assert "--index-url" in text
-    assert "llama-cpp-python==0.3.35" in text
+    assert "--force-reinstall" in text
+    assert "--no-deps" in text
+    assert "github.com/abetlen/llama-cpp-python" in text
     assert "restart" not in text
     assert "rebuild" not in text
     assert "cu12" not in text
@@ -541,7 +593,44 @@ def test_heal_llama_cpp_tries_index_then_direct_wheel(
     joined = " ".join(calls[0])
     assert "cu12" not in joined
     assert "cu13" not in joined
+    assert "--force-reinstall" in calls[1]
+    assert "--no-deps" in calls[1]
     assert any("github.com/abetlen/llama-cpp-python" in item for item in calls[1])
+
+
+def test_heal_llama_cpp_force_reinstalls_when_pip_already_satisfied(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[list[str]] = []
+
+    def _pip(args: list[str]) -> subprocess.CompletedProcess[str]:
+        calls.append(list(args))
+        return subprocess.CompletedProcess(
+            args=["pip", "install", *args],
+            returncode=0,
+            stdout="Requirement already satisfied: llama-cpp-python==0.3.35",
+            stderr="",
+        )
+
+    monkeypatch.setattr(client, "_pip_install", _pip)
+    monkeypatch.setattr(client, "_forget_llama_module", lambda: None)
+    with patch.dict(sys.modules, {"llama_cpp": None}):
+        err = client._heal_llama_cpp_cpu()
+    assert err
+    assert "import failed after pip" in err or "llama_cpp" in err
+    assert len(calls) == 2
+    assert "--index-url" in calls[0]
+    assert "--force-reinstall" in calls[1]
+    assert "--no-deps" in calls[1]
+    assert "--only-binary=:all:" in calls[1]
+    assert any("github.com/abetlen/llama-cpp-python" in item for item in calls[1])
+    joined = " ".join(calls[1])
+    assert "cu12" not in joined
+    assert "cu13" not in joined
+    status = client.llama_cpp_unavailable_status()
+    assert "CPU wheel pip failed" not in status
+    assert "Llama import failed" in status or "import failed" in status
+    assert "--force-reinstall" in status
 
 
 def test_get_llama_heals_cpu_wheel_then_loads(

@@ -748,10 +748,14 @@ def test_preflight_clone_names_missing_t3_model(monkeypatch) -> None:
 
 
 def test_translate_llama_status_names_pip_not_restart() -> None:
+    text = pipeline.translate_llama_status()
+    assert "llama.cpp unavailable" in text
+    assert "docker exec" in text
+    assert "--force-reinstall" in text
+    assert "github.com/abetlen/llama-cpp-python" in text
+    assert "restart so the entrypoint" not in text
     assert "llama.cpp unavailable" in pipeline.TRANSLATE_LLAMA_STATUS
     assert "docker exec" in pipeline.TRANSLATE_LLAMA_STATUS
-    assert "llama-cpp-python==0.3.35" in pipeline.TRANSLATE_LLAMA_STATUS
-    assert "restart so the entrypoint" not in pipeline.TRANSLATE_LLAMA_STATUS
 
 
 def test_preflight_translate_names_llama_miss(monkeypatch) -> None:
@@ -763,6 +767,18 @@ def test_preflight_translate_names_llama_miss(monkeypatch) -> None:
     assert "llama.cpp unavailable" in reason
     assert "pip" in reason.lower()
     assert "docker exec" in reason
+    assert "--force-reinstall" in reason
+
+
+def test_preflight_translate_swallows_runtimeerror(monkeypatch) -> None:
+    def _boom() -> tuple[object, str]:
+        raise RuntimeError("Failed to load shared library 'libllama.so'")
+
+    monkeypatch.setattr("ez_prompt_enhance.client._get_llama", _boom)
+    reason = pipeline.preflight_translate()
+    assert "llama.cpp unavailable" in reason
+    assert "docker exec" in reason
+    assert "--force-reinstall" in reason
 
 
 def test_preflight_translate_names_gguf_miss(monkeypatch) -> None:
