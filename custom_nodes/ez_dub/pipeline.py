@@ -209,7 +209,10 @@ CLONE_MISSING_STATUS = (
 )
 T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 — upgrade chatterbox-tts"
 TRANSLATE_LLAMA_STATUS = (
-    "llama.cpp unavailable — restart so the entrypoint installs the CPU wheel"
+    "llama.cpp unavailable — CPU wheel pip failed. "
+    "docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -m pip install "
+    "--only-binary=:all: --index-url https://abetlen.github.io/llama-cpp-python/whl/cpu "
+    "--extra-index-url https://pypi.org/simple llama-cpp-python==0.3.35"
 )
 TRANSLATE_BLOCKING_MARKERS = (
     "llama.cpp unavailable",

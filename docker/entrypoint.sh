@@ -873,12 +873,13 @@ install_dub_clone_wheel() {
   return 0
 }
 
-# Official llama-cpp-python CPU wheels (aarch64 manylinux py3-none). PyPI is
-# sdist-only; --only-binary against PyPI always misses on DGX Spark.
-LLAMA_CPP_CPU_INDEX="https://abetlen.github.io/llama-cpp-python/whl/cpu"
+# Official llama-cpp-python CPU wheels. PyPI is sdist-only. Shared pins:
+# shellcheck source=install-comfy/llama-cpp-cpu.sh disable=SC1091
+source "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/install-comfy/llama-cpp-cpu.sh"
 
 #######################################
 # pip-install llama-cpp-python CPU wheel into the Comfy venv. Fail-soft.
+# CPU extra-index is --index-url; GitHub manylinux wheel is the fallback.
 # Binaries only (no compile). Does not touch torch. CUDA extra-index unused.
 # Globals:
 #   LLAMA_CPP_CPU_INDEX
@@ -889,16 +890,14 @@ LLAMA_CPP_CPU_INDEX="https://abetlen.github.io/llama-cpp-python/whl/cpu"
 # Returns:
 #   0 always (soft-fail)
 #######################################
-install_llama_cpp_cpu_wheel() {
+install_llama_cpp_cpu_wheel_logged() {
   local py="${1:?}"
-  local index="${LLAMA_CPP_CPU_INDEX}"
-  ep_log "llama.cpp: pip install llama-cpp-python (CPU extra-index, binaries only)"
-  if "${py}" -m pip install --only-binary=:all: --extra-index-url "${index}" \
-    llama-cpp-python; then
+  ep_log "llama.cpp: pip install llama-cpp-python (CPU extra-index as --index-url, binaries only)"
+  if install_llama_cpp_cpu_wheel "${py}"; then
     ep_log "llama.cpp: llama-cpp-python CPU wheel installed"
     return 0
   fi
-  ep_log "WARN: llama-cpp-python CPU wheel pip failed — Enhance/dub translation will pass through"
+  ep_log "WARN: llama-cpp-python CPU wheel pip failed — Queue will retry; Enhance/dub translation pass through until Llama imports"
   return 0
 }
 
@@ -926,7 +925,12 @@ ensure_llama_cpp_cpu() {
     ep_log "llama.cpp: Llama already importable"
     return 0
   fi
-  install_llama_cpp_cpu_wheel "${py}"
+  install_llama_cpp_cpu_wheel_logged "${py}"
+  if dub_python_can_import "${py}" "from llama_cpp import Llama"; then
+    ep_log "llama.cpp: Llama importable after pip"
+    return 0
+  fi
+  ep_log "WARN: llama.cpp: Llama still not importable after pip"
   return 0
 }
 

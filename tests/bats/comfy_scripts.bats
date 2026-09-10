@@ -29,15 +29,32 @@ teardown() {
 }
 
 @test "install_llama_cpp_cpu is fail-soft and disables CUDA" {
+  local helper="${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh"
   run grep -F 'install_llama_cpp_cpu' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'https://abetlen.github.io/llama-cpp-python/whl/cpu' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'LLAMA_CPP_CPU_VERSION="0.3.35"' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'llama-cpp-python==' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F -- '--index-url' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'pypi.org/simple' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'llama_cpp_cpu_pip_index_args' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'llama_cpp_python_can_import' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'llama_cpp_direct_wheel_url' "${helper}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'install_llama_cpp_cpu_wheel()' "${helper}"
+  [ "${status}" -eq 0 ]
   run grep -F 'GGML_CUDA=OFF' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
-  [ "${status}" -eq 0 ]
-  run grep -F 'https://abetlen.github.io/llama-cpp-python/whl/cpu' \
-    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
-  [ "${status}" -eq 0 ]
-  run grep -E 'extra-index-url[^[:cntrl:]]*cu1' \
-    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
+  run grep -E 'extra-index-url[^[:cntrl:]]*cu1' "${helper}"
+  [ "${status}" -ne 0 ]
+  run grep -E 'cu11|cu12|cu13' "${helper}"
   [ "${status}" -ne 0 ]
   pip_install() {
     printf '%s\n' "$*" >>"${TEST_TMP_DIR}/pip_llama.log"
@@ -46,10 +63,12 @@ teardown() {
   : >"${TEST_TMP_DIR}/pip_llama.log"
   run install_llama_cpp_cpu
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"pass through"* || "${output}" == *"failed"* ]]
+  [[ "${output}" == *"pass through"* || "${output}" == *"failed"* || "${output}" == *"Queue"* ]]
   grep -q 'extra-index-url' "${TEST_TMP_DIR}/pip_llama.log"
-  grep -q 'llama-cpp-python' "${TEST_TMP_DIR}/pip_llama.log"
+  grep -q 'index-url' "${TEST_TMP_DIR}/pip_llama.log"
+  grep -q 'llama-cpp-python==0.3.35' "${TEST_TMP_DIR}/pip_llama.log"
   grep -q 'only-binary' "${TEST_TMP_DIR}/pip_llama.log"
+  grep -q 'github.com/abetlen/llama-cpp-python' "${TEST_TMP_DIR}/pip_llama.log"
   if grep -E 'cu11|cu12|cu13' "${TEST_TMP_DIR}/pip_llama.log"; then
     return 1
   fi
@@ -977,6 +996,9 @@ teardown() {
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-comfy.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-nodes.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-finalize.sh ]]
+  [[ -f ${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh ]]
+  run grep -F 'install-comfy/llama-cpp-cpu.sh' "${REPO_ROOT}/docker/Dockerfile"
+  [ "${status}" -eq 0 ]
   run grep -F 'TORCH_VERSION' "${REPO_ROOT}/docker/install-comfy/core.sh"
   [ "${status}" -eq 0 ]
   # Comfy pins must not live in the torch-stage COPY
@@ -1179,10 +1201,10 @@ PY
   run grep -F 'ensure_llama_cpp_cpu' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'https://abetlen.github.io/llama-cpp-python/whl/cpu' \
-    "${REPO_ROOT}/docker/entrypoint.sh"
+    "${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh"
   [ "${status}" -eq 0 ]
   run grep -E 'extra-index-url[^[:cntrl:]]*cu1' \
-    "${REPO_ROOT}/docker/entrypoint.sh"
+    "${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh"
   [ "${status}" -ne 0 ]
 
   : >"${DUB_PIP_LOG}"
@@ -1191,7 +1213,9 @@ PY
   [ "${status}" -eq 0 ]
   grep -q 'llama-cpp-python' "${DUB_PIP_LOG}"
   grep -q 'extra-index-url' "${DUB_PIP_LOG}"
+  grep -q 'index-url' "${DUB_PIP_LOG}"
   grep -q 'only-binary' "${DUB_PIP_LOG}"
+  grep -q 'github.com/abetlen/llama-cpp-python' "${DUB_PIP_LOG}"
   if grep -E 'cu11|cu12|cu13' "${DUB_PIP_LOG}"; then
     return 1
   fi
@@ -1204,7 +1228,7 @@ PY
 
   export LLAMA_PIP_FAIL=1
   export LLAMA_IMPORT_RC=1
-  run install_llama_cpp_cpu_wheel "${COMFY_HOME}/.venv/bin/python"
+  run install_llama_cpp_cpu_wheel_logged "${COMFY_HOME}/.venv/bin/python"
   [ "${status}" -eq 0 ]
 }
 
