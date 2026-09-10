@@ -189,7 +189,7 @@ flowchart TB
 
     | Workflow | What it does |
     | --- | --- |
-    | **dub-localize-lab-example** | Multi-speaker clone-and-translate. Pick or upload source media. Rights gate. Duration-locked `ez_dub_yt` for YouTube Languages. Prefix `ez_dub_mix` |
+    | **dub-localize-lab-example** | Multi-speaker clone-and-translate. Pick or upload source media. Rights gate. **Dub status** after Queue. Duration-locked `ez_dub_yt` for YouTube Languages. Prefix `ez_dub_mix` |
     | **podcast-audio-first-lab-example** | Two-host episode. Kokoro stock voices + ACE-Step instrumental bed. Prefix `ez_podcast_ep` |
     | **podcast-radio-drama-lab-example** | One-graph radio drama. Sting + bed stay instrumental. Prefix `ez_radio_ep` |
     | **music-rap-draft-lab-example** | ACE-Step rap draft **32 s** boom-bap 88 (`ez_rap_draft`) |

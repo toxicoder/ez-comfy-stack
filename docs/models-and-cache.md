@@ -246,7 +246,7 @@ Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
 | --- | --- | --- |
 | `silero_vad.onnx` | `onnx/` | Silero VAD (`--tier asr`) |
 | `model.bin` + `config.json` + `tokenizer.json` + `vocabulary.json` | `whisper/` | faster-whisper large-v3 (`--tier asr`; `model.bin` alone is not loadable) |
-| `ve.pt` + `s3gen.pt` + `t3_mtl23ls_v3.safetensors` + `grapheme_mtl_merged_expanded_v1.json` | `tts/` | Chatterbox Multilingual V3 (`--tier clone`; `from_local` also needs `Cangjie5_TC.json` + `conds.pt`) |
+| `ve.pt` + `s3gen.pt` + `t3_mtl23ls_v3.safetensors` + `grapheme_mtl_merged_expanded_v1.json` + `conds.pt` | `tts/` | Chatterbox Multilingual V3 (`--tier clone`; `from_local` also needs `Cangjie5_TC.json`) |
 
 ### Example graphs
 

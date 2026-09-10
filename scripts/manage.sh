@@ -82,6 +82,58 @@ ensure_prompt_enhance_gguf() {
 }
 
 #######################################
+# Pip-install faster-whisper + chatterbox-tts into the running Comfy venv.
+# No-op (log) when the stack is stopped. Never fails the caller.
+# Globals:
+#   None (uses compose_is_running / compose_run)
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0
+#######################################
+install_dub_runtime_wheels() {
+  if ! compose_is_running; then
+    log "dub wheels: stack stopped — start, then re-run download-dub, or rebuild the image"
+    return 0
+  fi
+  log "dub wheels: pip install faster-whisper chatterbox-tts in the container venv"
+  if compose_run exec -T comfyui /comfy-state/ComfyUI/.venv/bin/pip install \
+    faster-whisper chatterbox-tts; then
+    log "dub wheels: faster-whisper + chatterbox-tts importable in the container"
+    return 0
+  fi
+  warn "dub wheels: pip failed — Queue writes empty mix until the venv has faster-whisper and chatterbox-tts"
+  return 0
+}
+
+#######################################
+# Soft-check that dub ASR/clone wheels import inside the running container.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0
+#######################################
+check_dub_runtime_wheels() {
+  if ! compose_is_running; then
+    log "dub wheel import: skipped (stack stopped)"
+    return 0
+  fi
+  if compose_run exec -T comfyui /comfy-state/ComfyUI/.venv/bin/python -c \
+    'import faster_whisper, chatterbox.mtl_tts'; then
+    log "dub wheels: faster-whisper + chatterbox.mtl_tts import ok"
+    return 0
+  fi
+  warn "dub wheels missing in the container — ./scripts/manage.sh download-dub --tier asr (stack up) or rebuild the image"
+  return 0
+}
+
+#######################################
 # Print the human-facing command list and environment pointer to stdout.
 # Globals:
 #   See file header / caller environment.
@@ -117,7 +169,8 @@ Commands:
                     analog = Kokoro-82M ONNX only. Missing pack is not a doctor failure.
   download-dub [--tier asr|clone|all] [--limit auto|N|off]
                     Opt-in Silero VAD + faster-whisper + Chatterbox Multilingual V3
-                    Missing pack is not a doctor failure. Not part of download-models.
+                    When the stack is up, also pip-installs faster-whisper + chatterbox-tts
+                    into the container venv. Missing pack is not a doctor failure.
   download-music [--tier turbo|xl|all] [--limit auto|N|off]
                     Opt-in ACE-Step 1.5 music AIO (bandwidth limited)
                     turbo = ace_step_1.5_turbo_aio.safetensors (~10 GB). Shares dest with download-podcast --tier acestep.
@@ -395,13 +448,14 @@ cmd_doctor() {
   else
     log "spark-timing: none — Queue klein-still-draft / wan-i2v-5s / ltx-i2v-5s then spark-timing record --klein N --wan N --ltx N"
   fi
-  local image_json wan_json ltx_json llm_json podcast_json dub_json music_json
+  local image_json wan_json ltx_json llm_json podcast_json dub_json dub_clone_json music_json
   image_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-image.sh" status --tier fast --json 2>/dev/null || echo '{}')
   wan_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-wan.sh" status --tier 5b --json 2>/dev/null || echo '{}')
   ltx_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" status --tier 2.5 --json 2>/dev/null || echo '{}')
   llm_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" status --json 2>/dev/null || echo '{}')
   podcast_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-podcast.sh" status --tier analog --json 2>/dev/null || echo '{}')
   dub_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-dub.sh" status --tier asr --json 2>/dev/null || echo '{}')
+  dub_clone_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-dub.sh" status --tier clone --json 2>/dev/null || echo '{}')
   music_json=$(MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-music.sh" status --tier turbo --json 2>/dev/null || echo '{}')
   log "MODELS_DIR pack disk:"
   log "  image status: ${image_json}"
@@ -409,7 +463,8 @@ cmd_doctor() {
   log "  ltx status: ${ltx_json}"
   log "  llm status: ${llm_json}"
   log "podcast status: ${podcast_json} (opt-in; missing pack is not a doctor failure)"
-  log "dub status: ${dub_json} (opt-in; missing pack is not a doctor failure)"
+  log "dub status asr: ${dub_json} clone: ${dub_clone_json} (opt-in; missing pack is not a doctor failure)"
+  check_dub_runtime_wheels
   log "music status: ${music_json} (opt-in; missing pack is not a doctor failure)"
   ensure_prompt_enhance_gguf
   # Soft: missing lab weights do not fail doctor (download may be intentional later)
@@ -886,6 +941,7 @@ cmd_download_dub() {
 Usage: manage.sh download-dub [--tier asr|clone|all] [--limit auto|N|off]
   Opt-in. Default asr = Silero VAD + faster-whisper large-v3.
   clone = Chatterbox Multilingual V3 (MIT, PerTh on).
+  When compose is up, pip-installs faster-whisper + chatterbox-tts into the venv.
   Does not run as part of download-models.
   --limit auto|N|off  same wrap as download-models (always clears on exit)
 EOF
@@ -922,6 +978,7 @@ EOF
     return 1
   fi
   log "download-dub: tier ${tier} ready under ${MODELS_DIR}/comfy"
+  install_dub_runtime_wheels
   return 0
 }
 

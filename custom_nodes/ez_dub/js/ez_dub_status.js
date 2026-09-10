@@ -1,17 +1,9 @@
 import { app } from "../../scripts/app.js";
 import { ComfyWidgets } from "../../scripts/widgets.js";
 
-const NODE_CLASSES = new Set([
-  "EZKleinPromptEnhance",
-  "EZWanPromptEnhance",
-  "EZLTXPromptEnhance",
-  "EZAceStepPromptEnhance",
-  "EZRapLyrics",
-  "EZPodcastScript",
-]);
-
-const PREVIEW = "CLIP prompt";
-const STATUS = "Enhance status";
+const NODE_CLASSES = new Set(["EZDubScript", "EZDubRender"]);
+const PREVIEW = "Turns JSON";
+const STATUS = "Dub status";
 
 function textFromMessage(message, key) {
   const raw = message?.[key];
@@ -56,7 +48,7 @@ function populate(node, text, status) {
 }
 
 app.registerExtension({
-  name: "ez_prompt_enhance.preview",
+  name: "ez_dub.statusPreview",
   async beforeRegisterNodeDef(nodeType, nodeData) {
     if (!NODE_CLASSES.has(nodeData.name)) {
       return;
@@ -64,7 +56,7 @@ app.registerExtension({
     const onNodeCreated = nodeType.prototype.onNodeCreated;
     nodeType.prototype.onNodeCreated = function () {
       onNodeCreated?.apply(this, arguments);
-      populate(this, "", "Queue to rewrite");
+      populate(this, "", "Queue to transcribe, translate, and clone");
     };
     const onExecuted = nodeType.prototype.onExecuted;
     nodeType.prototype.onExecuted = function (message) {

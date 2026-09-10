@@ -199,10 +199,14 @@ def resolve_media_source(
 
 
 TRANSLATE_MAX_TOKENS = 512
+TRANSLATE_TEMPERATURE = 0.3
+TRANSLATE_TIMEOUT_S = 120
+CLONE_TEXT_LIMIT = 300
 CLONE_MISSING_STATUS = (
     "clone engine missing — pip install chatterbox-tts and "
     "./scripts/manage.sh download-dub --tier clone"
 )
+T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 — upgrade chatterbox-tts"
 NO_TURNS_STATUS = "no turns — ASR/translate did not run"
 ASR_WHEEL_STATUS = "faster-whisper not installed — pip install faster-whisper"
 ASR_PACK_STATUS = (
@@ -213,8 +217,17 @@ CLONE_REQUIRED_FILES = (
     "s3gen.pt",
     "grapheme_mtl_merged_expanded_v1.json",
     "t3_mtl23ls_v3.safetensors",
+    "conds.pt",
 )
 WHISPER_REQUIRED_FILES = ("model.bin", "config.json")
+S3_SR = 16000
+
+# Process-local handles. Tests reset these. Production loads once per Queue.
+_WHISPER: Any = None
+_WHISPER_DIR_CACHED = ""
+_CHATTERBOX: Any = None
+_CHATTERBOX_CKPT = ""
+_VOICE_ENCODER: Any = None
 
 
 def language_code(code: object) -> str:
@@ -244,6 +257,73 @@ def language_name(code: object) -> str:
     if raw == "auto":
         return "the source language"
     return LANG_NAMES.get(raw, LANG_NAMES["en"])
+
+
+def dub_llm_timeout_s() -> int:
+    """Per-turn GGUF timeout for translation (default 120 s)."""
+    raw = os.environ.get("EZ_DUB_LLM_TIMEOUT_S", str(TRANSLATE_TIMEOUT_S)).strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        return TRANSLATE_TIMEOUT_S
+    if value < 1:
+        return TRANSLATE_TIMEOUT_S
+    return value
+
+
+def split_clone_text(text: str, limit: int = CLONE_TEXT_LIMIT) -> list[str]:
+    """Split clone text so each chunk stays within Chatterbox's ~300 char cap.
+
+    Arguments:
+        text: One turn's target sentence(s).
+        limit: Max characters per generate() call.
+    Returns:
+        Non-empty chunks. Empty input yields ``[]``.
+    """
+    raw = " ".join((text or "").split())
+    cap = int(limit) if int(limit) > 0 else CLONE_TEXT_LIMIT
+    if not raw:
+        return []
+    if len(raw) <= cap:
+        return [raw]
+    chunks: list[str] = []
+    rest = raw
+    while rest:
+        if len(rest) <= cap:
+            chunks.append(rest)
+            break
+        cut = rest.rfind(" ", 0, cap)
+        if cut < max(1, cap // 4):
+            cut = cap
+        piece = rest[:cut].strip()
+        if piece:
+            chunks.append(piece)
+        rest = rest[cut:].strip()
+    return chunks
+
+
+def preflight_asr() -> str:
+    """Empty when faster-whisper can load; otherwise an operator-facing reason."""
+    try:
+        from faster_whisper import WhisperModel  # noqa: F401
+    except ImportError:
+        return ASR_WHEEL_STATUS
+    if not _whisper_dir():
+        return ASR_PACK_STATUS
+    return ""
+
+
+def preflight_clone() -> str:
+    """Empty when Chatterbox V3 can load; otherwise an operator-facing reason."""
+    try:
+        from chatterbox.mtl_tts import ChatterboxMultilingualTTS  # noqa: F401
+    except ImportError:
+        return (
+            "chatterbox-tts not installed — optional runtime: pip install chatterbox-tts"
+        )
+    if clone_ckpt_dir() is None:
+        return "clone pack missing — run ./scripts/manage.sh download-dub --tier clone"
+    return ""
 
 
 def load_translate_prompt() -> str:
@@ -507,6 +587,78 @@ def _default_embed(pcm: list[float], rate: int) -> list[float]:
     return [energy, float(zc), peak, mean]
 
 
+def _close_voice_encoder() -> None:
+    global _VOICE_ENCODER
+    _VOICE_ENCODER = None
+
+
+def _get_voice_encoder() -> Any | None:
+    """Load Chatterbox VoiceEncoder + ve.pt once. None when the pack/wheel is missing."""
+    global _VOICE_ENCODER
+    if _VOICE_ENCODER is not None:
+        return _VOICE_ENCODER
+    ckpt = clone_ckpt_dir()
+    if ckpt is None:
+        return None
+    ve_path = Path(ckpt) / "ve.pt"
+    if not ve_path.is_file():
+        return None
+    try:
+        import torch
+        from chatterbox.models.voice_encoder import VoiceEncoder
+    except Exception:  # noqa: BLE001 — optional runtime
+        return None
+    try:
+        encoder = VoiceEncoder()
+        state = torch.load(str(ve_path), map_location="cpu", weights_only=True)
+        encoder.load_state_dict(state)
+        encoder.eval()
+    except Exception as exc:  # noqa: BLE001 — fail-soft to energy fingerprint
+        _log(f"voice encoder load failed: {exc}")
+        return None
+    _VOICE_ENCODER = encoder
+    return encoder
+
+
+def _resample_for_encoder(pcm: list[float], rate: int, dest_rate: int = S3_SR) -> list[float]:
+    """Linear resample a turn slice to the VoiceEncoder rate."""
+    sr = int(rate) or SAMPLE_RATE
+    if sr == dest_rate:
+        return [float(x) for x in pcm]
+    if not pcm or dest_rate < 1:
+        return []
+    out_len = max(1, int(round(len(pcm) * dest_rate / sr)))
+    from .align import resample_linear
+
+    return resample_linear(pcm, out_len)
+
+
+def speaker_embed(pcm: list[float], rate: int) -> list[float]:
+    """Speaker embedding from ve.pt when available; energy fingerprint otherwise."""
+    hook = embed_hook
+    if hook is not None:
+        return hook(pcm, rate)
+    encoder = _get_voice_encoder()
+    if encoder is None or not pcm:
+        return _default_embed(pcm, rate)
+    wav = _resample_for_encoder(pcm, rate)
+    if not wav:
+        return _default_embed(pcm, rate)
+    try:
+        import numpy as np
+
+        arr = np.asarray(wav, dtype=np.float32)
+        embeds = encoder.embeds_from_wavs([arr], sample_rate=S3_SR)
+        if embeds is None:
+            return _default_embed(pcm, rate)
+        flat = _pcm_list(embeds[0] if getattr(embeds, "__len__", None) else embeds)
+        if flat:
+            return flat
+    except Exception as exc:  # noqa: BLE001 — energy fingerprint is the fallback
+        _log(f"voice encoder embed failed: {exc}")
+    return _default_embed(pcm, rate)
+
+
 def analyze_pcm(
     samples: list[float],
     rate: int,
@@ -537,16 +689,59 @@ def analyze_pcm(
             return [], detected, reason
     else:
         return [], "", "missing source.wav"
-    embed = embed_hook or _default_embed
     vectors: list[list[float]] = []
     for turn in raw:
         chunk = _slice_pcm(samples, rate, float(turn["t0"]), float(turn["t1"]))
         turn["rms"] = rms(chunk)
-        vectors.append(embed(chunk, rate))
+        vectors.append(speaker_embed(chunk, rate))
     speakers = cluster_embeddings(vectors, max_speakers=max_speakers)
     for turn, speaker in zip(raw, speakers):
         turn["speaker"] = speaker
     return assign_overlap(raw), detected, ""
+
+
+def _close_whisper() -> None:
+    global _WHISPER, _WHISPER_DIR_CACHED
+    _WHISPER = None
+    _WHISPER_DIR_CACHED = ""
+
+
+def _load_whisper_model(model_dir: str) -> Any:
+    """Construct WhisperModel, trying CUDA then CPU int8."""
+    from faster_whisper import WhisperModel
+
+    last: Exception | None = None
+    for device, compute in (("cuda", "float16"), ("cpu", "int8")):
+        try:
+            return WhisperModel(model_dir, device=device, compute_type=compute)
+        except Exception as exc:  # noqa: BLE001 — try the next device
+            last = exc
+            _log(f"faster-whisper {device}/{compute} failed: {exc}")
+    if last is not None:
+        raise last
+    raise RuntimeError("faster-whisper failed to load")
+
+
+def _get_whisper() -> tuple[Any | None, str]:
+    """Cached faster-whisper handle plus a miss reason."""
+    global _WHISPER, _WHISPER_DIR_CACHED
+    try:
+        from faster_whisper import WhisperModel  # noqa: F401
+    except ImportError:
+        return None, ASR_WHEEL_STATUS
+    model_dir = _whisper_dir()
+    if not model_dir:
+        return None, ASR_PACK_STATUS
+    if _WHISPER is not None and _WHISPER_DIR_CACHED == model_dir:
+        return _WHISPER, ""
+    try:
+        _WHISPER = _load_whisper_model(model_dir)
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        _WHISPER = None
+        _WHISPER_DIR_CACHED = ""
+        return None, f"faster-whisper failed: {exc}"
+    _WHISPER_DIR_CACHED = model_dir
+    return _WHISPER, ""
 
 
 def _whisper_segments(
@@ -555,21 +750,23 @@ def _whisper_segments(
     """Transcribe the whole file. Turns are Whisper segments with text."""
     if not wav_path.is_file():
         return [], "", "missing source.wav"
+    model, miss = _get_whisper()
+    if model is None:
+        _log(miss or ASR_WHEEL_STATUS)
+        return [], "", miss or ASR_WHEEL_STATUS
     try:
-        from faster_whisper import WhisperModel
-    except ImportError:
-        _log(ASR_WHEEL_STATUS)
-        return [], "", ASR_WHEEL_STATUS
-    model_dir = _whisper_dir()
-    if not model_dir:
-        _log(ASR_PACK_STATUS)
-        return [], "", ASR_PACK_STATUS
-    try:
-        model = WhisperModel(model_dir, device="cpu")
         lang = None if language in {"", "auto"} else language
-        segments, info = model.transcribe(
-            str(wav_path), language=lang, word_timestamps=False
-        )
+        try:
+            segments, info = model.transcribe(
+                str(wav_path),
+                language=lang,
+                word_timestamps=False,
+                vad_filter=True,
+            )
+        except TypeError:
+            segments, info = model.transcribe(
+                str(wav_path), language=lang, word_timestamps=False
+            )
     except Exception as exc:  # noqa: BLE001 — fail-soft
         reason = f"faster-whisper failed: {exc}"
         _log(reason)
@@ -665,16 +862,21 @@ def translate_turns(
     if not spoken:
         return [dict(t) for t in turns], "no turns"
     try:
+        from ez_prompt_enhance.client import REASON_EMPTY
+        from ez_prompt_enhance.client import REASON_GGUF_MISSING
+        from ez_prompt_enhance.client import REASON_LLAMA_UNAVAILABLE
         from ez_prompt_enhance.client import _close_llm
         from ez_prompt_enhance.client import complete
     except Exception as exc:  # noqa: BLE001 — fail-soft
         _log(f"prompt enhance client unavailable: {exc}")
         return _copy_source_targets(turns), "llama.cpp unavailable"
     system = load_translate_prompt()
+    timeout = dub_llm_timeout_s()
     translated = 0
     passthrough = 0
     last_reason = ""
     merged: list[dict[str, Any]] = []
+    fatal = ""
     try:
         for turn in turns:
             item = dict(turn)
@@ -683,16 +885,40 @@ def translate_turns(
                 item["text_target"] = str(item.get("text_target") or "")
                 merged.append(item)
                 continue
+            if fatal:
+                item["text_target"] = source_text
+                passthrough += 1
+                merged.append(item)
+                continue
+            user = _translate_user_message(source_text, src, tgt)
             rewritten, reason = complete(
                 system,
-                _translate_user_message(source_text, src, tgt),
+                user,
                 max_tokens=TRANSLATE_MAX_TOKENS,
+                temperature=TRANSLATE_TEMPERATURE,
+                timeout_s=timeout,
             )
+            if reason in {REASON_GGUF_MISSING, REASON_LLAMA_UNAVAILABLE}:
+                fatal = reason
+                item["text_target"] = source_text
+                passthrough += 1
+                last_reason = reason
+                merged.append(item)
+                continue
             cleaned = (rewritten or "").strip()
+            if (not cleaned or cleaned == source_text) and src != tgt:
+                rewritten, reason = complete(
+                    system,
+                    user,
+                    max_tokens=TRANSLATE_MAX_TOKENS,
+                    temperature=TRANSLATE_TEMPERATURE,
+                    timeout_s=timeout,
+                )
+                cleaned = (rewritten or "").strip()
             if not cleaned or (cleaned == source_text):
                 item["text_target"] = source_text
                 passthrough += 1
-                last_reason = reason or "passthrough"
+                last_reason = (reason or REASON_EMPTY) if not cleaned else "passthrough"
                 merged.append(item)
                 continue
             item["text_target"] = cleaned
@@ -704,10 +930,14 @@ def translate_turns(
         except Exception as exc:  # noqa: BLE001 — unload is best-effort
             _log(f"writer unload failed: {exc}")
     total = translated + passthrough
+    if fatal:
+        return merged, fatal
     if passthrough and translated:
         return merged, f"translated {translated}/{total}; {passthrough} passthrough"
     if passthrough:
         return merged, last_reason or "passthrough"
+    if translated:
+        return merged, f"translated {translated}/{total}"
     return merged, ""
 
 
@@ -806,56 +1036,89 @@ def clone_ckpt_dir() -> Path | None:
 
 
 def _from_local_multilingual(loader: Callable[..., Any], ckpt: str, device: str) -> Any:
-    """Call ``from_local`` with T3 V3; older wheels omit ``t3_model``."""
+    """Call ``from_local`` with T3 V3. Older wheels cannot load our snapshot."""
     try:
         return loader(ckpt, device=device, t3_model="v3")
-    except TypeError:
-        return loader(ckpt, device=device)
+    except TypeError as exc:
+        raise RuntimeError(T3_MODEL_STATUS) from exc
+
+
+def _close_chatterbox() -> None:
+    global _CHATTERBOX, _CHATTERBOX_CKPT
+    _CHATTERBOX = None
+    _CHATTERBOX_CKPT = ""
+
+
+def _chatterbox_device() -> str:
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            return "cuda"
+    except Exception:  # noqa: BLE001 — CPU is the safe default
+        pass
+    return "cpu"
+
+
+def _load_chatterbox_model() -> tuple[Any | None, str]:
+    """Uncached from_local. Prefer this snapshot over a mixed comfy/tts dir."""
+    try:
+        from chatterbox.mtl_tts import ChatterboxMultilingualTTS
+    except ImportError:
+        return (
+            None,
+            "chatterbox-tts not installed — optional runtime: pip install chatterbox-tts",
+        )
+    ckpt = clone_ckpt_dir()
+    if ckpt is None:
+        return (
+            None,
+            "clone pack missing — run ./scripts/manage.sh download-dub --tier clone",
+        )
+    loader = getattr(ChatterboxMultilingualTTS, "from_local", None)
+    if not callable(loader):
+        return None, "chatterbox-tts missing from_local — upgrade chatterbox-tts"
+    try:
+        model = _from_local_multilingual(loader, str(ckpt), _chatterbox_device())
+    except RuntimeError as exc:
+        return None, str(exc)
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        return None, f"chatterbox failed: {exc}"
+    return model, ""
+
+
+def _get_chatterbox() -> tuple[Any | None, str]:
+    """Cached Chatterbox Multilingual V3 handle."""
+    global _CHATTERBOX, _CHATTERBOX_CKPT
+    ckpt = clone_ckpt_dir()
+    ckpt_s = str(ckpt) if ckpt is not None else ""
+    if _CHATTERBOX is not None and _CHATTERBOX_CKPT == ckpt_s and ckpt_s:
+        return _CHATTERBOX, ""
+    model, err = _load_chatterbox_model()
+    if model is None:
+        _CHATTERBOX = None
+        _CHATTERBOX_CKPT = ""
+        return None, err
+    _CHATTERBOX = model
+    _CHATTERBOX_CKPT = ckpt_s
+    return model, ""
 
 
 def _try_chatterbox(
     text: str, language_id: str, ref_wav: str
 ) -> tuple[list[float], int, str]:
     """Lazy Chatterbox Multilingual generate. Empty PCM plus a reason on miss."""
+    model, err = _get_chatterbox()
+    if model is None:
+        return [], SAMPLE_RATE, err or CLONE_MISSING_STATUS
+    generate = getattr(model, "generate", None)
+    if not callable(generate):
+        return [], SAMPLE_RATE, "chatterbox missing generate"
+    kwargs: dict[str, Any] = {"language_id": language_id}
+    ref = (ref_wav or "").strip()
+    if ref and Path(ref).is_file():
+        kwargs["audio_prompt_path"] = ref
     try:
-        from chatterbox.mtl_tts import ChatterboxMultilingualTTS
-    except ImportError:
-        return (
-            [],
-            SAMPLE_RATE,
-            "chatterbox-tts not installed — optional runtime: pip install chatterbox-tts",
-        )
-    ckpt = clone_ckpt_dir()
-    if ckpt is None:
-        return (
-            [],
-            SAMPLE_RATE,
-            "clone pack missing — run ./scripts/manage.sh download-dub --tier clone",
-        )
-    device = "cpu"
-    try:
-        import torch
-
-        if torch.cuda.is_available():
-            device = "cuda"
-    except Exception:  # noqa: BLE001 — CPU is the safe default
-        device = "cpu"
-    try:
-        loader = getattr(ChatterboxMultilingualTTS, "from_local", None)
-        if not callable(loader):
-            return (
-                [],
-                SAMPLE_RATE,
-                "chatterbox-tts missing from_local — upgrade chatterbox-tts",
-            )
-        model: Any = _from_local_multilingual(loader, str(ckpt), device)
-        generate = getattr(model, "generate", None)
-        if not callable(generate):
-            return [], SAMPLE_RATE, "chatterbox missing generate"
-        kwargs: dict[str, Any] = {"language_id": language_id}
-        ref = (ref_wav or "").strip()
-        if ref and Path(ref).is_file():
-            kwargs["audio_prompt_path"] = ref
         wav = generate(text, **kwargs)
         pcm = _pcm_list(wav)
         rate = int(getattr(model, "sr", SAMPLE_RATE) or SAMPLE_RATE)
@@ -910,17 +1173,36 @@ def synthesize_turn(
     """Clone one line. Tests inject ``tts_hook``. ``language`` is an ISO code."""
     hook = tts_hook
     lang = language_code(language)
+    chunks = split_clone_text(text)
+    if not chunks:
+        return [], SAMPLE_RATE, ""
     if hook is not None:
-        pcm, sr = hook(text, lang, ref_wav, engine)
-        return pcm, sr, ""
+        joined: list[float] = []
+        rate = SAMPLE_RATE
+        for chunk in chunks:
+            pcm, sr = hook(chunk, lang, ref_wav, engine)
+            rate = sr or rate
+            joined.extend(pcm)
+        return joined, rate, ""
     name = engine if engine in ENGINES else ENGINE_CHATTERBOX
-    if name == ENGINE_QWEN3TTS:
-        pcm, sr, err = _try_qwen3tts(text, lang, ref_wav)
-    else:
-        pcm, sr, err = _try_chatterbox(text, lang, ref_wav)
-    if err:
-        _log(err)
-    return pcm, sr, err
+    joined_pcm: list[float] = []
+    out_rate = SAMPLE_RATE
+    last_err = ""
+    for chunk in chunks:
+        if name == ENGINE_QWEN3TTS:
+            pcm, sr, err = _try_qwen3tts(chunk, lang, ref_wav)
+        else:
+            pcm, sr, err = _try_chatterbox(chunk, lang, ref_wav)
+        if err:
+            last_err = err
+            _log(err)
+        if not pcm:
+            continue
+        out_rate = sr or out_rate
+        joined_pcm.extend(pcm)
+    if not joined_pcm:
+        return [], out_rate, last_err
+    return joined_pcm, out_rate, ""
 
 
 def render_mix(
@@ -939,7 +1221,11 @@ def render_mix(
     Returns:
         ``(mix, rate, status)``.
     """
-    del speed  # reserved for engine-specific TTS speed
+    pace = float(speed) if speed else 1.0
+    if pace < 0.5:
+        pace = 0.5
+    if pace > 1.5:
+        pace = 1.5
     turns = list(payload.get("turns") or [])
     if not turns:
         return [], rate, NO_TURNS_STATUS
@@ -978,6 +1264,10 @@ def render_mix(
             from .align import resample_linear
 
             pcm = resample_linear(pcm, int(round(len(pcm) * rate / max(sr, 1))))
+        if pace != 1.0 and pcm:
+            from .align import resample_linear
+
+            pcm = resample_linear(pcm, max(1, int(round(len(pcm) / pace))))
         fitted, meta = fit_turn(
             pcm,
             rate,
@@ -1032,7 +1322,7 @@ def render_mix(
         flags.append("disclosure sidecar")
     write_wav(dest / "ez_dub_mix.wav", mix, rate)
     write_wav(dest / "ez_dub_yt.wav", mix, rate)
-    status = f"ok; {len(refs)} speakers, {cloned_n} turns cloned"
+    status = f"{len(refs)} speakers, {cloned_n} turns cloned"
     if lock_flags.get("trimmed"):
         flags.append("duration trimmed")
     if flags:
@@ -1063,13 +1353,22 @@ def analyze_job(
     """Analyze + translate, or pin widget JSON when enhance is off / stage=render."""
     wav = dest / "source.wav"
     name = stage if stage in STAGES else STAGE_ALL
-    if name == STAGE_RENDER and widget_payload and widget_payload.get("turns"):
-        payload = dict(widget_payload)
-        payload["stage"] = STAGE_RENDER
-        payload["target_language"] = target_language
-        return payload, "pinned widget"
-    if not enhance and widget_payload and widget_payload.get("turns"):
-        payload = dict(widget_payload)
+    widget_turns = list((widget_payload or {}).get("turns") or [])
+    if name == STAGE_RENDER:
+        if widget_turns:
+            payload = dict(widget_payload or {})
+            payload["stage"] = STAGE_RENDER
+            payload["target_language"] = target_language
+            return payload, "pinned widget"
+        payload = empty_payload(
+            target_language=target_language,
+            source_language=source_language,
+            stage=STAGE_RENDER,
+            status=NO_TURNS_STATUS,
+        )
+        return payload, NO_TURNS_STATUS
+    if not enhance and widget_turns:
+        payload = dict(widget_payload or {})
         payload["stage"] = name
         payload["target_language"] = target_language
         return payload, "enhance off"
@@ -1118,7 +1417,9 @@ def analyze_job(
         turns, target_language, src, enhance=enhance
     )
     n_spk = len({str(t.get("speaker") or "") for t in turns})
-    status = reason or f"{n_spk} speakers, {len(turns)} turns"
+    status = f"{n_spk} speakers, {len(turns)} turns"
+    if reason:
+        status = f"{status}; {reason}"
     payload = {
         "target_language": target_language,
         "source_language": src,
