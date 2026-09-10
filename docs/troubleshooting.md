@@ -191,7 +191,7 @@ sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
-| Disk full / leftover LTX-2.3 snapshot | Leftover weights, HF hub, Docker layers, or other inference caches | `./scripts/manage.sh disk-wizard --plan` (host-wide, read-only). MODELS_DIR classes: `reap-models --plan` then `--apply --class superseded --quarantine --yes`. `cleanup` does **not** delete weights. |
+| Disk full / leftover LTX-2.3 snapshot | Leftover weights, HF hub, Docker layers, or other inference caches | `./scripts/manage.sh disk-wizard --plan` (host-wide, read-only). stderr shows which root is scanning (`~/.cache`, `/tmp`, Docker `system df` can take a while; it is not hung). MODELS_DIR classes: `reap-models --plan` then `--apply --class superseded --quarantine --yes`. `cleanup` does **not** delete weights. |
 | I passed `--tier fast` expecting faster video | `--tier` is a **pack id** per downloader, not a quality ladder | Image `fast` is Klein 4B distilled stills. Wan video default is `--tier 5b`. Map: [Download tiers](download-tiers.md) |
 | I passed `--limit turbo` / thought `--limit` picked a model | `--limit` is **Mbps** (`auto` / `off` / integer) | Use `--tier` for the pack. [Download limit](download-limit.md) |
 | Fun InP / SeedVR2 filled the box | Opt-in ~47 GB / ~15 GB packs | `reap-models --plan`; `--drop-pack` cannot eat shared VAE. Unload LTX before Fun InP. SeedVR2 is post-concat only |

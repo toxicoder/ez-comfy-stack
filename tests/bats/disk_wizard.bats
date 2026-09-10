@@ -51,6 +51,10 @@ teardown() {
 @test "disk-wizard --plan lists junk not live 2.5 keep-set" {
   run bash "${DW}" --plan
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"read-only disk survey"* ]]
+  [[ "${output}" == *"Scanning"* ]]
+  [[ "${output}" == *"Ranking"* ]]
+  [[ "${output}" == *"Plan written"* ]]
   [[ "${output}" == *"hf-incomplete"* || "${output}" == *".incomplete"* ]]
   [[ "${output}" == *"junk.incomplete"* || "${output}" == *"incomplete"* ]]
   [[ "${output}" != *"PLAN live"* ]]
@@ -61,6 +65,18 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"hf-incomplete"* ]]
   [[ "${output}" == *"keep-set-weight"* || "${output}" == *"dangerous"* ]]
+}
+
+@test "disk-wizard --json stdout is JSON; progress on stderr" {
+  local errf stdout
+  errf="${TEST_TMP_DIR}/dw.err"
+  stdout="$(bash "${DW}" --json 2>"${errf}")"
+  python3 -c 'import json,sys; json.load(sys.stdin)' <<<"${stdout}"
+  grep -q 'read-only disk survey' "${errf}"
+  grep -q 'Scanning' "${errf}"
+  grep -q 'Ranking' "${errf}"
+  grep -q 'Plan written' "${errf}"
+  [[ "${stdout}" == *"hf-incomplete"* ]]
 }
 
 @test "disk-wizard --apply without --yes fails" {
@@ -118,6 +134,23 @@ teardown() {
   [ "${status}" -eq 0 ]
   run disk_skip_dir_name models
   [ "${status}" -ne 0 ]
+}
+
+@test "disk_walk_root prunes nested skip dirs" {
+  mkdir -p "${MODELS_DIR}/node_modules/pkg"
+  echo x >"${MODELS_DIR}/node_modules/pkg/x.js"
+  echo y >"${MODELS_DIR}/ok.bin"
+  run disk_walk_root "${MODELS_DIR}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"ok.bin"* ]]
+  [[ "${output}" != *"x.js"* ]]
+}
+
+@test "disk_file_size_bytes uses native stat" {
+  printf 'abcd' >"${MODELS_DIR}/sz.bin"
+  run disk_file_size_bytes "${MODELS_DIR}/sz.bin"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == "4" ]]
 }
 
 @test "manage.sh help lists disk-wizard" {
