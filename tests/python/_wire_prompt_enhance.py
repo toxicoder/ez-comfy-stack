@@ -60,6 +60,8 @@ PIN_ENHANCE_OFF = frozenset(
         "wan-push-in-i2v-lab-example",
         "wan-parallax-i2v-lab-example",
         "ltx-iclora-depth-5s-lab-example",
+        "ltx-iclora-canny-5s-lab-example",
+        "ltx-iclora-depth-shorts-lab-example",
         "podcast-audio-first-lab-example",
         "podcast-radio-drama-lab-example",
         "music-rap-draft-lab-example",

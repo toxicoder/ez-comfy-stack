@@ -64,7 +64,7 @@ One GB10 job. Cover art ≠ film ≠ podcast. Every App Note includes a one-line
 | `film` | 90 s one-click | everything else on that Spark |
 | `audio` | podcast / dub / rap | Klein / Wan / LTX session |
 
-Prompt Enhance GGUF stays CPU-only (`n_gpu_layers=0`). Sidecar occupancy (Comfy XOR Blender) is unchanged: [Studio sidecars](studio-sidecars.md).
+Prompt Enhance GGUF stays CPU-only (`n_gpu_layers=0`). Sidecar occupancy (Comfy XOR Blender) is unchanged: [Studio sidecars](studio-sidecars.md). `export-guides` / `blender-stills` / `house-views` die if compose is up.
 
 ---
 
@@ -113,7 +113,23 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
 
-Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`, `music-edm-*`, **audio-finish-lab-example**) are occupancy **audio**. That includes the forty-five **180 s** `music-rap-nill-bye-*-lab-example` diss takes under `_lab/audio/nill-bye/` and the thirty **180 s** `music-edm-drive-through-*-lab-example` rave-set EDM takes under `_lab/audio/drive-through/` ([Local music](music.md)). Graph outputs stay FLAC + MP3. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC: [DCC guide pack](dcc-workflows.md). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md).
+Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`, `music-edm-*`, **audio-finish-lab-example**) are occupancy **audio**. That includes the forty-five **180 s** `music-rap-nill-bye-*-lab-example` diss takes under `_lab/audio/nill-bye/` and the thirty **180 s** `music-edm-drive-through-*-lab-example` rave-set EDM takes under `_lab/audio/drive-through/` ([Local music](music.md)). Graph outputs stay FLAC + MP3. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
+
+---
+
+## Lane DCC — clay desk
+
+Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR with dumps is unchanged.
+
+| App | Occupancy | What it does |
+| --- | --- | --- |
+| **klein-from-clay-lab-example** | klein | Klein edit of guide `first.png`, 1280×704, prefix `ez_clay_hero` |
+| **klein-from-clay-plates-lab-example** | klein | One clay still → hero 704 / packshot 1:1 / IG 4:5 / shorts 9:16 (`ez_clay_pack_*`) |
+| **klein-from-canny-lab-example** | klein | Klein edit of `canny.png`, 1280×704, prefix `ez_canny_hero` |
+| **ltx-iclora-depth-5s-lab-example** | ltx | Union Control envelope, depth from `depth.mp4` |
+| **ltx-iclora-canny-5s-lab-example** | ltx | Same envelope, canny from `canny.mp4` |
+| **ltx-iclora-depth-shorts-lab-example** | ltx | Depth envelope at **768×1280** |
+| **wan-flf-from-guide-lab-example** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
 
 ---
 
@@ -128,6 +144,10 @@ Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`, `music-edm-*`, **audio-finish-l
 | Storyboard 6-up | `wan-i2v-shot` / `ltx-i2v-shot` |
 | Beat sheet (script desk) | `shot-sheet` → identity sheet / clay dump / `klein-from-clay` |
 | Klein-from-clay | `overlay-qc` → `ltx-iclora-depth` → `audio-finish` / `stem-mix` |
+| Klein-from-clay | Silent 5s (`wan-i2v-5s`) |
+| Klein-from-clay-plates | `wan-shorts-i2v` / `ltx-iclora-depth-shorts` |
+| Klein-from-canny | `ltx-iclora-canny` |
+| Guide pack first+last | `wan-flf-from-guide` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |
 | Clay dream-house | `start` (or `house-views` dump) → **klein-dream-house-clay-lab-example** → same loop kit |
 

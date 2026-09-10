@@ -52,6 +52,7 @@ Generated meshes, previews, and scene instances are **outputs** in the [Asset Bi
 ./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
 ./scripts/manage.sh blender                      # dies if compose is up
 ./scripts/manage.sh export-guides --film go-see --shot 12   # same occupancy
+./scripts/manage.sh blender-stills --film go-see --plate mug --size 1024x1024
 ./scripts/manage.sh house-views --slug lab-penthouse        # Instagram 4:5 clay; same occupancy
 ```
 
