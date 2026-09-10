@@ -296,6 +296,10 @@ case "${1:-}" in
     shift
     chmod -R u+w "$@" 2>/dev/null || true
     ;;
+  chmod)
+    shift
+    chmod "$@"
+    ;;
   *)
     exit 0
     ;;

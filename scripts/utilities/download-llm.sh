@@ -178,14 +178,20 @@ link_llm_into_comfy() {
   dir="$(llm_dir)"
   f="${dir}/$(llm_filename)"
   src="${MODELS_DIR}/comfy/llm"
-  mkdir -p "${src}" 2>/dev/null || true
-  [[ -f ${f} ]] || return 0
   dest="${src}/$(llm_filename)"
+  [[ -f ${f} ]] || return 0
+  if ! prepare_writable_layout_dir "${src}"; then
+    if [[ -e ${dest} ]]; then
+      return 0
+    fi
+    return 1
+  fi
   if ln_sfn_relative "${f}" "${dest}"; then
     log "linked $(llm_filename) → comfy/llm/"
-  else
-    warn "failed to link $(llm_filename) → comfy/llm/"
+    return 0
   fi
+  warn "failed to link $(llm_filename) → comfy/llm/"
+  return 1
 }
 
 #######################################
@@ -266,7 +272,7 @@ cmd_run() {
   dir="$(llm_dir)"
   if llm_files_ready; then
     log "skip llm: already present at ${dir} (cache hit)"
-    link_llm_into_comfy
+    link_llm_into_comfy || exit 1
     cmd_status
     return 0
   fi
@@ -274,7 +280,7 @@ cmd_run() {
   log "  include: $(llm_include_pattern)"
   if HF_HOME="${MODELS_DIR}" hf_download "$(llm_repo)" --local-dir "${dir}" \
     --include "$(llm_include_pattern)"; then
-    link_llm_into_comfy
+    link_llm_into_comfy || exit 1
     cmd_status
     return 0
   fi

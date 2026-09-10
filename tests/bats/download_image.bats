@@ -100,6 +100,21 @@ teardown() {
   [[ -L "${MODELS_DIR}/comfy/diffusion_models/flux-2-klein-4b-fp8.safetensors" ]]
 }
 
+@test "download-image cmd_run heals unwritable comfy child on cache hit" {
+  local tdir
+  tdir="$(tier_dir fast)"
+  mkdir -p "${tdir}" "${MODELS_DIR}/comfy/diffusion_models"
+  echo x >"${tdir}/flux-2-klein-4b-fp8.safetensors"
+  chmod a-w "${MODELS_DIR}/comfy/diffusion_models"
+  unset LAB_NO_SUDO
+  install_sudo_heal_mock
+  TIER=fast
+  run cmd_run
+  chmod -R u+w "${MODELS_DIR}/comfy" 2>/dev/null || true
+  [ "${status}" -eq 0 ]
+  [[ -L "${MODELS_DIR}/comfy/diffusion_models/flux-2-klein-4b-fp8.safetensors" ]]
+}
+
 @test "download-image cleanup keep selective and prune" {
   local tdir extra
   tdir="$(tier_dir fast)"

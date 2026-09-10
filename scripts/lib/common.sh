@@ -802,7 +802,55 @@ warn_unwritable_comfy_layout() {
 }
 
 #######################################
-# Create MODELS_DIR/comfy and layout subdirs; sudo-chown the tree when needed.
+# Create one layout directory; sudo-heal mkdir/chown/chmod when not writable.
+# Used for MODELS_DIR/comfy/<sub> and ln_sfn_relative dest dirs. Does not
+# recurse into HF snapshots. Skips sudo when LAB_NO_SUDO=1.
+# Globals:
+#   LAB_NO_SUDO
+# Arguments:
+#   $1 - Absolute directory path
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 when the directory exists and is writable; 1 on failure
+#######################################
+prepare_writable_layout_dir() {
+  local dir="${1:?prepare_writable_layout_dir requires directory}"
+  if [[ -d ${dir} && -w ${dir} ]]; then
+    return 0
+  fi
+  mkdir -p "${dir}" 2>/dev/null || true
+  if [[ -d ${dir} && -w ${dir} ]]; then
+    return 0
+  fi
+  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
+    err "layout dir ${dir} not writable and LAB_NO_SUDO=1 (cannot sudo)"
+    return 1
+  fi
+  log "Healing layout dir with sudo: ${dir}"
+  if ! sudo mkdir -p "${dir}"; then
+    err "sudo mkdir -p '${dir}' failed"
+    return 1
+  fi
+  if ! sudo chown "$(id -u):$(id -g)" "${dir}"; then
+    err "sudo chown failed for '${dir}'"
+    return 1
+  fi
+  if ! sudo chmod u+rwx "${dir}"; then
+    err "sudo chmod u+rwx failed for '${dir}'"
+    return 1
+  fi
+  if [[ -d ${dir} && -w ${dir} ]]; then
+    return 0
+  fi
+  err "layout dir ${dir} is not writable."
+  err "  ./scripts/manage.sh setup"
+  err "  # or: sudo mkdir -p '${dir}' && sudo chown $(id -u):$(id -g) '${dir}' && sudo chmod u+rwx '${dir}'"
+  return 1
+}
+
+#######################################
+# Create MODELS_DIR/comfy and layout subdirs; sudo-heal each dir when needed.
 # Does not recurse chown over HF snapshots under MODELS_DIR.
 # Skips sudo when LAB_NO_SUDO=1 (tests / restricted environments).
 # Globals:
@@ -816,53 +864,14 @@ warn_unwritable_comfy_layout() {
 #######################################
 prepare_comfy_layout() {
   local root="${1:-${MODELS_DIR:-/mnt/models}}"
-  local comfy sub d
-  local -a dirs=()
-  local ready=1
+  local comfy sub
   prepare_writable_host_dir MODELS_DIR "${root}" || return 1
   comfy="${root}/comfy"
-  dirs=("${comfy}")
+  prepare_writable_layout_dir "${comfy}" || return 1
   while IFS= read -r sub; do
     [[ -z ${sub} ]] && continue
-    dirs+=("${comfy}/${sub}")
+    prepare_writable_layout_dir "${comfy}/${sub}" || return 1
   done < <(lab_comfy_layout_subdirs)
-  mkdir -p "${dirs[@]}" 2>/dev/null || true
-  for d in "${dirs[@]}"; do
-    if [[ ! -d ${d} || ! -w ${d} ]]; then
-      ready=0
-      break
-    fi
-  done
-  if [[ ${ready} -eq 1 ]]; then
-    return 0
-  fi
-  if [[ ${LAB_NO_SUDO:-} == "1" ]]; then
-    err "MODELS_DIR/comfy=${comfy} not writable and LAB_NO_SUDO=1 (cannot sudo)"
-    return 1
-  fi
-  log "Healing comfy layout with sudo: ${comfy}"
-  if ! sudo mkdir -p "${comfy}"; then
-    err "sudo mkdir -p '${comfy}' failed"
-    return 1
-  fi
-  if ! sudo chown "$(id -u):$(id -g)" "${comfy}"; then
-    err "sudo chown failed for '${comfy}'"
-    return 1
-  fi
-  mkdir -p "${dirs[@]}" 2>/dev/null || true
-  if ! sudo chown -R "$(id -u):$(id -g)" "${comfy}"; then
-    err "sudo chown -R failed for '${comfy}'"
-    return 1
-  fi
-  for d in "${dirs[@]}"; do
-    if [[ ! -d ${d} || ! -w ${d} ]]; then
-      err "MODELS_DIR/comfy=${comfy} is not writable."
-      err "  ./scripts/manage.sh setup"
-      err "  # or: sudo chown -R $(id -u):$(id -g) '${comfy}'"
-      return 1
-    fi
-  done
-  log "comfy layout ready: ${comfy}"
   return 0
 }
 
@@ -1457,7 +1466,15 @@ ln_sfn_relative() {
   local linkpath="${2:?ln_sfn_relative requires link path}"
   local linkdir rel current err
   linkdir="$(dirname "${linkpath}")"
-  mkdir -p "${linkdir}" || return 1
+  if [[ ! -d ${linkdir} || ! -w ${linkdir} ]]; then
+    if ! prepare_writable_layout_dir "${linkdir}"; then
+      # Relink is optional when the dest is already visible on the bind-mount.
+      if [[ -e ${linkpath} ]]; then
+        return 0
+      fi
+      return 1
+    fi
+  fi
   if [[ ! -e ${target} ]]; then
     warn "ln_sfn_relative: target missing: ${target}"
     return 1
