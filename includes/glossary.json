@@ -95,7 +95,7 @@
     "aliases": ["Chatterbox Multilingual", "Chatterbox Multilingual V3"],
     "category": "Models",
     "short": "MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.",
-    "long": "Default engine for [Local dub](dub.md). Cross-lingual clone from a short ref extracted from this job, not a celebrity pack. Needs `from_local(..., t3_model=\"v3\")` (GitHub pin `CHATTERBOX_TTS_REF`; PyPI 0.1.7 is too old). Turbo English remains `download-podcast --tier chatterbox`.",
+    "long": "Default engine for [Local dub](dub.md). Cross-lingual clone from a short ref extracted from this job, not a celebrity pack. Needs `from_local(..., t3_model=\"v3\")` (GitHub pin `CHATTERBOX_TTS_REF`; PyPI 0.1.7 is too old) and `setuptools<82` so PerTh (`perth.PerthImplicitWatermarker`) stays importable. Turbo English remains `download-podcast --tier chatterbox`.",
     "see_also": ["chatterbox", "dub", "tts"]
   },
   {

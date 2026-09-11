@@ -27,23 +27,9 @@ COMFYUI_VHS_REF="${COMFYUI_VHS_REF:-}"
 COMFYUI_OPENCUT_REF="${COMFYUI_OPENCUT_REF:-0.5.0}"
 COMFYUI_MAGCACHE_REF="${COMFYUI_MAGCACHE_REF:-47bdd2aca97e568087c4e92d2d2f0426bdce7a37}"
 COMFYUI_LTX_DIRECTOR_REF="${COMFYUI_LTX_DIRECTOR_REF:-a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64}"
-# PyPI chatterbox-tts==0.1.7 predates from_local(..., t3_model="v3") (PR #516).
-CHATTERBOX_TTS_REF="${CHATTERBOX_TTS_REF:-5de7a54aa4e5e2baadb0182dde554908b48b85c2}"
-
-#######################################
-# GitHub archive URL for the Chatterbox V3-capable source tree.
-# Globals:
-#   CHATTERBOX_TTS_REF
-# Arguments:
-#   None
-# Outputs:
-#   HTTPS zip URL on stdout
-# Returns:
-#   0
-#######################################
-chatterbox_tts_zip_url() {
-  echo "https://github.com/resemble-ai/chatterbox/archive/${CHATTERBOX_TTS_REF}.zip"
-}
+# Chatterbox V3 pin + clone extras (setuptools<82 for PerTh / pkg_resources).
+# shellcheck source=chatterbox-tts.sh disable=SC1091
+source "${_INSTALL_COMFY_COMMON_DIR}/chatterbox-tts.sh"
 
 #######################################
 # Path of the volume ComfyUI pin stamp.

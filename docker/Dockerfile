@@ -97,6 +97,7 @@ ARG COMFYUI_REF=v0.34.6
 ENV COMFYUI_REF=${COMFYUI_REF}
 
 COPY --chmod=755 install-comfy/common.sh install-comfy/phase-comfy.sh \
+    install-comfy/chatterbox-tts.sh \
     /opt/ez-comfy/install-comfy/
 RUN --mount=type=cache,target=/root/.cache/pip \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \
@@ -127,7 +128,7 @@ ENV COMFYUI_MANAGER_REF=${COMFYUI_MANAGER_REF} \
     COMFYUI_LTX_DIRECTOR_REF=${COMFYUI_LTX_DIRECTOR_REF}
 
 COPY --chmod=755 install-comfy/phase-nodes.sh install-comfy/phase-finalize.sh \
-    install-comfy/llama-cpp-cpu.sh \
+    install-comfy/llama-cpp-cpu.sh install-comfy/chatterbox-tts.sh \
     /opt/ez-comfy/install-comfy/
 RUN --mount=type=cache,target=/root/.cache/pip \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \

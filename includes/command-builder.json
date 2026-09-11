@@ -157,7 +157,7 @@
     {
       "id": "download-dub",
       "title": "download-dub --tier",
-      "description": "Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt). With the stack up, pip-installs faster-whisper then the Chatterbox V3 GitHub zip --no-deps --force-reinstall (does not pin torch; PyPI 0.1.7 has no t3_model=v3). Missing pack is not a doctor failure.",
+      "description": "Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt). With the stack up, pip-installs faster-whisper, setuptools<82 (PerTh / pkg_resources), then the Chatterbox V3 GitHub zip --no-deps --force-reinstall (does not pin torch; PyPI 0.1.7 has no t3_model=v3). Missing pack is not a doctor failure.",
       "argv": ["./scripts/manage.sh", "download-dub"],
       "flags": [
         {
