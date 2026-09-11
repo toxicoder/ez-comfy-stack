@@ -13,7 +13,7 @@ tags: [occupancy, blender, trellis, safety, gb10]
 - Park Comfy with `POST /free` instead of `stop` for Workbench dumps or the 35B sidecar
 - What stays XOR (NVENC, Cycles CUDA, LTX next to TRELLIS, llm-desk next to blender-desk)
 - Graph occupancy label `llm` (Prompt Forge) is **not** a CLI mode
-- In-tree MCP: blender-mcp (desk) and research-mcp (CPU 4B or llm-desk sidecar; Path D)
+- In-tree MCP: blender-mcp (desk) and research-mcp (GPU sidecar when llm-desk; CPU 4B as OOM fallback; Path D)
 
 **What this enables**
 
@@ -99,7 +99,7 @@ In-tree MCP servers are typed-tool stdio processes. **No** `execute_code`, **no*
 
 Qwen3-4B will place primitives. Cinematic scenes: Path D — laptop Grok/Cursor as the MCP client over SSH, Spark only runs blender-mcp. If `llama-cli` is missing, `blender-llm` prints that hint and exits 1.
 
-**research-mcp** is the creative-process desk (chat, web search, sequential research subagents, `list_lab_apps` / `describe_app`). Graph occupancy **llm**: CPU 4B GGUF (`n_gpu_layers=0`) unless occupancy is `llm-desk` and `http://127.0.0.1:30000/v1/models` answers. It does **not** refuse a GPU Comfy session and does **not** map `idle` → `blender-desk` or `llm-desk`. Unified memory still contends — prefer a gap between Klein/Wan/LTX Queues for long 4B research, or park with `occupancy enter llm-desk`. Same pipeline as **research-chat-lab-example**. HTTPS search is SSRF-guarded (no arbitrary `fetch_url` tool).
+**research-mcp** is the creative-process desk (chat, web search, sequential research subagents, `list_lab_apps` / `describe_app`). Graph occupancy **llm**: GPU 35B sidecar when `llm-desk` is up (`http://127.0.0.1:30000/v1` on the host; `host.docker.internal` from Comfy). CPU 4B only if the sidecar is down or occupancy is Wan/LTX/TRELLIS. It does **not** refuse a GPU Comfy session and does **not** map `idle` → `blender-desk` or `llm-desk`. Same pipeline as **research-chat-lab-example**. HTTPS search is SSRF-guarded (no arbitrary `fetch_url` tool).
 
 ```bash
 ./scripts/manage.sh research-mcp --stdio

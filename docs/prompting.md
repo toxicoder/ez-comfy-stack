@@ -148,9 +148,9 @@ After Queue the node is an output: the **CLIP prompt** widget is the CLIP string
 
 Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model output logs a warning and passes the source through (with style applied if one is selected). Generation still runs. Do not copy a GGUF by hand — `./scripts/manage.sh download-models` plus a restart heals `comfy/llm/` and `doctor`/`start` relink a snapshot that is already on disk. **Enhance status** `llama.cpp unavailable` means `from llama_cpp import Llama` failed (not that pip skipped). Queue self-heals the CPU wheel from the official extra-index, then force-reinstalls the GitHub manylinux wheel if the pin is already satisfied but Llama still will not import. If status still names a `docker exec … pip install --force-reinstall` command, run that line. Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'`. Pip “already satisfied” alone is not the check.
 
-!!! warning "CPU-only local LLM"
+!!! warning "GPU-first local LLM"
 
-    Prompt Enhance runs **Qwen3-4B-Instruct-2507 Q4_K_M** (~2.5 GiB) through llama.cpp with **`n_gpu_layers=0`**. Do not GPU-offload it next to LTX-2.5. The opt-in 35B sidecar (`occupancy enter llm-desk`) is a **different** occupancy job: park Comfy first. Enhance stays 4B even if the sidecar is up. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same Spark while Comfy is generating.
+    GPU-first: occupancy `llm` / `llm-desk` / `idle` uses the host 35B sidecar when it answers (`occupancy enter llm-desk --yes`). Prompt Enhance on Wan / LTX / TRELLIS stays **CPU 4B** so the denoise keeps unified memory (OOM-safe). `EZ_LLM_ALLOW_GPU=0` forces CPU everywhere. Do not run the 35B sidecar next to LTX. The in-image llama-cpp pin is still a CPU wheel — in-canvas 4B ngl is occupancy-ready for a later CUDA wheel.
 
 Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit are unchanged. No API keys. The GGUF lives under `MODELS_DIR`, never in the image.
 

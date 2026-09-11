@@ -30,8 +30,11 @@ FORGE_NOTE = """## prompt-forge-lab-example
 
 Prompt Forge — rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — stop nothing GPU. One GB10 job.
-Uses the on-box Qwen3-4B-Instruct GGUF (CPU, n_gpu_layers=0). No new download flag.
+Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+
+  ./scripts/manage.sh occupancy enter llm-desk --yes
+
+Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 
 1. Type a lazy sentence (or leave the canned line).
 2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.
@@ -74,8 +77,11 @@ RESEARCH_NOTE = """## research-chat-lab-example
 Creative research desk — chat LLM with web search and sequential research
 subagents. No UNET, no VAE, no KSampler.
 
-Occupancy: llm — stop nothing GPU. One GB10 job.
-Uses the on-box Qwen3-4B-Instruct GGUF (CPU, n_gpu_layers=0). No new download flag.
+Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+
+  ./scripts/manage.sh occupancy enter llm-desk --yes
+
+Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 Web search is SSRF-safe HTTPS (Wikipedia + DuckDuckGo HTML). Fail-soft if the
 network or GGUF is missing.
 

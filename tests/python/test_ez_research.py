@@ -448,8 +448,14 @@ class _FakeSidecarResp:
 
 
 def test_complete_uses_sidecar_when_models_respond(
-    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    from ez_prompt_enhance import client as enhance_client
+
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    (tmp_path / ".occupancy.json").write_text(
+        json.dumps({"mode": "llm"}), encoding="utf-8"
+    )
     calls: list[str] = []
 
     def _open(request: object, timeout: float) -> _FakeSidecarResp:
@@ -463,7 +469,7 @@ def test_complete_uses_sidecar_when_models_respond(
         }
         return _FakeSidecarResp(json.dumps(payload).encode("utf-8"))
 
-    monkeypatch.setattr(pipeline, "_urlopen_sidecar", _open)
+    monkeypatch.setattr(enhance_client, "_urlopen_sidecar", _open)
     text, reason = pipeline._complete("sys", "user")
     assert text == "sidecar-brief"
     assert reason == ""
@@ -477,7 +483,9 @@ def test_complete_falls_back_to_4b_when_sidecar_down(
     def _down(*_args: object, **_kwargs: object) -> object:
         raise TimeoutError("sidecar down")
 
-    monkeypatch.setattr(pipeline, "_urlopen_sidecar", _down)
+    from ez_prompt_enhance import client as enhance_client
+
+    monkeypatch.setattr(enhance_client, "_urlopen_sidecar", _down)
     monkeypatch.setattr(
         pipeline, "_ensure_lab_custom_nodes_path", lambda: (_ for _ in ()).throw(
             ModuleNotFoundError("ez_prompt_enhance")

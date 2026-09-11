@@ -38,11 +38,16 @@ def _no_network_pip(args: list[str]) -> subprocess.CompletedProcess[str]:
     )
 
 
+def _sidecar_down(*_args: object, **_kwargs: object) -> object:
+    raise TimeoutError("sidecar down")
+
+
 @pytest.fixture(autouse=True)
 def _reset_llama_runtime(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
     """Reset llama.cpp state and block host pip (hermetic)."""
     client.reset_llama_runtime_for_tests()
     monkeypatch.setattr(client, "_pip_install", _no_network_pip)
+    monkeypatch.setattr(client, "_urlopen_sidecar", _sidecar_down)
     yield
     client.reset_llama_runtime_for_tests()
 
@@ -764,12 +769,92 @@ def test_timeout_and_thread_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
     assert client._n_threads() == 8
 
 
-def test_n_gpu_layers_refused_without_allow(monkeypatch: pytest.MonkeyPatch) -> None:
+def _write_occupancy(tmp_path: Path, mode: str) -> None:
+    payload = {"version": 1, "mode": mode, "parked": False, "llm_pid": 0}
+    (tmp_path / ".occupancy.json").write_text(json.dumps(payload), encoding="utf-8")
+
+
+def test_n_gpu_layers_occupancy_cpu_force_and_allow_off(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _write_occupancy(tmp_path, "ltx")
     monkeypatch.setenv("EZ_LLM_N_GPU_LAYERS", "99")
-    monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
-    assert client._n_gpu_layers() == 0
     monkeypatch.setenv("EZ_LLM_ALLOW_GPU", "1")
+    assert client._n_gpu_layers() == 0
+    monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
+    monkeypatch.delenv("EZ_LLM_N_GPU_LAYERS", raising=False)
+    _write_occupancy(tmp_path, "idle")
+    monkeypatch.setenv("EZ_LLM_ALLOW_GPU", "0")
+    assert client._n_gpu_layers() == 0
+    monkeypatch.delenv("EZ_LLM_ALLOW_GPU", raising=False)
     assert client._n_gpu_layers() == 99
+
+
+def test_sidecar_used_when_occupancy_llm(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _write_occupancy(tmp_path, "llm")
+    calls: list[str] = []
+
+    class _Resp:
+        def __init__(self, payload: bytes) -> None:
+            self._payload = payload
+
+        def read(self) -> bytes:
+            return self._payload
+
+        def __enter__(self) -> _Resp:
+            return self
+
+        def __exit__(self, *_args: object) -> None:
+            return None
+
+    def _open(request: object, timeout: float) -> _Resp:
+        del timeout
+        url = str(getattr(request, "full_url", "") or request)
+        calls.append(url)
+        if "/v1/models" in url:
+            return _Resp(b'{"data":[{"id":"qwen36-35b-a3b"}]}')
+        payload = {"choices": [{"message": {"content": "gpu-sidecar"}}]}
+        return _Resp(json.dumps(payload).encode("utf-8"))
+
+    monkeypatch.setattr(client, "_urlopen_sidecar", _open)
+    text, reason = client.complete("sys", "user")
+    assert text == "gpu-sidecar"
+    assert reason is None
+    assert any("/v1/models" in item for item in calls)
+
+
+def test_sidecar_skipped_when_occupancy_ltx(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _write_occupancy(tmp_path, "ltx")
+    called = {"n": 0}
+
+    def _open(*_args: object, **_kwargs: object) -> object:
+        called["n"] += 1
+        raise AssertionError("sidecar must not be probed during ltx")
+
+    monkeypatch.setattr(client, "_urlopen_sidecar", _open)
+    assert client.sidecar_occupancy_ok() is False
+    text, reason = client.complete("sys", "user")
+    assert called["n"] == 0
+    assert text == ""
+    assert reason == client.REASON_GGUF_MISSING
+
+
+def test_sidecar_base_url_uses_host_gateway_in_container(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("EZ_LLM_SIDECAR_URL", raising=False)
+    monkeypatch.setenv("MODELS_ROOT", "/models")
+    monkeypatch.setenv("EZ_LLM_SIDECAR_PORT", "30000")
+    assert "host.docker.internal" in client.sidecar_base_url()
+    monkeypatch.delenv("MODELS_ROOT", raising=False)
+    assert "127.0.0.1" in client.sidecar_base_url()
 
 
 def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
