@@ -77,6 +77,8 @@ def test_nill_bye_graphs_live_under_audio_nill_bye_phase() -> None:
         "phase4",
         "phase5",
         "phase6",
+        "phase7",
+        "phase8",
     }
     stray = list(artist.glob("music-rap-nill-bye-*-lab-example.json"))
     assert stray == [], stray
