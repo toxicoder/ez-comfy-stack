@@ -219,6 +219,11 @@ CLONE_MISSING_STATUS = (
     "./scripts/manage.sh download-dub --tier clone"
 )
 T3_MODEL_STATUS = "chatterbox-tts missing t3_model=v3 — upgrade chatterbox-tts"
+PERTH_STATUS = (
+    "resemble-perth watermarker missing — PerTh stays on. "
+    "docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -m pip install "
+    "'setuptools<82' then restart"
+)
 TRANSLATE_LLAMA_STATUS = (
     "llama.cpp unavailable — Llama did not import. "
     "docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -m pip install "
@@ -261,6 +266,7 @@ _WHISPER: Any = None
 _WHISPER_DIR_CACHED = ""
 _CHATTERBOX: Any = None
 _CHATTERBOX_CKPT = ""
+_CHATTERBOX_ERR = ""
 _VOICE_ENCODER: Any = None
 
 
@@ -362,6 +368,24 @@ def preflight_asr() -> str:
     return ""
 
 
+def perth_status(exc: BaseException | None = None) -> str:
+    """Operator-facing PerTh miss. Include ImportError detail when present."""
+    if exc is None:
+        return PERTH_STATUS
+    return f"{PERTH_STATUS} ({exc})"
+
+
+def preflight_perth() -> str:
+    """Empty when PerTh watermarker is callable; otherwise an operator-facing reason."""
+    try:
+        import perth
+    except ImportError as exc:
+        return perth_status(exc)
+    if not callable(getattr(perth, "PerthImplicitWatermarker", None)):
+        return PERTH_STATUS
+    return ""
+
+
 def preflight_clone() -> str:
     """Empty when Chatterbox V3 can load; otherwise an operator-facing reason."""
     try:
@@ -378,6 +402,9 @@ def preflight_clone() -> str:
             return T3_MODEL_STATUS
     except (TypeError, ValueError):
         return T3_MODEL_STATUS
+    perth_miss = preflight_perth()
+    if perth_miss:
+        return perth_miss
     if clone_ckpt_dir() is None:
         return "clone pack missing — run ./scripts/manage.sh download-dub --tier clone"
     return ""
@@ -1151,17 +1178,25 @@ def clone_ckpt_dir() -> Path | None:
 
 
 def _from_local_multilingual(loader: Callable[..., Any], ckpt: str, device: str) -> Any:
-    """Call ``from_local`` with T3 V3. Older wheels cannot load our snapshot."""
+    """Call ``from_local`` with T3 V3. Older wheels cannot load our snapshot.
+
+    Only remap a missing ``t3_model`` parameter. Inner TypeError (PerTh
+    watermarker None, conds.pt, pkuseg) must surface as ``chatterbox failed``.
+    """
     try:
-        return loader(ckpt, device=device, t3_model="v3")
-    except TypeError as exc:
+        params = inspect.signature(loader).parameters
+    except (TypeError, ValueError) as exc:
         raise RuntimeError(T3_MODEL_STATUS) from exc
+    if "t3_model" not in params:
+        raise RuntimeError(T3_MODEL_STATUS)
+    return loader(ckpt, device=device, t3_model="v3")
 
 
 def _close_chatterbox() -> None:
-    global _CHATTERBOX, _CHATTERBOX_CKPT
+    global _CHATTERBOX, _CHATTERBOX_CKPT, _CHATTERBOX_ERR
     _CHATTERBOX = None
     _CHATTERBOX_CKPT = ""
+    _CHATTERBOX_ERR = ""
 
 
 def _chatterbox_device() -> str:
@@ -1203,19 +1238,28 @@ def _load_chatterbox_model() -> tuple[Any | None, str]:
 
 
 def _get_chatterbox() -> tuple[Any | None, str]:
-    """Cached Chatterbox Multilingual V3 handle."""
-    global _CHATTERBOX, _CHATTERBOX_CKPT
+    """Cached Chatterbox Multilingual V3 handle (including a failed load)."""
+    global _CHATTERBOX, _CHATTERBOX_CKPT, _CHATTERBOX_ERR
     ckpt = clone_ckpt_dir()
     ckpt_s = str(ckpt) if ckpt is not None else ""
     if _CHATTERBOX is not None and _CHATTERBOX_CKPT == ckpt_s and ckpt_s:
         return _CHATTERBOX, ""
+    if (
+        _CHATTERBOX is None
+        and _CHATTERBOX_ERR
+        and _CHATTERBOX_CKPT == ckpt_s
+        and ckpt_s
+    ):
+        return None, _CHATTERBOX_ERR
     model, err = _load_chatterbox_model()
     if model is None:
         _CHATTERBOX = None
-        _CHATTERBOX_CKPT = ""
+        _CHATTERBOX_CKPT = ckpt_s
+        _CHATTERBOX_ERR = err
         return None, err
     _CHATTERBOX = model
     _CHATTERBOX_CKPT = ckpt_s
+    _CHATTERBOX_ERR = ""
     return model, ""
 
 

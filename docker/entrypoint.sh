@@ -746,23 +746,9 @@ dub_python_can_import() {
   "${py}" -c "${stmt}" >/dev/null 2>&1
 }
 
-# PyPI chatterbox-tts==0.1.7 predates from_local(..., t3_model="v3") (PR #516).
-CHATTERBOX_TTS_REF="${CHATTERBOX_TTS_REF:-5de7a54aa4e5e2baadb0182dde554908b48b85c2}"
-
-#######################################
-# GitHub archive URL for the Chatterbox V3-capable source tree.
-# Globals:
-#   CHATTERBOX_TTS_REF
-# Arguments:
-#   None
-# Outputs:
-#   HTTPS zip URL on stdout
-# Returns:
-#   0
-#######################################
-chatterbox_tts_zip_url() {
-  echo "https://github.com/resemble-ai/chatterbox/archive/${CHATTERBOX_TTS_REF}.zip"
-}
+# Chatterbox V3 pin + clone extras (setuptools<82 for PerTh / pkg_resources).
+# shellcheck source=install-comfy/chatterbox-tts.sh disable=SC1091
+source "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/install-comfy/chatterbox-tts.sh"
 
 #######################################
 # True when from_local accepts t3_model (Multilingual V3).
@@ -783,6 +769,24 @@ dub_chatterbox_has_t3_v3() {
   stmt+="assert 't3_model' in signature("
   stmt+="ChatterboxMultilingualTTS.from_local).parameters"
   dub_python_can_import "${py}" "${stmt}"
+}
+
+#######################################
+# True when PerTh watermarker is callable (resemble-perth imported it).
+# setuptools 82+ removes pkg_resources and leaves PerthImplicitWatermarker None.
+# Globals:
+#   None
+# Arguments:
+#   $1  Python interpreter
+# Outputs:
+#   None
+# Returns:
+#   0 when callable; 1 otherwise
+#######################################
+dub_chatterbox_perth_ok() {
+  local py="${1:?}"
+  dub_python_can_import "${py}" \
+    "import perth; assert callable(perth.PerthImplicitWatermarker)"
 }
 
 #######################################
@@ -851,19 +855,16 @@ install_dub_asr_wheel() {
 #######################################
 install_dub_clone_wheel() {
   local py="${1:?}"
-  local zip
-  local -a extras=(
-    librosa
-    s3tokenizer
-    resemble-perth
-    conformer
-    pykakasi
-    pyloudnorm
-    omegaconf
-    spacy-pkuseg
-  )
+  local zip pin
+  local -a extras=()
   zip="$(chatterbox_tts_zip_url)"
+  pin="$(chatterbox_setuptools_pin)"
+  while IFS= read -r tok; do
+    extras+=("${tok}")
+  done < <(chatterbox_clone_extra_packages)
   ep_log "dub clone: extras then chatterbox V3 zip --no-deps (skip torch pin)"
+  # Downgrade setuptools 82+ so resemble-perth can import pkg_resources.
+  "${py}" -m pip install "${pin}" || true
   "${py}" -m pip install --upgrade-strategy only-if-needed "${extras[@]}" || true
   if "${py}" -m pip install --upgrade --force-reinstall --no-deps "${zip}"; then
     ep_log "dub clone: chatterbox-tts V3 --no-deps installed"
@@ -961,7 +962,8 @@ ensure_dub_wheels() {
   fi
   if dub_python_can_import "${py}" \
     "from chatterbox.mtl_tts import ChatterboxMultilingualTTS" &&
-    dub_chatterbox_has_t3_v3 "${py}"; then
+    dub_chatterbox_has_t3_v3 "${py}" &&
+    dub_chatterbox_perth_ok "${py}"; then
     ep_log "dub clone: ChatterboxMultilingualTTS t3_model=v3 already importable"
   else
     install_dub_clone_wheel "${py}"

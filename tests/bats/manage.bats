@@ -470,6 +470,7 @@ FROZEN_MANAGE_VERBS=(
   grep -q -- '--no-deps' "${TEST_TMP_DIR}/docker_calls.log"
   grep -q -- '--force-reinstall' "${TEST_TMP_DIR}/docker_calls.log"
   grep -q 'resemble-ai/chatterbox' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q 'setuptools<82' "${TEST_TMP_DIR}/docker_calls.log"
   run grep -F 'install_llama_cpp_runtime_wheel' "${MANAGE_SH}"
   [ "${status}" -eq 0 ]
   run grep -F 'comfy_volume_python' "${MANAGE_SH}"

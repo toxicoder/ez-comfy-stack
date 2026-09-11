@@ -112,14 +112,27 @@ teardown() {
   run grep -F -- '--force-reinstall' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'resemble-ai/chatterbox/archive' \
-    "${REPO_ROOT}/docker/install-comfy/common.sh"
+    "${REPO_ROOT}/docker/install-comfy/chatterbox-tts.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'chatterbox_tts_zip_url' \
-    "${REPO_ROOT}/docker/install-comfy/common.sh"
+    "${REPO_ROOT}/docker/install-comfy/chatterbox-tts.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'setuptools<82' \
+    "${REPO_ROOT}/docker/install-comfy/chatterbox-tts.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'chatterbox_setuptools_pin' \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run chatterbox_tts_zip_url
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"resemble-ai/chatterbox/archive"* ]]
+  run chatterbox_setuptools_pin
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"setuptools<82"* ]]
+  run chatterbox_clone_extra_packages
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"resemble-perth"* ]]
+  [[ "${output}" == *"spacy-pkuseg"* ]]
   run grep -E 'pip_install --no-deps chatterbox-tts' \
     "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -ne 0 ]
@@ -142,6 +155,7 @@ teardown() {
   grep -q -- '--force-reinstall' "${TEST_TMP_DIR}/pip_dub.log"
   grep -q 'resemble-ai/chatterbox' "${TEST_TMP_DIR}/pip_dub.log"
   grep -q 'spacy-pkuseg' "${TEST_TMP_DIR}/pip_dub.log"
+  grep -q 'setuptools<82' "${TEST_TMP_DIR}/pip_dub.log"
   if grep -E 'faster-whisper.*chatterbox' "${TEST_TMP_DIR}/pip_dub.log"; then
     return 1
   fi
@@ -1008,7 +1022,10 @@ teardown() {
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-nodes.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/phase-finalize.sh ]]
   [[ -f ${REPO_ROOT}/docker/install-comfy/llama-cpp-cpu.sh ]]
+  [[ -f ${REPO_ROOT}/docker/install-comfy/chatterbox-tts.sh ]]
   run grep -F 'install-comfy/llama-cpp-cpu.sh' "${REPO_ROOT}/docker/Dockerfile"
+  [ "${status}" -eq 0 ]
+  run grep -F 'install-comfy/chatterbox-tts.sh' "${REPO_ROOT}/docker/Dockerfile"
   [ "${status}" -eq 0 ]
   run grep -F 'TORCH_VERSION' "${REPO_ROOT}/docker/install-comfy/core.sh"
   [ "${status}" -eq 0 ]
@@ -1257,6 +1274,7 @@ if [[ ${1} == -c ]]; then
   case "${2}" in
     *WhisperModel*) exit "${WHISPER_IMPORT_RC:-1}" ;;
     *t3_model*) exit "${CLONE_T3_RC:-${CLONE_IMPORT_RC:-1}}" ;;
+    *PerthImplicitWatermarker*) exit "${PERTH_RC:-${CLONE_IMPORT_RC:-1}}" ;;
     *ChatterboxMultilingualTTS*) exit "${CLONE_IMPORT_RC:-1}" ;;
   esac
   exit 0
@@ -1281,7 +1299,11 @@ PY
   [ "${status}" -eq 0 ]
   run grep -F 'dub_chatterbox_has_t3_v3' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'dub_chatterbox_perth_ok' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
   run dub_chatterbox_has_t3_v3 "${py}"
+  [ "${status}" -ne 0 ]
+  run dub_chatterbox_perth_ok "${py}"
   [ "${status}" -ne 0 ]
   run dub_python_can_import "${py}" "from faster_whisper import WhisperModel"
   [ "${status}" -ne 0 ]
@@ -1289,6 +1311,7 @@ PY
   [ "${status}" -eq 0 ]
   run install_dub_clone_wheel "${py}"
   [ "${status}" -eq 0 ]
+  grep -q 'setuptools<82' "${DUB_PIP_LOG}"
   : >"${DUB_PIP_LOG}"
   run ensure_dub_wheels
   [ "${status}" -eq 0 ]
@@ -1296,6 +1319,7 @@ PY
   grep -q -- '--no-deps' "${DUB_PIP_LOG}"
   grep -q -- '--force-reinstall' "${DUB_PIP_LOG}"
   grep -q 'resemble-ai/chatterbox' "${DUB_PIP_LOG}"
+  grep -q 'setuptools<82' "${DUB_PIP_LOG}"
   if grep -E 'faster-whisper.*chatterbox' "${DUB_PIP_LOG}"; then
     return 1
   fi
@@ -1304,6 +1328,7 @@ PY
   export WHISPER_IMPORT_RC=0
   export CLONE_IMPORT_RC=0
   export CLONE_T3_RC=0
+  export PERTH_RC=0
   run ensure_dub_wheels
   [ "${status}" -eq 0 ]
   [[ ! -s ${DUB_PIP_LOG} ]]
@@ -1313,6 +1338,14 @@ PY
   run ensure_dub_wheels
   [ "${status}" -eq 0 ]
   grep -q -- '--no-deps' "${DUB_PIP_LOG}"
+  grep -q 'resemble-ai/chatterbox' "${DUB_PIP_LOG}"
+
+  : >"${DUB_PIP_LOG}"
+  export CLONE_T3_RC=0
+  export PERTH_RC=1
+  run ensure_dub_wheels
+  [ "${status}" -eq 0 ]
+  grep -q 'setuptools<82' "${DUB_PIP_LOG}"
   grep -q 'resemble-ai/chatterbox' "${DUB_PIP_LOG}"
 
   export DUB_PIP_FAIL=1
@@ -1333,6 +1366,7 @@ if [[ ${1} == -c ]]; then
   case "${2}" in
     *WhisperModel*) exit "${WHISPER_IMPORT_RC:-1}" ;;
     *t3_model*) exit "${CLONE_T3_RC:-${CLONE_IMPORT_RC:-1}}" ;;
+    *PerthImplicitWatermarker*) exit "${PERTH_RC:-${CLONE_IMPORT_RC:-1}}" ;;
     *ChatterboxMultilingualTTS*) exit "${CLONE_IMPORT_RC:-1}" ;;
   esac
   exit 0

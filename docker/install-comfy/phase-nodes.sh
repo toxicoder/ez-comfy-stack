@@ -239,6 +239,10 @@ ensure_lab_video_nodes() {
 # against PyPI always misses on DGX Spark. Pins live in llama-cpp-cpu.sh.
 # shellcheck source=llama-cpp-cpu.sh disable=SC1091
 source "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/llama-cpp-cpu.sh"
+# Chatterbox V3 zip + extras (setuptools<82 for PerTh). Guarded if common.sh
+# already sourced this file.
+# shellcheck source=chatterbox-tts.sh disable=SC1091
+source "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/chatterbox-tts.sh"
 
 #######################################
 # Install llama-cpp-python CPU wheel so prompt enhance stays off the GPU.
@@ -297,9 +301,10 @@ install_faster_whisper_wheel() {
 }
 
 #######################################
-# Optional chatterbox-tts for local dub clone. Fail-soft. Install the GitHub
-# zip (PyPI 0.1.7 has no t3_model=v3) with --no-deps so the package cannot pin
-# torch==2.6.0 / transformers==5.2.0 over the lab venv.
+# Optional chatterbox-tts for local dub clone. Fail-soft. Install setuptools<82
+# (PerTh / pkg_resources) then the GitHub zip (PyPI 0.1.7 has no t3_model=v3)
+# with --no-deps so the package cannot pin torch==2.6.0 / transformers==5.2.0
+# over the lab venv.
 # Globals:
 #   None
 # Arguments:
@@ -310,18 +315,16 @@ install_faster_whisper_wheel() {
 #   0 always (soft-fail)
 #######################################
 install_chatterbox_wheel() {
-  local zip
-  local -a extras=(
-    librosa
-    s3tokenizer
-    resemble-perth
-    conformer
-    pykakasi
-    pyloudnorm
-    omegaconf
-    spacy-pkuseg
-  )
+  local zip pin
+  local -a extras=()
   zip="$(chatterbox_tts_zip_url)"
+  pin="$(chatterbox_setuptools_pin)"
+  while IFS= read -r tok; do
+    extras+=("${tok}")
+  done < <(chatterbox_clone_extra_packages)
+  # Downgrade setuptools 82+ so resemble-perth can import pkg_resources.
+  pip_install "${pin}" ||
+    warn "setuptools pin pip failed — PerTh watermarker may be missing"
   pip_install --upgrade-strategy only-if-needed "${extras[@]}" ||
     warn "chatterbox extras pip failed — clone may still miss"
   if pip_install --upgrade --force-reinstall --no-deps "${zip}"; then

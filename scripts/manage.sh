@@ -54,23 +54,9 @@ export MODELS_DIR
 COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output}
 export COMFY_OUTPUT_DIR
 DOWNLOAD_LIMIT=${DOWNLOAD_LIMIT:-auto}
-# PyPI chatterbox-tts==0.1.7 predates from_local(..., t3_model="v3") (PR #516).
-CHATTERBOX_TTS_REF="${CHATTERBOX_TTS_REF:-5de7a54aa4e5e2baadb0182dde554908b48b85c2}"
-
-#######################################
-# GitHub archive URL for the Chatterbox V3-capable source tree.
-# Globals:
-#   CHATTERBOX_TTS_REF
-# Arguments:
-#   None
-# Outputs:
-#   HTTPS zip URL on stdout
-# Returns:
-#   0
-#######################################
-chatterbox_tts_zip_url() {
-  echo "https://github.com/resemble-ai/chatterbox/archive/${CHATTERBOX_TTS_REF}.zip"
-}
+# Chatterbox V3 pin + clone extras (setuptools<82 for PerTh / pkg_resources).
+# shellcheck source=../../docker/install-comfy/chatterbox-tts.sh disable=SC1091
+source "${REPO_ROOT}/docker/install-comfy/chatterbox-tts.sh"
 
 #######################################
 # Relink the prompt-enhance GGUF into MODELS_DIR/comfy/llm/ if the snapshot
@@ -112,7 +98,8 @@ ensure_prompt_enhance_gguf() {
 #   0
 #######################################
 install_dub_runtime_wheels() {
-  local py zip
+  local py zip pin
+  local -a extras=()
   py="$(comfy_volume_python)"
   zip="$(chatterbox_tts_zip_url)"
   if ! compose_is_running; then
@@ -127,10 +114,14 @@ install_dub_runtime_wheels() {
     warn "dub wheels: faster-whisper pip failed — Queue writes empty mix until WhisperModel imports"
   fi
   install_llama_cpp_runtime_wheel "${py}"
+  pin="$(chatterbox_setuptools_pin)"
+  while IFS= read -r tok; do
+    extras+=("${tok}")
+  done < <(chatterbox_clone_extra_packages)
+  compose_run exec -T comfyui "${py}" -m pip install "${pin}" ||
+    warn "dub wheels: setuptools pin pip failed — PerTh watermarker may be missing"
   compose_run exec -T comfyui "${py}" -m pip install \
-    --upgrade-strategy only-if-needed \
-    librosa s3tokenizer resemble-perth conformer pykakasi pyloudnorm omegaconf \
-    spacy-pkuseg ||
+    --upgrade-strategy only-if-needed "${extras[@]}" ||
     warn "dub wheels: chatterbox extras pip failed"
   if compose_run exec -T comfyui "${py}" -m pip install \
     --upgrade --force-reinstall --no-deps "${zip}"; then
@@ -217,7 +208,7 @@ install_llama_cpp_runtime_wheel() {
 #   0
 #######################################
 check_dub_runtime_wheels() {
-  local py t3_check
+  local py t3_check perth_check
   if ! compose_is_running; then
     log "dub wheel import: skipped (stack stopped)"
     return 0
@@ -246,6 +237,12 @@ check_dub_runtime_wheels() {
     log "dub wheels: chatterbox.mtl_tts t3_model=v3 import ok"
   else
     warn "dub clone wheel missing t3_model=v3 — V3 zip --no-deps (do not pin torch)"
+  fi
+  perth_check="import perth; assert callable(perth.PerthImplicitWatermarker)"
+  if compose_run exec -T comfyui "${py}" -c "${perth_check}"; then
+    log "dub wheels: resemble-perth PerthImplicitWatermarker import ok"
+  else
+    warn "dub PerTh watermarker missing — pip install 'setuptools<82' (do not disable PerTh)"
   fi
   return 0
 }
@@ -1080,8 +1077,9 @@ Usage: manage.sh download-dub [--tier asr|clone|all] [--limit auto|N|off]
   Opt-in. Default asr = Silero VAD + faster-whisper large-v3.
   clone = Chatterbox Multilingual V3 (MIT, PerTh on).
   When compose is up, pip-installs faster-whisper, the llama-cpp-python
-  CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall
-  (does not pin torch==2.6.0; PyPI 0.1.7 has no t3_model=v3).
+  CPU wheel, setuptools<82 (PerTh / pkg_resources), then the Chatterbox V3
+  GitHub zip --no-deps --force-reinstall (does not pin torch==2.6.0;
+  PyPI 0.1.7 has no t3_model=v3).
   Does not run as part of download-models.
   --limit auto|N|off  same wrap as download-models (always clears on exit)
 EOF

@@ -731,6 +731,68 @@ def test_from_local_old_wheel_without_t3_model() -> None:
         assert "t3_model" in str(exc)
 
 
+def test_from_local_inner_typeerror_is_not_t3_status() -> None:
+    def loader(ckpt: str, device: str = "cpu", t3_model: str = "v2"):
+        del ckpt, device, t3_model
+        raise TypeError("'NoneType' object is not callable")
+
+    try:
+        pipeline._from_local_multilingual(loader, "/ckpt", "cpu")
+        raise AssertionError("expected TypeError")
+    except TypeError as exc:
+        assert "NoneType" in str(exc)
+
+
+def test_load_chatterbox_inner_typeerror_is_not_t3_status(
+    tmp_path: Path, monkeypatch
+) -> None:
+    snap = tmp_path / "ResembleAI__chatterbox_clone"
+    snap.mkdir()
+    for name in pipeline.CLONE_REQUIRED_FILES:
+        (snap / name).write_bytes(b"x")
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+
+    class _Loader:
+        @staticmethod
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+            del ckpt_dir, device, t3_model
+            raise TypeError("'NoneType' object is not callable")
+
+    mtl = types.ModuleType("chatterbox.mtl_tts")
+    setattr(mtl, "ChatterboxMultilingualTTS", _Loader)
+    chatterbox = types.ModuleType("chatterbox")
+    monkeypatch.setitem(sys.modules, "chatterbox", chatterbox)
+    monkeypatch.setitem(sys.modules, "chatterbox.mtl_tts", mtl)
+    model, err = pipeline._load_chatterbox_model()
+    assert model is None
+    assert pipeline.T3_MODEL_STATUS not in err
+    assert "chatterbox failed" in err
+    assert "NoneType" in err
+
+
+def test_preflight_clone_names_perth_miss(monkeypatch) -> None:
+    class _Loader:
+        @staticmethod
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+            del ckpt_dir, device, t3_model
+            return object()
+
+    mtl = types.ModuleType("chatterbox.mtl_tts")
+    setattr(mtl, "ChatterboxMultilingualTTS", _Loader)
+    chatterbox = types.ModuleType("chatterbox")
+    monkeypatch.setitem(sys.modules, "chatterbox", chatterbox)
+    monkeypatch.setitem(sys.modules, "chatterbox.mtl_tts", mtl)
+    perth = types.ModuleType("perth")
+    setattr(perth, "PerthImplicitWatermarker", None)
+    monkeypatch.setitem(sys.modules, "perth", perth)
+    monkeypatch.setattr(pipeline, "clone_ckpt_dir", lambda: Path("/ckpt"))
+    reason = pipeline.preflight_clone()
+    assert reason == pipeline.PERTH_STATUS
+    assert "setuptools<82" in reason
+    assert "PerTh stays on" in reason
+    assert "docker exec" in reason
+
+
 def test_preflight_clone_names_missing_t3_model(monkeypatch) -> None:
     class _Loader:
         @staticmethod
@@ -932,7 +994,11 @@ def test_preflight_asr_and_clone_name_the_miss(tmp_path: Path, monkeypatch) -> N
     assert asr
     assert clone
     assert "faster-whisper" in asr or "ASR pack" in asr
-    assert "chatterbox" in clone.lower() or "clone" in clone.lower()
+    assert (
+        "chatterbox" in clone.lower()
+        or "clone" in clone.lower()
+        or "perth" in clone.lower()
+    )
 
 
 def test_conds_pt_required_for_clone_dir(tmp_path: Path, monkeypatch) -> None:
@@ -969,6 +1035,26 @@ def test_get_chatterbox_caches_loader(monkeypatch) -> None:
     assert err1 == ""
     assert err2 == ""
     assert first is second
+    assert len(loads) == 1
+    pipeline._close_chatterbox()
+
+
+def test_get_chatterbox_caches_load_error(monkeypatch) -> None:
+    loads: list[int] = []
+
+    def _load() -> tuple[object | None, str]:
+        loads.append(1)
+        return None, "chatterbox failed: boom"
+
+    monkeypatch.setattr(pipeline, "_load_chatterbox_model", _load)
+    monkeypatch.setattr(pipeline, "clone_ckpt_dir", lambda: Path("/ckpt"))
+    pipeline._close_chatterbox()
+    first, err1 = pipeline._get_chatterbox()
+    second, err2 = pipeline._get_chatterbox()
+    assert first is None
+    assert second is None
+    assert err1 == "chatterbox failed: boom"
+    assert err2 == err1
     assert len(loads) == 1
     pipeline._close_chatterbox()
     assert pipeline._chatterbox_device() in {"cpu", "cuda"}
