@@ -1,4 +1,4 @@
-"""Exclusive-bar contract for the seventy-five Nill Bye diss takes.
+"""Exclusive-bar contract for the one-hundred-five Nill Bye diss takes.
 
 Hermetic: reads DISS_EXAMPLES only. No Comfy, no network, no GGUF.
 """
@@ -169,6 +169,43 @@ RESERVED_MOTIFS: tuple[tuple[str, str], ...] = (
     ("sharia plank", "sharia plank"),
     ("invasion hymn", "invasion hymn"),
     ("demolish hook", "demolish hook"),
+    ("thirty four counts", "thirty four counts"),
+    ("thirty-four counts", "thirty four counts"),
+    ("one eighty seven", "one eighty seven"),
+    ("one-eighty-seven", "one eighty seven"),
+    ("187 minutes", "one eighty seven"),
+    ("eleven seven eighty", "eleven seven eighty"),
+    ("11,780", "eleven seven eighty"),
+    ("11780", "eleven seven eighty"),
+    ("fake electors", "fake electors"),
+    ("bathroom boxes", "bathroom boxes"),
+    ("statement of worth", "statement of worth"),
+    ("university tab", "university tab"),
+    ("ukraine hold", "ukraine hold"),
+    ("travel memo", "travel memo"),
+    ("zero tolerance", "zero tolerance"),
+    ("zero-tolerance", "zero tolerance"),
+    ("census question", "census question"),
+    ("paris walkout", "paris walkout"),
+    ("emoluments suite", "emoluments suite"),
+    ("seven fifty", "seven fifty"),
+    ("seven-fifty", "seven fifty"),
+    ("carroll tab", "carroll tab"),
+    ("pardon flood", "pardon flood"),
+    ("ieepa wreck", "ieepa wreck"),
+    ("gold card", "gold card"),
+    ("memecoin tab", "memecoin tab"),
+    ("east wing wreck", "east wing wreck"),
+    ("metro surge", "metro surge"),
+    ("due process", "due process"),
+    ("kennedy plaque", "kennedy plaque"),
+    ("birthright order", "birthright order"),
+    ("cook firing", "cook firing"),
+    ("inspector purge", "inspector purge"),
+    ("law firm order", "law firm order"),
+    ("visa ticket", "visa ticket"),
+    ("shadow docket", "shadow docket"),
+    ("immunity hymn", "immunity hymn"),
 )
 
 
@@ -342,12 +379,17 @@ def test_name_stamps_at_most_once_per_verse() -> None:
             if rake > 1:
                 offenders.append((title, idx, "Rake", rake))
             abbott = 0
+            trump = 0
             for line in content_lines(body):
                 low = line.lower()
                 if low.startswith("abbott") or low.startswith("greg abbott"):
                     abbott += 1
+                if low.startswith("trump") or low.startswith("donald trump"):
+                    trump += 1
             if abbott > 1:
                 offenders.append((title, idx, "Abbott", abbott))
+            if trump > 1:
+                offenders.append((title, idx, "Trump", trump))
     assert offenders == [], f"name stamps over cap: {offenders}"
 
 

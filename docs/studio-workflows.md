@@ -33,7 +33,7 @@ user/default/workflows/
     dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast-*, dub-*, music-rap-draft/full
-      nill-bye/phase0|1|2|3|4/   seventy-five 180 s music-rap-nill-bye-* diss takes
+      nill-bye/phase0|1|2|3|4|5|6/   one hundred five 180 s music-rap-nill-bye-* diss takes
       drive-through/phase0|1|2|3|4/ eighty-five 180 s music-edm-drive-through-* EDM takes
     inspire/   prompt-forge, research-chat, beat-sheet
   _user/       your graphs (never overwritten)
