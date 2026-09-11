@@ -1,8 +1,8 @@
 {
-  "id": "klein-from-clay-lab-example",
+  "id": "klein-from-guide-loader-lab-example",
   "revision": 4,
-  "last_node_id": 14,
-  "last_link_id": 15,
+  "last_node_id": 15,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
@@ -357,9 +357,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_clay_hero"
+        "ez_guide_hero"
       ],
-      "title": "Save clay hero"
+      "title": "Save ez_guide_hero"
     },
     {
       "id": 10,
@@ -381,13 +381,13 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nAfter Queue, overlay-qc the look against clay (host ffmpeg; compose may stay up):\n\n  ./scripts/manage.sh overlay-qc --film <slug> --shot <id> --look PATH\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nStay on :8188 after a dump: klein-from-guide-loader-lab-example / ltx-iclora-from-guide-loader-lab-example / trellis-from-klein-still-lab-example (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein-from-guide-loader-lab-example\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` \u2192 OccupancyGate \u2192 Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\n./scripts/manage.sh occupancy enter blender-desk\n./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\n./scripts/manage.sh occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n"
       ],
       "title": "Operator note"
     },
     {
       "id": 11,
-      "type": "LoadImage",
+      "type": "EZDCCLoadGuideStill",
       "pos": [
         2180,
         80
@@ -402,28 +402,35 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "IMAGE",
+          "name": "image",
           "type": "IMAGE",
           "links": [
-            11
+            16
           ],
           "slot_index": 0
         },
         {
-          "name": "MASK",
+          "name": "mask",
           "type": "MASK",
           "links": null,
           "slot_index": 1
+        },
+        {
+          "name": "metadata",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "EZDCCLoadGuideStill"
       },
       "widgets_values": [
-        "first.png",
-        "image"
+        "go-see",
+        "12",
+        "first"
       ],
-      "title": "Clay first.png (guide pack)"
+      "title": "Load guide still"
     },
     {
       "id": 12,
@@ -546,6 +553,45 @@
       },
       "widgets_values": [],
       "title": "Positive + clay plate"
+    },
+    {
+      "id": 15,
+      "type": "EZDCCOccupancyGate",
+      "pos": [
+        2540,
+        80
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDCCOccupancyGate"
+      },
+      "widgets_values": [
+        "klein"
+      ],
+      "title": "Occupancy gate (klein)"
     }
   ],
   "links": [
@@ -623,7 +669,7 @@
     ],
     [
       11,
-      11,
+      15,
       0,
       13,
       0,
@@ -660,12 +706,20 @@
       7,
       1,
       "CONDITIONING"
+    ],
+    [
+      16,
+      11,
+      0,
+      15,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "klein-from-clay-lab-example",
+    "lab_profile": "klein-from-guide-loader-lab-example",
     "lab_flux_tier": "fast",
     "ds": {
       "scale": 1,
@@ -674,8 +728,8 @@
         0
       ]
     },
-    "lab_note": "## klein-from-clay-lab-example\n\nKlein 4B **edit** of a DCC clay first frame (guide pack ``first.png``). Enhance **on**. Seed **42**. Size **1280x704** (LTX VAE grid \u2014 not 1280x720).\n\nLoadImage: clay ``first.png`` from ``guides/<slug>/<shot>/``. Prefix ``ez_clay_hero``.\n\nAfter Queue, overlay-qc the look against clay (host ffmpeg; compose may stay up):\n\n  ./scripts/manage.sh overlay-qc --film <slug> --shot <id> --look PATH\n\nUnload before LTX. Do not Queue this graph and a DCC dump in one session (occupancy).\n\nPrompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.\n\nStay on :8188 after a dump: klein-from-guide-loader-lab-example / ltx-iclora-from-guide-loader-lab-example / trellis-from-klein-still-lab-example (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
-    "lab_description": "Klein 4B edit of DCC clay first.png. Enhance on. 1280x704. Seed 42.",
+    "lab_note": "## klein-from-guide-loader-lab-example\n\nKlein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.\n\nOccupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` \u2192 OccupancyGate \u2192 Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.\n\n```bash\n./scripts/manage.sh occupancy enter blender-desk\n./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth\n./scripts/manage.sh occupancy enter klein --yes\n```\n\nblender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.\n",
+    "lab_description": "Klein 4B edit of EZDCCLoadGuideStill first.png. Enhance on. 1280x704. Seed 42.",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -684,12 +738,40 @@
       "occupancy": "klein",
       "enhance_off_identity": false,
       "handoff": [
-        "ltx-iclora-depth-5s-lab-example",
-        "wan-i2v-5s-lab-example"
+        "ltx-iclora-from-guide-loader-lab-example",
+        "trellis-from-klein-still-lab-example"
       ]
     },
     "linearData": {
       "inputs": [
+        [
+          11,
+          "slug",
+          {
+            "label": "Guide slug"
+          }
+        ],
+        [
+          11,
+          "shot_id",
+          {
+            "label": "Shot id"
+          }
+        ],
+        [
+          11,
+          "layer",
+          {
+            "label": "Layer"
+          }
+        ],
+        [
+          15,
+          "required_mode",
+          {
+            "label": "Occupancy"
+          }
+        ],
         [
           12,
           "prompt",
@@ -713,14 +795,6 @@
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
             "label": "Rewrite prompt"
-          }
-        ],
-        [
-          11,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Clay first.png (guide pack)"
           }
         ],
         [
@@ -748,7 +822,11 @@
         1280,
         704
       ],
-      "prefix": "ez_clay_hero"
+      "prefix": "ez_guide_hero",
+      "loader": "EZDCCLoadGuideStill",
+      "layer": "first",
+      "slug": "go-see",
+      "shot_id": "12"
     }
   },
   "version": 0.4

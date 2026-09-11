@@ -19,7 +19,7 @@ def _load(name: str) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-DCC_STEMS = (
+EXISTING_LOADIMAGE_STEMS = (
     "klein-from-clay-lab-example",
     "klein-from-canny-lab-example",
     "klein-from-clay-plates-lab-example",
@@ -28,6 +28,12 @@ DCC_STEMS = (
     "ltx-iclora-depth-shorts-lab-example",
     "wan-flf-from-guide-lab-example",
 )
+LOADER_STEMS = (
+    "klein-from-guide-loader-lab-example",
+    "ltx-iclora-from-guide-loader-lab-example",
+    "trellis-from-klein-still-lab-example",
+)
+DCC_STEMS = EXISTING_LOADIMAGE_STEMS + LOADER_STEMS
 
 
 def test_dcc_graphs_exist_and_ids() -> None:
@@ -190,3 +196,91 @@ def test_iclora_not_in_download_models_help() -> None:
     assert "export-guides" in help_text
     assert "blender-stills" in help_text
     assert "house-views" in help_text
+
+
+def test_existing_seven_keep_loadimage_and_point_at_loaders() -> None:
+    for stem in EXISTING_LOADIMAGE_STEMS:
+        graph = _load(f"{stem}.json")
+        types = {n.get("type") for n in graph["nodes"]}
+        assert "LoadImage" in types, stem
+        assert "EZDCCLoadGuideStill" not in types, stem
+        note = (graph.get("extra") or {}).get("lab_note", "")
+        assert "klein-from-guide-loader-lab-example" in note, stem
+
+
+def test_klein_from_guide_loader_contract() -> None:
+    graph = _load("klein-from-guide-loader-lab-example.json")
+    extra = graph["extra"]
+    assert extra["lab_dcc"]["prefix"] == "ez_guide_hero"
+    assert extra["lab_dcc"]["size"] == [1280, 704]
+    assert extra["lab_dcc"]["seed"] == 42
+    assert extra["lab_app_mode"]["occupancy"] == "klein"
+    assert extra["lab_app_mode"]["lane"] == "dcc"
+    types = {n.get("type") for n in graph["nodes"]}
+    assert "EZDCCLoadGuideStill" in types
+    assert "EZDCCOccupancyGate" in types
+    assert "LoadImage" not in types
+    load = next(n for n in graph["nodes"] if n.get("type") == "EZDCCLoadGuideStill")
+    assert load["widgets_values"][:3] == ["go-see", "12", "first"]
+    save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
+    assert save["widgets_values"][0] == "ez_guide_hero"
+    titles = {n.get("title") for n in graph["nodes"]}
+    assert any(isinstance(t, str) and "klein" in t.lower() for t in titles)
+    blob = json.dumps(graph)
+    assert "1280x720" not in blob
+    assert "Pixal3D" not in blob
+    assert "FLUX.2-dev" not in blob
+
+
+def test_ltx_iclora_from_guide_loader_contract() -> None:
+    graph = _load("ltx-iclora-from-guide-loader-lab-example.json")
+    extra = graph["extra"]
+    assert extra["lab_iclora"]["magcache"] is False
+    assert extra["lab_iclora"]["distilled_only"] is True
+    assert extra["lab_iclora"]["prefix"] == "ez_iclora_guide"
+    assert extra["lab_app_mode"]["occupancy"] == "ltx"
+    types = {n.get("type") for n in graph["nodes"]}
+    assert "EZDCCLoadGuideStill" in types
+    assert "EZDCCLoadGuideVideo" in types
+    assert "EZDCCOccupancyGate" in types
+    assert "MagCache" not in types
+    assert "LoadImage" not in types
+    video = next(n for n in graph["nodes"] if n.get("type") == "EZDCCLoadGuideVideo")
+    assert video["widgets_values"][:3] == ["go-see", "12", "depth"]
+    note = extra["lab_note"]
+    assert "download-ltx --tier iclora" in note
+    assert "Templates" in note
+    blob = json.dumps(graph)
+    assert "19B" in extra["lab_note"] or "19b" not in blob.lower()
+    assert "Pixal3D" not in blob
+    assert "No 1280x720" in extra["lab_note"]
+    latent = next(
+        n
+        for n in graph["nodes"]
+        if n.get("type") in {"LTXVImgToVideo", "EmptyLTXVLatentVideo"}
+    )
+    values = latent.get("widgets_values") or []
+    if len(values) >= 2:
+        assert int(values[0]) != 1280 or int(values[1]) != 720
+
+
+def test_trellis_from_klein_still_contract() -> None:
+    graph = _load("trellis-from-klein-still-lab-example.json")
+    extra = graph["extra"]
+    assert extra["lab_app_mode"]["occupancy"] == "trellis"
+    assert extra["lab_app_mode"]["lane"] == "dcc"
+    assert extra["lab_dcc"]["plate"] == "mug"
+    assert extra["lab_dcc"]["prefix"] == "assets/objects/_lab-mug/"
+    types = {n.get("type") for n in graph["nodes"]}
+    assert "EZDCCLoadStillPack" in types
+    assert "EZDCCOccupancyGate" in types
+    assert "MeshToFile3D" in types
+    assert "LoadImage" not in types
+    load = next(n for n in graph["nodes"] if n.get("type") == "EZDCCLoadStillPack")
+    assert load["widgets_values"][:3] == ["go-see", "mug", "first"]
+    blob = json.dumps(graph)
+    assert "assets/objects/_lab-mug/" in blob
+    assert "download-3d --tier trellis2" in extra["lab_note"]
+    assert "Pixal3D" not in blob
+    assert "asset-new" not in blob
+    assert "Preview 3D" in extra["lab_note"] or "Load 3D" in extra["lab_note"]

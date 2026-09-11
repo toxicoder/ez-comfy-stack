@@ -1,8 +1,8 @@
 {
-  "id": "ltx-iclora-canny-5s-lab-example",
+  "id": "ltx-iclora-from-guide-loader-lab-example",
   "revision": 7,
-  "last_node_id": 23,
-  "last_link_id": 31,
+  "last_node_id": 25,
+  "last_link_id": 32,
   "nodes": [
     {
       "id": 1,
@@ -110,7 +110,7 @@
     },
     {
       "id": 4,
-      "type": "LoadImage",
+      "type": "EZDCCLoadGuideStill",
       "pos": [
         1080,
         80
@@ -125,28 +125,35 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "IMAGE",
+          "name": "image",
           "type": "IMAGE",
           "links": [
-            5
+            32
           ],
           "slot_index": 0
         },
         {
-          "name": "MASK",
+          "name": "mask",
           "type": "MASK",
           "links": null,
-          "slot_index": 0
+          "slot_index": 1
+        },
+        {
+          "name": "metadata",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "EZDCCLoadGuideStill"
       },
       "widgets_values": [
-        "first.png",
-        "image"
+        "go-see",
+        "12",
+        "first"
       ],
-      "title": "Guide first.png"
+      "title": "Load guide still"
     },
     {
       "id": 5,
@@ -489,9 +496,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_ltx_frames"
+        "ez_iclora_guide"
       ],
-      "title": "Save frames (secondary)"
+      "title": "Save ez_iclora_guide"
     },
     {
       "id": 13,
@@ -675,7 +682,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## ltx-iclora-canny-5s-lab-example\n\nLab envelope for Path B **canny**-guided 5.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.\n\nThis tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nSwitch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):\n\n  ./scripts/manage.sh download-ltx --tier iclora\n  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors\n\nRefuse 19B Union. Do not pair IC-LoRA with a dev transformer.\n\nLoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n\nStay on :8188 after a dump: klein-from-guide-loader-lab-example / ltx-iclora-from-guide-loader-lab-example / trellis-from-klein-still-lab-example (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## ltx-iclora-from-guide-loader-lab-example\n\nLab envelope for Path B depth-guided 5.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.\n\nOccupancy: **ltx**. EZDCCLoadGuideStill ``first`` \u2192 OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nOpt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n"
       ],
       "title": "Operator note"
     },
@@ -732,7 +739,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_iclora_canny",
+        "filename_prefix": "ez_iclora_guide",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -810,9 +817,9 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_last"
+        "ez_iclora_guide"
       ],
-      "title": "Save last frame"
+      "title": "Save ez_iclora_guide"
     },
     {
       "id": 21,
@@ -844,7 +851,7 @@
       },
       "widgets_values": [
         "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.",
-        false,
+        true,
         "i2v",
         "5 seconds, 24 fps",
         "world SFX matching the start image, no score",
@@ -924,6 +931,84 @@
         ""
       ],
       "title": "LTX AI-media disclosure (end-card)"
+    },
+    {
+      "id": 24,
+      "type": "EZDCCOccupancyGate",
+      "pos": [
+        1440,
+        80
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 32
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDCCOccupancyGate"
+      },
+      "widgets_values": [
+        "ltx"
+      ],
+      "title": "Occupancy gate (ltx)"
+    },
+    {
+      "id": 25,
+      "type": "EZDCCLoadGuideVideo",
+      "pos": [
+        40,
+        720
+      ],
+      "size": [
+        320,
+        130
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        },
+        {
+          "name": "fps",
+          "type": "INT",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDCCLoadGuideVideo"
+      },
+      "widgets_values": [
+        "go-see",
+        "12",
+        "depth"
+      ],
+      "title": "Load guide video path"
     }
   ],
   "links": [
@@ -953,7 +1038,7 @@
     ],
     [
       5,
-      4,
+      24,
       0,
       7,
       3,
@@ -1134,16 +1219,24 @@
       18,
       1,
       "AUDIO"
+    ],
+    [
+      32,
+      4,
+      0,
+      24,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "ltx-iclora-canny-5s-lab-example",
+    "lab_profile": "ltx-iclora-from-guide-loader-lab-example",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## ltx-iclora-canny-5s-lab-example\n\nLab envelope for Path B **canny**-guided 5.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.\n\nThis tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nSwitch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):\n\n  ./scripts/manage.sh download-ltx --tier iclora\n  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors\n\nRefuse 19B Union. Do not pair IC-LoRA with a dev transformer.\n\nLoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n\nStay on :8188 after a dump: klein-from-guide-loader-lab-example / ltx-iclora-from-guide-loader-lab-example / trellis-from-klein-still-lab-example (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## ltx-iclora-from-guide-loader-lab-example\n\nLab envelope for Path B depth-guided 5.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.\n\nOccupancy: **ltx**. EZDCCLoadGuideStill ``first`` \u2192 OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nOpt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n",
     "lab_ltx_av": true,
-    "lab_description": "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_description": "LTX-2.5 IC-LoRA envelope from EZDCCLoadGuideStill + depth video path.",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1157,6 +1250,34 @@
     },
     "linearData": {
       "inputs": [
+        [
+          4,
+          "slug",
+          {
+            "label": "Guide slug"
+          }
+        ],
+        [
+          4,
+          "shot_id",
+          {
+            "label": "Shot id"
+          }
+        ],
+        [
+          4,
+          "layer",
+          {
+            "label": "Layer"
+          }
+        ],
+        [
+          24,
+          "required_mode",
+          {
+            "label": "Occupancy"
+          }
+        ],
         [
           21,
           "prompt",
@@ -1181,14 +1302,6 @@
             "description": "World SFX to interleave. No score unless you asked for music.",
             "label": "Audio notes",
             "height": 80
-          }
-        ],
-        [
-          4,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Guide first.png"
           }
         ],
         [
@@ -1218,13 +1331,20 @@
         1280,
         704
       ],
-      "depth_default": false,
+      "depth_default": true,
       "magcache": false,
-      "canny_default": true,
-      "guide": "canny.mp4"
+      "prefix": "ez_iclora_guide",
+      "loader": "EZDCCLoadGuideStill"
     },
     "lab_disclosure": "LTX Community License",
+    "lab_dcc": {
+      "slug": "go-see",
+      "shot_id": "12",
+      "layer": "first",
+      "prefix": "ez_iclora_guide"
+    },
     "lab_optional_unwired": [
+      "EZDCCLoadGuideVideo",
       "EZFilmDisclosure"
     ]
   },
