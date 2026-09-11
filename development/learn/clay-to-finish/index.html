@@ -743,6 +743,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../comfy-first-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stay in Comfy after a Blender dump
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../dream-house/" class="md-nav__link">
         
   
@@ -1844,7 +1872,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 10 Sep 2026, 23:13 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-10T23:13:07+00:00">10 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 00:57 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T00:57:09+00:00">11 Sep 2026</time></span>
                 
                   
 
@@ -1891,7 +1919,7 @@
 <li>Optional board: <strong>klein-identity-sheet-lab-example</strong> then <strong>klein-storyboard-6up-lab-example</strong> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> 42, 1280×704).</li>
 <li>Optional clay: <code>manage.sh stop</code> then <code>export-guides --film go-see --shot 12</code>. Workbench clay + depth + canny, not Cycles beauty. Path D: dump on the laptop, rsync <code>guides/</code>. Creator plates (not 5.00s): <code>blender-stills</code> then <strong>klein-from-clay-plates</strong> — <a href="../blender-creator/">Blender creator suite</a>.</li>
 <li><code>manage.sh film-animatic --film go-see</code> — clay.mp4 or 5.00 s still holds, cap 90 s. Compose may stay up.</li>
-<li>Start Comfy. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> <strong>klein-from-clay-lab-example</strong> on <code>first.png</code>. Then <code>overlay-qc --film go-see --shot 12 --look PATH</code>. Iterate the look, not the print.</li>
+<li>Start Comfy. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> <strong>klein-from-clay-lab-example</strong> on <code>first.png</code>, or stay on <code>:8188</code> with <strong>klein-from-guide-loader-lab-example</strong> (<a href="../comfy-first-blender/">Stay in Comfy after a Blender dump</a>). Then <code>overlay-qc --film go-see --shot 12 --look PATH</code>. Iterate the look, not the print.</li>
 <li>Stop Klein. <code>download-ltx --tier iclora</code> if needed. Queue <strong>ltx-iclora-depth-5s-lab-example</strong> or Templates → LTX-2.5 Union Control (depth from <code>depth.mp4</code>). <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> off. Distilled-only. Refuse 19B Union.</li>
 <li>Stop LTX. Occupancy <strong>audio</strong>. <code>stem-mix --film go-see --shot 12 --bg PATH</code> (optional <code>--dx</code>). Duck −15 dB, YouTube <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span> I=-14. App: <strong>audio-finish-lab-example</strong>.</li>
 <li><code>film-accept</code> then concat. Disclosure <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> stays.</li>

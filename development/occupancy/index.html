@@ -647,6 +647,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../learn/comfy-first-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stay in Comfy after a Blender dump
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../learn/dream-house/" class="md-nav__link">
         
   
@@ -1844,7 +1872,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 10 Sep 2026, 23:13 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-10T23:13:07+00:00">10 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 00:57 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T00:57:09+00:00">11 Sep 2026</time></span>
                 
                   
 
@@ -1928,7 +1956,7 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>trellis<span class="w"> </span>--yes
 </code></pre></div>
 <p><code>occupancy enter</code> <strong>does not</strong> start Compose. Heavy modes tell you to <code>./scripts/manage.sh start</code> (type <strong>yes</strong>) when the container is down.</p>
-<p>State lives at <code>${COMFY_OUTPUT_DIR}/.occupancy.json</code> (outputs, never <code>MODELS_DIR</code>).</p>
+<p>State lives at <code>${COMFY_OUTPUT_DIR}/.occupancy.json</code> (outputs, never <code>MODELS_DIR</code>). In-canvas <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job. Park Comfy for blender-desk Workbench; stop Blender before TRELLIS/LTX.">Occupancy</span> gate</strong> (<code>EZDCCOccupancyGate</code>) reads that file only — it does not start Compose or spawn Blender. <a href="../learn/comfy-first-blender/">Stay in Comfy after a Blender dump</a>.</p>
 <hr />
 <h2 id="park-vs-stop">Park vs stop<a class="headerlink" href="#park-vs-stop" title="Permanent link">&para;</a></h2>
 <p><code>stop</code> is the hammer: container down, volumes kept. Use it for NVENC proxies, SuperSplat, or a wedged UI.</p>
@@ -1945,7 +1973,7 @@
 <hr />
 <h2 id="mcp-mcp-construct">MCP (mcp-construct)<a class="headerlink" href="#mcp-mcp-construct" title="Permanent link">&para;</a></h2>
 <p>In-tree MCP servers are typed-tool stdio processes. <strong>No</strong> <code>execute_code</code>, <strong>no</strong> telemetry. Official Comfy Cloud MCP / <code>comfy-mcp</code> stay out of the image (<code>manage.sh start</code> is the launch path).</p>
-<p><strong>blender-mcp</strong> wraps <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job. Park Comfy for blender-desk Workbench; stop Blender before TRELLIS/LTX.">occupancy</span> and host Blender (primitives, camera, keyframes, GLB, guide dumps). <strong>No</strong> cloud 3D APIs. bpy tools need blender-desk.</p>
+<p><strong>blender-mcp</strong> wraps occupancy and host Blender (primitives, camera, keyframes, GLB, guide dumps). <strong>No</strong> cloud 3D APIs. bpy tools need blender-desk.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>blender-mcp<span class="w"> </span>--stdio
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># optional on-box 4B (CPU, same GGUF as prompt-enhance):</span>

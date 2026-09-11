@@ -647,6 +647,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../learn/comfy-first-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stay in Comfy after a Blender dump
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../learn/dream-house/" class="md-nav__link">
         
   
@@ -1800,7 +1828,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 10 Sep 2026, 23:13 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-10T23:13:07+00:00">10 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 00:57 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T00:57:09+00:00">11 Sep 2026</time></span>
                 
                   
 
@@ -1830,7 +1858,7 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    shorts/    film-*-90s-*-lab-example.json
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    optional/  a14b, longcat stub, klein-trellis2
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    audio/     podcast-*, dub-*, music-rap-draft/full
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
@@ -2883,12 +2911,24 @@
 <td>Fun InP first+last from the pack. Opt-in <code>download-wan --tier fun-inp</code>. MagCache off.</td>
 </tr>
 <tr>
+<td><strong>klein-from-guide-loader-lab-example</strong></td>
+<td>Stay on <code>:8188</code>. <code>EZDCCLoadGuideStill</code> + occupancy gate. Prefix <code>ez_guide_hero</code>.</td>
+</tr>
+<tr>
+<td><strong>ltx-iclora-from-guide-loader-lab-example</strong></td>
+<td>Envelope from loaders + <code>depth.mp4</code> path. MagCache off. Distilled-only. Prefix <code>ez_iclora_guide</code>.</td>
+</tr>
+<tr>
+<td><strong>trellis-from-klein-still-lab-example</strong></td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="blender-stills" data-href="../glossary/#blender-stills" title="Single-frame clay/depth/canny dump at creator sizes. Occupancy: blender-desk.">Still pack</span> <code>plate=mug</code> → native TRELLIS.2 INT8. Output <code>assets/objects/_lab-mug/</code>. Occupancy <strong>trellis</strong>.</td>
+</tr>
+<tr>
 <td><strong>audio-finish-lab-example</strong></td>
 <td>Picture-lock stem mix desk. Occupancy <strong>audio</strong>. Host <code>stem-mix.sh</code> (duck −15 dB, YouTube <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span>).</td>
 </tr>
 </tbody>
 </table>
-<p>Operator loop: <a href="../dcc-workflows/">DCC guide pack</a>. Playbook: <a href="../learn/clay-to-finish/">Clay to finish</a>. Stills: <a href="../learn/blender-creator/">Blender creator suite</a>.</p>
+<p>Operator loop: <a href="../dcc-workflows/">DCC guide pack</a>. Stay on <code>:8188</code>: <a href="../learn/comfy-first-blender/">Stay in Comfy after a Blender dump</a>. Playbook: <a href="../learn/clay-to-finish/">Clay to finish</a>. Stills: <a href="../learn/blender-creator/">Blender creator suite</a>.</p>
 </div>
 <div class="tabbed-block">
 <p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="h3" data-href="../glossary/#h3" title="Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.">MiniMax H3</span> is <strong>banned</strong> (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See <a href="../licenses/">Model licenses</a>.</p>
