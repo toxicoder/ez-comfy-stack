@@ -56,7 +56,7 @@ Occupancy: `occupancy enter trellis` (unload LTX/Wan, stop Blender) before TRELL
 | `download-longcat` | `video` `avatar` `all` | `video` | Opt-in MIT LongCat; no NCCL | large | no |
 | `download-dreamx` | `creator` | `creator` | Apache Creator only; World refused | ~8 GB | no |
 | `download-restore` | `seedvr2-3b` | `seedvr2-3b` | Post-concat restore only | ~15 GB | no |
-| `download-llm` | *(none)* | n/a | Prompt-enhance GGUF | ~3 GB | yes |
+| `download-llm` | `enhance` `qwen36-35b-a3b` `all` | `enhance` | `enhance` is the prompt-enhance 4B GGUF. `qwen36-35b-a3b` is the opt-in occupancy **llm-desk** 35B UD-Q4_K_XL (~23 GB, Apache). 35B wrap uses `--limit auto\|N\|off` via manage.sh (always clears on exit). Does **not** weaken restart / headroom | ~3 GB / ~23 GB | `enhance` only |
 
 Cache layout and relative symlinks: [Models and cache](models-and-cache.md). Throttle details: [Download limit](download-limit.md).
 
@@ -167,6 +167,8 @@ id: download-restore
 ```
 
 ### Prompt-enhance GGUF (already in `download-models`)
+
+Default `--tier enhance` is the 4B Q4_K_M already pulled by `download-models`. `--tier qwen36-35b-a3b` is opt-in (~23 GB) for `occupancy enter llm-desk`. Do not add the 35B pack to `download-models`.
 
 ```ezcmd
 id: download-llm

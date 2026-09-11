@@ -24,6 +24,22 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
+@test "llm-desk does not weaken restart mem_limit or bake llama-server" {
+  run grep -E 'restart:.*"no"' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'mem_limit:.*90g|MEM_LIMIT:-90g' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
+  run grep -E 'min_host_free_gib: 28' "${REPO_ROOT}/config/resource-policy.yaml"
+  [ "$status" -eq 0 ]
+  run grep -E 'llm-desk: \{compose: parked, blender: off, heavy: true\}' \
+    "${REPO_ROOT}/config/resource-policy.yaml"
+  [ "$status" -eq 0 ]
+  run grep -E 'llama-server' "${REPO_ROOT}/docker/Dockerfile"
+  [ "$status" -ne 0 ]
+  run grep -E 'llm-sidecar|llama-server' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -ne 0 ]
+}
+
 @test "Dockerfile never vendors nvdiffrast blender or SuperSplat" {
   local df="${REPO_ROOT}/docker/Dockerfile"
   run grep -iE 'nvdiffrast|nvdiffrec|supersplat' "${df}"

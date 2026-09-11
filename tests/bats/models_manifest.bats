@@ -23,6 +23,7 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"flux2-vae.safetensors"* ]]
   [[ "${output}" == *"Qwen3-4B-Instruct-2507-Q4_K_M.gguf"* ]]
+  [[ "${output}" != *"Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf"* ]]
   run cmd_status
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"keep-set"* ]]
@@ -35,4 +36,17 @@ teardown() {
   [ "${status}" -ne 0 ]
   run models_manifest_path
   [[ "${output}" == *"model-manifest.yaml"* ]]
+}
+
+@test "models-manifest includes opt-in llm-qwen36-35b-a3b default false" {
+  run cmd_render
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"llm-qwen36-35b-a3b"* ]]
+  [[ "${output}" == *"llm-qwen3-4b"* ]]
+  run grep -A6 'llm-qwen36-35b-a3b:' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"default: false"* ]]
+  [[ "${output}" == *"Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf"* ]]
+  run grep -E 'MiniMax-H3|FLUX.2-klein-9b' "${REPO_ROOT}/config/model-manifest.yaml"
+  [ "${status}" -eq 0 ]
 }

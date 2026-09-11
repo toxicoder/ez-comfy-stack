@@ -150,7 +150,7 @@ Fail-soft: missing GGUF, missing `llama-cpp-python`, timeout, or empty model out
 
 !!! warning "CPU-only local LLM"
 
-    Prompt Enhance runs **Qwen3-4B-Instruct-2507 Q4_K_M** (~2.5 GiB) through llama.cpp with **`n_gpu_layers=0`**. Do not GPU-offload it next to LTX-2.5. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same Spark while Comfy is generating.
+    Prompt Enhance runs **Qwen3-4B-Instruct-2507 Q4_K_M** (~2.5 GiB) through llama.cpp with **`n_gpu_layers=0`**. Do not GPU-offload it next to LTX-2.5. The opt-in 35B sidecar (`occupancy enter llm-desk`) is a **different** occupancy job: park Comfy first. Enhance stays 4B even if the sidecar is up. Do not run Gemma 4 E2B or a 30B+ llama.cpp server on the same Spark while Comfy is generating.
 
 Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit are unchanged. No API keys. The GGUF lives under `MODELS_DIR`, never in the image.
 

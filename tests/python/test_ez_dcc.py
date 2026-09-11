@@ -239,6 +239,12 @@ def test_occupancy_idle_vs_klein_raises(output_dir: Path) -> None:
         EZDCCOccupancyGate().run(object(), "klein")
 
 
+def test_occupancy_llm_desk_vs_klein_raises(output_dir: Path) -> None:
+    _write_occupancy(output_dir, "llm-desk")
+    with pytest.raises(OccupancyError, match="llm-desk|sidecar"):
+        EZDCCOccupancyGate().run(object(), "klein")
+
+
 def test_occupancy_invalid_json_fail_closed(output_dir: Path) -> None:
     (output_dir / ".occupancy.json").write_text("{not-json", encoding="utf-8")
     with pytest.raises(OccupancyError):

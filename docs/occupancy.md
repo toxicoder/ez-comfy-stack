@@ -1,6 +1,6 @@
 ---
 title: Occupancy desk
-description: One heavy GPU job on GB10 — park Comfy for Blender Workbench, then restore Klein / TRELLIS / Wan / LTX.
+description: One heavy GPU job on GB10 — park Comfy for Blender Workbench or the 35B writing desk, then restore Klein / TRELLIS / Wan / LTX.
 tags: [occupancy, blender, trellis, safety, gb10]
 ---
 
@@ -9,39 +9,54 @@ tags: [occupancy, blender, trellis, safety, gb10]
 **What's on this page**
 
 - Why GB10 is still one heavy GPU job
-- Modes: idle, blender-desk, klein, trellis, wan, ltx
-- Park Comfy with `POST /free` instead of `stop` for Workbench dumps
-- What stays XOR (NVENC, Cycles CUDA, LTX next to TRELLIS)
-- In-tree MCP: blender-mcp (desk) and research-mcp (CPU research; Path D)
+- Modes: idle, blender-desk, llm-desk, klein, trellis, wan, ltx
+- Park Comfy with `POST /free` instead of `stop` for Workbench dumps or the 35B sidecar
+- What stays XOR (NVENC, Cycles CUDA, LTX next to TRELLIS, llm-desk next to blender-desk)
+- Graph occupancy label `llm` (Prompt Forge) is **not** a CLI mode
+- In-tree MCP: blender-mcp (desk) and research-mcp (CPU 4B or llm-desk sidecar; Path D)
 
 **What this enables**
 
 - Host Blender clay dumps without typing **yes** on a full `start` cycle every time
-- A later TRELLIS (`klein-trellis2-lab-example`) or LTX Queue after Blender is stopped
+- An opt-in 35B writing desk (`llm-desk`) while Comfy weights are parked
+- A later TRELLIS (`klein-trellis2-lab-example`) or LTX Queue after Blender / the sidecar is stopped
 - Unchanged `restart: "no"`, heavy confirm, `mem_limit: 90g`, headroom 28 GiB
 
 !!! danger "One heavy job"
 
-    Parked Comfy is **not** a second denoise. `blender-desk` is Workbench / CPU after models unload. Cycles CUDA, TRELLIS, Wan, and LTX still XOR with each other.
+    Parked Comfy is **not** a second denoise. `blender-desk` is Workbench / CPU after models unload. `llm-desk` is the host 35B llama-server after models unload — that sidecar **is** the GPU job. Cycles CUDA, TRELLIS, Wan, LTX, and llm-desk still XOR with each other. This does **not** weaken `restart: "no"`, headroom, or download-limit clear-on-exit.
 
 ---
 
 ## Modes
 
-| Mode | Compose | Comfy weights | Host Blender | GPU job |
+| Mode | Compose | Comfy weights | 35B sidecar | GPU job |
 | --- | --- | --- | --- | --- |
-| `idle` | down | — | off | none |
-| `blender-desk` | up **or** down | `POST /free` unload when up | Workbench / CPU | clay / primitives / dumps |
+| `idle` | down | — | **stopped** | none |
+| `blender-desk` | up **or** down | `POST /free` unload when up | **stopped** | Workbench / CPU dumps |
+| `llm-desk` | up **or** down | `POST /free` unload when up | **running** (`127.0.0.1:30000`) | host llama-server GGUF |
 | `klein` | up, 90g/80g | Klein 4B | **stopped** | stills |
 | `trellis` | up, 90g/80g | TRELLIS.2 INT8 | **stopped** | image→mesh |
 | `wan` / `ltx` | up, 90g/80g | video | **stopped** | 5s print |
+
+App occupancy keys (`none` / `llm` / `klein` / …) on Prompt Forge and research-chat are **graph labels**. `llm` means nothing GPU. It is not `occupancy enter llm`.
 
 ```bash
 ./scripts/manage.sh occupancy status
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender -- --background
+./scripts/manage.sh occupancy enter llm-desk --yes
+# OpenAI-compatible: http://127.0.0.1:30000/v1
 ./scripts/manage.sh occupancy enter trellis --yes
 ```
+
+One-time 35B pull (throttled; **not** `download-models`):
+
+```bash
+./scripts/manage.sh download-llm --tier qwen36-35b-a3b
+```
+
+Host `llama-server` must be on `PATH` (aarch64). Missing binary prints a host-install hint and exits 1 — do not apt/pip inside Docker. vLLM + `nvidia/Qwen3.6-35B-A3B-NVFP4` is an operator alternative only (not wired). Path D: `ssh -L 30000:127.0.0.1:30000`.
 
 `occupancy enter` **does not** start Compose. Heavy modes tell you to `./scripts/manage.sh start` (type **yes**) when the container is down.
 
@@ -65,6 +80,7 @@ If `/free` fails, Workbench may still contend for unified memory — `occupancy 
 - Not Cycles GPU / OptiX while Compose is up
 - Not lowering `mem_limit: 90g` or `min_host_free_gib: 28`
 - Not two denoises (Klein + LTX, TRELLIS + LTX, Wan + TRELLIS)
+- Not `occupancy enter llm` (graph label only). Use `llm-desk` for the 35B sidecar.
 
 ---
 
@@ -83,7 +99,7 @@ In-tree MCP servers are typed-tool stdio processes. **No** `execute_code`, **no*
 
 Qwen3-4B will place primitives. Cinematic scenes: Path D — laptop Grok/Cursor as the MCP client over SSH, Spark only runs blender-mcp. If `llama-cli` is missing, `blender-llm` prints that hint and exits 1.
 
-**research-mcp** is the creative-process desk (chat, web search, sequential research subagents, `list_lab_apps` / `describe_app`). Occupancy **llm**: CPU GGUF (`n_gpu_layers=0`). It does **not** refuse a GPU Comfy session and does **not** map `idle` → `blender-desk`. Unified memory still contends — prefer a gap between Klein/Wan/LTX Queues for long research. Same pipeline as **research-chat-lab-example**. HTTPS search is SSRF-guarded (no arbitrary `fetch_url` tool).
+**research-mcp** is the creative-process desk (chat, web search, sequential research subagents, `list_lab_apps` / `describe_app`). Graph occupancy **llm**: CPU 4B GGUF (`n_gpu_layers=0`) unless occupancy is `llm-desk` and `http://127.0.0.1:30000/v1/models` answers. It does **not** refuse a GPU Comfy session and does **not** map `idle` → `blender-desk` or `llm-desk`. Unified memory still contends — prefer a gap between Klein/Wan/LTX Queues for long 4B research, or park with `occupancy enter llm-desk`. Same pipeline as **research-chat-lab-example**. HTTPS search is SSRF-guarded (no arbitrary `fetch_url` tool).
 
 ```bash
 ./scripts/manage.sh research-mcp --stdio

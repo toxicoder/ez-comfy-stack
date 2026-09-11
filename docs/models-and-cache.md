@@ -216,6 +216,12 @@ Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
 | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` | On-box prompt enhance (CPU llama.cpp) |
 
+Opt-in 35B writing desk (`./scripts/manage.sh download-llm --tier qwen36-35b-a3b`, **not** `download-models`):
+
+| File | Comfy folder | Role |
+| --- | --- | --- |
+| `Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf` | `llm/` | Occupancy `llm-desk` host llama-server (~23 GB, Apache) |
+
 Opt-in music (`./scripts/manage.sh download-music --tier turbo`, **not** `download-models`). Turbo **reuses** the podcast acestep snapshot — do not pull the ~10 GB AIO twice:
 
 ```bash

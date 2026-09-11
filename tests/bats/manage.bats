@@ -76,6 +76,8 @@ FROZEN_MANAGE_VERBS=(
   blender-mcp
   research-mcp
   blender-llm
+  download-llm
+  llm-sidecar
 )
 
 @test "cmd_disk_wizard --plan is read-only" {
@@ -292,6 +294,13 @@ FROZEN_MANAGE_VERBS=(
   run cmd_occupancy --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"blender-desk"* ]]
+  [[ "${output}" == *"llm-desk"* ]]
+  run cmd_download_llm --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"qwen36-35b-a3b"* ]]
+  run cmd_llm_sidecar --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"llm-desk"* ]]
   run cmd_blender_mcp --help
   [ "${status}" -eq 0 ]
   run cmd_research_mcp --help

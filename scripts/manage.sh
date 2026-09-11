@@ -12,7 +12,7 @@
 #   remote-SSH operation.
 #
 # Usage:
-#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|cleanup
+#   ./scripts/manage.sh help|setup|doctor|status|start|stop|restart|logs|download-models [--limit auto|N|off] [--drop-incomplete]|download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]|download-dub [--tier asr|clone|all] [--limit auto|N|off]|download-music [--tier turbo|xl|all] [--limit auto|N|off]|download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]|cleanup
 #   ./scripts/manage.sh reset-hf-partials [--yes] [--force]
 #   ./scripts/manage.sh download-limit status|run|clear|wrap ...
 #
@@ -293,6 +293,10 @@ Commands:
                     Opt-in ACE-Step 1.5 music AIO (bandwidth limited)
                     turbo = ace_step_1.5_turbo_aio.safetensors (~10 GB). Shares dest with download-podcast --tier acestep.
                     Missing pack is not a doctor failure. Not part of download-models.
+  download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]
+                    enhance (default) = Qwen3-4B GGUF (already in download-models).
+                    qwen36-35b-a3b = opt-in ~23 GB UD-Q4_K_XL for occupancy llm-desk.
+                    Missing 35B pack is not a doctor failure. Not part of download-models.
   download-limit    Proxy to utilities/download-limit.sh
   clear-hf-locks    Remove stale Hugging Face .lock files under MODELS_DIR
   reset-hf-partials [--yes] [--force]
@@ -315,8 +319,10 @@ Commands:
   download-3d [--tier trellis2|da3-base|all]
                     Opt-in Comfy-Org TRELLIS.2 INT8 (MIT, no nvdiffrast) + DA3-BASE (Apache)
   occupancy status|enter MODE [--yes] [--json]
-                    Occupancy desk: park Comfy (POST /free) for blender-desk, or
-                    enter klein|trellis|wan|ltx|idle. Does not start Compose.
+                    Occupancy desk: park Comfy (POST /free) for blender-desk or
+                    llm-desk, or enter klein|trellis|wan|ltx|idle. Does not start Compose.
+                    Graph occupancy label llm is not a CLI mode.
+  llm-sidecar       Host llama-server for occupancy llm-desk (127.0.0.1). Never in Dockerfile.
   blender-mcp       In-tree Blender MCP (typed tools; bpy needs blender-desk)
   research-mcp      In-tree research MCP (chat, web search, lab-app list; CPU GGUF)
   blender-llm       Optional host Qwen3-4B CPU client; Path D if llama.cpp missing
@@ -681,6 +687,7 @@ cmd_start() {
     fi
     exit 1
   }
+  bash "${REPO_ROOT}/scripts/utilities/llm-sidecar.sh" stop || true
   check_mem_limit_vs_headroom
   check_host_headroom || exit 1
   ensure_prompt_enhance_gguf
@@ -1325,10 +1332,109 @@ cmd_download_3d() {
 }
 
 #######################################
+# Opt-in / default LLM GGUF packs with the same download-limit wrap.
+# enhance is already in download-models. qwen36-35b-a3b is occupancy llm-desk.
+# Missing 35B pack is not a doctor failure.
+# Globals:
+#   DOWNLOAD_LIMIT, MODELS_DIR, REPO_ROOT
+# Arguments:
+#   Optional: --tier enhance|qwen36-35b-a3b|all
+#             --limit auto|N|off
+# Outputs:
+#   Status via log/warn/err
+# Returns:
+#   0 on success; 1 on usage or download failure
+#######################################
+cmd_download_llm() {
+  local limit="${DOWNLOAD_LIMIT}"
+  local tier="enhance"
+  local rc=0
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
+      --tier)
+        tier="${2:?}"
+        shift 2
+        ;;
+      --tier=*)
+        tier="${1#--tier=}"
+        shift
+        ;;
+      --limit)
+        if [[ $# -lt 2 || -z ${2} || ${2} == -* ]]; then
+          err "download-llm --limit requires auto|N|off"
+          return 1
+        fi
+        limit="${2}"
+        shift 2
+        ;;
+      --limit=*)
+        limit="${1#--limit=}"
+        if [[ -z ${limit} ]]; then
+          err "download-llm --limit requires auto|N|off"
+          return 1
+        fi
+        shift
+        ;;
+      enhance | qwen36-35b-a3b | all)
+        tier="${1}"
+        shift
+        ;;
+      -h | --help)
+        cat <<'EOF' >&2
+Usage: manage.sh download-llm [--tier enhance|qwen36-35b-a3b|all] [--limit auto|N|off]
+  Default enhance = Qwen3-4B-Instruct-2507 Q4_K_M (already in download-models).
+  qwen36-35b-a3b = opt-in ~23 GB UD-Q4_K_XL for occupancy llm-desk.
+  Does not add the 35B pack to download-models.
+  --limit auto|N|off  same wrap as download-models (always clears on exit)
+EOF
+        return 0
+        ;;
+      *)
+        err "Unknown download-llm flag: ${1}"
+        return 1
+        ;;
+    esac
+  done
+  case "${limit}" in
+    auto | off | 0) ;;
+    *)
+      if [[ ! ${limit} =~ ^[0-9]+$ || ${limit} -le 0 ]]; then
+        err "Invalid --limit '${limit}' (use auto, off, or a positive integer Mbps)"
+        return 1
+      fi
+      ;;
+  esac
+  prepare_comfy_layout "${MODELS_DIR}" || return 1
+  clear_stale_hf_locks "${MODELS_DIR}"
+  if [[ ${limit} == "off" || ${limit} == "0" ]]; then
+    warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    MODELS_DIR="${MODELS_DIR}" bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" run --tier "${tier}" || rc=$?
+  else
+    local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
+    local inner
+    inner="MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-llm.sh' run --tier '${tier}'"
+    bash "${dl}" wrap --limit "${limit}" -- bash -c "${inner}" || rc=$?
+  fi
+  if [[ ${rc} -ne 0 ]]; then
+    err "download-llm: tier ${tier} incomplete under ${MODELS_DIR}"
+    return 1
+  fi
+  log "download-llm: tier ${tier} ready under ${MODELS_DIR}/comfy"
+  return 0
+}
+
+#######################################
 # Occupancy desk (park / enter / status).
 #######################################
 cmd_occupancy() {
   bash "${REPO_ROOT}/scripts/utilities/occupancy.sh" "$@"
+}
+
+#######################################
+# Host llama-server sidecar (occupancy llm-desk).
+#######################################
+cmd_llm_sidecar() {
+  bash "${REPO_ROOT}/scripts/utilities/llm-sidecar.sh" "$@"
 }
 
 #######################################
@@ -1602,7 +1708,9 @@ main() {
     promote-workflow) cmd_promote_workflow "$@" ;;
     download-restore) cmd_download_restore "$@" ;;
     download-3d) cmd_download_3d "$@" ;;
+    download-llm) cmd_download_llm "$@" ;;
     occupancy) cmd_occupancy "$@" ;;
+    llm-sidecar) cmd_llm_sidecar "$@" ;;
     blender-mcp) cmd_blender_mcp "$@" ;;
     research-mcp) cmd_research_mcp "$@" ;;
     blender-llm) cmd_blender_llm "$@" ;;

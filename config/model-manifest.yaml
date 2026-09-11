@@ -81,6 +81,13 @@ packs:
     tier_dir: unsloth__Qwen3-4B-Instruct-2507-GGUF_llm
     files:
       - Qwen3-4B-Instruct-2507-Q4_K_M.gguf
+  llm-qwen36-35b-a3b:
+    default: false
+    min_gb: 23
+    tier_dir: unsloth__Qwen3.6-35B-A3B-MTP-GGUF_llm-35b
+    files:
+      - Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
+    cmd: download-llm --tier qwen36-35b-a3b
   music-turbo:
     default: false
     min_gb: 10

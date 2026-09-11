@@ -5,11 +5,13 @@
 # Source after scripts/lib/compose.sh. Not executable.
 #
 # Safety:
-#   One heavy GPU job: klein / trellis / wan / ltx, or host NVENC.
+#   One heavy GPU job: klein / trellis / wan / ltx, or host NVENC, or llm-desk.
 #   blender-desk is Workbench after POST /free (parked Comfy), not a second CUDA job.
+#   llm-desk is host llama-server after POST /free, XOR with blender-desk and visual.
 #   Does not weaken restart: "no", mem_limit 90g, or headroom.
 
-OCCUPANCY_MODE_LIST=(idle blender-desk klein trellis wan ltx)
+OCCUPANCY_MODE_LIST=(idle blender-desk llm-desk klein trellis wan ltx)
+_OCCUPANCY_LIB="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 #######################################
 # Path to the occupancy state file (outputs tree, never MODELS_DIR).
@@ -38,7 +40,7 @@ occupancy_state_path() {
 #   0
 #######################################
 occupancy_default_json() {
-  printf '%s\n' '{"version":1,"mode":"idle","compose":false,"parked":false,"blender_pid":0,"mcp_pid":0,"updated":""}'
+  printf '%s\n' '{"version":1,"mode":"idle","compose":false,"parked":false,"blender_pid":0,"mcp_pid":0,"llm_pid":0,"updated":""}'
 }
 
 #######################################
@@ -102,6 +104,7 @@ else:
 #   $2  parked (true|false|1|0)
 #   $3  blender_pid (optional, default 0)
 #   $4  mcp_pid (optional, default 0)
+#   $5  llm_pid (optional; when omitted, preserve current llm_pid)
 # Outputs:
 #   None
 # Returns:
@@ -112,8 +115,18 @@ occupancy_write() {
   local parked="${2}"
   local blender_pid="${3:-0}"
   local mcp_pid="${4:-0}"
+  local llm_pid="0"
   [[ -n ${blender_pid} ]] || blender_pid="0"
   [[ -n ${mcp_pid} ]] || mcp_pid="0"
+  if [[ $# -ge 5 ]]; then
+    llm_pid="${5:-0}"
+    [[ -n ${llm_pid} ]] || llm_pid="0"
+  else
+    llm_pid="$(occupancy_field llm_pid)"
+    if [[ -z ${llm_pid} ]]; then
+      llm_pid="0"
+    fi
+  fi
   local path parked_json compose_flag
   path="$(occupancy_state_path)"
   mkdir -p "$(dirname "${path}")" || return 1
@@ -126,7 +139,7 @@ occupancy_write() {
     compose_flag="true"
   fi
   python3 -c 'import json, sys, datetime
-path, mode, parked, blender_pid, mcp_pid, compose_flag = sys.argv[1:7]
+path, mode, parked, blender_pid, mcp_pid, llm_pid, compose_flag = sys.argv[1:8]
 payload = {
     "version": 1,
     "mode": mode,
@@ -134,12 +147,13 @@ payload = {
     "parked": parked == "true",
     "blender_pid": int(blender_pid or 0),
     "mcp_pid": int(mcp_pid or 0),
+    "llm_pid": int(llm_pid or 0),
     "updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
 }
 with open(path, "w", encoding="utf-8") as handle:
     json.dump(payload, handle, indent=2)
     handle.write("\n")
-' "${path}" "${mode}" "${parked_json}" "${blender_pid}" "${mcp_pid}" "${compose_flag}"
+' "${path}" "${mode}" "${parked_json}" "${blender_pid}" "${mcp_pid}" "${llm_pid}" "${compose_flag}"
 }
 
 #######################################
@@ -403,6 +417,7 @@ refuse_if_comfy_running() {
 #######################################
 refuse_if_heavy_gpu() {
   local job="${1:-host DCC dump (occupancy)}"
+  refuse_if_llm_sidecar "${job}" || return $?
   if ! compose_is_running; then
     return 0
   fi
@@ -493,6 +508,100 @@ blender_pid_alive() {
 #######################################
 mcp_pid_alive() {
   occupancy_pid_alive "$(occupancy_field mcp_pid)"
+}
+
+#######################################
+# True when the recorded llm-sidecar PID is alive.
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 alive; 1 dead
+#######################################
+llm_pid_alive() {
+  occupancy_pid_alive "$(occupancy_field llm_pid)"
+}
+
+#######################################
+# Record the llm-sidecar PID in occupancy state. Does not remap mode.
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   $1  pid
+# Outputs:
+#   None
+# Returns:
+#   occupancy_write status
+#######################################
+occupancy_set_llm_pid() {
+  local pid="${1:-0}"
+  local mode parked blender mcp
+  mode="$(occupancy_mode)"
+  parked="$(occupancy_field parked)"
+  blender="$(occupancy_field blender_pid)"
+  mcp="$(occupancy_field mcp_pid)"
+  [[ -n ${mode} ]] || mode="idle"
+  [[ -n ${parked} ]] || parked="false"
+  [[ -n ${blender} ]] || blender="0"
+  [[ -n ${mcp} ]] || mcp="0"
+  occupancy_write "${mode}" "${parked}" "${blender}" "${mcp}" "${pid}"
+}
+
+#######################################
+# SIGTERM then SIGKILL the recorded llm-sidecar PID and clear it.
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+stop_llm_sidecar() {
+  occupancy_stop_pid "$(occupancy_field llm_pid)"
+  occupancy_set_llm_pid 0
+  rm -f "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/llm-sidecar.pid" 2>/dev/null || true
+}
+
+#######################################
+# Refuse when a live llm-sidecar PID is recorded (XOR with DCC / visual).
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   $1  Optional job label
+# Outputs:
+#   Error on stderr when refused
+# Returns:
+#   0 allowed; 2 sidecar live
+#######################################
+refuse_if_llm_sidecar() {
+  local job="${1:-host GPU job (occupancy)}"
+  if llm_pid_alive; then
+    err "llm-desk sidecar is running — occupancy enter blender-desk or idle before ${job}"
+    return 2
+  fi
+  return 0
+}
+
+#######################################
+# Start the 35B sidecar (implementation detail of occupancy enter llm-desk).
+# Globals:
+#   COMFY_OUTPUT_DIR, LAB_MOCK_LLAMA_SERVER, _OCCUPANCY_LIB
+# Arguments:
+#   None
+# Outputs:
+#   sidecar logs on stderr
+# Returns:
+#   llm-sidecar.sh start status
+#######################################
+start_llm_sidecar() {
+  local sidecar
+  sidecar="${_OCCUPANCY_LIB}/../utilities/llm-sidecar.sh"
+  EZ_LLM_SIDECAR_ENTERING=1 bash "${sidecar}" start
 }
 
 #######################################
@@ -605,19 +714,28 @@ stop_blender_desk() {
 occupancy_status_json() {
   local compose_flag="false"
   local queue="idle"
+  local llm_live="false"
   if compose_is_running; then
     compose_flag="true"
     if comfy_queue_busy; then
       queue="busy"
     fi
   fi
+  if llm_pid_alive; then
+    llm_live="true"
+  fi
   occupancy_read | python3 -c 'import json, sys
 d = json.load(sys.stdin)
 d["compose_live"] = sys.argv[1] == "true"
 d["queue"] = sys.argv[2]
+try:
+    d["llm_pid"] = int(d.get("llm_pid") or 0)
+except (TypeError, ValueError):
+    d["llm_pid"] = 0
+d["llm_live"] = sys.argv[3] == "true"
 json.dump(d, sys.stdout)
 print()
-' "${compose_flag}" "${queue}"
+' "${compose_flag}" "${queue}" "${llm_live}"
 }
 
 #######################################
@@ -635,17 +753,20 @@ print()
 occupancy_enter() {
   local target="${1:-}"
   local yes="${2:-0}"
+  local parked="false"
   occupancy_valid_mode "${target}" || return 1
   case "${target}" in
     idle)
+      stop_llm_sidecar
       stop_blender_desk
       if compose_is_running; then
         stack_stop || return 1
       fi
-      occupancy_write "idle" "false" 0 0
+      occupancy_write "idle" "false" 0 0 0
       log "occupancy: idle"
       ;;
     blender-desk)
+      stop_llm_sidecar
       if compose_is_running; then
         if comfy_queue_busy; then
           err "Comfy queue is busy — wait or interrupt before blender-desk"
@@ -655,15 +776,48 @@ occupancy_enter() {
           warn "POST /free failed; Workbench may still contend for unified memory"
         fi
         occupancy_write "blender-desk" "true" \
-          "$(occupancy_field blender_pid)" "$(occupancy_field mcp_pid)"
+          "$(occupancy_field blender_pid)" "$(occupancy_field mcp_pid)" 0
         log "occupancy: blender-desk (Comfy parked via /free)"
       else
         occupancy_write "blender-desk" "false" \
-          "$(occupancy_field blender_pid)" "$(occupancy_field mcp_pid)"
+          "$(occupancy_field blender_pid)" "$(occupancy_field mcp_pid)" 0
         log "occupancy: blender-desk (compose down)"
       fi
       ;;
+    llm-desk)
+      if compose_is_running; then
+        if comfy_queue_busy; then
+          err "Comfy queue is busy — wait or interrupt before llm-desk"
+          return 2
+        fi
+      fi
+      if blender_pid_alive || mcp_pid_alive; then
+        if [[ ${yes} != "1" ]]; then
+          err "Blender desk is running — occupancy enter llm-desk --yes to stop it"
+          return 2
+        fi
+        stop_blender_desk
+      fi
+      parked="false"
+      if compose_is_running; then
+        if ! comfy_free_memory; then
+          warn "POST /free failed; 35B sidecar may still contend for unified memory"
+        fi
+        parked="true"
+      fi
+      occupancy_write "llm-desk" "${parked}" 0 0 0
+      if ! start_llm_sidecar; then
+        err "llm-sidecar failed to start"
+        return 1
+      fi
+      if [[ ${parked} == "true" ]]; then
+        log "occupancy: llm-desk (Comfy parked via /free; 35B sidecar)"
+      else
+        log "occupancy: llm-desk (compose down; 35B sidecar)"
+      fi
+      ;;
     klein | trellis | wan | ltx)
+      stop_llm_sidecar
       if blender_pid_alive || mcp_pid_alive; then
         if [[ ${yes} != "1" ]]; then
           err "Blender desk is running — occupancy enter ${target} --yes to stop it"
@@ -682,7 +836,7 @@ occupancy_enter() {
       if ! comfy_free_memory; then
         warn "POST /free failed before ${target}"
       fi
-      occupancy_write "${target}" "false" 0 0
+      occupancy_write "${target}" "false" 0 0 0
       log "occupancy: ${target} — one heavy GPU job. Queue the ${target} graph."
       ;;
   esac
