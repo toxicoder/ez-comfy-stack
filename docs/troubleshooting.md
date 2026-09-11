@@ -202,7 +202,11 @@ sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | LTX Director missing | GPL clone is opt-in | `LAB_ENABLE_LTX_DIRECTOR=1` then restart. Never MiniMax H3 Director |
 | studio-ui empty / port closed | Profile not started; default `start` skips it | `docker compose --profile studio-ui up studio-ui`. No GPU. Compile a film first |
 | take-promote missing file | No `takes/<id>/tNNN.mp4` | Print the shot (take increments on `running`), then promote |
-| `blender` exit 2 / occupancy | Compose is a heavy job (not parked, or queue busy) | `./scripts/manage.sh occupancy enter blender-desk` then retry. Hammer: `occupancy idle`. Host Blender is never in the Dockerfile |
+| `blender` exit 2 / occupancy | Compose is a heavy job (not parked, or queue busy), or the 35B sidecar is live | `./scripts/manage.sh occupancy enter blender-desk` then retry. Hammer: `occupancy idle`. Host Blender is never in the Dockerfile |
+| 35B GGUF missing / `occupancy enter llm-desk` exit 1 | Opt-in pack not downloaded | `./scripts/manage.sh download-llm --tier qwen36-35b-a3b` (throttled). Not part of `download-models`. Confirm `${MODELS_DIR}/comfy/llm/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf` |
+| `llama-server not found` | Host llama.cpp missing | Install `llama-server` on the Spark host (aarch64). Do not apt/pip inside the Comfy container. Path D: `ssh -L 30000:127.0.0.1:30000` |
+| llm-sidecar port in use | Something already bound `127.0.0.1:30000` | `occupancy enter idle` or `llm-sidecar stop`. Change `EZ_LLM_SIDECAR_PORT` only if you also retarget clients |
+| Enhance still 4B even if sidecar is up | Prompt Enhance is Lane A (CPU 4B). Occupancy `llm-desk` does not rewrite in-canvas Enhance | Use OpenAI-compatible clients at `http://127.0.0.1:30000/v1` while occupancy is `llm-desk`. Do not set `EZ_LLM_N_GPU_LAYERS` on the 4B next to LTX |
 | `download-3d --tier da3-large` refused | DA3-LARGE is banned | Use `--tier da3-base`. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused |
 | TRELLIS / VACE OOM next to LTX | Two heavy jobs | Stop Comfy or unload LTX first. VACE join is 17 frames (`1+8n`); MagCache off |
 | SuperSplat missing in the image | Host viewer, not Docker | [Splat sidecar](splat-sidecar.md). Do not add it to `docker/Dockerfile` |

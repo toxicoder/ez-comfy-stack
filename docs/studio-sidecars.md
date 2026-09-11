@@ -20,7 +20,7 @@ tags: [sidecar, blender, splat, trellis, 3d, occupancy]
 
 !!! warning "Occupancy"
 
-    GB10 is one heavy GPU job. Park Comfy (`occupancy enter blender-desk`) for Workbench dumps. Stop Blender before TRELLIS / LTX / Wan. SuperSplat and NVENC still want Compose **down**. Sidecars are **not** `docker compose` services. [Occupancy desk](occupancy.md).
+    GB10 is one heavy GPU job. Park Comfy (`occupancy enter blender-desk`) for Workbench dumps. Park Comfy (`occupancy enter llm-desk`) for the host 35B llama-server. Stop Blender and the sidecar before TRELLIS / LTX / Wan. SuperSplat and NVENC still want Compose **down**. Sidecars are **not** `docker compose` services. Bind the LLM sidecar on `127.0.0.1` only. [Occupancy desk](occupancy.md).
 
 ```mermaid
 flowchart TB
@@ -41,6 +41,7 @@ flowchart TB
 | SuperSplat | Host static viewer | MIT | **No** — [Splat sidecar](splat-sidecar.md) |
 | TRELLIS.2 native | Comfy after `download-3d` | MIT | Weights on `MODELS_DIR` only. No nvdiffrast |
 | DA3-BASE | Comfy after `download-3d` | Apache 2.0 | Weights on `MODELS_DIR` only. DA3-LARGE refused |
+| llama-server 35B | Host `llama-server` on `127.0.0.1:30000` | Apache 2.0 GGUF | **No** — occupancy `llm-desk`. Never a Compose service |
 
 Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D as a default.
 

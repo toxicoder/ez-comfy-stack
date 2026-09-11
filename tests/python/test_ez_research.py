@@ -433,6 +433,61 @@ def test_complete_fail_soft_when_client_missing(
     assert "unavailable" in reason
 
 
+class _FakeSidecarResp:
+    def __init__(self, payload: bytes) -> None:
+        self._payload = payload
+
+    def read(self) -> bytes:
+        return self._payload
+
+    def __enter__(self) -> _FakeSidecarResp:
+        return self
+
+    def __exit__(self, *_args: object) -> None:
+        return None
+
+
+def test_complete_uses_sidecar_when_models_respond(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[str] = []
+
+    def _open(request: object, timeout: float) -> _FakeSidecarResp:
+        del timeout
+        url = str(getattr(request, "full_url", "") or request)
+        calls.append(url)
+        if "/v1/models" in url:
+            return _FakeSidecarResp(b'{"data":[{"id":"qwen36-35b-a3b"}]}')
+        payload = {
+            "choices": [{"message": {"content": "sidecar-brief"}}],
+        }
+        return _FakeSidecarResp(json.dumps(payload).encode("utf-8"))
+
+    monkeypatch.setattr(pipeline, "_urlopen_sidecar", _open)
+    text, reason = pipeline._complete("sys", "user")
+    assert text == "sidecar-brief"
+    assert reason == ""
+    assert any("/v1/models" in item for item in calls)
+    assert any("/v1/chat/completions" in item for item in calls)
+
+
+def test_complete_falls_back_to_4b_when_sidecar_down(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def _down(*_args: object, **_kwargs: object) -> object:
+        raise TimeoutError("sidecar down")
+
+    monkeypatch.setattr(pipeline, "_urlopen_sidecar", _down)
+    monkeypatch.setattr(
+        pipeline, "_ensure_lab_custom_nodes_path", lambda: (_ for _ in ()).throw(
+            ModuleNotFoundError("ez_prompt_enhance")
+        )
+    )
+    text, reason = pipeline._complete("sys", "user")
+    assert text == ""
+    assert "unavailable" in reason
+
+
 def test_complete_imports_sibling_after_path_ensure(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

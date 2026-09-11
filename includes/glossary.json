@@ -535,8 +535,8 @@
     "title": "occupancy",
     "aliases": ["occupancy"],
     "category": "Hardware and safety",
-    "short": "One heavy GPU job. Park Comfy for blender-desk Workbench; stop Blender before TRELLIS/LTX.",
-    "long": "GB10 is one GPU. `occupancy enter blender-desk` parks Comfy (`POST /free`) for host Workbench dumps. NVENC/proxies still want Compose down. Do not load Klein + Wan + LTX + TRELLIS in one session. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`/`trellis`) are on App Notes. See [Occupancy desk](occupancy.md) and [Studio sidecars](studio-sidecars.md).",
+    "short": "One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.",
+    "long": "GB10 is one GPU. `occupancy enter blender-desk` parks Comfy (`POST /free`) for host Workbench dumps. `occupancy enter llm-desk` parks Comfy and starts the host 35B llama-server (`127.0.0.1:30000`). NVENC/proxies still want Compose down. Do not load Klein + Wan + LTX + TRELLIS + llm-desk in one session. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`/`trellis`) are graph labels — `llm` is not a CLI mode. See [Occupancy desk](occupancy.md) and [Studio sidecars](studio-sidecars.md).",
     "see_also": ["sidecar", "ace-step", "gb10", "app-mode"]
   },
   {

@@ -1,7 +1,8 @@
 """Chat and bounded research subagents for ez_research.
 
 Subagents are sequential in-process roles (planner → searchers → synthesizer).
-One llama.cpp instance; CPU only via ez_prompt_enhance.client.complete.
+Prefer occupancy llm-desk sidecar when 127.0.0.1:/v1/models answers; else
+CPU 4B via ez_prompt_enhance.client.complete.
 """
 
 from __future__ import annotations
@@ -10,8 +11,11 @@ import json
 import os
 import re
 import sys
+import urllib.error
+import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from .search import SearchHit, format_sources, search_web
 
@@ -105,8 +109,89 @@ def parse_planner_queries(text: str, fallback: str, limit: int) -> list[str]:
     return unique
 
 
+def _sidecar_base_url() -> str:
+    """Loopback OpenAI-compatible origin for occupancy llm-desk."""
+    port = os.environ.get("EZ_LLM_SIDECAR_PORT", "30000").strip() or "30000"
+    if not port.isdigit():
+        port = "30000"
+    return f"http://127.0.0.1:{port}"
+
+
+def _sidecar_timeout_s() -> float:
+    """Match Prompt Enhance timeout; invalid values fall back to 60s."""
+    raw = os.environ.get("EZ_LLM_TIMEOUT_S", "60").strip()
+    try:
+        value = float(raw)
+    except ValueError:
+        return 60.0
+    if value <= 0:
+        return 60.0
+    return value
+
+
+def _urlopen_sidecar(request: urllib.request.Request, timeout: float) -> Any:
+    """Indirection so pytest can mock sidecar HTTP without touching search."""
+    return urllib.request.urlopen(request, timeout=timeout)
+
+
+def _complete_via_sidecar(system: str, user: str) -> tuple[str, str] | None:
+    """Use llama-server /v1 when it answers. None if the sidecar is down."""
+    base = _sidecar_base_url()
+    timeout = _sidecar_timeout_s()
+    models_req = urllib.request.Request(
+        f"{base}/v1/models",
+        method="GET",
+        headers={"Accept": "application/json"},
+    )
+    try:
+        with _urlopen_sidecar(models_req, min(timeout, 0.4)) as resp:
+            body = resp.read()
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+        return None
+    if not body:
+        return None
+    payload = {
+        "model": "qwen36-35b-a3b",
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+        "temperature": 0.2,
+        "max_tokens": 700,
+    }
+    chat_req = urllib.request.Request(
+        f"{base}/v1/chat/completions",
+        data=json.dumps(payload).encode("utf-8"),
+        method="POST",
+        headers={"Content-Type": "application/json", "Accept": "application/json"},
+    )
+    try:
+        with _urlopen_sidecar(chat_req, timeout) as resp:
+            raw = resp.read()
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+        _log(f"llm-desk sidecar chat failed: {exc}")
+        return None
+    try:
+        data = json.loads(raw.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError):
+        return "", "empty sidecar output"
+    choices = data.get("choices") if isinstance(data, dict) else None
+    if not isinstance(choices, list) or not choices:
+        return "", "empty sidecar output"
+    message = choices[0].get("message") if isinstance(choices[0], dict) else None
+    text = ""
+    if isinstance(message, dict):
+        text = str(message.get("content") or "").strip()
+    if not text:
+        return "", "empty sidecar output"
+    return text, ""
+
+
 def _complete(system: str, user: str) -> tuple[str, str]:
-    """Run the on-box GGUF. Fail-soft if the sibling pack cannot import."""
+    """Sidecar first (llm-desk), else on-box 4B GGUF. Fail-soft on import miss."""
+    sidecar = _complete_via_sidecar(system, user)
+    if sidecar is not None:
+        return sidecar
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import complete as llama_complete

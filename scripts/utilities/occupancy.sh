@@ -7,12 +7,13 @@
 #
 # Usage:
 #   ./scripts/utilities/occupancy.sh status [--json]
-#   ./scripts/utilities/occupancy.sh enter blender-desk|klein|trellis|wan|ltx|idle [--yes]
+#   ./scripts/utilities/occupancy.sh enter blender-desk|llm-desk|klein|trellis|wan|ltx|idle [--yes]
 #
 # Safety:
 #   Does not start Compose (start still types yes). Does not weaken
 #   restart: "no", mem_limit 90g, headroom, or download-limit clear-on-exit.
 #   NVENC stays XOR with compose-up. blender-desk is POST /free + Workbench.
+#   llm-desk is POST /free + host llama-server (XOR with blender-desk / visual).
 #
 # @command occupancy
 
@@ -50,8 +51,10 @@ cmd_help() {
   echo "       occupancy.sh enter MODE [--yes]" >&2
   echo "  Modes: $(occupancy_modes)" >&2
   echo "  blender-desk parks Comfy (POST /free) for host Workbench dumps." >&2
-  echo "  Heavy modes stop the Blender desk; they do not start Compose." >&2
-  echo "  See docs/occupancy.md. Never in docker/Dockerfile." >&2
+  echo "  llm-desk parks Comfy and starts the host 35B sidecar (127.0.0.1)." >&2
+  echo "  Heavy modes stop the Blender desk and the 35B sidecar; they do not start Compose." >&2
+  echo "  Graph occupancy label llm is not a CLI mode. See docs/occupancy.md." >&2
+  echo "  Never in docker/Dockerfile." >&2
 }
 
 #######################################

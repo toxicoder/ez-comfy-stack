@@ -35,6 +35,7 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | LongCat-Video | meituan-longcat/LongCat-Video | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT. No NCCL | No |
 | DreamX-Creator 1.0 | GD-ML/DreamX-Creator | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache. Not DreamX-World | No |
 | Qwen3-4B-Instruct-2507 Q4_K_M GGUF | unsloth/Qwen3-4B-Instruct-2507-GGUF | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
+| Qwen3.6-35B-A3B UD-Q4_K_XL GGUF | unsloth/Qwen3.6-35B-A3B-MTP-GGUF | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Kokoro-82M | hexgrad/Kokoro-82M (ONNX pack: fastrtc/kokoro-onnx) | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | ACE-Step 1.5 turbo AIO | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT upstream / Apache companion pack | Yes | Yes | none | MIT | No extra ban beyond MIT | No |
 | ACE-Step 1.5 XL | Comfy-Org/ace_step_1.5_ComfyUI_files | MIT | Yes | Yes | none | MIT | No extra ban beyond MIT | No |

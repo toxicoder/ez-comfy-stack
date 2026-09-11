@@ -290,15 +290,39 @@
     },
     {
       "id": "download-llm",
-      "title": "download-llm",
-      "description": "Prompt-enhance GGUF (Qwen3-4B-Instruct Q4_K_M). No --tier. Already in download-models.",
-      "argv": ["./scripts/utilities/download-llm.sh", "run"],
-      "flags": []
+      "title": "download-llm --tier",
+      "description": "Default enhance is the Qwen3-4B prompt-enhance GGUF (already in download-models). qwen36-35b-a3b is the opt-in ~23 GB occupancy llm-desk pack. Missing 35B is not a doctor failure.",
+      "argv": ["./scripts/manage.sh", "download-llm"],
+      "flags": [
+        {
+          "name": "tier",
+          "kind": "choice",
+          "required": true,
+          "default": "enhance",
+          "choices": [
+            {"value": "enhance", "label": "enhance — Qwen3-4B Q4_K_M (default, in download-models)"},
+            {"value": "qwen36-35b-a3b", "label": "qwen36-35b-a3b — Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"},
+            {"value": "all", "label": "all — enhance + qwen36-35b-a3b"}
+          ]
+        },
+        {
+          "name": "limit",
+          "kind": "choice-or-int",
+          "required": false,
+          "default": "auto",
+          "bind_var": "DOWNLOAD_LIMIT",
+          "int_label": "Mbps",
+          "choices": [
+            {"value": "auto", "label": "auto"},
+            {"value": "off", "label": "off (SSH risk)"}
+          ]
+        }
+      ]
     },
     {
       "id": "occupancy",
       "title": "occupancy enter",
-      "description": "Park Comfy for blender-desk (POST /free) or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up.",
+      "description": "Park Comfy for blender-desk (POST /free) or llm-desk (35B sidecar), or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up. Graph occupancy label llm is not a CLI mode.",
       "argv": ["./scripts/manage.sh", "occupancy", "enter"],
       "flags": [
         {
@@ -308,11 +332,12 @@
           "default": "blender-desk",
           "choices": [
             {"value": "blender-desk", "label": "blender-desk — park Comfy, Workbench dumps"},
-            {"value": "klein", "label": "klein — stop Blender, Queue stills"},
-            {"value": "trellis", "label": "trellis — stop Blender, Queue TRELLIS.2"},
-            {"value": "wan", "label": "wan — stop Blender, Queue silent motion"},
-            {"value": "ltx", "label": "ltx — stop Blender, Queue AV print"},
-            {"value": "idle", "label": "idle — stop Blender and Compose"}
+            {"value": "llm-desk", "label": "llm-desk — park Comfy, host 35B llama-server"},
+            {"value": "klein", "label": "klein — stop Blender and 35B sidecar, Queue stills"},
+            {"value": "trellis", "label": "trellis — stop Blender and 35B sidecar, Queue TRELLIS.2"},
+            {"value": "wan", "label": "wan — stop Blender and 35B sidecar, Queue silent motion"},
+            {"value": "ltx", "label": "ltx — stop Blender and 35B sidecar, Queue AV print"},
+            {"value": "idle", "label": "idle — stop Blender, 35B sidecar, and Compose"}
           ]
         }
       ]

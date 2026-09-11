@@ -58,6 +58,7 @@ def occupancy_status() -> dict[str, Any]:
         "parked": False,
         "blender_pid": 0,
         "mcp_pid": 0,
+        "llm_pid": 0,
     }
 
 

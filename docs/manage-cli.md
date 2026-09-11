@@ -52,7 +52,9 @@ id: doctor
 | `print-shot` / `film-resume` / `film-export-otio` / `film-proxies` / `take-promote` | 90s jobstore ([90s shorts](shorts.md)) | `film-proxies` while compose is up |
 | `download-restore` | Opt-in SeedVR2-3B | Treat as part of `download-models` |
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
-| `occupancy status\|enter MODE` | Park Comfy (`blender-desk`) or enter `klein`/`trellis`/`wan`/`ltx`/`idle`. Does not start Compose. [Occupancy desk](occupancy.md) | Cycles CUDA next to a denoise; skip `--yes` when Blender is still up |
+| `download-llm [--tier enhance\|qwen36-35b-a3b\|all] [--limit auto\|N\|off]` | Default `enhance` is the 4B GGUF (already in `download-models`). `qwen36-35b-a3b` is opt-in ~23 GB for occupancy `llm-desk`. [Tiers](download-tiers.md) | Treat 35B as part of `download-models`; GPU-offload the in-canvas 4B |
+| `occupancy status\|enter MODE` | Park Comfy (`blender-desk` or `llm-desk`) or enter `klein`/`trellis`/`wan`/`ltx`/`idle`. Graph label `llm` is not a CLI mode. Does not start Compose. [Occupancy desk](occupancy.md) | Cycles CUDA next to a denoise; skip `--yes` when Blender is still up; `occupancy enter llm` |
+| `llm-sidecar status\|start\|stop` | Host llama-server for occupancy `llm-desk` (`127.0.0.1:30000`). Prefer `occupancy enter llm-desk`. Never in Dockerfile | Bind `0.0.0.0`; start while klein/wan/ltx is the GPU job |
 | `blender-mcp` | In-tree typed Blender MCP (stdio / `--call`). bpy tools need blender-desk | Vendor ahujasid; `execute_code`; telemetry |
 | `research-mcp` | In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF | `execute_code`; arbitrary URL fetch; GPU-offload llama |
 | `blender-llm` | Optional host Qwen3-4B CPU → blender-mcp. Path D if llama.cpp missing | GPU-offload next to Comfy |

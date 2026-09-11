@@ -58,7 +58,7 @@ def check_occupancy(required_mode: str) -> str:
         Current mode (``unknown`` when the file is missing).
 
     Raises:
-        OccupancyError: idle, blender-desk, or mismatched heavy mode.
+        OccupancyError: idle, blender-desk, llm-desk, or mismatched heavy mode.
     """
     required = str(required_mode or "").strip()
     mode = read_mode()
@@ -74,6 +74,11 @@ def check_occupancy(required_mode: str) -> str:
         raise OccupancyError(
             "occupancy is blender-desk (park is for dumps); "
             f"stop Blender, occupancy enter {required} --yes"
+        )
+    if mode == "llm-desk":
+        raise OccupancyError(
+            "occupancy is llm-desk (35B sidecar is the GPU job); "
+            f"occupancy enter {required} --yes"
         )
     raise OccupancyError(
         f"occupancy is {mode}, required {required}; unload first"
