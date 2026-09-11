@@ -83,6 +83,17 @@ def _log(message: str) -> None:
     print(f"[ez_dub] {message}", file=sys.stderr)
 
 
+def _ensure_lab_custom_nodes_path() -> None:
+    """Make sibling ez_* packs importable under ComfyUI 0.34+ load_custom_node.
+
+    Comfy registers directory packs as the filesystem path, not the folder
+    name, and does not put custom_nodes on sys.path.
+    """
+    root = str(Path(__file__).resolve().parent.parent)
+    if root not in sys.path:
+        sys.path.insert(0, root)
+
+
 def is_url(source: object) -> bool:
     """True when the widget looks like an http(s) URL."""
     text = (source if isinstance(source, str) else str(source or "")).strip()
@@ -375,6 +386,7 @@ def preflight_clone() -> str:
 def translate_llama_status() -> str:
     """Operator-facing Dub status when Llama cannot import."""
     try:
+        _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import llama_cpp_unavailable_status
     except Exception:  # noqa: BLE001 — missing pack is a dub hard miss
         return TRANSLATE_LLAMA_STATUS
@@ -384,6 +396,7 @@ def translate_llama_status() -> str:
 def preflight_translate() -> str:
     """Empty when the on-box GGUF writer can load; otherwise a blocking reason."""
     try:
+        _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import _get_llama
         from ez_prompt_enhance.client import status_for_reason
     except Exception:  # noqa: BLE001 — missing pack is a dub hard miss
@@ -958,6 +971,7 @@ def translate_turns(
     if not spoken:
         return [dict(t) for t in turns], "no turns"
     try:
+        _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import REASON_EMPTY
         from ez_prompt_enhance.client import REASON_GGUF_MISSING
         from ez_prompt_enhance.client import REASON_LLAMA_UNAVAILABLE

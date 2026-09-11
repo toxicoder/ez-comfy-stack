@@ -130,6 +130,16 @@ def test_script_success_unloads_writer() -> None:
     assert "Speaker A: Hi." in out["result"][0]
 
 
+def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch) -> None:
+    monkeypatch.setattr(
+        sys,
+        "path",
+        [p for p in sys.path if Path(p).resolve() != CUSTOM.resolve()],
+    )
+    nodes._ensure_lab_custom_nodes_path()
+    assert Path(sys.path[0]).resolve() == CUSTOM.resolve()
+
+
 def test_kokoro_tts_no_turns_empty_audio() -> None:
     audio = EZKokoroTTS().run("   ", include_announcer=False)[0]
     assert audio["sample_rate"] == 24000
