@@ -19,16 +19,15 @@ from .align import (
     rms,
 )
 from .audio import read_wav, write_wav
+from .disclosure import DISCLOSURE_TEXT, apply_spoken_disclosure, disclosure_for
 from .jobstore import dub_dir, load_state, save_state, write_json
+from .qc import evaluate_qc
 from .rights import require_rights
+from .sanitize import looks_like_target, sanitize_target
 from .srt import turns_to_srt
-from .turns import assign_overlap, empty_payload, normalize_turn
+from .turns import assign_overlap, empty_payload, merge_adjacent_turns, normalize_turn
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
-DISCLOSURE_TEXT = (
-    "This audio is an AI-translated dub. Voices are synthesized from the "
-    "original speakers with the rights-holder's authorization."
-)
 ENGINE_CHATTERBOX = "chatterbox-ml"
 ENGINE_QWEN3TTS = "qwen3tts"
 ENGINES = (ENGINE_CHATTERBOX, ENGINE_QWEN3TTS)
@@ -956,17 +955,28 @@ def _whisper_segments(
         return [], "", miss or asr_wheel_status()
     try:
         lang = None if language in {"", "auto"} else language
+        path = str(wav_path)
         try:
             segments, info = model.transcribe(
-                str(wav_path),
+                path,
                 language=lang,
                 word_timestamps=False,
                 vad_filter=True,
+                beam_size=5,
+                condition_on_previous_text=False,
             )
         except TypeError:
-            segments, info = model.transcribe(
-                str(wav_path), language=lang, word_timestamps=False
-            )
+            try:
+                segments, info = model.transcribe(
+                    path,
+                    language=lang,
+                    word_timestamps=False,
+                    vad_filter=True,
+                )
+            except TypeError:
+                segments, info = model.transcribe(
+                    path, language=lang, word_timestamps=False
+                )
     except Exception as exc:  # noqa: BLE001 — fail-soft
         reason = f"faster-whisper failed: {exc}"
         _log(reason)
@@ -1030,15 +1040,32 @@ def _same_language(source: str, target: str) -> bool:
     return src == tgt
 
 
-def _translate_user_message(text: str, source: str, target: str) -> str:
+def _translate_user_message(
+    text: str,
+    source: str,
+    target: str,
+    *,
+    prev_source: str = "",
+    prev_target: str = "",
+    next_source: str = "",
+) -> str:
     src_name = language_name(source)
     tgt = language_code(target)
     tgt_name = language_name(tgt)
-    return (
+    parts = [
         f"/no_think\nTranslate from {src_name} to {tgt_name} ({tgt}). "
         "Output only the translated sentence.\n\n"
         f"Source: {text}"
-    )
+    ]
+    if prev_source:
+        parts.append(
+            "Context (previous turn, do not translate this block):\n"
+            f"Source: {prev_source}\n"
+            f"Target: {prev_target}"
+        )
+    if next_source:
+        parts.append(f"Following source (do not translate): {next_source}")
+    return "\n\n".join(parts)
 
 
 def translate_turns(
@@ -1080,11 +1107,13 @@ def translate_turns(
     timeout = dub_llm_timeout_s()
     translated = 0
     passthrough = 0
+    suspect = 0
     last_reason = ""
     merged: list[dict[str, Any]] = []
     fatal = ""
     try:
-        for turn in turns:
+        n_turns = len(turns)
+        for idx, turn in enumerate(turns):
             item = dict(turn)
             source_text = str(item.get("text") or "").strip()
             if not source_text:
@@ -1096,7 +1125,22 @@ def translate_turns(
                 passthrough += 1
                 merged.append(item)
                 continue
-            user = _translate_user_message(source_text, src, tgt)
+            prev_source = ""
+            prev_target = ""
+            if merged:
+                prev_source = str(merged[-1].get("text") or "").strip()
+                prev_target = str(merged[-1].get("text_target") or "").strip()
+            next_source = ""
+            if idx + 1 < n_turns:
+                next_source = str(turns[idx + 1].get("text") or "").strip()
+            user = _translate_user_message(
+                source_text,
+                src,
+                tgt,
+                prev_source=prev_source,
+                prev_target=prev_target,
+                next_source=next_source,
+            )
             rewritten, reason = complete(
                 system,
                 user,
@@ -1115,8 +1159,13 @@ def translate_turns(
                 last_reason = reason
                 merged.append(item)
                 continue
-            cleaned = (rewritten or "").strip()
-            if (not cleaned or cleaned == source_text) and src != tgt:
+            cleaned = sanitize_target(
+                rewritten or "", source_text=source_text, language=tgt
+            )
+            needs_retry = (not cleaned or cleaned == source_text) or (
+                src != tgt and not looks_like_target(cleaned, tgt)
+            )
+            if needs_retry and src != tgt:
                 rewritten, reason = complete(
                     system,
                     user,
@@ -1124,14 +1173,28 @@ def translate_turns(
                     temperature=TRANSLATE_TEMPERATURE,
                     timeout_s=timeout,
                 )
-                cleaned = (rewritten or "").strip()
-            if not cleaned or (cleaned == source_text):
+                cleaned = sanitize_target(
+                    rewritten or "", source_text=source_text, language=tgt
+                )
+            if not cleaned:
                 item["text_target"] = source_text
                 passthrough += 1
-                last_reason = (reason or REASON_EMPTY) if not cleaned else "passthrough"
+                last_reason = reason or REASON_EMPTY
+                merged.append(item)
+                continue
+            if cleaned == source_text:
+                item["text_target"] = source_text
+                passthrough += 1
+                last_reason = "passthrough"
                 merged.append(item)
                 continue
             item["text_target"] = cleaned
+            if src != tgt and not looks_like_target(cleaned, tgt):
+                passthrough += 1
+                suspect += 1
+                last_reason = "passthrough"
+                merged.append(item)
+                continue
             translated += 1
             merged.append(item)
     finally:
@@ -1142,12 +1205,15 @@ def translate_turns(
     total = translated + passthrough
     if fatal:
         return merged, fatal
+    extra = f"; {suspect} suspect" if suspect else ""
     if passthrough and translated:
-        return merged, f"translated {translated}/{total}; {passthrough} passthrough"
+        return merged, f"translated {translated}/{total}; {passthrough} passthrough{extra}"
     if passthrough:
+        if suspect:
+            return merged, f"{last_reason or 'passthrough'}; {suspect} suspect"
         return merged, last_reason or "passthrough"
     if translated:
-        return merged, f"translated {translated}/{total}"
+        return merged, f"translated {translated}/{total}{extra}"
     return merged, ""
 
 
@@ -1212,6 +1278,32 @@ def _peak_normalize(pcm: list[float], peak: float = REF_PEAK) -> list[float]:
         return [float(x) for x in pcm]
     scale = target / mag
     return [float(x) * scale for x in pcm]
+
+
+def raise_to_peak(pcm: list[float], peak: float = REF_PEAK) -> list[float]:
+    """Scale so max abs == peak. No-op on silence (mag < 1e-8)."""
+    if not pcm:
+        return []
+    mag = max(abs(float(x)) for x in pcm)
+    if mag < 1e-8:
+        return [float(x) for x in pcm]
+    scale = float(peak) / mag
+    return [float(x) * scale for x in pcm]
+
+
+def match_rms(pcm: list[float], target_rms: float) -> list[float]:
+    """Scale pcm so rms(pcm) ~= target_rms, then cap with raise_to_peak.
+
+    No-op if rms(pcm) < 1e-8 or target_rms < REF_MIN_RMS.
+    """
+    if not pcm:
+        return []
+    current = rms(pcm)
+    if current < 1e-8 or float(target_rms) < REF_MIN_RMS:
+        return [float(x) for x in pcm]
+    scale = float(target_rms) / current
+    scaled = [float(x) * scale for x in pcm]
+    return raise_to_peak(scaled)
 
 
 def _speaker_ref_text(ref: Path | str) -> str:
@@ -1754,6 +1846,65 @@ def synthesize_turn(
     return joined_pcm, out_rate, ""
 
 
+def _maybe_loudnorm_yt(
+    dest: Path,
+    mix: list[float],
+    rate: int,
+    source_len: int,
+    room: list[float],
+) -> list[float]:
+    """Fail-soft ffmpeg loudnorm on ez_dub_yt.wav. Keep raised PCM on miss."""
+    yt = dest / "ez_dub_yt.wav"
+    loud = dest / "ez_dub_yt.loudnorm.wav"
+    code, _err = _run(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(yt),
+            "-af",
+            "loudnorm=I=-14:LRA=11:TP=-1.5",
+            str(loud),
+        ]
+    )
+    if int(code) != 0 or not loud.is_file():
+        return mix
+    try:
+        shutil.copyfile(loud, yt)
+        pcm, _sr = read_wav(yt)
+    except Exception:  # noqa: BLE001 — fail-soft
+        return mix
+    if not pcm:
+        return mix
+    if len(pcm) != int(source_len):
+        pcm, _flags = lock_duration(pcm, source_len, room=room, rate=rate)
+        write_wav(yt, pcm, rate)
+    return pcm
+
+
+def _maybe_yt_mp3_48k(dest: Path) -> None:
+    """Fail-soft 48 kHz / 320k MP3 next to the duration-locked YT wav."""
+    yt = dest / "ez_dub_yt.wav"
+    mp3 = dest / "ez_dub_yt_48k.mp3"
+    if not yt.is_file():
+        return
+    _run(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(yt),
+            "-ar",
+            "48000",
+            "-ac",
+            "1",
+            "-b:a",
+            "320k",
+            str(mp3),
+        ]
+    )
+
+
 def render_mix(
     samples: list[float],
     rate: int,
@@ -1762,7 +1913,7 @@ def render_mix(
     *,
     engine: str = ENGINE_CHATTERBOX,
     keep_bed: bool = True,
-    spoken_disclosure: bool = True,
+    spoken_disclosure: bool = False,
     speed: float = 1.0,
     exaggeration: float = EXAGGERATION_DEFAULT,
     cfg_weight: float = CFG_AUTO,
@@ -1848,6 +1999,8 @@ def render_mix(
             from .align import time_stretch
 
             pcm = time_stretch(pcm, max(1, int(round(len(pcm) / pace))), rate)
+        src_chunk = _slice_pcm(samples, rate, float(turn["t0"]), float(turn["t1"]))
+        pcm = match_rms(pcm, rms(src_chunk))
         fitted, meta = fit_turn(
             pcm,
             rate,
@@ -1866,7 +2019,12 @@ def render_mix(
     (dest / f"ez_dub.{tgt_lang}.srt").write_text(
         turns_to_srt(turns, field="text_target"), encoding="utf-8"
     )
-    (dest / "ez_dub.disclosure.txt").write_text(DISCLOSURE_TEXT + "\n", encoding="utf-8")
+    (dest / "ez_dub.disclosure.txt").write_text(
+        disclosure_for(lang) + "\n", encoding="utf-8"
+    )
+    (dest / "ez_dub.disclosure.en.txt").write_text(
+        DISCLOSURE_TEXT + "\n", encoding="utf-8"
+    )
     write_json(dest / "translation.json", payload)
     if not had_spoken:
         status = "no spoken text — ASR produced empty turns"
@@ -1898,10 +2056,45 @@ def render_mix(
     mix = build_timeline(samples, clones, rate, keep_bed=keep_bed)
     room = collect_room_tone(samples, turns, rate)
     mix, lock_flags = lock_duration(mix, len(samples), room=room, rate=rate)
-    if spoken_disclosure:
-        flags.append("disclosure sidecar")
-    write_wav(dest / "ez_dub_mix.wav", mix, rate)
+    mix = raise_to_peak(mix)
     write_wav(dest / "ez_dub_yt.wav", mix, rate)
+    mix = _maybe_loudnorm_yt(dest, mix, rate, len(samples), room)
+    _maybe_yt_mp3_48k(dest)
+    mix_wav = mix
+    if spoken_disclosure:
+        first_ref = ""
+        if turns:
+            spk = str(turns[0].get("speaker") or "")
+            ref = refs.get(spk) if spk else None
+            if ref:
+                first_ref = str(ref)
+            elif refs:
+                first_ref = str(next(iter(refs.values())))
+        mix_wav, disc_status = apply_spoken_disclosure(
+            list(mix),
+            rate,
+            language=lang,
+            engine=name,
+            ref_wav=first_ref,
+            turns=turns,
+            synthesize=synthesize_turn,
+        )
+        flags.append(disc_status)
+    write_wav(dest / "ez_dub_mix.wav", mix_wav, rate)
+    peak = max((abs(float(x)) for x in mix), default=0.0)
+    flags.append(f"peak={peak:.2f}")
+    if peak < 0.25:
+        flags.append("quiet mix")
+    try:
+        report = evaluate_qc(
+            mix, rate, turns, target_language=lang, peak=peak
+        )
+        write_json(dest / "qc.json", report)
+        qc_flags = [str(x) for x in (report.get("flags") or [])]
+        if qc_flags:
+            flags.append("qc: " + ",".join(qc_flags))
+    except Exception as exc:  # noqa: BLE001 — QC must not fail the mix
+        _log(f"qc failed: {exc}")
     status = f"{len(refs)} speakers, {cloned_n} turns cloned"
     if lock_flags.get("trimmed"):
         flags.append("duration trimmed")
@@ -2066,6 +2259,7 @@ def analyze_job(
             stage=name,
             reason=asr_reason,
         )
+    turns = merge_adjacent_turns(turns)
     turns, reason = translate_turns(
         turns, target_language, src, enhance=enhance
     )

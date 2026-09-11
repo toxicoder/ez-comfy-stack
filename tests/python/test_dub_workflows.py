@@ -68,11 +68,14 @@ def test_dub_localize_graph() -> None:
     script = next(n for n in graph["nodes"] if n["type"] == "EZDubScript")
     assert script["widgets_values"][1] is True
     assert script["widgets_values"][2] == "es"
+    assert script["widgets_values"][5] == "analyze"
     seed = json.loads(script["widgets_values"][0])
     assert seed["turns"] == []
+    assert seed["stage"] == "analyze"
     assert "Bienvenidos" not in json.dumps(seed)
     render = next(n for n in graph["nodes"] if n["type"] == "EZDubRender")
     assert render["widgets_values"][0] == "chatterbox-ml"
+    assert render["widgets_values"][2] is False
     assert render["widgets_values"][4] == -1.0
     assert render["widgets_values"][5] == 0.5
     flac = next(n for n in graph["nodes"] if n["type"] == "SaveAudio")
@@ -111,5 +114,8 @@ def test_dub_localize_graph() -> None:
     assert "Dub status" in note
     assert "original bed only" not in note
     assert "Prompt enhance is on by default" not in note
+    assert "Stage analyze" in note or "Stage **analyze**" in note
+    assert "320 kbps MP3 (duration-locked)" not in note
+    assert "ez_dub_yt.wav" in note
     outputs = graph["extra"]["linearData"]["outputs"]
     assert 3 in outputs

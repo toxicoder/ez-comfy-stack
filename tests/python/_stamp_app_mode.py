@@ -379,10 +379,13 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "target_language": "Language to speak. Spanish is the soccer-podcast default.",
     "source_language": "auto detects from ASR. Pin when the show is mixed-language.",
     "max_speakers": "0 = auto (cap 8). Hint when you know the cast size.",
-    "stage": "all = analyze+render. analyze writes JSON. render clones the widget.",
+    "stage": "Default analyze. analyze writes JSON. render clones the widget. all = analyze+render.",
     "engine": "chatterbox-ml (MIT, 23 langs, PerTh on) or qwen3tts (Apache).",
     "keep_bed": "On: keep original ambience in gaps. Off: speech-only mix.",
-    "spoken_disclosure": "On: overlay a 3 s spoken bumper. Sidecar is always written.",
+    "spoken_disclosure": (
+        "Default off. On: localized bumper on ez_dub_mix only, not the YT wav. "
+        "Sidecar is always written."
+    ),
 }
 
 

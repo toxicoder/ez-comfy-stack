@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from .align import SAMPLE_RATE, fit_turn
+from .align import SAMPLE_RATE
 from .audio import audio_from_pcm, empty_audio, read_wav
 from .jobstore import dub_dir, record_ingest_failure, sanitize_slug
 from .pipeline import (
-    DISCLOSURE_TEXT,
+    DISCLOSURE_TEXT,  # noqa: F401 — re-exported for tests and graph builder
     ENGINE_CHATTERBOX,
     ENGINES,
     LANG_CODES,
@@ -20,6 +20,7 @@ from .pipeline import (
     STAGES,
     TARGET_LANG_WIDGET,
     analyze_job,
+    apply_spoken_disclosure,
     ingest,
     missing_source_status,
     render_mix,
@@ -35,7 +36,7 @@ SEED_SCRIPT = dumps_payload(
     {
         "target_language": "es",
         "source_language": "auto",
-        "stage": STAGE_ALL,
+        "stage": STAGE_ANALYZE,
         "status": "",
         "turns": SEED_TURNS,
     }
@@ -147,7 +148,7 @@ class EZDubScript:
                     "INT",
                     {"default": 0, "min": 0, "max": 12, "step": 1},
                 ),
-                "stage": (list(STAGES), {"default": STAGE_ALL}),
+                "stage": (list(STAGES), {"default": STAGE_ANALYZE}),
             },
             "optional": {
                 "job_id": (
@@ -174,7 +175,7 @@ class EZDubScript:
         target_language="es",
         source_language="auto",
         max_speakers=0,
-        stage=STAGE_ALL,
+        stage=STAGE_ANALYZE,
         job_id="",
     ):
         widget = parse_payload(prompt)
@@ -209,7 +210,7 @@ class EZDubRender:
                 ),
                 "engine": (list(ENGINES), {"default": ENGINE_CHATTERBOX}),
                 "keep_bed": ("BOOLEAN", {"default": True}),
-                "spoken_disclosure": ("BOOLEAN", {"default": True}),
+                "spoken_disclosure": ("BOOLEAN", {"default": False}),
                 "speed": (
                     "FLOAT",
                     {"default": 1.0, "min": 0.5, "max": 1.5, "step": 0.05},
@@ -248,8 +249,9 @@ class EZDubRender:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Zero-shot clone (Chatterbox Multilingual V3 or Qwen3-TTS) with "
-        "PerTh on. Cross-lang CFG auto is 0. Writes duration-locked WAV + "
-        "SRT + disclosure.txt."
+        "PerTh on. Cross-lang CFG auto is 0. Writes duration-locked YT WAV + "
+        "SRT + disclosure sidecars. Spoken bumper (off by default) overlays "
+        "the mix wav only."
     )
 
     def run(
@@ -257,7 +259,7 @@ class EZDubRender:
         script,
         engine=ENGINE_CHATTERBOX,
         keep_bed=True,
-        spoken_disclosure=True,
+        spoken_disclosure=False,
         speed=1.0,
         cfg_weight=-1.0,
         exaggeration=0.5,
@@ -284,13 +286,6 @@ class EZDubRender:
             exaggeration=float(exaggeration) if exaggeration else 0.5,
             cfg_weight=float(cfg_weight) if cfg_weight is not None else -1.0,
         )
-        if spoken_disclosure and mix:
-            self._overlay_disclosure(mix, rate, engine)
-            from .audio import write_wav
-
-            write_wav(dest / "ez_dub_mix.wav", mix, rate)
-            write_wav(dest / "ez_dub_yt.wav", mix, rate)
-            status = (status + "; spoken disclosure") if status else "spoken disclosure"
         return _pack_audio(mix, rate, status)
 
     def _overlay_disclosure(
@@ -298,32 +293,20 @@ class EZDubRender:
         samples: list[float],
         rate: int,
         engine: str,
-    ) -> None:
-        """Fit a 3 s spoken bumper over the start without changing duration."""
-        bumper, sr, _err = synthesize_turn(
-            DISCLOSURE_TEXT,
-            "en",
-            "",
-            engine if engine in ENGINES else ENGINE_CHATTERBOX,
+        language: str = "es",
+        ref_wav: str = "",
+        turns: list[dict[str, Any]] | None = None,
+    ) -> tuple[list[float], str]:
+        """Overlay a localized bumper without changing duration (mix wav only)."""
+        return apply_spoken_disclosure(
+            samples,
+            rate,
+            language=language,
+            engine=engine if engine in ENGINES else ENGINE_CHATTERBOX,
+            ref_wav=ref_wav,
+            turns=turns or [],
+            synthesize=synthesize_turn,
         )
-        if not bumper:
-            return
-        if sr != rate:
-            from .align import resample_linear
-
-            bumper = resample_linear(bumper, int(round(len(bumper) * rate / max(sr, 1))))
-        fitted, _flags = fit_turn(bumper, rate, 3.0, spill_s=0.0)
-        fade = max(1, int(rate * 0.03))
-        for i, sample in enumerate(fitted):
-            if i >= len(samples):
-                break
-            gain = 1.0
-            if i < fade:
-                gain = i / fade
-            remain = len(fitted) - 1 - i
-            if remain < fade:
-                gain = min(gain, remain / fade if fade else 1.0)
-            samples[i] = samples[i] * (1.0 - gain) + sample * gain
 
 
 NODE_CLASS_MAPPINGS: dict[str, Any] = {
