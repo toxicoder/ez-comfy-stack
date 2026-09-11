@@ -23,6 +23,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"flux2-vae.safetensors"* ]]
   [[ "${output}" == *"Qwen3-4B-Instruct-2507-Q4_K_M.gguf"* ]]
+  [[ "${output}" == *"Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf"* ]]
+  run models_default_keep_set
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Qwen3-4B-Instruct-2507-Q4_K_M.gguf"* ]]
   [[ "${output}" != *"Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf"* ]]
   run cmd_status
   [ "${status}" -eq 0 ]
