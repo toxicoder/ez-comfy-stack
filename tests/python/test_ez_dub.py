@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import os
 import shutil
 import sys
 import types
@@ -1208,6 +1209,7 @@ def test_clone_ckpt_dir_requires_complete_snapshot(
     for name in pipeline.CLONE_REQUIRED_FILES:
         (snap / name).write_bytes(b"x")
     assert pipeline.clone_ckpt_dir() == snap
+    assert "Cangjie5_TC.json" in pipeline.CLONE_REQUIRED_FILES
 
 
 def test_whisper_dir_requires_config(tmp_path: Path, monkeypatch) -> None:
@@ -2520,3 +2522,183 @@ def test_ezdub_render_clone_knob_widgets() -> None:
     assert required["cfg_weight"][1]["default"] == -1.0
     assert required["exaggeration"][0] == "FLOAT"
     assert required["exaggeration"][1]["default"] == 0.5
+
+
+def _write_qwen3_base(folder: Path) -> None:
+    folder.mkdir(parents=True, exist_ok=True)
+    for name in pipeline.QWEN3_BASE_REQUIRED_FILES:
+        dest = folder / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(b"x")
+
+
+def _write_qwen3_tokenizer(folder: Path) -> None:
+    for name in pipeline.QWEN3_TOKENIZER_REQUIRED_FILES:
+        dest = folder / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(b"x")
+
+
+class _FakeQwen3:
+    @staticmethod
+    def from_pretrained(*args, local_files_only=False, **kwargs):
+        del args, kwargs
+        loaded = types.SimpleNamespace(local_files_only=local_files_only)
+        return loaded
+
+
+def test_preflight_qwen3_wheel_miss_names_no_deps(monkeypatch) -> None:
+    pipeline._close_qwen3()
+    monkeypatch.setattr(
+        pipeline,
+        "_import_qwen3_model",
+        lambda: (None, pipeline.QWEN3_WHEEL_STATUS),
+    )
+    reason = pipeline.preflight_qwen3()
+    assert "qwen3tts extra not installed" in reason
+    assert "--no-deps" in reason
+    assert "qwen-tts" in reason
+    assert "download-podcast" not in reason
+
+
+def test_preflight_qwen3_weights_miss(tmp_path: Path, monkeypatch) -> None:
+    pipeline._close_qwen3()
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    monkeypatch.setattr(pipeline, "_import_qwen3_model", lambda: (_FakeQwen3, ""))
+    reason = pipeline.preflight_qwen3()
+    assert reason == pipeline.QWEN3_PACK_STATUS
+    assert "download-podcast --tier qwen3tts" in reason
+
+
+def test_preflight_qwen3_tokenizer_miss(tmp_path: Path, monkeypatch) -> None:
+    pipeline._close_qwen3()
+    snap = tmp_path / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts"
+    _write_qwen3_base(snap)
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    monkeypatch.setattr(pipeline, "_import_qwen3_model", lambda: (_FakeQwen3, ""))
+    reason = pipeline.preflight_qwen3()
+    assert reason == pipeline.QWEN3_TOKENIZER_STATUS
+    assert pipeline.qwen3_ckpt_dir() is None
+    assert pipeline.qwen3_base_dir() == snap
+
+
+def test_preflight_qwen3_ok(tmp_path: Path, monkeypatch) -> None:
+    pipeline._close_qwen3()
+    snap = tmp_path / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts"
+    _write_qwen3_base(snap)
+    _write_qwen3_tokenizer(snap)
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    monkeypatch.setattr(pipeline, "_import_qwen3_model", lambda: (_FakeQwen3, ""))
+    assert pipeline.preflight_qwen3() == ""
+    assert pipeline.qwen3_ckpt_dir() == snap
+
+
+def test_load_qwen3_passes_local_files_only(tmp_path: Path, monkeypatch) -> None:
+    pipeline._close_qwen3()
+    snap = tmp_path / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts"
+    _write_qwen3_base(snap)
+    _write_qwen3_tokenizer(snap)
+    seen: list[dict] = []
+
+    class _Loader:
+        @staticmethod
+        def from_pretrained(path, local_files_only=False, **kwargs):
+            seen.append({"path": path, "local": local_files_only, **kwargs})
+            return object()
+
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    monkeypatch.setattr(pipeline, "_import_qwen3_model", lambda: (_Loader, ""))
+    model, err = pipeline._load_qwen3_model()
+    assert err == ""
+    assert model is not None
+    assert seen[0]["local"] is True
+    assert seen[0]["path"] == str(snap)
+
+
+def test_render_mix_qwen3tts_missing_extra_fail_fast(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+    logs: list[str] = []
+    synth_calls: list[str] = []
+    monkeypatch.setattr(pipeline, "_log", lambda message: logs.append(message))
+
+    def _synth(*args, **kwargs):
+        del args, kwargs
+        synth_calls.append("synthesize_turn")
+        return [0.1] * 80, rate, ""
+
+    monkeypatch.setattr(pipeline, "synthesize_turn", _synth)
+    monkeypatch.setattr(
+        pipeline, "preflight_qwen3", lambda: pipeline.QWEN3_WHEEL_STATUS
+    )
+    pipeline.tts_hook = None
+    mix, out_rate, status = pipeline.render_mix(
+        samples,
+        rate,
+        payload,
+        dest,
+        engine=pipeline.ENGINE_QWEN3TTS,
+        keep_bed=True,
+        spoken_disclosure=False,
+    )
+    assert out_rate == rate
+    assert mix == []
+    assert mix != samples
+    assert status == pipeline.QWEN3_WHEEL_STATUS
+    assert synth_calls == []
+    assert not any("render" in item or "TTS " in item for item in logs)
+    assert not (dest / "ez_dub_yt.wav").is_file()
+
+
+def test_chatterbox_local_only_does_not_call_hub(
+    tmp_path: Path, monkeypatch
+) -> None:
+    snap = tmp_path / "ResembleAI__chatterbox_clone"
+    snap.mkdir()
+    for name in pipeline.CLONE_REQUIRED_FILES:
+        (snap / name).write_bytes(b"x")
+    pk = tmp_path / "pkuseg"
+    pk.mkdir()
+    (pk / "spacy_ontonotes.zip").write_bytes(b"PK")
+    (pk / "spacy_ontonotes").mkdir()
+    monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
+    monkeypatch.delenv("PKUSEG_HOME", raising=False)
+    monkeypatch.delenv("HF_HUB_OFFLINE", raising=False)
+
+    def explode(*_args, **_kwargs):
+        raise AssertionError("hub download must not run")
+
+    fake_hub = types.ModuleType("huggingface_hub")
+    setattr(fake_hub, "hf_hub_download", explode)
+    monkeypatch.setitem(sys.modules, "huggingface_hub", fake_hub)
+    tok = types.ModuleType("chatterbox.models.tokenizers.tokenizer")
+    setattr(tok, "hf_hub_download", explode)
+    monkeypatch.setitem(sys.modules, "chatterbox.models.tokenizers.tokenizer", tok)
+
+    with pipeline._chatterbox_local_only(snap):
+        import huggingface_hub as hub
+
+        got = hub.hf_hub_download("ResembleAI/chatterbox", "Cangjie5_TC.json")
+        assert got == str(snap / "Cangjie5_TC.json")
+        assert os.environ.get("HF_HUB_OFFLINE") == "1"
+        assert os.environ.get("PKUSEG_HOME") == str(pk)
+        try:
+            hub.hf_hub_download("ResembleAI/chatterbox", "other.json")
+            raise AssertionError("expected RuntimeError")
+        except RuntimeError as exc:
+            assert "blocked" in str(exc)
+    assert os.environ.get("HF_HUB_OFFLINE") is None
+    try:
+        import huggingface_hub as hub
+
+        hub.hf_hub_download("ResembleAI/chatterbox", "Cangjie5_TC.json")
+        raise AssertionError("expected explode after context")
+    except AssertionError as exc:
+        assert "hub download must not run" in str(exc)

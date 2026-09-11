@@ -56,6 +56,8 @@ services:
       MODELS_ROOT: /models
       HF_HOME: /models
       HUGGINGFACE_HUB_CACHE: /models/hub
+      # spacy-pkuseg reads this at import; default ~/.pkuseg is ephemeral.
+      PKUSEG_HOME: /models/pkuseg
       # Runtime only — not baked into image layers
       HF_TOKEN: ${HF_TOKEN:-}
       # On-box prompt-enhance GGUF (CPU llama.cpp). Never bake weights into the image.

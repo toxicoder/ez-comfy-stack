@@ -142,6 +142,122 @@ dub_tier_dir() {
 }
 
 #######################################
+# Persistent pkuseg home under MODELS_DIR (not /root/.pkuseg).
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   None
+# Outputs:
+#   Directory path on stdout
+# Returns:
+#   0
+#######################################
+dub_pkuseg_home() {
+  echo "${MODELS_DIR}/pkuseg"
+}
+
+#######################################
+# GitHub release URL for the default spacy-pkuseg ontonotes zip.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   HTTPS URL on stdout
+# Returns:
+#   0
+#######################################
+dub_pkuseg_zip_url() {
+  echo "https://github.com/explosion/spacy-pkuseg/releases/download/v0.0.26/spacy_ontonotes.zip"
+}
+
+#######################################
+# Absolute path of the ontonotes zip under MODELS_DIR/pkuseg.
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   None
+# Outputs:
+#   File path on stdout
+# Returns:
+#   0
+#######################################
+dub_pkuseg_zip_path() {
+  echo "$(dub_pkuseg_home)/spacy_ontonotes.zip"
+}
+
+#######################################
+# True when the ontonotes zip and extract exist (pkuseg skips GitHub).
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 ready; 1 not ready
+#######################################
+dub_pkuseg_ready() {
+  local home zip extracted
+  home="$(dub_pkuseg_home)"
+  zip="${home}/spacy_ontonotes.zip"
+  extracted="${home}/spacy_ontonotes"
+  [[ -f ${zip} && -s ${zip} && -d ${extracted} ]]
+}
+
+#######################################
+# Seed spacy_ontonotes.zip under MODELS_DIR/pkuseg and extract it.
+# pkuseg download_model only skips the network when the zip file exists.
+# Globals:
+#   MODELS_DIR, LAB_MOCK_HF_DOWNLOAD
+# Arguments:
+#   None
+# Outputs:
+#   log/warn/err
+# Returns:
+#   0 on success; 1 on download/extract failure
+#######################################
+dub_seed_pkuseg() {
+  local home zip extracted url
+  home="$(dub_pkuseg_home)"
+  zip="${home}/spacy_ontonotes.zip"
+  extracted="${home}/spacy_ontonotes"
+  mkdir -p "${home}"
+  if dub_pkuseg_ready; then
+    log "skip pkuseg: already present at ${home}"
+    return 0
+  fi
+  if [[ -n ${LAB_MOCK_HF_DOWNLOAD:-} ]]; then
+    if [[ ${LAB_MOCK_HF_DOWNLOAD} == fail* ]]; then
+      err "pkuseg mock fail"
+      return 1
+    fi
+    mkdir -p "${extracted}"
+    echo mock >"${extracted}/.mock"
+    echo mock >"${zip}"
+    log "pkuseg mock: ${zip}"
+    return 0
+  fi
+  url="$(dub_pkuseg_zip_url)"
+  log "Downloading pkuseg ontonotes → ${zip}"
+  if ! curl -fsSL -o "${zip}.partial" "${url}"; then
+    rm -f "${zip}.partial"
+    warn "pkuseg ontonotes download failed — Chinese segmentation may hit GitHub on first Queue"
+    return 1
+  fi
+  mv "${zip}.partial" "${zip}"
+  mkdir -p "${extracted}"
+  if ! python3 -c \
+    'import sys, zipfile; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])' \
+    "${zip}" "${extracted}"; then
+    warn "pkuseg ontonotes unzip failed"
+    return 1
+  fi
+  log "pkuseg ontonotes ready at ${home}"
+  return 0
+}
+
+#######################################
 # Approximate on-disk size of a directory in GB.
 # Globals:
 #   None
@@ -493,6 +609,9 @@ dub_cmd_run() {
     dir="$(dub_tier_dir "${tier}")"
     if dub_tier_files_ready "${tier}"; then
       log "skip ${tier}: already present at ${dir} (cache hit)"
+      if [[ ${tier} == clone ]]; then
+        dub_seed_pkuseg || true
+      fi
       if dub_link_into_comfy "${tier}"; then
         ok=$((ok + 1))
       else
@@ -516,6 +635,9 @@ dub_cmd_run() {
     HF_HOME="${MODELS_DIR}" hf_download "${repo}" --local-dir "${dir}" \
       "${include_args[@]}" || dl_rc=$?
     if [[ ${dl_rc} -eq 0 ]]; then
+      if [[ ${tier} == clone ]]; then
+        dub_seed_pkuseg || true
+      fi
       if dub_link_into_comfy "${tier}"; then
         ok=$((ok + 1))
       else

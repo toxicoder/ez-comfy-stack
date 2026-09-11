@@ -11,6 +11,7 @@ tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 - `--tier` is a **pack id**, not a quality ladder for the whole studio
 - `--limit` is **bandwidth** (Mbps), not a model
 - Default pack vs opt-in packs
+- Required files / min GB for podcast `qwen3tts` and dub `clone` (pkuseg)
 - One live command builder per downloader
 
 **What this enables**
@@ -49,8 +50,8 @@ Occupancy: `occupancy enter trellis` (unload LTX/Wan, stop Blender) before TRELL
 | `download-image` | `fast` `nvfp4` `base` `zimage` `all` | `fast` | Still UNET **variant**. `fast` also pulls companions `te` + `vae` | 3–4 GB + companions | `fast` only |
 | `download-wan` | `5b` `a14b` `fun-inp` `vace` `s2v` | `5b` | **Different Wan graphs**. `all` = 5b+a14b+fun-inp (**not** vace/s2v) | 12 / 20 / 40 / 6 / 20 GB | `5b` only |
 | `download-ltx` | `2.5` `2.3` `iclora` `gemma` | `2.5` | **Generation** of LTX, not “better”. `2.3` is retired | ~30 GB distilled | `2.5` only |
-| `download-podcast` | `analog` `acestep` `chatterbox` `qwen3tts` `all` | `analog` | **Different audio packs**. Missing pack is not a doctor failure | analog tiny; acestep ~10 GB shared | no |
-| `download-dub` | `asr` `clone` `all` | `asr` | Silero VAD + faster-whisper (full CTranslate2 dir); Chatterbox Multilingual V3 (`ve.pt` + `s3gen.pt` + T3 + `conds.pt`). Wheels: faster-whisper then Chatterbox V3 GitHub zip `--no-deps`. Missing pack is not a doctor failure | asr ~3 GB; clone ~4 GB | no |
+| `download-podcast` | `analog` `acestep` `chatterbox` `qwen3tts` `all` | `analog` | **Different audio packs**. `qwen3tts` is a complete Base snapshot (config + tokenizer + nested 12Hz `speech_tokenizer/`), not weights-only. Missing pack is not a doctor failure | analog tiny; acestep ~10 GB shared; qwen3tts ~3 GB | no |
+| `download-dub` | `asr` `clone` `all` | `asr` | Silero VAD + faster-whisper (full CTranslate2 dir); Chatterbox Multilingual V3 (`ve.pt` + `s3gen.pt` + T3 + `Cangjie5_TC.json` + `conds.pt`) plus `MODELS_DIR/pkuseg` ontonotes. Wheels: faster-whisper then Chatterbox V3 GitHub zip `--no-deps`. Missing pack is not a doctor failure | asr ~3 GB; clone ~4 GB + small pkuseg zip | no |
 | `download-music` | `turbo` `xl` `all` | `turbo` | Size ladder. `turbo` **shares dest** with `download-podcast --tier acestep` | ~10 GB AIO | no |
 | `download-3d` | `trellis2` `da3-base` `all` | `trellis2` | Native Comfy-Org TRELLIS.2 INT8 + DINOv3 companion. `da3-large` refused | ~12 / ~1 GB | no |
 | `download-longcat` | `video` `avatar` `all` | `video` | Opt-in MIT LongCat; no NCCL | large | no |
@@ -110,7 +111,7 @@ id: download-ltx
 
 ## Podcast — different audio packs
 
-`analog` is Kokoro only (tiny). `acestep` is the same ~10 GB AIO as music `turbo`. Chatterbox / Qwen3-TTS are optional. Doctor does **not** fail when these are missing.
+`analog` is Kokoro only (tiny). `acestep` is the same ~10 GB AIO as music `turbo`. Chatterbox / Qwen3-TTS are optional. `qwen3tts` keeps `model.safetensors`, `config.json`, text tokenizer files, and nested `speech_tokenizer/` (~3 GB). Doctor does **not** fail when these are missing.
 
 ```ezcmd
 id: download-podcast
@@ -120,7 +121,7 @@ id: download-podcast
 
 ## Dub — ASR + multilingual clone
 
-`asr` is Silero VAD + faster-whisper large-v3 (`model.bin`, `config.json`, **and** `tokenizer.json`). `clone` is Chatterbox Multilingual V3 (MIT, PerTh on): `ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`. `download-dub` pip-installs `faster-whisper`, the `llama-cpp-python` CPU wheel (extra-index as `--index-url`, GitHub manylinux `--force-reinstall --no-deps` if Llama still will not import), `setuptools<82` (PerTh / `pkg_resources`), then the Chatterbox GitHub zip at `CHATTERBOX_TTS_REF` with `--upgrade --force-reinstall --no-deps` (does not pin torch 2.6; PyPI 0.1.7 has no `t3_model=v3`) when compose is up. Restart also heals PerTh when `PerthImplicitWatermarker` is not callable. Queue also self-heals a missing llama.cpp wheel. A llama.cpp / GGUF miss is a **blocking** Dub status when Rewrite translation is on. Doctor does **not** fail when these are missing. Occupancy **audio**. Playbook: [Local dub](dub.md).
+`asr` is Silero VAD + faster-whisper large-v3 (`model.bin`, `config.json`, **and** `tokenizer.json`). `clone` is Chatterbox Multilingual V3 (MIT, PerTh on): `ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `Cangjie5_TC.json`, `conds.pt`, plus `MODELS_DIR/pkuseg/spacy_ontonotes.zip`. `download-dub` pip-installs `faster-whisper`, the `llama-cpp-python` CPU wheel (extra-index as `--index-url`, GitHub manylinux `--force-reinstall --no-deps` if Llama still will not import), `setuptools<82` (PerTh / `pkg_resources`), then the Chatterbox GitHub zip at `CHATTERBOX_TTS_REF` with `--upgrade --force-reinstall --no-deps` (does not pin torch 2.6; PyPI 0.1.7 has no `t3_model=v3`) when compose is up. Restart also heals PerTh when `PerthImplicitWatermarker` is not callable. Queue also self-heals a missing llama.cpp wheel. A llama.cpp / GGUF miss is a **blocking** Dub status when Rewrite translation is on. Doctor does **not** fail when these are missing. Occupancy **audio**. Playbook: [Local dub](dub.md).
 
 ```ezcmd
 id: download-dub

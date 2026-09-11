@@ -244,7 +244,7 @@ Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models
 | `voices-v1.0.bin` | `tts/` | Kokoro built-in voice pack |
 | `ace_step_1.5_turbo_aio.safetensors` | `checkpoints/` | ACE-Step 1.5 turbo AIO (podcast beds + rap lane; shared dest) |
 | `t3_turbo_v1.safetensors` | `tts/` | Optional Chatterbox Turbo |
-| `model.safetensors` | `tts/` | Optional Qwen3-TTS 0.6B |
+| `model.safetensors` + `config.json` + text tokenizer + `speech_tokenizer/` | snapshot dir (not flattened `comfy/tts`) | Optional Qwen3-TTS 0.6B Base. Nested 12Hz tokenizer must stay beside the talker weights |
 
 Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
 
@@ -252,7 +252,8 @@ Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
 | --- | --- | --- |
 | `silero_vad.onnx` | `onnx/` | Silero VAD (`--tier asr`) |
 | `model.bin` + `config.json` + `tokenizer.json` + `vocabulary.json` | `whisper/` | faster-whisper large-v3 (`--tier asr`; `model.bin` alone is not loadable) |
-| `ve.pt` + `s3gen.pt` + `t3_mtl23ls_v3.safetensors` + `grapheme_mtl_merged_expanded_v1.json` + `conds.pt` | `tts/` | Chatterbox Multilingual V3 (`--tier clone`; `from_local(..., t3_model="v3")` also needs `Cangjie5_TC.json`). Wheel is GitHub pin `CHATTERBOX_TTS_REF` (PyPI 0.1.7 has no `t3_model`). PerTh needs `setuptools<82` (pkg_resources) |
+| `ve.pt` + `s3gen.pt` + `t3_mtl23ls_v3.safetensors` + `grapheme_mtl_merged_expanded_v1.json` + `Cangjie5_TC.json` + `conds.pt` | `tts/` | Chatterbox Multilingual V3 (`--tier clone`; `from_local(..., t3_model="v3")` is offline when this set is complete). Wheel is GitHub pin `CHATTERBOX_TTS_REF` (PyPI 0.1.7 has no `t3_model`). PerTh needs `setuptools<82` (pkg_resources) |
+| `spacy_ontonotes.zip` | `pkuseg/` (not `comfy/`) | `PKUSEG_HOME=/models/pkuseg`; entrypoint symlinks `/root/.pkuseg`. Seeded by `download-dub --tier clone` |
 
 ### Example graphs
 

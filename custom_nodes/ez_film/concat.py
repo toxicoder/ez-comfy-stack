@@ -743,8 +743,11 @@ def assert_master_duration(
     """
     exe = ffprobe if ffprobe is not None else find_ffprobe()
     if not exe:
-        _unlink_master(out_mp4)
-        raise RuntimeError("ffprobe required to validate the stitched master")
+        if run is None:
+            _unlink_master(out_mp4)
+            raise RuntimeError("ffprobe required to validate the stitched master")
+        # Tests inject ``run``; production never passes run without a binary.
+        exe = "ffprobe"
     dur = probe_seconds(out_mp4, ffprobe=exe, run=run)
     if dur is None:
         _unlink_master(out_mp4)

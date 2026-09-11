@@ -11,7 +11,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 - Option A (audio-first commercial episode) vs Option B (one-graph radio drama)
 - App Mode: script, bed/sting tags, length, Kokoro stock voices (refs stay graph-only)
 - Why TTS-Audio-Suite and OldTimeRadio are not vendored
-- Kokoro default on Spark; Chatterbox / Qwen3-TTS optional
+- Kokoro default on Spark; Chatterbox / Qwen3-TTS optional (`qwen3tts` is a complete snapshot, not weights-only)
 - Native ACE-Step instrumental beds
 - Voice consent, platform rules, and authorship
 - `download-podcast` usage, sequential Queue, and loudnorm
@@ -81,7 +81,7 @@ Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.6` (`TextEncodeAceStepAu
 | Kokoro-82M ONNX | Apache 2.0 | Default TTS, built-in voices, CPU/aarch64-safe | No — `download-podcast --tier analog` |
 | ACE-Step 1.5 turbo AIO | MIT | Instrumental beds | No — `--tier acestep` |
 | Chatterbox Turbo | MIT | Optional GPU TTS; PerTh watermark stays on | No — `--tier chatterbox` |
-| Qwen3-TTS 0.6B | Apache 2.0 | Optional TTS + voice design | No — `--tier qwen3tts` |
+| Qwen3-TTS 0.6B | Apache 2.0 | Optional TTS + voice design. `--tier qwen3tts` is a **complete Base snapshot** (config + text tokenizer + nested 12Hz `speech_tokenizer/`), not `model.safetensors` only. Wheel is a separate `--no-deps` extra | No — `--tier qwen3tts` |
 | Qwen3-4B-Instruct GGUF | Apache 2.0 | Script draft, fail-soft | Already in `download-models` |
 
 Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity WAVs into the graph.
@@ -114,8 +114,11 @@ Podcast weights are **opt-in**. `./scripts/manage.sh download-models` does **not
 ./scripts/manage.sh download-podcast --tier analog      # Kokoro ONNX + voices
 ./scripts/manage.sh download-podcast --tier acestep     # ace_step_1.5_turbo_aio.safetensors
 # same AIO dest as: ./scripts/manage.sh download-music --tier turbo
+./scripts/manage.sh download-podcast --tier qwen3tts    # complete 0.6B Base + nested 12Hz tokenizer (~3 GB)
 ./scripts/manage.sh download-podcast --tier all         # analog + ACE + optional TTS
 # same --limit auto|N|off wrap as download-models (always clears on exit)
+# qwen3tts with compose up: extras then pip install --no-deps qwen-tts
+# (never unconstrained pip install qwen-tts — it pins transformers==4.57.3)
 ```
 
 Layout after analog + acestep:

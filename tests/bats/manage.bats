@@ -497,6 +497,25 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"WhisperModel"* || "${output}" == *"import"* ]]
 }
 
+@test "install_qwen3tts_runtime_wheel extras then --no-deps" {
+  touch "${TEST_TMP_DIR}/compose_running"
+  : >"${TEST_TMP_DIR}/docker_calls.log"
+  run install_qwen3tts_runtime_wheel
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"qwen-tts"* || "$(cat "${TEST_TMP_DIR}/docker_calls.log")" == *"qwen-tts"* ]]
+  grep -q 'einops' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q 'soundfile' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q -- '--no-deps' "${TEST_TMP_DIR}/docker_calls.log"
+  grep -q 'qwen-tts' "${TEST_TMP_DIR}/docker_calls.log"
+  if grep -E 'transformers==4.57.3' "${TEST_TMP_DIR}/docker_calls.log"; then
+    return 1
+  fi
+  run grep -F 'install_qwen3tts_runtime_wheel' "${MANAGE_SH}"
+  [ "${status}" -eq 0 ]
+  run qwen_tts_wheel
+  [ "${output}" = "qwen-tts" ]
+}
+
 @test "doctor warns when comfy layout is not writable" {
   mkdir -p "${MODELS_DIR}/comfy"
   chmod a-w "${MODELS_DIR}/comfy"

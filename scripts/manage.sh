@@ -57,6 +57,9 @@ DOWNLOAD_LIMIT=${DOWNLOAD_LIMIT:-auto}
 # Chatterbox V3 pin + clone extras (setuptools<82 for PerTh / pkg_resources).
 # shellcheck source=../../docker/install-comfy/chatterbox-tts.sh disable=SC1091
 source "${REPO_ROOT}/docker/install-comfy/chatterbox-tts.sh"
+# Optional qwen-tts extras + --no-deps (never unconstrained; transformers pin).
+# shellcheck source=../../docker/install-comfy/qwen-tts.sh disable=SC1091
+source "${REPO_ROOT}/docker/install-comfy/qwen-tts.sh"
 
 #######################################
 # Relink the prompt-enhance GGUF into MODELS_DIR/comfy/llm/ if the snapshot
@@ -130,6 +133,45 @@ install_dub_runtime_wheels() {
     warn "dub wheels: chatterbox-tts --no-deps failed — clone will fail-soft"
   fi
   check_dub_runtime_wheels
+  return 0
+}
+
+#######################################
+# Pip-install qwen-tts extras then the wheel --no-deps into a running venv.
+# Fail-soft. Never installs unconstrained qwen-tts (transformers==4.57.3).
+# No-op when compose is stopped. Opt-in from download-podcast --tier qwen3tts.
+# Globals:
+#   None (uses compose_is_running / compose_run)
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0
+#######################################
+install_qwen3tts_runtime_wheel() {
+  local py wheel
+  local -a extras=()
+  py="$(comfy_volume_python)"
+  wheel="$(qwen_tts_wheel)"
+  if ! compose_is_running; then
+    log "qwen3tts wheel: stack stopped — start, then re-run download-podcast --tier qwen3tts"
+    return 0
+  fi
+  while IFS= read -r tok; do
+    extras+=("${tok}")
+  done < <(qwen_tts_extra_packages)
+  log "qwen3tts wheel: extras then ${wheel} --no-deps (skip transformers pin)"
+  if [[ ${#extras[@]} -gt 0 ]]; then
+    compose_run exec -T comfyui "${py}" -m pip install \
+      --upgrade-strategy only-if-needed "${extras[@]}" ||
+      warn "qwen3tts extras pip failed — wheel may still miss"
+  fi
+  if compose_run exec -T comfyui "${py}" -m pip install --no-deps "${wheel}"; then
+    log "qwen3tts wheel: ${wheel} installed --no-deps (did not pin transformers)"
+  else
+    warn "qwen3tts --no-deps failed — Queue writes empty mix until the extra imports"
+  fi
   return 0
 }
 
@@ -992,6 +1034,8 @@ cmd_download_podcast() {
         cat <<'EOF' >&2
 Usage: manage.sh download-podcast [--tier analog|acestep|chatterbox|qwen3tts|all] [--limit auto|N|off]
   Opt-in. Default analog = Kokoro-82M ONNX only.
+  qwen3tts = complete 0.6B Base snapshot + nested 12Hz tokenizer (~3 GB).
+  With compose up, extras then pip install --no-deps qwen-tts (never unconstrained).
   Does not run as part of download-models.
   --limit auto|N|off  same wrap as download-models (always clears on exit)
 EOF
@@ -1028,6 +1072,9 @@ EOF
     return 1
   fi
   log "download-podcast: tier ${tier} ready under ${MODELS_DIR}/comfy"
+  if [[ ${tier} == qwen3tts || ${tier} == all ]]; then
+    install_qwen3tts_runtime_wheel
+  fi
   return 0
 }
 

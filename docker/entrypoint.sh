@@ -982,6 +982,35 @@ ensure_dub_wheels() {
 }
 
 #######################################
+# Point pkuseg at MODELS_DIR and symlink /root/.pkuseg (import-time default).
+# Config() reads PKUSEG_HOME at import; compose sets the env. The symlink
+# covers processes that still use ~/.pkuseg.
+# Globals:
+#   MODELS_ROOT, PKUSEG_HOME
+# Arguments:
+#   $1  Optional symlink path (default /root/.pkuseg)
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always
+#######################################
+ensure_pkuseg_home() {
+  local root home link
+  root="${MODELS_ROOT:-/models}"
+  home="${PKUSEG_HOME:-${root}/pkuseg}"
+  link="${1:-/root/.pkuseg}"
+  export PKUSEG_HOME="${home}"
+  mkdir -p "${home}" || true
+  mkdir -p "$(dirname "${link}")" || true
+  if ln -sfn "${home}" "${link}" 2>/dev/null; then
+    ep_log "pkuseg home: ${home} → ${link}"
+  else
+    ep_log "WARN: pkuseg symlink ${link} failed — set PKUSEG_HOME=${home}"
+  fi
+  return 0
+}
+
+#######################################
 # Write an empty custom_nodes/_user pack so Comfy does not FileNotFoundError.
 # Never overwrites an operator __init__.py.
 # Globals:
@@ -1178,6 +1207,7 @@ main() {
   ensure_triton_build_env
   configure_torch_native_triton
   ensure_llama_cpp_cpu
+  ensure_pkuseg_home /root/.pkuseg
   ensure_dub_wheels
   cd "${comfy_home}"
   link_comfy_output_dir "${comfy_home}/output"
