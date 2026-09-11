@@ -18,6 +18,9 @@ Branch-aware site artifacts (mike aliases ``latest`` / ``development``):
 - ``on_post_page`` injects a site-wide last-published chip from
   ``EZ_DOCS_PUBLISHED_AT``, then ``SOURCE_DATE_EPOCH``, then git HEAD. Invalid
   or missing stamps omit the chip (never ``datetime.now()``).
+- ``on_post_page`` wraps the first **What's on this page** / **What this
+  enables** pair after the page ``h1`` into ``.ez-page-brief`` via
+  ``docs/page_brief.py`` (before glossary wrap so list items still get terms).
 """
 
 from __future__ import annotations
@@ -34,6 +37,7 @@ from typing import Any
 
 _GLOSSARY_MOD = None
 _COMMANDS_MOD = None
+_PAGE_BRIEF_MOD = None
 
 
 def _commands_mod() -> Any:
@@ -72,6 +76,25 @@ def _glossary_mod() -> Any:
         spec.loader.exec_module(module)
         _GLOSSARY_MOD = module
     return _GLOSSARY_MOD
+
+
+def _page_brief_mod() -> Any:
+    """Load docs/page_brief.py once (same directory as this hooks file).
+
+    Returns:
+        The page-brief wrap module.
+    """
+    global _PAGE_BRIEF_MOD
+    if _PAGE_BRIEF_MOD is None:
+        path = Path(__file__).resolve().parent / "page_brief.py"
+        spec = importlib.util.spec_from_file_location("ez_docs_page_brief", path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"cannot load page-brief module from {path}")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules["ez_docs_page_brief"] = module
+        spec.loader.exec_module(module)
+        _PAGE_BRIEF_MOD = module
+    return _PAGE_BRIEF_MOD
 
 _REPO = "toxicoder/ez-comfy-stack"
 _REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -374,7 +397,7 @@ def on_page_markdown(markdown: str, **kwargs: Any) -> str:
 
 
 def on_post_page(output: str, **kwargs: Any) -> str:
-    """Stamp refs, inject publish chip and development banner, wrap glossary.
+    """Stamp refs, inject chip/banner, wrap page brief, then glossary.
 
     Args:
         output: Rendered HTML page content from MkDocs.
@@ -382,8 +405,8 @@ def on_post_page(output: str, **kwargs: Any) -> str:
 
     Returns:
         HTML with branch stamps, optional last-published chip, optional
-        development banner, and glossary term triggers plus a definition
-        dialog when terms matched.
+        development banner, page-brief card, and glossary term triggers
+        plus a definition dialog when terms matched.
     """
     page = kwargs.get("page")
     output = stamp_docs_git_ref_placeholder(stamp_git_ref(output))
@@ -421,5 +444,6 @@ def on_post_page(output: str, **kwargs: Any) -> str:
                 if n:
                     output = html2
 
+    output = _page_brief_mod().wrap_page_brief(output)
     output = _commands_mod().inject_command_assets(output)
     return _glossary_mod().apply_glossary(output, page)

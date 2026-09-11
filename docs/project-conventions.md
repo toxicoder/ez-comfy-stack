@@ -289,6 +289,8 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 2. **What's on this page** (bullet list)
 3. **What this enables** (bullet list)
 
+Author those two lists as **bold + bullets** in source. `docs/hooks.py` wraps the first pair after the page `h1` into `.ez-page-brief` (`docs/page_brief.py` + `docs/stylesheets/extra.css`): a two-column scan card (stacked under `44.99em`). Titles stay `<p>`, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card.
+
 **Nav (Diátaxis-shaped, task tabs):** Learn (explanation + [glossary](glossary.md)) → Start (tutorial) → Create (how-to) → Operate (how-to + reference) → Contribute. Do not mix a command catalog into Getting Started (`manage-cli.md`) or a workflow spreadsheet into the playbook (`studio-workflows.md`).
 
 **Glossary (definition modal):**
@@ -314,6 +316,7 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 | `++ctrl+c++` (`pymdownx.keys`) | Keyboard shortcuts |
 | Mermaid | Architecture / decision trees — **after** actionable commands when the reader’s job is to run something |
 | Card grids (`<div class="grid cards" markdown>`) | Home / Learn indexes — equal-weight next steps |
+| Page brief (`.ez-page-brief`) | Required What's on this page / What this enables lists, rendered as a two-column scan card |
 | `:material-…:` / `:octicons-…:` icons | Cards and scan anchors (`pymdownx.emoji` twemoji) |
 | Bold first phrase in list items | Scan anchors |
 
