@@ -86,7 +86,7 @@
     "aliases": ["Local dub", "dub-localize"],
     "category": "Audio",
     "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
-    "long": "The **dub-localize-lab-example** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, writes per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing ASR, clone, llama.cpp, or GGUF yields an empty mix plus that status, not the original recording and not English cloned as the target. Wheels install separately (Chatterbox GitHub zip `--no-deps` so torch 2.14 stays; PyPI 0.1.7 has no `t3_model=v3`). YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "long": "The **dub-localize-lab-example** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, writes 6–10 s per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`, **Clone CFG** auto 0 on EN→ES). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing ASR, clone, llama.cpp, or GGUF yields an empty mix plus that status, not the original recording and not English cloned as the target. Wheels install separately (Chatterbox GitHub zip `--no-deps` so torch 2.14 stays; PyPI 0.1.7 has no `t3_model=v3`). YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
     "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
   },
   {
@@ -95,7 +95,7 @@
     "aliases": ["Chatterbox Multilingual", "Chatterbox Multilingual V3"],
     "category": "Models",
     "short": "MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.",
-    "long": "Default engine for [Local dub](dub.md). Cross-lingual clone from a short ref extracted from this job, not a celebrity pack. Needs `from_local(..., t3_model=\"v3\")` (GitHub pin `CHATTERBOX_TTS_REF`; PyPI 0.1.7 is too old) and `setuptools<82` so PerTh (`perth.PerthImplicitWatermarker`) stays importable. Turbo English remains `download-podcast --tier chatterbox`.",
+    "long": "Default engine for [Local dub](dub.md). Cross-lingual clone from a 6–10 s ref extracted from this job, not a celebrity pack. Language transfer uses `cfg_weight=0` so the target language does not keep the reference accent. Needs `from_local(..., t3_model=\"v3\")` (GitHub pin `CHATTERBOX_TTS_REF`; PyPI 0.1.7 is too old) and `setuptools<82` so PerTh (`perth.PerthImplicitWatermarker`) stays importable. Turbo English remains `download-podcast --tier chatterbox`.",
     "see_also": ["chatterbox", "dub", "tts"]
   },
   {

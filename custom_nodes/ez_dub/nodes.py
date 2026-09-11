@@ -214,6 +214,24 @@ class EZDubRender:
                     "FLOAT",
                     {"default": 1.0, "min": 0.5, "max": 1.5, "step": 0.05},
                 ),
+                "cfg_weight": (
+                    "FLOAT",
+                    {
+                        "default": -1.0,
+                        "min": -1.0,
+                        "max": 1.0,
+                        "step": 0.05,
+                    },
+                ),
+                "exaggeration": (
+                    "FLOAT",
+                    {
+                        "default": 0.5,
+                        "min": 0.25,
+                        "max": 2.0,
+                        "step": 0.05,
+                    },
+                ),
             },
             "optional": {
                 "job_id": (
@@ -230,7 +248,8 @@ class EZDubRender:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Zero-shot clone (Chatterbox Multilingual V3 or Qwen3-TTS) with "
-        "PerTh on. Writes duration-locked WAV + SRT + disclosure.txt."
+        "PerTh on. Cross-lang CFG auto is 0. Writes duration-locked WAV + "
+        "SRT + disclosure.txt."
     )
 
     def run(
@@ -240,6 +259,8 @@ class EZDubRender:
         keep_bed=True,
         spoken_disclosure=True,
         speed=1.0,
+        cfg_weight=-1.0,
+        exaggeration=0.5,
         job_id="",
     ):
         payload = parse_payload(script)
@@ -260,6 +281,8 @@ class EZDubRender:
             keep_bed=bool(keep_bed),
             spoken_disclosure=bool(spoken_disclosure),
             speed=float(speed) if speed else 1.0,
+            exaggeration=float(exaggeration) if exaggeration else 0.5,
+            cfg_weight=float(cfg_weight) if cfg_weight is not None else -1.0,
         )
         if spoken_disclosure and mix:
             self._overlay_disclosure(mix, rate, engine)

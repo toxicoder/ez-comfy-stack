@@ -9,8 +9,8 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 **What's on this page**
 
 - Rights gate (required) vs the original-character podcast lane
-- App Mode: source file dropdown + upload (or URL), languages, stage, clone engine
-- Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → translate → clone → duration lock
+- App Mode: source file dropdown + upload (or URL), languages, stage, clone engine, Clone CFG
+- Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → translate → clone → pitch-preserving duration lock
 - YouTube Studio multi-language audio upload (audio-only file + SRT)
 - `download-dub` usage, sequential Queue, and loudnorm
 - Optional still-image MP4 when you have no source video (host `audio-still-video`)
@@ -50,7 +50,7 @@ Do not paste celebrity reference WAVs. Refs are extracted from **this** job’s 
 
 ## Quality bar
 
-Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Editable translation JSON is the quality lever (Stage **analyze**, edit, Stage **render**).
+Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent), pitch-preserving duration lock. Editable translation JSON is the other lever (Stage **analyze**, edit, Stage **render**).
 
 Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera lip sync. **No lip-sync OSS** (Wav2Lip stays banned). Mouths will not match on talking-head video.
 
@@ -62,8 +62,8 @@ Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera l
 | Speakers | Chatterbox `VoiceEncoder` + `ve.pt` (same embedding the clone uses). Energy fingerprint if the wheel is missing | MIT | `download-dub --tier clone` |
 | VAD helper | faster-whisper Silero filter; ONNX on disk is the download leftover | MIT | `download-dub --tier asr` |
 | Translate | On-box Qwen3-4B-Instruct GGUF, **one turn at a time** (ISO source → target, temp 0.3, 120 s timeout). Needs `llama-cpp-python` CPU wheel | Apache 2.0 | GGUF already in `download-models`; wheel via CPU extra-index as `--index-url`, `download-dub`, or Queue self-heal |
-| Clone | Chatterbox Multilingual V3 (cached `from_local` + ISO `language_id`, PerTh on). Lines over 300 characters split | MIT | `download-dub --tier clone` |
-| Clone alt | Qwen3-TTS 0.6B | Apache 2.0 | `download-podcast --tier qwen3tts` |
+| Clone | Chatterbox Multilingual V3 (cached `from_local` + ISO `language_id`, PerTh on). Cross-lang `cfg_weight` auto is 0. Lines over 300 characters split | MIT | `download-dub --tier clone` |
+| Clone alt | Qwen3-TTS 0.6B Base (`generate_voice_clone` + the same per-speaker refs) | Apache 2.0 | `download-podcast --tier qwen3tts` |
 
 `faster-whisper`, `chatterbox-tts`, and `llama-cpp-python` are fail-soft-baked in `phase-nodes.sh`. ASR and clone install **separately**: ASR first, then `setuptools<82` (PerTh / `pkg_resources`) and the Chatterbox GitHub zip (`CHATTERBOX_TTS_REF`, `--no-deps --force-reinstall`) so Chatterbox cannot pin `torch==2.6.0` over the lab 2.14 cu130 venv. PyPI `chatterbox-tts==0.1.7` has no `t3_model=v3`. setuptools 82+ leaves `perth.PerthImplicitWatermarker` as `None` — clone status names that miss (do not disable PerTh). llama-cpp-python uses the **official CPU extra-index as `--index-url`** (`--only-binary=:all:`, pin `0.3.35`, no CUDA extra-index) because PyPI is sdist-only and `--extra-index-url` alone can miss the aarch64 wheel. Direct GitHub manylinux wheel is the fallback (`--force-reinstall --no-deps`) when pip is already satisfied but `from llama_cpp import Llama` still fails. `download-dub` pip-installs ASR, the CPU wheel, the setuptools pin, and clone into a **running** container (volume venv Comfy execs). Restart heals PerTh when the watermarker is not callable. Queue also self-heals `llama-cpp-python` on first miss — no extra restart for the wheel. `yt-dlp` stays optional for URL ingest. The graph still loads if a wheel is missing; Queue writes an **empty mix** plus **Dub status** (never the original recording, never English cloned as the target). Missing llama.cpp / GGUF is **blocking** when Rewrite translation is on and source ≠ target — Queue does not run ASR or clone. On DGX Spark, CTranslate2 PyPI wheels are **CPU-only**; Whisper loads CPU int8 first.
 
@@ -114,6 +114,9 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 | **Clone engine** | chatterbox-ml or qwen3tts |
 | **Keep original bed** | Gaps keep ambience |
 | **Spoken disclosure** | 3 s overlay; sidecar always written |
+| **Speaking speed** | 1.0 default. Pitch-preserving stretch when fitting the original window |
+| **Clone CFG** | −1 auto: 0 when source ≠ target (EN→ES). 0.5 same-language. Raise toward 0.5 if you want more of the original accent |
+| **Exaggeration** | 0.5 neutral. Higher is more intense and faster |
 
 ## Sequential Queue
 
@@ -175,7 +178,7 @@ sequenceDiagram
   I->>S: job slug
   S->>S: ffmpeg mono PCM + Whisper turns + ve.pt speaker cluster + per-turn GGUF
   S->>R: translation JSON
-  R->>R: per-speaker refs + cached Chatterbox V3 clone
+  R->>R: 6–10 s refs + cached Chatterbox V3 clone (CFG auto)
   R->>U: duration-locked mix + SRT + disclosure
 ```
 

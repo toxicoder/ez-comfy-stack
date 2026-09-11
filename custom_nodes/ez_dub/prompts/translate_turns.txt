@@ -9,5 +9,6 @@ Rules:
 - Do not summarize, omit, or add facts.
 - Preserve names, scores, team names, product names, and numbers.
 - Preserve speaker personality and register (banter stays banter).
+- Keep roughly the same spoken length as the source. Do not add extra clauses.
 - Do not invent applause, music, or stage directions.
 - If the source is already in the target language, repeat it unchanged.

@@ -214,6 +214,21 @@ TRANSLATE_MAX_TOKENS = 512
 TRANSLATE_TEMPERATURE = 0.3
 TRANSLATE_TIMEOUT_S = 120
 CLONE_TEXT_LIMIT = 300
+CFG_AUTO = -1.0
+CFG_CROSS_LANG = 0.0
+CFG_SAME_LANG = 0.5
+EXAGGERATION_DEFAULT = 0.5
+CLONE_TEMPERATURE = 0.8
+REF_MIN_TURN_S = 0.8
+REF_SINGLE_S = 6.0
+REF_TARGET_S = 8.0
+REF_MAX_S = 10.0
+REF_MIN_RMS = 0.008
+REF_SILENCE_RMS = 0.008
+REF_XFADE_MS = 30
+REF_PEAK = 0.89
+REF_PURITY_MIN_DIM = 8
+REF_PURITY_COSINE = 0.55
 CLONE_MISSING_STATUS = (
     "clone engine missing — pip install chatterbox-tts and "
     "./scripts/manage.sh download-dub --tier clone"
@@ -267,7 +282,12 @@ _WHISPER_DIR_CACHED = ""
 _CHATTERBOX: Any = None
 _CHATTERBOX_CKPT = ""
 _CHATTERBOX_ERR = ""
+_CHATTERBOX_COND_KEY = ""
 _VOICE_ENCODER: Any = None
+_QWEN3: Any = None
+_QWEN3_ERR = ""
+_QWEN3_PROMPT: Any = None
+_QWEN3_PROMPT_KEY = ""
 
 
 def language_code(code: object) -> str:
@@ -297,6 +317,39 @@ def language_name(code: object) -> str:
     if raw == "auto":
         return "the source language"
     return LANG_NAMES.get(raw, LANG_NAMES["en"])
+
+
+def clone_cfg_weight(
+    source: object, target: object, override: object = CFG_AUTO
+) -> float:
+    """CFG for Chatterbox generate. Auto is 0 on language transfer.
+
+    Arguments:
+        source: ISO source or ``auto``.
+        target: ISO target.
+        override: Widget value. ``< 0`` means auto.
+    Returns:
+        Weight in ``[0.0, 1.0]``.
+    """
+    value = CFG_AUTO
+    if isinstance(override, bool):
+        value = CFG_AUTO
+    elif isinstance(override, (int, float)):
+        value = float(override)
+    elif isinstance(override, str):
+        try:
+            value = float(override.strip())
+        except ValueError:
+            value = CFG_AUTO
+    if value >= 0.0:
+        if value > 1.0:
+            return 1.0
+        return value
+    src = language_code(source)
+    tgt = language_code(target)
+    if _same_language(src, tgt):
+        return CFG_SAME_LANG
+    return CFG_CROSS_LANG
 
 
 def dub_llm_timeout_s() -> int:
@@ -1083,34 +1136,188 @@ def translate_turns(
     return merged, ""
 
 
+def _trim_silence(
+    pcm: list[float], rate: int, thresh: float = REF_SILENCE_RMS
+) -> list[float]:
+    """Drop leading and trailing frames below ``thresh`` RMS."""
+    if not pcm:
+        return []
+    sr = int(rate) or SAMPLE_RATE
+    frame = max(1, int(sr * 0.02))
+    n = len(pcm)
+
+    def _voiced(index: int) -> bool:
+        chunk = pcm[index : min(n, index + frame)]
+        return rms(chunk) >= float(thresh)
+
+    start = 0
+    while start + frame <= n and not _voiced(start):
+        start += frame
+    end = n
+    while end - frame >= start and not _voiced(end - frame):
+        end -= frame
+    if end <= start:
+        return [float(x) for x in pcm]
+    return [float(x) for x in pcm[start:end]]
+
+
+def _concat_crossfade(
+    chunks: list[list[float]], rate: int, xfade_ms: int = REF_XFADE_MS
+) -> list[float]:
+    """Join PCM chunks with an equal-power-ish linear crossfade."""
+    if not chunks:
+        return []
+    sr = int(rate) or SAMPLE_RATE
+    fade = max(1, int(sr * max(0, int(xfade_ms)) / 1000))
+    out = [float(x) for x in chunks[0]]
+    for chunk in chunks[1:]:
+        if not chunk:
+            continue
+        piece = [float(x) for x in chunk]
+        n = min(fade, len(out), len(piece))
+        if n <= 0:
+            out.extend(piece)
+            continue
+        for i in range(n):
+            gain = i / n
+            out[-n + i] = out[-n + i] * (1.0 - gain) + piece[i] * gain
+        out.extend(piece[n:])
+    return out
+
+
+def _peak_normalize(pcm: list[float], peak: float = REF_PEAK) -> list[float]:
+    """Scale so max abs sample is ``peak`` (no-op when already quieter)."""
+    if not pcm:
+        return []
+    mag = max(abs(float(x)) for x in pcm)
+    if mag <= 1e-8:
+        return [float(x) for x in pcm]
+    target = float(peak)
+    if mag <= target:
+        return [float(x) for x in pcm]
+    scale = target / mag
+    return [float(x) * scale for x in pcm]
+
+
+def _speaker_ref_text(ref: Path | str) -> str:
+    """Transcript sidecar next to a speaker ref wav."""
+    path = Path(ref)
+    txt = path.with_suffix(".txt")
+    if not txt.is_file():
+        return ""
+    return txt.read_text(encoding="utf-8").strip()
+
+
+def _turn_rms(turn: dict[str, Any], pcm: list[float]) -> float:
+    raw = turn.get("rms")
+    try:
+        value = float(raw) if raw is not None else 0.0
+    except (TypeError, ValueError):
+        value = 0.0
+    if value > 0.0:
+        return value
+    return rms(pcm)
+
+
+def _filter_ref_turns(
+    group: list[dict[str, Any]],
+    samples: list[float],
+    rate: int,
+) -> list[dict[str, Any]]:
+    """Drop overlap, short, quiet, and (when VE-sized) off-centroid turns."""
+    sr = int(rate) or SAMPLE_RATE
+    kept: list[dict[str, Any]] = []
+    vectors: list[list[float]] = []
+    for turn in group:
+        if turn.get("overlap"):
+            continue
+        dur = float(turn["t1"]) - float(turn["t0"])
+        if dur < REF_MIN_TURN_S:
+            continue
+        chunk = _slice_pcm(samples, sr, float(turn["t0"]), float(turn["t1"]))
+        if _turn_rms(turn, chunk) < REF_MIN_RMS:
+            continue
+        item = dict(turn)
+        item["_pcm"] = chunk
+        kept.append(item)
+        vectors.append(speaker_embed(chunk, sr))
+    if len(kept) < 2:
+        return kept
+    if not vectors or len(vectors[0]) < REF_PURITY_MIN_DIM:
+        return kept
+    dim = len(vectors[0])
+    centroid = [0.0] * dim
+    for vector in vectors:
+        for i, value in enumerate(vector[:dim]):
+            centroid[i] += float(value)
+    scale = 1.0 / len(vectors)
+    centroid = [c * scale for c in centroid]
+    pure: list[dict[str, Any]] = []
+    for item, vector in zip(kept, vectors):
+        if cosine(vector, centroid) >= REF_PURITY_COSINE:
+            pure.append(item)
+    return pure or kept
+
+
 def _extract_refs(
     samples: list[float],
     rate: int,
     turns: list[dict[str, Any]],
     dest: Path,
-    max_s: float = 12.0,
+    max_s: float = REF_MAX_S,
 ) -> dict[str, Path]:
-    """Concatenate the longest clean turns per speaker into a ref wav."""
+    """Build a 3–10 s clean ref wav (and transcript sidecar) per speaker."""
     dest.mkdir(parents=True, exist_ok=True)
     by_spk: dict[str, list[dict[str, Any]]] = {}
     for turn in turns:
-        if turn.get("overlap"):
-            continue
         by_spk.setdefault(str(turn["speaker"]), []).append(turn)
     refs: dict[str, Path] = {}
     sr = int(rate) or SAMPLE_RATE
-    budget = int(max_s * sr)
+    cap = int((max_s if max_s > 0 else REF_MAX_S) * sr)
+    target = int(REF_TARGET_S * sr)
     for speaker, group in by_spk.items():
-        ordered = sorted(group, key=lambda t: (t["t1"] - t["t0"]), reverse=True)
-        pcm: list[float] = []
-        for turn in ordered:
-            pcm.extend(_slice_pcm(samples, sr, turn["t0"], turn["t1"]))
-            if len(pcm) >= budget:
-                break
+        candidates = _filter_ref_turns(group, samples, sr)
+        if not candidates:
+            continue
+        ordered = sorted(
+            candidates,
+            key=lambda t: (
+                (float(t["t1"]) - float(t["t0"]))
+                * max(_turn_rms(t, t.get("_pcm") or []), 1e-6)
+            ),
+            reverse=True,
+        )
+        used: list[dict[str, Any]] = []
+        chunks: list[list[float]] = []
+        best = ordered[0]
+        best_dur = float(best["t1"]) - float(best["t0"])
+        if best_dur >= REF_SINGLE_S:
+            used = [best]
+            chunks = [list(best.get("_pcm") or [])]
+        else:
+            total = 0
+            for turn in ordered:
+                chunk = list(turn.get("_pcm") or [])
+                if not chunk:
+                    continue
+                used.append(turn)
+                chunks.append(chunk)
+                total += len(chunk)
+                if total >= target:
+                    break
+        pcm = _concat_crossfade(chunks, sr)
+        pcm = _trim_silence(pcm, sr)
+        if len(pcm) > cap:
+            pcm = pcm[:cap]
+        pcm = _peak_normalize(pcm)
         if not pcm:
             continue
         path = dest / f"{speaker}.wav"
-        write_wav(path, pcm[:budget], sr)
+        write_wav(path, pcm, sr)
+        lines = [str(t.get("text") or "").strip() for t in used]
+        note = " ".join(part for part in lines if part)
+        if note:
+            path.with_suffix(".txt").write_text(note + "\n", encoding="utf-8")
         refs[speaker] = path
     return refs
 
@@ -1193,10 +1400,11 @@ def _from_local_multilingual(loader: Callable[..., Any], ckpt: str, device: str)
 
 
 def _close_chatterbox() -> None:
-    global _CHATTERBOX, _CHATTERBOX_CKPT, _CHATTERBOX_ERR
+    global _CHATTERBOX, _CHATTERBOX_CKPT, _CHATTERBOX_ERR, _CHATTERBOX_COND_KEY
     _CHATTERBOX = None
     _CHATTERBOX_CKPT = ""
     _CHATTERBOX_ERR = ""
+    _CHATTERBOX_COND_KEY = ""
 
 
 def _chatterbox_device() -> str:
@@ -1264,19 +1472,34 @@ def _get_chatterbox() -> tuple[Any | None, str]:
 
 
 def _try_chatterbox(
-    text: str, language_id: str, ref_wav: str
+    text: str,
+    language_id: str,
+    ref_wav: str,
+    *,
+    exaggeration: float = EXAGGERATION_DEFAULT,
+    cfg_weight: float = CFG_SAME_LANG,
+    temperature: float = CLONE_TEMPERATURE,
 ) -> tuple[list[float], int, str]:
     """Lazy Chatterbox Multilingual generate. Empty PCM plus a reason on miss."""
+    global _CHATTERBOX_COND_KEY
     model, err = _get_chatterbox()
     if model is None:
         return [], SAMPLE_RATE, err or CLONE_MISSING_STATUS
     generate = getattr(model, "generate", None)
     if not callable(generate):
         return [], SAMPLE_RATE, "chatterbox missing generate"
-    kwargs: dict[str, Any] = {"language_id": language_id}
+    kwargs: dict[str, Any] = {
+        "language_id": language_id,
+        "exaggeration": float(exaggeration),
+        "cfg_weight": float(cfg_weight),
+        "temperature": float(temperature),
+    }
     ref = (ref_wav or "").strip()
+    cond_key = ""
     if ref and Path(ref).is_file():
-        kwargs["audio_prompt_path"] = ref
+        cond_key = f"{ref}|{float(exaggeration):.4f}"
+        if cond_key != _CHATTERBOX_COND_KEY:
+            kwargs["audio_prompt_path"] = ref
     try:
         wav = generate(text, **kwargs)
         pcm = _pcm_list(wav)
@@ -1285,6 +1508,8 @@ def _try_chatterbox(
         return [], SAMPLE_RATE, f"chatterbox failed: {exc}"
     if not pcm:
         return [], rate, "chatterbox returned empty audio"
+    if cond_key:
+        _CHATTERBOX_COND_KEY = cond_key
     return pcm, rate, ""
 
 
@@ -1301,26 +1526,165 @@ def _bind_generate(module_name: str) -> Callable[[str], Any] | None:
     return method
 
 
-def _try_qwen3tts(
-    text: str, language_id: str, ref_wav: str
-) -> tuple[list[float], int, str]:
-    """Lazy Qwen3-TTS generate. Empty PCM plus a reason on miss."""
-    del language_id, ref_wav
-    generate = _bind_generate("qwen_tts") or _bind_generate("qwen3_tts")
-    if generate is None:
-        return (
-            [],
-            SAMPLE_RATE,
-            "qwen3tts extra not installed — download-podcast --tier qwen3tts",
+def _close_qwen3() -> None:
+    global _QWEN3, _QWEN3_ERR, _QWEN3_PROMPT, _QWEN3_PROMPT_KEY
+    _QWEN3 = None
+    _QWEN3_ERR = ""
+    _QWEN3_PROMPT = None
+    _QWEN3_PROMPT_KEY = ""
+
+
+def qwen3_ckpt_dir() -> Path | None:
+    """First local Qwen3-TTS Base snapshot (0.6B download-podcast pack)."""
+    for root in _model_roots():
+        candidates = (
+            Path(root) / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts",
+            Path(root) / "Qwen__Qwen3-TTS-12Hz-0.6B-Base",
+            Path(root) / "qwen3tts",
         )
+        for folder in candidates:
+            if (folder / "model.safetensors").is_file() or (
+                folder / "config.json"
+            ).is_file():
+                return folder
+    return None
+
+
+def _load_qwen3_model() -> tuple[Any | None, str]:
+    """Uncached Qwen3-TTS Base handle. None plus a reason on miss."""
+    miss = "qwen3tts extra not installed — download-podcast --tier qwen3tts"
+    ckpt = qwen3_ckpt_dir()
+    model_cls: Any = None
     try:
-        wav = generate(text)
+        from qwen_tts import Qwen3TTSModel  # type: ignore[import-not-found]
+
+        model_cls = Qwen3TTSModel
+    except Exception:  # noqa: BLE001 — optional runtime
+        model_cls = None
+    if model_cls is not None and ckpt is not None:
+        loader = getattr(model_cls, "from_pretrained", None)
+        if callable(loader):
+            try:
+                return loader(str(ckpt)), ""
+            except Exception as exc:  # noqa: BLE001 — fail-soft
+                return None, f"qwen3tts failed: {exc}"
+    for module_name in ("qwen_tts", "qwen3_tts"):
+        try:
+            module = __import__(module_name, fromlist=["Qwen3TTS"])
+            cls = getattr(module, "Qwen3TTS", None)
+            loader = getattr(cls, "from_pretrained", None) if cls else None
+            if callable(loader):
+                return loader(), ""
+        except Exception:  # noqa: BLE001 — try the next name
+            continue
+    return None, miss
+
+
+def _get_qwen3() -> tuple[Any | None, str]:
+    """Cached Qwen3-TTS handle (including a failed load)."""
+    global _QWEN3, _QWEN3_ERR
+    if _QWEN3 is not None:
+        return _QWEN3, ""
+    if _QWEN3_ERR:
+        return None, _QWEN3_ERR
+    model, err = _load_qwen3_model()
+    if model is None:
+        _QWEN3_ERR = err
+        return None, err
+    _QWEN3 = model
+    _QWEN3_ERR = ""
+    return model, ""
+
+
+def _qwen3_language(language_id: str) -> str:
+    """English language name for Qwen3-TTS (``Spanish``, not ``es``)."""
+    raw = language_code(language_id)
+    if raw == "auto":
+        return "Auto"
+    return LANG_NAMES.get(raw, LANG_NAMES["en"])
+
+
+def _try_qwen3tts(
+    text: str,
+    language_id: str,
+    ref_wav: str,
+    ref_text: str = "",
+) -> tuple[list[float], int, str]:
+    """Lazy Qwen3-TTS Base clone. Empty PCM plus a reason on miss."""
+    global _QWEN3_PROMPT, _QWEN3_PROMPT_KEY
+    model, err = _get_qwen3()
+    if model is None:
+        generate = _bind_generate("qwen_tts") or _bind_generate("qwen3_tts")
+        if generate is None:
+            return [], SAMPLE_RATE, err or (
+                "qwen3tts extra not installed — download-podcast --tier qwen3tts"
+            )
+        try:
+            wav = generate(text)
+        except Exception as exc:  # noqa: BLE001 — fail-soft
+            return [], SAMPLE_RATE, f"qwen3tts failed: {exc}"
+        pcm = _pcm_list(wav)
+        if not pcm:
+            return [], SAMPLE_RATE, "qwen3tts returned empty audio"
+        return pcm, SAMPLE_RATE, ""
+    clone = getattr(model, "generate_voice_clone", None)
+    if not callable(clone):
+        generate = getattr(model, "generate", None)
+        if not callable(generate):
+            return [], SAMPLE_RATE, "qwen3tts missing generate_voice_clone"
+        try:
+            wav = generate(text)
+        except Exception as exc:  # noqa: BLE001 — fail-soft
+            return [], SAMPLE_RATE, f"qwen3tts failed: {exc}"
+        pcm = _pcm_list(wav)
+        if not pcm:
+            return [], SAMPLE_RATE, "qwen3tts returned empty audio"
+        return pcm, SAMPLE_RATE, ""
+    ref = (ref_wav or "").strip()
+    transcript = (ref_text or "").strip() or (_speaker_ref_text(ref) if ref else "")
+    xvec_only = not bool(transcript)
+    lang = _qwen3_language(language_id)
+    prompt = None
+    make_prompt = getattr(model, "create_voice_clone_prompt", None)
+    if callable(make_prompt) and ref and Path(ref).is_file():
+        key = f"{ref}|{transcript}|{int(xvec_only)}"
+        if key != _QWEN3_PROMPT_KEY or _QWEN3_PROMPT is None:
+            try:
+                prompt = make_prompt(
+                    ref_audio=ref,
+                    ref_text=transcript or None,
+                    x_vector_only_mode=xvec_only,
+                )
+            except Exception as exc:  # noqa: BLE001 — fall through to inline refs
+                _log(f"qwen3tts prompt failed: {exc}")
+                prompt = None
+            else:
+                _QWEN3_PROMPT = prompt
+                _QWEN3_PROMPT_KEY = key
+        else:
+            prompt = _QWEN3_PROMPT
+    kwargs: dict[str, Any] = {"text": text, "language": lang}
+    if prompt is not None:
+        kwargs["voice_clone_prompt"] = prompt
+    else:
+        if ref and Path(ref).is_file():
+            kwargs["ref_audio"] = ref
+        if transcript:
+            kwargs["ref_text"] = transcript
+        kwargs["x_vector_only_mode"] = xvec_only
+    try:
+        packed: Any = clone(**kwargs)
+        wavs, sr = packed
     except Exception as exc:  # noqa: BLE001 — fail-soft
         return [], SAMPLE_RATE, f"qwen3tts failed: {exc}"
-    pcm = _pcm_list(wav)
+    first: object = wavs
+    if isinstance(wavs, (list, tuple)) and wavs:
+        first = wavs[0]
+    pcm = _pcm_list(first)
+    rate = int(sr or SAMPLE_RATE)
     if not pcm:
-        return [], SAMPLE_RATE, "qwen3tts returned empty audio"
-    return pcm, SAMPLE_RATE, ""
+        return [], rate, "qwen3tts returned empty audio"
+    return pcm, rate, ""
 
 
 def synthesize_turn(
@@ -1328,6 +1692,10 @@ def synthesize_turn(
     language: str,
     ref_wav: str,
     engine: str,
+    *,
+    exaggeration: float = EXAGGERATION_DEFAULT,
+    cfg_weight: float = CFG_SAME_LANG,
+    ref_text: str = "",
 ) -> tuple[list[float], int, str]:
     """Clone one line. Tests inject ``tts_hook``. ``language`` is an ISO code."""
     hook = tts_hook
@@ -1349,9 +1717,16 @@ def synthesize_turn(
     last_err = ""
     for chunk in chunks:
         if name == ENGINE_QWEN3TTS:
-            pcm, sr, err = _try_qwen3tts(chunk, lang, ref_wav)
+            pcm, sr, err = _try_qwen3tts(chunk, lang, ref_wav, ref_text=ref_text)
         else:
-            pcm, sr, err = _try_chatterbox(chunk, lang, ref_wav)
+            pcm, sr, err = _try_chatterbox(
+                chunk,
+                lang,
+                ref_wav,
+                exaggeration=exaggeration,
+                cfg_weight=cfg_weight,
+                temperature=CLONE_TEMPERATURE,
+            )
         if err:
             last_err = err
             _log(err)
@@ -1374,6 +1749,8 @@ def render_mix(
     keep_bed: bool = True,
     spoken_disclosure: bool = True,
     speed: float = 1.0,
+    exaggeration: float = EXAGGERATION_DEFAULT,
+    cfg_weight: float = CFG_AUTO,
 ) -> tuple[list[float], int, str]:
     """Clone, align, mix, write stems/SRT/disclosure.
 
@@ -1385,6 +1762,19 @@ def render_mix(
         pace = 0.5
     if pace > 1.5:
         pace = 1.5
+    try:
+        exag = float(exaggeration)
+    except (TypeError, ValueError):
+        exag = EXAGGERATION_DEFAULT
+    if exag < 0.25:
+        exag = 0.25
+    if exag > 2.0:
+        exag = 2.0
+    cfg = clone_cfg_weight(
+        payload.get("source_language"),
+        payload.get("target_language"),
+        cfg_weight,
+    )
     blocked = translate_blocking_status(str(payload.get("status") or ""))
     if blocked:
         return [], rate, blocked
@@ -1419,6 +1809,9 @@ def render_mix(
             lang,
             str(ref) if ref else "",
             engine if engine in ENGINES else ENGINE_CHATTERBOX,
+            exaggeration=exag,
+            cfg_weight=cfg,
+            ref_text=_speaker_ref_text(ref) if ref else "",
         )
         if not pcm:
             flags.append(f"turn {turn['id']} clone missing")
@@ -1432,9 +1825,9 @@ def render_mix(
 
             pcm = resample_linear(pcm, int(round(len(pcm) * rate / max(sr, 1))))
         if pace != 1.0 and pcm:
-            from .align import resample_linear
+            from .align import time_stretch
 
-            pcm = resample_linear(pcm, max(1, int(round(len(pcm) / pace))))
+            pcm = time_stretch(pcm, max(1, int(round(len(pcm) / pace))), rate)
         fitted, meta = fit_turn(
             pcm,
             rate,

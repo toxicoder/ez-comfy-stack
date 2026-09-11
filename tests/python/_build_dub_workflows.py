@@ -29,8 +29,8 @@ US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occu
 
 1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.
 2. **Source file**: pick wav/mp4/mkv already in `${{COMFY_OUTPUT_DIR}}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.
-3. Stage **all** (default): faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, per-speaker clone refs write under `dubs/<slug>/speakers/` (6–12 s), then per-turn GGUF translate + cached Chatterbox V3 clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) — Queue does not clone English as the target. Stage **analyze** writes JSON to edit; then Queue with Rewrite translation **off** and Stage **render**.
-4. Chatterbox Multilingual V3 (MIT, PerTh on) — ISO `language_id` (`es`, not `Spanish`). Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split.
+3. Stage **all** (default): faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, per-speaker clone refs write under `dubs/<slug>/speakers/` (6–10 s, one clean take when possible), then per-turn GGUF translate + cached Chatterbox V3 clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) — Queue does not clone English as the target. Stage **analyze** writes JSON to edit; then Queue with Rewrite translation **off** and Stage **render**.
+4. Chatterbox Multilingual V3 (MIT, PerTh on) — ISO `language_id` (`es`, not `Spanish`). **Clone CFG** auto is 0 on EN→ES (less English accent); 0.5 same-language. Pitch-preserving duration lock. Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS Base clones from the same refs (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split.
 5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, speaker refs, and disclosure.txt.
 6. YouTube Studio: Languages → Add language → upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.
 7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (−14 LUFS).
@@ -162,9 +162,9 @@ def build_dub_localize() -> dict:
         3,
         "EZDubRender",
         [500, 480],
-        [440, 220],
+        [440, 300],
         "ez_dub_voice",
-        ["chatterbox-ml", True, True, 1.0],
+        ["chatterbox-ml", True, True, 1.0, -1.0, 0.5],
         inputs=[g.inp("script", "STRING"), g.inp("job_id", "STRING")],
         outputs=[g.out("audio", "AUDIO", [])],
     )
@@ -210,7 +210,7 @@ def build_dub_localize() -> dict:
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
                 _group(1, "INPUT", 20, LAB_GROUP_Y0, 460, 380, "#3f789e"),
-                _group(2, "PROMPT", 480, LAB_GROUP_Y0, 480, 700, "#3f789e"),
+                _group(2, "PROMPT", 480, LAB_GROUP_Y0, 480, 780, "#3f789e"),
                 _group(3, "OUTPUT", 980, LAB_GROUP_Y0, 460, 860, "#3f789e"),
             ],
         }

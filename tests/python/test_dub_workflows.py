@@ -73,6 +73,8 @@ def test_dub_localize_graph() -> None:
     assert "Bienvenidos" not in json.dumps(seed)
     render = next(n for n in graph["nodes"] if n["type"] == "EZDubRender")
     assert render["widgets_values"][0] == "chatterbox-ml"
+    assert render["widgets_values"][4] == -1.0
+    assert render["widgets_values"][5] == 0.5
     flac = next(n for n in graph["nodes"] if n["type"] == "SaveAudio")
     assert flac["widgets_values"][0] == "ez_dub_mix"
     mp3 = next(n for n in graph["nodes"] if n["type"] == "SaveAudioMP3")
@@ -96,6 +98,8 @@ def test_dub_localize_graph() -> None:
     assert "I have rights" in labels
     assert "Target language" in labels
     assert "Translation" in labels or "Rewrite translation" in labels
+    assert "Clone CFG" in labels
+    assert "Exaggeration" in labels
     assert len(labels) == len(set(labels)), labels
     note = graph["extra"]["lab_note"]
     assert "Source file" in note
