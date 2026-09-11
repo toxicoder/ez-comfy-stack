@@ -2148,7 +2148,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 19:52 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T19:52:40+00:00">11 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 20:31 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T20:31:37+00:00">11 Sep 2026</time></span>
                 
                   
 
@@ -2163,6 +2163,7 @@
 <li><code>--tier</code> is a <strong>pack id</strong>, not a quality ladder for the whole studio</li>
 <li><code>--limit</code> is <strong>bandwidth</strong> (Mbps), not a model</li>
 <li>Default pack vs opt-in packs</li>
+<li>Required files / min GB for podcast <code>qwen3tts</code> and dub <code>clone</code> (pkuseg)</li>
 <li>One live command builder per downloader</li>
 </ul>
 <p><strong>What this enables</strong></p>
@@ -2254,16 +2255,16 @@
 <td><code>download-podcast</code></td>
 <td><code>analog</code> <code>acestep</code> <code>chatterbox</code> <code>qwen3tts</code> <code>all</code></td>
 <td><code>analog</code></td>
-<td><strong>Different audio packs</strong>. Missing pack is not a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="doctor" data-href="../glossary/#doctor" title="Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.">doctor</span> failure</td>
-<td>analog tiny; acestep ~10 GB shared</td>
+<td><strong>Different audio packs</strong>. <code>qwen3tts</code> is a complete Base snapshot (config + tokenizer + nested 12Hz <code>speech_tokenizer/</code>), not weights-only. Missing pack is not a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="doctor" data-href="../glossary/#doctor" title="Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.">doctor</span> failure</td>
+<td>analog tiny; acestep ~10 GB shared; qwen3tts ~3 GB</td>
 <td>no</td>
 </tr>
 <tr>
 <td><code>download-dub</code></td>
 <td><code>asr</code> <code>clone</code> <code>all</code></td>
 <td><code>asr</code></td>
-<td>Silero VAD + faster-whisper (full CTranslate2 dir); <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span> (<code>ve.pt</code> + <code>s3gen.pt</code> + T3 + <code>conds.pt</code>). Wheels: faster-whisper then <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> V3 GitHub zip <code>--no-deps</code>. Missing pack is not a doctor failure</td>
-<td>asr ~3 GB; clone ~4 GB</td>
+<td>Silero VAD + faster-whisper (full CTranslate2 dir); <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span> (<code>ve.pt</code> + <code>s3gen.pt</code> + T3 + <code>Cangjie5_TC.json</code> + <code>conds.pt</code>) plus <code>MODELS_DIR/pkuseg</code> ontonotes. Wheels: faster-whisper then <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> V3 GitHub zip <code>--no-deps</code>. Missing pack is not a doctor failure</td>
+<td>asr ~3 GB; clone ~4 GB + small pkuseg zip</td>
 <td>no</td>
 </tr>
 <tr>
@@ -2350,14 +2351,14 @@
 
 <hr />
 <h2 id="podcast-different-audio-packs">Podcast — different audio packs<a class="headerlink" href="#podcast-different-audio-packs" title="Permanent link">&para;</a></h2>
-<p><code>analog</code> is <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> only (tiny). <code>acestep</code> is the same ~10 GB AIO as music <code>turbo</code>. Chatterbox / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> are optional. Doctor does <strong>not</strong> fail when these are missing.</p>
+<p><code>analog</code> is <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> only (tiny). <code>acestep</code> is the same ~10 GB AIO as music <code>turbo</code>. Chatterbox / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> are optional. <code>qwen3tts</code> keeps <code>model.safetensors</code>, <code>config.json</code>, text tokenizer files, and nested <code>speech_tokenizer/</code> (~3 GB). Doctor does <strong>not</strong> fail when these are missing.</p>
 <div class="ez-cmd-builder" data-ez-cmd="download-podcast">
 <noscript><pre><code>./scripts/manage.sh download-podcast --tier analog --limit auto</code></pre></noscript>
 </div>
 
 <hr />
 <h2 id="dub-asr-multilingual-clone">Dub — ASR + multilingual clone<a class="headerlink" href="#dub-asr-multilingual-clone" title="Permanent link">&para;</a></h2>
-<p><code>asr</code> is Silero VAD + faster-whisper large-v3 (<code>model.bin</code>, <code>config.json</code>, <strong>and</strong> <code>tokenizer.json</code>). <code>clone</code> is Chatterbox Multilingual V3 (MIT, PerTh on): <code>ve.pt</code>, <code>s3gen.pt</code>, T3 V3, tokenizer JSON, <code>conds.pt</code>. <code>download-dub</code> pip-installs <code>faster-whisper</code>, the <code>llama-cpp-python</code> CPU wheel (extra-index as <code>--index-url</code>, GitHub manylinux <code>--force-reinstall --no-deps</code> if Llama still will not import), <code>setuptools&lt;82</code> (PerTh / <code>pkg_resources</code>), then the Chatterbox GitHub zip at <code>CHATTERBOX_TTS_REF</code> with <code>--upgrade --force-reinstall --no-deps</code> (does not pin torch 2.6; PyPI 0.1.7 has no <code>t3_model=v3</code>) when compose is up. Restart also heals PerTh when <code>PerthImplicitWatermarker</code> is not callable. Queue also self-heals a missing llama.cpp wheel. A llama.cpp / GGUF miss is a <strong>blocking</strong> Dub status when Rewrite translation is on. Doctor does <strong>not</strong> fail when these are missing. Occupancy <strong>audio</strong>. Playbook: <a href="../dub/">Local dub</a>.</p>
+<p><code>asr</code> is Silero VAD + faster-whisper large-v3 (<code>model.bin</code>, <code>config.json</code>, <strong>and</strong> <code>tokenizer.json</code>). <code>clone</code> is Chatterbox Multilingual V3 (MIT, PerTh on): <code>ve.pt</code>, <code>s3gen.pt</code>, T3 V3, tokenizer JSON, <code>Cangjie5_TC.json</code>, <code>conds.pt</code>, plus <code>MODELS_DIR/pkuseg/spacy_ontonotes.zip</code>. <code>download-dub</code> pip-installs <code>faster-whisper</code>, the <code>llama-cpp-python</code> CPU wheel (extra-index as <code>--index-url</code>, GitHub manylinux <code>--force-reinstall --no-deps</code> if Llama still will not import), <code>setuptools&lt;82</code> (PerTh / <code>pkg_resources</code>), then the Chatterbox GitHub zip at <code>CHATTERBOX_TTS_REF</code> with <code>--upgrade --force-reinstall --no-deps</code> (does not pin torch 2.6; PyPI 0.1.7 has no <code>t3_model=v3</code>) when compose is up. Restart also heals PerTh when <code>PerthImplicitWatermarker</code> is not callable. Queue also self-heals a missing llama.cpp wheel. A llama.cpp / GGUF miss is a <strong>blocking</strong> Dub status when Rewrite translation is on. Doctor does <strong>not</strong> fail when these are missing. Occupancy <strong>audio</strong>. Playbook: <a href="../dub/">Local dub</a>.</p>
 <div class="ez-cmd-builder" data-ez-cmd="download-dub">
 <noscript><pre><code>./scripts/manage.sh download-dub --tier asr --limit auto</code></pre></noscript>
 </div>

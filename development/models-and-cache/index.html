@@ -2240,7 +2240,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 19:52 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T19:52:40+00:00">11 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 20:31 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T20:31:37+00:00">11 Sep 2026</time></span>
                 
                   
 
@@ -2630,9 +2630,9 @@
 <td>Optional <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> Turbo</td>
 </tr>
 <tr>
-<td><code>model.safetensors</code></td>
-<td><code>tts/</code></td>
-<td>Optional <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> 0.6B</td>
+<td><code>model.safetensors</code> + <code>config.json</code> + text tokenizer + <code>speech_tokenizer/</code></td>
+<td>snapshot dir (not flattened <code>comfy/tts</code>)</td>
+<td>Optional <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> 0.6B Base. Nested 12Hz tokenizer must stay beside the talker weights</td>
 </tr>
 </tbody>
 </table>
@@ -2657,9 +2657,14 @@
 <td>faster-whisper large-v3 (<code>--tier asr</code>; <code>model.bin</code> alone is not loadable)</td>
 </tr>
 <tr>
-<td><code>ve.pt</code> + <code>s3gen.pt</code> + <code>t3_mtl23ls_v3.safetensors</code> + <code>grapheme_mtl_merged_expanded_v1.json</code> + <code>conds.pt</code></td>
+<td><code>ve.pt</code> + <code>s3gen.pt</code> + <code>t3_mtl23ls_v3.safetensors</code> + <code>grapheme_mtl_merged_expanded_v1.json</code> + <code>Cangjie5_TC.json</code> + <code>conds.pt</code></td>
 <td><code>tts/</code></td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span> (<code>--tier clone</code>; <code>from_local(..., t3_model="v3")</code> also needs <code>Cangjie5_TC.json</code>). Wheel is GitHub pin <code>CHATTERBOX_TTS_REF</code> (PyPI 0.1.7 has no <code>t3_model</code>). PerTh needs <code>setuptools&lt;82</code> (pkg_resources)</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox-ml" data-href="../glossary/#chatterbox-ml" title="MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.">Chatterbox Multilingual V3</span> (<code>--tier clone</code>; <code>from_local(..., t3_model="v3")</code> is offline when this set is complete). Wheel is GitHub pin <code>CHATTERBOX_TTS_REF</code> (PyPI 0.1.7 has no <code>t3_model</code>). PerTh needs <code>setuptools&lt;82</code> (pkg_resources)</td>
+</tr>
+<tr>
+<td><code>spacy_ontonotes.zip</code></td>
+<td><code>pkuseg/</code> (not <code>comfy/</code>)</td>
+<td><code>PKUSEG_HOME=/models/pkuseg</code>; entrypoint symlinks <code>/root/.pkuseg</code>. Seeded by <code>download-dub --tier clone</code></td>
 </tr>
 </tbody>
 </table>
