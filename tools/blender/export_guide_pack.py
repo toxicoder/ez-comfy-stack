@@ -22,6 +22,8 @@ for _path in (_LIB, _HERE):
     if str(_path) not in sys.path:
         sys.path.insert(0, str(_path))
 
+from operator_log import log as ol_log  # noqa: E402
+from operator_log import log_step as ol_step  # noqa: E402
 from guide_pack import (  # noqa: E402
     PACK_FPS,
     PACK_FRAMES,
@@ -153,15 +155,19 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
     if defects:
         raise SystemExit("shot.yaml invalid: " + "; ".join(defects))
 
+    ol_log(f"guide pack {ns.film} {ns.frames}f {ns.width}x{ns.height}")
     _configure_scene(bpy, ns)
     scene = bpy.context.scene
+    ol_step(1, 3, "clay rgb")
     configure_clay(scene)
     _render_pass(bpy, dest, "rgb")
 
+    ol_step(2, 3, "depth")
     configure_mist_depth(scene.world)
     configure_clay(scene)
     _render_pass(bpy, dest, "depth")
 
+    ol_step(3, 3, "canny")
     configure_canny(scene)
     _render_pass(bpy, dest, "canny")
 

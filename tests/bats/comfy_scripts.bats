@@ -375,6 +375,7 @@ teardown() {
   echo keep-pack >"${dest}/custom_nodes/_user/mine.py"
   run copy_prebuilt_tree "${pre}" "${dest}"
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"seed copy finished"* ]]
   [[ -f ${dest}/main.py ]]
   [[ -f ${dest}/user/default/mine.json ]]
   [[ ! -f ${dest}/user/default/lab.json ]]

@@ -397,7 +397,7 @@ EOF
 concat_playable() {
   local list="${1}"
   local out="${2}"
-  if ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+  if run_ffmpeg_logged "encoding concat → ${out}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
     -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
     -r 24 -c:v libx264 -preset veryfast -crf 18 -pix_fmt yuv420p \
     -c:a aac -ar 48000 -ac 2 -b:a 192k \
@@ -407,7 +407,7 @@ concat_playable() {
     return 0
   fi
   warn "libx264 missing; falling back to stream-copy + faststart"
-  ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+  run_ffmpeg_logged "encoding concat (stream copy) → ${out}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
     -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
     -c:v copy -c:a aac -ar 48000 -ac 2 -b:a 192k \
     -af "aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5" \
@@ -447,12 +447,12 @@ concat_xfade_audio() {
   video_tmp="${list}.v.mp4"
   audio_tmp="${list}.a.m4a"
   write_concat_list "${list}" "${files[@]}"
-  if ! ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+  if ! run_ffmpeg_logged "encoding concat video → ${video_tmp}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
     -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
     -r 24 -c:v libx264 -preset veryfast -crf 18 -pix_fmt yuv420p -an \
     "${video_tmp}"; then
     warn "libx264 missing; falling back to stream-copy for xfade video"
-    ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
+    run_ffmpeg_logged "encoding concat video (stream copy)" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
       -t "${CAP_SECONDS}" -avoid_negative_ts make_zero -c:v copy -an "${video_tmp}" ||
       return 1
   fi
@@ -461,8 +461,8 @@ concat_xfade_audio() {
     aargv+=(-i "${f}")
   done
   aargv+=(-filter_complex "${filter}" -map "[a]" -c:a aac -ar 48000 -ac 2 -b:a 192k "${audio_tmp}")
-  "${aargv[@]}"
-  ffmpeg -y -i "${video_tmp}" -i "${audio_tmp}" -t "${CAP_SECONDS}" \
+  run_ffmpeg_logged "encoding concat acrossfade audio" -- "${aargv[@]}"
+  run_ffmpeg_logged "mux concat → ${out}" -- ffmpeg -y -i "${video_tmp}" -i "${audio_tmp}" -t "${CAP_SECONDS}" \
     -c:v copy -c:a copy -movflags +faststart "${out}"
   rm -f "${list}" "${video_tmp}" "${audio_tmp}"
 }

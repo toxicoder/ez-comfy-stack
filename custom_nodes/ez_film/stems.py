@@ -209,6 +209,7 @@ def mix_stems(
     ordered.extend(beds)
     argv = mix_argv(ordered, out, has_dx=has_dx, duck_db=duck_db, video=video)
     argv[0] = exe
+    print(f"[ez_film] stem mix → {out}", file=sys.stderr)
     proc = _run(argv, run=run)
     if proc.returncode != 0:
         report["defects"].append(

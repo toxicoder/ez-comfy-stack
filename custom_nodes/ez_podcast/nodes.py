@@ -431,7 +431,18 @@ class EZKokoroTTS:
             )
         chunks: list[Any] = []
         rate = SAMPLE_RATE_KOKORO
+        _log(f"TTS {len(turns)} turns ({chosen})")
+        try:
+            _ensure_lab_custom_nodes_path()
+            from ez_common import node_progress
+
+            bar = node_progress(max(len(turns), 1))
+        except Exception:  # noqa: BLE001 — pytest / missing pack
+            bar = None
         for role, spoken in turns:
+            _log(f"TTS {role}")
+            if bar is not None:
+                bar.update(1)
             pcm, rate = self._synthesize_turn(
                 spoken,
                 voice_map.get(role, DEFAULT_VOICE_A),

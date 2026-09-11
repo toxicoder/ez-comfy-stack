@@ -316,7 +316,7 @@ cmd_run() {
     bcmd+=(--include-normal)
   fi
   log "dumping guide pack → ${dest}"
-  "${bcmd[@]}" || {
+  run_with_heartbeat "Blender guide dump → ${dest}" -- "${bcmd[@]}" || {
     err "Blender guide dump failed"
     return 1
   }

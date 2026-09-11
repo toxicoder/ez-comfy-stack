@@ -361,7 +361,7 @@ cmd_run() {
   bcmd+=(--out "${dest}" --layout "${layout}" --slug "${SLUG}" --engine "${ENGINE}")
   bcmd+=(--width "${WIDTH}" --height "${HEIGHT}" --input-dir "${input}")
   log "dumping house views → ${dest}"
-  "${bcmd[@]}" || {
+  run_with_heartbeat "Blender house-views dump → ${dest}" -- "${bcmd[@]}" || {
     err "Blender house-views dump failed"
     return 1
   }

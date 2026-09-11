@@ -692,6 +692,17 @@ def stitch_film(
             )
     if xfade_cs < 0 or xfade_cs > 50:
         raise ValueError(f"xfade_cs must be 0–50, got {xfade_cs}")
+    log(f"stitching {len(shot_paths)} shots → {out_mp4}")
+    try:
+        root = str(Path(__file__).resolve().parent.parent)
+        if root not in sys.path:
+            sys.path.insert(0, root)
+        from ez_common import node_log, node_progress
+
+        node_log("ez_film", f"stitching {len(shot_paths)} shots")
+        bar = node_progress(2)
+    except Exception:  # noqa: BLE001 — pytest / missing pack
+        bar = None
     exe = ffmpeg or find_ffmpeg()
     runner = run or subprocess.run
     list_file = tempfile.NamedTemporaryFile(
@@ -709,6 +720,8 @@ def stitch_film(
                 ffmpeg_stitch_copy_argv(list_file.name, out_mp4, cap_seconds, exe),
                 runner,
             )
+            if bar is not None:
+                bar.update(2)
         else:
             for path in shot_paths:
                 if not probe_has_audio(path, ffprobe=ffprobe, run=run):
@@ -734,6 +747,8 @@ def stitch_film(
                 ffmpeg_mux_copy_argv(video_tmp, audio_tmp, out_mp4, cap_seconds, exe),
                 runner,
             )
+            if bar is not None:
+                bar.update(2)
             hz = probe_audio_hz(out_mp4, ffprobe=ffprobe, run=run)
             if hz is not None and hz != int(AAC_RATE):
                 raise RuntimeError(f"concat audio is {hz} Hz, expected {AAC_RATE}")

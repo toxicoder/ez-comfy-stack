@@ -524,9 +524,13 @@ cmd_run() {
   check_hf_cli
   prepare_comfy_layout "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
-  local tier repo ok=0 fail=0 pat dir
-  local -a include_args=()
-  for tier in $(tiers_to_process); do
+  local tier repo ok=0 fail=0 pat dir i=0 n=0
+  local -a include_args=() tiers=()
+  read -r -a tiers <<<"$(tiers_to_process)"
+  n="${#tiers[@]}"
+  for tier in "${tiers[@]}"; do
+    i=$((i + 1))
+    log_step "${i}" "${n}" "music ${tier}"
     repo=$(tier_repo "${tier}")
     if [[ -z ${repo} ]]; then
       err "Unknown tier: ${tier}"

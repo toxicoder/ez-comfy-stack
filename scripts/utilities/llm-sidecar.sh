@@ -392,6 +392,7 @@ cmd_start() {
   else
     log "llama-server has no --spec-type; starting without MTP"
   fi
+  log "loading GGUF ${gguf} into llama-server (can take a minute)…"
   nohup llama-server \
     -m "${gguf}" \
     --host "${host}" \
@@ -404,6 +405,23 @@ cmd_start() {
   pid=$!
   occupancy_set_llm_pid "${pid}"
   printf '%s\n' "${pid}" >"${pidf}"
+  local waited=0
+  while ((waited < 60)); do
+    if (echo >/dev/tcp/"${host}"/"${port}") >/dev/null 2>&1; then
+      log_ok "llm-sidecar ready pid=${pid} ${host}:${port} log=${logf}"
+      return 0
+    fi
+    if ! kill -0 "${pid}" 2>/dev/null; then
+      err "llama-server exited while loading GGUF — see ${logf}"
+      return 1
+    fi
+    if ((waited % 5 == 0)); then
+      log "… loading GGUF elapsed ${waited}s (still running)"
+    fi
+    sleep 1
+    waited=$((waited + 1))
+  done
+  warn "llm-sidecar pid=${pid} started but ${host}:${port} not open yet — see ${logf}"
   log "llm-sidecar started pid=${pid} ${host}:${port} log=${logf}"
   return 0
 }

@@ -893,24 +893,33 @@ EOF
   wan_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-wan.sh" run --tier 5b)
   ltx_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-ltx.sh" run --tier 2.5)
   llm_cmd=(bash "${REPO_ROOT}/scripts/utilities/download-llm.sh" run)
+  log "download-models: 4 packs (Klein 4B, Wan 5B, LTX 2.5, prompt-enhance GGUF) limit=${limit}"
   if [[ ${limit} == "off" || ${limit} == "0" ]]; then
     warn "DOWNLOAD_LIMIT=off — saturating the link may lock remote SSH"
+    log_step 1 4 "Klein 4B still pack (download-image --tier fast)"
     "${image_cmd[@]}" || rc=$?
     if [[ ${rc} -eq 0 ]]; then
+      log_step 2 4 "Wan 2.2 5B"
       "${wan_cmd[@]}" || rc=$?
     fi
     if [[ ${rc} -eq 0 ]]; then
+      log_step 3 4 "LTX-2.5 distilled AV"
       "${ltx_cmd[@]}" || rc=$?
     fi
     if [[ ${rc} -eq 0 ]]; then
+      log_step 4 4 "prompt-enhance 4B GGUF"
       "${llm_cmd[@]}" || rc=$?
     fi
   else
     local dl="${REPO_ROOT}/scripts/utilities/download-limit.sh"
     local inner
-    inner="MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-image.sh' run --tier fast && \
+    inner="echo '[ez-comfy] ══ 1/4 ══ Klein 4B still pack' >&2 && \
+       MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-image.sh' run --tier fast && \
+       echo '[ez-comfy] ══ 2/4 ══ Wan 2.2 5B' >&2 && \
        MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-wan.sh' run --tier 5b && \
+       echo '[ez-comfy] ══ 3/4 ══ LTX-2.5 distilled AV' >&2 && \
        MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-ltx.sh' run --tier 2.5 && \
+       echo '[ez-comfy] ══ 4/4 ══ prompt-enhance 4B GGUF' >&2 && \
        MODELS_DIR='${MODELS_DIR}' bash '${REPO_ROOT}/scripts/utilities/download-llm.sh' run"
     bash "${dl}" wrap --limit "${limit}" -- bash -c "${inner}" ||
       rc=$?

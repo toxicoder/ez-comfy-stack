@@ -384,7 +384,7 @@ cmd_run() {
   parent="$(dirname "${OUT_FILE}")"
   mkdir -p "${parent}"
   log "mux ${IMAGE_FILE} + ${AUDIO_FILE} → ${OUT_FILE} (size=${SIZE} fit=${FIT})"
-  if ! "${FFMPEG_ARGV[@]}"; then
+  if ! run_ffmpeg_logged "mux still+audio → ${OUT_FILE}" -- "${FFMPEG_ARGV[@]}"; then
     err "ffmpeg still-video failed for ${AUDIO_FILE} (not skipped)"
     return 1
   fi

@@ -20,6 +20,8 @@ for _path in (_LIB, _HERE):
     if str(_path) not in sys.path:
         sys.path.insert(0, str(_path))
 
+from operator_log import log as ol_log  # noqa: E402
+from operator_log import log_step as ol_step  # noqa: E402
 from guide_pack import (  # noqa: E402
     STILL_SCHEMA,
     STILL_SIZES,
@@ -125,16 +127,20 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
     if ns.camera and ns.camera in bpy.data.objects:
         scene.camera = bpy.data.objects[ns.camera]
 
+    ol_log(f"still pack {ns.film}/{ns.plate} {width}x{height}")
+    ol_step(1, 3, "clay")
     configure_clay(scene)
     clay = _render_still(bpy, dest, "first.png")
     rgb_dir = dest / "rgb"
     rgb_dir.mkdir(parents=True, exist_ok=True)
     (rgb_dir / "0001.png").write_bytes(clay.read_bytes())
 
+    ol_step(2, 3, "depth")
     configure_mist_depth(scene.world)
     configure_clay(scene)
     _render_still(bpy, dest, "depth.png")
 
+    ol_step(3, 3, "canny")
     configure_canny(scene)
     _render_still(bpy, dest, "canny.png")
 

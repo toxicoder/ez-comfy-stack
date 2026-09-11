@@ -10,7 +10,7 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 
 - Default cache location and layout
 - Host persistence (weights, media, Comfy `user/`, operator custom nodes)
-- Download utilities, auto-install of `hf`, resume / stuck-partial recovery, and readiness checks
+- Download utilities, auto-install of `hf`, resume / stuck-partial recovery, pack `1/4` progress, and readiness checks
 - Pointer: `--tier` is a pack id ([Download tiers](download-tiers.md))
 - Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
 - Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
@@ -198,7 +198,7 @@ Per-utility status (read-only) still uses the default pack ids:
 
 Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`). `setup` and `download-models` auto-install it into `~/.local/bin` (or the original user's home when the command is run with `sudo`). Do not prefix `download-models` with `sudo` — `download-limit` uses sudo internally.
 
-Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. `HF_PROGRESS=0` turns progress lines off; `HF_PROGRESS_INTERVAL=10` sets the tick (seconds).
+Progress UI is owned by the stack. `download-models` prints `══ 1/4 ══` … `4/4` for Klein, Wan, LTX, and the prompt-enhance GGUF. Each `hf download` shows disk size + MiB/s + elapsed on one rewriting TTY line (or a newline every `HF_PROGRESS_INTERVAL` seconds when piped). Hub/tqdm file-count bars stay disabled so they do not smash the heartbeat. `HF_PROGRESS=0` or `EZ_COMFY_PROGRESS=0` turns progress lines off; `HF_EXPECTED_KIB` adds a best-effort ETA.
 
 ### Expected basenames after `download-models` (lab workflows)
 

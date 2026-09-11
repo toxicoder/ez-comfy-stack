@@ -230,6 +230,10 @@ def test_progress_interval_parses_env(monkeypatch: pytest.MonkeyPatch) -> None:
     assert dc.progress_interval_s() == 2.0
 
 
+def test_progress_prefix_matches_operator_log() -> None:
+    assert dc.PROGRESS_PREFIX == "[ez-comfy]"
+
+
 def test_emit_walk_progress_newline(capsys: pytest.CaptureFixture[str]) -> None:
     """Non-TTY progress is a full prefixed line (BATS/CI)."""
     dc.emit_walk_progress("Scanning /tmp/models (max depth 6)…")

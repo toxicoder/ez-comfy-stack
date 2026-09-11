@@ -19,6 +19,8 @@ _LIB = _REPO / "scripts" / "lib"
 if str(_LIB) not in sys.path:
     sys.path.insert(0, str(_LIB))
 
+from operator_log import log as ol_log  # noqa: E402
+from operator_log import log_step as ol_step  # noqa: E402
 from house_layout import (  # noqa: E402
     CLAY_PREFIX,
     ENGINE_BLENDER,
@@ -264,7 +266,10 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
     construct_scene(bpy, layout)
     _configure_workbench(bpy, ns.width, ns.height)
 
-    for index, cam in enumerate(layout["cameras"]):
+    cameras = list(layout["cameras"])
+    ol_log(f"house views {slug} {len(cameras)} cameras")
+    for index, cam in enumerate(cameras):
+        ol_step(index + 1, len(cameras), f"camera {cam['id']}")
         clay = _render_camera(bpy, cam["id"], dest, "views")
         copy_path = dest / clay_copy_name(index)
         if clay.is_file():

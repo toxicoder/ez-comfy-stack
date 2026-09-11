@@ -119,7 +119,7 @@ cmd_run() {
   fi
   mkdir -p "$(dirname "${OUT_MP4}")"
   log "mux ${IN_DIR} → ${OUT_MP4} (${FPS} fps, libx264, not NVENC)"
-  ffmpeg -y -framerate "${FPS}" -i "${IN_DIR}/${PATTERN}" \
+  run_ffmpeg_logged "mux frames → ${OUT_MP4}" -- ffmpeg -y -framerate "${FPS}" -i "${IN_DIR}/${PATTERN}" \
     -an -c:v libx264 -pix_fmt yuv420p -s "${WIDTH}x${HEIGHT}" "${OUT_MP4}"
   log "wrote ${OUT_MP4}"
 }

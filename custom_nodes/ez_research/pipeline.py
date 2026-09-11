@@ -13,6 +13,7 @@ import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from .search import SearchHit, format_sources, search_web
 
@@ -34,6 +35,16 @@ class ResearchResult:
 
 def _log(message: str) -> None:
     print(f"[ez_research] {message}", file=sys.stderr)
+
+
+def _progress(total: int) -> Any:
+    _ensure_lab_custom_nodes_path()
+    try:
+        from ez_common import node_progress
+
+        return node_progress(total)
+    except Exception:  # noqa: BLE001 — pytest / missing pack
+        return None
 
 
 def _ensure_lab_custom_nodes_path() -> None:
@@ -215,17 +226,25 @@ def run_research(
     if not text:
         return ResearchResult("", "", "empty message", [])
     n = clamp_subagents(subagents)
+    bar = _progress(2 + max(n, 1))
+    _log(f"research: planner ({n} searchers)")
     planner_user = _compose_user(
         text,
         history,
         extra=f"Subagent count: {n}. JSON only.",
     )
     planner_out, planner_reason = _complete(load_prompt("planner"), planner_user)
+    if bar is not None:
+        bar.update(1)
     queries = parse_planner_queries(planner_out, text, n)
     hits: list[SearchHit] = []
     if web_search:
         for query in queries:
+            _log(f"research: search {query}")
             hits.extend(search_web(query, limit=3, fetch_bodies=True))
+            if bar is not None:
+                bar.update(1)
+    _log("research: synthesizer")
     synth_extra = (
         f"Planner queries: {json.dumps(queries)}\n\n{_hits_block(hits)}"
     )
@@ -233,6 +252,8 @@ def run_research(
         load_prompt("synthesizer"),
         _compose_user(text, history, synth_extra),
     )
+    if bar is not None:
+        bar.update(1)
     status = reason or planner_reason or "ok"
     if not reply:
         reply = _fallback_brief(text, hits)

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import html
 import json
+import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, TypedDict
@@ -289,6 +290,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main() -> None:
+    print("[ez-comfy] studio-ui http://0.0.0.0:8190", file=sys.stderr, flush=True)
     httpd = ThreadingHTTPServer(("0.0.0.0", 8190), Handler)
     httpd.serve_forever()
 

@@ -205,11 +205,16 @@ cmd_status() {
 # Download.
 #######################################
 cmd_run() {
-  local tier repo dir
+  local tier repo dir i=0 n=0
+  local -a tiers=()
   refuse_context_parallel || true
   check_hf_cli
   prepare_comfy_layout "${MODELS_DIR}" || exit 1
-  for tier in $(tiers_to_process); do
+  read -r -a tiers <<<"$(tiers_to_process)"
+  n="${#tiers[@]}"
+  for tier in "${tiers[@]}"; do
+    i=$((i + 1))
+    log_step "${i}" "${n}" "longcat ${tier}"
     repo=$(tier_repo "${tier}")
     if [[ -z ${repo} ]]; then
       err "Unknown LongCat tier: ${tier}"

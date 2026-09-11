@@ -100,7 +100,7 @@ cmd_run() {
     err "ffmpeg not on PATH"
     return 1
   fi
-  ffmpeg -y -i "${IN_MP4}" -c:v h264_nvenc -preset p4 -c:a aac -ar 48000 -ac 2 \
+  run_ffmpeg_logged "NVENC preview → ${OUT_MP4}" -- ffmpeg -y -i "${IN_MP4}" -c:v h264_nvenc -preset p4 -c:a aac -ar 48000 -ac 2 \
     -b:a 128k "${OUT_MP4}"
   log "wrote ${OUT_MP4}"
 }

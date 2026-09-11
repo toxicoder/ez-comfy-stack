@@ -187,6 +187,8 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
   run bash -c "DOWNLOAD_LIMIT=off LAB_MOCK_HF_DOWNLOAD=1 bash \"${MANAGE_SH}\" download-models"
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"══ 1/4 ══"* ]]
+  [[ "${output}" == *"══ 4/4 ══"* ]]
 }
 
 @test "manage setup creates env and models under LAB_NO_SUDO" {

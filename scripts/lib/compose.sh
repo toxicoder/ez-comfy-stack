@@ -506,8 +506,18 @@ stack_pull_image() {
     return 1
   fi
   log "Pulling prebuilt image ${img} (GHCR; no model weights inside)…"
-  if docker pull "${img}"; then
-    log "Pull ok: ${img}"
+  local pull_ok=0
+  if [[ -t 2 ]]; then
+    if docker pull "${img}"; then
+      pull_ok=1
+    fi
+  else
+    if run_with_heartbeat "docker pull ${img}" -- docker pull "${img}"; then
+      pull_ok=1
+    fi
+  fi
+  if [[ ${pull_ok} -eq 1 ]]; then
+    log_ok "Pull ok: ${img}"
     return 0
   fi
   warn "Pull failed for ${img} — will build locally if needed (long if prebuild enabled)"
@@ -591,11 +601,20 @@ stack_start() {
     up_args+=(--build)
   fi
 
-  if ! compose_run "${up_args[@]}"; then
-    err "compose up failed"
-    compose_run ps -a 2>/dev/null || true
-    compose_run logs --tail 80 comfyui 2>/dev/null || true
-    return 1
+  if [[ -t 2 ]]; then
+    if ! compose_run "${up_args[@]}"; then
+      err "compose up failed"
+      compose_run ps -a 2>/dev/null || true
+      compose_run logs --tail 80 comfyui 2>/dev/null || true
+      return 1
+    fi
+  else
+    if ! run_with_heartbeat "compose ${up_args[*]}" -- compose_run "${up_args[@]}"; then
+      err "compose up failed"
+      compose_run ps -a 2>/dev/null || true
+      compose_run logs --tail 80 comfyui 2>/dev/null || true
+      return 1
+    fi
   fi
   log "Compose up finished — verifying container is running…"
   # LAB_STACK_VERIFY_SETTLE=0 skips sleep in hermetic tests

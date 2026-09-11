@@ -127,6 +127,7 @@ def build_animatic(
     out = publish / "animatic.mp4"
     argv = concat_argv(concat_list, out, cap)
     argv[0] = exe
+    print(f"[ez_film] animatic {len(rows)} shots → {out}", file=sys.stderr)
     proc = _run(argv, run=run)
     if proc.returncode != 0:
         report["defects"].append(
