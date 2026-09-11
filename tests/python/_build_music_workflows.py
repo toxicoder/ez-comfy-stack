@@ -365,6 +365,11 @@ def _diss_cast(ex: DissExample) -> str:
             "satire of **Donald Trump**. Trump is a satire target, "
             "not a vocal identity"
         )
+    if ex["series"] in {"progress", "progress-club"}:
+        return (
+            "Fictional MC **Nill Bye** (science guy) on public-record "
+            "**fixes**: methods, statutes, and measurement. No roast target"
+        )
     return (
         "Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels)"
     )
@@ -372,9 +377,10 @@ def _diss_cast(ex: DissExample) -> str:
 
 def _diss_note(ex: DissExample) -> str:
     duration_s = int(ex["duration"])
+    kind = "progress" if ex["series"] in {"progress", "progress-club"} else "diss"
     return f"""## {ex["stem"]}
 
-US-safe rap **{duration_s} s diss** take: **{ex["title"]}**. {_diss_cast(ex)}. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe rap **{duration_s} s {kind}** take: **{ex["title"]}**. {_diss_cast(ex)}. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.

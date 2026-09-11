@@ -209,6 +209,36 @@ EXPECTED_NILL_BYE_TITLES = (
     "visa ticket",
     "shadow docket",
     "immunity hymn",
+    "winterize wells",
+    "registered report",
+    "named uncertainty",
+    "scif only",
+    "hearing first",
+    "keep the match",
+    "honest census",
+    "paris seat",
+    "qualified divest",
+    "return pdf",
+    "casework screen",
+    "district door",
+    "levy in code",
+    "fourteenth clause",
+    "one college",
+    "duty switch",
+    "article one",
+    "for-cause lock",
+    "ig notice",
+    "counsel stays",
+    "prevailing wage",
+    "merits syllabus",
+    "unofficial sort",
+    "clemency file",
+    "congress the wing",
+    "tie the island",
+    "decade lines",
+    "ratepayer bus",
+    "open quad",
+    "wrench the tap",
 )
 SPOKEN_WORD_TITLES = frozenset(
     {
@@ -219,11 +249,14 @@ SPOKEN_WORD_TITLES = frozenset(
         "disaster stamp",
         "one eighty seven",
         "pardon flood",
+        "registered report",
+        "duty switch",
     }
 )
 RAKE_SERIES = frozenset({"lab", "variety", "trap-edm"})
 CIVIC_SERIES = frozenset({"civic", "civic-club"})
 FEDERAL_SERIES = frozenset({"federal", "federal-club"})
+PROGRESS_SERIES = frozenset({"progress", "progress-club"})
 DISABILITY_NEEDLES = (
     "wheelchair",
     "paralyzed",
@@ -321,7 +354,7 @@ def test_format_diss_lyrics_requires_three_verses() -> None:
 
 def test_nill_bye_diss_examples_are_original_180s() -> None:
     assert DISS_DURATION_S == 180.0
-    assert len(DISS_EXAMPLES) == 105
+    assert len(DISS_EXAMPLES) == 135
     prefixes: list[str] = []
     stems: list[str] = []
     seeds: list[int] = []
@@ -333,8 +366,10 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         "civic-club": 0,
         "federal": 0,
         "federal-club": 0,
+        "progress": 0,
+        "progress-club": 0,
     }
-    phase_counts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+    phase_counts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
     spoken_titles: set[str] = set()
     series_phase = {
         "lab": 0,
@@ -344,6 +379,8 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         "civic-club": 4,
         "federal": 5,
         "federal-club": 6,
+        "progress": 7,
+        "progress-club": 8,
     }
     for ex in DISS_EXAMPLES:
         assert ex["duration"] == DISS_DURATION_S
@@ -361,6 +398,13 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
             assert "Trump" in lyrics
             assert "Rake" not in lyrics
             assert "Abbott" not in lyrics
+        elif ex["series"] in PROGRESS_SERIES:
+            assert "Rake" not in lyrics
+            assert "Abbott" not in lyrics
+            assert "Trump" not in lyrics
+            assert "diss" not in ex["description"]
+            assert "roast" not in ex["description"]
+            assert "progress" in ex["description"]
         else:
             assert ex["series"] in RAKE_SERIES
             assert "Rake" in lyrics
@@ -377,11 +421,16 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         if ex["series"] != "lab":
             for token in NILL_VOICE.split(", "):
                 assert token in ex["tags"], (ex["stem"], token)
-        if ex["series"] in {"variety", "civic", "federal"}:
+        if ex["series"] in {"variety", "civic", "federal", "progress"}:
             low = ex["tags"].lower()
             for needle in VARIETY_EDM_NEEDLES:
                 assert needle not in low, (ex["stem"], needle)
-        if ex["series"] in {"trap-edm", "civic-club", "federal-club"}:
+        if ex["series"] in {
+            "trap-edm",
+            "civic-club",
+            "federal-club",
+            "progress-club",
+        }:
             low = ex["tags"].lower()
             assert any(genre in low for genre in TRAP_EDM_GENRES), ex["stem"]
         for needle in LIVING_MC_NEEDLES:
@@ -391,7 +440,11 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         low_lyrics = lyrics.lower()
         for needle in DISABILITY_NEEDLES:
             assert needle not in low_lyrics, (ex["stem"], needle)
-        if ex["series"] in CIVIC_SERIES or ex["series"] in FEDERAL_SERIES:
+        if (
+            ex["series"] in CIVIC_SERIES
+            or ex["series"] in FEDERAL_SERIES
+            or ex["series"] in PROGRESS_SERIES
+        ):
             for needle in PUNCH_DOWN_NEEDLES:
                 assert needle not in low_lyrics, (ex["stem"], needle)
         prefixes.append(ex["prefix"])
@@ -399,8 +452,8 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         seeds.append(int(ex["seed"]))
         if "[spoken word]" in lyrics:
             spoken_titles.add(ex["title"])
-    assert len(set(prefixes)) == 105
-    assert len(set(stems)) == 105
+    assert len(set(prefixes)) == 135
+    assert len(set(stems)) == 135
     assert series_counts == {
         "lab": 15,
         "variety": 15,
@@ -409,8 +462,20 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         "civic-club": 15,
         "federal": 15,
         "federal-club": 15,
+        "progress": 15,
+        "progress-club": 15,
     }
-    assert phase_counts == {0: 15, 1: 15, 2: 15, 3: 15, 4: 15, 5: 15, 6: 15}
+    assert phase_counts == {
+        0: 15,
+        1: 15,
+        2: 15,
+        3: 15,
+        4: 15,
+        5: 15,
+        6: 15,
+        7: 15,
+        8: 15,
+    }
     assert spoken_titles == SPOKEN_WORD_TITLES
     assert any(seed != 42 for seed in seeds)
     assert tuple(ex["title"] for ex in DISS_EXAMPLES) == EXPECTED_NILL_BYE_TITLES
@@ -431,6 +496,12 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
     assert "thirty-four" in federal[0]["lyrics"].lower() or "thirty four" in federal[0]["lyrics"].lower()
     assert federal_club[0]["title"] == "pardon flood"
     assert "pardon" in federal_club[0]["lyrics"].lower()
+    progress = [ex for ex in DISS_EXAMPLES if ex["series"] == "progress"]
+    progress_club = [ex for ex in DISS_EXAMPLES if ex["series"] == "progress-club"]
+    assert progress[0]["title"] == "winterize wells"
+    assert "NERC" in progress[0]["lyrics"] or "nerc" in progress[0]["lyrics"].lower()
+    assert progress_club[0]["title"] == "duty switch"
+    assert "switch" in progress_club[0]["lyrics"].lower()
 
 
 EXPECTED_DRIVE_THROUGH_TITLES = (

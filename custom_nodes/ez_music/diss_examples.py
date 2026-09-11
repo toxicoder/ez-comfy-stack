@@ -34,6 +34,8 @@ DissSeries = Literal[
     "civic-club",
     "federal",
     "federal-club",
+    "progress",
+    "progress-club",
 ]
 
 
@@ -68,6 +70,13 @@ def _desc(take: str) -> str:
     )
 
 
+def _progress_desc(take: str) -> str:
+    return (
+        f"US-safe rap 180s progress: Nill Bye {take}, "
+        "ACE-Step 1.5 turbo AIO, invented vocal"
+    )
+
+
 def format_diss_lyrics(
     *,
     intro: str,
@@ -96,6 +105,8 @@ def _catalog() -> tuple[DissExample, ...]:
     from .diss_federal import DISS_FEDERAL
     from .diss_federal_club import DISS_FEDERAL_CLUB
     from .diss_lab import DISS_LAB
+    from .diss_progress import DISS_PROGRESS
+    from .diss_progress_club import DISS_PROGRESS_CLUB
     from .diss_trap_edm import DISS_TRAP_EDM
     from .diss_variety import DISS_VARIETY
 
@@ -107,6 +118,8 @@ def _catalog() -> tuple[DissExample, ...]:
         + DISS_CIVIC_CLUB
         + DISS_FEDERAL
         + DISS_FEDERAL_CLUB
+        + DISS_PROGRESS
+        + DISS_PROGRESS_CLUB
     )
 
 

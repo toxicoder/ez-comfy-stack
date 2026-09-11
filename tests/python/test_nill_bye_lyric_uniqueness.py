@@ -1,4 +1,4 @@
-"""Exclusive-bar contract for the one-hundred-five Nill Bye diss takes.
+"""Exclusive-bar contract for the one-hundred-thirty-five Nill Bye takes.
 
 Hermetic: reads DISS_EXAMPLES only. No Comfy, no network, no GGUF.
 """
@@ -206,6 +206,37 @@ RESERVED_MOTIFS: tuple[tuple[str, str], ...] = (
     ("visa ticket", "visa ticket"),
     ("shadow docket", "shadow docket"),
     ("immunity hymn", "immunity hymn"),
+    ("winterize wells", "winterize wells"),
+    ("registered report", "registered report"),
+    ("named uncertainty", "named uncertainty"),
+    ("scif only", "scif only"),
+    ("hearing first", "hearing first"),
+    ("keep the match", "keep the match"),
+    ("honest census", "honest census"),
+    ("paris seat", "paris seat"),
+    ("qualified divest", "qualified divest"),
+    ("return pdf", "return pdf"),
+    ("casework screen", "casework screen"),
+    ("district door", "district door"),
+    ("levy in code", "levy in code"),
+    ("fourteenth clause", "fourteenth clause"),
+    ("one college", "one college"),
+    ("duty switch", "duty switch"),
+    ("article one", "article one"),
+    ("for-cause lock", "for-cause lock"),
+    ("for cause lock", "for-cause lock"),
+    ("ig notice", "ig notice"),
+    ("counsel stays", "counsel stays"),
+    ("prevailing wage", "prevailing wage"),
+    ("merits syllabus", "merits syllabus"),
+    ("unofficial sort", "unofficial sort"),
+    ("clemency file", "clemency file"),
+    ("congress the wing", "congress the wing"),
+    ("tie the island", "tie the island"),
+    ("decade lines", "decade lines"),
+    ("ratepayer bus", "ratepayer bus"),
+    ("open quad", "open quad"),
+    ("wrench the tap", "wrench the tap"),
 )
 
 
