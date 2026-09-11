@@ -1982,7 +1982,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 16:49 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T16:49:07+00:00">11 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 17:23 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T17:23:34+00:00">11 Sep 2026</time></span>
                 
                   
 
@@ -1996,15 +1996,15 @@
 <ul>
 <li>Rights gate (required) vs the original-character podcast lane</li>
 <li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: source file dropdown + upload (or URL), languages, stage, clone engine, Clone <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="cfg" data-href="../glossary/#cfg" title="Classifier-free guidance scale. Distilled Klein wants 1.0 — do not &#x27;turn it up for quality&#x27;.">CFG</span></li>
-<li>Cascade: ingest → ASR turns → speaker cluster (<code>ve.pt</code>) → translate → clone → pitch-preserving duration lock</li>
-<li>YouTube Studio <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="multi-language-audio" data-href="../glossary/#multi-language-audio" title="YouTube Studio Languages tab: upload an audio-only dub the same length as the video.">multi-language audio</span> upload (audio-only file + SRT)</li>
-<li><code>download-dub</code> usage, sequential <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span></li>
+<li>Cascade: ingest → ASR turns → speaker cluster (<code>ve.pt</code>) → merge → translate → clone → pitch-preserving duration lock</li>
+<li>YouTube Studio <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="multi-language-audio" data-href="../glossary/#multi-language-audio" title="YouTube Studio Languages tab: upload an audio-only dub the same length as the video.">multi-language audio</span> upload (audio-only job-dir WAV + SRT)</li>
+<li><code>download-dub</code> usage, sequential <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> (Stage <strong>analyze</strong> first), and in-graph loudness</li>
 <li>Optional still-image MP4 when you have no source video (host <code>audio-still-video</code>)</li>
 </ul>
 <p><strong>What this enables</strong></p>
 <ul>
 <li>A second audio track in another language that keeps each speaker’s voice</li>
-<li>A duration-locked WAV/MP3 for YouTube Languages → Audio</li>
+<li>A duration-locked job-dir WAV for YouTube Languages → Audio (Comfy MP3 is a preview)</li>
 <li>Source and translated SRT captions from the same turns</li>
 </ul>
 <div class="admonition warning">
@@ -2017,7 +2017,8 @@
 </div>
 <h2 id="this-is-not-the-podcast-lane">This is not the podcast lane<a class="headerlink" href="#this-is-not-the-podcast-lane" title="Permanent link">&para;</a></h2>
 <p><a href="../podcast/">Local podcast</a> invents hosts and uses <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> stock voices. This lane clones <strong>recorded speakers</strong> from a show you own or are licensed to translate. Different disclosure. Different App.</p>
-<p>First spoken bumper (optional overlay, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> always written):</p>
+<p>Spoken disclosure defaults <strong>off</strong>. Sidecars are always written (localized <code>ez_dub.disclosure.txt</code> plus English <code>ez_dub.disclosure.en.txt</code>). If you turn the bumper on, it is a short localized overlay on <code>ez_dub_mix.wav</code> only — never on the duration-locked YT wav.</p>
+<p>English canonical:</p>
 <blockquote>
 <p>This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.</p>
 </blockquote>
@@ -2030,7 +2031,7 @@
 </ul>
 <p>Do not paste celebrity reference WAVs. Refs are extracted from <strong>this</strong> job’s audio. URL ingest is for operator-owned or licensed URLs only. YouTube’s terms of service still apply to <code>yt-dlp</code>.</p>
 <h2 id="quality-bar">Quality bar<a class="headerlink" href="#quality-bar" title="Permanent link">&para;</a></h2>
-<p>Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), <strong>Clone CFG</strong> 0 on EN→ES (less English accent), pitch-preserving duration lock. Editable translation JSON is the other lever (Stage <strong>analyze</strong>, edit, Stage <strong>render</strong>).</p>
+<p>Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), <strong>Clone CFG</strong> 0 on EN→ES (less English accent), pitch-preserving duration lock, same-speaker merge when the gap is under 0.35 s, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and <code>qc.json</code>. Editable translation JSON is the other lever (Stage <strong>analyze</strong>, edit, Rewrite <strong>off</strong>, Stage <strong>render</strong>). Do not ship Stage <strong>all</strong> blindly.</p>
 <p>Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera lip sync. <strong>No lip-sync OSS</strong> (Wav2Lip stays banned). Mouths will not match on talking-head video.</p>
 <h2 id="engines">Engines<a class="headerlink" href="#engines" title="Permanent link">&para;</a></h2>
 <table>
@@ -2149,7 +2150,7 @@
 </tr>
 <tr>
 <td><strong>Stage</strong></td>
-<td><code>all</code> / <code>analyze</code> / <code>render</code></td>
+<td>Default <strong>analyze</strong>. <code>all</code> / <code>analyze</code> / <code>render</code></td>
 </tr>
 <tr>
 <td><strong>Clone engine</strong></td>
@@ -2161,7 +2162,7 @@
 </tr>
 <tr>
 <td><strong>Spoken disclosure</strong></td>
-<td>3 s overlay; sidecar always written</td>
+<td>Default <strong>off</strong>. Localized bumper on <code>ez_dub_mix</code> only; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> always written</td>
 </tr>
 <tr>
 <td><strong>Speaking speed</strong></td>
@@ -2181,11 +2182,11 @@
 <ol>
 <li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
 <li><code>download-dub --tier asr</code> then <code>--tier clone</code> (clone is <code>ve.pt</code> + <code>s3gen.pt</code> + T3 V3 + tokenizer JSON + <code>conds.pt</code>, not t3-only). With the stack up this pip-installs faster-whisper, the llama-cpp-python <strong>CPU wheel</strong>, <code>setuptools&lt;82</code>, then the Chatterbox V3 zip <code>--no-deps --force-reinstall</code>. Queue also self-heals a missing CPU wheel (no extra restart). Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code> and that <code>inspect.signature(ChatterboxMultilingualTTS.from_local)</code> includes <code>t3_model</code> and <code>callable(perth.PerthImplicitWatermarker)</code>.</li>
-<li>Load <strong>dub-localize-lab-example</strong>. Pick <strong>Source file</strong> or <strong>Upload media</strong> (or set <strong>Source URL</strong>). Turn <strong>I have rights</strong> on. Queue once (Stage <strong>all</strong>, Rewrite translation <strong>on</strong>).</li>
+<li>Load <strong>dub-localize-lab-example</strong>. Pick <strong>Source file</strong> or <strong>Upload media</strong> (or set <strong>Source URL</strong>). Turn <strong>I have rights</strong> on. First Queue is Stage <strong>analyze</strong> (Rewrite translation <strong>on</strong>). Edit the JSON (<code>text_target</code>). Turn Rewrite <strong>off</strong>. Set Stage <strong>render</strong>. Queue again.</li>
 <li>Ingest Dub status must be <strong><code>ok</code></strong>. If script JSON says <code>missing source.wav</code> / empty <code>turns</code>, ingest never wrote the wav — rights still off, source still <code>(none)</code>, or extract failed. Read ingest status first.</li>
-<li><strong>Dub status</strong> must list speaker/turn counts (and <code>translated N/M</code>), not <code>ASR pack missing</code> / <code>clone engine missing</code> / <code>llama.cpp unavailable</code> / <code>GGUF missing</code> / <code>t3_model=v3</code> / <code>resemble-perth watermarker missing</code>. The Translation JSON <code>text_target</code> fields must be the target language. A llama.cpp / GGUF miss <strong>stops Queue</strong> (empty mix, empty <code>text_target</code>) — it does not clone English as Spanish. <code>llama.cpp unavailable</code> with a <code>docker exec … pip install --force-reinstall</code> line means Llama still will not import (pip “already satisfied” is not enough) — run that command, then confirm <code>from llama_cpp import Llama</code>, then Queue again. Do not treat “restart” as the fix for llama.cpp. <code>resemble-perth watermarker missing</code> <strong>does</strong> need pip <code>'setuptools&lt;82'</code> then a restart so perth reimports.</li>
-<li>Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_dub_mix_*.flac</code> / <code>ez_dub_yt_*.mp3</code> plus <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt.wav</code></li>
-<li>Loudness:</li>
+<li><strong>Dub status</strong> must list speaker/turn counts (and <code>translated N/M</code>), not <code>ASR pack missing</code> / <code>clone engine missing</code> / <code>llama.cpp unavailable</code> / <code>GGUF missing</code> / <code>t3_model=v3</code> / <code>resemble-perth watermarker missing</code>. The Translation JSON <code>text_target</code> fields must be the target language. A llama.cpp / GGUF miss <strong>stops Queue</strong> (empty mix, empty <code>text_target</code>) — it does not clone English as Spanish. <code>llama.cpp unavailable</code> with a <code>docker exec … pip install --force-reinstall</code> line means Llama still will not import (pip “already satisfied” is not enough) — run that command, then confirm <code>from llama_cpp import Llama</code>, then Queue again. Do not treat “restart” as the fix for llama.cpp. <code>resemble-perth watermarker missing</code> <strong>does</strong> need pip <code>'setuptools&lt;82'</code> then a restart so perth reimports. After render, read <code>dubs/&lt;slug&gt;/qc.json</code> if <strong>Dub status</strong> shows <code>qc:</code>.</li>
+<li>MLA file is <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt.wav</code> (duration-locked). Optional <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt_48k.mp3</code>. Comfy <code>outputs/ez_dub_mix_*.flac</code> / <code>ez_dub_yt_*.mp3</code> is a 24 kHz preview — do not call the numbered MP3 a 320k master.</li>
+<li>Loudness is in-graph raise-to-peak plus optional ffmpeg −14 LUFS. Operator fallback (not required):</li>
 </ol>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>run<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/dubs/episode/ez_dub_yt.wav"</span><span class="w"> </span>--target<span class="w"> </span>youtube
 </code></pre></div>
