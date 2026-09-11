@@ -324,7 +324,7 @@ def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
             (
                 name
                 for name in names
-                if name in {"prompt", "tags", "lyrics", "value"}
+                if name in {"prompt", "tags", "lyrics", "value", "slug", "plate"}
             ),
             None,
         )

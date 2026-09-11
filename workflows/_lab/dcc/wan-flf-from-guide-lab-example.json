@@ -554,7 +554,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## wan-flf-from-guide-lab-example\n\nSilent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:\n\n  ./scripts/manage.sh download-wan --tier fun-inp\n\nUnload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV print.\n\nPrefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pack is 1280x704; the latent node resizes.\n"
+        "## wan-flf-from-guide-lab-example\n\nSilent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:\n\n  ./scripts/manage.sh download-wan --tier fun-inp\n\nUnload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV print.\n\nPrefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pack is 1280x704; the latent node resizes.\n\nStay on :8188 after a dump: klein-from-guide-loader-lab-example / ltx-iclora-from-guide-loader-lab-example / trellis-from-klein-still-lab-example (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n"
       ],
       "title": "Operator note"
     },
@@ -786,7 +786,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## wan-flf-from-guide-lab-example\n\nSilent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:\n\n  ./scripts/manage.sh download-wan --tier fun-inp\n\nUnload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV print.\n\nPrefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pack is 1280x704; the latent node resizes.\n",
+    "lab_note": "## wan-flf-from-guide-lab-example\n\nSilent Fun InP first-last-frame from a DCC guide pack. LoadImage ``first.png`` and ``last.png``. MagCache **off**. Opt-in:\n\n  ./scripts/manage.sh download-wan --tier fun-inp\n\nUnload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV print.\n\nPrefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pack is 1280x704; the latent node resizes.\n\nStay on :8188 after a dump: klein-from-guide-loader-lab-example / ltx-iclora-from-guide-loader-lab-example / trellis-from-klein-still-lab-example (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n",
     "lab_profile": "wan-flf-from-guide-lab-example",
     "lab_description": "Wan Fun InP first-last-frame from guide first.png + last.png. MagCache off.",
     "ds": {

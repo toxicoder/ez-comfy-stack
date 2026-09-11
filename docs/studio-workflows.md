@@ -30,7 +30,7 @@ user/default/workflows/
     wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
     ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
     shorts/    film-*-90s-*-lab-example.json
-    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide
+    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast-*, dub-*, music-rap-draft/full
       nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
@@ -359,9 +359,12 @@ flowchart TB
     | **ltx-iclora-canny-5s-lab-example** | Same envelope; wire `canny.mp4`. |
     | **ltx-iclora-depth-shorts-lab-example** | Depth envelope at **768×1280**. Dump with `export-guides --width 768 --height 1280`. |
     | **wan-flf-from-guide-lab-example** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
+    | **klein-from-guide-loader-lab-example** | Stay on `:8188`. `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. |
+    | **ltx-iclora-from-guide-loader-lab-example** | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
+    | **trellis-from-klein-still-lab-example** | Still pack `plate=mug` → native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. Occupancy **trellis**. |
     | **audio-finish-lab-example** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck −15 dB, YouTube loudnorm). |
 
-    Operator loop: [DCC guide pack](dcc-workflows.md). Playbook: [Clay to finish](learn/clay-to-finish.md). Stills: [Blender creator suite](learn/blender-creator.md).
+    Operator loop: [DCC guide pack](dcc-workflows.md). Stay on `:8188`: [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md). Playbook: [Clay to finish](learn/clay-to-finish.md). Stills: [Blender creator suite](learn/blender-creator.md).
 
 === "License"
 

@@ -45,7 +45,7 @@ tags: [occupancy, blender, trellis, safety, gb10]
 
 `occupancy enter` **does not** start Compose. Heavy modes tell you to `./scripts/manage.sh start` (type **yes**) when the container is down.
 
-State lives at `${COMFY_OUTPUT_DIR}/.occupancy.json` (outputs, never `MODELS_DIR`).
+State lives at `${COMFY_OUTPUT_DIR}/.occupancy.json` (outputs, never `MODELS_DIR`). In-canvas **Occupancy gate** (`EZDCCOccupancyGate`) reads that file only — it does not start Compose or spawn Blender. [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
 
 ---
 

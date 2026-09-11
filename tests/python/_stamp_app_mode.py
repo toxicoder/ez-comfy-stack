@@ -234,6 +234,11 @@ WIDGET_ORDER = (
     "source_url",
     "have_rights",
     "job_slug",
+    "slug",
+    "shot_id",
+    "plate",
+    "layer",
+    "required_mode",
     "prompt",
     "web_search",
     "subagents",
@@ -311,6 +316,11 @@ GENERIC_LABELS = {
     "source_url": "Source URL",
     "have_rights": "I have rights",
     "job_slug": "Job slug",
+    "slug": "Guide slug",
+    "shot_id": "Shot id",
+    "plate": "Plate",
+    "layer": "Layer",
+    "required_mode": "Occupancy",
     "target_language": "Target language",
     "source_language": "Source language",
     "max_speakers": "Max speakers",
@@ -838,6 +848,22 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "wan",
         "ltx-iclora-depth-5s-lab-example",
     ),
+    "klein-from-guide-loader-lab-example": _spec(
+        "dcc",
+        "klein",
+        "ltx-iclora-from-guide-loader-lab-example",
+        "trellis-from-klein-still-lab-example",
+    ),
+    "ltx-iclora-from-guide-loader-lab-example": _spec(
+        "dcc",
+        "ltx",
+        "audio-finish-lab-example",
+    ),
+    "trellis-from-klein-still-lab-example": _spec(
+        "dcc",
+        "trellis",
+        default_view="graph",
+    ),
     "audio-finish-lab-example": _spec(
         "audio",
         "audio",
@@ -886,6 +912,10 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
     "ltx-iclora-depth-5s-lab-example": ("EZFilmDisclosure",),
     "ltx-iclora-canny-5s-lab-example": ("EZFilmDisclosure",),
     "ltx-iclora-depth-shorts-lab-example": ("EZFilmDisclosure",),
+    "ltx-iclora-from-guide-loader-lab-example": (
+        "EZFilmDisclosure",
+        "EZDCCLoadGuideVideo",
+    ),
     "audio-finish-lab-example": ("SaveAudio", "PrimitiveNode"),
     "wan-i2v-a14b-lab-example": ("UNETLoader",),
     "podcast-radio-drama-lab-example": ("UNETLoader", "VHS_VideoCombine"),
@@ -1020,6 +1050,24 @@ def _collect_raw_inputs(
                     )
                 )
             saw_seed = True
+        elif ntype == "EZDCCLoadGuideStill":
+            raw.extend(
+                (
+                    (nid, "slug", node),
+                    (nid, "shot_id", node),
+                    (nid, "layer", node),
+                )
+            )
+        elif ntype == "EZDCCLoadStillPack":
+            raw.extend(
+                (
+                    (nid, "slug", node),
+                    (nid, "plate", node),
+                    (nid, "layer", node),
+                )
+            )
+        elif ntype == "EZDCCOccupancyGate":
+            raw.append((nid, "required_mode", node))
         elif ntype == "LoadImage":
             if spec.get("hide_images"):
                 continue

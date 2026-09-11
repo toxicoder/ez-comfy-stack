@@ -131,6 +131,9 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | **ltx-iclora-canny-5s-lab-example** | ltx | Same envelope, canny from `canny.mp4` |
 | **ltx-iclora-depth-shorts-lab-example** | ltx | Depth envelope at **768×1280** |
 | **wan-flf-from-guide-lab-example** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
+| **klein-from-guide-loader-lab-example** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
+| **ltx-iclora-from-guide-loader-lab-example** | ltx | Envelope from loaders. MagCache off. Prefix `ez_iclora_guide` |
+| **trellis-from-klein-still-lab-example** | trellis | Still pack `mug` → TRELLIS.2 INT8 under `assets/objects/_lab-mug/` |
 
 ---
 

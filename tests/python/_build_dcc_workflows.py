@@ -123,6 +123,63 @@ Unload LTX first. Occupancy: wan. This is a continuity draft, not the LTX AV pri
 Prefix ``ez_flf_guide``. 832x480, 121 frames (Wan 5B / Fun InP default). The pack is 1280x704; the latent node resizes.
 """
 
+STAY_IN_COMFY = (
+    "Stay on :8188 after a dump: klein-from-guide-loader-lab-example / "
+    "ltx-iclora-from-guide-loader-lab-example / trellis-from-klein-still-lab-example "
+    "(EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path "
+    "on this graph still works."
+)
+
+KLEIN_NOTE = KLEIN_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
+LTX_NOTE = LTX_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
+CANNY_STILL_NOTE = CANNY_STILL_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
+CLAY_PLATES_NOTE = CLAY_PLATES_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
+LTX_CANNY_NOTE = LTX_CANNY_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
+LTX_SHORTS_NOTE = LTX_SHORTS_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
+WAN_FLF_GUIDE_NOTE = WAN_FLF_GUIDE_NOTE.rstrip() + "\n\n" + STAY_IN_COMFY + "\n"
+
+KLEIN_LOADER_NOTE = """## klein-from-guide-loader-lab-example
+
+Klein 4B **edit** of a guide-pack still loaded in-canvas (no LoadImage / --install-inputs). Enhance **on**. Seed **42**. Size **1280x704**. Prefix ``ez_guide_hero``.
+
+Occupancy: **klein**. Wire: EZDCCLoadGuideStill ``layer=first`` → OccupancyGate → Klein envelope. Defaults: slug ``go-see``, shot_id ``12``.
+
+```bash
+./scripts/manage.sh occupancy enter blender-desk
+./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
+./scripts/manage.sh occupancy enter klein --yes
+```
+
+blender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D: laptop dump, rsync ``guides/``, Spark Comfy. Stay on :8188.
+"""
+
+LTX_LOADER_NOTE = """## ltx-iclora-from-guide-loader-lab-example
+
+Lab envelope for Path B depth-guided 5.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
+
+Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` → OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.
+
+  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
+
+Opt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.
+
+LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
+"""
+
+TRELLIS_LOADER_NOTE = """## trellis-from-klein-still-lab-example
+
+Still pack plate → native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.
+
+```bash
+./scripts/manage.sh download-3d --tier trellis2
+./scripts/manage.sh occupancy enter trellis --yes
+```
+
+EZDCCLoadStillPack slug ``go-see`` plate ``mug`` → OccupancyGate → EZUnloadModels → TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.
+
+No Preview3D / Load3D / Save3D types in-tree — inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.
+"""
+
 CLAY_PLATES = (
     ("hero", "ez_clay_pack_hero", 1280, 704),
     ("packshot", "ez_clay_pack_packshot", 1024, 1024),
@@ -183,6 +240,102 @@ def _add_link(
     graph.setdefault("links", []).append(
         [link_id, from_id, from_slot, to_id, to_slot, ltype]
     )
+
+
+def _replace_load_image(
+    graph: dict,
+    *,
+    ntype: str,
+    title: str,
+    widgets: list,
+) -> dict:
+    """Swap the first LoadImage for an ez_dcc loader. Keep IMAGE outbound links."""
+    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
+    old_links: list = []
+    if load.get("outputs"):
+        raw = load["outputs"][0].get("links") or []
+        if isinstance(raw, list):
+            old_links = list(raw)
+    load["type"] = ntype
+    load["title"] = title
+    load["widgets_values"] = list(widgets)
+    load["properties"] = {"Node name for S&R": ntype}
+    load["inputs"] = []
+    load["outputs"] = [
+        {"name": "image", "type": "IMAGE", "links": old_links, "slot_index": 0},
+        {"name": "mask", "type": "MASK", "links": None, "slot_index": 1},
+        {"name": "metadata", "type": "STRING", "links": None, "slot_index": 2},
+    ]
+    return load
+
+
+def _insert_occupancy_gate(
+    graph: dict, *, source: dict, required_mode: str
+) -> dict:
+    """Insert EZDCCOccupancyGate on the source IMAGE output."""
+    max_id, max_link = _max_ids(graph)
+    gate_id = max_id + 1
+    link_in = max_link + 1
+    out = source["outputs"][0]
+    old_links = [int(lid) for lid in (out.get("links") or []) if lid is not None]
+    for link in graph.get("links") or []:
+        if int(link[0]) in old_links:
+            link[1] = gate_id
+            link[2] = 0
+    pos = source.get("pos") or [40, 40]
+    gate = {
+        "id": gate_id,
+        "type": "EZDCCOccupancyGate",
+        "pos": [int(pos[0]) + 360, int(pos[1])],
+        "size": [280, 90],
+        "flags": {},
+        "order": gate_id,
+        "mode": 0,
+        "inputs": [{"name": "image", "type": "IMAGE", "link": link_in}],
+        "outputs": [
+            {
+                "name": "image",
+                "type": "IMAGE",
+                "links": old_links,
+                "slot_index": 0,
+            }
+        ],
+        "properties": {"Node name for S&R": "EZDCCOccupancyGate"},
+        "widgets_values": [required_mode],
+        "title": f"Occupancy gate ({required_mode})",
+    }
+    graph["nodes"].append(gate)
+    out["links"] = [link_in]
+    _add_link(graph, link_in, int(source["id"]), 0, gate_id, 0, "IMAGE")
+    graph["last_node_id"] = gate_id
+    graph["last_link_id"] = max(int(graph.get("last_link_id") or 0), link_in)
+    return gate
+
+
+def _add_guide_video_node(graph: dict, *, layer: str = "depth") -> dict:
+    """Unwired video-path loader (envelope only — do not decode frames)."""
+    max_id, _max_link = _max_ids(graph)
+    nid = max_id + 1
+    node = {
+        "id": nid,
+        "type": "EZDCCLoadGuideVideo",
+        "pos": [40, 720],
+        "size": [320, 130],
+        "flags": {},
+        "order": nid,
+        "mode": 0,
+        "inputs": [],
+        "outputs": [
+            {"name": "path", "type": "STRING", "links": None, "slot_index": 0},
+            {"name": "fps", "type": "INT", "links": None, "slot_index": 1},
+        ],
+        "properties": {"Node name for S&R": "EZDCCLoadGuideVideo"},
+        "widgets_values": ["go-see", "12", layer],
+        "title": "Load guide video path",
+    }
+    graph["nodes"].append(node)
+    graph["last_node_id"] = nid
+    return node
 
 
 def build_klein_from_clay() -> dict:
@@ -868,6 +1021,131 @@ def build_wan_flf_from_guide() -> dict:
     return graph
 
 
+def _set_filename_prefix(graph: dict, prefix: str) -> None:
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        if ntype == "SaveImage":
+            node["widgets_values"] = [prefix]
+            node["title"] = f"Save {prefix}"
+        elif ntype == "VHS_VideoCombine":
+            widgets = node.get("widgets_values")
+            if isinstance(widgets, dict):
+                widgets = dict(widgets)
+                widgets["filename_prefix"] = prefix
+                node["widgets_values"] = widgets
+            elif isinstance(widgets, list) and widgets:
+                widgets = list(widgets)
+                widgets[0] = prefix
+                node["widgets_values"] = widgets
+
+
+def build_klein_from_guide_loader() -> dict:
+    graph = build_klein_from_clay()
+    graph["id"] = "klein-from-guide-loader-lab-example"
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "klein-from-guide-loader-lab-example"
+    extra["lab_description"] = (
+        "Klein 4B edit of EZDCCLoadGuideStill first.png. Enhance on. 1280x704. Seed 42."
+    )
+    extra["lab_dcc"] = {
+        "enhance": True,
+        "mode": "edit",
+        "seed": 42,
+        "size": [1280, 704],
+        "prefix": "ez_guide_hero",
+        "loader": "EZDCCLoadGuideStill",
+        "layer": "first",
+        "slug": "go-see",
+        "shot_id": "12",
+    }
+    extra["lab_note"] = KLEIN_LOADER_NOTE
+    _retitle_note(graph, KLEIN_LOADER_NOTE)
+    _set_filename_prefix(graph, "ez_guide_hero")
+    load = _replace_load_image(
+        graph,
+        ntype="EZDCCLoadGuideStill",
+        title="Load guide still",
+        widgets=["go-see", "12", "first"],
+    )
+    _insert_occupancy_gate(graph, source=load, required_mode="klein")
+    return graph
+
+
+def build_ltx_iclora_from_guide_loader() -> dict:
+    graph = build_ltx_iclora()
+    graph["id"] = "ltx-iclora-from-guide-loader-lab-example"
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "ltx-iclora-from-guide-loader-lab-example"
+    extra["lab_description"] = (
+        "LTX-2.5 IC-LoRA envelope from EZDCCLoadGuideStill + depth video path."
+    )
+    ic = dict(extra.get("lab_iclora") or {})
+    ic["prefix"] = "ez_iclora_guide"
+    ic["loader"] = "EZDCCLoadGuideStill"
+    ic["magcache"] = False
+    ic["distilled_only"] = True
+    extra["lab_iclora"] = ic
+    extra["lab_dcc"] = {
+        "slug": "go-see",
+        "shot_id": "12",
+        "layer": "first",
+        "prefix": "ez_iclora_guide",
+    }
+    extra["lab_note"] = LTX_LOADER_NOTE
+    _retitle_note(graph, LTX_LOADER_NOTE)
+    _set_filename_prefix(graph, "ez_iclora_guide")
+    load = _replace_load_image(
+        graph,
+        ntype="EZDCCLoadGuideStill",
+        title="Load guide still",
+        widgets=["go-see", "12", "first"],
+    )
+    _insert_occupancy_gate(graph, source=load, required_mode="ltx")
+    _add_guide_video_node(graph, layer="depth")
+    blob = json.dumps(graph)
+    if '"type": "MagCache"' in blob:
+        raise SystemExit("iclora loader envelope must not include MagCache nodes")
+    return graph
+
+
+def build_trellis_from_klein_still() -> dict:
+    from _build_trellis_workflow import build_trellis
+
+    graph = build_trellis()
+    graph["id"] = "trellis-from-klein-still-lab-example"
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "trellis-from-klein-still-lab-example"
+    extra["lab_description"] = (
+        "EZDCCLoadStillPack mug plate to native TRELLIS.2 INT8. Occupancy trellis."
+    )
+    extra["lab_dcc"] = {
+        "slug": "go-see",
+        "plate": "mug",
+        "prefix": "assets/objects/_lab-mug/",
+        "loader": "EZDCCLoadStillPack",
+    }
+    trellis = dict(extra.get("lab_trellis") or {})
+    trellis["native_only"] = True
+    trellis["output_prefix"] = "assets/objects/_lab-mug/"
+    extra["lab_trellis"] = trellis
+    extra["lab_note"] = TRELLIS_LOADER_NOTE
+    _retitle_note(graph, TRELLIS_LOADER_NOTE)
+    load = _replace_load_image(
+        graph,
+        ntype="EZDCCLoadStillPack",
+        title="Load still pack",
+        widgets=["go-see", "mug", "first"],
+    )
+    _insert_occupancy_gate(graph, source=load, required_mode="trellis")
+    for node in graph["nodes"]:
+        if node.get("type") == "MeshToFile3D":
+            node["widgets_values"] = ["assets/objects/_lab-mug/mesh"]
+            node["title"] = "Save GLB (_lab-mug)"
+    if any(str(n.get("type") or "").lower().startswith("pixal") for n in graph["nodes"]):
+        raise SystemExit("trellis loader must not include Pixal nodes")
+    return graph
+
+
 def main() -> int:
     klein = build_klein_from_clay()
     canny = build_klein_from_canny()
@@ -876,6 +1154,9 @@ def main() -> int:
     ltx_canny = build_ltx_iclora_canny()
     ltx_shorts = build_ltx_iclora_depth_shorts()
     flf = build_wan_flf_from_guide()
+    klein_loader = build_klein_from_guide_loader()
+    ltx_loader = build_ltx_iclora_from_guide_loader()
+    trellis_loader = build_trellis_from_klein_still()
     written = [
         ("klein-from-clay-lab-example.json", klein),
         ("klein-from-canny-lab-example.json", canny),
@@ -884,6 +1165,9 @@ def main() -> int:
         ("ltx-iclora-canny-5s-lab-example.json", ltx_canny),
         ("ltx-iclora-depth-shorts-lab-example.json", ltx_shorts),
         ("wan-flf-from-guide-lab-example.json", flf),
+        ("klein-from-guide-loader-lab-example.json", klein_loader),
+        ("ltx-iclora-from-guide-loader-lab-example.json", ltx_loader),
+        ("trellis-from-klein-still-lab-example.json", trellis_loader),
     ]
     for name, graph in written:
         dest = lab_dest(name, lane="dcc")
