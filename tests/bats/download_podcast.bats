@@ -61,8 +61,16 @@ teardown() {
   [ "${output}" = "" ]
   run tier_min_gb analog
   [ "${output}" = "0" ]
+  run tier_min_gb qwen3tts
+  [ "${output}" = "3" ]
   run tier_min_gb x
   [ "${output}" = "0" ]
+  run tier_include_patterns qwen3tts
+  [[ "${output}" == *"model.safetensors"* ]]
+  [[ "${output}" == *"config.json"* ]]
+  [[ "${output}" == *"speech_tokenizer/model.safetensors"* ]]
+  [[ "${output}" == *"tokenizer_config.json"* ]]
+  [[ "${output}" == *"vocab.json"* ]]
   run tier_include_patterns analog
   [[ "${output}" == *"kokoro-v1.0.onnx"* ]]
   [[ "${output}" == *"voices-v1.0.bin"* ]]
@@ -148,4 +156,28 @@ teardown() {
   [[ -f ${tdir}/kokoro-v1.0.onnx ]]
   run prune_empty_dirs "${tdir}"
   [ "${status}" -eq 0 ]
+}
+
+@test "download-podcast qwen3tts include is more than model.safetensors" {
+  local tdir
+  tdir="$(tier_dir qwen3tts)"
+  mkdir -p "${tdir}"
+  echo x >"${tdir}/model.safetensors"
+  run tier_files_ready qwen3tts
+  [ "${status}" -ne 0 ]
+  echo x >"${tdir}/config.json"
+  run tier_files_ready qwen3tts
+  [ "${status}" -ne 0 ]
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DP}\" run --tier qwen3tts"
+  [ "${status}" -eq 0 ]
+  [[ -f "${tdir}/config.json" ]]
+  [[ -f "${tdir}/speech_tokenizer/model.safetensors" ]]
+  [[ -f "${tdir}/speech_tokenizer/config.json" ]]
+  run tier_files_ready qwen3tts
+  [ "${status}" -eq 0 ]
+  # Nested tokenizer must not flatten over comfy/tts/model.safetensors.
+  if [[ -L ${MODELS_DIR}/comfy/tts/model.safetensors ]]; then
+    tgt="$(readlink "${MODELS_DIR}/comfy/tts/model.safetensors")"
+    [[ ${tgt} != *speech_tokenizer* ]]
+  fi
 }

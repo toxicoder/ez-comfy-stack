@@ -7,6 +7,8 @@ import os
 import shutil
 import subprocess
 import sys
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable
 
@@ -275,8 +277,36 @@ CLONE_REQUIRED_FILES = (
     "ve.pt",
     "s3gen.pt",
     "grapheme_mtl_merged_expanded_v1.json",
+    "Cangjie5_TC.json",
     "t3_mtl23ls_v3.safetensors",
     "conds.pt",
+)
+QWEN3_WHEEL_STATUS = (
+    "qwen3tts extra not installed — "
+    "docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -m pip install "
+    "einops soundfile && docker exec ez-comfy-studio "
+    "/comfy-state/ComfyUI/.venv/bin/python -m pip install --no-deps qwen-tts"
+)
+QWEN3_PACK_STATUS = (
+    "qwen3tts pack incomplete — ./scripts/manage.sh download-podcast --tier qwen3tts"
+)
+QWEN3_TOKENIZER_STATUS = (
+    "qwen3tts tokenizer missing — ./scripts/manage.sh download-podcast --tier qwen3tts"
+)
+QWEN3_BASE_REQUIRED_FILES = (
+    "model.safetensors",
+    "config.json",
+    "generation_config.json",
+    "tokenizer_config.json",
+    "vocab.json",
+    "merges.txt",
+    "preprocessor_config.json",
+)
+QWEN3_TOKENIZER_REQUIRED_FILES = (
+    "speech_tokenizer/config.json",
+    "speech_tokenizer/configuration.json",
+    "speech_tokenizer/preprocessor_config.json",
+    "speech_tokenizer/model.safetensors",
 )
 WHISPER_REQUIRED_FILES = ("model.bin", "config.json", "tokenizer.json")
 # Spark CTranslate2 wheels are CPU-only; try int8 CPU before CUDA float16.
@@ -470,6 +500,33 @@ def preflight_clone() -> str:
         return perth_miss
     if clone_ckpt_dir() is None:
         return "clone pack missing — run ./scripts/manage.sh download-dub --tier clone"
+    return ""
+
+
+def _import_qwen3_model() -> tuple[Any | None, str]:
+    """Load Qwen3TTSModel or an operator-facing ImportError reason."""
+    try:
+        from qwen_tts import Qwen3TTSModel  # type: ignore[import-not-found]
+    except ImportError as exc:
+        return None, f"{QWEN3_WHEEL_STATUS} ({exc})"
+    except Exception:  # noqa: BLE001 — optional runtime
+        return None, QWEN3_WHEEL_STATUS
+    return Qwen3TTSModel, ""
+
+
+def preflight_qwen3() -> str:
+    """Empty when Qwen3-TTS can load offline; otherwise an operator-facing reason."""
+    model_cls, miss = _import_qwen3_model()
+    if miss:
+        return miss
+    folder = qwen3_base_dir()
+    if folder is None or not qwen3_base_is_complete(folder):
+        return QWEN3_PACK_STATUS
+    if not qwen3_tokenizer_is_complete(folder):
+        return QWEN3_TOKENIZER_STATUS
+    loader = getattr(model_cls, "from_pretrained", None)
+    if not callable(loader):
+        return "qwen3tts missing from_pretrained"
     return ""
 
 
@@ -1491,6 +1548,73 @@ def clone_ckpt_dir() -> Path | None:
     return None
 
 
+def pkuseg_home_dir() -> Path | None:
+    """MODELS_DIR pkuseg home when the ontonotes zip or extract is present."""
+    env = (os.environ.get("PKUSEG_HOME") or "").strip()
+    if env:
+        return Path(env)
+    for root in _model_roots():
+        folder = Path(root) / "pkuseg"
+        if (folder / "spacy_ontonotes.zip").is_file() or (
+            folder / "spacy_ontonotes"
+        ).is_dir():
+            return folder
+    return None
+
+
+@contextmanager
+def _chatterbox_local_only(ckpt: Path) -> Iterator[None]:
+    """Force Cangjie + pkuseg onto the clone snapshot. No Hub during load/generate."""
+    cangjie = ckpt / "Cangjie5_TC.json"
+    prev_offline = os.environ.get("HF_HUB_OFFLINE")
+    prev_pkuseg = os.environ.get("PKUSEG_HOME")
+    os.environ["HF_HUB_OFFLINE"] = "1"
+    pkuseg_home = pkuseg_home_dir()
+    if pkuseg_home is not None:
+        os.environ["PKUSEG_HOME"] = str(pkuseg_home)
+    patches: list[tuple[Any, str, Any]] = []
+
+    def _local_download(
+        repo_id: str,
+        filename: str,
+        cache_dir: str | None = None,
+        **kwargs: Any,
+    ) -> str:
+        del repo_id, cache_dir, kwargs
+        if filename == "Cangjie5_TC.json" and cangjie.is_file():
+            return str(cangjie)
+        raise RuntimeError(f"hub download blocked: {filename}")
+
+    def _patch(mod: Any, name: str) -> None:
+        if mod is None or not hasattr(mod, name):
+            return
+        patches.append((mod, name, getattr(mod, name)))
+        setattr(mod, name, _local_download)
+
+    try:
+        try:
+            import huggingface_hub
+
+            _patch(huggingface_hub, "hf_hub_download")
+        except Exception:  # noqa: BLE001 — optional at unit-test time
+            pass
+        tok_mod = sys.modules.get("chatterbox.models.tokenizers.tokenizer")
+        if tok_mod is not None:
+            _patch(tok_mod, "hf_hub_download")
+        yield
+    finally:
+        for mod, name, orig in reversed(patches):
+            setattr(mod, name, orig)
+        if prev_offline is None:
+            os.environ.pop("HF_HUB_OFFLINE", None)
+        else:
+            os.environ["HF_HUB_OFFLINE"] = prev_offline
+        if prev_pkuseg is None:
+            os.environ.pop("PKUSEG_HOME", None)
+        else:
+            os.environ["PKUSEG_HOME"] = prev_pkuseg
+
+
 def _from_local_multilingual(loader: Callable[..., Any], ckpt: str, device: str) -> Any:
     """Call ``from_local`` with T3 V3. Older wheels cannot load our snapshot.
 
@@ -1544,7 +1668,8 @@ def _load_chatterbox_model() -> tuple[Any | None, str]:
     if not callable(loader):
         return None, "chatterbox-tts missing from_local — upgrade chatterbox-tts"
     try:
-        model = _from_local_multilingual(loader, str(ckpt), _chatterbox_device())
+        with _chatterbox_local_only(ckpt):
+            model = _from_local_multilingual(loader, str(ckpt), _chatterbox_device())
     except RuntimeError as exc:
         return None, str(exc)
     except Exception as exc:  # noqa: BLE001 — fail-soft
@@ -1608,7 +1733,12 @@ def _try_chatterbox(
         if cond_key != _CHATTERBOX_COND_KEY:
             kwargs["audio_prompt_path"] = ref
     try:
-        wav = generate(text, **kwargs)
+        ckpt = clone_ckpt_dir()
+        if ckpt is not None:
+            with _chatterbox_local_only(ckpt):
+                wav = generate(text, **kwargs)
+        else:
+            wav = generate(text, **kwargs)
         pcm = _pcm_list(wav)
         rate = int(getattr(model, "sr", SAMPLE_RATE) or SAMPLE_RATE)
     except Exception as exc:  # noqa: BLE001 — fail-soft
@@ -1620,19 +1750,6 @@ def _try_chatterbox(
     return pcm, rate, ""
 
 
-def _bind_generate(module_name: str) -> Callable[[str], Any] | None:
-    """Return ``model.generate`` from an optional TTS module, or None."""
-    try:
-        module = __import__(module_name, fromlist=["Qwen3TTS"])
-        loaded = module.Qwen3TTS.from_pretrained()
-        method = getattr(loaded, "generate", None)
-    except Exception:  # noqa: BLE001 — optional runtime
-        return None
-    if not callable(method):
-        return None
-    return method
-
-
 def _close_qwen3() -> None:
     global _QWEN3, _QWEN3_ERR, _QWEN3_PROMPT, _QWEN3_PROMPT_KEY
     _QWEN3 = None
@@ -1641,50 +1758,77 @@ def _close_qwen3() -> None:
     _QWEN3_PROMPT_KEY = ""
 
 
-def qwen3_ckpt_dir() -> Path | None:
-    """First local Qwen3-TTS Base snapshot (0.6B download-podcast pack)."""
+def _qwen3_snapshot_candidates() -> list[Path]:
+    """Possible Base snapshot directories under model roots."""
+    found: list[Path] = []
     for root in _model_roots():
-        candidates = (
-            Path(root) / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts",
-            Path(root) / "Qwen__Qwen3-TTS-12Hz-0.6B-Base",
-            Path(root) / "qwen3tts",
+        found.extend(
+            (
+                Path(root) / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts",
+                Path(root) / "Qwen__Qwen3-TTS-12Hz-0.6B-Base",
+                Path(root) / "qwen3tts",
+            )
         )
-        for folder in candidates:
-            if (folder / "model.safetensors").is_file() or (
-                folder / "config.json"
-            ).is_file():
-                return folder
+    return found
+
+
+def qwen3_base_is_complete(folder: Path) -> bool:
+    """True when Base metadata + talker weights are on disk."""
+    return all((folder / name).is_file() for name in QWEN3_BASE_REQUIRED_FILES)
+
+
+def qwen3_tokenizer_is_complete(folder: Path) -> bool:
+    """True when the nested 12Hz speech tokenizer is on disk."""
+    return all((folder / name).is_file() for name in QWEN3_TOKENIZER_REQUIRED_FILES)
+
+
+def qwen3_dir_is_complete(folder: Path) -> bool:
+    """True when ``from_pretrained(..., local_files_only=True)`` can run."""
+    return qwen3_base_is_complete(folder) and qwen3_tokenizer_is_complete(folder)
+
+
+def qwen3_base_dir() -> Path | None:
+    """First Base snapshot that has any sentinel (even incomplete)."""
+    for folder in _qwen3_snapshot_candidates():
+        if (folder / "model.safetensors").is_file() or (folder / "config.json").is_file():
+            return folder
     return None
+
+
+def qwen3_ckpt_dir() -> Path | None:
+    """First complete local Qwen3-TTS Base snapshot (0.6B download-podcast pack)."""
+    for folder in _qwen3_snapshot_candidates():
+        if qwen3_dir_is_complete(folder):
+            return folder
+    return None
+
+
+def _from_pretrained_local(loader: Callable[..., Any], ckpt: str) -> Any:
+    """Call ``from_pretrained`` with ``local_files_only=True`` when supported."""
+    try:
+        return loader(ckpt, local_files_only=True)
+    except TypeError:
+        return loader(ckpt)
 
 
 def _load_qwen3_model() -> tuple[Any | None, str]:
     """Uncached Qwen3-TTS Base handle. None plus a reason on miss."""
-    miss = "qwen3tts extra not installed — download-podcast --tier qwen3tts"
+    model_cls, miss = _import_qwen3_model()
+    if model_cls is None:
+        return None, miss or QWEN3_WHEEL_STATUS
     ckpt = qwen3_ckpt_dir()
-    model_cls: Any = None
+    if ckpt is None:
+        folder = qwen3_base_dir()
+        if folder is None or not qwen3_base_is_complete(folder):
+            return None, QWEN3_PACK_STATUS
+        return None, QWEN3_TOKENIZER_STATUS
+    loader = getattr(model_cls, "from_pretrained", None)
+    if not callable(loader):
+        return None, "qwen3tts missing from_pretrained"
     try:
-        from qwen_tts import Qwen3TTSModel  # type: ignore[import-not-found]
-
-        model_cls = Qwen3TTSModel
-    except Exception:  # noqa: BLE001 — optional runtime
-        model_cls = None
-    if model_cls is not None and ckpt is not None:
-        loader = getattr(model_cls, "from_pretrained", None)
-        if callable(loader):
-            try:
-                return loader(str(ckpt)), ""
-            except Exception as exc:  # noqa: BLE001 — fail-soft
-                return None, f"qwen3tts failed: {exc}"
-    for module_name in ("qwen_tts", "qwen3_tts"):
-        try:
-            module = __import__(module_name, fromlist=["Qwen3TTS"])
-            cls = getattr(module, "Qwen3TTS", None)
-            loader = getattr(cls, "from_pretrained", None) if cls else None
-            if callable(loader):
-                return loader(), ""
-        except Exception:  # noqa: BLE001 — try the next name
-            continue
-    return None, miss
+        return _from_pretrained_local(loader, str(ckpt)), ""
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        return None, f"qwen3tts failed: {exc}"
 
 
 def _get_qwen3() -> tuple[Any | None, str]:
@@ -1721,32 +1865,10 @@ def _try_qwen3tts(
     global _QWEN3_PROMPT, _QWEN3_PROMPT_KEY
     model, err = _get_qwen3()
     if model is None:
-        generate = _bind_generate("qwen_tts") or _bind_generate("qwen3_tts")
-        if generate is None:
-            return [], SAMPLE_RATE, err or (
-                "qwen3tts extra not installed — download-podcast --tier qwen3tts"
-            )
-        try:
-            wav = generate(text)
-        except Exception as exc:  # noqa: BLE001 — fail-soft
-            return [], SAMPLE_RATE, f"qwen3tts failed: {exc}"
-        pcm = _pcm_list(wav)
-        if not pcm:
-            return [], SAMPLE_RATE, "qwen3tts returned empty audio"
-        return pcm, SAMPLE_RATE, ""
+        return [], SAMPLE_RATE, err or QWEN3_WHEEL_STATUS
     clone = getattr(model, "generate_voice_clone", None)
     if not callable(clone):
-        generate = getattr(model, "generate", None)
-        if not callable(generate):
-            return [], SAMPLE_RATE, "qwen3tts missing generate_voice_clone"
-        try:
-            wav = generate(text)
-        except Exception as exc:  # noqa: BLE001 — fail-soft
-            return [], SAMPLE_RATE, f"qwen3tts failed: {exc}"
-        pcm = _pcm_list(wav)
-        if not pcm:
-            return [], SAMPLE_RATE, "qwen3tts returned empty audio"
-        return pcm, SAMPLE_RATE, ""
+        return [], SAMPLE_RATE, "qwen3tts missing generate_voice_clone"
     ref = (ref_wav or "").strip()
     transcript = (ref_text or "").strip() or (_speaker_ref_text(ref) if ref else "")
     xvec_only = not bool(transcript)
@@ -1948,10 +2070,15 @@ def render_mix(
     if not turns:
         return [], rate, NO_TURNS_STATUS
     name = engine if engine in ENGINES else ENGINE_CHATTERBOX
-    if name == ENGINE_CHATTERBOX and tts_hook is None:
-        clone_miss = preflight_clone()
-        if clone_miss:
-            return [], rate, clone_miss
+    if tts_hook is None:
+        if name == ENGINE_CHATTERBOX:
+            clone_miss = preflight_clone()
+            if clone_miss:
+                return [], rate, clone_miss
+        elif name == ENGINE_QWEN3TTS:
+            qwen_miss = preflight_qwen3()
+            if qwen_miss:
+                return [], rate, qwen_miss
     refs = _extract_refs(samples, rate, turns, dest / "speakers")
     lang = language_code(payload.get("target_language") or "es")
     clones: list[dict[str, Any]] = []

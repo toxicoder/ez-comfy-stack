@@ -78,7 +78,7 @@ tier_min_gb() {
     analog) echo 0 ;;
     acestep) echo 2 ;;
     chatterbox) echo 1 ;;
-    qwen3tts) echo 1 ;;
+    qwen3tts) echo 3 ;;
     *) echo 0 ;;
   esac
 }
@@ -106,7 +106,20 @@ tier_include_patterns() {
       printf '%s\n' "t3_turbo_v1.safetensors"
       ;;
     qwen3tts)
-      printf '%s\n' "model.safetensors"
+      # Official Base snapshot vendors the 12Hz tokenizer under speech_tokenizer/.
+      # model.safetensors alone cannot from_pretrained(local_files_only=True).
+      printf '%s\n' \
+        "model.safetensors" \
+        "config.json" \
+        "generation_config.json" \
+        "tokenizer_config.json" \
+        "vocab.json" \
+        "merges.txt" \
+        "preprocessor_config.json" \
+        "speech_tokenizer/config.json" \
+        "speech_tokenizer/configuration.json" \
+        "speech_tokenizer/preprocessor_config.json" \
+        "speech_tokenizer/model.safetensors"
       ;;
     *)
       return 0
@@ -314,6 +327,13 @@ link_into_comfy() {
   [[ -d ${dir} ]] || return 0
   while IFS= read -r f; do
     [[ -z ${f} ]] && continue
+    rel="${f#"${dir}"/}"
+    # Nested 12Hz tokenizer must stay in the snapshot (basename collision).
+    if [[ ${tier} == qwen3tts ]]; then
+      case "${rel}" in
+        speech_tokenizer/*) continue ;;
+      esac
+    fi
     base="$(basename "${f}")"
     dest_sub="$(comfy_dest_subdir "${base}")"
     dest="${src}/${dest_sub}/${base}"

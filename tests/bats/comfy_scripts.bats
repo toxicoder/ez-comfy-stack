@@ -159,6 +159,20 @@ teardown() {
   if grep -E 'faster-whisper.*chatterbox' "${TEST_TMP_DIR}/pip_dub.log"; then
     return 1
   fi
+  # shellcheck source=../../docker/install-comfy/qwen-tts.sh disable=SC1091
+  source "${REPO_ROOT}/docker/install-comfy/qwen-tts.sh"
+  run qwen_tts_extra_packages
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"einops"* ]]
+  [[ "${output}" == *"soundfile"* ]]
+  [[ "${output}" != *"transformers"* ]]
+  run qwen_tts_wheel
+  [ "${output}" = "qwen-tts" ]
+  run grep -E 'pip install[[:space:]]+qwen-tts([[:space:]]|$)' \
+    "${REPO_ROOT}/docker/install-comfy/qwen-tts.sh" \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh" \
+    "${REPO_ROOT}/scripts/manage.sh"
+  [ "${status}" -ne 0 ]
 }
 
 @test "install-comfy phase_nodes and ensure_lab_video_nodes require VideoHelperSuite" {
@@ -1352,6 +1366,23 @@ PY
   export DUB_PIP_FAIL=1
   export WHISPER_IMPORT_RC=1
   run install_dub_asr_wheel "${py}"
+  [ "${status}" -eq 0 ]
+}
+
+@test "ensure_pkuseg_home exports PKUSEG_HOME and symlinks" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  export MODELS_ROOT="${TEST_TMP_DIR}/models"
+  export PKUSEG_HOME="${MODELS_ROOT}/pkuseg"
+  mkdir -p "${MODELS_ROOT}/pkuseg"
+  local link="${TEST_TMP_DIR}/root/.pkuseg"
+  run ensure_pkuseg_home "${link}"
+  [ "${status}" -eq 0 ]
+  [[ -L ${link} ]]
+  [[ "${output}" == *"pkuseg home"* ]]
+  run grep -F 'ensure_pkuseg_home' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'PKUSEG_HOME' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "${status}" -eq 0 ]
 }
 

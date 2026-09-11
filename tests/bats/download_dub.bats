@@ -70,8 +70,21 @@ teardown() {
   [[ "${output}" == *"ve.pt"* ]]
   [[ "${output}" == *"s3gen.pt"* ]]
   [[ "${output}" == *"grapheme_mtl_merged_expanded_v1.json"* ]]
+  [[ "${output}" == *"Cangjie5_TC.json"* ]]
   [[ "${output}" != *"t3_mtl23ls_v2.safetensors"* ]]
   [[ "${output}" != *"s3gen.safetensors"* ]]
+  run dub_pkuseg_home
+  [[ "${output}" == "${MODELS_DIR}/pkuseg" ]]
+  run dub_pkuseg_zip_url
+  [[ "${output}" == *"spacy_ontonotes.zip"* ]]
+  run dub_pkuseg_zip_path
+  [[ "${output}" == *"spacy_ontonotes.zip"* ]]
+  run dub_pkuseg_ready
+  [ "${status}" -ne 0 ]
+  run dub_seed_pkuseg
+  [ "${status}" -eq 0 ]
+  run dub_pkuseg_ready
+  [ "${status}" -eq 0 ]
   TIER=asr
   run dub_tiers_to_process
   [[ "${output}" == *"vad"* && "${output}" == *"whisper"* ]]
@@ -157,4 +170,9 @@ teardown() {
   [ "${status}" -eq 0 ]
   run dub_list_extra_files clone
   [ "${status}" -eq 0 ]
+  [[ -f "${MODELS_DIR}/comfy/tts/Cangjie5_TC.json" || -L "${MODELS_DIR}/comfy/tts/Cangjie5_TC.json" ]]
+  run dub_pkuseg_ready
+  [ "${status}" -eq 0 ]
+  [[ -f "$(dub_pkuseg_zip_path)" ]]
+  [[ -d "$(dub_pkuseg_home)/spacy_ontonotes" ]]
 }
