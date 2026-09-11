@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import gc
+from pathlib import Path
 from typing import Any
 
 from .concat import (
@@ -122,10 +123,16 @@ class EZFilmConcat:
         disclosure: str = "",
         **shots: object,
     ):
-        paths = [
-            resolve_shot_path(shots.get(f"shot_{index:02d}"))
-            for index in range(1, SHOT_COUNT + 1)
-        ]
+        paths = []
+        for index in range(1, SHOT_COUNT + 1):
+            path = resolve_shot_path(shots.get(f"shot_{index:02d}"))
+            file_path = Path(path)
+            if not file_path.is_file() or file_path.stat().st_size < 1:
+                raise RuntimeError(
+                    f"missing or unreadable shot_{index:02d} ({path}); "
+                    "refusing to stitch fewer than 18 stems"
+                )
+            paths.append(path)
         dest_dir = output_directory()
         dest_dir.mkdir(parents=True, exist_ok=True)
         out_mp4 = str(publish_path(film, dest_dir))

@@ -18,6 +18,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Optional studio-ui board (`:8190` profile), LTX Director GPL clone, OpenCut MIT embed
 - Optional 3D sidecars (TRELLIS.2, DA3-BASE, host Blender / SuperSplat) and VACE join
 - Wave 4: `film-accept`, DFR print mode, A14B hero, talking-head, LongCat / DreamX opt-in
+- Go-see show-off loop (identity-first reprint, wordless mix, fail-closed concat)
 
 **What this enables**
 
@@ -135,7 +136,8 @@ FILM=go-see   # or still-here | switchyard
 ./scripts/manage.sh film-proxies go-see --yes
 # Promote take 3 of shot 12 into the jobstore master:
 ./scripts/manage.sh take-promote go-see 12 3
-# Fail-closed accept gate before concat (5.00s, 1280×704, LTX audio):
+# Fail-closed accept gate before concat (5.00s, 1280×704, LTX audio,
+# world-only speech-band, 90s master when present):
 ./scripts/manage.sh film-accept go-see
 ```
 
@@ -215,7 +217,7 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
 
 === "go-see"
 
-    First-person **parkour** body-cam. Identity lock: ink-black fitted running layers + matte-black gloves + open short storm-cloak with warm-gold lining + warm-gold rune sparks at the wrists only (data-staff slung on the back). Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens. Never a teal jumpsuit, never circuit embroidery, never player chrome or a game interface. Eye-level, arms always in the lower third; boots/knees on vaults, drops, and wall-runs. Dead sprint from frame 1. One signature stunt per 5 s; each shot lands on a readable plant for the next I2V. Never a standing third-person wizard. **No score, no speech** (breath + world foley).
+    First-person **parkour** body-cam. Identity lock: ink-black fitted running layers + **blank** matte-black gloves (empty palms) + open short storm-cloak with warm-gold lining + tiny warm-gold rune **motes** at the wrists only (data-staff slung on the back). Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens. Never a teal jumpsuit, never circuit embroidery, never a wingsuit handlebar, never player chrome or a game interface. Eye-level, arms always in the lower third; boots/knees on vaults, drops, and wall-runs. Dead sprint from frame 1. One signature stunt per 5 s; last frames hold the next plant large in center. Never a standing third-person wizard. **No score, no speech** — LTX paragraphs lead with `Wordless mix:` then close `No speech.`
 
     | Beat | Place | s1 enter | s2 traverse | s3 exit |
     | --- | --- | --- | --- | --- |
@@ -253,6 +255,24 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
     | 6 | Lamp hold | Look down the dark string of cars, quiet laugh |
 
 Prefixes: `ez_gosee_b{1..6}_s{1..3}`, `ez_stillhere_…`, `ez_switchyard_…`. Machine-readable lists: `workflows/shorts/*.shots.yaml` (`identity_look` for Klein, `ltx_i2v` for each print).
+
+---
+
+## Go-see show-off loop
+
+Identity owns every later I2V. Distilled LTX audio talks if the mix is only a prohibition. Concat used to publish 17 stems. Do this before calling `ez_gosee_90s.mp4` a deliverable:
+
+1. Queue identity only if you can isolate it; otherwise Queue the film graph and **stop after the identity PNG** (`ez_gosee_identity_*.png`).
+2. Accept the still only if: contralateral pump, blank gloves, staff on the back, no handlebar, no circular mask, gap already in center.
+3. Re-roll identity (seed **42** is frozen in YAML — if the still is illegal, change **prompt text**, not the seed, then rebuild). If you must explore seeds, do it on `klein-still-hero-lab-example` off-graph, then paste the winning look back into YAML.
+4. Print b1s1–s3 with `ltx-i2v-shot-lab-example` / `./scripts/manage.sh print-shot go-see N` until last frames still show gloves in the lower third.
+5. `take-promote` winners. `film-resume` the rest.
+6. `./scripts/manage.sh film-accept go-see` must exit 0 before anyone calls the file a deliverable. In-graph `EZFilmConcat` refuses missing/short stems and unlinks a master that is not 90.00±0.10s.
+7. Listen on headphones. If you hear words, reprint that shot; do not “EQ the announcer out” unless you are on the stems path and dropping DX.
+
+If b2s1’s start frame is a wooden pier, reprint b1s3 first. LTX will not invent maglev steel.
+
+Optional salvage on a **locked** picture (not the lab default, not in the one-click graph): dual-condition last-frame + identity still (IC-LoRA / reference latent); per-shot `print_mode: wan-flf`; DFR two-stage; SeedVR2; VACE 17-frame joins; ACE-Step score; distilled→base LTX. Go-see stays world-only, `score: none`.
 
 ---
 

@@ -259,10 +259,24 @@ def test_creative_locks() -> None:
         "hold",
         "burst",
     )
+    ident = parsed["identity"].lower()
+    assert "blank matte-black gloves" in ident
+    assert "empty palms" in ident
+    assert "motes" in ident
+    assert "handlebar" not in ident
+    assert "wingsuit" not in ident
+    assert "standing wizard" not in go.lower()
     for shot in parsed["shots"]:
-        blob = shot["ltx_i2v"].lower()
-        assert "no speech" in blob, shot["prefix"]
-        assert any(token in blob for token in stunts), shot["prefix"]
+        blob = shot["ltx_i2v"]
+        lower = blob.lower()
+        assert "no speech" in lower, shot["prefix"]
+        assert "Wordless mix:" in blob, shot["prefix"]
+        assert "silent mouth" in lower, shot["prefix"]
+        assert "blank matte-black gloves" in lower, shot["prefix"]
+        assert "Last frames hold" in blob, shot["prefix"]
+        assert "handlebar" not in lower, shot["prefix"]
+        assert "wingsuit" not in lower, shot["prefix"]
+        assert any(token in lower for token in stunts), shot["prefix"]
         if shot["prefix"] != "ez_gosee_b6_s3":
             assert shot["end_state"], shot["prefix"]
     for i, shot in enumerate(parsed["shots"][:-1]):
@@ -422,6 +436,20 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
             assert concat["pos"][0] < 400
         else:
             assert concat["widgets_values"][2] == 0
+        ltx_neg = next(n for n in graph["nodes"] if n.get("id") == 104)
+        neg = str(ltx_neg["widgets_values"][0])
+        if film == "go-see":
+            assert "wingsuit handlebar" in neg
+            klein_neg = next(
+                n
+                for n in graph["nodes"]
+                if n.get("type") == "CLIPTextEncode"
+                and n.get("title") == "Negative"
+                and n.get("id") != 104
+            )
+            assert "handlebar grip" in str(klein_neg["widgets_values"][0])
+        else:
+            assert "wingsuit handlebar" not in neg
         identity = next(
             n
             for n in graph["nodes"]

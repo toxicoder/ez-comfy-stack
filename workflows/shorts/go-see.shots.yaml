@@ -13,13 +13,14 @@ identity_enhance: false
 identity_look: |
   A photoreal still, first-person eye-level body-cam already at a dead sprint across a
   golden-hour tropical rooftop terrace. An original techno wizard kit fills the lower
-  third: ink-black fitted running-layer sleeves and matte-black gloves; the left glove
-  pumps hip-to-chest as the right knee drives. An open short storm-cloak in matte charcoal
-  with a warm-gold inner lining streams at the frame edges. Tiny warm-gold rune sparks
-  bloom at the wrists only. A compact unmarked data-staff is slung across the back.
-  Unmarked palms and glass towers rush toward a bright bay; a rooftop gap sits in the
-  center distance. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in
-  YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.
+  third: ink-black fitted running-layer sleeves and blank matte-black gloves, empty palms
+  with no printed glyphs; the left glove pumps hip-to-chest as the right knee drives.
+  An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at
+  the frame edges. Tiny floating warm-gold rune motes hover near the wrists only. A
+  compact unmarked data-staff is slung across the back. Unmarked palms and glass towers
+  rush toward a bright bay; a rooftop gap sits in the center distance. Wide 24mm body-cam,
+  slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges
+  and a clean unmarked lens, empty of lettering.
 shots:
   - beat: 1
     shot: 1
@@ -30,22 +31,22 @@ shots:
     audio_world: race-pace footfalls, warm wind, grit ticks, close-mic breath
     script: Dead sprint toward the first rooftop gap.
     ltx_i2v: |
-      The start image holds as the first frame. The eye-level body-cam is already at a dead
-      sprint across the sunlit terrace; ink-black sleeves and matte-black gloves pump through
-      the lower third in a contralateral arm swing, elbows bent near ninety degrees, hands
-      traveling hip to chest as the horizon bobs with each race-pace stride. The open short
-      storm-cloak streams behind and snaps at the edges, warm-gold lining flashing. Warm wind
-      shoves the storm-cloak, grit ticks under the boots, and close-mic breath sits on every
-      footfall. The head stays level and snaps toward a rooftop gap dead ahead until that gap
-      fills the center of the frame, left glove still pumping. Continuous first-person take,
-      no cut. The frame stays a full-bleed photographic plate with bare edges and a clean
-      unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only race-pace footfalls,
+      warm wind, grit ticks, close-mic breath, silent mouth. First-person eye-level
+      body-cam. Dead sprint across the sunlit terrace already in the start frame; empty
+      pumping gloves stay in the lower third as the rooftop gap grows. Ink-black sleeves
+      and blank matte-black gloves stay in the lower third, contralateral pump, empty
+      palms. Open short storm-cloak streams, warm-gold lining flashing. Tiny wrist motes
+      only. Terrace stone under the boots. Last frames hold the gap in the center until
+      it fills the frame. Continuous first-person take, no cut. Full-bleed photographic
+      plate, bare edges, clean unmarked lens. No speech. No music and no score.
     wan_i2v: |
       First-person eye-level body-cam already at a dead sprint across a sunlit terrace.
-      Contralateral arm pump in the lower third, elbows bent, hands swinging hip to chest,
-      horizon bobbing. Open short storm-cloak streams at the edges. Head snaps toward a
-      rooftop gap until it fills the frame. Continuous tracking, locked identity, no cut.
-      Full-bleed photographic plate, bare frame edges, locked identity.
+      Contralateral arm pump in the lower third, blank gloves, empty palms, elbows bent,
+      hands swinging hip to chest, horizon bobbing. Open short storm-cloak streams at the
+      edges. Head snaps toward a rooftop gap until it fills the frame. Continuous tracking,
+      locked identity, no cut. Full-bleed photographic plate, bare frame edges, locked
+      identity.
   - beat: 1
     shot: 2
     prefix: ez_gosee_b1_s2
@@ -55,22 +56,22 @@ shots:
     audio_world: takeoff inhale, wind roar, lip grit, boot slam, effort breath
     script: Tucked front flip across the rooftop gap.
     ltx_i2v: |
-      The start image holds as the first frame. The head is already locked on the rooftop gap;
-      both matte-black gloves complete one last contralateral pump, then the arms pull in as
-      the camera launches into a tucked front flip, the horizon rolling once as boots kick
-      through the lower frame. The open short storm-cloak streams upward then snaps on the
-      landing. Wind roars past the ears, a hard close-mic inhale of breath hits on takeoff,
-      and grit ticks off the lip. Boots slam the far terrace; the camera dips on impact, the
-      arms reopen into a pump, and the sprint recovers, a low unmarked bulkhead now filling
-      the frame. Continuous first-person take, no cut. The frame stays a full-bleed
-      photographic plate with bare edges and a clean unmarked lens. No speech. No music and no
-      score.
+      The start image holds as the first frame. Wordless mix: only takeoff inhale, wind
+      roar, lip grit, boot slam, effort breath, silent mouth. First-person eye-level
+      body-cam. Tucked front flip across that rooftop gap already filling the start frame;
+      look at the far terrace lip before launch, horizon rolls once, camera dips on the
+      boot slam. Ink-black sleeves and blank matte-black gloves stay in the lower third,
+      contralateral pump, empty palms. Open short storm-cloak streams, warm-gold lining
+      flashing. Tiny wrist motes only. Terrace stone and the gap lip already in the start
+      image. Last frames hold the low unmarked bulkhead in the center. Continuous
+      first-person take, no cut. Full-bleed photographic plate, bare edges, clean unmarked
+      lens. No speech. No music and no score.
     wan_i2v: |
       First-person tucked front flip across a rooftop gap. Last arm pump, then arms tuck as
       the horizon rolls once, boots kick the lower frame, then slam the far terrace. Camera
       dips and recovers toward a low unmarked bulkhead, arms returning to a contralateral
-      pump. Open short storm-cloak streams then snaps. Continuous tracking, no cut. Full-bleed
-      photographic plate, bare frame edges, locked identity.
+      pump. Open short storm-cloak streams then snaps. Continuous tracking, no cut.
+      Full-bleed photographic plate, bare frame edges, locked identity.
   - beat: 1
     shot: 3
     prefix: ez_gosee_b1_s3
@@ -80,21 +81,23 @@ shots:
     audio_world: glove plant, fabric snap, wall ticks, wind rush, effort breath
     script: Kong vault the bulkhead, wall-run, drop toward the skybridge.
     ltx_i2v: |
-      The start image holds as the first frame. Both matte-black gloves reach, fingers
-      wrapping the top of the low unmarked bulkhead, then the body kongs through as the hips
-      pass between the planted arms, knees flashing the lower frame. A three-step wall-run
-      climbs unmarked glass, one glove sliding for balance while the other pumps, the open
-      short storm-cloak pressing flat then snapping free. Fabric snaps in the warm wind, glass
-      ticks under the palms, and close-mic breath punches on the plant. The camera drops off
-      the last terrace toward a glowing unmarked waterfront skybridge, legs kicking through
-      the bottom as that skybridge fills the view. Continuous first-person take, no cut. The
-      frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens.
-      No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only glove plant, fabric snap,
+      wall ticks, wind rush, effort breath, silent mouth. First-person eye-level body-cam.
+      Kong vault the low unmarked bulkhead already in the start frame; hips pass between
+      planted blank gloves, then a three-step glass wall-run, drop toward the waterfront.
+      Ink-black sleeves and blank matte-black gloves stay in the lower third, contralateral
+      pump, empty palms. Open short storm-cloak streams, warm-gold lining flashing. Tiny
+      wrist motes only. Unmarked glass and the bulkhead lip already in the start image.
+      Last frames hold the glowing unmarked waterfront skybridge in the center, metal
+      grating filling the view. Continuous first-person take, no cut. Full-bleed
+      photographic plate, bare edges, clean unmarked lens. No speech. No music and no
+      score.
     wan_i2v: |
-      First-person kong vault over a low unmarked bulkhead: both gloves grab the lip, hips
-      pass between the arms, then a short wall-run on glass. Camera drops toward a glowing
-      unmarked waterfront skybridge. Open short storm-cloak snaps on the drop. Continuous
-      tracking, no cut. Full-bleed photographic plate, bare frame edges, locked identity.
+      First-person kong vault over a low unmarked bulkhead: both blank gloves grab the lip,
+      hips pass between the arms, then a short wall-run on glass. Camera drops toward a
+      glowing unmarked waterfront skybridge of metal grating. Open short storm-cloak snaps
+      on the drop. Continuous tracking, no cut. Full-bleed photographic plate, bare frame
+      edges, locked identity.
   - beat: 2
     shot: 1
     prefix: ez_gosee_b2_s1
@@ -104,21 +107,22 @@ shots:
     audio_world: metal grating ticks, storm-cloak snap, wind, close-mic breath
     script: Dead sprint along the maglev spine.
     ltx_i2v: |
-      The start image holds as the first frame. The eye-level body-cam lands onto the unmarked
-      maglev skybridge and surges into a dead sprint along the metal spine; ink-black sleeves
-      and matte-black gloves pump at the edges in a contralateral swing, elbows bent, hands
-      passing hip to chest, boots hammering grating. The open short storm-cloak streams down
-      the spine, warm-gold lining catching the bay light. Unmarked glass towers streak past.
-      Wind shears, grating ticks each stride, and close-mic breath sits under the run. The
-      next gantry gap fills the frame as the sprint never breaks. Continuous first-person
-      take, no cut. The frame stays a full-bleed photographic plate with bare edges and a
-      clean unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only metal grating ticks,
+      storm-cloak snap, wind, close-mic breath, silent mouth. First-person eye-level
+      body-cam. Dead sprint along the unmarked maglev skybridge already in the start frame;
+      boots hammer metal grating. Ink-black sleeves and blank matte-black gloves stay in
+      the lower third, contralateral pump, empty palms. Open
+      short storm-cloak streams, warm-gold lining flashing. Tiny wrist motes only. Maglev
+      metal grating under the boots. Last frames hold the next gantry gap in the center
+      until it fills the frame. Continuous first-person take, no cut. Full-bleed
+      photographic plate, bare edges, clean unmarked lens. No speech. No music and no
+      score.
     wan_i2v: |
-      First-person dead sprint along an unmarked maglev spine over the bay. Contralateral arm
-      pump in the lower third, boots on metal grating, unmarked glass towers streaking past.
-      Open short storm-cloak streams behind. Next gantry gap fills the frame. Continuous
-      tracking, locked identity. Full-bleed photographic plate, bare frame edges, locked
-      identity.
+      First-person dead sprint along an unmarked maglev spine over the bay. Contralateral
+      arm pump in the lower third, blank gloves, boots on metal grating, unmarked glass
+      towers streaking past. Open short storm-cloak streams behind. Next gantry gap fills
+      the frame. Continuous tracking, locked identity. Full-bleed photographic plate, bare
+      frame edges, locked identity.
   - beat: 2
     shot: 2
     prefix: ez_gosee_b2_s2
@@ -128,21 +132,22 @@ shots:
     audio_world: rail grab clang, wind shear, boot flash, effort breath
     script: Cat leap between unmarked gantry segments.
     ltx_i2v: |
-      The start image holds as the first frame. The head snaps toward the gantry gap, then the
-      parkour body-cam cat-leaps; both matte-black gloves reach and grab a rail, fingers
-      wrapping the metal, the body swings through, boots flashing the lower frame. Warm-gold
-      rune sparks flare on the grab. The open short storm-cloak snaps across the gap. Metal
-      clangs, wind shears the gap, and a close-mic grunt of breath hits on the catch. The
-      camera recovers into the sprint along the last gantry lip, arms returning to a
-      contralateral pump, a vertical glass canyon opening below. Continuous first-person take,
-      no cut. The frame stays a full-bleed photographic plate with bare edges and a clean
-      unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only rail grab clang, wind
+      shear, boot flash, effort breath, silent mouth. First-person eye-level body-cam. Cat
+      leap between unmarked gantry segments already in the start frame; blank gloves wrap a
+      metal rail, body swings through, boots flash the lower frame. Ink-black sleeves and
+      blank matte-black gloves stay in the lower third, contralateral pump, empty palms.
+      Open short storm-cloak streams, warm-gold lining flashing. Tiny wrist motes only.
+      Metal grating and the gantry rail already in the start image. Last frames hold the
+      vertical glass canyon in the center. Continuous first-person take, no cut. Full-bleed
+      photographic plate, bare edges, clean unmarked lens. No speech. No music and no
+      score.
     wan_i2v: |
-      First-person cat leap between unmarked gantry segments. Both gloves reach and grab a
-      rail, body swings through, boots flash in frame, then arms return to a contralateral
-      pump. Open short storm-cloak snaps across the gap. Last gantry lip, canyon opening
-      below. Continuous tracking, no cut. Full-bleed photographic plate, bare frame edges,
-      locked identity.
+      First-person cat leap between unmarked gantry segments. Both blank gloves reach and
+      grab a metal rail, body swings through, boots flash in frame, then arms return to a
+      contralateral pump. Open short storm-cloak snaps across the gap. Last gantry lip,
+      canyon opening below. Continuous tracking, no cut. Full-bleed photographic plate,
+      bare frame edges, locked identity.
   - beat: 2
     shot: 3
     prefix: ez_gosee_b2_s3
@@ -152,19 +157,21 @@ shots:
     audio_world: wind roar, fabric snap, falling rush, close-mic breath
     script: Dive off the last gantry into hanging gardens.
     ltx_i2v: |
-      The start image holds as the first frame. The high-speed parkour run dives off the last
-      gantry, eye-level body-cam pitching down into a vertical glass canyon of hanging
-      gardens, ink-black sleeves whipping at the edges while the open short storm-cloak
-      streams upward, warm-gold lining flashing. Boots kick the lower frame as the drop
-      begins; the arms open then pull in for a controlled fall. Wind roars, fabric snaps, and
-      close-mic breath rides the fall. Palm terraces rush up until those palms fill the frame.
-      Continuous first-person take, no cut. The frame stays a full-bleed photographic plate
-      with bare edges and a clean unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only wind roar, fabric snap,
+      falling rush, close-mic breath, silent mouth. First-person eye-level body-cam. Dive
+      off the last gantry already in the start frame into the vertical glass canyon; camera
+      pitches down, boots kick the lower frame. Ink-black sleeves and blank matte-black
+      gloves stay in the lower third, contralateral pump, empty palms. Open short
+      storm-cloak streams, warm-gold lining flashing. Tiny wrist motes only. Gantry lip and
+      canyon glass already in the start image. Last frames hold the palms in the center as
+      they rush up and fill the frame. Continuous first-person take, no cut. Full-bleed
+      photographic plate, bare edges, clean unmarked lens. No speech. No music and no
+      score.
     wan_i2v: |
       First-person dive off the last gantry into a vertical glass canyon of hanging gardens.
-      Sleeves whip at the edges, open short storm-cloak streams upward, boots kick the lower
-      frame. Palms rush up. Continuous tracking downward, no cut. Full-bleed photographic
-      plate, bare frame edges, locked identity.
+      Sleeves whip at the edges, open short storm-cloak streams upward, blank gloves and
+      boots kick the lower frame. Palms rush up. Continuous tracking downward, no cut.
+      Full-bleed photographic plate, bare frame edges, locked identity.
   - beat: 3
     shot: 1
     prefix: ez_gosee_b3_s1
@@ -174,20 +181,21 @@ shots:
     audio_world: glass ticks, tunnel wind, kicking boots, close-mic breath
     script: Wall-run on unmarked canyon glass.
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam hits a long parkour
-      wall-run on unmarked glass among the palms, inside boot kicking along the canyon wall
-      while the outside matte-black glove slides for balance and the other arm keeps a tight
-      pump. The open short storm-cloak presses to the back in the tunnel wind, then peels free
-      at each step. Hanging tropical gardens streak past. Glass ticks under the gloves, wind
-      tunnels through the canyon, and close-mic breath stays on the lens. A garden terrace lip
-      fills the frame as the wall-run carries forward. Continuous first-person take, no cut.
-      The frame stays a full-bleed photographic plate with bare edges and a clean unmarked
-      lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only glass ticks, tunnel wind,
+      kicking boots, close-mic breath, silent mouth. First-person eye-level body-cam.
+      Wall-run on unmarked canyon glass among real tropical plants already in the start
+      frame; inside boot kicks photoreal wet stone, palms streak past. Ink-black sleeves
+      and blank matte-black gloves stay in the lower third, contralateral pump, empty
+      palms. Open short storm-cloak streams, warm-gold lining flashing. Tiny wrist motes
+      only. Canyon glass and hanging plants already in the start image. Last frames hold
+      the garden terrace lip in the center. Continuous first-person take, no cut.
+      Full-bleed photographic plate, bare edges, clean unmarked lens. No speech. No music
+      and no score.
     wan_i2v: |
-      First-person parkour wall-run on unmarked glass. Inside boot kicks the wall, one glove
-      slides, the other arm pumps. Hanging tropical gardens streak past. Open short
-      storm-cloak presses then peels. Terrace lip fills the frame. Continuous tracking, no
-      cut. Full-bleed photographic plate, bare frame edges, locked identity.
+      First-person parkour wall-run on unmarked glass. Inside boot kicks the wall, one
+      blank glove slides, the other arm pumps. Hanging tropical gardens streak past. Open
+      short storm-cloak presses then peels. Terrace lip fills the frame. Continuous
+      tracking, no cut. Full-bleed photographic plate, bare frame edges, locked identity.
   - beat: 3
     shot: 2
     prefix: ez_gosee_b3_s2
@@ -197,20 +205,22 @@ shots:
     audio_world: wet-stone footfalls, cloth slap, wrist sparks, close-mic breath
     script: Tic-tac vault across hanging garden terraces.
     ltx_i2v: |
-      The start image holds as the first frame. The parkour body-cam tic-tacs off the terrace
-      lip and speed-vaults hanging unmarked garden terraces: the outside boot kicks the riser,
-      then both matte-black gloves plant the next lip, fingers wrapping stone, hips passing,
-      knees flashing through the lower frame as warm-gold rune sparks flare at the wrists. The
-      open short storm-cloak slaps then streams. Cloth slaps, close-mic breath sits on the
-      plant, and footfalls knock wet stone. A garden water curtain fills the frame dead ahead
-      as the run never stops. Continuous first-person take, no cut. The frame stays a
-      full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No
-      music and no score.
+      The start image holds as the first frame. Wordless mix: only wet-stone footfalls,
+      cloth slap, wrist sparks, close-mic breath, silent mouth. First-person eye-level
+      body-cam. Tic-tac and speed vault across hanging unmarked terraces already in the
+      start frame; outside boot kicks the riser, both blank gloves plant the next wet-stone
+      lip. Ink-black sleeves and blank matte-black gloves stay in the lower third,
+      contralateral pump, empty palms. Open short storm-cloak streams, warm-gold lining
+      flashing. Tiny wrist motes only. Wet stone and the terrace lip already in the start
+      image. Last frames hold the water curtain in the center, dead ahead. Continuous
+      first-person take, no cut. Full-bleed photographic plate, bare edges, clean unmarked
+      lens. No speech. No music and no score.
     wan_i2v: |
       First-person tic-tac and speed vault across hanging unmarked garden terraces. Outside
-      boot kicks the riser, both gloves plant the next lip, hips pass, knees flash. Open short
-      storm-cloak slaps then streams. Water curtain dead ahead. Keep moving forward,
-      continuous tracking. Full-bleed photographic plate, bare frame edges, locked identity.
+      boot kicks the riser, both blank gloves plant the next lip, hips pass, knees flash.
+      Open short storm-cloak slaps then streams. Water curtain dead ahead. Keep moving
+      forward, continuous tracking. Full-bleed photographic plate, bare frame edges, locked
+      identity.
   - beat: 3
     shot: 3
     prefix: ez_gosee_b3_s3
@@ -220,19 +230,21 @@ shots:
     audio_world: water explosion, splash, wind, close-mic breath
     script: Burst through the garden water curtain.
     ltx_i2v: |
-      The start image holds as the first frame. The high-speed parkour body-cam bursts through
-      the garden water curtain, ink-black sleeves and matte-black gloves pumping in a
-      contralateral swing, water exploding at the lens, boots splashing the lower frame. The
-      open short storm-cloak heavy with water snaps once then streams. Water, wind, splash,
-      and close-mic breath travel with the camera. The view opens onto a storm-lit unmarked
-      causeway over the bay until that causeway fills the frame. Continuous first-person take,
-      no cut. The frame stays a full-bleed photographic plate with bare edges and a clean
-      unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only water explosion, splash,
+      wind, close-mic breath, silent mouth. First-person eye-level body-cam. Burst through
+      the garden water curtain already filling the start frame; water explodes at the lens,
+      boots splash the lower frame. Ink-black sleeves and blank matte-black gloves stay in
+      the lower third, contralateral pump, empty palms. Open short storm-cloak streams,
+      warm-gold lining flashing. Tiny wrist motes only. Falling water and wet stone already
+      in the start image. Last frames hold the storm-lit unmarked causeway in the center,
+      rain streaks on the lens and storm-cloak, until it fills the frame. Continuous
+      first-person take, no cut. Full-bleed photographic plate, bare edges, clean unmarked
+      lens. No speech. No music and no score.
     wan_i2v: |
       First-person parkour burst through a garden water curtain toward a storm-lit causeway.
-      Contralateral arm pump, boots splash the lower frame, open short storm-cloak snaps wet
-      then streams. Continuous tracking, no cut. Full-bleed photographic plate, bare frame
-      edges, locked identity.
+      Contralateral arm pump, blank gloves, boots splash the lower frame, open short
+      storm-cloak snaps wet then streams. Continuous tracking, no cut. Full-bleed
+      photographic plate, bare frame edges, locked identity.
   - beat: 4
     shot: 1
     prefix: ez_gosee_b4_s1
@@ -242,20 +254,21 @@ shots:
     audio_world: rain on storm-cloak, wet footfalls, distant thunder, close-mic breath
     script: Rain sprint on the unmarked causeway.
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam sprints a rain-slick
-      unmarked causeway at a dead run, ink-black sleeves pumping contralateral, elbows bent,
-      hands traveling hip to chest, warm-gold rune sparks hissing in the tropical rain. The
-      open short storm-cloak streams heavy and snaps in the gusts, lining flashing gold.
-      Lightning blooms far off over the bay. Rain ticks the storm-cloak, wet footfalls slap,
-      wind shoves, and close-mic breath sits on the lens. A squall gap in the spans fills the
-      center of the frame. Continuous first-person take, no cut. The frame stays a full-bleed
-      photographic plate with bare edges and a clean unmarked lens. No speech. No music and no
+      The start image holds as the first frame. Wordless mix: only rain on storm-cloak, wet
+      footfalls, distant thunder, close-mic breath, silent mouth. First-person eye-level
+      body-cam. Dead sprint on the rain-slick unmarked causeway already in the start frame;
+      visible rain streaks on the lens and storm-cloak. Ink-black sleeves and blank
+      matte-black gloves stay in the lower third, contralateral pump, empty palms. Open
+      short storm-cloak streams, warm-gold lining flashing. Tiny wrist motes only. Wet
+      causeway stone and rain on the cloak already in the start image. Last frames hold the
+      squall gap in the center. Continuous first-person take, no cut. Full-bleed
+      photographic plate, bare edges, clean unmarked lens. No speech. No music and no
       score.
     wan_i2v: |
       First-person dead sprint across a rain-slick unmarked causeway. Contralateral arm pump
-      in the lower third, open short storm-cloak streaming in the gusts, lightning far off
-      over the bay. Squall gap fills the frame. Continuous tracking, locked identity.
-      Full-bleed photographic plate, bare frame edges, locked identity.
+      in the lower third, blank gloves, open short storm-cloak streaming in the gusts,
+      lightning far off over the bay. Squall gap fills the frame. Continuous tracking,
+      locked identity. Full-bleed photographic plate, bare frame edges, locked identity.
   - beat: 4
     shot: 2
     prefix: ez_gosee_b4_s2
@@ -265,21 +278,22 @@ shots:
     audio_world: wind shear, rain ticks, landing dip, close-mic inhale
     script: Precision leap across the squall gap.
     ltx_i2v: |
-      The start image holds as the first frame. The head snaps toward the squall gap; the
-      parkour body-cam leaps between unmarked causeway spans, camera pitching, ink-black
-      sleeves and legs in the lower frame. Both gloves reach for balance then grab nothing and
-      return to a pump on landing. The open short storm-cloak streams across the gap and snaps
-      on impact. Warm-gold rune sparks streak. Wind shears the gap, rain ticks the
-      storm-cloak, a close-mic inhale of breath hits on takeoff, and the camera dips on impact
-      then recovers. Coastal cliffs open ahead as the sprint continues. Continuous
-      first-person take, no cut. The frame stays a full-bleed photographic plate with bare
-      edges and a clean unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only wind shear, rain ticks,
+      landing dip, close-mic inhale, silent mouth. First-person eye-level body-cam.
+      Precision leap across the squall gap already filling the start frame; look at the far
+      lip before launch, camera pitches, camera dips on landing. Ink-black sleeves and
+      blank matte-black gloves stay in the lower third, contralateral pump, empty palms.
+      Open short storm-cloak streams, warm-gold lining flashing. Tiny wrist motes only.
+      Rain on the lens and the causeway lip already in the start image. Last frames hold
+      the coastal cliffs in the center. Continuous first-person take, no cut. Full-bleed
+      photographic plate, bare edges, clean unmarked lens. No speech. No music and no
+      score.
     wan_i2v: |
       First-person precision leap across a squall gap between unmarked causeway spans. Head
-      locks on the far lip, camera pitches, sleeves and legs in the lower frame, gloves reach
-      then return to a contralateral pump on landing. Recovers toward coastal cliffs.
-      Continuous tracking, no cut. Full-bleed photographic plate, bare frame edges, locked
-      identity.
+      locks on the far lip, camera pitches, sleeves and legs in the lower frame, blank
+      gloves reach then return to a contralateral pump on landing. Recovers toward coastal
+      cliffs. Continuous tracking, no cut. Full-bleed photographic plate, bare frame edges,
+      locked identity.
   - beat: 4
     shot: 3
     prefix: ez_gosee_b4_s3
@@ -289,18 +303,20 @@ shots:
     audio_world: vault plant, grit, thinning rain, close-mic breath
     script: Dash vault off the last causeway lip.
     ltx_i2v: |
-      The start image holds as the first frame. The high-speed parkour run dash vaults a last
-      unmarked causeway lip: both matte-black gloves plant the edge, fingers wrapping stone,
-      the body dives through, knees flashing, then the arms push off and return to a
-      contralateral pump as the sprint hits the coastal cliffs and the squall thins. The open
-      short storm-cloak snaps over the lip. Wind, grit, and close-mic breath ride the vault.
-      Unmarked ridge stone fills the frame under the boots as the body-cam never stops.
-      Continuous first-person take, no cut. The frame stays a full-bleed photographic plate
-      with bare edges and a clean unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only vault plant, grit,
+      thinning rain, close-mic breath, silent mouth. First-person eye-level body-cam. Dash
+      vault the last unmarked causeway lip already in the start frame toward the coastal
+      cliffs; both blank gloves plant the edge, body dives through, knees flash. Ink-black
+      sleeves and blank matte-black gloves stay in the lower third, contralateral pump,
+      empty palms. Open short storm-cloak streams, warm-gold lining flashing. Tiny wrist
+      motes only. Wet stone of the causeway lip already in the start image. Last frames
+      hold the unmarked ridge stone in the center under the boots. Continuous first-person
+      take, no cut. Full-bleed photographic plate, bare edges, clean unmarked lens. No
+      speech. No music and no score.
     wan_i2v: |
       First-person dash vault off a last unmarked causeway lip toward coastal cliffs. Both
-      gloves plant the lip, body dives through, knees flash, arms push off and return to a
-      pump. Ridge stone fills the frame. Keep tracking forward, no cut. Full-bleed
+      blank gloves plant the lip, body dives through, knees flash, arms push off and return
+      to a pump. Ridge stone fills the frame. Keep tracking forward, no cut. Full-bleed
       photographic plate, bare frame edges, locked identity.
   - beat: 5
     shot: 1
@@ -311,19 +327,20 @@ shots:
     audio_world: wet-stone footfalls, wind, grit ticks, close-mic breath
     script: Dead sprint along the coastal jungle ridge.
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam sprints a coastal
-      jungle ridge at a dead run, ink-black sleeves pumping contralateral, elbows bent, hands
-      swinging hip to chest, boots on wet stone, warm-gold rune sparks throwing amber on
-      unmarked cliff walls. The open short storm-cloak streams along the ridge, lining
-      flashing. Palms and the bay open toward an overlook far ahead. Wind, grit ticking, and
-      close-mic breath sit under the run. A wet root arch fills the frame. Continuous
-      first-person take, no cut. The frame stays a full-bleed photographic plate with bare
-      edges and a clean unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only wet-stone footfalls,
+      wind, grit ticks, close-mic breath, silent mouth. First-person eye-level body-cam.
+      Dead sprint a narrow wet-stone ridge already in the start frame, drops on both sides.
+      Ink-black sleeves and blank matte-black gloves stay in the lower third, contralateral
+      pump, empty palms. Open short storm-cloak streams, warm-gold lining flashing. Tiny
+      wrist motes only. Wet ridge stone under the boots. Last frames hold the wet root arch
+      in the center until it fills the frame. Continuous first-person take, no cut.
+      Full-bleed photographic plate, bare edges, clean unmarked lens. No speech. No music
+      and no score.
     wan_i2v: |
-      First-person dead sprint along a coastal jungle ridge. Contralateral arm pump, boots on
-      wet stone, open short storm-cloak streaming, warm-gold sparks in frame. Wet root arch
-      fills the view. Continuous tracking, locked identity. Full-bleed photographic plate,
-      bare frame edges, locked identity.
+      First-person dead sprint along a coastal jungle ridge. Contralateral arm pump, blank
+      gloves, boots on wet stone, open short storm-cloak streaming, warm-gold motes in
+      frame. Wet root arch fills the view. Continuous tracking, locked identity. Full-bleed
+      photographic plate, bare frame edges, locked identity.
   - beat: 5
     shot: 2
     prefix: ez_gosee_b5_s2
@@ -333,19 +350,21 @@ shots:
     audio_world: wood scrape, wind through the arch, kick, close-mic breath
     script: Slide under the wet root arch.
     ltx_i2v: |
-      The start image holds as the first frame. The parkour body-cam slides under the wet root
-      arch, one matte-black glove grazing the wood for a guide, the other hand low, boots
-      kicking through the lower frame, then both arms pop back into a contralateral pump as
-      the sprint resumes. The open short storm-cloak drags then snaps free of the arch. A
-      scrape, wind through the arch, and close-mic breath stay with the camera. A serrated
-      climb-line of wet stone fills the frame ahead. Continuous first-person take, no cut. The
-      frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens.
-      No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only wood scrape, wind
+      through the arch, kick, close-mic breath, silent mouth. First-person eye-level
+      body-cam. Slide under the wet root arch already filling the start frame; one blank
+      glove grazes the wood, boots kick the lower frame, then both arms pop back into a
+      pump. Ink-black sleeves and blank matte-black gloves stay in the lower third,
+      contralateral pump, empty palms. Open short storm-cloak streams, warm-gold lining
+      flashing. Tiny wrist motes only. Wet wood of the arch already in the start image.
+      Last frames hold the serrated climb line of wet stone in the center ahead. Continuous
+      first-person take, no cut. Full-bleed photographic plate, bare edges, clean unmarked
+      lens. No speech. No music and no score.
     wan_i2v: |
-      First-person slide under a wet root arch. One glove grazes the wood, boots kick through
-      the lower frame, then both arms pop back into a contralateral pump toward a serrated
-      climb. Open short storm-cloak drags then snaps free. Continuous tracking, no cut.
-      Full-bleed photographic plate, bare frame edges, locked identity.
+      First-person slide under a wet root arch. One blank glove grazes the wood, boots kick
+      through the lower frame, then both arms pop back into a contralateral pump toward a
+      serrated climb. Open short storm-cloak drags then snaps free. Continuous tracking, no
+      cut. Full-bleed photographic plate, bare frame edges, locked identity.
   - beat: 5
     shot: 3
     prefix: ez_gosee_b5_s3
@@ -355,20 +374,21 @@ shots:
     audio_world: ledge grit, wind shear, grabbing gloves, close-mic effort breath
     script: Climb-run the serrated coastal ridge.
     ltx_i2v: |
-      The start image holds as the first frame. The high-speed parkour body-cam climb-runs the
-      serrated coastal ridge: matte-black gloves grab a ledge, fingers wrapping wet stone,
-      then push off and return to a pump while boots kick the next hold in a wall-kick, warm
-      city lights blooming ahead over the bay. The open short storm-cloak hangs then snaps on
-      each pull. Warm-gold rune sparks throw amber on the cliff. Grit ticks each ledge, wind
-      shears the ridge, and close-mic breath sits on the lens. The warm-night ridge opens with
-      drops on both sides. Continuous first-person climb-run, no cut. The frame stays a
-      full-bleed photographic plate with bare edges and a clean unmarked lens. No speech. No
-      music and no score.
+      The start image holds as the first frame. Wordless mix: only ledge grit, wind shear,
+      grabbing gloves, close-mic effort breath, silent mouth. First-person eye-level
+      body-cam. Climb-run the serrated coastal ridge already in the start frame; blank
+      gloves grab a wet-stone ledge, boots kick the next hold, warm city lights bloom over
+      the tropical bay. Ink-black sleeves and blank matte-black gloves stay in the lower
+      third, contralateral pump, empty palms. Open short storm-cloak streams, warm-gold
+      lining flashing. Tiny wrist motes only. Wet stone of the climb line already in the
+      start image. Last frames hold the warm-night ridge in the center, drops on both
+      sides. Continuous first-person take, no cut. Full-bleed photographic plate, bare
+      edges, clean unmarked lens. No speech. No music and no score.
     wan_i2v: |
-      First-person parkour climb-run up a serrated coastal ridge toward a bay overlook. Gloves
-      grab a ledge then push off into a pump, boots kick the next hold. Open short storm-cloak
-      hangs then snaps. Warm-night ridge opens. Continuous tracking, no cut. Full-bleed
-      photographic plate, bare frame edges, locked identity.
+      First-person parkour climb-run up a serrated coastal ridge toward a bay overlook.
+      Blank gloves grab a ledge then push off into a pump, boots kick the next hold. Open
+      short storm-cloak hangs then snaps. Warm-night ridge opens. Continuous tracking, no
+      cut. Full-bleed photographic plate, bare frame edges, locked identity.
   - beat: 6
     shot: 1
     prefix: ez_gosee_b6_s1
@@ -378,19 +398,20 @@ shots:
     audio_world: stone footfalls, night wind, close-mic breath
     script: Last all-out sprint along the warm-night ridge.
     ltx_i2v: |
-      The start image holds as the first frame. The first-person body-cam makes a last all-out
-      parkour sprint along the warm-night ridge, ink-black sleeves and matte-black gloves
-      pumping hard in a contralateral swing, elbows bent, hands traveling hip to chest,
-      warm-gold rune sparks bright against unmarked sky. The open short storm-cloak streams
-      hard, lining flashing over the drop. Unmarked stone drops away on both sides toward the
-      bay. Wind, footfalls on stone, and close-mic breath. An unmarked overlook rail fills the
-      frame. Continuous first-person take, no cut. The frame stays a full-bleed photographic
-      plate with bare edges and a clean unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only stone footfalls, night
+      wind, close-mic breath, silent mouth. First-person eye-level body-cam. Last all-out
+      sprint along the warm-night ridge already in the start frame, unmarked stone dropping
+      away on both sides toward the bay. Ink-black sleeves and blank matte-black gloves
+      stay in the lower third, contralateral pump, empty palms. Open short storm-cloak
+      streams, warm-gold lining flashing. Tiny wrist motes only. Wet-night ridge stone
+      under the boots. Last frames hold the unmarked overlook rail in the center until it
+      fills the frame. Continuous first-person take, no cut. Full-bleed photographic plate,
+      bare edges, clean unmarked lens. No speech. No music and no score.
     wan_i2v: |
-      First-person all-out sprint along a warm-night ridge. Contralateral arm pump hard in the
-      lower third, open short storm-cloak streaming over the drop, warm-gold sparks bright.
-      Overlook rail fills the frame. Continuous tracking, locked identity. Full-bleed
-      photographic plate, bare frame edges, locked identity.
+      First-person all-out sprint along a warm-night ridge. Contralateral arm pump hard in
+      the lower third, blank gloves, open short storm-cloak streaming over the drop,
+      warm-gold motes bright. Overlook rail fills the frame. Continuous tracking, locked
+      identity. Full-bleed photographic plate, bare frame edges, locked identity.
   - beat: 6
     shot: 2
     prefix: ez_gosee_b6_s2
@@ -400,19 +421,21 @@ shots:
     audio_world: leap wind, boot land, rail creak, slowing breath
     script: Leap to the overlook rail.
     ltx_i2v: |
-      The start image holds as the first frame. The parkour body-cam leaps onto an unmarked
-      overlook; both matte-black gloves reach and find a weathered wooden rail, fingers
-      wrapping the wood as boots land in the lower frame. The camera dips on impact and
-      settles forward over warm city lights and the ocean. The open short storm-cloak settles
-      against the back. A rail creak, distant wind, slowing footfalls, and close-mic breath.
-      Both gloves stay on the rail as the hold begins. Continuous take from leap to hold. The
-      frame stays a full-bleed photographic plate with bare edges and a clean unmarked lens.
-      No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only leap wind, boot land,
+      rail creak, slowing breath, silent mouth. First-person eye-level body-cam. Leap onto
+      the unmarked overlook rail already filling the start frame; both blank gloves wrap
+      the weathered wood, boots land in the lower frame, camera dips and settles over warm
+      tropical bay lights. Ink-black sleeves and blank matte-black gloves stay in the lower
+      third, contralateral pump, empty palms. Open short storm-cloak streams, warm-gold
+      lining flashing. Tiny wrist motes only. Wooden rail already in the start image. Last
+      frames hold the hold in the center as both gloves stay on the rail. Continuous
+      first-person take, no cut. Full-bleed photographic plate, bare edges, clean unmarked
+      lens. No speech. No music and no score.
     wan_i2v: |
-      First-person parkour leap onto an unmarked overlook. Both gloves reach and find a
-      weathered wooden rail, fingers wrapping the wood, boots land in the lower frame. Camera
-      eases from leap to hold. Open short storm-cloak settles. Full-bleed photographic plate,
-      bare frame edges, locked identity.
+      First-person parkour leap onto an unmarked overlook. Both blank gloves reach and find
+      a weathered wooden rail, fingers wrapping the wood, boots land in the lower frame.
+      Camera eases from leap to hold over warm tropical bay lights. Open short storm-cloak
+      settles. Full-bleed photographic plate, bare frame edges, locked identity.
   - beat: 6
     shot: 3
     prefix: ez_gosee_b6_s3
@@ -422,14 +445,16 @@ shots:
     audio_world: slowing close-mic breath, distant wind, one rail creak
     script: Hold on the rail. Breath only.
     ltx_i2v: |
-      The start image holds as the first frame. Both matte-black gloved hands stay on the
-      weathered unmarked rail, ink-black sleeves in the lower third, the open short
-      storm-cloak settled with its warm-gold lining quiet while tiny rune sparks dim. The
-      first-person view holds warm city lights and the ocean. The run is over. Close-mic
-      breath slows. Distant wind and a single rail creak sit under that breath. The camera is
-      still. The frame stays a full-bleed photographic plate with bare edges and a clean
-      unmarked lens. No speech. No music and no score.
+      The start image holds as the first frame. Wordless mix: only slowing close-mic breath,
+      distant wind, one rail creak, silent mouth. First-person eye-level body-cam. Hold on
+      the weathered unmarked rail already in the start frame; the run is over, camera
+      still. Ink-black sleeves and blank matte-black gloves stay in the lower third on the
+      rail, empty palms wrapping wood. Open short storm-cloak streams, warm-gold lining
+      quiet. Tiny wrist motes only. Wooden rail and tropical bay lights already in the
+      start image. Last frames hold the still view in the center, gloves on the rail.
+      Continuous first-person take, no cut. Full-bleed photographic plate, bare edges,
+      clean unmarked lens. No speech. No music and no score.
     wan_i2v: |
-      First-person hold on the warm-night bay overlook. Both gloves stay on the unmarked rail,
-      open short storm-cloak settled, rune sparks dim. Camera still, locked identity.
-      Full-bleed photographic plate, bare frame edges, locked identity.
+      First-person hold on the warm-night bay overlook. Both blank gloves stay on the
+      unmarked rail, open short storm-cloak settled, rune motes dim. Camera still, locked
+      identity. Full-bleed photographic plate, bare frame edges, locked identity.

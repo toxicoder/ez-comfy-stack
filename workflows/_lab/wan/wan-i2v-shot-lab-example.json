@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "First-person body-cam high-speed parkour sprint across a sunlit tropical terrace. Sun-washed teal sleeves and gloves pump at the frame edges, glyph motes at the wrists. Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, locked identity, no cut."
+        "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. Contralateral arm pump in the lower third, blank gloves, empty palms, elbows bent, hands swinging hip to chest, horizon bobbing. Open short storm-cloak streams at the edges. Head snaps toward a rooftop gap until it fills the frame. Continuous tracking, locked identity, no cut. Full-bleed photographic plate, bare frame edges, locked identity."
       ],
       "title": "Motion / prompt"
     },
@@ -653,7 +653,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "First-person body-cam high-speed parkour sprint across a sunlit tropical terrace. Sun-washed teal sleeves and gloves pump at the frame edges, glyph motes at the wrists. Leap the first rooftop gap; boots flash in the lower frame. Continuous tracking, locked identity, no cut.",
+        "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. Contralateral arm pump in the lower third, blank gloves, empty palms, elbows bent, hands swinging hip to chest, horizon bobbing. Open short storm-cloak streams at the edges. Head snaps toward a rooftop gap until it fills the frame. Continuous tracking, locked identity, no cut. Full-bleed photographic plate, bare frame edges, locked identity.",
         true,
         "i2v",
         "5 seconds, 24 fps",

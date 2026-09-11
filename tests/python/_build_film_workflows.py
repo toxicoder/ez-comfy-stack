@@ -38,10 +38,23 @@ PREVIEW_BULLET = (
 KLEIN_NEG_PHOTO = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
 )
+KLEIN_NEG_GOSEE = (
+    "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks, "
+    "third-person figure, standing wizard, wingsuit control bar, handlebar grip, lettering on gloves, "
+    "circular vignette, decorative frame, costume chrome"
+)
 LTX_NEGATIVE = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
     "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
     "watermark, burned-in text"
+)
+LTX_NEGATIVE_GOSEE = (
+    "morphing, identity drift, warping objects, face melting, flicker, jitter, "
+    "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
+    "watermark, burned-in text, third-person follow, full body from behind, "
+    "standing wizard, costume change, lettering on gloves, circular vignette, "
+    "decorative frame, repeating planter tiles, game-engine lighting, "
+    "wooden fishing pier, wingsuit handlebar, readable captions"
 )
 
 FILMS = (
@@ -494,7 +507,9 @@ def build_one_click_film(
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
             node["widgets_values"] = [identity]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":
-            node["widgets_values"] = [KLEIN_NEG_PHOTO]
+            node["widgets_values"] = [
+                KLEIN_NEG_GOSEE if film == "go-see" else KLEIN_NEG_PHOTO
+            ]
 
     markdown = _mk(
         ID_MARKDOWN,
@@ -562,7 +577,7 @@ def build_one_click_film(
         [40, 1660],
         [420, 120],
         "Negative",
-        [LTX_NEGATIVE],
+        [LTX_NEGATIVE_GOSEE if film == "go-see" else LTX_NEGATIVE],
         [_inp("clip", "CLIP")],
         [_out("CONDITIONING", "CONDITIONING", 0)],
     )

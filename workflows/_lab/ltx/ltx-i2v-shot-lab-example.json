@@ -191,7 +191,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score."
+        "The start image holds as the first frame. Wordless mix: only race-pace footfalls, warm wind, grit ticks, close-mic breath, silent mouth. First-person eye-level body-cam. Dead sprint across the sunlit terrace already in the start frame; empty pumping gloves stay in the lower third as the rooftop gap grows. Ink-black sleeves and blank matte-black gloves stay in the lower third, contralateral pump, empty palms. Open short storm-cloak streams, warm-gold lining flashing. Tiny wrist motes only. Terrace stone under the boots. Last frames hold the gap in the center until it fills the frame. Continuous first-person take, no cut. Full-bleed photographic plate, bare edges, clean unmarked lens. No speech. No music and no score."
       ],
       "title": "Motion + audio"
     },
@@ -843,7 +843,7 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.",
+        "The start image holds as the first frame. Wordless mix: only race-pace footfalls, warm wind, grit ticks, close-mic breath, silent mouth. First-person eye-level body-cam. Dead sprint across the sunlit terrace already in the start frame; empty pumping gloves stay in the lower third as the rooftop gap grows. Ink-black sleeves and blank matte-black gloves stay in the lower third, contralateral pump, empty palms. Open short storm-cloak streams, warm-gold lining flashing. Tiny wrist motes only. Terrace stone under the boots. Last frames hold the gap in the center until it fills the frame. Continuous first-person take, no cut. Full-bleed photographic plate, bare edges, clean unmarked lens. No speech. No music and no score.",
         true,
         "i2v",
         "5 seconds, 24 fps",
