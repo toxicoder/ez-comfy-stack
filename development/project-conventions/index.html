@@ -2123,22 +2123,18 @@
   
 
 
-<h1 id="project-conventions">Project Conventions<a class="headerlink" href="#project-conventions" title="Permanent link">&para;</a></h1>
-<p><strong>What's on this page</strong></p>
-<ul>
+<h1 id="project-conventions">Project Conventions<a class="headerlink" href="#project-conventions" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
 <li>Core principles</li>
 <li>Repo layout and ownership</li>
 <li>Shell style (Google Shell Style Guide + project deviations)</li>
 <li>Operator progress (bars, heartbeats, env)</li>
 <li>Docker, testing, coverage gate, Pyright (Pylance) + mypy, and branching rules</li>
 <li>Docs publish and <strong>human-readable formatting</strong> patterns</li>
-</ul>
-<p><strong>What this enables</strong></p>
-<ul>
+</ul></div><div class="ez-page-brief__col ez-page-brief__enables"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg><span class="ez-page-brief__label">What this enables</span></p><ul>
 <li>Consistent, reviewable contributions without the full lab Bazel/K8s surface</li>
 <li>Shell that matches industry practice while staying safe on remote <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">DGX Spark</span> hosts</li>
 <li>MkDocs pages operators can <strong>scan</strong> (not only search)</li>
-</ul>
+</ul></div></div>
 <h2 id="principles">Principles<a class="headerlink" href="#principles" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2547,6 +2543,7 @@
 <li><strong>What's on this page</strong> (bullet list)</li>
 <li><strong>What this enables</strong> (bullet list)</li>
 </ol>
+<p>Author those two lists as <strong>bold + bullets</strong> in source. <code>docs/hooks.py</code> wraps the first pair after the page <code>h1</code> into <code>.ez-page-brief</code> (<code>docs/page_brief.py</code> + <code>docs/stylesheets/extra.css</code>): a two-column scan card (stacked under <code>44.99em</code>). Titles stay <code>&lt;p&gt;</code>, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing <code>**Who this is for:**</code> stays outside the card.</p>
 <p><strong>Nav (Diátaxis-shaped, task tabs):</strong> Learn (explanation + <a href="../glossary/">glossary</a>) → Start (tutorial) → Create (how-to) → Operate (how-to + reference) → Contribute. Do not mix a command catalog into Getting Started (<code>manage-cli.md</code>) or a workflow spreadsheet into the playbook (<code>studio-workflows.md</code>).</p>
 <p><strong>Glossary (definition modal):</strong></p>
 <ul>
@@ -2602,6 +2599,10 @@
 <tr>
 <td>Card grids (<code>&lt;div class="grid cards" markdown&gt;</code>)</td>
 <td>Home / Learn indexes — equal-weight next steps</td>
+</tr>
+<tr>
+<td>Page brief (<code>.ez-page-brief</code>)</td>
+<td>Required What's on this page / What this enables lists, rendered as a two-column scan card</td>
 </tr>
 <tr>
 <td><code>:material-…:</code> / <code>:octicons-…:</code> icons</td>
