@@ -1207,7 +1207,7 @@ main() {
   ensure_triton_build_env
   configure_torch_native_triton
   ensure_llama_cpp_cpu
-  ensure_pkuseg_home
+  ensure_pkuseg_home /root/.pkuseg
   ensure_dub_wheels
   cd "${comfy_home}"
   link_comfy_output_dir "${comfy_home}/output"
