@@ -78,6 +78,9 @@ def _passthrough_ffmpeg(monkeypatch) -> None:
         if not src:
             return 1, "no input"
         Path(dest).parent.mkdir(parents=True, exist_ok=True)
+        if dest.endswith(".mp3") or dest.endswith(".loudnorm.wav"):
+            shutil.copy(src, dest)
+            return 0, ""
         shutil.copy(src, dest)
         return 0, ""
 
@@ -142,6 +145,112 @@ def test_disclosure_string_exact() -> None:
         "original speakers with the rights-holder's authorization."
     )
     assert "original characters" not in DISCLOSURE_TEXT.lower()
+
+
+def test_disclosure_localized_es_exact() -> None:
+    from ez_dub.disclosure import DISCLOSURE_LOCALIZED, disclosure_for
+
+    es = DISCLOSURE_LOCALIZED["es"]
+    assert es == (
+        "Este audio es un doblaje traducido por IA. "
+        "Las voces están sintetizadas a partir de los hablantes originales "
+        "con la autorización del titular de los derechos."
+    )
+    assert DISCLOSURE_TEXT == (
+        "This audio is an AI-translated dub. Voices are synthesized from the "
+        "original speakers with the rights-holder's authorization."
+    )
+    assert pipeline.DISCLOSURE_TEXT == DISCLOSURE_TEXT
+    assert disclosure_for("es") == es
+    assert disclosure_for("ES") == es
+    assert disclosure_for("xx") == DISCLOSURE_TEXT
+    assert "original characters" not in DISCLOSURE_TEXT.lower()
+    assert "original characters" not in es.lower()
+
+
+def test_apply_spoken_disclosure_does_not_change_length() -> None:
+    from ez_dub.disclosure import apply_spoken_disclosure
+
+    rate = 24000
+    mix = [0.05] * (rate * 8)
+    turns = [{"t0": 0.4, "t1": 2.0, "speaker": "spk00"}]
+
+    def _synth(text: str, language: str, ref_wav: str, engine: str):
+        del text, language, ref_wav, engine
+        return [0.2] * (rate * 6), rate, ""
+
+    out, status = apply_spoken_disclosure(
+        mix,
+        rate,
+        language="es",
+        engine=ENGINE_CHATTERBOX,
+        ref_wav="",
+        turns=turns,
+        synthesize=_synth,
+    )
+    assert len(out) == len(mix)
+    assert status == "spoken disclosure"
+
+
+def test_apply_spoken_disclosure_uses_target_language_and_ref() -> None:
+    from ez_dub.disclosure import apply_spoken_disclosure
+
+    rate = 24000
+    mix = [0.05] * (rate * 4)
+    seen: list[tuple[str, str]] = []
+
+    def _synth(text: str, language: str, ref_wav: str, engine: str):
+        del text, engine
+        seen.append((language, ref_wav))
+        return [0.2] * (rate // 2), rate, ""
+
+    apply_spoken_disclosure(
+        mix,
+        rate,
+        language="es",
+        engine=ENGINE_CHATTERBOX,
+        ref_wav="/tmp/spk00.wav",
+        turns=[{"t0": 2.0, "t1": 3.0, "speaker": "spk00"}],
+        synthesize=_synth,
+    )
+    assert seen
+    assert seen[0][0] == "es"
+    assert seen[0][1] == "/tmp/spk00.wav"
+
+
+def test_apply_spoken_disclosure_does_not_call_fit_turn_three_seconds(
+    monkeypatch,
+) -> None:
+    from ez_dub import disclosure as dub_disclosure
+
+    windows: list[float] = []
+    real_fit = dub_disclosure.fit_turn
+
+    def _fit(pcm, rate, window, spill_s=0.0):
+        windows.append(float(window))
+        return real_fit(pcm, rate, window, spill_s=spill_s)
+
+    monkeypatch.setattr(dub_disclosure, "fit_turn", _fit)
+    rate = 24000
+    mix = [0.05] * (rate * 8)
+
+    def _synth(text: str, language: str, ref_wav: str, engine: str):
+        del text, language, ref_wav, engine
+        return [0.2] * (rate * 6), rate, ""
+
+    dub_disclosure.apply_spoken_disclosure(
+        mix,
+        rate,
+        language="es",
+        engine=ENGINE_CHATTERBOX,
+        ref_wav="",
+        turns=[{"t0": 0.4, "t1": 2.0, "speaker": "spk00"}],
+        synthesize=_synth,
+    )
+    assert 3.0 not in windows
+    assert all(w != 3.0 for w in windows)
+    if windows:
+        assert 4.0 in windows
 
 
 def test_rights_refuse() -> None:
@@ -264,6 +373,72 @@ def test_overlap_keeps_louder() -> None:
     assert kept[0]["overlap"] is True
 
 
+def test_merge_adjacent_same_speaker_within_gap() -> None:
+    turns = [
+        dub_turns.normalize_turn(
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 0.0,
+                "t1": 1.0,
+                "text": "Hello there.",
+                "rms": 0.1,
+                "overlap": False,
+            },
+            1,
+        ),
+        dub_turns.normalize_turn(
+            {
+                "id": 2,
+                "speaker": "spk00",
+                "t0": 1.2,
+                "t1": 2.0,
+                "text": "We keep going.",
+                "rms": 0.4,
+                "overlap": True,
+            },
+            2,
+        ),
+    ]
+    merged = dub_turns.merge_adjacent_turns(turns)
+    assert len(merged) == 1
+    assert merged[0]["speaker"] == "spk00"
+    assert merged[0]["t0"] == 0.0
+    assert merged[0]["t1"] == 2.0
+    assert merged[0]["text"] == "Hello there. We keep going."
+    assert merged[0]["rms"] == 0.4
+    assert merged[0]["overlap"] is True
+
+
+def test_merge_adjacent_does_not_merge_other_speaker() -> None:
+    turns = [
+        dub_turns.normalize_turn(
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 0.0,
+                "t1": 1.0,
+                "text": "Hello.",
+            },
+            1,
+        ),
+        dub_turns.normalize_turn(
+            {
+                "id": 2,
+                "speaker": "spk01",
+                "t0": 1.1,
+                "t1": 2.0,
+                "text": "Hi.",
+            },
+            2,
+        ),
+    ]
+    merged = dub_turns.merge_adjacent_turns(turns)
+    assert len(merged) == 2
+    assert merged[0]["speaker"] == "spk00"
+    assert merged[1]["speaker"] == "spk01"
+
+
 def test_fit_turn_pad_spill_trim() -> None:
     rate = 24000
     short, flags = align.fit_turn([0.2] * 100, rate, 0.02)
@@ -277,6 +452,33 @@ def test_fit_turn_pad_spill_trim() -> None:
     spilled, spill_flags = align.fit_turn(long_pcm, rate, window, spill_s=0.2)
     assert spill_flags["spill"] is True
     assert len(spilled) > len(fitted)
+
+
+def test_raise_to_peak_amplifies_quiet_pcm() -> None:
+    quiet = [0.1, -0.2, 0.05]
+    out = pipeline.raise_to_peak(quiet, peak=0.89)
+    mag = max(abs(x) for x in out)
+    assert abs(mag - 0.89) < 1e-6
+    assert pipeline.raise_to_peak([0.0, 0.0]) == [0.0, 0.0]
+    assert pipeline.raise_to_peak([]) == []
+
+
+def test_peak_normalize_still_does_not_raise_refs() -> None:
+    quiet = [0.1, -0.1, 0.05]
+    out = pipeline._peak_normalize(quiet, peak=0.89)
+    assert out == [0.1, -0.1, 0.05]
+    hot = [0.5, -0.99, 0.2]
+    limited = pipeline._peak_normalize(hot, peak=0.89)
+    assert abs(max(abs(x) for x in limited) - 0.89) < 1e-6
+
+
+def test_match_rms_scales_clone_toward_source() -> None:
+    clone = [0.05] * 200
+    target = align.rms([0.4] * 200)
+    out = pipeline.match_rms(clone, target)
+    assert align.rms(out) > align.rms(clone)
+    assert max(abs(x) for x in out) <= pipeline.REF_PEAK + 1e-6
+    assert pipeline.match_rms(clone, 0.0) == clone
 
 
 def test_lock_duration_and_timeline() -> None:
@@ -338,6 +540,7 @@ def test_is_url_and_language_name() -> None:
 
 def test_render_uses_tts_hook(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
@@ -366,12 +569,136 @@ def test_render_uses_tts_hook(tmp_path: Path, monkeypatch) -> None:
     assert out_rate == rate
     assert len(mix) == len(samples)
     assert (dest / "ez_dub_yt.wav").is_file()
-    assert (dest / "ez_dub.disclosure.txt").read_text(encoding="utf-8").startswith(
+    assert (dest / "ez_dub.disclosure.en.txt").read_text(encoding="utf-8").startswith(
         DISCLOSURE_TEXT
     )
+    assert (dest / "ez_dub.disclosure.txt").is_file()
+    assert (dest / "qc.json").is_file()
     assert (dest / "ez_dub.es.srt").is_file()
     assert "speakers" in status
     assert "cloned" in status
+
+
+def test_render_mix_yt_wav_equals_source_length(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+
+    def _tts(text, language, ref_wav, engine):
+        del language, ref_wav, engine
+        n = max(100, len(text) * 40)
+        return [0.3] * n, rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=True,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert len(mix) == len(samples)
+    yt, yt_rate = dub_audio.read_wav(dest / "ez_dub_yt.wav")
+    mixed, mix_rate = dub_audio.read_wav(dest / "ez_dub_mix.wav")
+    assert yt_rate == rate
+    assert mix_rate == rate
+    assert len(yt) == len(samples)
+    assert len(mixed) == len(samples)
+    assert "spoken disclosure" in status or "disclosure skipped" in status
+
+
+def test_render_mix_optional_48k_mp3_argv(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    seen: list[list[str]] = []
+
+    def _run(cmd: list[str]) -> tuple[int, str]:
+        seen.append(list(cmd))
+        return 1, "fail"
+
+    monkeypatch.setattr(pipeline, "_run", _run)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+
+    def _tts(text, language, ref_wav, engine):
+        del language, ref_wav, engine
+        n = max(100, len(text) * 40)
+        return [0.3] * n, rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert mix
+    assert (dest / "ez_dub_yt.wav").is_file()
+    mp3_cmds = [c for c in seen if c and str(c[-1]).endswith("ez_dub_yt_48k.mp3")]
+    assert mp3_cmds
+    argv = mp3_cmds[0]
+    assert "-ar" in argv and "48000" in argv
+    assert "-b:a" in argv and "320k" in argv
+    assert not (dest / "ez_dub_yt_48k.mp3").is_file()
+    assert "cloned" in status
+
+
+def test_mix_loudness_raises_quiet_render(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+
+    def _tts(text, language, ref_wav, engine):
+        del language, ref_wav, engine
+        n = max(100, len(text) * 40)
+        return [0.05] * n, rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert mix
+    peak = max(abs(x) for x in mix)
+    assert peak >= 0.8
+    assert "peak=" in status
 
 
 def test_render_analyze_stage_skips(tmp_path: Path, monkeypatch) -> None:
@@ -418,6 +745,127 @@ def test_fetch_hook_ingest(tmp_path: Path, monkeypatch) -> None:
     assert (dest / "source.wav").is_file()
     assert via_url["result"][0] == "url-job-2"
     assert (tmp_path / "dubs" / "url-job-2" / "source.wav").is_file()
+
+
+def test_sanitize_strips_think_and_translation_prefix() -> None:
+    from ez_dub.sanitize import sanitize_target, strip_model_fences
+
+    fenced = (
+        "<think>internal</think>Translation: \"Las calles estaban alineadas.\""
+    )
+    stripped = strip_model_fences(fenced)
+    assert "<think>" not in stripped
+    assert not stripped.lower().startswith("translation")
+    assert stripped.startswith("Las calles")
+    cleaned = sanitize_target(
+        "Traducción: 'Bienvenidos de nuevo a la cinta.'",
+        source_text="Welcome back to the tape.",
+        language="es",
+    )
+    assert cleaned == "Bienvenidos de nuevo a la cinta."
+
+
+def test_sanitize_drops_voice_model_tail() -> None:
+    from ez_dub.sanitize import strip_leak_tails
+
+    raw = (
+        "La ciudad estaba llena de oportunidades y me agradecido por formar "
+        "parte de ello experiencia de una manera que te ayude a desarrollar "
+        "mi modelo de voz."
+    )
+    cleaned = strip_leak_tails(raw)
+    assert "modelo de voz" not in cleaned.lower()
+    assert "te ayude a desarrollar" not in cleaned.lower()
+    assert "La ciudad estaba llena de oportunidades" in cleaned
+
+
+def test_looks_like_target_rejects_english_on_es() -> None:
+    from ez_dub.sanitize import looks_like_target
+
+    assert looks_like_target("", "es") is False
+    assert (
+        looks_like_target(
+            "This is the time for you and the rest of the people.",
+            "es",
+        )
+        is False
+    )
+    assert looks_like_target(
+        "El ritmo de la vida diaria lo marcaba el sonido constante del tren "
+        "que pasaba por nuestra estación cada mañana y cada tarde.",
+        "es",
+    )
+    gold = (
+        "La ciudad estaba llena de oportunidades, y estaba agradecido de "
+        "formar parte de esa experiencia."
+    )
+    assert looks_like_target(gold, "es") is True
+
+
+def test_qc_flags_leak_and_empty_target() -> None:
+    from ez_dub.qc import evaluate_qc
+
+    mix = [0.5] * 24000
+    turns = [
+        {
+            "t0": 0.0,
+            "t1": 1.0,
+            "text": "Hello there everyone.",
+            "text_target": "",
+        },
+        {
+            "t0": 2.0,
+            "t1": 3.0,
+            "text": "Hi.",
+            "text_target": (
+                "Hola de una manera que te ayude a desarrollar mi modelo de voz."
+            ),
+        },
+    ]
+    report = evaluate_qc(
+        mix, 24000, turns, target_language="es", peak=0.89
+    )
+    ids = {str(item.get("id")) for item in report.get("checks") or []}
+    assert "empty_target" in ids
+    assert "leak" in ids
+    flags = report.get("flags") or []
+    assert "empty_target" in flags
+    assert "leak" in flags
+
+
+def test_qc_flags_gap_passthrough_quiet_and_english() -> None:
+    from ez_dub.qc import evaluate_qc
+
+    mix = [0.05] * 24000
+    turns = [
+        {
+            "t0": 0.0,
+            "t1": 0.5,
+            "text": "This is the time for you and the rest.",
+            "text_target": "This is the time for you and the rest.",
+        },
+        {
+            "t0": 2.0,
+            "t1": 2.5,
+            "text": "More English here for the people.",
+            "text_target": "More English here for the people.",
+        },
+    ]
+    report = evaluate_qc(
+        mix, 24000, turns, target_language="es", peak=0.89
+    )
+    flags = set(report.get("flags") or [])
+    assert "gap" in flags
+    assert "passthrough" in flags
+    assert "quiet_mix" in flags
+    assert "english_left" in flags
+
+
+def test_qc_never_raises_on_garbage() -> None:
+    from ez_dub.qc import evaluate_qc
+
+    report = evaluate_qc([], 0, [None], target_language="es", peak=0.89)  # type: ignore[list-item]
+    assert isinstance(report, dict)
 
 
 def test_banned_strings_absent_from_pack() -> None:
@@ -478,7 +926,12 @@ def test_translate_turns_per_turn_fills_spanish(monkeypatch) -> None:
     ):
         del system
         calls.append((user, max_tokens, temperature, timeout_s))
-        if "Welcome" in user:
+        source_line = ""
+        for line in user.splitlines():
+            if line.startswith("Source:"):
+                source_line = line
+                break
+        if "Welcome" in source_line:
             return "Bienvenidos de nuevo a la cinta.", None
         return "Hoy nos quedamos en el partido.", None
 
@@ -564,6 +1017,125 @@ def test_translate_turns_enhance_off_copies() -> None:
     out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=False)
     assert reason == "enhance off"
     assert out[0]["text_target"] == "Welcome back to the tape."
+
+
+def test_translate_turns_passes_previous_turn_context(monkeypatch) -> None:
+    calls: list[str] = []
+
+    def _complete(
+        system: str,
+        user: str,
+        *,
+        max_tokens: int | None = None,
+        temperature: float | None = None,
+        timeout_s: int | None = None,
+    ):
+        del system, max_tokens, temperature, timeout_s
+        calls.append(user)
+        source_line = ""
+        for line in user.splitlines():
+            if line.startswith("Source:"):
+                source_line = line
+                break
+        if "Welcome" in source_line:
+            return "Bienvenidos de nuevo a la cinta.", None
+        return "Hoy nos quedamos en el partido.", None
+
+    monkeypatch.setattr("ez_prompt_enhance.client.complete", _complete)
+    monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
+    pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=True)
+    assert len(calls) == 2
+    assert "Welcome back to the tape." in calls[0]
+    assert "Context (previous turn" not in calls[0]
+    assert "Welcome back to the tape." in calls[1]
+    assert "Context (previous turn" in calls[1]
+    assert "Bienvenidos de nuevo a la cinta." in calls[1]
+
+
+GOLD_ES = (
+    "El ritmo de la vida diaria lo marcaba el sonido constante del tren que "
+    "pasaba por nuestra estación cada mañana y cada tarde.",
+    "Las calles estaban alineadas con casas de ladrillo antiguo, las fachadas "
+    "erosionadas por el tiempo, y la panadería del barrio era siempre la "
+    "primera parada de quienes iban a trabajar.",
+    "Por las tardes se contaban las historias del día mientras los niños "
+    "jugaban al escondite en las calles.",
+    "A menudo me sentaba en un café a ver pasar el mundo y sentía una "
+    "conexión con la gente a mi alrededor.",
+    "La ciudad estaba llena de oportunidades, y estaba agradecido de formar "
+    "parte de esa experiencia.",
+)
+
+
+def test_translate_turns_keeps_golden_spanish(monkeypatch) -> None:
+    golds = list(GOLD_ES)
+
+    def _complete(
+        system: str,
+        user: str,
+        *,
+        max_tokens: int | None = None,
+        **kwargs,
+    ):
+        del system, user, max_tokens, kwargs
+        return golds.pop(0), None
+
+    monkeypatch.setattr("ez_prompt_enhance.client.complete", _complete)
+    monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
+    turns = [
+        {
+            "id": i + 1,
+            "speaker": "spk00",
+            "t0": float(i),
+            "t1": float(i) + 0.8,
+            "text": f"English line {i + 1}.",
+            "text_target": "",
+            "overlap": False,
+            "rms": 0.1,
+        }
+        for i in range(5)
+    ]
+    out, reason = pipeline.translate_turns(turns, "es", "en", enhance=True)
+    assert "translated 5/5" in reason
+    assert [t["text_target"] for t in out] == list(GOLD_ES)
+
+
+def test_translate_turns_strips_voice_model_leak(monkeypatch) -> None:
+    leak = (
+        "La ciudad estaba llena de oportunidades y me agradecido por formar "
+        "parte de ello experiencia de una manera que te ayude a desarrollar "
+        "mi modelo de voz."
+    )
+
+    def _complete(
+        system: str,
+        user: str,
+        *,
+        max_tokens: int | None = None,
+        **kwargs,
+    ):
+        del system, user, max_tokens, kwargs
+        return leak, None
+
+    monkeypatch.setattr("ez_prompt_enhance.client.complete", _complete)
+    monkeypatch.setattr("ez_prompt_enhance.client._close_llm", lambda: None)
+    turns = [
+        {
+            "id": 1,
+            "speaker": "spk00",
+            "t0": 0.0,
+            "t1": 1.0,
+            "text": "The city was full of opportunity.",
+            "text_target": "",
+            "overlap": False,
+            "rms": 0.1,
+        }
+    ]
+    out, _reason = pipeline.translate_turns(turns, "es", "en", enhance=True)
+    target = out[0]["text_target"]
+    assert "modelo de voz" not in target.lower()
+    assert "te ayude a desarrollar" not in target.lower()
+    assert "La ciudad estaba llena de oportunidades" in target
 
 
 def test_synthesize_turn_passes_iso_code() -> None:
@@ -654,6 +1226,42 @@ def test_whisper_dir_requires_config(tmp_path: Path, monkeypatch) -> None:
     (snap / "tokenizer.json").write_text("{}", encoding="utf-8")
     assert pipeline._whisper_dir() == str(snap)
     assert "tokenizer.json" in pipeline.WHISPER_REQUIRED_FILES
+
+
+def test_whisper_transcribe_extra_kwargs_typeerror_fallback(
+    tmp_path: Path, monkeypatch
+) -> None:
+    wav = tmp_path / "clip.wav"
+    dub_audio.write_wav(wav, [0.1] * 2400, 24000)
+    calls: list[dict] = []
+
+    class _Seg:
+        text = "Hello"
+        start = 0.0
+        end = 0.4
+
+    class _Info:
+        language = "en"
+
+    def _transcribe(_path: str, **kwargs):
+        calls.append(dict(kwargs))
+        if "beam_size" in kwargs or "condition_on_previous_text" in kwargs:
+            raise TypeError("unexpected kwargs")
+        return [_Seg()], _Info()
+
+    class _Model:
+        transcribe = staticmethod(_transcribe)
+
+    monkeypatch.setattr(pipeline, "_get_whisper", lambda: (_Model(), ""))
+    turns, detected, reason = pipeline._whisper_segments(wav, "en")
+    assert reason == ""
+    assert detected == "en"
+    assert turns and turns[0]["text"] == "Hello"
+    assert any(c.get("beam_size") == 5 for c in calls)
+    assert any(c.get("condition_on_previous_text") is False for c in calls)
+    assert any(
+        "beam_size" not in c and "condition_on_previous_text" not in c for c in calls
+    )
 
 
 def test_asr_wheel_status_includes_import_detail() -> None:
@@ -1445,8 +2053,15 @@ def test_analyze_job_missing_wav_operator_status(
     assert payload["turns"] == []
     assert reason == pipeline.MISSING_SOURCE_STATUS
     assert "I have rights" in reason
+    render_payload = dub_turns.parse_payload(SEED_SCRIPT)
+    render_payload["stage"] = "render"
     rendered = EZDubRender().run(
-        SEED_SCRIPT, ENGINE_CHATTERBOX, True, False, 1.0, job_id="ep"
+        dub_turns.dumps_payload(render_payload),
+        ENGINE_CHATTERBOX,
+        True,
+        False,
+        1.0,
+        job_id="ep",
     )
     assert rendered["ui"]["passthrough"][0] == pipeline.MISSING_SOURCE_STATUS
 
@@ -1663,6 +2278,7 @@ def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch) -> No
 
 def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
@@ -1890,9 +2506,12 @@ def test_try_qwen3tts_passes_ref_audio_and_text(
     assert seen[0]["voice_clone_prompt"] == {"cached": True}
 
 
-def test_translate_prompt_mentions_spoken_length() -> None:
+def test_translate_prompt_requires_grammar_not_length() -> None:
     text = pipeline.load_translate_prompt().lower()
-    assert "spoken length" in text or "same length" in text
+    assert "spoken length" not in text
+    assert "same length" not in text
+    assert "clitic" in text or "grammatical" in text
+    assert "/no_think" in pipeline.load_translate_prompt()
 
 
 def test_ezdub_render_clone_knob_widgets() -> None:

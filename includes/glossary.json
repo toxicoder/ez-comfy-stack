@@ -86,7 +86,7 @@
     "aliases": ["Local dub", "dub-localize"],
     "category": "Audio",
     "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
-    "long": "The **dub-localize-lab-example** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, writes 6–10 s per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`, **Clone CFG** auto 0 on EN→ES). Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing ASR, clone, llama.cpp, or GGUF yields an empty mix plus that status, not the original recording and not English cloned as the target. Wheels install separately (Chatterbox GitHub zip `--no-deps` so torch 2.14 stays; PyPI 0.1.7 has no `t3_model=v3`). YouTube Studio wants the audio-only `ez_dub_yt` file, not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "long": "The **dub-localize-lab-example** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, merges same-speaker gaps under 0.35 s, writes 6–10 s per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`, **Clone CFG** auto 0 on EN→ES). First Queue is Stage **analyze**; edit `text_target`, then Stage **render**. Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing ASR, clone, llama.cpp, or GGUF yields an empty mix plus that status, not the original recording and not English cloned as the target. Wheels install separately (Chatterbox GitHub zip `--no-deps` so torch 2.14 stays; PyPI 0.1.7 has no `t3_model=v3`). YouTube Studio wants the duration-locked job-dir `ez_dub_yt.wav`, not the Comfy preview MP3 and not a muxed multi-track MP4. See [Local dub](dub.md).",
     "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
   },
   {
@@ -104,7 +104,7 @@
     "aliases": ["multi-language audio", "MLA"],
     "category": "Audio",
     "short": "YouTube Studio Languages tab: upload an audio-only dub the same length as the video.",
-    "long": "YouTube does not reliably ingest extra AAC tracks muxed into an MP4. Export `ez_dub_yt.wav`, upload it under Languages → Audio, add the translated SRT, and use the synthetic/altered-content toggle. Eligibility varies by channel. See [Local dub](dub.md).",
+    "long": "YouTube does not reliably ingest extra AAC tracks muxed into an MP4. Export the duration-locked job-dir `ez_dub_yt.wav` (not the Comfy 24 kHz preview MP3), upload it under Languages → Audio, add the translated SRT, and use the synthetic/altered-content toggle. Eligibility varies by channel. See [Local dub](dub.md).",
     "see_also": ["dub", "loudnorm"]
   },
   {

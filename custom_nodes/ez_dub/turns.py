@@ -140,3 +140,53 @@ def assign_overlap(turns: list[dict[str, Any]]) -> list[dict[str, Any]]:
             continue
         kept.append(turn)
     return kept
+
+
+MERGE_GAP_S = 0.35
+
+
+def _join_turn_text(left: str, right: str) -> str:
+    a = (left or "").strip()
+    b = (right or "").strip()
+    if a and b:
+        return f"{a} {b}"
+    return a or b
+
+
+def merge_adjacent_turns(
+    turns: list[dict[str, Any]],
+    *,
+    gap_s: float = MERGE_GAP_S,
+) -> list[dict[str, Any]]:
+    """Merge consecutive same-speaker turns when gap < gap_s.
+
+    Concatenate text with a single space. Union [t0, t1].
+    rms = max of the two. overlap stays True if either was.
+    Call AFTER assign_overlap, BEFORE translate.
+    """
+    ordered = sorted((dict(t) for t in turns), key=lambda t: (t["t0"], t["t1"]))
+    if not ordered:
+        return []
+    out: list[dict[str, Any]] = [dict(ordered[0])]
+    limit = float(gap_s)
+    for turn in ordered[1:]:
+        prev = out[-1]
+        same = str(turn.get("speaker") or "") == str(prev.get("speaker") or "")
+        gap = float(turn["t0"]) - float(prev["t1"])
+        a = str(prev.get("text") or "").strip()
+        b = str(turn.get("text") or "").strip()
+        if not same or gap >= limit:
+            out.append(dict(turn))
+            continue
+        prev["t0"] = min(float(prev["t0"]), float(turn["t0"]))
+        prev["t1"] = max(float(prev["t1"]), float(turn["t1"]))
+        prev["text"] = _join_turn_text(a, b)
+        prev["text_target"] = _join_turn_text(
+            str(prev.get("text_target") or ""),
+            str(turn.get("text_target") or ""),
+        )
+        prev["rms"] = max(
+            float(prev.get("rms") or 0.0), float(turn.get("rms") or 0.0)
+        )
+        prev["overlap"] = bool(prev.get("overlap")) or bool(turn.get("overlap"))
+    return out

@@ -10,15 +10,15 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 
 - Rights gate (required) vs the original-character podcast lane
 - App Mode: source file dropdown + upload (or URL), languages, stage, clone engine, Clone CFG
-- Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → translate → clone → pitch-preserving duration lock
-- YouTube Studio multi-language audio upload (audio-only file + SRT)
-- `download-dub` usage, sequential Queue, and loudnorm
+- Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → merge → translate → clone → pitch-preserving duration lock
+- YouTube Studio multi-language audio upload (audio-only job-dir WAV + SRT)
+- `download-dub` usage, sequential Queue (Stage **analyze** first), and in-graph loudness
 - Optional still-image MP4 when you have no source video (host `audio-still-video`)
 
 **What this enables**
 
 - A second audio track in another language that keeps each speaker’s voice
-- A duration-locked WAV/MP3 for YouTube Languages → Audio
+- A duration-locked job-dir WAV for YouTube Languages → Audio (Comfy MP3 is a preview)
 - Source and translated SRT captions from the same turns
 
 !!! warning "Not legal advice"
@@ -33,7 +33,9 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 
 [Local podcast](podcast.md) invents hosts and uses Kokoro stock voices. This lane clones **recorded speakers** from a show you own or are licensed to translate. Different disclosure. Different App.
 
-First spoken bumper (optional overlay, sidecar always written):
+Spoken disclosure defaults **off**. Sidecars are always written (localized `ez_dub.disclosure.txt` plus English `ez_dub.disclosure.en.txt`). If you turn the bumper on, it is a short localized overlay on `ez_dub_mix.wav` only — never on the duration-locked YT wav.
+
+English canonical:
 
 > This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.
 
@@ -50,7 +52,7 @@ Do not paste celebrity reference WAVs. Refs are extracted from **this** job’s 
 
 ## Quality bar
 
-Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent), pitch-preserving duration lock. Editable translation JSON is the other lever (Stage **analyze**, edit, Stage **render**).
+Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent), pitch-preserving duration lock, same-speaker merge when the gap is under 0.35 s, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and `qc.json`. Editable translation JSON is the other lever (Stage **analyze**, edit, Rewrite **off**, Stage **render**). Do not ship Stage **all** blindly.
 
 Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera lip sync. **No lip-sync OSS** (Wav2Lip stays banned). Mouths will not match on talking-head video.
 
@@ -110,10 +112,10 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 | **Source language** | `auto` or pin |
 | **Rewrite translation** | On: ASR + speaker cluster + per-turn GGUF into `text_target`. Off: pin the JSON |
 | **Dub status** | After Queue: speaker/turn counts + `translated N/M`, or the blocking miss (`faster-whisper not installed`, `clone pack missing`, `llama.cpp unavailable`, `GGUF missing`, `t3_model=v3`, `resemble-perth watermarker missing`) |
-| **Stage** | `all` / `analyze` / `render` |
+| **Stage** | Default **analyze**. `all` / `analyze` / `render` |
 | **Clone engine** | chatterbox-ml or qwen3tts |
 | **Keep original bed** | Gaps keep ambience |
-| **Spoken disclosure** | 3 s overlay; sidecar always written |
+| **Spoken disclosure** | Default **off**. Localized bumper on `ez_dub_mix` only; sidecar always written |
 | **Speaking speed** | 1.0 default. Pitch-preserving stretch when fitting the original window |
 | **Clone CFG** | −1 auto: 0 when source ≠ target (EN→ES). 0.5 same-language. Raise toward 0.5 if you want more of the original accent |
 | **Exaggeration** | 0.5 neutral. Higher is more intense and faster |
@@ -122,11 +124,11 @@ Graph: **dub-localize-lab-example** (`extra.lab_profile` `us-safe-dub`). Occupan
 
 1. `./scripts/manage.sh start` — type **yes**
 2. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON + `conds.pt`, not t3-only). With the stack up this pip-installs faster-whisper, the llama-cpp-python **CPU wheel**, `setuptools<82`, then the Chatterbox V3 zip `--no-deps --force-reinstall`. Queue also self-heals a missing CPU wheel (no extra restart). Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'` and that `inspect.signature(ChatterboxMultilingualTTS.from_local)` includes `t3_model` and `callable(perth.PerthImplicitWatermarker)`.
-3. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. Queue once (Stage **all**, Rewrite translation **on**).
+3. Load **dub-localize-lab-example**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. First Queue is Stage **analyze** (Rewrite translation **on**). Edit the JSON (`text_target`). Turn Rewrite **off**. Set Stage **render**. Queue again.
 4. Ingest Dub status must be **`ok`**. If script JSON says `missing source.wav` / empty `turns`, ingest never wrote the wav — rights still off, source still `(none)`, or extract failed. Read ingest status first.
-5. **Dub status** must list speaker/turn counts (and `translated N/M`), not `ASR pack missing` / `clone engine missing` / `llama.cpp unavailable` / `GGUF missing` / `t3_model=v3` / `resemble-perth watermarker missing`. The Translation JSON `text_target` fields must be the target language. A llama.cpp / GGUF miss **stops Queue** (empty mix, empty `text_target`) — it does not clone English as Spanish. `llama.cpp unavailable` with a `docker exec … pip install --force-reinstall` line means Llama still will not import (pip “already satisfied” is not enough) — run that command, then confirm `from llama_cpp import Llama`, then Queue again. Do not treat “restart” as the fix for llama.cpp. `resemble-perth watermarker missing` **does** need pip `'setuptools<82'` then a restart so perth reimports.
-6. Files under `${COMFY_OUTPUT_DIR}` as `ez_dub_mix_*.flac` / `ez_dub_yt_*.mp3` plus `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav`
-7. Loudness:
+5. **Dub status** must list speaker/turn counts (and `translated N/M`), not `ASR pack missing` / `clone engine missing` / `llama.cpp unavailable` / `GGUF missing` / `t3_model=v3` / `resemble-perth watermarker missing`. The Translation JSON `text_target` fields must be the target language. A llama.cpp / GGUF miss **stops Queue** (empty mix, empty `text_target`) — it does not clone English as Spanish. `llama.cpp unavailable` with a `docker exec … pip install --force-reinstall` line means Llama still will not import (pip “already satisfied” is not enough) — run that command, then confirm `from llama_cpp import Llama`, then Queue again. Do not treat “restart” as the fix for llama.cpp. `resemble-perth watermarker missing` **does** need pip `'setuptools<82'` then a restart so perth reimports. After render, read `dubs/<slug>/qc.json` if **Dub status** shows `qc:`.
+6. MLA file is `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav` (duration-locked). Optional `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt_48k.mp3`. Comfy `outputs/ez_dub_mix_*.flac` / `ez_dub_yt_*.mp3` is a 24 kHz preview — do not call the numbered MP3 a 320k master.
+7. Loudness is in-graph raise-to-peak plus optional ffmpeg −14 LUFS. Operator fallback (not required):
 
 ```bash
 ./scripts/utilities/podcast-loudnorm.sh run --in "${COMFY_OUTPUT_DIR}/dubs/episode/ez_dub_yt.wav" --target youtube
