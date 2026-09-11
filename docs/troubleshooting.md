@@ -199,6 +199,8 @@ sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | Nunchaku import spam / `nunchaku 0.16.1` / missing `nunchaku.models` | Wrong **PyPI** package (`nunchaku` stats lib) or no aarch64 wheel on GB10 | Lab graphs do **not** need Nunchaku. Restart: entrypoint moves `ComfyUI-nunchaku` to `ComfyUI-nunchaku.disabled` when the engine is missing (Comfy skips `*.disabled`). Do **not** `pip install nunchaku` from PyPI. Optional real engine: GitHub wheels only (`NUNCHAKU_WHEEL_URL=…` or x86_64 cu/torch match). Spark aarch64: skip; use core UNET/CLIP/VAE loaders |
 | Nunchaku missing | aarch64 wheel unavailable | Fail-soft; **\*-lab-example** Flux / LTX paths still work |
 | `Cannot import …/custom_nodes/_user` / missing `__init__.py` | Empty host bind `${COMFY_OUTPUT_DIR}/custom-nodes-user` | Restart. Entrypoint writes an empty stub `__init__.py` when missing; never overwrites an operator pack |
+| `ModuleNotFoundError: No module named 'comfy_api.input'` then container exit 1 (after Kitchen attention) | Volume seed used unanchored rsync `--exclude input/`, which also dropped ComfyUI v0.34+ `comfy_api/input` | Pull latest (`entrypoint.sh` + `install-comfy` are bind-mounted — no image rebuild). `./scripts/manage.sh stop` then `start` (type **yes**). Stamp-present refresh heals `comfy_api/` from `/opt/comfy-prebuilt`. Do **not** need `LAB_FORCE_COLD_INSTALL`. Last resort: `docker volume rm ez-comfy-state` then start |
+| `git clone` into `ComfyUI-VideoHelperSuite` “already exists and is not an empty directory” | Prebuilt strip removes `.git`; refresh used to clone into the leftover tree | Pull latest and restart. Clone is skipped when the pack is already present; pip requirements still run. LTX lab MP4 is unaffected |
 
 ---
 

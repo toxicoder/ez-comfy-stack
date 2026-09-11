@@ -1060,6 +1060,16 @@ exit 0
   install_docker_mocks
 }
 
+@test "compose: stack_port_open requires HTTP when curl exists" {
+  install_mock_bin curl 'exit 1'
+  install_mock_bin nc 'exit 0'
+  run stack_port_open 8188
+  [ "${status}" -ne 0 ]
+  install_mock_bin curl 'exit 0'
+  run stack_port_open 8188
+  [ "${status}" -eq 0 ]
+}
+
 @test "compose: stack_attention_from_text kitchen sage fallback unknown" {
   run stack_attention_from_text "Using Comfy Kitchen attention"
   [ "${output}" = "kitchen" ]

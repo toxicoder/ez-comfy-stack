@@ -298,6 +298,19 @@ teardown() {
   run clone_node_ref_is_sha main
   [ "${status}" -ne 0 ]
 
+  # strip_prebuilt removes .git — clone_node must not git clone into that tree
+  mkdir -p "${CUSTOM}/ComfyUI-VideoHelperSuite"
+  echo vhs >"${CUSTOM}/ComfyUI-VideoHelperSuite/nodes.py"
+  echo opencv-python >"${CUSTOM}/ComfyUI-VideoHelperSuite/requirements.txt"
+  rm -f "${TEST_TMP_DIR}/git.log"
+  install_mock_bin git 'echo "git $*" >>"${TEST_TMP_DIR}/git.log"; exit 1'
+  run clone_node "https://example.com/vhs.git" "ComfyUI-VideoHelperSuite"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"already present"* ]]
+  [[ "${output}" == *"skip clone"* ]]
+  [[ ! -f ${TEST_TMP_DIR}/git.log ]]
+  [[ -f ${CUSTOM}/ComfyUI-VideoHelperSuite/nodes.py ]]
+
   # strip_prebuilt removes .git and bytecode junk
   local strip_root
   strip_root="${TEST_TMP_DIR}/strip_tree"
@@ -344,6 +357,7 @@ teardown() {
   pre="${TEST_TMP_DIR}/prebuilt"
   dest="${TEST_TMP_DIR}/ComfyUI"
   mkdir -p "${pre}/.venv/bin" "${pre}/user/default" "${pre}/input" \
+    "${pre}/comfy_api/input" \
     "${pre}/custom_nodes/_user" "${pre}/custom_nodes/ez_prompt_enhance" \
     "${dest}/user/default" "${dest}/input" "${dest}/custom_nodes/_user"
   printf '#!/usr/bin/env bash\necho ok\n' >"${pre}/.venv/bin/python"
@@ -353,6 +367,7 @@ teardown() {
   echo keep-me >"${dest}/user/default/mine.json"
   echo oldstart >"${dest}/input/start.png"
   echo prestart >"${pre}/input/example.png"
+  echo 'from typing import Any' >"${pre}/comfy_api/input/__init__.py"
   echo poison >"${pre}/custom_nodes/_user/poison.py"
   echo ok >"${pre}/custom_nodes/ez_prompt_enhance/__init__.py"
   echo keep-pack >"${dest}/custom_nodes/_user/mine.py"
@@ -360,7 +375,11 @@ teardown() {
   export COMFY_HOME="${dest}"
   run prebuilt_exclude_patterns
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"custom_nodes/_user/"* ]]
+  [[ "${output}" == *"/custom_nodes/_user/"* ]]
+  [[ "${output}" == *"/input/"* ]]
+  # Unanchored `input/` would also drop comfy_api/input.
+  [[ "${output}" != $'input/'* ]]
+  [[ "${output}" != *$'\ninput/'* ]]
   run seed_from_prebuilt
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/main.py ]]
@@ -368,9 +387,30 @@ teardown() {
   [[ ! -f ${dest}/user/default/lab.json ]]
   [[ -f ${dest}/input/start.png ]]
   [[ ! -f ${dest}/input/example.png ]]
+  [[ -f ${dest}/comfy_api/input/__init__.py ]]
   [[ -f ${dest}/custom_nodes/_user/mine.py ]]
   [[ ! -f ${dest}/custom_nodes/_user/poison.py ]]
   [[ -f ${dest}/custom_nodes/ez_prompt_enhance/__init__.py ]]
+}
+
+@test "entrypoint heal_comfy_api_input_from_prebuilt copies nested package" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local pre dest
+  pre="${TEST_TMP_DIR}/pre_ep_heal"
+  dest="${TEST_TMP_DIR}/ComfyUI_ep_heal"
+  mkdir -p "${pre}/comfy_api/input" "${pre}/input" "${dest}/input"
+  echo 'from typing import Any' >"${pre}/comfy_api/input/__init__.py"
+  echo prestart >"${pre}/input/example.png"
+  echo oldstart >"${dest}/input/start.png"
+  export LAB_PREBUILT_ROOT="${pre}"
+  export COMFY_HOME="${dest}"
+  run heal_comfy_api_input_from_prebuilt
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Healing comfy_api/input"* ]]
+  [[ -f ${dest}/comfy_api/input/__init__.py ]]
+  [[ -f ${dest}/input/start.png ]]
+  [[ ! -f ${dest}/input/example.png ]]
 }
 
 @test "copy_prebuilt_tree skips user input and custom_nodes/_user" {
@@ -891,10 +931,14 @@ teardown() {
   echo v0.29.0 >"${COMFY_HOME}/.lab-comfyui-ref"
   local pre="${TEST_TMP_DIR}/pre_pin"
   export LAB_PREBUILT_ROOT="${pre}"
-  mkdir -p "${pre}"
+  mkdir -p "${pre}/comfy_api/input" "${pre}/input" \
+    "${pre}/custom_nodes/_user" "${COMFY_HOME}/custom_nodes/_user" \
+    "${COMFY_HOME}/input"
   echo seeded >"${pre}/from_image.txt"
   echo 'print("ok")' >"${pre}/main.py"
-  mkdir -p "${pre}/custom_nodes/_user" "${COMFY_HOME}/custom_nodes/_user"
+  echo 'from typing import Any' >"${pre}/comfy_api/input/__init__.py"
+  echo prestart >"${pre}/input/example.png"
+  echo oldstart >"${COMFY_HOME}/input/start.png"
   echo poison >"${pre}/custom_nodes/_user/poison.py"
   echo keep >"${COMFY_HOME}/custom_nodes/_user/mine.py"
   COMFYUI_REF="v0.34.6"
@@ -903,7 +947,35 @@ teardown() {
   [[ -f ${COMFY_HOME}/from_image.txt ]]
   [[ -f ${COMFY_HOME}/custom_nodes/_user/mine.py ]]
   [[ ! -f ${COMFY_HOME}/custom_nodes/_user/poison.py ]]
+  [[ -f ${COMFY_HOME}/comfy_api/input/__init__.py ]]
+  [[ -f ${COMFY_HOME}/input/start.png ]]
+  [[ ! -f ${COMFY_HOME}/input/example.png ]]
   [[ "${output}" == *"Re-seeding"* || "${output}" == *"prebuilt"* ]]
+}
+
+@test "heal_comfy_api_input_from_prebuilt copies nested package when pin matches" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/install-comfy.sh"
+  mkdir -p "${VENV}/bin"
+  printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
+  COMFYUI_REF="v0.34.6"
+  write_comfy_pin
+  local pre="${TEST_TMP_DIR}/pre_heal"
+  export LAB_PREBUILT_ROOT="${pre}"
+  mkdir -p "${pre}/comfy_api/input" "${pre}/input" "${COMFY_HOME}/input"
+  echo 'from typing import Any' >"${pre}/comfy_api/input/__init__.py"
+  echo prestart >"${pre}/input/example.png"
+  echo oldstart >"${COMFY_HOME}/input/start.png"
+  [[ ! -f ${COMFY_HOME}/comfy_api/input/__init__.py ]]
+  run heal_comfy_api_input_from_prebuilt
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Healing comfy_api/input"* ]]
+  [[ -f ${COMFY_HOME}/comfy_api/input/__init__.py ]]
+  [[ -f ${COMFY_HOME}/input/start.png ]]
+  [[ ! -f ${COMFY_HOME}/input/example.png ]]
+  run heal_comfy_api_input_from_prebuilt
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"Healing"* ]]
 }
 
 @test "install-comfy main stamp-present refresh invokes pin sync" {

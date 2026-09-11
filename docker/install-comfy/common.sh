@@ -196,23 +196,9 @@ clone_node() {
   local name="${2}"
   local ref="${3:-}"
   local dest="${CUSTOM}/${name}"
+  local any=""
   log "custom node: begin ${name}${ref:+ (ref ${ref})}"
-  if [[ ! -d ${dest}/.git ]]; then
-    log "custom node: cloning ${name}…"
-    if [[ -n ${ref} ]] && clone_node_ref_is_sha "${ref}"; then
-      mkdir -p "${dest}"
-      git -C "${dest}" init >/dev/null 2>&1 || true
-      git -C "${dest}" remote add origin "${url}" 2>/dev/null || true
-      git -C "${dest}" fetch --depth 1 origin "${ref}" || warn "clone failed: ${name}"
-      git -C "${dest}" checkout FETCH_HEAD >/dev/null 2>&1 || warn "checkout failed: ${name}"
-    else
-      local -a clone_args=(--depth 1)
-      if [[ -n ${ref} ]]; then
-        clone_args+=(--branch "${ref}")
-      fi
-      git clone "${clone_args[@]}" "${url}" "${dest}" || warn "clone failed: ${name}"
-    fi
-  else
+  if [[ -d ${dest}/.git ]]; then
     log "custom node: updating ${name}…"
     if [[ -n ${ref} ]]; then
       git -C "${dest}" fetch --depth 1 origin "${ref}" 2>/dev/null || true
@@ -220,6 +206,28 @@ clone_node() {
         git -C "${dest}" pull --ff-only || true
     else
       git -C "${dest}" pull --ff-only || true
+    fi
+  else
+    if [[ -d ${dest} ]]; then
+      any="$(find "${dest}" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null || true)"
+    fi
+    if [[ -n ${any} ]]; then
+      log "custom node: ${name} already present (no .git) — skip clone"
+    else
+      log "custom node: cloning ${name}…"
+      if [[ -n ${ref} ]] && clone_node_ref_is_sha "${ref}"; then
+        mkdir -p "${dest}"
+        git -C "${dest}" init >/dev/null 2>&1 || true
+        git -C "${dest}" remote add origin "${url}" 2>/dev/null || true
+        git -C "${dest}" fetch --depth 1 origin "${ref}" || warn "clone failed: ${name}"
+        git -C "${dest}" checkout FETCH_HEAD >/dev/null 2>&1 || warn "checkout failed: ${name}"
+      else
+        local -a clone_args=(--depth 1)
+        if [[ -n ${ref} ]]; then
+          clone_args+=(--branch "${ref}")
+        fi
+        git clone "${clone_args[@]}" "${url}" "${dest}" || warn "clone failed: ${name}"
+      fi
     fi
   fi
   if [[ -f "${CUSTOM}/${name}/requirements.txt" ]]; then
@@ -388,6 +396,55 @@ apply_magcache_compat_patch() {
   else
     warn "patch_magcache_compat.py not found in image"
   fi
+}
+
+#######################################
+# Copy comfy_api/ from prebuilt when the volume is missing comfy_api/input.
+# Unanchored rsync --exclude input/ used to drop that nested v0.34+ package.
+# No-op when the package is already present or prebuilt lacks it.
+# Globals:
+#   COMFY_HOME, LAB_PREBUILT_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 always (soft-fail)
+#######################################
+heal_comfy_api_input_from_prebuilt() {
+  local pre dest src_pkg dest_init
+  pre="${LAB_PREBUILT_ROOT:-/opt/comfy-prebuilt}"
+  dest="${COMFY_HOME:-/comfy-state/ComfyUI}"
+  src_pkg="${pre}/comfy_api"
+  dest_init="${dest}/comfy_api/input/__init__.py"
+  if [[ ! -d ${src_pkg}/input ]]; then
+    return 0
+  fi
+  if [[ -f ${dest_init} ]]; then
+    return 0
+  fi
+  log "Healing comfy_api/input from prebuilt (nested package; not root input/)"
+  mkdir -p "${dest}/comfy_api" || {
+    warn "heal comfy_api/input: could not mkdir ${dest}/comfy_api"
+    return 0
+  }
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a "${src_pkg}/" "${dest}/comfy_api/" || {
+      warn "heal comfy_api/input rsync failed"
+      return 0
+    }
+  else
+    cp -a "${src_pkg}/." "${dest}/comfy_api/" || {
+      warn "heal comfy_api/input copy failed"
+      return 0
+    }
+  fi
+  if [[ -f ${dest_init} ]]; then
+    log "Healed comfy_api/input → ${dest_init}"
+  else
+    warn "comfy_api/input still missing after heal"
+  fi
+  return 0
 }
 
 #######################################

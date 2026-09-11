@@ -51,7 +51,7 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | Operator custom nodes | `${COMFY_OUTPUT_DIR}/custom-nodes-user` | `$COMFY_HOME/custom_nodes/_user` | persist (pin refresh excludes this tree) |
 | Comfy install + venv | Docker volume `ez-comfy-state` | `/comfy-state` | persist until `cleanup` |
 
-`seed_from_prebuilt` already skips `user/`, `input/`, `output/`, `temp/`, and `extra_model_paths.yaml`. It also skips `custom_nodes/_user/` so a pin refresh cannot delete Manager-installed packs that live on the host bind. Lab packs named `ez_*` still overwrite from `/opt/ez-comfy/custom_nodes`.
+`seed_from_prebuilt` skips **root-anchored** `/user/`, `/input/`, `/output/`, `/temp/`, `/extra_model_paths.yaml`, and `/custom_nodes/_user/` so a pin refresh cannot delete Manager-installed packs that live on the host bind. Anchoring matters: unanchored `input/` also dropped nested `comfy_api/input` (ComfyUI v0.34+ Curve/Range types) and ComfyUI crashed on import. Stamp-present refresh heals that package from `/opt/comfy-prebuilt` even when `.lab-comfyui-ref` already matches `COMFYUI_REF`. Lab packs named `ez_*` still overwrite from `/opt/ez-comfy/custom_nodes`.
 
 ---
 
