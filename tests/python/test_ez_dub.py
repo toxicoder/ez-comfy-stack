@@ -378,7 +378,14 @@ def test_render_analyze_stage_skips(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
     payload["stage"] = "analyze"
-    out = EZDubRender().run(dub_turns.dumps_payload(payload), ENGINE_CHATTERBOX, True, False, 1.0, "ep")
+    out = EZDubRender().run(
+        dub_turns.dumps_payload(payload),
+        ENGINE_CHATTERBOX,
+        True,
+        False,
+        1.0,
+        job_id="ep",
+    )
     assert out["ui"]["passthrough"][0].startswith("analyze only")
 
 
@@ -1350,7 +1357,12 @@ def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch) -> None:
         assert payload["turns"][0]["text"] != payload["turns"][0]["text_target"]
         assert "Bienvenidos" in payload["turns"][0]["text_target"]
         rendered = EZDubRender().run(
-            scripted["result"][0], ENGINE_CHATTERBOX, True, False, 1.0, "ep"
+            scripted["result"][0],
+            ENGINE_CHATTERBOX,
+            True,
+            False,
+            1.0,
+            job_id="ep",
         )
         status = rendered["ui"]["passthrough"][0]
         assert "speakers" in status or "cloned" in status
@@ -1399,7 +1411,12 @@ def test_script_render_surface_rights_refuse(tmp_path: Path, monkeypatch) -> Non
     assert payload["turns"] == []
     assert payload["status"] == "rights refused"
     rendered = EZDubRender().run(
-        scripted["result"][0], ENGINE_CHATTERBOX, True, False, 1.0, "match-day"
+        scripted["result"][0],
+        ENGINE_CHATTERBOX,
+        True,
+        False,
+        1.0,
+        job_id="match-day",
     )
     assert rendered["ui"]["passthrough"][0] == "rights refused"
 
@@ -1428,7 +1445,9 @@ def test_analyze_job_missing_wav_operator_status(
     assert payload["turns"] == []
     assert reason == pipeline.MISSING_SOURCE_STATUS
     assert "I have rights" in reason
-    rendered = EZDubRender().run(SEED_SCRIPT, ENGINE_CHATTERBOX, True, False, 1.0, "ep")
+    rendered = EZDubRender().run(
+        SEED_SCRIPT, ENGINE_CHATTERBOX, True, False, 1.0, job_id="ep"
+    )
     assert rendered["ui"]["passthrough"][0] == pipeline.MISSING_SOURCE_STATUS
 
 
@@ -1561,3 +1580,324 @@ def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch) -> None:
     )
     pipeline._ensure_lab_custom_nodes_path()
     assert Path(sys.path[0]).resolve() == CUSTOM.resolve()
+
+
+def _f0(samples: list[float], rate: int, skip_s: float = 0.08) -> float:
+    """Autocorrelation F0 (Hz). Lags cover ~300–800 Hz so 2×440 is excluded."""
+    a = int(skip_s * rate)
+    b = len(samples) - a
+    chunk = samples[a:b] if b > a else samples
+    if len(chunk) < 64:
+        return 0.0
+    min_lag = int(rate / 800)
+    max_lag = int(rate / 300)
+    if max_lag >= len(chunk):
+        max_lag = len(chunk) - 2
+    if min_lag < 1 or max_lag <= min_lag:
+        return 0.0
+    best_lag = min_lag
+    best = -1e18
+    for lag in range(min_lag, max_lag + 1):
+        acc = 0.0
+        count = len(chunk) - lag
+        for i in range(count):
+            acc += chunk[i] * chunk[i + lag]
+        acc /= max(count, 1)
+        if acc > best:
+            best = acc
+            best_lag = lag
+    return rate / best_lag
+
+
+def test_clone_cfg_weight_auto_and_override() -> None:
+    assert pipeline.clone_cfg_weight("en", "es", -1) == 0.0
+    assert pipeline.clone_cfg_weight("auto", "es", -1.0) == 0.0
+    assert pipeline.clone_cfg_weight("es", "es", -1) == 0.5
+    assert pipeline.clone_cfg_weight("en", "es", 0.3) == 0.3
+    assert pipeline.clone_cfg_weight("en", "es", 1.5) == 1.0
+    assert pipeline.clone_cfg_weight("en", "es", "nope") == 0.0
+
+
+def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch) -> None:
+    seen: list[dict] = []
+
+    class _Fake:
+        sr = 24000
+
+        def generate(self, text: str, **kwargs):
+            del text
+            seen.append(dict(kwargs))
+            return [0.1] * 240
+
+    monkeypatch.setattr(pipeline, "_get_chatterbox", lambda: (_Fake(), ""))
+    pipeline._CHATTERBOX_COND_KEY = ""
+    ref = tmp_path / "spk00.wav"
+    dub_audio.write_wav(ref, [0.2] * 24000, 24000)
+    pcm, rate, err = pipeline._try_chatterbox(
+        "Hola",
+        "es",
+        str(ref),
+        exaggeration=0.5,
+        cfg_weight=0.0,
+        temperature=0.8,
+    )
+    assert err == ""
+    assert rate == 24000
+    assert pcm
+    assert seen[0]["cfg_weight"] == 0.0
+    assert seen[0]["exaggeration"] == 0.5
+    assert seen[0]["language_id"] == "es"
+    assert seen[0]["audio_prompt_path"] == str(ref)
+    pcm2, _rate, err2 = pipeline._try_chatterbox(
+        "Adios",
+        "es",
+        str(ref),
+        exaggeration=0.5,
+        cfg_weight=0.0,
+        temperature=0.8,
+    )
+    assert err2 == ""
+    assert pcm2
+    assert "audio_prompt_path" not in seen[1]
+
+
+def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.2] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    seen: list[dict] = []
+
+    class _Fake:
+        sr = 24000
+
+        def generate(self, text: str, **kwargs):
+            del text
+            seen.append(dict(kwargs))
+            return [0.1] * 800
+
+    monkeypatch.setattr(pipeline, "_get_chatterbox", lambda: (_Fake(), ""))
+    monkeypatch.setattr(pipeline, "preflight_clone", lambda: "")
+    pipeline._CHATTERBOX_COND_KEY = ""
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+    mix, out_rate, status = pipeline.render_mix(
+        samples,
+        rate,
+        payload,
+        dest,
+        engine=ENGINE_CHATTERBOX,
+        keep_bed=True,
+        spoken_disclosure=False,
+        cfg_weight=-1.0,
+        exaggeration=0.5,
+    )
+    assert out_rate == rate
+    assert mix
+    assert "cloned" in status
+    assert seen
+    assert seen[0]["cfg_weight"] == 0.0
+    assert seen[0]["exaggeration"] == 0.5
+
+
+def test_extract_refs_skips_overlap_quiet_and_caps(tmp_path: Path) -> None:
+    rate = 24000
+    samples = [0.25] * (rate * 16)
+    turns = [
+        {
+            "id": 1,
+            "speaker": "spk00",
+            "t0": 0.0,
+            "t1": 11.0,
+            "overlap": False,
+            "rms": 0.2,
+            "text": "long take",
+        },
+        {
+            "id": 2,
+            "speaker": "spk00",
+            "t0": 11.0,
+            "t1": 14.0,
+            "overlap": False,
+            "rms": 0.2,
+            "text": "extra",
+        },
+        {
+            "id": 3,
+            "speaker": "spk00",
+            "t0": 14.0,
+            "t1": 15.0,
+            "overlap": True,
+            "rms": 0.9,
+            "text": "overlap",
+        },
+        {
+            "id": 4,
+            "speaker": "spk00",
+            "t0": 15.0,
+            "t1": 15.4,
+            "overlap": False,
+            "rms": 0.2,
+            "text": "tiny",
+        },
+        {
+            "id": 5,
+            "speaker": "spk00",
+            "t0": 15.4,
+            "t1": 16.0,
+            "overlap": False,
+            "rms": 0.001,
+            "text": "quiet",
+        },
+    ]
+    refs = pipeline._extract_refs(samples, rate, turns, tmp_path / "speakers")
+    path = refs["spk00"]
+    wav, sr = dub_audio.read_wav(path)
+    assert sr == rate
+    assert len(wav) / sr <= pipeline.REF_MAX_S + 0.05
+    assert len(wav) / sr >= 3.0
+    note = path.with_suffix(".txt").read_text(encoding="utf-8")
+    assert "long take" in note
+    assert "overlap" not in note
+    assert "tiny" not in note
+    assert "quiet" not in note
+
+
+def test_extract_refs_prefers_single_long_take(tmp_path: Path) -> None:
+    rate = 24000
+    samples = [0.2] * (rate * 12)
+    turns = [
+        {
+            "id": 1,
+            "speaker": "spk00",
+            "t0": 0.0,
+            "t1": 7.0,
+            "overlap": False,
+            "rms": 0.3,
+            "text": "seven",
+        },
+        {
+            "id": 2,
+            "speaker": "spk00",
+            "t0": 7.5,
+            "t1": 11.5,
+            "overlap": False,
+            "rms": 0.25,
+            "text": "four",
+        },
+    ]
+    refs = pipeline._extract_refs(samples, rate, turns, tmp_path / "speakers")
+    wav, sr = dub_audio.read_wav(refs["spk00"])
+    assert sr == rate
+    dur = len(wav) / sr
+    assert 6.0 <= dur <= 7.2
+    note = refs["spk00"].with_suffix(".txt").read_text(encoding="utf-8").strip()
+    assert note == "seven"
+
+
+def test_extract_refs_crossfades_concat(tmp_path: Path) -> None:
+    rate = 24000
+    first = [0.8] * (rate * 2)
+    second = [0.2] * (rate * 2)
+    samples = first + second
+    turns = [
+        {
+            "id": 1,
+            "speaker": "spk00",
+            "t0": 0.0,
+            "t1": 2.0,
+            "overlap": False,
+            "rms": 0.8,
+            "text": "a",
+        },
+        {
+            "id": 2,
+            "speaker": "spk00",
+            "t0": 2.0,
+            "t1": 4.0,
+            "overlap": False,
+            "rms": 0.2,
+            "text": "b",
+        },
+    ]
+    refs = pipeline._extract_refs(samples, rate, turns, tmp_path / "speakers")
+    wav, sr = dub_audio.read_wav(refs["spk00"])
+    assert sr == rate
+    fade = int(rate * pipeline.REF_XFADE_MS / 1000)
+    join = 2 * rate
+    mid = wav[join - fade // 2]
+    assert 0.35 < abs(mid) < 0.85
+
+
+def test_time_stretch_preserves_pitch() -> None:
+    rate = 24000
+    freq = 440.0
+    n = rate
+    sine = [math.sin(2 * math.pi * freq * i / rate) for i in range(n)]
+    dest = int(0.7 * n)
+    stretched = align.time_stretch(sine, dest, rate)
+    linear = align.resample_linear(sine, dest)
+    assert len(stretched) == dest
+    src_f = _f0(sine, rate)
+    ola_f = _f0(stretched, rate)
+    lin_f = _f0(linear, rate)
+    assert abs(src_f - 440) < 20
+    assert abs(ola_f - src_f) < 30
+    assert abs(lin_f - src_f) > 80
+
+
+def test_fit_turn_overflow_keeps_pitch() -> None:
+    rate = 24000
+    sine = [math.sin(2 * math.pi * 440 * i / rate) for i in range(rate)]
+    fitted, meta = align.fit_turn(sine, rate, 0.5, spill_s=0.0)
+    assert len(fitted) == int(round(0.5 * rate))
+    assert meta["trimmed"] is True or meta["speed"] > 1.0
+    assert abs(_f0(fitted, rate) - _f0(sine, rate)) < 30
+
+
+def test_try_qwen3tts_passes_ref_audio_and_text(
+    tmp_path: Path, monkeypatch
+) -> None:
+    seen: list[dict] = []
+    prompts: list[dict] = []
+
+    class _Fake:
+        def create_voice_clone_prompt(self, **kwargs):
+            prompts.append(dict(kwargs))
+            return {"cached": True}
+
+        def generate_voice_clone(self, **kwargs):
+            seen.append(dict(kwargs))
+            return [[0.1] * 80], 24000
+
+    monkeypatch.setattr(pipeline, "_get_qwen3", lambda: (_Fake(), ""))
+    pipeline._QWEN3_PROMPT_KEY = ""
+    pipeline._QWEN3_PROMPT = None
+    ref = tmp_path / "spk00.wav"
+    dub_audio.write_wav(ref, [0.2] * 24000, 24000)
+    (tmp_path / "spk00.txt").write_text("hello from the ref", encoding="utf-8")
+    pcm, rate, err = pipeline._try_qwen3tts(
+        "Hola equipo", "es", str(ref), ref_text="hello from the ref"
+    )
+    assert err == ""
+    assert rate == 24000
+    assert pcm
+    assert prompts[0]["ref_audio"] == str(ref)
+    assert prompts[0]["ref_text"] == "hello from the ref"
+    assert prompts[0]["x_vector_only_mode"] is False
+    assert seen[0]["language"] == "Spanish"
+    assert seen[0]["voice_clone_prompt"] == {"cached": True}
+
+
+def test_translate_prompt_mentions_spoken_length() -> None:
+    text = pipeline.load_translate_prompt().lower()
+    assert "spoken length" in text or "same length" in text
+
+
+def test_ezdub_render_clone_knob_widgets() -> None:
+    required = EZDubRender.INPUT_TYPES()["required"]
+    assert required["cfg_weight"][0] == "FLOAT"
+    assert required["cfg_weight"][1]["default"] == -1.0
+    assert required["exaggeration"][0] == "FLOAT"
+    assert required["exaggeration"][1]["default"] == 0.5

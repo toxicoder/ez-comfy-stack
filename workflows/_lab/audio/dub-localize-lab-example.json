@@ -100,7 +100,7 @@
       ],
       "size": [
         440,
-        220
+        300
       ],
       "flags": {},
       "order": 2,
@@ -135,7 +135,9 @@
         "chatterbox-ml",
         true,
         true,
-        1.0
+        1.0,
+        -1.0,
+        0.5
       ],
       "title": "ez_dub_voice"
     },
@@ -220,7 +222,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.\n3. Stage **all** (default): faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, per-speaker clone refs write under `dubs/<slug>/speakers/` (6\u201312 s), then per-turn GGUF translate + cached Chatterbox V3 clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) \u2014 Queue does not clone English as the target. Stage **analyze** writes JSON to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) \u2014 ISO `language_id` (`es`, not `Spanish`). Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split.\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, speaker refs, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.\n3. Stage **all** (default): faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, per-speaker clone refs write under `dubs/<slug>/speakers/` (6\u201310 s, one clean take when possible), then per-turn GGUF translate + cached Chatterbox V3 clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) \u2014 Queue does not clone English as the target. Stage **analyze** writes JSON to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) \u2014 ISO `language_id` (`es`, not `Spanish`). **Clone CFG** auto is 0 on EN\u2192ES (less English accent); 0.5 same-language. Pitch-preserving duration lock. Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS Base clones from the same refs (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split.\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, speaker refs, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     }
@@ -288,7 +290,7 @@
         480,
         24,
         480,
-        700
+        780
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -311,7 +313,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-dub",
-    "lab_note": "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.\n3. Stage **all** (default): faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, per-speaker clone refs write under `dubs/<slug>/speakers/` (6\u201312 s), then per-turn GGUF translate + cached Chatterbox V3 clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) \u2014 Queue does not clone English as the target. Stage **analyze** writes JSON to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) \u2014 ISO `language_id` (`es`, not `Spanish`). Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS is the Apache alt (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split.\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, speaker refs, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_note": "## dub-localize-lab-example\n\nUS-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** \u2014 stop Klein / Wan / LTX first.\n\n1. **I have rights** must be on. Queue refuses otherwise. Clone only recordings you own or have speaker consent to translate.\n2. **Source file**: pick wav/mp4/mkv already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), or **Upload media**. Optional **Source URL** for http(s) (`yt-dlp`). Host helper: `./scripts/utilities/dub-fetch.sh run --url URL` then reload the App so the file appears in the dropdown.\n3. Stage **all** (default): faster-whisper segments become turns, speakers cluster with Chatterbox `ve.pt`, per-speaker clone refs write under `dubs/<slug>/speakers/` (6\u201310 s, one clean take when possible), then per-turn GGUF translate + cached Chatterbox V3 clone. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing llama.cpp / GGUF with Rewrite translation **on** is blocking (empty mix, empty `text_target`) \u2014 Queue does not clone English as the target. Stage **analyze** writes JSON to edit; then Queue with Rewrite translation **off** and Stage **render**.\n4. Chatterbox Multilingual V3 (MIT, PerTh on) \u2014 ISO `language_id` (`es`, not `Spanish`). **Clone CFG** auto is 0 on EN\u2192ES (less English accent); 0.5 same-language. Pitch-preserving duration lock. Needs the complete snapshot (`ve.pt`, `s3gen.pt`, T3 V3, tokenizer JSON, `conds.pt`), not t3-only `comfy/tts`, and a wheel whose `from_local` accepts `t3_model=v3` (GitHub pin, not PyPI 0.1.7). Qwen3-TTS Base clones from the same refs (`download-podcast --tier qwen3tts`). Missing ASR/clone/llama.cpp: empty mix + **Dub status** (never the original recording). Clone lines longer than 300 characters are split.\n5. Saves: `ez_dub_mix` FLAC + `ez_dub_yt` 320 kbps MP3 (duration-locked). Job dir also has WAV, SRT, speaker refs, and disclosure.txt.\n6. YouTube Studio: Languages \u2192 Add language \u2192 upload `ez_dub_yt` (audio-only, same length). Flip the synthetic/altered-content toggle. MLA eligibility varies by channel.\n7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE --target youtube` (\u221214 LUFS).\n8. No lip-sync. No celebrity refs. Spoken bumper (optional) overlays the first ~3 s.\n\nDisclosure sidecar: This audio is an AI-translated dub. Voices are synthesized from the original speakers with the rights-holder's authorization.\n\nWeights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-installs faster-whisper, the llama-cpp-python CPU wheel, then the Chatterbox V3 GitHub zip --no-deps --force-reinstall so torch 2.14 stays). Queue self-heals a missing llama.cpp wheel (needed for `text_target`). Missing pack is not a doctor failure. On DGX Spark, faster-whisper uses the CPU CTranslate2 wheel.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
     "lab_description": "US-safe multi-speaker dub: rights-gated ingest, diarize, translate, Chatterbox ML V3 clone, duration-locked YouTube track",
     "ds": {
       "scale": 1,
@@ -450,6 +452,22 @@
           {
             "description": "TTS speed. 1.0 is the Kokoro default.",
             "label": "Speaking speed"
+          }
+        ],
+        [
+          3,
+          "cfg_weight",
+          {
+            "description": "-1 auto: 0 for EN\u2192ES (less English accent). 0.5 same-language clone.",
+            "label": "Clone CFG"
+          }
+        ],
+        [
+          3,
+          "exaggeration",
+          {
+            "description": "0.5 is neutral. Higher is more intense and faster.",
+            "label": "Exaggeration"
           }
         ]
       ],

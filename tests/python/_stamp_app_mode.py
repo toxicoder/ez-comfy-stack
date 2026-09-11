@@ -264,6 +264,8 @@ WIDGET_ORDER = (
     "announcer_voice",
     "include_announcer",
     "speed",
+    "cfg_weight",
+    "exaggeration",
     "image",
     "seed",
     "width",
@@ -311,6 +313,8 @@ GENERIC_LABELS = {
     "announcer_voice": "Announcer",
     "include_announcer": "Include announcer",
     "speed": "Speaking speed",
+    "cfg_weight": "Clone CFG",
+    "exaggeration": "Exaggeration",
     "source": "Source file",
     "upload": "Upload media",
     "source_url": "Source URL",
@@ -358,6 +362,10 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "announcer_voice": "Kokoro built-in for Announcer: lines.",
     "include_announcer": "On: speak Announcer: lines. Off: skip them.",
     "speed": "TTS speed. 1.0 is the Kokoro default.",
+    "cfg_weight": (
+        "-1 auto: 0 for EN→ES (less English accent). 0.5 same-language clone."
+    ),
+    "exaggeration": "0.5 is neutral. Higher is more intense and faster.",
     "source": (
         "Audio or video already in COMFY_OUTPUT_DIR/input (container /inputs). "
         "Default (none)."
@@ -479,6 +487,8 @@ def display_label(
             "keep_bed": "Keep original bed",
             "spoken_disclosure": "Spoken disclosure",
             "speed": "Speaking speed",
+            "cfg_weight": "Clone CFG",
+            "exaggeration": "Exaggeration",
         }.get(name, generic)
     if ntype == "EZKokoroTTS":
         return {
@@ -1103,6 +1113,8 @@ def _collect_raw_inputs(
                     (nid, "keep_bed", node),
                     (nid, "spoken_disclosure", node),
                     (nid, "speed", node),
+                    (nid, "cfg_weight", node),
+                    (nid, "exaggeration", node),
                 )
             )
         elif ntype == "EZKokoroTTS":

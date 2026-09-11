@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
 SAMPLE_RATE = 24000
-MAX_SPEED = 1.15
+MAX_SPEED = 1.25
 MIN_STRETCH = 0.88
 XFADE_MS = 30
+STRETCH_WINDOW_S = 0.02
 
 
 def rms(samples: list[float]) -> float:
@@ -50,6 +52,87 @@ def resample_linear(samples: list[float], out_len: int) -> list[float]:
     return out
 
 
+def time_stretch(
+    samples: list[float],
+    out_len: int,
+    rate: int = SAMPLE_RATE,
+) -> list[float]:
+    """Pitch-preserving WSOLA stretch to ``out_len`` samples.
+
+    Linear resample changes pitch (chipmunk / helium). Output hop is
+    fixed; input hop follows ``out_len / len(samples)``. A small lag
+    search keeps overlap in phase. Short clips fall back to linear.
+
+    Arguments:
+        samples: Mono PCM.
+        out_len: Desired length in samples.
+        rate: Sample rate (window size is 20 ms).
+    Returns:
+        New list of length ``out_len`` (empty when out_len <= 0).
+    """
+    n = len(samples)
+    dest = int(out_len)
+    if dest <= 0:
+        return []
+    if n == 0:
+        return [0.0] * dest
+    if n == dest:
+        return [float(x) for x in samples]
+    sr = int(rate) or SAMPLE_RATE
+    win = max(32, int(round(STRETCH_WINDOW_S * sr)))
+    if win % 2:
+        win += 1
+    hop_out = max(1, win // 2)
+    if n < win or dest < win:
+        return resample_linear(samples, dest)
+    scale = dest / n
+    hop_in = hop_out / scale if scale > 1e-8 else float(hop_out)
+    n_grains = 1 + max(0, dest - win) // hop_out
+    if n_grains < 2:
+        return resample_linear(samples, dest)
+    last_i = win - 1
+    hann = [0.5 - 0.5 * math.cos(2.0 * math.pi * i / last_i) for i in range(win)]
+    acc = [0.0] * dest
+    wsum = [0.0] * dest
+    search = max(1, int(round(hop_in)))
+    overlap = max(1, win - hop_out)
+    prev_src = 0
+    for grain in range(n_grains):
+        natural = int(round(grain * hop_in))
+        if natural < 0:
+            natural = 0
+        if natural + win > n:
+            natural = max(0, n - win)
+        src = natural
+        if grain > 0:
+            lo = max(0, natural - search)
+            hi = min(n - win, natural + search)
+            best = natural
+            best_c = -1e18
+            cand = lo
+            prev_tail = prev_src + hop_out
+            while cand <= hi:
+                corr = 0.0
+                i = 0
+                while i < overlap:
+                    corr += float(samples[prev_tail + i]) * float(samples[cand + i])
+                    i += 2
+                if corr > best_c:
+                    best_c = corr
+                    best = cand
+                cand += 2
+            src = best
+        prev_src = src
+        dst = grain * hop_out
+        if dst + win > dest:
+            dst = max(0, dest - win)
+        for i in range(win):
+            weight = hann[i]
+            acc[dst + i] += float(samples[src + i]) * weight
+            wsum[dst + i] += weight
+    return [acc[i] / wsum[i] if wsum[i] > 1e-8 else 0.0 for i in range(dest)]
+
+
 def fit_turn(
     synth: list[float],
     rate: int,
@@ -65,7 +148,7 @@ def fit_turn(
         rate: Sample rate.
         window_s: Original turn length in seconds.
         spill_s: Seconds of following gap that may be used.
-        max_speed: TTS speed ceiling.
+        max_speed: TTS speed ceiling (pitch-preserving stretch).
         min_stretch: Time-stretch floor (below this, trim).
     Returns:
         ``(pcm, flags)`` with speed/stretch/trimmed/padded/spill.
@@ -98,7 +181,7 @@ def fit_turn(
     flags["spill"] = max_len > target
     if min_len > max_len:
         flags["trimmed"] = True
-    return resample_linear(synth, max_len), flags
+    return time_stretch(synth, max_len, sr), flags
 
 
 def lock_duration(
