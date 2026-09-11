@@ -261,6 +261,59 @@ probe_mp4_seconds() {
 }
 
 #######################################
+# True when duration is the 113-frame LTX VAE floor of an illegal 120 widget.
+# Arguments:
+#   $1  seconds
+# Returns:
+#   0 if ~4.708333s (113/24); 1 otherwise
+#######################################
+is_ltx_120_floor_s() {
+  local dur="${1}"
+  [[ -n ${dur} ]] || return 1
+  awk -v d="${dur}" 'BEGIN {
+    t = 113 / 24
+    diff = d - t
+    if (diff < 0) diff = -diff
+    exit !(diff <= (1 / 24) + 0.000001)
+  }'
+}
+
+#######################################
+# Pad a 113-frame LTX neighbor to 5.00s (clone last frame + apad).
+# Globals:
+#   None
+# Arguments:
+#   $1  source mp4
+# Outputs:
+#   path on stdout (original or temp)
+# Returns:
+#   0; 1 if pad ffmpeg fails
+#######################################
+maybe_pad_ltx_neighbor() {
+  local src="${1}"
+  local dur dest
+  dur="$(probe_mp4_seconds "${src}")"
+  if [[ -z ${dur} ]] || ! is_ltx_120_floor_s "${dur}"; then
+    printf '%s\n' "${src}"
+    return 0
+  fi
+  dest="$(mktemp "${TMPDIR:-/tmp}/ez-film-pad.XXXXXX.pad.mp4")"
+  log "padded ${dur}s → 5.00s (LTX 8n+1 neighbor 113 frames) (${src})"
+  if ! run_ffmpeg_logged "pad LTX 113-frame stem → 5.00s" -- ffmpeg -y -i "${src}" \
+    -filter_complex \
+    "[0:v]tpad=stop_mode=clone:stop=7,fps=24,trim=duration=5.00,setpts=PTS-STARTPTS[v];[0:a]apad=pad_dur=0.291667,atrim=duration=5.00,asetpts=PTS-STARTPTS[a]" \
+    -map "[v]" -map "[a]" -t 5.00 -r 24 \
+    -c:v libx264 -preset veryfast -crf 18 -pix_fmt yuv420p \
+    -c:a aac -ar 48000 -ac 2 -b:a 192k \
+    "${dest}"; then
+    rm -f "${dest}"
+    err "failed to pad 113-frame stem (${src})"
+    return 1
+  fi
+  printf '%s\n' "${dest}"
+}
+
+#######################################
 # Write an ffmpeg concat demuxer list.
 # Globals:
 #   None
@@ -527,17 +580,43 @@ cmd_run() {
     err "xfade_cs must be 0–50 (centiseconds), got ${XFADE_CS}"
     return 1
   fi
+  local -a work=()
+  local -a pad_tmps=()
+  local padded
+  for f in "${files[@]}"; do
+    padded="$(maybe_pad_ltx_neighbor "${f}")" || {
+      if [[ ${#pad_tmps[@]} -gt 0 ]]; then
+        rm -f "${pad_tmps[@]}"
+      fi
+      return 1
+    }
+    work+=("${padded}")
+    if [[ ${padded} != "${f}" ]]; then
+      pad_tmps+=("${padded}")
+    fi
+  done
   if [[ ${XFADE_CS} -gt 0 ]]; then
-    concat_xfade_audio "${OUT_MP4}" "${files[@]}" || return 1
+    concat_xfade_audio "${OUT_MP4}" "${work[@]}" || {
+      if [[ ${#pad_tmps[@]} -gt 0 ]]; then
+        rm -f "${pad_tmps[@]}"
+      fi
+      return 1
+    }
   else
     local list
     list="$(mktemp)"
-    write_concat_list "${list}" "${files[@]}"
+    write_concat_list "${list}" "${work[@]}"
     concat_playable "${list}" "${OUT_MP4}" || {
       rm -f "${list}"
+      if [[ ${#pad_tmps[@]} -gt 0 ]]; then
+        rm -f "${pad_tmps[@]}"
+      fi
       return 1
     }
     rm -f "${list}"
+  fi
+  if [[ ${#pad_tmps[@]} -gt 0 ]]; then
+    rm -f "${pad_tmps[@]}"
   fi
   write_preview_html "${OUT_MP4}"
   local dur

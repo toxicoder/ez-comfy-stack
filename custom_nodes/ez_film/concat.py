@@ -1,5 +1,8 @@
 """ffmpeg stitch for 18 × 5.00s LTX MP4s with a 90s publish cap.
 
+Illegal LTX ``length=120`` stems (113 frames / 4.708s) are padded to 5.00s
+before the duration gate.
+
 Hermetic at import: stdlib only. ffmpeg is resolved at call time.
 """
 
@@ -15,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 from .jobstore import DURATION_S, DURATION_TOL
+from .ltx_timing import ltx_decoded_frames
 from .shots import DEFAULT_CAP_SECONDS, SHOT_COUNT, film_slug
 
 LOUDNORM_FILTER = "loudnorm=I=-14:LRA=11:TP=-1.5"
@@ -26,6 +30,10 @@ X264_CRF = "18"
 PIX_FMT = "yuv420p"
 MOVFLAGS = "+faststart"
 FPS = "24"
+FPS_INT = 24
+# Illegal widget 120 floors to 113 pixel frames (4.708333s @ 24fps).
+LTX_120_DECODED_FRAMES = ltx_decoded_frames(120)
+PAD_HOLD_FRAMES = int(round(DURATION_S * FPS_INT)) - LTX_120_DECODED_FRAMES
 SHOT_WIDTH = 1280
 SHOT_HEIGHT = 704
 MASTER_TOL_S = 0.10
@@ -616,6 +624,123 @@ def probe_seconds(path: str, ffprobe: str | None = None, run: Any = None) -> flo
         return None
 
 
+def is_ltx_120_floor_duration(dur: float) -> bool:
+    """True when ``dur`` is the 113-frame VAE floor of an illegal 120 widget."""
+    expected = LTX_120_DECODED_FRAMES / float(FPS_INT)
+    return abs(float(dur) - expected) <= (1.0 / float(FPS_INT))
+
+
+def ffmpeg_pad_stem_argv(
+    src: str,
+    dest: str,
+    ffmpeg: str,
+    extra_frames: int = PAD_HOLD_FRAMES,
+) -> list[str]:
+    """Clone last video frame + pad audio to the 5.00s picture contract."""
+    pad_dur = extra_frames / float(FPS_INT)
+    target = f"{DURATION_S:.2f}"
+    vfilter = (
+        f"[0:v]tpad=stop_mode=clone:stop={extra_frames},"
+        f"fps={FPS},trim=duration={target},setpts=PTS-STARTPTS[v]"
+    )
+    afilter = (
+        f"[0:a]apad=pad_dur={pad_dur:.6f},"
+        f"atrim=duration={target},asetpts=PTS-STARTPTS[a]"
+    )
+    return [
+        ffmpeg,
+        "-y",
+        "-i",
+        src,
+        "-filter_complex",
+        f"{vfilter};{afilter}",
+        "-map",
+        "[v]",
+        "-map",
+        "[a]",
+        "-t",
+        target,
+        "-r",
+        FPS,
+        "-c:v",
+        "libx264",
+        "-preset",
+        X264_PRESET,
+        "-crf",
+        X264_CRF,
+        "-pix_fmt",
+        PIX_FMT,
+        "-c:a",
+        "aac",
+        "-ar",
+        AAC_RATE,
+        "-ac",
+        "2",
+        "-b:a",
+        AAC_BITRATE,
+        dest,
+    ]
+
+
+def normalize_stitch_stem(
+    path: str,
+    *,
+    ffmpeg: str,
+    ffprobe: str | None = None,
+    run: Any = None,
+    temps: list[str] | None = None,
+) -> str:
+    """Pad a 113-frame LTX neighbor to 5.00s; otherwise return ``path``.
+
+    Arguments:
+        path: Candidate MP4.
+        ffmpeg: ffmpeg executable (required to pad).
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+        temps: Optional list that receives temp paths for later unlink.
+    Returns:
+        Original path, or a temp padded to 5.00s.
+    Raises:
+        RuntimeError: pad ffmpeg fails.
+    """
+    dur = probe_seconds(path, ffprobe=ffprobe, run=run)
+    if dur is None or abs(dur - DURATION_S) <= DURATION_TOL:
+        return path
+    if not is_ltx_120_floor_duration(dur):
+        return path
+    handle = tempfile.NamedTemporaryFile(
+        "wb", suffix=".pad.mp4", delete=False
+    )
+    dest = handle.name
+    handle.close()
+    if temps is not None:
+        temps.append(dest)
+    log(
+        f"padded {dur:.6f}s → {DURATION_S:.2f}s "
+        f"(LTX 8n+1 neighbor {LTX_120_DECODED_FRAMES} frames) ({path})"
+    )
+    _run_ffmpeg(ffmpeg_pad_stem_argv(path, dest, ffmpeg), run or subprocess.run)
+    return dest
+
+
+def normalize_stitch_stems(
+    shot_paths: list[str],
+    *,
+    ffmpeg: str,
+    ffprobe: str | None = None,
+    run: Any = None,
+) -> tuple[list[str], list[str]]:
+    """Pad 113-frame LTX neighbors; return ``(paths, temps_to_unlink)``."""
+    temps: list[str] = []
+    out = [
+        normalize_stitch_stem(
+            path, ffmpeg=ffmpeg, ffprobe=ffprobe, run=run, temps=temps
+        )
+        for path in shot_paths
+    ]
+    return out, temps
+
+
 def probe_wh(
     path: str, ffprobe: str | None = None, run: Any = None
 ) -> tuple[int, int] | None:
@@ -816,8 +941,10 @@ def stitch_film(
     faststart still set.
 
     Every stem must exist, last 5.00±0.05s, be 1280×704, and carry audio.
-    After stitch the master must be ``cap±0.10`` s with audio within 50 ms
-    of picture. A failed master is deleted so a 17-shot file cannot publish.
+    Illegal LTX ``length=120`` files (113 frames / 4.708s) are padded to
+    5.00s (cloned last frame) before the duration gate. After stitch the
+    master must be ``cap±0.10`` s with audio within 50 ms of picture. A
+    failed master is deleted so a 17-shot file cannot publish.
 
     Arguments:
         shot_paths: Exactly 18 MP4 paths in beat/shot order (not VHS metadata PNGs).
@@ -843,73 +970,86 @@ def stitch_film(
             )
     if xfade_cs < 0 or xfade_cs > 50:
         raise ValueError(f"xfade_cs must be 0–50, got {xfade_cs}")
-    validate_stitch_stems(shot_paths, ffprobe=ffprobe, run=run)
-    log(f"stitching {len(shot_paths)} shots → {out_mp4}")
-    try:
-        root = str(Path(__file__).resolve().parent.parent)
-        if root not in sys.path:
-            sys.path.insert(0, root)
-        from ez_common import node_log, node_progress
-
-        node_log("ez_film", f"stitching {len(shot_paths)} shots")
-        bar = node_progress(2)
-    except Exception:  # noqa: BLE001 — pytest / missing pack
-        bar = None
     exe = ffmpeg or find_ffmpeg()
-    runner = run or subprocess.run
-    list_file = tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", suffix=".txt", delete=False
+    work_paths, pad_tmps = normalize_stitch_stems(
+        shot_paths, ffmpeg=exe, ffprobe=ffprobe, run=run
     )
-    video_tmp = ""
-    audio_tmp = ""
     try:
-        for path in shot_paths:
-            list_file.write(concat_list_line(path) + "\n")
-        list_file.close()
-        if xfade_cs == 0:
-            _run_with_x264_fallback(
-                ffmpeg_stitch_argv(list_file.name, out_mp4, cap_seconds, exe),
-                ffmpeg_stitch_copy_argv(list_file.name, out_mp4, cap_seconds, exe),
-                runner,
-            )
-            if bar is not None:
-                bar.update(2)
-        else:
-            for path in shot_paths:
-                if not probe_has_audio(path, ffprobe=ffprobe, run=run):
+        validate_stitch_stems(work_paths, ffprobe=ffprobe, run=run)
+        log(f"stitching {len(work_paths)} shots → {out_mp4}")
+        try:
+            root = str(Path(__file__).resolve().parent.parent)
+            if root not in sys.path:
+                sys.path.insert(0, root)
+            from ez_common import node_log, node_progress
+
+            node_log("ez_film", f"stitching {len(work_paths)} shots")
+            bar = node_progress(2)
+        except Exception:  # noqa: BLE001 — pytest / missing pack
+            bar = None
+        runner = run or subprocess.run
+        list_file = tempfile.NamedTemporaryFile(
+            "w", encoding="utf-8", suffix=".txt", delete=False
+        )
+        video_tmp = ""
+        audio_tmp = ""
+        try:
+            for path in work_paths:
+                list_file.write(concat_list_line(path) + "\n")
+            list_file.close()
+            if xfade_cs == 0:
+                _run_with_x264_fallback(
+                    ffmpeg_stitch_argv(list_file.name, out_mp4, cap_seconds, exe),
+                    ffmpeg_stitch_copy_argv(list_file.name, out_mp4, cap_seconds, exe),
+                    runner,
+                )
+                if bar is not None:
+                    bar.update(2)
+            else:
+                for path in work_paths:
+                    if not probe_has_audio(path, ffprobe=ffprobe, run=run):
+                        raise RuntimeError(
+                            f"xfade requires audio on every shot (missing on {path}); "
+                            "Wan-silent concat cannot use --xfade"
+                        )
+                duration_s = xfade_cs / 100.0
+                video_tmp = list_file.name + ".v.mp4"
+                audio_tmp = list_file.name + ".a.m4a"
+                _run_with_x264_fallback(
+                    ffmpeg_video_copy_argv(list_file.name, video_tmp, cap_seconds, exe),
+                    ffmpeg_video_streamcopy_argv(
+                        list_file.name, video_tmp, cap_seconds, exe
+                    ),
+                    runner,
+                )
+                _run_ffmpeg(
+                    ffmpeg_audio_acrossfade_argv(
+                        work_paths, audio_tmp, exe, duration_s
+                    ),
+                    runner,
+                )
+                _run_ffmpeg(
+                    ffmpeg_mux_copy_argv(
+                        video_tmp, audio_tmp, out_mp4, cap_seconds, exe
+                    ),
+                    runner,
+                )
+                if bar is not None:
+                    bar.update(2)
+                hz = probe_audio_hz(out_mp4, ffprobe=ffprobe, run=run)
+                if hz is not None and hz != int(AAC_RATE):
                     raise RuntimeError(
-                        f"xfade requires audio on every shot (missing on {path}); "
-                        "Wan-silent concat cannot use --xfade"
+                        f"concat audio is {hz} Hz, expected {AAC_RATE}"
                     )
-            duration_s = xfade_cs / 100.0
-            video_tmp = list_file.name + ".v.mp4"
-            audio_tmp = list_file.name + ".a.m4a"
-            _run_with_x264_fallback(
-                ffmpeg_video_copy_argv(list_file.name, video_tmp, cap_seconds, exe),
-                ffmpeg_video_streamcopy_argv(
-                    list_file.name, video_tmp, cap_seconds, exe
-                ),
-                runner,
-            )
-            _run_ffmpeg(
-                ffmpeg_audio_acrossfade_argv(shot_paths, audio_tmp, exe, duration_s),
-                runner,
-            )
-            _run_ffmpeg(
-                ffmpeg_mux_copy_argv(video_tmp, audio_tmp, out_mp4, cap_seconds, exe),
-                runner,
-            )
-            if bar is not None:
-                bar.update(2)
-            hz = probe_audio_hz(out_mp4, ffprobe=ffprobe, run=run)
-            if hz is not None and hz != int(AAC_RATE):
-                raise RuntimeError(f"concat audio is {hz} Hz, expected {AAC_RATE}")
+        finally:
+            Path(list_file.name).unlink(missing_ok=True)
+            if video_tmp:
+                Path(video_tmp).unlink(missing_ok=True)
+            if audio_tmp:
+                Path(audio_tmp).unlink(missing_ok=True)
     finally:
-        Path(list_file.name).unlink(missing_ok=True)
-        if video_tmp:
-            Path(video_tmp).unlink(missing_ok=True)
-        if audio_tmp:
-            Path(audio_tmp).unlink(missing_ok=True)
+        for tmp in pad_tmps:
+            Path(tmp).unlink(missing_ok=True)
 
     assert_master_duration(
         out_mp4, cap_seconds, ffprobe=ffprobe, run=run

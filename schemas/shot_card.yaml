@@ -4,7 +4,7 @@
 schema: ez.shot.card.v1
 film: go-see
 slug: gosee
-frames: 120
+frames: 121
 fps: 24
 duration_s: 5.00
 beats: 6

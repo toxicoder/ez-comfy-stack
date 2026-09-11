@@ -230,11 +230,11 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
         f"## {film} 90s ({label})",
         "",
         "Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame "
-        "continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames "
-        "per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional "
+        "continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames "
+        "= 1+8n per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional "
         f"host stitch: `./scripts/utilities/concat-shots.sh --film {film} --yes`.",
         "",
-        "18 × 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score. "
+        "18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. "
         "Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.",
         "",
         f"**Identity look:** {parsed['identity']}",
@@ -275,7 +275,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
-Do not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.
+Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.
 {enhance_line}
 """
 
@@ -337,7 +337,7 @@ def _shot_nodes(
             [ox + 460, oy],
             [320, 200],
             "LTX Img→Video condition",
-            [1280, 704, 120, 1],
+            [1280, 704, 121, 1],
             [
                 _inp("positive", "CONDITIONING"),
                 _inp("negative", "CONDITIONING"),
@@ -447,7 +447,7 @@ def _shot_nodes(
             [ox + 820, oy + 430],
             [240, 80],
             "Last frame",
-            [119, 1],
+            [120, 1],
             [_inp("image", "IMAGE")],
             [_out("IMAGE", "IMAGE", 0)],
             extra_props={"cnr_id": "comfy-core"},
@@ -587,7 +587,7 @@ def build_one_click_film(
         [40, 1820],
         [300, 130],
         "Empty LTX audio latent",
-        [120, 24.0, 1],
+        [121, 24.0, 1],
         [_inp("audio_vae", "VAE")],
         [_out("Latent", "LATENT", 0)],
     )

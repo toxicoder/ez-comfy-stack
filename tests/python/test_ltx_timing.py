@@ -12,8 +12,10 @@ sys.path.insert(0, str(ROOT / "custom_nodes"))
 
 from ez_film.ltx_timing import (  # noqa: E402
     DURATION_HEAD_S,
+    ltx_decoded_frames,
     ltx_frames_for_duration,
     preflight_duration_s,
+    snap_ltx_frames,
     validate_ltx_frames,
 )
 
@@ -21,6 +23,23 @@ from ez_film.ltx_timing import (  # noqa: E402
 def test_five_seconds_is_121() -> None:
     assert ltx_frames_for_duration(5.00) == 121
     assert validate_ltx_frames(121) == 121
+
+
+def test_snap_120_to_121_not_vae_floor() -> None:
+    assert snap_ltx_frames(120) == 121
+    assert snap_ltx_frames(121) == 121
+    assert snap_ltx_frames(113) == 113
+    assert snap_ltx_frames(97) == 97
+    with pytest.raises(ValueError, match=">= 1"):
+        snap_ltx_frames(0)
+
+
+def test_vae_floors_illegal_120_to_113() -> None:
+    assert ltx_decoded_frames(120) == 113
+    assert ltx_decoded_frames(121) == 121
+    assert abs(113 / 24 - 4.708333) < 1e-6
+    with pytest.raises(ValueError, match=">= 1"):
+        ltx_decoded_frames(0)
 
 
 def test_duration_head_is_1_plus_8n_and_odd() -> None:

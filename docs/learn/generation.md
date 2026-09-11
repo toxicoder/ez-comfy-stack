@@ -53,14 +53,14 @@ The sampler does not paint a PNG directly. It denoises a **latent** tensor. Widt
 | --- | --- | --- |
 | Fast still | Klein draft **768×432**, 4 steps | Minutes, not a hero |
 | I2V feeder / LTX | **1280×704** | LTX VAE is **÷32**. 1280×720 is not (720/16=45) |
-| ~5 s motion | **120** frames @ 24 fps = **5.00 s** (some smokes use **121**) | Iterate in minutes |
+| ~5 s motion | LTX **121** frames (`1+8n`) @ 24 fps ≈ **5.04 s**; Wan shot **120** = **5.00 s** | Iterate in minutes |
 | 90 s film | **18 × 5.00 s** + stitch | Not a 90 s denoise |
 
-Typing 720 or 1080 on an LTX widget is auto-snapped (704 / 1056) by `ez_ltx_spatial`. Prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**.
+Typing 720 or 1080 on an LTX widget is auto-snapped (704 / 1056) by `ez_ltx_spatial`. Prefer 704 so you skip the extra crop. The same pack snaps illegal **120** length to **121** (`1+8n`). Portrait shorts I2V is **768×1280**.
 
 !!! warning "Do not Queue a 30 / 60 / 90 s latent"
 
-    Long latents melt GB10. Film graphs still use 120-frame printers. See [90s shorts](../shorts.md).
+    Long latents melt GB10. Film graphs still use 121-frame (`1+8n`) LTX printers. See [90s shorts](../shorts.md).
 
 ---
 

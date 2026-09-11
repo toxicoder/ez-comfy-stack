@@ -12,6 +12,31 @@ DURATION_HEAD_S = (5.00, 8.00, 10.00, 12.00)
 FRAME_MODULUS = 8
 
 
+def snap_ltx_frames(frames: int) -> int:
+    """Nearest legal LTX pixel length (``1 + 8n``).
+
+    ``120`` (even, not ``1+8n``) snaps to ``121``, not the VAE floor of ``113``.
+    """
+    n = int(frames)
+    if n < 1:
+        raise ValueError(f"LTX frames must be >= 1, got {n}")
+    k = max(0, int(round((n - 1) / FRAME_MODULUS)))
+    return 1 + FRAME_MODULUS * k
+
+
+def ltx_decoded_frames(length: int) -> int:
+    """Pixel frames the LTX video VAE actually emits for widget ``length``.
+
+    Comfy allocates ``((length-1)//8)+1`` latent frames, which decode as
+    ``1+8n``. Illegal ``120`` therefore becomes **113** (4.708 s @ 24 fps).
+    """
+    n = int(length)
+    if n < 1:
+        raise ValueError(f"LTX length must be >= 1, got {n}")
+    latent = ((n - 1) // FRAME_MODULUS) + 1
+    return (latent - 1) * FRAME_MODULUS + 1
+
+
 def ltx_frames_for_duration(duration_s: float, fps: int = FPS_DEFAULT) -> int:
     """Nearest legal LTX frame count for ``duration_s`` at ``fps``.
 
@@ -21,8 +46,7 @@ def ltx_frames_for_duration(duration_s: float, fps: int = FPS_DEFAULT) -> int:
     if duration_s <= 0 or fps <= 0:
         raise ValueError(f"duration_s and fps must be positive, got {duration_s!r} {fps!r}")
     target = int(round(float(duration_s) * int(fps)))
-    n = max(0, int(round((target - 1) / FRAME_MODULUS)))
-    return 1 + FRAME_MODULUS * n
+    return snap_ltx_frames(target)
 
 
 def validate_ltx_frames(frames: int) -> int:
