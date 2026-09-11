@@ -58,6 +58,8 @@ Generated meshes, previews, and scene instances are **outputs** in the [Asset Bi
 
 Guide packs: [DCC guide pack](dcc-workflows.md). Clay is Workbench; beauty is Path A. Never 1280×720.
 
+`custom_nodes/ez_dcc` is a **Comfy pack on `:8188`**, not a sidecar. It loads dumped packs and gates occupancy in-canvas. It does not run Blender. Playbook: [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
+
 VACE join (Wan 2.1 1.3B Apache, 17 frames = `1+8n`) is a Comfy graph, not a sidecar:
 
 ```bash

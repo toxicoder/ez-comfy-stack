@@ -78,6 +78,8 @@ Pack files and print modes: [DCC guide pack](../dcc-workflows.md). Golden film l
 
 Path D: dump on the laptop, rsync `guides/`, Spark only runs Comfy.
 
+Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a Blender dump](comfy-first-blender.md) — **klein-from-guide-loader-lab-example**.
+
 ---
 
 ## Skip rules

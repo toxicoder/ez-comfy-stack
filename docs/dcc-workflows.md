@@ -24,7 +24,7 @@ tags: [dcc, blender, guide-pack, klein, ltx, occupancy, ic-lora]
 - Fail-closed packs (1280×704 or 768×1280, 120 frames @ 24 fps) before Comfy sees them
 - Laptop DCC / Spark Comfy as the default on one GB10
 
-This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar occupancy rule. Blender stays on the host — never in `docker/Dockerfile` or Compose.
+This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar occupancy rule. Blender stays on the host — never in `docker/Dockerfile` or Compose. After a dump, stay on `:8188` with first-party `ez_dcc` loaders: [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).
 
 !!! danger "One heavy GPU job"
 
@@ -107,6 +107,9 @@ Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later
 | **ltx-iclora-canny-5s-lab-example** | ltx | Same envelope; wire `canny.mp4`. |
 | **ltx-iclora-depth-shorts-lab-example** | ltx | Same envelope at **768×1280**. Dump with `--width 768 --height 1280`. |
 | **wan-flf-from-guide-lab-example** | wan | Fun InP `first.png` + `last.png`. Opt-in `download-wan --tier fun-inp`. MagCache off. |
+| **klein-from-guide-loader-lab-example** | klein | In-canvas `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. Stay on `:8188`. |
+| **ltx-iclora-from-guide-loader-lab-example** | ltx | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
+| **trellis-from-klein-still-lab-example** | trellis | Still pack `plate=mug` → native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. |
 | **audio-finish-lab-example** | audio | Stem mix desk. Host `stem-mix.sh`. ACE-Step group stays off. |
 
 Print modes `wan-vace`, `wan-denk-cn`, and `dcc-final` stay valid on `shot.yaml` but are **not** lab printers in this suite (VACE stays 17-frame join; Fun Control / Path A beauty are later).
