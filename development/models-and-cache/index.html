@@ -2240,7 +2240,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 08:02 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T08:02:09+00:00">11 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 16:49 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T16:49:07+00:00">11 Sep 2026</time></span>
                 
                   
 
@@ -2254,7 +2254,7 @@
 <ul>
 <li>Default cache location and layout</li>
 <li>Host persistence (weights, media, Comfy <code>user/</code>, operator custom nodes)</li>
-<li>Download utilities, auto-install of <code>hf</code>, resume / stuck-partial recovery, and readiness checks</li>
+<li>Download utilities, auto-install of <code>hf</code>, resume / stuck-partial recovery, pack <code>1/4</code> progress, and readiness checks</li>
 <li>Pointer: <code>--tier</code> is a pack id (<a href="../download-tiers/">Download tiers</a>)</li>
 <li>Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)</li>
 <li>Volume Comfy pin (<code>.lab-comfyui-ref</code>) vs image <code>COMFYUI_REF</code></li>
@@ -2479,7 +2479,7 @@
 </code></pre></div>
 <p><code>--tier fast</code> also pulls Klein companions (<code>te</code> + <code>vae</code>). Opt-in packs (Wan A14B, Fun InP, LTX 2.3, music, podcast, 3D, …) live on <a href="../download-tiers/">Download tiers</a>.</p>
 <p>Downloads use the modern <strong><code>hf download</code></strong> CLI (not deprecated <code>huggingface-cli</code>). <code>setup</code> and <code>download-models</code> auto-install it into <code>~/.local/bin</code> (or the original user's home when the command is run with <code>sudo</code>). Do not prefix <code>download-models</code> with <code>sudo</code> — <code>download-limit</code> uses sudo internally.</p>
-<p>Progress UI is owned by the stack (disk size + MiB/s + elapsed on one line). Hub/tqdm file-count bars are disabled so they do not smash the heartbeat. <code>HF_PROGRESS=0</code> turns progress lines off; <code>HF_PROGRESS_INTERVAL=10</code> sets the tick (seconds).</p>
+<p>Progress UI is owned by the stack. <code>download-models</code> prints <code>══ 1/4 ══</code> … <code>4/4</code> for Klein, Wan, LTX, and the prompt-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>. Each <code>hf download</code> shows disk size + MiB/s + elapsed on one rewriting TTY line (or a newline every <code>HF_PROGRESS_INTERVAL</code> seconds when piped). Hub/tqdm file-count bars stay disabled so they do not smash the heartbeat. <code>HF_PROGRESS=0</code> or <code>EZ_COMFY_PROGRESS=0</code> turns progress lines off; <code>HF_EXPECTED_KIB</code> adds a best-effort ETA.</p>
 <h3 id="expected-basenames-after-download-models-lab-workflows">Expected basenames after <code>download-models</code> (lab workflows)<a class="headerlink" href="#expected-basenames-after-download-models-lab-workflows" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

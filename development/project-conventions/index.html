@@ -1808,6 +1808,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#operator-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator progress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#utility-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2005,6 +2016,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#operator-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator progress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#utility-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2107,6 +2129,7 @@
 <li>Core principles</li>
 <li>Repo layout and ownership</li>
 <li>Shell style (Google Shell Style Guide + project deviations)</li>
+<li>Operator progress (bars, heartbeats, env)</li>
 <li>Docker, testing, coverage gate, Pyright (Pylance) + mypy, and branching rules</li>
 <li>Docs publish and <strong>human-readable formatting</strong> patterns</li>
 </ul>
@@ -2189,6 +2212,10 @@
 <tr>
 <td>STDERR</td>
 <td><code>log</code> / <code>warn</code> / <code>err</code> → stderr; data/JSON → stdout</td>
+</tr>
+<tr>
+<td>Progress</td>
+<td>Long jobs: start banner, TTY rewrite or periodic newline, end + elapsed. <code>scripts/lib/progress.sh</code> + <code>scripts/lib/operator_log.py</code>. <code>EZ_COMFY_PROGRESS=0</code> disables bars</td>
 </tr>
 <tr>
 <td>Comments</td>
@@ -2361,6 +2388,50 @@
 <a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">  </span>main<span class="w"> </span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
 <a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="k">fi</span>
 </code></pre></div>
+<h3 id="operator-progress">Operator progress<a class="headerlink" href="#operator-progress" title="Permanent link">&para;</a></h3>
+<p>Long-running operator commands must not look hung. Shared helpers:</p>
+<ul>
+<li>Shell: <code>scripts/lib/progress.sh</code> (sourced from <code>common.sh</code>) — <code>log_step</code>, <code>log_ok</code>, <code>progress_bar</code>, <code>run_with_heartbeat</code>, <code>run_ffmpeg_logged</code></li>
+<li>Python: <code>scripts/lib/operator_log.py</code> — same prefix and TTY rewrite</li>
+<li>In-canvas: <code>custom_nodes/ez_common</code> — Comfy <code>ProgressBar</code> when importable</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EZ_COMFY_PROGRESS</code></td>
+<td><code>1</code></td>
+<td><code>0</code> disables bars/heartbeats (<code>log</code>/<code>warn</code>/<code>err</code> stay)</td>
+</tr>
+<tr>
+<td><code>EZ_COMFY_PROGRESS_INTERVAL</code></td>
+<td><code>2</code></td>
+<td>Heartbeat seconds (ffmpeg/blender/rsync/docker)</td>
+</tr>
+<tr>
+<td><code>HF_PROGRESS</code> / <code>HF_PROGRESS_INTERVAL</code></td>
+<td><code>1</code> / <code>10</code></td>
+<td>HF disk-growth line (hub/tqdm stay off)</td>
+</tr>
+<tr>
+<td><code>EZ_COMFY_LOG_LEVEL</code></td>
+<td><code>info</code></td>
+<td><code>debug</code> ≡ <code>LAB_DEBUG=1</code></td>
+</tr>
+<tr>
+<td><code>NO_COLOR</code></td>
+<td>unset</td>
+<td>No ANSI when set or when stderr is not a TTY</td>
+</tr>
+</tbody>
+</table>
+<p>Hermetic tests set <code>EZ_COMFY_PROGRESS=0</code> and <code>HF_PROGRESS=0</code> so suites never sleep on progress monitors.</p>
 <h3 id="utility-contract">Utility contract<a class="headerlink" href="#utility-contract" title="Permanent link">&para;</a></h3>
 <p>Utilities under <code>scripts/utilities/</code> implement at least:</p>
 <table>
