@@ -345,11 +345,30 @@ def _ace_layout(name: str) -> tuple[dict[int, list[float]], list[tuple]]:
     return _ACE_LAYOUTS[name]
 
 
+def _diss_cast(ex: DissExample) -> str:
+    """One-line cast for a Nill Bye diss lab note.
+
+    Arguments:
+        ex: Catalog take.
+    Returns:
+        Cast sentence for the graph note.
+    """
+    if ex["series"] in {"civic", "civic-club"}:
+        return (
+            "Fictional MC **Nill Bye** (science guy) roasting public-record "
+            "satire of Texas Gov. **Greg Abbott**. Abbott is a satire target, "
+            "not a vocal identity"
+        )
+    return (
+        "Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels)"
+    )
+
+
 def _diss_note(ex: DissExample) -> str:
     duration_s = int(ex["duration"])
     return f"""## {ex["stem"]}
 
-US-safe rap **{duration_s} s diss** take: **{ex["title"]}**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe rap **{duration_s} s diss** take: **{ex["title"]}**. {_diss_cast(ex)}. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.

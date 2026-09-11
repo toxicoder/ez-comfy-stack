@@ -149,8 +149,70 @@ EXPECTED_NILL_BYE_TITLES = (
     "jersey bounce",
     "kick-split myth",
     "uplifting rumor",
+    "frozen ercot",
+    "abject failure",
+    "six week clock",
+    "no-bid wire",
+    "gavel theater",
+    "property hymn",
+    "voucher raid",
+    "uninsured blues",
+    "locked stacks",
+    "mask order",
+    "mid decade map",
+    "rack tax",
+    "wudu letter",
+    "fourth term",
+    "campus cordon",
+    "lone star tab",
+    "river buoy",
+    "bus receipt",
+    "guard detail",
+    "chase wreck",
+    "frequency drop",
+    "permitless",
+    "trigger clock",
+    "disaster stamp",
+    "windmill blame",
+    "yass primary",
+    "hold request",
+    "sharia plank",
+    "invasion hymn",
+    "demolish hook",
 )
-SPOKEN_WORD_TITLES = frozenset({"peer review", "grant denied", "story time"})
+SPOKEN_WORD_TITLES = frozenset(
+    {
+        "peer review",
+        "grant denied",
+        "story time",
+        "abject failure",
+        "disaster stamp",
+    }
+)
+RAKE_SERIES = frozenset({"lab", "variety", "trap-edm"})
+CIVIC_SERIES = frozenset({"civic", "civic-club"})
+DISABILITY_NEEDLES = (
+    "wheelchair",
+    "paralyzed",
+    "paralysis",
+    "paraplegic",
+    "cripple",
+    "crippled",
+    "disabled",
+    "disability",
+    "oak tree",
+    "1984",
+)
+PUNCH_DOWN_NEEDLES = (
+    "caliphate",
+    "fiqh",
+    "jihad",
+    "theocracy",
+    "illegals",
+    "illegal alien",
+    "terror noun",
+    "apartheid plumbing",
+)
 VARIETY_EDM_NEEDLES = (
     "trap",
     "808",
@@ -226,14 +288,26 @@ def test_format_diss_lyrics_requires_three_verses() -> None:
 
 def test_nill_bye_diss_examples_are_original_180s() -> None:
     assert DISS_DURATION_S == 180.0
-    assert len(DISS_EXAMPLES) == 45
+    assert len(DISS_EXAMPLES) == 75
     prefixes: list[str] = []
     stems: list[str] = []
     seeds: list[int] = []
-    series_counts = {"lab": 0, "variety": 0, "trap-edm": 0}
-    phase_counts = {0: 0, 1: 0, 2: 0}
+    series_counts = {
+        "lab": 0,
+        "variety": 0,
+        "trap-edm": 0,
+        "civic": 0,
+        "civic-club": 0,
+    }
+    phase_counts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0}
     spoken_titles: set[str] = set()
-    series_phase = {"lab": 0, "variety": 1, "trap-edm": 2}
+    series_phase = {
+        "lab": 0,
+        "variety": 1,
+        "trap-edm": 2,
+        "civic": 3,
+        "civic-club": 4,
+    }
     for ex in DISS_EXAMPLES:
         assert ex["duration"] == DISS_DURATION_S
         lyrics = ex["lyrics"]
@@ -243,7 +317,12 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         assert lyrics.count("[verse]") >= 3
         assert lyrics.count("[chorus]") >= 3
         assert "Nill Bye" in lyrics
-        assert "Rake" in lyrics
+        if ex["series"] in CIVIC_SERIES:
+            assert "Abbott" in lyrics
+            assert "Rake" not in lyrics
+        else:
+            assert ex["series"] in RAKE_SERIES
+            assert "Rake" in lyrics
         assert str(ex["bpm"]) in ex["tags"]
         assert ex["stem"].startswith("music-rap-nill-bye-")
         assert ex["stem"].endswith("-lab-example")
@@ -257,26 +336,38 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         if ex["series"] != "lab":
             for token in NILL_VOICE.split(", "):
                 assert token in ex["tags"], (ex["stem"], token)
-        if ex["series"] == "variety":
+        if ex["series"] in {"variety", "civic"}:
             low = ex["tags"].lower()
             for needle in VARIETY_EDM_NEEDLES:
                 assert needle not in low, (ex["stem"], needle)
-        if ex["series"] == "trap-edm":
+        if ex["series"] in {"trap-edm", "civic-club"}:
             low = ex["tags"].lower()
             assert any(genre in low for genre in TRAP_EDM_GENRES), ex["stem"]
         for needle in LIVING_MC_NEEDLES:
             assert needle not in lyrics
             assert needle not in ex["tags"]
             assert needle not in ex["description"]
+        low_lyrics = lyrics.lower()
+        for needle in DISABILITY_NEEDLES:
+            assert needle not in low_lyrics, (ex["stem"], needle)
+        if ex["series"] in CIVIC_SERIES:
+            for needle in PUNCH_DOWN_NEEDLES:
+                assert needle not in low_lyrics, (ex["stem"], needle)
         prefixes.append(ex["prefix"])
         stems.append(ex["stem"])
         seeds.append(int(ex["seed"]))
         if "[spoken word]" in lyrics:
             spoken_titles.add(ex["title"])
-    assert len(set(prefixes)) == 45
-    assert len(set(stems)) == 45
-    assert series_counts == {"lab": 15, "variety": 15, "trap-edm": 15}
-    assert phase_counts == {0: 15, 1: 15, 2: 15}
+    assert len(set(prefixes)) == 75
+    assert len(set(stems)) == 75
+    assert series_counts == {
+        "lab": 15,
+        "variety": 15,
+        "trap-edm": 15,
+        "civic": 15,
+        "civic-club": 15,
+    }
+    assert phase_counts == {0: 15, 1: 15, 2: 15, 3: 15, 4: 15}
     assert spoken_titles == SPOKEN_WORD_TITLES
     assert any(seed != 42 for seed in seeds)
     assert tuple(ex["title"] for ex in DISS_EXAMPLES) == EXPECTED_NILL_BYE_TITLES
@@ -285,6 +376,12 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
     assert "Rake in his feels like a full-time job" in DISS_EXAMPLES[2]["lyrics"]
     assert "Rake talk club like a uniform" in DISS_EXAMPLES[3]["lyrics"]
     assert "Hypothesis: Rake is cool" in DISS_EXAMPLES[4]["lyrics"]
+    civic = [ex for ex in DISS_EXAMPLES if ex["series"] == "civic"]
+    civic_club = [ex for ex in DISS_EXAMPLES if ex["series"] == "civic-club"]
+    assert civic[0]["title"] == "frozen ercot"
+    assert "Uri" in civic[0]["lyrics"]
+    assert civic_club[0]["title"] == "lone star tab"
+    assert "Lone Star" in civic_club[0]["lyrics"] or "lone star" in civic_club[0]["lyrics"].lower()
 
 
 EXPECTED_DRIVE_THROUGH_TITLES = (
