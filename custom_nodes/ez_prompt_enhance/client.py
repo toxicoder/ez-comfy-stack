@@ -2,6 +2,9 @@
 
 Hermetic: stdlib only at import. llama-cpp-python is optional; missing GGUF
 or import fails soft and the original prompt is passed through.
+
+GPU-first: occupancy llm-desk/llm/idle uses the host sidecar when it answers.
+CPU 4B is the OOM-safe path next to Wan / LTX / TRELLIS.
 """
 
 from __future__ import annotations
@@ -14,6 +17,8 @@ import re
 import subprocess
 import sys
 import threading
+import urllib.error
+import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
 from dataclasses import dataclass
@@ -55,6 +60,26 @@ REASON_GGUF_MISSING = "GGUF missing"
 REASON_LLAMA_UNAVAILABLE = "llama.cpp unavailable"
 REASON_LLM_LOAD_FAILED = "GGUF failed to load"
 REASON_EMPTY = "timeout or empty model output"
+REASON_SIDECAR_EMPTY = "empty sidecar output"
+
+CPU_FORCE_OCCUPANCY = frozenset({"wan", "ltx", "trellis"})
+GPU_SAFE_OCCUPANCY = frozenset(
+    {
+        "klein",
+        "llm",
+        "llm-desk",
+        "idle",
+        "unknown",
+        "audio",
+        "blender-desk",
+        "none",
+    }
+)
+SIDECAR_OK_OCCUPANCY = frozenset(
+    {"llm-desk", "llm", "idle", "unknown", "blender-desk"}
+)
+DEFAULT_SIDECAR_PORT = "30000"
+DEFAULT_SIDECAR_NGL = 99
 
 LLAMA_CPP_CPU_VERSION = "0.3.35"
 LLAMA_CPP_CPU_PKG = f"llama-cpp-python=={LLAMA_CPP_CPU_VERSION}"
@@ -690,19 +715,162 @@ def _n_ctx() -> int:
     return value
 
 
-def _n_gpu_layers() -> int:
-    raw = os.environ.get("EZ_LLM_N_GPU_LAYERS", "0").strip()
+def occupancy_mode() -> str:
+    """Read occupancy mode from outputs ``.occupancy.json`` (unknown if missing)."""
+    seen: set[str] = set()
+    candidates: list[Path] = []
+    for raw in (
+        os.environ.get("COMFY_OUTPUT_DIR", "").strip(),
+        "/outputs",
+    ):
+        if not raw or raw in seen:
+            continue
+        seen.add(raw)
+        candidates.append(Path(raw) / ".occupancy.json")
+    for path in candidates:
+        if not path.is_file():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        mode = str(data.get("mode") or "").strip()
+        return mode or "unknown"
+    return "unknown"
+
+
+def sidecar_occupancy_ok(mode: str | None = None) -> bool:
+    """True when occupancy allows the host 35B sidecar (not a visual/ACE GPU job)."""
+    current = occupancy_mode() if mode is None else str(mode or "").strip()
+    if not current:
+        current = "unknown"
+    return current in SIDECAR_OK_OCCUPANCY
+
+
+def sidecar_base_url() -> str:
+    """OpenAI-compatible origin. Container uses host.docker.internal."""
+    port = os.environ.get("EZ_LLM_SIDECAR_PORT", DEFAULT_SIDECAR_PORT).strip()
+    if not port.isdigit():
+        port = DEFAULT_SIDECAR_PORT
+    explicit = os.environ.get("EZ_LLM_SIDECAR_URL", "").strip().rstrip("/")
+    if explicit:
+        return explicit
+    in_container = Path("/.dockerenv").is_file() or (
+        os.environ.get("MODELS_ROOT", "").strip() == "/models"
+    )
+    host = "host.docker.internal" if in_container else "127.0.0.1"
+    return f"http://{host}:{port}"
+
+
+def _sidecar_timeout_s() -> float:
     try:
-        value = int(raw)
+        value = float(os.environ.get("EZ_LLM_TIMEOUT_S", str(DEFAULT_TIMEOUT_S)).strip())
     except ValueError:
-        return 0
+        return float(DEFAULT_TIMEOUT_S)
     if value <= 0:
-        return 0
-    allow = os.environ.get("EZ_LLM_ALLOW_GPU", "").strip().lower()
-    if allow not in {"1", "true", "yes", "on"}:
-        _log("refusing GPU offload (set EZ_LLM_ALLOW_GPU=1 to override); n_gpu_layers=0")
-        return 0
+        return float(DEFAULT_TIMEOUT_S)
     return value
+
+
+def _urlopen_sidecar(request: urllib.request.Request, timeout: float) -> Any:
+    """Indirection so pytest can mock sidecar HTTP without touching search."""
+    return urllib.request.urlopen(request, timeout=timeout)
+
+
+def _complete_via_sidecar(
+    system: str,
+    user: str,
+    *,
+    max_tokens: int = DEFAULT_MAX_TOKENS,
+    temperature: float = 0.0,
+) -> tuple[str, str | None] | None:
+    """Use llama-server /v1 when occupancy allows and it answers. None if down."""
+    if not sidecar_occupancy_ok():
+        return None
+    base = sidecar_base_url()
+    timeout = _sidecar_timeout_s()
+    models_req = urllib.request.Request(
+        f"{base}/v1/models",
+        method="GET",
+        headers={"Accept": "application/json"},
+    )
+    try:
+        with _urlopen_sidecar(models_req, min(timeout, 0.4)) as resp:
+            body = resp.read()
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+        return None
+    if not body:
+        return None
+    tokens = int(max_tokens) if int(max_tokens) > 0 else DEFAULT_MAX_TOKENS
+    temp = float(temperature)
+    if temp < 0.0:
+        temp = 0.0
+    payload = {
+        "model": "qwen36-35b-a3b",
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+        "temperature": temp,
+        "max_tokens": tokens,
+    }
+    chat_req = urllib.request.Request(
+        f"{base}/v1/chat/completions",
+        data=json.dumps(payload).encode("utf-8"),
+        method="POST",
+        headers={"Content-Type": "application/json", "Accept": "application/json"},
+    )
+    try:
+        with _urlopen_sidecar(chat_req, timeout) as resp:
+            raw = resp.read()
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+        _log(f"llm-desk sidecar chat failed: {exc}")
+        return None
+    try:
+        data = json.loads(raw.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError):
+        return "", REASON_SIDECAR_EMPTY
+    choices = data.get("choices") if isinstance(data, dict) else None
+    if not isinstance(choices, list) or not choices:
+        return "", REASON_SIDECAR_EMPTY
+    message = choices[0].get("message") if isinstance(choices[0], dict) else None
+    text = ""
+    if isinstance(message, dict):
+        text = strip_model_wrapping(str(message.get("content") or ""))
+    if not text:
+        return "", REASON_SIDECAR_EMPTY
+    _log(f"llm engine=sidecar url={base}")
+    return text, None
+
+
+def _n_gpu_layers() -> int:
+    """GPU 4B when occupancy is not a video/mesh hog. CPU next to Wan/LTX/TRELLIS.
+
+    ``EZ_LLM_ALLOW_GPU=0`` forces CPU. Occupancy ``wan``/``ltx``/``trellis``
+    forces CPU even if ngl is set. GPU-safe occupancy (klein/llm/idle/…)
+    defaults to 99 so CPU is not the writing-desk default.
+    """
+    allow = os.environ.get("EZ_LLM_ALLOW_GPU", "").strip().lower()
+    if allow in {"0", "false", "no", "off"}:
+        return 0
+    mode = occupancy_mode()
+    if mode in CPU_FORCE_OCCUPANCY:
+        _log(f"occupancy {mode}: CPU 4B (OOM-safe); n_gpu_layers=0")
+        return 0
+    raw = os.environ.get("EZ_LLM_N_GPU_LAYERS", "").strip()
+    requested = 0
+    if raw:
+        try:
+            requested = int(raw)
+        except ValueError:
+            requested = 0
+    if requested > 0:
+        return requested
+    if mode in GPU_SAFE_OCCUPANCY:
+        return DEFAULT_SIDECAR_NGL
+    return 0
 
 
 def resolve_gguf_path() -> str:
@@ -813,7 +981,9 @@ def _get_llama() -> tuple[Any | None, str | None]:
         _LLM_PATH = ""
         return None, REASON_LLM_LOAD_FAILED
     _LLM_PATH = path
-    _log(f"loaded local LLM {path} (cpu, n_threads={_n_threads()})")
+    ngl = _n_gpu_layers()
+    engine = "gpu-4b" if ngl > 0 else "cpu-4b"
+    _log(f"loaded local LLM {path} (engine={engine}, n_gpu_layers={ngl}, n_threads={_n_threads()})")
     return _LLM, None
 
 
@@ -853,7 +1023,16 @@ def complete(
     temperature: float | None = None,
     timeout_s: int | None = None,
 ) -> tuple[str, str | None]:
-    """Run one local chat completion. Empty text plus a reason on any failure."""
+    """GPU sidecar when occupancy allows, else local 4B. Empty text plus a reason."""
+    tokens = DEFAULT_MAX_TOKENS if max_tokens is None else int(max_tokens)
+    if tokens < 1:
+        tokens = DEFAULT_MAX_TOKENS
+    temp = 0.0 if temperature is None else float(temperature)
+    if temp < 0.0:
+        temp = 0.0
+    sidecar = _complete_via_sidecar(system, user, max_tokens=tokens, temperature=temp)
+    if sidecar is not None:
+        return sidecar
     llm, reason = _get_llama()
     if llm is None:
         return "", reason or REASON_LLAMA_UNAVAILABLE
@@ -866,12 +1045,6 @@ def complete(
             timeout = _timeout_s()
         if timeout < 1:
             timeout = _timeout_s()
-    tokens = DEFAULT_MAX_TOKENS if max_tokens is None else int(max_tokens)
-    if tokens < 1:
-        tokens = DEFAULT_MAX_TOKENS
-    temp = 0.0 if temperature is None else float(temperature)
-    if temp < 0.0:
-        temp = 0.0
     try:
         with ThreadPoolExecutor(max_workers=1) as pool:
             future = pool.submit(_generate, llm, system, user, tokens, temp)

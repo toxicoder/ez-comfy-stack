@@ -24,7 +24,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## prompt-forge-lab-example\n\nPrompt Forge \u2014 rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 stop nothing GPU. One GB10 job.\nUses the on-box Qwen3-4B-Instruct GGUF (CPU, n_gpu_layers=0). No new download flag.\n\n1. Type a lazy sentence (or leave the canned line).\n2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.\n3. Queue. Each Enhance node previews the rewritten STRING.\n4. Copy the family you need into **klein-still-draft-lab-example** (Spark Still).\n\nTurn Enhance off to pin the widget text.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## prompt-forge-lab-example\n\nPrompt Forge \u2014 rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 graph label (not a CLI mode). Prefer GPU 35B:\n\n  ./scripts/manage.sh occupancy enter llm-desk --yes\n\nFalls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.\n\n1. Type a lazy sentence (or leave the canned line).\n2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.\n3. Queue. Each Enhance node previews the rewritten STRING.\n4. Copy the family you need into **klein-still-draft-lab-example** (Spark Still).\n\nTurn Enhance off to pin the widget text.\n"
       ],
       "title": "Operator note"
     },
@@ -193,7 +193,7 @@
   "config": {},
   "extra": {
     "lab_profile": "prompt-forge-lab-example",
-    "lab_note": "## prompt-forge-lab-example\n\nPrompt Forge \u2014 rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 stop nothing GPU. One GB10 job.\nUses the on-box Qwen3-4B-Instruct GGUF (CPU, n_gpu_layers=0). No new download flag.\n\n1. Type a lazy sentence (or leave the canned line).\n2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.\n3. Queue. Each Enhance node previews the rewritten STRING.\n4. Copy the family you need into **klein-still-draft-lab-example** (Spark Still).\n\nTurn Enhance off to pin the widget text.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## prompt-forge-lab-example\n\nPrompt Forge \u2014 rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 graph label (not a CLI mode). Prefer GPU 35B:\n\n  ./scripts/manage.sh occupancy enter llm-desk --yes\n\nFalls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.\n\n1. Type a lazy sentence (or leave the canned line).\n2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.\n3. Queue. Each Enhance node previews the rewritten STRING.\n4. Copy the family you need into **klein-still-draft-lab-example** (Spark Still).\n\nTurn Enhance off to pin the widget text.\n",
     "lab_description": "No-UNET Prompt Forge: Klein + Wan + LTX enhance preview",
     "ds": {
       "scale": 1,

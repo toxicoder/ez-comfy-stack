@@ -68,8 +68,8 @@ class EZCreativeResearch:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Creative-process chat with optional web search and sequential research "
-        "subagents. Occupancy llm: on-box Qwen3-4B-Instruct GGUF, CPU only. "
-        "Handoff Prompt Forge or Spark Still. Fail-soft without a GGUF."
+        "subagents. Occupancy llm: GPU 35B sidecar when llm-desk is up, else "
+        "on-box 4B. Handoff Prompt Forge or Spark Still. Fail-soft without a GGUF."
     )
 
     def run(

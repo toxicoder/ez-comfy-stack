@@ -206,7 +206,7 @@ sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | 35B GGUF missing / `occupancy enter llm-desk` exit 1 | Opt-in pack not downloaded | `./scripts/manage.sh download-llm --tier qwen36-35b-a3b` (throttled). Not part of `download-models`. Confirm `${MODELS_DIR}/comfy/llm/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf` |
 | `llama-server not found` | Host llama.cpp missing | Install `llama-server` on the Spark host (aarch64). Do not apt/pip inside the Comfy container. Path D: `ssh -L 30000:127.0.0.1:30000` |
 | llm-sidecar port in use | Something already bound `127.0.0.1:30000` | `occupancy enter idle` or `llm-sidecar stop`. Change `EZ_LLM_SIDECAR_PORT` only if you also retarget clients |
-| Enhance still 4B even if sidecar is up | Prompt Enhance is Lane A (CPU 4B). Occupancy `llm-desk` does not rewrite in-canvas Enhance | Use OpenAI-compatible clients at `http://127.0.0.1:30000/v1` while occupancy is `llm-desk`. Do not set `EZ_LLM_N_GPU_LAYERS` on the 4B next to LTX |
+| Enhance still 4B even if sidecar is up | Occupancy is klein/wan/ltx/trellis/audio (sidecar is XOR), or compose cannot reach the host loopback | `occupancy enter llm-desk --yes` for writing desks. From Comfy the URL is `host.docker.internal:30000` (`extra_hosts`). Wan/LTX/TRELLIS Queue **must** stay on CPU 4B to avoid OOM. `EZ_LLM_ALLOW_GPU=0` forces CPU |
 | `download-3d --tier da3-large` refused | DA3-LARGE is banned | Use `--tier da3-base`. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused |
 | TRELLIS / VACE OOM next to LTX | Two heavy jobs | Stop Comfy or unload LTX first. VACE join is 17 frames (`1+8n`); MagCache off |
 | SuperSplat missing in the image | Host viewer, not Docker | [Splat sidecar](splat-sidecar.md). Do not add it to `docker/Dockerfile` |

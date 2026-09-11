@@ -38,6 +38,8 @@ teardown() {
   [ "$status" -ne 0 ]
   run grep -E 'llm-sidecar|llama-server' "${REPO_ROOT}/docker/docker-compose.yml"
   [ "$status" -ne 0 ]
+  run grep -F 'host.docker.internal:host-gateway' "${REPO_ROOT}/docker/docker-compose.yml"
+  [ "$status" -eq 0 ]
 }
 
 @test "Dockerfile never vendors nvdiffrast blender or SuperSplat" {

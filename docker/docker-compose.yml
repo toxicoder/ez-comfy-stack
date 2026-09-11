@@ -48,6 +48,9 @@ services:
     restart: "no"
     ports:
       - "${COMFY_PORT:-8188}:8188"
+    # Reach host loopback from the container (writing-desk GPU LLM). Bind stays 127.0.0.1.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       COMFY_HOME: /comfy-state/ComfyUI
       MODELS_ROOT: /models
@@ -62,6 +65,7 @@ services:
       EZ_LLM_TIMEOUT_S: ${EZ_LLM_TIMEOUT_S:-180}
       EZ_LLM_N_GPU_LAYERS: ${EZ_LLM_N_GPU_LAYERS:-0}
       EZ_LLM_UNLOAD: ${EZ_LLM_UNLOAD:-0}
+      EZ_LLM_SIDECAR_PORT: ${EZ_LLM_SIDECAR_PORT:-30000}
       LAB_PREBUILT_ROOT: /opt/comfy-prebuilt
       LAB_FORCE_COLD_INSTALL: ${LAB_FORCE_COLD_INSTALL:-0}
       # Runtime pin (must match build-arg). Stamp-present refresh syncs the volume when this changes.
