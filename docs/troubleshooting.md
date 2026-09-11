@@ -221,7 +221,11 @@ sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | `download-3d --tier da3-large` refused | DA3-LARGE is banned | Use `--tier da3-base`. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused |
 | TRELLIS / VACE OOM next to LTX | Two heavy jobs | Stop Comfy or unload LTX first. VACE join is 17 frames (`1+8n`); MagCache off |
 | SuperSplat missing in the image | Host viewer, not Docker | [Splat sidecar](splat-sidecar.md). Do not add it to `docker/Dockerfile` |
-| `film-accept` fail closed | Shot not 5.00±0.05s / not 1280×704 / LTX missing audio | Reprint the shot. Concat `--film --yes` runs this gate. `--skip-accept` is an escape hatch only |
+| `film-accept` fail closed | Shot not 5.00±0.05s / not 1280×704 / LTX missing audio; world-only speech-band; 90s master off-contract | Reprint the shot. Concat `--film --yes` runs this gate. `--skip-accept` is an escape hatch only |
+| Handlebar / gold glove glyphs / canopy cloak in go-see identity | Klein still owned the film | Reprint identity with the sprint still + go-see Klein neg. Do **not** change seed 42; change prompt text and rebuild |
+| Third-person wizard after beat 1 | Last frame lost lower-third gloves | Reprint that shot until last frames show blank gloves; then `film-resume` |
+| Announcer / words on a world-only stem | Distilled LTX audio + prohibition-only clause | Reprint; `film-accept` speech-band must fail that stem. Do not EQ the announcer out |
+| Master ~84s / 17 shots | Concat wrote without a short-master gate | Pull latest `ez_film`; stitch refuses `len != 18` and `90.00±0.10`. Confirm 18 `*-audio.mp4` stems |
 | A14B / LongCat / DreamX OOM | Two heavy packs coresident | Unload 5B/LTX first. LongCat context-parallel only with `LAB_ALLOW_CONTEXT_PARALLEL=1`. No NCCL |
 | DreamX-World refused | Wrong pack | `download-dreamx --tier creator` only |
 | Empty models in UI | Downloads not run | `./scripts/utilities/download-image.sh status --tier fast`; `download-wan.sh status --tier 5b`; `download-ltx.sh status --tier 2.5`; check `${MODELS_DIR}` mount |

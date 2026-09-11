@@ -49,6 +49,7 @@ def test_accept_passes_with_injected_probes(tmp_path: Path, monkeypatch: pytest.
     monkeypatch.setattr(acc, "probe_duration_s", lambda *a, **k: 5.00)
     monkeypatch.setattr(acc, "probe_wh", lambda *a, **k: (1280, 704))
     monkeypatch.setattr(acc, "probe_has_audio", lambda *a, **k: True)
+    monkeypatch.setattr(acc, "world_only_speech_defects", lambda *a, **k: [])
     report = acc.accept_film(dest)
     assert report["ok"] is True
     assert report["defects"] == []
@@ -111,3 +112,37 @@ def test_accept_cli_and_probes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     assert acc.probe_wh(shot, run=fake_run) == (1280, 704)
     assert acc.probe_has_audio(shot, run=fake_run) is True
     assert acc.film_dest(tmp_path, "go-see") == tmp_path / "films" / "gosee"
+
+
+def test_accept_world_only_fails_talking_stem(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    dest = _compile(tmp_path)
+    state = js.load_state(dest)
+    for row in state["shots"]:
+        sid = row["id"]
+        mp4 = dest / "shots" / f"{sid}.mp4"
+        mp4.parent.mkdir(parents=True, exist_ok=True)
+        mp4.write_bytes(b"x")
+        js.mark_shot(state, sid, "ok", mp4=f"shots/{sid}.mp4", backend="ltx")
+    js.save_state(dest, state)
+    monkeypatch.setattr(acc, "probe_duration_s", lambda *a, **k: 5.00)
+    monkeypatch.setattr(acc, "probe_wh", lambda *a, **k: (1280, 704))
+    monkeypatch.setattr(acc, "probe_has_audio", lambda *a, **k: True)
+    def _talking(_path, label, **_k):
+        return [f"{label}: speech-band ratio 0.90 over 4.90s (world-only)"]
+
+    monkeypatch.setattr(acc, "world_only_speech_defects", _talking)
+    report = acc.accept_film(dest)
+    assert report["ok"] is False
+    assert any("speech-band" in d for d in report["defects"])
+    master = dest / "publish" / "master.mp4"
+    master.write_bytes(b"x")
+    monkeypatch.setattr(acc, "world_only_speech_defects", lambda *a, **k: [])
+    def _talking_master(*_a, **_k):
+        return ["master: speech-band ratio 0.90 over 80s (world-only)"]
+
+    monkeypatch.setattr(acc, "accept_master", _talking_master)
+    report = acc.accept_film(dest)
+    assert report["ok"] is False
+    assert any(d.startswith("master:") for d in report["defects"])

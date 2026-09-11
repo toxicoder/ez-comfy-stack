@@ -55,7 +55,7 @@ cmd_run() {
   local slug dest
   if [[ ${film} == "-h" || ${film} == "--help" || -z ${film} ]]; then
     echo "Usage: film-accept.sh go-see|still-here|switchyard" >&2
-    echo "  Fail closed: 18 ok shots, 5.00±0.05s, 1280x704, LTX audio present." >&2
+    echo "  Fail closed: 18 ok shots, 5.00±0.05s, 1280x704, LTX audio; world-only speech-band; 90s master when present." >&2
     [[ -n ${film} ]] && return 0
     return 1
   fi

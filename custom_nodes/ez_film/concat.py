@@ -14,6 +14,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from .jobstore import DURATION_S, DURATION_TOL
 from .shots import DEFAULT_CAP_SECONDS, SHOT_COUNT, film_slug
 
 LOUDNORM_FILTER = "loudnorm=I=-14:LRA=11:TP=-1.5"
@@ -25,6 +26,10 @@ X264_CRF = "18"
 PIX_FMT = "yuv420p"
 MOVFLAGS = "+faststart"
 FPS = "24"
+SHOT_WIDTH = 1280
+SHOT_HEIGHT = 704
+MASTER_TOL_S = 0.10
+AUDIO_SYNC_TOL_S = 0.050
 VIDEO_SUFFIXES = (".mp4", ".webm", ".mkv", ".mov", ".m4v")
 IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
 
@@ -587,44 +592,183 @@ def probe_audio_hz(
         return None
 
 
-def probe_seconds(path: str, ffprobe: str | None = None) -> float | None:
+def probe_seconds(path: str, ffprobe: str | None = None, run: Any = None) -> float | None:
     """Duration in seconds, or None if ffprobe is missing/fails.
 
     Arguments:
         path: MP4 path.
         ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
     Returns:
         Float seconds or None.
     """
-    exe = ffprobe if ffprobe is not None else find_ffprobe()
-    if not exe:
-        return None
-    try:
-        proc = subprocess.run(
-            [
-                exe,
-                "-v",
-                "error",
-                "-show_entries",
-                "format=duration",
-                "-of",
-                "csv=p=0",
-                path,
-            ],
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-    except OSError as exc:
-        log(f"ffprobe failed: {exc}")
-        return None
-    text = (proc.stdout or "").strip()
+    text = _ffprobe_csv(
+        path,
+        ["-show_entries", "format=duration", "-of", "csv=p=0"],
+        ffprobe=ffprobe,
+        run=run,
+    )
     if not text:
         return None
     try:
-        return float(text)
+        return float(text.split(",")[0].strip())
     except ValueError:
         return None
+
+
+def probe_wh(
+    path: str, ffprobe: str | None = None, run: Any = None
+) -> tuple[int, int] | None:
+    """First video stream width×height, or None."""
+    text = _ffprobe_csv(
+        path,
+        [
+            "-select_streams",
+            "v:0",
+            "-show_entries",
+            "stream=width,height",
+            "-of",
+            "csv=p=0",
+        ],
+        ffprobe=ffprobe,
+        run=run,
+    )
+    if not text or "," not in text:
+        return None
+    left, right = text.split(",", 1)
+    try:
+        return int(left), int(right)
+    except ValueError:
+        return None
+
+
+def probe_audio_seconds(
+    path: str, ffprobe: str | None = None, run: Any = None
+) -> float | None:
+    """Audio stream duration in seconds, or None."""
+    text = _ffprobe_csv(
+        path,
+        [
+            "-select_streams",
+            "a:0",
+            "-show_entries",
+            "stream=duration",
+            "-of",
+            "csv=p=0",
+        ],
+        ffprobe=ffprobe,
+        run=run,
+    )
+    if text:
+        token = text.split(",")[0].strip()
+        if token and token.upper() != "N/A":
+            try:
+                return float(token)
+            except ValueError:
+                pass
+    return probe_seconds(path, ffprobe=ffprobe, run=run)
+
+
+def validate_stitch_stems(
+    shot_paths: list[str],
+    *,
+    ffprobe: str | None = None,
+    run: Any = None,
+) -> None:
+    """Refuse missing, unreadable, short, or silent stems before ffmpeg.
+
+    Arguments:
+        shot_paths: Candidate MP4 paths in beat/shot order.
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+    Raises:
+        ValueError: wrong shot count.
+        RuntimeError: a stem is missing, unreadable, or off-contract.
+    """
+    if len(shot_paths) != SHOT_COUNT:
+        raise ValueError(f"expected {SHOT_COUNT} shots, found {len(shot_paths)}")
+    exe = ffprobe if ffprobe is not None else find_ffprobe()
+    if not exe:
+        raise RuntimeError("ffprobe required to validate shots")
+    valid: list[str] = []
+    for path in shot_paths:
+        if not path or not str(path).strip():
+            raise RuntimeError("missing shot file")
+        file_path = Path(path)
+        if not file_path.is_file():
+            raise RuntimeError(f"unreadable shot ({path})")
+        if file_path.stat().st_size < 1:
+            raise RuntimeError(f"empty shot ({path})")
+        dur = probe_seconds(path, ffprobe=exe, run=run)
+        if dur is None or abs(dur - DURATION_S) > DURATION_TOL:
+            raise RuntimeError(
+                f"shot duration {dur!r} (need {DURATION_S}±{DURATION_TOL}) ({path})"
+            )
+        wh = probe_wh(path, ffprobe=exe, run=run)
+        if wh != (SHOT_WIDTH, SHOT_HEIGHT):
+            raise RuntimeError(
+                f"shot size {wh!r} (need {SHOT_WIDTH}x{SHOT_HEIGHT}) ({path})"
+            )
+        if not probe_has_audio(path, ffprobe=exe, run=run):
+            raise RuntimeError(f"shot missing audio ({path})")
+        valid.append(path)
+    if len(valid) != SHOT_COUNT:
+        raise RuntimeError(
+            f"expected {SHOT_COUNT} valid shots, found {len(valid)}; "
+            "refusing to write a short master"
+        )
+
+
+def _unlink_master(out_mp4: str) -> None:
+    """Best-effort delete a failed master so 17-shot files never publish."""
+    Path(out_mp4).unlink(missing_ok=True)
+
+
+def assert_master_duration(
+    out_mp4: str,
+    cap_seconds: float,
+    *,
+    ffprobe: str | None = None,
+    run: Any = None,
+) -> None:
+    """Fail closed if the stitched master is not ``cap±0.10`` with synced audio.
+
+    Arguments:
+        out_mp4: Stitched MP4 path.
+        cap_seconds: Publish cap (90.00).
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+    Raises:
+        RuntimeError: missing probe, duration outside band, or A/V skew.
+    """
+    exe = ffprobe if ffprobe is not None else find_ffprobe()
+    if not exe:
+        _unlink_master(out_mp4)
+        raise RuntimeError("ffprobe required to validate the stitched master")
+    dur = probe_seconds(out_mp4, ffprobe=exe, run=run)
+    if dur is None:
+        _unlink_master(out_mp4)
+        raise RuntimeError(f"concat duration unreadable ({out_mp4})")
+    cap = float(cap_seconds)
+    if dur > cap + MASTER_TOL_S:
+        _unlink_master(out_mp4)
+        raise RuntimeError(f"concat duration {dur}s exceeds cap {cap}s")
+    if dur < cap - MASTER_TOL_S:
+        _unlink_master(out_mp4)
+        raise RuntimeError(
+            f"concat duration {dur}s short of cap {cap}s "
+            f"(need {cap:.2f}±{MASTER_TOL_S})"
+        )
+    if not probe_has_audio(out_mp4, ffprobe=exe, run=run):
+        _unlink_master(out_mp4)
+        raise RuntimeError(f"concat master missing audio ({out_mp4})")
+    audio_dur = probe_audio_seconds(out_mp4, ffprobe=exe, run=run)
+    if audio_dur is None or abs(audio_dur - dur) > AUDIO_SYNC_TOL_S:
+        _unlink_master(out_mp4)
+        raise RuntimeError(
+            f"concat audio duration {audio_dur!r}s vs video {dur}s "
+            f"(need within {AUDIO_SYNC_TOL_S * 1000:.0f} ms)"
+        )
 
 
 def _run_ffmpeg(argv: list[str], runner: Any) -> None:
@@ -659,7 +803,7 @@ def stitch_film(
     run: Any = None,
     xfade_cs: int = 0,
 ) -> str:
-    """Concat 18 shot MP4s, cap duration, fail if probe exceeds cap.
+    """Concat 18 shot MP4s, cap duration, fail closed on short or long masters.
 
     Default (``xfade_cs=0``) is concat-demuxer + libx264 CRF 18 + AAC +
     ``+faststart`` so browsers can play and download the master. ``xfade_cs``
@@ -667,6 +811,10 @@ def stitch_film(
     hard cut, re-encoded the same way. Wan-silent shots have no audio —
     xfade refuses. If ffmpeg lacks libx264, fall back to ``-c:v copy`` with
     faststart still set.
+
+    Every stem must exist, last 5.00±0.05s, be 1280×704, and carry audio.
+    After stitch the master must be ``cap±0.10`` s with audio within 50 ms
+    of picture. A failed master is deleted so a 17-shot file cannot publish.
 
     Arguments:
         shot_paths: Exactly 18 MP4 paths in beat/shot order (not VHS metadata PNGs).
@@ -680,7 +828,7 @@ def stitch_film(
         ``out_mp4``.
     Raises:
         ValueError: wrong shot count or invalid xfade_cs.
-        RuntimeError: ffmpeg missing/fails, missing audio, or duration over cap.
+        RuntimeError: ffmpeg missing/fails, missing/short stems, or duration off cap.
     """
     if len(shot_paths) != SHOT_COUNT:
         raise ValueError(f"expected {SHOT_COUNT} shots, found {len(shot_paths)}")
@@ -692,6 +840,7 @@ def stitch_film(
             )
     if xfade_cs < 0 or xfade_cs > 50:
         raise ValueError(f"xfade_cs must be 0–50, got {xfade_cs}")
+    validate_stitch_stems(shot_paths, ffprobe=ffprobe, run=run)
     log(f"stitching {len(shot_paths)} shots → {out_mp4}")
     try:
         root = str(Path(__file__).resolve().parent.parent)
@@ -759,11 +908,9 @@ def stitch_film(
         if audio_tmp:
             Path(audio_tmp).unlink(missing_ok=True)
 
-    dur = probe_seconds(out_mp4, ffprobe=ffprobe)
-    if dur is not None and dur > float(cap_seconds) + 0.05:
-        raise RuntimeError(
-            f"concat duration {dur}s exceeds cap {cap_seconds}s"
-        )
+    assert_master_duration(
+        out_mp4, cap_seconds, ffprobe=ffprobe, run=run
+    )
     return out_mp4
 
 

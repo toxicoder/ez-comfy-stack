@@ -17,6 +17,15 @@ if str(CUSTOM) not in sys.path:
 import ez_film  # noqa: E402
 from ez_film import concat as film_concat  # noqa: E402
 from ez_film import nodes as film_nodes  # noqa: E402
+from ez_film.accept import (  # noqa: E402
+    SPEECH_RATIO_MIN,
+    accept_master,
+    parse_astats_peak_db,
+    parse_astats_rms_db,
+    parse_sustained_nonsilence_s,
+    probe_speech_band_ratio,
+    world_only_speech_defects,
+)
 from ez_film.concat import (  # noqa: E402
     AUDIO_FILTER,
     LOUDNORM_FILTER,
@@ -211,6 +220,8 @@ def test_audio_acrossfade_filter_and_xfade_argv() -> None:
 
 def test_stitch_film_runs_ffmpeg_and_checks_cap(tmp_path: Path) -> None:
     shots = [str(tmp_path / f"s{i:02d}.mp4") for i in range(18)]
+    for path in shots:
+        Path(path).write_bytes(b"mp4")
     out = str(tmp_path / "ez_gosee_90s.mp4")
     captured: list[list[str]] = []
 
@@ -219,8 +230,13 @@ def test_stitch_film_runs_ffmpeg_and_checks_cap(tmp_path: Path) -> None:
         Path(argv[-1]).write_bytes(b"mp4")
         return SimpleNamespace(returncode=0, stdout="", stderr="")
 
-    with patch.object(film_concat, "probe_seconds", return_value=90.0):
-        stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run)
+    with patch.object(film_concat, "validate_stitch_stems", return_value=None):
+        with (
+            patch.object(film_concat, "probe_seconds", return_value=90.0),
+            patch.object(film_concat, "probe_has_audio", return_value=True),
+            patch.object(film_concat, "probe_audio_seconds", return_value=90.0),
+        ):
+            stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run)
     assert captured
     assert "-t" in captured[0]
     assert any(LOUDNORM_FILTER in str(part) for part in captured[0])
@@ -228,16 +244,59 @@ def test_stitch_film_runs_ffmpeg_and_checks_cap(tmp_path: Path) -> None:
     assert captured[0][captured[0].index("-movflags") + 1] == MOVFLAGS
     assert Path(out).is_file()
 
-    with patch.object(film_concat, "probe_seconds", return_value=91.0):
-        with pytest.raises(RuntimeError, match="exceeds cap"):
-            stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run)
+    with patch.object(film_concat, "validate_stitch_stems", return_value=None):
+        with (
+            patch.object(film_concat, "probe_seconds", return_value=91.0),
+            patch.object(film_concat, "probe_has_audio", return_value=True),
+            patch.object(film_concat, "probe_audio_seconds", return_value=91.0),
+        ):
+            with pytest.raises(RuntimeError, match="exceeds cap"):
+                stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run)
 
     with pytest.raises(ValueError, match="expected 18"):
         stitch_film(shots[:3], out, 90.0, ffmpeg="ffmpeg", run=fake_run)
 
+    with pytest.raises(ValueError, match="expected 18"):
+        stitch_film(shots[:17], out, 90.0, ffmpeg="ffmpeg", run=fake_run)
+
     shots[0] = str(tmp_path / "ez_gosee_b1_s1_ltx_video_00006.png")
     with pytest.raises(RuntimeError, match="image, not an MP4"):
         stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run)
+
+
+def test_stitch_film_refuses_missing_stem_and_short_master(tmp_path: Path) -> None:
+    shots = [str(tmp_path / f"s{i:02d}.mp4") for i in range(18)]
+    for path in shots[:-1]:
+        Path(path).write_bytes(b"mp4")
+    out = str(tmp_path / "ez_gosee_90s.mp4")
+
+    def fake_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        if "width,height" in joined:
+            return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
+        if "format=duration" in joined or "stream=duration" in joined:
+            return SimpleNamespace(returncode=0, stdout="5.00\n", stderr="")
+        if "codec_type" in joined:
+            return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
+        Path(argv[-1]).write_bytes(b"mp4")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    with pytest.raises(RuntimeError, match="unreadable shot"):
+        stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=fake_run)
+    assert not Path(out).exists()
+
+    for path in shots:
+        Path(path).write_bytes(b"mp4")
+    Path(out).write_bytes(b"short")
+    with patch.object(film_concat, "validate_stitch_stems", return_value=None):
+        with (
+            patch.object(film_concat, "probe_seconds", return_value=84.79),
+            patch.object(film_concat, "probe_has_audio", return_value=True),
+            patch.object(film_concat, "probe_audio_seconds", return_value=84.79),
+        ):
+            with pytest.raises(RuntimeError, match="short of cap"):
+                stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run)
+    assert not Path(out).exists()
 
 
 def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
@@ -254,17 +313,20 @@ def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
         Path(argv[-1]).write_bytes(b"out")
         return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
 
-    with patch.object(film_concat, "probe_has_audio", return_value=False):
-        with pytest.raises(RuntimeError, match="requires audio"):
-            stitch_film(
-                shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run, xfade_cs=10
-            )
+    with patch.object(film_concat, "validate_stitch_stems", return_value=None):
+        with patch.object(film_concat, "probe_has_audio", return_value=False):
+            with pytest.raises(RuntimeError, match="requires audio"):
+                stitch_film(
+                    shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run, xfade_cs=10
+                )
 
     captured.clear()
     with (
+        patch.object(film_concat, "validate_stitch_stems", return_value=None),
         patch.object(film_concat, "probe_has_audio", return_value=True),
         patch.object(film_concat, "probe_audio_hz", return_value=48000),
         patch.object(film_concat, "probe_seconds", return_value=90.0),
+        patch.object(film_concat, "probe_audio_seconds", return_value=90.0),
     ):
         stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run, xfade_cs=10)
     assert len(captured) == 3
@@ -280,13 +342,16 @@ def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
     def fail_run(argv, **_kwargs):
         return SimpleNamespace(returncode=1, stdout="", stderr="boom")
 
-    with pytest.raises(RuntimeError, match="ffmpeg stitch failed"):
-        stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fail_run)
+    with patch.object(film_concat, "validate_stitch_stems", return_value=None):
+        with pytest.raises(RuntimeError, match="ffmpeg stitch failed"):
+            stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fail_run)
 
     with (
+        patch.object(film_concat, "validate_stitch_stems", return_value=None),
         patch.object(film_concat, "probe_has_audio", return_value=True),
         patch.object(film_concat, "probe_audio_hz", return_value=44100),
         patch.object(film_concat, "probe_seconds", return_value=90.0),
+        patch.object(film_concat, "probe_audio_seconds", return_value=90.0),
     ):
         with pytest.raises(RuntimeError, match="44100"):
             stitch_film(
@@ -425,9 +490,135 @@ def test_write_preview_html_and_x264_fallback(tmp_path: Path) -> None:
         Path(argv[-1]).write_bytes(b"out")
         return SimpleNamespace(returncode=0, stdout="", stderr="")
 
-    with patch.object(film_concat, "probe_seconds", return_value=90.0):
+    for path in shots:
+        Path(path).write_bytes(b"mp4")
+    with (
+        patch.object(film_concat, "validate_stitch_stems", return_value=None),
+        patch.object(film_concat, "probe_seconds", return_value=90.0),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=90.0),
+    ):
         stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fail_then_ok)
     assert len(captured) == 2
     assert captured[0][captured[0].index("-c:v") + 1] == "libx264"
     assert captured[1][captured[1].index("-c:v") + 1] == "copy"
     assert captured[1][captured[1].index("-movflags") + 1] == MOVFLAGS
+
+
+ASTATS_SPEECH = (
+    "[Parsed_astats_0 @ 0x1] Overall\n"
+    "RMS level dB: -16.00\n"
+    "Peak level dB: -12.00\n"
+)
+ASTATS_FULL = (
+    "[Parsed_astats_0 @ 0x1] Overall\n"
+    "RMS level dB: -16.50\n"
+    "Peak level dB: -11.00\n"
+)
+ASTATS_FOLEY_SPEECH = (
+    "[Parsed_astats_0 @ 0x1] Overall\n"
+    "RMS level dB: -32.00\n"
+    "Peak level dB: -28.00\n"
+)
+ASTATS_FOLEY_FULL = (
+    "[Parsed_astats_0 @ 0x1] Overall\n"
+    "RMS level dB: -18.00\n"
+    "Peak level dB: -10.00\n"
+)
+SILENCE_TALKING = "silence_start: 0.00\nsilence_end: 0.10 | silence_duration: 0.10\n"
+SILENCE_FOLEY = (
+    "silence_start: 0.00\n"
+    "silence_end: 4.80 | silence_duration: 4.80\n"
+)
+SILENCE_FOLEY_MASTER = (
+    "silence_start: 0.00\n"
+    "silence_end: 89.90 | silence_duration: 89.90\n"
+)
+
+
+def test_speech_band_parsers_and_ratio(tmp_path: Path) -> None:
+    assert parse_astats_rms_db(ASTATS_SPEECH) == -16.00
+    assert parse_astats_peak_db(ASTATS_SPEECH) == -12.00
+    assert parse_sustained_nonsilence_s(SILENCE_TALKING, 5.00) == pytest.approx(4.90)
+    assert parse_sustained_nonsilence_s(SILENCE_FOLEY, 5.00) == 0.0
+    shot = tmp_path / "talk.mp4"
+    shot.write_bytes(b"x")
+
+    def talking_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        if "silencedetect" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=SILENCE_TALKING)
+        if "highpass" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=ASTATS_SPEECH)
+        return SimpleNamespace(returncode=0, stdout="", stderr=ASTATS_FULL)
+
+    ratio = probe_speech_band_ratio(shot, ffmpeg="ffmpeg", run=talking_run)
+    assert ratio is not None
+    assert ratio >= SPEECH_RATIO_MIN
+    defects = world_only_speech_defects(
+        shot, "01", duration_s=5.00, ffmpeg="ffmpeg", run=talking_run
+    )
+    assert defects
+    assert any("speech-band" in line for line in defects)
+
+    def foley_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        if "silencedetect" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=SILENCE_FOLEY)
+        if "highpass" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=ASTATS_FOLEY_SPEECH)
+        return SimpleNamespace(returncode=0, stdout="", stderr=ASTATS_FOLEY_FULL)
+
+    assert world_only_speech_defects(
+        shot, "01", duration_s=5.00, ffmpeg="ffmpeg", run=foley_run
+    ) == []
+
+
+def test_accept_master_scripts_ffprobe(tmp_path: Path) -> None:
+    master = tmp_path / "ez_gosee_90s.mp4"
+    master.write_bytes(b"x")
+
+    def talking_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        if "format=duration" in joined or "stream=duration" in joined:
+            return SimpleNamespace(returncode=0, stdout="90.00\n", stderr="")
+        if "width,height" in joined:
+            return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
+        if "r_frame_rate" in joined:
+            return SimpleNamespace(returncode=0, stdout="24/1\n", stderr="")
+        if "codec_type" in joined:
+            return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
+        if "silencedetect" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=SILENCE_TALKING)
+        if "highpass" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=ASTATS_SPEECH)
+        if "astats" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=ASTATS_FULL)
+        return SimpleNamespace(returncode=1, stdout="", stderr="")
+
+    defects = accept_master(
+        master, ffprobe="ffprobe", ffmpeg="ffmpeg", run=talking_run
+    )
+    assert any("speech-band" in line for line in defects)
+
+    def clean_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        if "format=duration" in joined or "stream=duration" in joined:
+            return SimpleNamespace(returncode=0, stdout="90.00\n", stderr="")
+        if "width,height" in joined:
+            return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
+        if "r_frame_rate" in joined:
+            return SimpleNamespace(returncode=0, stdout="24/1\n", stderr="")
+        if "codec_type" in joined:
+            return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
+        if "silencedetect" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=SILENCE_FOLEY_MASTER)
+        if "highpass" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=ASTATS_FOLEY_SPEECH)
+        if "astats" in joined:
+            return SimpleNamespace(returncode=0, stdout="", stderr=ASTATS_FOLEY_FULL)
+        return SimpleNamespace(returncode=1, stdout="", stderr="")
+
+    assert accept_master(
+        master, ffprobe="ffprobe", ffmpeg="ffmpeg", run=clean_run
+    ) == []

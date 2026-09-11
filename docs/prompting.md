@@ -90,6 +90,8 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     First-person body-cam (go-see): one signature stunt per 5 s; eye-level; sleeves and gloves in the lower third; look at the landing before a jump; dip on impact then recover; land the last frame on a readable plant for the next I2V. Close-mic breath + surface foley beside the move. No speech. Identity still is already at a dead sprint.
 
+    LTX audio: name the mix first (`Wordless mix: only footfalls, wind, grit, close-mic breath, silent mouth`). Put `No speech.` last for the bible contract. Do not quote dialogue. Distilled AV will talk if the clause is only a prohibition.
+
 ---
 
 ## Prompt Enhance nodes
