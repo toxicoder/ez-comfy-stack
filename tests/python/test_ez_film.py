@@ -396,6 +396,27 @@ def test_probe_has_audio_and_hz() -> None:
         assert probe_has_audio("/tmp/a.mp4") is False
 
 
+def test_assert_master_duration_hermetic_without_path_ffprobe(
+    tmp_path: Path,
+) -> None:
+    """CI runners have no ffprobe; injected ``run`` must still validate."""
+    out = tmp_path / "ok.mp4"
+    out.write_bytes(b"mp4")
+    with patch.object(film_concat, "find_ffprobe", return_value=None):
+        with pytest.raises(RuntimeError, match="ffprobe required"):
+            film_concat.assert_master_duration(str(out), 90.0)
+
+        def _injected(argv, **_kwargs):
+            joined = " ".join(str(a) for a in argv)
+            if "codec_type" in joined:
+                return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
+            if "format=duration" in joined or "stream=duration" in joined:
+                return SimpleNamespace(returncode=0, stdout="90.00\n", stderr="")
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+        film_concat.assert_master_duration(str(out), 90.0, run=_injected)
+
+
 def test_unload_passthrough() -> None:
     image = object()
     with patch.object(film_nodes, "_unload_models", return_value="unloaded") as unload:
