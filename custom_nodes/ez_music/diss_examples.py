@@ -26,7 +26,7 @@ LOFI_TAGS = (
 
 DISS_DURATION_S = 180.0
 NILL_VOICE = "male rap vocals, dry booth, no autotune"
-DissSeries = Literal["lab", "variety", "trap-edm"]
+DissSeries = Literal["lab", "variety", "trap-edm", "civic", "civic-club"]
 
 
 class DissExample(TypedDict):
@@ -83,11 +83,13 @@ def format_diss_lyrics(
 
 
 def _catalog() -> tuple[DissExample, ...]:
+    from .diss_civic import DISS_CIVIC
+    from .diss_civic_club import DISS_CIVIC_CLUB
     from .diss_lab import DISS_LAB
     from .diss_trap_edm import DISS_TRAP_EDM
     from .diss_variety import DISS_VARIETY
 
-    return DISS_LAB + DISS_VARIETY + DISS_TRAP_EDM
+    return DISS_LAB + DISS_VARIETY + DISS_TRAP_EDM + DISS_CIVIC + DISS_CIVIC_CLUB
 
 
 DISS_EXAMPLES: tuple[DissExample, ...] = _catalog()

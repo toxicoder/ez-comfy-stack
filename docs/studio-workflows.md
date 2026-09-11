@@ -33,7 +33,7 @@ user/default/workflows/
     dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast-*, dub-*, music-rap-draft/full
-      nill-bye/phase0|1|2/       forty-five 180 s music-rap-nill-bye-* diss takes
+      nill-bye/phase0|1|2|3|4/   seventy-five 180 s music-rap-nill-bye-* diss takes
       drive-through/phase0|1|2|3|4/ eighty-five 180 s music-edm-drive-through-* EDM takes
     inspire/   prompt-forge, research-chat, beat-sheet
   _user/       your graphs (never overwritten)
@@ -256,6 +256,46 @@ flowchart TB
     | **music-rap-nill-bye-jersey-bounce-lab-example** | **180 s** jersey club 140 (`Nill Bye - Jersey Bounce - v2`) |
     | **music-rap-nill-bye-kick-split-lab-example** | **180 s** hardstyle 150 (`Nill Bye - Kick-Split Myth - v2`) |
     | **music-rap-nill-bye-uplift-rumor-lab-example** | **180 s** trance 138 (`Nill Bye - Uplifting Rumor - v2`) |
+
+    phase3 — Civic variety (punch-up satire of a public official; no disability / race / faith punch-down). Queue on its own. Full table: [Local music](music.md).
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-rap-nill-bye-frozen-ercot-lab-example** | **180 s** boom-bap 88 (`Nill Bye - Frozen Ercot - v3`). Uri / ERCOT |
+    | **music-rap-nill-bye-abject-failure-lab-example** | **180 s** boom-bap 86, `[spoken word]` (`Nill Bye - Abject Failure - v3`) |
+    | **music-rap-nill-bye-six-week-clock-lab-example** | **180 s** jazz hop 90 (`Nill Bye - Six Week Clock - v3`) |
+    | **music-rap-nill-bye-no-bid-wire-lab-example** | **180 s** industrial 108 (`Nill Bye - No-Bid Wire - v3`) |
+    | **music-rap-nill-bye-gavel-theater-lab-example** | **180 s** brass band 112 (`Nill Bye - Gavel Theater - v3`) |
+    | **music-rap-nill-bye-property-hymn-lab-example** | **180 s** folk 82 (`Nill Bye - Property Hymn - v3`) |
+    | **music-rap-nill-bye-voucher-raid-lab-example** | **180 s** country 100 (`Nill Bye - Voucher Raid - v3`) |
+    | **music-rap-nill-bye-uninsured-blues-lab-example** | **180 s** blues 74 (`Nill Bye - Uninsured Blues - v3`) |
+    | **music-rap-nill-bye-locked-stacks-lab-example** | **180 s** lo-fi 86 (`Nill Bye - Locked Stacks - v3`) |
+    | **music-rap-nill-bye-mask-order-lab-example** | **180 s** neo-soul 84 (`Nill Bye - Mask Order - v3`) |
+    | **music-rap-nill-bye-mid-decade-map-lab-example** | **180 s** chiptune 100 (`Nill Bye - Mid Decade Map - v3`) |
+    | **music-rap-nill-bye-rack-tax-lab-example** | **180 s** synthwave 104 (`Nill Bye - Rack Tax - v3`) |
+    | **music-rap-nill-bye-wudu-letter-lab-example** | **180 s** gospel 78 (`Nill Bye - Wudu Letter - v3`). Smear called out |
+    | **music-rap-nill-bye-fourth-term-lab-example** | **180 s** cinematic 76 (`Nill Bye - Fourth Term - v3`) |
+    | **music-rap-nill-bye-campus-cordon-lab-example** | **180 s** rap rock 168 (`Nill Bye - Campus Cordon - v3`) |
+
+    phase4 — Civic club (rap over club beds, same punch-up rule). Queue on its own.
+
+    | Workflow | What it does |
+    | --- | --- |
+    | **music-rap-nill-bye-lone-star-tab-lab-example** | **180 s** dark trap 140 (`Nill Bye - Lone Star Tab - v4`) |
+    | **music-rap-nill-bye-river-buoy-lab-example** | **180 s** rage 148 (`Nill Bye - River Buoy - v4`) |
+    | **music-rap-nill-bye-bus-receipt-lab-example** | **180 s** phonk 132 (`Nill Bye - Bus Receipt - v4`) |
+    | **music-rap-nill-bye-guard-detail-lab-example** | **180 s** trap 145 (`Nill Bye - Guard Detail - v4`) |
+    | **music-rap-nill-bye-chase-wreck-lab-example** | **180 s** house 126 (`Nill Bye - Chase Wreck - v4`) |
+    | **music-rap-nill-bye-frequency-drop-lab-example** | **180 s** drum and bass 174 (`Nill Bye - Frequency Drop - v4`) |
+    | **music-rap-nill-bye-permitless-lab-example** | **180 s** jersey club 140 (`Nill Bye - Permitless - v4`) |
+    | **music-rap-nill-bye-trigger-clock-lab-example** | **180 s** future bass 148 (`Nill Bye - Trigger Clock - v4`) |
+    | **music-rap-nill-bye-disaster-stamp-lab-example** | **180 s** techno 132, `[spoken word]` (`Nill Bye - Disaster Stamp - v4`) |
+    | **music-rap-nill-bye-windmill-blame-lab-example** | **180 s** dubstep 140 (`Nill Bye - Windmill Blame - v4`) |
+    | **music-rap-nill-bye-yass-primary-lab-example** | **180 s** electro house 128 (`Nill Bye - Yass Primary - v4`) |
+    | **music-rap-nill-bye-hold-request-lab-example** | **180 s** UK garage 130 (`Nill Bye - Hold Request - v4`) |
+    | **music-rap-nill-bye-sharia-plank-lab-example** | **180 s** hardstyle 150 (`Nill Bye - Sharia Plank - v4`). Empty scare |
+    | **music-rap-nill-bye-invasion-hymn-lab-example** | **180 s** trance 138 (`Nill Bye - Invasion Hymn - v4`) |
+    | **music-rap-nill-bye-demolish-hook-lab-example** | **180 s** festival trap 150 (`Nill Bye - Demolish Hook - v4`) |
 
     Drive-through EDM pack (American festival set, not rap over a club bed). Queue on its own; table order is the set list (`phase0/` hour 1, `phase1/` hour 2, `phase2/` hour 3 headliner, `phase3/` hour 4 afterparty, `phase4/` Secret Homage). Drop early, dirty pyro on every drop, chest-sub bass. Phase2, phase3, and phase4 vary Comfy node placement across five layouts. Full table: [Local music](music.md).
 

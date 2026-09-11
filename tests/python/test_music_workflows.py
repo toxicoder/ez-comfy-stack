@@ -135,7 +135,7 @@ def test_music_rap_full_graph() -> None:
 
 
 def test_music_rap_nill_bye_diss_graphs() -> None:
-    assert len(DISS_EXAMPLES) == 45
+    assert len(DISS_EXAMPLES) == 75
     assert tuple(ex["stem"] for ex in DISS_EXAMPLES) == NILL_BYE_STAMP_STEMS
     for ex in DISS_EXAMPLES:
         stem = ex["stem"]
@@ -152,12 +152,22 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
         blob = json.dumps(graph)
         assert "[outro]" in blob
         assert "Nill Bye" in blob
-        assert "Rake" in blob
+        if ex["series"] in {"civic", "civic-club"}:
+            assert "Abbott" in blob
+            assert "Rake" not in blob
+        else:
+            assert "Rake" in blob
         assert blob.count("[chorus]") >= 3
         note = graph["extra"]["lab_note"]
         assert "180" in note
         assert "on its own" in note.lower() or "queue on its own" in note.lower()
-        if ex["title"] in {"peer review", "grant denied", "story time"}:
+        if ex["title"] in {
+            "peer review",
+            "grant denied",
+            "story time",
+            "abject failure",
+            "disaster stamp",
+        }:
             assert "[spoken word]" in blob
         rel = lab_json(stem).relative_to(LAB_ROOT)
         assert rel.parts[:3] == ("audio", "nill-bye", f"phase{ex['phase']}")

@@ -9,7 +9,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 **What's on this page**
 
 - Queue the rap **draft** first, then the **full** track
-- Forty-five **180 s** Nill Bye vs Rake diss examples under `_lab/audio/nill-bye/phaseN/` (Queue on their own; phase0 lab catalog, phase1 style pack, phase2 trap/EDM pack; exclusive bars per take)
+- Seventy-five **180 s** Nill Bye diss examples under `_lab/audio/nill-bye/phaseN/` (Queue on their own; phase0 lab catalog, phase1 style pack, phase2 trap/EDM pack, phase3 civic variety, phase4 civic club; exclusive bars per take)
 - Eighty-five **180 s** Drive-through rave-set EDM examples under `_lab/audio/drive-through/phaseN/` (Queue on their own; phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty, phase4 Secret Homage; American festival EDM, drop early, dirty pyro on every drop, chest-sub bass; vocals are a rare DJ treat on two graphs)
 - Queued files are `Artist - Song Title - vN` (N matches the phase folder)
 - App Mode: tags, lyrics, rewrite, vocal/instrumental, duration
@@ -24,7 +24,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 **What this enables**
 
 - A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs
-- Forty-five 180 s original diss takes (Nill Bye vs Rake) with exclusive verses and punchlines, without cloud music APIs
+- Seventy-five 180 s original diss takes (Nill Bye vs Rake in phases 0–2; Nill Bye civic satire of a public official in phases 3–4) with exclusive verses and punchlines, without cloud music APIs
 - Eighty-five 180 s original Drive-through EDM takes (American festival EDM, BPM 140–176, drop-early dirty pyro, chest-sub bass; eighty-three instrumental, two DJ-shout treats) without cloud music APIs
 - Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - Keeping the visual studio bootable when the music pack is missing
@@ -85,9 +85,9 @@ Graph: **music-rap-full-lab-example**. App **Duration (seconds)** defaults to **
 
 ### 180s Nill Bye diss examples
 
-Forty-five extra full-track graphs under **`_lab/audio/nill-bye/phase0|phase1|phase2/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic lane, not a prerequisite. A longer Queue is expected (this is still an ACE-Step audio latent, not a video 90 s denoise). SaveAudio prefix is **`Nill Bye - Song Title - vN`** (N = phase).
+Seventy-five extra full-track graphs under **`_lab/audio/nill-bye/phase0|phase1|phase2|phase3|phase4/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic lane, not a prerequisite. A longer Queue is expected (this is still an ACE-Step audio latent, not a video 90 s denoise). SaveAudio prefix is **`Nill Bye - Song Title - vN`** (N = phase).
 
-Fictional MCs only: **Nill Bye** (science guy, mad) roasting **Rake** (in his feels; club-talk and fake-cool as a brand). Original lyrics. No living-MC names. No famous-hook paraphrases. Shipped bars stay short and SFW (roast the pose, not graphic content). Each take owns exclusive verses and punchlines — disses and content bars are not reused across the forty-five graphs; choruses stay unique hooks. ACE-Step vocal is an invented timbre. Human rewrite required before any release.
+**Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0–2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3–4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up**: policy, quotes, numbers, hypocrisy. Do not roast disability, race, faith, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines — disses and content bars are not reused across the seventy-five graphs; choruses stay unique hooks. Human rewrite required before any release.
 
 Style and trap/EDM packs keep the same dry-booth voice (`male rap vocals, dry booth, no autotune`). Trap/EDM graphs are rap **over** club beds — not autotune EDM vocals. Voices, tags, BPM, and seeds stay as shipped; only the bars change per take.
 
@@ -156,6 +156,50 @@ Same dry booth. Rap over club beds (no autotune).
 | **music-rap-nill-bye-jersey-bounce-lab-example** | jersey club **140**, seed **173** | `Nill Bye - Jersey Bounce - v2` | Bounce with no proof |
 | **music-rap-nill-bye-kick-split-lab-example** | hardstyle **150**, seed **179** | `Nill Bye - Kick-Split Myth - v2` | Kick-split myth |
 | **music-rap-nill-bye-uplift-rumor-lab-example** | trance **138**, seed **181** | `Nill Bye - Uplifting Rumor - v2` | Uplifting rumor |
+
+#### phase3 — Civic variety
+
+Same dry booth. Non-trap, non-EDM beds. Public-record satire of Abbott (punch up; no disability, race, or faith punch-down).
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-rap-nill-bye-frozen-ercot-lab-example** | boom-bap **88**, seed **191** | `Nill Bye - Frozen Ercot - v3` | Uri / ERCOT blame-shift |
+| **music-rap-nill-bye-abject-failure-lab-example** | boom-bap **86**, `[spoken word]`, seed **193** | `Nill Bye - Abject Failure - v3` | Uvalde delay, split message |
+| **music-rap-nill-bye-six-week-clock-lab-example** | jazz hop **90**, seed **197** | `Nill Bye - Six Week Clock - v3` | SB 8 bounty |
+| **music-rap-nill-bye-no-bid-wire-lab-example** | industrial hip-hop **108**, seed **199** | `Nill Bye - No-Bid Wire - v3` | OLS emergency procurement |
+| **music-rap-nill-bye-gavel-theater-lab-example** | brass band **112**, seed **211** | `Nill Bye - Gavel Theater - v3` | Paxton impeachment |
+| **music-rap-nill-bye-property-hymn-lab-example** | folk **82**, seed **223** | `Nill Bye - Property Hymn - v3` | No-income-tax vs levy |
+| **music-rap-nill-bye-voucher-raid-lab-example** | country **100**, seed **227** | `Nill Bye - Voucher Raid - v3` | ESA / Yass primaries |
+| **music-rap-nill-bye-uninsured-blues-lab-example** | blues **74**, seed **229** | `Nill Bye - Uninsured Blues - v3` | Medicaid non-expansion |
+| **music-rap-nill-bye-locked-stacks-lab-example** | lo-fi **86**, seed **233** | `Nill Bye - Locked Stacks - v3` | Book / DEI pull-lists |
+| **music-rap-nill-bye-mask-order-lab-example** | neo-soul **84**, seed **239** | `Nill Bye - Mask Order - v3` | GA-34 preemption |
+| **music-rap-nill-bye-mid-decade-map-lab-example** | chiptune **100**, seed **241** | `Nill Bye - Mid Decade Map - v3` | Mid-decade remap |
+| **music-rap-nill-bye-rack-tax-lab-example** | synthwave **104**, seed **251** | `Nill Bye - Rack Tax - v3` | Data-center boom then brake |
+| **music-rap-nill-bye-wudu-letter-lab-example** | gospel **78**, seed **257** | `Nill Bye - Wudu Letter - v3` | Airport rinse smear, called out |
+| **music-rap-nill-bye-fourth-term-lab-example** | cinematic **76**, seed **263** | `Nill Bye - Fourth Term - v3` | Unprecedented fourth lap |
+| **music-rap-nill-bye-campus-cordon-lab-example** | rap rock **168**, seed **269** | `Nill Bye - Campus Cordon - v3` | UT troopers vs protest |
+
+#### phase4 — Civic club
+
+Same dry booth. Rap over club beds (no autotune). Same punch-up rule.
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-rap-nill-bye-lone-star-tab-lab-example** | dark trap **140**, seed **271** | `Nill Bye - Lone Star Tab - v4` | OLS forever budget |
+| **music-rap-nill-bye-river-buoy-lab-example** | rage **148**, seed **277** | `Nill Bye - River Buoy - v4` | Buoys and wire as cruelty |
+| **music-rap-nill-bye-bus-receipt-lab-example** | phonk **132**, seed **281** | `Nill Bye - Bus Receipt - v4` | People mailed as a presser |
+| **music-rap-nill-bye-guard-detail-lab-example** | trap **145**, seed **283** | `Nill Bye - Guard Detail - v4` | Guard deaths on state orders |
+| **music-rap-nill-bye-chase-wreck-lab-example** | house **126**, seed **293** | `Nill Bye - Chase Wreck - v4` | OLS pursuit deaths |
+| **music-rap-nill-bye-frequency-drop-lab-example** | drum and bass **174**, seed **307** | `Nill Bye - Frequency Drop - v4` | 20,000 MW load-shed |
+| **music-rap-nill-bye-permitless-lab-example** | jersey club **140**, seed **311** | `Nill Bye - Permitless - v4` | HB 1927 |
+| **music-rap-nill-bye-trigger-clock-lab-example** | future bass **148**, seed **313** | `Nill Bye - Trigger Clock - v4` | HB 1280 felony delay |
+| **music-rap-nill-bye-disaster-stamp-lab-example** | techno **132**, `[spoken word]`, seed **317** | `Nill Bye - Disaster Stamp - v4` | Monthly border emergency |
+| **music-rap-nill-bye-windmill-blame-lab-example** | dubstep **140**, seed **331** | `Nill Bye - Windmill Blame - v4` | Fox clip vs FERC mix |
+| **music-rap-nill-bye-yass-primary-lab-example** | electro house **128**, seed **337** | `Nill Bye - Yass Primary - v4` | Out-of-state cash primaries |
+| **music-rap-nill-bye-hold-request-lab-example** | UK garage **130**, seed **347** | `Nill Bye - Hold Request - v4` | ICE extradition fight |
+| **music-rap-nill-bye-sharia-plank-lab-example** | hardstyle **150**, seed **349** | `Nill Bye - Sharia Plank - v4` | Convention scare, empty docket |
+| **music-rap-nill-bye-invasion-hymn-lab-example** | trance **138**, seed **353** | `Nill Bye - Invasion Hymn - v4` | War-word as appropriation |
+| **music-rap-nill-bye-demolish-hook-lab-example** | festival trap **150**, seed **359** | `Nill Bye - Demolish Hook - v4` | “Demolish” closer |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 

@@ -1,4 +1,4 @@
-"""Exclusive-bar contract for the forty-five Nill Bye diss takes.
+"""Exclusive-bar contract for the seventy-five Nill Bye diss takes.
 
 Hermetic: reads DISS_EXAMPLES only. No Comfy, no network, no GGUF.
 """
@@ -136,6 +136,39 @@ RESERVED_MOTIFS: tuple[tuple[str, str], ...] = (
     ("lab book", "lab notebook"),
     ("amen rumor", "amen rumor"),
     ("strobe claim", "strobe claim"),
+    ("frozen ercot", "frozen ercot"),
+    ("abject failure", "abject failure"),
+    ("six week", "six week clock"),
+    ("six-week", "six week clock"),
+    ("no-bid", "no-bid wire"),
+    ("no bid", "no-bid wire"),
+    ("gavel theater", "gavel theater"),
+    ("property hymn", "property hymn"),
+    ("voucher raid", "voucher raid"),
+    ("uninsured blues", "uninsured blues"),
+    ("locked stacks", "locked stacks"),
+    ("mask order", "mask order"),
+    ("mid decade", "mid decade map"),
+    ("mid-decade", "mid decade map"),
+    ("rack tax", "rack tax"),
+    ("wudu letter", "wudu letter"),
+    ("fourth term", "fourth term"),
+    ("campus cordon", "campus cordon"),
+    ("lone star tab", "lone star tab"),
+    ("river buoy", "river buoy"),
+    ("bus receipt", "bus receipt"),
+    ("guard detail", "guard detail"),
+    ("chase wreck", "chase wreck"),
+    ("frequency drop", "frequency drop"),
+    ("permitless", "permitless"),
+    ("trigger clock", "trigger clock"),
+    ("disaster stamp", "disaster stamp"),
+    ("windmill blame", "windmill blame"),
+    ("yass primary", "yass primary"),
+    ("hold request", "hold request"),
+    ("sharia plank", "sharia plank"),
+    ("invasion hymn", "invasion hymn"),
+    ("demolish hook", "demolish hook"),
 )
 
 
@@ -308,6 +341,13 @@ def test_name_stamps_at_most_once_per_verse() -> None:
                 offenders.append((title, idx, "Nill Bye", nill))
             if rake > 1:
                 offenders.append((title, idx, "Rake", rake))
+            abbott = 0
+            for line in content_lines(body):
+                low = line.lower()
+                if low.startswith("abbott") or low.startswith("greg abbott"):
+                    abbott += 1
+            if abbott > 1:
+                offenders.append((title, idx, "Abbott", abbott))
     assert offenders == [], f"name stamps over cap: {offenders}"
 
 
