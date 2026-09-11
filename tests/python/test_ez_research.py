@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import sys
 from pathlib import Path
+from types import ModuleType
 from typing import Any
-from unittest.mock import patch
 
 import pytest
 
@@ -366,3 +367,97 @@ def test_node_run_chat_and_research(monkeypatch: pytest.MonkeyPatch) -> None:
     types = node.INPUT_TYPES()
     assert types["required"]["mode"][0] == ["chat", "research"]
     assert pipeline.load_prompt("planner").startswith("You plan")
+
+
+def _is_custom_nodes_entry(entry: str) -> bool:
+    try:
+        return Path(entry).resolve() == CUSTOM.resolve()
+    except OSError:
+        return False
+
+
+def _hide_modules(*prefixes: str) -> dict[str, ModuleType]:
+    saved: dict[str, ModuleType] = {}
+    for name in list(sys.modules):
+        if name in prefixes or any(name.startswith(p + ".") for p in prefixes):
+            saved[name] = sys.modules.pop(name)
+    return saved
+
+
+def test_comfy_style_load_without_prompt_enhance_on_path() -> None:
+    """ComfyUI 0.34 load_custom_node: path-based name, custom_nodes not on path."""
+    pack = CUSTOM / "ez_research"
+    sys_module_name = str(pack).replace(".", "_x_")
+    saved_path = list(sys.path)
+    saved = _hide_modules("ez_research", "ez_prompt_enhance")
+    try:
+        sys.path[:] = [p for p in sys.path if not _is_custom_nodes_entry(p)]
+        spec = importlib.util.spec_from_file_location(
+            sys_module_name, pack / "__init__.py"
+        )
+        assert spec is not None
+        assert spec.loader is not None
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[sys_module_name] = module
+        spec.loader.exec_module(module)
+        assert "EZCreativeResearch" in module.NODE_CLASS_MAPPINGS
+        assert module.WEB_DIRECTORY == "./js"
+    finally:
+        sys.path[:] = saved_path
+        for name in list(sys.modules):
+            if name == sys_module_name or name.startswith(sys_module_name + "."):
+                sys.modules.pop(name, None)
+        sys.modules.update(saved)
+
+
+def test_ensure_lab_custom_nodes_path_inserts_parent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        sys, "path", [p for p in sys.path if not _is_custom_nodes_entry(p)]
+    )
+    assert not any(_is_custom_nodes_entry(p) for p in sys.path)
+    pipeline._ensure_lab_custom_nodes_path()
+    assert Path(sys.path[0]).resolve() == CUSTOM.resolve()
+
+
+def test_complete_fail_soft_when_client_missing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def _boom() -> None:
+        raise ModuleNotFoundError("ez_prompt_enhance")
+
+    monkeypatch.setattr(pipeline, "_ensure_lab_custom_nodes_path", _boom)
+    text, reason = pipeline._complete("system", "user")
+    assert text == ""
+    assert "unavailable" in reason
+
+
+def test_complete_imports_sibling_after_path_ensure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        sys, "path", [p for p in sys.path if not _is_custom_nodes_entry(p)]
+    )
+    for name in list(sys.modules):
+        if name == "ez_prompt_enhance" or name.startswith("ez_prompt_enhance."):
+            monkeypatch.delitem(sys.modules, name, raising=False)
+
+    def _fake_complete(
+        system: str,
+        user: str,
+        max_tokens: int = 700,
+        temperature: float = 0.2,
+    ) -> tuple[str, str]:
+        del max_tokens, temperature
+        assert system == "sys"
+        assert user == "user"
+        return "ok", ""
+
+    pipeline._ensure_lab_custom_nodes_path()
+    from ez_prompt_enhance import client as enhance_client
+
+    monkeypatch.setattr(enhance_client, "complete", _fake_complete)
+    text, reason = pipeline._complete("sys", "user")
+    assert text == "ok"
+    assert reason == ""

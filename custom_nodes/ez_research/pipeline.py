@@ -13,8 +13,6 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from ez_prompt_enhance.client import complete as _llama_complete
-
 from .search import SearchHit, format_sources, search_web
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
@@ -35,6 +33,17 @@ class ResearchResult:
 
 def _log(message: str) -> None:
     print(f"[ez_research] {message}", file=sys.stderr)
+
+
+def _ensure_lab_custom_nodes_path() -> None:
+    """Make sibling ez_* packs importable under ComfyUI 0.34+ load_custom_node.
+
+    Comfy registers directory packs as the filesystem path, not the folder
+    name, and does not put custom_nodes on sys.path.
+    """
+    root = str(Path(__file__).resolve().parent.parent)
+    if root not in sys.path:
+        sys.path.insert(0, root)
 
 
 def load_prompt(name: str) -> str:
@@ -97,7 +106,14 @@ def parse_planner_queries(text: str, fallback: str, limit: int) -> list[str]:
 
 
 def _complete(system: str, user: str) -> tuple[str, str]:
-    text, reason = _llama_complete(system, user, max_tokens=700, temperature=0.2)
+    """Run the on-box GGUF. Fail-soft if the sibling pack cannot import."""
+    try:
+        _ensure_lab_custom_nodes_path()
+        from ez_prompt_enhance.client import complete as llama_complete
+    except Exception as exc:  # noqa: BLE001 — fail-soft
+        _log(f"prompt enhance client unavailable: {exc}")
+        return "", "llama.cpp unavailable"
+    text, reason = llama_complete(system, user, max_tokens=700, temperature=0.2)
     return (text or "").strip(), (reason or "")
 
 

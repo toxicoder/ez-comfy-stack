@@ -700,3 +700,13 @@ def test_lyrics_missing_gguf_passthrough() -> None:
         out = EZRapLyrics().run(DRAFT_LYRICS, True)
     assert out["result"][0] == DRAFT_LYRICS
     assert "GGUF missing" in out["ui"]["passthrough"][0]
+
+
+def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        sys,
+        "path",
+        [p for p in sys.path if Path(p).resolve() != CUSTOM.resolve()],
+    )
+    nodes._ensure_lab_custom_nodes_path()
+    assert Path(sys.path[0]).resolve() == CUSTOM.resolve()

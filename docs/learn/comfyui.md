@@ -93,7 +93,7 @@ Fix the seed when you iterate a prompt. Randomize when you are exploring.
 
 If the canvas says **Missing Models**, the JSON is fine and the **weights** are not on `MODELS_DIR` (or the `comfy/` symlink is broken). Re-run `./scripts/manage.sh download-models`, then `doctor`. Do not rewrite the graph to “fix” a missing file.
 
-Prompt Enhance missing? Restart so `custom_nodes/ez_prompt_enhance` is copied. Enhance is fail-soft: generation still runs without the GGUF.
+Prompt Enhance missing? Restart so `custom_nodes/ez_prompt_enhance` is copied. Enhance is fail-soft: generation still runs without the GGUF. Creative Research missing with `IMPORT FAILED` / `No module named 'ez_prompt_enhance'` is the same restart after this pack load fix — Comfy 0.34 does not import sibling packs by folder name.
 
 ---
 

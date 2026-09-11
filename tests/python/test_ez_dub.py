@@ -1465,3 +1465,13 @@ def test_output_root_comfy_output_alias(tmp_path: Path, monkeypatch) -> None:
 
     monkeypatch.setattr(Path, "is_dir", fake_is_dir)
     assert jobstore.output_root() == tmp_path
+
+
+def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch) -> None:
+    monkeypatch.setattr(
+        sys,
+        "path",
+        [p for p in sys.path if Path(p).resolve() != CUSTOM.resolve()],
+    )
+    pipeline._ensure_lab_custom_nodes_path()
+    assert Path(sys.path[0]).resolve() == CUSTOM.resolve()

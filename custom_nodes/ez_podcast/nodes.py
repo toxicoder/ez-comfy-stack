@@ -63,6 +63,17 @@ def _log(message: str) -> None:
     print(f"[ez_podcast] {message}", file=sys.stderr)
 
 
+def _ensure_lab_custom_nodes_path() -> None:
+    """Make sibling ez_* packs importable under ComfyUI 0.34+ load_custom_node.
+
+    Comfy registers directory packs as the filesystem path, not the folder
+    name, and does not put custom_nodes on sys.path.
+    """
+    root = str(Path(__file__).resolve().parent.parent)
+    if root not in sys.path:
+        sys.path.insert(0, root)
+
+
 def _as_bool(value: object) -> bool:
     if isinstance(value, bool):
         return value
@@ -298,6 +309,7 @@ class EZPodcastScript:
         if not _as_bool(enhance):
             return _pack_text(original, "enhance off")
         try:
+            _ensure_lab_custom_nodes_path()
             from ez_prompt_enhance.client import _close_llm
             from ez_prompt_enhance.client import complete
         except Exception as exc:  # noqa: BLE001 — fail-soft
