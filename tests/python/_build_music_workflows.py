@@ -359,6 +359,12 @@ def _diss_cast(ex: DissExample) -> str:
             "satire of Texas Gov. **Greg Abbott**. Abbott is a satire target, "
             "not a vocal identity"
         )
+    if ex["series"] in {"federal", "federal-club"}:
+        return (
+            "Fictional MC **Nill Bye** (science guy) roasting public-record "
+            "satire of **Donald Trump**. Trump is a satire target, "
+            "not a vocal identity"
+        )
     return (
         "Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels)"
     )

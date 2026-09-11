@@ -9,7 +9,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 **What's on this page**
 
 - Queue the rap **draft** first, then the **full** track
-- Seventy-five **180 s** Nill Bye diss examples under `_lab/audio/nill-bye/phaseN/` (Queue on their own; phase0 lab catalog, phase1 style pack, phase2 trap/EDM pack, phase3 civic variety, phase4 civic club; exclusive bars per take)
+- One hundred five **180 s** Nill Bye diss examples under `_lab/audio/nill-bye/phaseN/` (Queue on their own; phase0 lab catalog, phase1 style pack, phase2 trap/EDM pack, phase3 civic variety, phase4 civic club, phase5 federal variety, phase6 federal club; exclusive bars per take)
 - Eighty-five **180 s** Drive-through rave-set EDM examples under `_lab/audio/drive-through/phaseN/` (Queue on their own; phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty, phase4 Secret Homage; American festival EDM, drop early, dirty pyro on every drop, chest-sub bass; vocals are a rare DJ treat on two graphs)
 - Queued files are `Artist - Song Title - vN` (N matches the phase folder)
 - App Mode: tags, lyrics, rewrite, vocal/instrumental, duration
@@ -24,7 +24,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 **What this enables**
 
 - A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs
-- Seventy-five 180 s original diss takes (Nill Bye vs Rake in phases 0–2; Nill Bye civic satire of a public official in phases 3–4) with exclusive verses and punchlines, without cloud music APIs
+- One hundred five 180 s original diss takes (Nill Bye vs Rake in phases 0–2; Nill Bye civic satire of Texas Gov. Greg Abbott in phases 3–4; Nill Bye civic satire of Donald Trump in phases 5–6) with exclusive verses and punchlines, without cloud music APIs
 - Eighty-five 180 s original Drive-through EDM takes (American festival EDM, BPM 140–176, drop-early dirty pyro, chest-sub bass; eighty-three instrumental, two DJ-shout treats) without cloud music APIs
 - Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - Keeping the visual studio bootable when the music pack is missing
@@ -85,9 +85,9 @@ Graph: **music-rap-full-lab-example**. App **Duration (seconds)** defaults to **
 
 ### 180s Nill Bye diss examples
 
-Seventy-five extra full-track graphs under **`_lab/audio/nill-bye/phase0|phase1|phase2|phase3|phase4/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic lane, not a prerequisite. A longer Queue is expected (this is still an ACE-Step audio latent, not a video 90 s denoise). SaveAudio prefix is **`Nill Bye - Song Title - vN`** (N = phase).
+One hundred five extra full-track graphs under **`_lab/audio/nill-bye/phase0|phase1|phase2|phase3|phase4|phase5|phase6/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic lane, not a prerequisite. A longer Queue is expected (this is still an ACE-Step audio latent, not a video 90 s denoise). SaveAudio prefix is **`Nill Bye - Song Title - vN`** (N = phase).
 
-**Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0–2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3–4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up**: policy, quotes, numbers, hypocrisy. Do not roast disability, race, faith, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines — disses and content bars are not reused across the seventy-five graphs; choruses stay unique hooks. Human rewrite required before any release.
+**Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0–2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3–4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Phases 5–6 are civic satire of **Donald Trump** as a public-record target, not a vocal identity. Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up**: policy, quotes, numbers, hypocrisy. Do not roast disability, race, faith, children, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines — disses and content bars are not reused across the one hundred five graphs; choruses stay unique hooks. Human rewrite required before any release.
 
 Style and trap/EDM packs keep the same dry-booth voice (`male rap vocals, dry booth, no autotune`). Trap/EDM graphs are rap **over** club beds — not autotune EDM vocals. Voices, tags, BPM, and seeds stay as shipped; only the bars change per take.
 
@@ -200,6 +200,50 @@ Same dry booth. Rap over club beds (no autotune). Same punch-up rule.
 | **music-rap-nill-bye-sharia-plank-lab-example** | hardstyle **150**, seed **349** | `Nill Bye - Sharia Plank - v4` | Convention scare, empty docket |
 | **music-rap-nill-bye-invasion-hymn-lab-example** | trance **138**, seed **353** | `Nill Bye - Invasion Hymn - v4` | War-word as appropriation |
 | **music-rap-nill-bye-demolish-hook-lab-example** | festival trap **150**, seed **359** | `Nill Bye - Demolish Hook - v4` | “Demolish” closer |
+
+#### phase5 — Federal variety
+
+Same dry booth. Non-trap, non-EDM beds. Public-record satire of Trump (punch up; no disability, race, faith, or children as the joke).
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-rap-nill-bye-thirty-four-counts-lab-example** | boom-bap **88**, seed **367** | `Nill Bye - Thirty Four Counts - v5` | 34 felony records counts |
+| **music-rap-nill-bye-one-eighty-seven-lab-example** | boom-bap **86**, `[spoken word]`, seed **373** | `Nill Bye - One Eighty Seven - v5` | Jan 6 idle minutes |
+| **music-rap-nill-bye-eleven-seven-eighty-lab-example** | jazz hop **90**, seed **379** | `Nill Bye - Eleven Seven Eighty - v5` | Raffensperger tape |
+| **music-rap-nill-bye-fake-electors-lab-example** | industrial hip-hop **108**, seed **383** | `Nill Bye - Fake Electors - v5` | Seven slates |
+| **music-rap-nill-bye-bathroom-boxes-lab-example** | brass band **112**, seed **389** | `Nill Bye - Bathroom Boxes - v5` | Mar-a-Lago storage |
+| **music-rap-nill-bye-statement-of-worth-lab-example** | folk **82**, seed **397** | `Nill Bye - Statement of Worth - v5` | Inflated SFSs |
+| **music-rap-nill-bye-university-tab-lab-example** | country **100**, seed **401** | `Nill Bye - University Tab - v5` | $25M seminar settlement |
+| **music-rap-nill-bye-ukraine-hold-lab-example** | blues **74**, seed **409** | `Nill Bye - Ukraine Hold - v5` | Aid freeze, first impeachment |
+| **music-rap-nill-bye-travel-memo-lab-example** | lo-fi **86**, seed **419** | `Nill Bye - Travel Memo - v5` | EO 13769 roster |
+| **music-rap-nill-bye-zero-tolerance-lab-example** | neo-soul **84**, seed **421** | `Nill Bye - Zero Tolerance - v5` | Family-separation memo |
+| **music-rap-nill-bye-census-question-lab-example** | chiptune **100**, seed **431** | `Nill Bye - Census Question - v5` | Citizenship-box pretext |
+| **music-rap-nill-bye-paris-walkout-lab-example** | synthwave **104**, seed **433** | `Nill Bye - Paris Walkout - v5` | Paris Agreement letter |
+| **music-rap-nill-bye-emoluments-suite-lab-example** | gospel **78**, seed **439** | `Nill Bye - Emoluments Suite - v5` | DC hotel while in office |
+| **music-rap-nill-bye-seven-fifty-lab-example** | cinematic **76**, seed **443** | `Nill Bye - Seven Fifty - v5` | Reported $750 federal line |
+| **music-rap-nill-bye-carroll-tab-lab-example** | rap rock **168**, seed **449** | `Nill Bye - Carroll Tab - v5` | Defamation after a finding |
+
+#### phase6 — Federal club
+
+Same dry booth. Rap over club beds (no autotune). Same punch-up rule.
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-rap-nill-bye-pardon-flood-lab-example** | dark trap **140**, `[spoken word]`, seed **457** | `Nill Bye - Pardon Flood - v6` | Day-one Jan 6 clemency |
+| **music-rap-nill-bye-ieepa-wreck-lab-example** | rage **148**, seed **461** | `Nill Bye - Ieepa Wreck - v6` | IEEPA tariffs 6–3 |
+| **music-rap-nill-bye-gold-card-lab-example** | phonk **132**, seed **463** | `Nill Bye - Gold Card - v6` | $1M residency SKU |
+| **music-rap-nill-bye-memecoin-tab-lab-example** | trap **145**, seed **467** | `Nill Bye - Memecoin Tab - v6` | Pre-oath token float |
+| **music-rap-nill-bye-east-wing-wreck-lab-example** | house **126**, seed **479** | `Nill Bye - East Wing Wreck - v6` | Ballroom teardown |
+| **music-rap-nill-bye-metro-surge-lab-example** | drum and bass **174**, seed **487** | `Nill Bye - Metro Surge - v6` | 2026 enforcement wave |
+| **music-rap-nill-bye-due-process-lab-example** | jersey club **140**, seed **491** | `Nill Bye - Due Process - v6` | Withholding skipped |
+| **music-rap-nill-bye-kennedy-plaque-lab-example** | future bass **148**, seed **499** | `Nill Bye - Kennedy Plaque - v6` | Organic-statute rename |
+| **music-rap-nill-bye-birthright-order-lab-example** | techno **132**, seed **503** | `Nill Bye - Birthright Order - v6` | 14th Amendment EO |
+| **music-rap-nill-bye-cook-firing-lab-example** | dubstep **140**, seed **509** | `Nill Bye - Cook Firing - v6` | Fed-governor purge try |
+| **music-rap-nill-bye-inspector-purge-lab-example** | electro house **128**, seed **521** | `Nill Bye - Inspector Purge - v6` | IG class sweep |
+| **music-rap-nill-bye-law-firm-order-lab-example** | UK garage **130**, seed **523** | `Nill Bye - Law Firm Order - v6` | Counsel-punishment EO |
+| **music-rap-nill-bye-visa-ticket-lab-example** | hardstyle **150**, seed **541** | `Nill Bye - Visa Ticket - v6` | $100k H-1B fee |
+| **music-rap-nill-bye-shadow-docket-lab-example** | trance **138**, seed **547** | `Nill Bye - Shadow Docket - v6` | Emergency-petition pile |
+| **music-rap-nill-bye-immunity-hymn-lab-example** | festival trap **150**, seed **557** | `Nill Bye - Immunity Hymn - v6` | Official-act structure |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 

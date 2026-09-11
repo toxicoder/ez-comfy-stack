@@ -69,7 +69,15 @@ def test_nill_bye_graphs_live_under_audio_nill_bye_phase() -> None:
         assert path.parent.parent == artist, path
         assert path.parent.name.startswith("phase"), path
         phases.add(path.parent.name)
-    assert phases == {"phase0", "phase1", "phase2", "phase3", "phase4"}
+    assert phases == {
+        "phase0",
+        "phase1",
+        "phase2",
+        "phase3",
+        "phase4",
+        "phase5",
+        "phase6",
+    }
     stray = list(artist.glob("music-rap-nill-bye-*-lab-example.json"))
     assert stray == [], stray
     stray_audio = list(audio.glob("music-rap-nill-bye-*-lab-example.json"))

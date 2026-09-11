@@ -135,7 +135,7 @@ def test_music_rap_full_graph() -> None:
 
 
 def test_music_rap_nill_bye_diss_graphs() -> None:
-    assert len(DISS_EXAMPLES) == 75
+    assert len(DISS_EXAMPLES) == 105
     assert tuple(ex["stem"] for ex in DISS_EXAMPLES) == NILL_BYE_STAMP_STEMS
     for ex in DISS_EXAMPLES:
         stem = ex["stem"]
@@ -155,6 +155,10 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
         if ex["series"] in {"civic", "civic-club"}:
             assert "Abbott" in blob
             assert "Rake" not in blob
+        elif ex["series"] in {"federal", "federal-club"}:
+            assert "Trump" in blob
+            assert "Rake" not in blob
+            assert "Abbott" not in blob
         else:
             assert "Rake" in blob
         assert blob.count("[chorus]") >= 3
@@ -167,6 +171,8 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
             "story time",
             "abject failure",
             "disaster stamp",
+            "one eighty seven",
+            "pardon flood",
         }:
             assert "[spoken word]" in blob
         rel = lab_json(stem).relative_to(LAB_ROOT)

@@ -1,0 +1,782 @@
+{
+  "id": "music-rap-nill-bye-eleven-seven-eighty-lab-example",
+  "revision": 1,
+  "last_node_id": 12,
+  "last_link_id": 15,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        360,
+        100
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CheckpointLoaderSimple"
+      },
+      "widgets_values": [
+        "ace_step_1.5_turbo_aio.safetensors"
+      ],
+      "title": "ACE-Step 1.5 turbo AIO"
+    },
+    {
+      "id": 2,
+      "type": "ModelSamplingAuraFlow",
+      "pos": [
+        40,
+        220
+      ],
+      "size": [
+        330,
+        60
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ModelSamplingAuraFlow"
+      },
+      "widgets_values": [
+        3
+      ],
+      "title": "AuraFlow sampling"
+    },
+    {
+      "id": 3,
+      "type": "PrimitiveNode",
+      "pos": [
+        40,
+        380
+      ],
+      "size": [
+        280,
+        82
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "widget": {
+            "name": "seconds"
+          },
+          "links": [
+            6,
+            7
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        180.0,
+        "fixed"
+      ],
+      "title": "Song Duration"
+    },
+    {
+      "id": 4,
+      "type": "EmptyAceStep1.5LatentAudio",
+      "pos": [
+        40,
+        520
+      ],
+      "size": [
+        320,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "seconds",
+          "type": "FLOAT",
+          "link": 6,
+          "widget": {
+            "name": "seconds"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyAceStep1.5LatentAudio"
+      },
+      "widgets_values": [
+        180.0,
+        1
+      ],
+      "title": "Latent length (seconds)"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        80
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "tags",
+          "type": "STRING",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZAceStepPromptEnhance"
+      },
+      "widgets_values": [
+        "jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry booth, no autotune, 90 bpm",
+        "[intro]\ntape hiss\nNill Bye transcribing\n\n[verse]\nJanuary two, a Saturday pressure-call, raffensperger\nBrad Raffensperger, fellow Republican\nTrump wanted eleven thousand seven hundred eighty\nOne more than the eleven thousand seven hundred seventy-nine\nNill Bye transcribing the Georgia tape\nThe state had counted, audited, recounted\nBiden's margin did not move for a threat\nYou offered a criminal overlay if they refused\nDead voters at five thousand, they found two\nThe data you have is wrong, he said\nYou said recalculate. He said stand by the numbers\nA secretary of state is not a vending slot, canvass\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nJazz hop brushes on a recorded hour\nMuted trumpet under a demand dressed as math, remainder\nTrump treated a certified result as a suggestion\nFind is a verb with a destination built in\nNill Bye mad at a hunt for uncast ballots\nYou do not find votes the way you find a sock\nYou count them, then you live with the total\nMeadows asked for compromise on a certified sheet, raffensperger\nCompromise is for a bill, not a tally\nGeorgia already ran the machine and the hand\nThree methods, one winner, zero magic remainder\nThe tape is the exhibit, not a gossip mill\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nFulton theories, suitcase lore, scanned-thrice myths\nEach one died in the same conversation\nTrump kept stacking debunked clips as if volume were proof\nRaffensperger kept answering with the actual canvass\nNill Bye filing the margin-plus-one ask\nOne more than you lost by is not a coincidence\nIt is the tell that the number was the goal\nAccuracy was the costume, canvass\nA Republican official still said no\nThat no is the whole civic method, remainder\nYou wanted a colleague to break his own count, raffensperger\nHe declined, and the tape kept running\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nYears on, you still tour the same remainder\nAs if a recording were a rumor you could out-shout\nTrump still sure Georgia hid a sock-drawer of ballots\nThe drawer was a certified canvass\nNill Bye posting the eleven seven eighty\nA find-request is a pressure campaign\nI want a tally, you want a remainder that fits\nKeep the brushes, print the ask\nEleven thousand seven hundred eighty is not an audit finding\nIt is a shopping list, canvass\nThe tape already priced the errand, remainder\nRaffensperger already closed the register\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[outro]\ntape stop\nmargin holds\ncut\nyeah",
+        false,
+        "vocal"
+      ],
+      "title": "ez_rap_prompt"
+    },
+    {
+      "id": 6,
+      "type": "TextEncodeAceStepAudio1.5",
+      "pos": [
+        500,
+        520
+      ],
+      "size": [
+        400,
+        420
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        },
+        {
+          "name": "tags",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "tags"
+          }
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 5,
+          "widget": {
+            "name": "lyrics"
+          }
+        },
+        {
+          "name": "duration",
+          "type": "FLOAT",
+          "link": 7,
+          "widget": {
+            "name": "duration"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            8,
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextEncodeAceStepAudio1.5"
+      },
+      "widgets_values": [
+        "jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry booth, no autotune, 90 bpm",
+        "[intro]\ntape hiss\nNill Bye transcribing\n\n[verse]\nJanuary two, a Saturday pressure-call, raffensperger\nBrad Raffensperger, fellow Republican\nTrump wanted eleven thousand seven hundred eighty\nOne more than the eleven thousand seven hundred seventy-nine\nNill Bye transcribing the Georgia tape\nThe state had counted, audited, recounted\nBiden's margin did not move for a threat\nYou offered a criminal overlay if they refused\nDead voters at five thousand, they found two\nThe data you have is wrong, he said\nYou said recalculate. He said stand by the numbers\nA secretary of state is not a vending slot, canvass\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nJazz hop brushes on a recorded hour\nMuted trumpet under a demand dressed as math, remainder\nTrump treated a certified result as a suggestion\nFind is a verb with a destination built in\nNill Bye mad at a hunt for uncast ballots\nYou do not find votes the way you find a sock\nYou count them, then you live with the total\nMeadows asked for compromise on a certified sheet, raffensperger\nCompromise is for a bill, not a tally\nGeorgia already ran the machine and the hand\nThree methods, one winner, zero magic remainder\nThe tape is the exhibit, not a gossip mill\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nFulton theories, suitcase lore, scanned-thrice myths\nEach one died in the same conversation\nTrump kept stacking debunked clips as if volume were proof\nRaffensperger kept answering with the actual canvass\nNill Bye filing the margin-plus-one ask\nOne more than you lost by is not a coincidence\nIt is the tell that the number was the goal\nAccuracy was the costume, canvass\nA Republican official still said no\nThat no is the whole civic method, remainder\nYou wanted a colleague to break his own count, raffensperger\nHe declined, and the tape kept running\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nYears on, you still tour the same remainder\nAs if a recording were a rumor you could out-shout\nTrump still sure Georgia hid a sock-drawer of ballots\nThe drawer was a certified canvass\nNill Bye posting the eleven seven eighty\nA find-request is a pressure campaign\nI want a tally, you want a remainder that fits\nKeep the brushes, print the ask\nEleven thousand seven hundred eighty is not an audit finding\nIt is a shopping list, canvass\nThe tape already priced the errand, remainder\nRaffensperger already closed the register\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[outro]\ntape stop\nmargin holds\ncut\nyeah",
+        379,
+        "fixed",
+        90,
+        180.0,
+        "4",
+        "en",
+        "C minor",
+        true,
+        2.0,
+        0.85,
+        0.9,
+        0,
+        0.0
+      ],
+      "title": "ACE tags + lyrics"
+    },
+    {
+      "id": 7,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        940,
+        80
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ConditioningZeroOut"
+      },
+      "widgets_values": [],
+      "title": "Negative (zero)"
+    },
+    {
+      "id": 8,
+      "type": "KSampler",
+      "pos": [
+        940,
+        180
+      ],
+      "size": [
+        330,
+        262
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 2
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 8
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 10
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        379,
+        "fixed",
+        8,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "ACE sampler"
+    },
+    {
+      "id": 9,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        1340,
+        80
+      ],
+      "size": [
+        280,
+        60
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 12
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            14,
+            15
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecodeAudio"
+      },
+      "widgets_values": [],
+      "title": "ACE decode"
+    },
+    {
+      "id": 10,
+      "type": "SaveAudio",
+      "pos": [
+        1340,
+        180
+      ],
+      "size": [
+        320,
+        80
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 14
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudio"
+      },
+      "widgets_values": [
+        "Nill Bye - Eleven Seven Eighty - v5"
+      ],
+      "title": "FLAC master"
+    },
+    {
+      "id": 11,
+      "type": "SaveAudioMP3",
+      "pos": [
+        1340,
+        300
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 15
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveAudioMP3"
+      },
+      "widgets_values": [
+        "Nill Bye - Eleven Seven Eighty - v5",
+        "320k"
+      ],
+      "title": "MP3 320k"
+    },
+    {
+      "id": 12,
+      "type": "Note",
+      "pos": [
+        1340,
+        440
+      ],
+      "size": [
+        440,
+        500
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## music-rap-nill-bye-eleven-seven-eighty-lab-example\n\nUS-safe rap **180 s diss** take: **eleven seven eighty**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 90, language en, timesignature 4, generate_audio_codes true. Seed 379.\n7. Saves: `Nill Bye - Eleven Seven Eighty - v5` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+      ],
+      "title": "Operator note"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      1,
+      1,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      5,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      5,
+      5,
+      1,
+      6,
+      2,
+      "STRING"
+    ],
+    [
+      6,
+      3,
+      0,
+      4,
+      0,
+      "FLOAT"
+    ],
+    [
+      7,
+      3,
+      0,
+      6,
+      3,
+      "FLOAT"
+    ],
+    [
+      8,
+      6,
+      0,
+      8,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      9,
+      6,
+      0,
+      7,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      10,
+      7,
+      0,
+      8,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      11,
+      4,
+      0,
+      8,
+      3,
+      "LATENT"
+    ],
+    [
+      12,
+      8,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      13,
+      1,
+      2,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      14,
+      9,
+      0,
+      10,
+      0,
+      "AUDIO"
+    ],
+    [
+      15,
+      9,
+      0,
+      11,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        24,
+        420,
+        280
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "DURATION",
+      "bounding": [
+        20,
+        324,
+        420,
+        300
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "PROMPT",
+      "bounding": [
+        480,
+        24,
+        820,
+        1000
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "OUTPUT",
+      "bounding": [
+        1320,
+        24,
+        500,
+        940
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "us-safe-music",
+    "lab_note": "## music-rap-nill-bye-eleven-seven-eighty-lab-example\n\nUS-safe rap **180 s diss** take: **eleven seven eighty**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 90, language en, timesignature 4, generate_audio_codes true. Seed 379.\n7. Saves: `Nill Bye - Eleven Seven Eighty - v5` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein-thumbnail-lab-example.json** or **klein-podcast-cover-lab-example.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe rap 180s diss: Nill Bye eleven-seven-eighty roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "audio",
+      "occupancy": "audio",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          5,
+          "tags",
+          {
+            "description": "Genre-first ACE-Step tags.",
+            "label": "Tags",
+            "height": 80
+          }
+        ],
+        [
+          5,
+          "lyrics",
+          {
+            "description": "Lyrics, or [inst] for instrumental.",
+            "label": "Lyrics",
+            "height": 140
+          }
+        ],
+        [
+          5,
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite prompt"
+          }
+        ],
+        [
+          5,
+          "mode",
+          {
+            "description": "Vocal vs instrumental. Instrumental forces no-vocals tags and [inst] lyrics.",
+            "label": "Vocal / instrumental"
+          }
+        ],
+        [
+          3,
+          "seconds",
+          {
+            "description": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
+            "label": "Duration (seconds)"
+          }
+        ],
+        [
+          8,
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
+          }
+        ]
+      ],
+      "outputs": [
+        10,
+        11
+      ]
+    },
+    "linearMode": true
+  },
+  "version": 0.4
+}
