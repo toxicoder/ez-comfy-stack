@@ -119,12 +119,13 @@ ls "${COMFY_OUTPUT_DIR}"/ez_ltx_*_video_*.mp4
 | Graph | Frames | FPS | ≈ duration |
 | --- | --- | --- | --- |
 | `wan-i2v-5s` / `wan-t2v-5s` / `ltx-*-5s` | 121 | 24 | ~5.04 s |
-| `wan-i2v-shot` / `ltx-i2v-shot` | 120 | 24 | **5.00 s** |
+| `wan-i2v-shot` | 120 | 24 | **5.00 s** |
+| `ltx-i2v-shot` / 90s film printers | 121 | 24 | **~5.04 s** (LTX `1+8n`; concat 5.00±0.05) |
 | 90s film (18 LTX prints + concat) | — | 24 | **90.00 s** cap |
 
 !!! warning "Do not Queue a 30 s / 60 s / 90 s latent"
 
-    Long latents melt Spark. Film graphs still use **120-frame** printers (18 × 5.00 s) and stitch. Keep headroom preflight green. A one-click film Queue is **long wall-clock**, not a 90s denoise.
+    Long latents melt Spark. Film graphs still use **121-frame** LTX printers (`1+8n`, 18 shots + stitch, cap 90 s). **120 is illegal** and decodes as 113 frames / 4.71 s. Keep headroom preflight green. A one-click film Queue is **long wall-clock**, not a 90s denoise.
 
 If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see [Troubleshooting](troubleshooting.md).
 

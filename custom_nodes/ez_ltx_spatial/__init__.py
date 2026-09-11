@@ -1,7 +1,8 @@
-"""Lab pack: snap LTX spatial dims to the video VAE 32× grid.
+"""Lab pack: snap LTX spatial dims to the video VAE 32× grid and length to 1+8n.
 
 No extra canvas nodes. Import wraps Comfy ``LTXVImgToVideo``,
-``EmptyLTXVLatentVideo``, and ``VideoVAE.encode`` when those modules exist.
+``EmptyLTXVLatentVideo``, ``LTXVEmptyLatentAudio``, and ``VideoVAE.encode``
+when those modules exist.
 """
 
 from .patch import apply_patches

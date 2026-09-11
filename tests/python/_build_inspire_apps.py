@@ -69,7 +69,7 @@ Shot-card keys (defaults fail-closed):
 
 Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 
-Do not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).
+Do not type a 30/60/90 s denoise. One LTX print is 5.00 s (121 frames = 1+8n @ 24 fps).
 """
 
 RESEARCH_NOTE = """## research-chat-lab-example

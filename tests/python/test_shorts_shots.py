@@ -84,7 +84,7 @@ def test_eighteen_shots_and_chain() -> None:
         meta = parsed["meta"]
         assert meta["film"] == film
         assert meta["slug"] == slug
-        assert meta["frames"] == "120"
+        assert meta["frames"] == "121"
         assert meta["fps"] == "24"
         assert meta["duration_s"] == "5.00"
         assert meta["beats"] == "6"
@@ -376,8 +376,8 @@ def test_shot_graphs_are_five_second_i2v() -> None:
         if n.get("type") == "LTXVEmptyLatentAudio"
     )
     assert wan_len == 120
-    assert ltx_len == 120
-    assert audio_len == 120
+    assert ltx_len == 121
+    assert audio_len == 121
     for graph, prefix in ((wan, "ez_gosee_b1_s1_wan_video"), (ltx, "ez_gosee_b1_s1_ltx_video")):
         vhs = next(n for n in graph["nodes"] if n.get("type") == "VHS_VideoCombine")
         assert vhs["widgets_values"]["format"] == "video/h264-mp4"
@@ -387,7 +387,10 @@ def test_shot_graphs_are_five_second_i2v() -> None:
         last = next(n for n in graph["nodes"] if n.get("title") == "Save last frame")
         assert last["widgets_values"][0] == "ez_gosee_b1_s1_last"
         batch = next(n for n in graph["nodes"] if n.get("type") == "ImageFromBatch")
-        assert batch["widgets_values"][0] == 119
+        if prefix.endswith("_ltx_video"):
+            assert batch["widgets_values"][0] == 120
+        else:
+            assert batch["widgets_values"][0] == 119
         load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
         assert load["widgets_values"][0] == "example.png"
 
@@ -403,7 +406,10 @@ def test_no_long_latents_in_shorts() -> None:
                 continue
             values = node.get("widgets_values") or []
             length = int(values[2] if node["type"] != "LTXVEmptyLatentAudio" else values[0])
-            assert length == 120, (path.name, node["type"], length)
+            if node["type"] in ("LTXVImgToVideo", "LTXVEmptyLatentAudio", "EmptyLTXVLatentVideo"):
+                assert length == 121, (path.name, node["type"], length)
+            else:
+                assert length == 120, (path.name, node["type"], length)
             assert length < 241
 
 
@@ -423,7 +429,7 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert all(n.get("mode") == 0 for n in printers)
         assert all(n["widgets_values"][0] == 1280 for n in printers)
         assert all(n["widgets_values"][1] == 704 for n in printers)
-        assert all(n["widgets_values"][2] == 120 for n in printers)
+        assert all(n["widgets_values"][2] == 121 for n in printers)
         assert any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"])
         assert any(n.get("type") == "EZUnloadModels" for n in graph["nodes"])
         concat = next(n for n in graph["nodes"] if n.get("type") == "EZFilmConcat")
@@ -511,5 +517,5 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert f"ez_{slug}_90s.mp4" in body
         mmap = next(n for n in graph["nodes"] if n.get("type") == "MarkdownNote")
         table = mmap["widgets_values"][0]
-        assert "120" in table
+        assert "121" in table
         assert "90" in table

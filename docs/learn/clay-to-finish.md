@@ -57,7 +57,7 @@ flowchart TB
 8. Stop LTX. Occupancy **audio**. `stem-mix --film go-see --shot 12 --bg PATH` (optional `--dx`). Duck −15 dB, YouTube loudnorm I=-14. App: **audio-finish-lab-example**.
 9. `film-accept` then concat. Disclosure sidecar stays.
 
-Printers stay **5.00 s / 1280×704 / 120 frames @ 24 fps**. Do not type a 90 s latent.
+Printers stay **5.00 s / 1280×704 / 121 frames (`1+8n`) @ 24 fps**. Do not type a 90 s latent. Do not type 120 (VAE floors to 113 frames).
 
 ---
 

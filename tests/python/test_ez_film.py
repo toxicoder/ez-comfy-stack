@@ -29,21 +29,27 @@ from ez_film.accept import (  # noqa: E402
 from ez_film.concat import (  # noqa: E402
     AUDIO_FILTER,
     LOUDNORM_FILTER,
+    LTX_120_DECODED_FRAMES,
     MOVFLAGS,
+    PAD_HOLD_FRAMES,
     audio_acrossfade_filter,
     concat_list_line,
     copy_publish_master,
     encoder_missing,
     ffmpeg_audio_acrossfade_argv,
     ffmpeg_mux_copy_argv,
+    ffmpeg_pad_stem_argv,
     ffmpeg_stitch_argv,
     ffmpeg_stitch_copy_argv,
     ffmpeg_video_copy_argv,
+    is_ltx_120_floor_duration,
+    normalize_stitch_stem,
     probe_audio_hz,
     probe_has_audio,
     publish_path,
     resolve_shot_path,
     stitch_film,
+    validate_stitch_stems,
     write_disclosure_sidecar,
     write_preview_html,
 )
@@ -376,6 +382,122 @@ def test_probe_has_audio_and_hz() -> None:
 
     assert probe_has_audio("/tmp/a.mp4", ffprobe="ffprobe", run=empty_run) is False
     assert probe_audio_hz("/tmp/a.mp4", ffprobe="ffprobe", run=empty_run) is None
+
+
+def test_ltx_120_floor_pad_argv() -> None:
+    assert LTX_120_DECODED_FRAMES == 113
+    assert PAD_HOLD_FRAMES == 7
+    assert is_ltx_120_floor_duration(113 / 24) is True
+    assert is_ltx_120_floor_duration(4.708333) is True
+    assert is_ltx_120_floor_duration(5.00) is False
+    assert is_ltx_120_floor_duration(5.041667) is False
+    assert is_ltx_120_floor_duration(3.0) is False
+    argv = ffmpeg_pad_stem_argv("/in.mp4", "/out.pad.mp4", "ffmpeg")
+    assert "tpad=stop_mode=clone:stop=7" in argv[argv.index("-filter_complex") + 1]
+    assert "apad=" in argv[argv.index("-filter_complex") + 1]
+    assert argv[argv.index("-t") + 1] == "5.00"
+    assert argv[argv.index("-c:v") + 1] == "libx264"
+
+
+def test_normalize_pads_113_and_validate_refuses_3s(tmp_path: Path) -> None:
+    src = tmp_path / "ez_gosee_b1_s1_ltx_video_00001-audio.mp4"
+    src.write_bytes(b"mp4")
+    padded_written: list[str] = []
+
+    def fake_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        dest = str(argv[-1])
+        if "tpad" in joined:
+            Path(dest).write_bytes(b"padded")
+            padded_written.append(dest)
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
+        if "width,height" in joined:
+            return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
+        if "codec_type" in joined:
+            return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
+        if "format=duration" in joined or "stream=duration" in joined:
+            if ".pad.mp4" in dest or Path(dest).name.endswith(".pad.mp4"):
+                return SimpleNamespace(returncode=0, stdout="5.00\n", stderr="")
+            if Path(dest).read_bytes() == b"padded":
+                return SimpleNamespace(returncode=0, stdout="5.00\n", stderr="")
+            return SimpleNamespace(returncode=0, stdout="4.708333\n", stderr="")
+        Path(dest).write_bytes(b"out")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    temps: list[str] = []
+    out = normalize_stitch_stem(
+        str(src), ffmpeg="ffmpeg", ffprobe="ffprobe", run=fake_run, temps=temps
+    )
+    assert padded_written
+    assert out == padded_written[0]
+    assert temps == [out]
+    Path(out).unlink(missing_ok=True)
+
+    shots = [str(tmp_path / f"s{i:02d}.mp4") for i in range(18)]
+    for path in shots:
+        Path(path).write_bytes(b"mp4")
+
+    def three_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        if "width,height" in joined:
+            return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
+        if "codec_type" in joined:
+            return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
+        if "format=duration" in joined or "stream=duration" in joined:
+            return SimpleNamespace(returncode=0, stdout="3.00\n", stderr="")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    with pytest.raises(RuntimeError, match="shot duration"):
+        validate_stitch_stems(shots, ffprobe="ffprobe", run=three_run)
+
+    def legal_121_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        if "width,height" in joined:
+            return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
+        if "codec_type" in joined:
+            return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
+        if "format=duration" in joined or "stream=duration" in joined:
+            return SimpleNamespace(returncode=0, stdout="5.041667\n", stderr="")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    validate_stitch_stems(shots, ffprobe="ffprobe", run=legal_121_run)
+
+
+def test_stitch_film_pads_113_frame_stems(tmp_path: Path) -> None:
+    shots = [str(tmp_path / f"s{i:02d}.mp4") for i in range(18)]
+    for path in shots:
+        Path(path).write_bytes(b"mp4")
+    out = str(tmp_path / "ez_gosee_90s.mp4")
+    captured: list[str] = []
+
+    def fake_run(argv, **_kwargs):
+        joined = " ".join(str(a) for a in argv)
+        dest = str(argv[-1])
+        captured.append(joined)
+        if "tpad" in joined:
+            Path(dest).write_bytes(b"padded")
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
+        if "width,height" in joined:
+            return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
+        if "codec_type" in joined:
+            return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
+        if "sample_rate" in joined:
+            return SimpleNamespace(returncode=0, stdout="48000\n", stderr="")
+        if "format=duration" in joined or "stream=duration" in joined:
+            if dest == out:
+                return SimpleNamespace(returncode=0, stdout="90.00\n", stderr="")
+            if ".pad.mp4" in dest or (
+                Path(dest).is_file() and Path(dest).read_bytes() == b"padded"
+            ):
+                return SimpleNamespace(returncode=0, stdout="5.00\n", stderr="")
+            return SimpleNamespace(returncode=0, stdout="4.708333\n", stderr="")
+        Path(dest).write_bytes(b"master")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=fake_run)
+    assert any("tpad=stop_mode=clone:stop=7" in line for line in captured)
+    assert Path(out).is_file()
+    assert not list(tmp_path.glob("*.pad.mp4"))
 
     def boom_run(argv, **_kwargs):
         raise OSError("no ffprobe")
