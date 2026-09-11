@@ -58,13 +58,14 @@ prebuilt_ready() {
 #   0
 #######################################
 prebuilt_exclude_patterns() {
+  # Root-anchored: unanchored `input/` also dropped comfy_api/input (v0.34+).
   printf '%s\n' \
-    user/ \
-    input/ \
-    output/ \
-    temp/ \
-    extra_model_paths.yaml \
-    custom_nodes/_user/
+    /user/ \
+    /input/ \
+    /output/ \
+    /temp/ \
+    /extra_model_paths.yaml \
+    /custom_nodes/_user/
 }
 
 #######################################
@@ -120,9 +121,10 @@ copy_prebuilt_tree() {
 
 #######################################
 # Copy prebuilt Comfy tree onto the volume (local disk; no pip).
-# rsync --exclude (or copy_prebuilt_tree) skips user/, input/, output/,
-# temp/, extra_model_paths.yaml, and custom_nodes/_user/. Never --delete
-# those trees. Image includes rsync; cp fallback honors the same list.
+# rsync --exclude (or copy_prebuilt_tree) skips *root* user/, input/,
+# output/, temp/, extra_model_paths.yaml, and custom_nodes/_user/. Patterns
+# are anchored (`/input/`) so nested packages such as comfy_api/input copy.
+# Never --delete those trees. Image includes rsync; cp fallback is top-level.
 # Globals:
 #   COMFY_HOME, LAB_PREBUILT_ROOT
 # Arguments:
@@ -150,6 +152,46 @@ seed_from_prebuilt() {
     copy_prebuilt_tree "${root}" "${dest}"
   fi
   ep_log "Seed complete"
+}
+
+#######################################
+# Copy comfy_api/ from prebuilt when the volume is missing comfy_api/input.
+# Unanchored rsync --exclude input/ used to drop that nested v0.34+ package.
+# install-comfy.sh also heals on stamp-present refresh (pin-match volumes).
+# Globals:
+#   COMFY_HOME, LAB_PREBUILT_ROOT
+# Arguments:
+#   None
+# Outputs:
+#   Progress via ep_log
+# Returns:
+#   0 always (soft-fail)
+#######################################
+heal_comfy_api_input_from_prebuilt() {
+  local pre dest src_pkg dest_init
+  pre="${LAB_PREBUILT_ROOT:-/opt/comfy-prebuilt}"
+  dest="${COMFY_HOME:-/comfy-state/ComfyUI}"
+  src_pkg="${pre}/comfy_api"
+  dest_init="${dest}/comfy_api/input/__init__.py"
+  if [[ ! -d ${src_pkg}/input ]]; then
+    return 0
+  fi
+  if [[ -f ${dest_init} ]]; then
+    return 0
+  fi
+  ep_log "Healing comfy_api/input from prebuilt (nested package; not root input/)"
+  mkdir -p "${dest}/comfy_api" || return 0
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a "${src_pkg}/" "${dest}/comfy_api/" || true
+  else
+    cp -a "${src_pkg}/." "${dest}/comfy_api/" || true
+  fi
+  if [[ -f ${dest_init} ]]; then
+    ep_log "Healed comfy_api/input"
+  else
+    ep_log "WARN: comfy_api/input still missing after heal"
+  fi
+  return 0
 }
 
 #######################################
@@ -1172,6 +1214,7 @@ main() {
     # shellcheck disable=SC2086
     ${install_cmd}
   fi
+  heal_comfy_api_input_from_prebuilt
   ep_log "phase 1/4: prepare finished"
 
   if [[ ! -x "${venv}/bin/python" ]]; then

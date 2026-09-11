@@ -240,8 +240,11 @@ stack_verify_running() {
 stack_port_open() {
   local port="${1:-${COMFY_PORT:-8188}}"
   if command -v curl >/dev/null 2>&1; then
-    curl -sf -o /dev/null --connect-timeout 1 "http://127.0.0.1:${port}/" 2>/dev/null && return 0
-    # Comfy may not answer HTTP until fully up; TCP is enough
+    # HTTP only. Docker-proxy accepts TCP on published ports before ComfyUI
+    # listens, which used to make start report "already responding".
+    curl -sf -o /dev/null --connect-timeout 1 --max-time 2 \
+      "http://127.0.0.1:${port}/" 2>/dev/null && return 0
+    return 1
   fi
   if command -v nc >/dev/null 2>&1; then
     nc -z -w 1 127.0.0.1 "${port}" 2>/dev/null && return 0

@@ -141,23 +141,24 @@ refresh_comfy_pin_if_needed() {
     mkdir -p "${COMFY_HOME}"
     if command -v rsync >/dev/null 2>&1; then
       rsync -a \
-        --exclude user/ \
-        --exclude input/ \
-        --exclude output/ \
-        --exclude temp/ \
-        --exclude extra_model_paths.yaml \
-        --exclude custom_nodes/_user/ \
+        --exclude /user/ \
+        --exclude /input/ \
+        --exclude /output/ \
+        --exclude /temp/ \
+        --exclude /extra_model_paths.yaml \
+        --exclude /custom_nodes/_user/ \
         "${pre}/" "${COMFY_HOME}/"
     else
       log "rsync missing; copying prebuilt with seed excludes"
       # Do not clobber operator custom_nodes/_user on the cp fallback.
+      # ./input is top-level only — do not exclude comfy_api/input.
       tar -C "${pre}" \
-        --exclude=user \
-        --exclude=input \
-        --exclude=output \
-        --exclude=temp \
-        --exclude=extra_model_paths.yaml \
-        --exclude=custom_nodes/_user \
+        --exclude='./user' \
+        --exclude='./input' \
+        --exclude='./output' \
+        --exclude='./temp' \
+        --exclude='./extra_model_paths.yaml' \
+        --exclude='./custom_nodes/_user' \
         -cf - . | tar -C "${COMFY_HOME}" -xf -
     fi
     activate_venv
@@ -257,6 +258,7 @@ main() {
     step 6 "${total}" "Refresh complete"
   fi
 
+  heal_comfy_api_input_from_prebuilt
   log "══ Install complete ══ total elapsed $(install_format_elapsed "$(install_elapsed_s)")"
 }
 
