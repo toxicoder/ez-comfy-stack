@@ -151,6 +151,8 @@ sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 | `huggingface-cli is deprecated` / 0 GB after download-models | Scripts used stub CLI | Pull latest; auto-install prefers `hf` over the stub; re-run download-models |
 | Download failed / gated license | No token or **LTX-2.5 license not accepted** for that token | `HF_TOKEN` set is not enough. Open https://huggingface.co/Lightricks/LTX-2.5 as the **same** user (`hf auth whoami`), click Agree, then re-run `download-models`. Klein/Wan can cache-hit while LTX is still missing |
 | Long Python `GatedRepoError` traceback | CLI stderr was leaking (should be a short checklist) | Pull latest; traceback is captured to a log. `LAB_DEBUG=1` still dumps the last 40 lines |
+| No `↓` / `══ n/m ══` progress line | Piped SSH, `EZ_COMFY_PROGRESS=0`, or `HF_PROGRESS=0` | Progress rewrites a TTY line; pipes get a newline every interval. Unset those env vars. `LAB_DEBUG=1` for extra traces |
+| Command looks hung (ffmpeg / Blender / compose build) | Heartbeat interval or no TTY | Wait for `… still running` / `elapsed m:ss`. `EZ_COMFY_PROGRESS_INTERVAL=2` is the default tick |
 | Limits stuck after kill | trap skipped | `./scripts/manage.sh download-limit clear` |
 
 ### wondershaper / qdisc failures

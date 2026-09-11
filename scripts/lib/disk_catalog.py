@@ -12,6 +12,9 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
+from operator_log import PREFIX as PROGRESS_PREFIX
+from operator_log import emit as _ol_emit
+
 _LIST_KEYS = (
     "match_suffix",
     "match_contains",
@@ -58,8 +61,6 @@ SKIP_BASENAMES = frozenset(
     }
 )
 WALK_PROGRESS_EVERY = 500
-PROGRESS_PREFIX = "[ez-comfy]"
-_PROGRESS_REWRITE = False
 
 
 def _empty_sig() -> dict[str, Any]:
@@ -337,10 +338,14 @@ def rank_candidates(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def progress_interval_s() -> float:
     """Heartbeat interval from DISK_WIZARD_PROGRESS_INTERVAL (0 disables).
 
+    Falls back to EZ_COMFY_PROGRESS_INTERVAL, then 2.
+
     Returns:
         Seconds between in-root heartbeats. Default 2.
     """
-    raw = os.environ.get("DISK_WIZARD_PROGRESS_INTERVAL", "2")
+    raw = os.environ.get("DISK_WIZARD_PROGRESS_INTERVAL")
+    if raw is None:
+        raw = os.environ.get("EZ_COMFY_PROGRESS_INTERVAL", "2")
     try:
         return float(raw)
     except ValueError:
@@ -357,17 +362,7 @@ def emit_walk_progress(msg: str, *, rewrite: bool = False) -> None:
         msg: Body without the ``[ez-comfy]`` prefix.
         rewrite: When True and stderr is a TTY, rewrite the current line.
     """
-    global _PROGRESS_REWRITE
-    if rewrite and sys.stderr.isatty():
-        sys.stderr.write(f"\r\033[K{PROGRESS_PREFIX} {msg}")
-        sys.stderr.flush()
-        _PROGRESS_REWRITE = True
-        return
-    if _PROGRESS_REWRITE:
-        sys.stderr.write("\n")
-        _PROGRESS_REWRITE = False
-    sys.stderr.write(f"{PROGRESS_PREFIX} {msg}\n")
-    sys.stderr.flush()
+    _ol_emit(msg, rewrite=rewrite)
 
 
 def _file_row(path: str) -> dict[str, Any]:

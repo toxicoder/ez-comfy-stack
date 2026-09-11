@@ -167,10 +167,11 @@ cmd_sync_models() {
   fi
   local src="${ips[0]}"
   local tree="${MODELS_DIR}/comfy"
-  local dest
+  local dest i=0 n=$((${#ips[@]} - 1))
   for dest in "${ips[@]:1}"; do
-    log "rsync comfy weights ${src} → ${dest} over fabric (not mgmt NIC)"
-    rsync -a --inplace -e "ssh -o BatchMode=yes" \
+    i=$((i + 1))
+    log_step "${i}" "${n}" "rsync comfy weights ${src} → ${dest} over fabric"
+    run_with_heartbeat "rsync ${src} → ${dest}" -- rsync -a --info=progress2 --inplace -e "ssh -o BatchMode=yes" \
       "${SPARK_USER}@${src}:${tree}/" \
       "${SPARK_USER}@${dest}:${tree}/"
   done
@@ -279,7 +280,7 @@ cmd_dispatch() {
     for sid in ${groups[${i}]}; do
       ssh_host "${host}" "./scripts/manage.sh print-shot ${FILM} ${sid}"
     done
-    rsync -a --inplace -e "ssh -o BatchMode=yes" \
+    run_with_heartbeat "rsync gather ${host}" -- rsync -a --info=progress2 --inplace -e "ssh -o BatchMode=yes" \
       "${SPARK_USER}@${host}:${FARM_SHARE}/" \
       "${FARM_SHARE}/out/${host}/"
   done

@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from guide_pack import write_rgb_png
+from operator_log import log as ol_log
 
 PACK_WIDTH = 1024
 PACK_HEIGHT = 1280
@@ -356,6 +357,7 @@ def render_clay_plate(
     Raises:
         ValueError: Camera index out of range.
     """
+    ol_log(f"clay plate camera {camera_index + 1}")
     small = render_clay_rgb(layout, camera_index)
     rgb = _upsample_nearest(
         small, RENDER_WIDTH, RENDER_HEIGHT, PACK_WIDTH, PACK_HEIGHT

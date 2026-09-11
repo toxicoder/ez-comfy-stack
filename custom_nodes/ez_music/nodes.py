@@ -155,6 +155,7 @@ class EZRapLyrics:
         except FileNotFoundError as exc:
             _log(f"rap lyrics prompt missing: {exc}")
             return _pack_text(original, "passthrough")
+        _log("rewriting rap lyrics via on-box GGUF…")
         try:
             rewritten, reason = complete(system, original)
         finally:

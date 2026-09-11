@@ -121,6 +121,7 @@ def overlay_qc(
     exe = ffmpeg or find_ffmpeg()
     if not exe:
         defects.append("ffmpeg missing")
+    print(f"[ez_film] overlay QC {clay} vs {look}", file=sys.stderr)
     report: dict[str, Any] = {
         "ok": False,
         "clay": str(clay),

@@ -739,6 +739,108 @@ exit 0
   [ "${status}" -eq 0 ]
 }
 
+@test "progress: enabled interval color step ok debug bar heartbeat ffmpeg" {
+  # test_helper sets EZ_COMFY_PROGRESS=0
+  run progress_enabled
+  [ "${status}" -ne 0 ]
+  EZ_COMFY_PROGRESS=1
+  run progress_enabled
+  [ "${status}" -eq 0 ]
+
+  run progress_interval_s
+  [ "${output}" = "0" ]
+  EZ_COMFY_PROGRESS_INTERVAL=2
+  run progress_interval_s
+  [ "${output}" = "2" ]
+  EZ_COMFY_PROGRESS_INTERVAL=nope
+  run progress_interval_s
+  [ "${output}" = "2" ]
+
+  run progress_use_color
+  [ "${status}" -ne 0 ]
+
+  run log_step 1 4 "Klein 4B"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"══ 1/4 ══ Klein 4B"* ]]
+  run log_ok "finished"
+  [[ "${output}" == *"✓ finished"* ]]
+  run log_debug "hidden"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"hidden"* ]]
+  LAB_DEBUG=1
+  run log_debug "shown"
+  [[ "${output}" == *"shown"* ]]
+  unset LAB_DEBUG
+  EZ_COMFY_LOG_LEVEL=debug
+  run log_debug "via-level"
+  [[ "${output}" == *"via-level"* ]]
+  unset EZ_COMFY_LOG_LEVEL
+
+  run progress_format_mib 183296
+  [ "${output}" = "179 MiB" ]
+  run progress_format_rate 140288 10
+  [ "${output}" = "13.7 MiB/s" ]
+  run progress_format_elapsed 90
+  [ "${output}" = "1:30" ]
+  run progress_eta_s 10 50 100
+  [ "${output}" = "10" ]
+  run progress_eta_s 0 0 100
+  [ "${output}" = "" ]
+
+  run progress_bar_fill 0 4
+  [ "${output}" = "░░░░" ]
+  run progress_bar_fill 4 4
+  [ "${output}" = "▓▓▓▓" ]
+  run progress_bar 3 7 "Klein"
+  [[ "${output}" == *"3/7"* ]]
+  [[ "${output}" == *"Klein"* ]]
+
+  run progress_emit "tick body"
+  [[ "${output}" == *"tick body"* ]]
+  run progress_newline
+  [ "${status}" -eq 0 ]
+  run progress_heartbeat "pull image" 0
+  [[ "${output}" == *"still running"* ]]
+
+  run ffmpeg_duration_from_args ffmpeg -y -t 90 -i in.mp4 out.mp4
+  [ "${output}" = "90" ]
+  run ffmpeg_duration_from_args ffmpeg -y -i in.mp4 out.mp4
+  [ "${output}" = "" ]
+
+  local prog
+  prog="${TEST_TMP_DIR}/ff.progress"
+  printf 'out_time_ms=2500\nprogress=continue\n' >"${prog}"
+  run progress_ffmpeg_out_time_s "${prog}"
+  [ "${output}" = "2.5" ]
+  run progress_ffmpeg_ended "${prog}"
+  [ "${status}" -ne 0 ]
+  printf 'out_time_us=4000000\nprogress=end\n' >"${prog}"
+  run progress_ffmpeg_out_time_s "${prog}"
+  [ "${output}" = "4.0" ]
+  run progress_ffmpeg_ended "${prog}"
+  [ "${status}" -eq 0 ]
+  run progress_ffmpeg_out_time_s "${TEST_TMP_DIR}/missing.progress"
+  [ "${output}" = "0" ]
+
+  install_mock_bin ffmpeg 'echo "ffmpeg $*" >>"${TEST_TMP_DIR}/ffmpeg.log"; exit 0'
+  EZ_COMFY_PROGRESS=1
+  EZ_COMFY_PROGRESS_INTERVAL=0
+  run run_ffmpeg_logged "encoding concat" -- ffmpeg -y -t 90 -i in.mp4 out.mp4
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"encoding concat"* ]]
+  grep -q -- '-t 90' "${TEST_TMP_DIR}/ffmpeg.log"
+  # interval 0 must not inject -progress (hermetic mocks)
+  if grep -q -- '-progress' "${TEST_TMP_DIR}/ffmpeg.log"; then
+    return 1
+  fi
+
+  run run_with_heartbeat "noop work" -- true
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"noop work"* ]]
+  run run_with_heartbeat "fail work" -- false
+  [ "${status}" -ne 0 ]
+}
+
 @test "safety: parse_gib host_free host_disk headroom confirms" {
   run parse_gib_from_mem_limit 90g
   [ "${output}" = "90" ]

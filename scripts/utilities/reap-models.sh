@@ -278,14 +278,19 @@ reap_one() {
 # Apply selected classes.
 #######################################
 reap_apply() {
-  local f class
+  local f class i=0
   reap_apply_guards || return $?
   if [[ ${YES} -ne 1 ]]; then
     err "--apply requires --yes"
     return 1
   fi
+  log "reap apply class=${CLASS} under ${MODELS_DIR}"
   while IFS= read -r f; do
     [[ -z ${f} ]] && continue
+    i=$((i + 1))
+    if ((i % 25 == 0)); then
+      log "… reap apply scanned ${i} paths (still running)"
+    fi
     class="$(reap_classify_path "${f}")"
     if [[ ${class} == foreign && ${I_FOREIGN} -eq 0 ]]; then
       continue

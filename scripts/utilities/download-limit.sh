@@ -1104,12 +1104,13 @@ cmd_wrap() {
   fi
 
   if shaping_supported && apply_limits "${iface}" "${mbps}"; then
-    dl_log "Kernel bandwidth limit active (~${mbps} Mbps down)"
+    dl_log "limit=${mbps} Mbps kernel HTB on ${iface} — live download progress follows"
   else
     if [[ ${DOWNLOAD_LIMIT_REQUIRE:-} == "1" ]]; then
       die "Failed to apply bandwidth limit on ${iface} (set DOWNLOAD_LIMIT=off to skip, or fix wondershaper/qdisc)"
     fi
     enable_gentle_download_mode "${mbps}" "${iface}"
+    dl_log "limit=${mbps} Mbps gentle HF workers (no kernel HTB) — live download progress follows"
   fi
   dl_log "Running: ${WRAP_ARGS[*]}"
   run_with_signal_forwarding "${WRAP_ARGS[@]}"

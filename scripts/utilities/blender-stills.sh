@@ -313,7 +313,7 @@ cmd_run() {
     bcmd+=(--camera "${CAMERA}")
   fi
   log "dumping still pack → ${dest}"
-  "${bcmd[@]}" || {
+  run_with_heartbeat "Blender still dump → ${dest}" -- "${bcmd[@]}" || {
     err "Blender still dump failed"
     return 1
   }

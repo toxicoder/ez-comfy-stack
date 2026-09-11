@@ -1024,6 +1024,7 @@ def complete(
     timeout_s: int | None = None,
 ) -> tuple[str, str | None]:
     """GPU sidecar when occupancy allows, else local 4B. Empty text plus a reason."""
+    _log("enhancing prompt (sidecar or local 4B)…")
     tokens = DEFAULT_MAX_TOKENS if max_tokens is None else int(max_tokens)
     if tokens < 1:
         tokens = DEFAULT_MAX_TOKENS

@@ -218,7 +218,7 @@ cmd_run() {
   fi
   filter="$(loudnorm_filter)"
   log "loudnorm ${IN_FILE} → ${out} (${filter})"
-  if ! ffmpeg -y -i "${IN_FILE}" -af "${filter}" "${out}"; then
+  if ! run_ffmpeg_logged "loudnorm → ${out}" -- ffmpeg -y -i "${IN_FILE}" -af "${filter}" "${out}"; then
     err "ffmpeg loudnorm failed for ${IN_FILE} (not skipped)"
     return 1
   fi

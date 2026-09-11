@@ -229,6 +229,7 @@ LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache — a token in `.env` is **
 | --- | --- |
 | **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` + `download-llm` |
 | **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
+| **Progress** | `══ 1/4 ══` Klein → Wan → LTX → GGUF, then a `↓` size/MiB/s line per repo. Piped SSH gets newlines instead of a rewriting bar. |
 | **CLI** | Modern **`hf download`** (auto-installed by `setup` / `download-models`) |
 | **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks. Cache hits still need writable `comfy/<subdir>/` dirs; `download-models` sudo-heals each layout dir on link (no manual `chown`). |
 | **LTX size** | Selective `Lightricks/LTX-2.5` distilled set (status floor ~**30 GB**), not the Kijai 2.3 monorepo (~400 GB) |

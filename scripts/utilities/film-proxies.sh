@@ -106,7 +106,7 @@ cmd_run() {
       err "ffmpeg not on PATH"
       return 1
     fi
-    ffmpeg -y -i "${src}" -vf scale=960:528 -c:v h264_nvenc -preset p4 \
+    run_ffmpeg_logged "NVENC proxy → ${out}" -- ffmpeg -y -i "${src}" -vf scale=960:528 -c:v h264_nvenc -preset p4 \
       -b:v 2M -maxrate 2M -bufsize 4M -an "${out}"
     log "wrote ${out}"
   done

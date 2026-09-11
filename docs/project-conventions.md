@@ -11,6 +11,7 @@ tags: [conventions, contributing, safety, shell, google-style]
 - Core principles
 - Repo layout and ownership
 - Shell style (Google Shell Style Guide + project deviations)
+- Operator progress (bars, heartbeats, env)
 - Docker, testing, coverage gate, Pyright (Pylance) + mypy, and branching rules
 - Docs publish and **human-readable formatting** patterns
 
@@ -64,6 +65,7 @@ This project follows that guide for executables and libraries, with the **intent
 | --- | --- |
 | Language | Bash only for executables |
 | STDERR | `log` / `warn` / `err` → stderr; data/JSON → stdout |
+| Progress | Long jobs: start banner, TTY rewrite or periodic newline, end + elapsed. `scripts/lib/progress.sh` + `scripts/lib/operator_log.py`. `EZ_COMFY_PROGRESS=0` disables bars |
 | Comments | File overview header; every library function documented |
 | Function docs | Google-style **Globals / Arguments / Outputs / Returns** blocks |
 | Indent | 2 spaces; no tabs (`shfmt -i 2 -ci`) |
@@ -149,6 +151,24 @@ if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
   main "$@"
 fi
 ```
+
+### Operator progress
+
+Long-running operator commands must not look hung. Shared helpers:
+
+- Shell: `scripts/lib/progress.sh` (sourced from `common.sh`) — `log_step`, `log_ok`, `progress_bar`, `run_with_heartbeat`, `run_ffmpeg_logged`
+- Python: `scripts/lib/operator_log.py` — same prefix and TTY rewrite
+- In-canvas: `custom_nodes/ez_common` — Comfy `ProgressBar` when importable
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `EZ_COMFY_PROGRESS` | `1` | `0` disables bars/heartbeats (`log`/`warn`/`err` stay) |
+| `EZ_COMFY_PROGRESS_INTERVAL` | `2` | Heartbeat seconds (ffmpeg/blender/rsync/docker) |
+| `HF_PROGRESS` / `HF_PROGRESS_INTERVAL` | `1` / `10` | HF disk-growth line (hub/tqdm stay off) |
+| `EZ_COMFY_LOG_LEVEL` | `info` | `debug` ≡ `LAB_DEBUG=1` |
+| `NO_COLOR` | unset | No ANSI when set or when stderr is not a TTY |
+
+Hermetic tests set `EZ_COMFY_PROGRESS=0` and `HF_PROGRESS=0` so suites never sleep on progress monitors.
 
 ### Utility contract
 

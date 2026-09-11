@@ -121,7 +121,11 @@ run_with_signal_forwarding() {
 #   0
 #######################################
 log() {
-  echo -e "${GREEN}[ez-comfy]${NC} $*" >&2
+  if [[ -z ${NO_COLOR:-} && -t 2 ]]; then
+    echo -e "${GREEN}[ez-comfy]${NC} $*" >&2
+  else
+    echo "[ez-comfy] $*" >&2
+  fi
 }
 
 #######################################
@@ -136,7 +140,11 @@ log() {
 #   0
 #######################################
 warn() {
-  echo -e "${YELLOW}[ez-comfy][WARN]${NC} $*" >&2
+  if [[ -z ${NO_COLOR:-} && -t 2 ]]; then
+    echo -e "${YELLOW}[ez-comfy][WARN]${NC} $*" >&2
+  else
+    echo "[ez-comfy][WARN] $*" >&2
+  fi
 }
 
 #######################################
@@ -152,7 +160,11 @@ warn() {
 #   0 (caller controls process exit)
 #######################################
 err() {
-  echo -e "${RED}[ez-comfy][ERROR]${NC} $*" >&2
+  if [[ -z ${NO_COLOR:-} && -t 2 ]]; then
+    echo -e "${RED}[ez-comfy][ERROR]${NC} $*" >&2
+  else
+    echo "[ez-comfy][ERROR] $*" >&2
+  fi
 }
 
 #######################################
@@ -170,6 +182,9 @@ die() {
   err "$@"
   exit 1
 }
+
+# shellcheck source=progress.sh disable=SC1091
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/progress.sh"
 
 #######################################
 # Load a .env file from a directory if present (best-effort).
@@ -456,7 +471,7 @@ EOF
     return 1
   fi
 
-  log "Installing Docker CE (apt preferred; may take a few minutes)..."
+  log "Installing Docker CE (apt preferred; may take a few minutes)…"
 
   # Snap docker breaks GPU tooling — remove if present
   if command -v snap >/dev/null 2>&1 && snap list docker >/dev/null 2>&1; then
@@ -466,8 +481,10 @@ EOF
 
   local apt_ok=0
   if command -v apt-get >/dev/null 2>&1; then
+    log "apt-get update (package lists)…"
     if sudo apt-get update -qq &&
-      sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      run_with_heartbeat "apt-get install docker-ce" -- \
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
         docker-ce docker-ce-cli containerd.io docker-compose-plugin; then
       apt_ok=1
     else
@@ -1832,86 +1849,6 @@ hf_progress_label() {
 }
 
 #######################################
-# Format kibibytes as a human size (MiB or GiB).
-# Globals:
-#   None
-# Arguments:
-#   $1  Size in KiB (integer)
-# Outputs:
-#   e.g. "179 MiB" or "28.4 GiB" on stdout
-# Returns:
-#   0
-#######################################
-hf_format_mib() {
-  local kib="${1:-0}"
-  if [[ ${kib} -lt 0 ]]; then
-    kib=0
-  fi
-  if [[ ${kib} -ge 1048576 ]]; then
-    awk -v k="${kib}" 'BEGIN { printf "%.1f GiB", k / 1048576 }'
-  else
-    awk -v k="${kib}" 'BEGIN { printf "%d MiB", int(k / 1024) }'
-  fi
-}
-
-#######################################
-# Format a transfer rate from KiB delta over seconds.
-# Globals:
-#   None
-# Arguments:
-#   $1  Delta KiB (integer; may be 0)
-#   $2  Interval seconds (positive integer)
-# Outputs:
-#   e.g. "13.7 MiB/s" on stdout
-# Returns:
-#   0
-#######################################
-hf_format_rate() {
-  local delta_kib="${1:-0}"
-  local interval_s="${2:-10}"
-  if [[ ${interval_s} -le 0 ]]; then
-    interval_s=1
-  fi
-  if [[ ${delta_kib} -le 0 ]]; then
-    echo "0 MiB/s"
-    return 0
-  fi
-  awk -v d="${delta_kib}" -v s="${interval_s}" 'BEGIN {
-    mibs = (d / 1024) / s
-    if (mibs >= 100) printf "%.0f MiB/s", mibs
-    else if (mibs >= 10) printf "%.1f MiB/s", mibs
-    else printf "%.2f MiB/s", mibs
-  }'
-}
-
-#######################################
-# Format elapsed seconds as m:ss or h:mm:ss.
-# Globals:
-#   None
-# Arguments:
-#   $1  Elapsed seconds
-# Outputs:
-#   Time string on stdout
-# Returns:
-#   0
-#######################################
-hf_format_elapsed() {
-  local secs="${1:-0}"
-  local h m s
-  if [[ ${secs} -lt 0 ]]; then
-    secs=0
-  fi
-  h=$((secs / 3600))
-  m=$(((secs % 3600) / 60))
-  s=$((secs % 60))
-  if [[ ${h} -gt 0 ]]; then
-    printf '%d:%02d:%02d' "${h}" "${m}" "${s}"
-  else
-    printf '%d:%02d' "${m}" "${s}"
-  fi
-}
-
-#######################################
 # Build progress body (no [ez-comfy] prefix).
 # Globals:
 #   None
@@ -1934,46 +1871,6 @@ hf_progress_line() {
 }
 
 #######################################
-# Emit a progress line: rewrite on TTY stderr, log newline otherwise.
-# Globals:
-#   GREEN, NC, _HF_PROGRESS_ON_TTY (set to 1 after TTY emit)
-# Arguments:
-#   $1  Body line (without prefix)
-# Outputs:
-#   Progress to stderr
-# Returns:
-#   0
-#######################################
-hf_progress_emit() {
-  local body="${1:-}"
-  if [[ -t 2 ]]; then
-    # Clear line + rewrite so we never smash with prior content
-    printf '\r\033[K%s[ez-comfy]%s %s' "${GREEN}" "${NC}" "${body}" >&2
-    _HF_PROGRESS_ON_TTY=1
-  else
-    log "${body}"
-  fi
-}
-
-#######################################
-# End a TTY progress rewrite so the next log starts on a new line.
-# Globals:
-#   _HF_PROGRESS_ON_TTY
-# Arguments:
-#   None
-# Outputs:
-#   Optional newline on stderr
-# Returns:
-#   0
-#######################################
-hf_progress_newline() {
-  if [[ ${_HF_PROGRESS_ON_TTY:-0} == "1" ]]; then
-    printf '\n' >&2
-    _HF_PROGRESS_ON_TTY=0
-  fi
-}
-
-#######################################
 # Download a Hugging Face repo snapshot into --local-dir (or mock in tests).
 # Prefers `hf download` over deprecated `huggingface-cli download` (the latter
 # is a non-working stub on recent huggingface_hub installs and may prompt).
@@ -1985,8 +1882,8 @@ hf_progress_newline() {
 #   LAB_MOCK_HF_DOWNLOAD, HF_TOKEN (read by hub), HF_HOME (caller may set),
 #   LAB_DEBUG, HF_DOWNLOAD_DEBUG, CI, HF_HUB_DISABLE_TELEMETRY,
 #   HF_DOWNLOAD_MAX_WORKERS, HF_PROGRESS (0 disables progress lines),
-#   HF_PROGRESS_INTERVAL (seconds, default 10), HF_LOCK_CLEAR_MID,
-#   HF_RESUME_STALL_S (default 90), HF_RESUME_RETRY (default 1)
+#   HF_PROGRESS_INTERVAL (seconds, default 10), HF_EXPECTED_KIB (optional ETA),
+#   HF_LOCK_CLEAR_MID, HF_RESUME_STALL_S (default 90), HF_RESUME_RETRY (default 1)
 # Arguments:
 #   $@ - Passed to `hf download` / `huggingface-cli download`
 #        (typically REPO --local-dir PATH)
@@ -2113,7 +2010,7 @@ hf_download() {
   fi
 
   local hb_pid="" hpid="" zero_streak=0
-  _HF_PROGRESS_ON_TTY=0
+  _PROGRESS_ON_TTY=0
   # Trap-only handler: SC2329/SC2317 — ShellCheck does not see string trap refs as calls
   # shellcheck disable=SC2317,SC2329
   _hf_dl_signal() {
@@ -2136,7 +2033,7 @@ hf_download() {
   if [[ -n ${dest_dir} && ${HF_PROGRESS:-1} != "0" ]]; then
     mkdir -p "${dest_dir}" 2>/dev/null || true
     (
-      local prev=0 cur delta elapsed body
+      local prev=0 cur delta elapsed body extra eta=""
       prev=$(du -sk "${dest_dir}" 2>/dev/null | awk '{print $1}') || prev=0
       zero_streak=0
       while true; do
@@ -2145,11 +2042,18 @@ hf_download() {
         delta=$((cur - prev))
         prev=${cur}
         elapsed=$(($(date +%s) - start_ts))
+        extra=""
+        if [[ -n ${HF_EXPECTED_KIB:-} && ${HF_EXPECTED_KIB} =~ ^[0-9]+$ && ${HF_EXPECTED_KIB} -gt 0 ]]; then
+          eta="$(progress_eta_s "${elapsed}" "${cur}" "${HF_EXPECTED_KIB}")"
+          if [[ -n ${eta} ]]; then
+            extra="  ETA $(hf_format_elapsed "${eta}")"
+          fi
+        fi
         body="$(hf_progress_line \
           "${progress_label}" \
           "$(hf_format_mib "${cur}")" \
           "$(hf_format_rate "${delta}" "${progress_interval}")" \
-          "$(hf_format_elapsed "${elapsed}")")"
+          "$(hf_format_elapsed "${elapsed}")")${extra}"
         hf_progress_emit "${body}"
         if [[ ${delta} -le 0 ]]; then
           zero_streak=$((zero_streak + 1))
@@ -2237,10 +2141,11 @@ hf_download() {
   _RWSF_EXTRA_PIDS=""
   unset _HF_PROTECTED_PIDS
   # Progress subshell may have left a \r line; always break TTY before final logs
+  progress_newline
   if [[ -t 2 ]]; then
     printf '\n' >&2
   fi
-  _HF_PROGRESS_ON_TTY=0
+  _PROGRESS_ON_TTY=0
   trap - INT TERM
 
   if [[ ${rc} -eq 0 ]]; then

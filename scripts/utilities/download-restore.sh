@@ -180,6 +180,7 @@ cmd_run() {
   fi
   check_hf_cli
   prepare_comfy_layout "${MODELS_DIR}" || exit 1
+  log_step 1 1 "restore ${TIER}"
   dir="$(tier_dir "${TIER}")"
   if tier_files_ready "${TIER}"; then
     log "skip ${TIER}: already present"

@@ -85,6 +85,7 @@ copy_prebuilt_tree() {
   local dest="${2:?}"
   local item base pack
   mkdir -p "${dest}"
+  local n=0
   (
     shopt -s dotglob nullglob
     for item in "${src}"/*; do
@@ -100,11 +101,20 @@ copy_prebuilt_tree() {
             continue
           fi
           cp -a "${pack}" "${dest}/custom_nodes/"
+          n=$((n + 1))
+          if ((n % 10 == 0)); then
+            ep_log "seed copy ${n} items…"
+          fi
         done
         continue
       fi
       cp -a "${item}" "${dest}/"
+      n=$((n + 1))
+      if ((n % 10 == 0)); then
+        ep_log "seed copy ${n} items…"
+      fi
     done
+    ep_log "seed copy finished (${n} top-level items)"
   )
 }
 

@@ -76,6 +76,7 @@ teardown() {
   [ "${status}" -eq 0 ]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DI}\" run --tier fast"
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"══"* ]]
   [[ -e "${MODELS_DIR}/comfy/text_encoders/qwen_3_4b.safetensors" ]]
   [[ -e "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors" ]]
   LAB_MOCK_HF_DOWNLOAD=fail

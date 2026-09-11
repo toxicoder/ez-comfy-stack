@@ -572,11 +572,16 @@ run_one_tier() {
 #   0 on success; 1 if download failed
 #######################################
 cmd_run() {
-  local tier fail=0
+  local tier fail=0 i=0 n=0
+  local -a tiers=()
   check_hf_cli
   prepare_comfy_layout "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
-  for tier in $(tiers_to_process); do
+  read -r -a tiers <<<"$(tiers_to_process)"
+  n="${#tiers[@]}"
+  for tier in "${tiers[@]}"; do
+    i=$((i + 1))
+    log_step "${i}" "${n}" "llm ${tier}"
     if ! run_one_tier "${tier}"; then
       fail=1
     fi

@@ -83,6 +83,17 @@ def _log(message: str) -> None:
     print(f"[ez_dub] {message}", file=sys.stderr)
 
 
+def _progress(total: int) -> Any:
+    """Comfy ProgressBar when the sibling pack is importable."""
+    _ensure_lab_custom_nodes_path()
+    try:
+        from ez_common import node_progress
+
+        return node_progress(total)
+    except Exception:  # noqa: BLE001 — pytest / missing pack
+        return None
+
+
 def _ensure_lab_custom_nodes_path() -> None:
     """Make sibling ez_* packs importable under ComfyUI 0.34+ load_custom_node.
 
@@ -874,11 +885,15 @@ def analyze_pcm(
             return [], detected, reason
     else:
         return [], "", MISSING_SOURCE_STATUS
+    _log(f"ASR {len(raw)} segments — clustering speakers")
+    bar = _progress(max(len(raw), 1))
     vectors: list[list[float]] = []
     for turn in raw:
         chunk = _slice_pcm(samples, rate, float(turn["t0"]), float(turn["t1"]))
         turn["rms"] = rms(chunk)
         vectors.append(speaker_embed(chunk, rate))
+        if bar is not None:
+            bar.update(1)
     speakers = cluster_embeddings(vectors, max_speakers=max_speakers)
     for turn, speaker in zip(raw, speakers):
         turn["speaker"] = speaker
@@ -1796,13 +1811,18 @@ def render_mix(
     cloned = False
     cloned_n = 0
     last_err = ""
+    _log(f"render {len(turns)} turns ({name})")
+    bar = _progress(max(len(turns), 1))
     for i, turn in enumerate(turns):
         nxt_t0 = turns[i + 1]["t0"] if i + 1 < len(turns) else (len(samples) / max(rate, 1))
         spill = max(0.0, float(nxt_t0) - float(turn["t1"]))
         spoken = _spoken_clone_text(turn, payload)
         ref = refs.get(str(turn["speaker"]))
+        if bar is not None:
+            bar.update(1)
         if not spoken:
             continue
+        _log(f"TTS {i + 1}/{len(turns)} {turn.get('speaker')}")
         had_spoken = True
         pcm, sr, err = synthesize_turn(
             spoken,
