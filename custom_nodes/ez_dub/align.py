@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 import math
+import shutil
+import struct
+import subprocess
+from collections.abc import Callable
 from typing import Any
 
 SAMPLE_RATE = 24000
@@ -10,6 +14,12 @@ MAX_SPEED = 1.25
 MIN_STRETCH = 0.88
 XFADE_MS = 30
 STRETCH_WINDOW_S = 0.02
+STRETCH_SEARCH_S = 0.005
+ATEMPO_MIN = 0.5
+ATEMPO_MAX = 2.0
+
+# Tests inject this to keep fit_turn hermetic (no host ffmpeg).
+stretch_hook: Callable[[list[float], int, int], list[float]] | None = None
 
 
 def rms(samples: list[float]) -> float:
@@ -60,8 +70,10 @@ def time_stretch(
     """Pitch-preserving WSOLA stretch to ``out_len`` samples.
 
     Linear resample changes pitch (chipmunk / helium). Output hop is
-    fixed; input hop follows ``out_len / len(samples)``. A small lag
-    search keeps overlap in phase. Short clips fall back to linear.
+    fixed; input hop follows ``out_len / len(samples)``. Lag search is
+    capped at 5 ms and indexed with the input hop. Short clips fall
+    back to linear. Production prefers ffmpeg ``atempo`` via
+    :func:`pitch_preserving_stretch`.
 
     Arguments:
         samples: Mono PCM.
@@ -94,8 +106,9 @@ def time_stretch(
     hann = [0.5 - 0.5 * math.cos(2.0 * math.pi * i / last_i) for i in range(win)]
     acc = [0.0] * dest
     wsum = [0.0] * dest
-    search = max(1, int(round(hop_in)))
+    search = max(1, int(round(STRETCH_SEARCH_S * sr)))
     overlap = max(1, win - hop_out)
+    hop_in_i = max(1, int(round(hop_in)))
     prev_src = 0
     for grain in range(n_grains):
         natural = int(round(grain * hop_in))
@@ -109,18 +122,23 @@ def time_stretch(
             hi = min(n - win, natural + search)
             best = natural
             best_c = -1e18
+            prev_tail = prev_src + hop_in_i
+            if prev_tail + overlap > n:
+                prev_tail = max(0, n - overlap)
             cand = lo
-            prev_tail = prev_src + hop_out
             while cand <= hi:
                 corr = 0.0
                 i = 0
                 while i < overlap:
-                    corr += float(samples[prev_tail + i]) * float(samples[cand + i])
-                    i += 2
+                    src_i = prev_tail + i
+                    if src_i >= n:
+                        break
+                    corr += float(samples[src_i]) * float(samples[cand + i])
+                    i += 1
                 if corr > best_c:
                     best_c = corr
                     best = cand
-                cand += 2
+                cand += 1
             src = best
         prev_src = src
         dst = grain * hop_out
@@ -133,6 +151,103 @@ def time_stretch(
     return [acc[i] / wsum[i] if wsum[i] > 1e-8 else 0.0 for i in range(dest)]
 
 
+def _ffmpeg_atempo(
+    samples: list[float], out_len: int, rate: int
+) -> list[float] | None:
+    """Pitch-preserving stretch via ffmpeg ``atempo``. None on miss/fail.
+
+    Arguments:
+        samples: Mono PCM.
+        out_len: Desired length in samples.
+        rate: Sample rate.
+    Returns:
+        PCM of length ``out_len``, or None when ffmpeg cannot run.
+    """
+    dest = int(out_len)
+    n = len(samples)
+    sr = int(rate) or SAMPLE_RATE
+    if dest <= 0 or n <= 0 or sr < 1 or n == dest:
+        return None
+    if shutil.which("ffmpeg") is None:
+        return None
+    factor = n / dest
+    if factor < ATEMPO_MIN or factor > ATEMPO_MAX:
+        return None
+    raw = b"".join(struct.pack("<f", float(value)) for value in samples)
+    try:
+        proc = subprocess.run(
+            [
+                "ffmpeg",
+                "-nostdin",
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-y",
+                "-f",
+                "f32le",
+                "-ar",
+                str(sr),
+                "-ac",
+                "1",
+                "-i",
+                "pipe:0",
+                "-filter:a",
+                f"atempo={factor:.6f}",
+                "-f",
+                "f32le",
+                "pipe:1",
+            ],
+            input=raw,
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    if int(proc.returncode) != 0 or not proc.stdout:
+        return None
+    count = len(proc.stdout) // 4
+    if count <= 0:
+        return None
+    unpacked = struct.unpack("<" + "f" * count, proc.stdout[: count * 4])
+    pcm = [float(value) for value in unpacked]
+    if len(pcm) == dest:
+        return pcm
+    return resample_linear(pcm, dest)
+
+
+def pitch_preserving_stretch(
+    samples: list[float],
+    out_len: int,
+    rate: int = SAMPLE_RATE,
+) -> list[float]:
+    """Stretch to ``out_len`` without changing pitch.
+
+    Prefers ffmpeg ``atempo``, then WSOLA. Tests may set ``stretch_hook``.
+
+    Arguments:
+        samples: Mono PCM.
+        out_len: Desired length in samples.
+        rate: Sample rate.
+    Returns:
+        New list of length ``out_len`` (empty when out_len <= 0).
+    """
+    dest = int(out_len)
+    n = len(samples)
+    if dest <= 0:
+        return []
+    if n == 0:
+        return [0.0] * dest
+    if n == dest:
+        return [float(x) for x in samples]
+    hook = stretch_hook
+    if hook is not None:
+        return hook(samples, dest, int(rate) or SAMPLE_RATE)
+    got = _ffmpeg_atempo(samples, dest, rate)
+    if got is not None:
+        return got
+    return time_stretch(samples, dest, rate)
+
+
 def fit_turn(
     synth: list[float],
     rate: int,
@@ -143,16 +258,21 @@ def fit_turn(
 ) -> tuple[list[float], dict[str, Any]]:
     """Fit a clone into ``window_s``, spilling only into the following gap.
 
+    Never time-compress more than ``max_speed`` (default 1.25×). Overflow
+    after that fade-trims the start of the sentence. ``min_stretch`` is
+    accepted for call-site compatibility and is not stacked with max_speed.
+
     Arguments:
         synth: Synthesized PCM.
         rate: Sample rate.
         window_s: Original turn length in seconds.
         spill_s: Seconds of following gap that may be used.
-        max_speed: TTS speed ceiling (pitch-preserving stretch).
-        min_stretch: Time-stretch floor (below this, trim).
+        max_speed: Time-compression ceiling (pitch-preserving stretch).
+        min_stretch: Ignored (legacy stacked floor). Cap is max_speed only.
     Returns:
         ``(pcm, flags)`` with speed/stretch/trimmed/padded/spill.
     """
+    del min_stretch
     flags: dict[str, Any] = {
         "speed": 1.0,
         "stretch": 1.0,
@@ -175,13 +295,21 @@ def fit_turn(
     if n <= max_len:
         flags["spill"] = True
         return [float(x) for x in synth], flags
-    min_len = max(1, int(round(n * float(min_stretch) / float(max_speed))))
-    flags["speed"] = float(max_speed)
-    flags["stretch"] = float(min_stretch)
+    cap = float(max_speed) if max_speed else MAX_SPEED
+    if cap < 1.0:
+        cap = 1.0
+    min_ok = max(1, int(math.ceil(n / cap)))
     flags["spill"] = max_len > target
-    if min_len > max_len:
-        flags["trimmed"] = True
-    return time_stretch(synth, max_len, sr), flags
+    if max_len >= min_ok:
+        flags["speed"] = n / max_len
+        flags["stretch"] = max_len / n
+        return pitch_preserving_stretch(synth, max_len, sr), flags
+    flags["trimmed"] = True
+    flags["speed"] = cap
+    flags["stretch"] = 1.0 / cap
+    stretched = pitch_preserving_stretch(synth, min_ok, sr)
+    trimmed, _lock = lock_duration(stretched, max_len, room=None, rate=sr)
+    return trimmed, flags
 
 
 def lock_duration(

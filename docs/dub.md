@@ -10,7 +10,7 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 
 - Rights gate (required) vs the original-character podcast lane
 - App Mode: source file dropdown + upload (or URL), languages, stage, clone engine, Clone CFG
-- Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → merge → translate → clone → pitch-preserving duration lock
+- Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → merge → translate → clone → duration lock (≤1.25×, then spill, then fade-trim)
 - YouTube Studio multi-language audio upload (audio-only job-dir WAV + SRT)
 - `download-dub` usage, sequential Queue (Stage **analyze** first), and in-graph loudness
 - Qwen3-TTS opt-in: wheel (`--no-deps`) vs complete snapshot vs nested tokenizer; fail-fast empty mix
@@ -53,7 +53,7 @@ Do not paste celebrity reference WAVs. Refs are extracted from **this** job’s 
 
 ## Quality bar
 
-Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent), pitch-preserving duration lock, same-speaker merge when the gap is under 0.35 s, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and `qc.json`. Editable translation JSON is the other lever (Stage **analyze**, edit, Rewrite **off**, Stage **render**). Do not ship Stage **all** blindly.
+Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent), duration lock that pitch-preserves **up to 1.25×** then spills into the following gap then fade-trims (it does not crush a 40 s clone into a 2 s window), same-speaker merge when the gap is under 0.35 s, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and `qc.json`. After render, A/B `dubs/<slug>/render/turn_NNNN.raw.wav` (TTS) vs `turn_NNNN.wav` (fitted). Editable translation JSON is the other lever (Stage **analyze**, edit, Rewrite **off**, Stage **render**). Do not ship Stage **all** blindly.
 
 Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera lip sync. **No lip-sync OSS** (Wav2Lip stays banned). Mouths will not match on talking-head video.
 
@@ -65,7 +65,7 @@ Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera l
 | Speakers | Chatterbox `VoiceEncoder` + `ve.pt` (same embedding the clone uses). Energy fingerprint if the wheel is missing | MIT | `download-dub --tier clone` |
 | VAD helper | faster-whisper Silero filter; ONNX on disk is the download leftover | MIT | `download-dub --tier asr` |
 | Translate | On-box Qwen3-4B-Instruct GGUF, **one turn at a time** (ISO source → target, temp 0.3, 120 s timeout). Needs `llama-cpp-python` CPU wheel | Apache 2.0 | GGUF already in `download-models`; wheel via CPU extra-index as `--index-url`, `download-dub`, or Queue self-heal |
-| Clone | Chatterbox Multilingual V3 (cached `from_local` + ISO `language_id`, PerTh on). Cross-lang `cfg_weight` auto is 0. Lines over 300 characters split. First Queue is offline when the clone pack is complete (`Cangjie5_TC.json` + `MODELS_DIR/pkuseg`). ~40 s/turn on GB10 is sequential sampling, not a leftover download | MIT | `download-dub --tier clone` |
+| Clone | Chatterbox Multilingual V3 (cached `from_local` + ISO `language_id`, PerTh on). Cross-lang `cfg_weight` auto is 0. Lines over 300 characters split. Duration lock: ffmpeg `atempo` ≤1.25×, then spill, then fade-trim. First Queue is offline when the clone pack is complete (`Cangjie5_TC.json` + `MODELS_DIR/pkuseg`). ~40 s/turn on GB10 is sequential sampling, not a leftover download | MIT | `download-dub --tier clone` |
 | Clone alt | Qwen3-TTS 0.6B Base (`generate_voice_clone` + the same per-speaker refs). Wheel and weights are **separate**. Missing extra fail-fasts (one Dub status, empty mix). **No** silent fallback to chatterbox-ml | Apache 2.0 | Wheel: `pip install --no-deps qwen-tts` (extras first; never unconstrained). Weights: `download-podcast --tier qwen3tts` (complete Base + nested 12Hz tokenizer) |
 
 Qwen3-TTS is **honest opt-in**. Entrypoint does **not** pip-install `qwen-tts` on start (official wheel pins `transformers==4.57.3` and would fight Comfy 0.34.6 + torch 2.14+cu130). `download-podcast --tier qwen3tts` with compose **up** installs extras (`einops`, `soundfile`) then `qwen-tts --no-deps`. Queue with **Clone engine** `qwen3tts` and no extra returns immediately: one Dub status, empty mix, never the original recording, never chatterbox-ml. A weights-only snapshot (`model.safetensors` alone) is **incomplete** — Base needs `config.json` + text tokenizer files + nested `speech_tokenizer/`.

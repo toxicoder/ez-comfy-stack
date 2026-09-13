@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import os
 import shutil
+import struct
 import sys
 import types
 from pathlib import Path
@@ -449,9 +450,12 @@ def test_fit_turn_pad_spill_trim() -> None:
     long_pcm = [0.2] * int(0.2 * rate)
     fitted, meta = align.fit_turn(long_pcm, rate, window, spill_s=0.0)
     assert len(fitted) == int(round(window * rate))
-    assert meta["trimmed"] is True or meta["speed"] > 1.0
+    assert meta["trimmed"] is True
+    min_ok = int(math.ceil(len(long_pcm) / align.MAX_SPEED))
+    assert min_ok > len(fitted)
     spilled, spill_flags = align.fit_turn(long_pcm, rate, window, spill_s=0.2)
     assert spill_flags["spill"] is True
+    assert len(spilled) == len(long_pcm)
     assert len(spilled) > len(fitted)
 
 
@@ -578,6 +582,7 @@ def test_render_uses_tts_hook(tmp_path: Path, monkeypatch) -> None:
     assert (dest / "ez_dub.es.srt").is_file()
     assert "speakers" in status
     assert "cloned" in status
+    assert (dest / "render" / "turn_0001.raw.wav").is_file()
 
 
 def test_render_mix_yt_wav_equals_source_length(
@@ -2265,6 +2270,7 @@ def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch) -> No
     assert seen[0]["exaggeration"] == 0.5
     assert seen[0]["language_id"] == "es"
     assert seen[0]["audio_prompt_path"] == str(ref)
+    assert seen[0]["repetition_penalty"] == pipeline.CLONE_REPETITION_PENALTY
     pcm2, _rate, err2 = pipeline._try_chatterbox(
         "Adios",
         "es",
@@ -2275,7 +2281,7 @@ def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch) -> No
     )
     assert err2 == ""
     assert pcm2
-    assert "audio_prompt_path" not in seen[1]
+    assert seen[1]["audio_prompt_path"] == str(ref)
 
 
 def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch) -> None:
@@ -2470,8 +2476,260 @@ def test_fit_turn_overflow_keeps_pitch() -> None:
     sine = [math.sin(2 * math.pi * 440 * i / rate) for i in range(rate)]
     fitted, meta = align.fit_turn(sine, rate, 0.5, spill_s=0.0)
     assert len(fitted) == int(round(0.5 * rate))
-    assert meta["trimmed"] is True or meta["speed"] > 1.0
+    assert meta["trimmed"] is True
     assert abs(_f0(fitted, rate) - _f0(sine, rate)) < 30
+
+
+def test_fit_turn_does_not_crush_extreme() -> None:
+    rate = 24000
+    n = rate * 8
+    sine = [math.sin(2 * math.pi * 440 * i / rate) for i in range(n)]
+    align.stretch_hook = align.time_stretch
+    try:
+        fitted, meta = align.fit_turn(sine, rate, 1.0, spill_s=0.0)
+    finally:
+        align.stretch_hook = None
+    dest = int(round(1.0 * rate))
+    assert len(fitted) == dest
+    assert meta["trimmed"] is True
+    min_ok = int(math.ceil(n / align.MAX_SPEED))
+    stretched = align.time_stretch(sine, min_ok, rate)
+    crushed = align.time_stretch(sine, dest, rate)
+    skip = int(0.05 * rate)
+    take = int(0.3 * rate)
+
+    def _mse(left: list[float], right: list[float]) -> float:
+        pair = list(zip(left, right))
+        return sum((a - b) ** 2 for a, b in pair) / max(len(pair), 1)
+
+    body = fitted[skip : skip + take]
+    assert _mse(body, stretched[skip : skip + take]) < _mse(
+        body, crushed[skip : skip + take]
+    )
+    assert abs(_f0(fitted, rate) - 440) < 30
+
+
+def test_crop_hallucination_tail_keeps_voiced_prefix() -> None:
+    rate = 24000
+    voiced = [0.2] * (rate * 2)
+    noise = [0.2 if i % 2 == 0 else -0.2 for i in range(rate * 6)]
+    out = pipeline.crop_hallucination_tail(voiced + noise, rate, "Hola equipo")
+    dur = len(out) / rate
+    assert 0.5 < dur < 2.5
+    expected = pipeline.expected_speech_s("Hola equipo") * pipeline.TAIL_SLACK
+    assert dur <= expected + 0.05
+
+
+def test_normalize_clone_pcm_rescales_int_range() -> None:
+    out = pipeline.normalize_clone_pcm([16000.0, -16000.0, 8000.0])
+    mag = max(abs(x) for x in out)
+    assert abs(mag - pipeline.REF_PEAK) < 1e-6
+    assert pipeline.normalize_clone_pcm([0.1, -0.2]) == [0.1, -0.2]
+    assert pipeline.normalize_clone_pcm([]) == []
+    scaled = pipeline._pcm_list([16000, -16000])
+    assert max(abs(x) for x in scaled) <= pipeline.REF_PEAK + 1e-6
+
+
+def test_is_speech_like_rejects_nyquist_square() -> None:
+    rate = 24000
+    noise = [0.3 if i % 2 == 0 else -0.3 for i in range(rate)]
+    sine = [math.sin(2 * math.pi * 440 * i / rate) for i in range(rate)]
+    assert pipeline.is_speech_like(noise, rate) is False
+    assert pipeline.is_speech_like(sine, rate) is True
+    assert pipeline.is_speech_like([0.0001] * rate, rate) is False
+    assert pipeline.is_speech_like([], rate) is False
+
+
+def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+
+    def _tts(text, language, ref_wav, engine):
+        del text, language, ref_wav, engine
+        return [0.3 if i % 2 == 0 else -0.3 for i in range(rate * 2)], rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert mix
+    assert len(mix) == len(samples)
+    assert "unvoiced" in status
+    assert "0 turns cloned" in status
+    assert (dest / "ez_dub_yt.wav").is_file()
+    qc = (dest / "qc.json").read_text(encoding="utf-8")
+    assert "clone_unvoiced" in qc
+
+
+def test_render_mix_speed_widget_does_not_stack(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.2] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+    seen_cap: list[float] = []
+    real_fit = pipeline.fit_turn
+
+    def _fit(
+        pcm: list[float],
+        rate_i: int,
+        window: float,
+        spill_s: float = 0.0,
+        max_speed: float = align.MAX_SPEED,
+        min_stretch: float = align.MIN_STRETCH,
+    ):
+        seen_cap.append(float(max_speed))
+        return real_fit(
+            pcm,
+            rate_i,
+            window,
+            spill_s=spill_s,
+            max_speed=max_speed,
+            min_stretch=min_stretch,
+        )
+
+    monkeypatch.setattr(pipeline, "fit_turn", _fit)
+
+    def _tts(text, language, ref_wav, engine):
+        del language, ref_wav, engine
+        n = max(rate, len(text) * 80)
+        return [0.2] * n, rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, _out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+            speed=1.5,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert mix
+    assert "cloned" in status
+    assert seen_cap
+    assert all(cap <= align.MAX_SPEED + 1e-9 for cap in seen_cap)
+
+
+def test_ffmpeg_atempo_mocked(monkeypatch) -> None:
+    class _Proc:
+        returncode = 0
+        stdout = struct.pack("<" + "f" * 100, *([0.1] * 100))
+
+    seen: list[list[str]] = []
+
+    def _run(cmd: list[str], **kwargs):
+        del kwargs
+        seen.append(list(cmd))
+        return _Proc()
+
+    monkeypatch.setattr(align.shutil, "which", lambda _name: "/usr/bin/ffmpeg")
+    monkeypatch.setattr(align.subprocess, "run", _run)
+    out = align._ffmpeg_atempo([0.1] * 200, 100, 24000)
+    assert out is not None
+    assert len(out) == 100
+    blob = " ".join(seen[0])
+    assert "atempo=" in blob
+    monkeypatch.setattr(align.shutil, "which", lambda _name: None)
+    assert align._ffmpeg_atempo([0.1] * 200, 100, 24000) is None
+
+
+def test_pitch_preserving_stretch_uses_hook() -> None:
+    def _hook(samples: list[float], out_len: int, rate: int) -> list[float]:
+        del samples, rate
+        return [0.42] * out_len
+
+    align.stretch_hook = _hook
+    try:
+        out = align.pitch_preserving_stretch([0.1] * 80, 40, 24000)
+    finally:
+        align.stretch_hook = None
+    assert out == [0.42] * 40
+
+
+def test_clone_prep_helpers_edge_cases() -> None:
+    assert pipeline.expected_speech_s("") == 0.35
+    assert pipeline.zero_crossing_rate([0.1], 24000) == 0.0
+    assert pipeline.voiced_fraction([], 24000) == 0.0
+    short = [0.2] * 100
+    assert pipeline.crop_hallucination_tail(short, 24000, "Hola") == short
+    assert align.pitch_preserving_stretch([0.1] * 10, 0, 24000) == []
+    same = [0.1, 0.2, 0.3]
+    assert align.pitch_preserving_stretch(same, 3, 24000) == same
+    empty_fit, flags = align.fit_turn([], 24000, 0.01)
+    assert flags["padded"] is True
+    assert len(empty_fit) == int(round(0.01 * 24000))
+    stretched = align.pitch_preserving_stretch([0.2] * 2400, 2000, 24000)
+    assert len(stretched) == 2000
+
+
+def test_ffmpeg_atempo_fail_paths(monkeypatch) -> None:
+    monkeypatch.setattr(align.shutil, "which", lambda _name: "/usr/bin/ffmpeg")
+    assert align._ffmpeg_atempo([], 10, 24000) is None
+    assert align._ffmpeg_atempo([0.1] * 10, 0, 24000) is None
+    assert align._ffmpeg_atempo([0.1] * 10, 10, 24000) is None
+    assert align._ffmpeg_atempo([0.1] * 400, 100, 24000) is None
+
+    def _boom(*_args, **_kwargs):
+        raise OSError("no ffmpeg")
+
+    monkeypatch.setattr(align.subprocess, "run", _boom)
+    assert align._ffmpeg_atempo([0.1] * 200, 100, 24000) is None
+
+    class _Bad:
+        returncode = 1
+        stdout = b""
+
+    monkeypatch.setattr(align.subprocess, "run", lambda *_a, **_k: _Bad())
+    assert align._ffmpeg_atempo([0.1] * 200, 100, 24000) is None
+
+
+def test_qc_merges_extra_flags() -> None:
+    from ez_dub.qc import evaluate_qc
+
+    report = evaluate_qc(
+        [0.5] * 24000,
+        24000,
+        [
+            {
+                "t0": 0.0,
+                "t1": 1.0,
+                "text": "Hola.",
+                "text_target": "Hola.",
+            }
+        ],
+        target_language="es",
+        peak=0.89,
+        extra_flags=["trimmed_clone", "clone_unvoiced"],
+    )
+    flags = set(report.get("flags") or [])
+    assert "trimmed_clone" in flags
+    assert "clone_unvoiced" in flags
 
 
 def test_try_qwen3tts_passes_ref_audio_and_text(
