@@ -10,10 +10,10 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 
 - Queue the rap **draft** first, then the **full** track
 - One hundred thirty-five **180 s** Nill Bye examples under `_lab/audio/nill-bye/phaseN/` (Queue on their own; phase0 lab catalog, phase1 style pack, phase2 trap/EDM pack, phase3 civic variety, phase4 civic club, phase5 federal variety, phase6 federal club, phase7 progress variety, phase8 progress club; exclusive bars per take)
-- Eighty-five **180 s** Drive-through rave-set EDM examples under `_lab/audio/drive-through/phaseN/` (Queue on their own; phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty, phase4 Secret Homage; American festival EDM, drop early, dirty pyro on every drop, chest-sub bass; vocals are a rare DJ treat on two graphs)
+- Eighty-five **180 s** Drive-through bass-set EDM examples under `_lab/audio/drive-through/phaseN/` (Queue on their own; phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty, phase4 Secret Homage; warped hybrid-trap EDM, drop first, hard warpy drops, trap drums, chest-sub bass, no quiet dips; vocals are a rare DJ treat on two graphs)
 - Queued files are `Artist - Song Title - vN` (N matches the phase folder)
 - App Mode: tags, lyrics, rewrite, vocal/instrumental, duration
-- Tags vs lyrics; `[verse]` / `[chorus]` / `[spoken word]` as vocal hints; EDM uses `[inst]` / `[intro]` / `[outro]`, plus one short `[chorus]` chop on the two DJ-shout treats
+- Tags vs lyrics; `[verse]` / `[chorus]` / `[spoken word]` as vocal hints; EDM uses `[inst]` / `[outro]`, plus one 1–2 word `[chorus]` chop on the two DJ-shout treats
 - Original lyrics only — no “in the style of \<living artist\>”
 - ACE-Step vocal = invented identity, not a clone
 - DistroKid / Spotify / YouTube / USCO Part 2 disclosure
@@ -25,7 +25,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 
 - A first 32 s boom-bap draft on one NVIDIA DGX Spark without cloud music APIs
 - One hundred thirty-five 180 s original Nill Bye takes (vs Rake in phases 0–2; civic satire of Texas Gov. Greg Abbott in phases 3–4; civic satire of Donald Trump in phases 5–6; progress/solutions in phases 7–8) with exclusive verses and punchlines, without cloud music APIs
-- Eighty-five 180 s original Drive-through EDM takes (American festival EDM, BPM 140–176, drop-early dirty pyro, chest-sub bass; eighty-three instrumental, two DJ-shout treats) without cloud music APIs
+- Eighty-five 180 s original Drive-through EDM takes (warped hybrid-trap EDM, BPM 140–176, drop-first warpy drops, trap drums, chest-sub bass; eighty-three instrumental, two DJ-shout treats) without cloud music APIs
 - Reusing the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - Keeping the visual studio bootable when the music pack is missing
 - Muxing a cover still + FLAC into a YouTube MP4 without changing the rap graphs
@@ -295,7 +295,7 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 Eighty-five extra full-track graphs under **`_lab/audio/drive-through/phase0|phase1|phase2|phase3|phase4/`**. Same AIO, sampler, occupancy **audio**, and Klein cover handoff as the 96 s full track. App **Duration (seconds)** defaults to **180**. Queue **on their own** — draft-first is the generic rap lane, not a prerequisite. A longer Queue is expected. SaveAudio prefix is **`Drive-through - Song Title - vN`** (N = phase).
 
-Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live rave DJ set**. Original **American festival EDM** arrangements (bass house, big room, future bass, brostep, festival trap, drumstep, bounce house, color bass, riddim, dirty dubstep — not techno). No living-DJ names. No famous-hook paraphrases. Eighty-three takes lock `instrumental, no vocals, no singing` (App **Vocal / instrumental** = instrumental). Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, one short `[chorus]` chop, no `[verse]`. Arrangement scores are production cues in `[inst]` blocks — unique flow per take, drop in the first or second section, dirty pyro on every drop, chest-sub / low 808, fast section changes, mix-in/out — not a Nill Bye verse/chorus loop and not the same melody-drop-break-drop skeleton on every graph. Some takes add dual-action pedal bass (sub swell + driven punch). Phase2, phase3, and phase4 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release.
+Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live bass DJ set**. Original **warped hybrid-trap EDM** (hybrid trap, riddim, tearout, brostep, wave bass, color bass, drumstep, dirty dubstep, neuro bass, chest/dirty bass — not techno, not big room, not progressive house). No living-DJ names. No famous-hook paraphrases. Eighty-three takes lock `instrumental, no vocals, no singing, no choir, no vocal chops` (App **Vocal / instrumental** = instrumental). Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, one 1–2 word `[chorus]` chop, no `[verse]`. Arrangement scores are production cues in `[inst]` blocks — drop first, hard warpy drops, trap drums, chest-sub / 808, no quiet dips, unique flow per take — not a Nill Bye verse/chorus loop and not a melody-drop-break-drop skeleton. Some takes add dual-action pedal bass under rolling hats. Phase2, phase3, and phase4 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release.
 
 This is **not** the Nill Bye trap/EDM pack. Those graphs are rap **over** club beds with a dry booth. Drive-through is dance EDM (mostly instrumental).
 
@@ -305,117 +305,111 @@ Catalog order is the recommended live-set queue (each graph still Queues alone).
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **music-edm-drive-through-night-window-lab-example** | bass house **145**, seed **193** | `Drive-through - Night Window - v0` | Opener: dirty 808 pyro from the first drop |
-| **music-edm-drive-through-open-lane-lab-example** | festival bass **152**, seed **191** | `Drive-through - Open Lane - v0` | Drop-first ID, second stacked pyro wreck |
-| **music-edm-drive-through-exit-seven-lab-example** | electro house **142**, seed **233** | `Drive-through - Exit Seven - v0` | Filter mix-in, two dirty electro pyro drops |
-| **music-edm-drive-through-skyline-pass-lab-example** | progressive house **145**, seed **199** | `Drive-through - Skyline Pass - v0` | Drop-first anthem, three pyro wrecks |
-| **music-edm-drive-through-on-ramp-lab-example** | festival bass **155**, seed **197** | `Drive-through - On-Ramp - v0` | Reverse-bass dirty pyro, three wrecks |
-| **music-edm-drive-through-tunnel-bass-lab-example** | dirty bass **150**, seed **257** | `Drive-through - Tunnel Bass - v0` | Drop-first industrial 808, three pyro drops |
-| **music-edm-drive-through-wide-open-lab-example** | big room **150**, seed **239** | `Drive-through - Wide Open - v0` | **DJ shout treat** (`hands up`) + dirty mainstage pyro |
-| **music-edm-drive-through-overpass-lab-example** | riddim **150**, seed **227** | `Drive-through - Overpass - v0` | Drop-first wobble, four-floor pyro flip |
-| **music-edm-drive-through-second-wave-lab-example** | festival remix **150**, seed **241** | `Drive-through - Second Wave - v0` | **Remix vocal-chop treat**, drop-first growl pyro |
-| **music-edm-drive-through-freight-pulse-lab-example** | drumstep **176**, seed **211** | `Drive-through - Freight Pulse - v0` | Drop-first amen, four dirty pyro wrecks |
-| **music-edm-drive-through-keep-going-lab-example** | drumstep **170**, seed **251** | `Drive-through - Keep Going - v0` | Drop-first 808 pyro, triple wreck |
-| **music-edm-drive-through-horizon-kick-lab-example** | festival bass **165**, seed **263** | `Drive-through - Horizon Kick - v0` | Drop-first reverse bass pyro |
-| **music-edm-drive-through-clean-wreckage-lab-example** | dirty electro **150**, seed **269** | `Drive-through - Clean Wreckage - v0` | Immediate dirty electro, three pyro wrecks |
-| **music-edm-drive-through-heart-lane-lab-example** | future bass **145**, seed **223** | `Drive-through - Heart Lane - v0` | Drop-first warm 808 pyro |
-| **music-edm-drive-through-dawn-receipt-lab-example** | progressive house **140**, seed **229** | `Drive-through - Dawn Receipt - v0` | Hour-1 closer, two dirty pyro wrecks |
+| **music-edm-drive-through-night-window-lab-example** | hybrid trap **145**, seed **193** | `Drive-through - Night Window - v0` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-open-lane-lab-example** | riddim **152**, seed **191** | `Drive-through - Open Lane - v0` | Drop-first riddim warp |
+| **music-edm-drive-through-exit-seven-lab-example** | tearout **142**, seed **233** | `Drive-through - Exit Seven - v0` | Drop-first tearout warp |
+| **music-edm-drive-through-skyline-pass-lab-example** | brostep **145**, seed **199** | `Drive-through - Skyline Pass - v0` | Drop-first brostep warp |
+| **music-edm-drive-through-on-ramp-lab-example** | wave bass **155**, seed **197** | `Drive-through - On-Ramp - v0` | Drop-first wave bass warp |
+| **music-edm-drive-through-tunnel-bass-lab-example** | dirty bass **150**, seed **257** | `Drive-through - Tunnel Bass - v0` | Drop-first dirty bass warp |
+| **music-edm-drive-through-wide-open-lab-example** | color bass **150**, seed **239** | `Drive-through - Wide Open - v0` | **DJ shout treat.** Drop-first color bass warp |
+| **music-edm-drive-through-overpass-lab-example** | dirty dubstep **150**, seed **227** | `Drive-through - Overpass - v0` | Drop-first dirty dubstep warp |
+| **music-edm-drive-through-second-wave-lab-example** | hybrid trap **150**, seed **241** | `Drive-through - Second Wave - v0` | **DJ shout treat.** Drop-first hybrid trap warp |
+| **music-edm-drive-through-freight-pulse-lab-example** | drumstep **176**, seed **211** | `Drive-through - Freight Pulse - v0` | Drop-first drumstep warp |
+| **music-edm-drive-through-keep-going-lab-example** | neuro bass **170**, seed **251** | `Drive-through - Keep Going - v0` | Drop-first neuro bass warp |
+| **music-edm-drive-through-horizon-kick-lab-example** | tearout **165**, seed **263** | `Drive-through - Horizon Kick - v0` | Drop-first tearout warp |
+| **music-edm-drive-through-clean-wreckage-lab-example** | brostep **150**, seed **269** | `Drive-through - Clean Wreckage - v0` | Drop-first brostep warp |
+| **music-edm-drive-through-heart-lane-lab-example** | wave bass **145**, seed **223** | `Drive-through - Heart Lane - v0` | Drop-first wave bass warp |
+| **music-edm-drive-through-dawn-receipt-lab-example** | chest bass **140**, seed **229** | `Drive-through - Dawn Receipt - v0` | Drop-first chest bass warp |
 
-#### phase1 — Hour 2 (bass)
-
-| Graph | Tags / bpm | Prefix | Take |
-| --- | --- | --- | --- |
-| **music-edm-drive-through-rumble-strip-lab-example** | bass house **140**, seed **271** | `Drive-through - Rumble Strip - v1` | Hour-2 opener, drop-first chest 808 pyro |
-| **music-edm-drive-through-low-lane-lab-example** | festival bass **144**, seed **277** | `Drive-through - Low Lane - v1` | Chest sub pyro, three wrecks |
-| **music-edm-drive-through-warm-merge-lab-example** | future bass **148**, seed **281** | `Drive-through - Warm Merge - v1` | Drop-first warm 808 pyro |
-| **music-edm-drive-through-colour-span-lab-example** | dirty electro **150**, seed **283** | `Drive-through - Colour Span - v1` | Dirty electro pyro, three wrecks |
-| **music-edm-drive-through-garage-ticket-lab-example** | festival trap **140**, seed **293** | `Drive-through - Garage Ticket - v1` | Drop-first trap 808 pyro |
-| **music-edm-drive-through-liquid-grade-lab-example** | drumstep **174**, seed **307** | `Drive-through - Liquid Grade - v1` | Drop-first drumstep pyro |
-| **music-edm-drive-through-jump-bay-lab-example** | brostep **150**, seed **311** | `Drive-through - Jump Bay - v1` | Drop-first dirty growl pyro |
-| **music-edm-drive-through-psy-median-lab-example** | big room **145**, seed **313** | `Drive-through - Psy Median - v1` | Mainstage 808 pyro, two wrecks |
-| **music-edm-drive-through-groove-mile-lab-example** | slap house **144**, seed **317** | `Drive-through - Groove Mile - v1` | Drop-first bounce 808 pyro |
-| **music-edm-drive-through-donk-ramp-lab-example** | dirty electro **150**, seed **331** | `Drive-through - Donk Ramp - v1` | Chest 808 pyro, three wrecks |
-| **music-edm-drive-through-bounce-booth-lab-example** | melbourne bounce **140**, seed **337** | `Drive-through - Bounce Booth - v1` | Drop-first bounce pyro |
-| **music-edm-drive-through-toll-growl-lab-example** | tearout **150**, seed **347** | `Drive-through - Toll Growl - v1` | Drop-first tearout pyro, four wrecks |
-| **music-edm-drive-through-night-oil-lab-example** | hybrid trap **142**, seed **349** | `Drive-through - Night Oil - v1` | Hybrid 808 pyro, two wrecks |
-| **music-edm-drive-through-chest-pass-lab-example** | festival bass **150**, seed **353** | `Drive-through - Chest Pass - v1` | Drop-first chest sub pyro |
-| **music-edm-drive-through-sunrise-sub-lab-example** | progressive house **140**, seed **359** | `Drive-through - Sunrise Sub - v1` | Encore closer, two warm sub pyro wrecks |
-
-#### phase2 — Hour 3 (headliner)
-
-Deeper bounce bass, heavier stacked drops, high-BPM dance EDM (148–174). All instrumental.
+#### phase1 — Hour 2
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **music-edm-drive-through-lantern-merge-lab-example** | bounce house **150**, seed **367** | `Drive-through - Lantern Merge - v2` | Hour-3 opener, drop-first bounce 808 pyro |
-| **music-edm-drive-through-firefly-lane-lab-example** | color bass **152**, seed **373** | `Drive-through - Firefly Lane - v2` | Color-bass wrecks, stacked pyro |
-| **music-edm-drive-through-canopy-bounce-lab-example** | bass house **148**, seed **379** | `Drive-through - Canopy Bounce - v2` | Deep bounce, three chest wrecks |
-| **music-edm-drive-through-grove-wreck-lab-example** | future riddim **150**, seed **383** | `Drive-through - Grove Wreck - v2` | Future-riddim growl pyro |
-| **music-edm-drive-through-moss-sub-lab-example** | space bass **150**, seed **389** | `Drive-through - Moss Sub - v2` | Deep space sub, dual-action pedal |
-| **music-edm-drive-through-fern-stack-lab-example** | hybrid bass **155**, seed **397** | `Drive-through - Fern Stack - v2` | Triple stacked hybrid wreck |
-| **music-edm-drive-through-pollen-kick-lab-example** | drumstep **174**, seed **401** | `Drive-through - Pollen Kick - v2` | High-BPM amen + 808 pyro |
-| **music-edm-drive-through-cedar-growl-lab-example** | riddim **150**, seed **409** | `Drive-through - Cedar Growl - v2` | Bounce-riddim growl pyro |
-| **music-edm-drive-through-moon-ramp-lab-example** | wave bass **148**, seed **419** | `Drive-through - Moon Ramp - v2` | Wave-bass bounce wrecks |
-| **music-edm-drive-through-trail-bounce-lab-example** | slap house **150**, seed **421** | `Drive-through - Trail Bounce - v2` | Bounce slap, four-floor pyro |
-| **music-edm-drive-through-dew-wreck-lab-example** | neuro bass **172**, seed **431** | `Drive-through - Dew Wreck - v2` | Complex high-BPM neuro wreck |
-| **music-edm-drive-through-sap-stack-lab-example** | festival bass **165**, seed **433** | `Drive-through - Sap Stack - v2` | Headliner stacked 808 pyro |
-| **music-edm-drive-through-glade-split-lab-example** | dirty electro **150**, seed **439** | `Drive-through - Glade Split - v2` | Double-drop electro wreck |
-| **music-edm-drive-through-root-chest-lab-example** | chest bass **148**, seed **443** | `Drive-through - Root Chest - v2` | Deepest chest bounce, four wrecks |
-| **music-edm-drive-through-ember-crest-lab-example** | festival bass **165**, seed **449** | `Drive-through - Ember Crest - v2` | High-BPM headliner closer |
+| **music-edm-drive-through-rumble-strip-lab-example** | hybrid trap **140**, seed **271** | `Drive-through - Rumble Strip - v1` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-low-lane-lab-example** | riddim **144**, seed **277** | `Drive-through - Low Lane - v1` | Drop-first riddim warp |
+| **music-edm-drive-through-warm-merge-lab-example** | wave bass **148**, seed **281** | `Drive-through - Warm Merge - v1` | Drop-first wave bass warp |
+| **music-edm-drive-through-colour-span-lab-example** | color bass **150**, seed **283** | `Drive-through - Colour Span - v1` | Drop-first color bass warp |
+| **music-edm-drive-through-garage-ticket-lab-example** | festival trap **140**, seed **293** | `Drive-through - Garage Ticket - v1` | Drop-first festival trap warp |
+| **music-edm-drive-through-liquid-grade-lab-example** | drumstep **174**, seed **307** | `Drive-through - Liquid Grade - v1` | Drop-first drumstep warp |
+| **music-edm-drive-through-jump-bay-lab-example** | brostep **150**, seed **311** | `Drive-through - Jump Bay - v1` | Drop-first brostep warp |
+| **music-edm-drive-through-psy-median-lab-example** | neuro bass **145**, seed **313** | `Drive-through - Psy Median - v1` | Drop-first neuro bass warp |
+| **music-edm-drive-through-groove-mile-lab-example** | hybrid trap **144**, seed **317** | `Drive-through - Groove Mile - v1` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-donk-ramp-lab-example** | tearout **150**, seed **331** | `Drive-through - Donk Ramp - v1` | Drop-first tearout warp |
+| **music-edm-drive-through-bounce-booth-lab-example** | chest bass **140**, seed **337** | `Drive-through - Bounce Booth - v1` | Drop-first chest bass warp |
+| **music-edm-drive-through-toll-growl-lab-example** | riddim **150**, seed **347** | `Drive-through - Toll Growl - v1` | Drop-first riddim warp |
+| **music-edm-drive-through-night-oil-lab-example** | hybrid trap **142**, seed **349** | `Drive-through - Night Oil - v1` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-chest-pass-lab-example** | dirty bass **150**, seed **353** | `Drive-through - Chest Pass - v1` | Drop-first dirty bass warp |
+| **music-edm-drive-through-sunrise-sub-lab-example** | wave bass **140**, seed **359** | `Drive-through - Sunrise Sub - v1` | Drop-first wave bass warp |
 
-#### phase3 — Hour 4 (afterparty)
-
-Harder chest-sub afterparty (BPM 150–176). All instrumental. Dual-action pedal bass on some takes. Layouts cycle the same five Comfy placements as phase2.
+#### phase2 — Hour 3 headliner
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **music-edm-drive-through-brake-fade-lab-example** | dirty bass **150**, seed **457** | `Drive-through - Brake Fade - v3` | Hour-4 opener, chest-sub pyro |
-| **music-edm-drive-through-diesel-hum-lab-example** | bass house **152**, seed **461** | `Drive-through - Diesel Hum - v3` | Dual-action pedal bass house |
-| **music-edm-drive-through-axle-grind-lab-example** | tearout **155**, seed **463** | `Drive-through - Axle Grind - v3` | Tearout growl + sub |
-| **music-edm-drive-through-weigh-station-lab-example** | festival bass **158**, seed **467** | `Drive-through - Weigh Station - v3` | Stacked 808 wall |
-| **music-edm-drive-through-black-ice-lab-example** | riddim **160**, seed **479** | `Drive-through - Black Ice - v3` | Wobble + chest rumble |
-| **music-edm-drive-through-high-beams-lab-example** | hybrid bass **165**, seed **487** | `Drive-through - High Beams - v3` | Dual-action hybrid bass |
-| **music-edm-drive-through-chain-hook-lab-example** | brostep **168**, seed **491** | `Drive-through - Chain Hook - v3` | Dirty growl wrecks |
-| **music-edm-drive-through-grit-plate-lab-example** | slap house **150**, seed **499** | `Drive-through - Grit Plate - v3` | Chest bounce 808 |
-| **music-edm-drive-through-steel-grate-lab-example** | drumstep **172**, seed **503** | `Drive-through - Steel Grate - v3` | Amen + chest sub |
-| **music-edm-drive-through-rest-bay-lab-example** | chest bass **155**, seed **509** | `Drive-through - Rest Bay - v3` | Dual-action chest bass |
-| **music-edm-drive-through-haul-crate-lab-example** | hybrid trap **170**, seed **521** | `Drive-through - Haul Crate - v3` | Trap 808 wall |
-| **music-edm-drive-through-night-splice-lab-example** | wave bass **152**, seed **523** | `Drive-through - Night Splice - v3` | Low swell wrecks |
-| **music-edm-drive-through-torque-bay-lab-example** | neuro bass **176**, seed **541** | `Drive-through - Torque Bay - v3` | Fast reese sub |
-| **music-edm-drive-through-spare-drum-lab-example** | festival bass **165**, seed **547** | `Drive-through - Spare Drum - v3` | Dual-action festival bass |
-| **music-edm-drive-through-oil-pan-lab-example** | bounce house **150**, seed **557** | `Drive-through - Oil Pan - v3` | Chest bounce 808 |
-| **music-edm-drive-through-curb-check-lab-example** | drumstep **174**, seed **563** | `Drive-through - Curb Check - v3` | Triple amen wreck |
-| **music-edm-drive-through-last-exit-lab-example** | dirty bass **160**, seed **569** | `Drive-through - Last Exit - v3` | Dual-action dirty bass |
-| **music-edm-drive-through-asphalt-heart-lab-example** | chest bass **155**, seed **571** | `Drive-through - Asphalt Heart - v3` | Chest-sub closer energy |
-| **music-edm-drive-through-clutch-slam-lab-example** | tearout **168**, seed **577** | `Drive-through - Clutch Slam - v3` | Dual-action tearout |
-| **music-edm-drive-through-trailer-hitch-lab-example** | festival bass **165**, seed **587** | `Drive-through - Trailer Hitch - v3` | Hour-4 closer |
+| **music-edm-drive-through-lantern-merge-lab-example** | hybrid trap **150**, seed **367** | `Drive-through - Lantern Merge - v2` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-firefly-lane-lab-example** | color bass **152**, seed **373** | `Drive-through - Firefly Lane - v2` | Drop-first color bass warp |
+| **music-edm-drive-through-canopy-bounce-lab-example** | chest bass **148**, seed **379** | `Drive-through - Canopy Bounce - v2` | Drop-first chest bass warp |
+| **music-edm-drive-through-grove-wreck-lab-example** | riddim **150**, seed **383** | `Drive-through - Grove Wreck - v2` | Drop-first riddim warp |
+| **music-edm-drive-through-moss-sub-lab-example** | dirty bass **150**, seed **389** | `Drive-through - Moss Sub - v2` | Drop-first dirty bass warp |
+| **music-edm-drive-through-fern-stack-lab-example** | hybrid trap **155**, seed **397** | `Drive-through - Fern Stack - v2` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-pollen-kick-lab-example** | drumstep **174**, seed **401** | `Drive-through - Pollen Kick - v2` | Drop-first drumstep warp |
+| **music-edm-drive-through-cedar-growl-lab-example** | tearout **150**, seed **409** | `Drive-through - Cedar Growl - v2` | Drop-first tearout warp |
+| **music-edm-drive-through-moon-ramp-lab-example** | wave bass **148**, seed **419** | `Drive-through - Moon Ramp - v2` | Drop-first wave bass warp |
+| **music-edm-drive-through-trail-bounce-lab-example** | color bass **150**, seed **421** | `Drive-through - Trail Bounce - v2` | Drop-first color bass warp |
+| **music-edm-drive-through-dew-wreck-lab-example** | neuro bass **172**, seed **431** | `Drive-through - Dew Wreck - v2` | Drop-first neuro bass warp |
+| **music-edm-drive-through-sap-stack-lab-example** | brostep **165**, seed **433** | `Drive-through - Sap Stack - v2` | Drop-first brostep warp |
+| **music-edm-drive-through-glade-split-lab-example** | dirty dubstep **150**, seed **439** | `Drive-through - Glade Split - v2` | Drop-first dirty dubstep warp |
+| **music-edm-drive-through-root-chest-lab-example** | chest bass **148**, seed **443** | `Drive-through - Root Chest - v2` | Drop-first chest bass warp |
+| **music-edm-drive-through-ember-crest-lab-example** | hybrid trap **165**, seed **449** | `Drive-through - Ember Crest - v2` | Drop-first hybrid trap warp |
+
+#### phase3 — Hour 4 afterparty
+
+| Graph | Tags / bpm | Prefix | Take |
+| --- | --- | --- | --- |
+| **music-edm-drive-through-brake-fade-lab-example** | dirty bass **150**, seed **457** | `Drive-through - Brake Fade - v3` | Drop-first dirty bass warp |
+| **music-edm-drive-through-diesel-hum-lab-example** | hybrid trap **152**, seed **461** | `Drive-through - Diesel Hum - v3` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-axle-grind-lab-example** | tearout **155**, seed **463** | `Drive-through - Axle Grind - v3` | Drop-first tearout warp |
+| **music-edm-drive-through-weigh-station-lab-example** | brostep **158**, seed **467** | `Drive-through - Weigh Station - v3` | Drop-first brostep warp |
+| **music-edm-drive-through-black-ice-lab-example** | riddim **160**, seed **479** | `Drive-through - Black Ice - v3` | Drop-first riddim warp |
+| **music-edm-drive-through-high-beams-lab-example** | color bass **165**, seed **487** | `Drive-through - High Beams - v3` | Drop-first color bass warp |
+| **music-edm-drive-through-chain-hook-lab-example** | brostep **168**, seed **491** | `Drive-through - Chain Hook - v3` | Drop-first brostep warp |
+| **music-edm-drive-through-grit-plate-lab-example** | wave bass **150**, seed **499** | `Drive-through - Grit Plate - v3` | Drop-first wave bass warp |
+| **music-edm-drive-through-steel-grate-lab-example** | drumstep **172**, seed **503** | `Drive-through - Steel Grate - v3` | Drop-first drumstep warp |
+| **music-edm-drive-through-rest-bay-lab-example** | chest bass **155**, seed **509** | `Drive-through - Rest Bay - v3` | Drop-first chest bass warp |
+| **music-edm-drive-through-haul-crate-lab-example** | hybrid trap **170**, seed **521** | `Drive-through - Haul Crate - v3` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-night-splice-lab-example** | wave bass **152**, seed **523** | `Drive-through - Night Splice - v3` | Drop-first wave bass warp |
+| **music-edm-drive-through-torque-bay-lab-example** | neuro bass **176**, seed **541** | `Drive-through - Torque Bay - v3` | Drop-first neuro bass warp |
+| **music-edm-drive-through-spare-drum-lab-example** | brostep **165**, seed **547** | `Drive-through - Spare Drum - v3` | Drop-first brostep warp |
+| **music-edm-drive-through-oil-pan-lab-example** | color bass **150**, seed **557** | `Drive-through - Oil Pan - v3` | Drop-first color bass warp |
+| **music-edm-drive-through-curb-check-lab-example** | drumstep **174**, seed **563** | `Drive-through - Curb Check - v3` | Drop-first drumstep warp |
+| **music-edm-drive-through-last-exit-lab-example** | dirty bass **160**, seed **569** | `Drive-through - Last Exit - v3` | Drop-first dirty bass warp |
+| **music-edm-drive-through-asphalt-heart-lab-example** | chest bass **155**, seed **571** | `Drive-through - Asphalt Heart - v3` | Drop-first chest bass warp |
+| **music-edm-drive-through-clutch-slam-lab-example** | tearout **168**, seed **577** | `Drive-through - Clutch Slam - v3` | Drop-first tearout warp |
+| **music-edm-drive-through-trailer-hitch-lab-example** | hybrid trap **165**, seed **587** | `Drive-through - Trailer Hitch - v3` | Drop-first hybrid trap warp |
 
 #### phase4 — Secret Homage
 
-Early dirty-bass album (BPM 140–176). Half-time dubstep, brostep, riddim, tearout, drumstep, hybrid trap. All instrumental. Layouts cycle the same five Comfy placements as phase2 and phase3.
-
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **music-edm-drive-through-hush-lane-lab-example** | dirty dubstep **140**, seed **593** | `Drive-through - Hush Lane - v4` | Album opener, half-time wobble pyro |
-| **music-edm-drive-through-cipher-lock-lab-example** | brostep **140**, seed **599** | `Drive-through - Cipher Lock - v4` | Drop-first growl wreck |
-| **music-edm-drive-through-ghost-dock-lab-example** | riddim **140**, seed **601** | `Drive-through - Ghost Dock - v4` | Wobble riddim pyro |
-| **music-edm-drive-through-sealed-ramp-lab-example** | tearout **145**, seed **607** | `Drive-through - Sealed Ramp - v4` | Tearout growl, four wrecks |
-| **music-edm-drive-through-fog-vault-lab-example** | electro house **142**, seed **613** | `Drive-through - Fog Vault - v4` | Dirty electro 808 pyro |
-| **music-edm-drive-through-dummy-light-lab-example** | festival bass **145**, seed **617** | `Drive-through - Dummy Light - v4` | Stacked 808 wall |
-| **music-edm-drive-through-quiet-wreck-lab-example** | dirty bass **140**, seed **619** | `Drive-through - Quiet Wreck - v4` | Half-time rumble, four wrecks |
-| **music-edm-drive-through-off-ledger-lab-example** | drumstep **174**, seed **631** | `Drive-through - Off Ledger - v4` | Amen + reese pyro |
-| **music-edm-drive-through-back-alley-lab-example** | neuro bass **172**, seed **641** | `Drive-through - Back Alley - v4` | Fast reese sub |
-| **music-edm-drive-through-cellar-kick-lab-example** | dirty dubstep **148**, seed **643** | `Drive-through - Cellar Kick - v4` | Wobble wrecks |
-| **music-edm-drive-through-hidden-booth-lab-example** | hybrid trap **140**, seed **647** | `Drive-through - Hidden Booth - v4` | Trap 808 wall |
-| **music-edm-drive-through-coded-sub-lab-example** | chest bass **140**, seed **653** | `Drive-through - Coded Sub - v4` | Dual-action pedal bass |
-| **music-edm-drive-through-shadow-coil-lab-example** | neuro bass **150**, seed **659** | `Drive-through - Shadow Coil - v4` | Reese coil wrecks |
-| **music-edm-drive-through-mute-pyro-lab-example** | dirty electro **150**, seed **661** | `Drive-through - Mute Pyro - v4` | Analog 808 pyro |
-| **music-edm-drive-through-unlisted-row-lab-example** | drumstep **176**, seed **673** | `Drive-through - Unlisted Row - v4` | Triple amen wreck |
-| **music-edm-drive-through-night-cipher-lab-example** | wave bass **140**, seed **677** | `Drive-through - Night Cipher - v4` | Low swell wrecks |
-| **music-edm-drive-through-blank-stencil-lab-example** | festival trap **140**, seed **683** | `Drive-through - Blank Stencil - v4` | Trap stamp 808 |
-| **music-edm-drive-through-blind-stamp-lab-example** | riddim **150**, seed **691** | `Drive-through - Blind Stamp - v4` | Wobble + sub crush |
-| **music-edm-drive-through-cold-cache-lab-example** | hybrid bass **142**, seed **701** | `Drive-through - Cold Cache - v4` | Hybrid 808 pyro |
-| **music-edm-drive-through-secret-homage-lab-example** | dirty dubstep **140**, seed **709** | `Drive-through - Secret Homage - v4` | Album closer, half-time stacked 808 |
+| **music-edm-drive-through-hush-lane-lab-example** | dirty dubstep **140**, seed **593** | `Drive-through - Hush Lane - v4` | Drop-first dirty dubstep warp |
+| **music-edm-drive-through-cipher-lock-lab-example** | brostep **140**, seed **599** | `Drive-through - Cipher Lock - v4` | Drop-first brostep warp |
+| **music-edm-drive-through-ghost-dock-lab-example** | riddim **140**, seed **601** | `Drive-through - Ghost Dock - v4` | Drop-first riddim warp |
+| **music-edm-drive-through-sealed-ramp-lab-example** | tearout **145**, seed **607** | `Drive-through - Sealed Ramp - v4` | Drop-first tearout warp |
+| **music-edm-drive-through-fog-vault-lab-example** | color bass **142**, seed **613** | `Drive-through - Fog Vault - v4` | Drop-first color bass warp |
+| **music-edm-drive-through-dummy-light-lab-example** | hybrid trap **145**, seed **617** | `Drive-through - Dummy Light - v4` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-quiet-wreck-lab-example** | dirty bass **140**, seed **619** | `Drive-through - Quiet Wreck - v4` | Drop-first dirty bass warp |
+| **music-edm-drive-through-off-ledger-lab-example** | drumstep **174**, seed **631** | `Drive-through - Off Ledger - v4` | Drop-first drumstep warp |
+| **music-edm-drive-through-back-alley-lab-example** | neuro bass **172**, seed **641** | `Drive-through - Back Alley - v4` | Drop-first neuro bass warp |
+| **music-edm-drive-through-cellar-kick-lab-example** | dirty dubstep **148**, seed **643** | `Drive-through - Cellar Kick - v4` | Drop-first dirty dubstep warp |
+| **music-edm-drive-through-hidden-booth-lab-example** | hybrid trap **140**, seed **647** | `Drive-through - Hidden Booth - v4` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-coded-sub-lab-example** | chest bass **140**, seed **653** | `Drive-through - Coded Sub - v4` | Drop-first chest bass warp |
+| **music-edm-drive-through-shadow-coil-lab-example** | neuro bass **150**, seed **659** | `Drive-through - Shadow Coil - v4` | Drop-first neuro bass warp |
+| **music-edm-drive-through-mute-pyro-lab-example** | wave bass **150**, seed **661** | `Drive-through - Mute Pyro - v4` | Drop-first wave bass warp |
+| **music-edm-drive-through-unlisted-row-lab-example** | drumstep **176**, seed **673** | `Drive-through - Unlisted Row - v4` | Drop-first drumstep warp |
+| **music-edm-drive-through-night-cipher-lab-example** | wave bass **140**, seed **677** | `Drive-through - Night Cipher - v4` | Drop-first wave bass warp |
+| **music-edm-drive-through-blank-stencil-lab-example** | festival trap **140**, seed **683** | `Drive-through - Blank Stencil - v4` | Drop-first festival trap warp |
+| **music-edm-drive-through-blind-stamp-lab-example** | riddim **150**, seed **691** | `Drive-through - Blind Stamp - v4` | Drop-first riddim warp |
+| **music-edm-drive-through-cold-cache-lab-example** | hybrid trap **142**, seed **701** | `Drive-through - Cold Cache - v4` | Drop-first hybrid trap warp |
+| **music-edm-drive-through-secret-homage-lab-example** | dirty dubstep **140**, seed **709** | `Drive-through - Secret Homage - v4` | Drop-first dirty dubstep warp |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
@@ -424,7 +418,7 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 ## Tags vs lyrics
 
 - **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
-- **Lyrics** are the bars (rap) or the arrangement score (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant. EDM graphs use `[inst]` for the bed, build, and drops. Eighty-three takes stay instrumental. Two rave-set treats add one short `[chorus]` DJ chop (never `[verse]`).
+- **Lyrics** are the bars (rap) or the arrangement score (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant. EDM graphs use `[inst]` for the bed and drops. Eighty-three takes stay instrumental. Two bass-set treats add one 1–2 word `[chorus]` DJ chop (never `[verse]`). Do not put the act name in the score — ACE will sing it.
 - Original lyrics only. Do not write “in the style of \<living artist\>”. No living-MC names. No famous-hook paraphrases.
 - Short percussive lines (about 6–10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **music-rap-draft-lab-example** after a pull so those combos stay aligned.
 
@@ -468,7 +462,7 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 1. `./scripts/manage.sh download-music --tier turbo`
 2. `./scripts/manage.sh start` — type **yes**
 3. Load **music-rap-draft-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
-4. Then load **music-rap-full-lab-example** (96 s), **or** one **music-rap-nill-bye-*-lab-example** (180 s) from `_lab/audio/nill-bye/phaseN/` on its own, **or** one **music-edm-drive-through-*-lab-example** (180 s rave-set take) from `_lab/audio/drive-through/phaseN/` on its own
+4. Then load **music-rap-full-lab-example** (96 s), **or** one **music-rap-nill-bye-*-lab-example** (180 s) from `_lab/audio/nill-bye/phaseN/` on its own, **or** one **music-edm-drive-through-*-lab-example** (180 s bass-set take) from `_lab/audio/drive-through/phaseN/` on its own
 5. Cover in a **later** session: **klein-thumbnail-lab-example** or **klein-podcast-cover-lab-example**
 6. Optional YouTube still-image video (host ffmpeg; graphs still save FLAC + MP3):
 

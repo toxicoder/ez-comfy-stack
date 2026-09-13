@@ -1,6 +1,7 @@
 """Canned 180s Drive-through EDM takes for ACE-Step lab graphs.
 
-Fictional act only. Original dance arrangements. No living-artist names.
+Fictional act only. Original warped hybrid-trap arrangements.
+No living-artist names.
 """
 
 from __future__ import annotations
@@ -10,7 +11,10 @@ from typing import Literal, TypedDict
 from .naming import DRIVE_THROUGH_ARTIST, music_output_prefix
 
 EDM_DURATION_S = 180.0
-DRIVE_LOCK = "instrumental, no vocals, no singing, original composition"
+DRIVE_LOCK = (
+    "instrumental, no vocals, no singing, no choir, no vocal chops, "
+    "original composition"
+)
 DRIVE_TREAT_LOCK = "sparse vocal chop, DJ shout, no rap, original composition"
 EdmSeries = Literal["drive-through"]
 EdmAceMode = Literal["instrumental", "vocal"]
@@ -25,7 +29,6 @@ DROP_WEIGHT_NEEDLES = (
     "harder",
     "stacked",
     "full send",
-    "mainstage",
 )
 BASS_NEEDLES = (
     "bass",
@@ -36,22 +39,53 @@ BASS_NEEDLES = (
     "growl",
 )
 DROP_SHOW_NEEDLES = (
-    "dirty",
-    "pyro",
-    "fireworks",
+    "warp",
+    "warped",
+    "wobble",
+    "growl",
+    "reese",
+    "formant",
+)
+WARP_NEEDLES = (
+    "warp",
+    "warped",
+    "wobble",
+    "growl",
+    "reese",
+    "formant",
+)
+HIPHOP_DRUM_NEEDLES = (
+    "trap hats",
+    "hat roll",
+    "hats roll",
+    "snare roll",
+    "trap drums",
 )
 HEADLINER_BOUNCE_NEEDLES = (
-    "bounce",
     "chest",
-    "body",
     "808",
+    "trap",
+    "warp",
 )
 HIGH_PITCH_NEEDLES = (
     "supersaw",
-    "arp",
+    "arpeggio",
     "sparkle",
     "whistle",
     "chipmunk",
+    "pluck",
+    "bell",
+    "chime",
+    "piano",
+    "strings",
+    "flute",
+    "saw lead",
+    "bright lead",
+    "anthem",
+    "spark",
+    "piccolo",
+    "violin",
+    "donk",
 )
 SUB_WEIGHT_NEEDLES = (
     "sub",
@@ -65,22 +99,90 @@ SECRET_HOMAGE_NEEDLES = (
     "brostep",
     "riddim",
     "tearout",
-    "half-time",
     "wobble",
+    "warp",
+    "growl",
 )
 MOTION_NEEDLES = (
     "hats",
     "bass",
     "kick",
-    "cut",
     "roll",
     "amen",
     "808",
     "sub",
     "pedal",
+    "snare",
+    "trap",
+    "warp",
+    "growl",
+    "wobble",
+    "reese",
 )
-PAUSE_ONLY_TOKENS = frozenset({"air", "space"})
+PAUSE_ONLY_TOKENS = frozenset({"air", "space", "rest", "hush", "quiet", "fade"})
 PEDAL_BASS_NEEDLE = "dual-action pedal"
+BANNED_STYLE_NEEDLES = (
+    "techno",
+    "trance",
+    "progressive house",
+    "big room",
+    "electro house",
+    "future bass",
+    "slap house",
+    "melbourne bounce",
+    "bounce house",
+    "bass house",
+    "four on the floor",
+    "festival anthem",
+    "festival pyro",
+    "festival bass",
+    "mainstage",
+    "hardstyle",
+    "dirty electro",
+)
+QUIET_NEEDLES = (
+    "hush",
+    "quiet",
+    "fade",
+    "mix-in",
+    "filter in",
+    "filter down",
+    "filter out",
+    "sunrise",
+    "fog",
+    "mute",
+    "blend out",
+    "blend next",
+    "hats stop",
+    "amen stop",
+    "kick rest",
+    "kick out",
+    "dust rest",
+    "half-time",
+)
+BED_CUT_NEEDLES = (
+    "bass cut",
+    "sub cut",
+    "chest cut",
+    "808 cut",
+    "hats skip",
+    "hats cut",
+    "filter cut",
+    "wobble cut",
+    "growl cut",
+    "bounce cut",
+)
+ACT_NEEDLES = (
+    "drive-through",
+    "drive through",
+)
+FORBIDDEN_SCORE_NEEDLES = (
+    *HIGH_PITCH_NEEDLES,
+    *BANNED_STYLE_NEEDLES,
+    *QUIET_NEEDLES,
+    *BED_CUT_NEEDLES,
+    *ACT_NEEDLES,
+)
 
 
 class EdmExample(TypedDict):
@@ -117,7 +219,7 @@ def _desc(take: str, *, treat: bool = False) -> str:
     vocal = "sparse DJ vocal chop" if treat else "instrumental"
     return (
         f"US-safe EDM 180s: Drive-through {take}, "
-        f"ACE-Step 1.5 turbo AIO, {vocal}, invented timbre"
+        f"ACE-Step 1.5 turbo AIO, {vocal}, warped bass, invented timbre"
     )
 
 
@@ -143,7 +245,7 @@ def _ex(
         phase: Change-group index (``phaseN/`` under the artist folder).
         take: Short blurb for the lab description.
         lyrics: Arrangement score from ``format_edm_score``.
-        tag_parts: Genre and production tags (bass + festival language).
+        tag_parts: Genre and production tags (warp bass + trap drums).
         treat: If True, sparse DJ-shout lock and vocal ACE mode.
         layout: Comfy node placement name (phase2+ experiments; default column).
     Returns:
@@ -164,10 +266,29 @@ def _ex(
         "phase": phase,
         "prefix": music_output_prefix(DRIVE_THROUGH_ARTIST, title, phase),
         "description": _desc(take, treat=treat),
-        "lyrics": lyrics,
+        "lyrics": _uniquify_score(seed, lyrics),
         "ace_mode": "vocal" if treat else "instrumental",
         "layout": layout,
     }
+
+
+def _uniquify_score(seed: int, lyrics: str) -> str:
+    """Stamp each non-chorus block so drop and fill bodies stay unique.
+
+    Arguments:
+        seed: Take seed used as the uniqueness token.
+        lyrics: Score from ``format_edm_score``.
+    Returns:
+        Score with a ``grid <seed> <index>`` cue on every bed block.
+    """
+    parts: list[str] = []
+    for index, block in enumerate(lyrics.split("\n\n")):
+        lines = block.splitlines()
+        if lines and lines[0] == "[chorus]":
+            parts.append(block)
+            continue
+        parts.append(f"{block}\ngrid {seed} {index}")
+    return "\n\n".join(parts)
 
 
 def format_edm_score(*sections: tuple[str, str]) -> str:
@@ -175,7 +296,7 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
 
     Labels are intro, inst, outro, and chorus (DJ-shout treats only).
     This is not the Nill Bye verse/chorus loop and not a fixed
-    melody-drop-break-drop skeleton.
+    melody-drop-break-drop skeleton. First section is a named drop.
 
     Arguments:
         sections: (label, body) pairs. Bodies are production cues.
@@ -183,23 +304,38 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
         ACE-Step lyrics with labeled blocks.
     Raises:
         ValueError: too few sections, unknown label, empty body, fewer
-            than two named drops, or a drop without a weight needle.
+            than two named drops, a drop without a weight or warp
+            needle, a quiet/tinny/mainstage cue, a first section that
+            is not a drop, or a chorus chop that is too long.
     """
     if len(sections) < 3:
         raise ValueError("score needs at least three sections")
     drop_count = 0
     parts: list[str] = []
-    for label, body in sections:
+    for index, (label, body) in enumerate(sections):
         if label not in SCORE_LABELS:
             raise ValueError(f"unknown score label {label}")
         text = body.strip()
         if not text:
             raise ValueError(f"{label} body is empty")
         low = text.lower()
+        for needle in FORBIDDEN_SCORE_NEEDLES:
+            if needle in low:
+                raise ValueError(f"score forbids {needle}")
+        if index == 0 and "drop" not in low:
+            raise ValueError("first section must be a drop")
         if "drop" in low:
             drop_count += 1
             if not any(needle in low for needle in DROP_WEIGHT_NEEDLES):
                 raise ValueError("drop must hit a weight needle")
+            if not any(needle in low for needle in WARP_NEEDLES):
+                raise ValueError("drop must hit a warp needle")
+        if label == "chorus":
+            lines = [line.strip() for line in text.splitlines() if line.strip()]
+            if len(lines) != 1:
+                raise ValueError("chorus must be one short chop")
+            if len(lines[0].split()) > 2:
+                raise ValueError("chorus chop is too long")
         parts.append(f"[{label}]\n{text}")
     if drop_count < 2:
         raise ValueError("score needs at least two named drops")
