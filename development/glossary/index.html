@@ -4310,7 +4310,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 22:23 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T22:23:36+00:00">11 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 13 Sep 2026, 18:59 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-13T18:59:15+00:00">13 Sep 2026</time></span>
                 
                   
 
@@ -4502,7 +4502,7 @@
 <p><code>extra.lab_app_mode</code> marks a seeded graph as an App (<code>enabled</code>, <code>default_view</code>, <code>lane</code> inspire/produce/audio/film/dcc/optional, <code>occupancy</code>, <code>handoff</code>). <code>default_view: app</code> seeds as <code>*.app.json</code> (Apps + Workflows sidebars). Do not require <code>extra.linearMode</code> — Comfy upstream does not write it. See <a href="../studio-apps/">ComfyUI Apps</a>.</p>
 <p><strong>See also:</strong> <a href="#app-mode">App Mode</a> · <a href="#occupancy">occupancy</a> · <a href="#lab-example">lab-example</a></p>
 <h3 id="latent">latent<a class="headerlink" href="#latent" title="Permanent link">&para;</a></h3>
-<p>5.00 s at 24 fps is 120 frames (some smokes use 121 = 4n+1). LTX spatial size must be divisible by 32 — lab landscape is 1280×704. Do not Queue a 30–90 s latent on GB10. See <a href="../learn/generation/">Image and video generation</a>.</p>
+<p>LTX 5 s printers are <strong>121 frames</strong> (<code>1+8n</code>) at 24 fps ≈ 5.04 s. Illegal <strong>120</strong> floors to 113 frames (4.71 s) and stitch refuses. Wan shot graphs stay 120 = 5.00 s. LTX spatial size must be divisible by 32 — lab landscape is 1280×704. Do not Queue a 30–90 s latent on GB10. See <a href="../learn/generation/">Image and video generation</a>.</p>
 <p><strong>Also called:</strong> <code>latent space</code></p>
 <p><strong>See also:</strong> <a href="#vae">VAE</a> · <a href="#sampler">KSampler</a> · <a href="#ltx">LTX-2.5</a></p>
 <h3 id="sampler">KSampler<a class="headerlink" href="#sampler" title="Permanent link">&para;</a></h3>
@@ -4638,7 +4638,7 @@
 <p><strong>See also:</strong> <a href="#dgx-spark">DGX Spark</a> · <a href="#manage-sh">manage.sh</a></p>
 <h2 id="film">Film<a class="headerlink" href="#film" title="Permanent link">&para;</a></h2>
 <h3 id="last-frame">last-frame continuity<a class="headerlink" href="#last-frame" title="Permanent link">&para;</a></h3>
-<p>18 × 5.00 s LTX prints (120 frames @ 24 fps) stitch to a 90.00 s cap. One-click film graphs chain this inside Comfy; <code>print-shot</code> / <code>film-resume</code> do it on the host jobstore. See <a href="../shorts/">90s shorts</a>.</p>
+<p>18 × 5.00 s LTX prints (121 frames = <code>1+8n</code> @ 24 fps) stitch under a 90.00 s cap. One-click film graphs chain this inside Comfy; <code>print-shot</code> / <code>film-resume</code> do it on the host jobstore. See <a href="../shorts/">90s shorts</a>.</p>
 <p><strong>See also:</strong> <a href="#identity-still">identity still</a> · <a href="#ltx">LTX-2.5</a> · <a href="#film-accept">film-accept</a></p>
 <h3 id="otio">OTIO<a class="headerlink" href="#otio" title="Permanent link">&para;</a></h3>
 <p><code>manage.sh film-export-otio go-see</code> writes stdlib JSON under <code>films/&lt;slug&gt;/publish/</code>. Import on the Spark host or a laptop. Occupancy: stop Comfy if the NLE will use the GPU. See <a href="../studio-sidecars/">Studio sidecars</a>.</p>

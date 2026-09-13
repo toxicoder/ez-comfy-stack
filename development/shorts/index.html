@@ -1938,7 +1938,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 11 Sep 2026, 22:23 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-11T22:23:36+00:00">11 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 13 Sep 2026, 18:59 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-13T18:59:15+00:00">13 Sep 2026</time></span>
                 
                   
 
@@ -1985,7 +1985,7 @@
 </div>
 <hr />
 <h2 id="why-not-one-90s-latent">Why not one 90s latent<a class="headerlink" href="#why-not-one-90s-latent" title="Permanent link">&para;</a></h2>
-<p>Default lab graphs iterate in <strong>minutes</strong>. A 90s (or 30–60s) <strong>denoise</strong> on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> is the wrong default — keep widgets at <strong>120 frames</strong>.</p>
+<p>Default lab graphs iterate in <strong>minutes</strong>. A 90s (or 30–60s) <strong>denoise</strong> on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> is the wrong default — keep LTX widgets at <strong>121 frames</strong> (<code>1+8n</code>).</p>
 <p>The one-click film graph still prints <strong>18 independent 5.00s latents</strong>. Continuity is <strong>last frame of shot N → start image of shot N+1</strong>. One Queue runs them in order because each printer depends on the previous last frame.</p>
 <table>
 <thead>
@@ -1997,7 +1997,7 @@
 <tbody>
 <tr>
 <td>Micro-shot</td>
-<td><strong>120 frames @ 24 fps = 5.00 s</strong></td>
+<td><strong>121 frames @ 24 fps ≈ 5.04 s</strong> (LTX <code>1+8n</code>; concat contract 5.00±0.05 s)</td>
 </tr>
 <tr>
 <td>LTX print size</td>
@@ -2017,7 +2017,7 @@
 </tr>
 <tr>
 <td>Picture</td>
-<td><strong>18 × 5.00 s = 90.00 s</strong></td>
+<td><strong>18 × ~5.04 s</strong>, ffmpeg <strong><code>-t 90</code></strong> → <strong>90.00 s</strong></td>
 </tr>
 <tr>
 <td>Publish</td>
@@ -2025,7 +2025,7 @@
 </tr>
 </tbody>
 </table>
-<p>Do <strong>not</strong> set 241+ frames or a single 90s <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="latent" data-href="../glossary/#latent" title="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.">latent</span>. If a latent <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> errors on even length, you may set <strong>121</strong> (4n+1 / 8n+1) on that shot and still concat with the 90s cap.</p>
+<p>Do <strong>not</strong> set 241+ frames or a single 90s <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="latent" data-href="../glossary/#latent" title="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.">latent</span>. <strong>Do not set 120</strong> — the LTX VAE floors even 120 to <strong>113 frames (4.708 s)</strong> and stitch refuses.</p>
 <pre class="mermaid"><code>flowchart LR
   Load["Load film-*-90s graph"] --&gt; Q["Queue once"]
   Q --&gt; Klein["Klein identity 4-step"]
