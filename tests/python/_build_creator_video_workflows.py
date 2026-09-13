@@ -324,6 +324,17 @@ def patch_existing_video_graphs() -> None:
         gif = path.name.startswith("wan-gif")
         if path.name.startswith("ltx-"):
             wire_ltx_audio(graph)
+        if path.name == "ltx-i2v-shot-lab-example.json":
+            for node in graph["nodes"]:
+                ntype = node.get("type")
+                vals = node.get("widgets_values")
+                if ntype == "LTXVImgToVideo" and isinstance(vals, list) and len(vals) >= 3:
+                    vals[2] = 121
+                if ntype == "LTXVEmptyLatentAudio" and isinstance(vals, list) and vals:
+                    vals[0] = 121
+                if ntype == "ImageFromBatch" and node.get("title") == "Last frame":
+                    if isinstance(vals, list) and vals:
+                        vals[0] = 120
         polish_video_graph(graph, gif=gif)
         normalize_enhance_widgets(graph)
         # Point shot notes at unified films
@@ -423,7 +434,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict) -> str:
         "Motion+Audio, and prefixes for each of 18 shots. Optional Wan rehearsal:",
         "**wan-i2v-shot-lab-example**.",
         "",
-        "18 × 120 frames @ 24 fps = 90.00s. Last frame of shot N is LoadImage of shot N+1.",
+        "18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. Last frame of shot N is LoadImage of shot N+1.",
         f"Concat: `./scripts/utilities/concat-shots.sh --film {film} --yes`",
         "",
         "Do not Queue a 90s denoise in one graph. US-safe local pack only. No score "

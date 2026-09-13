@@ -49,21 +49,21 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 ## Why not one 90s latent
 
-Default lab graphs iterate in **minutes**. A 90s (or 30–60s) **denoise** on GB10 is the wrong default — keep widgets at **120 frames**.
+Default lab graphs iterate in **minutes**. A 90s (or 30–60s) **denoise** on GB10 is the wrong default — keep LTX widgets at **121 frames** (`1+8n`).
 
 The one-click film graph still prints **18 independent 5.00s latents**. Continuity is **last frame of shot N → start image of shot N+1**. One Queue runs them in order because each printer depends on the previous last frame.
 
 | | |
 | --- | --- |
-| Micro-shot | **120 frames @ 24 fps = 5.00 s** |
+| Micro-shot | **121 frames @ 24 fps ≈ 5.04 s** (LTX `1+8n`; concat contract 5.00±0.05 s) |
 | LTX print size | **1280×704** (VAE ÷32; not 1280×720) |
 | Klein identity | **1280×704** (same VAE grid as LTX; do not feed 720) |
 | Beats | **6** |
 | Micro-shots per beat | **3** (enter / traverse / exit) |
-| Picture | **18 × 5.00 s = 90.00 s** |
+| Picture | **18 × ~5.04 s**, ffmpeg **`-t 90`** → **90.00 s** |
 | Publish | in-graph **EZFilmConcat** (or `concat-shots.sh --film … --yes`) → ffmpeg **`-t 90`**; fail if probe `> 90` |
 
-Do **not** set 241+ frames or a single 90s latent. If a latent widget errors on even length, you may set **121** (4n+1 / 8n+1) on that shot and still concat with the 90s cap.
+Do **not** set 241+ frames or a single 90s latent. **Do not set 120** — the LTX VAE floors even 120 to **113 frames (4.708 s)** and stitch refuses.
 
 ```mermaid
 flowchart LR

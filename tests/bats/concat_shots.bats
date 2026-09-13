@@ -165,6 +165,34 @@ teardown() {
   [ "${n}" -eq 18 ]
 }
 
+@test "concat-shots pads 113-frame LTX stems to 5.00s" {
+  local b s
+  for b in 1 2 3 4 5 6; do
+    for s in 1 2 3; do
+      : >"${COMFY_OUTPUT_DIR}/ez_gosee_b${b}_s${s}_ltx_video_00001-audio.mp4"
+    done
+  done
+  run type maybe_pad_ltx_neighbor
+  [ "${status}" -eq 0 ]
+  run is_ltx_120_floor_s 4.708333
+  [ "${status}" -eq 0 ]
+  run is_ltx_120_floor_s 5.00
+  [ "${status}" -ne 0 ]
+  install_mock_bin ffmpeg 'echo "ffmpeg $*" >>"${TEST_TMP_DIR}/ffmpeg.log"; touch "${@: -1}"; exit 0'
+  install_mock_bin ffprobe 'echo 4.708333'
+  FILM=go-see
+  FILE_CSV=""
+  SHOT_DIR="${COMFY_OUTPUT_DIR}"
+  DRY_RUN=0
+  SKIP_ACCEPT=1
+  OUT_MP4="${COMFY_OUTPUT_DIR}/cap.mp4"
+  : >"${TEST_TMP_DIR}/ffmpeg.log"
+  run cmd_run
+  [ "${status}" -eq 0 ]
+  grep -q -- 'tpad=stop_mode=clone:stop=7' "${TEST_TMP_DIR}/ffmpeg.log"
+  [[ "${output}" == *"padded"* ]]
+}
+
 @test "concat-shots film duration over cap fails" {
   local b s
   for b in 1 2 3 4 5 6; do

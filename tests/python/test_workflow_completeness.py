@@ -174,7 +174,7 @@ def test_lab_graph_completeness(path: Path) -> None:
                 length = int(
                     values[0] if node["type"] == "LTXVEmptyLatentAudio" else values[2]
                 )
-                assert length == 120, (path.name, node["type"], length)
+                assert length == 121, (path.name, node["type"], length)
             if node.get("title") == "Save last frame":
                 prefix = str((node.get("widgets_values") or [""])[0])
                 assert prefix.endswith("_last"), (path.name, prefix)

@@ -12,6 +12,7 @@ from ez_ltx_spatial import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 from ez_ltx_spatial.align import center_crop_bcthw, snap_dim, snap_hw
 from ez_ltx_spatial.patch import (
     apply_patches,
+    snap_length_in_call,
     snap_width_height_in_call,
     _wrap_classmethod_wh,
     _wrap_video_vae_encode,
@@ -103,6 +104,20 @@ def test_snap_call_positional_and_kwargs() -> None:
     assert kw_h["width"] == 1280
 
 
+def test_snap_length_120_becomes_121() -> None:
+    args, kwargs = snap_length_in_call((1280, 704, 120, 1), {}, 2)
+    assert args == (1280, 704, 121, 1)
+    assert kwargs == {}
+    args, kwargs = snap_length_in_call((), {"length": 120}, 0)
+    assert kwargs["length"] == 121
+    args, kwargs = snap_length_in_call((120, 24.0, 1), {}, 0, "frames_number")
+    assert args[0] == 121
+    skipped = snap_length_in_call((1,), {}, 4)
+    assert skipped == ((1,), {})
+    bad = snap_length_in_call(("nope",), {}, 0)
+    assert bad == (("nope",), {})
+
+
 def _install_ltx_stubs(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
     def ensure(name: str) -> types.ModuleType:
         mod = sys.modules.get(name)
@@ -119,6 +134,7 @@ def _install_ltx_stubs(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
         "comfy",
         "comfy_extras",
         "comfy_extras.nodes_lt",
+        "comfy_extras.nodes_lt_audio",
         "comfy.ldm",
         "comfy.ldm.lightricks",
         "comfy.ldm.lightricks.vae",
@@ -149,7 +165,18 @@ def _install_ltx_stubs(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
         def execute(
             cls, width: int, height: int, length: int, batch_size: int = 1
         ) -> dict[str, int]:
-            return {"width": width, "height": height}
+            return {"width": width, "height": height, "length": length}
+
+    class LTXVEmptyLatentAudio:
+        @classmethod
+        def execute(
+            cls,
+            frames_number: int,
+            frame_rate: float,
+            batch_size: int,
+            audio_vae: Any,
+        ) -> dict[str, Any]:
+            return {"frames_number": frames_number, "frame_rate": frame_rate}
 
     class VideoVAE:
         def encode(self, x: Any, device: Any = None) -> Any:
@@ -158,11 +185,14 @@ def _install_ltx_stubs(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
     nodes_lt = sys.modules["comfy_extras.nodes_lt"]
     setattr(nodes_lt, "LTXVImgToVideo", LTXVImgToVideo)
     setattr(nodes_lt, "EmptyLTXVLatentVideo", EmptyLTXVLatentVideo)
+    audio_mod = sys.modules["comfy_extras.nodes_lt_audio"]
+    setattr(audio_mod, "LTXVEmptyLatentAudio", LTXVEmptyLatentAudio)
     vae_mod = sys.modules["comfy.ldm.lightricks.vae.causal_video_autoencoder"]
     setattr(vae_mod, "VideoVAE", VideoVAE)
     return {
         "LTXVImgToVideo": LTXVImgToVideo,
         "EmptyLTXVLatentVideo": EmptyLTXVLatentVideo,
+        "LTXVEmptyLatentAudio": LTXVEmptyLatentAudio,
         "VideoVAE": VideoVAE,
     }
 
@@ -177,10 +207,12 @@ def test_apply_patches_fail_soft_without_comfy(
     assert results == {
         "LTXVImgToVideo": False,
         "EmptyLTXVLatentVideo": False,
+        "LTXVEmptyLatentAudio": False,
         "VideoVAE": False,
     }
     err = capsys.readouterr().err
     assert "LTX nodes not wrapped" in err
+    assert "LTX audio latent not wrapped" in err
     assert "VideoVAE.encode not wrapped" in err
 
 
@@ -191,15 +223,22 @@ def test_apply_patches_snaps_widgets_and_encode(
     results = apply_patches()
     assert results["LTXVImgToVideo"] is True
     assert results["EmptyLTXVLatentVideo"] is True
+    assert results["LTXVEmptyLatentAudio"] is True
     assert results["VideoVAE"] is True
 
     img = stubs["LTXVImgToVideo"]
     out = img.execute(None, None, None, None, 1280, 720, 121, 1, 1.0)
     assert out == {"width": 1280, "height": 704, "length": 121}
+    snapped = img.execute(None, None, None, None, 1280, 704, 120, 1, 1.0)
+    assert snapped == {"width": 1280, "height": 704, "length": 121}
     gen = img.generate(None, None, None, None, 1920, 1080, 97, 1)
     assert gen["height"] == 1056
     empty = stubs["EmptyLTXVLatentVideo"].execute(1280, 720, 97)
-    assert empty == {"width": 1280, "height": 704}
+    assert empty == {"width": 1280, "height": 704, "length": 97}
+    empty120 = stubs["EmptyLTXVLatentVideo"].execute(1280, 704, 120)
+    assert empty120["length"] == 121
+    audio = stubs["LTXVEmptyLatentAudio"].execute(120, 24.0, 1, None)
+    assert audio == {"frames_number": 121, "frame_rate": 24.0}
 
     pixels = FakeBCTHW((1, 3, 1, 720, 1280))
     cropped, device = stubs["VideoVAE"]().encode(pixels, device="cpu")
@@ -212,11 +251,13 @@ def test_apply_patches_snaps_widgets_and_encode(
     err = capsys.readouterr().err
     assert "1280x720 -> 1280x704" in err
     assert "encode 1280x720 -> 1280x704" in err
+    assert "length 120 -> 121" in err
 
     again = apply_patches()
     assert again == {
         "LTXVImgToVideo": False,
         "EmptyLTXVLatentVideo": False,
+        "LTXVEmptyLatentAudio": False,
         "VideoVAE": False,
     }
 
@@ -236,6 +277,10 @@ def test_apply_patches_keyword_width_height(monkeypatch: pytest.MonkeyPatch) -> 
         strength=1.0,
     )
     assert out["height"] == 704
+    audio = stubs["LTXVEmptyLatentAudio"].execute(
+        frames_number=120, frame_rate=24.0, batch_size=1, audio_vae=None
+    )
+    assert audio["frames_number"] == 121
 
 
 def test_wrap_skips_missing_methods() -> None:

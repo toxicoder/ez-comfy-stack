@@ -381,7 +381,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## film-switchyard-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s film (night freight yard): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_switchyard_90s.mp4`. A **90s film ready** overlay plays it; `ez_switchyard_90s.html` is a local player. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film switchyard --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n"
+        "## film-switchyard-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s film (night freight yard): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_switchyard_90s.mp4`. A **90s film ready** overlay plays it; `ez_switchyard_90s.html` is a local player. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film switchyard --yes`\n\nDo not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n"
       ],
       "title": "Operator note \u2014 one-click 90s film"
     },
@@ -442,7 +442,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## switchyard 90s (night freight yard)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (120 frames per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film switchyard --yes`.\n\n18 \u00d7 120 frames @ 24 fps = 90.00s. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel walk | rain walk | puddles | stop between cars |\n| 2 | Between cars | gloves on rail | coupling clank | look up |\n| 3 | Ladder | climb | continue | roof edge |\n| 4 | Roof walk | along cars | distant horn | look down |\n| 5 | Drop to gravel | splash | window glow | keep walking |\n| 6 | Lamp hold | stop | look down the string | quiet laugh |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## switchyard 90s (night freight yard)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film switchyard --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel walk | rain walk | puddles | stop between cars |\n| 2 | Between cars | gloves on rail | coupling clank | look up |\n| 3 | Ladder | climb | continue | roof edge |\n| 4 | Roof walk | along cars | distant horn | look down |\n| 5 | Drop to gravel | splash | window glow | keep walking |\n| 6 | Lamp hold | stop | look down the string | quiet laugh |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "switchyard 90s shot map"
     },
@@ -814,7 +814,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        120,
+        121,
         24.0,
         1
       ],
@@ -1105,7 +1105,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -1497,7 +1497,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -1685,7 +1685,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -2077,7 +2077,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -2265,7 +2265,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -2657,7 +2657,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -2845,7 +2845,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -3237,7 +3237,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -3425,7 +3425,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -3817,7 +3817,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -4005,7 +4005,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -4397,7 +4397,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -4585,7 +4585,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -4977,7 +4977,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -5165,7 +5165,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -5557,7 +5557,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -5745,7 +5745,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -6137,7 +6137,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -6325,7 +6325,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -6717,7 +6717,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -6905,7 +6905,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -7297,7 +7297,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -7485,7 +7485,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -7877,7 +7877,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -8065,7 +8065,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -8457,7 +8457,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -8645,7 +8645,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -9037,7 +9037,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -9225,7 +9225,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -9617,7 +9617,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -9805,7 +9805,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -10197,7 +10197,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -10385,7 +10385,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -10777,7 +10777,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -10965,7 +10965,7 @@
       "widgets_values": [
         1280,
         704,
-        120,
+        121,
         1
       ],
       "title": "LTX Img\u2192Video condition"
@@ -11356,7 +11356,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        119,
+        120,
         1
       ],
       "title": "Last frame"
@@ -15117,7 +15117,7 @@
   "config": {},
   "extra": {
     "lab_profile": "film-switchyard-90s-lab-example",
-    "lab_note": "## film-switchyard-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s film (night freight yard): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_switchyard_90s.mp4`. A **90s film ready** overlay plays it; `ez_switchyard_90s.html` is a local player. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film switchyard --yes`\n\nDo not Queue a 90s denoise (keep 120-frame widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n",
+    "lab_note": "## film-switchyard-90s-lab-example\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nThe stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.\n\nOne-click 90s film (night freight yard): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.\nModels: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) \u00b7 LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).\nLTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\n1. Queue **once**. Klein runs first; models unload; then 18 \u00d7 5.00s LTX prints chain last-frame \u2192 next start.\n2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) \u2014 expected, not a hang.\n3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_switchyard_90s.mp4`. A **90s film ready** overlay plays it; `ez_switchyard_90s.html` is a local player. Copy off the Spark with scp.\n4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.\n5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film switchyard --yes`\n\nDo not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.\nPrompt enhance is **off** so the pinned identity and each baked LTX I2V paragraph are encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: film \u2014 stop everything else on that Spark. One GB10 job.\n",
     "lab_description": "One-click 90s night freight yard: Klein identity + 18 LTX 5.00s AV shots + stitch\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_film": "switchyard",
     "lab_slug": "switchyard",

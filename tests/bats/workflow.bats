@@ -82,7 +82,7 @@ lab_wf() {
   [[ ! -f ${REPO_ROOT}/docs/h3-films.md ]]
 }
 
-@test "shorts lab graphs are 120-frame US-safe I2V with last-frame prefix" {
+@test "shorts lab graphs are concat-safe US-safe I2V with last-frame prefix" {
   local shorts_yaml="${REPO_ROOT}/workflows/shorts"
   local lab="${REPO_ROOT}/workflows/_lab"
   local dir="${REPO_ROOT}/workflows"
@@ -109,8 +109,8 @@ import json
 w=json.load(open('${wan}'))
 l=json.load(open('${ltx}'))
 assert any(n.get('type')=='Wan22ImageToVideoLatent' and n['widgets_values'][2]==120 for n in w['nodes'])
-assert any(n.get('type')=='LTXVImgToVideo' and n['widgets_values'][2]==120 for n in l['nodes'])
-assert any(n.get('type')=='LTXVEmptyLatentAudio' and n['widgets_values'][0]==120 for n in l['nodes'])
+assert any(n.get('type')=='LTXVImgToVideo' and n['widgets_values'][2]==121 for n in l['nodes'])
+assert any(n.get('type')=='LTXVEmptyLatentAudio' and n['widgets_values'][0]==121 for n in l['nodes'])
 for g in (w, l):
     vhs=next(n for n in g['nodes'] if n.get('type')=='VHS_VideoCombine')
     assert float(vhs['widgets_values']['frame_rate'])==24
@@ -400,7 +400,7 @@ for p in sorted(root.rglob('*-lab-example.json')):
         assert '120' in desc
         assert 'ez_shot_01' in note
     if p.stem == 'ltx-i2v-shot-lab-example':
-        assert '120' in desc
+        assert '121' in desc
     if p.stem == 'klein-still-draft-lab-example':
         assert 'klein-still-hero-lab-example' in note
     if p.stem == 'film-go-see-90s-run-lab-example':

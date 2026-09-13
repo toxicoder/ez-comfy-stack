@@ -410,7 +410,7 @@
     "aliases": ["latent space", "latent"],
     "category": "Studio",
     "short": "Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.",
-    "long": "5.00 s at 24 fps is 120 frames (some smokes use 121 = 4n+1). LTX spatial size must be divisible by 32 — lab landscape is 1280×704. Do not Queue a 30–90 s latent on GB10. See [Image and video generation](learn/generation.md).",
+    "long": "LTX 5 s printers are **121 frames** (`1+8n`) at 24 fps ≈ 5.04 s. Illegal **120** floors to 113 frames (4.71 s) and stitch refuses. Wan shot graphs stay 120 = 5.00 s. LTX spatial size must be divisible by 32 — lab landscape is 1280×704. Do not Queue a 30–90 s latent on GB10. See [Image and video generation](learn/generation.md).",
     "see_also": ["vae", "sampler", "ltx"]
   },
   {
@@ -725,7 +725,7 @@
     "aliases": ["last-frame continuity"],
     "category": "Film",
     "short": "Shot N's last PNG becomes shot N+1's I2V start. How 90s films work without a 90s denoise.",
-    "long": "18 × 5.00 s LTX prints (120 frames @ 24 fps) stitch to a 90.00 s cap. One-click film graphs chain this inside Comfy; `print-shot` / `film-resume` do it on the host jobstore. See [90s shorts](shorts.md).",
+    "long": "18 × 5.00 s LTX prints (121 frames = `1+8n` @ 24 fps) stitch under a 90.00 s cap. One-click film graphs chain this inside Comfy; `print-shot` / `film-resume` do it on the host jobstore. See [90s shorts](shorts.md).",
     "see_also": ["identity-still", "ltx", "film-accept"]
   },
   {
