@@ -552,8 +552,9 @@ sync_lab_json_dir() {
 }
 
 #######################################
-# Map legacy flat repo globs into dest/_lab/<lane>/ then sync --delete.
-# Transition only: used when src/_lab is absent. Do not copy quality/,
+# Map legacy JSON (no src/_lab) into dest/_lab/<lane>/ then sync --delete.
+# Transition only: used when src/_lab is absent. Accepts root globs
+# (klein-*.json) and lane folders (klein/*.json). Do not copy quality/,
 # YAML, NOTICE, or _user/.
 # Globals:
 #   None
@@ -570,20 +571,15 @@ seed_legacy_lab_workflows() {
   local dest_lab="${2:?}"
   local tmp wf rel lane
   tmp="$(mktemp -d)"
-  (
-    shopt -s nullglob
-    for wf in \
-      "${src}"/*.json \
-      "${src}"/shorts/*.json \
-      "${src}"/dcc/*.json \
-      "${src}"/optional/*.json; do
-      [[ -f ${wf} ]] || continue
-      rel="${wf#"${src}"/}"
-      lane="$(lab_workflow_lane "${rel}")" || continue
-      mkdir -p "${tmp}/${lane}"
-      cp -a "${wf}" "${tmp}/${lane}/$(basename "${wf}")"
-    done
-  )
+  while IFS= read -r -d '' wf; do
+    rel="${wf#"${src}"/}"
+    case "${rel}" in
+      _lab/* | _user/* | quality/*) continue ;;
+    esac
+    lane="$(lab_workflow_lane "${rel}")" || continue
+    mkdir -p "${tmp}/${lane}"
+    cp -a "${wf}" "${tmp}/${lane}/$(basename "${wf}")"
+  done < <(find "${src}" -type f -name '*.json' -print0)
   sync_lab_json_dir "${tmp}" "${dest_lab}"
   rm -rf "${tmp}"
 }

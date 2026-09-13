@@ -750,6 +750,7 @@ teardown() {
   dest="${TEST_TMP_DIR}/user_wf_legacy"
   mkdir -p "${src}/klein" "${src}/shorts" "${src}/dcc" "${src}/optional" "${src}/audio"
   echo '{}' >"${src}/klein/still-draft.json"
+  echo '{}' >"${src}/klein-still-hero-lab-example.json"
   echo '{}' >"${src}/audio/podcast-audio-first.json"
   echo '{}' >"${src}/shorts/go-see.json"
   echo '{}' >"${src}/dcc/from-clay.json"
@@ -760,6 +761,7 @@ teardown() {
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/_lab/klein/still-draft.json ]]
+  [[ -f ${dest}/_lab/klein/klein-still-hero-lab-example.json ]]
   [[ -f ${dest}/_lab/audio/podcast-audio-first.json ]]
   [[ -f ${dest}/_lab/shorts/go-see.json ]]
   [[ -f ${dest}/_lab/dcc/from-clay.json ]]
