@@ -217,7 +217,7 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
 
 === "go-see"
 
-    First-person **parkour** body-cam. Identity lock: ink-black fitted running layers + **blank** matte-black gloves (empty palms) + open short storm-cloak with warm-gold lining + tiny warm-gold rune **motes** at the wrists only (data-staff slung on the back). Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens. Never a teal jumpsuit, never circuit embroidery, never a wingsuit handlebar, never player chrome or a game interface. Eye-level, arms always in the lower third; boots/knees on vaults, drops, and wall-runs. Dead sprint from frame 1. One signature stunt per 5 s; last frames hold the next plant large in center. Never a standing third-person wizard. **No score, no speech** — LTX paragraphs lead with `Wordless mix:` then close `No speech.`
+    First-person **parkour** body-cam. Identity lock: ink-black fitted running layers + **blank** matte-black gloves (empty palms, hands free) + open short storm-cloak with warm-gold lining + tiny warm-gold rune **motes** at the wrists only. No staff, no pole, nothing carried. Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens. Never a teal jumpsuit, never circuit embroidery, never a wingsuit handlebar, never player chrome or a game interface. Eye-level, arms always in the lower third; boots/knees on vaults, drops, and wall-runs. Dead sprint from frame 1, rooftop gap already large in center. One signature stunt per 5 s; last frames hold the next plant large in center. Never a standing third-person wizard. **No score, no speech** — LTX paragraphs lead with `Wordless mix:` then close `No speech.`
 
     | Beat | Place | s1 enter | s2 traverse | s3 exit |
     | --- | --- | --- | --- | --- |
@@ -263,7 +263,7 @@ Prefixes: `ez_gosee_b{1..6}_s{1..3}`, `ez_stillhere_…`, `ez_switchyard_…`. M
 Identity owns every later I2V. Distilled LTX audio talks if the mix is only a prohibition. Concat used to publish 17 stems. Do this before calling `ez_gosee_90s.mp4` a deliverable:
 
 1. Queue identity only if you can isolate it; otherwise Queue the film graph and **stop after the identity PNG** (`ez_gosee_identity_*.png`).
-2. Accept the still only if: contralateral pump, blank gloves, staff on the back, no handlebar, no circular mask, gap already in center.
+2. Accept the still only if: contralateral pump, blank gloves, hands free, no staff or pole, no handlebar, no circular mask, gap already in center.
 3. Re-roll identity (seed **42** is frozen in YAML — if the still is illegal, change **prompt text**, not the seed, then rebuild). If you must explore seeds, do it on `klein-still-hero-lab-example` off-graph, then paste the winning look back into YAML.
 4. Print b1s1–s3 with `ltx-i2v-shot-lab-example` / `./scripts/manage.sh print-shot go-see N` until last frames still show gloves in the lower third.
 5. `take-promote` winners. `film-resume` the rest.

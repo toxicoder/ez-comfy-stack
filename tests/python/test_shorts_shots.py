@@ -262,9 +262,15 @@ def test_creative_locks() -> None:
     ident = parsed["identity"].lower()
     assert "blank matte-black gloves" in ident
     assert "empty palms" in ident
+    assert "hands free" in ident
+    assert "palm trees" in ident
+    assert "fills the center" in ident
     assert "motes" in ident
     assert "handlebar" not in ident
     assert "wingsuit" not in ident
+    assert "staff" not in ident
+    assert "data-staff" not in ident
+    assert "data-staff" not in go.lower()
     assert "standing wizard" not in go.lower()
     for shot in parsed["shots"]:
         blob = shot["ltx_i2v"]
@@ -276,6 +282,8 @@ def test_creative_locks() -> None:
         assert "Last frames hold" in blob, shot["prefix"]
         assert "handlebar" not in lower, shot["prefix"]
         assert "wingsuit" not in lower, shot["prefix"]
+        assert "staff" not in lower, shot["prefix"]
+        assert "staff" not in shot["wan_i2v"].lower(), shot["prefix"]
         assert any(token in lower for token in stunts), shot["prefix"]
         if shot["prefix"] != "ez_gosee_b6_s3":
             assert shot["end_state"], shot["prefix"]
@@ -446,6 +454,8 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         neg = str(ltx_neg["widgets_values"][0])
         if film == "go-see":
             assert "wingsuit handlebar" in neg
+            assert "staff" in neg
+            assert "carried object" in neg
             klein_neg = next(
                 n
                 for n in graph["nodes"]
@@ -453,7 +463,10 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
                 and n.get("title") == "Negative"
                 and n.get("id") != 104
             )
-            assert "handlebar grip" in str(klein_neg["widgets_values"][0])
+            klein_neg_text = str(klein_neg["widgets_values"][0])
+            assert "handlebar grip" in klein_neg_text
+            assert "staff" in klein_neg_text
+            assert "carried object" in klein_neg_text
         else:
             assert "wingsuit handlebar" not in neg
         identity = next(
@@ -488,6 +501,7 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert enhance["widgets_values"][1] is False
         if film == "go-see":
             assert enhance["widgets_values"][2] == "t2i"
+            assert "staff" not in str(enhance["widgets_values"][0]).lower()
         else:
             assert enhance["widgets_values"][2] == "identity"
         ltx_pos = [

@@ -62,7 +62,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Front-load the subject. Write prose.
 
-    **Do:** `A photoreal still, first-person eye-level body-cam already at a dead sprint across a golden-hour tropical rooftop terrace. An original techno wizard in ink-black fitted running layers and an open short storm-cloak with warm-gold lining pumps through the lower third. Tiny warm-gold rune sparks bloom at the wrists only. Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens…`
+    **Do:** `A photoreal still, first-person eye-level body-cam already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. An original techno wizard in ink-black fitted running layers and an open short storm-cloak with warm-gold lining occupies only the lower third, empty palms, hands free. Tiny warm-gold rune sparks bloom at the wrists only. Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens…`
 
     **Don’t:** `rooftop, techno wizard, photo, 24mm, no logos, no text`
 

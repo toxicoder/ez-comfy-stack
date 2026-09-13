@@ -199,15 +199,15 @@ STORYBOARD = (
 
 GOSEE_IDENTITY = (
     f"A {STYLE_LOCK}, first-person eye-level body-cam already at a dead sprint across a "
-    "golden-hour tropical rooftop terrace. An original techno wizard kit fills the lower "
-    "third: ink-black fitted running-layer sleeves and blank matte-black gloves, empty palms "
-    "with no printed glyphs; the left glove pumps hip-to-chest as the right knee drives. "
-    "An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at "
-    "the frame edges. Tiny floating warm-gold rune motes hover near the wrists only. A "
-    "compact unmarked data-staff is slung across the back. Unmarked palms and glass towers "
-    "rush toward a bright bay; a rooftop gap sits in the center distance. Wide 24mm body-cam, "
-    "slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges "
-    "and a clean unmarked lens, empty of lettering."
+    "golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap "
+    "that already fills the center. An original techno wizard in ink-black fitted "
+    "running-layer sleeves and blank matte-black gloves occupies only the lower third: "
+    "contralateral pump, left glove hip-to-chest, empty palms with no printed glyphs, "
+    "hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining "
+    "streams at the left and right frame edges. Tiny floating warm-gold rune motes hover "
+    "near the wrists only. Unmarked palm trees and glass towers rush toward a bright bay "
+    "beyond the gap. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in "
+    "YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
 )
 GOSEE_WAN_I2V_01 = (
     "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. "
