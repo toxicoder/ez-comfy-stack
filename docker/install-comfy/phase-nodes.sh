@@ -211,6 +211,75 @@ configure_nunchaku_pack() {
 }
 
 #######################################
+# Remove a v4 git clone of ComfyUI-Manager from custom_nodes (no __init__.py).
+# Manager 4.x is pip (`comfyui_manager`) plus --enable-manager, not a pack.
+# Globals:
+#   COMFY_HOME, CUSTOM
+# Arguments:
+#   None
+# Outputs:
+#   log when a leftover tree is removed
+# Returns:
+#   0 always
+#######################################
+remove_legacy_comfyui_manager_custom_node() {
+  local custom dest
+  custom="${CUSTOM:-${COMFY_HOME}/custom_nodes}"
+  mkdir -p "${custom}"
+  for dest in "${custom}/ComfyUI-Manager" "${custom}/comfyui-manager"; do
+    if [[ -d ${dest} && ! -f ${dest}/__init__.py ]]; then
+      log "removing leftover ${dest} (Manager 4.x is pip; no custom_nodes __init__.py)"
+      rm -rf "${dest}"
+    fi
+  done
+  return 0
+}
+
+#######################################
+# Install ComfyUI-Manager as a pip package (v4) and drop leftover custom_nodes clones.
+# Fail-soft: lab graphs do not require Manager. Torch pins stay constrained.
+# Globals:
+#   COMFY_HOME, CUSTOM, COMFYUI_MANAGER_REF, VENV
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 always
+#######################################
+ensure_lab_manager() {
+  local req constraint pin
+  activate_venv
+  CUSTOM="${CUSTOM:-${COMFY_HOME}/custom_nodes}"
+  mkdir -p "${CUSTOM}"
+  remove_legacy_comfyui_manager_custom_node
+  req="${COMFY_HOME}/manager_requirements.txt"
+  pin="comfyui_manager==${COMFYUI_MANAGER_REF:-4.2.2}"
+  constraint="$(mktemp)"
+  if declare -F write_torch_pip_constraint >/dev/null &&
+    write_torch_pip_constraint "${constraint}"; then
+    if [[ -f ${req} ]]; then
+      pip_install -r "${req}" -c "${constraint}" ||
+        warn "ComfyUI-Manager pip from ${req} failed (optional)"
+    else
+      pip_install "${pin}" -c "${constraint}" ||
+        warn "ComfyUI-Manager pip ${pin} failed (optional)"
+    fi
+  else
+    if [[ -f ${req} ]]; then
+      pip_install -r "${req}" ||
+        warn "ComfyUI-Manager pip from ${req} failed (optional)"
+    else
+      pip_install "${pin}" ||
+        warn "ComfyUI-Manager pip ${pin} failed (optional)"
+    fi
+  fi
+  rm -f "${constraint}"
+  remove_legacy_comfyui_manager_custom_node
+  return 0
+}
+
+#######################################
 # Ensure ComfyUI-VideoHelperSuite is present (required for LTX lab MP4 output).
 # Idempotent: safe on cold install and stamp-present refresh.
 # Globals:
@@ -404,8 +473,8 @@ phase_nodes() {
   activate_venv
   CUSTOM="${COMFY_HOME}/custom_nodes"
   mkdir -p "${CUSTOM}"
-  clone_node "https://github.com/ltdrdata/ComfyUI-Manager.git" "ComfyUI-Manager" \
-    "${COMFYUI_MANAGER_REF:-}"
+  # Manager 4.x is pip (manager_requirements.txt) + --enable-manager, not a clone.
+  ensure_lab_manager
   # Required for ltx-*-lab-example VHS_VideoCombine MP4 output
   ensure_lab_video_nodes || return 1
   clone_node "https://github.com/nunchaku-ai/ComfyUI-nunchaku.git" "ComfyUI-nunchaku" \

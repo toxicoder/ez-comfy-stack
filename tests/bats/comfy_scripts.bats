@@ -200,6 +200,136 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'COMFYUI_VHS_REF' "${REPO_ROOT}/docker/install-comfy/common.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'ensure_lab_manager' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'ensure_lab_manager' "${REPO_ROOT}/docker/install-comfy.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'remove_legacy_comfyui_manager_custom_node' \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'clone_node "https://github.com/ltdrdata/ComfyUI-Manager.git"' \
+    "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -ne 0 ]
+  run grep -F 'manager_requirements.txt' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'comfyui_manager==' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
+  [ "${status}" -eq 0 ]
+}
+
+@test "ensure_lab_manager pip installs manager_requirements and removes leftover clone" {
+  mkdir -p "${COMFY_HOME}/custom_nodes/ComfyUI-Manager" \
+    "${COMFY_HOME}/custom_nodes/comfyui-manager" \
+    "${COMFY_HOME}/custom_nodes/_user"
+  echo pyproject >"${COMFY_HOME}/custom_nodes/ComfyUI-Manager/pyproject.toml"
+  echo leftover >"${COMFY_HOME}/custom_nodes/comfyui-manager/README.md"
+  echo keep >"${COMFY_HOME}/custom_nodes/_user/mine.py"
+  echo 'comfyui_manager==4.2.2' >"${COMFY_HOME}/manager_requirements.txt"
+  : >"${TEST_TMP_DIR}/pip_mgr.log"
+  pip_install() {
+    printf '%s\n' "$*" >>"${TEST_TMP_DIR}/pip_mgr.log"
+    return 0
+  }
+  activate_venv() { return 0; }
+  write_torch_pip_constraint() {
+    echo 'torch==2.14.0+cu130' >"$1"
+    return 0
+  }
+  run ensure_lab_manager
+  [ "${status}" -eq 0 ]
+  [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-Manager ]]
+  [[ ! -d ${COMFY_HOME}/custom_nodes/comfyui-manager ]]
+  [[ -f ${COMFY_HOME}/custom_nodes/_user/mine.py ]]
+  grep -q 'manager_requirements.txt' "${TEST_TMP_DIR}/pip_mgr.log"
+  grep -q -- '-c' "${TEST_TMP_DIR}/pip_mgr.log"
+  [[ "${output}" == *"leftover"* ]]
+}
+
+@test "ensure_lab_manager falls back to comfyui_manager pin without requirements file" {
+  mkdir -p "${COMFY_HOME}/custom_nodes"
+  : >"${TEST_TMP_DIR}/pip_mgr.log"
+  pip_install() {
+    printf '%s\n' "$*" >>"${TEST_TMP_DIR}/pip_mgr.log"
+    return 0
+  }
+  activate_venv() { return 0; }
+  write_torch_pip_constraint() { return 1; }
+  echo 'comfyui_manager==4.2.2' >"${COMFY_HOME}/manager_requirements.txt"
+  run ensure_lab_manager
+  [ "${status}" -eq 0 ]
+  grep -q 'manager_requirements.txt' "${TEST_TMP_DIR}/pip_mgr.log"
+  rm -f "${COMFY_HOME}/manager_requirements.txt"
+  : >"${TEST_TMP_DIR}/pip_mgr.log"
+  run ensure_lab_manager
+  [ "${status}" -eq 0 ]
+  grep -q 'comfyui_manager==' "${TEST_TMP_DIR}/pip_mgr.log"
+}
+
+@test "ensure_lab_manager pip pin with torch constraint when requirements missing" {
+  mkdir -p "${COMFY_HOME}/custom_nodes"
+  : >"${TEST_TMP_DIR}/pip_mgr.log"
+  pip_install() {
+    printf '%s\n' "$*" >>"${TEST_TMP_DIR}/pip_mgr.log"
+    return 0
+  }
+  activate_venv() { return 0; }
+  write_torch_pip_constraint() {
+    echo 'torch==2.14.0+cu130' >"$1"
+    return 0
+  }
+  run ensure_lab_manager
+  [ "${status}" -eq 0 ]
+  grep -q 'comfyui_manager==' "${TEST_TMP_DIR}/pip_mgr.log"
+  grep -q -- '-c' "${TEST_TMP_DIR}/pip_mgr.log"
+}
+
+@test "ensure_lab_manager is fail-soft when pip fails" {
+  mkdir -p "${COMFY_HOME}/custom_nodes"
+  echo 'comfyui_manager==4.2.2' >"${COMFY_HOME}/manager_requirements.txt"
+  pip_install() { return 1; }
+  activate_venv() { return 0; }
+  write_torch_pip_constraint() {
+    echo 'torch==2.14.0+cu130' >"$1"
+    return 0
+  }
+  run ensure_lab_manager
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"failed"* ]]
+  write_torch_pip_constraint() { return 1; }
+  run ensure_lab_manager
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"failed"* ]]
+  rm -f "${COMFY_HOME}/manager_requirements.txt"
+  run ensure_lab_manager
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"failed"* ]]
+}
+
+@test "remove_legacy_comfyui_manager_custom_node keeps a pack with __init__.py" {
+  mkdir -p "${COMFY_HOME}/custom_nodes/ComfyUI-Manager"
+  echo 'NODE_CLASS_MAPPINGS = {}' >"${COMFY_HOME}/custom_nodes/ComfyUI-Manager/__init__.py"
+  CUSTOM="${COMFY_HOME}/custom_nodes"
+  run remove_legacy_comfyui_manager_custom_node
+  [ "${status}" -eq 0 ]
+  [[ -f ${COMFY_HOME}/custom_nodes/ComfyUI-Manager/__init__.py ]]
+}
+
+@test "heal_legacy_comfyui_manager_dir removes leftover Manager clone" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  mkdir -p "${COMFY_HOME}/custom_nodes/ComfyUI-Manager" \
+    "${COMFY_HOME}/custom_nodes/_user"
+  echo leftover >"${COMFY_HOME}/custom_nodes/ComfyUI-Manager/pyproject.toml"
+  echo keep >"${COMFY_HOME}/custom_nodes/_user/mine.py"
+  run heal_legacy_comfyui_manager_dir "${COMFY_HOME}/custom_nodes"
+  [ "${status}" -eq 0 ]
+  [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-Manager ]]
+  [[ -f ${COMFY_HOME}/custom_nodes/_user/mine.py ]]
+  [[ "${output}" == *"leftover"* ]]
+  mkdir -p "${COMFY_HOME}/custom_nodes/ComfyUI-Manager"
+  echo 'NODE_CLASS_MAPPINGS = {}' >"${COMFY_HOME}/custom_nodes/ComfyUI-Manager/__init__.py"
+  run heal_legacy_comfyui_manager_dir "${COMFY_HOME}/custom_nodes"
+  [ "${status}" -eq 0 ]
+  [[ -f ${COMFY_HOME}/custom_nodes/ComfyUI-Manager/__init__.py ]]
 }
 
 @test "install-comfy nunchaku helpers never use bare PyPI nunchaku" {
@@ -1245,9 +1375,12 @@ teardown() {
   [[ "${args}" == *"--bf16-unet"* ]]
   [[ "${args}" == *"--input-directory"* ]]
   [[ "${args}" == *"--output-directory"* ]]
+  [[ "${args}" == *"--enable-manager"* ]]
   # One token per line from comfy_exec_args. grep -Fx so bash 3.2 set -e
   # does not swallow a failed [[ != ]] in the middle of the test function.
   run grep -Fx -- '--use-sage-attention' <<< "${args}"
+  [ "${status}" -ne 0 ]
+  run grep -Fx -- '--enable-manager-legacy-ui' <<< "${args}"
   [ "${status}" -ne 0 ]
   run grep -Fx -- '--highvram' <<< "${args}"
   [ "${status}" -ne 0 ]
