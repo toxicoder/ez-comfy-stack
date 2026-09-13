@@ -41,7 +41,7 @@ KLEIN_NEG_PHOTO = (
 KLEIN_NEG_GOSEE = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks, "
     "third-person figure, standing wizard, wingsuit control bar, handlebar grip, lettering on gloves, "
-    "circular vignette, decorative frame, costume chrome"
+    "circular vignette, decorative frame, costume chrome, staff, pole, wizard staff, carried object"
 )
 LTX_NEGATIVE = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
@@ -54,7 +54,8 @@ LTX_NEGATIVE_GOSEE = (
     "watermark, burned-in text, third-person follow, full body from behind, "
     "standing wizard, costume change, lettering on gloves, circular vignette, "
     "decorative frame, repeating planter tiles, game-engine lighting, "
-    "wooden fishing pier, wingsuit handlebar, readable captions"
+    "wooden fishing pier, wingsuit handlebar, readable captions, "
+    "staff, pole, wizard staff, carried object"
 )
 
 FILMS = (
