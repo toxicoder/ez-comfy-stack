@@ -310,7 +310,7 @@ Commands:
                     Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, hf CLI, doctor
   doctor            Preflight: docker, GPU, free RAM/disk, attention, models, output dir, license policy
   status [--json]   Stack status (attention + host_free_gib when --json)
-  start             Start studio stack (requires yes)
+  start             Start studio stack detached (requires yes; not tied to this shell)
   stop              Stop stack (keep models, outputs, and comfy volume)
   restart           stop + start
   logs              Follow compose logs
@@ -707,6 +707,7 @@ cmd_status() {
 
 #######################################
 # Confirm, check headroom, then start the unified studio Compose stack.
+# Returns after compose up -d + verify; the stack is not tied to this shell.
 # Side effects: May build/start containers; requires operator confirmation.
 # Globals:
 #   See file header / caller environment.

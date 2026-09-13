@@ -404,9 +404,7 @@ The full verb list (including when **not** to run each command) lives on **[mana
 
     If GHCR pull fails or you force a thin/local build without prebuild, first start can take **10–30+ minutes** of pip.
 
-    `manage.sh start` streams logs until port `${COMFY_PORT}` responds (++ctrl+c++ detaches only).
-
-    `LAB_STACK_FOLLOW=0` returns immediately after the container is up.
+    `manage.sh start` returns after `compose up -d` verifies the container is running. Closing SSH / this shell does **not** stop Comfy (dockerd owns it). Follow install: `./scripts/manage.sh logs`. Wait in this shell until port `${COMFY_PORT}` responds: `LAB_STACK_FOLLOW=1` (++ctrl+c++ detaches the view only).
 
 ??? abstract "First-run journey (sequence)"
 

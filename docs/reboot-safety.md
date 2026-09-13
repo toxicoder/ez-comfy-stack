@@ -64,7 +64,7 @@ flowchart LR
    # type: yes
    ```
 
-   Independent Spark farm containers still use `restart: "no"`; start each node locally with confirm.
+   `start` returns after `compose up -d`. Closing the SSH session does **not** stop the stack. `stop` is still required before reboot. Independent Spark farm containers still use `restart: "no"`; start each node locally with confirm.
 
 ```mermaid
 sequenceDiagram

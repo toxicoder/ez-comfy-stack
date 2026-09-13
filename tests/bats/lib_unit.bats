@@ -983,6 +983,8 @@ exit 0
   [ "${status}" -ne 0 ]
   run stack_start
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not tied to this shell"* ]]
+  [[ "${output}" == *"Detached"* ]]
   [ -f "${COMFY_OUTPUT_DIR}/input/ez_house_clay_01.png" ]
   [ -f "${COMFY_OUTPUT_DIR}/input/ez_house_clay_10.png" ]
   run seed_house_clay_inputs
@@ -1058,6 +1060,46 @@ exit 0
   [[ "${output}" == *"not running"* || "${output}" == *"not running after start"* ]]
   unset COMPOSE_BIN
   install_docker_mocks
+}
+
+@test "compose: stack_ignore_hangup and start detaches by default" {
+  export MODELS_DIR="${TEST_TMP_DIR}/models"
+  export COMFY_OUTPUT_DIR="${TEST_TMP_DIR}/comfy-output"
+  export LAB_STACK_VERIFY_SETTLE=0
+  export LAB_STACK_SKIP_PULL=1
+  export LAB_STACK_FORCE_BUILD=1
+  unset LAB_STACK_FOLLOW
+  unset EZ_COMFY_IMAGE
+  export LAB_GIT_BRANCH=development
+  install_docker_mocks
+
+  stack_ignore_hangup
+  local hup
+  hup="$(trap -p HUP)"
+  [[ -n ${hup} ]]
+  [[ "${hup}" == *"''"* ]]
+  trap - HUP
+
+  : >"${TEST_TMP_DIR}/docker_calls.log"
+  run stack_start
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not tied to this shell"* ]]
+  [[ "${output}" == *"Detached"* ]]
+  [[ "${output}" == *"./scripts/manage.sh logs"* ]]
+  grep -q 'up -d' "${TEST_TMP_DIR}/docker_calls.log"
+  ! grep -q -- 'logs -f' "${TEST_TMP_DIR}/docker_calls.log"
+
+  stack_port_open() { return 0; }
+  export LAB_STACK_FOLLOW=1
+  run stack_follow_until_ready
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"already responding"* ]]
+  : >"${TEST_TMP_DIR}/docker_calls.log"
+  run stack_start
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"already responding"* ]]
+  unset -f stack_port_open
+  trap - HUP
 }
 
 @test "compose: stack_port_open requires HTTP when curl exists" {

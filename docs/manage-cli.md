@@ -37,7 +37,7 @@ id: doctor
 | `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, `hf` CLI, then doctor | Skip doctor failures |
 | `doctor` | Preflight (docker, GPU, RAM/disk, dirs, `hf` CLI, license one-liner, spark-timing) | Treat missing weights as a hard fail (they are a warning) |
 | `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port | — |
-| `start` | Type `yes`; headroom; compose up | Weaken confirm or `restart: "no"` |
+| `start` | Type `yes`; headroom; `compose up -d`; returns detached (not tied to this shell). Follow: `logs`. `LAB_STACK_FOLLOW=1` waits for the UI | Weaken confirm or `restart: "no"`; treat logout as stop |
 | `stop` | Stop containers; keep models, outputs, volume | Reboot with the stack up |
 | `restart` | `stop` + `start` (full confirm again) | — |
 | `logs` | Follow compose logs (`logs --tail 100` works) | — |
