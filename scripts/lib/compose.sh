@@ -14,10 +14,14 @@
 # Environment:
 #   MODELS_DIR, COMFY_PORT, MEM_LIMIT, MEM_RESERVATION — exported into compose
 #   COMPOSE_BIN — optional full command override for tests (space-separated ok)
+#   LAB_STACK_FOLLOW — 1 = stream logs until UI port is open (default 0: detach)
 #
 # Safety:
 #   stack_start does not ask for confirmation (caller must require_heavy_confirm).
+#   stack_start ignores SIGHUP so an SSH drop does not abort compose up.
+#   stack_start returns after up -d + verify; it does not stay bound to the shell.
 #   stack_cleanup_state removes named volumes but never deletes host MODELS_DIR.
+#   restart: "no" is unchanged — logout is not a reboot and does not auto-start.
 #
 
 #######################################
@@ -306,8 +310,26 @@ stack_wait_for_port() {
 }
 
 #######################################
+# Ignore SIGHUP for this process and children (inherited ignore).
+# Used by stack_start so docker pull / compose up -d can finish if SSH drops.
+# Does not install a systemd unit and does not change restart: "no".
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+stack_ignore_hangup() {
+  trap '' HUP
+}
+
+#######################################
 # Stream compose logs and poll until UI port is open (or timeout / detach).
-# Ctrl+C detaches follower only — container keeps running.
+# Opt-in via LAB_STACK_FOLLOW=1. Ctrl+C detaches follower only — container
+# keeps running. Default is not to follow (start returns after up -d).
 # Globals:
 #   COMFY_PORT, LAB_STACK_FOLLOW, LAB_STACK_READY_TIMEOUT, LAB_STACK_HEARTBEAT
 # Arguments:
@@ -322,15 +344,8 @@ stack_follow_until_ready() {
   local timeout_s="${LAB_STACK_READY_TIMEOUT:-2700}"
   local heartbeat_s="${LAB_STACK_HEARTBEAT:-30}"
   local t0 now elapsed log_pid=""
-  local follow="${LAB_STACK_FOLLOW:-}"
+  local follow="${LAB_STACK_FOLLOW:-0}"
 
-  if [[ -z ${follow} ]]; then
-    if [[ -t 1 || -t 2 ]]; then
-      follow=1
-    else
-      follow=0
-    fi
-  fi
   if [[ ${follow} == "0" ]]; then
     log "LAB_STACK_FOLLOW=0 — not streaming logs; use: ./scripts/manage.sh logs"
     return 0
@@ -561,6 +576,8 @@ seed_house_clay_inputs() {
 # Build images if needed and start the unified stack detached.
 # Prefers GHCR pull; falls back to compose build. Seeds volume from prebuilt.
 # Also seeds ez_house_clay_NN.png into LoadImage input/ before compose up.
+# Ignores SIGHUP during pull/up so an SSH drop does not abort start.
+# Returns after up -d + verify; LAB_STACK_FOLLOW=1 waits for the UI port.
 # Globals:
 #   See file header / caller environment.
 # Arguments:
@@ -572,6 +589,7 @@ seed_house_clay_inputs() {
 #######################################
 stack_start() {
   require_docker
+  stack_ignore_hangup
   export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
   export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
   export COMFY_PORT="${COMFY_PORT:-8188}"
@@ -627,8 +645,14 @@ stack_start() {
   log "Container is running. UI target: http://localhost:${COMFY_PORT}"
   log "First start with prebuilt image: seeds volume from /opt/comfy-prebuilt (local copy)"
   log "Without prebuilt: cold pip install (multi-GB). LAB_FORCE_COLD_INSTALL=1 forces pip path."
-  # Default FOLLOW on TTY; tests set LAB_STACK_FOLLOW=0
-  stack_follow_until_ready || return 1
+  log_ok "Detached: stack keeps running after this command exits (not tied to this shell)."
+  log "Closing SSH / this terminal does not stop Comfy. Stop with: ./scripts/manage.sh stop"
+  log "UI may still be installing. Follow: ./scripts/manage.sh logs"
+  log "Wait in this shell until :${COMFY_PORT} is up: LAB_STACK_FOLLOW=1"
+  # Default is detach (no log follow). Opt-in: LAB_STACK_FOLLOW=1
+  if [[ ${LAB_STACK_FOLLOW:-0} == "1" ]]; then
+    stack_follow_until_ready || return 1
+  fi
 }
 
 #######################################

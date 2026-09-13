@@ -276,6 +276,8 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"setup"* ]]
   [[ "${output}" == *"clear-hf-locks"* ]]
   [[ "${output}" == *"print-shot"* ]]
+  [[ "${output}" == *"Start studio stack detached"* ]]
+  [[ "${output}" == *"not tied to this shell"* ]]
   run cmd_print_shot --help
   [ "${status}" -eq 0 ]
   run cmd_film_resume
@@ -353,6 +355,8 @@ FROZEN_MANAGE_VERBS=(
   export LAB_MOCK_DISK_FREE_GIB=100
   run cmd_start
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not tied to this shell"* ]]
+  [[ "${output}" == *"Detached"* ]]
   run cmd_stop
   [ "${status}" -eq 0 ]
   run cmd_restart
