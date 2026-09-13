@@ -49,8 +49,9 @@ def _app_labels(graph: dict) -> list[str]:
 
 
 def test_dub_localize_graph() -> None:
-    graph = _load("dub-localize-lab-example")
-    assert graph["id"] == "dub-localize-lab-example"
+    graph = _load("audio/dub/localize")
+    assert graph["id"] == "localize"
+    assert graph["extra"].get("lab_rel") == "audio/dub/localize"
     extra = graph["extra"]
     assert extra["lab_profile"] == "us-safe-dub"
     assert extra["lab_app_mode"]["occupancy"] == "audio"

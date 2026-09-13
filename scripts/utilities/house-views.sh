@@ -270,7 +270,7 @@ default_layout() {
 require_blender() {
   if ! command -v blender >/dev/null 2>&1; then
     err "blender not on PATH. Host install only — never in docker/Dockerfile."
-    err "No Blender → use klein-dream-house-lab-example (T2I). See docs/blender-gb10-sidecar.md"
+    err "No Blender → use klein/dream-house (T2I). See docs/blender-gb10-sidecar.md"
     return 1
   fi
   return 0

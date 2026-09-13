@@ -49,17 +49,29 @@ from ez_music.edm_examples import (  # noqa: E402
     drive_tags,
     format_edm_score,
 )
+from ez_music.albums import (  # noqa: E402
+    DRIVE_THROUGH_ALBUMS,
+    NILL_BYE_ALBUMS,
+    album_rel,
+    drive_album_for_phase,
+    nill_album_for_series,
+    shipped_albums,
+)
 from ez_music.naming import (  # noqa: E402
     DRIVE_THROUGH_ARTIST,
     NILL_BYE_ARTIST,
+    album_output_dir,
     music_output_prefix,
     title_case_song,
 )
 from ez_music.nodes import (  # noqa: E402
     DRAFT_LYRICS,
+    EZAlbumPack,
+    EZAudioMetadata,
     EZRapLyrics,
     FULL_LYRICS,
     NODE_CLASS_MAPPINGS,
+    NODE_DISPLAY_NAME_MAPPINGS,
     load_writer_prompt,
 )
 
@@ -87,10 +99,14 @@ LIVING_EDM_NEEDLES = (
 
 def test_pack_imports_without_extra_pip() -> None:
     assert ez_music.NODE_CLASS_MAPPINGS == NODE_CLASS_MAPPINGS
-    assert set(NODE_CLASS_MAPPINGS) == {"EZRapLyrics"}
+    assert set(NODE_CLASS_MAPPINGS) == {
+        "EZRapLyrics",
+        "EZAudioMetadata",
+        "EZAlbumPack",
+    }
     cls = NODE_CLASS_MAPPINGS["EZRapLyrics"]
-    assert cls.CATEGORY == "ez-comfy/music"
-    spec = cls.INPUT_TYPES()
+    assert cls.CATEGORY == "ez-comfy/music"  # type: ignore[attr-defined]
+    spec = cls.INPUT_TYPES()  # type: ignore[attr-defined]
     assert spec["required"]["enhance"][1]["default"] is True
     assert spec["required"]["enhance"][1]["label_on"] == "On"
     assert spec["required"]["enhance"][1]["label_off"] == "Off"
@@ -325,20 +341,12 @@ def test_title_case_song_and_output_prefix() -> None:
     assert title_case_song("two-step alibi") == "Two-Step Alibi"
     assert title_case_song("hypothesis vs rumor") == "Hypothesis vs Rumor"
     assert title_case_song("replicate or retract") == "Replicate or Retract"
-    assert (
-        music_output_prefix(NILL_BYE_ARTIST, "lab coat lecture", 0)
-        == "Nill Bye - Lab Coat Lecture - v0"
-    )
-    assert (
-        music_output_prefix(DRIVE_THROUGH_ARTIST, "night window", 1)
-        == "Drive-through - Night Window - v1"
-    )
+    assert music_output_prefix("lab coat lecture", 1) == "01 - Lab Coat Lecture"
+    assert music_output_prefix("night window", 15) == "15 - Night Window"
     with pytest.raises(ValueError, match="empty"):
         title_case_song("  ")
-    with pytest.raises(ValueError, match="artist"):
-        music_output_prefix("  ", "lab coat lecture", 0)
-    with pytest.raises(ValueError, match="phase"):
-        music_output_prefix(NILL_BYE_ARTIST, "lab coat lecture", -1)
+    with pytest.raises(ValueError, match="track"):
+        music_output_prefix("lab coat lecture", 0)
 
 
 def test_nill_tags_lock_dry_booth_voice() -> None:
@@ -415,13 +423,17 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
             assert ex["series"] in RAKE_SERIES
             assert "Rake" in lyrics
         assert str(ex["bpm"]) in ex["tags"]
-        assert ex["stem"].startswith("music-rap-nill-bye-")
-        assert ex["stem"].endswith("-lab-example")
+        assert ex["stem"] == f"{ex['track']:02d}-{ex['slug']}"
+        assert not ex["stem"].endswith("-lab-example")
         assert ex["series"] in series_counts
         assert ex["phase"] == series_phase[ex["series"]]
-        assert ex["prefix"] == nill_output_prefix(ex["title"], ex["phase"])
-        assert ex["prefix"].startswith("Nill Bye - ")
-        assert ex["prefix"].endswith(f" - v{ex['phase']}")
+        assert ex["album"] == NILL_BYE_ALBUMS[ex["series"]]["title"]
+        assert ex["artist"] == NILL_BYE_ARTIST
+        assert ex["track"] >= 1
+        assert ex["tracktotal"] == 15
+        assert ex["prefix"] == nill_output_prefix(ex["title"], ex["track"])
+        assert ex["prefix"] == f"{ex['track']:02d} - {title_case_song(ex['title'])}"
+        assert ex["rel"] == album_rel("nill-bye", ex["album_slug"], ex["stem"])
         series_counts[ex["series"]] += 1
         phase_counts[ex["phase"]] += 1
         if ex["series"] != "lab":
@@ -916,13 +928,14 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
                 assert token in ex["tags"], (ex["stem"], token)
         assert "rave" in ex["tags"]
         assert str(ex["bpm"]) in ex["tags"]
-        assert ex["stem"].startswith("music-edm-drive-through-")
-        assert ex["stem"].endswith("-lab-example")
-        assert ex["prefix"] == music_output_prefix(
-            DRIVE_THROUGH_ARTIST, ex["title"], ex["phase"]
+        assert ex["stem"] == f"{ex['track']:02d}-{ex['slug']}"
+        assert not ex["stem"].endswith("-lab-example")
+        assert ex["artist"] == DRIVE_THROUGH_ARTIST
+        assert ex["album"] == DRIVE_THROUGH_ALBUMS[ex["phase"]]["title"]
+        assert ex["prefix"] == music_output_prefix(ex["title"], ex["track"])
+        assert ex["rel"] == album_rel(
+            "drive-through", ex["album_slug"], ex["stem"]
         )
-        assert ex["prefix"].startswith("Drive-through - ")
-        assert ex["prefix"].endswith(f" - v{ex['phase']}")
         for needle in (*LIVING_MC_NEEDLES, *LIVING_EDM_NEEDLES):
             assert needle not in lyrics
             assert needle not in ex["tags"]
@@ -1007,3 +1020,38 @@ def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch: pytest.MonkeyP
     )
     nodes._ensure_lab_custom_nodes_path()
     assert Path(sys.path[0]).resolve() == CUSTOM.resolve()
+
+
+def test_shipped_albums_and_output_dir() -> None:
+    albums = shipped_albums()
+    assert len(albums) == 14
+    assert albums[0]["title"] == "Peer Review"
+    assert albums[0]["slug"] == "peer-review"
+    assert albums[8]["title"] == "Duty Switch"
+    assert albums[9]["title"] == "Hour 1"
+    assert albums[-1]["title"] == "Secret Homage"
+    assert album_output_dir(NILL_BYE_ARTIST, "Peer Review") == (
+        "albums/Nill Bye/Peer Review"
+    )
+    with pytest.raises(ValueError, match="artist"):
+        album_output_dir("  ", "Peer Review")
+    with pytest.raises(ValueError, match="album"):
+        album_output_dir(NILL_BYE_ARTIST, "  ")
+    assert "no living person" in albums[0]["cover_prompt"]
+    assert nill_album_for_series("lab")["slug"] == "peer-review"
+    with pytest.raises(KeyError):
+        nill_album_for_series("missing")
+    assert drive_album_for_phase(4)["slug"] == "secret-homage"
+    with pytest.raises(KeyError):
+        drive_album_for_phase(99)
+
+
+def test_metadata_nodes_expose_art_mode() -> None:
+    spec = EZAudioMetadata.INPUT_TYPES()
+    assert spec["required"]["art_mode"][0] == ["skip", "upload", "generate"]
+    assert spec["required"]["artist"][0] == "STRING"
+    assert "cover" in spec["optional"]
+    pack = EZAlbumPack.INPUT_TYPES()
+    assert pack["required"]["album"][0] == "STRING"
+    assert NODE_CLASS_MAPPINGS["EZAudioMetadata"].CATEGORY == "ez-comfy/music"  # type: ignore[attr-defined]
+    assert NODE_DISPLAY_NAME_MAPPINGS["EZAlbumPack"] == "Pack album zip"

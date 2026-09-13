@@ -19,12 +19,17 @@ teardown() {
 #######################################
 # Resolve a shipped lab JSON under workflows/_lab.
 # Arguments:
-#   $1  basename (e.g. klein-still-draft-lab-example.json)
+#   $1  basename (e.g. klein/still-draft.json)
 # Outputs:
 #   Absolute path on stdout
 #######################################
 lab_wf() {
-  find "${REPO_ROOT}/workflows/_lab" -name "${1:?}" -print -quit
+  local rel="${1:?}"
+  if [[ -f ${REPO_ROOT}/workflows/_lab/${rel} ]]; then
+    printf '%s\n' "${REPO_ROOT}/workflows/_lab/${rel}"
+    return 0
+  fi
+  find "${REPO_ROOT}/workflows/_lab" -name "$(basename "${rel}")" -print -quit
 }
 
 @test "gitignore hides operator _user graphs and local media" {
@@ -66,9 +71,9 @@ lab_wf() {
   [ "${status}" -eq 1 ]
   run git check-ignore -q workflows/_user/README.md
   [ "${status}" -eq 1 ]
-  run git check-ignore -q workflows/klein-still-draft-lab-example.json
+  run git check-ignore -q workflows/klein/still-draft.json
   [ "${status}" -eq 1 ]
-  run git check-ignore -q workflows/_lab/klein/klein-still-draft-lab-example.json
+  run git check-ignore -q workflows/_lab/klein/still-draft.json
   [ "${status}" -eq 1 ]
   run git check-ignore -q workflows/klein/_user/secret.json
   [ "${status}" -eq 0 ]
@@ -87,11 +92,11 @@ lab_wf() {
   local lab="${REPO_ROOT}/workflows/_lab"
   local dir="${REPO_ROOT}/workflows"
   local wf wan ltx
-  [[ -f $(lab_wf film-go-see-90s-run-lab-example.json) ]]
-  [[ -f $(lab_wf film-still-here-90s-lab-example.json) ]]
-  [[ -f $(lab_wf film-switchyard-90s-lab-example.json) ]]
-  [[ -f $(lab_wf wan-i2v-shot-lab-example.json) ]]
-  [[ -f $(lab_wf ltx-i2v-shot-lab-example.json) ]]
+  [[ -f $(lab_wf shorts/go-see.json) ]]
+  [[ -f $(lab_wf shorts/still-here.json) ]]
+  [[ -f $(lab_wf shorts/switchyard.json) ]]
+  [[ -f $(lab_wf wan/i2v-shot.json) ]]
+  [[ -f $(lab_wf ltx/i2v-shot.json) ]]
   [[ ! -f ${dir}/still-studio-lab-example.json ]]
   [[ ! -f ${dir}/wan-shot-lab-example.json ]]
   [[ ! -f ${shorts_yaml}/bridge-wan-lab-example.json ]]
@@ -101,9 +106,9 @@ lab_wf() {
   while IFS= read -r wf; do
     run python3 -c "import json,os; p='${wf}'; d=json.load(open(p)); assert d.get('id')==os.path.splitext(os.path.basename(p))[0]"
     [ "${status}" -eq 0 ]
-  done < <(find "${lab}/shorts" -name '*-lab-example.json')
-  wan="$(lab_wf wan-i2v-shot-lab-example.json)"
-  ltx="$(lab_wf ltx-i2v-shot-lab-example.json)"
+  done < <(find "${lab}/shorts" -name '*.json')
+  wan="$(lab_wf wan/i2v-shot.json)"
+  ltx="$(lab_wf ltx/i2v-shot.json)"
   run python3 -c "
 import json
 w=json.load(open('${wan}'))
@@ -125,13 +130,13 @@ for g in (w, l):
   [ "${status}" -eq 0 ]
 }
 
-@test "lab-example workflows parse, name pattern, banned strings, no overlaps" {
+@test "lab workflows parse, name pattern, banned strings, no overlaps" {
   local wf dir="${REPO_ROOT}/workflows"
   local n=0
   local -a files=()
   while IFS= read -r wf; do
     files+=("${wf}")
-  done < <(find "${dir}/_lab" -name '*-lab-example.json' | sort)
+  done < <(find "${dir}/_lab" -name '*.json' | sort)
   [[ ${#files[@]} -ge 8 ]]
 
   for gone in \
@@ -159,7 +164,7 @@ for g in (w, l):
     [ "${status}" -ne 0 ]
     # DCC envelopes were not in the old top-level AABB glob; groups test still covers them.
     # TRELLIS native stages stack vertically by design (shape under structure).
-    if [[ ${wf} == */_lab/dcc/* || ${wf} == */klein-trellis2-lab-example.json ]]; then
+    if [[ ${wf} == */_lab/dcc/* || ${wf} == */optional/klein/trellis2.json ]]; then
       continue
     fi
     run python3 -c "
@@ -214,7 +219,7 @@ for path in paths:
 
 @test "still lab graphs use Klein 4B Apache weights and flux2 CLIP" {
   local wf path draft hero
-  for wf in klein-still-draft-lab-example.json klein-still-hero-lab-example.json klein-still-daily-lab-example.json; do
+  for wf in klein/still-draft.json klein/still-hero.json klein/still-daily.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'flux-2-klein-4b-fp8.safetensors' "${path}"
@@ -230,8 +235,8 @@ for path in paths:
     run grep -F 'SaveImage' "${path}"
     [ "${status}" -eq 0 ]
   done
-  draft="$(lab_wf klein-still-draft-lab-example.json)"
-  hero="$(lab_wf klein-still-hero-lab-example.json)"
+  draft="$(lab_wf klein/still-draft.json)"
+  hero="$(lab_wf klein/still-hero.json)"
   run grep -F 'ez_still_draft' "${draft}"
   [ "${status}" -eq 0 ]
   run grep -F '768' "${draft}"
@@ -258,7 +263,7 @@ assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is T
 
 @test "wan lab graphs use 5B Apache weights, 121 frames, VHS" {
   local wf path i2v t2v shot
-  for wf in wan-i2v-5s-lab-example.json wan-t2v-5s-lab-example.json; do
+  for wf in wan/i2v-5s.json wan/t2v-5s.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'wan2.2_ti2v_5B_fp16.safetensors' "${path}"
@@ -283,9 +288,9 @@ assert vhs[0]['widgets_values']['save_output'] is True
 "
     [ "${status}" -eq 0 ]
   done
-  i2v="$(lab_wf wan-i2v-5s-lab-example.json)"
-  t2v="$(lab_wf wan-t2v-5s-lab-example.json)"
-  shot="$(lab_wf wan-i2v-shot-lab-example.json)"
+  i2v="$(lab_wf wan/i2v-5s.json)"
+  t2v="$(lab_wf wan/t2v-5s.json)"
+  shot="$(lab_wf wan/i2v-shot.json)"
   run grep -F 'ez_shot_01' "${shot}"
   [ "${status}" -eq 0 ]
   run grep -F 'Motion / prompt' "${i2v}"
@@ -316,7 +321,7 @@ assert 'score' not in tenh['widgets_values'][0].lower()
 
 @test "ltx hero graphs use 2.5 distilled pack, 121 frames, VHS, CLIP ltxv" {
   local wf path i2v t2v
-  for wf in ltx-i2v-5s-lab-example.json ltx-t2v-5s-lab-example.json; do
+  for wf in ltx/i2v-5s.json ltx/t2v-5s.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors' "${path}"
@@ -352,8 +357,8 @@ assert 'preview' in (vhs[0].get('title') or '').lower()
 "
     [ "${status}" -eq 0 ]
   done
-  i2v="$(lab_wf ltx-i2v-5s-lab-example.json)"
-  t2v="$(lab_wf ltx-t2v-5s-lab-example.json)"
+  i2v="$(lab_wf ltx/i2v-5s.json)"
+  t2v="$(lab_wf ltx/t2v-5s.json)"
   run python3 -c "
 import json
 d=json.load(open('${i2v}'))
@@ -380,7 +385,7 @@ from pathlib import Path
 root = Path('${REPO_ROOT}/workflows')
 stale = ('~10 s', 'tea house', 'sketch', 'STILL DRAFT/HERO', 'bridge-wan', 'still-studio')
 seen = []
-for p in sorted(root.rglob('*-lab-example.json')):
+for p in sorted((root / '_lab').rglob('*.json')):
     d = json.loads(p.read_text())
     desc = d.get('extra', {}).get('lab_description') or ''
     note = d.get('extra', {}).get('lab_note') or ''
@@ -390,26 +395,27 @@ for p in sorted(root.rglob('*-lab-example.json')):
     for s in stale:
         assert s not in blob, (p.name, s)
     seen.append(p.stem)
-    if p.stem == 'wan-i2v-5s-lab-example':
+    rel = p.relative_to(root / '_lab').with_suffix('').as_posix()
+    if rel == 'wan/i2v-5s':
         assert '121' in desc
-        assert 'wan-i2v-shot-lab-example' in note
-    if p.stem == 'wan-t2v-5s-lab-example':
+        assert 'wan/i2v-shot' in note
+    if rel == 'wan/t2v-5s':
         assert 'T2V' in desc
         assert 'bypassed' in note.lower()
-    if p.stem == 'wan-i2v-shot-lab-example':
+    if rel == 'wan/i2v-shot':
         assert '120' in desc
         assert 'ez_shot_01' in note
-    if p.stem == 'ltx-i2v-shot-lab-example':
+    if rel == 'ltx/i2v-shot':
         assert '121' in desc
-    if p.stem == 'klein-still-draft-lab-example':
-        assert 'klein-still-hero-lab-example' in note
-    if p.stem == 'film-go-see-90s-run-lab-example':
+    if rel == 'klein/still-draft':
+        assert 'klein/still-hero' in note
+    if rel == 'shorts/go-see':
         assert 'parkour' in desc
         assert 'one-click' in desc.lower() or 'queue once' in note.lower()
-assert 'klein-still-draft-lab-example' in seen
-assert 'film-go-see-90s-run-lab-example' in seen
-assert 'klein-shorts-still-lab-example' in seen
-assert 'ltx-broll-ambient-lab-example' in seen
+assert 'still-draft' in seen
+assert 'go-see' in seen
+assert 'shorts-still' in seen
+assert 'broll-ambient' in seen
 "
   [ "${status}" -eq 0 ]
 }
@@ -420,7 +426,7 @@ import json
 from pathlib import Path
 root = Path('${REPO_ROOT}/workflows')
 video = 0
-for p in sorted(root.rglob('*-lab-example.json')):
+for p in sorted((root / '_lab').rglob('*.json')):
     d = json.loads(p.read_text())
     vhs_nodes = [n for n in d['nodes'] if n.get('type')=='VHS_VideoCombine']
     if not vhs_nodes:
@@ -446,36 +452,36 @@ assert video >= 7, video
   local dir="${REPO_ROOT}/workflows"
   local wf
   for wf in \
-    klein-shorts-still-lab-example.json \
-    wan-shorts-i2v-lab-example.json \
-    ltx-shorts-i2v-lab-example.json \
-    klein-thumbnail-lab-example.json \
-    klein-product-packshot-lab-example.json \
-    klein-before-after-lab-example.json \
-    klein-style-lock-lab-example.json \
-    wan-bumper-loop-lab-example.json \
-    ltx-broll-ambient-lab-example.json \
-    klein-storyboard-6up-lab-example.json \
-    klein-endcard-cta-lab-example.json \
-    klein-quote-bg-lab-example.json \
-    klein-og-blog-lab-example.json \
-    klein-podcast-cover-lab-example.json \
-    klein-banner-wide-lab-example.json \
-    klein-ig-square-lab-example.json \
-    klein-hook-still-lab-example.json \
-    klein-lower-third-bg-lab-example.json \
-    klein-food-tabletop-lab-example.json \
-    klein-lighting-trio-lab-example.json \
-    klein-time-of-day-lab-example.json \
-    klein-camera-angles-lab-example.json \
-    klein-color-moods-lab-example.json \
-    wan-orbit-i2v-lab-example.json \
-    wan-push-in-i2v-lab-example.json \
-    wan-parallax-i2v-lab-example.json \
-    wan-sticker-loop-lab-example.json \
-    ltx-weather-broll-lab-example.json \
-    ltx-interior-ambience-lab-example.json \
-    ltx-hook-av-lab-example.json; do
+    klein/shorts-still.json \
+    wan/shorts-i2v.json \
+    ltx/shorts-i2v.json \
+    klein/thumbnail.json \
+    klein/product-packshot.json \
+    klein/before-after.json \
+    klein/style-lock.json \
+    wan/bumper-loop.json \
+    ltx/broll-ambient.json \
+    klein/storyboard-6up.json \
+    klein/endcard-cta.json \
+    klein/quote-bg.json \
+    klein/og-blog.json \
+    klein/podcast-cover.json \
+    klein/banner-wide.json \
+    klein/ig-square.json \
+    klein/hook-still.json \
+    klein/lower-third-bg.json \
+    klein/food-tabletop.json \
+    klein/lighting-trio.json \
+    klein/time-of-day.json \
+    klein/camera-angles.json \
+    klein/color-moods.json \
+    wan/orbit-i2v.json \
+    wan/push-in-i2v.json \
+    wan/parallax-i2v.json \
+    wan/sticker-loop.json \
+    ltx/weather-broll.json \
+    ltx/interior-ambience.json \
+    ltx/hook-av.json; do
     [[ -f $(lab_wf "${wf}") ]]
   done
 }
@@ -486,7 +492,8 @@ assert video >= 7, video
   local -a files=()
   while IFS= read -r wf; do
     files+=("${wf}")
-  done < <(find "${dir}/_lab" -name '*-lab-example.json' | sort)
+  done < <(find "${dir}/_lab" -name '*.json' | sort)
+  [[ ${#files[@]} -gt 8 ]]
   for wf in "${files[@]}"; do
     run python3 -c "
 import json, os
@@ -520,10 +527,10 @@ assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_no
 
 @test "operator app graphs: still settings, gif ping-pong loop, dream-house pack" {
   local daily gif house clay
-  daily="$(lab_wf klein-still-daily-lab-example.json)"
-  gif="$(lab_wf wan-gif-loop-lab-example.json)"
-  house="$(lab_wf klein-dream-house-lab-example.json)"
-  clay="$(lab_wf klein-dream-house-clay-lab-example.json)"
+  daily="$(lab_wf klein/still-daily.json)"
+  gif="$(lab_wf wan/gif-loop.json)"
+  house="$(lab_wf klein/dream-house.json)"
+  clay="$(lab_wf klein/dream-house-clay.json)"
   [[ -f ${daily} ]]
   [[ -f ${gif} ]]
   [[ -f ${house} ]]
@@ -531,7 +538,7 @@ assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_no
   run python3 -c "
 import json
 s=json.load(open('${daily}'))
-assert s.get('id')=='klein-still-daily-lab-example'
+assert s.get('id')=='still-daily'
 assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='flux-2-klein-4b-fp8.safetensors' for n in s['nodes'])
 assert any(n.get('type')=='CLIPLoader' and 'qwen_3_4b.safetensors' in n['widgets_values'] and 'flux2' in n['widgets_values'] for n in s['nodes'])
 assert any(n.get('type')=='VAELoader' and n['widgets_values'][0]=='flux2-vae.safetensors' for n in s['nodes'])
@@ -553,7 +560,7 @@ assert any('SETTING' in g.get('title','').upper() for g in s.get('groups',[]))
   run python3 -c "
 import json
 g=json.load(open('${gif}'))
-assert g.get('id')=='wan-gif-loop-lab-example'
+assert g.get('id')=='gif-loop'
 assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='wan2.2_ti2v_5B_fp16.safetensors' for n in g['nodes'])
 assert any(n.get('type')=='VAELoader' and n['widgets_values'][0]=='wan2.2_vae.safetensors' for n in g['nodes'])
 lat=next(n for n in g['nodes'] if n.get('type')=='Wan22ImageToVideoLatent')
@@ -584,7 +591,7 @@ assert 'breeze' in motion or 'curtain' in motion or 'leaves' in motion
   run python3 -c "
 import json
 d=json.load(open('${house}'))
-assert d.get('id')=='klein-dream-house-lab-example'
+assert d.get('id')=='dream-house'
 assert d.get('extra',{}).get('lab_flux_tier')=='fast'
 assert any(n.get('type')=='UNETLoader' and n['widgets_values'][0]=='flux-2-klein-4b-fp8.safetensors' for n in d['nodes'])
 assert any(n.get('type')=='CLIPLoader' and 'qwen_3_4b.safetensors' in n['widgets_values'] and 'flux2' in n['widgets_values'] for n in d['nodes'])
@@ -662,7 +669,7 @@ assert 'referencelatent' in ntext or 'new views' in ntext or 'independent t2i' i
   run python3 -c "
 import json
 d=json.load(open('${clay}'))
-assert d.get('id')=='klein-dream-house-clay-lab-example'
+assert d.get('id')=='dream-house-clay'
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1024, 1280] for n in d['nodes'])
 assert sum(1 for n in d['nodes'] if n.get('type')=='ReferenceLatent')==10
 assert sum(1 for n in d['nodes'] if n.get('type')=='LoadImage')==10

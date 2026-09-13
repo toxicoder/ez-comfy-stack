@@ -18,10 +18,10 @@ To ship a keeper from a live `_user` graph (does **not** commit):
 ./scripts/manage.sh promote-workflow \
   --from "${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/my-hook.json" \
   --lane klein \
-  --id klein-my-hook-lab-example
+  --id my-hook
 ```
 
-Destination is `workflows/_lab/<lane>/<id>.json`. The file must end in `-lab-example` and must not contain MiniMax / Klein 9B / FLUX.2-dev / Seedance / Kling / z_image_turbo. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.  
+Destination is `workflows/_lab/<lane>/<id>.json` (optional `--subdir`). Do not repeat lane tokens in the filename. Must not contain MiniMax / Klein 9B / FLUX.2-dev / Seedance / Kling / z_image_turbo. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.  
 
 ```mermaid
 flowchart TB

@@ -7,7 +7,7 @@
 # Purpose:
 #   status: SSH each SPARK_HOSTS entry (docker ps, disk, nvidia-smi, fabric ping).
 #   sync-models: rsync MODELS_DIR/comfy over SPARK_FABRIC_IPS only (not mgmt NIC).
-#   run: refuses MiniMax H3 names; operators Queue wan-i2v-shot / ltx-i2v-shot
+#   run: refuses MiniMax H3 names; operators Queue wan/i2v-shot / ltx/i2v-shot
 #   graphs per host, then concat-shots.sh locally.
 #   Never starts compose on a remote node — prints the local manage.sh start.
 #
@@ -202,7 +202,7 @@ cmd_run() {
   fi
   print_remote_start_hint
   mkdir -p "${FARM_SHARE}/out"
-  log "On each host, open Comfy, Queue wan-i2v-shot-lab-example.json then ltx-i2v-shot-lab-example.json (5.00s shots)"
+  log "On each host, open Comfy, Queue wan/i2v-shot.json then ltx/i2v-shot.json (5.00s shots)"
   log "Then run scripts/utilities/concat-shots.sh --film ${FILM:-go-see} against ${FARM_SHARE}"
   local url
   for url in "${urls[@]}"; do

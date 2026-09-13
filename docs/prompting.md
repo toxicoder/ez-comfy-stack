@@ -9,7 +9,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 **What's on this page**
 
 - How each lab model actually reads a prompt
-- Canned lab-example text (already rewritten)
+- Canned lab graph text (already rewritten)
 - GIF loop motion and dream-house world bible (one place prompt; one shot per room or angle; Prompt Join lock=view). Clay tour: same bible, Klein restyles Blender stills
 - Character draft then tweak (style dropdown; generated still as the next reference)
 - Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507). Seeded graphs pin Enhance **on** for lazy CLIP printers and **off** when the string is already a recipe, script, or film shot.
@@ -24,7 +24,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 !!! tip "Lab graphs already ship model-native prompts"
 
-    Seeded **\*-lab-example** graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **research-chat-lab-example** is a no-UNET creative desk (occupancy **llm**): chat or planner+search subagents, then copy prompt ingredients into **prompt-forge-lab-example**. Prompt Forge previews Klein / Wan / LTX rewrites with no UNET. Copy the family you need into Spark Still. The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
+    Seeded lab graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **inspire/research-chat** is a no-UNET creative desk (occupancy **llm**): chat or planner+search subagents, then copy prompt ingredients into **inspire/prompt-forge**. Prompt Forge previews Klein / Wan / LTX rewrites with no UNET. Copy the family you need into Spark Still. The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
 
 ```mermaid
 flowchart TB
@@ -76,13 +76,13 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "Looping GIF (Wan I2V)"
 
-    Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do **not** prompt a walk or a one-way dolly — **wan-gif-loop-lab-example** plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.
+    Locked camera plus cyclic motion (breeze, curtains, leaves, water). Do **not** prompt a walk or a one-way dolly — **wan/gif-loop** plays the clip forward then reverse (VHS ping-pong) so the join frame is the start image. Turn ping-pong off only when reverse playback would look wrong.
 
 === "Dream-house pack (Klein)"
 
-    Type **one place**. Identity-mode enhance freezes only the rooms, furniture, outdoor lamps, and surroundings you named (the default placeholder is a full-floor penthouse on a tall tower in a dense unmarked city). Name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough — tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study — not a penthouse template. Each card is one room or angle with its own backdrop: only lounge looks out the main opening; kitchen, dining, bedroom, bath, and study keep interior walls. **Prompt Join** `lock=view` front-loads the shot, then “same building, rooms, furniture, and materials” + “this still is only the room and backdrop the shot names” + the bible, and repeats that closer after the bible. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01. Dawn / noon / night of one camera belong on **klein-time-of-day-lab-example** (`lock=state`). `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
+    Type **one place**. Identity-mode enhance freezes only the rooms, furniture, outdoor lamps, and surroundings you named (the default placeholder is a full-floor penthouse on a tall tower in a dense unmarked city). Name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough — tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study — not a penthouse template. Each card is one room or angle with its own backdrop: only lounge looks out the main opening; kitchen, dining, bedroom, bath, and study keep interior walls. **Prompt Join** `lock=view` front-loads the shot, then “same building, rooms, furniture, and materials” + “this still is only the room and backdrop the shot names” + the bible, and repeats that closer after the bible. Shot cards are **not** Klein-t2i-enhanced — a per-shot rewrite would mutate the bible. Shots 02–10 are independent T2I (empty latent, same seed) — they do **not** `ReferenceLatent` shot 01. Dawn / noon / night of one camera belong on **klein/time-of-day** (`lock=state`). `lock=state` is the other mode: same camera, change only light/grade/action (lighting-trio, before/after). Unused shots may be bypassed.
 
-    Second door — **klein-dream-house-clay-lab-example**: same bible and shot cards, but each still `ReferenceLatent`s a clay plate (`ez_house_clay_01`…`10`). `start` seeds LoadImage; optional Workbench dump with `./scripts/manage.sh house-views` while Comfy is **down**. Prompt the **look** (style dropdown, materials); do not re-describe the floorplan — the greybox already locked cameras and adjacency. Prefix `ez_dream_house_clay_01`…`10`. Language-only (no geometry) → T2I tour. Playbook: [Dream-house tours](learn/dream-house.md).
+    Second door — **klein/dream-house-clay**: same bible and shot cards, but each still `ReferenceLatent`s a clay plate (`ez_house_clay_01`…`10`). `start` seeds LoadImage; optional Workbench dump with `./scripts/manage.sh house-views` while Comfy is **down**. Prompt the **look** (style dropdown, materials); do not re-describe the floorplan — the greybox already locked cameras and adjacency. Prefix `ez_dream_house_clay_01`…`10`. Language-only (no geometry) → T2I tour. Playbook: [Dream-house tours](learn/dream-house.md).
 
 === "LTX-2.5 AV"
 
@@ -160,4 +160,4 @@ Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit ar
 
 ## Next steps
 
-Queue **klein-still-draft-lab-example** first ([Getting Started](getting-started.md)), or **klein-character-draft-lab-example** then **klein-character-tweak-lab-example** to iterate a still. Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).
+Queue **klein/still-draft** first ([Getting Started](getting-started.md)), or **klein/character-draft** then **klein/character-tweak** to iterate a still. Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).

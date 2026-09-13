@@ -37,9 +37,9 @@ ACE_STING_TAGS = (
     "short instrumental sting, analog keys hit, no vocals, instrumental"
 )
 ACE_NEG_TAGS = "vocals, singing, choir, rap"
-COVER_GRAPH = "klein-podcast-cover-lab-example.json"
+COVER_GRAPH = "klein/podcast-cover.json"
 
-AUDIO_NOTE_A = f"""## podcast-audio-first-lab-example
+AUDIO_NOTE_A = f"""## audio/podcast/audio-first
 
 US-safe audio-first episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
 
@@ -54,13 +54,13 @@ US-safe audio-first episode (Option A). Sequential Queue — do not load Klein +
 Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
 """
 
-AUDIO_NOTE_B = f"""## podcast-radio-drama-lab-example
+AUDIO_NOTE_B = f"""## audio/podcast/radio-drama
 
 US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan-bumper-loop-lab-example** / **ltx-hook-av-lab-example** in a later session — not a one-graph film.
+- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session — not a one-graph film.
 - Cover: Queue **{COVER_GRAPH}** separately.
 
 {DISCLOSURE_TEXT}
@@ -180,7 +180,7 @@ def _sampler_widgets() -> list:
 
 
 def build_audio_first() -> dict:
-    g = Graph("podcast-audio-first-lab-example")
+    g = Graph("audio/podcast/audio-first")
     g.add(
         1,
         "CheckpointLoaderSimple",
@@ -355,7 +355,7 @@ def build_audio_first() -> dict:
 
 
 def build_radio_drama() -> dict:
-    g = Graph("podcast-radio-drama-lab-example")
+    g = Graph("audio/podcast/radio-drama")
     g.add(
         1,
         "CheckpointLoaderSimple",
@@ -649,8 +649,8 @@ def build_radio_drama() -> dict:
 
 def main() -> None:
     graphs = {
-        "podcast-audio-first-lab-example.json": build_audio_first(),
-        "podcast-radio-drama-lab-example.json": build_radio_drama(),
+        "audio/podcast/audio-first.json": build_audio_first(),
+        "audio/podcast/radio-drama.json": build_radio_drama(),
     }
     for name, graph in graphs.items():
         path = lab_json(name)

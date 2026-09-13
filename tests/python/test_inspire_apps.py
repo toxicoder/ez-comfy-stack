@@ -47,8 +47,9 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
 
 
 def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
-    graph = _load("prompt-forge-lab-example")
-    assert graph["id"] == "prompt-forge-lab-example"
+    graph = _load("inspire/prompt-forge")
+    assert graph["id"] == "prompt-forge"
+    assert graph["extra"].get("lab_rel") == "inspire/prompt-forge"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -64,7 +65,7 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["enabled"] is True
     assert extra["lab_app_mode"]["lane"] == "inspire"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
-    assert "klein-still-draft-lab-example" in extra["lab_app_mode"]["handoff"]
+    assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
     labels = []
     for entry in extra["linearData"]["inputs"]:
         config = entry[2] if len(entry) > 2 else {}
@@ -77,8 +78,9 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
 
 
 def test_research_chat_has_no_unet_and_stamps_llm() -> None:
-    graph = _load("research-chat-lab-example")
-    assert graph["id"] == "research-chat-lab-example"
+    graph = _load("inspire/research-chat")
+    assert graph["id"] == "research-chat"
+    assert graph["extra"].get("lab_rel") == "inspire/research-chat"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -90,8 +92,8 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["enabled"] is True
     assert extra["lab_app_mode"]["lane"] == "inspire"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
-    assert "prompt-forge-lab-example" in extra["lab_app_mode"]["handoff"]
-    assert "klein-still-draft-lab-example" in extra["lab_app_mode"]["handoff"]
+    assert "inspire/prompt-forge" in extra["lab_app_mode"]["handoff"]
+    assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
     assert extra["lab_mcp"]["server"] == "research-mcp"
     assert extra["lab_mcp"]["tools"] == ["chat", "web_search", "research"]
     labels = []
@@ -109,10 +111,10 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
 
 
 def test_character_draft_is_t2i_without_reference() -> None:
-    graph = _load("klein-character-draft-lab-example")
+    graph = _load("klein/character-draft")
     assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
-    assert "klein-character-tweak-lab-example" in graph["extra"]["lab_app_mode"]["handoff"]
+    assert "klein/character-tweak" in graph["extra"]["lab_app_mode"]["handoff"]
     enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert enh["widgets_values"][2] == "t2i"
     assert enh["widgets_values"][1] is True
@@ -129,7 +131,7 @@ def test_character_draft_is_t2i_without_reference() -> None:
 
 
 def test_character_tweak_wires_reference_latent() -> None:
-    graph = _load("klein-character-tweak-lab-example")
+    graph = _load("klein/character-tweak")
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
     enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert enh["widgets_values"][2] == "edit"
@@ -151,8 +153,9 @@ def test_character_tweak_wires_reference_latent() -> None:
 
 
 def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
-    graph = _load("beat-sheet-lab-example")
-    assert graph["id"] == "beat-sheet-lab-example"
+    graph = _load("inspire/beat-sheet")
+    assert graph["id"] == "beat-sheet"
+    assert graph["extra"].get("lab_rel") == "inspire/beat-sheet"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types, heavy
@@ -173,9 +176,9 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "none"
     assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
     handoff = graph["extra"]["lab_app_mode"]["handoff"]
-    assert "film-go-see-90s-run-lab-example" in handoff
-    assert "klein-from-clay-lab-example" in handoff
-    assert "klein-identity-sheet-lab-example" in handoff
+    assert "shorts/go-see" in handoff
+    assert "dcc/klein/from-clay" in handoff
+    assert "klein/identity-sheet" in handoff
     assert "1280×720" not in blob and "1280x720" not in blob
     assert "MODELS_DIR" not in blob
     for needle in BANNED:

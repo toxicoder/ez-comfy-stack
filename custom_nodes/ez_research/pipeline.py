@@ -170,7 +170,7 @@ def _fallback_brief(message: str, hits: list[SearchHit]) -> str:
             "- one camera / lens note",
             "",
             "## Next App",
-            "prompt-forge-lab-example, then klein-still-draft-lab-example",
+            "inspire/prompt-forge, then klein/still-draft",
         ]
     )
     return "\n".join(lines).strip()

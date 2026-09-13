@@ -47,14 +47,14 @@ flowchart TB
 
 ## Golden path (script door)
 
-1. Load **beat-sheet-lab-example**. Fill logline, script, audio policy, 18 cards. Occupancy **none**.
+1. Load **inspire/beat-sheet**. Fill logline, script, audio policy, 18 cards. Occupancy **none**.
 2. `./scripts/manage.sh shot-sheet run --film go-see` writes `films/gosee/shots.yaml`. Does not overwrite lab YAML.
-3. Optional board: **klein-identity-sheet-lab-example** then **klein-storyboard-6up-lab-example** (seed 42, 1280×704).
+3. Optional board: **klein/identity-sheet** then **klein/storyboard-6up** (seed 42, 1280×704).
 4. Optional clay: `manage.sh stop` then `export-guides --film go-see --shot 12`. Workbench clay + depth + canny, not Cycles beauty. Path D: dump on the laptop, rsync `guides/`. Creator plates (not 5.00s): `blender-stills` then **klein-from-clay-plates** — [Blender creator suite](blender-creator.md).
 5. `manage.sh film-animatic --film go-see` — clay.mp4 or 5.00 s still holds, cap 90 s. Compose may stay up.
-6. Start Comfy. Queue **klein-from-clay-lab-example** on `first.png`, or stay on `:8188` with **klein-from-guide-loader-lab-example** ([Stay in Comfy after a Blender dump](comfy-first-blender.md)). Then `overlay-qc --film go-see --shot 12 --look PATH`. Iterate the look, not the print.
-7. Stop Klein. `download-ltx --tier iclora` if needed. Queue **ltx-iclora-depth-5s-lab-example** or Templates → LTX-2.5 Union Control (depth from `depth.mp4`). MagCache off. Distilled-only. Refuse 19B Union.
-8. Stop LTX. Occupancy **audio**. `stem-mix --film go-see --shot 12 --bg PATH` (optional `--dx`). Duck −15 dB, YouTube loudnorm I=-14. App: **audio-finish-lab-example**.
+6. Start Comfy. Queue **dcc/klein/from-clay** on `first.png`, or stay on `:8188` with **dcc/klein/from-guide-loader** ([Stay in Comfy after a Blender dump](comfy-first-blender.md)). Then `overlay-qc --film go-see --shot 12 --look PATH`. Iterate the look, not the print.
+7. Stop Klein. `download-ltx --tier iclora` if needed. Queue **dcc/ltx/iclora-depth-5s** or Templates → LTX-2.5 Union Control (depth from `depth.mp4`). MagCache off. Distilled-only. Refuse 19B Union.
+8. Stop LTX. Occupancy **audio**. `stem-mix --film go-see --shot 12 --bg PATH` (optional `--dx`). Duck −15 dB, YouTube loudnorm I=-14. App: **audio/finish**.
 9. `film-accept` then concat. Disclosure sidecar stays.
 
 Printers stay **5.00 s / 1280×704 / 121 frames (`1+8n`) @ 24 fps**. Do not type a 90 s latent. Do not type 120 (VAE floors to 113 frames).
@@ -65,10 +65,10 @@ Printers stay **5.00 s / 1280×704 / 121 frames (`1+8n`) @ 24 fps**. Do not type
 
 | If | Skip |
 | --- | --- |
-| No Blender / Path D not ready | Film clay dump. Look plate owns composition. Overlay QC is skipped, not faked. Instagram clay tour still Queues on `start` / `--seed-inputs` layout plates; language-only → **klein-dream-house-lab-example**. |
+| No Blender / Path D not ready | Film clay dump. Look plate owns composition. Overlay QC is skipped, not faked. Instagram clay tour still Queues on `start` / `--seed-inputs` layout plates; language-only → **klein/dream-house**. |
 | Empty dialogue | DX stem |
 | Shorts “world SFX, no score” | MX. Do not load ACE-Step next to LTX. |
-| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`klein-talking-head-lab-example`). Mouths will not match. |
+| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`klein/talking-head`). Mouths will not match. |
 
 ---
 

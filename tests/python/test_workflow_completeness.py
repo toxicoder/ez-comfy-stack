@@ -1,4 +1,4 @@
-"""Completeness auditor for shipped *-lab-example graphs."""
+"""Completeness auditor for shipped lab graphs."""
 
 from __future__ import annotations
 
@@ -137,6 +137,7 @@ def test_lab_graph_completeness(path: Path) -> None:
                 "EZLTXPromptEnhance",
                 "EZCreativeResearch",
                 "PrimitiveNode",
+                "EZAlbumPack",
             }
         )
     wired = _wired_node_ids(graph)

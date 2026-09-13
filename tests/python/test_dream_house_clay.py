@@ -1,4 +1,4 @@
-"""klein-dream-house-clay-lab-example: 3D clay persistence + Klein edit."""
+"""klein/dream-house-clay: 3D clay persistence + Klein edit."""
 
 from __future__ import annotations
 
@@ -11,15 +11,16 @@ BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev", "Wav2L
 
 
 def _load() -> dict:
-    path = lab_json("klein-dream-house-clay-lab-example.json")
+    path = lab_json("klein/dream-house-clay.json")
     return json.loads(path.read_text(encoding="utf-8"))
 
 
 def test_dream_house_clay_contract() -> None:
     graph = _load()
-    assert graph["id"] == "klein-dream-house-clay-lab-example"
+    assert graph["id"] == "dream-house-clay"
+    assert graph["extra"].get("lab_rel") == "klein/dream-house-clay"
     extra = graph["extra"]
-    assert extra["lab_profile"] == "klein-dream-house-clay-lab-example"
+    assert extra["lab_profile"] == "klein/dream-house-clay"
     assert extra["lab_app_mode"]["occupancy"] == "klein"
     assert extra["lab_app_mode"]["lane"] == "inspire"
     blob = json.dumps(graph)
@@ -51,17 +52,17 @@ def test_dream_house_clay_contract() -> None:
     assert "install-inputs" in note
     assert "seed-inputs" in note
     assert "start" in note
-    assert "klein-dream-house-lab-example" in extra["lab_note"]
+    assert "klein/dream-house" in extra["lab_note"]
     assert extra["lab_app_mode"]["handoff"] == [
-        "wan-gif-loop-lab-example",
-        "wan-bumper-loop-lab-example",
-        "wan-sticker-loop-lab-example",
+        "wan/gif-loop",
+        "wan/bumper-loop",
+        "wan/sticker-loop",
     ]
 
 
 def test_dream_house_clay_hides_shots_and_images() -> None:
     graph = _load()
-    spec = STAMP_SPECS["klein-dream-house-clay-lab-example"]
+    spec = STAMP_SPECS["klein/dream-house-clay"]
     assert spec.get("hide_images") is True
     names = [item[1] for item in infer_suite_inputs(graph, spec)]
     assert names.count("prompt") == 1

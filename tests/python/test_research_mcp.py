@@ -57,18 +57,18 @@ def test_list_lab_apps_includes_inspire() -> None:
     assert result["ok"] is True
     assert result["count"] >= 2
     ids = {row["id"] for row in result["apps"]}
-    assert "prompt-forge-lab-example" in ids
-    assert "research-chat-lab-example" in ids
-    research = next(r for r in result["apps"] if r["id"] == "research-chat-lab-example")
+    assert "inspire/prompt-forge" in ids
+    assert "inspire/research-chat" in ids
+    research = next(r for r in result["apps"] if r["id"] == "inspire/research-chat")
     assert research["lane"] == "inspire"
     assert research["occupancy"] == "llm"
 
 
 def test_describe_app_research_chat() -> None:
-    result = mcp.call_tool("describe_app", {"stem": "research-chat-lab-example"})
+    result = mcp.call_tool("describe_app", {"stem": "inspire/research-chat"})
     assert result["ok"] is True
     assert result["occupancy"] == "llm"
-    assert "prompt-forge-lab-example" in result["handoff"]
+    assert "inspire/prompt-forge" in result["handoff"]
     assert "Message" in result["widgets"]
     assert result["lab_mcp"]["server"] == "research-mcp"
     assert "research" in result["lab_mcp"]["tools"]

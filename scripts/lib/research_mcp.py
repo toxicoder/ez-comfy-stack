@@ -78,12 +78,19 @@ def _linear_labels(extra: Mapping[str, Any]) -> list[str]:
 
 
 def _load_lab_graph(stem: str) -> tuple[Path, dict[str, Any]] | None:
-    name = Path(str(stem or "")).name
-    if not name:
+    text = str(stem or "").replace("\\", "/").strip().lstrip("./")
+    text = text.removeprefix("_lab/")
+    if text.endswith(".json"):
+        text = text[: -len(".json")]
+    if not text:
         return None
-    if not name.endswith(".json"):
-        name = f"{name}.json"
-    hits = sorted(p for p in _lab_root().rglob(name) if p.is_file())
+    root = _lab_root()
+    if "/" in text:
+        path = root / f"{text}.json"
+        hits = [path] if path.is_file() else []
+    else:
+        name = f"{text}.json"
+        hits = sorted(p for p in root.rglob(name) if p.is_file())
     if len(hits) != 1:
         return None
     try:
@@ -104,7 +111,7 @@ def tool_list_lab_apps(_args: dict[str, Any]) -> dict[str, Any]:
     root = _lab_root()
     if not root.is_dir():
         return {"ok": True, "apps": [], "count": 0}
-    for path in sorted(root.rglob("*-lab-example.json")):
+    for path in sorted(root.rglob("*.json")):
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
@@ -119,9 +126,10 @@ def tool_list_lab_apps(_args: dict[str, Any]) -> dict[str, Any]:
             mode = {}
         rel = path.relative_to(root)
         lane = str(mode.get("lane") or (rel.parts[0] if rel.parts else ""))
+        lab_rel = str(extra.get("lab_rel") or rel.with_suffix("").as_posix())
         apps.append(
             {
-                "id": str(data.get("id") or path.stem),
+                "id": lab_rel,
                 "lane": lane,
                 "occupancy": mode.get("occupancy"),
                 "handoff": list(mode.get("handoff") or []),
@@ -148,7 +156,7 @@ def tool_describe_app(args: dict[str, Any]) -> dict[str, Any]:
         mcp = {}
     return {
         "ok": True,
-        "id": str(data.get("id") or path.stem),
+        "id": str(extra.get("lab_rel") or data.get("id") or path.stem),
         "path": str(path.relative_to(_repo_root())),
         "lab_note": str(extra.get("lab_note") or ""),
         "description": str(extra.get("lab_description") or ""),
@@ -227,7 +235,7 @@ TOOLS: dict[str, dict[str, Any]] = {
     },
     "list_lab_apps": {
         "description": (
-            "List shipped *-lab-example Apps (id, lane, occupancy, handoff)."
+            "List shipped lab Apps (id, lane, occupancy, handoff)."
         ),
         "inputSchema": {"type": "object", "properties": {}},
         "handler": tool_list_lab_apps,

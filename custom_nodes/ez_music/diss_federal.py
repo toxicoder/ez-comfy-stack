@@ -7,6 +7,8 @@ Same dry-booth vocal tags as the lab catalog.
 
 from __future__ import annotations
 
+from typing import Any
+
 from .diss_examples import (
     DISS_DURATION_S,
     DissExample,
@@ -27,7 +29,7 @@ def _ex(
     take: str,
     lyrics: str,
     *tag_parts: str,
-) -> DissExample:
+) -> dict[str, Any]:
     return {
         "stem": f"music-rap-nill-bye-{slug}-lab-example",
         "series": "federal",
@@ -996,7 +998,7 @@ CARROLL_TAB_LYRICS = format_diss_lyrics(
 )
 
 
-DISS_FEDERAL: tuple[DissExample, ...] = (
+DISS_FEDERAL = (
     _ex(
         "thirty-four-counts",
         "thirty four counts",

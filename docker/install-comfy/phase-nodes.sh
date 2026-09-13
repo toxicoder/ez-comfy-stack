@@ -505,4 +505,9 @@ phase_nodes() {
   configure_nunchaku_pack
   install_llama_cpp_cpu
   install_dub_wheels
+  if pip_install mutagen; then
+    log "mutagen installed for album FLAC/MP3 tags"
+  else
+    warn "mutagen pip failed — album tags write sidecar JSON only"
+  fi
 }

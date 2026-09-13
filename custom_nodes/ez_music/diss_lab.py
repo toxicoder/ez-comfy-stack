@@ -975,7 +975,7 @@ REPLICATE_LYRICS = format_diss_lyrics(
     outro="rerun over\ncannot repeat\ncut\nyeah",
 )
 
-DISS_LAB: tuple[DissExample, ...] = (
+DISS_LAB = (
     {
         "stem": "music-rap-nill-bye-lab-coat-lab-example",
         "series": "lab",

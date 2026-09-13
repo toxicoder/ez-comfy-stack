@@ -25,7 +25,7 @@ SPECS = (
         "klein-t2i-backbone",
         KLEIN_UUID,
         "klein",
-        "klein-still-draft-lab-example.json",
+        "klein/still-draft.json",
         (
             ("prompt", "STRING"),
             ("negative", "STRING"),
@@ -41,7 +41,7 @@ SPECS = (
         "wan-i2v-5s",
         WAN_UUID,
         "wan",
-        "wan-i2v-5s-lab-example.json",
+        "wan/i2v-5s.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),
@@ -55,7 +55,7 @@ SPECS = (
         "ltx-av-5s",
         LTX_AV_UUID,
         "ltx",
-        "ltx-i2v-5s-lab-example.json",
+        "ltx/i2v-5s.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),
@@ -70,7 +70,7 @@ SPECS = (
         "ltx-film-shot",
         LTX_SHOT_UUID,
         "film",
-        "ltx-i2v-shot-lab-example.json",
+        "ltx/i2v-shot.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),

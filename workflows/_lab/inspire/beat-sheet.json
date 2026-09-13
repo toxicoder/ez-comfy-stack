@@ -1,0 +1,2155 @@
+{
+  "id": "beat-sheet",
+  "revision": 1,
+  "last_node_id": 41,
+  "last_link_id": 18,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        1340,
+        460.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## inspire/beat-sheet\n\nScript desk \u2014 6 beats \u00d7 enter / traverse / exit. Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Fill Logline, Script, Audio policy, Score, then the 18 cards\n(`action | camera | world SFX | dialogue`). Write YAML on the host:\n\n  ./scripts/manage.sh shot-sheet run --film <slug>\n\nThat writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**\ncopy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.\n\nNext: klein/identity-sheet, or export-guides if clay is required, then\ndcc/klein/from-clay.\n\nShot-card keys (defaults fail-closed):\n\n  audio_policy: world-only | stems | a2v-lock\n  score: none | acestep-instrumental\n  clay: skip | required\n  audio_lock: none | a2v\n  camera: dolly in | tracking | fixed camera | \u2026\n\nShot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.\n\nDo not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        616.0
+      ],
+      "size": [
+        420.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "One-line premise. Approve before any UNET.",
+        "fixed"
+      ],
+      "title": "Logline"
+    },
+    {
+      "id": 3,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        616.0
+      ],
+      "size": [
+        420.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "Spoken and visual beats. Words are cheap; prints are not.",
+        "fixed"
+      ],
+      "title": "Script"
+    },
+    {
+      "id": 4,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        616.0
+      ],
+      "size": [
+        420.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "world-only",
+        "fixed"
+      ],
+      "title": "Audio policy"
+    },
+    {
+      "id": 5,
+      "type": "PrimitiveNode",
+      "pos": [
+        1420.0,
+        616.0
+      ],
+      "size": [
+        420.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "none",
+        "fixed"
+      ],
+      "title": "Score"
+    },
+    {
+      "id": 6,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        836.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            1
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 1 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 1 enter"
+    },
+    {
+      "id": 7,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        40.0,
+        1046.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 1,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "enter beat 1 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 1 enter LTX enhance"
+    },
+    {
+      "id": 8,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        836.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            2
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 1 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 1 traverse"
+    },
+    {
+      "id": 9,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        500.0,
+        1046.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 2,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "traverse beat 1 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 1 traverse LTX enhance"
+    },
+    {
+      "id": 10,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        836.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            3
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 1 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 1 exit"
+    },
+    {
+      "id": 11,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        960.0,
+        1046.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 3,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "exit beat 1 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 1 exit LTX enhance"
+    },
+    {
+      "id": 12,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        1422.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            4
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 2 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 2 enter"
+    },
+    {
+      "id": 13,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        40.0,
+        1632.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "enter beat 2 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 2 enter LTX enhance"
+    },
+    {
+      "id": 14,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        1422.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            5
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 2 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 2 traverse"
+    },
+    {
+      "id": 15,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        500.0,
+        1632.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 5,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "traverse beat 2 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 2 traverse LTX enhance"
+    },
+    {
+      "id": 16,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        1422.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 2 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 2 exit"
+    },
+    {
+      "id": 17,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        960.0,
+        1632.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "exit beat 2 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 2 exit LTX enhance"
+    },
+    {
+      "id": 18,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        2008.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            7
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 3 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 3 enter"
+    },
+    {
+      "id": 19,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        40.0,
+        2218.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 7,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "enter beat 3 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 3 enter LTX enhance"
+    },
+    {
+      "id": 20,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        2008.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            8
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 3 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 3 traverse"
+    },
+    {
+      "id": 21,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        500.0,
+        2218.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 8,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "traverse beat 3 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 3 traverse LTX enhance"
+    },
+    {
+      "id": 22,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        2008.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            9
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 3 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 3 exit"
+    },
+    {
+      "id": 23,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        960.0,
+        2218.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 9,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "exit beat 3 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 3 exit LTX enhance"
+    },
+    {
+      "id": 24,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        2594.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            10
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 4 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 4 enter"
+    },
+    {
+      "id": 25,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        40.0,
+        2804.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 10,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "enter beat 4 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 4 enter LTX enhance"
+    },
+    {
+      "id": 26,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        2594.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            11
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 4 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 4 traverse"
+    },
+    {
+      "id": 27,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        500.0,
+        2804.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 11,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "traverse beat 4 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 4 traverse LTX enhance"
+    },
+    {
+      "id": 28,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        2594.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            12
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 4 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 4 exit"
+    },
+    {
+      "id": 29,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        960.0,
+        2804.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 28,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 12,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "exit beat 4 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 4 exit LTX enhance"
+    },
+    {
+      "id": 30,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        3180.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 29,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            13
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 5 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 5 enter"
+    },
+    {
+      "id": 31,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        40.0,
+        3390.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 13,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "enter beat 5 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 5 enter LTX enhance"
+    },
+    {
+      "id": 32,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        3180.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            14
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 5 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 5 traverse"
+    },
+    {
+      "id": 33,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        500.0,
+        3390.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 14,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "traverse beat 5 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 5 traverse LTX enhance"
+    },
+    {
+      "id": 34,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        3180.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            15
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 5 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 5 exit"
+    },
+    {
+      "id": 35,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        960.0,
+        3390.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 15,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "exit beat 5 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 5 exit LTX enhance"
+    },
+    {
+      "id": 36,
+      "type": "PrimitiveNode",
+      "pos": [
+        40.0,
+        3766.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            16
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "enter beat 6 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 6 enter"
+    },
+    {
+      "id": 37,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        40.0,
+        3976.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 16,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "enter beat 6 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 6 enter LTX enhance"
+    },
+    {
+      "id": 38,
+      "type": "PrimitiveNode",
+      "pos": [
+        500.0,
+        3766.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "traverse beat 6 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 6 traverse"
+    },
+    {
+      "id": 39,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        500.0,
+        3976.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 38,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 17,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "traverse beat 6 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 6 traverse LTX enhance"
+    },
+    {
+      "id": 40,
+      "type": "PrimitiveNode",
+      "pos": [
+        960.0,
+        3766.0
+      ],
+      "size": [
+        420.0,
+        160.0
+      ],
+      "flags": {},
+      "order": 39,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            18
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "exit beat 6 \u2014 action | camera | world SFX | dialogue",
+        "fixed"
+      ],
+      "title": "Beat 6 exit"
+    },
+    {
+      "id": 41,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        960.0,
+        3976.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 18,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "exit beat 6 \u2014 action | camera | world SFX | dialogue",
+        true,
+        "i2v",
+        "5 seconds, 24 fps",
+        "",
+        "none"
+      ],
+      "title": "Beat 6 exit LTX enhance"
+    }
+  ],
+  "links": [
+    [
+      1,
+      6,
+      0,
+      7,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      8,
+      0,
+      9,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      10,
+      0,
+      11,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      12,
+      0,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      14,
+      0,
+      15,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      16,
+      0,
+      17,
+      0,
+      "STRING"
+    ],
+    [
+      7,
+      18,
+      0,
+      19,
+      0,
+      "STRING"
+    ],
+    [
+      8,
+      20,
+      0,
+      21,
+      0,
+      "STRING"
+    ],
+    [
+      9,
+      22,
+      0,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      10,
+      24,
+      0,
+      25,
+      0,
+      "STRING"
+    ],
+    [
+      11,
+      26,
+      0,
+      27,
+      0,
+      "STRING"
+    ],
+    [
+      12,
+      28,
+      0,
+      29,
+      0,
+      "STRING"
+    ],
+    [
+      13,
+      30,
+      0,
+      31,
+      0,
+      "STRING"
+    ],
+    [
+      14,
+      32,
+      0,
+      33,
+      0,
+      "STRING"
+    ],
+    [
+      15,
+      34,
+      0,
+      35,
+      0,
+      "STRING"
+    ],
+    [
+      16,
+      36,
+      0,
+      37,
+      0,
+      "STRING"
+    ],
+    [
+      17,
+      38,
+      0,
+      39,
+      0,
+      "STRING"
+    ],
+    [
+      18,
+      40,
+      0,
+      41,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        1380,
+        516.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "DESK",
+      "bounding": [
+        20,
+        560.0,
+        1380,
+        196.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "BEAT 1",
+      "bounding": [
+        20,
+        780.0,
+        1380,
+        566.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "BEAT 2",
+      "bounding": [
+        20,
+        1366.0,
+        1380,
+        566.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "BEAT 3",
+      "bounding": [
+        20,
+        1952.0,
+        1380,
+        566.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "BEAT 4",
+      "bounding": [
+        20,
+        2538.0,
+        1380,
+        566.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "BEAT 5",
+      "bounding": [
+        20,
+        3124.0,
+        1380,
+        566.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 8,
+      "title": "BEAT 6",
+      "bounding": [
+        20,
+        3710.0,
+        1380,
+        566.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "inspire/beat-sheet",
+    "lab_note": "## inspire/beat-sheet\n\nScript desk \u2014 6 beats \u00d7 enter / traverse / exit. Occupancy: none \u2014 stop nothing GPU.\n\nThis graph does not print video. Fill Logline, Script, Audio policy, Score, then the 18 cards\n(`action | camera | world SFX | dialogue`). Write YAML on the host:\n\n  ./scripts/manage.sh shot-sheet run --film <slug>\n\nThat writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**\ncopy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.\n\nNext: klein/identity-sheet, or export-guides if clay is required, then\ndcc/klein/from-clay.\n\nShot-card keys (defaults fail-closed):\n\n  audio_policy: world-only | stems | a2v-lock\n  score: none | acestep-instrumental\n  clay: skip | required\n  audio_lock: none | a2v\n  camera: dolly in | tracking | fixed camera | \u2026\n\nShot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.\n\nDo not type a 30/60/90 s denoise. One print is 5.00 s (120 frames @ 24 fps).\n",
+    "lab_description": "Script desk: logline, audio policy, 18 shot cards \u2192 shot-sheet YAML",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "none",
+      "enhance_off_identity": false,
+      "handoff": [
+        "klein/identity-sheet",
+        "dcc/klein/from-clay",
+        "shorts/go-see"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          2,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Logline",
+            "height": 72
+          }
+        ],
+        [
+          3,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Script",
+            "height": 72
+          }
+        ],
+        [
+          4,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Audio policy",
+            "height": 72
+          }
+        ],
+        [
+          5,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Score",
+            "height": 72
+          }
+        ],
+        [
+          6,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 1 enter",
+            "height": 72
+          }
+        ],
+        [
+          8,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 1 traverse",
+            "height": 72
+          }
+        ],
+        [
+          10,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 1 exit",
+            "height": 72
+          }
+        ],
+        [
+          12,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 2 enter",
+            "height": 72
+          }
+        ],
+        [
+          14,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 2 traverse",
+            "height": 72
+          }
+        ],
+        [
+          16,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 2 exit",
+            "height": 72
+          }
+        ],
+        [
+          18,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 3 enter",
+            "height": 72
+          }
+        ],
+        [
+          20,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 3 traverse",
+            "height": 72
+          }
+        ],
+        [
+          22,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 3 exit",
+            "height": 72
+          }
+        ],
+        [
+          24,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 4 enter",
+            "height": 72
+          }
+        ],
+        [
+          26,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 4 traverse",
+            "height": 72
+          }
+        ],
+        [
+          28,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 4 exit",
+            "height": 72
+          }
+        ],
+        [
+          30,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 5 enter",
+            "height": 72
+          }
+        ],
+        [
+          32,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 5 traverse",
+            "height": 72
+          }
+        ],
+        [
+          34,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 5 exit",
+            "height": 72
+          }
+        ],
+        [
+          36,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 6 enter",
+            "height": 72
+          }
+        ],
+        [
+          38,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 6 traverse",
+            "height": 72
+          }
+        ],
+        [
+          40,
+          "value",
+          {
+            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "label": "Beat 6 exit",
+            "height": 72
+          }
+        ]
+      ],
+      "outputs": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        18,
+        20,
+        22,
+        24,
+        26,
+        28,
+        30,
+        32,
+        34,
+        36,
+        38,
+        40
+      ]
+    },
+    "linearMode": true,
+    "lab_rel": "inspire/beat-sheet"
+  },
+  "version": 0.4
+}

@@ -6,6 +6,8 @@ Fictional MCs only. Original lyrics. No living-artist names. No autotune.
 
 from __future__ import annotations
 
+from typing import Any
+
 from .diss_examples import (
     DISS_DURATION_S,
     DissExample,
@@ -26,7 +28,7 @@ def _ex(
     take: str,
     lyrics: str,
     *tag_parts: str,
-) -> DissExample:
+) -> dict[str, Any]:
     return {
         "stem": f"music-rap-nill-bye-{slug}-lab-example",
         "series": "trap-edm",
@@ -949,7 +951,7 @@ UPLIFT_RUMOR_LYRICS = format_diss_lyrics(
 )
 
 
-DISS_TRAP_EDM: tuple[DissExample, ...] = (
+DISS_TRAP_EDM = (
     _ex(
         "false-drop",
         "false drop",

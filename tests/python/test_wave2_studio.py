@@ -52,9 +52,9 @@ def test_no_wav2lip_in_tree() -> None:
 
 def test_film_graphs_carry_ltx_disclosure() -> None:
     for name in (
-        "film-go-see-90s-run-lab-example.json",
-        "film-still-here-90s-lab-example.json",
-        "film-switchyard-90s-lab-example.json",
+        "shorts/go-see.json",
+        "shorts/still-here.json",
+        "shorts/switchyard.json",
     ):
         graph = json.loads(lab_json(name).read_text(encoding="utf-8"))
         extra = graph["extra"]

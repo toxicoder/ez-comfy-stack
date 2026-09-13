@@ -19,7 +19,7 @@ tags: [occupancy, blender, trellis, safety, gb10]
 
 - Host Blender clay dumps without typing **yes** on a full `start` cycle every time
 - An opt-in 35B writing desk (`llm-desk`) while Comfy weights are parked
-- A later TRELLIS (`klein-trellis2-lab-example`) or LTX Queue after Blender / the sidecar is stopped
+- A later TRELLIS (`optional/klein/trellis2`) or LTX Queue after Blender / the sidecar is stopped
 - Unchanged `restart: "no"`, heavy confirm, `mem_limit: 90g`, headroom 28 GiB
 
 !!! danger "One heavy job"
@@ -99,7 +99,7 @@ In-tree MCP servers are typed-tool stdio processes. **No** `execute_code`, **no*
 
 Qwen3-4B will place primitives. Cinematic scenes: Path D — laptop Grok/Cursor as the MCP client over SSH, Spark only runs blender-mcp. If `llama-cli` is missing, `blender-llm` prints that hint and exits 1.
 
-**research-mcp** is the creative-process desk (chat, web search, sequential research subagents, `list_lab_apps` / `describe_app`). Graph occupancy **llm**: GPU 35B sidecar when `llm-desk` is up (`http://127.0.0.1:30000/v1` on the host; `host.docker.internal` from Comfy). CPU 4B only if the sidecar is down or occupancy is Wan/LTX/TRELLIS. It does **not** refuse a GPU Comfy session and does **not** map `idle` → `blender-desk` or `llm-desk`. Same pipeline as **research-chat-lab-example**. HTTPS search is SSRF-guarded (no arbitrary `fetch_url` tool).
+**research-mcp** is the creative-process desk (chat, web search, sequential research subagents, `list_lab_apps` / `describe_app`). Graph occupancy **llm**: GPU 35B sidecar when `llm-desk` is up (`http://127.0.0.1:30000/v1` on the host; `host.docker.internal` from Comfy). CPU 4B only if the sidecar is down or occupancy is Wan/LTX/TRELLIS. It does **not** refuse a GPU Comfy session and does **not** map `idle` → `blender-desk` or `llm-desk`. Same pipeline as **inspire/research-chat**. HTTPS search is SSRF-guarded (no arbitrary `fetch_url` tool).
 
 ```bash
 ./scripts/manage.sh research-mcp --stdio

@@ -18,7 +18,7 @@ tags: [comfyui, klein, wan, ltx, visual]
 - Running still + silent motion + AV tools in **one** Docker Compose stack
 - Iterating in minutes on ~5 s clips instead of a 90 s denoise
 
-**Who this is for:** studio users after `klein-still-draft-lab-example` has queued once.
+**Who this is for:** studio users after `klein/still-draft` has queued once.
 
 !!! tip "First run?"
 
@@ -66,7 +66,7 @@ flowchart LR
   LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff (start in App Mode):** load **klein-still-draft-lab-example** → enter App Mode → Queue Spark Still → open **klein-still-hero-lab-example** (same seed) → set **wan-i2v-5s-lab-example** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **ltx-i2v-5s-lab-example** for native audio. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
+**Handoff (start in App Mode):** load **klein/still-draft** → enter App Mode → Queue Spark Still → open **klein/still-hero** (same seed) → set **wan/i2v-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **ltx/i2v-5s** for native audio. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
 
 LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, concat them with video latents before `KSampler`, then decode audio with **`LTXVAudioVAEDecode`** into **`VHS_VideoCombine`** so the MP4 includes world audio. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
@@ -76,7 +76,7 @@ LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **aud
     2. Prefer keeping both model sets loaded between T2I and I2V
     3. Do not GPU-offload a 30B+ llama.cpp next to LTX; Prompt Enhance is CPU-only (~2.5 GiB GGUF)
     4. Video graphs emit **MP4** via **VideoHelperSuite** (`VHS_VideoCombine`, 24 fps) plus optional PNG frames
-    5. Prompting: Klein wants Qwen-style prose (subject → light → camera); Wan wants motion + one camera move (no audio); LTX wants a present-tense paragraph with sound interleaved. See [Prompting](prompting.md). Every **\*-lab-example** canvas has an operator **Note**
+    5. Prompting: Klein wants Qwen-style prose (subject → light → camera); Wan wants motion + one camera move (no audio); LTX wants a present-tense paragraph with sound interleaved. See [Prompting](prompting.md). Every seeded lab canvas has an operator **Note**
 
 Which filename: [Workflow catalog](studio-workflows.md).
 
@@ -86,11 +86,11 @@ Which filename: [Workflow catalog](studio-workflows.md).
 
 Do **not** edit raw JSON. Change widgets on the canvas.
 
-1. Load **klein-still-draft-lab-example** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
+1. Load **klein/still-draft** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
-3. Load **wan-i2v-5s-lab-example** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
-4. Optional audio: **ltx-i2v-5s-lab-example**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
-5. Short six-shot demo: Queue **wan-i2v-shot-lab-example** six times (`ez_shot_01` … `06`) then:
+3. Load **wan/i2v-5s** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
+4. Optional audio: **ltx/i2v-5s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
+5. Short six-shot demo: Queue **wan/i2v-shot** six times (`ez_shot_01` … `06`) then:
 
     ```bash
     ./scripts/utilities/concat-shots.sh --yes
@@ -98,7 +98,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     ```
 
 6. **90s films** (go-see first-person parkour / still-here / switchyard): load one **film-*-90s** graph → Queue **once** → the MP4 is already at `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (faststart). A **90s film ready** overlay plays and downloads it; `ez_<slug>_90s.html` is a local player. See [90s shorts](shorts.md).
-7. Daily still / GIF / IG pack: **klein-still-daily-lab-example** → optional **wan-gif-loop-lab-example** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein-dream-house-lab-example** for a 10-photo virtual tour of one place (type any place; tower, foyer, rooms, terrace, drone, study). Same walkthrough with 3D persistence: **klein-dream-house-clay-lab-example** (`start` seeds clay plates; optional `house-views` dump) ([Dream-house tours](learn/dream-house.md)). Character loop: **klein-character-draft-lab-example** → **klein-character-tweak-lab-example** (`ez_character_*.png`).
+7. Daily still / GIF / IG pack: **klein/still-daily** → optional **wan/gif-loop** (LoadImage = `ez_still_app_*.png`, leave ping-pong on) or **klein/dream-house** for a 10-photo virtual tour of one place (type any place; tower, foyer, rooms, terrace, drone, study). Same walkthrough with 3D persistence: **klein/dream-house-clay** (`start` seeds clay plates; optional `house-views` dump) ([Dream-house tours](learn/dream-house.md)). Character loop: **klein/character-draft** → **klein/character-tweak** (`ez_character_*.png`).
 8. Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up — [catalog](studio-workflows.md).
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes; one-click films are 18 × 5s prints.
@@ -131,7 +131,7 @@ If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so inst
 
 ??? abstract "Lab workflow internals"
 
-    - Name pattern: host files `workflows/_lab/<lane>/*-lab-example.json` (entrypoint rsyncs into `user/default/workflows/_lab/`)
+    - Name pattern: host files `workflows/_lab/<lane>/*.json` (unique id is `extra.lab_rel`; entrypoint rsyncs into `user/default/workflows/_lab/`)
     - Every graph has a ComfyUI **Note** node + `extra.lab_note` with the same operator guidance
     - Klein CLIP loader type is **`flux2`** with `qwen_3_4b` + `EmptyFlux2LatentImage` (simplified `KSampler`)
     - LTX-2.5 graphs use **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**), save **MP4** via **`VHS_VideoCombine`** (h264, 24 fps)

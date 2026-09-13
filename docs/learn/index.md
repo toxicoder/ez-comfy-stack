@@ -42,7 +42,7 @@ It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). G
 
     ---
 
-    Browser at port **8188**. Load a `*-lab-example` graph, change widgets, Queue, pick PNG/MP4 from `COMFY_OUTPUT_DIR`.
+    Browser at port **8188**. Load a `_lab` graph, change widgets, Queue, pick PNG/MP4 from `COMFY_OUTPUT_DIR`.
 
     [:octicons-arrow-right-24: ComfyUI basics](comfyui.md)
 
@@ -78,7 +78,7 @@ flowchart TB
   end
   subgraph Studio["Studio in the browser"]
     UI["ComfyUI :8188"]
-    Graph["*-lab-example graph"]
+    Graph["_lab graph"]
     Q["Queue"]
   end
   Op --> Compose --> UI

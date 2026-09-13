@@ -46,11 +46,11 @@ flowchart LR
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
 ./scripts/manage.sh occupancy enter klein --yes
-# :8188 → klein-from-guide-loader-lab-example
+# :8188 → dcc/klein/from-guide-loader
 # EZDCCLoadGuideStill slug=go-see shot_id=12 layer=first
 ./scripts/manage.sh overlay-qc --film go-see --shot 12 --look PATH
 ./scripts/manage.sh occupancy enter trellis --yes
-# trellis-from-klein-still-lab-example — inspect mesh in Load 3D / Preview 3D
+# dcc/trellis/from-klein-still — inspect mesh in Load 3D / Preview 3D
 ```
 
 Widgets default to `slug=go-see`, `shot_id=12`, `plate=mug`. Depth stays mist 0–1 (near=white, far=black). Do not invert.
@@ -63,9 +63,9 @@ Widgets default to `slug=go-see`, `shot_id=12`, `plate=mug`. Depth stays mist 0�
 
 | Graph | Occupancy | What it does |
 | --- | --- | --- |
-| **klein-from-guide-loader-lab-example** | klein | Gate + `EZDCCLoadGuideStill(first)` → Klein 4B edit. 1280×704. Seed 42. Prefix `ez_guide_hero` |
-| **ltx-iclora-from-guide-loader-lab-example** | ltx | Gate + still + `depth.mp4` path. Envelope only (Templates → Union Control). MagCache off. Distilled-only. Prefix `ez_iclora_guide` |
-| **trellis-from-klein-still-lab-example** | trellis | Gate + still pack `plate=mug` → native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/` under `output/` |
+| **dcc/klein/from-guide-loader** | klein | Gate + `EZDCCLoadGuideStill(first)` → Klein 4B edit. 1280×704. Seed 42. Prefix `ez_guide_hero` |
+| **dcc/ltx/iclora-from-guide-loader** | ltx | Gate + still + `depth.mp4` path. Envelope only (Templates → Union Control). MagCache off. Distilled-only. Prefix `ez_iclora_guide` |
+| **dcc/trellis/from-klein-still** | trellis | Gate + still pack `plate=mug` → native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/` under `output/` |
 
 The original seven DCC graphs stay on `LoadImage` + `--install-inputs`. After a dump you can keep using those, or stay on `:8188` with the loaders.
 

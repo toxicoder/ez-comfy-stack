@@ -35,7 +35,7 @@ def _load(name: str) -> dict:
 
 
 def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
-    graph = _load("klein-still-draft-lab-example.json")
+    graph = _load("klein/still-draft.json")
     profile = graph["extra"]["lab_profile"]
     note = graph["extra"]["lab_note"]
     stamped = stamp_app_mode(
@@ -52,7 +52,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
         lane="inspire",
         occupancy="klein",
         enhance_off_identity=False,
-        handoff=("klein-still-hero-lab-example", "wan-i2v-5s-lab-example"),
+        handoff=("klein/still-hero", "wan/i2v-5s"),
     )
     extra = stamped["extra"]
     assert extra["lab_profile"] == profile
@@ -65,8 +65,8 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
     assert mode["occupancy"] == "klein"
     assert mode["enhance_off_identity"] is False
     assert mode["handoff"] == [
-        "klein-still-hero-lab-example",
-        "wan-i2v-5s-lab-example",
+        "klein/still-hero",
+        "wan/i2v-5s",
     ]
     linear = extra["linearData"]
     by_id = {int(n["id"]): n for n in stamped["nodes"]}
@@ -84,7 +84,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
 
 
 def test_wan_video_stamp_resolves_vhs_output() -> None:
-    graph = _load("wan-i2v-5s-lab-example.json")
+    graph = _load("wan/i2v-5s.json")
     stamped = stamp_app_mode(
         copy.deepcopy(graph),
         inputs=[
@@ -104,7 +104,7 @@ def test_wan_video_stamp_resolves_vhs_output() -> None:
 
 
 def test_missing_node_stamp_raises() -> None:
-    graph = _load("klein-still-draft-lab-example.json")
+    graph = _load("klein/still-draft.json")
     with pytest.raises(ValueError, match="missing"):
         stamp_app_mode(
             graph,
@@ -116,7 +116,7 @@ def test_missing_node_stamp_raises() -> None:
 
 
 def test_banned_string_in_label_is_rejected() -> None:
-    graph = _load("klein-still-draft-lab-example.json")
+    graph = _load("klein/still-draft.json")
     with pytest.raises(ValueError, match="banned"):
         stamp_app_mode(
             copy.deepcopy(graph),
@@ -143,12 +143,13 @@ def test_banned_string_in_label_is_rejected() -> None:
 
 
 def _widget_names(graph: dict) -> list[str]:
-    spec = STAMP_SPECS[str(graph["id"])]
+    key = str((graph.get("extra") or {}).get("lab_rel") or graph["id"])
+    spec = STAMP_SPECS[key]
     return [entry[1] for entry in infer_suite_inputs(graph, spec)]
 
 
 def test_still_draft_app_inputs_are_prompt_first_without_latent_size() -> None:
-    names = _widget_names(_load("klein-still-draft-lab-example.json"))
+    names = _widget_names(_load("klein/still-draft.json"))
     assert names[:4] == ["prompt", "style", "enhance", "seed"]
     assert "width" not in names
     assert "height" not in names
@@ -158,7 +159,7 @@ def test_still_draft_app_inputs_are_prompt_first_without_latent_size() -> None:
 
 
 def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
-    names = _widget_names(_load("klein-still-daily-lab-example.json"))
+    names = _widget_names(_load("klein/still-daily.json"))
     assert names[0] == "prompt"
     assert names.index("prompt") < names.index("seed")
     assert names.index("style") < names.index("enhance")
@@ -170,7 +171,7 @@ def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
 
 
 def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
-    names = _widget_names(_load("klein-dream-house-lab-example.json"))
+    names = _widget_names(_load("klein/dream-house.json"))
     assert names.count("prompt") == 1
     assert names[0] == "prompt"
     for hidden in HIDDEN_APP_WIDGETS:
@@ -179,7 +180,7 @@ def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
 
 
 def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
-    names = _widget_names(_load("klein-dream-house-clay-lab-example.json"))
+    names = _widget_names(_load("klein/dream-house-clay.json"))
     assert names.count("prompt") == 1
     assert names[0] == "prompt"
     assert "image" not in names
@@ -188,21 +189,21 @@ def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
 
 
 def test_beat_sheet_exposes_only_shot_cards() -> None:
-    names = _widget_names(_load("beat-sheet-lab-example.json"))
+    names = _widget_names(_load("inspire/beat-sheet.json"))
     assert names == ["value"] * 22
 
 
 def test_research_chat_exposes_message_mode_search() -> None:
-    names = _widget_names(_load("research-chat-lab-example.json"))
+    names = _widget_names(_load("inspire/research-chat.json"))
     assert names == ["prompt", "mode", "web_search", "subagents", "history"]
-    labels = _labels(_load("research-chat-lab-example.json"))
+    labels = _labels(_load("inspire/research-chat.json"))
     assert labels[0] == "Message"
     assert "Web search" in labels
     assert len(labels) == len(set(labels)), labels
 
 
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
-    names = _widget_names(_load("prompt-forge-lab-example.json"))
+    names = _widget_names(_load("inspire/prompt-forge.json"))
     assert names[:3] == ["prompt", "prompt", "prompt"]
     assert names.count("style") == 3
     assert names.count("enhance") == 3
@@ -218,7 +219,8 @@ def test_widget_help_text_has_no_banned_models() -> None:
 
 
 def _labels(graph: dict) -> list[str]:
-    spec = STAMP_SPECS[str(graph["id"])]
+    key = str((graph.get("extra") or {}).get("lab_rel") or graph["id"])
+    spec = STAMP_SPECS[key]
     labels: list[str] = []
     for entry in infer_suite_inputs(graph, spec):
         name = entry[1]
@@ -228,44 +230,44 @@ def _labels(graph: dict) -> list[str]:
 
 
 def test_unwired_or_bypassed_loadimage_is_not_an_app_input() -> None:
-    hero = _widget_names(_load("klein-still-hero-lab-example.json"))
+    hero = _widget_names(_load("klein/still-hero.json"))
     assert "image" not in hero
-    thumb = _widget_names(_load("klein-thumbnail-lab-example.json"))
+    thumb = _widget_names(_load("klein/thumbnail.json"))
     assert "image" not in thumb
-    t2v = _widget_names(_load("wan-t2v-5s-lab-example.json"))
+    t2v = _widget_names(_load("wan/t2v-5s.json"))
     assert "image" not in t2v
-    flf = _widget_names(_load("wan-flf-5s-lab-example.json"))
+    flf = _widget_names(_load("wan/flf-5s.json"))
     assert flf.count("image") == 1
-    vace = _widget_names(_load("wan-vace-join-lab-example.json"))
+    vace = _widget_names(_load("wan/vace-join.json"))
     assert vace.count("image") == 1
 
 
 def test_wired_edit_and_i2v_keep_image() -> None:
-    tweak = _widget_names(_load("klein-character-tweak-lab-example.json"))
+    tweak = _widget_names(_load("klein/character-tweak.json"))
     assert "image" in tweak
-    i2v = _widget_names(_load("wan-i2v-5s-lab-example.json"))
+    i2v = _widget_names(_load("wan/i2v-5s.json"))
     assert "image" in i2v
-    clay = _widget_names(_load("klein-from-clay-lab-example.json"))
+    clay = _widget_names(_load("dcc/klein/from-clay.json"))
     assert "image" in clay
 
 
 def test_i2v_hides_style_t2v_keeps_it() -> None:
-    i2v = _widget_names(_load("wan-i2v-5s-lab-example.json"))
+    i2v = _widget_names(_load("wan/i2v-5s.json"))
     assert "style" not in i2v
-    ltx_i2v = _widget_names(_load("ltx-i2v-5s-lab-example.json"))
+    ltx_i2v = _widget_names(_load("ltx/i2v-5s.json"))
     assert "style" not in ltx_i2v
-    t2v = _widget_names(_load("wan-t2v-5s-lab-example.json"))
+    t2v = _widget_names(_load("wan/t2v-5s.json"))
     assert "style" in t2v
-    ltx_t2v = _widget_names(_load("ltx-t2v-5s-lab-example.json"))
+    ltx_t2v = _widget_names(_load("ltx/t2v-5s.json"))
     assert "style" in ltx_t2v
-    still = _widget_names(_load("klein-still-draft-lab-example.json"))
+    still = _widget_names(_load("klein/still-draft.json"))
     assert "style" in still
 
 
 def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
-    names = _widget_names(_load("prompt-forge-lab-example.json"))
+    names = _widget_names(_load("inspire/prompt-forge.json"))
     assert names.count("style") == 3
-    labels = _labels(_load("prompt-forge-lab-example.json"))
+    labels = _labels(_load("inspire/prompt-forge.json"))
     assert "Klein prompt" in labels
     assert "Wan prompt" in labels
     assert "LTX prompt" in labels
@@ -273,7 +275,7 @@ def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
 
 
 def test_beat_sheet_labels_are_node_titles() -> None:
-    graph = _load("beat-sheet-lab-example.json")
+    graph = _load("inspire/beat-sheet.json")
     labels = _labels(graph)
     titles = [
         n.get("title")
@@ -286,19 +288,19 @@ def test_beat_sheet_labels_are_node_titles() -> None:
 
 
 def test_music_exposes_duration_and_vocal_mode() -> None:
-    names = _widget_names(_load("music-rap-draft-lab-example.json"))
+    names = _widget_names(_load("audio/music/rap-draft.json"))
     assert names[0] == "tags"
     assert "lyrics" in names
     assert "seconds" in names
     assert "mode" in names
     assert names.index("enhance") < names.index("seconds")
-    labels = _labels(_load("music-rap-draft-lab-example.json"))
+    labels = _labels(_load("audio/music/rap-draft.json"))
     assert "Duration (seconds)" in labels
     assert "Vocal / instrumental" in labels
 
 
 def test_podcast_exposes_voices_and_hides_refs_and_bed_lyrics() -> None:
-    names = _widget_names(_load("podcast-audio-first-lab-example.json"))
+    names = _widget_names(_load("audio/podcast/audio-first.json"))
     assert "prompt" in names
     assert "tags" in names
     assert "seconds" in names
@@ -308,19 +310,19 @@ def test_podcast_exposes_voices_and_hides_refs_and_bed_lyrics() -> None:
     assert "lyrics" not in names
     assert "backend" not in names
     assert "speaker_a_ref" not in names
-    labels = _labels(_load("podcast-audio-first-lab-example.json"))
+    labels = _labels(_load("audio/podcast/audio-first.json"))
     assert "Script" in labels
     assert "Bed tags" in labels
     assert "Rewrite script" in labels
     assert "Rewrite bed" in labels
     assert len(labels) == len(set(labels)), labels
-    radio = _widget_names(_load("podcast-radio-drama-lab-example.json"))
+    radio = _widget_names(_load("audio/podcast/radio-drama.json"))
     assert radio.count("tags") == 2
     assert radio.count("seconds") == 2
     assert "announcer_voice" in radio
     assert "include_announcer" in radio
     assert "lyrics" not in radio
-    radio_labels = _labels(_load("podcast-radio-drama-lab-example.json"))
+    radio_labels = _labels(_load("audio/podcast/radio-drama.json"))
     assert "Sting tags" in radio_labels
     assert "Bed tags" in radio_labels
     assert len(radio_labels) == len(set(radio_labels)), radio_labels
@@ -368,7 +370,7 @@ def test_linear_input_node_id_accepts_int_and_rejects_colon_join() -> None:
 
 
 def test_frontend_1496_drops_two_part_widget_ids() -> None:
-    graph = _load("klein-still-draft-lab-example.json")
+    graph = _load("klein/still-draft.json")
     node_ids = {int(n["id"]) for n in graph["nodes"]}
     enhance = next(
         n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"
@@ -380,7 +382,7 @@ def test_frontend_1496_drops_two_part_widget_ids() -> None:
 
 
 def test_stamped_inputs_survive_frontend_1496_prune() -> None:
-    graph = copy.deepcopy(_load("klein-still-draft-lab-example.json"))
+    graph = copy.deepcopy(_load("klein/still-draft.json"))
     stamped = stamp_app_mode(
         graph,
         inputs=[

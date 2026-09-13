@@ -1,0 +1,172 @@
+{
+  "id": "album",
+  "revision": 1,
+  "last_node_id": 2,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        640,
+        420
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## audio/albums/drive-through/afterparty/album\n\nAlbum **Afterparty** by **Drive-through** (20 tracks).\n\nQueue this graph to zip whatever is already in `${COMFY_OUTPUT_DIR}/albums/Drive-through/Afterparty/`.\nGenerate the full album in one go:\n\n`./scripts/manage.sh album-render --album drive-through/afterparty --art skip|upload|generate`\n\nOccupancy: audio for tracks, klein first when --art generate. Do not co-resident Klein + ACE-Step.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 2,
+      "type": "EZAlbumPack",
+      "pos": [
+        720,
+        80
+      ],
+      "size": [
+        360,
+        120
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "zip_path",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZAlbumPack"
+      },
+      "widgets_values": [
+        "Drive-through",
+        "Afterparty"
+      ],
+      "title": "Pack album zip"
+    }
+  ],
+  "links": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        680,
+        500
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "PACK",
+      "bounding": [
+        700,
+        24,
+        400,
+        220
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "us-safe-music-album",
+    "lab_note": "## audio/albums/drive-through/afterparty/album\n\nAlbum **Afterparty** by **Drive-through** (20 tracks).\n\nQueue this graph to zip whatever is already in `${COMFY_OUTPUT_DIR}/albums/Drive-through/Afterparty/`.\nGenerate the full album in one go:\n\n`./scripts/manage.sh album-render --album drive-through/afterparty --art skip|upload|generate`\n\nOccupancy: audio for tracks, klein first when --art generate. Do not co-resident Klein + ACE-Step.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_description": "Pack Afterparty zip + m3u",
+    "lab_album": {
+      "artist": "Drive-through",
+      "album": "Afterparty",
+      "album_slug": "afterparty",
+      "artist_slug": "drive-through",
+      "role": "album",
+      "year": 2026,
+      "tracks": [
+        "01-brake-fade",
+        "02-diesel-hum",
+        "03-axle-grind",
+        "04-weigh-station",
+        "05-black-ice",
+        "06-high-beams",
+        "07-chain-hook",
+        "08-grit-plate",
+        "09-steel-grate",
+        "10-rest-bay",
+        "11-haul-crate",
+        "12-night-splice",
+        "13-torque-bay",
+        "14-spare-drum",
+        "15-oil-pan",
+        "16-curb-check",
+        "17-last-exit",
+        "18-asphalt-heart",
+        "19-clutch-slam",
+        "20-trailer-hitch"
+      ],
+      "cover_graph": "audio/albums/drive-through/afterparty/cover"
+    },
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_rel": "audio/albums/drive-through/afterparty/album",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "audio",
+      "occupancy": "none",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          2,
+          "artist",
+          {
+            "description": "Album artist written into FLAC/MP3 tags.",
+            "label": "Artist"
+          }
+        ],
+        [
+          2,
+          "album",
+          {
+            "description": "Album title written into FLAC/MP3 tags.",
+            "label": "Album"
+          }
+        ]
+      ],
+      "outputs": [
+        2
+      ]
+    },
+    "linearMode": true
+  },
+  "version": 0.4
+}

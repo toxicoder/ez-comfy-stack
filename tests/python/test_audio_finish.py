@@ -13,8 +13,9 @@ HEAVY = ("UNETLoader", "VAELoader", "KSampler", "VAEDecode")
 
 
 def test_audio_finish_app_contract() -> None:
-    graph = json.loads(lab_json("audio-finish-lab-example.json").read_text(encoding="utf-8"))
-    assert graph["id"] == "audio-finish-lab-example"
+    graph = json.loads(lab_json("audio/finish.json").read_text(encoding="utf-8"))
+    assert graph["id"] == "finish"
+    assert graph["extra"].get("lab_rel") == "audio/finish"
     types = {n.get("type") for n in graph["nodes"]}
     for heavy in HEAVY:
         assert heavy not in types

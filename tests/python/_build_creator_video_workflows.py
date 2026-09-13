@@ -75,60 +75,60 @@ GIF_PREVIEW_BULLET = (
 )
 
 CREATOR_STEMS = (
-    "klein-shorts-still-lab-example",
-    "wan-shorts-i2v-lab-example",
-    "ltx-shorts-i2v-lab-example",
-    "klein-thumbnail-lab-example",
-    "klein-product-packshot-lab-example",
-    "klein-before-after-lab-example",
-    "klein-style-lock-lab-example",
-    "wan-bumper-loop-lab-example",
-    "ltx-broll-ambient-lab-example",
-    "klein-storyboard-6up-lab-example",
+    "klein/shorts-still",
+    "wan/shorts-i2v",
+    "ltx/shorts-i2v",
+    "klein/thumbnail",
+    "klein/product-packshot",
+    "klein/before-after",
+    "klein/style-lock",
+    "wan/bumper-loop",
+    "ltx/broll-ambient",
+    "klein/storyboard-6up",
 )
 
 CREATOR_STEMS_V2 = (
-    "klein-endcard-cta-lab-example",
-    "klein-quote-bg-lab-example",
-    "klein-og-blog-lab-example",
-    "klein-podcast-cover-lab-example",
-    "klein-banner-wide-lab-example",
-    "klein-ig-square-lab-example",
-    "klein-hook-still-lab-example",
-    "klein-lower-third-bg-lab-example",
-    "klein-food-tabletop-lab-example",
-    "klein-lighting-trio-lab-example",
-    "klein-time-of-day-lab-example",
-    "klein-camera-angles-lab-example",
-    "klein-color-moods-lab-example",
-    "wan-orbit-i2v-lab-example",
-    "wan-push-in-i2v-lab-example",
-    "wan-parallax-i2v-lab-example",
-    "wan-sticker-loop-lab-example",
-    "ltx-weather-broll-lab-example",
-    "ltx-interior-ambience-lab-example",
-    "ltx-hook-av-lab-example",
+    "klein/endcard-cta",
+    "klein/quote-bg",
+    "klein/og-blog",
+    "klein/podcast-cover",
+    "klein/banner-wide",
+    "klein/ig-square",
+    "klein/hook-still",
+    "klein/lower-third-bg",
+    "klein/food-tabletop",
+    "klein/lighting-trio",
+    "klein/time-of-day",
+    "klein/camera-angles",
+    "klein/color-moods",
+    "wan/orbit-i2v",
+    "wan/push-in-i2v",
+    "wan/parallax-i2v",
+    "wan/sticker-loop",
+    "ltx/weather-broll",
+    "ltx/interior-ambience",
+    "ltx/hook-av",
 )
 
 FILMS = (
     (
         "go-see",
         "gosee",
-        "film-go-see-90s-run-lab-example",
+        "shorts/go-see",
         "go-see.shots.yaml",
         "first-person parkour",
     ),
     (
         "still-here",
         "stillhere",
-        "film-still-here-90s-lab-example",
+        "shorts/still-here",
         "still-here.shots.yaml",
         "household morning",
     ),
     (
         "switchyard",
         "switchyard",
-        "film-switchyard-90s-lab-example",
+        "shorts/switchyard",
         "switchyard.shots.yaml",
         "night freight yard",
     ),
@@ -311,20 +311,20 @@ def polish_video_graph(graph: dict, *, gif: bool = False) -> dict:
 
 def patch_existing_video_graphs() -> None:
     video_files = [
-        lab_json("wan-i2v-5s-lab-example.json"),
-        lab_json("wan-t2v-5s-lab-example.json"),
-        lab_json("wan-i2v-shot-lab-example.json"),
-        lab_json("ltx-i2v-5s-lab-example.json"),
-        lab_json("ltx-t2v-5s-lab-example.json"),
-        lab_json("ltx-i2v-shot-lab-example.json"),
-        lab_json("wan-gif-loop-lab-example.json"),
+        lab_json("wan/i2v-5s.json"),
+        lab_json("wan/t2v-5s.json"),
+        lab_json("wan/i2v-shot.json"),
+        lab_json("ltx/i2v-5s.json"),
+        lab_json("ltx/t2v-5s.json"),
+        lab_json("ltx/i2v-shot.json"),
+        lab_json("wan/gif-loop.json"),
     ]
     for path in video_files:
         graph = _load(path)
         gif = path.name.startswith("wan-gif")
         if path.name.startswith("ltx-"):
             wire_ltx_audio(graph)
-        if path.name == "ltx-i2v-shot-lab-example.json":
+        if path.name == "ltx/i2v-shot.json":
             for node in graph["nodes"]:
                 ntype = node.get("type")
                 vals = node.get("widgets_values")
@@ -339,13 +339,13 @@ def patch_existing_video_graphs() -> None:
         normalize_enhance_widgets(graph)
         # Point shot notes at unified films
         if path.name in (
-            "wan-i2v-shot-lab-example.json",
-            "ltx-i2v-shot-lab-example.json",
+            "wan/i2v-shot.json",
+            "ltx/i2v-shot.json",
         ):
             note = next(n for n in graph["nodes"] if n.get("type") == "Note")
             text = note["widgets_values"][0]
             tip = (
-                "\n90s films: prefer the one-click **film-*-90s-*-lab-example** graphs "
+                "\n90s films: prefer the one-click **shorts/go-see** graphs "
                 "(Queue once: identity + 18 LTX prints + stitch). This graph remains the "
                 "generic 5.00s printer / spark-farm shot / Wan rehearsal.\n"
             )
@@ -432,7 +432,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict) -> str:
         "Unified graph: Queue **Identity (Klein)** once (LTX group starts bypassed).",
         "Then Ctrl+B to bypass Identity and enable **Shot print (LTX)**. Retarget LoadImage,",
         "Motion+Audio, and prefixes for each of 18 shots. Optional Wan rehearsal:",
-        "**wan-i2v-shot-lab-example**.",
+        "**wan/i2v-shot**.",
         "",
         "18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. Last frame of shot N is LoadImage of shot N+1.",
         f"Concat: `./scripts/utilities/concat-shots.sh --film {film} --yes`",
@@ -472,7 +472,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 1. Leave **Shot print (LTX)** bypassed (Ctrl+B). Queue **Identity (Klein)** → `ez_{slug}_identity_*.png`.
 2. Bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or previous `*_last`.
 3. Paste Motion + Audio from the on-canvas shot map. Set VHS prefix `ez_{slug}_bN_sM_ltx_video` and last-frame `ez_{slug}_bN_sM_last`. Queue **5.00s** AV.
-4. Repeat 18 times. Optional silent rehearsal: **wan-i2v-shot-lab-example**.
+4. Repeat 18 times. Optional silent rehearsal: **wan/i2v-shot**.
 5. `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
@@ -598,8 +598,8 @@ def _set_note(graph: dict, note: str, description: str) -> None:
 
 def build_creator_toolkit() -> None:
     # 1. Vertical Shorts still
-    g = _load(lab_json("klein-still-draft-lab-example.json"))
-    g["id"] = "klein-shorts-still-lab-example"
+    g = _load(lab_json("klein/still-draft.json"))
+    g["id"] = "klein/shorts-still"
     g["revision"] = 1
     latent = _node(g, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [432, 768, 1]
@@ -612,10 +612,10 @@ def build_creator_toolkit() -> None:
     enh["widgets_values"][0] = prompt
     enh["widgets_values"][1] = True
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
-    note = f"""## klein-shorts-still-lab-example
+    note = f"""## klein/shorts-still
 
 Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
-Save prefix: `ez_shorts_still`. Feed into **wan-shorts-i2v-lab-example** or **ltx-shorts-i2v-lab-example**.
+Save prefix: `ez_shorts_still`. Feed into **wan/shorts-i2v** or **ltx/shorts-i2v**.
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 """
     _set_note(g, note, "Klein 4B vertical 9:16 Shorts still")
@@ -625,11 +625,11 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; r
         _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
         _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
     ]
-    _dump(lab_json("klein-shorts-still-lab-example.json"), g)
+    _dump(lab_json("klein/shorts-still.json"), g)
 
     # 2. Vertical Wan I2V
-    g = _load(lab_json("wan-i2v-5s-lab-example.json"))
-    g["id"] = "wan-shorts-i2v-lab-example"
+    g = _load(lab_json("wan/i2v-5s.json"))
+    g["id"] = "wan/shorts-i2v"
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
     # width, height, length — keep 121 smoke length; vertical size
@@ -648,7 +648,7 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; r
     enh = _node(g, "EZWanPromptEnhance")
     enh["widgets_values"] = [motion, True, "i2v", "5 seconds, 24 fps, 9:16", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
-    note = f"""## wan-shorts-i2v-lab-example
+    note = f"""## wan/shorts-i2v
 
 Vertical silent Wan 5B I2V for Shorts (~5 s @ 24 fps). Apache 2.0.
 LoadImage: `ez_shorts_still_*.png` (or example.png to smoke-test).
@@ -657,11 +657,11 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
 {PREVIEW_BULLET}
 """
     _set_note(g, note, "Wan 5B vertical 9:16 silent I2V ~5s")
-    _dump(lab_json("wan-shorts-i2v-lab-example.json"), g)
+    _dump(lab_json("wan/shorts-i2v.json"), g)
 
     # 3. Vertical LTX I2V AV
-    g = _load(lab_json("ltx-i2v-5s-lab-example.json"))
-    g["id"] = "ltx-shorts-i2v-lab-example"
+    g = _load(lab_json("ltx/i2v-5s.json"))
+    g["id"] = "ltx/shorts-i2v"
     g["revision"] = 1
     wire_ltx_audio(g)
     # LTXVImgToVideo widgets include width/height/length
@@ -687,7 +687,7 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
             "Motion + audio",
         ):
             n["widgets_values"] = [prompt]
-    note = f"""## ltx-shorts-i2v-lab-example
+    note = f"""## ltx/shorts-i2v
 
 {LTX_CANVAS_PORTRAIT}
 
@@ -698,11 +698,11 @@ LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio mu
 Disclose AI-generated media; do not strip provenance; do not distill. No score.
 """
     _set_note(g, note, "LTX-2.5 vertical 9:16 AV I2V ~5s")
-    _dump(lab_json("ltx-shorts-i2v-lab-example.json"), g)
+    _dump(lab_json("ltx/shorts-i2v.json"), g)
 
     # 4. Thumbnail
-    g = _load(lab_json("klein-still-hero-lab-example.json"))
-    g["id"] = "klein-thumbnail-lab-example"
+    g = _load(lab_json("klein/still-hero.json"))
+    g["id"] = "klein/thumbnail"
     g["revision"] = 1
     save = _node(g, "SaveImage")
     save["widgets_values"] = ["ez_thumbnail"]
@@ -710,17 +710,17 @@ Disclose AI-generated media; do not strip provenance; do not distill. No score.
     enh = _node(g, "EZKleinPromptEnhance")
     enh["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
-    note = """## klein-thumbnail-lab-example
+    note = """## klein/thumbnail
 
 YouTube thumbnail still (Klein 4B). Default 1280×720. Prefix `ez_thumbnail`.
 Keep the subject large and readable at small sizes. Do not burn in titles — add text in your editor.
 """
     _set_note(g, note, "Klein 4B YouTube thumbnail 1280x720")
-    _dump(lab_json("klein-thumbnail-lab-example.json"), g)
+    _dump(lab_json("klein/thumbnail.json"), g)
 
     # 5. Product packshot
-    g = _load(lab_json("klein-still-hero-lab-example.json"))
-    g["id"] = "klein-product-packshot-lab-example"
+    g = _load(lab_json("klein/still-hero.json"))
+    g["id"] = "klein/product-packshot"
     g["revision"] = 1
     save = _node(g, "SaveImage")
     save["widgets_values"] = ["ez_packshot"]
@@ -735,13 +735,13 @@ Keep the subject large and readable at small sizes. Do not burn in titles — ad
     enh["widgets_values"][0] = prompt
     _node(g, "CLIPTextEncode", "Positive")["widgets_values"] = [prompt]
     _set_neg(g, KLEIN_NEG_PHOTO)
-    note = """## klein-product-packshot-lab-example
+    note = """## klein/product-packshot
 
 Clean product / packshot still (Klein 4B). Default 1024×1024. Prefix `ez_packshot`.
 Swap the subject in the prompt; keep seamless background and soft studio light.
 """
     _set_note(g, note, "Klein 4B product packshot 1:1")
-    _dump(lab_json("klein-product-packshot-lab-example.json"), g)
+    _dump(lab_json("klein/product-packshot.json"), g)
 
     mug_identity = (
         "A photoreal still of a small kitchen table at first light. One cream ceramic mug "
@@ -749,7 +749,7 @@ Swap the subject in the prompt; keep seamless background and soft studio light.
         "White subway tile, one linen curtain. Cool blue shadows, unmarked surfaces."
     )
     _klein_pack(
-        stem="klein-before-after-lab-example",
+        stem="klein/before-after",
         size=(768, 432),
         identity=mug_identity,
         inventory="cream ceramic mug with a hairline chip, honey-oak table, white subway tile, linen curtain",
@@ -766,7 +766,7 @@ Swap the subject in the prompt; keep seamless background and soft studio light.
             ),
         ],
         neg=KLEIN_NEG_PHOTO,
-        note=f"""## klein-before-after-lab-example
+        note=f"""## klein/before-after
 
 Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-edits from it. Prefixes `ez_before` and `ez_after`. Do not bypass BEFORE on a cold canvas.
 
@@ -777,7 +777,7 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
 
     style_cards = load_view_pack("place_4")
     _klein_pack(
-        stem="klein-style-lock-lab-example",
+        stem="klein/style-lock",
         size=(768, 960),
         identity=HOUSE_IDENTITY,
         inventory="",
@@ -788,7 +788,7 @@ Two Klein 4B stills of one mug. SHOT BEFORE is the identity plate; AFTER Klein-e
         ],
         hint="Instagram 4:5 still",
         neg=KLEIN_NEG_STILL,
-        note=f"""## klein-style-lock-lab-example
+        note=f"""## klein/style-lock
 
 Four Klein 4B stills of **one place** from new cameras (Prompt Join lock=view). Type any place in IDENTITY — default placeholder is the lab penthouse. Hidden cards are camera roles. Prefixes `ez_style_01`…`04`. Independent T2I, same seed.
 
@@ -798,8 +798,8 @@ Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klei
     )
 
     # 8. Wan bumper loop MP4
-    g = _load(lab_json("wan-gif-loop-lab-example.json"))
-    g["id"] = "wan-bumper-loop-lab-example"
+    g = _load(lab_json("wan/gif-loop.json"))
+    g["id"] = "wan/bumper-loop"
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
     vals = list(lat["widgets_values"])
@@ -826,7 +826,7 @@ Identity-mode enhance is on for the bible (camera-free). Shot cards are not Klei
         motion = f"{motion.rstrip()} {I2V_LOCK}"
     enh["widgets_values"] = [motion, False, "i2v", "looping bumper, 12 fps", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
-    note = f"""## wan-bumper-loop-lab-example
+    note = f"""## wan/bumper-loop
 
 Short loopable MP4 bumper (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_bumper`.
 LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
@@ -835,11 +835,11 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
 """
     _set_note(g, note, "Wan 5B loopable MP4 bumper")
     polish_video_graph(g)
-    _dump(lab_json("wan-bumper-loop-lab-example.json"), g)
+    _dump(lab_json("wan/bumper-loop.json"), g)
 
     # 9. LTX ambient B-roll
-    g = _load(lab_json("ltx-t2v-5s-lab-example.json"))
-    g["id"] = "ltx-broll-ambient-lab-example"
+    g = _load(lab_json("ltx/t2v-5s.json"))
+    g["id"] = "ltx/broll-ambient"
     g["revision"] = 1
     wire_ltx_audio(g)
     vhs = _node(g, "VHS_VideoCombine")
@@ -857,7 +857,7 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
     for n in g["nodes"]:
         if n.get("type") == "CLIPTextEncode" and n.get("title") in ("Positive", "Motion / prompt"):
             n["widgets_values"] = [prompt]
-    note = f"""## ltx-broll-ambient-lab-example
+    note = f"""## ltx/broll-ambient
 
 {LTX_CANVAS_LANDSCAPE}
 
@@ -868,7 +868,7 @@ Locked camera, world audio muxed into MP4. Prefix `ez_broll_video`.
 Disclose AI-generated media. No score.
 """
     _set_note(g, note, "LTX-2.5 ambient B-roll AV ~5s")
-    _dump(lab_json("ltx-broll-ambient-lab-example.json"), g)
+    _dump(lab_json("ltx/broll-ambient.json"), g)
 
     board_cards = load_view_pack("storyboard_6")
     board_shots = [
@@ -876,13 +876,13 @@ Disclose AI-generated media. No score.
         for i, card in enumerate(board_cards, start=1)
     ]
     _klein_pack(
-        stem="klein-storyboard-6up-lab-example",
+        stem="klein/storyboard-6up",
         size=(768, 432),
         identity=CREATOR_IDENTITY,
         inventory="",
         persist="view",
         shots=board_shots,
-        note=f"""## klein-storyboard-6up-lab-example
+        note=f"""## klein/storyboard-6up
 
 Six Klein 4B storyboard frames of **one scene** from new cameras (lock=view). Type any scene in IDENTITY. Prefixes `ez_board_01`…`06`. Independent T2I, same seed. Identity-mode enhance is on for the bible.
 """,
@@ -902,7 +902,7 @@ def _klein_single(
     size_title: str | None = None,
     neg: str | None = None,
 ) -> None:
-    src = lab_json("klein-still-hero-lab-example.json") if template == "hero" else lab_json("klein-still-draft-lab-example.json")
+    src = lab_json("klein/still-hero.json") if template == "hero" else lab_json("klein/still-draft.json")
     g = _load(src)
     g["id"] = stem
     g["revision"] = 1
@@ -1333,7 +1333,7 @@ def _wan_i2v(
     length: int = 121,
     enhance: bool = True,
 ) -> None:
-    g = _load(lab_json("wan-i2v-5s-lab-example.json"))
+    g = _load(lab_json("wan/i2v-5s.json"))
     g["id"] = stem
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
@@ -1366,7 +1366,7 @@ def _wan_loop(
     note: str,
     description: str,
 ) -> None:
-    g = _load(lab_json("wan-gif-loop-lab-example.json"))
+    g = _load(lab_json("wan/gif-loop.json"))
     g["id"] = stem
     g["revision"] = 1
     vhs = _node(g, "VHS_VideoCombine")
@@ -1398,7 +1398,7 @@ def _ltx_av(
     mode: str,
     audio_hint: str,
 ) -> None:
-    src = lab_json("ltx-i2v-5s-lab-example.json") if mode == "i2v" else lab_json("ltx-t2v-5s-lab-example.json")
+    src = lab_json("ltx/i2v-5s.json") if mode == "i2v" else lab_json("ltx/t2v-5s.json")
     g = _load(src)
     g["id"] = stem
     g["revision"] = 1
@@ -1425,7 +1425,7 @@ def build_creator_toolkit_v2() -> None:
     identity = CREATOR_IDENTITY
 
     _klein_single(
-        stem="klein-endcard-cta-lab-example",
+        stem="klein/endcard-cta",
         template="hero",
         size=(1280, 720),
         prefix="ez_endcard",
@@ -1434,7 +1434,7 @@ def build_creator_toolkit_v2() -> None:
             "for a subscribe button later. Clean of burned-in text, logos, or UI chrome. "
             "Photoreal still 16:9."
         ),
-        note="""## klein-endcard-cta-lab-example
+        note="""## klein/endcard-cta
 
 YouTube/end-card still (Klein 4B). Default 1280×720. Prefix `ez_endcard`.
 Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
@@ -1443,7 +1443,7 @@ Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
         size_title="Size 16:9 end card",
     )
     _klein_single(
-        stem="klein-quote-bg-lab-example",
+        stem="klein/quote-bg",
         template="hero",
         size=(1024, 1024),
         prefix="ez_quote_bg",
@@ -1451,7 +1451,7 @@ Keep the lower-right quiet — add CTA text in your editor, not in the prompt.
             f"{identity} Square 1:1. Soft bokeh, quiet center so overlay text can sit later. "
             "Empty of lettering. Photoreal still quote-card background."
         ),
-        note="""## klein-quote-bg-lab-example
+        note="""## klein/quote-bg
 
 Quote-card background (Klein 4B). Default 1024×1024. Prefix `ez_quote_bg`.
 Keep the center empty of detail; add the quote in your editor.
@@ -1460,7 +1460,7 @@ Keep the center empty of detail; add the quote in your editor.
         size_title="Size 1:1 quote background",
     )
     _klein_single(
-        stem="klein-og-blog-lab-example",
+        stem="klein/og-blog",
         template="hero",
         size=(1216, 640),
         prefix="ez_og",
@@ -1468,7 +1468,7 @@ Keep the center empty of detail; add the quote in your editor.
             f"{identity} Wide blog / Open Graph hero. Subject left-weighted, quiet right third "
             "for a headline later. Clean of burned-in text. Photoreal still ~1.9:1."
         ),
-        note="""## klein-og-blog-lab-example
+        note="""## klein/og-blog
 
 Blog / Open Graph hero (Klein 4B). Default 1216×640. Prefix `ez_og`.
 Leave space for a title overlay. No burned-in words.
@@ -1477,7 +1477,7 @@ Leave space for a title overlay. No burned-in words.
         size_title="Size OG / blog hero",
     )
     _klein_single(
-        stem="klein-podcast-cover-lab-example",
+        stem="klein/podcast-cover",
         template="hero",
         size=(1024, 1024),
         prefix="ez_podcast",
@@ -1485,7 +1485,7 @@ Leave space for a title overlay. No burned-in words.
             "A photoreal square podcast-cover still. A ceramic mug and a simple analog recorder "
             "sit on a wooden table in warm sidelight. Unmarked, empty of logos and lettering. 1:1."
         ),
-        note="""## klein-podcast-cover-lab-example
+        note="""## klein/podcast-cover
 
 Podcast / playlist cover (Klein 4B). Default 1024×1024. Prefix `ez_podcast`.
 Swap the props in the prompt. Add show title in your editor.
@@ -1495,7 +1495,7 @@ Swap the props in the prompt. Add show title in your editor.
         neg=KLEIN_NEG_PHOTO,
     )
     _klein_single(
-        stem="klein-banner-wide-lab-example",
+        stem="klein/banner-wide",
         template="hero",
         size=(1536, 512),
         prefix="ez_banner",
@@ -1503,7 +1503,7 @@ Swap the props in the prompt. Add show title in your editor.
             f"{identity} Ultra-wide channel / LinkedIn banner. Horizon low, empty sky band "
             "for a name overlay. Empty of lettering. Photoreal still ~3:1."
         ),
-        note="""## klein-banner-wide-lab-example
+        note="""## klein/banner-wide
 
 Channel / LinkedIn banner (Klein 4B). Default 1536×512. Prefix `ez_banner`.
 Keep the upper band simple for a name overlay.
@@ -1512,14 +1512,14 @@ Keep the upper band simple for a name overlay.
         size_title="Size wide banner 3:1",
     )
     _klein_single(
-        stem="klein-ig-square-lab-example",
+        stem="klein/ig-square",
         template="hero",
         size=(1024, 1024),
         prefix="ez_ig_square",
         prompt=(
             f"{identity} Instagram 1:1 square. Subject centered, warm key, unmarked surfaces."
         ),
-        note="""## klein-ig-square-lab-example
+        note="""## klein/ig-square
 
 Generic Instagram 1:1 still (Klein 4B). Default 1024×1024. Prefix `ez_ig_square`.
 Edit the prompt for any feed post.
@@ -1528,21 +1528,21 @@ Edit the prompt for any feed post.
         size_title="Size 1:1 Instagram",
     )
     _klein_single(
-        stem="klein-hook-still-lab-example",
+        stem="klein/hook-still",
         template="draft",
         size=(432, 768),
         prefix="ez_hook_still",
         prompt=KLEIN_HOOK,
-        note="""## klein-hook-still-lab-example
+        note="""## klein/hook-still
 
 First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`.
-Feed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.
+Feed into **wan/shorts-i2v** or **ltx/hook-av**.
 """,
         description="Klein 4B 9:16 Shorts hook still",
         size_title="Size 9:16 hook still",
     )
     _klein_single(
-        stem="klein-lower-third-bg-lab-example",
+        stem="klein/lower-third-bg",
         template="hero",
         size=(1280, 720),
         prefix="ez_lowerthird",
@@ -1550,7 +1550,7 @@ Feed into **wan-shorts-i2v-lab-example** or **ltx-hook-av-lab-example**.
             f"{identity} 16:9 plate with a clean, empty lower fifth for a lower-third graphic. "
             "Subject sits in the upper two-thirds. Empty of lettering."
         ),
-        note="""## klein-lower-third-bg-lab-example
+        note="""## klein/lower-third-bg
 
 Lower-third-safe 16:9 plate (Klein 4B). Default 1280×720. Prefix `ez_lowerthird`.
 Keep the bottom band empty; composite titles later.
@@ -1559,7 +1559,7 @@ Keep the bottom band empty; composite titles later.
         size_title="Size 16:9 lower-third plate",
     )
     _klein_single(
-        stem="klein-food-tabletop-lab-example",
+        stem="klein/food-tabletop",
         template="hero",
         size=(1024, 1280),
         prefix="ez_tabletop",
@@ -1567,7 +1567,7 @@ Keep the bottom band empty; composite titles later.
             "A photoreal food tabletop still, Instagram 4:5. A ceramic bowl of soup and a linen "
             "napkin on oak, soft window sidelight. Unmarked crockery, no logos, no lettering."
         ),
-        note="""## klein-food-tabletop-lab-example
+        note="""## klein/food-tabletop
 
 Food / tabletop still (Klein 4B). Default 1024×1280 (4:5). Prefix `ez_tabletop`.
 Swap the dish in the prompt; keep unmarked surfaces.
@@ -1579,7 +1579,7 @@ Swap the dish in the prompt; keep unmarked surfaces.
 
     light_cards = load_view_pack("lighting_3")
     _klein_pack(
-        stem="klein-lighting-trio-lab-example",
+        stem="klein/lighting-trio",
         size=(768, 432),
         identity=identity,
         inventory="",
@@ -1587,7 +1587,7 @@ Swap the dish in the prompt; keep unmarked surfaces.
             (f"ez_light_{i:02d}", card["label"], card["shot"])
             for i, card in enumerate(light_cards, start=1)
         ],
-        note=f"""## klein-lighting-trio-lab-example
+        note=f"""## klein/lighting-trio
 
 Same subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02–03 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.
 Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light.
@@ -1603,7 +1603,7 @@ Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light
         "ez_identity_profile",
     )
     _klein_pack(
-        stem="klein-identity-sheet-lab-example",
+        stem="klein/identity-sheet",
         size=(1280, 704),
         identity=identity,
         inventory="",
@@ -1612,7 +1612,7 @@ Prefixes `ez_light_01`…`03` (key / window / night lamp). Change only the light
             (prefix, card["label"], card["shot"])
             for prefix, card in zip(sheet_prefixes, sheet_cards, strict=True)
         ],
-        note=f"""## klein-identity-sheet-lab-example
+        note=f"""## klein/identity-sheet
 
 Three-angle Klein identity sheet. Type any character in IDENTITY. Frozen seed 42. Identity-mode enhance is on. Optional style dropdown applies to the bible.
 Prints ez_identity_front / ez_identity_threequarter / ez_identity_profile.
@@ -1624,13 +1624,13 @@ Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 """,
         description="Klein 4B three-angle identity sheet 1280x704",
     )
-    ident_path = lab_json("klein-identity-sheet-lab-example.json")
+    ident_path = lab_json("klein/identity-sheet.json")
     ident_graph = _load(ident_path)
     ident_graph.setdefault("extra", {})["lab_identity"] = {"seed": 42, "enhance": True}
     _dump(ident_path, ident_graph)
     tod_cards = load_view_pack("time_of_day_4")
     _klein_pack(
-        stem="klein-time-of-day-lab-example",
+        stem="klein/time-of-day",
         size=(768, 432),
         identity=identity,
         inventory="",
@@ -1638,7 +1638,7 @@ Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
             (f"ez_tod_{i:02d}", card["label"], card["shot"])
             for i, card in enumerate(tod_cards, start=1)
         ],
-        note=f"""## klein-time-of-day-lab-example
+        note=f"""## klein/time-of-day
 
 Same place at golden hour / dawn / noon / night (Klein 4B). Type any place in IDENTITY. SHOT GOLDEN is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass GOLDEN on a cold canvas.
 Prefixes `ez_tod_01`…`04`. Change only time of day.
@@ -1650,7 +1650,7 @@ Prefixes `ez_tod_01`…`04`. Change only time of day.
     angle_cards = load_view_pack("camera_angles")
     angle_prefixes = ("ez_angle_med", "ez_angle_wide", "ez_angle_close")
     _klein_pack(
-        stem="klein-camera-angles-lab-example",
+        stem="klein/camera-angles",
         size=(768, 432),
         identity=identity,
         inventory="",
@@ -1659,7 +1659,7 @@ Prefixes `ez_tod_01`…`04`. Change only time of day.
             (prefix, card["label"], card["shot"])
             for prefix, card in zip(angle_prefixes, angle_cards, strict=True)
         ],
-        note=f"""## klein-camera-angles-lab-example
+        note=f"""## klein/camera-angles
 
 Wide / medium / close of one subject (Klein 4B, lock=view). Type any subject in IDENTITY. Prefixes `ez_angle_wide`, `ez_angle_med`, `ez_angle_close`. Independent T2I, same seed — new lens and framing, not copies of MEDIUM.
 
@@ -1669,7 +1669,7 @@ Identity-mode enhance is on for the bible (camera-free).
     )
     mood_cards = load_view_pack("color_moods_4")
     _klein_pack(
-        stem="klein-color-moods-lab-example",
+        stem="klein/color-moods",
         size=(768, 432),
         identity=identity,
         inventory="",
@@ -1677,7 +1677,7 @@ Identity-mode enhance is on for the bible (camera-free).
             (f"ez_mood_{i:02d}", card["label"], card["shot"])
             for i, card in enumerate(mood_cards, start=1)
         ],
-        note=f"""## klein-color-moods-lab-example
+        note=f"""## klein/color-moods
 
 Four color moods, shared identity (Klein 4B). Type any subject in IDENTITY. SHOT WARM is the identity plate. Queue the whole graph; 02–04 Klein-edit from 01. Do not bypass WARM on a cold canvas.
 Prefixes `ez_mood_01`…`04`. Change only grade / mood.
@@ -1688,10 +1688,10 @@ Prefixes `ez_mood_01`…`04`. Change only grade / mood.
     )
 
     _wan_i2v(
-        stem="wan-orbit-i2v-lab-example",
+        stem="wan/orbit-i2v",
         prefix="ez_orbit_video",
         motion=WAN_ORBIT,
-        note=f"""## wan-orbit-i2v-lab-example
+        note=f"""## wan/orbit-i2v
 
 Silent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).
 Prefix `ez_orbit_video`.
@@ -1702,13 +1702,13 @@ Prefix `ez_orbit_video`.
         enhance=False,
     )
     _wan_i2v(
-        stem="wan-push-in-i2v-lab-example",
+        stem="wan/push-in-i2v",
         prefix="ez_pushin_video",
         motion=(
             "Slow cinematic push-in toward the start-image subject. Keep identity locked. "
             "One continuous ~5 s take at 24 fps. No orbit, no cut."
         ),
-        note=f"""## wan-push-in-i2v-lab-example
+        note=f"""## wan/push-in-i2v
 
 Silent Wan 5B I2V hero push-in (~5 s). LoadImage: a still or thumbnail.
 Prefix `ez_pushin_video`.
@@ -1719,13 +1719,13 @@ Prefix `ez_pushin_video`.
         enhance=False,
     )
     _wan_i2v(
-        stem="wan-parallax-i2v-lab-example",
+        stem="wan/parallax-i2v",
         prefix="ez_parallax_video",
         motion=(
             "Subtle parallax from the start still. Foreground drifts a hair left, background holds. "
             "Locked framing, Ken Burns-like depth, identity locked. One continuous ~5 s take."
         ),
-        note=f"""## wan-parallax-i2v-lab-example
+        note=f"""## wan/parallax-i2v
 
 Silent Wan 5B I2V subtle parallax (~5 s). LoadImage: a still.
 Prefix `ez_parallax_video`.
@@ -1736,13 +1736,13 @@ Prefix `ez_parallax_video`.
         enhance=False,
     )
     _wan_loop(
-        stem="wan-sticker-loop-lab-example",
+        stem="wan/sticker-loop",
         prefix="ez_sticker",
         motion=(
             "Tight looping sticker motion. A small cyclic bounce or shimmer on the subject. "
             "Ping-pong friendly. Keep start-image identity locked. No walk, no dolly."
         ),
-        note=f"""## wan-sticker-loop-lab-example
+        note=f"""## wan/sticker-loop
 
 Loopable sticker MP4 (Wan 5B, 49 frames @ 12 fps, ping-pong ON). Prefix `ez_sticker`.
 LoadImage: a cutout-friendly still.
@@ -1753,12 +1753,12 @@ LoadImage: a cutout-friendly still.
     )
 
     _ltx_av(
-        stem="ltx-weather-broll-lab-example",
+        stem="ltx/weather-broll",
         prefix="ez_weather_video",
         prompt=LTX_WEATHER,
         audio_hint=LTX_WEATHER_AUDIO,
         mode="t2v",
-        note=f"""## ltx-weather-broll-lab-example
+        note=f"""## ltx/weather-broll
 
 {LTX_CANVAS_LANDSCAPE}
 
@@ -1771,7 +1771,7 @@ Disclose AI-generated media. No score.
         description="LTX-2.5 weather B-roll AV ~5s",
     )
     _ltx_av(
-        stem="ltx-interior-ambience-lab-example",
+        stem="ltx/interior-ambience",
         prefix="ez_interior_video",
         prompt=(
             "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a "
@@ -1780,7 +1780,7 @@ Disclose AI-generated media. No score.
         ),
         audio_hint="kettle, house creak, no score",
         mode="t2v",
-        note=f"""## ltx-interior-ambience-lab-example
+        note=f"""## ltx/interior-ambience
 
 {LTX_CANVAS_LANDSCAPE}
 
@@ -1793,17 +1793,17 @@ Disclose AI-generated media. No score.
         description="LTX-2.5 interior ambience AV ~5s",
     )
     _ltx_av(
-        stem="ltx-hook-av-lab-example",
+        stem="ltx/hook-av",
         prefix="ez_hook_video",
         prompt=LTX_HOOK_AV,
         audio_hint=LTX_HOOK_AUDIO,
         mode="t2v",
-        note=f"""## ltx-hook-av-lab-example
+        note=f"""## ltx/hook-av
 
 {LTX_CANVAS_LANDSCAPE}
 
 ~5 s AV cold-open / hook (LTX-2.5 T2V). Community License — not Apache.
-Prefix `ez_hook_video`. Pair with **klein-hook-still-lab-example** if you want I2V instead.
+Prefix `ez_hook_video`. Pair with **klein/hook-still** if you want I2V instead.
 
 {PREVIEW_BULLET}
 Disclose AI-generated media. No score.
@@ -1817,7 +1817,7 @@ def main() -> None:
     build_all_films()
     build_creator_toolkit()
     build_creator_toolkit_v2()
-    for path in sorted(WF.rglob("*-lab-example.json")):
+    for path in sorted((WF / "_lab").rglob("*.json")):
         graph = _load(path)
         enable_lab_graph(graph)
         normalize_enhance_widgets(graph)

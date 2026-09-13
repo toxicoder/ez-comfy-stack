@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from _lab_paths import lab_json
+from _lab_paths import LAB_ROOT, lab_graph_paths, lab_json
 
 from _lab_theme import (
     GOSEE_IDENTITY,
@@ -47,20 +47,24 @@ LOCK = ("photoreal still", "techno wizard")
 
 # Packs that already use a different subject (house is wizard-home; mug, 90s still-here/switchyard, DCC).
 EXEMPT = {
-    "klein-product-packshot-lab-example",
-    "klein-podcast-cover-lab-example",
-    "klein-food-tabletop-lab-example",
-    "klein-before-after-lab-example",
-    "ltx-interior-ambience-lab-example",
-    "film-still-here-90s-lab-example",
-    "film-switchyard-90s-lab-example",
-    "klein-from-clay-lab-example",
-    "ltx-iclora-depth-5s-lab-example",
+    "klein/product-packshot",
+    "klein/podcast-cover",
+    "klein/food-tabletop",
+    "klein/before-after",
+    "ltx/interior-ambience",
+    "shorts/still-here",
+    "shorts/switchyard",
+    "dcc/klein/from-clay",
+    "dcc/ltx/iclora-depth-5s",
 }
 
 
 def _graphs() -> list[Path]:
-    return sorted(WF.glob("**/*-lab-example.json"))
+    return lab_graph_paths()
+
+
+def _rel(path: Path) -> str:
+    return path.relative_to(LAB_ROOT).with_suffix("").as_posix()
 
 
 def test_theme_module_lens_split_and_lock() -> None:
@@ -102,8 +106,8 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
 
 
 def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
-    draft = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
-    hero = json.loads(lab_json("klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
+    draft = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
+    hero = json.loads(lab_json("klein/still-hero.json").read_text(encoding="utf-8"))
 
     def pos(graph: dict) -> str:
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
@@ -123,7 +127,7 @@ def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
 def test_lab_example_graphs_drop_bicycle_theme() -> None:
     hits: list[str] = []
     for path in _graphs():
-        if path.stem in EXEMPT:
+        if _rel(path) in EXEMPT:
             continue
         blob = path.read_text(encoding="utf-8").lower()
         for banned in BANNED:
@@ -135,7 +139,7 @@ def test_lab_example_graphs_drop_bicycle_theme() -> None:
 def test_lab_example_graphs_drop_superhero_theme() -> None:
     hits: list[str] = []
     for path in _graphs():
-        if path.stem in EXEMPT:
+        if _rel(path) in EXEMPT:
             continue
         blob = path.read_text(encoding="utf-8")
         lower = blob.lower()
@@ -146,15 +150,15 @@ def test_lab_example_graphs_drop_superhero_theme() -> None:
 
 
 def test_lab_identity_graphs_lock_techno_wizard() -> None:
-    draft = lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8")
+    draft = lab_json("klein/still-draft.json").read_text(encoding="utf-8")
     for needle in LOCK:
         assert needle in draft
 
 
 def test_exempt_packs_keep_their_own_subjects() -> None:
-    house = lab_json("klein-dream-house-lab-example.json").read_text(encoding="utf-8").lower()
-    clay = lab_json("klein-dream-house-clay-lab-example.json").read_text(encoding="utf-8").lower()
-    style = lab_json("klein-style-lock-lab-example.json").read_text(encoding="utf-8").lower()
+    house = lab_json("klein/dream-house.json").read_text(encoding="utf-8").lower()
+    clay = lab_json("klein/dream-house-clay.json").read_text(encoding="utf-8").lower()
+    style = lab_json("klein/style-lock.json").read_text(encoding="utf-8").lower()
     for blob in (house, clay, style):
         assert "warm-glass" in blob
         assert "crown penthouse" in blob
@@ -165,7 +169,7 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
         assert "cedar" not in blob
         assert "alpine" not in blob
         assert "charcoal-glass" not in blob
-    film = lab_json("film-go-see-90s-run-lab-example.json").read_text(encoding="utf-8").lower()
+    film = lab_json("shorts/go-see.json").read_text(encoding="utf-8").lower()
     assert "storm-cloak" in film
     assert "ink-black" in film
     assert "parkour" in film
@@ -173,7 +177,7 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
     assert "windbreaker" not in film
     assert "electric-cyan" not in film
     for path in _graphs():
-        if path.stem not in EXEMPT:
+        if _rel(path) not in EXEMPT:
             continue
         blob = path.read_text(encoding="utf-8").lower()
         for banned in BANNED:
@@ -183,7 +187,7 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
 def test_wizard_graphs_drop_dusk_cutscene_look() -> None:
     hits: list[str] = []
     for path in _graphs():
-        if path.stem in EXEMPT:
+        if _rel(path) in EXEMPT:
             continue
         if "dcc" in str(path.relative_to(WF)):
             continue

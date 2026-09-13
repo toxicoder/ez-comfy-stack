@@ -23,6 +23,7 @@ from _lab_layout import (  # noqa: E402
     group_overlap_hits,
     title_inset_hits,
 )
+from _lab_paths import lab_graph_paths  # noqa: E402
 
 
 def test_lab_group_y0_clears_default_node_row() -> None:
@@ -70,7 +71,7 @@ def test_ensure_group_title_inset_does_not_overlap_stacked_groups() -> None:
 
 
 def _graphs() -> list[Path]:
-    return sorted(WF.rglob("*-lab-example.json"))
+    return lab_graph_paths()
 
 
 @pytest.mark.parametrize("path", _graphs(), ids=lambda p: str(p.relative_to(WF)))

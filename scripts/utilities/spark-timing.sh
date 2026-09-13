@@ -176,7 +176,7 @@ cmd_record() {
   path="$(timing_path)"
   dest="$(dirname "${path}")"
   mkdir -p "${dest}"
-  printf '{"klein_s":%s,"wan_s":%s,"ltx_s":%s,"attention":"%s","smokes":{"klein":"klein-still-draft-lab-example","wan":"wan-i2v-5s-lab-example","ltx":"ltx-i2v-5s-lab-example"}}\n' \
+  printf '{"klein_s":%s,"wan_s":%s,"ltx_s":%s,"attention":"%s","smokes":{"klein":"klein/still-draft","wan":"wan/i2v-5s","ltx":"ltx/i2v-5s"}}\n' \
     "${KLEIN_S}" "${WAN_S}" "${LTX_S}" "${attn}" >"${path}"
   log "wrote ${path} (attention=${attn})"
   if [[ ${JSON_FLAG} == "--json" ]]; then

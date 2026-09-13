@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Backstop LoadImage plates for klein-dream-house-clay-lab-example.
+"""Backstop LoadImage plates for klein/dream-house-clay.
 
 Host ``manage.sh start`` still prefers layout-accurate plates via
 ``house_layout.py``. This module runs inside the container (stdlib only) when

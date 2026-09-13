@@ -14,11 +14,10 @@ WF = ROOT / "workflows"
 
 LTX_SPATIAL_TYPES = ("LTXVImgToVideo", "EmptyLTXVLatentVideo")
 BROADCAST_ILLEGAL = {720, 1080}
-PORTRAIT_SHORTS = "ltx-shorts-i2v-lab-example"
 PORTRAIT_STEMS = frozenset(
     {
-        PORTRAIT_SHORTS,
-        "ltx-iclora-depth-shorts-lab-example",
+        "shorts-i2v",
+        "iclora-depth-shorts",
     }
 )
 LANDSCAPE_SIZE = (1280, 704)
@@ -26,8 +25,10 @@ PORTRAIT_SIZE = (768, 1280)
 
 
 def _workflow_json() -> list[Path]:
-    files = sorted(WF.rglob("*-lab-example.json"))
-    assert files, "expected lab-example workflows"
+    from _lab_paths import lab_graph_paths
+
+    files = lab_graph_paths()
+    assert files, "expected lab workflows"
     return files
 
 
