@@ -11,6 +11,13 @@ const LABELS = {
   image: "Start image",
   tags: "Tags",
   lyrics: "Lyrics",
+  artist: "Artist",
+  album: "Album",
+  title: "Title",
+  track: "Track",
+  tracktotal: "Tracks",
+  year: "Year",
+  art_mode: "Album art",
   audio_notes: "Audio notes",
   width: "Width",
   height: "Height",
@@ -58,6 +65,8 @@ const SAVE_TYPES = new Set([
   "SaveAudio",
   "SaveAudioMP3",
   "EZFilmConcat",
+  "EZAlbumPack",
+  "EZAudioMetadata",
 ]);
 
 const BANNER_ID = "ez-studio-app-banner";
@@ -180,6 +189,12 @@ function renderBanner(status) {
   }
   if (handoff) {
     lines.push(`Next: ${handoff}`);
+  }
+  const album = app.graph?.extra?.lab_album;
+  if (album?.role === "album" && album.artist_slug && album.album_slug) {
+    lines.push(
+      `Full album: ./scripts/manage.sh album-render --album ${album.artist_slug}/${album.album_slug} --art skip|upload|generate`,
+    );
   }
   el.innerHTML = lines.join("<br>");
 }

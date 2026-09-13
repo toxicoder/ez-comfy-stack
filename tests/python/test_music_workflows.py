@@ -54,7 +54,7 @@ def _assert_shared(
     ace_mode: str = "vocal",
     edm_vocal_treat: bool = False,
 ) -> None:
-    assert graph["id"] == stem
+    assert graph["id"] == Path(stem).name
     extra = graph["extra"]
     assert extra["lab_profile"] == "us-safe-music"
     assert extra["lab_note"].strip()
@@ -112,13 +112,16 @@ def _assert_shared(
         assert ace["widgets_values"][0] == tags
         assert widgets[0] == tags
     assert "Note" in {n["type"] for n in graph["nodes"]}
-    assert "klein-thumbnail-lab-example" in extra["lab_note"]
-    assert "klein-podcast-cover-lab-example" in extra["lab_note"]
+    assert "klein/thumbnail" in extra["lab_note"]
+    assert "klein/podcast-cover" in extra["lab_note"]
+    assert extra.get("lab_album")
+    assert extra["lab_album"]["art_mode"] in {"skip", "upload", "generate"}
+    assert any(n["type"] == "EZAudioMetadata" for n in graph["nodes"])
 
 
 def test_music_rap_draft_graph() -> None:
-    graph = _load("music-rap-draft-lab-example")
-    _assert_shared(graph, "music-rap-draft-lab-example", "ez_rap_draft", 32.0)
+    graph = _load("audio/music/rap-draft")
+    _assert_shared(graph, "rap-draft", "ez_rap_draft", 32.0)
     note = graph["extra"]["lab_note"].lower()
     assert "instrumental" in note
     assert "[inst]" in graph["extra"]["lab_note"]
@@ -127,8 +130,8 @@ def test_music_rap_draft_graph() -> None:
 
 
 def test_music_rap_full_graph() -> None:
-    graph = _load("music-rap-full-lab-example")
-    _assert_shared(graph, "music-rap-full-lab-example", "ez_rap_full", 96.0)
+    graph = _load("audio/music/rap-full")
+    _assert_shared(graph, "rap-full", "ez_rap_full", 96.0)
     blob = json.dumps(graph)
     assert "[outro]" in blob
     assert blob.count("[chorus]") >= 2
@@ -136,7 +139,7 @@ def test_music_rap_full_graph() -> None:
 
 def test_music_rap_nill_bye_diss_graphs() -> None:
     assert len(DISS_EXAMPLES) == 135
-    assert tuple(ex["stem"] for ex in DISS_EXAMPLES) == NILL_BYE_STAMP_STEMS
+    assert tuple(ex["rel"] for ex in DISS_EXAMPLES) == NILL_BYE_STAMP_STEMS
     for ex in DISS_EXAMPLES:
         stem = ex["stem"]
         graph = _load(stem)
@@ -184,11 +187,11 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
         }:
             assert "[spoken word]" in blob
         rel = lab_json(stem).relative_to(LAB_ROOT)
-        assert rel.parts[:3] == ("audio", "nill-bye", f"phase{ex['phase']}")
+        assert rel.parts[:4] == ("audio", "albums", "nill-bye", ex["album_slug"])
 
 
 def test_nill_bye_stems_are_stamped_audio() -> None:
-    stems = {ex["stem"] for ex in DISS_EXAMPLES}
+    stems = {ex["rel"] for ex in DISS_EXAMPLES}
     assert stems <= set(STAMP_SPECS)
     for stem in stems:
         assert STAMP_SPECS[stem]["lane"] == "audio"
@@ -221,7 +224,7 @@ def _node_fingerprint(graph: dict) -> tuple[tuple[int, float, float], ...]:
 
 def test_music_edm_drive_through_graphs() -> None:
     assert len(EDM_EXAMPLES) == 85
-    assert tuple(ex["stem"] for ex in EDM_EXAMPLES) == DRIVE_THROUGH_STAMP_STEMS
+    assert tuple(ex["rel"] for ex in EDM_EXAMPLES) == DRIVE_THROUGH_STAMP_STEMS
     for ex in EDM_EXAMPLES:
         stem = ex["stem"]
         graph = _load(stem)
@@ -253,14 +256,14 @@ def test_music_edm_drive_through_graphs() -> None:
         ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
         assert ace["title"] == "ez_edm_prompt"
         rel = lab_json(stem).relative_to(LAB_ROOT)
-        assert rel.parts[:3] == ("audio", "drive-through", f"phase{ex['phase']}")
+        assert rel.parts[:4] == ("audio", "albums", "drive-through", ex["album_slug"])
 
 
 def test_drive_through_phase2_layouts_vary() -> None:
     fingerprints: set[tuple[tuple[int, float, float], ...]] = set()
     for ex in EDM_EXAMPLES:
         graph = _load(ex["stem"])
-        fingerprint = _node_fingerprint(graph)
+        fingerprint = tuple(item for item in _node_fingerprint(graph) if item[0] <= 12)
         if ex["phase"] < 2:
             assert fingerprint == COLUMN_NODE_POS, ex["stem"]
         else:
@@ -269,7 +272,7 @@ def test_drive_through_phase2_layouts_vary() -> None:
 
 
 def test_drive_through_stems_are_stamped_audio() -> None:
-    stems = {ex["stem"] for ex in EDM_EXAMPLES}
+    stems = {ex["rel"] for ex in EDM_EXAMPLES}
     assert stems <= set(STAMP_SPECS)
     for stem in stems:
         assert STAMP_SPECS[stem]["lane"] == "audio"
@@ -279,8 +282,8 @@ def test_drive_through_stems_are_stamped_audio() -> None:
 
 def test_music_apps_expose_duration_and_vocal_mode() -> None:
     stems = [
-        "music-rap-draft-lab-example",
-        "music-rap-full-lab-example",
+        "audio/music/rap-draft",
+        "audio/music/rap-full",
         *[ex["stem"] for ex in DISS_EXAMPLES],
         *[ex["stem"] for ex in EDM_EXAMPLES],
     ]
@@ -296,3 +299,6 @@ def test_music_apps_expose_duration_and_vocal_mode() -> None:
         ]
         assert "Duration (seconds)" in labels, stem
         assert "Vocal / instrumental" in labels, stem
+        assert "Album art" in labels, stem
+        assert "Artist" in labels, stem
+        assert "Album" in labels, stem

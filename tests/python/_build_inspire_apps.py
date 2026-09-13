@@ -26,7 +26,7 @@ WF = ROOT / "workflows"
 
 LAZY = LAZY_FORGE
 
-FORGE_NOTE = """## prompt-forge-lab-example
+FORGE_NOTE = """## inspire/prompt-forge
 
 Prompt Forge — rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.
 
@@ -39,12 +39,12 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 1. Type a lazy sentence (or leave the canned line).
 2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.
 3. Queue. Each Enhance node previews the rewritten STRING.
-4. Copy the family you need into **klein-still-draft-lab-example** (Spark Still).
+4. Copy the family you need into **klein/still-draft** (Spark Still).
 
 Turn Enhance off to pin the widget text.
 """
 
-BEAT_NOTE = """## beat-sheet-lab-example
+BEAT_NOTE = """## inspire/beat-sheet
 
 Script desk — 6 beats × enter / traverse / exit. Occupancy: none — stop nothing GPU.
 
@@ -56,8 +56,8 @@ This graph does not print video. Fill Logline, Script, Audio policy, Score, then
 That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
 
-Next: klein-identity-sheet-lab-example, or export-guides if clay is required, then
-klein-from-clay-lab-example.
+Next: klein/identity-sheet, or export-guides if clay is required, then
+dcc/klein/from-clay.
 
 Shot-card keys (defaults fail-closed):
 
@@ -72,7 +72,7 @@ Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 Do not type a 30/60/90 s denoise. One LTX print is 5.00 s (121 frames = 1+8n @ 24 fps).
 """
 
-RESEARCH_NOTE = """## research-chat-lab-example
+RESEARCH_NOTE = """## inspire/research-chat
 
 Creative research desk — chat LLM with web search and sequential research
 subagents. No UNET, no VAE, no KSampler.
@@ -88,7 +88,7 @@ network or GGUF is missing.
 1. Type a question (look, camera, lighting, world, reference).
 2. Mode **research** (planner + search subagents) or **chat** (one turn).
 3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
-   **prompt-forge-lab-example**, then **klein-still-draft-lab-example**.
+   **inspire/prompt-forge**, then **klein/still-draft**.
 
 Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
@@ -203,7 +203,7 @@ def build_prompt_forge() -> dict:
         0,
     )
     graph = {
-        "id": "prompt-forge-lab-example",
+        "id": "inspire/prompt-forge",
         "revision": 1,
         "last_node_id": 4,
         "last_link_id": 0,
@@ -217,7 +217,7 @@ def build_prompt_forge() -> dict:
         ],
         "config": {},
         "extra": {
-            "lab_profile": "prompt-forge-lab-example",
+            "lab_profile": "inspire/prompt-forge",
             "lab_note": FORGE_NOTE,
             "lab_description": "No-UNET Prompt Forge: Klein + Wan + LTX enhance preview",
             "ds": {"scale": 1, "offset": [0, 0]},
@@ -366,7 +366,7 @@ def build_beat_sheet() -> dict:
             lid += 1
             nid += 1
     graph = {
-        "id": "beat-sheet-lab-example",
+        "id": "inspire/beat-sheet",
         "revision": 1,
         "last_node_id": nid - 1,
         "last_link_id": lid - 1,
@@ -375,7 +375,7 @@ def build_beat_sheet() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "beat-sheet-lab-example",
+            "lab_profile": "inspire/beat-sheet",
             "lab_note": BEAT_NOTE,
             "lab_description": "Script desk: logline, audio policy, 18 shot cards → shot-sheet YAML",
             "ds": {"scale": 1, "offset": [0, 0]},
@@ -411,7 +411,7 @@ def build_research_chat() -> dict:
         [{"name": "reply", "type": "STRING", "links": None, "slot_index": 0}],
     )
     graph = {
-        "id": "research-chat-lab-example",
+        "id": "inspire/research-chat",
         "revision": 1,
         "last_node_id": 2,
         "last_link_id": 0,
@@ -431,7 +431,7 @@ def build_research_chat() -> dict:
         ],
         "config": {},
         "extra": {
-            "lab_profile": "research-chat-lab-example",
+            "lab_profile": "inspire/research-chat",
             "lab_note": RESEARCH_NOTE,
             "lab_description": (
                 "No-UNET creative research chat: web search + sequential subagents"
@@ -440,7 +440,7 @@ def build_research_chat() -> dict:
                 "server": "research-mcp",
                 "tools": ["chat", "web_search", "research"],
                 "workflow": (
-                    "workflows/_lab/inspire/research-chat-lab-example.json"
+                    "workflows/_lab/inspire/research-chat.json"
                 ),
             },
             "ds": {"scale": 1, "offset": [0, 0]},
@@ -451,9 +451,9 @@ def build_research_chat() -> dict:
 
 
 def main() -> None:
-    _dump(lab_json("prompt-forge-lab-example.json"), build_prompt_forge())
-    _dump(lab_json("beat-sheet-lab-example.json"), build_beat_sheet())
-    _dump(lab_dest("research-chat-lab-example.json"), build_research_chat())
+    _dump(lab_json("inspire/prompt-forge.json"), build_prompt_forge())
+    _dump(lab_json("inspire/beat-sheet.json"), build_beat_sheet())
+    _dump(lab_dest("inspire/research-chat.json"), build_research_chat())
 
 
 if __name__ == "__main__":

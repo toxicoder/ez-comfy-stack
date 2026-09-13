@@ -2,7 +2,7 @@
 #
 # ## promote_workflow.bats
 #
-# Cover scripts/utilities/promote-workflow.sh: refuse banned / bad suffix /
+# Cover scripts/utilities/promote-workflow.sh: refuse banned / bad id /
 # bad lane, copy into workflows/_lab.
 
 load 'test_helper'
@@ -19,22 +19,21 @@ teardown() {
 # Named for coverage inventory: promote_usage promote_lane_ok
 # promote_refuse_banned promote_run
 
-@test "promote_workflow refuses banned strings bad suffix and bad lane" {
+@test "promote_workflow refuses banned strings bad id and bad lane" {
   local src sh
   sh="${REPO_ROOT}/scripts/utilities/promote-workflow.sh"
   src="${TEST_TMP_DIR}/bad.json"
   printf '%s\n' '{"id":"x","note":"MiniMax"}' >"${src}"
-  run bash "${sh}" --from "${src}" --lane klein --id klein-hook-lab-example
+  run bash "${sh}" --from "${src}" --lane klein --id my-hook
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"MiniMax"* ]]
   printf '%s\n' '{"id":"ok"}' >"${src}"
-  run bash "${sh}" --from "${src}" --lane klein --id not-an-example
+  run bash "${sh}" --from "${src}" --lane klein --id '..'
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"-lab-example"* ]]
-  run bash "${sh}" --from "${src}" --lane nope --id klein-hook-lab-example
+  run bash "${sh}" --from "${src}" --lane nope --id my-hook
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"unknown lane"* ]]
-  run bash "${sh}" --from "${TEST_TMP_DIR}/missing.json" --lane klein --id klein-hook-lab-example
+  run bash "${sh}" --from "${TEST_TMP_DIR}/missing.json" --lane klein --id my-hook
   [ "${status}" -ne 0 ]
   run bash "${sh}" --help
   [ "${status}" -ne 0 ]
@@ -45,16 +44,21 @@ teardown() {
   local src dest sh
   sh="${REPO_ROOT}/scripts/utilities/promote-workflow.sh"
   src="${TEST_TMP_DIR}/keep-me.json"
-  printf '%s\n' '{"id":"klein-my-hook-lab-example","nodes":[]}' >"${src}"
-  dest="${REPO_ROOT}/workflows/_lab/klein/klein-my-hook-lab-example.json"
-  run bash "${sh}" --from "${src}" --lane klein --id klein-my-hook-lab-example
+  printf '%s\n' '{"id":"my-hook","nodes":[]}' >"${src}"
+  dest="${REPO_ROOT}/workflows/_lab/klein/my-hook.json"
+  run bash "${sh}" --from "${src}" --lane klein --id my-hook
   [ "${status}" -eq 0 ]
   [[ -f ${dest} ]]
-  grep -F 'klein-my-hook-lab-example' "${dest}"
+  grep -F 'my-hook' "${dest}"
   [[ "${output}" == *"stamp App Mode"* ]]
   rm -f "${dest}"
-  run bash "${sh}" --from "${REPO_ROOT}/workflows/_lab/klein/klein-still-draft-lab-example.json" \
-    --lane klein --id klein-cloned-lab-example
+  dest="${REPO_ROOT}/workflows/_lab/audio/albums/demo/hook.json"
+  run bash "${sh}" --from "${src}" --lane audio --id hook --subdir albums/demo
+  [ "${status}" -eq 0 ]
+  [[ -f ${dest} ]]
+  rm -rf "${REPO_ROOT}/workflows/_lab/audio/albums/demo"
+  run bash "${sh}" --from "${REPO_ROOT}/workflows/_lab/klein/still-draft.json" \
+    --lane klein --id cloned
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"never copy _lab"* ]]
 }

@@ -48,7 +48,7 @@ GIF_NEG = (
     "watermark, burned-in text"
 )
 
-STILL_NOTE = """## klein-still-daily-lab-example
+STILL_NOTE = """## klein/still-daily
 
 Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.
 CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.
@@ -63,7 +63,7 @@ Save prefix: ez_still_app.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
 
-GIF_NOTE = """## wan-gif-loop-lab-example
+GIF_NOTE = """## wan/gif-loop
 
 Wan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).
 Models: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.
@@ -75,7 +75,7 @@ Do not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.
 Prompt enhance is **off** so the locked-camera cyclic motion stays ping-pong safe. Turn Enhance on only if you want the 4B rewriter.
 """
 
-HOUSE_NOTE = """## klein-dream-house-lab-example
+HOUSE_NOTE = """## klein/dream-house
 
 Ten Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY — the default placeholder is the lab penthouse.
 HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings). Enhance extracts only the rooms and furniture you named — name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Hidden SHOT cards are a walkthrough (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study), not a penthouse template. Each card is one room or angle with its own backdrop — only lounge looks out the main opening; kitchen, dining, bedroom, bath, and study keep interior walls. Prompt Join lock=view front-loads the shot and closes with “this still is only the room and backdrop the shot names.” Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
@@ -89,7 +89,7 @@ CLAY_LOCK = (
     "Do not redesign layout."
 )
 
-HOUSE_CLAY_NOTE = """## klein-dream-house-clay-lab-example
+HOUSE_CLAY_NOTE = """## klein/dream-house-clay
 
 Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
 
@@ -109,22 +109,22 @@ Reseed LoadImage plates without Blender (compose may stay up):
 
   ./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs
 
-HOUSE IDENTITY is the same camera-free world bible as klein-dream-house-lab-example. Shot cards are the place_10 walkthrough. Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
+HOUSE IDENTITY is the same camera-free world bible as klein/dream-house. Shot cards are the place_10 walkthrough. Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 
-Language-only tour (no geometry) → klein-dream-house-lab-example. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
+Language-only tour (no geometry) → klein/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
 Optional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).
 """
 
-CHARACTER_DRAFT_NOTE = """## klein-character-draft-lab-example
+CHARACTER_DRAFT_NOTE = """## klein/character-draft
 
 Klein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.
 
-Handoff: load **klein-character-tweak-lab-example**, pick `ez_character_*.png`, and prompt the change.
+Handoff: load **klein/character-tweak**, pick `ez_character_*.png`, and prompt the change.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 """
 
-CHARACTER_TWEAK_NOTE = """## klein-character-tweak-lab-example
+CHARACTER_TWEAK_NOTE = """## klein/character-tweak
 
 Klein 4B **edit** of a character still. LoadImage: `ez_character_*.png` from Character Draft (or any Klein still). Prompt only the change. Enhance **edit**. Style restyles medium/grade; identity stays in the reference image. Prefix `ez_character_tweak`. Size 1024x1280.
 
@@ -133,7 +133,7 @@ VAEEncode + ReferenceLatent. Do not Queue without a start image.
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 """
 
-PACK_NOTE = """## klein-platform-pack-lab-example
+PACK_NOTE = """## klein/platform-pack
 
 One identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.
 
@@ -240,8 +240,8 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
 
 
 def build_still_app() -> dict:
-    graph = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
-    graph["id"] = "klein-still-daily-lab-example"
+    graph = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
+    graph["id"] = "klein/still-daily"
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
     unet["title"] = "Image model — click filename to swap"
@@ -256,7 +256,7 @@ def build_still_app() -> dict:
     save["title"] = "Save PNG"
     note = _node(graph, "Note")
     note["widgets_values"] = [STILL_NOTE]
-    graph["extra"]["lab_profile"] = "klein-still-daily-lab-example"
+    graph["extra"]["lab_profile"] = "klein/still-daily"
     graph["extra"]["lab_note"] = STILL_NOTE
     graph["extra"]["lab_description"] = "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
     enh = _node(graph, "EZKleinPromptEnhance")
@@ -276,8 +276,8 @@ def build_still_app() -> dict:
 
 
 def build_gif_loop() -> dict:
-    graph = json.loads(lab_json("wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    graph["id"] = "wan-gif-loop-lab-example"
+    graph = json.loads(lab_json("wan/i2v-5s.json").read_text(encoding="utf-8"))
+    graph["id"] = "wan/gif-loop"
     graph["revision"] = 1
     lat = _node(graph, "Wan22ImageToVideoLatent")
     lat["widgets_values"][2] = 49
@@ -299,7 +299,7 @@ def build_gif_loop() -> dict:
     neg["widgets_values"] = [GIF_NEG]
     note = _node(graph, "Note")
     note["widgets_values"] = [GIF_NOTE]
-    graph["extra"]["lab_profile"] = "wan-gif-loop-lab-example"
+    graph["extra"]["lab_profile"] = "wan/gif-loop"
     graph["extra"]["lab_note"] = GIF_NOTE
     graph["extra"]["lab_description"] = "Wan 5B looping GIF, 49 frames ping-pong @ 12 fps"
     groups = list(graph.get("groups") or [])
@@ -605,7 +605,7 @@ def build_dream_house() -> dict:
 
     last_id = max(n["id"] for n in nodes)
     return {
-        "id": "klein-dream-house-lab-example",
+        "id": "klein/dream-house",
         "revision": 1,
         "last_node_id": last_id,
         "last_link_id": link_id,
@@ -614,7 +614,7 @@ def build_dream_house() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "klein-dream-house-lab-example",
+            "lab_profile": "klein/dream-house",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
             "lab_description": "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, rooms, terrace, drone)",
@@ -961,7 +961,7 @@ def build_dream_house_clay() -> dict:
 
     last_id = max(n["id"] for n in nodes)
     return {
-        "id": "klein-dream-house-clay-lab-example",
+        "id": "klein/dream-house-clay",
         "revision": 1,
         "last_node_id": last_id,
         "last_link_id": link_id,
@@ -970,7 +970,7 @@ def build_dream_house_clay() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "klein-dream-house-clay-lab-example",
+            "lab_profile": "klein/dream-house-clay",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_CLAY_NOTE,
             "lab_description": (
@@ -1231,7 +1231,7 @@ def build_platform_pack() -> dict:
         )
     last_id = max(n["id"] for n in nodes)
     return {
-        "id": "klein-platform-pack-lab-example",
+        "id": "klein/platform-pack",
         "revision": 1,
         "last_node_id": last_id,
         "last_link_id": link_id,
@@ -1240,7 +1240,7 @@ def build_platform_pack() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "klein-platform-pack-lab-example",
+            "lab_profile": "klein/platform-pack",
             "lab_flux_tier": "fast",
             "lab_note": PACK_NOTE,
             "lab_description": "Six Klein platform plates from one identity; independent T2I per aspect",
@@ -1251,8 +1251,8 @@ def build_platform_pack() -> dict:
 
 
 def build_character_draft() -> dict:
-    graph = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
-    graph["id"] = "klein-character-draft-lab-example"
+    graph = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
+    graph["id"] = "klein/character-draft"
     graph["revision"] = 1
     latent = _node(graph, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [1024, 1280, 1]
@@ -1273,7 +1273,7 @@ def build_character_draft() -> dict:
     note = _node(graph, "Note")
     note["widgets_values"] = [CHARACTER_DRAFT_NOTE]
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "klein-character-draft-lab-example"
+    extra["lab_profile"] = "klein/character-draft"
     extra["lab_note"] = CHARACTER_DRAFT_NOTE
     extra["lab_description"] = "Klein 4B character still, 1024x1280, style on, prefix ez_character"
     return graph
@@ -1283,10 +1283,10 @@ def build_character_tweak() -> dict:
     from _build_dcc_workflows import build_klein_from_clay
 
     graph = build_klein_from_clay()
-    graph["id"] = "klein-character-tweak-lab-example"
+    graph["id"] = "klein/character-tweak"
     graph["revision"] = 1
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "klein-character-tweak-lab-example"
+    extra["lab_profile"] = "klein/character-tweak"
     extra["lab_note"] = CHARACTER_TWEAK_NOTE
     extra["lab_description"] = (
         "Klein 4B character edit. LoadImage ez_character_*.png. ReferenceLatent. Prefix ez_character_tweak."
@@ -1334,13 +1334,13 @@ def main() -> None:
     pack = build_platform_pack()
     draft = build_character_draft()
     tweak = build_character_tweak()
-    _dump(lab_json("klein-still-daily-lab-example.json"), still)
-    _dump(lab_json("wan-gif-loop-lab-example.json"), gif)
-    _dump(lab_json("klein-dream-house-lab-example.json"), house)
-    _dump(lab_dest("klein-dream-house-clay-lab-example"), house_clay)
-    _dump(lab_json("klein-platform-pack-lab-example.json"), pack)
-    _dump(lab_dest("klein-character-draft-lab-example"), draft)
-    _dump(lab_dest("klein-character-tweak-lab-example"), tweak)
+    _dump(lab_json("klein/still-daily.json"), still)
+    _dump(lab_json("wan/gif-loop.json"), gif)
+    _dump(lab_json("klein/dream-house.json"), house)
+    _dump(lab_dest("klein/dream-house-clay"), house_clay)
+    _dump(lab_json("klein/platform-pack.json"), pack)
+    _dump(lab_dest("klein/character-draft"), draft)
+    _dump(lab_dest("klein/character-tweak"), tweak)
     print(
         "wrote still-app, gif-loop, dream-house, dream-house-clay, "
         "platform-pack, character draft/tweak"

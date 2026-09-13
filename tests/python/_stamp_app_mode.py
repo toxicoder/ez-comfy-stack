@@ -214,6 +214,8 @@ OUTPUT_TYPES = (
     "SaveAudio",
     "SaveAudioMP3",
     "EZDubRender",
+    "EZAlbumPack",
+    "EZAudioMetadata",
     "MeshToFile3D",
 )
 
@@ -252,6 +254,13 @@ WIDGET_ORDER = (
     "duration_hint",
     "audio_notes",
     "seconds",
+    "artist",
+    "album",
+    "title",
+    "track",
+    "tracktotal",
+    "year",
+    "art_mode",
     "target_language",
     "source_language",
     "max_speakers",
@@ -295,6 +304,13 @@ GENERIC_LABELS = {
     "enhance": "Rewrite prompt",
     "seed": "Seed",
     "image": "Start image",
+    "artist": "Artist",
+    "album": "Album",
+    "title": "Title",
+    "track": "Track",
+    "tracktotal": "Tracks",
+    "year": "Year",
+    "art_mode": "Album art",
     "tags": "Tags",
     "lyrics": "Lyrics",
     "audio_notes": "Audio notes",
@@ -344,6 +360,13 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     ),
     "seed": "Fix to iterate; randomize to explore.",
     "image": "Start frame or reference still. Only shown when the LoadImage is wired.",
+    "artist": "Album artist written into FLAC/MP3 tags.",
+    "album": "Album title written into FLAC/MP3 tags.",
+    "title": "Track title written into FLAC/MP3 tags.",
+    "track": "Track number on the album.",
+    "tracktotal": "Number of tracks on the album.",
+    "year": "Album year.",
+    "art_mode": "skip, upload (Cover image), or generate (Queue cover.json first).",
     "tags": "Genre-first ACE-Step tags.",
     "lyrics": "Lyrics, or [inst] for instrumental.",
     "audio_notes": "World SFX to interleave. No score unless you asked for music.",
@@ -666,223 +689,223 @@ def _spec(
 
 
 STAMP_SPECS: dict[str, dict[str, Any]] = {
-    "klein-still-draft-lab-example": _spec(
+    "klein/still-draft": _spec(
         "inspire",
         "klein",
-        "klein-still-hero-lab-example",
-        "wan-i2v-5s-lab-example",
-        "klein-platform-pack-lab-example",
+        "klein/still-hero",
+        "wan/i2v-5s",
+        "klein/platform-pack",
     ),
-    "klein-identity-sheet-lab-example": _spec(
+    "klein/identity-sheet": _spec(
         "inspire", "klein"
     ),
-    "klein-storyboard-6up-lab-example": _spec(
+    "klein/storyboard-6up": _spec(
         "inspire",
         "klein",
-        "wan-i2v-shot-lab-example",
-        "ltx-i2v-shot-lab-example",
+        "wan/i2v-shot",
+        "ltx/i2v-shot",
     ),
-    "klein-dream-house-lab-example": _spec(
+    "klein/dream-house": _spec(
         "inspire",
         "klein",
-        "wan-gif-loop-lab-example",
-        "wan-bumper-loop-lab-example",
-        "wan-sticker-loop-lab-example",
+        "wan/gif-loop",
+        "wan/bumper-loop",
+        "wan/sticker-loop",
     ),
-    "klein-dream-house-clay-lab-example": _spec(
+    "klein/dream-house-clay": _spec(
         "inspire",
         "klein",
-        "wan-gif-loop-lab-example",
-        "wan-bumper-loop-lab-example",
-        "wan-sticker-loop-lab-example",
+        "wan/gif-loop",
+        "wan/bumper-loop",
+        "wan/sticker-loop",
         hide_images=True,
     ),
-    "klein-style-lock-lab-example": _spec(
+    "klein/style-lock": _spec(
         "inspire", "klein"
     ),
-    "klein-lighting-trio-lab-example": _spec("inspire", "klein"),
-    "klein-camera-angles-lab-example": _spec("inspire", "klein"),
-    "klein-color-moods-lab-example": _spec("inspire", "klein"),
-    "klein-time-of-day-lab-example": _spec("inspire", "klein"),
-    "klein-hook-still-lab-example": _spec(
-        "inspire", "klein", "wan-shorts-i2v-lab-example"
+    "klein/lighting-trio": _spec("inspire", "klein"),
+    "klein/camera-angles": _spec("inspire", "klein"),
+    "klein/color-moods": _spec("inspire", "klein"),
+    "klein/time-of-day": _spec("inspire", "klein"),
+    "klein/hook-still": _spec(
+        "inspire", "klein", "wan/shorts-i2v"
     ),
-    "klein-character-draft-lab-example": _spec(
+    "klein/character-draft": _spec(
         "inspire",
         "klein",
-        "klein-character-tweak-lab-example",
-        "klein-identity-sheet-lab-example",
-        "wan-i2v-5s-lab-example",
+        "klein/character-tweak",
+        "klein/identity-sheet",
+        "wan/i2v-5s",
     ),
-    "klein-character-tweak-lab-example": _spec(
+    "klein/character-tweak": _spec(
         "inspire",
         "klein",
-        "klein-identity-sheet-lab-example",
-        "wan-i2v-5s-lab-example",
+        "klein/identity-sheet",
+        "wan/i2v-5s",
     ),
-    "prompt-forge-lab-example": _spec(
+    "inspire/prompt-forge": _spec(
         "inspire",
         "llm",
-        "klein-still-draft-lab-example",
+        "klein/still-draft",
         forge_widgets=True,
     ),
-    "research-chat-lab-example": _spec(
+    "inspire/research-chat": _spec(
         "inspire",
         "llm",
-        "prompt-forge-lab-example",
-        "klein-still-draft-lab-example",
+        "inspire/prompt-forge",
+        "klein/still-draft",
         research_widgets=True,
     ),
-    "beat-sheet-lab-example": _spec(
+    "inspire/beat-sheet": _spec(
         "inspire",
         "none",
-        "klein-identity-sheet-lab-example",
-        "klein-from-clay-lab-example",
-        "film-go-see-90s-run-lab-example",
+        "klein/identity-sheet",
+        "dcc/klein/from-clay",
+        "shorts/go-see",
         primitive_strings=True,
     ),
-    "klein-still-daily-lab-example": _spec(
+    "klein/still-daily": _spec(
         "produce",
         "klein",
         expose_unet=True,
         expose_latent=True,
         sampler_steps_cfg=True,
     ),
-    "klein-still-hero-lab-example": _spec(
+    "klein/still-hero": _spec(
         "produce",
         "klein",
-        "wan-i2v-5s-lab-example",
-        "ltx-i2v-5s-lab-example",
+        "wan/i2v-5s",
+        "ltx/i2v-5s",
     ),
-    "klein-thumbnail-lab-example": _spec("produce", "klein"),
-    "klein-product-packshot-lab-example": _spec("produce", "klein"),
-    "klein-ig-square-lab-example": _spec("produce", "klein"),
-    "klein-og-blog-lab-example": _spec("produce", "klein"),
-    "klein-banner-wide-lab-example": _spec("produce", "klein"),
-    "klein-podcast-cover-lab-example": _spec("produce", "klein"),
-    "klein-endcard-cta-lab-example": _spec("produce", "klein"),
-    "klein-quote-bg-lab-example": _spec("produce", "klein"),
-    "klein-lower-third-bg-lab-example": _spec("produce", "klein"),
-    "klein-food-tabletop-lab-example": _spec("produce", "klein"),
-    "klein-shorts-still-lab-example": _spec("produce", "klein"),
-    "klein-before-after-lab-example": _spec("produce", "klein"),
-    "klein-platform-pack-lab-example": _spec(
+    "klein/thumbnail": _spec("produce", "klein"),
+    "klein/product-packshot": _spec("produce", "klein"),
+    "klein/ig-square": _spec("produce", "klein"),
+    "klein/og-blog": _spec("produce", "klein"),
+    "klein/banner-wide": _spec("produce", "klein"),
+    "klein/podcast-cover": _spec("produce", "klein"),
+    "klein/endcard-cta": _spec("produce", "klein"),
+    "klein/quote-bg": _spec("produce", "klein"),
+    "klein/lower-third-bg": _spec("produce", "klein"),
+    "klein/food-tabletop": _spec("produce", "klein"),
+    "klein/shorts-still": _spec("produce", "klein"),
+    "klein/before-after": _spec("produce", "klein"),
+    "klein/platform-pack": _spec(
         "produce",
         "klein",
-        "wan-i2v-5s-lab-example",
-        "ltx-hook-av-lab-example",
+        "wan/i2v-5s",
+        "ltx/hook-av",
     ),
-    "klein-talking-head-lab-example": _spec("produce", "ltx"),
-    "wan-i2v-5s-lab-example": _spec(
-        "produce", "wan", "ltx-i2v-5s-lab-example"
+    "klein/talking-head": _spec("produce", "ltx"),
+    "wan/i2v-5s": _spec(
+        "produce", "wan", "ltx/i2v-5s"
     ),
-    "wan-t2v-5s-lab-example": _spec("produce", "wan"),
-    "wan-flf-5s-lab-example": _spec("produce", "wan"),
-    "wan-vace-join-lab-example": _spec("produce", "wan"),
-    "wan-i2v-shot-lab-example": _spec("produce", "wan"),
-    "wan-gif-loop-lab-example": _spec("produce", "wan"),
-    "wan-bumper-loop-lab-example": _spec("produce", "wan"),
-    "wan-sticker-loop-lab-example": _spec("produce", "wan"),
-    "wan-shorts-i2v-lab-example": _spec(
-        "produce", "wan", "ltx-shorts-i2v-lab-example"
+    "wan/t2v-5s": _spec("produce", "wan"),
+    "wan/flf-5s": _spec("produce", "wan"),
+    "wan/vace-join": _spec("produce", "wan"),
+    "wan/i2v-shot": _spec("produce", "wan"),
+    "wan/gif-loop": _spec("produce", "wan"),
+    "wan/bumper-loop": _spec("produce", "wan"),
+    "wan/sticker-loop": _spec("produce", "wan"),
+    "wan/shorts-i2v": _spec(
+        "produce", "wan", "ltx/shorts-i2v"
     ),
-    "wan-orbit-i2v-lab-example": _spec("produce", "wan"),
-    "wan-push-in-i2v-lab-example": _spec("produce", "wan"),
-    "wan-parallax-i2v-lab-example": _spec("produce", "wan"),
-    "ltx-i2v-5s-lab-example": _spec("produce", "ltx"),
-    "ltx-t2v-5s-lab-example": _spec("produce", "ltx"),
-    "ltx-i2v-shot-lab-example": _spec("produce", "ltx"),
-    "ltx-shorts-i2v-lab-example": _spec("produce", "ltx"),
-    "ltx-hook-av-lab-example": _spec("produce", "ltx"),
-    "ltx-broll-ambient-lab-example": _spec("produce", "ltx"),
-    "ltx-weather-broll-lab-example": _spec("produce", "ltx"),
-    "ltx-interior-ambience-lab-example": _spec("produce", "ltx"),
-    "film-go-see-90s-run-lab-example": _spec(
+    "wan/orbit-i2v": _spec("produce", "wan"),
+    "wan/push-in-i2v": _spec("produce", "wan"),
+    "wan/parallax-i2v": _spec("produce", "wan"),
+    "ltx/i2v-5s": _spec("produce", "ltx"),
+    "ltx/t2v-5s": _spec("produce", "ltx"),
+    "ltx/i2v-shot": _spec("produce", "ltx"),
+    "ltx/shorts-i2v": _spec("produce", "ltx"),
+    "ltx/hook-av": _spec("produce", "ltx"),
+    "ltx/broll-ambient": _spec("produce", "ltx"),
+    "ltx/weather-broll": _spec("produce", "ltx"),
+    "ltx/interior-ambience": _spec("produce", "ltx"),
+    "shorts/go-see": _spec(
         "film",
         "film",
         default_view="graph",
         film_minimal=True,
         enhance_off_identity=True,
     ),
-    "film-still-here-90s-lab-example": _spec(
+    "shorts/still-here": _spec(
         "film",
         "film",
         default_view="graph",
         film_minimal=True,
         enhance_off_identity=True,
     ),
-    "film-switchyard-90s-lab-example": _spec(
+    "shorts/switchyard": _spec(
         "film",
         "film",
         default_view="graph",
         film_minimal=True,
         enhance_off_identity=True,
     ),
-    "podcast-audio-first-lab-example": _spec("audio", "audio"),
-    "podcast-radio-drama-lab-example": _spec("audio", "audio"),
-    "dub-localize-lab-example": _spec("audio", "audio"),
-    "music-rap-draft-lab-example": _spec("audio", "audio"),
-    "music-rap-full-lab-example": _spec("audio", "audio"),
-    "klein-from-clay-lab-example": _spec(
+    "audio/podcast/audio-first": _spec("audio", "audio"),
+    "audio/podcast/radio-drama": _spec("audio", "audio"),
+    "audio/dub/localize": _spec("audio", "audio"),
+    "audio/music/rap-draft": _spec("audio", "audio"),
+    "audio/music/rap-full": _spec("audio", "audio"),
+    "dcc/klein/from-clay": _spec(
         "dcc",
         "klein",
-        "ltx-iclora-depth-5s-lab-example",
-        "wan-i2v-5s-lab-example",
+        "dcc/ltx/iclora-depth-5s",
+        "wan/i2v-5s",
     ),
-    "klein-from-canny-lab-example": _spec(
+    "dcc/klein/from-canny": _spec(
         "dcc",
         "klein",
-        "ltx-iclora-canny-5s-lab-example",
+        "dcc/ltx/iclora-canny-5s",
     ),
-    "klein-from-clay-plates-lab-example": _spec(
+    "dcc/klein/from-clay-plates": _spec(
         "dcc",
         "klein",
-        "wan-i2v-5s-lab-example",
-        "wan-shorts-i2v-lab-example",
-        "ltx-iclora-depth-shorts-lab-example",
+        "wan/i2v-5s",
+        "wan/shorts-i2v",
+        "dcc/ltx/iclora-depth-shorts",
     ),
-    "ltx-iclora-depth-5s-lab-example": _spec(
+    "dcc/ltx/iclora-depth-5s": _spec(
         "dcc",
         "ltx",
-        "audio-finish-lab-example",
+        "audio/finish",
     ),
-    "ltx-iclora-canny-5s-lab-example": _spec(
+    "dcc/ltx/iclora-canny-5s": _spec(
         "dcc",
         "ltx",
-        "audio-finish-lab-example",
+        "audio/finish",
     ),
-    "ltx-iclora-depth-shorts-lab-example": _spec(
+    "dcc/ltx/iclora-depth-shorts": _spec(
         "dcc",
         "ltx",
-        "audio-finish-lab-example",
+        "audio/finish",
     ),
-    "wan-flf-from-guide-lab-example": _spec(
+    "dcc/wan/flf-from-guide": _spec(
         "dcc",
         "wan",
-        "ltx-iclora-depth-5s-lab-example",
+        "dcc/ltx/iclora-depth-5s",
     ),
-    "klein-from-guide-loader-lab-example": _spec(
+    "dcc/klein/from-guide-loader": _spec(
         "dcc",
         "klein",
-        "ltx-iclora-from-guide-loader-lab-example",
-        "trellis-from-klein-still-lab-example",
+        "dcc/ltx/iclora-from-guide-loader",
+        "dcc/trellis/from-klein-still",
     ),
-    "ltx-iclora-from-guide-loader-lab-example": _spec(
+    "dcc/ltx/iclora-from-guide-loader": _spec(
         "dcc",
         "ltx",
-        "audio-finish-lab-example",
+        "audio/finish",
     ),
-    "trellis-from-klein-still-lab-example": _spec(
+    "dcc/trellis/from-klein-still": _spec(
         "dcc",
         "trellis",
         default_view="graph",
     ),
-    "audio-finish-lab-example": _spec(
+    "audio/finish": _spec(
         "audio",
         "audio",
         primitive_strings=True,
     ),
-    "wan-i2v-a14b-lab-example": _spec("produce", "wan", default_view="graph"),
+    "optional/wan/i2v-a14b": _spec("produce", "wan", default_view="graph"),
 }
 
 def _nill_bye_stems() -> tuple[str, ...]:
@@ -894,7 +917,7 @@ def _nill_bye_stems() -> tuple[str, ...]:
         sys.path.insert(0, str(custom))
     from ez_music.diss_examples import DISS_EXAMPLES
 
-    return tuple(ex["stem"] for ex in DISS_EXAMPLES)
+    return tuple(ex["rel"] for ex in DISS_EXAMPLES)
 
 
 NILL_BYE_STAMP_STEMS = _nill_bye_stems()
@@ -911,7 +934,7 @@ def _drive_through_stems() -> tuple[str, ...]:
         sys.path.insert(0, str(custom))
     from ez_music.edm_examples import EDM_EXAMPLES
 
-    return tuple(ex["stem"] for ex in EDM_EXAMPLES)
+    return tuple(ex["rel"] for ex in EDM_EXAMPLES)
 
 
 DRIVE_THROUGH_STAMP_STEMS = _drive_through_stems()
@@ -920,27 +943,65 @@ for _drive_through_stem in DRIVE_THROUGH_STAMP_STEMS:
         "audio", "audio", ace_instrumental_score=True
     )
 
-STUB_IDS = frozenset({"longcat-video-lab-example"})
+STUB_IDS = frozenset({"optional/longcat-video"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
-    "ltx-iclora-depth-5s-lab-example": ("EZFilmDisclosure",),
-    "ltx-iclora-canny-5s-lab-example": ("EZFilmDisclosure",),
-    "ltx-iclora-depth-shorts-lab-example": ("EZFilmDisclosure",),
-    "ltx-iclora-from-guide-loader-lab-example": (
+    "dcc/ltx/iclora-depth-5s": ("EZFilmDisclosure",),
+    "dcc/ltx/iclora-canny-5s": ("EZFilmDisclosure",),
+    "dcc/ltx/iclora-depth-shorts": ("EZFilmDisclosure",),
+    "dcc/ltx/iclora-from-guide-loader": (
         "EZFilmDisclosure",
         "EZDCCLoadGuideVideo",
     ),
-    "audio-finish-lab-example": ("SaveAudio", "PrimitiveNode"),
-    "wan-i2v-a14b-lab-example": ("UNETLoader",),
-    "podcast-radio-drama-lab-example": ("UNETLoader", "VHS_VideoCombine"),
-    "prompt-forge-lab-example": (
+    "audio/finish": ("SaveAudio", "PrimitiveNode"),
+    "optional/wan/i2v-a14b": ("UNETLoader",),
+    "audio/podcast/radio-drama": ("UNETLoader", "VHS_VideoCombine"),
+    "inspire/prompt-forge": (
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
     ),
-    "research-chat-lab-example": ("EZCreativeResearch",),
-    "wan-flf-5s-lab-example": ("LoadImage",),
-    "wan-vace-join-lab-example": ("LoadImage",),
+    "inspire/research-chat": ("EZCreativeResearch",),
+    "wan/flf-5s": ("LoadImage",),
+    "wan/vace-join": ("LoadImage",),
 }
+
+
+def _migrate_stamp_keys() -> None:
+    """Rewrite STAMP_SPECS / stubs from *-lab-example stems to lab-relative ids."""
+    from _lab_ids import rel_id
+
+    converted: dict[str, dict[str, Any]] = {}
+    for key, spec in STAMP_SPECS.items():
+        new_key = rel_id(key)
+        handoff = tuple(rel_id(str(item)) for item in spec.get("handoff") or ())
+        converted[new_key] = {**spec, "handoff": handoff}
+    STAMP_SPECS.clear()
+    STAMP_SPECS.update(converted)
+    global STUB_IDS, OPTIONAL_UNWIRED
+    STUB_IDS = frozenset(rel_id(item) for item in STUB_IDS)
+    OPTIONAL_UNWIRED = {rel_id(key): value for key, value in OPTIONAL_UNWIRED.items()}
+
+
+_migrate_stamp_keys()
+
+
+def _register_album_stamps() -> None:
+    import sys
+    from pathlib import Path
+
+    custom = Path(__file__).resolve().parents[2] / "custom_nodes"
+    if str(custom) not in sys.path:
+        sys.path.insert(0, str(custom))
+    from ez_music.albums import album_rel, shipped_albums
+
+    for info in shipped_albums():
+        cover = album_rel(info["artist_slug"], info["slug"], "cover")
+        album = album_rel(info["artist_slug"], info["slug"], "album")
+        STAMP_SPECS[cover] = _spec("produce", "klein")
+        STAMP_SPECS[album] = _spec("audio", "none")
+
+
+_register_album_stamps()
 
 
 def occupancy_stanza(occupancy: str) -> str:
@@ -1133,6 +1194,25 @@ def _collect_raw_inputs(
             if include:
                 raw.append((nid, "announcer_voice", node))
             raw.append((nid, "speed", node))
+        elif ntype == "EZAudioMetadata":
+            raw.extend(
+                (
+                    (nid, "artist", node),
+                    (nid, "album", node),
+                    (nid, "title", node),
+                    (nid, "track", node),
+                    (nid, "tracktotal", node),
+                    (nid, "year", node),
+                    (nid, "art_mode", node),
+                )
+            )
+        elif ntype == "EZAlbumPack":
+            raw.extend(
+                (
+                    (nid, "artist", node),
+                    (nid, "album", node),
+                )
+            )
         elif ntype == "EmptyAceStep1.5LatentAudio":
             if not _input_linked(node, "seconds"):
                 raw.append((nid, "seconds", node))
@@ -1196,7 +1276,10 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
 def apply_lab_completeness_flags(graph: dict) -> dict:
     """Write lab_stub / lab_optional_unwired. Preserve other extra keys."""
     extra = graph.setdefault("extra", {})
-    gid = str(graph.get("id") or "")
+    gid = str((graph.get("extra") or {}).get("lab_rel") or graph.get("id") or "")
+    from _lab_ids import rel_id
+
+    gid = rel_id(gid)
     if gid in STUB_IDS:
         extra["lab_stub"] = True
     types = list(OPTIONAL_UNWIRED.get(gid, ()))
@@ -1213,7 +1296,13 @@ def apply_lab_completeness_flags(graph: dict) -> dict:
 
 def stamp_suite_graph(graph: dict) -> dict:
     """Stamp a known suite graph. No-op when graph id is not in STAMP_SPECS."""
-    spec = STAMP_SPECS.get(str(graph.get("id") or ""))
+    from _lab_ids import rel_id
+
+    extra = graph.get("extra") or {}
+    key = rel_id(str(extra.get("lab_rel") or graph.get("id") or ""))
+    spec = STAMP_SPECS.get(key)
+    if spec is None:
+        spec = STAMP_SPECS.get(str(graph.get("id") or ""))
     if spec is None:
         from _wire_prompt_enhance import apply_enhance_policy
 

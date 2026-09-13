@@ -18,7 +18,7 @@ tags: [learn, klein, wan, ltx, pipeline, us-safe]
 - Picking the next graph after a still without guessing
 - Prompting each model in its native shape
 
-**Who this is for:** studio users who have Queued `klein-still-draft-lab-example` once.
+**Who this is for:** studio users who have Queued `klein/still-draft` once.
 
 ---
 
@@ -64,7 +64,7 @@ flowchart LR
 
     One flowing **present-tense** paragraph, 4–8 sentences, **sound interleaved** (wind beside the coat, not a trailer at the end). Dialogue in `"quotes"` only if you asked for speech. Shorts: world SFX, no score.
 
-Lab `*-lab-example` graphs already ship model-native text. Leave **Enhance** off unless you replace that text with something short. Recipes: [Prompting](../prompting.md).
+Seeded lab graphs already ship model-native text. Leave **Enhance** off unless you replace that text with something short. Recipes: [Prompting](../prompting.md).
 
 ---
 

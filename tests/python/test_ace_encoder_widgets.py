@@ -32,8 +32,8 @@ def test_every_lab_ace_encoder_has_seed_control_and_valid_combos() -> None:
 
 def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
     cases: list[tuple[str, float, int]] = [
-        ("music-rap-draft-lab-example", 32.0, 88),
-        ("music-rap-full-lab-example", 96.0, 88),
+        ("audio/music/rap-draft", 32.0, 88),
+        ("audio/music/rap-full", 96.0, 88),
     ]
     for diss in DISS_EXAMPLES:
         cases.append((diss["stem"], float(diss["duration"]), int(diss["bpm"])))
@@ -53,7 +53,7 @@ def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
 
 
 def test_podcast_ace_encoders_keep_instrumental_codes_off() -> None:
-    for stem in ("podcast-audio-first-lab-example", "podcast-radio-drama-lab-example"):
+    for stem in ("audio/podcast/audio-first", "audio/podcast/radio-drama"):
         graph = _load(lab_json(stem))
         encoders = list(iter_ace_encoders(graph))
         assert encoders, stem

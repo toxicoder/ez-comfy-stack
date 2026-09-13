@@ -6,14 +6,14 @@
 #
 # Usage:
 #   ./scripts/utilities/promote-workflow.sh \
-#     --from PATH --lane LANE --id STEM-lab-example
+#     --from PATH --lane LANE --id STEM [--subdir REL]
 #
 # Environment:
 #   REPO_ROOT (optional)
 #
 # Safety:
 #   Never copies _lab into _user. Refuses banned model strings and a
-#   missing -lab-example suffix.
+#   missing id.
 #
 # Exit codes:
 #   0 success; 1 usage / refuse
@@ -51,7 +51,7 @@ readonly PROMOTE_BANNED=(
 #   0
 #######################################
 promote_usage() {
-  err "Usage: promote-workflow.sh --from PATH --lane LANE --id STEM-lab-example"
+  err "Usage: promote-workflow.sh --from PATH --lane LANE --id STEM [--subdir REL]"
 }
 
 #######################################
@@ -111,7 +111,7 @@ promote_refuse_banned() {
 #   0 on copy; 1 on refuse
 #######################################
 promote_run() {
-  local from="" lane="" id="" dest
+  local from="" lane="" id="" subdir="" dest dest_dir
   while [[ $# -gt 0 ]]; do
     case "${1}" in
       --from)
@@ -124,6 +124,10 @@ promote_run() {
         ;;
       --id)
         id="${2:-}"
+        shift 2
+        ;;
+      --subdir)
+        subdir="${2:-}"
         shift 2
         ;;
       -h | --help)
@@ -142,8 +146,9 @@ promote_run() {
     return 1
   fi
   id="${id%.json}"
-  if [[ ${id} != *-lab-example ]]; then
-    err "id must end in -lab-example (got ${id})"
+  id="${id##*/}"
+  if [[ -z ${id} || ${id} == *..* ]]; then
+    err "id must be a filename stem (got ${id})"
     return 1
   fi
   promote_lane_ok "${lane}" || {
@@ -159,7 +164,15 @@ promote_run() {
     return 1
   fi
   promote_refuse_banned "${from}" || return 1
-  dest="${REPO_ROOT}/workflows/_lab/${lane}/${id}.json"
+  dest_dir="${REPO_ROOT}/workflows/_lab/${lane}"
+  if [[ -n ${subdir} ]]; then
+    if [[ ${subdir} == /* || ${subdir} == *..* ]]; then
+      err "invalid --subdir ${subdir}"
+      return 1
+    fi
+    dest_dir="${dest_dir}/${subdir}"
+  fi
+  dest="${dest_dir}/${id}.json"
   mkdir -p "$(dirname "${dest}")"
   cp -a "${from}" "${dest}"
   log "copied ${from} → ${dest}"

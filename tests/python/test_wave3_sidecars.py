@@ -19,9 +19,10 @@ def test_dockerfile_has_no_nvdiffrast_blender_or_supersplat() -> None:
 
 
 def test_vace_join_graph_is_17_frames_magcache_off() -> None:
-    path = lab_json("wan-vace-join-lab-example.json")
+    path = lab_json("wan/vace-join.json")
     graph = json.loads(path.read_text(encoding="utf-8"))
-    assert graph["id"] == "wan-vace-join-lab-example"
+    assert graph["id"] == "vace-join"
+    assert graph["extra"].get("lab_rel") == "wan/vace-join"
     extra = graph["extra"]
     assert extra["lab_vace"]["frames"] == 17
     assert extra["lab_vace"]["rule"] == "1+8n"

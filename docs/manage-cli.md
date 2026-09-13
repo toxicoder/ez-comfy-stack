@@ -67,6 +67,7 @@ id: doctor
 | `film-animatic` | Cheap 90s animatic from clay.mp4 or stills | Treat as a 90s denoise |
 | `stem-mix` | Picture-lock stems; duck −15 dB; YouTube loudnorm | Mix ACE-Step next to LTX |
 | `audio-still-video --audio FILE --image FILE` | Mux a still + audio master to YouTube MP4 (host ffmpeg; compose may stay up) | Treat as a denoise; use NVENC; edit audio lab graphs |
+| `album-render --album ARTIST/SLUG [--art skip\|upload\|generate]` | Queue one shipped album (optional Klein cover, ACE tracks, zip+m3u). Does not start compose | Co-resident Klein + ACE; skip `/free` after generate |
 | `asset-ls` | Read-only [Asset Bible](asset-bible.md) catalog (`COMFY_OUTPUT_DIR/assets`) | Store assets in `MODELS_DIR` or `guides/` |
 | `film-accept` | Fail-closed 90s gate (duration / 1280×704 / LTX audio; world-only speech-band; 90s master when present; stems LUFS when `audio_policy: stems`) | `--skip-accept` as a habit |
 | `download-longcat` / `download-dreamx` | Opt-in LongCat MIT / DreamX-Creator Apache | DreamX-World; NCCL |

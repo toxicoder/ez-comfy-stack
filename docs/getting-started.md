@@ -31,7 +31,7 @@ tags: [getting-started, docker, comfyui]
 | Goal | Detail |
 | --- | --- |
 | **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` |
-| **Workflow** | **`_lab/klein/klein-still-draft-lab-example`** queued without missing-weight errors |
+| **Workflow** | **`_lab/klein/still-draft`** queued without missing-weight errors |
 | **Weights** | Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under `${MODELS_DIR}` (default `/mnt/models`) |
 | **Output** | `ez_still_draft_*.png` under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 
@@ -69,7 +69,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"   # auto | off | integer Mbps
 4. **Accept LTX-2.5** on Hugging Face (gated) and set `HF_TOKEN`
 5. **`download-models`** — Klein 4B + Wan 5B + LTX-2.5 (throttled)
 6. **`start`** — type `yes`, then open the UI
-7. **Queue klein-still-draft-lab-example**
+7. **Queue klein/still-draft**
 8. **`stop`** — always, before reboot
 
 ```bash
@@ -264,7 +264,7 @@ LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache — a token in `.env` is **
 
     That deletes `*.incomplete` (finished weights stay) and re-pulls. See [Models & Cache](models-and-cache.md#resume-cache).
 
-If Comfy shows **Missing Models** on **klein-still-draft-lab-example**, re-run download and `doctor`. Full cache layout: [Models & Cache](models-and-cache.md).
+If Comfy shows **Missing Models** on **klein/still-draft**, re-run download and `doctor`. Full cache layout: [Models & Cache](models-and-cache.md).
 
 ---
 
@@ -288,7 +288,7 @@ Then open `http://127.0.0.1:${COMFY_PORT}` on the laptop.
 
 !!! success "First Queue"
 
-    In ComfyUI, load **klein-still-draft-lab-example** from the **Apps** sidebar (or **Workflows → `_lab/klein/`**). Host file: `workflows/_lab/klein/klein-still-draft-lab-example.json`. It is seeded as `*.app.json` under `_lab/klein/`. Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
+    In ComfyUI, load **klein/still-draft** from the **Apps** sidebar (or **Workflows → `_lab/klein/`**). Host file: `workflows/_lab/klein/still-draft.json`. It is seeded as `*.app.json` under `_lab/klein/`. Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
 
     **What you just did:** `start` launched ComfyUI (no auto-restart after reboot). The graph loaded Klein 4B distilled (4 steps, CFG 1.0) and wrote a still on the host — not inside the git repo. Canvas nouns: [ComfyUI basics](learn/comfyui.md).
 

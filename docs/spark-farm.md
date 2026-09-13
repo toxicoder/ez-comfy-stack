@@ -10,7 +10,7 @@ tags: [spark, farm, fabric, comfyui]
 
 - How three Sparks are used (farm vs relay)
 - Fabric NFS / rsync vs management SSH
-- Three ComfyUI UIs (Queue lab-example graphs on each)
+- Three ComfyUI UIs (Queue seeded lab graphs on each)
 - Optional `sync-models` (rsync `MODELS_DIR/comfy` over fabric)
 - `dispatch`: local `print-shot` per host, never remote compose up
 - What this sample stack refuses (NCCL, K3s, MiniMax H3, H3 Director)
@@ -75,7 +75,7 @@ Three UIs (replace hostnames from `SPARK_COMFY_URLS`):
 # http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188
 ```
 
-The one-click **film-*-90s-*-lab-example** graph is sequential on one host. For a farm, load **ltx-i2v-shot-lab-example** (or optional **wan-i2v-shot-lab-example**) on each UI and **Queue** independent **5 s** shots — different beats in parallel. Concat locally:
+The one-click **shorts/go-see** graph is sequential on one host. For a farm, load **ltx/i2v-shot** (or optional **wan/i2v-shot**) on each UI and **Queue** independent **5 s** shots — different beats in parallel. Concat locally:
 
 ```bash
 FILM=go-see   # or still-here | switchyard

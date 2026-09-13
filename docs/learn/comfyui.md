@@ -24,7 +24,7 @@ tags: [learn, comfyui, queue, workflow, studio]
 
 ## A graph, not a chat box
 
-ComfyUI is a **node graph**. Each box is a step (load weights, encode text, sample, decode, save). Wires carry images, latents, and strings. You do not type a prompt into a single streaming chat field and hope — you change **widgets** on the nodes the lab already wired. **research-chat-lab-example** is still that graph: one **Message** widget, then Queue (occupancy **llm**). It is not Comfy Cloud’s In-App Agent.
+ComfyUI is a **node graph**. Each box is a step (load weights, encode text, sample, decode, save). Wires carry images, latents, and strings. You do not type a prompt into a single streaming chat field and hope — you change **widgets** on the nodes the lab already wired. **inspire/research-chat** is still that graph: one **Message** widget, then Queue (occupancy **llm**). It is not Comfy Cloud’s In-App Agent.
 
 ```mermaid
 flowchart LR
@@ -35,7 +35,7 @@ flowchart LR
   VAE --> Save["Save PNG or VHS MP4"]
 ```
 
-Daily rule: **do not edit raw `*-lab-example` JSON.** Open the graph, change widgets, Queue.
+Daily rule: **do not edit raw `_lab` JSON.** Open the graph, change widgets, Queue.
 
 ### Graph and App
 
@@ -45,10 +45,10 @@ The same JSON can open as a **graph** (nodes and wires) or as an **App** (creato
 
 ## How a lab graph shows up
 
-On `start`, the entrypoint rsyncs shipped JSON into Comfy’s `user/default/workflows/_lab/<lane>/` (directory-preserving; `--delete` is scoped to `_lab/` only). Prefer host `workflows/_lab/` when present; otherwise map the current flat repo globs into those lanes. App Mode graphs (`default_view: app`) land as `_lab/<lane>/*-lab-example.app.json` so they show in the **Apps** sidebar as well as **Workflows**. 90s films stay `*.json` (graph default). Save your own graphs under **`_user/`** — start never deletes or overwrites that folder. Do not edit files under `_lab/`; copy to `_user/` first.
+On `start`, the entrypoint rsyncs shipped JSON into Comfy’s `user/default/workflows/_lab/<lane>/` (directory-preserving; `--delete` is scoped to `_lab/` only). Prefer host `workflows/_lab/` when present; otherwise map the current flat repo globs into those lanes. App Mode graphs (`default_view: app`) land as `_lab/<lane>/*.app.json` so they show in the **Apps** sidebar as well as **Workflows**. 90s films stay `*.json` (graph default). Save your own graphs under **`_user/`** — start never deletes or overwrites that folder. Do not edit files under `_lab/`; copy to `_user/` first.
 
 1. Open `http://${SPARK_HOST}:${COMFY_PORT}` (port-forward from a laptop if needed)
-2. Load **klein-still-draft-lab-example** from **Apps** or **Workflows** (filename suffix **`-lab-example`**)
+2. Load **klein/still-draft** from **Apps** or **Workflows**
 3. Read the on-canvas **Note node** — purpose, models, sampler, prompting, run steps
 4. Queue
 

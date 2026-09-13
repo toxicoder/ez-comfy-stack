@@ -37,7 +37,7 @@ Do **not** load Klein + Wan + LTX + ACE-Step + TTS in one session. Cover art is 
 
 ### Option A — audio-first commercial episode
 
-Graph: **podcast-audio-first-lab-example** (`extra.lab_profile` `us-safe-podcast`).
+Graph: **audio/podcast/audio-first** (`extra.lab_profile` `us-safe-podcast`).
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
@@ -46,7 +46,7 @@ Graph: **podcast-audio-first-lab-example** (`extra.lab_profile` `us-safe-podcast
 | VOICES | App **Speaker A / B**, **Include announcer**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only | `ez_podcast_voice` |
 | BEDS | App **Bed tags**, **Rewrite bed**, **Bed length (seconds)**. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden) | `ez_podcast_bed` |
 | MIX | Duck −15 dB + overlay. FLAC master + 320 kbps MP3 | `ez_podcast_ep` / `ez_podcast_mix` |
-| COVER | Queue **klein-podcast-cover-lab-example** separately (1024², `ez_podcast`) | `ez_podcast` |
+| COVER | Queue **klein/podcast-cover** separately (1024², `ez_podcast`) | `ez_podcast` |
 
 First spoken line is always:
 
@@ -56,9 +56,9 @@ Do not type that line yourself. The disclosure node prepends it.
 
 ### Option B — one-graph radio drama
 
-Graph: **podcast-radio-drama-lab-example** (`us-safe-radio`). Same legal engines. Writer prompt is lab-original fiction (`radio_drama.txt`), not a news rewrite. App Mode: **Script**, **Sting tags** / **Bed tags**, sting and bed length, **Speaker A / B / Announcer**, **Include announcer**, **Speaking speed**. ACE-Step sting + bed stay instrumental (lyrics hidden). One master mix (`ez_radio_ep` / `ez_radio_mix`).
+Graph: **audio/podcast/radio-drama** (`us-safe-radio`). Same legal engines. Writer prompt is lab-original fiction (`radio_drama.txt`), not a news rewrite. App Mode: **Script**, **Sting tags** / **Bed tags**, sting and bed length, **Speaker A / B / Announcer**, **Include announcer**, **Speaking speed**. ACE-Step sting + bed stay instrumental (lyrics hidden). One master mix (`ez_radio_ep` / `ez_radio_mix`).
 
-Optional Wan silent bumper / LTX 5s hook **groups default off** (node mode never). Queue **wan-bumper-loop-lab-example** or **ltx-hook-av-lab-example** in a later session. Not a one-graph film.
+Optional Wan silent bumper / LTX 5s hook **groups default off** (node mode never). Queue **wan/bumper-loop** or **ltx/hook-av** in a later session. Not a one-graph film.
 
 ---
 
@@ -92,7 +92,7 @@ Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity 
 
 ## Voice consent and invented characters
 
-Hosts are **original characters**, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo. Translating a recorded podcast while keeping the original speakers is [Local dub](dub.md) (`dub-localize-lab-example`), with a rights attestation on every Queue.
+Hosts are **original characters**, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo. Translating a recorded podcast while keeping the original speakers is [Local dub](dub.md) (`audio/dub/localize`), with a rights attestation on every Queue.
 
 ---
 
@@ -161,8 +161,8 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
 2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see troubleshooting)
 3. `./scripts/manage.sh start` — type **yes**
-4. Load **podcast-audio-first-lab-example**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
-5. Load **klein-podcast-cover-lab-example** in a **later** session. Queue `ez_podcast_*.png`
+4. Load **audio/podcast/audio-first**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
+5. Load **klein/podcast-cover** in a **later** session. Queue `ez_podcast_*.png`
 6. Loudness (ffmpeg; Comfy cannot LUFS):
 
 ```bash

@@ -5,9 +5,10 @@ Fictional MCs only. Original lyrics. No living-artist names.
 
 from __future__ import annotations
 
-from typing import Literal, TypedDict
+from typing import Any, Literal, Mapping, Sequence, TypedDict
 
-from .naming import NILL_BYE_ARTIST, music_output_prefix
+from .albums import album_rel, nill_album_for_series
+from .naming import music_output_prefix
 
 BOOM_BAP_TAGS_88 = (
     "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano "
@@ -41,6 +42,8 @@ DissSeries = Literal[
 
 class DissExample(TypedDict):
     stem: str
+    slug: str
+    rel: str
     series: DissSeries
     title: str
     tags: str
@@ -51,11 +54,19 @@ class DissExample(TypedDict):
     prefix: str
     description: str
     lyrics: str
+    artist: str
+    artist_slug: str
+    album: str
+    album_slug: str
+    track: int
+    tracktotal: int
+    year: int
+    cover_prompt: str
 
 
-def nill_output_prefix(title: str, phase: int) -> str:
+def nill_output_prefix(title: str, track: int) -> str:
     """SaveAudio prefix for a Nill Bye take."""
-    return music_output_prefix(NILL_BYE_ARTIST, title, phase)
+    return music_output_prefix(title, track if track >= 1 else 1)
 
 
 def nill_tags(*parts: str, bpm: int) -> str:
@@ -99,6 +110,46 @@ def format_diss_lyrics(
     return "\n\n".join(parts)
 
 
+def nill_slug_from_stem(stem: str) -> str:
+    """Kebab slug from a legacy or short Nill Bye stem."""
+    text = stem.removeprefix("music-rap-nill-bye-").removesuffix("-lab-example")
+    if text[:1].isdigit() and "-" in text:
+        return text.split("-", 1)[1]
+    return text
+
+
+def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample, ...]:
+    """Number tracks, set album metadata, and rewrite stems for one series."""
+    if not rows:
+        return ()
+    info = nill_album_for_series(rows[0]["series"])
+    total = len(rows)
+    out: list[DissExample] = []
+    for index, row in enumerate(rows, 1):
+        slug = nill_slug_from_stem(str(row.get("slug") or row["stem"]))
+        stem = f"{index:02d}-{slug}"
+        payload: dict[str, Any] = dict(row)
+        payload.update(
+            {
+                "slug": slug,
+                "stem": stem,
+                "rel": album_rel(info["artist_slug"], info["slug"], stem),
+                "artist": info["artist"],
+                "artist_slug": info["artist_slug"],
+                "album": info["title"],
+                "album_slug": info["slug"],
+                "track": index,
+                "tracktotal": total,
+                "year": info["year"],
+                "cover_prompt": info["cover_prompt"],
+                "phase": info["phase"],
+                "prefix": music_output_prefix(str(row["title"]), index),
+            }
+        )
+        out.append(payload)  # type: ignore[arg-type]
+    return tuple(out)
+
+
 def _catalog() -> tuple[DissExample, ...]:
     from .diss_civic import DISS_CIVIC
     from .diss_civic_club import DISS_CIVIC_CLUB
@@ -110,17 +161,21 @@ def _catalog() -> tuple[DissExample, ...]:
     from .diss_trap_edm import DISS_TRAP_EDM
     from .diss_variety import DISS_VARIETY
 
-    return (
-        DISS_LAB
-        + DISS_VARIETY
-        + DISS_TRAP_EDM
-        + DISS_CIVIC
-        + DISS_CIVIC_CLUB
-        + DISS_FEDERAL
-        + DISS_FEDERAL_CLUB
-        + DISS_PROGRESS
-        + DISS_PROGRESS_CLUB
+    groups = (
+        DISS_LAB,
+        DISS_VARIETY,
+        DISS_TRAP_EDM,
+        DISS_CIVIC,
+        DISS_CIVIC_CLUB,
+        DISS_FEDERAL,
+        DISS_FEDERAL_CLUB,
+        DISS_PROGRESS,
+        DISS_PROGRESS_CLUB,
     )
+    out: list[DissExample] = []
+    for group in groups:
+        out.extend(finalize_nill_album(group))  # type: ignore[arg-type]
+    return tuple(out)
 
 
 DISS_EXAMPLES: tuple[DissExample, ...] = _catalog()

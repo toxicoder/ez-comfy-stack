@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
-from _lab_paths import LAB_ROOT, lab_dest
+from _lab_paths import LAB_ROOT, apply_lab_identity, lab_dest, lab_json, write_lab_graph
 from _stamp_app_mode import stamp_suite_graph
 from _wire_prompt_enhance import _rewrite_enhance_blurb
 
@@ -29,15 +29,17 @@ from ez_music.diss_examples import (  # noqa: E402
     TRAP_TAGS,
     DissExample,
 )
+from ez_music.albums import AlbumInfo, album_rel, shipped_albums  # noqa: E402
 from ez_music.edm_examples import EDM_EXAMPLES, EdmExample  # noqa: E402
+from ez_music.naming import album_output_dir  # noqa: E402
 from ez_music.nodes import DRAFT_LYRICS, FULL_LYRICS  # noqa: E402
 
 ACE_CKPT = "ace_step_1.5_turbo_aio.safetensors"
 ACE_TAGS = BOOM_BAP_TAGS_88
-COVER_THUMB = "klein-thumbnail-lab-example.json"
-COVER_PODCAST = "klein-podcast-cover-lab-example.json"
+COVER_THUMB = "klein/thumbnail.json"
+COVER_PODCAST = "klein/podcast-cover.json"
 
-DRAFT_NOTE = f"""## music-rap-draft-lab-example
+DRAFT_NOTE = f"""## audio/music/rap-draft
 
 US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue — do not load Klein + Wan + LTX + ACE-Step together.
 
@@ -58,11 +60,11 @@ Canned style swaps (tags widget only — not extra files):
 - lo-fi: {LOFI_TAGS}
 """
 
-FULL_NOTE = f"""## music-rap-full-lab-example
+FULL_NOTE = f"""## audio/music/rap-full
 
 US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.
 
-1. Queue **music-rap-draft-lab-example** first. Then this graph.
+1. Queue **audio/music/rap-draft** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
 3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit lyrics before Queue. Human rewrite required before any release.
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No “in the style of <living artist>”.
@@ -155,8 +157,9 @@ class Graph:
         return self._lid
 
     def dump(self, extra: dict) -> dict:
+        rel = str(extra.pop("lab_rel", self.graph_id))
         graph = {
-            "id": self.graph_id,
+            "id": Path(rel).name,
             "revision": 1,
             "last_node_id": max(n["id"] for n in self.nodes),
             "last_link_id": self._lid,
@@ -167,6 +170,7 @@ class Graph:
             "extra": extra,
             "version": 0.4,
         }
+        apply_lab_identity(graph, rel)
         stamp_suite_graph(graph)
         extra = graph.setdefault("extra", {})
         extra["lab_note"] = _rewrite_enhance_blurb(str(extra.get("lab_note") or ""))
@@ -452,8 +456,23 @@ def _build_ace(
     ace_mode: str = "vocal",
     enhance_title: str = "ez_rap_prompt",
     layout: str = "column",
+    album_meta: dict | None = None,
 ) -> dict:
     pos, group_specs = _ace_layout(layout)
+    pos[13] = [2200, 80]
+    pos[14] = [2200, 280]
+    groups = list(group_specs)
+    groups.append((5, "METADATA", 2180, LAB_GROUP_Y0, 420, 520))
+    meta = album_meta or {
+        "artist": "",
+        "album": "Demos",
+        "title": "Untitled",
+        "track": 1,
+        "tracktotal": 1,
+        "year": 2026,
+        "art_mode": "skip",
+        "prefix": prefix,
+    }
     g = Graph(stem)
     g.add(
         1,
@@ -593,6 +612,37 @@ def _build_ace(
         "Operator note",
         [note],
     )
+    g.add(
+        13,
+        "LoadImage",
+        pos[13],
+        [320, 80],
+        "Cover image",
+        ["cover.png", "image"],
+        outputs=[g.out("IMAGE", "IMAGE", []), g.out("MASK", "MASK", [])],
+    )
+    g.add(
+        14,
+        "EZAudioMetadata",
+        pos[14],
+        [360, 220],
+        "Album metadata",
+        [
+            meta.get("artist", ""),
+            meta.get("album", ""),
+            meta.get("title", ""),
+            int(meta.get("track", 1)),
+            int(meta.get("tracktotal", 1)),
+            int(meta.get("year", 2026)),
+            meta.get("art_mode", "skip"),
+            prefix,
+        ],
+        inputs=[
+            g.inp("audio", "AUDIO"),
+            g.inp("cover", "IMAGE"),
+        ],
+        outputs=[g.out("audio", "AUDIO", [])],
+    )
     g.link(1, 0, 2, 0, "MODEL")
     g.link(2, 0, 8, 0, "MODEL")
     g.link(1, 1, 6, 0, "CLIP")
@@ -608,45 +658,94 @@ def _build_ace(
     g.link(1, 2, 9, 1, "VAE")
     g.link(9, 0, 10, 0, "AUDIO")
     g.link(9, 0, 11, 0, "AUDIO")
-    return g.dump(
-        {
-            "lab_profile": "us-safe-music",
-            "lab_note": note,
-            "lab_description": description,
-            "ds": {"scale": 1, "offset": [0, 0]},
-            "groups": [
-                _group(gid, title, x, y, w, h, "#3f789e")
-                for gid, title, x, y, w, h in group_specs
-            ],
-        }
-    )
+    g.link(9, 0, 14, 0, "AUDIO")
+    g.link(13, 0, 14, 1, "IMAGE")
+    extra = {
+        "lab_rel": stem if "/" in stem else f"audio/music/{stem}",
+        "lab_profile": "us-safe-music",
+        "lab_note": note,
+        "lab_description": description,
+        "lab_optional_unwired": ["LoadImage"],
+        "lab_album": {
+            "artist": meta.get("artist", ""),
+            "album": meta.get("album", ""),
+            "title": meta.get("title", ""),
+            "track": int(meta.get("track", 1)),
+            "tracktotal": int(meta.get("tracktotal", 1)),
+            "year": int(meta.get("year", 2026)),
+            "art_mode": meta.get("art_mode", "skip"),
+        },
+        "ds": {"scale": 1, "offset": [0, 0]},
+        "groups": [
+            _group(gid, title, x, y, w, h, "#3f789e")
+            for gid, title, x, y, w, h in group_specs
+        ],
+    }
+    return g.dump(extra)
 
 
 def build_draft() -> dict:
     return _build_ace(
-        "music-rap-draft-lab-example",
+        "audio/music/rap-draft",
         32.0,
         DRAFT_LYRICS,
         "ez_rap_draft",
         DRAFT_NOTE,
         "US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal",
+        album_meta={
+            "artist": "Local",
+            "album": "Demos",
+            "title": "Rap Draft",
+            "track": 1,
+            "tracktotal": 1,
+            "year": 2026,
+            "art_mode": "skip",
+        },
     )
 
 
 def build_full() -> dict:
     return _build_ace(
-        "music-rap-full-lab-example",
+        "audio/music/rap-full",
         96.0,
         FULL_LYRICS,
         "ez_rap_full",
         FULL_NOTE,
         "US-safe rap full track: ACE-Step 1.5 turbo AIO, 96s boom-bap, invented vocal",
+        album_meta={
+            "artist": "Local",
+            "album": "Demos",
+            "title": "Rap Full",
+            "track": 1,
+            "tracktotal": 1,
+            "year": 2026,
+            "art_mode": "skip",
+        },
     )
+
+
+def _catalog_meta(ex: DissExample | EdmExample) -> dict:
+    return {
+        "artist": ex["artist"],
+        "album": ex["album"],
+        "title": title_case(ex["title"]),
+        "track": int(ex["track"]),
+        "tracktotal": int(ex["tracktotal"]),
+        "year": int(ex["year"]),
+        "art_mode": "skip",
+        "prefix": ex["prefix"],
+    }
+
+
+def title_case(title: str) -> str:
+    from ez_music.naming import title_case_song
+
+    return title_case_song(title)
 
 
 def build_diss(ex: DissExample) -> dict:
     return _build_ace(
-        ex["stem"],
+        ex["rel"],
         float(ex["duration"]),
         ex["lyrics"],
         ex["prefix"],
@@ -655,12 +754,13 @@ def build_diss(ex: DissExample) -> dict:
         tags=ex["tags"],
         bpm=int(ex["bpm"]),
         seed=int(ex["seed"]),
+        album_meta=_catalog_meta(ex),
     )
 
 
 def build_edm(ex: EdmExample) -> dict:
     return _build_ace(
-        ex["stem"],
+        ex["rel"],
         float(ex["duration"]),
         ex["lyrics"],
         ex["prefix"],
@@ -672,46 +772,149 @@ def build_edm(ex: EdmExample) -> dict:
         ace_mode=ex["ace_mode"],
         enhance_title="ez_edm_prompt",
         layout=ex["layout"],
+        album_meta=_catalog_meta(ex),
     )
 
 
-def _clear_artist_root_json(artist: str) -> None:
-    """Remove leftover *-lab-example.json at the artist folder root."""
-    root = LAB_ROOT / "audio" / artist
-    if not root.is_dir():
-        return
-    for path in root.glob("*-lab-example.json"):
-        path.unlink()
-        print(f"removed {path.relative_to(ROOT)}")
+def _clear_legacy_artist_trees() -> None:
+    """Remove pre-album artist folders (phaseN catalogs)."""
+    import shutil
+
+    for artist in ("nill-bye", "drive-through"):
+        root = LAB_ROOT / "audio" / artist
+        if root.is_dir():
+            shutil.rmtree(root)
+            print(f"removed {root.relative_to(ROOT)}")
+
+
+def _node(graph: dict, ntype: str):
+    return next(n for n in graph["nodes"] if n.get("type") == ntype)
+
+
+def build_cover(info: AlbumInfo) -> dict:
+    """Klein 1024×1024 square still for one album cover."""
+    graph = json.loads(lab_json("klein/ig-square").read_text(encoding="utf-8"))
+    rel = album_rel(info["artist_slug"], info["slug"], "cover")
+    apply_lab_identity(graph, rel)
+    prefix = f"albums/{info['artist']}/{info['title']}/cover"
+    prompt = info["cover_prompt"]
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        if ntype == "EZKleinPromptEnhance":
+            values = list(node.get("widgets_values") or [])
+            if values:
+                values[0] = prompt
+            node["widgets_values"] = values
+        if ntype == "CLIPTextEncode" and "Positive" in str(node.get("title") or ""):
+            node["widgets_values"] = [prompt]
+        if ntype == "SaveImage":
+            node["widgets_values"] = [prefix]
+        if ntype == "EmptyFlux2LatentImage":
+            node["widgets_values"] = [1024, 1024, 1]
+        if ntype == "Note":
+            node["widgets_values"] = [
+                f"## {rel}\n\nAlbum cover for **{info['artist']} — {info['title']}**. "
+                "Occupancy klein — stop ACE-Step / Wan / LTX. Queue this before "
+                "album-render --art generate. Prefix "
+                f"`{prefix}`.\n"
+            ]
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "us-safe-music-cover"
+    extra["lab_note"] = graph["nodes"][-1]["widgets_values"][0] if graph["nodes"] else ""
+    extra["lab_description"] = f"Album cover still for {info['artist']} / {info['title']}"
+    extra["lab_album"] = {
+        "artist": info["artist"],
+        "album": info["title"],
+        "album_slug": info["slug"],
+        "role": "cover",
+        "year": info["year"],
+    }
+    stamp_suite_graph(graph)
+    return graph
+
+
+def build_album(info: AlbumInfo, tracks: list[str]) -> dict:
+    """Pack-only album App (zip + m3u). Full render is album-render CLI."""
+    rel = album_rel(info["artist_slug"], info["slug"], "album")
+    note = (
+        f"## {rel}\n\n"
+        f"Album **{info['title']}** by **{info['artist']}** "
+        f"({len(tracks)} tracks).\n\n"
+        "Queue this graph to zip whatever is already in "
+        f"`${{COMFY_OUTPUT_DIR}}/{album_output_dir(info['artist'], info['title'])}/`.\n"
+        "Generate the full album in one go:\n\n"
+        f"`./scripts/manage.sh album-render --album {info['artist_slug']}/{info['slug']} "
+        "--art skip|upload|generate`\n\n"
+        "Occupancy: audio for tracks, klein first when --art generate. "
+        "Do not co-resident Klein + ACE-Step.\n"
+    )
+    g = Graph(rel)
+    g.add(
+        1,
+        "Note",
+        [40, 80],
+        [640, 420],
+        "Operator note",
+        [note],
+    )
+    g.add(
+        2,
+        "EZAlbumPack",
+        [720, 80],
+        [360, 120],
+        "Pack album zip",
+        [info["artist"], info["title"]],
+        outputs=[g.out("zip_path", "STRING", [])],
+    )
+    extra = {
+        "lab_rel": rel,
+        "lab_profile": "us-safe-music-album",
+        "lab_note": note,
+        "lab_description": f"Pack {info['title']} zip + m3u",
+        "lab_album": {
+            "artist": info["artist"],
+            "album": info["title"],
+            "album_slug": info["slug"],
+            "artist_slug": info["artist_slug"],
+            "role": "album",
+            "year": info["year"],
+            "tracks": tracks,
+            "cover_graph": album_rel(info["artist_slug"], info["slug"], "cover"),
+        },
+        "ds": {"scale": 1, "offset": [0, 0]},
+        "groups": [
+            _group(1, "NOTE", 20, LAB_GROUP_Y0, 680, 500, "#3f789e"),
+            _group(2, "PACK", 700, LAB_GROUP_Y0, 400, 220, "#3f789e"),
+        ],
+    }
+    return g.dump(extra)
 
 
 def main() -> None:
-    _clear_artist_root_json("nill-bye")
-    _clear_artist_root_json("drive-through")
-    placements: list[tuple[str, dict, str | None]] = [
-        ("music-rap-draft-lab-example.json", build_draft(), None),
-        ("music-rap-full-lab-example.json", build_full(), None),
-    ]
+    _clear_legacy_artist_trees()
+    write_lab_graph(lab_dest("audio/music/rap-draft"), build_draft())
+    write_lab_graph(lab_dest("audio/music/rap-full"), build_full())
+    by_album: dict[tuple[str, str], list[str]] = {}
     for diss in DISS_EXAMPLES:
-        placements.append(
-            (
-                f"{diss['stem']}.json",
-                build_diss(diss),
-                f"nill-bye/phase{diss['phase']}",
-            )
-        )
+        write_lab_graph(lab_dest(diss["rel"]), build_diss(diss))
+        key = (diss["artist_slug"], diss["album_slug"])
+        by_album.setdefault(key, []).append(diss["stem"])
     for edm in EDM_EXAMPLES:
-        placements.append(
-            (
-                f"{edm['stem']}.json",
-                build_edm(edm),
-                f"drive-through/phase{edm['phase']}",
-            )
+        write_lab_graph(lab_dest(edm["rel"]), build_edm(edm))
+        key = ("drive-through", edm["album_slug"])
+        by_album.setdefault(key, []).append(edm["stem"])
+    for info in shipped_albums():
+        key = (info["artist_slug"], info["slug"])
+        tracks = by_album.get(key, [])
+        write_lab_graph(
+            lab_dest(album_rel(info["artist_slug"], info["slug"], "cover")),
+            build_cover(info),
         )
-    for name, graph, subdir in placements:
-        path = lab_dest(name, subdir=subdir)
-        path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
-        print(f"wrote {path.relative_to(ROOT)}")
+        write_lab_graph(
+            lab_dest(album_rel(info["artist_slug"], info["slug"], "album")),
+            build_album(info, tracks),
+        )
+        print(f"wrote album {info['artist']} / {info['title']} ({len(tracks)} tracks)")
 
 
 if __name__ == "__main__":

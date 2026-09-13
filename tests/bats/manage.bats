@@ -53,6 +53,7 @@ FROZEN_MANAGE_VERBS=(
   film-proxies
   take-promote
   promote-workflow
+  album-render
   download-restore
   download-3d
   blender

@@ -86,7 +86,7 @@
     "aliases": ["Local dub", "dub-localize"],
     "category": "Audio",
     "short": "Clone-and-translate a recorded show into a duration-locked second audio track.",
-    "long": "The **dub-localize-lab-example** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, merges same-speaker gaps under 0.35 s, writes 6–10 s per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`, **Clone CFG** auto 0 on EN→ES). Duration lock pitch-preserves up to 1.25×, then spills, then fade-trims — it does not crush a long clone into the original window. First Queue is Stage **analyze**; edit `text_target`, then Stage **render**. Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing ASR, clone, llama.cpp, or GGUF yields an empty mix plus that status, not the original recording and not English cloned as the target. Wheels install separately (Chatterbox GitHub zip `--no-deps` so torch 2.14 stays; PyPI 0.1.7 has no `t3_model=v3`). YouTube Studio wants the duration-locked job-dir `ez_dub_yt.wav`, not the Comfy preview MP3 and not a muxed multi-track MP4. See [Local dub](dub.md).",
+    "long": "The **audio/dub/localize** App transcribes with faster-whisper (segments become turns), clusters speakers with Chatterbox `ve.pt`, merges same-speaker gaps under 0.35 s, writes 6–10 s per-speaker clone refs, translates each turn with the on-box GGUF (ISO source → target), and clones each voice (Chatterbox Multilingual V3, `language_id` like `es`, **Clone CFG** auto 0 on EN→ES). Duration lock pitch-preserves up to 1.25×, then spills, then fade-trims — it does not crush a long clone into the original window. First Queue is Stage **analyze**; edit `text_target`, then Stage **render**. Pick or upload a file from `input/` (or set a Source URL). **I have rights** must be on. Occupancy audio. After Queue, **Dub status** lists speaker/turn counts and `translated N/M`. Missing ASR, clone, llama.cpp, or GGUF yields an empty mix plus that status, not the original recording and not English cloned as the target. Wheels install separately (Chatterbox GitHub zip `--no-deps` so torch 2.14 stays; PyPI 0.1.7 has no `t3_model=v3`). YouTube Studio wants the duration-locked job-dir `ez_dub_yt.wav`, not the Comfy preview MP3 and not a muxed multi-track MP4. See [Local dub](dub.md).",
     "see_also": ["chatterbox", "tts", "occupancy", "disclosure", "multi-language-audio"]
   },
   {
@@ -221,7 +221,7 @@
     "aliases": ["Fun InP"],
     "category": "Models",
     "short": "Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.",
-    "long": "`download-wan --tier fun-inp` then load `wan-flf-5s-lab-example`. Unload LTX first. This is a continuity draft, not the 90s LTX print path. See [90s shorts](shorts.md).",
+    "long": "`download-wan --tier fun-inp` then load `wan/flf-5s`. Unload LTX first. This is a continuity draft, not the 90s LTX print path. See [90s shorts](shorts.md).",
     "see_also": ["flf", "wan", "vace"]
   },
   {
@@ -239,7 +239,7 @@
     "aliases": ["Z-Image Turbo", "Z-Image"],
     "category": "Models",
     "short": "Optional Apache still runner-up. Not the default Klein path.",
-    "long": "Z-Image Turbo uses different weights (`ae`, `z_image_turbo_*`). Seeded lab stills are Klein 4B. If a template asks for `ae.safetensors`, you loaded the wrong graph — open `klein-still-draft-lab-example`. Optional: `download-image --tier zimage`. See [Model licenses](licenses.md).",
+    "long": "Z-Image Turbo uses different weights (`ae`, `z_image_turbo_*`). Seeded lab stills are Klein 4B. If a template asks for `ae.safetensors`, you loaded the wrong graph — open `klein/still-draft`. Optional: `download-image --tier zimage`. See [Model licenses](licenses.md).",
     "see_also": ["klein", "t2i"]
   },
   {
@@ -284,7 +284,7 @@
     "aliases": ["text-to-image", "T2I"],
     "category": "Modalities",
     "short": "Text-to-image: a prompt becomes a still (PNG). Klein's job.",
-    "long": "Text-to-image is the first studio move. Queue `klein-still-draft-lab-example`, then feed a PNG into Wan or LTX I2V if you want motion. See [ComfyUI basics](learn/comfyui.md).",
+    "long": "Text-to-image is the first studio move. Queue `klein/still-draft`, then feed a PNG into Wan or LTX I2V if you want motion. See [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["klein", "i2v", "queue"]
   },
   {
@@ -311,7 +311,7 @@
     "aliases": ["audio-to-video", "A2V"],
     "category": "Modalities",
     "short": "Audio-to-video: picture follows a soundtrack (talking-head freeze, not lip-sync OSS).",
-    "long": "`klein-talking-head-lab-example` smokes LTX A2V freeze. Banned lip-sync OSS (Wav2Lip) stays out. See [Workflow catalog](studio-workflows.md).",
+    "long": "`klein/talking-head` smokes LTX A2V freeze. Banned lip-sync OSS (Wav2Lip) stays out. See [Workflow catalog](studio-workflows.md).",
     "see_also": ["s2v", "ltx"]
   },
   {
@@ -347,7 +347,7 @@
     "aliases": ["ping-pong"],
     "category": "Modalities",
     "short": "Play a clip forward then reverse so the join frame equals the start (GIF/bumper loops).",
-    "long": "`wan-gif-loop-lab-example` leaves VHS ping-pong on. Prompt cyclic motion (breeze, curtains), not a walk or one-way dolly, or reverse playback looks wrong. See [Prompting](prompting.md).",
+    "long": "`wan/gif-loop` leaves VHS ping-pong on. Prompt cyclic motion (breeze, curtains), not a walk or one-way dolly, or reverse playback looks wrong. See [Prompting](prompting.md).",
     "see_also": ["wan", "vhs"]
   },
   {
@@ -356,7 +356,7 @@
     "aliases": ["ComfyUI"],
     "category": "Studio",
     "short": "Node-graph UI for local image, video, and audio generation. This stack's studio.",
-    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files end in `-lab-example` and copy into `user/default/workflows/` on start. App Mode graphs land as `*.app.json` so they appear under Apps as well as Workflows. See [ComfyUI basics](learn/comfyui.md).",
+    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files live under `_lab/<lane>/` and copy into `user/default/workflows/` on start. App Mode graphs land as `*.app.json` so they appear under Apps as well as Workflows. See [ComfyUI basics](learn/comfyui.md).",
     "see_also": ["queue", "widget", "workflow", "manage-sh"]
   },
   {
@@ -365,7 +365,7 @@
     "aliases": ["node graph", "lab graph", "workflow"],
     "category": "Studio",
     "short": "A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.",
-    "long": "Host files live under `workflows/*-lab-example.json`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md).",
+    "long": "Host files live under `workflows/_lab/<lane>/`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md).",
     "see_also": ["lab-example", "note-node", "widget", "comfyui"]
   },
   {
@@ -400,7 +400,7 @@
     "title": "lab_app_mode",
     "aliases": ["lab_app_mode"],
     "category": "Studio",
-    "short": "Lab extra on *-lab-example graphs: lane, occupancy, handoff, frontend_min.",
+    "short": "Lab extra on shipped graphs: lane, occupancy, handoff, frontend_min.",
     "long": "`extra.lab_app_mode` marks a seeded graph as an App (`enabled`, `default_view`, `lane` inspire/produce/audio/film/dcc/optional, `occupancy`, `handoff`). `default_view: app` seeds as `*.app.json` (Apps + Workflows sidebars). Do not require `extra.linearMode` — Comfy upstream does not write it. See [ComfyUI Apps](studio-apps.md).",
     "see_also": ["app-mode", "occupancy", "lab-example"]
   },
@@ -470,10 +470,10 @@
   {
     "id": "lab-example",
     "title": "lab-example",
-    "aliases": ["lab-example graphs"],
+    "aliases": ["lab-example", "lab-example graphs"],
     "category": "Studio",
-    "short": "Seeded graph filename suffix. Load these; do not start from a blank canvas.",
-    "long": "If it does not end in `-lab-example`, it is not a lab smoke. Optional packs live under `workflows/optional/` and `workflows/shorts/`. See [Workflow catalog](studio-workflows.md).",
+    "short": "A seeded `_lab/<lane>/` graph. Load these; do not start from a blank canvas.",
+    "long": "Shipped smokes live under `workflows/_lab/<lane>/` with short stems (`klein/still-draft.json`). The unique id is `extra.lab_rel`. The old `*-lab-example` filename suffix is gone. Optional packs live under `workflows/_lab/optional/` and shot YAML under `workflows/shorts/`. See [Workflow catalog](studio-workflows.md).",
     "see_also": ["workflow", "note-node"]
   },
   {
@@ -884,10 +884,10 @@
   {
     "id": "research-chat",
     "title": "Research Chat",
-    "aliases": ["Research Chat", "research-chat", "research-chat-lab-example"],
+    "aliases": ["Research Chat", "research-chat", "inspire/research-chat"],
     "category": "Studio",
     "short": "Inspire App: CPU chat + web search + sequential research subagents. Occupancy llm.",
-    "long": "No-UNET creative-process desk (`research-chat-lab-example`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1–3 sequential search workers, then a synthesizer brief (prompt ingredients → Prompt Forge → Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `./scripts/manage.sh research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
+    "long": "No-UNET creative-process desk (`inspire/research-chat`). Queue a Message; read Reply and Sources. Mode research runs a planner plus 1–3 sequential search workers, then a synthesizer brief (prompt ingredients → Prompt Forge → Spark Still). Same on-box Qwen3-4B GGUF as Prompt Enhance (`n_gpu_layers=0`). HTTPS search is SSRF-safe. Laptop Path D: `./scripts/manage.sh research-mcp --stdio`. See [ComfyUI Apps](studio-apps.md) and [Occupancy desk](occupancy.md).",
     "see_also": ["prompt-enhance", "occupancy", "qwen"]
   },
   {
@@ -923,7 +923,7 @@
     "aliases": ["house-views", "dream-house clay", "clay tour"],
     "category": "Studio",
     "short": "Blender greybox + ten 1024×1280 Instagram clay stills. Occupancy XOR.",
-    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024×1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **klein-dream-house-clay-lab-example** can Queue without Blender. Language-only tour → **klein-dream-house-lab-example**. See [Dream-house tours](learn/dream-house.md).",
+    "long": "Host Blender constructs a `bpy-primitive` set under `${COMFY_OUTPUT_DIR}/assets/sets/<slug>/` (layout, GLB, clay, depth). Size is Instagram 4:5 (**1024×1280**), not the LTX guide pack. Stop Comfy first for the dump. `manage.sh start` seeds LoadImage plates (copy pack or render layout) so **klein/dream-house-clay** can Queue without Blender. Language-only tour → **klein/dream-house**. See [Dream-house tours](learn/dream-house.md).",
     "see_also": ["guide-pack", "occupancy", "sidecar", "klein"]
   },
   {

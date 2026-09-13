@@ -2,11 +2,17 @@
 
 Not collected by pytest (leading underscore). Builders and tests import
 ``lab_json`` instead of hardcoding a folder.
+
+Ids are ``_lab``-relative paths without ``.json`` (``klein/still-draft``,
+``wan/i2v-5s``). Basenames may collide across lanes; pass the relative
+id when they do.
 """
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
@@ -24,26 +30,52 @@ ALLOWED_LANES = (
 )
 
 
-def lab_example_paths(root: Path | None = None) -> list[Path]:
-    """Every ``*-lab-example.json`` under ``workflows/_lab``."""
+def lab_graph_paths(root: Path | None = None) -> list[Path]:
+    """Every ``*.json`` under ``workflows/_lab``."""
     base = LAB_ROOT if root is None else Path(root) / "_lab"
     if not base.is_dir():
         base = Path(root) if root is not None else LAB_ROOT
-    return sorted(base.rglob("*-lab-example.json"))
+    if not base.is_dir():
+        return []
+    return sorted(path for path in base.rglob("*.json") if path.is_file())
+
+
+def lab_example_paths(root: Path | None = None) -> list[Path]:
+    """Alias for ``lab_graph_paths`` (historical name)."""
+    return lab_graph_paths(root)
+
+
+def _lab_base(root: Path | None) -> Path:
+    base = LAB_ROOT if root is None else Path(root) / "_lab"
+    if not base.is_dir() and root is not None:
+        return Path(root)
+    return base
+
+
+def lab_rel_of(path: Path, *, root: Path | None = None) -> str:
+    """Return the ``_lab``-relative id for a JSON path."""
+    base = _lab_base(root)
+    rel = path.resolve().relative_to(base.resolve())
+    return rel.with_suffix("").as_posix()
 
 
 def lab_json(stem: str, *, root: Path | None = None) -> Path:
     """Return the unique ``_lab/**/<stem>.json`` path.
 
-    ``stem`` may be a basename, ``name.json``, or a leftover relative path
-    such as ``shorts/film-go-see-90s-run-lab-example.json``.
+    ``stem`` may be a basename (``still-draft``), a file name, an old
+    leftover relative path, or a lab-relative id (``wan/i2v-5s``).
     """
-    name = Path(stem).name
-    if not name.endswith(".json"):
-        name = f"{name}.json"
-    base = LAB_ROOT if root is None else Path(root) / "_lab"
-    if not base.is_dir() and root is not None:
-        base = Path(root)
+    text = str(stem).replace("\\", "/").lstrip("./")
+    text = text.removeprefix("_lab/")
+    if text.endswith(".json"):
+        text = text[: -len(".json")]
+    base = _lab_base(root)
+    if "/" in text:
+        path = base / f"{text}.json"
+        if path.is_file():
+            return path
+        raise FileNotFoundError(f"no lab json named {text}.json under {base}")
+    name = f"{text}.json"
     hits = sorted(p for p in base.rglob(name) if p.is_file())
     if not hits:
         raise FileNotFoundError(f"no lab json named {name} under {base}")
@@ -57,7 +89,7 @@ def _subdir_parts(subdir: str) -> tuple[str, ...]:
     """Relative nested components under a lab lane.
 
     Arguments:
-        subdir: Slash-separated relative path (``nill-bye/phase0``).
+        subdir: Slash-separated relative path (``albums/nill-bye/peer-review``).
     Returns:
         Path parts to join under the lane directory.
     Raises:
@@ -78,33 +110,61 @@ def _subdir_parts(subdir: str) -> tuple[str, ...]:
 def lab_dest(stem: str, *, lane: str | None = None, subdir: str | None = None) -> Path:
     """Path to write a lab graph. Creates the lane directory.
 
-    ``subdir`` is an optional relative path under the lane
-    (for example ``nill-bye/phase0`` → ``_lab/audio/nill-bye/phase0/``,
-    ``drive-through/phase1`` → ``_lab/audio/drive-through/phase1/``).
+    ``stem`` may be a lab-relative id (``klein/still-draft``) or a
+    basename. ``subdir`` is an optional relative path under the lane.
     """
-    name = Path(stem).name
-    if not name.endswith(".json"):
-        name = f"{name}.json"
-    chosen = lane or lane_for_stem(name)
+    text = str(stem).replace("\\", "/").lstrip("./")
+    text = text.removeprefix("_lab/")
+    if text.endswith(".json"):
+        text = text[: -len(".json")]
+    if "/" in text and (subdir is None or str(subdir).strip() == ""):
+        dest = LAB_ROOT / f"{text}.json"
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        return dest
+    name = Path(text).name
+    chosen = lane or lane_for_stem(text)
     if chosen not in ALLOWED_LANES:
         raise ValueError(f"invalid lab lane {chosen!r}")
     dest_dir = LAB_ROOT / chosen
     if subdir is not None and str(subdir).strip() != "":
         dest_dir = dest_dir.joinpath(*_subdir_parts(str(subdir)))
-    dest = dest_dir / name
+    dest = dest_dir / f"{name}.json"
     dest.parent.mkdir(parents=True, exist_ok=True)
     return dest
+
+
+def apply_lab_identity(graph: dict[str, Any], rel: str) -> dict[str, Any]:
+    """Set ``id`` to the file stem and ``extra.lab_rel`` to the relative id."""
+    clean = str(rel).removesuffix(".json")
+    graph["id"] = Path(clean).name
+    extra = graph.setdefault("extra", {})
+    extra["lab_rel"] = clean
+    return graph
+
+
+def write_lab_graph(path: Path, graph: dict[str, Any]) -> Path:
+    """Write graph JSON with ``id`` = stem and ``extra.lab_rel`` set.
+
+    Arguments:
+        path: Destination under ``workflows/_lab``.
+        graph: Comfy graph dict (mutated).
+    Returns:
+        ``path``.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    apply_lab_identity(graph, lab_rel_of(path))
+    path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+    return path
 
 
 def lane_for_stem(stem: str) -> str:
     """Sidebar lane for a lab filename or relative path."""
     rel = str(stem).replace("\\", "/").lstrip("./")
+    rel = rel.removeprefix("_lab/")
     name = Path(rel).name
-    if rel.startswith("_lab/"):
-        rest = rel[len("_lab/") :]
-        lane = rest.split("/", 1)[0]
-        if lane in ALLOWED_LANES:
-            return lane
+    first = rel.split("/", 1)[0]
+    if first in ALLOWED_LANES:
+        return first
     if rel.startswith("shorts/") or name.startswith("film-"):
         return "shorts"
     if rel.startswith("dcc/"):
@@ -117,12 +177,21 @@ def lane_for_stem(stem: str) -> str:
         return "wan"
     if name.startswith("ltx-"):
         return "ltx"
-    if name.startswith("podcast-") or name.startswith("music-") or name.startswith("dub-") or name.startswith("audio-"):
+    if (
+        name.startswith("podcast-")
+        or name.startswith("music-")
+        or name.startswith("dub-")
+        or name.startswith("audio-")
+        or name.startswith("rap-")
+        or name.startswith("album")
+        or name.startswith("cover")
+        or name[:1].isdigit()
+    ):
         return "audio"
     if (
-        name.startswith("prompt-forge-")
-        or name.startswith("beat-sheet-")
-        or name.startswith("research-chat-")
+        name.startswith("prompt-forge")
+        or name.startswith("beat-sheet")
+        or name.startswith("research-chat")
     ):
         return "inspire"
     raise ValueError(f"cannot map {stem!r} to a lab lane")

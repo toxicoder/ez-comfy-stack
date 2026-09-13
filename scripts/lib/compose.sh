@@ -565,7 +565,7 @@ seed_house_clay_inputs() {
   }
   python3 "${root}/scripts/lib/house_layout.py" seed-inputs "${input}" \
     --slug lab-penthouse || {
-    warn "house clay seed into ${input} failed — klein-dream-house-clay-lab-example LoadImage may be empty"
+    warn "house clay seed into ${input} failed — klein/dream-house-clay LoadImage may be empty"
     return 0
   }
   log "house clay plates ready in ${input}"

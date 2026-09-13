@@ -202,7 +202,7 @@ cmd_run() {
   fi
   print_remote_start_hint
   mkdir -p "${FARM_SHARE}/out"
-  log "On each host, open Comfy, Queue wan-i2v-shot-lab-example.json then ltx-i2v-shot-lab-example.json (5.00s shots)"
+  log "On each host, open Comfy, Queue wan/i2v-shot.json then ltx/i2v-shot.json (5.00s shots)"
   log "Then run scripts/utilities/concat-shots.sh --film ${FILM:-go-see} against ${FARM_SHARE}"
   local url
   for url in "${urls[@]}"; do

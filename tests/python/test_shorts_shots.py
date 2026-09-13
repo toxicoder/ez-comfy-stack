@@ -47,9 +47,9 @@ SHOT_INDEX_RE = re.compile(r"Shot \d+ of 18")
 WAN_AUDIO_WORDS = ("score", "music", "audio", "sound", "breath")
 LTX_CLOSE = "No music and no score."
 BIBLES = {
-    "go-see": "film-go-see-90s-run-lab-example.json",
-    "still-here": "film-still-here-90s-lab-example.json",
-    "switchyard": "film-switchyard-90s-lab-example.json",
+    "go-see": "shorts/go-see.json",
+    "still-here": "shorts/still-here.json",
+    "switchyard": "shorts/switchyard.json",
 }
 
 
@@ -61,7 +61,7 @@ def test_print_template_ltx_and_dfr() -> None:
     assert print_template("ltx") == LTX_PRINT_TEMPLATE
     assert print_template("dfr") == DFR_TEMPLATE
     assert print_template("ltx-iclora-depth") == ICLORA_TEMPLATE
-    assert print_template("wan-flf") == "wan-flf-5s-lab-example.json"
+    assert print_template("wan-flf") == "wan/flf-5s.json"
     assert print_template("dcc-final") == "dcc-final"
     assert DFR_TEMPLATE.startswith("templates/ltx-2.5/")
     try:
@@ -307,7 +307,7 @@ def test_creative_locks() -> None:
 def _json_files() -> list[Path]:
     from _lab_paths import LAB_ROOT
 
-    files = sorted((LAB_ROOT / "shorts").glob("*-lab-example.json"))
+    files = sorted((LAB_ROOT / "shorts").glob("*.json"))
     assert files, "expected shorts lab JSON"
     return files
 
@@ -342,9 +342,9 @@ def _overlap_hits(graph: dict) -> list[str]:
 
 def test_shorts_json_parse_ids_and_banned_strings() -> None:
     expected = {
-        "film-go-see-90s-run-lab-example",
-        "film-still-here-90s-lab-example",
-        "film-switchyard-90s-lab-example",
+        "go-see",
+        "still-here",
+        "switchyard",
     }
     names = {p.stem for p in _json_files()}
     assert names == expected
@@ -373,8 +373,8 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
 
 
 def test_shot_graphs_are_five_second_i2v() -> None:
-    wan = json.loads(lab_json("wan-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
-    ltx = json.loads(lab_json("ltx-i2v-shot-lab-example.json").read_text(encoding="utf-8"))
+    wan = json.loads(lab_json("wan/i2v-shot.json").read_text(encoding="utf-8"))
+    ltx = json.loads(lab_json("ltx/i2v-shot.json").read_text(encoding="utf-8"))
     wan_len = next(
         n["widgets_values"][2]
         for n in wan["nodes"]

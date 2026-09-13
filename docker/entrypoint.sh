@@ -491,11 +491,11 @@ lab_workflow_lane() {
     shorts/*) printf '%s\n' shorts ;;
     dcc/*) printf '%s\n' dcc ;;
     optional/*) printf '%s\n' optional ;;
-    klein-*) printf '%s\n' klein ;;
-    wan-*) printf '%s\n' wan ;;
-    ltx-*) printf '%s\n' ltx ;;
-    podcast-* | music-*) printf '%s\n' audio ;;
-    prompt-forge-* | beat-sheet-* | research-chat-*) printf '%s\n' inspire ;;
+    klein/* | klein-*) printf '%s\n' klein ;;
+    wan/* | wan-*) printf '%s\n' wan ;;
+    ltx/* | ltx-*) printf '%s\n' ltx ;;
+    audio/* | podcast-* | music-* | dub-*) printf '%s\n' audio ;;
+    inspire/* | prompt-forge-* | beat-sheet-* | research-chat-*) printf '%s\n' inspire ;;
     *) return 1 ;;
   esac
 }

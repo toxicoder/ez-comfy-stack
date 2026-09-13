@@ -63,7 +63,7 @@ FILMS = (
     (
         "go-see",
         "gosee",
-        "film-go-see-90s-run-lab-example",
+        "shorts/go-see",
         "go-see.shots.yaml",
         "first-person parkour",
         (
@@ -78,7 +78,7 @@ FILMS = (
     (
         "still-here",
         "stillhere",
-        "film-still-here-90s-lab-example",
+        "shorts/still-here",
         "still-here.shots.yaml",
         "household morning",
         (
@@ -93,7 +93,7 @@ FILMS = (
     (
         "switchyard",
         "switchyard",
-        "film-switchyard-90s-lab-example",
+        "shorts/switchyard",
         "switchyard.shots.yaml",
         "night freight yard",
         (
@@ -233,7 +233,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
         "",
         "Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame "
         "continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames "
-        "= 1+8n per shot). Optional silent rehearsal: **wan-i2v-shot-lab-example**. Optional "
+        "= 1+8n per shot). Optional silent rehearsal: **wan/i2v-shot**. Optional "
         f"host stitch: `./scripts/utilities/concat-shots.sh --film {film} --yes`.",
         "",
         "18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. "
@@ -274,7 +274,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
 3. The MP4 is already on disk at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4`. A **90s film ready** overlay plays it; `ez_{slug}_90s.html` is a local player. Copy off the Spark with scp.
-4. Optional single-shot iterate: **ltx-i2v-shot-lab-example**. Optional silent rehearsal: **wan-i2v-shot-lab-example**.
+4. Optional single-shot iterate: **ltx/i2v-shot**. Optional silent rehearsal: **wan/i2v-shot**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
 Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.
@@ -477,7 +477,7 @@ def build_one_click_film(
 ) -> dict:
     parsed = parse_shots_yaml((SHORTS / yaml_name).read_text(encoding="utf-8"))
     identity = parsed["identity"]
-    graph = copy.deepcopy(_load(lab_json("klein-still-draft-lab-example.json")))
+    graph = copy.deepcopy(_load(lab_json("klein/still-draft.json")))
     graph["id"] = stem
     graph["revision"] = int(graph.get("revision", 1)) + 1
     graph["links"] = [list(link) for link in graph.get("links") or []]

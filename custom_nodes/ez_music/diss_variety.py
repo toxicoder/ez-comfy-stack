@@ -6,6 +6,8 @@ Same dry-booth vocal tags as the lab catalog.
 
 from __future__ import annotations
 
+from typing import Any
+
 from .diss_examples import (
     DISS_DURATION_S,
     DissExample,
@@ -26,7 +28,7 @@ def _ex(
     take: str,
     lyrics: str,
     *tag_parts: str,
-) -> DissExample:
+) -> dict[str, Any]:
     return {
         "stem": f"music-rap-nill-bye-{slug}-lab-example",
         "series": "variety",
@@ -993,7 +995,7 @@ CAMPFIRE_LYRICS = format_diss_lyrics(
 )
 
 
-DISS_VARIETY: tuple[DissExample, ...] = (
+DISS_VARIETY = (
     _ex(
         "citation-needed",
         "citation needed",

@@ -284,7 +284,7 @@ def test_run_research_calls_search_per_query(monkeypatch: pytest.MonkeyPatch) ->
     def _complete(system: str, user: str) -> tuple[str, str]:
         if "JSON" in system or "queries" in system.lower() or "plan" in system.lower():
             return '{"queries":["neon","rooftop"]}', ""
-        return "## Brief\nCited [1].\n## Next App\nprompt-forge-lab-example", ""
+        return "## Brief\nCited [1].\n## Next App\ninspire/prompt-forge", ""
 
     def _search(query: str, **_kwargs: object) -> list[SearchHit]:
         calls.append(query)

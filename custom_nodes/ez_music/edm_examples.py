@@ -8,7 +8,8 @@ from __future__ import annotations
 
 from typing import Literal, TypedDict
 
-from .naming import DRIVE_THROUGH_ARTIST, music_output_prefix
+from .albums import album_rel, drive_album_for_phase
+from .naming import music_output_prefix
 
 EDM_DURATION_S = 180.0
 DRIVE_LOCK = (
@@ -187,6 +188,8 @@ FORBIDDEN_SCORE_NEEDLES = (
 
 class EdmExample(TypedDict):
     stem: str
+    slug: str
+    rel: str
     series: EdmSeries
     title: str
     tags: str
@@ -199,6 +202,14 @@ class EdmExample(TypedDict):
     lyrics: str
     ace_mode: EdmAceMode
     layout: str
+    artist: str
+    artist_slug: str
+    album: str
+    album_slug: str
+    track: int
+    tracktotal: int
+    year: int
+    cover_prompt: str
 
 
 def drive_tags(*parts: str, bpm: int, treat: bool = False) -> str:
@@ -242,7 +253,7 @@ def _ex(
         title: Operator-facing take name.
         bpm: Tempo written into tags and the ACE encoder.
         seed: Fixed ACE / sampler seed.
-        phase: Change-group index (``phaseN/`` under the artist folder).
+        phase: Live-set hour index (maps to an album).
         take: Short blurb for the lab description.
         lyrics: Arrangement score from ``format_edm_score``.
         tag_parts: Genre and production tags (warp bass + trap drums).
@@ -256,7 +267,9 @@ def _ex(
     if layout not in EDM_LAYOUTS:
         raise ValueError(f"unknown layout {layout}")
     return {
-        "stem": f"music-edm-drive-through-{slug}-lab-example",
+        "stem": slug,
+        "slug": slug,
+        "rel": "",
         "series": "drive-through",
         "title": title,
         "tags": drive_tags(*tag_parts, bpm=bpm, treat=treat),
@@ -264,11 +277,19 @@ def _ex(
         "duration": EDM_DURATION_S,
         "seed": seed,
         "phase": phase,
-        "prefix": music_output_prefix(DRIVE_THROUGH_ARTIST, title, phase),
+        "prefix": "",
         "description": _desc(take, treat=treat),
         "lyrics": _uniquify_score(seed, lyrics),
         "ace_mode": "vocal" if treat else "instrumental",
         "layout": layout,
+        "artist": "",
+        "artist_slug": "",
+        "album": "",
+        "album_slug": "",
+        "track": 0,
+        "tracktotal": 0,
+        "year": 0,
+        "cover_prompt": "",
     }
 
 
@@ -342,6 +363,44 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
     return "\n\n".join(parts)
 
 
+def drive_slug_from_stem(stem: str) -> str:
+    """Kebab slug from a legacy or short Drive-through stem."""
+    text = stem.removeprefix("music-edm-drive-through-").removesuffix("-lab-example")
+    if text[:1].isdigit() and "-" in text:
+        return text.split("-", 1)[1]
+    return text
+
+
+def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]:
+    """Number tracks and attach album metadata for one live-set hour."""
+    if not rows:
+        return ()
+    info = drive_album_for_phase(int(rows[0]["phase"]))
+    total = len(rows)
+    out: list[EdmExample] = []
+    for index, row in enumerate(rows, 1):
+        slug = drive_slug_from_stem(str(row.get("slug") or row["stem"]))
+        stem = f"{index:02d}-{slug}"
+        out.append(
+            {
+                **row,
+                "slug": slug,
+                "stem": stem,
+                "rel": album_rel(info["artist_slug"], info["slug"], stem),
+                "artist": info["artist"],
+                "artist_slug": info["artist_slug"],
+                "album": info["title"],
+                "album_slug": info["slug"],
+                "track": index,
+                "tracktotal": total,
+                "year": info["year"],
+                "cover_prompt": info["cover_prompt"],
+                "prefix": music_output_prefix(row["title"], index),
+            }
+        )
+    return tuple(out)
+
+
 def _catalog() -> tuple[EdmExample, ...]:
     from .edm_drive_through import EDM_DRIVE_THROUGH
     from .edm_drive_through_afterparty import EDM_DRIVE_THROUGH_AFTERPARTY
@@ -349,13 +408,17 @@ def _catalog() -> tuple[EdmExample, ...]:
     from .edm_drive_through_headliner import EDM_DRIVE_THROUGH_HEADLINER
     from .edm_drive_through_secret_homage import EDM_DRIVE_THROUGH_SECRET_HOMAGE
 
-    return (
-        EDM_DRIVE_THROUGH
-        + EDM_DRIVE_THROUGH_BASS
-        + EDM_DRIVE_THROUGH_HEADLINER
-        + EDM_DRIVE_THROUGH_AFTERPARTY
-        + EDM_DRIVE_THROUGH_SECRET_HOMAGE
+    groups = (
+        EDM_DRIVE_THROUGH,
+        EDM_DRIVE_THROUGH_BASS,
+        EDM_DRIVE_THROUGH_HEADLINER,
+        EDM_DRIVE_THROUGH_AFTERPARTY,
+        EDM_DRIVE_THROUGH_SECRET_HOMAGE,
     )
+    out: list[EdmExample] = []
+    for group in groups:
+        out.extend(finalize_drive_album(group))
+    return tuple(out)
 
 
 EDM_EXAMPLES: tuple[EdmExample, ...] = _catalog()

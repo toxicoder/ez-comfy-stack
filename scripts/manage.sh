@@ -351,8 +351,10 @@ Commands:
                     960×528 h264 NVENC proxies (refuse if compose is up; never rewrite masters)
   take-promote <film> <id> <take>
                     Copy takes/<id>/tNNN.mp4 to shots/<id>.mp4 and mark ok
-  promote-workflow --from PATH --lane LANE --id STEM-lab-example
+  promote-workflow --from PATH --lane LANE --id STEM [--subdir REL]
                     Copy a live _user graph into workflows/_lab/<lane>/ (does not commit)
+  album-render --album ARTIST/SLUG [--art skip|upload|generate]
+                    Queue one shipped album then zip (compose must already be up)
   download-restore [--tier seedvr2-3b]
                     Opt-in SeedVR2-3B Apache restore pack (post-concat; not download-models)
   download-3d [--tier trellis2|da3-base|all]
@@ -1367,6 +1369,19 @@ cmd_promote_workflow() {
 }
 
 #######################################
+# Queue a shipped music album then zip the output folder.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  album-render flags
+# Returns:
+#   album-render status
+#######################################
+cmd_album_render() {
+  bash "${REPO_ROOT}/scripts/utilities/album-render.sh" "$@"
+}
+
+#######################################
 # Opt-in restore pack download (SeedVR2-3B). Does not reap. Not download-models.
 # Globals:
 #   REPO_ROOT
@@ -1761,6 +1776,7 @@ main() {
     film-proxies) cmd_film_proxies "$@" ;;
     take-promote) cmd_take_promote "$@" ;;
     promote-workflow) cmd_promote_workflow "$@" ;;
+    album-render) cmd_album_render "$@" ;;
     download-restore) cmd_download_restore "$@" ;;
     download-3d) cmd_download_3d "$@" ;;
     download-llm) cmd_download_llm "$@" ;;

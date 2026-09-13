@@ -1,6 +1,7 @@
-"""SaveAudio prefixes for artist catalog graphs.
+"""SaveAudio filenames and album output folders.
 
-Format: ``Artist - Song Title - vN`` where N is the catalog phase.
+Format: ``NN - Song Title`` (zero-padded track). Artist and album live
+in tags, not the filename. Output dir: ``albums/<Artist>/<Album>/``.
 """
 
 from __future__ import annotations
@@ -41,21 +42,37 @@ def title_case_song(title: str) -> str:
     return " ".join(words)
 
 
-def music_output_prefix(artist: str, title: str, phase: int) -> str:
-    """Build the SaveAudio prefix for one artist take.
+def music_output_prefix(title: str, track: int) -> str:
+    """Build the SaveAudio filename stem for one catalog take.
 
     Arguments:
-        artist: Branded act name (``Nill Bye``, ``Drive-through``).
         title: Catalog song title.
-        phase: Zero-based change-group index (matches ``phaseN/``).
+        track: One-based track number on the album.
     Returns:
-        ``Artist - Song Title - vN``.
+        ``NN - Song Title``.
     Raises:
-        ValueError: empty artist, empty title, or negative phase.
+        ValueError: empty title or track < 1.
     """
-    if phase < 0:
-        raise ValueError(f"phase must be >= 0, got {phase}")
+    if track < 1:
+        raise ValueError(f"track must be >= 1, got {track}")
+    return f"{track:02d} - {title_case_song(title)}"
+
+
+def album_output_dir(artist: str, album: str) -> str:
+    """Relative output folder under Comfy output dir.
+
+    Arguments:
+        artist: Branded act name.
+        album: Album title.
+    Returns:
+        ``albums/<Artist>/<Album>``.
+    Raises:
+        ValueError: empty artist or album.
+    """
     artist_s = artist.strip()
+    album_s = album.strip()
     if artist_s == "":
         raise ValueError("artist is empty")
-    return f"{artist_s} - {title_case_song(title)} - v{phase}"
+    if album_s == "":
+        raise ValueError("album is empty")
+    return f"albums/{artist_s}/{album_s}"

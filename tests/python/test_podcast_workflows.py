@@ -36,8 +36,9 @@ def _load(stem: str) -> dict:
 
 
 def test_audio_first_podcast_graph() -> None:
-    graph = _load("podcast-audio-first-lab-example")
-    assert graph["id"] == "podcast-audio-first-lab-example"
+    graph = _load("audio/podcast/audio-first")
+    assert graph["id"] == "audio-first"
+    assert graph["extra"].get("lab_rel") == "audio/podcast/audio-first"
     extra = graph["extra"]
     assert extra["lab_profile"] == "us-safe-podcast"
     assert extra["lab_note"].strip()
@@ -52,7 +53,7 @@ def test_audio_first_podcast_graph() -> None:
     ):
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
-    assert "klein-podcast-cover-lab-example" in blob
+    assert "klein/podcast-cover" in blob
     titles = {n.get("title") for n in graph["nodes"]}
     assert "MODEL" in {g["title"] for g in graph["groups"]}
     assert "PROMPT" in {g["title"] for g in graph["groups"]}
@@ -90,8 +91,9 @@ def test_audio_first_podcast_graph() -> None:
 
 
 def test_radio_drama_graph() -> None:
-    graph = _load("podcast-radio-drama-lab-example")
-    assert graph["id"] == "podcast-radio-drama-lab-example"
+    graph = _load("audio/podcast/radio-drama")
+    assert graph["id"] == "radio-drama"
+    assert graph["extra"].get("lab_rel") == "audio/podcast/radio-drama"
     extra = graph["extra"]
     assert extra["lab_profile"] == "us-safe-radio"
     blob = json.dumps(graph)
@@ -148,7 +150,7 @@ def _app_labels(graph: dict) -> list[str]:
 
 
 def test_podcast_apps_expose_voices_length_not_clone_refs() -> None:
-    audio = _load("podcast-audio-first-lab-example")
+    audio = _load("audio/podcast/audio-first")
     names = _app_names(audio)
     assert "speaker_a_voice" in names
     assert "speaker_b_voice" in names
@@ -161,7 +163,7 @@ def test_podcast_apps_expose_voices_length_not_clone_refs() -> None:
     assert "Script" in labels
     assert "Bed tags" in labels
     assert len(labels) == len(set(labels)), labels
-    radio = _load("podcast-radio-drama-lab-example")
+    radio = _load("audio/podcast/radio-drama")
     radio_names = _app_names(radio)
     assert radio_names.count("seconds") == 2
     assert "announcer_voice" in radio_names

@@ -22,13 +22,13 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 - Knowing which App to stop before you load the next one
 - Following Spark Still → Hero → Silent 5s → AV 5s without renaming files
 
-**Who this is for:** studio users after `klein-still-draft-lab-example` has been loaded once.
+**Who this is for:** studio users after `klein/still-draft` has been loaded once.
 
-Lab graphs are still the same host `*-lab-example.json` files. On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`. A small occupancy chip sits at the top of the App widget list (under the menu if you are in graph view) and shows which family is running, still N of M on multi-plate Apps, and the next handoff. It does not cover Run. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
+Lab graphs are the host `_lab/<lane>/*.json` files (folder-scoped ids). On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`. A small occupancy chip sits at the top of the App widget list (under the menu if you are in graph view) and shows which family is running, still N of M on multi-plate Apps, and the next handoff. It does not cover Run. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
 
 ```mermaid
 flowchart LR
-  Load["Load *-lab-example"] --> App["App Mode widgets"]
+  Load["Load _lab graph"] --> App["App Mode widgets"]
   App --> Queue["Queue"]
   Queue --> Out["PNG / MP4"]
   App --> Graph["Graph view to inspect"]
@@ -45,7 +45,7 @@ flowchart LR
 
 Official persist is `extra.linearData` (`inputs` / `outputs`). Each input is `[nodeId, widgetName, config?]` with an **integer** node id. ComfyUI frontend **1.49.6+** (the v0.34.6 pin) upgrades that to a live `graphId:nodeId:name` WidgetId at load. Do **not** persist `"11:prompt"` two-part ids — the frontend treats a colon as a subgraph locator and drops the widget, leaving App view with Run and occupancy but no Prompt. The lab contract is `extra.lab_app_mode` (`lane`, `occupancy`, `handoff`, `frontend_min`). Do not require `extra.linearMode` — upstream does not write it.
 
-Comfy’s **Apps** sidebar lists files whose name ends in `.app.json`. On `start`, the entrypoint seeds every App Mode graph (`default_view: app`) as `_lab/<lane>/*-lab-example.app.json`. The same stem still appears under **Workflows** in that folder. 90s film graphs stay `default_view: graph` (too many widgets) and keep the `.json` suffix — App Mode is still **enabled**, but they stay Workflows-only. Folders do not add `workflows/apps/`.
+Comfy’s **Apps** sidebar lists files whose name ends in `.app.json`. On `start`, the entrypoint seeds every App Mode graph (`default_view: app`) as `_lab/<lane>/*.app.json`. The same stem still appears under **Workflows** in that folder. 90s film graphs stay `default_view: graph` (too many widgets) and keep the `.json` suffix — App Mode is still **enabled**, but they stay Workflows-only. Folders do not add `workflows/apps/`.
 
 Filenames: [Workflow catalog](studio-workflows.md). Playbook: [Still to motion to AV](visual-generative-ai.md). Restart the container after a pull so the `.app.json` copy runs.
 
@@ -74,22 +74,22 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 
 | App | What it does |
 | --- | --- |
-| **klein-still-draft-lab-example** | Spark Still. 768×432, seed 42, Enhance on. Prefix `ez_still_draft` |
-| **klein-identity-sheet-lab-example** | Front / three-quarter / profile. 1280×704, Enhance on (identity mode) |
-| **klein-storyboard-6up-lab-example** | Six new cameras of one scene (`ez_board_01`…`06`) |
-| **klein-dream-house-lab-example** | Virtual tour. Ten 4:5 stills of **one place**, one room or angle each (tower, foyer, rooms, terrace, drone, study; default placeholder is a full-floor penthouse in a dense city) |
-| **klein-dream-house-clay-lab-example** | Same walkthrough as Klein edit of clay plates (`ez_house_clay_01`…`10`). `start` seeds LoadImage; optional `house-views` dump. Prefix `ez_dream_house_clay_01`…`10` |
-| **klein-style-lock-lab-example** | One place, four cameras |
-| **klein-lighting-trio-lab-example** | Same subject, three lights |
-| **klein-camera-angles-lab-example** | Wide / medium / close |
-| **klein-color-moods-lab-example** | Warm plate plus three grades |
-| **klein-time-of-day-lab-example** | Dusk plate, then dawn / noon / night |
-| **klein-hook-still-lab-example** | Vertical 9:16 first-frame hook (`ez_hook_still`) |
-| **klein-character-draft-lab-example** | Character still. Prompt + style, 1024×1280, prefix `ez_character` |
-| **klein-character-tweak-lab-example** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
-| **prompt-forge-lab-example** | No UNET. Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
-| **research-chat-lab-example** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
-| **beat-sheet-lab-example** | Script desk. Logline, audio policy, 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
+| **klein/still-draft** | Spark Still. 768×432, seed 42, Enhance on. Prefix `ez_still_draft` |
+| **klein/identity-sheet** | Front / three-quarter / profile. 1280×704, Enhance on (identity mode) |
+| **klein/storyboard-6up** | Six new cameras of one scene (`ez_board_01`…`06`) |
+| **klein/dream-house** | Virtual tour. Ten 4:5 stills of **one place**, one room or angle each (tower, foyer, rooms, terrace, drone, study; default placeholder is a full-floor penthouse in a dense city) |
+| **klein/dream-house-clay** | Same walkthrough as Klein edit of clay plates (`ez_house_clay_01`…`10`). `start` seeds LoadImage; optional `house-views` dump. Prefix `ez_dream_house_clay_01`…`10` |
+| **klein/style-lock** | One place, four cameras |
+| **klein/lighting-trio** | Same subject, three lights |
+| **klein/camera-angles** | Wide / medium / close |
+| **klein/color-moods** | Warm plate plus three grades |
+| **klein/time-of-day** | Dusk plate, then dawn / noon / night |
+| **klein/hook-still** | Vertical 9:16 first-frame hook (`ez_hook_still`) |
+| **klein/character-draft** | Character still. Prompt + style, 1024×1280, prefix `ez_character` |
+| **klein/character-tweak** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
+| **inspire/prompt-forge** | No UNET. Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
+| **inspire/research-chat** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
+| **inspire/beat-sheet** | Script desk. Logline, audio policy, 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
 
 ---
 
@@ -99,22 +99,22 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 
 | App | Occupancy | Prefix / output |
 | --- | --- | --- |
-| **klein-still-daily-lab-example** | klein | `ez_still_app` — click UNET to swap distilled / NVFP4 / base |
-| **klein-still-hero-lab-example** | klein | `ez_still_hero` — 1280×704 LTX feeder |
-| **klein-thumbnail-lab-example** | klein | `ez_thumbnail` 1280×720 |
-| **klein-ig-square-lab-example** | klein | `ez_ig_square` 1:1 |
-| **klein-og-blog-lab-example** | klein | `ez_og` 1216×640 |
-| **klein-banner-wide-lab-example** | klein | `ez_banner` ~3:1 |
-| **klein-shorts-still-lab-example** | klein | `ez_shorts_still` 432×768 |
-| **wan-i2v-5s-lab-example** | wan | Silent 5 s, 121 frames, MagCache draft-only |
-| **wan-gif-loop-lab-example** | wan | 49-frame ping-pong GIF |
-| **ltx-i2v-5s-lab-example** | ltx | AV 5 s, 1280×704 |
-| **ltx-hook-av-lab-example** | ltx | AV cold open |
-| **klein-platform-pack-lab-example** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
+| **klein/still-daily** | klein | `ez_still_app` — click UNET to swap distilled / NVFP4 / base |
+| **klein/still-hero** | klein | `ez_still_hero` — 1280×704 LTX feeder |
+| **klein/thumbnail** | klein | `ez_thumbnail` 1280×720 |
+| **klein/ig-square** | klein | `ez_ig_square` 1:1 |
+| **klein/og-blog** | klein | `ez_og` 1216×640 |
+| **klein/banner-wide** | klein | `ez_banner` ~3:1 |
+| **klein/shorts-still** | klein | `ez_shorts_still` 432×768 |
+| **wan/i2v-5s** | wan | Silent 5 s, 121 frames, MagCache draft-only |
+| **wan/gif-loop** | wan | 49-frame ping-pong GIF |
+| **ltx/i2v-5s** | ltx | AV 5 s, 1280×704 |
+| **ltx/hook-av** | ltx | AV cold open |
+| **klein/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
 
-Audio Apps (`podcast-*`, `dub-*`, `music-rap-*`, `music-edm-*`, **audio-finish-lab-example**) are occupancy **audio**. That includes the one hundred thirty-five **180 s** `music-rap-nill-bye-*-lab-example` takes under `_lab/audio/nill-bye/phaseN/` and the eighty-five **180 s** `music-edm-drive-through-*-lab-example` bass-set EDM takes under `_lab/audio/drive-through/phaseN/` ([Local music](music.md)). Graph outputs stay FLAC + MP3 (`Artist - Song Title - vN` on the artist catalogs). Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film `film-*-90s-*-lab-example` is occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
+Audio Apps (`podcast-*`, `dub-*`, `audio/music/rap-draft`, `audio/music/rap-full`, **audio/finish**) are occupancy **audio**. Catalog albums live under `_lab/audio/albums/<artist>/<album>/` with numbered tracks, `cover.json` (klein), and `album.json` (zip). Outputs are FLAC + MP3 tagged with artist/album/title; optional cover is in the tags. One-go: `./scripts/manage.sh album-render --album nill-bye/peer-review`. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film graphs under `_lab/shorts/` are occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
 
 ---
 
@@ -124,16 +124,16 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 
 | App | Occupancy | What it does |
 | --- | --- | --- |
-| **klein-from-clay-lab-example** | klein | Klein edit of guide `first.png`, 1280×704, prefix `ez_clay_hero` |
-| **klein-from-clay-plates-lab-example** | klein | One clay still → hero 704 / packshot 1:1 / IG 4:5 / shorts 9:16 (`ez_clay_pack_*`) |
-| **klein-from-canny-lab-example** | klein | Klein edit of `canny.png`, 1280×704, prefix `ez_canny_hero` |
-| **ltx-iclora-depth-5s-lab-example** | ltx | Union Control envelope, depth from `depth.mp4` |
-| **ltx-iclora-canny-5s-lab-example** | ltx | Same envelope, canny from `canny.mp4` |
-| **ltx-iclora-depth-shorts-lab-example** | ltx | Depth envelope at **768×1280** |
-| **wan-flf-from-guide-lab-example** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
-| **klein-from-guide-loader-lab-example** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
-| **ltx-iclora-from-guide-loader-lab-example** | ltx | Envelope from loaders. MagCache off. Prefix `ez_iclora_guide` |
-| **trellis-from-klein-still-lab-example** | trellis | Still pack `mug` → TRELLIS.2 INT8 under `assets/objects/_lab-mug/` |
+| **dcc/klein/from-clay** | klein | Klein edit of guide `first.png`, 1280×704, prefix `ez_clay_hero` |
+| **dcc/klein/from-clay-plates** | klein | One clay still → hero 704 / packshot 1:1 / IG 4:5 / shorts 9:16 (`ez_clay_pack_*`) |
+| **dcc/klein/from-canny** | klein | Klein edit of `canny.png`, 1280×704, prefix `ez_canny_hero` |
+| **dcc/ltx/iclora-depth-5s** | ltx | Union Control envelope, depth from `depth.mp4` |
+| **dcc/ltx/iclora-canny-5s** | ltx | Same envelope, canny from `canny.mp4` |
+| **dcc/ltx/iclora-depth-shorts** | ltx | Depth envelope at **768×1280** |
+| **dcc/wan/flf-from-guide** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
+| **dcc/klein/from-guide-loader** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
+| **dcc/ltx/iclora-from-guide-loader** | ltx | Envelope from loaders. MagCache off. Prefix `ez_iclora_guide` |
+| **dcc/trellis/from-klein-still** | trellis | Still pack `mug` → TRELLIS.2 INT8 under `assets/objects/_lab-mug/` |
 
 ---
 
@@ -154,7 +154,7 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | Klein-from-canny | `ltx-iclora-canny` |
 | Guide pack first+last | `wan-flf-from-guide` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |
-| Clay dream-house | `start` (or `house-views` dump) → **klein-dream-house-clay-lab-example** → same loop kit |
+| Clay dream-house | `start` (or `house-views` dump) → **klein/dream-house-clay** → same loop kit |
 
 Set I2V **LoadImage** to the still prefix you just saved (`ez_still_draft_*.png`, `ez_hook_still_*.png`, …). I2V graphs also Queue on Comfy’s `example.png`.
 

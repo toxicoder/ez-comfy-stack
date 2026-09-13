@@ -860,18 +860,18 @@ def test_sidecar_base_url_uses_host_gateway_in_container(
 def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
     from _lab_paths import lab_json
 
-    draft = json.loads(lab_json("klein-still-draft-lab-example.json").read_text(encoding="utf-8"))
-    hero = json.loads(lab_json("klein-still-hero-lab-example.json").read_text(encoding="utf-8"))
+    draft = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
+    hero = json.loads(lab_json("klein/still-hero.json").read_text(encoding="utf-8"))
     klein_d = next(n for n in draft["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     klein_h = next(n for n in hero["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein_d["widgets_values"][0] == klein_h["widgets_values"][0]
     assert klein_d["widgets_values"][1] is True
     assert klein_h["widgets_values"][1] is True
     assert klein_d["widgets_values"][-1] == "none"
-    wan_t = json.loads(lab_json("wan-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    wan_i = json.loads(lab_json("wan-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    ltx_t = json.loads(lab_json("ltx-t2v-5s-lab-example.json").read_text(encoding="utf-8"))
-    ltx_i = json.loads(lab_json("ltx-i2v-5s-lab-example.json").read_text(encoding="utf-8"))
+    wan_t = json.loads(lab_json("wan/t2v-5s.json").read_text(encoding="utf-8"))
+    wan_i = json.loads(lab_json("wan/i2v-5s.json").read_text(encoding="utf-8"))
+    ltx_t = json.loads(lab_json("ltx/t2v-5s.json").read_text(encoding="utf-8"))
+    ltx_i = json.loads(lab_json("ltx/i2v-5s.json").read_text(encoding="utf-8"))
     wan_tp = next(n for n in wan_t["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"][0]
     wan_ip = next(n for n in wan_i["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"][0]
     ltx_tp = next(n for n in ltx_t["nodes"] if n.get("type") == "EZLTXPromptEnhance")["widgets_values"][0]
@@ -936,9 +936,9 @@ def test_ez_prompt_join_identity_and_shot() -> None:
 def test_app_lab_graphs_wire_join_and_enhance() -> None:
     from _lab_paths import lab_json
 
-    still = json.loads(lab_json("klein-still-daily-lab-example.json").read_text(encoding="utf-8"))
-    gif = json.loads(lab_json("wan-gif-loop-lab-example.json").read_text(encoding="utf-8"))
-    house = json.loads(lab_json("klein-dream-house-lab-example.json").read_text(encoding="utf-8"))
+    still = json.loads(lab_json("klein/still-daily.json").read_text(encoding="utf-8"))
+    gif = json.loads(lab_json("wan/gif-loop.json").read_text(encoding="utf-8"))
+    house = json.loads(lab_json("klein/dream-house.json").read_text(encoding="utf-8"))
     klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     assert klein["widgets_values"][1] is True
     assert klein["widgets_values"][-1] == "none"
@@ -1226,7 +1226,9 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
     """
     from _wire_prompt_enhance import enhance_pin_off
 
-    skip_ids = {"longcat-video-lab-example", "audio-finish-lab-example"}
+    from _lab_paths import lab_graph_paths
+
+    skip_ids = {"optional/longcat-video", "audio/finish"}
     enhance_types = {
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
@@ -1236,11 +1238,11 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
         "EZPodcastScript",
     }
     encoder_types = {"CLIPTextEncode", "TextEncodeAceStepAudio1.5"}
-    wf_root = ROOT / "workflows"
     missing: list[str] = []
-    for path in sorted(wf_root.rglob("*-lab-example.json")):
+    for path in lab_graph_paths():
         graph = json.loads(path.read_text(encoding="utf-8"))
-        gid = str(graph.get("id") or path.stem)
+        extra = graph.get("extra") or {}
+        gid = str(extra.get("lab_rel") or graph.get("id") or path.stem)
         if gid in skip_ids:
             continue
         pin_off = enhance_pin_off(gid)

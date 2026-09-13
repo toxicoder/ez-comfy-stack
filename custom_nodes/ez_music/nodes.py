@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 FLAVOR_RAP = "rap_lyrics"
@@ -168,10 +169,205 @@ class EZRapLyrics:
         return _pack_text(rewritten, "")
 
 
+class EZAudioMetadata:
+    """Stamp artist/album/title tags and optional cover on saved audio."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "audio": ("AUDIO",),
+                "artist": ("STRING", {"default": "", "multiline": False}),
+                "album": ("STRING", {"default": "", "multiline": False}),
+                "title": ("STRING", {"default": "", "multiline": False}),
+                "track": ("INT", {"default": 1, "min": 1, "max": 99}),
+                "tracktotal": ("INT", {"default": 1, "min": 1, "max": 99}),
+                "year": ("INT", {"default": 2026, "min": 1900, "max": 2100}),
+                "art_mode": (["skip", "upload", "generate"], {"default": "skip"}),
+                "prefix": ("STRING", {"default": "", "multiline": False}),
+            },
+            "optional": {
+                "cover": ("IMAGE",),
+            },
+        }
+
+    RETURN_TYPES = ("AUDIO",)
+    RETURN_NAMES = ("audio",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/music"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Copies ACE SaveAudio masters into albums/<Artist>/<Album>/ and "
+        "writes artist/album/title tags. Album art: skip, upload (IMAGE), "
+        "or generate (use cover.jpg from the album folder)."
+    )
+
+    def run(
+        self,
+        audio,
+        artist="",
+        album="",
+        title="",
+        track=1,
+        tracktotal=1,
+        year=2026,
+        art_mode="skip",
+        prefix="",
+        cover=None,
+    ):
+        from .metadata import AudioMeta, album_dir_from_env, resolve_cover, stamp_audio_file
+        from .naming import music_output_prefix
+
+        meta = AudioMeta(
+            artist=str(artist or "").strip(),
+            album=str(album or "").strip(),
+            title=str(title or "").strip(),
+            track=int(track),
+            tracktotal=int(tracktotal),
+            year=int(year),
+            art_mode=str(art_mode or "skip"),
+        )
+        dest = album_dir_from_env(meta.artist or "Unknown", meta.album or "Untitled")
+        upload_path = None
+        if cover is not None:
+            upload_path = dest / "cover.png"
+            try:
+                _save_cover_tensor(cover, upload_path)
+            except Exception as exc:  # noqa: BLE001 — optional art
+                _log(f"cover tensor save failed: {exc}")
+                upload_path = None
+        try:
+            cover_path = resolve_cover(
+                art_mode=meta.art_mode,
+                upload=upload_path,
+                album_dir=dest,
+            )
+        except ValueError as exc:
+            _log(str(exc))
+            cover_path = None
+            if meta.art_mode != "skip":
+                return {
+                    "ui": {"text": (str(exc),)},
+                    "result": (audio,),
+                }
+        if cover_path is not None and cover_path.parent != dest:
+            copied = dest / "cover.jpg"
+            copied.write_bytes(cover_path.read_bytes())
+            cover_path = copied
+        stem = str(prefix or "").strip()
+        if not stem and meta.title:
+            stem = music_output_prefix(meta.title, meta.track)
+        stamped = _stamp_output_masters(stem, dest, meta, cover_path)
+        status = f"tagged {len(stamped)} file(s)" if stamped else "no SaveAudio masters yet"
+        _log(status)
+        return {"ui": {"text": (status,)}, "result": (audio,)}
+
+
+class EZAlbumPack:
+    """Zip albums/<Artist>/<Album>/ for one-shot download."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "artist": ("STRING", {"default": "", "multiline": False}),
+                "album": ("STRING", {"default": "", "multiline": False}),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("zip_path",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/music"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Writes <Album>.m3u and <Album>.zip under albums/<Artist>/<Album>/. "
+        "Queue tracks first (or album-render). CPU only."
+    )
+
+    def run(self, artist="", album=""):
+        from .metadata import album_dir_from_env
+        from .pack import pack_album
+
+        artist_s = str(artist or "").strip() or "Unknown"
+        album_s = str(album or "").strip() or "Untitled"
+        dest = album_dir_from_env(artist_s, album_s)
+        try:
+            zip_path = pack_album(dest, album=album_s)
+        except FileNotFoundError as exc:
+            _log(str(exc))
+            return {"ui": {"text": (str(exc),)}, "result": ("",)}
+        _log(f"packed {zip_path}")
+        return {"ui": {"text": (str(zip_path),)}, "result": (str(zip_path),)}
+
+
+def _save_cover_tensor(image: object, dest: Path) -> Path:
+    """Write a Comfy IMAGE tensor as PNG. Best-effort."""
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    array: Any = image
+    cpu = getattr(image, "cpu", None)
+    if callable(cpu):
+        array = cast(Any, cpu()).numpy()
+    import numpy as np
+    from PIL import Image
+
+    data = np.asarray(array)
+    if data.ndim == 4:
+        data = data[0]
+    if data.max() <= 1.0:
+        data = data * 255.0
+    Image.fromarray(data.clip(0, 255).astype("uint8")).save(dest)
+    return dest
+
+
+def _output_root(album_dir: Path) -> Path:
+    """Comfy output dir, else the album folder (tests)."""
+    env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
+    if env:
+        return Path(env)
+    try:
+        import folder_paths  # type: ignore[import-not-found]
+
+        return Path(folder_paths.get_output_directory())
+    except Exception:  # noqa: BLE001 — pytest / missing Comfy
+        return album_dir
+
+
+def _stamp_output_masters(
+    prefix: str,
+    album_dir: Path,
+    meta: object,
+    cover: Path | None,
+) -> list[Path]:
+    """Copy SaveAudio files matching prefix into the album folder and tag them."""
+    import shutil
+
+    from .metadata import AudioMeta, stamp_audio_file
+
+    if not isinstance(meta, AudioMeta) or not prefix:
+        return []
+    output_root = _output_root(album_dir)
+    hits: list[Path] = []
+    for suffix in (".flac", ".mp3", ".wav"):
+        hits.extend(sorted(output_root.glob(f"{prefix}*{suffix}")))
+    stamped: list[Path] = []
+    for src in hits:
+        dest = album_dir / src.name
+        if src.resolve() != dest.resolve():
+            shutil.copy2(src, dest)
+        stamp_audio_file(dest, meta, cover)
+        stamped.append(dest)
+    return stamped
+
+
 NODE_CLASS_MAPPINGS = {
     "EZRapLyrics": EZRapLyrics,
+    "EZAudioMetadata": EZAudioMetadata,
+    "EZAlbumPack": EZAlbumPack,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "EZRapLyrics": "Rap Lyrics",
+    "EZAudioMetadata": "Album metadata",
+    "EZAlbumPack": "Pack album zip",
 }

@@ -257,58 +257,58 @@ Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
 
 ### Example graphs
 
-Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Name pattern **`*-lab-example.json`**. App Mode graphs land as **`*-lab-example.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
+Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. App Mode graphs land as **`*.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
 
 | Graph | Notes |
 | --- | --- |
-| `klein-still-draft-lab-example.json` | Klein 4B 768×432, 4 steps, batch 2 |
-| `dub-localize-lab-example.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
-| `music-rap-draft-lab-example.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
-| `music-rap-full-lab-example.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
-| `_lab/audio/nill-bye/phaseN/music-rap-nill-bye-*-lab-example.json` | One hundred thirty-five ACE-Step 180 s Nill Bye takes (phase0 lab / phase1 style / phase2 trap-EDM / phase3 civic / phase4 civic-club / phase5 federal / phase6 federal-club / phase7 progress / phase8 progress-club). Prefix `Nill Bye - Song Title - vN`. Catalog: [Local music](music.md) |
-| `_lab/audio/drive-through/phaseN/music-edm-drive-through-*-lab-example.json` | Eighty-five ACE-Step 180 s Drive-through bass-set EDM takes (phase0 hour 1, phase1 hour 2, phase2 hour 3 headliner, phase3 hour 4 afterparty, phase4 Secret Homage; eighty-three instrumental, two DJ-shout treats). Prefix `Drive-through - Song Title - vN`. Warped hybrid-trap EDM, drop-first warpy drops, trap drums, chest-sub bass. Catalog: [Local music](music.md) |
-| `klein-still-hero-lab-example.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
-| `klein-still-daily-lab-example.json` | Daily still; UNET swap distilled / NVFP4 / base |
-| `klein-dream-house-lab-example.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
-| `klein-dream-house-clay-lab-example.json` | Ten IG 4:5 Klein edits of `house-views` clay (`ez_dream_house_clay_01`…`10`) |
-| `wan-i2v-5s-lab-example.json` | Wan 5B I2V smoke (121 @ 24 fps) |
-| `wan-t2v-5s-lab-example.json` | Wan 5B T2V smoke |
-| `wan-i2v-shot-lab-example.json` | 5.00 s Wan I2V + last-frame SaveImage |
-| `wan-gif-loop-lab-example.json` | Ping-pong GIF, 49 @ 12 fps |
-| `ltx-i2v-5s-lab-example.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
-| `ltx-t2v-5s-lab-example.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
-| `ltx-i2v-shot-lab-example.json` | 5.00 s LTX I2V print + last-frame SaveImage |
-| `_lab/shorts/film-*-90s-*-lab-example.json` | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](shorts.md)) |
-| `klein-shorts-still-lab-example.json` | Vertical 9:16 Shorts still |
-| `wan-shorts-i2v-lab-example.json` | Vertical silent Shorts I2V |
-| `ltx-shorts-i2v-lab-example.json` | Vertical AV Shorts I2V |
-| `klein-thumbnail-lab-example.json` | YouTube thumbnail still |
-| `klein-product-packshot-lab-example.json` | Product packshot 1:1 |
-| `klein-before-after-lab-example.json` | Before/after still pair |
-| `klein-style-lock-lab-example.json` | Four stills of one penthouse from new cameras; locked inventory |
-| `wan-bumper-loop-lab-example.json` | Loopable MP4 bumper |
-| `ltx-broll-ambient-lab-example.json` | Ambient B-roll AV ~5 s |
-| `klein-storyboard-6up-lab-example.json` | Six storyboard frames |
-| `klein-endcard-cta-lab-example.json` | End-card / CTA plate 16:9 |
-| `klein-quote-bg-lab-example.json` | Quote-card background 1:1 |
-| `klein-og-blog-lab-example.json` | Blog / OG hero |
-| `klein-podcast-cover-lab-example.json` | Podcast cover 1:1 |
-| `klein-banner-wide-lab-example.json` | Wide channel banner |
-| `klein-ig-square-lab-example.json` | Instagram 1:1 still |
-| `klein-hook-still-lab-example.json` | 9:16 hook still |
-| `klein-lower-third-bg-lab-example.json` | Lower-third-safe 16:9 |
-| `klein-food-tabletop-lab-example.json` | Food tabletop 4:5 |
-| `klein-lighting-trio-lab-example.json` | Three-light study |
-| `klein-time-of-day-lab-example.json` | Dawn / noon / dusk / night |
-| `klein-camera-angles-lab-example.json` | Wide / medium / close |
-| `klein-color-moods-lab-example.json` | Four color moods |
-| `wan-orbit-i2v-lab-example.json` | Slow orbit I2V ~5 s |
-| `wan-push-in-i2v-lab-example.json` | Hero push-in I2V ~5 s |
-| `wan-parallax-i2v-lab-example.json` | Parallax I2V ~5 s |
-| `wan-sticker-loop-lab-example.json` | Looping sticker MP4 |
-| `ltx-weather-broll-lab-example.json` | Weather B-roll AV ~5 s |
-| `ltx-interior-ambience-lab-example.json` | Interior ambience AV ~5 s |
-| `ltx-hook-av-lab-example.json` | AV hook / cold open ~5 s |
+| `klein/still-draft.json` | Klein 4B 768×432, 4 steps, batch 2 |
+| `audio/dub/localize.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
+| `audio/music/rap-draft.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
+| `audio/music/rap-full.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
+| `_lab/audio/albums/nill-bye/<album>/` | Nine Nill Bye albums (135 ACE-Step 180 s takes + `cover.json` + `album.json`). SaveAudio stem `NN - Song Title`. Catalog: [Local music](music.md) |
+| `_lab/audio/albums/drive-through/<album>/` | Five Drive-through albums (85 ACE-Step 180 s bass-set EDM takes + cover + album pack; eighty-three instrumental, two DJ-shout treats). SaveAudio stem `NN - Song Title`. Catalog: [Local music](music.md) |
+| `klein/still-hero.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
+| `klein/still-daily.json` | Daily still; UNET swap distilled / NVFP4 / base |
+| `klein/dream-house.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
+| `klein/dream-house-clay.json` | Ten IG 4:5 Klein edits of `house-views` clay (`ez_dream_house_clay_01`…`10`) |
+| `wan/i2v-5s.json` | Wan 5B I2V smoke (121 @ 24 fps) |
+| `wan/t2v-5s.json` | Wan 5B T2V smoke |
+| `wan/i2v-shot.json` | 5.00 s Wan I2V + last-frame SaveImage |
+| `wan/gif-loop.json` | Ping-pong GIF, 49 @ 12 fps |
+| `ltx/i2v-5s.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
+| `ltx/t2v-5s.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
+| `ltx/i2v-shot.json` | 5.00 s LTX I2V print + last-frame SaveImage |
+| `_lab/shorts/go-see.json` (also still-here, switchyard) | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](shorts.md)) |
+| `klein/shorts-still.json` | Vertical 9:16 Shorts still |
+| `wan/shorts-i2v.json` | Vertical silent Shorts I2V |
+| `ltx/shorts-i2v.json` | Vertical AV Shorts I2V |
+| `klein/thumbnail.json` | YouTube thumbnail still |
+| `klein/product-packshot.json` | Product packshot 1:1 |
+| `klein/before-after.json` | Before/after still pair |
+| `klein/style-lock.json` | Four stills of one penthouse from new cameras; locked inventory |
+| `wan/bumper-loop.json` | Loopable MP4 bumper |
+| `ltx/broll-ambient.json` | Ambient B-roll AV ~5 s |
+| `klein/storyboard-6up.json` | Six storyboard frames |
+| `klein/endcard-cta.json` | End-card / CTA plate 16:9 |
+| `klein/quote-bg.json` | Quote-card background 1:1 |
+| `klein/og-blog.json` | Blog / OG hero |
+| `klein/podcast-cover.json` | Podcast cover 1:1 |
+| `klein/banner-wide.json` | Wide channel banner |
+| `klein/ig-square.json` | Instagram 1:1 still |
+| `klein/hook-still.json` | 9:16 hook still |
+| `klein/lower-third-bg.json` | Lower-third-safe 16:9 |
+| `klein/food-tabletop.json` | Food tabletop 4:5 |
+| `klein/lighting-trio.json` | Three-light study |
+| `klein/time-of-day.json` | Dawn / noon / dusk / night |
+| `klein/camera-angles.json` | Wide / medium / close |
+| `klein/color-moods.json` | Four color moods |
+| `wan/orbit-i2v.json` | Slow orbit I2V ~5 s |
+| `wan/push-in-i2v.json` | Hero push-in I2V ~5 s |
+| `wan/parallax-i2v.json` | Parallax I2V ~5 s |
+| `wan/sticker-loop.json` | Looping sticker MP4 |
+| `ltx/weather-broll.json` | Weather B-roll AV ~5 s |
+| `ltx/interior-ambience.json` | Interior ambience AV ~5 s |
+| `ltx/hook-av.json` | AV hook / cold open ~5 s |
 
 Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. They still **must** wire the audio VAE because LTX is a joint AV model.
 
@@ -497,8 +497,8 @@ flowchart TB
     | `TORCH_VERSION` | `2.14.0` | cu130 aarch64 wheel from `https://download.pytorch.org/whl/cu130`. Declared only in the **torch** stage. Bump here (and compose / publish-image / `install-comfy/core.sh`) when rebuilding the multi‑GB layer. |
     | `COMFYUI_REF` | `v0.34.6` | Newest **patch tag** on the v0.34 stable line (`8fed378`, 2026-09-07) — not GitHub **Latest** (`v0.34.0`). Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Frontend still 1.49.6. Rebuild the **comfy** image stage after this bump (torch stage stays cached). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
     | `COMFYUI_MANAGER_REF` | `4.2.2` | Matches ComfyUI v0.34.6 `manager_requirements.txt` (`comfyui_manager==4.2.2`). **Pip**, not a `custom_nodes` git clone — v4 has no root `__init__.py`. Runtime: `pip install -r manager_requirements.txt` (torch-constrained) and `python main.py --enable-manager`. Leftover `custom_nodes/ComfyUI-Manager` trees without `__init__.py` are removed on start. |
-    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels). When the engine is missing, start moves the pack to `ComfyUI-nunchaku.disabled` so Comfy does not import it. `*-lab-example` graphs use core UNET/CLIP/VAE loaders. |
-    | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for lab **`VHS_VideoCombine`** MP4. **Required** for `wan-*-lab-example` / `ltx-*-lab-example`. Empty ref clones default branch; set a tag/branch when you need a pin. |
+    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels). When the engine is missing, start moves the pack to `ComfyUI-nunchaku.disabled` so Comfy does not import it. Seeded lab graphs use core UNET/CLIP/VAE loaders. |
+    | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for lab **`VHS_VideoCombine`** MP4. **Required** for `wan/*` / `ltx/*` printers. Empty ref clones default branch; set a tag/branch when you need a pin. |
     | `COMFYUI_OPENCUT_REF` | `0.5.0` | [jtydhr88/ComfyUI-OpenCut](https://github.com/jtydhr88/ComfyUI-OpenCut) MIT embed. Fail-soft. Not the Rust rewrite. |
     | `COMFYUI_MAGCACHE_REF` | `47bdd2a…` | [Zehong-Ma/ComfyUI-MagCache](https://github.com/Zehong-Ma/ComfyUI-MagCache) commit pin (no release tag). Wan 5B draft extra only. ComfyUI v0.34 dropped module-level `precompute_freqs_cis`; `docker/patch_magcache_compat.py` wraps that import in every MagCache module that still has it (`nodes.py` and `nodes_calibration.py`) and fail-softs the calibration import in `__init__.py`. Idempotency is per file so a volume that already wrapped `nodes.py` still gets calibration on the next start. MagCache-on-LTX stays unsupported. |
     | `COMFYUI_LTX_DIRECTOR_REF` | `a3c809c…` | [WhatDreamsCost-ComfyUI](https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI) GPL clone **only** when `LAB_ENABLE_LTX_DIRECTOR=1`. Commit pin (no release tag). |
