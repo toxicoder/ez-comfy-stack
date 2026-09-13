@@ -402,25 +402,25 @@ def _edm_note(ex: EdmExample) -> str:
     treat = ex["ace_mode"] == "vocal"
     if treat:
         score_blurb = (
-            "Live rave-set take. Sparse DJ vocal chop in one short chorus "
+            "Live bass-set take. One 1–2 word DJ chop in a single `[chorus]` "
             "block; bed and drops stay `[inst]`. Not a rap verse."
         )
         mode_blurb = (
             "Keep App **Vocal / instrumental** on vocal so the shout renders. "
             "`[inst]` lines are instrument cues so ACE does not sing the bed."
         )
-        labels_blurb = "`[inst]` / `[intro]` / `[outro]` and the one chorus chop"
+        labels_blurb = "`[inst]` / `[outro]` and the one chorus chop"
     else:
         score_blurb = (
-            "Live rave-set take. Instrumental arrangement score in `[inst]` "
-            "blocks: dance-floor flow unique to this take, heavy drops, "
-            "mix-in/out. Vocals are a rare DJ treat on other graphs, not here."
+            "Live bass-set take. Instrumental arrangement score in `[inst]` "
+            "blocks: drop-first warped hybrid-trap, trap drums, no quiet "
+            "dips. Vocals are a rare DJ treat on other graphs, not here."
         )
         mode_blurb = (
             "Keep App **Vocal / instrumental** on instrumental so ACE does "
             "not sing the score."
         )
-        labels_blurb = "`[inst]` / `[intro]` / `[outro]`"
+        labels_blurb = "`[inst]` / `[outro]`"
     return f"""## {ex["stem"]}
 
 US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. {score_blurb} Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
