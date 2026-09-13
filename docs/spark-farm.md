@@ -86,7 +86,7 @@ See [90s shorts](shorts.md). MiniMax H3 films are banned (see [licenses](license
 
 `spark-farm.sh` **never** starts compose remotely. It prints the exact `./scripts/manage.sh start` you must run locally (heavy confirm stays on that node). Containers still use `restart: "no"`.
 
-The `run` subcommand prints a **film-*-90s / wan-i2v-shot / ltx-i2v-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
+The `run` subcommand prints a **shorts/go-see / wan/i2v-shot / ltx/i2v-shot** Queue reminder for `--film go-see` (or still-here / switchyard). It does **not** POST graphs. It refuses MiniMax H3 names (`*h3*` / `*MiniMax*`).
 
 `dispatch` assigns shots **01–06 / 07–12 / 13–18** (or an even split on two hosts) and SSH-runs **local** `./scripts/manage.sh print-shot` on each Spark. It **never** remote-starts compose. Director is off this path. Concat on spark-0 after gather.
 
