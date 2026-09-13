@@ -266,6 +266,9 @@ def test_creative_locks() -> None:
     assert "palm trees" in ident
     assert "fills the center" in ident
     assert "motes" in ident
+    assert "cinematic" in ident
+    assert "physically plausible" in ident
+    assert "no printed glyphs" not in ident
     assert "handlebar" not in ident
     assert "wingsuit" not in ident
     assert "staff" not in ident
@@ -280,6 +283,8 @@ def test_creative_locks() -> None:
         assert "silent mouth" in lower, shot["prefix"]
         assert "blank matte-black gloves" in lower, shot["prefix"]
         assert "Last frames hold" in blob, shot["prefix"]
+        assert "photoreal cinematic" in lower, shot["prefix"]
+        assert "physically plausible" in lower, shot["prefix"]
         assert "handlebar" not in lower, shot["prefix"]
         assert "wingsuit" not in lower, shot["prefix"]
         assert "staff" not in lower, shot["prefix"]
