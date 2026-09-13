@@ -2072,7 +2072,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 13 Sep 2026, 20:49 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-13T20:49:26+00:00">13 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 13 Sep 2026, 21:22 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-13T21:22:51+00:00">13 Sep 2026</time></span>
                 
                   
 
@@ -2914,17 +2914,27 @@
 <tr>
 <td>Drive-through EDM sings the arrangement score</td>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App mode</span> is vocal on a no-vocal take, or score lines look like lyrics</td>
-<td>Keep <strong>Vocal / instrumental</strong> on instrumental for the eighty-three locked takes. Re-open a <strong>music-edm-drive-through-*-lab-example</strong> under <code>_lab/audio/drive-through/phaseN/</code>. Score stays production cues in <code>[inst]</code> / <code>[intro]</code> / <code>[outro]</code>; short lines (~6–10 syllables). Do not write story bars</td>
+<td>Keep <strong>Vocal / instrumental</strong> on instrumental for the eighty-three locked takes. Re-open a <strong>music-edm-drive-through-*-lab-example</strong> under <code>_lab/audio/drive-through/phaseN/</code>. Score stays production cues in <code>[inst]</code> / <code>[outro]</code>; short lines (~6–10 syllables). Do not write story bars or the act name in the lyrics field</td>
 </tr>
 <tr>
 <td>Drive-through DJ shout sings the bed</td>
 <td>Treat graph (<code>wide-open</code> / <code>second-wave</code>) but <code>[inst]</code> lines are singable</td>
-<td>Keep App mode <strong>vocal</strong>. Keep the <code>[chorus]</code> chop to 2–4 short lines. <code>[inst]</code> stays instrument names only</td>
+<td>Keep App mode <strong>vocal</strong>. Keep the <code>[chorus]</code> chop to one 1–2 word line. <code>[inst]</code> stays instrument names only</td>
 </tr>
 <tr>
 <td>Drive-through drop is mush / no hit</td>
 <td>Arrangement lines too long, or Enhance rewrote <code>[inst]</code></td>
-<td>Seeded EDM graphs pin Enhance <strong>off</strong>. Short percussive lines in the drop blocks (<code>dirty</code>, <code>pyro</code>, <code>fireworks</code>); do not turn Rewrite prompt on unless you want the 4B rewriter</td>
+<td>Seeded EDM graphs pin Enhance <strong>off</strong>. Short percussive lines in the drop blocks (<code>warp</code>, <code>growl</code>, <code>reese</code>, <code>wobble</code>); do not turn Rewrite prompt on unless you want the 4B rewriter</td>
+</tr>
+<tr>
+<td>Drive-through take is tinny / bright leads</td>
+<td>Tags still name plucks, anthems, or mainstage house</td>
+<td>Re-open the seeded graph. Keep hybrid-trap / riddim / tearout / warp bass tags. Do not add supersaw, pluck, piano, or big-room language</td>
+</tr>
+<tr>
+<td>Drive-through take goes quiet mid-song</td>
+<td>Score has mix-in, bass-cut, or fade cues</td>
+<td>Seeded scores drop first and keep hats + 808 on every fill. Do not add <code>hats skip</code> / <code>bass cut</code> / filter mix-ins</td>
 </tr>
 <tr>
 <td><code>kokoro-onnx</code> / <code>onnxruntime</code> import miss on aarch64</td>
