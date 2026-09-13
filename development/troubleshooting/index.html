@@ -2072,7 +2072,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 13 Sep 2026, 19:42 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-13T19:42:59+00:00">13 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 13 Sep 2026, 20:13 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-13T20:13:44+00:00">13 Sep 2026</time></span>
                 
                   
 
@@ -2554,6 +2554,11 @@
 <td><code>./scripts/manage.sh start &amp;&amp; ./scripts/manage.sh film-resume go-see</code> reprints only failed/crashed shots. Ok clips with duration 5.00±0.05 s are skipped</td>
 </tr>
 <tr>
+<td>SSH drop during <code>start</code> / after <code>start</code> returns</td>
+<td>Compose client used to die with the shell; log-follow used to hold the TTY</td>
+<td><code>start</code> ignores hangup during pull/<code>up -d</code>, then detaches. Container keeps running after logout. Re-attach: <code>./scripts/manage.sh logs</code>. Logout is <strong>not</strong> <code>stop</code>. Reboot still needs a manual <code>start</code> (<code>restart: "no"</code>)</td>
+</tr>
+<tr>
 <td>Build OK, <code>status</code> empty / not in <code>docker ps</code></td>
 <td>Container exited immediately (<code>restart: "no"</code>)</td>
 <td>Pull latest (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../glossary/#workflow" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">workflow</span> no longer mounts into <code>ComfyUI/</code> before clone). <code>./scripts/manage.sh logs</code> or <code>docker logs ez-comfy-studio</code>. Reset poisoned volume: <code>./scripts/manage.sh stop &amp;&amp; docker volume rm ez-comfy-state</code> then <code>start</code> again. Stop other GPU containers if needed</td>
@@ -2566,7 +2571,7 @@
 <tr>
 <td><code>start</code> returns while logs still downloading torch</td>
 <td>Normal cold install; multi‑GB wheels</td>
-<td>Leave it running; <code>start</code> streams logs by default. Re-attach: <code>./scripts/manage.sh logs</code>. Markers: <code>[comfy-install] ══ step N/12 ══</code> (or <code>Docker phase: …</code> during image prebuild)</td>
+<td>Default: <code>start</code> returns after <code>compose up -d</code>. Leave the container running; follow: <code>./scripts/manage.sh logs</code>. In-shell wait: <code>LAB_STACK_FOLLOW=1</code>. Markers: <code>[comfy-install] ══ step N/12 ══</code> (or <code>Docker phase: …</code> during image prebuild)</td>
 </tr>
 <tr>
 <td>Quiet for minutes on step 4 (PyTorch)</td>
