@@ -3,11 +3,25 @@
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 from typing import Any, Callable
 
-from ez_film.ltx_timing import snap_ltx_frames
 
-from .align import center_crop_bcthw, snap_hw
+def _ensure_lab_custom_nodes_path() -> None:
+    """Make sibling ez_* packs importable under ComfyUI 0.34+ load_custom_node.
+
+    Comfy registers directory packs as the filesystem path, not the folder
+    name, and does not put custom_nodes on sys.path.
+    """
+    root = str(Path(__file__).resolve().parent.parent)
+    if root not in sys.path:
+        sys.path.insert(0, root)
+
+
+_ensure_lab_custom_nodes_path()
+from ez_film.ltx_timing import snap_ltx_frames  # noqa: E402
+
+from .align import center_crop_bcthw, snap_hw  # noqa: E402
 
 WRAPPED_ATTR = "_ez_ltx_spatial_wrapped"
 

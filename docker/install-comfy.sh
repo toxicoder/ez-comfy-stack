@@ -7,7 +7,8 @@
 # Purpose:
 #   Populate the comfy-state volume on first container start (or when the install
 #   stamp is missing). Clones ComfyUI, creates a venv, installs PyTorch (cu130
-#   when available), Comfy requirements, Manager + Nunchaku nodes (fail-soft),
+#   when available), Comfy requirements, Manager (pip comfyui_manager +
+#   --enable-manager; not a custom_nodes git clone) + Nunchaku nodes (fail-soft),
 #   links $MODELS_ROOT/comfy/* into ComfyUI/models/*, and applies the Spark
 #   free-memory patch.
 #
@@ -229,7 +230,7 @@ main() {
     phase_comfy
     log "step 3–5 done"
 
-    step 6 "${total}" "Install custom nodes (Manager, VideoHelperSuite, Nunchaku)"
+    step 6 "${total}" "Install Manager pip + VideoHelperSuite + Nunchaku"
     step 7 "${total}" "Optional SageAttention (fail-soft on aarch64)"
     step 8 "${total}" "Optional nunchaku package (fail-soft)"
     phase_nodes
@@ -247,8 +248,9 @@ main() {
     refresh_comfy_pin_if_needed
     step 2 "${total}" "Refresh model directory links"
     link_all_models
-    step 3 "${total}" "Ensure VideoHelperSuite (LTX lab MP4)"
+    step 3 "${total}" "Ensure VideoHelperSuite (LTX lab MP4) + Manager pip"
     ensure_lab_video_nodes || warn "VideoHelperSuite refresh failed — LTX lab MP4 may be unavailable"
+    ensure_lab_manager
     step 4 "${total}" "Remove wrong PyPI nunchaku if present"
     cleanup_wrong_nunchaku
     step 5 "${total}" "Apply Spark free-memory, copy=False, and MagCache compat patches"

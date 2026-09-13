@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import importlib.util
 import sys
 import types
+from pathlib import Path
+from types import ModuleType
 from typing import Any
 
 import pytest
@@ -14,9 +17,13 @@ from ez_ltx_spatial.patch import (
     apply_patches,
     snap_length_in_call,
     snap_width_height_in_call,
+    _ensure_lab_custom_nodes_path,
     _wrap_classmethod_wh,
     _wrap_video_vae_encode,
 )
+
+ROOT = Path(__file__).resolve().parents[2]
+CUSTOM = ROOT / "custom_nodes"
 
 
 class FakeBCTHW:
@@ -339,3 +346,57 @@ def test_encode_log_shape_failure_still_forwards(
     assert _wrap_video_vae_encode(VAE) is True
     assert isinstance(VAE().encode(Partial()), Sliced)
     assert "encode cropped to a ÷32 spatial window" in capsys.readouterr().err
+
+
+def _is_custom_nodes_entry(entry: str) -> bool:
+    try:
+        return Path(entry).resolve() == CUSTOM.resolve()
+    except OSError:
+        return False
+
+
+def _hide_modules(*prefixes: str) -> dict[str, ModuleType]:
+    saved: dict[str, ModuleType] = {}
+    for name in list(sys.modules):
+        if name in prefixes or any(name.startswith(p + ".") for p in prefixes):
+            saved[name] = sys.modules.pop(name)
+    return saved
+
+
+def test_comfy_style_load_without_custom_nodes_on_path() -> None:
+    """ComfyUI 0.34 load_custom_node: path-based name, custom_nodes not on path."""
+    pack = CUSTOM / "ez_ltx_spatial"
+    sys_module_name = str(pack).replace(".", "_x_")
+    saved_path = list(sys.path)
+    saved = _hide_modules("ez_ltx_spatial", "ez_film")
+    try:
+        sys.path[:] = [p for p in sys.path if not _is_custom_nodes_entry(p)]
+        spec = importlib.util.spec_from_file_location(
+            sys_module_name, pack / "__init__.py"
+        )
+        assert spec is not None
+        assert spec.loader is not None
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[sys_module_name] = module
+        spec.loader.exec_module(module)
+        assert module.NODE_CLASS_MAPPINGS == {}
+        assert module.NODE_DISPLAY_NAME_MAPPINGS == {}
+    finally:
+        sys.path[:] = saved_path
+        for name in list(sys.modules):
+            if name == sys_module_name or name.startswith(sys_module_name + "."):
+                sys.modules.pop(name, None)
+        sys.modules.update(saved)
+
+
+def test_ensure_lab_custom_nodes_path_inserts_parent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        sys, "path", [p for p in sys.path if not _is_custom_nodes_entry(p)]
+    )
+    assert not any(_is_custom_nodes_entry(p) for p in sys.path)
+    _ensure_lab_custom_nodes_path()
+    assert Path(sys.path[0]).resolve() == CUSTOM.resolve()
+    _ensure_lab_custom_nodes_path()
+    assert sum(1 for p in sys.path if _is_custom_nodes_entry(p)) == 1

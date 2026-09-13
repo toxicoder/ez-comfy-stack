@@ -727,6 +727,7 @@ comfy_exec_args() {
     0.0.0.0 \
     --port \
     8188 \
+    --enable-manager \
     --output-directory \
     "${LAB_OUTPUTS_MOUNT:-/outputs}" \
     --input-directory \
@@ -1053,6 +1054,32 @@ ensure_pkuseg_home() {
 }
 
 #######################################
+# Remove a v4 git clone of ComfyUI-Manager from custom_nodes (no __init__.py).
+# Manager 4.x is pip plus --enable-manager. Seed from an old image can copy
+# the leftover tree; Comfy then FileNotFoundError on __init__.py.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   $1  Optional custom_nodes directory
+# Outputs:
+#   ep_log when a leftover tree is removed
+# Returns:
+#   0 always
+#######################################
+heal_legacy_comfyui_manager_dir() {
+  local custom dest
+  custom="${1:-${COMFY_HOME:-/comfy-state/ComfyUI}/custom_nodes}"
+  mkdir -p "${custom}"
+  for dest in "${custom}/ComfyUI-Manager" "${custom}/comfyui-manager"; do
+    if [[ -d ${dest} && ! -f ${dest}/__init__.py ]]; then
+      ep_log "removing leftover ${dest} (Manager 4.x is pip; no custom_nodes __init__.py)"
+      rm -rf "${dest}"
+    fi
+  done
+  return 0
+}
+
+#######################################
 # Write an empty custom_nodes/_user pack so Comfy does not FileNotFoundError.
 # Never overwrites an operator __init__.py.
 # Globals:
@@ -1242,6 +1269,7 @@ main() {
     "${LAB_CUSTOM_NODES_SRC:-/opt/ez-comfy/custom_nodes}" \
     "${comfy_home}/custom_nodes"
   ensure_user_custom_node_stub "${comfy_home}/custom_nodes/_user"
+  heal_legacy_comfyui_manager_dir "${comfy_home}/custom_nodes"
   configure_nunchaku_pack
 
   export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
