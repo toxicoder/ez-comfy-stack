@@ -28,6 +28,7 @@ def evaluate_qc(
     *,
     target_language: str,
     peak: float,
+    extra_flags: list[str] | None = None,
 ) -> dict[str, Any]:
     """Return a JSON-able dict. Never raises."""
     del peak
@@ -98,6 +99,10 @@ def evaluate_qc(
                         "rule": "text_target equals source on cross-lang turn",
                     }
                 )
+        for ident in extra_flags or []:
+            name = str(ident or "").strip()
+            if name:
+                checks.append({"id": name, "level": "warn", "rule": name})
     except Exception:  # noqa: BLE001 — never raise
         return {"ok": False, "flags": [], "checks": []}
     flags: list[str] = []

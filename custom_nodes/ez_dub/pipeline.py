@@ -13,11 +13,13 @@ from pathlib import Path
 from typing import Any, Callable
 
 from .align import (
+    MAX_SPEED,
     SAMPLE_RATE,
     build_timeline,
     collect_room_tone,
     fit_turn,
     lock_duration,
+    resample_linear,
     rms,
 )
 from .audio import read_wav, write_wav
@@ -231,6 +233,12 @@ CFG_CROSS_LANG = 0.0
 CFG_SAME_LANG = 0.5
 EXAGGERATION_DEFAULT = 0.5
 CLONE_TEMPERATURE = 0.8
+CLONE_REPETITION_PENALTY = 1.2
+EXPECTED_WORDS_PER_S = 2.7
+TAIL_SLACK = 1.6
+VOICED_MIN_FRAC = 0.20
+ZCR_NOISE_FRAC = 0.25
+PCM_INT_RANGE = 1.5
 REF_MIN_TURN_S = 0.8
 REF_SINGLE_S = 6.0
 REF_TARGET_S = 8.0
@@ -1486,8 +1494,98 @@ def _extract_refs(
     return refs
 
 
+def expected_speech_s(text: str) -> float:
+    """Nominal spoken duration from word count (~160 wpm)."""
+    words = len((text or "").split())
+    return max(0.35, words / EXPECTED_WORDS_PER_S)
+
+
+def normalize_clone_pcm(
+    pcm: list[float], peak: float = REF_PEAK
+) -> list[float]:
+    """Rescale int-range PCM into [-peak, peak]. No-op when already in [-1.5, 1.5]."""
+    if not pcm:
+        return []
+    mag = max(abs(float(x)) for x in pcm)
+    if mag <= PCM_INT_RANGE:
+        return [float(x) for x in pcm]
+    scale = float(peak) / mag
+    return [float(x) * scale for x in pcm]
+
+
+def zero_crossing_rate(pcm: list[float], rate: int) -> float:
+    """Zero-crossings per second. Noise sits near ``rate / 2``."""
+    if len(pcm) < 2:
+        return 0.0
+    zc = 0
+    prev = float(pcm[0])
+    for sample in pcm[1:]:
+        cur = float(sample)
+        if prev != 0.0 and cur != 0.0 and (prev >= 0.0) != (cur >= 0.0):
+            zc += 1
+        prev = cur
+    dur = len(pcm) / float(int(rate) or SAMPLE_RATE)
+    if dur <= 0.0:
+        return 0.0
+    return zc / dur
+
+
+def voiced_fraction(
+    pcm: list[float],
+    rate: int,
+    thresh: float = REF_SILENCE_RMS,
+    frame_ms: int = 20,
+) -> float:
+    """Fraction of 20 ms frames whose RMS is at least ``thresh``."""
+    sr = int(rate) or SAMPLE_RATE
+    n = len(pcm)
+    if n == 0:
+        return 0.0
+    frame = max(1, int(sr * frame_ms / 1000))
+    voiced = 0
+    total = 0
+    i = 0
+    while i + frame <= n:
+        total += 1
+        if rms(pcm[i : i + frame]) >= float(thresh):
+            voiced += 1
+        i += frame
+    if total == 0:
+        return 1.0 if rms(pcm) >= float(thresh) else 0.0
+    return voiced / total
+
+
+def is_speech_like(pcm: list[float], rate: int) -> bool:
+    """False for silence, square-wave clip, or white-noise-like ZCR."""
+    if not pcm:
+        return False
+    if rms(pcm) < REF_MIN_RMS:
+        return False
+    sr = int(rate) or SAMPLE_RATE
+    if zero_crossing_rate(pcm, sr) > sr * ZCR_NOISE_FRAC:
+        return False
+    return voiced_fraction(pcm, sr) >= VOICED_MIN_FRAC
+
+
+def crop_hallucination_tail(
+    pcm: list[float], rate: int, text: str
+) -> list[float]:
+    """Trim silence, then keep a prefix up to 1.6× expected spoken duration."""
+    trimmed = _trim_silence(pcm, rate)
+    if not trimmed:
+        return trimmed
+    cap = max(
+        1,
+        int(round(expected_speech_s(text) * TAIL_SLACK * (int(rate) or SAMPLE_RATE))),
+    )
+    if len(trimmed) <= cap:
+        return trimmed
+    out, _flags = lock_duration(trimmed, cap, room=None, rate=rate)
+    return out
+
+
 def _pcm_list(wav: object) -> list[float]:
-    """Flatten a TTS tensor/array/list into mono float PCM."""
+    """Flatten a TTS tensor/array/list into mono float PCM in [-1, 1]."""
     if wav is None:
         return []
     data: Any = wav
@@ -1500,7 +1598,7 @@ def _pcm_list(wav: object) -> list[float]:
     except Exception:  # noqa: BLE001 — already a list
         pass
     if isinstance(data, (int, float)):
-        return [float(data)]
+        return normalize_clone_pcm([float(data)])
     if not isinstance(data, (list, tuple)):
         return []
     out: list[float] = []
@@ -1514,7 +1612,7 @@ def _pcm_list(wav: object) -> list[float]:
             out.append(float(item))
         except (TypeError, ValueError):
             continue
-    return out
+    return normalize_clone_pcm(out)
 
 
 def _model_roots() -> list[str]:
@@ -1726,12 +1824,21 @@ def _try_chatterbox(
         "cfg_weight": float(cfg_weight),
         "temperature": float(temperature),
     }
+    try:
+        params: Any = inspect.signature(generate).parameters
+    except (TypeError, ValueError):
+        params = {}
+    has_rep = "repetition_penalty" in params
+    has_var = any(
+        item.kind == inspect.Parameter.VAR_KEYWORD for item in params.values()
+    )
+    if has_rep or has_var:
+        kwargs["repetition_penalty"] = CLONE_REPETITION_PENALTY
     ref = (ref_wav or "").strip()
     cond_key = ""
     if ref and Path(ref).is_file():
         cond_key = f"{ref}|{float(exaggeration):.4f}"
-        if cond_key != _CHATTERBOX_COND_KEY:
-            kwargs["audio_prompt_path"] = ref
+        kwargs["audio_prompt_path"] = ref
     try:
         ckpt = clone_ckpt_dir()
         if ckpt is not None:
@@ -2116,23 +2223,26 @@ def render_mix(
             if err:
                 last_err = err
             continue
+        if sr != rate:
+            pcm = resample_linear(
+                pcm, int(round(len(pcm) * rate / max(sr, 1)))
+            )
+        pcm = crop_hallucination_tail(pcm, rate, spoken)
+        write_wav(render_dir / f"turn_{int(turn['id']):04d}.raw.wav", pcm, rate)
+        if not is_speech_like(pcm, rate):
+            flags.append(f"turn {turn['id']} clone unvoiced")
+            continue
         cloned = True
         cloned_n += 1
-        if sr != rate:
-            from .align import resample_linear
-
-            pcm = resample_linear(pcm, int(round(len(pcm) * rate / max(sr, 1))))
-        if pace != 1.0 and pcm:
-            from .align import time_stretch
-
-            pcm = time_stretch(pcm, max(1, int(round(len(pcm) / pace))), rate)
         src_chunk = _slice_pcm(samples, rate, float(turn["t0"]), float(turn["t1"]))
         pcm = match_rms(pcm, rms(src_chunk))
+        cap = min(MAX_SPEED, max(1.0, pace))
         fitted, meta = fit_turn(
             pcm,
             rate,
             float(turn["t1"]) - float(turn["t0"]),
             spill_s=spill,
+            max_speed=cap,
         )
         if meta.get("trimmed"):
             flags.append(f"turn {turn['id']} trimmed")
@@ -2166,7 +2276,8 @@ def render_mix(
             },
         )
         return [], rate, status
-    if not cloned:
+    unvoiced_only = (not cloned) and any("unvoiced" in f for f in flags)
+    if not cloned and not unvoiced_only:
         status = last_err or CLONE_MISSING_STATUS
         flags.append(status)
         save_state(
@@ -2212,9 +2323,19 @@ def render_mix(
     flags.append(f"peak={peak:.2f}")
     if peak < 0.25:
         flags.append("quiet mix")
+    extra_qc: list[str] = []
+    if any(" trimmed" in f or f.endswith(" trimmed") for f in flags):
+        extra_qc.append("trimmed_clone")
+    if any("unvoiced" in f for f in flags):
+        extra_qc.append("clone_unvoiced")
     try:
         report = evaluate_qc(
-            mix, rate, turns, target_language=lang, peak=peak
+            mix,
+            rate,
+            turns,
+            target_language=lang,
+            peak=peak,
+            extra_flags=extra_qc,
         )
         write_json(dest / "qc.json", report)
         qc_flags = [str(x) for x in (report.get("flags") or [])]
