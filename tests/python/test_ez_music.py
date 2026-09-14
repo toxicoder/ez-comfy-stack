@@ -625,12 +625,24 @@ def _block_body(block: str) -> str:
     return "\n".join(line for line in block.splitlines() if not line.startswith("["))
 
 
+def _block_cues(block: str) -> str:
+    for line in block.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("[") and stripped.endswith("]"):
+            inner = stripped[1:-1]
+            if " - " in inner:
+                return inner.split(" - ", 1)[1]
+            return inner
+    return _block_body(block)
+
+
 def _score_labels(lyrics: str) -> tuple[str, ...]:
     labels: list[str] = []
     for line in lyrics.splitlines():
         stripped = line.strip()
         if stripped.startswith("[") and stripped.endswith("]"):
-            labels.append(stripped[1:-1])
+            inner = stripped[1:-1]
+            labels.append(inner.split(" - ", 1)[0].split(",", 1)[0].strip())
     return tuple(labels)
 
 
@@ -816,8 +828,8 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         lyrics = ex["lyrics"]
         tags_low = ex["tags"].lower()
         lyrics_low = lyrics.lower()
-        assert "[outro]" in lyrics
-        assert "[inst]" in lyrics
+        assert "[outro" in lyrics
+        assert "[drop" in lyrics
         assert "[verse]" not in lyrics
         assert "[spoken word]" not in lyrics
         assert "Drive-through" not in lyrics
@@ -849,7 +861,7 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         assert ex["layout"] in EDM_LAYOUTS, ex["stem"]
         labels = _score_labels(lyrics)
         assert labels[-1] == "outro"
-        assert labels[0] == "inst", (ex["stem"], labels)
+        assert labels[0] == "drop", (ex["stem"], labels)
         signatures.append(labels)
         sections = _section_blocks(lyrics)
         drop_at = next(
@@ -867,16 +879,16 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
                 block,
             )
             assert _hits_needles(block, WARP_NEEDLES), (ex["stem"], block)
-            drop_bodies.append(_block_body(block).lower())
+            drop_bodies.append(_block_cues(block).lower())
         for block in sections:
-            if not block.startswith("[inst]"):
+            if not block.startswith("[inst"):
                 continue
             if "drop" in block.lower():
                 continue
             assert _hits_needles(block, MOTION_NEEDLES), (ex["stem"], block)
             assert _hits_needles(block, BASS_NEEDLES), (ex["stem"], block)
-            body = _block_body(block)
-            tokens = set(body.lower().replace("\n", " ").split())
+            body = _block_cues(block)
+            tokens = set(body.lower().replace("\n", " ").replace(",", " ").split())
             assert tokens, (ex["stem"], block)
             assert not tokens <= PAUSE_ONLY_TOKENS, (ex["stem"], block)
             bridge_bodies.append(body.lower())
@@ -922,7 +934,15 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
             treat_titles.append(ex["title"])
         else:
             assert "[chorus]" not in lyrics
-            assert "[intro]" in lyrics or labels[0] == "inst"
+            assert labels[0] == "drop"
+            for line in lyrics.splitlines():
+                stripped = line.strip()
+                if not stripped:
+                    continue
+                assert stripped.startswith("[") and stripped.endswith("]"), (
+                    ex["stem"],
+                    line,
+                )
             assert ex["ace_mode"] == "instrumental"
             for token in DRIVE_LOCK.split(", "):
                 assert token in ex["tags"], (ex["stem"], token)

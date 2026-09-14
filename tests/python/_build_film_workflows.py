@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, ensure_group_title_inset, group as _group
-from _lab_paths import lab_json
+from _lab_paths import apply_lab_identity, lab_json, lab_rel_of
 from _stamp_app_mode import stamp_suite_graph
 from _wire_prompt_enhance import normalize_enhance_widgets
 
@@ -40,7 +40,8 @@ KLEIN_NEG_PHOTO = (
 )
 KLEIN_NEG_GOSEE = (
     "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks, "
-    "third-person figure, standing wizard, wingsuit control bar, handlebar grip, lettering on gloves, "
+    "third-person figure, standing wizard, second person in frame, wearer's face, another runner ahead, "
+    "full body from behind, wingsuit control bar, handlebar grip, lettering on gloves, "
     "circular vignette, decorative frame, costume chrome, staff, pole, wizard staff, carried object, "
     "game-engine cutscene, CGI render, illustration"
 )
@@ -53,6 +54,7 @@ LTX_NEGATIVE_GOSEE = (
     "morphing, identity drift, warping objects, face melting, flicker, jitter, "
     "frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, "
     "watermark, burned-in text, third-person follow, full body from behind, "
+    "second person in frame, wearer's face, another runner ahead, "
     "standing wizard, costume change, lettering on gloves, circular vignette, "
     "decorative frame, repeating planter tiles, game-engine lighting, "
     "wooden fishing pier, wingsuit handlebar, readable captions, "
@@ -132,6 +134,7 @@ def _load(path: Path) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    apply_lab_identity(graph, lab_rel_of(path))
     stamp_suite_graph(graph)
     ensure_group_title_inset(graph)
     _assert_no_overlap(graph)

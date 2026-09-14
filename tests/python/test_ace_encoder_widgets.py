@@ -47,7 +47,11 @@ def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
         assert widgets[4] == bpm
         assert widgets[5] == duration
         assert widgets[6] == "4"
-        assert widgets[7] == "en"
+        expect_lang = "en"
+        row = next((ex for ex in EDM_EXAMPLES if ex["stem"] == stem), None)
+        if row is not None and row["ace_mode"] == "instrumental":
+            expect_lang = "unknown"
+        assert widgets[7] == expect_lang
         assert widgets[8] == "C minor"
         assert widgets[9] is True
 

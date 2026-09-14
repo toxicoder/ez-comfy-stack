@@ -36,7 +36,7 @@ SEED_SCRIPT = dumps_payload(
     {
         "target_language": "es",
         "source_language": "auto",
-        "stage": STAGE_ANALYZE,
+        "stage": STAGE_ALL,
         "status": "",
         "turns": SEED_TURNS,
     }
@@ -148,7 +148,7 @@ class EZDubScript:
                     "INT",
                     {"default": 0, "min": 0, "max": 12, "step": 1},
                 ),
-                "stage": (list(STAGES), {"default": STAGE_ANALYZE}),
+                "stage": (list(STAGES), {"default": STAGE_ALL}),
             },
             "optional": {
                 "job_id": (
@@ -175,7 +175,7 @@ class EZDubScript:
         target_language="es",
         source_language="auto",
         max_speakers=0,
-        stage=STAGE_ANALYZE,
+        stage=STAGE_ALL,
         job_id="",
     ):
         widget = parse_payload(prompt)

@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. Contralateral arm pump in the lower third, blank gloves, empty palms, elbows bent, hands swinging hip to chest, horizon bobbing with each stride. Open short storm-cloak streams at the edges. The rooftop gap grows until it fills the frame. Continuous tracking, no cut, locked identity."
+        "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. Contralateral arm pump along the bottom edge, blank gloves, empty palms, elbows bent, hands swinging hip to chest, horizon bobbing with each stride. Open short storm-cloak streams at the edges. The rooftop gap grows until it fills the frame. Continuous tracking, no cut, locked identity."
       ],
       "title": "Motion / prompt"
     },
@@ -653,7 +653,7 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
-        "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. Contralateral arm pump in the lower third, blank gloves, empty palms, elbows bent, hands swinging hip to chest, horizon bobbing with each stride. Open short storm-cloak streams at the edges. The rooftop gap grows until it fills the frame. Continuous tracking, no cut, locked identity.",
+        "First-person eye-level body-cam already at a dead sprint across a sunlit terrace. Contralateral arm pump along the bottom edge, blank gloves, empty palms, elbows bent, hands swinging hip to chest, horizon bobbing with each stride. Open short storm-cloak streams at the edges. The rooftop gap grows until it fills the frame. Continuous tracking, no cut, locked identity.",
         true,
         "i2v",
         "5 seconds, 24 fps",

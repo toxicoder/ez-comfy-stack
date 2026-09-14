@@ -2,7 +2,7 @@
   "id": "05-on-ramp",
   "revision": 1,
   "last_node_id": 14,
-  "last_link_id": 17,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
@@ -211,7 +211,7 @@
       },
       "widgets_values": [
         "wave bass, warped bass, trap hats, 808 punch, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
-        "[inst]\nheavy wave drop\nwarped 808 wreck\nfold bass\ngrid 197 0\n\n[inst]\ntrap hats roll\nwave 808 sustain\ngrid 197 1\n\n[inst]\nharder formant drop\ndouble 808 split\nchest warp\ngrid 197 2\n\n[inst]\nsnare roll\n808 slide\ngrid 197 3\n\n[inst]\nfull send drop\nstacked wave wreck\nwarped sub\ngrid 197 4\n\n[outro]\nkick holds\ntrap hats roll\nwave ride\ngrid 197 5",
+        "[drop - heavy wave drop, warped 808 wreck, fold bass, grid 197 0]\n\n[inst - trap hats roll, wave 808 sustain, grid 197 1]\n\n[drop - harder formant drop, double 808 split, chest warp, grid 197 2]\n\n[inst - snare roll, 808 slide, grid 197 3]\n\n[drop - full send drop, stacked wave wreck, warped sub, grid 197 4]\n\n[outro - kick holds, trap hats roll, wave ride, grid 197 5]",
         false,
         "instrumental"
       ],
@@ -278,13 +278,13 @@
       },
       "widgets_values": [
         "wave bass, warped bass, trap hats, 808 punch, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
-        "[inst]\nheavy wave drop\nwarped 808 wreck\nfold bass\ngrid 197 0\n\n[inst]\ntrap hats roll\nwave 808 sustain\ngrid 197 1\n\n[inst]\nharder formant drop\ndouble 808 split\nchest warp\ngrid 197 2\n\n[inst]\nsnare roll\n808 slide\ngrid 197 3\n\n[inst]\nfull send drop\nstacked wave wreck\nwarped sub\ngrid 197 4\n\n[outro]\nkick holds\ntrap hats roll\nwave ride\ngrid 197 5",
+        "[drop - heavy wave drop, warped 808 wreck, fold bass, grid 197 0]\n\n[inst - trap hats roll, wave 808 sustain, grid 197 1]\n\n[drop - harder formant drop, double 808 split, chest warp, grid 197 2]\n\n[inst - snare roll, 808 slide, grid 197 3]\n\n[drop - full send drop, stacked wave wreck, warped sub, grid 197 4]\n\n[outro - kick holds, trap hats roll, wave ride, grid 197 5]",
         197,
         "fixed",
         155,
         180.0,
         "4",
-        "en",
+        "unknown",
         "C minor",
         true,
         2.0,
@@ -517,7 +517,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## 05-on-ramp\n\nUS-safe EDM **180 s** take: **on-ramp**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental arrangement score in `[inst]` blocks: drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing the score.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 155, language en, timesignature 4, generate_audio_codes true. Seed 197.\n7. Saves: `05 - On-Ramp` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## 05-on-ramp\n\nUS-safe EDM **180 s** take: **on-ramp**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE does not sing production notes. Drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics \u2014 keep cues inside the brackets.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 155, language unknown, timesignature 4, generate_audio_codes true. Seed 197.\n7. Saves: `05 - On-Ramp` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -540,9 +540,7 @@
         {
           "name": "IMAGE",
           "type": "IMAGE",
-          "links": [
-            17
-          ],
+          "links": [],
           "slot_index": 0
         },
         {
@@ -584,7 +582,7 @@
         {
           "name": "cover",
           "type": "IMAGE",
-          "link": 17
+          "link": null
         }
       ],
       "outputs": [
@@ -739,14 +737,6 @@
       14,
       0,
       "AUDIO"
-    ],
-    [
-      17,
-      13,
-      0,
-      14,
-      1,
-      "IMAGE"
     ]
   ],
   "groups": [
@@ -806,8 +796,8 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## 05-on-ramp\n\nUS-safe EDM **180 s** take: **on-ramp**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental arrangement score in `[inst]` blocks: drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing the score.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 155, language en, timesignature 4, generate_audio_codes true. Seed 197.\n7. Saves: `05 - On-Ramp` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe EDM 180s: Drive-through on-ramp wave bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre",
+    "lab_note": "## 05-on-ramp\n\nUS-safe EDM **180 s** take: **on-ramp**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE does not sing production notes. Drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics \u2014 keep cues inside the brackets.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 155, language unknown, timesignature 4, generate_audio_codes true. Seed 197.\n7. Saves: `05 - On-Ramp` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe EDM 180s: Drive-through on-ramp wave bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
     ],
@@ -933,16 +923,8 @@
           14,
           "art_mode",
           {
-            "description": "skip, upload (Cover image), or generate (Queue cover.json first).",
+            "description": "skip (default). upload: wire Cover image in graph. generate: Queue cover.json first.",
             "label": "Album art"
-          }
-        ],
-        [
-          13,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Cover image"
           }
         ],
         [

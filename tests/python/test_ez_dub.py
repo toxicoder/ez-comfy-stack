@@ -118,6 +118,9 @@ def test_pack_imports_without_whisper() -> None:
     assert "EZDubScript" not in enhance_js
     parsed_seed = dub_turns.parse_payload(SEED_SCRIPT)
     assert parsed_seed["turns"] == []
+    assert parsed_seed["stage"] == "all"
+    stage = EZDubScript.INPUT_TYPES()["required"]["stage"]
+    assert stage[1]["default"] == "all"
 
 
 def test_ingest_source_is_input_combo(tmp_path: Path, monkeypatch) -> None:

@@ -20,7 +20,7 @@ DRIVE_TREAT_LOCK = "sparse vocal chop, DJ shout, no rap, original composition"
 EdmSeries = Literal["drive-through"]
 EdmAceMode = Literal["instrumental", "vocal"]
 
-SCORE_LABELS = frozenset({"intro", "inst", "outro", "chorus"})
+SCORE_LABELS = frozenset({"intro", "inst", "drop", "build-up", "outro", "chorus"})
 EDM_LAYOUTS = frozenset(
     {"column", "wide-stage", "stacked-tower", "prompt-left", "output-rail"}
 )
@@ -293,20 +293,33 @@ def _ex(
     }
 
 
+def _cues_from_body(text: str) -> str:
+    """Join production-cue lines into one comma-separated bracket body."""
+    parts = [line.strip() for line in text.splitlines() if line.strip()]
+    return ", ".join(parts)
+
+
 def _uniquify_score(seed: int, lyrics: str) -> str:
-    """Stamp each non-chorus block so drop and fill bodies stay unique.
+    """Stamp each non-chorus marker so drop and fill cues stay unique.
 
     Arguments:
         seed: Take seed used as the uniqueness token.
         lyrics: Score from ``format_edm_score``.
     Returns:
-        Score with a ``grid <seed> <index>`` cue on every bed block.
+        Score with ``grid <seed> <index>`` folded into each bed bracket.
     """
     parts: list[str] = []
     for index, block in enumerate(lyrics.split("\n\n")):
-        lines = block.splitlines()
-        if lines and lines[0] == "[chorus]":
+        lines = [line for line in block.splitlines() if line.strip()]
+        if not lines:
+            continue
+        head = lines[0].strip()
+        if head == "[chorus]" or head.startswith("[chorus"):
             parts.append(block)
+            continue
+        if head.startswith("[") and head.endswith("]"):
+            inner = head[1:-1].rstrip()
+            parts.append(f"[{inner}, grid {seed} {index}]")
             continue
         parts.append(f"{block}\ngrid {seed} {index}")
     return "\n\n".join(parts)
@@ -315,7 +328,10 @@ def _uniquify_score(seed: int, lyrics: str) -> str:
 def format_edm_score(*sections: tuple[str, str]) -> str:
     """Build a 180s ACE-Step score from labeled sections.
 
-    Labels are intro, inst, outro, and chorus (DJ-shout treats only).
+    Labels are intro, inst, drop, build-up, outro, and chorus (DJ-shout
+    treats only). Instrumental sections emit empty-body markers with
+    production cues inside the brackets so ACE-Step does not sing them.
+    An ``inst`` body that names a drop is promoted to ``[drop - …]``.
     This is not the Nill Bye verse/chorus loop and not a fixed
     melody-drop-break-drop skeleton. First section is a named drop.
 
@@ -343,9 +359,10 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
         for needle in FORBIDDEN_SCORE_NEEDLES:
             if needle in low:
                 raise ValueError(f"score forbids {needle}")
-        if index == 0 and "drop" not in low:
+        is_drop = label == "drop" or "drop" in low
+        if index == 0 and not is_drop:
             raise ValueError("first section must be a drop")
-        if "drop" in low:
+        if is_drop:
             drop_count += 1
             if not any(needle in low for needle in DROP_WEIGHT_NEEDLES):
                 raise ValueError("drop must hit a weight needle")
@@ -357,7 +374,10 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
                 raise ValueError("chorus must be one short chop")
             if len(lines[0].split()) > 2:
                 raise ValueError("chorus chop is too long")
-        parts.append(f"[{label}]\n{text}")
+            parts.append(f"[chorus]\n{text}")
+            continue
+        marker = "drop" if is_drop and label in {"inst", "drop"} else label
+        parts.append(f"[{marker} - {_cues_from_body(text)}]")
     if drop_count < 2:
         raise ValueError("score needs at least two named drops")
     return "\n\n".join(parts)

@@ -2,7 +2,7 @@
   "id": "03-axle-grind",
   "revision": 1,
   "last_node_id": 14,
-  "last_link_id": 17,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
@@ -211,7 +211,7 @@
       },
       "widgets_values": [
         "tearout, warped bass, trap hats, bass growl, dirty 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
-        "[inst]\nheavy tearout drop\ngrowl wreck\nwarped axle\ngrid 463 0\n\n[inst]\nmetal hats roll\ngrowl sustain\ngrid 463 1\n\n[inst]\nharder formant drop\nsub crush\nchest 808\ngrid 463 2\n\n[inst]\ntrap hats denser\ngrowl hold\ngrid 463 3\n\n[inst]\nfull send drop\nstacked growl wreck\ntearout warp\ngrid 463 4\n\n[inst]\nharder growl drop\nlow 808 wreck\naxle grind\ngrid 463 5\n\n[outro]\nkick holds\nhats denser\ngrowl ride\ngrid 463 6",
+        "[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0]\n\n[inst - metal hats roll, growl sustain, grid 463 1]\n\n[drop - harder formant drop, sub crush, chest 808, grid 463 2]\n\n[inst - trap hats denser, growl hold, grid 463 3]\n\n[drop - full send drop, stacked growl wreck, tearout warp, grid 463 4]\n\n[drop - harder growl drop, low 808 wreck, axle grind, grid 463 5]\n\n[outro - kick holds, hats denser, growl ride, grid 463 6]",
         false,
         "instrumental"
       ],
@@ -278,13 +278,13 @@
       },
       "widgets_values": [
         "tearout, warped bass, trap hats, bass growl, dirty 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
-        "[inst]\nheavy tearout drop\ngrowl wreck\nwarped axle\ngrid 463 0\n\n[inst]\nmetal hats roll\ngrowl sustain\ngrid 463 1\n\n[inst]\nharder formant drop\nsub crush\nchest 808\ngrid 463 2\n\n[inst]\ntrap hats denser\ngrowl hold\ngrid 463 3\n\n[inst]\nfull send drop\nstacked growl wreck\ntearout warp\ngrid 463 4\n\n[inst]\nharder growl drop\nlow 808 wreck\naxle grind\ngrid 463 5\n\n[outro]\nkick holds\nhats denser\ngrowl ride\ngrid 463 6",
+        "[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0]\n\n[inst - metal hats roll, growl sustain, grid 463 1]\n\n[drop - harder formant drop, sub crush, chest 808, grid 463 2]\n\n[inst - trap hats denser, growl hold, grid 463 3]\n\n[drop - full send drop, stacked growl wreck, tearout warp, grid 463 4]\n\n[drop - harder growl drop, low 808 wreck, axle grind, grid 463 5]\n\n[outro - kick holds, hats denser, growl ride, grid 463 6]",
         463,
         "fixed",
         155,
         180.0,
         "4",
-        "en",
+        "unknown",
         "C minor",
         true,
         2.0,
@@ -517,7 +517,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## 03-axle-grind\n\nUS-safe EDM **180 s** take: **axle grind**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental arrangement score in `[inst]` blocks: drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing the score.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 155, language en, timesignature 4, generate_audio_codes true. Seed 463.\n7. Saves: `03 - Axle Grind` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## 03-axle-grind\n\nUS-safe EDM **180 s** take: **axle grind**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE does not sing production notes. Drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics \u2014 keep cues inside the brackets.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 155, language unknown, timesignature 4, generate_audio_codes true. Seed 463.\n7. Saves: `03 - Axle Grind` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -540,9 +540,7 @@
         {
           "name": "IMAGE",
           "type": "IMAGE",
-          "links": [
-            17
-          ],
+          "links": [],
           "slot_index": 0
         },
         {
@@ -584,7 +582,7 @@
         {
           "name": "cover",
           "type": "IMAGE",
-          "link": 17
+          "link": null
         }
       ],
       "outputs": [
@@ -739,14 +737,6 @@
       14,
       0,
       "AUDIO"
-    ],
-    [
-      17,
-      13,
-      0,
-      14,
-      1,
-      "IMAGE"
     ]
   ],
   "groups": [
@@ -806,8 +796,8 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## 03-axle-grind\n\nUS-safe EDM **180 s** take: **axle grind**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental arrangement score in `[inst]` blocks: drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing the score.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 155, language en, timesignature 4, generate_audio_codes true. Seed 463.\n7. Saves: `03 - Axle Grind` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe EDM 180s: Drive-through axle-grind tearout warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre",
+    "lab_note": "## 03-axle-grind\n\nUS-safe EDM **180 s** take: **axle grind**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE does not sing production notes. Drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics \u2014 keep cues inside the brackets.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 155, language unknown, timesignature 4, generate_audio_codes true. Seed 463.\n7. Saves: `03 - Axle Grind` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe EDM 180s: Drive-through axle-grind tearout warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
     ],
@@ -933,16 +923,8 @@
           14,
           "art_mode",
           {
-            "description": "skip, upload (Cover image), or generate (Queue cover.json first).",
+            "description": "skip (default). upload: wire Cover image in graph. generate: Queue cover.json first.",
             "label": "Album art"
-          }
-        ],
-        [
-          13,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Cover image"
           }
         ],
         [

@@ -62,7 +62,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Front-load the subject. Write prose.
 
-    **Do:** `A photoreal still, cinematic first-person eye-level body-cam already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. An original techno wizard occupies only the lower third: ink-black fitted running sleeves, blank matte-black gloves, empty palms, hands free. An open short storm-cloak with warm-gold lining streams at the edges. Physically plausible late-sun rim light, fabric weave and stone grit. Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens…`
+    **Do:** `A chest-mounted first-person body-cam still, eye-level, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge, empty palms, hands free. An open short storm-cloak with warm-gold lining streams at the edges. Late-sun rim light, fabric weave and stone grit. Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens…`
 
     **Don’t:** `rooftop, techno wizard, photo, 24mm, no logos, no text`
 
@@ -88,7 +88,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). All three 90s films pin Enhance **off** so the identity and each shot paragraph are encoded as written.
 
-    First-person body-cam (go-see): one signature stunt per 5 s; eye-level; sleeves and gloves in the lower third; look at the landing before a jump; dip on impact then recover; land the last frame on a readable plant for the next I2V. Close-mic breath + surface foley beside the move. No speech. Identity still is already at a dead sprint.
+    First-person body-cam (go-see): one signature stunt per 5 s; eye-level chest-cam; only the wearer's own sleeves and gloves along the bottom edge — never a person occupying the plate. Look at the landing before a jump; dip on impact then recover; land the last frame on a readable plant for the next I2V. Close-mic breath + surface foley beside the move. No speech. Identity still is already at a dead sprint. I2V describes motion from the start frame; do not restate a second body.
 
     LTX audio: name the mix first (`Wordless mix: only footfalls, wind, grit, close-mic breath, silent mouth`). Put `No speech.` last for the bible contract. Do not quote dialogue. Distilled AV will talk if the clause is only a prohibition.
 
@@ -124,7 +124,7 @@ STRING out → CLIPTextEncode `text` input.
 | IC-LoRA depth | Clay already locked camera |
 | Podcast script + ACE beds | `Speaker A:` labels and instrumental tags are parser input |
 | Rap tags + lyrics (draft, full, nill-bye) | `[verse]`/`[chorus]`, BPM, `language=en` vs encoder widgets |
-| Drive-through EDM arrangement scores | `[inst]`/`[outro]`, BPM; eighty-three takes stay instrumental; two bass-set treats add one 1–2 word `[chorus]` chop (no `[verse]`) |
+| Drive-through EDM arrangement scores | empty-body `[drop]`/`[inst]`/`[outro]` with cues inside the brackets, BPM; eighty-three takes stay instrumental; two bass-set treats add one 1–2 word `[chorus]` chop (no `[verse]`). Free-text under a marker is sung |
 
 Lazy Klein stills, identity bibles you type, Klein edit, generic 5s Wan/LTX printers, Prompt Forge, and Beat Sheet stay **on**. Dub **Rewrite translation** stays on — that path translates turns, it does not CLIP-rewrite. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE (the start image owns look). Do not Klein-t2i-enhance Prompt Join shot cards.
 

@@ -81,6 +81,10 @@ def enhance_pin_off(graph_id: str) -> bool:
         return True
     if gid.startswith("audio/albums/") and not gid.endswith("/cover"):
         return True
+    if gid.startswith("audio/music/"):
+        return True
+    if gid.startswith("audio/dub/"):
+        return True
     return False
 SHIFT = 460
 ENHANCE_H = 420
@@ -256,7 +260,8 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
 
 
 def append_note(graph: dict[str, Any]) -> None:
-    pin_off = enhance_pin_off(str(graph.get("id") or ""))
+    extra = graph.setdefault("extra", {})
+    pin_off = enhance_pin_off(str(extra.get("lab_rel") or graph.get("id") or ""))
     for node in graph["nodes"]:
         if node.get("type") in ("Note", "MarkdownNote"):
             values = node.get("widgets_values") or [""]
@@ -696,7 +701,8 @@ def _set_node_enhance(node: dict[str, Any], on: bool) -> None:
 
 def apply_enhance_policy(graph: dict[str, Any]) -> None:
     """Pin Enhance off on authored/structured graphs. Leave lazy printers alone."""
-    gid = str(graph.get("id") or "")
+    extra = graph.get("extra") or {}
+    gid = str(extra.get("lab_rel") or graph.get("id") or "")
     if not enhance_pin_off(gid):
         return
     for node in graph.get("nodes") or []:
@@ -732,7 +738,7 @@ def enable_lab_graph(graph: dict[str, Any]) -> None:
     normalize_enhance_widgets(graph)
     apply_enhance_policy(graph)
     extra = graph.setdefault("extra", {})
-    gid = str(graph.get("id") or "")
+    gid = str(extra.get("lab_rel") or graph.get("id") or "")
     if isinstance(extra.get("lab_app_mode"), dict) and not enhance_pin_off(gid):
         extra["lab_app_mode"]["enhance_off_identity"] = False
     if isinstance(extra.get("lab_dcc"), dict) and "enhance" in extra["lab_dcc"]:

@@ -53,7 +53,7 @@ tags: [troubleshooting, comfyui, occupancy, studio-ui, dub]
 | YouTube rejects the extra audio | Duration mismatch or MLA not enabled | Use `ez_dub_yt.wav` (duration-locked). MLA is rolling out; check Studio → Languages |
 | Dub mix too quiet / around −30 LUFS | Clone sat well below peak; old limiter did not raise | Pull latest. Render now raise-to-peak. If still quiet, check `dubs/<slug>/qc.json` `quiet_mix` and speaker refs |
 | “i-translated” English bumper crushes t=0 Spanish | Old overlay fitted English disclosure into 3 s on both WAVs | Pull latest. Spoken disclosure defaults **off**. Sidecar only unless you turn it on; bumper never writes onto `ez_dub_yt.wav` |
-| `text_target` is `me agradecido` / missing clitics | Length-matching translate prompt dropped grammar | Pull latest. Stage **analyze**, edit JSON, Rewrite **off**, Stage **render**. Do not ship Stage **all** blindly |
+| `text_target` is `me agradecido` / missing clitics | Length-matching translate prompt dropped grammar | Pull latest. Stage **analyze**, edit JSON, Rewrite **off**, Stage **render**. Default Stage **all** skips that edit pass |
 | Demo-script tail `modelo de voz` / “help you develop” | GGUF leaked instruction text into `text_target` | Pull latest. Sanitize drops that tail. Trim the source wav if the leak is in the recording |
 | Preview MP3 is not 320k / not 48 kHz | Comfy `SaveAudioMP3` is a 24 kHz preview | Expected. MLA master is `dubs/<slug>/ez_dub_yt.wav`. Optional `ez_dub_yt_48k.mp3` in the job dir |
 | VHS node missing | Image/volume predates VideoHelperSuite | Pull/rebuild GHCR image and restart |

@@ -2,7 +2,7 @@
   "id": "09-second-wave",
   "revision": 1,
   "last_node_id": 14,
-  "last_link_id": 17,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
@@ -211,7 +211,7 @@
       },
       "widgets_values": [
         "hybrid trap, warped bass, trap hats, bass growl, chest sub, rave, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
-        "[inst]\nheavy warped drop\nhybrid trap growl wreck\n808 stack\ngrid 241 0\n\n[inst]\ntrap hats roll\n808 slide\ngrid 241 1\n\n[chorus]\ngo\n\n[inst]\nharder double drop\nfull send bass warp\nformant wreck\ngrid 241 3\n\n[inst]\nfull send drop\nchest 808 wreck\nwarped trap\ngrid 241 4\n\n[outro]\nkick holds\ntrap hats roll\ngrowl ride\ngrid 241 5",
+        "[drop - heavy warped drop, hybrid trap growl wreck, 808 stack, grid 241 0]\n\n[inst - trap hats roll, 808 slide, grid 241 1]\n\n[chorus]\ngo\n\n[drop - harder double drop, full send bass warp, formant wreck, grid 241 3]\n\n[drop - full send drop, chest 808 wreck, warped trap, grid 241 4]\n\n[outro - kick holds, trap hats roll, growl ride, grid 241 5]",
         false,
         "vocal"
       ],
@@ -278,7 +278,7 @@
       },
       "widgets_values": [
         "hybrid trap, warped bass, trap hats, bass growl, chest sub, rave, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
-        "[inst]\nheavy warped drop\nhybrid trap growl wreck\n808 stack\ngrid 241 0\n\n[inst]\ntrap hats roll\n808 slide\ngrid 241 1\n\n[chorus]\ngo\n\n[inst]\nharder double drop\nfull send bass warp\nformant wreck\ngrid 241 3\n\n[inst]\nfull send drop\nchest 808 wreck\nwarped trap\ngrid 241 4\n\n[outro]\nkick holds\ntrap hats roll\ngrowl ride\ngrid 241 5",
+        "[drop - heavy warped drop, hybrid trap growl wreck, 808 stack, grid 241 0]\n\n[inst - trap hats roll, 808 slide, grid 241 1]\n\n[chorus]\ngo\n\n[drop - harder double drop, full send bass warp, formant wreck, grid 241 3]\n\n[drop - full send drop, chest 808 wreck, warped trap, grid 241 4]\n\n[outro - kick holds, trap hats roll, growl ride, grid 241 5]",
         241,
         "fixed",
         150,
@@ -517,7 +517,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## 09-second-wave\n\nUS-safe EDM **180 s** take: **second wave**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. One 1\u20132 word DJ chop in a single `[chorus]` block; bed and drops stay `[inst]`. Not a rap verse. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[outro]` and the one chorus chop stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on vocal so the shout renders. `[inst]` lines are instrument cues so ACE does not sing the bed.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language en, timesignature 4, generate_audio_codes true. Seed 241.\n7. Saves: `09 - Second Wave` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## 09-second-wave\n\nUS-safe EDM **180 s** take: **second wave**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. One 1\u20132 word DJ chop in a single `[chorus]` block; bed and drops stay empty-body `[drop]` / `[inst]` markers. Not a rap verse. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` and the one chorus chop stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on vocal so the shout renders. Bed markers stay empty-body so ACE does not sing the arrangement.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language en, timesignature 4, generate_audio_codes true. Seed 241.\n7. Saves: `09 - Second Wave` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -540,9 +540,7 @@
         {
           "name": "IMAGE",
           "type": "IMAGE",
-          "links": [
-            17
-          ],
+          "links": [],
           "slot_index": 0
         },
         {
@@ -584,7 +582,7 @@
         {
           "name": "cover",
           "type": "IMAGE",
-          "link": 17
+          "link": null
         }
       ],
       "outputs": [
@@ -739,14 +737,6 @@
       14,
       0,
       "AUDIO"
-    ],
-    [
-      17,
-      13,
-      0,
-      14,
-      1,
-      "IMAGE"
     ]
   ],
   "groups": [
@@ -806,8 +796,8 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## 09-second-wave\n\nUS-safe EDM **180 s** take: **second wave**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. One 1\u20132 word DJ chop in a single `[chorus]` block; bed and drops stay `[inst]`. Not a rap verse. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[inst]` / `[outro]` and the one chorus chop stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on vocal so the shout renders. `[inst]` lines are instrument cues so ACE does not sing the bed.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language en, timesignature 4, generate_audio_codes true. Seed 241.\n7. Saves: `09 - Second Wave` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe EDM 180s: Drive-through second-wave hybrid trap chop, ACE-Step 1.5 turbo AIO, sparse DJ vocal chop, warped bass, invented timbre",
+    "lab_note": "## 09-second-wave\n\nUS-safe EDM **180 s** take: **second wave**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. One 1\u20132 word DJ chop in a single `[chorus]` block; bed and drops stay empty-body `[drop]` / `[inst]` markers. Not a rap verse. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` and the one chorus chop stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on vocal so the shout renders. Bed markers stay empty-body so ACE does not sing the arrangement.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language en, timesignature 4, generate_audio_codes true. Seed 241.\n7. Saves: `09 - Second Wave` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe EDM 180s: Drive-through second-wave hybrid trap chop, ACE-Step 1.5 turbo AIO, sparse DJ vocal chop, warped bass, invented timbre\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
     ],
@@ -933,16 +923,8 @@
           14,
           "art_mode",
           {
-            "description": "skip, upload (Cover image), or generate (Queue cover.json first).",
+            "description": "skip (default). upload: wire Cover image in graph. generate: Queue cover.json first.",
             "label": "Album art"
-          }
-        ],
-        [
-          13,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Cover image"
           }
         ],
         [
