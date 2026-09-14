@@ -309,10 +309,16 @@ teardown() {
   [ "${status}" -ne 0 ]
   run audio_acrossfade_filter 2 0.10
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"acrossfade=d=0.10"* ]]
+  [[ "${output}" == *"acrossfade=d=0.10:o=0"* ]]
+  [[ "${output}" == *"atrim=duration=5.00"* ]]
+  [[ "${output}" == *"atrim=duration=90.00"* ]]
   run audio_acrossfade_filter 18 0.10
   [ "${status}" -eq 0 ]
   local n
   n="$(printf '%s' "${output}" | grep -o 'acrossfade=' | wc -l | tr -d ' ')"
   [ "${n}" -eq 17 ]
+  [[ "${output}" == *"acrossfade=d=0.10:o=0"* ]]
+  [[ "${output}" == *",apad,atrim=duration=90.00"* ]]
+  n="$(printf '%s' "${output}" | grep -o 'atrim=duration=5.00' | wc -l | tr -d ' ')"
+  [ "${n}" -eq 18 ]
 }

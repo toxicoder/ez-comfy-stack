@@ -191,12 +191,13 @@ def test_ffmpeg_argv_has_cap_aac_loudnorm() -> None:
     assert argv[argv.index("-t") + 1] == "90.0"
     assert argv[argv.index("-c:v") + 1] == "libx264"
     assert argv[argv.index("-c:a") + 1] == "aac"
-    assert argv[argv.index("-af") + 1] == AUDIO_FILTER
+    assert argv[argv.index("-af") + 1] == f"{AUDIO_FILTER},apad"
     assert LOUDNORM_FILTER in AUDIO_FILTER
     assert argv[argv.index("-movflags") + 1] == MOVFLAGS
     assert "+faststart" in MOVFLAGS
     copy_argv = ffmpeg_stitch_copy_argv("/tmp/list.txt", "/tmp/out.mp4", 90.0, "ffmpeg")
     assert copy_argv[copy_argv.index("-c:v") + 1] == "copy"
+    assert copy_argv[copy_argv.index("-af") + 1] == f"{AUDIO_FILTER},apad"
     assert copy_argv[copy_argv.index("-movflags") + 1] == MOVFLAGS
     assert encoder_missing("Unknown encoder 'libx264'") is True
     assert encoder_missing("ok") is False
@@ -204,17 +205,28 @@ def test_ffmpeg_argv_has_cap_aac_loudnorm() -> None:
 
 def test_audio_acrossfade_filter_and_xfade_argv() -> None:
     two = audio_acrossfade_filter(2, 0.10)
-    assert "acrossfade=d=0.10" in two
+    assert "acrossfade=d=0.10:o=0" in two
     assert LOUDNORM_FILTER in two
     assert "[a]" in two
+    assert two.count("atrim=duration=5.00") == 2
+    assert ",apad,atrim=duration=90.00" in two
     eighteen = audio_acrossfade_filter(18, 0.10)
     assert eighteen.count("acrossfade=") == 17
+    assert eighteen.count("acrossfade=d=0.10:o=0") == 17
+    assert eighteen.count("atrim=duration=5.00") == 18
+    assert ",apad,atrim=duration=90.00" in eighteen
+    go_see = audio_acrossfade_filter(18, 0.08)
+    assert go_see.count("acrossfade=d=0.08:o=0") == 17
+    assert go_see.count("atrim=duration=5.00") == 18
     with pytest.raises(ValueError, match="at least 2"):
         audio_acrossfade_filter(1, 0.10)
     shots = [f"/tmp/s{i:02d}.mp4" for i in range(18)]
     audio_argv = ffmpeg_audio_acrossfade_argv(shots, "/tmp/a.m4a", "ffmpeg", 0.10)
     assert audio_argv.count("-i") == 18
-    assert "acrossfade" in audio_argv[audio_argv.index("-filter_complex") + 1]
+    filt = audio_argv[audio_argv.index("-filter_complex") + 1]
+    assert "acrossfade=d=0.10:o=0" in filt
+    assert filt.count("atrim=duration=5.00") == 18
+    assert ",apad,atrim=duration=90.00" in filt
     video_argv = ffmpeg_video_copy_argv("/tmp/list.txt", "/tmp/v.mp4", 90.0, "ffmpeg")
     assert "-an" in video_argv
     assert "-c:v" in video_argv and video_argv[video_argv.index("-c:v") + 1] == "libx264"
@@ -337,7 +349,10 @@ def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
         stitch_film(shots, out, 90.0, ffmpeg="ffmpeg", run=fake_run, xfade_cs=10)
     assert len(captured) == 3
     assert "-an" in captured[0]
-    assert "acrossfade" in captured[1][captured[1].index("-filter_complex") + 1]
+    filt = captured[1][captured[1].index("-filter_complex") + 1]
+    assert "acrossfade=d=0.10:o=0" in filt
+    assert filt.count("atrim=duration=5.00") == 18
+    assert ",apad,atrim=duration=90.00" in filt
     assert captured[2][captured[2].index("-c:v") + 1] == "copy"
 
     with pytest.raises(ValueError, match="0–50"):

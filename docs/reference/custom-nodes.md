@@ -101,7 +101,7 @@ Category `ez-comfy/film`. Films: `go-see`, `still-here`, `switchyard`. [90s shor
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZUnloadModels` | Unload models (pass IMAGE) | `IMAGE` image | `IMAGE` image | — (used between Klein and LTX) | Best-effort Comfy + CUDA unload, then identity IMAGE. Keeps Klein 4B and LTX-2.5 from sitting in memory together |
-| `EZFilmConcat` | Save 90s film (MP4) — play / download | `film` combo (default `go-see`), `cap_seconds` FLOAT 1.0–90.0 (default 90), `xfade_cs` INT 0–50 (default 0), `shot_01`…`shot_18` `VHS_FILENAMES`; optional `disclosure` STRING | `STRING` path | graph **film** | Concat 18 LTX 5.00s MP4s. Refuses fewer than 18 readable stems. H.264 CRF 18 + AAC + YouTube loudnorm + faststart. `xfade_cs` is audio-only acrossfade (10 = 0.10s); 0 is a hard cut |
+| `EZFilmConcat` | Save 90s film (MP4) — play / download | `film` combo (default `go-see`), `cap_seconds` FLOAT 1.0–90.0 (default 90), `xfade_cs` INT 0–50 (default 0), `shot_01`…`shot_18` `VHS_FILENAMES`; optional `disclosure` STRING | `STRING` path | graph **film** | Concat 18 LTX 5.00s MP4s. Refuses fewer than 18 readable stems. H.264 CRF 18 + AAC + YouTube loudnorm + faststart. `xfade_cs` is audio-only acrossfade (10 = 0.10s) with overlap off (`o=0`) so duration stays `18 × 5.00` / cap; 0 is a hard cut |
 | `EZFilmDisclosure` | LTX AI-media disclosure (end-card) | `text` STRING multiline | `STRING` text | — | Prepends the LTX Community License AI-media disclosure. Idempotent. **Not legal advice** |
 
 ---

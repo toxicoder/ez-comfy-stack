@@ -111,7 +111,8 @@ class EZFilmConcat:
     DESCRIPTION = (
         "Concat 18 LTX 5.00s MP4s in beat/shot order. H.264 CRF 18 + AAC + "
         "YouTube loudnorm + faststart, cap 90s. xfade_cs is audio-only "
-        "acrossfade (10 = 0.10s); 0 is a hard cut. A play/download overlay "
+        "acrossfade (10 = 0.10s, overlap off so duration stays on picture); "
+        "0 is a hard cut. A play/download overlay "
         "appears when Queue finishes."
     )
 
