@@ -2646,7 +2646,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 01:39 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T01:39:30+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
                 
                   
 
@@ -3041,6 +3041,11 @@
 <td><strong>EZFilmConcat</strong> <code>xfade requires audio</code> / path ends in <code>.png</code></td>
 <td>VHS_FILENAMES lists the metadata PNG first, then silent <code>.mp4</code>, then muxed <code>*-audio.mp4</code>. Old <code>ez_film</code> took the PNG. go-see <code>xfade_cs=8</code> then refuses</td>
 <td>The 18 LTX prints already finished — <strong>do not</strong> re-Queue the full graph. Pull latest, <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>ez_film</code> copies. Stitch existing files: <code>./scripts/utilities/concat-shots.sh --film go-see --xfade 8 --yes</code>. Confirm: <code>ls "${COMFY_OUTPUT_DIR}"/ez_gosee_b*_s*_ltx_video*-audio.mp4</code>. After the pack update you can also Queue <strong>only</strong> EZFilmConcat (node 900)</td>
+</tr>
+<tr>
+<td><strong>EZFilmConcat</strong> <code>concat audio duration 89.3s vs video 90.0s (need within 50 ms)</code></td>
+<td>go-see <code>xfade_cs=8</code> used overlapping <code>acrossfade</code> (ffmpeg default <code>o=1</code>), which shortens audio by <code>(n−1)×d</code> while picture stays a 90 s hard cut</td>
+<td>The 18 LTX prints already finished — <strong>do not</strong> re-Queue the full graph. Pull latest, <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>ez_film</code> copies. Queue <strong>only</strong> EZFilmConcat (node 900), or <code>./scripts/utilities/concat-shots.sh --film go-see --xfade 8 --yes</code>. Acrossfade is overlap-off (<code>o=0</code>) and pad/trimmed to cap. Confirm: <code>ls "${COMFY_OUTPUT_DIR}"/ez_gosee_90s.mp4</code></td>
 </tr>
 <tr>
 <td>LTX MP4 plays but has no sound</td>
