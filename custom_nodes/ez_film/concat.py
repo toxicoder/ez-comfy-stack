@@ -369,7 +369,7 @@ def ffmpeg_stitch_argv(
         "-b:a",
         AAC_BITRATE,
         "-af",
-        AUDIO_FILTER,
+        f"{AUDIO_FILTER},apad",
         "-movflags",
         MOVFLAGS,
         out_mp4,
@@ -396,39 +396,58 @@ def ffmpeg_stitch_copy_argv(
         "-b:a",
         AAC_BITRATE,
         "-af",
-        AUDIO_FILTER,
+        f"{AUDIO_FILTER},apad",
         "-movflags",
         MOVFLAGS,
         out_mp4,
     ]
 
 
-def audio_acrossfade_filter(n_inputs: int, duration_s: float) -> str:
+def audio_acrossfade_filter(
+    n_inputs: int,
+    duration_s: float,
+    cap_seconds: float = DEFAULT_CAP_SECONDS,
+    shot_seconds: float = DURATION_S,
+) -> str:
     """Build an ffmpeg ``-filter_complex`` graph for chained audio acrossfade.
+
+    Each input is padded/trimmed to ``shot_seconds`` (the 5.00 s picture
+    contract). Joins use ``acrossfade`` with ``o=0`` so duration stays the
+    sum of inputs (picture-aligned hard cuts). Overlap-on acrossfade would
+    shorten audio by ``(n-1)*d`` and miss the 50 ms A/V gate. The chain is
+    then loudnormed and padded/trimmed to ``cap_seconds``.
 
     Arguments:
         n_inputs: Number of audio inputs (``[0:a]`` …).
         duration_s: Acrossfade duration in seconds (e.g. 0.10).
+        cap_seconds: Publish cap for the final atrim (default 90).
+        shot_seconds: Per-shot atrim (default 5.00).
     Returns:
-        filter_complex string ending in ``[a]`` after loudnorm.
+        filter_complex string ending in ``[a]`` after loudnorm + cap pad.
     Raises:
         ValueError: fewer than two inputs.
     """
     if n_inputs < 2:
         raise ValueError("acrossfade needs at least 2 inputs")
     d = f"{duration_s:.2f}"
+    shot = f"{float(shot_seconds):.2f}"
+    cap = f"{float(cap_seconds):.2f}"
+    prep = [
+        f"[{index}:a]apad,atrim=duration={shot},asetpts=PTS-STARTPTS[s{index}]"
+        for index in range(n_inputs)
+    ]
+    xfade = f"acrossfade=d={d}:o=0:c1=tri:c2=tri"
     if n_inputs == 2:
-        chain = f"[0:a][1:a]acrossfade=d={d}:c1=tri:c2=tri[ax]"
+        chain = f"[s0][s1]{xfade}[ax]"
     else:
-        parts = [f"[0:a][1:a]acrossfade=d={d}:c1=tri:c2=tri[a1]"]
+        parts = [f"[s0][s1]{xfade}[a1]"]
         for index in range(2, n_inputs):
             prev = index - 1
             label = "ax" if index == n_inputs - 1 else f"a{index}"
-            parts.append(
-                f"[a{prev}][{index}:a]acrossfade=d={d}:c1=tri:c2=tri[{label}]"
-            )
+            parts.append(f"[a{prev}][s{index}]{xfade}[{label}]")
         chain = ";".join(parts)
-    return f"{chain};[ax]{AUDIO_FILTER}[a]"
+    tail = f"[ax]{AUDIO_FILTER},apad,atrim=duration={cap},asetpts=PTS-STARTPTS[a]"
+    return ";".join([*prep, chain, tail])
 
 
 def ffmpeg_video_copy_argv(
@@ -470,15 +489,18 @@ def ffmpeg_audio_acrossfade_argv(
     out_m4a: str,
     ffmpeg: str,
     duration_s: float,
+    cap_seconds: float = DEFAULT_CAP_SECONDS,
 ) -> list[str]:
-    """N-input audio acrossfade + loudnorm to AAC 48 kHz stereo 192k."""
+    """N-input picture-aligned audio acrossfade + loudnorm to AAC 48 kHz stereo 192k."""
     argv: list[str] = [ffmpeg, "-y"]
     for path in shot_paths:
         argv.extend(["-i", path])
     argv.extend(
         [
             "-filter_complex",
-            audio_acrossfade_filter(len(shot_paths), duration_s),
+            audio_acrossfade_filter(
+                len(shot_paths), duration_s, cap_seconds=cap_seconds
+            ),
             "-map",
             "[a]",
             "-c:a",
@@ -935,10 +957,10 @@ def stitch_film(
 
     Default (``xfade_cs=0``) is concat-demuxer + libx264 CRF 18 + AAC +
     ``+faststart`` so browsers can play and download the master. ``xfade_cs``
-    is centiseconds of **audio** acrossfade (10 = 0.10 s); video is still a
-    hard cut, re-encoded the same way. Wan-silent shots have no audio —
-    xfade refuses. If ffmpeg lacks libx264, fall back to ``-c:v copy`` with
-    faststart still set.
+    is centiseconds of **audio** acrossfade (10 = 0.10 s) with overlap off
+    (``o=0``) so duration stays on the hard-cut picture. Wan-silent shots
+    have no audio — xfade refuses. If ffmpeg lacks libx264, fall back to
+    ``-c:v copy`` with faststart still set.
 
     Every stem must exist, last 5.00±0.05s, be 1280×704, and carry audio.
     Illegal LTX ``length=120`` files (113 frames / 4.708s) are padded to
@@ -953,7 +975,7 @@ def stitch_film(
         ffmpeg: Override ffmpeg path.
         ffprobe: Override ffprobe path.
         run: Override ``subprocess.run`` (tests).
-        xfade_cs: Audio acrossfade in centiseconds; 0 disables.
+        xfade_cs: Audio acrossfade in centiseconds (overlap off); 0 disables.
     Returns:
         ``out_mp4``.
     Raises:
@@ -1024,7 +1046,11 @@ def stitch_film(
                 )
                 _run_ffmpeg(
                     ffmpeg_audio_acrossfade_argv(
-                        work_paths, audio_tmp, exe, duration_s
+                        work_paths,
+                        audio_tmp,
+                        exe,
+                        duration_s,
+                        cap_seconds=cap_seconds,
                     ),
                     runner,
                 )

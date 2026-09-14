@@ -92,7 +92,7 @@ parse_args() {
       --skip-accept) SKIP_ACCEPT=1 ;;
       -h | --help)
         echo "Usage: $0 [--dir DIR] [--out FILE] [--files a.mp4,b.mp4] [--film go-see|still-here|switchyard] [--cap-seconds N] [--xfade CS] [--dry-run|--yes]" >&2
-        echo "  --xfade CS  audio acrossfade in centiseconds (10 = 0.10s). Default 0 (hard cut)." >&2
+        echo "  --xfade CS  audio acrossfade in centiseconds (10 = 0.10s, overlap off). Default 0 (hard cut)." >&2
         echo "              Video is a hard cut (H.264). Requires audio on every shot (LTX, not Wan-silent)." >&2
         echo "  --film --yes runs film-accept first (duration/res/audio). --skip-accept bypasses." >&2
         exit 0
@@ -359,9 +359,12 @@ shot_has_audio() {
 
 #######################################
 # Build a chained audio acrossfade filter_complex (plus loudnorm).
+# Globals:
+#   CAP_SECONDS
 # Arguments:
 #   $1  input count
 #   $2  duration seconds (e.g. 0.10)
+#   $3  optional publish cap seconds (default CAP_SECONDS)
 # Outputs:
 #   filter graph on stdout
 # Returns:
@@ -370,29 +373,40 @@ shot_has_audio() {
 audio_acrossfade_filter() {
   local n="${1}"
   local d="${2}"
+  local cap="${3:-${CAP_SECONDS}}"
+  local cap_fmt shot_fmt
   local i prev label
+  local -a prep=()
   local -a parts=()
   if [[ ${n} -lt 2 ]]; then
     return 1
   fi
-  if [[ ${n} -eq 2 ]]; then
-    printf '[0:a][1:a]acrossfade=d=%s:c1=tri:c2=tri[ax];[ax]aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5[a]\n' "${d}"
-    return 0
-  fi
-  parts+=("[0:a][1:a]acrossfade=d=${d}:c1=tri:c2=tri[a1]")
-  i=2
+  cap_fmt="$(awk "BEGIN {printf \"%.2f\", ${cap}}")"
+  shot_fmt="5.00"
+  i=0
   while [[ ${i} -lt ${n} ]]; do
-    prev=$((i - 1))
-    if [[ ${i} -eq $((n - 1)) ]]; then
-      label="ax"
-    else
-      label="a${i}"
-    fi
-    parts+=("[a${prev}][${i}:a]acrossfade=d=${d}:c1=tri:c2=tri[${label}]")
+    prep+=("[${i}:a]apad,atrim=duration=${shot_fmt},asetpts=PTS-STARTPTS[s${i}]")
     i=$((i + 1))
   done
+  if [[ ${n} -eq 2 ]]; then
+    parts+=("[s0][s1]acrossfade=d=${d}:o=0:c1=tri:c2=tri[ax]")
+  else
+    parts+=("[s0][s1]acrossfade=d=${d}:o=0:c1=tri:c2=tri[a1]")
+    i=2
+    while [[ ${i} -lt ${n} ]]; do
+      prev=$((i - 1))
+      if [[ ${i} -eq $((n - 1)) ]]; then
+        label="ax"
+      else
+        label="a${i}"
+      fi
+      parts+=("[a${prev}][s${i}]acrossfade=d=${d}:o=0:c1=tri:c2=tri[${label}]")
+      i=$((i + 1))
+    done
+  fi
   local IFS=';'
-  printf '%s;[ax]aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5[a]\n' "${parts[*]}"
+  printf '%s;%s;[ax]aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5,apad,atrim=duration=%s,asetpts=PTS-STARTPTS[a]\n' \
+    "${prep[*]}" "${parts[*]}" "${cap_fmt}"
 }
 
 #######################################
@@ -454,7 +468,7 @@ concat_playable() {
     -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
     -r 24 -c:v libx264 -preset veryfast -crf 18 -pix_fmt yuv420p \
     -c:a aac -ar 48000 -ac 2 -b:a 192k \
-    -af "aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5" \
+    -af "aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5,apad" \
     -movflags +faststart \
     "${out}"; then
     return 0
@@ -463,7 +477,7 @@ concat_playable() {
   run_ffmpeg_logged "encoding concat (stream copy) → ${out}" -- ffmpeg -y -fflags +genpts -f concat -safe 0 -i "${list}" \
     -t "${CAP_SECONDS}" -avoid_negative_ts make_zero \
     -c:v copy -c:a aac -ar 48000 -ac 2 -b:a 192k \
-    -af "aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5" \
+    -af "aresample=48000,loudnorm=I=-14:LRA=11:TP=-1.5,apad" \
     -movflags +faststart \
     "${out}" || return 1
 }
@@ -492,7 +506,7 @@ concat_xfade_audio() {
     fi
   done
   d="$(awk "BEGIN {printf \"%.2f\", ${XFADE_CS}/100}")"
-  filter="$(audio_acrossfade_filter "${#files[@]}" "${d}")" || {
+  filter="$(audio_acrossfade_filter "${#files[@]}" "${d}" "${CAP_SECONDS}")" || {
     err "acrossfade needs at least 2 shots"
     return 1
   }
