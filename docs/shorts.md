@@ -15,7 +15,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 - Model-native Klein / LTX prompts ([Prompting](prompting.md))
 - Spark farm: optional parallel 5s Queues, local concat
 - Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
-- Optional studio-ui board (`:8190` profile), LTX Director GPL clone, OpenCut MIT embed
+- Optional [studio-ui](reference/studio-ui.md) board (`:8190` profile), LTX Director GPL clone, OpenCut MIT embed
 - Optional 3D sidecars (TRELLIS.2, DA3-BASE, host Blender / SuperSplat) and VACE join
 - Wave 4: `film-accept`, DFR print mode, A14B hero, talking-head, LongCat / DreamX opt-in
 - Go-see show-off loop (identity-first reprint, wordless mix, fail-closed concat)

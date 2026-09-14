@@ -34,6 +34,7 @@ id: doctor
 
 | Command | Purpose | Do not |
 | --- | --- | --- |
+| `help` | Print the command list | — |
 | `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, `hf` CLI, then doctor | Skip doctor failures |
 | `doctor` | Preflight (docker, GPU, RAM/disk, dirs, `hf` CLI, license one-liner, spark-timing) | Treat missing weights as a hard fail (they are a warning) |
 | `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port | — |
@@ -50,6 +51,7 @@ id: doctor
 | `reset-hf-partials [--yes] [--force]` | Delete `*.incomplete` (finished weights kept) | — |
 | `cleanup` | Type `DELETE`; remove `ez-comfy-state` only | Think this deletes weights or `COMFY_OUTPUT_DIR` |
 | `print-shot` / `film-resume` / `film-export-otio` / `film-proxies` / `take-promote` | 90s jobstore ([90s shorts](shorts.md)) | `film-proxies` while compose is up |
+| `promote-workflow --from PATH --lane LANE --id STEM` | Copy a live `_user` graph into `workflows/_lab/<lane>/` (does **not** commit) | MiniMax / Klein 9B / FLUX.2-dev / Seedance graphs; copy `_lab` into `_user` |
 | `download-restore` | Opt-in SeedVR2-3B | Treat as part of `download-models` |
 | `download-3d` | Opt-in TRELLIS.2 + DA3-BASE (no nvdiffrast; DA3-LARGE refused) | `--tier da3-large` |
 | `download-llm [--tier enhance\|qwen36-35b-a3b\|all] [--limit auto\|N\|off]` | Default `enhance` is the 4B GGUF (already in `download-models`). `qwen36-35b-a3b` is opt-in ~23 GB for occupancy `llm-desk`. [Tiers](download-tiers.md) | Treat 35B as part of `download-models`; GPU-offload the in-canvas 4B |
@@ -85,7 +87,12 @@ Safety is unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflig
 
 | Need | Page |
 | --- | --- |
+| Comment-derived man page | [Generated shell reference](generated/shell/reference.md) |
 | First install | [Getting Started](getting-started.md) |
 | Why start asks for `yes` | [Hardware, memory, and safety](learn/hardware.md) |
 | Throttle details | [Download limit](download-limit.md) |
 | Symptom → fix | [Troubleshooting](troubleshooting.md) |
+| Occupancy mode × jobs | [Occupancy matrix](operate/occupancy-matrix.md) |
+| blender-mcp / research-mcp | [MCP](operate/mcp.md) |
+| What `cleanup` deletes | [Backup and restore](operate/backup-restore.md) |
+| Lab `ez_*` nodes | [Custom nodes](reference/custom-nodes.md) |

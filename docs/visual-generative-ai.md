@@ -127,7 +127,7 @@ ls "${COMFY_OUTPUT_DIR}"/ez_ltx_*_video_*.mp4
 
     Long latents melt Spark. Film graphs still use **121-frame** LTX printers (`1+8n`, 18 shots + stitch, cap 90 s). **120 is illegal** and decodes as 113 frames / 4.71 s. Keep headroom preflight green. A one-click film Queue is **long wall-clock**, not a 90s denoise.
 
-If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see [Troubleshooting](troubleshooting.md).
+If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see [Troubleshooting — studio canvas](operate/troubleshooting-canvas.md) and [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md).
 
 ??? abstract "Lab workflow internals"
 

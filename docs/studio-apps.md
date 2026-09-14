@@ -24,7 +24,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 
 **Who this is for:** studio users after `klein/still-draft` has been loaded once.
 
-Lab graphs are the host `_lab/<lane>/*.json` files (folder-scoped ids). On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not `studio-ui`. A small occupancy chip sits at the top of the App widget list (under the menu if you are in graph view) and shows which family is running, still N of M on multi-plate Apps, and the next handoff. It does not cover Run. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
+Lab graphs are the host `_lab/<lane>/*.json` files (folder-scoped ids). On `start` they seed into Comfy as `*.app.json` when App Mode is the default view, so they appear under **Apps** as well as **Workflows**. [App Mode](learn/comfyui.md#graph-and-app) is a widget surface on that JSON (ComfyUI frontend **1.41.13+**). It is **not** a second frontend and not [`studio-ui`](reference/studio-ui.md). A small occupancy chip sits at the top of the App widget list (under the menu if you are in graph view) and shows which family is running, still N of M on multi-plate Apps, and the next handoff. It does not cover Run. Restart the container after a pull so `custom_nodes/ez_studio_app` is copied.
 
 ```mermaid
 flowchart LR

@@ -92,6 +92,7 @@ nav:
   - Home: index.md
   - Learn:
       - How the studio works: learn/index.md
+      - Architecture: learn/architecture.md
       - ComfyUI basics: learn/comfyui.md
       - Image and video generation: learn/generation.md
       - Klein, Wan, and LTX: learn/pipeline.md
@@ -105,28 +106,57 @@ nav:
       - Getting Started: getting-started.md
       - Prompting: prompting.md
       - Model licenses: licenses.md
+      - FAQ: start/faq.md
+      - When to use vs spark-lab: start/when-to-use-vs-spark-lab.md
   - Create:
       - Still to motion to AV: visual-generative-ai.md
       - ComfyUI Apps: studio-apps.md
       - Workflow catalog: studio-workflows.md
+      - Stills graphs: create/workflows-stills.md
+      - Motion graphs: create/workflows-motion.md
+      - Film graphs: create/workflows-film.md
+      - Audio graphs: create/workflows-audio.md
       - 90s shorts: shorts.md
       - Local podcast: podcast.md
       - Local dub: dub.md
       - Local music: music.md
+      - RAP-FIRST: create/music-rap.md
+      - Drive-through EDM: create/music-edm.md
+      - Music disclosure and QC: create/music-disclosure.md
       - Studio sidecars: studio-sidecars.md
       - Asset Bible: asset-bible.md
       - Blender GB10 sidecar: blender-gb10-sidecar.md
       - DCC guide pack: dcc-workflows.md
       - Splat sidecar: splat-sidecar.md
+      - Custom nodes: reference/custom-nodes.md
+      - Config and schemas: reference/config-and-schemas.md
+      - studio-ui board: reference/studio-ui.md
   - Operate:
       - Occupancy desk: occupancy.md
+      - Occupancy matrix: operate/occupancy-matrix.md
+      - MCP and SSH tunnels: operate/mcp.md
       - manage.sh reference: manage-cli.md
+      - Generated shell reference: generated/shell/reference.md
       - Models and cache: models-and-cache.md
+      - Hugging Face tokens: operate/models-tokens.md
+      - Sharing MODELS_DIR: operate/models-sharing.md
+      - Per-family packs: operate/models-packs.md
       - Disk wizard: disk-wizard.md
       - Download tiers: download-tiers.md
       - Download limit: download-limit.md
+      - Backup and restore: operate/backup-restore.md
       - Reboot safety: reboot-safety.md
       - Spark farm: spark-farm.md
       - Troubleshooting: troubleshooting.md
+      - Docs site: operate/troubleshooting-docs-site.md
+      - Canvas: operate/troubleshooting-canvas.md
+      - Host and Docker: operate/troubleshooting-host-docker.md
+      - Downloads: operate/troubleshooting-downloads.md
+      - Start and runtime: operate/troubleshooting-start-runtime.md
+      - Models and workflows: operate/troubleshooting-models-workflows.md
   - Contribute:
       - Conventions: project-conventions.md
+      - Docs style: contribute/docs-style.md
+      - Testing docs: contribute/testing-docs.md
+      - Contributing: contribute/contributing.md
+      - Security: contribute/security.md

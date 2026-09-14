@@ -289,6 +289,7 @@ check_dub_runtime_wheels() {
   return 0
 }
 
+# @command help
 #######################################
 # Print the human-facing command list and environment pointer to stdout.
 # Globals:
@@ -408,6 +409,7 @@ Environment: see .env.example (MODELS_DIR, COMFY_OUTPUT_DIR, HF_TOKEN, MEM_LIMIT
 EOF
 }
 
+# @command setup
 #######################################
 # Bootstrap host prerequisites for doctor/download/start.
 # Creates .env from example if missing; prepares MODELS_DIR (sudo mkdir/chown);
@@ -554,6 +556,7 @@ EOF
   return 0
 }
 
+# @command doctor
 #######################################
 # Run operator preflight checks without starting the stack.
 # Validates Docker + Compose, optional nvidia-smi, hf CLI presence (soft),
@@ -669,6 +672,7 @@ cmd_doctor() {
   return 0
 }
 
+# @command status
 #######################################
 # Show human-readable or JSON status of the Compose project.
 # Globals:
@@ -707,6 +711,7 @@ cmd_status() {
   log "MODELS_DIR=${MODELS_DIR} COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output} COMFY_PORT=${COMFY_PORT:-8188} MEM_LIMIT=${MEM_LIMIT:-90g}"
 }
 
+# @command start
 #######################################
 # Confirm, check headroom, then start the unified studio Compose stack.
 # Returns after compose up -d + verify; the stack is not tied to this shell.
@@ -736,6 +741,7 @@ cmd_start() {
   stack_start
 }
 
+# @command stop
 #######################################
 # Stop stack containers while retaining volumes and the host model cache.
 # Globals:
@@ -751,6 +757,7 @@ cmd_stop() {
   stack_stop
 }
 
+# @command restart
 #######################################
 # Stop then start (re-runs full start confirmation and headroom checks).
 # Globals:
@@ -767,6 +774,7 @@ cmd_restart() {
   cmd_start
 }
 
+# @command logs
 #######################################
 # Follow Docker Compose logs for the stack.
 # Globals:
@@ -782,6 +790,7 @@ cmd_logs() {
   stack_logs "$@"
 }
 
+# @command clear-hf-locks
 #######################################
 # Clear stale Hugging Face download locks under MODELS_DIR.
 # Globals:
@@ -798,6 +807,7 @@ cmd_clear_hf_locks() {
   clear_stale_hf_locks "${MODELS_DIR}"
 }
 
+# @command reset-hf-partials
 #######################################
 # Delete HF *.incomplete partials so a hung resume can start that file fresh.
 # Refuses while hf download is running unless --force.
@@ -854,6 +864,7 @@ EOF
   clear_stale_hf_locks "${MODELS_DIR}" "locks_only"
 }
 
+# @command download-models
 #######################################
 # Download lab weights under MODELS_DIR with bandwidth limits.
 # DOWNLOAD_LIMIT (auto|N|off) is the default; --limit overrides for this run.
@@ -986,6 +997,7 @@ EOF
   return 0
 }
 
+# @command download-podcast
 #######################################
 # Opt-in podcast weights under MODELS_DIR with the same download-limit wrap.
 # Missing analog pack is not a doctor failure. Does not change download-models.
@@ -1081,6 +1093,7 @@ EOF
   return 0
 }
 
+# @command download-dub
 #######################################
 # Opt-in dub weights under MODELS_DIR with the same download-limit wrap.
 # Missing ASR/clone pack is not a doctor failure. Does not change download-models.
@@ -1179,6 +1192,7 @@ EOF
   return 0
 }
 
+# @command download-music
 #######################################
 # Opt-in ACE-Step music weights under MODELS_DIR with the same download-limit wrap.
 # Missing turbo AIO is not a doctor failure. Does not change download-models.
@@ -1271,6 +1285,7 @@ EOF
   return 0
 }
 
+# @command download-limit
 #######################################
 # Proxy remaining argv to scripts/utilities/download-limit.sh.
 # Globals:
@@ -1286,6 +1301,7 @@ cmd_download_limit() {
   bash "${REPO_ROOT}/scripts/utilities/download-limit.sh" "$@"
 }
 
+# @command print-shot
 #######################################
 # Dispatch print-shot to utilities/print-shot.sh.
 # Globals:
@@ -1301,6 +1317,7 @@ cmd_print_shot() {
   bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" "$@"
 }
 
+# @command film-resume
 #######################################
 # Resume a film (skip ok shots with valid duration).
 # Globals:
@@ -1316,6 +1333,7 @@ cmd_film_resume() {
   bash "${REPO_ROOT}/scripts/utilities/print-shot.sh" --resume "$@"
 }
 
+# @command film-export-otio
 #######################################
 # Export OTIO timeline from a film jobstore.
 # Globals:
@@ -1329,6 +1347,7 @@ cmd_film_export_otio() {
   bash "${REPO_ROOT}/scripts/utilities/film-export-otio.sh" "$@"
 }
 
+# @command film-proxies
 #######################################
 # NVENC proxies for a film (refuse if compose is up).
 # Globals:
@@ -1342,6 +1361,7 @@ cmd_film_proxies() {
   bash "${REPO_ROOT}/scripts/utilities/film-proxies.sh" "$@"
 }
 
+# @command take-promote
 #######################################
 # Promote a take into shots/NN.mp4.
 # Globals:
@@ -1355,6 +1375,7 @@ cmd_take_promote() {
   bash "${REPO_ROOT}/scripts/utilities/take-promote.sh" "$@"
 }
 
+# @command promote-workflow
 #######################################
 # Copy a live user graph into the repo lab tree. Does not commit.
 # Globals:
@@ -1368,6 +1389,7 @@ cmd_promote_workflow() {
   bash "${REPO_ROOT}/scripts/utilities/promote-workflow.sh" "$@"
 }
 
+# @command album-render
 #######################################
 # Queue a shipped music album then zip the output folder.
 # Globals:
@@ -1381,6 +1403,7 @@ cmd_album_render() {
   bash "${REPO_ROOT}/scripts/utilities/album-render.sh" "$@"
 }
 
+# @command download-restore
 #######################################
 # Opt-in restore pack download (SeedVR2-3B). Does not reap. Not download-models.
 # Globals:
@@ -1394,6 +1417,7 @@ cmd_download_restore() {
   bash "${REPO_ROOT}/scripts/utilities/download-restore.sh" "$@"
 }
 
+# @command download-3d
 #######################################
 # Opt-in 3D packs (TRELLIS.2 native, DA3-BASE).
 #######################################
@@ -1401,6 +1425,7 @@ cmd_download_3d() {
   bash "${REPO_ROOT}/scripts/utilities/download-3d.sh" "$@"
 }
 
+# @command download-llm
 #######################################
 # Opt-in / default LLM GGUF packs with the same download-limit wrap.
 # enhance is already in download-models. qwen36-35b-a3b is occupancy llm-desk.
@@ -1493,6 +1518,7 @@ EOF
   return 0
 }
 
+# @command occupancy
 #######################################
 # Occupancy desk (park / enter / status).
 #######################################
@@ -1500,6 +1526,7 @@ cmd_occupancy() {
   bash "${REPO_ROOT}/scripts/utilities/occupancy.sh" "$@"
 }
 
+# @command llm-sidecar
 #######################################
 # Host llama-server sidecar (occupancy llm-desk).
 #######################################
@@ -1507,6 +1534,7 @@ cmd_llm_sidecar() {
   bash "${REPO_ROOT}/scripts/utilities/llm-sidecar.sh" "$@"
 }
 
+# @command blender-mcp
 #######################################
 # In-tree Blender MCP (typed tools, occupancy-aware).
 #######################################
@@ -1514,6 +1542,7 @@ cmd_blender_mcp() {
   bash "${REPO_ROOT}/scripts/utilities/blender-mcp.sh" "$@"
 }
 
+# @command research-mcp
 #######################################
 # In-tree creative research MCP (typed tools, occupancy-aware).
 #######################################
@@ -1521,6 +1550,7 @@ cmd_research_mcp() {
   bash "${REPO_ROOT}/scripts/utilities/research-mcp.sh" "$@"
 }
 
+# @command blender-llm
 #######################################
 # Optional on-box Qwen3-4B CPU client for blender-mcp.
 #######################################
@@ -1528,6 +1558,7 @@ cmd_blender_llm() {
   bash "${REPO_ROOT}/scripts/utilities/blender-llm.sh" "$@"
 }
 
+# @command blender
 #######################################
 # Host Blender sidecar (refuses if Comfy is a heavy job).
 #######################################
@@ -1535,6 +1566,7 @@ cmd_blender() {
   bash "${REPO_ROOT}/scripts/utilities/blender.sh" "$@"
 }
 
+# @command export-guides
 #######################################
 # Occupancy-gated Blender guide-pack dump (P0). Godot is P2.
 # Globals:
@@ -1548,6 +1580,7 @@ cmd_export_guides() {
   bash "${REPO_ROOT}/scripts/utilities/blender-guide.sh" "$@"
 }
 
+# @command blender-stills
 #######################################
 # Occupancy-gated Blender still-pack dump (P0). Godot is P2.
 # Globals:
@@ -1561,6 +1594,7 @@ cmd_blender_stills() {
   bash "${REPO_ROOT}/scripts/utilities/blender-stills.sh" "$@"
 }
 
+# @command house-views
 #######################################
 # Occupancy-gated Blender Instagram clay dump (P0). Godot is P2.
 # Globals:
@@ -1574,6 +1608,7 @@ cmd_house_views() {
   bash "${REPO_ROOT}/scripts/utilities/house-views.sh" "$@"
 }
 
+# @command asset-ls
 #######################################
 # Read-only Asset Bible catalog (outputs under COMFY_OUTPUT_DIR/assets).
 # Globals:
@@ -1589,6 +1624,7 @@ cmd_asset_ls() {
   bash "${REPO_ROOT}/scripts/utilities/asset-ls.sh" "$@"
 }
 
+# @command film-accept
 #######################################
 # Fail-closed accept gate before 90s concat.
 #######################################
@@ -1596,6 +1632,7 @@ cmd_film_accept() {
   bash "${REPO_ROOT}/scripts/utilities/film-accept.sh" "$@"
 }
 
+# @command shot-sheet
 #######################################
 # Write films/<slug>/shots.yaml with shot-card defaults.
 #######################################
@@ -1603,6 +1640,7 @@ cmd_shot_sheet() {
   bash "${REPO_ROOT}/scripts/utilities/shot-sheet.sh" "$@"
 }
 
+# @command overlay-qc
 #######################################
 # Clay vs look overlay QC (host ffmpeg, no GPU).
 #######################################
@@ -1610,6 +1648,7 @@ cmd_overlay_qc() {
   bash "${REPO_ROOT}/scripts/utilities/overlay-qc.sh" "$@"
 }
 
+# @command film-animatic
 #######################################
 # Cheap 90s animatic from clay or held stills.
 #######################################
@@ -1617,6 +1656,7 @@ cmd_film_animatic() {
   bash "${REPO_ROOT}/scripts/utilities/film-animatic.sh" "$@"
 }
 
+# @command stem-mix
 #######################################
 # Picture-lock stem mix (CPU ffmpeg).
 #######################################
@@ -1624,6 +1664,7 @@ cmd_stem_mix() {
   bash "${REPO_ROOT}/scripts/utilities/stem-mix.sh" "$@"
 }
 
+# @command audio-still-video
 #######################################
 # Mux a still + audio master to YouTube MP4 (CPU ffmpeg).
 # Globals:
@@ -1639,6 +1680,7 @@ cmd_audio_still_video() {
   bash "${REPO_ROOT}/scripts/utilities/audio-still-video.sh" "$@"
 }
 
+# @command download-longcat
 #######################################
 # Opt-in LongCat-Video (MIT, no NCCL).
 #######################################
@@ -1646,6 +1688,7 @@ cmd_download_longcat() {
   bash "${REPO_ROOT}/scripts/utilities/download-longcat.sh" "$@"
 }
 
+# @command download-dreamx
 #######################################
 # Opt-in DreamX-Creator 1.0 (Apache; not World).
 #######################################
@@ -1653,6 +1696,7 @@ cmd_download_dreamx() {
   bash "${REPO_ROOT}/scripts/utilities/download-dreamx.sh" "$@"
 }
 
+# @command spark-timing
 #######################################
 # Kitchen smoke wall-clock table (operator-measured; CI has no GPU).
 # Globals:
@@ -1668,6 +1712,7 @@ cmd_spark_timing() {
   bash "${REPO_ROOT}/scripts/utilities/spark-timing.sh" "$@"
 }
 
+# @command models-status
 #######################################
 # Print keep-set / refuse from the disk bible (does not delete).
 # Globals:
@@ -1683,6 +1728,7 @@ cmd_models_status() {
   bash "${REPO_ROOT}/scripts/utilities/models-manifest.sh" status "$@"
 }
 
+# @command reap-models
 #######################################
 # Dispatch reap-models (default --plan).
 # Globals:
@@ -1698,6 +1744,7 @@ cmd_reap_models() {
   bash "${REPO_ROOT}/scripts/utilities/reap-models.sh" "$@"
 }
 
+# @command disk-wizard
 #######################################
 # Dispatch disk-wizard (default --plan / TTY wizard).
 # Globals:
@@ -1713,6 +1760,7 @@ cmd_disk_wizard() {
   bash "${REPO_ROOT}/scripts/utilities/disk-wizard.sh" "$@"
 }
 
+# @command cleanup
 #######################################
 # After DELETE confirmation, remove Compose volumes (Comfy install state only).
 # Globals:

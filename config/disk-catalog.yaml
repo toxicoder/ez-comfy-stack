@@ -1,3 +1,10 @@
+# Purpose:
+#   Host leftover signatures for disk-wizard (what / why / risk / reclaim).
+# Source of truth: this file (operator entry via ./scripts/manage.sh disk-wizard)
+# Schema: restricted YAML, scripts/lib/disk_catalog.py (no PyYAML)
+# Safety:
+#   keep-set weights and named volume ez-comfy-state are refused (risk: dangerous).
+#   Never offers docker system prune -a --volumes. Default disk-wizard is --plan.
 # Host leftover signatures for disk-wizard. Restricted YAML (scripts/lib/disk_catalog.py).
 # risk: safe | review | dangerous
 # reclaim: delete | quarantine | docker-prune | hf-prune | reap-models | none

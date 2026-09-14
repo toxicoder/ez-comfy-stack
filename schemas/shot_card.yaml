@@ -1,3 +1,4 @@
+# Purpose: ez.shot.card.v1 film bible extras on workflows/shorts/*.shots.yaml and films/<slug>/shots.yaml.
 # ez.shot.card.v1 — film bible extras on workflows/shorts/*.shots.yaml
 # and films/<slug>/shots.yaml (shot-sheet output). Optional keys default
 # fail-closed. Does not replace ez.guide.shot.v1 (DCC pack handshake).

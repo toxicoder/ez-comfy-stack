@@ -1,3 +1,4 @@
+# Purpose: ez.guide.shot.v1 DCC ↔ Comfy print handshake (120f @ 24 fps, 1280x704 / 768x1280).
 # ez.guide.shot.v1 — DCC ↔ Comfy print handshake.
 # Size is the LTX VAE grid: 1280x704 landscape or 768x1280 portrait. Never 1280x720.
 # Frames 120 @ 24 fps = 5.00s. Path B dumps clay (rgb) + mist depth + Workbench canny.

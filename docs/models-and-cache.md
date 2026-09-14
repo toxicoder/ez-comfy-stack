@@ -8,23 +8,50 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 
 **What's on this page**
 
-- Default cache location and layout
-- Host persistence (weights, media, Comfy `user/`, operator custom nodes)
-- Download utilities, auto-install of `hf`, resume / stuck-partial recovery, pack `1/4` progress, and readiness checks
-- Pointer: `--tier` is a pack id ([Download tiers](download-tiers.md))
-- Prebuilt image layer-cache contract (what invalidates multi‑GB pulls)
-- Volume Comfy pin (`.lab-comfyui-ref`) vs image `COMFYUI_REF`
-- Sharing with nvidia-dgx-spark-lab
+- **Three stores** (GHCR image, `MODELS_DIR`, comfy-state volume)
+- **Default location** and permissions for `${MODELS_DIR}`
+- **Layout** (tier dirs, relative `comfy/` symlinks, reap)
+- **Pack map** pointing at download utilities (`download-image.sh`, `download-wan.sh`, `download-ltx.sh`, `download-llm.sh`)
 
 **What this enables**
 
-- Downloading weights once and reusing them across stacks
-- Checking readiness without network access
-- Rebuilding/pulling only the layers that actually changed
+- **Downloading Klein 4B, Wan 2.2, and LTX-2.5 weights once** and reusing them across stacks
+- **Keeping weights** off the GHCR image (`us-safe-studio`)
+- **Checking the tree** without network access
+
+**Who this is for:** operators setting `MODELS_DIR` before `download-models`.
 
 !!! tip "Operator path"
 
-    Most operators only need: set `MODELS_DIR` → `download-models` → confirm basenames. Layer pins and Dockerfile cache order are for maintainers — collapsed below.
+    Most operators only need: set `MODELS_DIR` → `download-models` → confirm basenames. Layer pins, gated tokens, and multi-stack sharing are linked below.
+
+<div class="grid cards" markdown>
+
+-   :material-key:{ .lg .middle } **Gated models**
+
+    ---
+
+    LTX-2.5 needs a Hugging Face license click. `HF_TOKEN` is not that click.
+
+    [:octicons-arrow-right-24: HF_TOKEN](operate/models-tokens.md)
+
+-   :material-share-variant:{ .lg .middle } **Multi-stack sharing**
+
+    ---
+
+    One `MODELS_DIR` for this Docker stack and nvidia-dgx-spark-lab hostPath.
+
+    [:octicons-arrow-right-24: Sharing](operate/models-sharing.md)
+
+-   :material-package-down:{ .lg .middle } **Download packs**
+
+    ---
+
+    Basenames, example graphs, LTX selective download, resume, GHCR pins.
+
+    [:octicons-arrow-right-24: Packs](operate/models-packs.md)
+
+</div>
 
 ## Three stores
 
@@ -126,22 +153,6 @@ Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) ar
 ./scripts/manage.sh reap-models --apply --class superseded --quarantine --yes
 ```
 
-Opt-in packs (not `download-models`):
-
-```bash
-./scripts/utilities/download-wan.sh run --tier fun-inp   # Fun InP A14B FLF, ~47 GB Apache
-./scripts/manage.sh download-restore --tier seedvr2-3b   # SeedVR2-3B post-concat, ~15 GB Apache
-./scripts/manage.sh download-3d --tier trellis2          # Comfy-Org TRELLIS.2 INT8 + DINOv3, no nvdiffrast
-./scripts/manage.sh download-3d --tier da3-base          # DA3-BASE Apache (DA3-LARGE refused)
-./scripts/utilities/download-wan.sh run --tier vace      # Wan 2.1 VACE 1.3B join, ~6 GB Apache
-./scripts/utilities/download-wan.sh run --tier a14b      # A14B FP8 silent hero; unload 5B first
-./scripts/utilities/download-wan.sh run --tier s2v       # S2V-14B talking-head opt-in
-./scripts/manage.sh download-longcat --tier video        # LongCat-Video MIT; no NCCL
-./scripts/manage.sh download-dreamx --tier creator       # DreamX-Creator 1.0 Apache; not World
-```
-
-Unload LTX before Fun InP / TRELLIS / VACE. SeedVR2 is restore-only after concat. `reap-models --drop-pack` cannot eat shared VAEs. SuperSplat is a [host viewer](splat-sidecar.md), not a download.
-
 `manage.sh cleanup` is **volume-only** (named volume `comfy-state`). It does **not** delete weights. `reap-models --plan` is the default; `--apply` requires `--yes`. Shared files (`flux2-vae`, ACE-Step AIO) stay in the keep-set so `--drop-pack` cannot eat them.
 
 `download-models` links weights into `comfy/*` with **relative** symlinks (e.g. `../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors`). That way the same tree resolves on the host (`MODELS_DIR=/mnt/models`) and inside the container (bind-mounted at `/models`). Absolute `/mnt/models/…` file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.
@@ -170,22 +181,21 @@ flowchart TB
 
 ---
 
-## Download
+## Pack map
 
-`download-models` has **no** `--tier`. It always pulls the default still + Wan 5B + LTX-2.5 set. On every other downloader, `--tier` is **which pack**, not a global quality ladder. `--limit` is Mbps. Full flag map and live builders: [Download tiers](download-tiers.md).
-
-```bash
-./scripts/manage.sh download-models
-# Exits non-zero until every lab basename under MODELS_DIR/comfy is present
-# Klein TE + flux2-vae use file-level readiness so a TE-only
-# partial cannot cache-hit skip the VAE.
-```
+Full download, basename, resume, and pin reference: [Download packs](operate/models-packs.md). `--tier` is a pack id ([Download tiers](download-tiers.md)).
 
 ```ezcmd
 id: download-models
 ```
 
-Per-utility status (read-only) still uses the default pack ids:
+| Utility | Default pack | Role |
+| --- | --- | --- |
+| `scripts/utilities/download-image.sh` | `--tier fast` | Klein 4B distilled + TE + VAE |
+| `scripts/utilities/download-wan.sh` | `--tier 5b` | Wan 2.2 TI2V-5B |
+| `scripts/utilities/download-ltx.sh` | `--tier 2.5` | LTX-2.5 distilled AV |
+| `scripts/utilities/download-llm.sh` | prompt-enhance GGUF | On-box Qwen3-4B |
+| GHCR image | `us-safe-studio` | ComfyUI + PyTorch; **not** Klein / Wan / LTX weights |
 
 ```bash
 ./scripts/utilities/download-image.sh status --tier fast --json
@@ -194,313 +204,9 @@ Per-utility status (read-only) still uses the default pack ids:
 ./scripts/utilities/download-llm.sh run
 ```
 
-`--tier fast` also pulls Klein companions (`te` + `vae`). Opt-in packs (Wan A14B, Fun InP, LTX 2.3, music, podcast, 3D, …) live on [Download tiers](download-tiers.md).
+`download-models` has **no** `--tier`. It always pulls the default still + Wan 5B + LTX-2.5 set.
 
-Downloads use the modern **`hf download`** CLI (not deprecated `huggingface-cli`). `setup` and `download-models` auto-install it into `~/.local/bin` (or the original user's home when the command is run with `sudo`). Do not prefix `download-models` with `sudo` — `download-limit` uses sudo internally.
-
-Progress UI is owned by the stack. `download-models` prints `══ 1/4 ══` … `4/4` for Klein, Wan, LTX, and the prompt-enhance GGUF. Each `hf download` shows disk size + MiB/s + elapsed on one rewriting TTY line (or a newline every `HF_PROGRESS_INTERVAL` seconds when piped). Hub/tqdm file-count bars stay disabled so they do not smash the heartbeat. `HF_PROGRESS=0` or `EZ_COMFY_PROGRESS=0` turns progress lines off; `HF_EXPECTED_KIB` adds a best-effort ETA.
-
-### Expected basenames after `download-models` (lab workflows)
-
-| File | Comfy folder | Role |
-| --- | --- | --- |
-| `flux-2-klein-4b-fp8.safetensors` | `diffusion_models/` | Apache Klein 4B distilled still UNET |
-| `qwen_3_4b.safetensors` | `text_encoders/` | Klein 4B TE (CLIP type **`flux2`**) |
-| `flux2-vae.safetensors` | `vae/` | Flux.2 VAE |
-| `wan2.2_ti2v_5B_fp16.safetensors` | `diffusion_models/` | Apache Wan 2.2 TI2V-5B |
-| `umt5_xxl_fp8_e4m3fn_scaled.safetensors` | `text_encoders/` | Wan CLIP (type **`wan`**) |
-| `wan2.2_vae.safetensors` | `vae/` | Wan 2.2 VAE |
-| `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors` | `diffusion_models/` | LTX-2.5 distilled AV UNET (Community License) |
-| `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors` | `text_encoders/` | LTX-2.5 Gemma4-with-proj (CLIP type **`ltxv`**) |
-| `ltx-2.5-video-vae-bf16.safetensors` | `vae/` | LTX-2.5 video VAE |
-| `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` | LTX-2.5 audio VAE |
-| `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` | On-box prompt enhance (CPU llama.cpp) |
-
-Opt-in 35B writing desk (`./scripts/manage.sh download-llm --tier qwen36-35b-a3b`, **not** `download-models`):
-
-| File | Comfy folder | Role |
-| --- | --- | --- |
-| `Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf` | `llm/` | Occupancy `llm-desk` host llama-server (~23 GB, Apache) |
-
-Opt-in music (`./scripts/manage.sh download-music --tier turbo`, **not** `download-models`). Turbo **reuses** the podcast acestep snapshot — do not pull the ~10 GB AIO twice:
-
-```bash
-./scripts/manage.sh download-music --tier turbo
-./scripts/utilities/download-music.sh status --tier turbo --json
-```
-
-| File | Comfy folder | Role |
-| --- | --- | --- |
-| `ace_step_1.5_turbo_aio.safetensors` | `checkpoints/` | ACE-Step 1.5 rap + podcast AIO |
-| `acestep_v1.5_xl_turbo_bf16.safetensors` | `diffusion_models/` | Optional XL split (`--tier xl` only) |
-| `qwen_0.6b_ace15.safetensors` / `qwen_1.7b_ace15.safetensors` | `text_encoders/` | Optional XL text encoders |
-| `ace_1.5_vae.safetensors` | `vae/` | Optional XL VAE |
-
-Opt-in podcast (`./scripts/manage.sh download-podcast`, **not** `download-models`):
-
-| File | Comfy folder | Role |
-| --- | --- | --- |
-| `kokoro-v1.0.onnx` | `onnx/` | Kokoro-82M ONNX (analog TTS) |
-| `voices-v1.0.bin` | `tts/` | Kokoro built-in voice pack |
-| `ace_step_1.5_turbo_aio.safetensors` | `checkpoints/` | ACE-Step 1.5 turbo AIO (podcast beds + rap lane; shared dest) |
-| `t3_turbo_v1.safetensors` | `tts/` | Optional Chatterbox Turbo |
-| `model.safetensors` + `config.json` + text tokenizer + `speech_tokenizer/` | snapshot dir (not flattened `comfy/tts`) | Optional Qwen3-TTS 0.6B Base. Nested 12Hz tokenizer must stay beside the talker weights |
-
-Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
-
-| File | Comfy folder | Role |
-| --- | --- | --- |
-| `silero_vad.onnx` | `onnx/` | Silero VAD (`--tier asr`) |
-| `model.bin` + `config.json` + `tokenizer.json` + `vocabulary.json` | `whisper/` | faster-whisper large-v3 (`--tier asr`; `model.bin` alone is not loadable) |
-| `ve.pt` + `s3gen.pt` + `t3_mtl23ls_v3.safetensors` + `grapheme_mtl_merged_expanded_v1.json` + `Cangjie5_TC.json` + `conds.pt` | `tts/` | Chatterbox Multilingual V3 (`--tier clone`; `from_local(..., t3_model="v3")` is offline when this set is complete). Wheel is GitHub pin `CHATTERBOX_TTS_REF` (PyPI 0.1.7 has no `t3_model`). PerTh needs `setuptools<82` (pkg_resources) |
-| `spacy_ontonotes.zip` | `pkuseg/` (not `comfy/`) | `PKUSEG_HOME=/models/pkuseg`; entrypoint symlinks `/root/.pkuseg`. Seeded by `download-dub --tier clone` |
-
-### Example graphs
-
-Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. App Mode graphs land as **`*.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](visual-generative-ai.md).
-
-| Graph | Notes |
-| --- | --- |
-| `klein/still-draft.json` | Klein 4B 768×432, 4 steps, batch 2 |
-| `audio/dub/localize.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
-| `audio/music/rap-draft.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
-| `audio/music/rap-full.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
-| `_lab/audio/albums/nill-bye/<album>/` | Nine Nill Bye albums (135 ACE-Step 180 s takes + `cover.json` + `album.json`). SaveAudio stem `NN - Song Title`. Catalog: [Local music](music.md) |
-| `_lab/audio/albums/drive-through/<album>/` | Five Drive-through albums (85 ACE-Step 180 s bass-set EDM takes + cover + album pack; eighty-three instrumental, two DJ-shout treats). SaveAudio stem `NN - Song Title`. Catalog: [Local music](music.md) |
-| `klein/still-hero.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
-| `klein/still-daily.json` | Daily still; UNET swap distilled / NVFP4 / base |
-| `klein/dream-house.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
-| `klein/dream-house-clay.json` | Ten IG 4:5 Klein edits of `house-views` clay (`ez_dream_house_clay_01`…`10`) |
-| `wan/i2v-5s.json` | Wan 5B I2V smoke (121 @ 24 fps) |
-| `wan/t2v-5s.json` | Wan 5B T2V smoke |
-| `wan/i2v-shot.json` | 5.00 s Wan I2V + last-frame SaveImage |
-| `wan/gif-loop.json` | Ping-pong GIF, 49 @ 12 fps |
-| `ltx/i2v-5s.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
-| `ltx/t2v-5s.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
-| `ltx/i2v-shot.json` | 5.00 s LTX I2V print + last-frame SaveImage |
-| `_lab/shorts/go-see.json` (also still-here, switchyard) | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](shorts.md)) |
-| `klein/shorts-still.json` | Vertical 9:16 Shorts still |
-| `wan/shorts-i2v.json` | Vertical silent Shorts I2V |
-| `ltx/shorts-i2v.json` | Vertical AV Shorts I2V |
-| `klein/thumbnail.json` | YouTube thumbnail still |
-| `klein/product-packshot.json` | Product packshot 1:1 |
-| `klein/before-after.json` | Before/after still pair |
-| `klein/style-lock.json` | Four stills of one penthouse from new cameras; locked inventory |
-| `wan/bumper-loop.json` | Loopable MP4 bumper |
-| `ltx/broll-ambient.json` | Ambient B-roll AV ~5 s |
-| `klein/storyboard-6up.json` | Six storyboard frames |
-| `klein/endcard-cta.json` | End-card / CTA plate 16:9 |
-| `klein/quote-bg.json` | Quote-card background 1:1 |
-| `klein/og-blog.json` | Blog / OG hero |
-| `klein/podcast-cover.json` | Podcast cover 1:1 |
-| `klein/banner-wide.json` | Wide channel banner |
-| `klein/ig-square.json` | Instagram 1:1 still |
-| `klein/hook-still.json` | 9:16 hook still |
-| `klein/lower-third-bg.json` | Lower-third-safe 16:9 |
-| `klein/food-tabletop.json` | Food tabletop 4:5 |
-| `klein/lighting-trio.json` | Three-light study |
-| `klein/time-of-day.json` | Dawn / noon / dusk / night |
-| `klein/camera-angles.json` | Wide / medium / close |
-| `klein/color-moods.json` | Four color moods |
-| `wan/orbit-i2v.json` | Slow orbit I2V ~5 s |
-| `wan/push-in-i2v.json` | Hero push-in I2V ~5 s |
-| `wan/parallax-i2v.json` | Parallax I2V ~5 s |
-| `wan/sticker-loop.json` | Looping sticker MP4 |
-| `ltx/weather-broll.json` | Weather B-roll AV ~5 s |
-| `ltx/interior-ambience.json` | Interior ambience AV ~5 s |
-| `ltx/hook-av.json` | AV hook / cold open ~5 s |
-
-Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. They still **must** wire the audio VAE because LTX is a joint AV model.
-
-MiniMax H3 is **banned** (US Excluded Territory). See [Model licenses](licenses.md). `download-models` refuses `--with-h3`.
-
-### Gated models / HF_TOKEN
-
-**LTX-2.5** (`Lightricks/LTX-2.5`) is gated. Klein 4B distilled and Wan 2.2 5B are Apache and do not need a license click. A token in `.env` is **not** the same as accepting the Lightricks license.
-
-```bash
-# .env
-HF_TOKEN=hf_...
-# Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree
-# or: hf auth login
-hf auth whoami
-```
-
-Fine-grained tokens need **gated repo** read. `download-models` passes `--token` from `HF_TOKEN` so it wins over a leftover `hf auth login`.
-
-### Disk headroom
+## Disk headroom
 
 `manage.sh doctor` / `start` require free disk ≥ `MIN_DISK_FREE_GIB` (default 40).
 
----
-
-## LTX selective download
-
-Default **2.5** is the small distilled set from `Lightricks/LTX-2.5` (status `min_gb` 30).
-
-`Kijai/LTX2.3_comfy` is a multi-variant hub repo (~**400 GB** if you pull everything). Use it only as a **2.3 fallback**:
-
-| Tier | Transformer (approx) | Plus | Total (approx) |
-| --- | --- | --- | --- |
-| **2.5** (default) | LTX-2.5 distilled INT8-convrot | Gemma4-with-proj + video/audio VAEs | status floor ~30 GB |
-| **2.3** / **balanced** | distilled FP8 `…fp8_input_scaled_v3` (~25 GB) | text projection + video/audio VAE + Gemma 3 TE | ~28–30 GB + ~9.5 GB TE |
-| **quality** | distilled BF16 (~42 GB) | same projection + VAEs + Gemma 3 | ~45–48 GB + TE |
-| **gemma** (auto with 2.3/balanced/quality) | — | `gemma_3_12B_it_fp4_mixed` from `Comfy-Org/ltx-2` | ~9.5 GB |
-
-Lab LTX-2.5 graphs use **CLIPLoader** (Gemma4-with-proj, type **`ltxv`**). LTX-2.3 DualCLIP is fallback only — seeded lab JSON still names 2.5 files.
-
-`status --json` readiness uses `min_gb` 30 (2.5) / 20 (2.3/balanced) / 35 (quality) / 8 (gemma) as a floor, not the full monorepo size.
-
-??? tip "Cleanup extra LTX monorepo files"
-
-    If an older run pulled the full `Kijai/LTX2.3_comfy` snapshot into a 2.3/balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:
-
-    ```bash
-    # Preview (default)
-    ./scripts/utilities/download-ltx.sh cleanup --tier 2.3
-
-    # Delete extras (keeps FP8 transformer + TE + VAEs only)
-    ./scripts/utilities/download-ltx.sh cleanup --tier 2.3 --yes
-    ```
-
-    Does **not** touch Klein, Wan, or other trees under `MODELS_DIR`.
-
-??? warning "Full monorepo escape hatch"
-
-    Operators who really want every precision/lora:
-
-    ```bash
-    LTX_FULL_REPO=1 ./scripts/utilities/download-ltx.sh run --tier 2.3
-    ```
-
-    After a full-repo mistake, use `cleanup --yes` instead of wiping all of `MODELS_DIR`.
-
----
-
-## Resume & cache
-
-Downloads are **resumable** and **cacheable** under `MODELS_DIR`:
-
-| Behavior | Detail |
-| --- | --- |
-| Resume after interrupt | ++ctrl+c++ / crash leaves `*.incomplete` under each tier’s `.cache/huggingface/`; re-run the same command to continue |
-| Resume stall (0 MiB/s) | Live `hf` holding a lock with no disk growth. FORCE-clearing locks will not unstick it. ++ctrl+c++, then `./scripts/manage.sh reset-hf-partials --yes` and re-run, or `download-models --drop-incomplete`. After 90s the downloader drops that dest’s partials and retries **once**. |
-| Skip when ready | `download-image` / `download-wan` / `download-ltx` skip tiers that already have required weights (log: `cache hit`) |
-| `HF_HOME` | Set to `MODELS_DIR` so hub metadata lives on the durable model disk |
-| Cleanup | `download-ltx.sh cleanup --yes` removes non-selective monorepo weights but **keeps** `.cache/`, `*.incomplete`, and selective keep-set files |
-
-!!! tip "Keep `.cache/`"
-
-    Do not delete a tier’s `.cache/huggingface/` folder if you want fast resume/metadata checks. Finished weight files are never re-downloaded unless missing or hub revision changes.
-
----
-
-## Multi-stack sharing
-
-```mermaid
-flowchart LR
-  EZ["ez-comfy-stack<br/>Docker bind mount"]
-  Cache["MODELS_DIR<br/>shared host path"]
-  Lab["nvidia-dgx-spark-lab<br/>K8s hostPath"]
-  EZ <--> Cache
-  Lab <--> Cache
-```
-
-### Download path
-
-```mermaid
-sequenceDiagram
-  actor Op as Operator
-  participant M as manage.sh
-  participant W as download-limit wrap
-  participant I as download-image.sh
-  participant Wa as download-wan.sh
-  participant L as download-ltx.sh
-  participant HF as Hugging Face
-  participant Disk as MODELS_DIR
-
-  Op->>M: download-models
-  M->>W: --limit auto (default)
-  W->>I: run --tier fast
-  I->>HF: pull Klein 4B + TE + VAE
-  HF-->>Disk: still weights + symlinks
-  W->>Wa: run --tier 5b
-  Wa->>HF: pull Wan 5B
-  HF-->>Disk: wan weights + symlinks
-  W->>L: run --tier 2.5
-  L->>HF: pull LTX-2.5
-  HF-->>Disk: ltx weights + symlinks
-  W-->>M: clear limit on EXIT/INT/TERM
-```
-
-### Readiness check
-
-```mermaid
-flowchart TB
-  Status["download-image / download-wan / download-ltx<br/>status --json"]
-  Doctor["manage.sh doctor"]
-  Status --> Check{"lab files present<br/>under MODELS_DIR/comfy?"}
-  Doctor --> Check
-  Check -->|yes| Ready["Ready for start"]
-  Check -->|no| Missing["Run download-models<br/>or fix MODELS_DIR mount"]
-```
-
----
-
-## Prebuilt container image (GHCR)
-
-| Item | Detail |
-| --- | --- |
-| Image (`main`) | `ghcr.io/toxicoder/ez-comfy:us-safe-studio` (arm64) |
-| Image (`development` / feature) | `ghcr.io/toxicoder/ez-comfy:us-safe-studio-development` (arm64) |
-| Selection | `manage.sh` maps current git branch → tag (override: `EZ_COMFY_IMAGE`) |
-| Frozen tags | Old `flux-to-ltx*` tags freeze on the previous image |
-| Final base | `nvidia/cuda` **runtime** (builder defaults to the same runtime image; override `CUDA_BASE_IMAGE` to devel only if you compile CUDA extensions) |
-| Contains | CUDA runtime, ComfyUI, Python venv, PyTorch/CUDA wheels (`.git`/caches stripped) |
-| Does **not** contain | `HF_TOKEN`, `.env`, host PII, or Klein/Wan/LTX weights |
-| First start | Seeds `comfy-state` volume from `/opt/comfy-prebuilt` (local rsync/cp) |
-| Volume pin | `COMFY_HOME/.lab-comfyui-ref` — stamp-present refresh reseeds from prebuilt (or git-clones `COMFYUI_REF`) when this lags the runtime pin. Compose passes `COMFYUI_REF` at **runtime**, not only as a build-arg |
-| Weights | Still under `MODELS_DIR` via `download-models` |
-| Publish | `publish-image` on `main` / `development` (docker/**); Buildx **registry** cache (`:buildcache-arm64`) |
-| Local build | Optional: `LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start` builds `docker/Dockerfile` instead of pulling — see [Getting Started](getting-started.md#build-the-image-locally-optional) |
-
-### Image layer cache (high-velocity rebuilds + pulls)
-
-??? abstract "Layer invalidation matrix"
-
-    Dockerfile order is intentional so **ops-script edits do not re-download multi‑GB torch**, **Comfy/node pip does not re-pull torch**, and **runtime apt changes rebase** via `COPY --link`:
-
-    | Change | Rebuild multi‑GB **torch** stage? | Re-pull **venv-torch**? | Re-pull **venv-extra**? | Re-pull **app**? |
-    | --- | --- | --- | --- | --- |
-    | `entrypoint.sh` / UM patches / orchestrator | No | No | No | No |
-    | `install-comfy/common.sh` (clone/link/strip only) | No | No | No | Maybe (nodes/comfy stages) |
-    | `install-comfy/phase-nodes.sh` or node **sources** only | No | No | No | Yes (smaller) |
-    | VideoHelperSuite / new node **pip** deps (opencv, llama-cpp, …) | No | No | **Yes** (delta only) | Yes |
-    | `install-comfy/phase-comfy.sh` / `COMFYUI_REF` bump | No | No | **Yes** if reqs change | Yes |
-    | `install-comfy/core.sh` / `phase-venv-torch.sh` / `TORCH_VERSION` | Yes | Yes | Yes | Yes |
-    | Runtime `apt` only (`gcc`/`g++`/`python3-dev` for Triton JIT) | No | No (`COPY --link`) | No | No |
-
-    Builder: **named stages** `torch` → `comfy` → `nodes`. Torch `COPY` is only `core.sh` + `phase-venv-torch.sh`. Pin `ARG`s are declared in the stage that uses them. Runtime: **`COPY --link` `/opt/parts/venv` then `venv-extra` then `app`** (then thin ops scripts). Compose bind-mounts `entrypoint.sh`, `install-comfy.sh`, `install-comfy/`, `pythonpath/`, and the UM patches so local script iteration needs **no image rebuild**.
-
-    Runtime installs **`gcc` + `g++` + `python3-dev`** (not full `build-essential`) so PyTorch 2.13+ Triton can JIT-compile `cuda_utils` (needs **CC + `Python.h`**) on first `CLIPTextEncode`. That is a small apt layer; `COPY --link` keeps the multi‑GB torch blob. If JIT deps are still incomplete, the entrypoint sets `LAB_DISABLE_TORCH_NATIVE_TRITON=1` so torch falls back to eager/cuBLAS.
-
-    **venv-extra** is the pip delta after the torch snapshot (Comfy `requirements.txt`, Manager/VHS, llama-cpp). Baking a small optional wheel (e.g. `kokoro-onnx`) invalidates extra, not torch.
-
-### Prebuild version pins (validated)
-
-??? abstract "Pin table and bump procedure"
-
-    Defaults are intentional tags so GHCR rebuilds are reproducible. Validated **2026-07-29** (Comfy pin **2026-09-08**):
-
-    | Pin | Default | Why this value |
-    | --- | --- | --- |
-    | `TORCH_VERSION` | `2.14.0` | cu130 aarch64 wheel from `https://download.pytorch.org/whl/cu130`. Declared only in the **torch** stage. Bump here (and compose / publish-image / `install-comfy/core.sh`) when rebuilding the multi‑GB layer. |
-    | `COMFYUI_REF` | `v0.34.6` | Newest **patch tag** on the v0.34 stable line (`8fed378`, 2026-09-07) — not GitHub **Latest** (`v0.34.0`). Native Klein 4B + Wan 2.2 + LTX-2.5 loaders. Torch cu130. Frontend still 1.49.6. Rebuild the **comfy** image stage after this bump (torch stage stays cached). Spark free-memory patch still matches `mem_free_cuda, _ = torch.cuda.mem_get_info(dev)` in `comfy/model_management.py`. |
-    | `COMFYUI_MANAGER_REF` | `4.2.2` | Matches ComfyUI v0.34.6 `manager_requirements.txt` (`comfyui_manager==4.2.2`). **Pip**, not a `custom_nodes` git clone — v4 has no root `__init__.py`. Runtime: `pip install -r manager_requirements.txt` (torch-constrained) and `python main.py --enable-manager`. Leftover `custom_nodes/ComfyUI-Manager` trees without `__init__.py` are removed on start. |
-    | `COMFYUI_NUNCHAKU_NODE_REF` | `v1.2.1` | Latest plugin release; aligned with `NUNCHAKU_VERSION=1.2.1`. **Optional** on GB10 (no official aarch64 engine wheels). When the engine is missing, start moves the pack to `ComfyUI-nunchaku.disabled` so Comfy does not import it. Seeded lab graphs use core UNET/CLIP/VAE loaders. |
-    | `COMFYUI_VHS_REF` | *(empty = main)* | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) for lab **`VHS_VideoCombine`** MP4. **Required** for `wan/*` / `ltx/*` printers. Empty ref clones default branch; set a tag/branch when you need a pin. |
-    | `COMFYUI_OPENCUT_REF` | `0.5.0` | [jtydhr88/ComfyUI-OpenCut](https://github.com/jtydhr88/ComfyUI-OpenCut) MIT embed. Fail-soft. Not the Rust rewrite. |
-    | `COMFYUI_MAGCACHE_REF` | `47bdd2a…` | [Zehong-Ma/ComfyUI-MagCache](https://github.com/Zehong-Ma/ComfyUI-MagCache) commit pin (no release tag). Wan 5B draft extra only. ComfyUI v0.34 dropped module-level `precompute_freqs_cis`; `docker/patch_magcache_compat.py` wraps that import in every MagCache module that still has it (`nodes.py` and `nodes_calibration.py`) and fail-softs the calibration import in `__init__.py`. Idempotency is per file so a volume that already wrapped `nodes.py` still gets calibration on the next start. MagCache-on-LTX stays unsupported. |
-    | `COMFYUI_LTX_DIRECTOR_REF` | `a3c809c…` | [WhatDreamsCost-ComfyUI](https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI) GPL clone **only** when `LAB_ENABLE_LTX_DIRECTOR=1`. Commit pin (no release tag). |
-
-    **How to bump pins:** change the defaults in `docker/Dockerfile` `ARG`s, `docker/docker-compose.yml` build-args, `.github/workflows/publish-image.yml`, `docker/install-comfy/core.sh` (torch) and `docker/install-comfy/common.sh` (Comfy/node refs), then rebuild/publish. Escape hatch: set `COMFYUI_REF=` empty to float the default branch (not recommended for GHCR).

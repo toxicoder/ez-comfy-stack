@@ -110,4 +110,4 @@ MODELS_DIR class work still belongs to `reap-models` for superseded LTX-2.3 / dr
 | MODELS_DIR classes only | [Models and cache](models-and-cache.md) |
 | `--tier` pack map | [Download tiers](download-tiers.md) |
 | Verb catalog | [manage.sh reference](manage-cli.md) |
-| Disk-full symptom | [Troubleshooting](troubleshooting.md) |
+| Disk-full symptom | [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md) |

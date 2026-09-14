@@ -1,0 +1,70 @@
+---
+title: Music disclosure
+description: DistroKid, Spotify, YouTube, and USCO disclosure for ACE-Step rap and EDM, plus tags vs lyrics, Hard no, and QC. Not legal advice.
+tags: [music, disclosure, distrokid, spotify, youtube, usco, us-safe]
+---
+
+# Music disclosure
+
+**What's on this page**
+
+- **Tags vs lyrics** (vocal hints are not a rights grant)
+- **DistroKid / Spotify / YouTube / USCO Part 2** disclosure
+- **Hard no** vendors and prompts
+- **QC** before any release
+
+**What this enables**
+
+- **Keeping RAP-FIRST and Drive-through takes** original, disclosed, and off banned vendors
+- **A human rewrite plus selection** before anyone treats a Queue as a release
+
+**Who this is for:** studio users who already Queued **audio/music/rap-draft**. Overview: [Local music](../music.md). RAP-FIRST: [Nill Bye albums](music-rap.md). EDM: [Drive-through EDM](music-edm.md).
+
+!!! warning "Not legal advice"
+
+    Platform rules and copyright change. Read the current DistroKid, Spotify, YouTube, FTC, and USCO pages before you monetize.
+
+---
+
+## Tags vs lyrics
+
+- **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
+- **Lyrics** are the bars (rap) or the arrangement score (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant. EDM graphs use `[inst]` for the bed and drops. Eighty-three takes stay instrumental. Two bass-set treats add one 1–2 word `[chorus]` DJ chop (never `[verse]`). Do not put the act name in the score — ACE will sing it.
+- **Original lyrics only.** Do not write “in the style of \<living artist\>”. No living-MC names. No famous-hook paraphrases.
+- **Short percussive lines** (about 6–10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **audio/music/rap-draft** after a pull so those combos stay aligned.
+
+ACE-Step generates the vocal from lyrics + tags. That timbre is an **invented identity**, not a cloned MC. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs.
+
+---
+
+## DistroKid, Spotify, YouTube, authorship
+
+- **DistroKid / Spotify:** you must own the rights. Disclose AI lyrics + vocals + instrumental. If the artist identity is fake, Spotify may treat it as an “AI Persona” — prefer a **human artist name** with disclosed AI production.
+- **YouTube:** use the synthetic-audio / altered-content flag. Mass-upload of near-duplicates is inauthentic content.
+- **USCO Part 2 / Thaler:** edit the lyrics. Prompts are not authorship. A human rewrite plus selection and arrangement can be; raw generations are not registrable.
+
+---
+
+## QC
+
+Do this **before any release**. These graphs are lab takes, not masters.
+
+- **Human rewrite** the lyrics on RAP-FIRST full tracks and every Nill Bye take. Seeded bars stay short and SFW.
+- **Human selection and edit** on Drive-through EDM. Arrangement scores are production cues, not a verse/chorus loop.
+- **Punch up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river.
+- **No living-MC names** and no famous-hook paraphrases. Each Nill Bye take owns exclusive verses and punchlines — content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks.
+- **ACE-Step vocal** is an invented identity, not a clone. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs.
+- **Cover still** in a later Klein session. Do not co-resident with LTX / Wan / Klein.
+
+---
+
+## Hard no
+
+Do not vendor or default:
+
+- TTS-Audio-Suite, OldTimeRadio, cloud `ace-step/ACE-Step-ComfyUI`
+- MiniMax Music 3 as a lab default, MiniMax H3, Suno / Udio, Stable Audio 2.5 partner
+- Celebrity names in tags/lyrics, `LoadAudio` of copyrighted songs, “cover this Drake track”
+- Required `XAI_API_KEY`
+
+Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.34.6`.

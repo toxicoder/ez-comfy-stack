@@ -26,7 +26,7 @@ tags: [learn, comfyui, studio, dgx-spark, concepts]
 
 ez-comfy-stack is a **sample US-safe local studio**: ComfyUI in Docker on **one** NVIDIA DGX Spark, with Apache Klein 4B stills, Apache Wan 2.2 silent motion, and LTX-2.5 joint AV.
 
-It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). Graduate to the lab when you outgrow a demo.
+It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). How the pieces fit: [Architecture](architecture.md). When to graduate: [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md).
 
 <div class="grid cards" markdown>
 
@@ -108,14 +108,16 @@ Learn the models: [Klein, Wan, and LTX](pipeline.md). Learn the math-lite versio
 ## Suggested order
 
 1. This page (you are here)
-2. [ComfyUI basics](comfyui.md) — canvas nouns
-3. [Getting Started](../getting-started.md) — first successful still
-4. [Prompting](../prompting.md) — how each model reads text
-5. [Still to motion to AV](../visual-generative-ai.md) — the daily playbook
-6. [Clay to finish](clay-to-finish.md) — script → clay → look → print → stems
-7. [Blender creator suite](blender-creator.md) — stills + 5.00s packs from host Blender
-8. [Stay in Comfy after a Blender dump](comfy-first-blender.md) — loaders + occupancy gate on `:8188`
-9. [Dream-house tours](dream-house.md) — language T2I vs Blender greybox + Klein restyle
-10. [Workflow catalog](../studio-workflows.md) — which graph for a thumbnail, GIF, or 90s film
+2. [Architecture](architecture.md) — Compose, three stores, occupancy XOR
+3. [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md) — this sample vs the full lab
+4. [ComfyUI basics](comfyui.md) — canvas nouns
+5. [Getting Started](../getting-started.md) — first successful still
+6. [Prompting](../prompting.md) — how each model reads text
+7. [Still to motion to AV](../visual-generative-ai.md) — the daily playbook
+8. [Clay to finish](clay-to-finish.md) — script → clay → look → print → stems
+9. [Blender creator suite](blender-creator.md) — stills + 5.00s packs from host Blender
+10. [Stay in Comfy after a Blender dump](comfy-first-blender.md) — loaders + occupancy gate on `:8188`
+11. [Dream-house tours](dream-house.md) — language T2I vs Blender greybox + Klein restyle
+12. [Workflow catalog](../studio-workflows.md) — which graph for a thumbnail, GIF, or 90s film
 
 Something broke: [Troubleshooting](../troubleshooting.md). Before reboot: [Reboot safety](../reboot-safety.md).

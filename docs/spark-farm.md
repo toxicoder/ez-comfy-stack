@@ -8,20 +8,114 @@ tags: [spark, farm, fabric, comfyui]
 
 **What's on this page**
 
-- How three Sparks are used (farm vs relay)
-- Fabric NFS / rsync vs management SSH
-- Three ComfyUI UIs (Queue seeded lab graphs on each)
-- Optional `sync-models` (rsync `MODELS_DIR/comfy` over fabric)
-- `dispatch`: local `print-shot` per host, never remote compose up
-- What this sample stack refuses (NCCL, K3s, MiniMax H3, H3 Director)
+- **Farm vs relay** — independent 5 s Queues, not NCCL
+- **Fabric NFS / rsync** vs management SSH
+- **Numbered runbook** — copy example env → per-node start → dispatch → concat
+- **Three ComfyUI UIs** — Queue seeded lab graphs on each
+- **Optional `sync-models`** — rsync `MODELS_DIR/comfy` over fabric
+- **`dispatch`** — local `print-shot` per host, never remote compose up
+- **Refusals** — NCCL, K3s, MiniMax H3, H3 Director
 
 **What this enables**
 
-- Three concurrent 5 s Wan/LTX shots with **one weight copy**
-- Copies on the 200 GbE fabric, not the 10 GbE mgmt NIC
-- Unchanged `restart: "no"` and local heavy confirm on `start`
+- **Three concurrent 5 s** Wan/LTX shots with **one weight copy**
+- **Copies on the 200 GbE fabric**, not the 10 GbE mgmt NIC
+- **Unchanged `restart: "no"`** and local heavy confirm on `start`
 
-This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab). You still have **no NCCL** and **no multi-GPU graph** in this sample stack — three UIs, one weight copy, independent 5 s Queues.
+This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab). You still have **no NCCL** and **no multi-GPU graph** in this sample stack — three UIs, one weight copy, independent 5 s Queues. Why this repo stays Compose: [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md). Occupancy is **per Spark**: [Occupancy](occupancy.md) · [Occupancy matrix](operate/occupancy-matrix.md).
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
+```
+
+Farm hosts use the example env (placeholders), not a single `${SPARK_HOST}`. Status probe:
+
+```ezcmd
+id: spark-farm-status
+```
+
+!!! danger "Never remote compose up · never NCCL · MiniMax H3 banned"
+
+    `spark-farm.sh` **never** starts compose on a remote node. Type **yes** on each Spark locally. Independent workers may share `${MODELS_DIR}`; that is **not** NCCL. MiniMax H3 names (`*h3*` / `*MiniMax*`) are refused — see [licenses](licenses.md).
+
+---
+
+## Runbook (numbered)
+
+Placeholders below match `config/spark-farm.example.env`. Do **not** commit real hostnames.
+
+1. **Copy the example env**
+
+   ```bash
+   cp config/spark-farm.example.env config/spark-farm.env   # local, untracked
+   ```
+
+2. **Fill placeholders** — `SPARK_HOSTS`, `SPARK_USER`, `SPARK_COMFY_URLS`, `SPARK_FABRIC_IPS`, `MODELS_DIR` (and `COMFY_OUTPUT_DIR` / `FARM_SHARE` if you do not want the defaults):
+
+   ```bash
+   # Management / SSH network (not the 200 GbE fabric)
+   SPARK_HOSTS=spark-0.local,spark-1.local,spark-2.local
+   SPARK_USER=nvidia
+   SPARK_COMFY_URLS=http://spark-0.local:8188,http://spark-1.local:8188,http://spark-2.local:8188
+   # Fabric (ConnectX-7 / RoCE) — NFS and rsync only
+   SPARK_FABRIC_IPS=10.0.0.1,10.0.0.2,10.0.0.3
+   MODELS_DIR=/mnt/models
+   COMFY_OUTPUT_DIR=/mnt/comfy-output
+   FARM_SHARE=/mnt/comfy-output/shots
+   ```
+
+3. **Source it** in the operator shell:
+
+   ```bash
+   set -a
+   source config/spark-farm.env
+   set +a
+   ```
+
+4. **Share weights: NFS vs rsync over fabric** (pick one)
+
+   - **NFS over the fabric subnet (preferred):** Spark-0 exports `${MODELS_DIR}` (default `/mnt/models`); Sparks 1–2 mount it. Compose already bind-mounts `${MODELS_DIR}:/models`.
+   - **Replica:** `./scripts/utilities/spark-farm.sh sync-models` rsyncs `MODELS_DIR/comfy` over **`SPARK_FABRIC_IPS` only** (not the management NIC). Needs at least two fabric addresses.
+
+5. **Per-node setup / doctor / download / start** — on **each** Spark, operator, with confirm. Type **yes** locally. Never `ssh … compose up`.
+
+   ```bash
+   git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
+   cd ez-comfy-stack
+   ./scripts/manage.sh setup
+   # set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)
+   ./scripts/manage.sh doctor
+   ./scripts/manage.sh download-models      # cache owner, or after NFS is up
+   ./scripts/manage.sh start                # type yes
+   ```
+
+6. **Probe** (does not start compose):
+
+   ```bash
+   ./scripts/utilities/spark-farm.sh status [--json]
+   ```
+
+7. **Dispatch** `print-shot` (shots **01–06 / 07–12 / 13–18** on three hosts, or an even split on two). SSH-runs **local** `./scripts/manage.sh print-shot` only:
+
+   ```bash
+   ./scripts/utilities/spark-farm.sh dispatch --film go-see
+   ```
+
+8. **Concat locally** (gather is under `${FARM_SHARE}/out`; concat on spark-0):
+
+   ```bash
+   FILM=go-see   # or still-here | switchyard
+   ./scripts/utilities/concat-shots.sh --film "${FILM}" --yes
+   ```
+
+Director is **off** this path. See [90s shorts](shorts.md).
+
+---
 
 ## Farm vs relay
 
@@ -31,6 +125,8 @@ This remains a **per-node Comfy demo**. Tensor-parallel LLMs belong in [nvidia-d
 | **Do not implement** | NCCL split of a single denoise across 3 GB10s | Out of scope |
 
 Clustering is **throughput + one weight copy**, not slicing one sampler. MiniMax H3 is banned — see [licenses](licenses.md).
+
+---
 
 ## Networking (docs only — no IaC)
 
@@ -53,6 +149,8 @@ set -a
 source config/spark-farm.example.env   # after you filled in real hosts
 set +a
 ```
+
+---
 
 ## Per-node process
 
@@ -91,6 +189,8 @@ The `run` subcommand prints a **shorts/go-see / wan/i2v-shot / ltx/i2v-shot** Qu
 `dispatch` assigns shots **01–06 / 07–12 / 13–18** (or an even split on two hosts) and SSH-runs **local** `./scripts/manage.sh print-shot` on each Spark. It **never** remote-starts compose. Director is off this path. Concat on spark-0 after gather.
 
 Memory: keep `MEM_LIMIT=90g`, `MEM_RESERVATION=80g`, `MIN_HOST_FREE_GIB=28`, `shm_size: 16gb`.
+
+---
 
 ## Commands
 

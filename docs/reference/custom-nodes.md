@@ -1,0 +1,199 @@
+---
+title: Custom nodes
+description: Lab ez_* ComfyUI packs — class names, display names, inputs/outputs, occupancy, and QC/rights notes from NODE_CLASS_MAPPINGS.
+tags: [custom-nodes, comfyui, occupancy, qc]
+---
+
+# Custom nodes
+
+**What's on this page**
+
+- **Every pack** under `custom_nodes/` (`ez_common` … `ez_studio_blocks`)
+- **Mapped nodes** from `NODE_CLASS_MAPPINGS` / `INPUT_TYPES` / `RETURN_TYPES`
+- **Empty mappings** — helpers, LTX spatial patch, App occupancy chip, subgraphs
+- **QC / rights** notes that ship on the node `DESCRIPTION` (nothing invented)
+
+**What this enables**
+
+- **Looking up** a canvas class without opening `nodes.py`
+- **Seeing** occupancy widgets vs graph labels (`llm` is not a CLI mode)
+- **Keeping** App Mode widgets on [ComfyUI Apps](../studio-apps.md) (this page is the node catalog)
+
+Entrypoint copies these packs into `$COMFY_HOME/custom_nodes/` on `start`. Operator-installed packs live on `${COMFY_OUTPUT_DIR}/custom-nodes-user` (`_user/`) and are not overwritten.
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
+```
+
+!!! warning "Occupancy and licenses"
+
+    One heavy GPU job on GB10. In-canvas **Occupancy gate** reads `${COMFY_OUTPUT_DIR}/.occupancy.json` only — it does not start Compose. LTX Community License disclosure nodes are not legal advice. Dub Queue refuses unless **I have rights** is on.
+
+---
+
+## Pack index
+
+| Pack | `NODE_CLASS_MAPPINGS` | Role |
+| --- | --- | --- |
+| `ez_common` | empty | Shared `node_log` / `node_progress` |
+| `ez_dcc` | 6 nodes | Guide-pack loaders + occupancy gate |
+| `ez_dub` | 3 nodes | Ingest / translate / clone+mix |
+| `ez_film` | 3 nodes | Unload, 90s concat, LTX disclosure |
+| `ez_ltx_spatial` | empty | Runtime snap of LTX spatial dims |
+| `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
+| `ez_podcast` | 3 nodes | Script, disclosure, Kokoro TTS |
+| `ez_prompt_enhance` | 5 nodes | Klein / Wan / LTX / join / ACE-Step |
+| `ez_research` | 1 node | Creative research chat |
+| `ez_studio_app` | empty | App Mode JS occupancy chip |
+| `ez_studio_blocks` | empty | Subgraph blueprints |
+
+---
+
+## ez_common (helpers)
+
+**No canvas nodes.** `NODE_CLASS_MAPPINGS` is empty.
+
+| Helper | What it does |
+| --- | --- |
+| `node_log(prefix, message)` | Writes `[prefix] message` to stderr |
+| `node_progress(total)` | Comfy `ProgressBar` when importable, else `NullProgress` |
+
+Used by other `ez_*` packs (podcast TTS turns, and similar). Import is hermetic.
+
+---
+
+## ez_dcc
+
+Category `ez-comfy/dcc`. Fail-closed pack QC. Depth stills are mist 0–1 (near=white, far=black). Paths under `${COMFY_OUTPUT_DIR}/guides/`. Stay in Comfy: [Stay in Comfy after a Blender dump](../learn/comfy-first-blender.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZDCCLoadGuideStill` | Load guide still | `slug` STRING (default `go-see`), `shot_id` STRING (default `12`), `layer` combo `first` `last` `clay` `depth` `canny` (default `first`) | `IMAGE` image, `MASK` mask, `STRING` metadata | — | Fail-closed QC. Clay/depth/canny/first/last from `guides/<slug>/<shot_id>/` |
+| `EZDCCLoadGuideVideo` | Load guide video path | `slug`, `shot_id`, `layer` combo `clay` `depth` `canny` (default `clay`) | `STRING` path, `INT` fps | — | Absolute `clay.mp4` / `depth.mp4` / `canny.mp4` at **24 fps**. Does not decode 120 frames |
+| `EZDCCLoadStillPack` | Load still pack | `slug`, `plate` STRING (default `mug`), `layer` combo `first` `rgb` `depth` `canny` `normal` (default `first`) | `IMAGE` image, `MASK` mask, `STRING` metadata | — | `guides/<slug>/stills/<plate>/`. Sizes match `guide_pack.STILL_SIZES` |
+| `EZDCCCameraJson` | Load camera.json | `slug`, `shot_id` | `STRING` camera_json | — | Missing file → empty string. No CAMERA socket |
+| `EZDCCPreviewGuideLayer` | Preview guide layer | `IMAGE` image, `label` STRING (default `guide`) | `IMAGE` image | — | Identity pass-through |
+| `EZDCCOccupancyGate` | Occupancy gate | `IMAGE` image, `required_mode` combo `klein` `trellis` `wan` `ltx` (default `klein`) | `IMAGE` image | **required_mode** (CLI heavy modes) | Reads `.occupancy.json`. Missing file **passes**. `idle` / `blender-desk` / `llm-desk` / mismatch **fail**. Does **not** start Compose or spawn Blender |
+
+---
+
+## ez_dub
+
+Category `ez-comfy/dub`. Output nodes. No celebrity refs. [Local dub](../dub.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZDubIngest` | Dub ingest (file or URL) | `source` combo (files in Comfy input/ plus `(none)`), `have_rights` BOOLEAN (default **false**), `job_slug` STRING (default `episode`), `source_url` STRING | `STRING` job_id, `AUDIO` audio | graph **audio** (App Mode) | Queue **refuses** unless **I have rights** is on (`RightsError`). File in input/ or optional http(s) URL |
+| `EZDubScript` | Dub transcript + translate | `prompt` STRING multiline JSON, `enhance` BOOLEAN (default on), `target_language` combo (ISO codes, default `es`), `source_language` combo (`auto` + same codes, default `auto`), `max_speakers` INT 0–12 (default 0), `stage` combo `all` `analyze` `render` (default `analyze`); optional `job_id` STRING | `STRING` script | graph **audio** | Diarize + ASR + on-box GGUF. Turn **Rewrite translation** off to pin widget text. Stage=`render` skips ASR |
+| `EZDubRender` | Dub clone + mix | `script` STRING, `engine` combo `chatterbox-ml` `qwen3tts` (default `chatterbox-ml`), `keep_bed` BOOLEAN (default true), `spoken_disclosure` BOOLEAN (default **false**), `speed` FLOAT 0.5–1.5 (default 1.0), `cfg_weight` FLOAT −1.0–1.0 (default −1.0), `exaggeration` FLOAT 0.25–2.0 (default 0.5); optional `job_id` | `AUDIO` audio | graph **audio** | Zero-shot clone; PerTh **on**. Duration-locked YT WAV + SRT + disclosure sidecars. Spoken bumper (off by default) overlays the mix wav only. Stage `analyze` returns empty audio |
+
+---
+
+## ez_film
+
+Category `ez-comfy/film`. Films: `go-see`, `still-here`, `switchyard`. [90s shorts](../shorts.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZUnloadModels` | Unload models (pass IMAGE) | `IMAGE` image | `IMAGE` image | — (used between Klein and LTX) | Best-effort Comfy + CUDA unload, then identity IMAGE. Keeps Klein 4B and LTX-2.5 from sitting in memory together |
+| `EZFilmConcat` | Save 90s film (MP4) — play / download | `film` combo (default `go-see`), `cap_seconds` FLOAT 1.0–90.0 (default 90), `xfade_cs` INT 0–50 (default 0), `shot_01`…`shot_18` `VHS_FILENAMES`; optional `disclosure` STRING | `STRING` path | graph **film** | Concat 18 LTX 5.00s MP4s. Refuses fewer than 18 readable stems. H.264 CRF 18 + AAC + YouTube loudnorm + faststart. `xfade_cs` is audio-only acrossfade (10 = 0.10s); 0 is a hard cut |
+| `EZFilmDisclosure` | LTX AI-media disclosure (end-card) | `text` STRING multiline | `STRING` text | — | Prepends the LTX Community License AI-media disclosure. Idempotent. **Not legal advice** |
+
+---
+
+## ez_ltx_spatial (runtime patch)
+
+**No canvas nodes.** `NODE_CLASS_MAPPINGS` is empty.
+
+On import, `apply_patches()` wraps Comfy `LTXVImgToVideo`, `EmptyLTXVLatentVideo`, `LTXVEmptyLatentAudio`, and `VideoVAE.encode` when those modules exist. Spatial size snaps to the video VAE **32×** grid; length snaps to **1+8n**. Fail-soft. Lab size is **1280×704** (never 1280×720 as the plan).
+
+---
+
+## ez_music
+
+Category `ez-comfy/music`. [Local music](../music.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZRapLyrics` | Rap Lyrics | `lyrics` STRING multiline, `enhance` BOOLEAN (default on) | `STRING` lyrics | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. **Forbids living-MC names and famous hooks**. ACE-Step still invents vocal timbre from tags plus lyrics |
+| `EZAudioMetadata` | Album metadata | `AUDIO` audio, `artist` `album` `title` STRING, `track` INT 1–99, `tracktotal` INT 1–99, `year` INT 1900–2100 (default 2026), `art_mode` combo `skip` `upload` `generate` (default `skip`), `prefix` STRING; optional `IMAGE` cover | `AUDIO` audio | graph **audio** | Copies ACE SaveAudio masters into `albums/<Artist>/<Album>/` and writes tags |
+| `EZAlbumPack` | Pack album zip | `artist` STRING, `album` STRING | `STRING` zip_path | graph **audio** | Writes `<Album>.m3u` and `<Album>.zip`. CPU only |
+
+---
+
+## ez_podcast
+
+Category `ez-comfy/podcast`. [Local podcast](../podcast.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZPodcastScript` | Podcast Script | `prompt` STRING multiline, `enhance` BOOLEAN (default on), `flavor` combo `podcast_two_host` `radio_drama` (default `podcast_two_host`) | `STRING` script | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. Unloads the writer after a rewrite so TTS can run in the same Queue |
+| `EZPodcastDisclosure` | Podcast Disclosure | `script` STRING | `STRING` script | graph **audio** | Prepends the **fixed** line: voices and music are synthesized; hosts are original characters, not recordings of real people. Operators cannot edit that string |
+| `EZKokoroTTS` | Kokoro TTS (two-host) | `script` STRING, `speaker_a_voice` / `speaker_b_voice` / `announcer_voice` combo (Kokoro ids; defaults `af_heart` / `am_michael` / `bm_george`), `include_announcer` BOOLEAN (default false), `backend` combo `kokoro` `chatterbox` `qwen3tts` (default `kokoro`), `speaker_a_ref` / `speaker_b_ref` STRING, `speed` FLOAT 0.5–1.5 (default 1.0) | `AUDIO` audio | graph **audio** | Kokoro-82M ONNX/CPU built-ins (Apache 2.0). Chatterbox / Qwen3-TTS only with operator-owned refs; empty refs fall back to Kokoro. **Never ships celebrity WAVs** |
+
+---
+
+## ez_prompt_enhance
+
+Category `ez-comfy/prompt`. On-box Qwen3-4B-Instruct-2507 GGUF. Fail-soft without a GGUF (`download-models`). Style combo is `none` plus ids from `custom_nodes/ez_prompt_enhance/styles.json` (file order). [Prompting](../prompting.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZKleinPromptEnhance` | Klein Prompt Enhance | `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible |
+| `EZWanPromptEnhance` | Wan Prompt Enhance | `prompt`, `enhance`, `mode` combo `t2v` `i2v` `flf` `vace` (default `t2v`), `duration_hint` (default `5 seconds, 24 fps`), `style` | `STRING` prompt | CPU GGUF | T2V look+motion+one camera; I2V motion+camera only; `flf` Fun InP first-last; `vace` join/inpaint. **No audio**. Style ignored on I2V/flf/vace |
+| `EZLTXPromptEnhance` | LTX Prompt Enhance | `prompt`, `enhance`, `mode` combo `t2v` `i2v` (default `t2v`), `duration_hint`, `audio_notes` STRING, `style` | `STRING` prompt | CPU GGUF | Flowing present-tense paragraph with audio interleaved. Style ignored on I2V |
+| `EZPromptJoin` | Prompt Join | `identity` STRING, `shot` STRING, `inventory` STRING, `lock` combo `view` `state` (default `view`) | `STRING` prompt | — | `view` front-loads the shot; `state` keeps framing and changes only light/grade/named action. Inventory is a locked object list |
+| `EZAceStepPromptEnhance` | ACE-Step Prompt Enhance | `tags` STRING, `lyrics` STRING, `enhance` BOOLEAN (default on), `mode` combo `vocal` `instrumental` (default `vocal`) | `STRING` tags, `STRING` lyrics | CPU GGUF | Instrumental mode forces no-vocals tags and `[inst]` lyrics |
+
+---
+
+## ez_research
+
+Category `ez-comfy/research`. Same pipeline as **inspire/research-chat**. Briefs under `${COMFY_OUTPUT_DIR}/research/` (never `${MODELS_DIR}`). MCP twin: [MCP](../operate/mcp.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZCreativeResearch` | Creative Research | `prompt` STRING (default night-rooftop lighting question), `mode` combo `chat` `research` (default `research`), `web_search` BOOLEAN (default on), `subagents` INT 1–3 (default 2), `history` STRING | `STRING` reply | graph **`llm`** (not CLI `occupancy enter llm`) | GPU 35B sidecar when `llm-desk` is up, else on-box 4B. Fail-soft without a GGUF. HTTPS search is SSRF-guarded |
+
+Graph label `llm` means **nothing GPU** on the App occupancy chip unless `llm-desk` is the writing desk. It is not `occupancy enter llm`.
+
+---
+
+## ez_studio_app (JS occupancy chip)
+
+**No Python nodes.** `NODE_CLASS_MAPPINGS` is empty. `WEB_DIRECTORY = ./js`.
+
+`ez_studio_app.js` relabels App widgets and draws an occupancy chip from `extra.lab_app_mode`. Chip “must be stopped” copy:
+
+| Graph occupancy | Chip says stop |
+| --- | --- |
+| `none` / `llm` | nothing GPU |
+| `klein` | Wan, LTX, podcast, music |
+| `wan` | LTX, podcast, music |
+| `ltx` | Wan, podcast, music, other LTX |
+| `film` | everything else on that Spark |
+| `audio` | Klein / Wan / LTX session |
+
+This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md).
+
+---
+
+## ez_studio_blocks (subgraphs)
+
+**No extra Python nodes.** `NODE_CLASS_MAPPINGS` is empty.
+
+Comfy scans `custom_nodes/ez_studio_blocks/subgraphs/*.json` after `start` copies the pack. Source of truth for the JSON: `tests/python/_build_studio_blocks.py`. Do not vendor official LTX Template blobs.
+
+| Blueprint | Occupancy (pack README) |
+| --- | --- |
+| `klein-t2i-backbone` | klein |
+| `wan-i2v-5s` | wan |
+| `ltx-av-5s` | ltx |
+| `ltx-film-shot` | film |
+
+US-safe weights only (Klein 4B / Wan 2.2 5B / LTX-2.5 distilled). 90s film lab graphs still expand 18 concat-safe printers on the parent so VHS prefixes stay per-shot.
