@@ -238,6 +238,16 @@ EXPECTED_WORDS_PER_S = 2.7
 TAIL_SLACK = 1.6
 VOICED_MIN_FRAC = 0.20
 ZCR_NOISE_FRAC = 0.25
+ENVELOPE_CV_MIN = 0.12
+ONSET_ABS = 0.02
+ONSET_REL = 0.12
+ONSET_HOLD_S = 0.08
+ONSET_PAD_S = 0.03
+CLONE_TOKEN_RATE = 25
+CLONE_SILENCE_PAD_S = 3.0
+CLONE_TOKEN_SLACK = 1.8
+CLONE_TOKEN_MIN = 80
+CLONE_TOKEN_MAX = 1000
 PCM_INT_RANGE = 1.5
 REF_MIN_TURN_S = 0.8
 REF_SINGLE_S = 6.0
@@ -1282,6 +1292,122 @@ def translate_turns(
     return merged, ""
 
 
+def clone_token_budget(text: str) -> int:
+    """T3 ``max_new_tokens`` cap for one clone line.
+
+    Includes a hush-token pad so leading silence tokens still fit; onset
+    crop strips that prefix after decode. Chatterbox ``generate`` hardcodes
+    1000 (~40 s) when this wrap is absent.
+
+    Arguments:
+        text: Target-language line.
+    Returns:
+        Token count in ``[CLONE_TOKEN_MIN, CLONE_TOKEN_MAX]``.
+    """
+    need = CLONE_SILENCE_PAD_S + expected_speech_s(text) * CLONE_TOKEN_SLACK
+    tokens = int(round(need * CLONE_TOKEN_RATE))
+    if tokens < CLONE_TOKEN_MIN:
+        return CLONE_TOKEN_MIN
+    if tokens > CLONE_TOKEN_MAX:
+        return CLONE_TOKEN_MAX
+    return tokens
+
+
+def _frame_rms(
+    pcm: list[float], rate: int, frame_ms: int = 20
+) -> tuple[list[float], int]:
+    """Non-overlapping frame RMS plus frame length in samples."""
+    sr = int(rate) or SAMPLE_RATE
+    frame = max(1, int(sr * frame_ms / 1000))
+    n = len(pcm)
+    values: list[float] = []
+    i = 0
+    while i + frame <= n:
+        values.append(rms(pcm[i : i + frame]))
+        i += frame
+    return values, frame
+
+
+def speech_onset_slice(pcm: list[float], rate: int) -> list[float]:
+    """Drop leading/trailing near-silence using a relative onset.
+
+    Absolute RMS 0.008 keeps PerTh-watermarked hush (~0.01). This uses
+    ``max(ONSET_ABS, ONSET_REL * peak)`` and an 80 ms hold so watermark
+    floor and clicks do not count as speech.
+
+    Arguments:
+        pcm: Mono clone PCM.
+        rate: Sample rate.
+    Returns:
+        Sliced PCM, or ``[]`` when no voiced burst is found.
+    """
+    if not pcm:
+        return []
+    sr = int(rate) or SAMPLE_RATE
+    frames, frame = _frame_rms(pcm, sr)
+    n = len(pcm)
+    if not frames:
+        return [float(x) for x in pcm] if rms(pcm) >= ONSET_ABS else []
+    peak = max(frames)
+    if peak < ONSET_ABS:
+        return []
+    thresh = max(ONSET_ABS, ONSET_REL * peak)
+    hold = max(1, int(round(ONSET_HOLD_S * sr / frame)))
+    if len(frames) < hold:
+        return [float(x) for x in pcm] if peak >= thresh else []
+
+    def _first_hold(seq: list[float]) -> int | None:
+        run = 0
+        for i, value in enumerate(seq):
+            if value >= thresh:
+                run += 1
+                if run >= hold:
+                    return i - hold + 1
+            else:
+                run = 0
+        return None
+
+    start_f = _first_hold(frames)
+    if start_f is None:
+        return []
+    end_rev = _first_hold(list(reversed(frames)))
+    if end_rev is None:
+        last_f = len(frames) - 1
+    else:
+        last_f = len(frames) - 1 - end_rev
+    pad = int(round(ONSET_PAD_S * sr))
+    start = max(0, start_f * frame - pad)
+    end = min(n, (last_f + 1) * frame + pad)
+    if end <= start:
+        return []
+    return [float(x) for x in pcm[start:end]]
+
+
+def envelope_cv(pcm: list[float], rate: int, frame_ms: int = 20) -> float:
+    """Coefficient of variation of 20 ms frame RMS.
+
+    Steady tones sit near 0; speech has syllable-scale swings.
+
+    Arguments:
+        pcm: Mono PCM.
+        rate: Sample rate.
+        frame_ms: Frame size.
+    Returns:
+        ``std / mean``, or 1.0 when the clip is too short to judge.
+    """
+    frames, _frame = _frame_rms(pcm, rate, frame_ms)
+    if len(frames) < 4:
+        return 1.0
+    mean = sum(frames) / len(frames)
+    if mean < 1e-8:
+        return 0.0
+    acc = 0.0
+    for value in frames:
+        delta = value - mean
+        acc += delta * delta
+    return (acc / len(frames)) ** 0.5 / mean
+
+
 def _trim_silence(
     pcm: list[float], rate: int, thresh: float = REF_SILENCE_RMS
 ) -> list[float]:
@@ -1556,7 +1682,7 @@ def voiced_fraction(
 
 
 def is_speech_like(pcm: list[float], rate: int) -> bool:
-    """False for silence, square-wave clip, or white-noise-like ZCR."""
+    """False for silence, square-wave clip, white-noise ZCR, or a steady tone."""
     if not pcm:
         return False
     if rms(pcm) < REF_MIN_RMS:
@@ -1564,14 +1690,16 @@ def is_speech_like(pcm: list[float], rate: int) -> bool:
     sr = int(rate) or SAMPLE_RATE
     if zero_crossing_rate(pcm, sr) > sr * ZCR_NOISE_FRAC:
         return False
-    return voiced_fraction(pcm, sr) >= VOICED_MIN_FRAC
+    if voiced_fraction(pcm, sr) < VOICED_MIN_FRAC:
+        return False
+    return envelope_cv(pcm, sr) >= ENVELOPE_CV_MIN
 
 
 def crop_hallucination_tail(
     pcm: list[float], rate: int, text: str
 ) -> list[float]:
-    """Trim silence, then keep a prefix up to 1.6× expected spoken duration."""
-    trimmed = _trim_silence(pcm, rate)
+    """Onset-crop hush, then keep a prefix up to 1.6× expected spoken duration."""
+    trimmed = speech_onset_slice(pcm, rate)
     if not trimmed:
         return trimmed
     cap = max(
@@ -1801,6 +1929,36 @@ def _get_chatterbox() -> tuple[Any | None, str]:
     return model, ""
 
 
+@contextmanager
+def _cap_t3_tokens(model: Any, budget: int) -> Iterator[None]:
+    """Pin ``t3.inference(..., max_new_tokens)`` for one generate() call."""
+    t3 = getattr(model, "t3", None)
+    infer = getattr(t3, "inference", None)
+    if t3 is None or not callable(infer):
+        yield
+        return
+    cap = int(budget)
+    if cap < 1:
+        cap = CLONE_TOKEN_MAX
+
+    def _capped(*args: Any, **kwargs: Any) -> Any:
+        raw = kwargs.get("max_new_tokens", CLONE_TOKEN_MAX)
+        try:
+            current = int(raw) if raw is not None else CLONE_TOKEN_MAX
+        except (TypeError, ValueError):
+            current = CLONE_TOKEN_MAX
+        if current < 1:
+            current = CLONE_TOKEN_MAX
+        kwargs["max_new_tokens"] = min(current, cap)
+        return infer(*args, **kwargs)
+
+    t3.inference = _capped
+    try:
+        yield
+    finally:
+        t3.inference = infer
+
+
 def _try_chatterbox(
     text: str,
     language_id: str,
@@ -1841,11 +1999,12 @@ def _try_chatterbox(
         kwargs["audio_prompt_path"] = ref
     try:
         ckpt = clone_ckpt_dir()
-        if ckpt is not None:
-            with _chatterbox_local_only(ckpt):
+        with _cap_t3_tokens(model, clone_token_budget(text)):
+            if ckpt is not None:
+                with _chatterbox_local_only(ckpt):
+                    wav = generate(text, **kwargs)
+            else:
                 wav = generate(text, **kwargs)
-        else:
-            wav = generate(text, **kwargs)
         pcm = _pcm_list(wav)
         rate = int(getattr(model, "sr", SAMPLE_RATE) or SAMPLE_RATE)
     except Exception as exc:  # noqa: BLE001 — fail-soft
