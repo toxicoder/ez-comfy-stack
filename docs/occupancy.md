@@ -9,11 +9,11 @@ tags: [occupancy, blender, trellis, safety, gb10]
 **What's on this page**
 
 - Why GB10 is still one heavy GPU job
-- Modes: idle, blender-desk, llm-desk, klein, trellis, wan, ltx
+- Modes: idle, blender-desk, llm-desk, klein, trellis, wan, ltx — matrix: [Occupancy matrix](operate/occupancy-matrix.md)
 - Park Comfy with `POST /free` instead of `stop` for Workbench dumps or the 35B sidecar
 - What stays XOR (NVENC, Cycles CUDA, LTX next to TRELLIS, llm-desk next to blender-desk)
 - Graph occupancy label `llm` (Prompt Forge) is **not** a CLI mode
-- In-tree MCP: blender-mcp (desk) and research-mcp (GPU sidecar when llm-desk; CPU 4B as OOM fallback; Path D)
+- In-tree MCP: blender-mcp (desk) and research-mcp (GPU sidecar when llm-desk; CPU 4B as OOM fallback; Path D) — tools: [MCP](operate/mcp.md)
 
 **What this enables**
 
@@ -39,7 +39,7 @@ tags: [occupancy, blender, trellis, safety, gb10]
 | `trellis` | up, 90g/80g | TRELLIS.2 INT8 | **stopped** | image→mesh |
 | `wan` / `ltx` | up, 90g/80g | video | **stopped** | 5s print |
 
-App occupancy keys (`none` / `llm` / `klein` / …) on Prompt Forge and research-chat are **graph labels**. `llm` means nothing GPU. It is not `occupancy enter llm`.
+App occupancy keys (`none` / `llm` / `klein` / …) on Prompt Forge and research-chat are **graph labels**. `llm` means nothing GPU. It is not `occupancy enter llm`. Mode × legal GPU jobs: [Occupancy matrix](operate/occupancy-matrix.md).
 
 ```bash
 ./scripts/manage.sh occupancy status
@@ -86,6 +86,8 @@ If `/free` fails, Workbench may still contend for unified memory — `occupancy 
 
 ## MCP (mcp-construct)
 
+Tool tables and Path D tunnels: [MCP](operate/mcp.md).
+
 In-tree MCP servers are typed-tool stdio processes. **No** `execute_code`, **no** telemetry. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the launch path).
 
 **blender-mcp** wraps occupancy and host Blender (primitives, camera, keyframes, GLB, guide dumps). **No** cloud 3D APIs. bpy tools need blender-desk.
@@ -108,4 +110,4 @@ Qwen3-4B will place primitives. Cinematic scenes: Path D — laptop Grok/Cursor 
 
 Path D: laptop agent is the MCP client; Spark runs `research-mcp`. Briefs land under `${COMFY_OUTPUT_DIR}/research/` (never `MODELS_DIR`). Copy prompt ingredients into Prompt Forge, then Spark Still. MCP does not Queue Comfy.
 
-Related: [ComfyUI Apps](studio-apps.md), [Blender GB10 sidecar](blender-gb10-sidecar.md), [Studio sidecars](studio-sidecars.md), [Hardware, memory, and safety](learn/hardware.md).
+Related: [Occupancy matrix](operate/occupancy-matrix.md) · [MCP](operate/mcp.md) · [ComfyUI Apps](studio-apps.md) · [Blender GB10 sidecar](blender-gb10-sidecar.md) · [Studio sidecars](studio-sidecars.md) · [Hardware, memory, and safety](learn/hardware.md) · [Architecture](learn/architecture.md) · [Troubleshooting — studio canvas](operate/troubleshooting-canvas.md).

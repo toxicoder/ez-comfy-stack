@@ -195,7 +195,7 @@ flowchart LR
   - Torch stage `COPY` is only `install-comfy/core.sh` + `phase-venv-torch.sh` (not `common.sh` / Comfy pins)
   - Named stages `torch` → `comfy` → `nodes`; pin `ARG`s declared in the stage that uses them
   - Runtime: `COPY --link` `/opt/parts/venv` then `venv-extra` then `app` **before** entrypoint/install/patch
-  - Validated pins: `TORCH_VERSION`, `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see models-and-cache.md)
+  - Validated pins: `TORCH_VERSION`, `COMFYUI_REF`, `COMFYUI_MANAGER_REF`, `COMFYUI_NUNCHAKU_NODE_REF` (see operate/models-packs.md)
   - BuildKit `# syntax=docker/dockerfile:1`, `COPY --link`, `COPY --chmod`, pip + apt cache mounts
   - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
   - `docker/.dockerignore` is **whitelist-only** (`*` then `!exceptions`). Every `COPY` source from the build context must have a matching `!` line or GHCR/`docker build` fails with `not found`
@@ -262,7 +262,9 @@ flowchart LR
 
 ## Docs publish
 
-- Local / PR: `make docs` (strict MkDocs Material build into `site/`)
+Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How docs tests work: [Testing docs](contribute/testing-docs.md). Comment-derived CLI: [Generated shell reference](generated/shell/reference.md). **AI-drafted docs still need a human pass** before merge.
+
+- Local / PR: `make docs` (runs `docs/generate_shell_docs.py`, then strict MkDocs Material build into `site/`)
 - Public site (per long-lived branch) via **mike** on GitHub Pages:
   - `main` → [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
   - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)

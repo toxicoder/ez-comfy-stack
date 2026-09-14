@@ -5,38 +5,40 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/toxicoder/ez-comfy-stack/ci.yml?branch=development&style=for-the-badge&logo=github&label=CI)](https://github.com/toxicoder/ez-comfy-stack/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/toxicoder/ez-comfy-stack?style=for-the-badge)](LICENSE)
 
-**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI with a **US-safe local studio** (Apache Klein 4B stills, Apache Wan 2.2 silent motion, LTX distilled AV), Docker Compose, shared `/mnt/models` cache, and remote-SSH-safe download throttling. Opt-in local podcast (Kokoro + native ACE-Step) and rap-first music lanes (plus a Drive-through EDM pack) are documented in [Local podcast](docs/podcast.md) and [Local music](docs/music.md) and are **not** part of `download-models`.
+**Simplified Visual Generative AI** demo for a **single NVIDIA DGX Spark**: ComfyUI in Docker Compose with a **US-safe local studio** (Apache Klein 4B stills, Apache Wan 2.2 silent motion, LTX-2.5 distilled AV), occupancy XOR, and remote-SSH-safe downloads.
 
-**Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`) — MkDocs Material, published per branch via GitHub Pages.
+| Feature | Default |
+| --- | --- |
+| Runtime | Docker Compose, one ComfyUI service |
+| US-safe models | Klein 4B + Wan 2.2 + LTX-2.5 |
+| Occupancy | One heavy GPU job (XOR) |
+| Downloads | `download-limit auto` = **85%** of speedtest |
+| Restart | `restart: "no"` — type **yes** on start |
+| Tests | Hermetic **100%** coverage gate |
 
-Inspired by [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) visual workloads — without K3s, Ansible, or the full lab dashboard. Use the lab for production multi-stack operations; use this repo for faster demos. Local US-safe models only: [licenses](docs/licenses.md) · optional independent Sparks: [Spark farm](docs/spark-farm.md).
+**Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`).
 
-## Goals
+When to use this sample vs [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab): [docs/start/when-to-use-vs-spark-lab.md](docs/start/when-to-use-vs-spark-lab.md). Licenses: [docs/licenses.md](docs/licenses.md).
 
-- One command path to a working ComfyUI US-safe studio on one Spark  
-
-- Shared model cache compatible with other stacks (`/mnt/models`)  
-- Operator CLI (`manage.sh`) for start / stop / status / doctor  
-- Bandwidth-limited downloads with **auto = 85% of speedtest**  
-- Never auto-start heavy GPU work after reboot  
-- Hermetic tests with a **100% coverage gate**
-
-## Architecture
+## Documentation map
 
 ```mermaid
 flowchart TB
-  Op["Operator"] --> CLI["manage.sh"]
-  CLI --> Compose["Docker Compose · restart: no"]
-  Compose --> Comfy["ComfyUI container"]
-  Models["/mnt/models"] -.->|bind| Comfy
-  State["comfy-state volume"] -.-> Comfy
-  Comfy --> UI[":8188"]
-  Op --> UI
+  Home["Home"] --> Learn["Learn"]
+  Home --> Start["Start"]
+  Home --> Create["Create"]
+  Home --> Operate["Operate"]
+  Home --> Contribute["Contribute"]
+  Learn --> L1["architecture · ComfyUI · pipeline · glossary"]
+  Start --> S1["Getting Started · licenses · FAQ"]
+  Create --> C1["still → motion → AV · workflows"]
+  Operate --> O1["occupancy · doctor · troubleshooting"]
+  Contribute --> N1["conventions · docs-style · tests"]
 ```
 
 ## Quick start
 
-Full walkthrough (prerequisites, setup, workflows): **[Getting Started](https://toxicoder.github.io/ez-comfy-stack/latest/getting-started/)** (or the [development](https://toxicoder.github.io/ez-comfy-stack/development/getting-started/) docs if you track that branch).
+Full walkthrough: **[Getting Started](https://toxicoder.github.io/ez-comfy-stack/latest/getting-started/)** (or the [development](https://toxicoder.github.io/ez-comfy-stack/development/getting-started/) docs if you track that branch). Session variables:
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -45,86 +47,20 @@ export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
 export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
 export COMFY_PORT="${COMFY_PORT:-8188}"
 
-./scripts/manage.sh setup --install-docker   # .env, MODELS_DIR, Docker if needed
-# set HF_TOKEN in .env if models are gated (LTX-2.5)
+./scripts/manage.sh setup --install-docker
 ./scripts/manage.sh doctor
-./scripts/manage.sh download-models   # throttled Klein 4B + Wan 5B + LTX-2.5 (no --tier; pack map: docs/download-tiers.md)
+./scripts/manage.sh download-models   # Klein 4B + Wan 2.2 5B + LTX-2.5
 ./scripts/manage.sh start             # type yes
-./scripts/manage.sh status
 # open http://${SPARK_HOST}:${COMFY_PORT}
 # laptop: ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 ./scripts/manage.sh stop              # before reboot
 ```
 
-```mermaid
-sequenceDiagram
-  actor Op as Operator
-  participant M as manage.sh
-  participant D as Docker / ComfyUI
-  participant B as Browser
-
-  Op->>M: doctor
-  Op->>M: download-models
-  Note over M: wrap --limit auto or --limit N Mbps
-  Op->>M: start type yes
-  M->>D: compose up
-  Op->>B: open :8188
-  Op->>M: stop before reboot
-```
-
-## Layout
-
-```text
-docker/           Dockerfile + compose (us-safe-studio)
-scripts/manage.sh Operator CLI
-scripts/lib/      Shared shell helpers
-scripts/utilities download-image, download-wan, download-ltx, download-llm, download-podcast, download-dub, download-limit, concat-shots, spark-farm
-config/           Resource / headroom policy
-workflows/_lab/   Seeded lab ComfyUI graphs by lane (klein / wan / ltx / shorts / …); YAML shot lists stay in workflows/shorts/; private graphs belong in _user/
-docs/             MkDocs site
-tests/            BATS + pytest + coverage gate
-```
-
-```mermaid
-flowchart LR
-  Docker["docker/"] --> Manage["scripts/manage.sh"]
-  Manage --> Lib["scripts/lib/"]
-  Manage --> Util["scripts/utilities/"]
-  Manage --> Cfg["config/"]
-  Docker --> WF["workflows/"]
-  Docs["docs/"] --> Tests["tests/"]
-```
-
-## Documentation
-
-**Read online (published):** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) · [development](https://toxicoder.github.io/ez-comfy-stack/development/)
-
-CI deploys docs via `.github/workflows/deploy-docs.yml` after push to `main` / `development` (docs paths) or `workflow_dispatch`. PR checks run `make docs` only.
-
-```bash
-pip install -r docs/requirements.txt
-make docs          # site/ (strict MkDocs build)
-# or: mkdocs serve
-```
-
-Key pages (branch-relative source): [How the studio works](docs/learn/index.md) · [Glossary](docs/glossary.md) · [Getting Started](docs/getting-started.md) · [Prompting](docs/prompting.md) · [Model licenses](docs/licenses.md) · [Still to motion to AV](docs/visual-generative-ai.md) · [Workflow catalog](docs/studio-workflows.md) · [Local podcast](docs/podcast.md) · [90s shorts](docs/shorts.md) · [Download Limit](docs/download-limit.md) · [Reboot Safety](docs/reboot-safety.md)
-
-## Development
-
-```bash
-pip install -r tests/requirements.txt   # pytest, pytest-cov, pyright, mypy
-make test
-make coverage
-make lint          # ShellCheck + shfmt + Pyright (Pylance) + mypy
-make typecheck     # Pyright + mypy
-make docs
-```
-
 ## Safety
 
-- Compose `restart: "no"` — manual start only  
-- Heavy confirmation + free RAM/disk headroom  
-- Download throttle by default  
+- Compose `restart: "no"` — manual start only
+- Heavy confirmation + free RAM/disk headroom
+- Download throttle by default; wrap **clears on exit**
 - See [docs/reboot-safety.md](docs/reboot-safety.md)
 
 ## License

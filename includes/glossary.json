@@ -149,7 +149,7 @@
     "aliases": ["MagCache"],
     "category": "Models",
     "short": "Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.",
-    "long": "MagCache skips some denoiser steps on the Wan 5 s smoke graph (`extra.lab_magcache`). Hero LTX prints and A14B graphs leave it off. If the node is missing, the Wan graph still Queues. See [Workflow catalog](studio-workflows.md).",
+    "long": "MagCache skips some denoiser steps on the Wan 5 s smoke graph (`extra.lab_magcache`). Hero LTX prints and A14B graphs leave it off. If the node is missing, the Wan graph still Queues. See [Motion workflows](create/workflows-motion.md) and [Workflow catalog](studio-workflows.md).",
     "see_also": ["wan", "i2v"]
   },
   {
@@ -365,7 +365,7 @@
     "aliases": ["node graph", "lab graph", "workflow"],
     "category": "Studio",
     "short": "A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.",
-    "long": "Host files live under `workflows/_lab/<lane>/`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md).",
+    "long": "Host files live under `workflows/_lab/<lane>/`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md) and [Still workflows](create/workflows-stills.md).",
     "see_also": ["lab-example", "note-node", "widget", "comfyui"]
   },
   {
@@ -393,7 +393,7 @@
     "category": "Studio",
     "short": "ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.",
     "long": "App Mode shows the creator widgets listed in `extra.linearData` (Prompt, Style, Rewrite prompt, seed; LoadImage on I2V; size/UNET only on the daily still). Persist is `[nodeId, widgetName, config]` with an integer node id — frontend 1.49.6+ upgrades that to a live WidgetId. Two-part `11:prompt` ids are dropped and the side panel looks empty. It is not a second frontend. The lab contract is `lab_app_mode`. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as `*.app.json` so they appear in Comfy's Apps sidebar as well as Workflows. See [ComfyUI Apps](studio-apps.md) and [ComfyUI basics](learn/comfyui.md).",
-    "see_also": ["lab-app-mode", "widget", "occupancy", "workflow"]
+    "see_also": ["lab-app-mode", "widget", "occupancy", "workflow", "studio-ui"]
   },
   {
     "id": "lab-app-mode",
@@ -473,7 +473,7 @@
     "aliases": ["lab-example", "lab-example graphs"],
     "category": "Studio",
     "short": "A seeded `_lab/<lane>/` graph. Load these; do not start from a blank canvas.",
-    "long": "Shipped smokes live under `workflows/_lab/<lane>/` with short stems (`klein/still-draft.json`). The unique id is `extra.lab_rel`. The old `*-lab-example` filename suffix is gone. Optional packs live under `workflows/_lab/optional/` and shot YAML under `workflows/shorts/`. See [Workflow catalog](studio-workflows.md).",
+    "long": "Shipped smokes live under `workflows/_lab/<lane>/` with short stems (`klein/still-draft.json`). The unique id is `extra.lab_rel`. The old `*-lab-example` filename suffix is gone. Optional packs live under `workflows/_lab/optional/` and shot YAML under `workflows/shorts/`. See [Workflow catalog](studio-workflows.md) and [Still workflows](create/workflows-stills.md).",
     "see_also": ["workflow", "note-node"]
   },
   {
@@ -536,8 +536,8 @@
     "aliases": ["occupancy"],
     "category": "Hardware and safety",
     "short": "One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.",
-    "long": "GB10 is one GPU. `occupancy enter blender-desk` parks Comfy (`POST /free`) for host Workbench dumps. `occupancy enter llm-desk` parks Comfy and starts the host 35B llama-server (`127.0.0.1:30000`). NVENC/proxies still want Compose down. Do not load Klein + Wan + LTX + TRELLIS + llm-desk in one session. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`/`trellis`) are graph labels — `llm` is not a CLI mode. See [Occupancy desk](occupancy.md) and [Studio sidecars](studio-sidecars.md).",
-    "see_also": ["sidecar", "ace-step", "gb10", "app-mode"]
+    "long": "GB10 is one GPU. `occupancy enter blender-desk` parks Comfy (`POST /free`) for host Workbench dumps. `occupancy enter llm-desk` parks Comfy and starts the host 35B llama-server (`127.0.0.1:30000`). NVENC/proxies still want Compose down. Do not load Klein + Wan + LTX + TRELLIS + llm-desk in one session. App occupancy keys (`none`/`llm`/`klein`/`wan`/`ltx`/`film`/`audio`/`trellis`) are graph labels — `llm` is not a CLI mode. See [Occupancy desk](occupancy.md), [Occupancy matrix](operate/occupancy-matrix.md), [MCP](operate/mcp.md), and [Studio sidecars](studio-sidecars.md).",
+    "see_also": ["sidecar", "ace-step", "gb10", "app-mode", "park", "xor-desk", "blender-desk", "llm-desk", "path-d"]
   },
   {
     "id": "headroom",
@@ -618,7 +618,7 @@
     "category": "Hardware and safety",
     "short": "Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.",
     "long": "Weights live on the host so GHCR images stay small and multiple stacks can share one cache. `cleanup` does not delete MODELS_DIR. See [Models and cache](models-and-cache.md).",
-    "see_also": ["comfy-state", "ghcr", "comfy-output-dir"]
+    "see_also": ["comfy-state", "ghcr", "comfy-output-dir", "three-stores"]
   },
   {
     "id": "comfy-output-dir",
@@ -636,7 +636,7 @@
     "category": "Hardware and safety",
     "short": "Docker volume for the Comfy install (venv, custom nodes). cleanup DELETE removes this only.",
     "long": "First start seeds the volume from `/opt/comfy-prebuilt`. Weights are not in this volume. Resetting it does not re-download Klein/Wan/LTX. See [Hardware, memory, and safety](learn/hardware.md).",
-    "see_also": ["ghcr", "models-dir"]
+    "see_also": ["ghcr", "models-dir", "three-stores"]
   },
   {
     "id": "ghcr",
@@ -645,7 +645,7 @@
     "category": "Hardware and safety",
     "short": "GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.",
     "long": "`main` → `ghcr.io/toxicoder/ez-comfy:us-safe-studio`; `development` and feature branches → `-development`. The image has Comfy+torch, not Klein/Wan/LTX weights. Old `flux-to-ltx*` tags freeze. See [Getting Started](getting-started.md).",
-    "see_also": ["comfy-state", "models-dir"]
+    "see_also": ["comfy-state", "models-dir", "us-safe-studio", "three-stores"]
   },
   {
     "id": "us-safe",
@@ -663,7 +663,7 @@
     "category": "Hardware and safety",
     "short": "Operator CLI: setup, doctor, download-models, start (type yes), stop, status.",
     "long": "Run from the repo root. It loads `.env`. Studio users still Queue in the browser; operators keep SSH alive with this tool. Full catalog: [manage.sh reference](manage-cli.md).",
-    "see_also": ["doctor", "restart-no", "download-limit"]
+    "see_also": ["doctor", "restart-no", "download-limit", "ezcmd", "promote-workflow"]
   },
   {
     "id": "doctor",
@@ -762,7 +762,7 @@
     "category": "Film",
     "short": "Per-film state.json + shot MP4s under COMFY_OUTPUT_DIR/films/<slug>/ for resume.",
     "long": "A dropped SSH session is not a two-hour requeue: `film-resume` skips ok 5.00 s shots. Optional studio-ui on :8190 is lights only (no GPU). See [90s shorts](shorts.md).",
-    "see_also": ["last-frame", "film-accept"]
+    "see_also": ["last-frame", "film-accept", "studio-ui"]
   },
   {
     "id": "shot-card",
@@ -824,8 +824,8 @@
     "aliases": ["sidecar"],
     "category": "Film",
     "short": "Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.",
-    "long": "Sidecars stay off the Docker image on purpose. `manage.sh blender` dies if Comfy is a heavy job; park with `occupancy enter blender-desk`. See [Occupancy desk](occupancy.md).",
-    "see_also": ["occupancy", "trellis"]
+    "long": "Sidecars stay off the Docker image on purpose. `manage.sh blender` dies if Comfy is a heavy job; park with `occupancy enter blender-desk`. See [Occupancy desk](occupancy.md) and [Occupancy matrix](operate/occupancy-matrix.md).",
+    "see_also": ["occupancy", "trellis", "xor-desk", "blender-desk"]
   },
   {
     "id": "spark-farm",
@@ -897,7 +897,7 @@
     "category": "Studio",
     "short": "In-tree MCP for chat, web search, research, and lab-app discovery. No execute_code.",
     "long": "Typed stdio MCP (`./scripts/manage.sh research-mcp`). Tools: occupancy_status, list_lab_apps, describe_app, chat, web_search, research. Does not Queue Comfy, does not refuse a GPU session, does not map idle to blender-desk. No arbitrary URL fetch. Official Comfy Cloud MCP is out of tree. See [Occupancy desk](occupancy.md).",
-    "see_also": ["research-chat", "occupancy"]
+    "see_also": ["research-chat", "occupancy", "path-d"]
   },
   {
     "id": "h3",
@@ -934,5 +934,104 @@
     "short": "Single-frame clay/depth/canny dump at creator sizes. Occupancy: blender-desk.",
     "long": "Host Blender dumps `ez.guide.still.v1` under `${COMFY_OUTPUT_DIR}/guides/<slug>/stills/<plate>/`. Sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, not LTX). Not the 5.00s shot pack and not `house-views`. Park Comfy (`occupancy enter blender-desk`) first. `--install-inputs` copies `first.png` into `input/` while compose may stay up. Apps: **klein-from-clay-plates**, **klein-from-canny**. See [Blender creator suite](learn/blender-creator.md).",
     "see_also": ["guide-pack", "house-views", "occupancy", "sidecar", "klein"]
+  },
+  {
+    "id": "park",
+    "title": "park",
+    "aliases": ["park", "parked Comfy"],
+    "category": "Hardware and safety",
+    "short": "occupancy enter blender-desk / llm-desk POST /free; Compose may stay up.",
+    "long": "`occupancy enter blender-desk` or `occupancy enter llm-desk` waits for an empty queue, then `POST /free` `{unload_models, free_memory}`. Compose may stay up. That is not `stop` (container down). NVENC still wants Compose down. Parked Comfy is not a second denoise. See [Occupancy desk](occupancy.md) and [Occupancy matrix](operate/occupancy-matrix.md).",
+    "see_also": ["occupancy", "blender-desk", "llm-desk", "xor-desk"]
+  },
+  {
+    "id": "xor-desk",
+    "title": "XOR desk",
+    "aliases": ["XOR desk", "occupancy XOR", "xor-desk"],
+    "category": "Hardware and safety",
+    "short": "One heavy GPU job. NVENC, Cycles, LTX, TRELLIS, and llm-desk XOR with each other.",
+    "long": "GB10 is one GPU. NVENC proxies, Cycles CUDA, LTX, TRELLIS, and llm-desk are mutually exclusive. blender-desk is Workbench after park, not a second CUDA denoise. Graph occupancy label `llm` is not a CLI mode. See [Occupancy desk](occupancy.md) and [Occupancy matrix](operate/occupancy-matrix.md).",
+    "see_also": ["occupancy", "park", "blender-desk", "llm-desk", "nvenc"]
+  },
+  {
+    "id": "ezcmd",
+    "title": "ezcmd",
+    "aliases": ["ezcmd"],
+    "category": "Studio",
+    "short": "Interactive docs fence: body `id: <recipe>` matching includes/command-builder.json.",
+    "long": "Flagged operator examples use a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json`. `docs/hooks.py` expands the fence into a copyable command with Your Spark chips. See [Project conventions](project-conventions.md) and [manage.sh reference](manage-cli.md).",
+    "see_also": ["manage-sh"]
+  },
+  {
+    "id": "us-safe-studio",
+    "title": "us-safe-studio",
+    "aliases": ["us-safe-studio", "us-safe-studio-development"],
+    "category": "Hardware and safety",
+    "short": "GHCR tag and Compose visual profile. Weights stay on MODELS_DIR.",
+    "long": "`main` pulls `ghcr.io/toxicoder/ez-comfy:us-safe-studio`; `development` and feature branches pull `:us-safe-studio-development`. Compose env `LAB_VISUAL_PROFILE=us-safe-studio`. The image has Comfy+torch, not Klein/Wan/LTX weights. See [Getting Started](getting-started.md) and [Models and cache](models-and-cache.md).",
+    "see_also": ["ghcr", "us-safe", "three-stores"]
+  },
+  {
+    "id": "path-d",
+    "title": "Path D",
+    "aliases": ["Path D", "path-d"],
+    "category": "Hardware and safety",
+    "short": "Laptop SSH tunnel to MCP or llm-desk. Not a fourth occupancy CLI mode.",
+    "long": "Path D is a laptop client over SSH (`ssh -L` to Comfy, `research-mcp` / `blender-mcp` stdio, or llm-desk `127.0.0.1:30000`). Spark runs the server; the laptop is the MCP/agent client. Occupancy CLI modes stay `idle` / `blender-desk` / `llm-desk` / `klein` / `trellis` / `wan` / `ltx` — Path D is not a fourth mode. See [Occupancy desk](occupancy.md) and [MCP](operate/mcp.md).",
+    "see_also": ["occupancy", "llm-desk", "research-mcp"]
+  },
+  {
+    "id": "ezdcc-occupancy-gate",
+    "title": "Occupancy gate",
+    "aliases": ["EZDCCOccupancyGate", "Occupancy gate"],
+    "category": "Studio",
+    "short": "In-canvas node that reads occupancy JSON only. Does not start Compose or spawn Blender.",
+    "long": "`EZDCCOccupancyGate` is a pass-through IMAGE node. It fail-closes against `${COMFY_OUTPUT_DIR}/.occupancy.json`. A missing file passes (first-run). blender-desk versus a heavy mode fails. It does not start Compose, call Manager unload, or launch a host DCC. See [Occupancy desk](occupancy.md) and [Stay in Comfy after a Blender dump](learn/comfy-first-blender.md).",
+    "see_also": ["occupancy", "xor-desk", "blender-desk"]
+  },
+  {
+    "id": "promote-workflow",
+    "title": "promote-workflow",
+    "aliases": ["promote-workflow"],
+    "category": "Studio",
+    "short": "manage.sh copies a keeper graph into workflows/_lab/<lane>/. Does not commit.",
+    "long": "`./scripts/manage.sh promote-workflow --from PATH --lane LANE --id STEM` copies a live `_user` graph into `workflows/_lab/<lane>/`. Optional `--subdir`. Does not commit. Refuses MiniMax / Klein 9B / FLUX.2-dev / Seedance / Kling / `z_image_turbo`. Never copy `_lab` into `_user`. See [manage.sh reference](manage-cli.md) and [Workflow catalog](studio-workflows.md).",
+    "see_also": ["workflow", "lab-example", "manage-sh"]
+  },
+  {
+    "id": "studio-ui",
+    "title": "studio-ui",
+    "aliases": ["studio-ui"],
+    "category": "Studio",
+    "short": "Optional Compose profile jobstore board on :8190. Not App Mode.",
+    "long": "`docker compose --profile studio-ui up studio-ui` serves a lights-only jobstore board at port **8190**. No GPU. Default `start` skips it. App Mode is a ComfyUI widget surface on the same JSON — not this board. See [90s shorts](shorts.md) and [ComfyUI Apps](studio-apps.md).",
+    "see_also": ["jobstore", "app-mode"]
+  },
+  {
+    "id": "blender-desk",
+    "title": "blender-desk",
+    "aliases": ["blender-desk"],
+    "category": "Hardware and safety",
+    "short": "Occupancy CLI mode: park Comfy (POST /free) for host Workbench dumps.",
+    "long": "`occupancy enter blender-desk` parks Comfy when Compose is up. Host Workbench dumps (`export-guides`, `blender-stills`, `house-views`) are allowed. Cycles CUDA and NVENC still XOR. Does not start Compose. See [Occupancy desk](occupancy.md) and [Occupancy matrix](operate/occupancy-matrix.md).",
+    "see_also": ["park", "occupancy", "xor-desk", "sidecar"]
+  },
+  {
+    "id": "llm-desk",
+    "title": "llm-desk",
+    "aliases": ["llm-desk"],
+    "category": "Hardware and safety",
+    "short": "Occupancy CLI mode: park Comfy and run the host 35B llama-server sidecar.",
+    "long": "`occupancy enter llm-desk --yes` parks Comfy (`POST /free` when up) and starts host `llama-server` on `127.0.0.1:30000`. That sidecar **is** the GPU job. Graph occupancy label `llm` is not this mode. One-time pull: `download-llm --tier qwen36-35b-a3b` (not `download-models`). See [Occupancy desk](occupancy.md) and [Occupancy matrix](operate/occupancy-matrix.md).",
+    "see_also": ["park", "occupancy", "xor-desk", "path-d"]
+  },
+  {
+    "id": "three-stores",
+    "title": "three stores",
+    "aliases": ["three stores", "three-stores"],
+    "category": "Hardware and safety",
+    "short": "GHCR image vs MODELS_DIR weights vs comfy-state volume. cleanup deletes the volume only.",
+    "long": "The GHCR image holds Comfy+torch (no Klein/Wan/LTX weights). `MODELS_DIR` holds weights on the host. The `comfy-state` volume holds the Comfy install. `cleanup` (type `DELETE`) removes the volume only. Outputs stay in `COMFY_OUTPUT_DIR`. See [Models and cache](models-and-cache.md) and [Hardware, memory, and safety](learn/hardware.md).",
+    "see_also": ["ghcr", "models-dir", "comfy-state"]
   }
 ]

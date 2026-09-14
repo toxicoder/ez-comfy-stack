@@ -57,6 +57,7 @@ flowchart LR
 - [ ] `make docs` (mkdocs strict)  
 - [ ] Safety impact called out if Docker/resources/download-limit changed  
 - [ ] Docs updated for operator-facing changes  
+- [ ] AI-drafted docs still received a human pass  
 
 ## Published docs
 
@@ -69,4 +70,4 @@ Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main
 
 ## Style
 
-See [docs/project-conventions.md](docs/project-conventions.md) and [AGENTS.md](AGENTS.md).
+See [docs/project-conventions.md](docs/project-conventions.md), [docs/contribute/docs-style.md](docs/contribute/docs-style.md), and [AGENTS.md](AGENTS.md). **AI-drafted docs still need a human pass** before merge.

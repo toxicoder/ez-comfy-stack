@@ -1,3 +1,4 @@
+# Purpose: ez.asset.v1 Asset Bible record (outputs under COMFY_OUTPUT_DIR/assets, never MODELS_DIR).
 # ez.asset.v1 — Asset Bible record (outputs under COMFY_OUTPUT_DIR/assets, never MODELS_DIR).
 # Restricted YAML subset (stdlib parser in scripts/lib/asset_bible.py; no PyYAML).
 schema: ez.asset.v1

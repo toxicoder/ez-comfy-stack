@@ -11,6 +11,7 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
 - What this project is (and is not)
 - Choose a path: learn, first install, create, recover
 - Default stack and the four SSH-safe guards
+- Documentation map (Learn / Start / Create / Operate / Contribute)
 
 **What this enables**
 
@@ -57,7 +58,7 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
 
 </div>
 
-Contributors: [Conventions](project-conventions.md). Licenses before a 30 GB pull: [Model licenses](licenses.md).
+Also: [Architecture](learn/architecture.md) · [FAQ](start/faq.md) · [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md). Contributors: [Conventions](project-conventions.md). Licenses before a 30 GB pull: [Model licenses](licenses.md).
 
 ---
 
@@ -65,7 +66,7 @@ Contributors: [Conventions](project-conventions.md). Licenses before a 30 GB pul
 
 This is a **sample / demo** repository for **Visual Generative AI** on a **single NVIDIA DGX Spark (GB10)**. It is deliberately smaller than [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab): Docker Compose instead of K3s, one unified profile instead of a full lab.
 
-Long-term multi-workload operations should use the full lab project. Use **ez-comfy-stack** when you want faster experimentation.
+Long-term multi-workload operations should use the full lab project. Use **ez-comfy-stack** when you want faster experimentation — [when to use vs spark-lab](start/when-to-use-vs-spark-lab.md).
 
 ```mermaid
 flowchart TB
@@ -137,30 +138,24 @@ Why those exist: [Hardware, memory, and safety](learn/hardware.md). Operator det
 
 ```mermaid
 flowchart TB
-  Home["Home"] --> Learn["Learn · concepts + glossary"]
-  Home --> GS["Getting Started"]
-  Learn --> GS
-  GS --> Prompt["Prompting"]
-  GS --> Vis["Still → Wan → LTX"]
-  Vis --> Catalog["Workflow catalog"]
-  Vis --> Shorts["90s shorts"]
-  GS --> Operate["Operate · cache, throttle, reboot"]
-  Operate --> TS["Troubleshooting"]
+  Home["Home"] --> Learn["Learn"]
+  Home --> Start["Start"]
+  Home --> Create["Create"]
+  Home --> Operate["Operate"]
+  Home --> Contribute["Contribute"]
+  Learn --> L1["architecture · ComfyUI · pipeline · glossary"]
+  Start --> S1["Getting Started · licenses · FAQ"]
+  Create --> C1["still → motion → AV · workflows"]
+  Operate --> O1["occupancy · doctor · troubleshooting"]
+  Contribute --> N1["conventions · docs-style · tests"]
 ```
 
 | When | Read |
 | --- | --- |
-| **What is this?** | [How the studio works](learn/index.md) · [Glossary](glossary.md) |
-| **First run** | [Getting Started](getting-started.md) |
-| **How to prompt** | [Prompting](prompting.md) |
+| **What is this?** | [How the studio works](learn/index.md) · [Architecture](learn/architecture.md) · [Glossary](glossary.md) |
+| **This repo or the lab?** | [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md) |
+| **First run** | [Getting Started](getting-started.md) · [FAQ](start/faq.md) |
 | **Licenses before a 30 GB pull** | [Model licenses](licenses.md) |
 | **Still → silent 5 s → AV 5 s** | [Visual Generative AI](visual-generative-ai.md) |
-| **Which graph?** | [Workflow catalog](studio-workflows.md) |
-| **90s films** | [90s shorts](shorts.md) |
-| **Three Sparks, one weight copy** | [Spark farm](spark-farm.md) |
-| **`manage.sh` verbs** | [manage.sh reference](manage-cli.md) |
-| **Weights, cache, image pins** | [Models and cache](models-and-cache.md) |
-| **What `--tier` means** | [Download tiers](download-tiers.md) |
-| **Free disk (safely)** | [Disk wizard](disk-wizard.md) |
 | **Something broke** | [Troubleshooting](troubleshooting.md) |
 | **Contributing** | [Conventions](project-conventions.md) |

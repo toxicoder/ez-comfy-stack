@@ -36,7 +36,10 @@
       "id": "download-models",
       "title": "download-models",
       "description": "Default pack only (Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF). No --tier. --limit is bandwidth, not quality.",
-      "argv": ["./scripts/manage.sh", "download-models"],
+      "argv": [
+        "./scripts/manage.sh",
+        "download-models"
+      ],
       "flags": [
         {
           "name": "limit",
@@ -46,8 +49,14 @@
           "bind_var": "DOWNLOAD_LIMIT",
           "int_label": "Mbps",
           "choices": [
-            {"value": "auto", "label": "auto (85% of speedtest when HTB works)"},
-            {"value": "off", "label": "off (SSH risk — full-rate pull)"}
+            {
+              "value": "auto",
+              "label": "auto (85% of speedtest when HTB works)"
+            },
+            {
+              "value": "off",
+              "label": "off (SSH risk \u2014 full-rate pull)"
+            }
           ]
         },
         {
@@ -62,7 +71,10 @@
       "id": "download-image",
       "title": "download-image --tier",
       "description": "Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder.",
-      "argv": ["./scripts/utilities/download-image.sh", "run"],
+      "argv": [
+        "./scripts/utilities/download-image.sh",
+        "run"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -70,11 +82,26 @@
           "required": true,
           "default": "fast",
           "choices": [
-            {"value": "fast", "label": "fast — Klein 4B distilled FP8 + TE + VAE (default, in download-models)"},
-            {"value": "nvfp4", "label": "nvfp4 — Klein 4B NVFP4 still UNET (optional)"},
-            {"value": "base", "label": "base — Klein 4B base FP8 still UNET (optional)"},
-            {"value": "zimage", "label": "zimage — Z-Image Turbo stills (optional)"},
-            {"value": "all", "label": "all — fast + nvfp4 + base + zimage"}
+            {
+              "value": "fast",
+              "label": "fast \u2014 Klein 4B distilled FP8 + TE + VAE (default, in download-models)"
+            },
+            {
+              "value": "nvfp4",
+              "label": "nvfp4 \u2014 Klein 4B NVFP4 still UNET (optional)"
+            },
+            {
+              "value": "base",
+              "label": "base \u2014 Klein 4B base FP8 still UNET (optional)"
+            },
+            {
+              "value": "zimage",
+              "label": "zimage \u2014 Z-Image Turbo stills (optional)"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 fast + nvfp4 + base + zimage"
+            }
           ]
         }
       ]
@@ -83,7 +110,10 @@
       "id": "download-wan",
       "title": "download-wan --tier",
       "description": "Different Wan graphs, not a quality ladder. all does not include vace or s2v. Unload LTX before Fun InP / VACE / S2V.",
-      "argv": ["./scripts/utilities/download-wan.sh", "run"],
+      "argv": [
+        "./scripts/utilities/download-wan.sh",
+        "run"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -91,12 +121,30 @@
           "required": true,
           "default": "5b",
           "choices": [
-            {"value": "5b", "label": "5b — Wan 2.2 TI2V-5B silent (~12 GB, in download-models)"},
-            {"value": "a14b", "label": "a14b — Wan 2.2 I2V A14B FP8 (~20 GB, opt-in)"},
-            {"value": "fun-inp", "label": "fun-inp — Fun InP A14B first-last-frame (~40 GB)"},
-            {"value": "vace", "label": "vace — Wan 2.1 VACE 1.3B join (~6 GB, not in all)"},
-            {"value": "s2v", "label": "s2v — Wan 2.2 S2V-14B talking-head (~20 GB, not in all)"},
-            {"value": "all", "label": "all — 5b + a14b + fun-inp (not vace, not s2v)"}
+            {
+              "value": "5b",
+              "label": "5b \u2014 Wan 2.2 TI2V-5B silent (~12 GB, in download-models)"
+            },
+            {
+              "value": "a14b",
+              "label": "a14b \u2014 Wan 2.2 I2V A14B FP8 (~20 GB, opt-in)"
+            },
+            {
+              "value": "fun-inp",
+              "label": "fun-inp \u2014 Fun InP A14B first-last-frame (~40 GB)"
+            },
+            {
+              "value": "vace",
+              "label": "vace \u2014 Wan 2.1 VACE 1.3B join (~6 GB, not in all)"
+            },
+            {
+              "value": "s2v",
+              "label": "s2v \u2014 Wan 2.2 S2V-14B talking-head (~20 GB, not in all)"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 5b + a14b + fun-inp (not vace, not s2v)"
+            }
           ]
         }
       ]
@@ -104,8 +152,11 @@
     {
       "id": "download-ltx",
       "title": "download-ltx --tier",
-      "description": "LTX generation selector, not “better”. 2.5 is the lab default. 2.3 is a retired fallback.",
-      "argv": ["./scripts/utilities/download-ltx.sh", "run"],
+      "description": "LTX generation selector, not \u201cbetter\u201d. 2.5 is the lab default. 2.3 is a retired fallback.",
+      "argv": [
+        "./scripts/utilities/download-ltx.sh",
+        "run"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -113,10 +164,22 @@
           "required": true,
           "default": "2.5",
           "choices": [
-            {"value": "2.5", "label": "2.5 — distilled INT8-convrot AV (~30 GB, in download-models)"},
-            {"value": "2.3", "label": "2.3 — retired distilled FP8 fallback (~20 GB)"},
-            {"value": "iclora", "label": "iclora — IC-LoRA Union Control (~1 GB, opt-in)"},
-            {"value": "gemma", "label": "gemma — LTX-2.3 Gemma DualCLIP (~8 GB)"}
+            {
+              "value": "2.5",
+              "label": "2.5 \u2014 distilled INT8-convrot AV (~30 GB, in download-models)"
+            },
+            {
+              "value": "2.3",
+              "label": "2.3 \u2014 retired distilled FP8 fallback (~20 GB)"
+            },
+            {
+              "value": "iclora",
+              "label": "iclora \u2014 IC-LoRA Union Control (~1 GB, opt-in)"
+            },
+            {
+              "value": "gemma",
+              "label": "gemma \u2014 LTX-2.3 Gemma DualCLIP (~8 GB)"
+            }
           ]
         }
       ]
@@ -125,7 +188,10 @@
       "id": "download-podcast",
       "title": "download-podcast --tier",
       "description": "Opt-in audio packs. analog is Kokoro only. acestep shares the ~10 GB AIO with download-music --tier turbo. Missing pack is not a doctor failure.",
-      "argv": ["./scripts/manage.sh", "download-podcast"],
+      "argv": [
+        "./scripts/manage.sh",
+        "download-podcast"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -133,11 +199,26 @@
           "required": true,
           "default": "analog",
           "choices": [
-            {"value": "analog", "label": "analog — Kokoro-82M ONNX + voices (tiny, default)"},
-            {"value": "acestep", "label": "acestep — ACE-Step 1.5 turbo AIO (~10 GB, shared with music turbo)"},
-            {"value": "chatterbox", "label": "chatterbox — optional MIT GPU TTS"},
-            {"value": "qwen3tts", "label": "qwen3tts — optional Qwen3-TTS 0.6B"},
-            {"value": "all", "label": "all — analog + acestep + chatterbox + qwen3tts"}
+            {
+              "value": "analog",
+              "label": "analog \u2014 Kokoro-82M ONNX + voices (tiny, default)"
+            },
+            {
+              "value": "acestep",
+              "label": "acestep \u2014 ACE-Step 1.5 turbo AIO (~10 GB, shared with music turbo)"
+            },
+            {
+              "value": "chatterbox",
+              "label": "chatterbox \u2014 optional MIT GPU TTS"
+            },
+            {
+              "value": "qwen3tts",
+              "label": "qwen3tts \u2014 optional Qwen3-TTS 0.6B"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 analog + acestep + chatterbox + qwen3tts"
+            }
           ]
         },
         {
@@ -148,8 +229,14 @@
           "bind_var": "DOWNLOAD_LIMIT",
           "int_label": "Mbps",
           "choices": [
-            {"value": "auto", "label": "auto"},
-            {"value": "off", "label": "off (SSH risk)"}
+            {
+              "value": "auto",
+              "label": "auto"
+            },
+            {
+              "value": "off",
+              "label": "off (SSH risk)"
+            }
           ]
         }
       ]
@@ -158,7 +245,10 @@
       "id": "download-dub",
       "title": "download-dub --tier",
       "description": "Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt). With the stack up, pip-installs faster-whisper, setuptools<82 (PerTh / pkg_resources), then the Chatterbox V3 GitHub zip --no-deps --force-reinstall (does not pin torch; PyPI 0.1.7 has no t3_model=v3). Missing pack is not a doctor failure.",
-      "argv": ["./scripts/manage.sh", "download-dub"],
+      "argv": [
+        "./scripts/manage.sh",
+        "download-dub"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -166,9 +256,18 @@
           "required": true,
           "default": "asr",
           "choices": [
-            {"value": "asr", "label": "asr — Silero VAD + faster-whisper large-v3 (default)"},
-            {"value": "clone", "label": "clone — Chatterbox Multilingual V3 (MIT, PerTh on)"},
-            {"value": "all", "label": "all — asr + clone"}
+            {
+              "value": "asr",
+              "label": "asr \u2014 Silero VAD + faster-whisper large-v3 (default)"
+            },
+            {
+              "value": "clone",
+              "label": "clone \u2014 Chatterbox Multilingual V3 (MIT, PerTh on)"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 asr + clone"
+            }
           ]
         },
         {
@@ -179,8 +278,14 @@
           "bind_var": "DOWNLOAD_LIMIT",
           "int_label": "Mbps",
           "choices": [
-            {"value": "auto", "label": "auto"},
-            {"value": "off", "label": "off (SSH risk)"}
+            {
+              "value": "auto",
+              "label": "auto"
+            },
+            {
+              "value": "off",
+              "label": "off (SSH risk)"
+            }
           ]
         }
       ]
@@ -188,8 +293,11 @@
     {
       "id": "download-music",
       "title": "download-music --tier",
-      "description": "Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep — do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.",
-      "argv": ["./scripts/manage.sh", "download-music"],
+      "description": "Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep \u2014 do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.",
+      "argv": [
+        "./scripts/manage.sh",
+        "download-music"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -197,9 +305,18 @@
           "required": true,
           "default": "turbo",
           "choices": [
-            {"value": "turbo", "label": "turbo — ACE-Step 1.5 AIO (~10 GB, default rap/podcast beds)"},
-            {"value": "xl", "label": "xl — split XL files (larger; not the default)"},
-            {"value": "all", "label": "all — turbo + xl"}
+            {
+              "value": "turbo",
+              "label": "turbo \u2014 ACE-Step 1.5 AIO (~10 GB, default rap/podcast beds)"
+            },
+            {
+              "value": "xl",
+              "label": "xl \u2014 split XL files (larger; not the default)"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 turbo + xl"
+            }
           ]
         },
         {
@@ -210,8 +327,14 @@
           "bind_var": "DOWNLOAD_LIMIT",
           "int_label": "Mbps",
           "choices": [
-            {"value": "auto", "label": "auto"},
-            {"value": "off", "label": "off (SSH risk)"}
+            {
+              "value": "auto",
+              "label": "auto"
+            },
+            {
+              "value": "off",
+              "label": "off (SSH risk)"
+            }
           ]
         }
       ]
@@ -220,7 +343,10 @@
       "id": "download-3d",
       "title": "download-3d --tier",
       "description": "Opt-in 3D. da3-large is refused. Unload LTX first. SuperSplat is a host viewer, not this downloader.",
-      "argv": ["./scripts/manage.sh", "download-3d"],
+      "argv": [
+        "./scripts/manage.sh",
+        "download-3d"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -228,9 +354,18 @@
           "required": true,
           "default": "trellis2",
           "choices": [
-            {"value": "trellis2", "label": "trellis2 — Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"},
-            {"value": "da3-base", "label": "da3-base — Depth Anything 3 BASE Apache (~1 GB)"},
-            {"value": "all", "label": "all — trellis2 + da3-base"}
+            {
+              "value": "trellis2",
+              "label": "trellis2 \u2014 Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"
+            },
+            {
+              "value": "da3-base",
+              "label": "da3-base \u2014 Depth Anything 3 BASE Apache (~1 GB)"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 trellis2 + da3-base"
+            }
           ]
         }
       ]
@@ -239,7 +374,10 @@
       "id": "download-longcat",
       "title": "download-longcat --tier",
       "description": "Opt-in MIT LongCat. No NCCL in this sample stack.",
-      "argv": ["./scripts/manage.sh", "download-longcat"],
+      "argv": [
+        "./scripts/manage.sh",
+        "download-longcat"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -247,9 +385,18 @@
           "required": true,
           "default": "video",
           "choices": [
-            {"value": "video", "label": "video — LongCat-Video"},
-            {"value": "avatar", "label": "avatar — LongCat-Video-Avatar"},
-            {"value": "all", "label": "all — video + avatar"}
+            {
+              "value": "video",
+              "label": "video \u2014 LongCat-Video"
+            },
+            {
+              "value": "avatar",
+              "label": "avatar \u2014 LongCat-Video-Avatar"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 video + avatar"
+            }
           ]
         }
       ]
@@ -258,7 +405,10 @@
       "id": "download-dreamx",
       "title": "download-dreamx --tier",
       "description": "Apache DreamX-Creator only. DreamX-World is refused.",
-      "argv": ["./scripts/manage.sh", "download-dreamx"],
+      "argv": [
+        "./scripts/manage.sh",
+        "download-dreamx"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -266,7 +416,10 @@
           "required": true,
           "default": "creator",
           "choices": [
-            {"value": "creator", "label": "creator — DreamX-Creator 1.0 Apache (~8 GB)"}
+            {
+              "value": "creator",
+              "label": "creator \u2014 DreamX-Creator 1.0 Apache (~8 GB)"
+            }
           ]
         }
       ]
@@ -275,7 +428,10 @@
       "id": "download-restore",
       "title": "download-restore --tier",
       "description": "Post-concat SeedVR2 restore pack. Not part of download-models.",
-      "argv": ["./scripts/manage.sh", "download-restore"],
+      "argv": [
+        "./scripts/manage.sh",
+        "download-restore"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -283,7 +439,10 @@
           "required": true,
           "default": "seedvr2-3b",
           "choices": [
-            {"value": "seedvr2-3b", "label": "seedvr2-3b — SeedVR2-3B Apache (~15 GB)"}
+            {
+              "value": "seedvr2-3b",
+              "label": "seedvr2-3b \u2014 SeedVR2-3B Apache (~15 GB)"
+            }
           ]
         }
       ]
@@ -292,7 +451,10 @@
       "id": "download-llm",
       "title": "download-llm --tier",
       "description": "Default enhance is the Qwen3-4B prompt-enhance GGUF (already in download-models). qwen36-35b-a3b is the opt-in ~23 GB occupancy llm-desk pack. Missing 35B is not a doctor failure.",
-      "argv": ["./scripts/manage.sh", "download-llm"],
+      "argv": [
+        "./scripts/manage.sh",
+        "download-llm"
+      ],
       "flags": [
         {
           "name": "tier",
@@ -300,9 +462,18 @@
           "required": true,
           "default": "enhance",
           "choices": [
-            {"value": "enhance", "label": "enhance — Qwen3-4B Q4_K_M (default, in download-models)"},
-            {"value": "qwen36-35b-a3b", "label": "qwen36-35b-a3b — Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"},
-            {"value": "all", "label": "all — enhance + qwen36-35b-a3b"}
+            {
+              "value": "enhance",
+              "label": "enhance \u2014 Qwen3-4B Q4_K_M (default, in download-models)"
+            },
+            {
+              "value": "qwen36-35b-a3b",
+              "label": "qwen36-35b-a3b \u2014 Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 enhance + qwen36-35b-a3b"
+            }
           ]
         },
         {
@@ -313,8 +484,14 @@
           "bind_var": "DOWNLOAD_LIMIT",
           "int_label": "Mbps",
           "choices": [
-            {"value": "auto", "label": "auto"},
-            {"value": "off", "label": "off (SSH risk)"}
+            {
+              "value": "auto",
+              "label": "auto"
+            },
+            {
+              "value": "off",
+              "label": "off (SSH risk)"
+            }
           ]
         }
       ]
@@ -323,7 +500,11 @@
       "id": "occupancy",
       "title": "occupancy enter",
       "description": "Park Comfy for blender-desk (POST /free) or llm-desk (35B sidecar), or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up. Graph occupancy label llm is not a CLI mode.",
-      "argv": ["./scripts/manage.sh", "occupancy", "enter"],
+      "argv": [
+        "./scripts/manage.sh",
+        "occupancy",
+        "enter"
+      ],
       "flags": [
         {
           "name": "mode",
@@ -331,13 +512,34 @@
           "required": true,
           "default": "blender-desk",
           "choices": [
-            {"value": "blender-desk", "label": "blender-desk — park Comfy, Workbench dumps"},
-            {"value": "llm-desk", "label": "llm-desk — park Comfy, host 35B llama-server"},
-            {"value": "klein", "label": "klein — stop Blender and 35B sidecar, Queue stills"},
-            {"value": "trellis", "label": "trellis — stop Blender and 35B sidecar, Queue TRELLIS.2"},
-            {"value": "wan", "label": "wan — stop Blender and 35B sidecar, Queue silent motion"},
-            {"value": "ltx", "label": "ltx — stop Blender and 35B sidecar, Queue AV print"},
-            {"value": "idle", "label": "idle — stop Blender, 35B sidecar, and Compose"}
+            {
+              "value": "blender-desk",
+              "label": "blender-desk \u2014 park Comfy, Workbench dumps"
+            },
+            {
+              "value": "llm-desk",
+              "label": "llm-desk \u2014 park Comfy, host 35B llama-server"
+            },
+            {
+              "value": "klein",
+              "label": "klein \u2014 stop Blender and 35B sidecar, Queue stills"
+            },
+            {
+              "value": "trellis",
+              "label": "trellis \u2014 stop Blender and 35B sidecar, Queue TRELLIS.2"
+            },
+            {
+              "value": "wan",
+              "label": "wan \u2014 stop Blender and 35B sidecar, Queue silent motion"
+            },
+            {
+              "value": "ltx",
+              "label": "ltx \u2014 stop Blender and 35B sidecar, Queue AV print"
+            },
+            {
+              "value": "idle",
+              "label": "idle \u2014 stop Blender, 35B sidecar, and Compose"
+            }
           ]
         }
       ]
@@ -346,7 +548,10 @@
       "id": "research-mcp",
       "title": "research-mcp",
       "description": "In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF. No execute_code. Does not refuse a GPU session.",
-      "argv": ["./scripts/manage.sh", "research-mcp"],
+      "argv": [
+        "./scripts/manage.sh",
+        "research-mcp"
+      ],
       "flags": []
     },
     {
@@ -365,42 +570,402 @@
       "id": "open-ui",
       "title": "Open ComfyUI URL",
       "description": "On-box / LAN URL. Use ssh-forward from a laptop instead.",
-      "argv": ["echo", "http://${SPARK_HOST}:${COMFY_PORT}"],
+      "argv": [
+        "echo",
+        "http://${SPARK_HOST}:${COMFY_PORT}"
+      ],
       "flags": []
     },
     {
       "id": "doctor",
       "title": "doctor",
       "description": "Preflight. Missing weights are a warning, not a hard fail.",
-      "argv": ["./scripts/manage.sh", "doctor"],
+      "argv": [
+        "./scripts/manage.sh",
+        "doctor"
+      ],
       "flags": []
     },
     {
       "id": "start",
       "title": "start",
       "description": "Type yes. Headroom preflight. Compose restart: no.",
-      "argv": ["./scripts/manage.sh", "start"],
+      "argv": [
+        "./scripts/manage.sh",
+        "start"
+      ],
       "flags": []
     },
     {
       "id": "stop",
       "title": "stop",
       "description": "Stop containers. Keeps models, outputs, and the comfy-state volume.",
-      "argv": ["./scripts/manage.sh", "stop"],
+      "argv": [
+        "./scripts/manage.sh",
+        "stop"
+      ],
       "flags": []
     },
     {
       "id": "reap-models-plan",
       "title": "reap-models --plan",
       "description": "MODELS_DIR class plan only. Does not delete. cleanup does not delete weights.",
-      "argv": ["./scripts/manage.sh", "reap-models", "--plan"],
+      "argv": [
+        "./scripts/manage.sh",
+        "reap-models",
+        "--plan"
+      ],
       "flags": []
     },
     {
       "id": "disk-wizard-plan",
       "title": "disk-wizard --plan",
       "description": "Host-wide leftover survey. Read-only. Never docker system prune -a --volumes.",
-      "argv": ["./scripts/manage.sh", "disk-wizard", "--plan"],
+      "argv": [
+        "./scripts/manage.sh",
+        "disk-wizard",
+        "--plan"
+      ],
+      "flags": []
+    },
+    {
+      "id": "help",
+      "title": "help",
+      "description": "Print the manage.sh command list.",
+      "argv": [
+        "./scripts/manage.sh",
+        "help"
+      ],
+      "flags": []
+    },
+    {
+      "id": "setup",
+      "title": "setup",
+      "description": ".env, MODELS_DIR, COMFY_OUTPUT_DIR, optional Docker CE, hf CLI, then doctor.",
+      "argv": [
+        "./scripts/manage.sh",
+        "setup"
+      ],
+      "flags": [
+        {
+          "name": "install-docker",
+          "kind": "bool",
+          "default": false,
+          "label": "Install Docker CE + compose plugin when missing"
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "title": "status",
+      "description": "Compose project status. Prints MODELS_DIR, COMFY_OUTPUT_DIR, port.",
+      "argv": [
+        "./scripts/manage.sh",
+        "status"
+      ],
+      "flags": []
+    },
+    {
+      "id": "restart",
+      "title": "restart",
+      "description": "stop then start. Full yes confirm and headroom again.",
+      "argv": [
+        "./scripts/manage.sh",
+        "restart"
+      ],
+      "flags": []
+    },
+    {
+      "id": "logs",
+      "title": "logs",
+      "description": "Follow compose logs.",
+      "argv": [
+        "./scripts/manage.sh",
+        "logs"
+      ],
+      "flags": []
+    },
+    {
+      "id": "download-limit",
+      "title": "download-limit",
+      "description": "Throttle Hugging Face pulls. wrap always clears on exit.",
+      "argv": [
+        "./scripts/manage.sh",
+        "download-limit",
+        "status"
+      ],
+      "flags": []
+    },
+    {
+      "id": "clear-hf-locks",
+      "title": "clear-hf-locks",
+      "description": "Remove stale Hugging Face .lock files under MODELS_DIR.",
+      "argv": [
+        "./scripts/manage.sh",
+        "clear-hf-locks"
+      ],
+      "flags": []
+    },
+    {
+      "id": "reset-hf-partials",
+      "title": "reset-hf-partials",
+      "description": "Delete *.incomplete under MODELS_DIR. Finished weights kept.",
+      "argv": [
+        "./scripts/manage.sh",
+        "reset-hf-partials"
+      ],
+      "flags": []
+    },
+    {
+      "id": "print-shot",
+      "title": "print-shot",
+      "description": "Queue one compiled 90s shot into films/<slug>/shots/.",
+      "argv": [
+        "./scripts/manage.sh",
+        "print-shot"
+      ],
+      "flags": []
+    },
+    {
+      "id": "film-resume",
+      "title": "film-resume",
+      "description": "Reprint failed 90s shots only. Skip ok 5.00s takes.",
+      "argv": [
+        "./scripts/manage.sh",
+        "film-resume"
+      ],
+      "flags": []
+    },
+    {
+      "id": "film-export-otio",
+      "title": "film-export-otio",
+      "description": "Write films/<slug>/publish OTIO from the jobstore. Host-side.",
+      "argv": [
+        "./scripts/manage.sh",
+        "film-export-otio"
+      ],
+      "flags": []
+    },
+    {
+      "id": "film-proxies",
+      "title": "film-proxies",
+      "description": "NVENC proxies. Refuse if compose is up. Never rewrite masters.",
+      "argv": [
+        "./scripts/manage.sh",
+        "film-proxies"
+      ],
+      "flags": []
+    },
+    {
+      "id": "take-promote",
+      "title": "take-promote",
+      "description": "Copy a take into shots/NN.mp4 and mark the shot ok.",
+      "argv": [
+        "./scripts/manage.sh",
+        "take-promote"
+      ],
+      "flags": []
+    },
+    {
+      "id": "promote-workflow",
+      "title": "promote-workflow",
+      "description": "Copy a live _user graph into workflows/_lab/<lane>/. Does not commit.",
+      "argv": [
+        "./scripts/manage.sh",
+        "promote-workflow"
+      ],
+      "flags": []
+    },
+    {
+      "id": "album-render",
+      "title": "album-render",
+      "description": "Queue one shipped album then zip. Compose must already be up.",
+      "argv": [
+        "./scripts/manage.sh",
+        "album-render"
+      ],
+      "flags": []
+    },
+    {
+      "id": "llm-sidecar",
+      "title": "llm-sidecar",
+      "description": "Host llama-server for occupancy llm-desk (127.0.0.1:30000). Prefer occupancy enter llm-desk.",
+      "argv": [
+        "./scripts/manage.sh",
+        "llm-sidecar",
+        "status"
+      ],
+      "flags": []
+    },
+    {
+      "id": "blender-mcp",
+      "title": "blender-mcp",
+      "description": "In-tree typed Blender MCP. bpy tools need blender-desk. No execute_code.",
+      "argv": [
+        "./scripts/manage.sh",
+        "blender-mcp"
+      ],
+      "flags": []
+    },
+    {
+      "id": "blender-llm",
+      "title": "blender-llm",
+      "description": "Optional host Qwen3-4B CPU client for blender-mcp. Path D if llama.cpp missing.",
+      "argv": [
+        "./scripts/manage.sh",
+        "blender-llm"
+      ],
+      "flags": []
+    },
+    {
+      "id": "blender",
+      "title": "blender",
+      "description": "Host Blender sidecar. Workbench in blender-desk. Dies if Comfy is a heavy job.",
+      "argv": [
+        "./scripts/manage.sh",
+        "blender"
+      ],
+      "flags": []
+    },
+    {
+      "id": "export-guides",
+      "title": "export-guides",
+      "description": "Dump a 1280x704 (or 768x1280) / 120f clay+depth+canny pack. Dies if Comfy is heavy.",
+      "argv": [
+        "./scripts/manage.sh",
+        "export-guides"
+      ],
+      "flags": []
+    },
+    {
+      "id": "blender-stills",
+      "title": "blender-stills",
+      "description": "Dump a single-frame clay/depth/canny still. Dies if Comfy is heavy.",
+      "argv": [
+        "./scripts/manage.sh",
+        "blender-stills"
+      ],
+      "flags": []
+    },
+    {
+      "id": "house-views",
+      "title": "house-views",
+      "description": "Dump 1024x1280 Instagram clay stills + GLB. Dies if Comfy is heavy.",
+      "argv": [
+        "./scripts/manage.sh",
+        "house-views"
+      ],
+      "flags": []
+    },
+    {
+      "id": "asset-ls",
+      "title": "asset-ls",
+      "description": "Read-only Asset Bible catalog under COMFY_OUTPUT_DIR/assets.",
+      "argv": [
+        "./scripts/manage.sh",
+        "asset-ls"
+      ],
+      "flags": []
+    },
+    {
+      "id": "film-accept",
+      "title": "film-accept",
+      "description": "Fail-closed 90s gate: 5.00s, 1280x704, LTX audio.",
+      "argv": [
+        "./scripts/manage.sh",
+        "film-accept"
+      ],
+      "flags": []
+    },
+    {
+      "id": "shot-sheet",
+      "title": "shot-sheet",
+      "description": "Write films/<slug>/shots.yaml with shot-card defaults.",
+      "argv": [
+        "./scripts/manage.sh",
+        "shot-sheet"
+      ],
+      "flags": []
+    },
+    {
+      "id": "overlay-qc",
+      "title": "overlay-qc",
+      "description": "50% clay/look overlay. Host ffmpeg; compose may stay up.",
+      "argv": [
+        "./scripts/manage.sh",
+        "overlay-qc"
+      ],
+      "flags": []
+    },
+    {
+      "id": "film-animatic",
+      "title": "film-animatic",
+      "description": "Cheap 90s animatic from clay.mp4 or stills. Host ffmpeg.",
+      "argv": [
+        "./scripts/manage.sh",
+        "film-animatic"
+      ],
+      "flags": []
+    },
+    {
+      "id": "stem-mix",
+      "title": "stem-mix",
+      "description": "Picture-lock stems; duck -15 dB; YouTube loudnorm. Occupancy audio.",
+      "argv": [
+        "./scripts/manage.sh",
+        "stem-mix"
+      ],
+      "flags": []
+    },
+    {
+      "id": "audio-still-video",
+      "title": "audio-still-video",
+      "description": "Mux a still + audio master to YouTube MP4. Host ffmpeg; compose may stay up.",
+      "argv": [
+        "./scripts/manage.sh",
+        "audio-still-video"
+      ],
+      "flags": []
+    },
+    {
+      "id": "spark-timing",
+      "title": "spark-timing",
+      "description": "Kitchen wall-clock table. Do not record on pytorch-fallback.",
+      "argv": [
+        "./scripts/manage.sh",
+        "spark-timing",
+        "show"
+      ],
+      "flags": []
+    },
+    {
+      "id": "models-status",
+      "title": "models-status",
+      "description": "Disk bible: keep-set + refuse list. Does not delete.",
+      "argv": [
+        "./scripts/manage.sh",
+        "models-status"
+      ],
+      "flags": []
+    },
+    {
+      "id": "cleanup",
+      "title": "cleanup",
+      "description": "Type DELETE. Removes ez-comfy-state only. Keeps MODELS_DIR and COMFY_OUTPUT_DIR.",
+      "argv": [
+        "./scripts/manage.sh",
+        "cleanup"
+      ],
+      "flags": []
+    },
+    {
+      "id": "spark-farm-status",
+      "title": "spark-farm status",
+      "description": "Probe independent Spark workers. Never starts compose remotely. No NCCL.",
+      "argv": [
+        "./scripts/utilities/spark-farm.sh",
+        "status"
+      ],
       "flags": []
     }
   ]

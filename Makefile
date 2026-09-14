@@ -20,7 +20,7 @@ help:
 	@echo "  make lint       shellcheck + shfmt check + Pyright + mypy"
 	@echo "  make typecheck  Pyright (Pylance) + mypy"
 	@echo "  make fmt        shfmt -w"
-	@echo "  make docs       mkdocs build --strict"
+	@echo "  make docs       generate shell reference + mkdocs build --strict"
 	@echo "  make doctor     ./scripts/manage.sh doctor"
 
 # @target test — full hermetic suite (see tests/run_all.sh)
@@ -61,9 +61,10 @@ lint:
 fmt:
 	shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh tests/typecheck.sh
 
-# @target docs — strict MkDocs Material build into site/ (publish is Actions + mike)
+# @target docs — generate CLI reference, then strict MkDocs Material build into site/
 # NO_MKDOCS_2_WARNING: suppress Material advisory; stack is pinned to mkdocs 1.x.
 docs:
+	python3 docs/generate_shell_docs.py
 	NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict
 	# Match deploy-docs.yml: mike copies from site/; skip Jekyll on Pages.
 	touch site/.nojekyll

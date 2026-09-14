@@ -1,3 +1,10 @@
+# Purpose:
+#   Disk bible for MODELS_DIR keep-set packs and refuse list (MiniMax-H3, Klein 9B, …).
+# Source of truth: this file (LICENSE-MODELS.md stays the license bible)
+# Schema: restricted YAML, scripts/lib/model_manifest.py (schema 1)
+# Safety:
+#   Refuse list is fail-closed for banned weights. cleanup (manage.sh) does not
+#   delete MODELS_DIR — reap-models / disk-wizard default to --plan.
 # Disk bible for MODELS_DIR. LICENSE-MODELS.md stays the license bible.
 # schema 1 — restricted YAML parsed by scripts/lib/model_manifest.py
 schema: 1

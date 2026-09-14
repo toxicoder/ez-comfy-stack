@@ -1,0 +1,55 @@
+---
+title: Troubleshooting — start and runtime
+description: Headroom refuse, Kitchen fallback, cold start, GHCR pulls, and bind-mounted ops scripts.
+tags: [troubleshooting, start, docker, kitchen, comfyui]
+---
+
+# Troubleshooting — start and runtime
+
+**What's on this page**
+
+- **Headroom** refuse, Kitchen attention fallback, and cold start
+- **GHCR / layer cache** and bind-mounted ops scripts
+- **Logs and reset** — full copy on the troubleshooting index
+
+**What this enables**
+
+- **Starting** Comfy after a refuse or a poisoned `ez-comfy-state` volume
+- **Keeping** `restart: "no"`, heavy confirm, and headroom preflight
+
+!!! danger "restart: no"
+
+    Logout is **not** `stop`. Reboot still needs a manual `./scripts/manage.sh start` (type **yes**). Do not weaken headroom preflight. Logs and `cleanup` (keeps `${MODELS_DIR}`): [Troubleshooting](../troubleshooting.md#logs).
+
+## Start & runtime
+
+| Symptom | Likely cause | Action |
+| --- | --- | --- |
+| `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |
+| Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
+| 10–20× slow / mushy video vs a 4090 | Silent PyTorch attention fallback (Kitchen/Sage not active) | `./scripts/manage.sh doctor` must **not** say `attention: pytorch-fallback` on a running Spark. Logs should contain `Using Comfy Kitchen attention`. Launch uses `--use-ck-attention` (never `--use-sage-attention` next to it). Do **not** `pip install sageattention` from PyPI on aarch64. Do **not** `spark-timing record` on that path (the command refuses) |
+| Empty Kitchen timing table | CI has no GPU; seconds are operator-measured | `attention: kitchen`, Queue the three smokes, then `./scripts/manage.sh spark-timing record --klein N --wan N --ltx N`. File: `${COMFY_OUTPUT_DIR}/spark-timing.json`. Record refuses if compose is up and attention is not `kitchen` |
+| SSH drop mid-90s film | `restart: "no"` is correct; no jobstore before this change | `./scripts/manage.sh start && ./scripts/manage.sh film-resume go-see` reprints only failed/crashed shots. Ok clips with duration 5.00±0.05 s are skipped |
+| SSH drop during `start` / after `start` returns | Compose client used to die with the shell; log-follow used to hold the TTY | `start` ignores hangup during pull/`up -d`, then detaches. Container keeps running after logout. Re-attach: `./scripts/manage.sh logs`. Logout is **not** `stop`. Reboot still needs a manual `start` (`restart: "no"`) |
+| Build OK, `status` empty / not in `docker ps` | Container exited immediately (`restart: "no"`) | Pull latest (workflow no longer mounts into `ComfyUI/` before clone). `./scripts/manage.sh logs` or `docker logs ez-comfy-studio`. Reset poisoned volume: `./scripts/manage.sh stop && docker volume rm ez-comfy-state` then `start` again. Stop other GPU containers if needed |
+| `unrecognized arguments: --normalvram` then container exits | Entrypoint still passed `--normalvram`; ComfyUI v0.34+ removed that flag (default VRAM is implied) | Pull latest. `entrypoint.sh` is bind-mounted — no image rebuild. `./scripts/manage.sh stop` then `start`. Confirm logs show Kitchen on :8188, not argparse help |
+| `start` returns while logs still downloading torch | Normal cold install; multi‑GB wheels | Default: `start` returns after `compose up -d`. Leave the container running; follow: `./scripts/manage.sh logs`. In-shell wait: `LAB_STACK_FOLLOW=1`. Markers: `[comfy-install] ══ step N/12 ══` (or `Docker phase: …` during image prebuild) |
+| Quiet for minutes on step 4 (PyTorch) | Large cudnn/torch wheel download | Prefer GHCR prebuilt image (seed, no pip). Or wait for pip bars; host heartbeat every 30s |
+| `docker pull ghcr.io/...` denied / not found | Wrong branch tag, package not published, or private | Confirm tag matches branch (`:us-safe-studio` on `main`, `:us-safe-studio-development` on `development`/feature — see `doctor`). Run `publish-image` on that long-lived branch; make GHCR package public; or `EZ_COMFY_IMAGE=…` / force local build: [Getting Started — build locally](../getting-started.md#build-the-image-locally-optional) |
+| Image build: `COPY … not found` / `failed to calculate checksum` for `patch_*.py` or `seed_clay_inputs.py` | `docker/.dockerignore` is whitelist-only (`*` then `!exceptions`); a new runtime `COPY` was added without a matching `!file` | Add `!the-file.py` next to the other patch allowlists in `docker/.dockerignore`. `tests/bats/safety.bats` asserts every Dockerfile context `COPY` is allowlisted |
+| First start still runs multi-GB pip | Thin image / no prebuilt / force cold | Check logs for “Seeding … prebuilt”. Rebuild with `EZ_COMFY_PREBUILD=1` or pull GHCR tag. Unset `LAB_FORCE_COLD_INSTALL` |
+| `docker pull` / rebuild re-downloads multi‑GB after tiny script edit | Old image with monolithic prebuilt layer, or a real **torch** change | Pull latest split layout: runtime has **venv-torch** (multi‑GB), **venv-extra** (Comfy/node pip), and **app**. Ops scripts are late thin layers + compose bind-mounts. Node/source-only changes re-pull **app**; extra pip re-pulls **venv-extra** only; torch pin/index changes re-pull torch. See [Download packs](models-packs.md#image-layer-cache-high-velocity-rebuilds-pulls) |
+| Local script change has no effect | Looking at baked image without restart | Compose mounts `docker/*.sh`, `docker/install-comfy/`, and the patch; restart after edit. To rebake prebuilt tree: [build locally](../getting-started.md#build-the-image-locally-optional) (`LAB_STACK_FORCE_BUILD=1`) |
+| `IndentationError` in `model_management.py` / `mem_free_torch` | Old free-memory patch broke indent | Pull latest (patch is bind-mounted). `./scripts/manage.sh stop && ./scripts/manage.sh start` — auto-repairs via git restore + re-patch. No full image rebuild required |
+| Cold start forever | First PVC/volume pip+git | Wait; `manage.sh logs`; check network |
+| Nunchaku import spam / `nunchaku 0.16.1` / missing `nunchaku.models` | Wrong **PyPI** package (`nunchaku` stats lib) or no aarch64 wheel on GB10 | Lab graphs do **not** need Nunchaku. Restart: entrypoint moves `ComfyUI-nunchaku` to `ComfyUI-nunchaku.disabled` when the engine is missing (Comfy skips `*.disabled`). Do **not** `pip install nunchaku` from PyPI. Optional real engine: GitHub wheels only (`NUNCHAKU_WHEEL_URL=…` or x86_64 cu/torch match). Spark aarch64: skip; use core UNET/CLIP/VAE loaders |
+| Nunchaku missing | aarch64 wheel unavailable | Fail-soft; seeded Klein / LTX paths still work |
+| `Cannot import …/custom_nodes/_user` / missing `__init__.py` | Empty host bind `${COMFY_OUTPUT_DIR}/custom-nodes-user` | Restart. Entrypoint writes an empty stub `__init__.py` when missing; never overwrites an operator pack |
+| `ModuleNotFoundError: No module named 'comfy_api.input'` then container exit 1 (after Kitchen attention) | Volume seed used unanchored rsync `--exclude input/`, which also dropped ComfyUI v0.34+ `comfy_api/input` | Pull latest (`entrypoint.sh` + `install-comfy` are bind-mounted — no image rebuild). `./scripts/manage.sh stop` then `start` (type **yes**). Stamp-present refresh heals `comfy_api/` from `/opt/comfy-prebuilt`. Do **not** need `LAB_FORCE_COLD_INSTALL`. Last resort: `docker volume rm ez-comfy-state` then start |
+| `git clone` into `ComfyUI-VideoHelperSuite` “already exists and is not an empty directory” | Prebuilt strip removes `.git`; refresh used to clone into the leftover tree | Pull latest and restart. Clone is skipped when the pack is already present; pip requirements still run. LTX lab MP4 is unaffected |
+
+---
+
+## Logs and reset
+
+Full `./scripts/manage.sh logs` / `docker logs ez-comfy-studio` fences and `cleanup` (type **DELETE**, keeps `${MODELS_DIR}`) live on the [troubleshooting index](../troubleshooting.md#logs).

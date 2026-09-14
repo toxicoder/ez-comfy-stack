@@ -8,21 +8,19 @@ tags: [getting-started, docker, comfyui]
 
 **What's on this page**
 
-- What success looks like
 - Session variables (Your Spark panel, in-place chips, or shell exports)
-- Prerequisites checklist
-- Setup, doctor, download, start, first still, stop
-- Optional: build the Docker image locally instead of pulling GHCR
-- What that first still actually did
-- Pointer to the `manage.sh` catalog
+- Numbered operator steps: clone → setup → doctor → licenses → download → start → first still → stop
+- **Verify** after each step, with failure jumps
+- GHCR pull vs local image build (collapsed)
+- Safety: `restart: "no"`, type **yes**, headroom, download-limit clear-on-exit
 
 **What this enables**
 
 - A first successful open of ComfyUI at `${COMFY_PORT}` (default **8188**)
 - Safe model downloads that leave bandwidth for SSH
-- Choosing prebuilt GHCR pull (default) or a local Dockerfile build
-- One queued **still-draft** before you move to the [studio playbook](visual-generative-ai.md)
+- One queued **`_lab/klein/still-draft`** PNG under `${COMFY_OUTPUT_DIR}`
 - Knowing *why* you typed `yes` and *where* the PNG went — [How the studio works](learn/index.md)
+- Short answers after first run: [FAQ](start/faq.md)
 
 ---
 
@@ -36,6 +34,8 @@ tags: [getting-started, docker, comfyui]
 | **Output** | `ez_still_draft_*.png` under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 
 **Expect** multi‑GB Hugging Face pulls (throttled by default). First start usually **seeds** from a prebuilt GHCR image; without that image, cold pip can take **10–30+ minutes**.
+
+Full verb list (including when **not** to run each command): [manage.sh reference](manage-cli.md). Do not weaken `restart: "no"`, heavy confirm on `start`, headroom preflight, or download-limit **clear-on-exit**.
 
 ---
 
@@ -61,46 +61,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"   # auto | off | integer Mbps
 
 ---
 
-## Path at a glance
-
-1. **Clone** this repo (branch that matches these docs)
-2. **`setup`** — `.env`, model dir, output dir, Docker if needed
-3. **`doctor`** — fix hard failures before multi‑GB downloads
-4. **Accept LTX-2.5** on Hugging Face (gated) and set `HF_TOKEN`
-5. **`download-models`** — Klein 4B + Wan 5B + LTX-2.5 (throttled)
-6. **`start`** — type `yes`, then open the UI
-7. **Queue klein/still-draft**
-8. **`stop`** — always, before reboot
-
-```bash
-git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
-cd ez-comfy-stack
-
-export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
-export SPARK_USER="${SPARK_USER:-$USER}"
-export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
-export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
-export COMFY_PORT="${COMFY_PORT:-8188}"
-export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
-
-./scripts/manage.sh setup --install-docker   # approve sudo; edit .env for HF_TOKEN
-./scripts/manage.sh doctor
-./scripts/manage.sh download-models
-./scripts/manage.sh start                    # type: yes
-./scripts/manage.sh status
-# LAN / on-box:  open http://${SPARK_HOST}:${COMFY_PORT}
-# Laptop:        ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
-#                then open http://127.0.0.1:${COMFY_PORT}
-./scripts/manage.sh stop                     # before reboot
-```
-
-Sections below unpack each step. Feature work still branches from `development` (see [Conventions](project-conventions.md)).
-
----
-
 ## Prerequisites
-
-### Checklist
 
 - [ ] **NVIDIA DGX Spark** (or compatible GB10) with drivers + **NVIDIA Container Toolkit**
 - [ ] **Docker** with Compose v2 (prefer apt `docker-ce`, not snap; user in `docker` group)
@@ -109,8 +70,6 @@ Sections below unpack each step. Feature work still branches from `development` 
 - [ ] **git**, **python3**
 - [ ] **HF account** — accept the LTX-2.5 license; `HF_TOKEN` in `.env` or `hf auth login`
 
-### At a glance
-
 | Kind | Items |
 | --- | --- |
 | **Required on host** | NVIDIA drivers, Container Toolkit, Docker + Compose v2, git, python3 |
@@ -118,55 +77,42 @@ Sections below unpack each step. Feature work still branches from `development` 
 | **Accounts** | LTX-2.5 license click + `HF_TOKEN` (Klein 4B and Wan 5B are Apache) |
 | **Image base** | Public Docker Hub `nvidia/cuda` — **no** NGC / `nvcr.io` login required |
 
+`setup` creates and chowns both dirs. Manual last resort:
+
 ```bash
-# Prefer: ./scripts/manage.sh setup  (creates and chowns both dirs; installs hf CLI)
 sudo mkdir -p "${MODELS_DIR}" "${COMFY_OUTPUT_DIR}"
 sudo chown "$USER:$USER" "${MODELS_DIR}" "${COMFY_OUTPUT_DIR}"
 ```
 
-```mermaid
-flowchart LR
-  subgraph Required["Required on host"]
-    Drv["NVIDIA drivers"]
-    CTK["NVIDIA Container Toolkit"]
-    Dock["Docker + Compose v2"]
-    Git["git · python3"]
-  end
-  subgraph Optional["Optional / auto"]
-    HfCli["hf CLI"]
-    WS["wondershaper"]
-    ST["speedtest-cli"]
-  end
-  subgraph Accounts["Accounts"]
-    HF["LTX license + HF_TOKEN"]
-  end
-  Required --> Ready["Ready for doctor"]
-  Optional --> Ready
-  Accounts --> Ready
+---
+
+## Operator steps
+
+Clone the **same long-lived branch these docs describe** (`main` for [latest](https://toxicoder.github.io/ez-comfy-stack/latest/), `development` for [development](https://toxicoder.github.io/ez-comfy-stack/development/)). Feature work still branches from `development` ([Conventions](project-conventions.md)).
+
+### 1. Clone matching these docs
+
+```bash
+git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
+cd ez-comfy-stack
 ```
+
+**Verify:** `git branch --show-current` is `__DOCS_GIT_REF__`, and you are in the repo root (`ls scripts/manage.sh`).
 
 ---
 
-## Setup
-
-Clone the **same long-lived branch these docs describe** (`main` for [latest](https://toxicoder.github.io/ez-comfy-stack/latest/), `development` for [development](https://toxicoder.github.io/ez-comfy-stack/development/)).
+### 2. `setup --install-docker`
 
 === "Interactive"
 
     ```bash
-    git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
-    cd ez-comfy-stack
-
     ./scripts/manage.sh setup --install-docker
-    # approve sudo + type yes if prompted; edit .env for HF_TOKEN
+    # approve sudo + type yes if prompted; edit .env for HF_TOKEN (step 4)
     ```
 
 === "Non-interactive"
 
     ```bash
-    git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git
-    cd ez-comfy-stack
-
     LAB_NON_INTERACTIVE=1 LAB_CONFIRM_TOKEN=yes SETUP_INSTALL_DOCKER=1 \
       ./scripts/manage.sh setup
     ```
@@ -179,9 +125,11 @@ Clone the **same long-lived branch these docs describe** (`main` for [latest](ht
 4. Add your user to the `docker` group; configure `nvidia-ctk` when present
 5. Re-run `doctor`
 
-??? tip "Docker group not active in this shell"
+**Verify:** next step is `doctor`. If `docker` permission is denied after install: `newgrp docker` (or re-login SSH), then continue.
 
-    After install, if `docker` permission is denied:
+**Fail:** [Host and Docker](operate/troubleshooting-host-docker.md).
+
+??? tip "Docker group not active in this shell"
 
     ```bash
     newgrp docker   # or re-login SSH
@@ -190,13 +138,25 @@ Clone the **same long-lived branch these docs describe** (`main` for [latest](ht
 
 ---
 
-## Doctor
+### 3. `doctor`
 
-```bash
-./scripts/manage.sh doctor
+```ezcmd
+id: doctor
 ```
 
-Fix any errors **before** downloading multi‑GB models. Missing lab weights are a **warning**, not a hard doctor failure (download next).
+Expect a passing run to print (among other lines) **`Doctor OK`**. Real doctor lines to look for:
+
+```text
+attention: unknown
+License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md
+Doctor OK
+```
+
+`attention:` is `kitchen`, `sage`, `pytorch-fallback`, or `unknown` (unknown is normal while Compose is down). On a running Spark, `attention: pytorch-fallback` is a 10–20× slow path — [Start and runtime](operate/troubleshooting-start-runtime.md).
+
+**Verify:** stderr ends with `Doctor OK`. Doctor also prints pack JSON (`image status`, `wan status`, `ltx status`, `llm status`) and the image tag for this git branch. **Missing lab weights are a warning**, not a hard fail (`lab workflow models incomplete (not a hard doctor failure)`).
+
+**Fail (hard):** docker missing, compose missing, host headroom, or dirs not writable → [Host and Docker](operate/troubleshooting-host-docker.md). Prefer `setup` first.
 
 !!! warning "Hard failures to clear first"
 
@@ -205,34 +165,37 @@ Fix any errors **before** downloading multi‑GB models. Missing lab weights are
     - **host headroom** (RAM/disk)
     - **MODELS_DIR or COMFY_OUTPUT_DIR not writable**
 
-    Prefer `./scripts/manage.sh setup` first. Copy-paste fixes: [Troubleshooting](troubleshooting.md).
+---
 
-`doctor` also prints the **license policy one-liner**, image tag for this git branch, JSON status from `download-image` / `download-wan` / `download-ltx` / `download-llm`, and the Kitchen **spark-timing** line (`none` until you record). Analog **podcast** JSON is printed as a soft line — a missing podcast pack is **not** a doctor failure.
+### 4. Accept LTX-2.5 + set `HF_TOKEN`
+
+LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache. A token in `.env` is **not** the same as accepting the Lightricks license. Policy: [Model licenses](licenses.md).
+
+1. Open [Lightricks/LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5) as **that** Hugging Face user and click **Agree**
+2. Put `HF_TOKEN=hf_...` in `.env`, or `hf auth login`
+3. Fine-grained tokens need gated-repo read
+
+**Verify:** the Hugging Face model card shows the license accepted for this account; `.env` has `HF_TOKEN` (no quotes needed). Do not prefix later downloads with `sudo` — download-limit and `comfy/` ownership heal use sudo internally.
+
+**Fail:** [Downloads](operate/troubleshooting-downloads.md).
 
 ---
 
-## Download models
+### 5. `download-models`
 
-LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache — a token in `.env` is **not** the same as accepting the Lightricks license. Policy: [Model licenses](licenses.md).
+Default pack only: Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. **No `--tier`.** Throttled by download-limit (`auto` = **85%** of speedtest when HTB works). The wrap **always clears on exit**.
 
-```bash
-# 1. echo 'HF_TOKEN=hf_...' >> .env   # or: hf auth login
-# 2. Open https://huggingface.co/Lightricks/LTX-2.5 as THAT user and click Agree
-# 3. Fine-grained tokens need gated-repo read
-# Do not prefix with sudo — download-limit and comfy/ ownership heal use sudo internally.
-./scripts/manage.sh download-models
-# Manual cap (Mbps; 40 ≈ 5 MB/s). Overrides DOWNLOAD_LIMIT for this run:
-# ./scripts/manage.sh download-models --limit 40
+```ezcmd
+id: download-models
 ```
 
 | What | Detail |
 | --- | --- |
 | **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` + `download-llm` |
 | **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
-| **Progress** | `══ 1/4 ══` Klein → Wan → LTX → GGUF, then a `↓` size/MiB/s line per repo. Piped SSH gets newlines instead of a rewriting bar. |
-| **CLI** | Modern **`hf download`** (auto-installed by `setup` / `download-models`) |
-| **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks. Cache hits still need writable `comfy/<subdir>/` dirs; `download-models` sudo-heals each layout dir on link (no manual `chown`). |
-| **LTX size** | Selective `Lightricks/LTX-2.5` distilled set (status floor ~**30 GB**), not the Kijai 2.3 monorepo (~400 GB) |
+| **Progress** | `══ 1/4 ══` Klein → Wan → LTX → GGUF, then a `↓` size/MiB/s line per repo |
+| **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks |
+| **LTX size** | Selective distilled set (status floor ~**30 GB**), not the Kijai 2.3 monorepo |
 
 `download-models` **exits non-zero** until every lab basename is present under `${MODELS_DIR}/comfy/`:
 
@@ -250,124 +213,99 @@ LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache — a token in `.env` is **
 | `ltx-2.5-audio-vae-bf16.safetensors` | `vae/` |
 | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `llm/` |
 
+**Verify:** `./scripts/manage.sh models-status` and a second `doctor` — pack JSON should no longer warn that lab models are incomplete.
+
+**Fail:** [Downloads](operate/troubleshooting-downloads.md) · [Models and workflows](operate/troubleshooting-models-workflows.md). Cache layout: [Models & Cache](models-and-cache.md).
+
 !!! tip "Bandwidth shaping soft-fail"
 
     If kernel HTB is missing (common on DGX Spark), downloads continue with gentle HF workers and a warning. Use `DOWNLOAD_LIMIT=off` only when you accept SSH risk. See [Download Limit](download-limit.md).
 
-!!! tip "Stuck resume (0 MiB/s, incomplete file)"
+??? tip "Stuck resume (0 MiB/s, incomplete file)"
 
-    Heartbeats showing `found N incomplete` and `0 MiB/s` mean `hf` is alive but the partial is not growing. **Do not** `HF_LOCK_CLEAR_FORCE=1` while it runs. ++ctrl+c++, then:
+    Heartbeats showing `found N incomplete` and `0 MiB/s` mean `hf` is alive but the partial is not growing. **Do not** `HF_LOCK_CLEAR_FORCE=1` while it runs. ++ctrl+c++, then check **Delete stuck \*.incomplete** on the widget, or:
 
     ```bash
     ./scripts/manage.sh download-models --drop-incomplete --limit 1000
     ```
 
-    That deletes `*.incomplete` (finished weights stay) and re-pulls. See [Models & Cache](models-and-cache.md#resume-cache).
-
-If Comfy shows **Missing Models** on **klein/still-draft**, re-run download and `doctor`. Full cache layout: [Models & Cache](models-and-cache.md).
+    That deletes `*.incomplete` (finished weights stay) and re-pulls. See [Download packs](operate/models-packs.md#resume-cache).
 
 ---
 
-## Start the stack
+### 6. `start` (type **yes**)
 
-```bash
-./scripts/manage.sh start
-# type: yes
-./scripts/manage.sh status
+!!! warning "Remote Spark rules"
+
+    Type **yes**. `start` checks host RAM/disk **headroom** first. Compose `restart: "no"` — the stack will not come back after reboot. Download-limit wrap always **clears on exit**. Do not weaken these for demos.
+
+```ezcmd
+id: start
 ```
 
-Open **`http://${SPARK_HOST}:${COMFY_PORT}`** (click the highlighted host/port, or use Your Spark — copy uses those values).
+Then:
 
-From a laptop (Spark is remote):
+```ezcmd
+id: status
+```
+
+On-box / LAN:
+
+```ezcmd
+id: open-ui
+```
+
+From a laptop (Spark is remote), forward the port and open `http://127.0.0.1:${COMFY_PORT}`:
 
 ```ezcmd
 id: ssh-forward
 ```
 
-Then open `http://127.0.0.1:${COMFY_PORT}` on the laptop.
+Equivalent shell (docs JS off):
 
-!!! success "First Queue"
+```bash
+ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
+```
 
-    In ComfyUI, load **klein/still-draft** from the **Apps** sidebar (or **Workflows → `_lab/klein/`**). Host file: `workflows/_lab/klein/still-draft.json`. It is seeded as `*.app.json` under `_lab/klein/`. Leave **Enhance** off. Queue. PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png`.
+**Verify:** `status` shows the project; ComfyUI port open; `MODELS_DIR` / `COMFY_OUTPUT_DIR` / `COMFY_PORT` printed; browser loads the UI. Headroom was already checked — a refuse is a hard fail, not a warning.
 
-    **What you just did:** `start` launched ComfyUI (no auto-restart after reboot). The graph loaded Klein 4B distilled (4 steps, CFG 1.0) and wrote a still on the host — not inside the git repo. Canvas nouns: [ComfyUI basics](learn/comfyui.md).
+**Fail:** [Start and runtime](operate/troubleshooting-start-runtime.md).
 
-    Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Still to motion to AV](visual-generative-ai.md). After that first still, optional audio packs (not part of `download-models`; `--tier` is which pack): [Download tiers](download-tiers.md), then [Local podcast](podcast.md) or [Local music](music.md) — do not co-resident with LTX/Wan/Klein.
-
-### Build the image locally (optional)
-
-By default, `manage.sh start` **pulls** a branch-aligned prebuilt image from GHCR (ComfyUI + PyTorch baked in; **not** Klein/Wan/LTX weights). You can instead **build** `docker/Dockerfile` on the host and still use the same start path.
-
-=== "One-shot env"
-
-    ```bash
-    LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start
-    # type: yes
-    ```
-
-=== "Persist in .env"
-
-    ```bash
-    # in .env (see .env.example)
-    LAB_STACK_FORCE_BUILD=1
-
-    ./scripts/manage.sh start
-    # type: yes
-    ```
-
-| When to use local build | When to stick with GHCR pull |
-| --- | --- |
-| GHCR tag missing, private, or pull denied | Normal first install / fastest path |
-| Rebaking `/opt/comfy-prebuilt` after pin or phase changes | Ops-script-only edits (entrypoint / install / patch) |
-| Developing the image layers themselves | You only need Comfy + weights running |
-
-**Still the same safety path:** type `yes`, host headroom preflight, `restart: "no"`, and weights via `download-models` / `MODELS_DIR`. Local build does **not** skip confirmation or put models inside the image.
-
-!!! warning "Expect a long Docker build"
-
-    With default `EZ_COMFY_PREBUILD=1`, local build installs torch and Comfy into the image and can take **30+ minutes** (multi‑GB wheels). Base layers come from public Docker Hub `nvidia/cuda` (no NGC login by default). Compose may use a previously pulled GHCR image as build cache (`cache_from`) when present.
-
-After a successful prebuild image, first container start **seeds** the `comfy-state` volume from `/opt/comfy-prebuilt` (same as the GHCR path). A thin build (`EZ_COMFY_PREBUILD=0`) or `LAB_FORCE_COLD_INSTALL=1` falls back to cold multi‑GB pip at runtime.
-
-| Variable | Role |
-| --- | --- |
-| `LAB_STACK_FORCE_BUILD=1` | Prefer local `compose up --build` (skip pull-first path) |
-| `LAB_STACK_SKIP_PULL=1` | Do not `docker pull`; start falls through to local `compose --build` |
-| `EZ_COMFY_PREBUILD=1` (default) | Bake Comfy + torch into the image during build |
-| `EZ_COMFY_PREBUILD=0` | Thin image → cold pip at first container start |
-| `EZ_COMFY_IMAGE` | Tag for the pulled or built image (branch default if unset) |
-
-Pull failures already fall back to local build automatically. Force-build is for when you **want** a rebuild even if GHCR is available.
-
-Layer invalidation and pin bumps: [Models & Cache](models-and-cache.md#prebuilt-container-image-ghcr). Recovery rows: [Troubleshooting](troubleshooting.md).
+GHCR pull vs a local Dockerfile build (same `start` path, same safety): [collapsed below](#build-the-image-locally-optional).
 
 ---
 
-## Stop (always before reboot)
+### 7. Queue `_lab/klein/still-draft`
+
+In ComfyUI, load **klein/still-draft** from the **Apps** sidebar (or **Workflows → `_lab/klein/`**). Host file: `workflows/_lab/klein/still-draft.json`. It is seeded as `*.app.json` under `_lab/klein/`. Leave **Enhance** off. Queue.
+
+**Verify:** PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png` (container `/outputs`). Missing Models on this graph → re-run download and `doctor` ([Models and workflows](operate/troubleshooting-models-workflows.md)).
+
+**What you just did:** `start` launched ComfyUI (no auto-restart after reboot). The graph loaded Klein 4B distilled (4 steps, CFG 1.0) and wrote a still on the host — not inside the git repo. Canvas nouns: [ComfyUI basics](learn/comfyui.md).
+
+Next: [Prompting](prompting.md), then the still → Wan → LTX loop on [Still to motion to AV](visual-generative-ai.md). Optional audio packs are **not** part of `download-models` — [Download tiers](download-tiers.md), then [Local podcast](podcast.md) or [Local music](music.md). Do not co-resident with LTX/Wan/Klein.
+
+---
+
+### 8. `stop` before reboot
 
 !!! danger "Golden rule"
 
     **Never reboot with the heavy ComfyUI stack still running.** Always stop first. See [Reboot Safety](reboot-safety.md).
 
-```bash
-./scripts/manage.sh stop
+```ezcmd
+id: stop
 ```
 
 `stop` keeps `${MODELS_DIR}`, `${COMFY_OUTPUT_DIR}`, and the `ez-comfy-state` volume.
 
----
-
-## manage.sh catalog
-
-The full verb list (including when **not** to run each command) lives on **[manage.sh reference](manage-cli.md)**. First-run you need: `setup` → `doctor` → `download-models` → `start` → `status` → `stop`.
-
-`download-h3`, `queue-h3`, `farm-h3`, and `stitch-h3` are **banned** aliases (MiniMax H3).
+**Verify:** `./scripts/manage.sh status` shows comfyui is not running. Then reboot if you need to.
 
 ---
 
-## Optional deep-dives
+## GHCR pull vs local build {#build-the-image-locally-optional}
 
-??? tip "Prebuilt image (GHCR)"
+??? tip "Prebuilt image (GHCR) — default"
 
     `manage.sh start` pulls a **branch-aligned** arm64 image published by the `publish-image` workflow:
 
@@ -380,7 +318,7 @@ The full verb list (including when **not** to run each command) lives on **[mana
 
     Multi-stage: **runtime** builder stages install Comfy+torch in **phased modules** (torch separate from Comfy pins and custom nodes); final stage is **CUDA runtime** (no nvcc) with **split layers** (`venv` / `venv-extra` / `app`, `COPY --link`) so pulls reuse multi‑GB torch when only extra pip or app bits change. Override `CUDA_BASE_IMAGE` to a devel tag only if you compile CUDA extensions.
 
-    It includes ComfyUI + PyTorch (pinned refs — see [Models & Cache](models-and-cache.md#prebuild-version-pins-validated)); **not** Klein/Wan/LTX weights (those stay on `MODELS_DIR`).
+    It includes ComfyUI + PyTorch (pinned refs — see [Download packs](operate/models-packs.md#prebuild-version-pins-validated)); **not** Klein/Wan/LTX weights (those stay on `MODELS_DIR`).
 
     First start **seeds** the volume from `/opt/comfy-prebuilt` (local copy) instead of multi‑GB pip.
 
@@ -388,23 +326,80 @@ The full verb list (including when **not** to run each command) lives on **[mana
 
     `./scripts/manage.sh doctor` prints the resolved default image before you start.
 
+??? tip "Build the image locally (optional)"
+
+    By default, `manage.sh start` **pulls** GHCR. You can instead **build** `docker/Dockerfile` on the host and still use the same start path.
+
+    === "One-shot env"
+
+        ```bash
+        LAB_STACK_FORCE_BUILD=1 ./scripts/manage.sh start
+        # type: yes
+        ```
+
+    === "Persist in .env"
+
+        ```bash
+        # in .env (see .env.example)
+        LAB_STACK_FORCE_BUILD=1
+
+        ./scripts/manage.sh start
+        # type: yes
+        ```
+
+    | When to use local build | When to stick with GHCR pull |
+    | --- | --- |
+    | GHCR tag missing, private, or pull denied | Normal first install / fastest path |
+    | Rebaking `/opt/comfy-prebuilt` after pin or phase changes | Ops-script-only edits (entrypoint / install / patch) |
+    | Developing the image layers themselves | You only need Comfy + weights running |
+
+    **Still the same safety path:** type `yes`, host headroom preflight, `restart: "no"`, and weights via `download-models` / `MODELS_DIR`. Local build does **not** skip confirmation or put models inside the image.
+
+    !!! warning "Expect a long Docker build"
+
+        With default `EZ_COMFY_PREBUILD=1`, local build installs torch and Comfy into the image and can take **30+ minutes** (multi‑GB wheels). Base layers come from public Docker Hub `nvidia/cuda` (no NGC login by default). Compose may use a previously pulled GHCR image as build cache (`cache_from`) when present.
+
+    After a successful prebuild image, first container start **seeds** the `comfy-state` volume from `/opt/comfy-prebuilt` (same as the GHCR path). A thin build (`EZ_COMFY_PREBUILD=0`) or `LAB_FORCE_COLD_INSTALL=1` falls back to cold multi‑GB pip at runtime.
+
+    | Variable | Role |
+    | --- | --- |
+    | `LAB_STACK_FORCE_BUILD=1` | Prefer local `compose up --build` (skip pull-first path) |
+    | `LAB_STACK_SKIP_PULL=1` | Do not `docker pull`; start falls through to local `compose --build` |
+    | `EZ_COMFY_PREBUILD=1` (default) | Bake Comfy + torch into the image during build |
+    | `EZ_COMFY_PREBUILD=0` | Thin image → cold pip at first container start |
+    | `EZ_COMFY_IMAGE` | Tag for the pulled or built image (branch default if unset) |
+
+    Pull failures already fall back to local build automatically. Force-build is for when you **want** a rebuild even if GHCR is available.
+
+    Layer invalidation and pin bumps: [Download packs](operate/models-packs.md#prebuilt-container-image-ghcr). Recovery rows: [Start and runtime](operate/troubleshooting-start-runtime.md).
+
 ??? tip "Dev: edit scripts without rebuilding"
 
     Compose bind-mounts `docker/entrypoint.sh`, `docker/install-comfy.sh`, `docker/install-comfy/`, `docker/patch_get_free_memory.py`, and `docker/patch_unified_memory_copy.py` into the container.
 
-    Default attention is **Comfy Kitchen** (`--use-ck-attention`). `doctor` reports `attention: kitchen|sage|pytorch-fallback|unknown`. On a running Spark, `pytorch-fallback` means a 10–20× slow path — see [Troubleshooting](troubleshooting.md). After Kitchen is live, Queue the three smokes and `./scripts/manage.sh spark-timing record --klein N --wan N --ltx N` (CI does not invent seconds).
+    Default attention is **Comfy Kitchen** (`--use-ck-attention`). `doctor` reports `attention: kitchen|sage|pytorch-fallback|unknown`. On a running Spark, `pytorch-fallback` means a 10–20× slow path — [Start and runtime](operate/troubleshooting-start-runtime.md). After Kitchen is live, Queue the three smokes and `./scripts/manage.sh spark-timing record --klein N --wan N --ltx N` (CI does not invent seconds).
 
     Change those files on the host, then restart the stack — **no multi‑GB image rebuild**.
 
-    Rebuild only when you need a new baked `/opt/comfy-prebuilt` tree (torch / Comfy / nodes): [build the image locally](getting-started.md#build-the-image-locally-optional) or publish.
+    Rebuild only when you need a new baked `/opt/comfy-prebuilt` tree (torch / Comfy / nodes): force-build above, or publish.
 
-    See [Models & Cache](models-and-cache.md#image-layer-cache-high-velocity-rebuilds-pulls) for what invalidates which layers.
+    See [Download packs](operate/models-packs.md#image-layer-cache-high-velocity-rebuilds-pulls) for what invalidates which layers.
 
 ??? warning "Cold start without prebuilt"
 
     If GHCR pull fails or you force a thin/local build without prebuild, first start can take **10–30+ minutes** of pip.
 
     `manage.sh start` returns after `compose up -d` verifies the container is running. Closing SSH / this shell does **not** stop Comfy (dockerd owns it). Follow install: `./scripts/manage.sh logs`. Wait in this shell until port `${COMFY_PORT}` responds: `LAB_STACK_FOLLOW=1` (++ctrl+c++ detaches the view only).
+
+    ```mermaid
+    flowchart TB
+      A["manage.sh start<br/>type yes"] --> B["Docker build image<br/>ez-comfy:us-safe-studio"]
+      B --> C["Create volume comfy-state"]
+      C --> D["entrypoint: install-comfy.sh<br/>pip + git · 10–30+ min"]
+      D --> E["UM patches (free-mem + copy=False)"]
+      E --> F["Exec ComfyUI Kitchen + UM flags"]
+      F --> G["UI ready"]
+    ```
 
 ??? abstract "First-run journey (sequence)"
 
@@ -419,7 +414,7 @@ The full verb list (including when **not** to run each command) lives on **[mana
 
       Op->>M: clone + setup
       Op->>M: doctor
-      M-->>Op: preflight OK
+      M-->>Op: Doctor OK
       Op->>M: download-models
       M->>DL: wrap --limit auto or N Mbps
       DL->>HF: image fast + wan 5b + ltx 2.5
@@ -434,18 +429,6 @@ The full verb list (including when **not** to run each command) lives on **[mana
       Op->>M: stop (before reboot)
     ```
 
-??? abstract "Cold-start phases (first start without prebuilt)"
-
-    ```mermaid
-    flowchart TB
-      A["manage.sh start<br/>type yes"] --> B["Docker build image<br/>ez-comfy:us-safe-studio"]
-      B --> C["Create volume comfy-state"]
-      C --> D["entrypoint: install-comfy.sh<br/>pip + git · 10–30+ min"]
-      D --> E["UM patches (free-mem + copy=False)"]
-      E --> F["Exec ComfyUI Kitchen + UM flags"]
-      F --> G["UI ready"]
-    ```
-
 ---
 
 ## Next steps
@@ -457,9 +440,5 @@ The full verb list (including when **not** to run each command) lives on **[mana
 | Licenses, $10M LTX cap, banned models | [Model licenses](licenses.md) |
 | Still → Wan 5 s → LTX 5 s AV playbook | [Still to motion to AV](visual-generative-ai.md) |
 | `manage.sh` verbs | [manage.sh reference](manage-cli.md) |
-| 90s films | [90s shorts](shorts.md) |
-| Cache layout, basenames, layer pins | [Models & Cache](models-and-cache.md) |
-| Bandwidth throttle details | [Download Limit](download-limit.md) |
-| Reboot / recovery | [Reboot Safety](reboot-safety.md) |
 | Symptom → fix | [Troubleshooting](troubleshooting.md) |
-| Contributing / shell style | [Conventions](project-conventions.md) |
+| Reboot / recovery | [Reboot Safety](reboot-safety.md) |

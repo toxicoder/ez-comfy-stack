@@ -159,7 +159,7 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 ## Sequential Queue
 
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
-2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see troubleshooting)
+2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md))
 3. `./scripts/manage.sh start` — type **yes**
 4. Load **audio/podcast/audio-first**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
 5. Load **klein/podcast-cover** in a **later** session. Queue `ez_podcast_*.png`
