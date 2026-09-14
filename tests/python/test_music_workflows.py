@@ -65,14 +65,14 @@ def _assert_shared(
     assert prefix in blob
     if ace_mode == "vocal" and edm_vocal_treat:
         assert "[chorus]" in blob
-        assert "[inst]" in blob
+        assert "[inst" in blob or "[drop" in blob
         assert "[verse]" not in blob
     elif ace_mode == "vocal":
         assert "[verse]" in blob
         assert "[chorus]" in blob
     else:
-        assert "[inst]" in blob
-        assert "[outro]" in blob
+        assert "[inst" in blob or "[drop" in blob
+        assert "[outro" in blob
         assert "[verse]" not in blob
         assert "[chorus]" not in blob
     for needle in BANNED:
@@ -91,7 +91,7 @@ def _assert_shared(
     assert widgets[4] == bpm
     assert widgets[5] == duration
     assert widgets[6] == "4"
-    assert widgets[7] == "en"
+    assert widgets[7] == ("unknown" if ace_mode == "instrumental" else "en")
     assert widgets[8] == "C minor"
     assert widgets[9] is True
     sampler = next(n for n in graph["nodes"] if n["type"] == "KSampler")
@@ -253,6 +253,10 @@ def test_music_edm_drive_through_graphs() -> None:
         else:
             assert "instrumental" in note.lower()
             assert "[chorus]" not in blob
+            ace_enc = next(
+                n for n in graph["nodes"] if n["type"] == "TextEncodeAceStepAudio1.5"
+            )
+            assert ace_enc["widgets_values"][7] == "unknown"
         ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
         assert ace["title"] == "ez_edm_prompt"
         rel = lab_json(stem).relative_to(LAB_ROOT)
@@ -300,5 +304,17 @@ def test_music_apps_expose_duration_and_vocal_mode() -> None:
         assert "Duration (seconds)" in labels, stem
         assert "Vocal / instrumental" in labels, stem
         assert "Album art" in labels, stem
+        assert "Cover image" not in labels, stem
+        assert "image" not in names, stem
         assert "Artist" in labels, stem
         assert "Album" in labels, stem
+        load = next(n for n in graph["nodes"] if n["type"] == "LoadImage")
+        assert load["title"] == "Cover image"
+        image_out = next(
+            out for out in load["outputs"] if str(out.get("name") or "").upper() == "IMAGE"
+        )
+        assert not image_out.get("links")
+        meta = next(n for n in graph["nodes"] if n["type"] == "EZAudioMetadata")
+        cover_in = next(inp for inp in meta["inputs"] if inp.get("name") == "cover")
+        assert cover_in.get("link") is None
+        assert meta["widgets_values"][6] == "skip"

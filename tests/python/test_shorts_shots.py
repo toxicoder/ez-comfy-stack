@@ -217,7 +217,8 @@ def test_creative_locks() -> None:
     assert "storm-cloak" in go
     assert "ink-black" in go
     assert "warm-gold" in go
-    assert "techno wizard" in go.lower()
+    assert "techno wizard" not in go.lower()
+    assert "occupies" not in go.lower()
     assert "teal" not in go.lower()
     assert "cyan" not in go.lower()
     assert "jumpsuit" not in go.lower()
@@ -266,8 +267,13 @@ def test_creative_locks() -> None:
     assert "palm trees" in ident
     assert "fills the center" in ident
     assert "motes" in ident
-    assert "cinematic" in ident
-    assert "physically plausible" in ident
+    assert "chest-mounted" in ident or "body-cam" in ident
+    assert "bottom edge" in ident
+    assert "wearer's own" in ident
+    assert "occupies" not in ident
+    assert "standing" not in ident
+    assert "full body" not in ident
+    assert "another person" not in ident
     assert "no printed glyphs" not in ident
     assert "handlebar" not in ident
     assert "wingsuit" not in ident
@@ -283,8 +289,9 @@ def test_creative_locks() -> None:
         assert "silent mouth" in lower, shot["prefix"]
         assert "blank matte-black gloves" in lower, shot["prefix"]
         assert "Last frames hold" in blob, shot["prefix"]
-        assert "photoreal cinematic" in lower, shot["prefix"]
-        assert "physically plausible" in lower, shot["prefix"]
+        assert "bottom edge" in lower or "lower frame" in lower, shot["prefix"]
+        assert "photoreal cinematic" not in lower, shot["prefix"]
+        assert "occupies" not in lower, shot["prefix"]
         assert "handlebar" not in lower, shot["prefix"]
         assert "wingsuit" not in lower, shot["prefix"]
         assert "staff" not in lower, shot["prefix"]

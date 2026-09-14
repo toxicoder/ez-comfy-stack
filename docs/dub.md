@@ -12,7 +12,7 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 - App Mode: source file dropdown + upload (or URL), languages, stage, clone engine, Clone CFG
 - Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → merge → translate → clone → duration lock (≤1.25×, then spill, then fade-trim)
 - YouTube Studio multi-language audio upload (audio-only job-dir WAV + SRT)
-- `download-dub` usage, sequential Queue (Stage **analyze** first), and in-graph loudness
+- `download-dub` usage, sequential Queue (Stage **all** default), and in-graph loudness
 - Qwen3-TTS opt-in: wheel (`--no-deps`) vs complete snapshot vs nested tokenizer; fail-fast empty mix
 - Optional still-image MP4 when you have no source video (host `audio-still-video`)
 
@@ -53,7 +53,7 @@ Do not paste celebrity reference WAVs. Refs are extracted from **this** job’s 
 
 ## Quality bar
 
-Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent), onset-crop of Chatterbox hush / PerTh floor before fit, duration lock that pitch-preserves **up to 1.25×** then spills into the following gap then fade-trims (it does not crush a 40 s clone into a 2 s window), same-speaker merge when the gap is under 0.35 s, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and `qc.json`. After render, A/B `dubs/<slug>/render/turn_NNNN.raw.wav` (onset-cropped TTS) vs `turn_NNNN.wav` (fitted). Unvoiced / steady-tone clones skip overlay. Editable translation JSON is the other lever (Stage **analyze**, edit, Rewrite **off**, Stage **render**). Do not ship Stage **all** blindly. Do not disable PerTh.
+Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent), onset-crop of Chatterbox hush / PerTh floor before fit, duration lock that pitch-preserves **up to 1.25×** then spills into the following gap then fade-trims (it does not crush a 40 s clone into a 2 s window), same-speaker merge when the gap is under 0.35 s, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and `qc.json`. After render, A/B `dubs/<slug>/render/turn_NNNN.raw.wav` (onset-cropped TTS) vs `turn_NNNN.wav` (fitted). Unvoiced / steady-tone clones skip overlay. Editable translation JSON is the other lever (Stage **analyze**, edit, Rewrite **off**, Stage **render**). Default Stage **all** runs analyze then clone in one Queue. Do not disable PerTh.
 
 Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera lip sync. **No lip-sync OSS** (Wav2Lip stays banned). Mouths will not match on talking-head video.
 
@@ -115,7 +115,7 @@ Graph: **audio/dub/localize** (`extra.lab_profile` `us-safe-dub`). Occupancy **a
 | **Source language** | `auto` or pin |
 | **Rewrite translation** | On: ASR + speaker cluster + per-turn GGUF into `text_target`. Off: pin the JSON |
 | **Dub status** | After Queue: speaker/turn counts + `translated N/M`, or the blocking miss (`faster-whisper not installed`, `clone pack missing`, `llama.cpp unavailable`, `GGUF missing`, `t3_model=v3`, `resemble-perth watermarker missing`) |
-| **Stage** | Default **analyze**. `all` / `analyze` / `render` |
+| **Stage** | Default **all**. `all` / `analyze` / `render` |
 | **Clone engine** | chatterbox-ml or qwen3tts |
 | **Keep original bed** | Gaps keep ambience |
 | **Spoken disclosure** | Default **off**. Localized bumper on `ez_dub_mix` only; sidecar always written |
@@ -127,7 +127,7 @@ Graph: **audio/dub/localize** (`extra.lab_profile` `us-safe-dub`). Occupancy **a
 
 1. `./scripts/manage.sh start` — type **yes**
 2. `download-dub --tier asr` then `--tier clone` (clone is `ve.pt` + `s3gen.pt` + T3 V3 + tokenizer JSON + `Cangjie5_TC.json` + `conds.pt`, not t3-only). Clone also seeds `MODELS_DIR/pkuseg/spacy_ontonotes.zip` so first Queue does not hit GitHub. With the stack up this pip-installs faster-whisper, the llama-cpp-python **CPU wheel**, `setuptools<82`, then the Chatterbox V3 zip `--no-deps --force-reinstall`. Queue also self-heals a missing CPU wheel (no extra restart). Confirm: `docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'` and that `inspect.signature(ChatterboxMultilingualTTS.from_local)` includes `t3_model` and `callable(perth.PerthImplicitWatermarker)`. Chatterbox render is ~40 s/turn on GB10 (seven turns ≈ 280 s) — do not treat that as a stuck download.
-3. Load **audio/dub/localize**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. First Queue is Stage **analyze** (Rewrite translation **on**). Edit the JSON (`text_target`). Turn Rewrite **off**. Set Stage **render**. Queue again.
+3. Load **audio/dub/localize**. Pick **Source file** or **Upload media** (or set **Source URL**). Turn **I have rights** on. First Queue is Stage **all** (analyze then clone; Rewrite translation **on**). To edit translations first: set Stage **analyze**, Queue, edit `text_target`, turn Rewrite **off**, set Stage **render**, Queue again.
 4. Ingest Dub status must be **`ok`**. If script JSON says `missing source.wav` / empty `turns`, ingest never wrote the wav — rights still off, source still `(none)`, or extract failed. Read ingest status first.
 5. **Dub status** must list speaker/turn counts (and `translated N/M`), not `ASR pack missing` / `clone engine missing` / `llama.cpp unavailable` / `GGUF missing` / `t3_model=v3` / `resemble-perth watermarker missing`. The Translation JSON `text_target` fields must be the target language. A llama.cpp / GGUF miss **stops Queue** (empty mix, empty `text_target`) — it does not clone English as Spanish. `llama.cpp unavailable` with a `docker exec … pip install --force-reinstall` line means Llama still will not import (pip “already satisfied” is not enough) — run that command, then confirm `from llama_cpp import Llama`, then Queue again. Do not treat “restart” as the fix for llama.cpp. `resemble-perth watermarker missing` **does** need pip `'setuptools<82'` then a restart so perth reimports. After render, read `dubs/<slug>/qc.json` if **Dub status** shows `qc:`.
 6. MLA file is `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt.wav` (duration-locked). Optional `${COMFY_OUTPUT_DIR}/dubs/<slug>/ez_dub_yt_48k.mp3`. Comfy `outputs/ez_dub_mix_*.flac` / `ez_dub_yt_*.mp3` is a 24 kHz preview — do not call the numbered MP3 a 320k master.

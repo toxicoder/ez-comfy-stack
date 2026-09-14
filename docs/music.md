@@ -120,7 +120,7 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 2. `./scripts/manage.sh start` — type **yes**
 3. Load **audio/music/rap-draft**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
 4. Then load **audio/music/rap-full** (96 s), **or** a numbered take under `_lab/audio/albums/nill-bye/<album>/`, **or** `_lab/audio/albums/drive-through/<album>/`. Full album: `./scripts/manage.sh album-render --album nill-bye/peer-review --art skip|upload|generate`
-5. Album art: App **Album art** skip / upload / generate, or `album-render --art skip|upload|generate`. Generate queues `cover.json` (klein occupancy) then POST `/free` then ACE tracks. Do not co-resident Klein + ACE. Generic stills: **klein/thumbnail** or **klein/podcast-cover** in a later session.
+5. Album art: App **Album art** skip (default) / upload (wire Cover image in graph view) / generate, or `album-render --art skip|upload|generate`. Generate queues `cover.json` (klein occupancy) then POST `/free` then ACE tracks. Cover LoadImage is unwired so App Queue does not require a file. Do not co-resident Klein + ACE. Generic stills: **klein/thumbnail** or **klein/podcast-cover** in a later session.
 6. Optional YouTube still-image video (host ffmpeg; graphs still save FLAC + MP3):
 
 ```bash

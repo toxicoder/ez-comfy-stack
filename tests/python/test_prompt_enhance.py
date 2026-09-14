@@ -26,6 +26,7 @@ from ez_prompt_enhance.nodes import (  # noqa: E402
     EZPromptJoin,
     EZWanPromptEnhance,
     NODE_CLASS_MAPPINGS,
+    sanitize_instrumental_lyrics,
 )
 
 
@@ -120,6 +121,7 @@ def test_system_prompts_encode_model_rules() -> None:
     ace_inst = client.load_system_prompt("ace_instrumental")
     assert "instrumental" in ace_inst.lower()
     assert "no vocals" in ace_inst.lower()
+    assert "empty-body" in ace_inst.lower() or "inside the brackets" in ace_inst.lower()
 
 
 def test_style_catalog_is_fifty_unique() -> None:
@@ -1194,6 +1196,19 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert "Visual style" not in mock.call_args[0][1]
 
 
+def test_sanitize_instrumental_lyrics_folds_free_text() -> None:
+    assert sanitize_instrumental_lyrics("") == "[inst]"
+    assert sanitize_instrumental_lyrics("[inst]") == "[inst]"
+    assert (
+        sanitize_instrumental_lyrics("[inst]\nheavy warped drop\ntrap hats roll")
+        == "[inst - heavy warped drop, trap hats roll]"
+    )
+    assert (
+        sanitize_instrumental_lyrics("[drop - warped 808]\ngrid 193 0")
+        == "[drop - warped 808, grid 193 0]"
+    )
+
+
 def test_ace_step_enhance_node_defaults_and_modes() -> None:
     ace = EZAceStepPromptEnhance()
     spec = ace.INPUT_TYPES()["required"]
@@ -1207,6 +1222,14 @@ def test_ace_step_enhance_node_defaults_and_modes() -> None:
     inst_off = ace.run("lo-fi keys", "", False, "instrumental")
     assert "instrumental" in inst_off["result"][0].lower()
     assert inst_off["result"][1] == "[inst]"
+    sung = ace.run(
+        "hybrid trap, instrumental, no vocals",
+        "[inst]\nheavy warped drop\ntrap hats roll",
+        False,
+        "instrumental",
+    )
+    assert sung["result"][1] == "[inst - heavy warped drop, trap hats roll]"
+    assert "\nheavy" not in sung["result"][1]
     with patch("ez_prompt_enhance.nodes.complete", side_effect=[("boom bap, dusty drums, 88 bpm", None), ("[verse]\nrewritten", None)]):
         with patch("ez_prompt_enhance.nodes._close_llm"):
             on = ace.run("lazy beat", "[verse]\nhi", True, "vocal")

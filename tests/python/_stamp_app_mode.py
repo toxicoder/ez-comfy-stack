@@ -366,7 +366,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "track": "Track number on the album.",
     "tracktotal": "Number of tracks on the album.",
     "year": "Album year.",
-    "art_mode": "skip, upload (Cover image), or generate (Queue cover.json first).",
+    "art_mode": "skip (default). upload: wire Cover image in graph. generate: Queue cover.json first.",
     "tags": "Genre-first ACE-Step tags.",
     "lyrics": "Lyrics, or [inst] for instrumental.",
     "audio_notes": "World SFX to interleave. No score unless you asked for music.",
@@ -402,7 +402,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "target_language": "Language to speak. Spanish is the soccer-podcast default.",
     "source_language": "auto detects from ASR. Pin when the show is mixed-language.",
     "max_speakers": "0 = auto (cap 8). Hint when you know the cast size.",
-    "stage": "Default analyze. analyze writes JSON. render clones the widget. all = analyze+render.",
+    "stage": "Default all. all = analyze+render. analyze writes JSON only. render clones the widget.",
     "engine": "chatterbox-ml (MIT, 23 langs, PerTh on) or qwen3tts (Apache).",
     "keep_bed": "On: keep original ambience in gaps. Off: speech-only mix.",
     "spoken_disclosure": (

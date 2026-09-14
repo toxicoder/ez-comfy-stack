@@ -293,6 +293,55 @@ class EZPromptJoin:
         return (join_prompt(identity, shot, inventory, lock),)
 
 
+def sanitize_instrumental_lyrics(lyrics: str) -> str:
+    """Keep ACE structure tags; fold free-text lines into the brackets.
+
+    ACE-Step sings any non-empty line under a section marker. Instrumental
+    scores belong as ``[drop - warped 808]`` (cues inside the brackets) or
+    empty-body ``[inst]``.
+
+    Arguments:
+        lyrics: Widget lyrics, possibly with production cues as lines.
+    Returns:
+        Empty-body or cue-in-bracket section tags, or ``[inst]`` if empty.
+    """
+    text = lyrics.strip() if isinstance(lyrics, str) else str(lyrics or "").strip()
+    if not text:
+        return "[inst]"
+    kept: list[str] = []
+    pending_inner: str | None = None
+    pending_cues: list[str] = []
+
+    def flush() -> None:
+        nonlocal pending_inner, pending_cues
+        if pending_inner is None:
+            pending_cues = []
+            return
+        if pending_cues:
+            extra = ", ".join(pending_cues)
+            if " - " in pending_inner:
+                pending_inner = f"{pending_inner}, {extra}"
+            else:
+                pending_inner = f"{pending_inner} - {extra}"
+        kept.append(f"[{pending_inner}]")
+        pending_inner = None
+        pending_cues = []
+
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith("[") and line.endswith("]"):
+            flush()
+            pending_inner = line[1:-1].strip()
+            continue
+        if pending_inner is None:
+            continue
+        pending_cues.append(line)
+    flush()
+    return "\n\n".join(kept) if kept else "[inst]"
+
+
 def _pack_ace(tags: str, lyrics: str, status: str) -> dict:
     preview = tags if not lyrics.strip() else f"{tags}\n---\n{lyrics}"
     return {
@@ -350,8 +399,8 @@ class EZAceStepPromptEnhance:
                     if original_tags.strip()
                     else "instrumental, no vocals"
                 )
-            if instrumental and not original_lyrics.strip():
-                original_lyrics = "[inst]"
+            if instrumental:
+                original_lyrics = sanitize_instrumental_lyrics(original_lyrics)
             return _pack_ace(original_tags, original_lyrics, "enhance off")
         try:
             tag_system = load_system_prompt(
@@ -368,7 +417,9 @@ class EZAceStepPromptEnhance:
             if (out_tags or "").strip():
                 rewritten_tags = out_tags.strip()
             if instrumental:
-                rewritten_lyrics = original_lyrics.strip() or "[inst]"
+                rewritten_lyrics = sanitize_instrumental_lyrics(
+                    original_lyrics.strip() or "[inst]"
+                )
             elif original_lyrics.strip():
                 lyric_system = load_system_prompt("ace_lyrics")
                 out_lyrics, lyric_reason = complete(lyric_system, original_lyrics)
@@ -390,7 +441,7 @@ class EZAceStepPromptEnhance:
             status = reason or "passthrough"
             rewritten_tags = original_tags
             rewritten_lyrics = original_lyrics if not instrumental else (
-                original_lyrics.strip() or "[inst]"
+                sanitize_instrumental_lyrics(original_lyrics.strip() or "[inst]")
             )
         return _pack_ace(rewritten_tags, rewritten_lyrics, status)
 

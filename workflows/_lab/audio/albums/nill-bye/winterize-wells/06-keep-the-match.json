@@ -2,7 +2,7 @@
   "id": "06-keep-the-match",
   "revision": 1,
   "last_node_id": 14,
-  "last_link_id": 17,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
@@ -540,9 +540,7 @@
         {
           "name": "IMAGE",
           "type": "IMAGE",
-          "links": [
-            17
-          ],
+          "links": [],
           "slot_index": 0
         },
         {
@@ -584,7 +582,7 @@
         {
           "name": "cover",
           "type": "IMAGE",
-          "link": 17
+          "link": null
         }
       ],
       "outputs": [
@@ -739,14 +737,6 @@
       14,
       0,
       "AUDIO"
-    ],
-    [
-      17,
-      13,
-      0,
-      14,
-      1,
-      "IMAGE"
     ]
   ],
   "groups": [
@@ -807,7 +797,7 @@
   "extra": {
     "lab_profile": "us-safe-music",
     "lab_note": "## 06-keep-the-match\n\nUS-safe rap **180 s progress** take: **keep the match**. Fictional MC **Nill Bye** (science guy) on public-record **fixes**: methods, statutes, and measurement. No roast target. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 82, language en, timesignature 4, generate_audio_codes true. Seed 593.\n7. Saves: `06 - Keep the Match` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe rap 180s progress: Nill Bye keep-the-match family-unity fix, ACE-Step 1.5 turbo AIO, invented vocal",
+    "lab_description": "US-safe rap 180s progress: Nill Bye keep-the-match family-unity fix, ACE-Step 1.5 turbo AIO, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
     ],
@@ -933,16 +923,8 @@
           14,
           "art_mode",
           {
-            "description": "skip, upload (Cover image), or generate (Queue cover.json first).",
+            "description": "skip (default). upload: wire Cover image in graph. generate: Queue cover.json first.",
             "label": "Album art"
-          }
-        ],
-        [
-          13,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Cover image"
           }
         ],
         [

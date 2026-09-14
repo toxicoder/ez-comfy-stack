@@ -24,7 +24,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## audio/albums/drive-through/hour-1/album\n\nAlbum **Hour 1** by **Drive-through** (15 tracks).\n\nQueue this graph to zip whatever is already in `${COMFY_OUTPUT_DIR}/albums/Drive-through/Hour 1/`.\nGenerate the full album in one go:\n\n`./scripts/manage.sh album-render --album drive-through/hour-1 --art skip|upload|generate`\n\nOccupancy: audio for tracks, klein first when --art generate. Do not co-resident Klein + ACE-Step.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## audio/albums/drive-through/hour-1/album\n\nAlbum **Hour 1** by **Drive-through** (15 tracks).\n\nQueue this graph to zip whatever is already in `${COMFY_OUTPUT_DIR}/albums/Drive-through/Hour 1/`.\nGenerate the full album in one go:\n\n`./scripts/manage.sh album-render --album drive-through/hour-1 --art skip|upload|generate`\n\nOccupancy: audio for tracks, klein first when --art generate. Do not co-resident Klein + ACE-Step.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "Operator note"
     },
@@ -93,8 +93,8 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music-album",
-    "lab_note": "## audio/albums/drive-through/hour-1/album\n\nAlbum **Hour 1** by **Drive-through** (15 tracks).\n\nQueue this graph to zip whatever is already in `${COMFY_OUTPUT_DIR}/albums/Drive-through/Hour 1/`.\nGenerate the full album in one go:\n\n`./scripts/manage.sh album-render --album drive-through/hour-1 --art skip|upload|generate`\n\nOccupancy: audio for tracks, klein first when --art generate. Do not co-resident Klein + ACE-Step.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
-    "lab_description": "Pack Hour 1 zip + m3u",
+    "lab_note": "## audio/albums/drive-through/hour-1/album\n\nAlbum **Hour 1** by **Drive-through** (15 tracks).\n\nQueue this graph to zip whatever is already in `${COMFY_OUTPUT_DIR}/albums/Drive-through/Hour 1/`.\nGenerate the full album in one go:\n\n`./scripts/manage.sh album-render --album drive-through/hour-1 --art skip|upload|generate`\n\nOccupancy: audio for tracks, klein first when --art generate. Do not co-resident Klein + ACE-Step.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_description": "Pack Hour 1 zip + m3u\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_album": {
       "artist": "Drive-through",
       "album": "Hour 1",

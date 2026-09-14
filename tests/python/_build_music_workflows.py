@@ -192,6 +192,7 @@ def _ace_widgets(
     *,
     tags: str = ACE_TAGS,
     bpm: int = 88,
+    language: str = "en",
 ) -> list:
     # seed is followed by control_after_generate (native TextEncodeAceStepAudio1.5).
     return [
@@ -202,7 +203,7 @@ def _ace_widgets(
         bpm,
         duration,
         "4",
-        "en",
+        language,
         "C minor",
         True,
         2.0,
@@ -407,24 +408,28 @@ def _edm_note(ex: EdmExample) -> str:
     if treat:
         score_blurb = (
             "Live bass-set take. One 1–2 word DJ chop in a single `[chorus]` "
-            "block; bed and drops stay `[inst]`. Not a rap verse."
+            "block; bed and drops stay empty-body `[drop]` / `[inst]` markers. "
+            "Not a rap verse."
         )
         mode_blurb = (
             "Keep App **Vocal / instrumental** on vocal so the shout renders. "
-            "`[inst]` lines are instrument cues so ACE does not sing the bed."
+            "Bed markers stay empty-body so ACE does not sing the arrangement."
         )
-        labels_blurb = "`[inst]` / `[outro]` and the one chorus chop"
+        labels_blurb = "`[drop]` / `[inst]` / `[outro]` and the one chorus chop"
     else:
         score_blurb = (
-            "Live bass-set take. Instrumental arrangement score in `[inst]` "
-            "blocks: drop-first warped hybrid-trap, trap drums, no quiet "
-            "dips. Vocals are a rare DJ treat on other graphs, not here."
+            "Live bass-set take. Instrumental score is empty-body ACE "
+            "markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE "
+            "does not sing production notes. Drop-first warped hybrid-trap, "
+            "trap drums, no quiet dips. Vocals are a rare DJ treat on other "
+            "graphs, not here."
         )
         mode_blurb = (
             "Keep App **Vocal / instrumental** on instrumental so ACE does "
-            "not sing the score."
+            "not sing. Encoder language is `unknown`. Free-text lines under "
+            "a marker are lyrics — keep cues inside the brackets."
         )
-        labels_blurb = "`[inst]` / `[outro]`"
+        labels_blurb = "`[drop]` / `[inst]` / `[outro]`"
     return f"""## {ex["stem"]}
 
 US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. {score_blurb} Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
@@ -434,7 +439,7 @@ US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-th
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. {mode_blurb}
 4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language en, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language {"en" if treat else "unknown"}, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
 8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -542,7 +547,14 @@ def _build_ace(
         pos[6],
         [400, 420],
         "ACE tags + lyrics",
-        _ace_widgets(lyrics, duration, seed, tags=tags, bpm=bpm),
+        _ace_widgets(
+            lyrics,
+            duration,
+            seed,
+            tags=tags,
+            bpm=bpm,
+            language="unknown" if ace_mode == "instrumental" else "en",
+        ),
         inputs=[
             g.inp("clip", "CLIP"),
             g.inp("tags", "STRING", widget="tags"),
@@ -659,7 +671,6 @@ def _build_ace(
     g.link(9, 0, 10, 0, "AUDIO")
     g.link(9, 0, 11, 0, "AUDIO")
     g.link(9, 0, 14, 0, "AUDIO")
-    g.link(13, 0, 14, 1, "IMAGE")
     extra = {
         "lab_rel": stem if "/" in stem else f"audio/music/{stem}",
         "lab_profile": "us-safe-music",
