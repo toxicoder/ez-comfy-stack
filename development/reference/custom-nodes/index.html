@@ -2888,7 +2888,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 00:49 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T00:49:04+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 01:39 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T01:39:30+00:00">14 Sep 2026</time></span>
                 
                   
 
@@ -3100,10 +3100,10 @@
 <tr>
 <td><code>EZDubScript</code></td>
 <td>Dub transcript + translate</td>
-<td><code>prompt</code> STRING multiline JSON, <code>enhance</code> BOOLEAN (default on), <code>target_language</code> combo (ISO codes, default <code>es</code>), <code>source_language</code> combo (<code>auto</code> + same codes, default <code>auto</code>), <code>max_speakers</code> INT 0–12 (default 0), <code>stage</code> combo <code>all</code> <code>analyze</code> <code>render</code> (default <code>analyze</code>); optional <code>job_id</code> STRING</td>
+<td><code>prompt</code> STRING multiline JSON, <code>enhance</code> BOOLEAN (default on), <code>target_language</code> combo (ISO codes, default <code>es</code>), <code>source_language</code> combo (<code>auto</code> + same codes, default <code>auto</code>), <code>max_speakers</code> INT 0–12 (default 0), <code>stage</code> combo <code>all</code> <code>analyze</code> <code>render</code> (default <code>all</code>); optional <code>job_id</code> STRING</td>
 <td><code>STRING</code> script</td>
 <td>graph <strong>audio</strong></td>
-<td>Diarize + ASR + on-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>. Turn <strong>Rewrite translation</strong> off to pin <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> text. Stage=<code>render</code> skips ASR</td>
+<td>Diarize + ASR + on-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>. Turn <strong>Rewrite translation</strong> off to pin <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> text. Stage=<code>render</code> skips ASR. Default <code>all</code> analyzes then clones</td>
 </tr>
 <tr>
 <td><code>EZDubRender</code></td>
@@ -3295,7 +3295,7 @@
 <td><code>tags</code> STRING, <code>lyrics</code> STRING, <code>enhance</code> BOOLEAN (default on), <code>mode</code> combo <code>vocal</code> <code>instrumental</code> (default <code>vocal</code>)</td>
 <td><code>STRING</code> tags, <code>STRING</code> lyrics</td>
 <td>CPU GGUF</td>
-<td>Instrumental mode forces no-vocals tags and <code>[inst]</code> lyrics</td>
+<td>Instrumental mode forces no-vocals tags and empty-body <code>[inst]</code> / <code>[drop]</code> lyrics (free-text lines fold into the brackets so ACE does not sing them)</td>
 </tr>
 </tbody>
 </table>
