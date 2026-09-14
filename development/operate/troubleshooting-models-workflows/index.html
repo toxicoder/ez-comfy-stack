@@ -1,0 +1,3261 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Empty models, CLIP/VAE links, MagCache, App Mode, 90s concat, dream-house, ACE, and occupancy gate rows.">
+      
+      
+      
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/operate/troubleshooting-models-workflows/">
+      
+      
+        <link rel="prev" href="../troubleshooting-start-runtime/">
+      
+      
+        <link rel="next" href="../../project-conventions/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Troubleshooting — models and workflows - ez-comfy-stack</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#troubleshooting-models-and-workflows" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ez-comfy-stack
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Troubleshooting — models and workflows
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/toxicoder/ez-comfy-stack" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../learn/" class="md-tabs__link">
+          
+  
+  
+  Learn
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../getting-started/" class="md-tabs__link">
+          
+  
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../visual-generative-ai/" class="md-tabs__link">
+          
+  
+  
+  Create
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../occupancy/" class="md-tabs__link">
+          
+  
+  
+  Operate
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../project-conventions/" class="md-tabs__link">
+          
+  
+  
+  Contribute
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ez-comfy-stack
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/toxicoder/ez-comfy-stack" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learn
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the studio works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/comfyui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ComfyUI basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/generation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image and video generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Klein, Wan, and LTX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/clay-to-finish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clay to finish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/blender-creator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blender creator suite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/comfy-first-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stay in Comfy after a Blender dump
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/dream-house/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dream-house tours
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn/hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware, memory, and safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prompting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prompting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/when-to-use-vs-spark-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When to use vs spark-lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Create
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visual-generative-ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Still to motion to AV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../studio-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ComfyUI Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../studio-workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../create/workflows-stills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stills graphs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../create/workflows-motion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion graphs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../create/workflows-film/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Film graphs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../create/workflows-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audio graphs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shorts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    90s shorts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../podcast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local podcast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dub/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local dub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../music/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local music
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../create/music-rap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAP-FIRST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../create/music-edm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Drive-through EDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../create/music-disclosure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Music disclosure and QC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../studio-sidecars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio sidecars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asset-bible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Asset Bible
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blender-gb10-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blender GB10 sidecar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dcc-workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DCC guide pack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../splat-sidecar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Splat sidecar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/custom-nodes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom nodes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/config-and-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config and schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/studio-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    studio-ui board
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operate
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operate
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../occupancy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Occupancy desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../occupancy-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Occupancy matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP and SSH tunnels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manage-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    manage.sh reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/shell/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generated shell reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models-and-cache/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and cache
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-tokens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hugging Face tokens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-sharing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharing MODELS_DIR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-packs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-family packs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../disk-wizard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Disk wizard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../download-tiers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Download tiers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../download-limit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Download limit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup and restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reboot-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reboot safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spark-farm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark farm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting-docs-site/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs site
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting-canvas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Canvas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting-host-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host and Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting-downloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Downloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting-start-runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start and runtime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and workflows
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and workflows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#models-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models &amp; workflows
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contribute
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contribute
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project-conventions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conventions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contribute/docs-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs style
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contribute/testing-docs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contribute/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contribute/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#models-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models &amp; workflows
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 00:49 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T00:49:04+00:00">14 Sep 2026</time></span>
+                
+                  
+
+
+  
+  
+
+
+<h1 id="troubleshooting-models-and-workflows">Troubleshooting — models and workflows<a class="headerlink" href="#troubleshooting-models-and-workflows" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
+<li><strong>Empty models</strong>, bad <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../../glossary/#clip" title="Text encoder that turns a prompt into conditioning for the sampler.">CLIP</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vae" data-href="../../glossary/#vae" title="Encoder/decoder between pixels and latent space. Each model family has its own.">VAE</span> links, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../../glossary/#magcache" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span></li>
+<li><strong>90s film</strong> concat, dream-house, ACE/rap, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span></li>
+<li><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../../glossary/#occupancy" title="One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.">Occupancy</span></strong> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="blender-desk" data-href="../../glossary/#blender-desk" title="Occupancy CLI mode: park Comfy (POST /free) for host Workbench dumps.">blender-desk</span> vs heavy <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">wan</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">ltx</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">trellis</span></li>
+</ul></div><div class="ez-page-brief__col ez-page-brief__enables"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg><span class="ez-page-brief__label">What this enables</span></p><ul>
+<li><strong>Fixing</strong> Missing Models and graph-specific <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span> failures</li>
+<li><strong>Keeping</strong> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="h3" data-href="../../glossary/#h3" title="Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.">MiniMax H3</span> out of <code>${MODELS_DIR}</code> and 90s films on 18 × 5.00 s shots</li>
+</ul></div></div>
+<div class="admonition danger">
+<p class="admonition-title">Do not Queue a 90s <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="latent" data-href="../../glossary/#latent" title="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.">latent</span></p>
+<p>Film graphs are 18 × <strong>5.00 s</strong> (121 frames, <code>1+8n</code>) + stitch. MiniMax H3 is banned — <a href="../../licenses/">Model licenses</a>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="xor-desk" data-href="../../glossary/#xor-desk" title="One heavy GPU job. NVENC, Cycles, LTX, TRELLIS, and llm-desk XOR with each other.">Occupancy XOR</span>: <a href="../troubleshooting-canvas/">Troubleshooting — studio canvas</a>.</p>
+</div>
+<h2 id="models-workflows">Models &amp; workflows<a class="headerlink" href="#models-workflows" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Disk full / leftover LTX-2.3 snapshot</td>
+<td>Leftover weights, HF hub, Docker layers, or other inference caches</td>
+<td><code>./scripts/manage.sh disk-wizard --plan</code> (host-wide, read-only). stderr shows which root is scanning (<code>~/.cache</code>, <code>/tmp</code>, Docker <code>system df</code> can take a while; it is not hung). <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="models-dir" data-href="../../glossary/#models-dir" title="Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.">MODELS_DIR</span> classes: <code>reap-models --plan</code> then <code>--apply --class superseded --quarantine --yes</code>. <code>cleanup</code> does <strong>not</strong> delete weights.</td>
+</tr>
+<tr>
+<td>I passed <code>--tier fast</code> expecting faster video</td>
+<td><code>--tier</code> is a <strong>pack id</strong> per downloader, not a quality ladder</td>
+<td>Image <code>fast</code> is Klein 4B distilled stills. Wan video default is <code>--tier 5b</code>. Map: <a href="../../download-tiers/">Download tiers</a></td>
+</tr>
+<tr>
+<td>I passed <code>--limit turbo</code> / thought <code>--limit</code> picked a model</td>
+<td><code>--limit</code> is <strong>Mbps</strong> (<code>auto</code> / <code>off</code> / integer)</td>
+<td>Use <code>--tier</code> for the pack. <a href="../../download-limit/">Download limit</a></td>
+</tr>
+<tr>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fun-inp" data-href="../../glossary/#fun-inp" title="Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.">Fun InP</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seedvr2" data-href="../../glossary/#seedvr2" title="Optional Apache restorer for a stitched 90s master. Not part of download-models.">SeedVR2</span> filled the box</td>
+<td>Opt-in ~47 GB / ~15 GB packs</td>
+<td><code>reap-models --plan</code>; <code>--drop-pack</code> cannot eat shared VAE. Unload LTX before Fun InP. SeedVR2 is post-concat only</td>
+</tr>
+<tr>
+<td><code>film-proxies</code> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nvenc" data-href="../../glossary/#nvenc" title="Hardware encoder for proxies/previews. Comfy must be stopped (encoder contention on GB10).">NVENC</span> preview refused</td>
+<td>Compose still up</td>
+<td><code>./scripts/manage.sh stop</code> then retry. Proxies never rewrite masters</td>
+</tr>
+<tr>
+<td>MagCache node missing on Wan draft / <code>precompute_freqs_cis</code> ImportError</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../../glossary/#comfyui" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span> v0.34 moved the LTX RoPE helper. MagCache <code>__init__.py</code> also imports <code>nodes_calibration.py</code> with the same name. An older patch wrapped only <code>nodes.py</code> and then skipped the pack as “already applied”</td>
+<td>Pull latest and restart (bind-mounted patch wraps <strong>every</strong> MagCache <code>*.py</code> that still imports the helper, and fail-softs the calibration import). Wan 5B MagCache loads; MagCache-on-LTX stays unsupported. Graph still Queues without MagCache. See <code>extra.lab_magcache</code> on <code>wan/i2v-5s</code>. Hero LTX graphs must not contain MagCache</td>
+</tr>
+<tr>
+<td>LTX Director missing</td>
+<td>GPL clone is opt-in</td>
+<td><code>LAB_ENABLE_LTX_DIRECTOR=1</code> then restart. Never MiniMax H3 Director</td>
+</tr>
+<tr>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="studio-ui" data-href="../../glossary/#studio-ui" title="Optional Compose profile jobstore board on :8190. Not App Mode.">studio-ui</span> empty / port closed</td>
+<td>Profile not started; default <code>start</code> skips it</td>
+<td><code>docker compose --profile studio-ui up studio-ui</code>. No GPU. Compile a film first</td>
+</tr>
+<tr>
+<td>take-promote missing file</td>
+<td>No <code>takes/&lt;id&gt;/tNNN.mp4</code></td>
+<td>Print the shot (take increments on <code>running</code>), then promote</td>
+</tr>
+<tr>
+<td><code>blender</code> exit 2 / occupancy</td>
+<td>Compose is a heavy job (not parked, or queue busy), or the 35B <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> is live</td>
+<td><code>./scripts/manage.sh occupancy enter blender-desk</code> then retry. Hammer: <code>occupancy idle</code>. Host Blender is never in the Dockerfile</td>
+</tr>
+<tr>
+<td>35B GGUF missing / <code>occupancy enter llm-desk</code> exit 1</td>
+<td>Opt-in pack not downloaded</td>
+<td><code>./scripts/manage.sh download-llm --tier qwen36-35b-a3b</code> (throttled). Not part of <code>download-models</code>. Confirm <code>${MODELS_DIR}/comfy/llm/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf</code></td>
+</tr>
+<tr>
+<td><code>llama-server not found</code></td>
+<td>Host llama.cpp missing</td>
+<td>Install <code>llama-server</code> on the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> host (aarch64). Do not apt/pip inside the Comfy container. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="path-d" data-href="../../glossary/#path-d" title="Laptop SSH tunnel to MCP or llm-desk. Not a fourth occupancy CLI mode.">Path D</span>: <code>ssh -L 30000:127.0.0.1:30000</code></td>
+</tr>
+<tr>
+<td>llm-sidecar port in use</td>
+<td>Something already bound <code>127.0.0.1:30000</code></td>
+<td><code>occupancy enter idle</code> or <code>llm-sidecar stop</code>. Change <code>EZ_LLM_SIDECAR_PORT</code> only if you also retarget clients</td>
+</tr>
+<tr>
+<td>Enhance still 4B even if sidecar is up</td>
+<td>Occupancy is klein/wan/ltx/trellis/audio (sidecar is XOR), or compose cannot reach the host loopback</td>
+<td><code>occupancy enter llm-desk --yes</code> for writing desks. From Comfy the URL is <code>host.docker.internal:30000</code> (<code>extra_hosts</code>). Wan/LTX/TRELLIS Queue <strong>must</strong> stay on CPU 4B to avoid OOM. <code>EZ_LLM_ALLOW_GPU=0</code> forces CPU</td>
+</tr>
+<tr>
+<td><code>download-3d --tier da3-large</code> refused</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="da3" data-href="../../glossary/#da3" title="Optional Apache depth model. DA3-LARGE is refused.">DA3</span>-LARGE is banned</td>
+<td>Use <code>--tier da3-base</code>. nvdiffrast / Inria 3DGS / Pixal3D-as-default are also refused</td>
+</tr>
+<tr>
+<td>TRELLIS / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vace" data-href="../../glossary/#vace" title="Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.">VACE</span> OOM next to LTX</td>
+<td>Two heavy jobs</td>
+<td>Stop Comfy or unload LTX first. VACE join is 17 frames (<code>1+8n</code>); MagCache off</td>
+</tr>
+<tr>
+<td>SuperSplat missing in the image</td>
+<td>Host viewer, not Docker</td>
+<td><a href="../../splat-sidecar/">Splat sidecar</a>. Do not add it to <code>docker/Dockerfile</code></td>
+</tr>
+<tr>
+<td><code>film-accept</code> fail closed</td>
+<td>Shot not 5.00±0.05s / not 1280×704 / LTX missing audio; world-only speech-band; 90s master off-contract</td>
+<td>Reprint the shot. Concat <code>--film --yes</code> runs this gate. <code>--skip-accept</code> is an escape hatch only</td>
+</tr>
+<tr>
+<td>Handlebar / gold glove glyphs / canopy cloak in go-see identity</td>
+<td>Klein still owned the film</td>
+<td>Reprint identity with the sprint still + go-see Klein neg. Do <strong>not</strong> change <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../../glossary/#seed" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> 42; change prompt text and rebuild</td>
+</tr>
+<tr>
+<td>Third-person wizard after beat 1</td>
+<td>Last frame lost lower-third gloves</td>
+<td>Reprint that shot until last frames show blank gloves; then <code>film-resume</code></td>
+</tr>
+<tr>
+<td>Announcer / words on a world-only stem</td>
+<td>Distilled LTX audio + prohibition-only clause</td>
+<td>Reprint; <code>film-accept</code> speech-band must fail that stem. Do not EQ the announcer out</td>
+</tr>
+<tr>
+<td>Master ~84s / 17 shots</td>
+<td>Concat wrote without a short-master gate</td>
+<td>Pull latest <code>ez_film</code>; stitch refuses <code>len != 18</code> and <code>90.00±0.10</code>. Confirm 18 <code>*-audio.mp4</code> stems</td>
+</tr>
+<tr>
+<td>A14B / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="longcat" data-href="../../glossary/#longcat" title="Optional MIT video pack. No NCCL. Not a 90s default.">LongCat</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dreamx" data-href="../../glossary/#dreamx" title="Optional Apache joint-AV pack. DreamX-World is refused.">DreamX</span> OOM</td>
+<td>Two heavy packs coresident</td>
+<td>Unload 5B/LTX first. LongCat context-parallel only with <code>LAB_ALLOW_CONTEXT_PARALLEL=1</code>. No NCCL</td>
+</tr>
+<tr>
+<td>DreamX-World refused</td>
+<td>Wrong pack</td>
+<td><code>download-dreamx --tier creator</code> only</td>
+</tr>
+<tr>
+<td>Empty models in UI</td>
+<td>Downloads not run</td>
+<td><code>./scripts/utilities/download-image.sh status --tier fast</code>; <code>download-wan.sh status --tier 5b</code>; <code>download-ltx.sh status --tier 2.5</code>; check <code>${MODELS_DIR}</code> mount</td>
+</tr>
+<tr>
+<td>Missing <code>ae.safetensors</code> / <code>z_image_turbo_*.safetensors</code></td>
+<td><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="z-image" data-href="../../glossary/#z-image" title="Optional Apache still runner-up. Not the default Klein path.">Z-Image</span></strong> template, not the default stack</td>
+<td>Load <strong>klein/still-draft</strong>. Default still is Klein 4B <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../../glossary/#apache" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache</span> (see <a href="../../licenses/">licenses</a>). Optional <code>download-image --tier zimage</code></td>
+</tr>
+<tr>
+<td>Missing <code>flux-2-klein-4b-fp8</code> / Wan / LTX-2.5 in seeded lab graphs</td>
+<td>Weights not on host and/or Comfy <code>models/*</code> not symlinked to host</td>
+<td>1) <code>./scripts/manage.sh download-models</code> 2) <code>ls "${MODELS_DIR}/comfy/diffusion_models"</code> 3) <code>docker exec ez-comfy-studio ls -la /comfy-state/ComfyUI/models/diffusion_models</code> — should be a <strong>symlink</strong> to <code>/models/comfy/diffusion_models</code>. LTX-2.5 is gated: set <code>HF_TOKEN</code> and accept the Lightricks license</td>
+</tr>
+<tr>
+<td>Missing <code>flux2-vae.safetensors</code> (VAELoader) while Qwen TE is present</td>
+<td>Companions partial (TE-only cache-hit skip VAE)</td>
+<td>Re-run <code>./scripts/manage.sh download-models</code> or <code>./scripts/utilities/download-image.sh run --tier fast</code> (fast includes <code>te</code> + <code>vae</code>). Confirm <code>ls "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"</code>. Restart Comfy after pull</td>
+</tr>
+<tr>
+<td>Comfy log: path <code>…/models/vae/*.safetensors</code> <strong>exists but doesn't link anywhere</strong>; UI missing <code>flux2-vae</code> / <code>ltx-2.5-*-vae</code> while host <code>ls</code> looks fine</td>
+<td>Absolute host symlinks under <code>MODELS_DIR/comfy/*</code> (e.g. → <code>/mnt/models/…</code>) break inside the container where the cache is mounted at <code>/models</code></td>
+<td>Pull latest; re-run <code>./scripts/manage.sh download-models</code> (cache hit rewrites <strong>relative</strong> links — no full re-download). Check <code>readlink "${MODELS_DIR}/comfy/vae/flux2-vae.safetensors"</code> starts with <code>../</code>, not <code>/</code>. Confirm: <code>docker exec ez-comfy-studio test -e /models/comfy/vae/flux2-vae.safetensors</code>. <strong>Do not</strong> wipe <code>ez-comfy-state</code> for this</td>
+</tr>
+<tr>
+<td>Missing <code>ltx-2.5-video-vae-bf16</code> / LTX-2.5 distilled in <strong>ltx/</strong>*</td>
+<td>LTX-2.5 not downloaded or not linked (older <code>*te*</code> globs mis-linked every <code>*.safetensors</code> into <code>text_encoders/</code>)</td>
+<td>Pull latest; <code>./scripts/utilities/download-ltx.sh run --tier 2.5</code> then <code>ls "${MODELS_DIR}/comfy/"{diffusion_models,vae}</code> (not only <code>text_encoders/</code>). <code>download-models</code> gates on the full lab set</td>
+</tr>
+<tr>
+<td>CLIP / latent errors on Klein lab graphs</td>
+<td>Wrong CLIP type or latent node</td>
+<td>Use seeded <strong>klein/still-</strong><em> graphs: CLIP type </em><em><code>flux2</code></em><em> with <code>qwen_3_4b</code>, latent </em><em><code>EmptyFlux2LatentImage</code></em>*. Do not use <code>qwen_image</code> / Z-Image loaders</td>
+</tr>
+<tr>
+<td><code>Failed to find C compiler</code> / Triton on <strong>CLIPTextEncode</strong></td>
+<td>Runtime image missing <code>gcc</code>/<code>g++</code>; PyTorch 2.13 Triton JIT needs CC for <code>cuda_utils</code> / <code>bmm_outer_product</code></td>
+<td>Pull/rebuild image (runtime installs <code>gcc</code> <code>g++</code> + <code>python3-dev</code>) and restart. Confirm: <code>docker exec ez-comfy-studio which gcc</code></td>
+</tr>
+<tr>
+<td><code>CalledProcessError</code> compiling <code>cuda_utils*.so</code> / <code>bmm_outer_product</code> on <strong>CLIPTextEncode</strong> (LTX Gemma or Flux)</td>
+<td>Triton JIT has <code>gcc</code> but fails the compile (missing <code>Python.h</code> / <code>python3-dev</code>, or <code>libcuda.so.1</code> not on gcc <code>LIBRARY_PATH</code>). stderr is swallowed by Triton</td>
+<td>Pull/rebuild image so runtime has <strong><code>python3-dev</code></strong> + <code>gcc</code>/<code>g++</code>. Restart. Confirm: <code>docker exec ez-comfy-studio test -f /usr/include/python3.*/Python.h &amp;&amp; echo ok</code>. Logs should show <code>Triton JIT deps OK</code> (or auto-disable). Escape hatch: <code>LAB_DISABLE_TORCH_NATIVE_TRITON=1</code> then restart (eager/cuBLAS fallback; CLIP still works)</td>
+</tr>
+<tr>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sampler" data-href="../../glossary/#sampler" title="Node that denoises latents for N steps at a CFG, seed, and scheduler.">KSampler</span> LTX: <code>Expected size 768 but got size 4096</code> / <code>embeddings_connector</code></td>
+<td>Wrong CLIP (projection-only or LTX-2.3 DualCLIP on a 2.5 graph)</td>
+<td>Lab graphs need <strong>CLIPLoader</strong>: <code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code>, type <strong><code>ltxv</code></strong>. Run <code>./scripts/manage.sh download-models</code>, re-open <strong>ltx/</strong>* from <code>workflows/</code></td>
+</tr>
+<tr>
+<td>KSampler LTX: <code>cannot reshape tensor of 0 elements into shape [1, 0, 32, -1]</code> / <code>freqs_cis_matrix</code> / <code>av_model</code> audio RoPE</td>
+<td>LTX is a <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="av" data-href="../../glossary/#av" title="Audio and video in one transformer pass. LTX-2.5&#x27;s job; Wan cannot do this.">joint AV</span></strong> transformer; video-only latents leave audio length T=0</td>
+<td>Re-open a current <strong>ltx/</strong>* graph (has <code>LTXVEmptyLatentAudio</code> + <code>LTXVConcatAVLatent</code> + <code>ltx-2.5-audio-vae-bf16</code>). Do not feed <code>EmptyLTXVLatentVideo</code> / <code>LTXVImgToVideo</code> straight into <code>KSampler</code>. Confirm <code>ls "${MODELS_DIR}/comfy/vae/ltx-2.5-audio-vae-bf16.safetensors"</code></td>
+</tr>
+<tr>
+<td><code>LTXVImgToVideo</code> <code>einops.EinopsError</code> / <code>can't divide axis of length 45</code> (or 33)</td>
+<td>LTX video VAE is <strong>32×</strong> spatial. Broadcast <strong>720</strong> and <strong>1080</strong> are not divisible by 32 (720/16=45, then the next <code>/2</code> patch fails)</td>
+<td>Pull latest and restart so <code>ez_ltx_spatial</code> is installed — Queue <strong>auto-snaps</strong> 720→704 and 1080→1056 (stderr <code>[ez_ltx_spatial]</code>). Lab graphs stay <strong>1280×704</strong>. Klein <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">I2V</span> feeders are <strong>1280×704</strong>. Prefer not to type 720/1080 so you skip the extra crop. Portrait lab is <strong>768×1280</strong>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_ltx_spatial/__init__.py</code>. If the pack is missing, set widgets to a ÷32 pair and re-open <strong>ltx/</strong>*</td>
+</tr>
+<tr>
+<td>Missing <code>gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot</code> in LTX graphs</td>
+<td>LTX-2.5 TE not downloaded</td>
+<td><code>./scripts/utilities/download-ltx.sh run --tier 2.5</code> or <code>download-models</code>; <code>ls "${MODELS_DIR}/comfy/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors"</code></td>
+</tr>
+<tr>
+<td>Missing <code>VHS_VideoCombine</code> node on <strong>ltx/</strong>*</td>
+<td>Image/volume predates <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vhs" data-href="../../glossary/#vhs" title="Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview.">VideoHelperSuite</span>, or refresh clone failed</td>
+<td>Pull/rebuild <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ghcr" data-href="../../glossary/#ghcr" title="GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.">GHCR</span> image (VHS is prebuilt). Restart container so stamp-present refresh runs <code>ensure_lab_video_nodes</code>. Confirm: <code>docker exec ez-comfy-studio test -d /comfy-state/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite</code>. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or volume cleanup, then re-open seeded workflows</td>
+</tr>
+<tr>
+<td>Log <code>IMPORT FAILED: …/ComfyUI-Manager</code> / <code>No such file or directory: …/ComfyUI-Manager/__init__.py</code></td>
+<td>Manager <strong>4.2.2 is pip</strong> (<code>manager_requirements.txt</code> + <code>--enable-manager</code>). An old git clone in <code>custom_nodes/</code> has no <code>__init__.py</code></td>
+<td>Pull latest. <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so refresh pip-installs <code>comfyui_manager</code> and removes the leftover clone. Confirm the log has <strong>no</strong> Manager <code>IMPORT FAILED</code>, and <code>docker exec ez-comfy-studio python -c 'import comfyui_manager'</code>. Do <strong>not</strong> <code>git clone</code> Manager into the volume. Last resort if pip cannot reach PyPI: <code>LAB_FORCE_COLD_INSTALL=1</code></td>
+</tr>
+<tr>
+<td>Log <code>IMPORT FAILED: …/ez_ltx_spatial</code> / <code>No module named 'ez_film'</code></td>
+<td>Old pack imported <code>ez_film</code> at load (Comfy 0.34 does not register sibling folder names)</td>
+<td>Pull latest. <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so entrypoint recopies <code>ez_ltx_spatial</code>. Confirm the log has <code>0.0 seconds: …/ez_ltx_spatial</code> <strong>without</strong> <code>IMPORT FAILED</code>. Until this loads, typing 720/1080 on LTX widgets is <strong>not</strong> auto-snapped. File check: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_ltx_spatial/__init__.py</code></td>
+</tr>
+<tr>
+<td>Missing <strong>Creative Research</strong> node / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="research-chat" data-href="../../glossary/#research-chat" title="Inspire App: CPU chat + web search + sequential research subagents. Occupancy llm.">research-chat</span> App / log <code>IMPORT FAILED: …/ez_research</code> / <code>No module named 'ez_prompt_enhance'</code></td>
+<td>Old pack imported <code>ez_prompt_enhance</code> at load (Comfy 0.34 does not register sibling folder names), or host pack not copied</td>
+<td>Pull latest. <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so entrypoint recopies <code>ez_research</code>. Confirm the log has <code>0.0 seconds: …/ez_research</code> <strong>without</strong> <code>IMPORT FAILED</code>. File check: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_research/__init__.py</code>. Load <strong>inspire/research-chat</strong> from <code>_lab/inspire/</code></td>
+</tr>
+<tr>
+<td>Research Reply empty / status GGUF missing</td>
+<td>Same CPU GGUF as <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="prompt-enhance" data-href="../../glossary/#prompt-enhance" title="In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.">Prompt Enhance</span></td>
+<td>Fail-soft: search snippets still appear in <strong>Sources</strong>. <code>./scripts/manage.sh download-models</code>. <code>llama.cpp unavailable</code> → same self-heal as Enhance. Logs: <code>[ez_research]</code></td>
+</tr>
+<tr>
+<td>Research Sources empty</td>
+<td>Network blocked, SSRF, or Web search off</td>
+<td>Turn <strong>Web search</strong> on. Container needs outbound HTTPS. Private/loopback URLs are refused. Wikipedia + DuckDuckGo HTML only — no API key</td>
+</tr>
+<tr>
+<td><code>research-mcp</code> maps occupancy to blender-desk</td>
+<td>Old helper or <code>occupancy_set_mcp_pid</code></td>
+<td>Pull latest. <code>research-mcp</code> records <code>mcp_pid</code> without changing mode. Confirm: <code>./scripts/manage.sh occupancy status</code> stays <code>idle</code>/<code>klein</code>/…</td>
+</tr>
+<tr>
+<td>Missing <strong>Podcast Script</strong> / <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../../glossary/#kokoro" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span></strong> node</td>
+<td>Host pack not mounted or entrypoint copy skipped</td>
+<td>Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_podcast</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_podcast/__init__.py</code></td>
+</tr>
+<tr>
+<td>Kokoro ONNX missing / empty speech</td>
+<td>Analog pack not downloaded</td>
+<td><code>./scripts/manage.sh download-podcast --tier analog</code>. Confirm <code>ls "${MODELS_DIR}/comfy/onnx/kokoro-v1.0.onnx"</code> and <code>comfy/tts/voices-v1.0.bin</code></td>
+</tr>
+<tr>
+<td>ACE checkpoint name missing on podcast or rap graphs</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> AIO not downloaded</td>
+<td><code>./scripts/manage.sh download-music --tier turbo</code> <strong>or</strong> <code>download-podcast --tier acestep</code> (same dest). Lab file is <code>ace_step_1.5_turbo_aio.safetensors</code> under <code>comfy/checkpoints/</code></td>
+</tr>
+<tr>
+<td><strong>ACE tags + lyrics</strong> Invalid input: keyscale=<code>true</code>, language=<code>C minor</code>, timesignature=<code>en</code></td>
+<td>Seed <code>control_after_generate</code> slot missing; combo widgets shifted by one</td>
+<td>Pull latest. <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>_lab/</code> rsyncs. Re-open <strong>audio/music/rap-draft</strong> (or the podcast ACE graph). Do not keep a canvas loaded before the rsync. Seed control stays <strong>fixed</strong></td>
+</tr>
+<tr>
+<td>Rap bars slur / mush</td>
+<td>Lines too long, or language not <code>en</code></td>
+<td>Shorten to ~6–10 syllables; keep <code>language=en</code> on <code>TextEncodeAceStepAudio1.5</code>. Re-open <strong>audio/music/rap-draft</strong> or a numbered take under <code>_lab/audio/albums/nill-bye/&lt;album&gt;/</code></td>
+</tr>
+<tr>
+<td>Trap/EDM bed swallows the booth</td>
+<td>Club tags without dry-booth voice, or autotune creep</td>
+<td>Keep <code>male rap vocals, dry booth, no autotune</code> on the tags <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span>. Re-open a take under <code>_lab/audio/albums/nill-bye/false-drop/</code>; do not add autotune</td>
+</tr>
+<tr>
+<td>Vocals leaking into an instrumental pass</td>
+<td>Tags still say male rap vocals; lyrics still have bars</td>
+<td>Keep boom-bap tags, append <code>instrumental, no vocals</code>, replace lyrics with <code>[inst]</code>. There is no third instrumental JSON</td>
+</tr>
+<tr>
+<td>Drive-through EDM sings the arrangement score</td>
+<td>App mode is vocal on a no-vocal take, or score lines look like lyrics</td>
+<td>Keep <strong>Vocal / instrumental</strong> on instrumental for the eighty-three locked takes. Re-open a numbered take under <code>_lab/audio/albums/drive-through/&lt;album&gt;/</code>. Score stays production cues in <code>[inst]</code> / <code>[outro]</code>; short lines (~6–10 syllables). Do not write story bars or the act name in the lyrics field</td>
+</tr>
+<tr>
+<td>Drive-through DJ shout sings the bed</td>
+<td>Treat graph (<code>wide-open</code> / <code>second-wave</code>) but <code>[inst]</code> lines are singable</td>
+<td>Keep App mode <strong>vocal</strong>. Keep the <code>[chorus]</code> chop to one 1–2 word line. <code>[inst]</code> stays instrument names only</td>
+</tr>
+<tr>
+<td>Drive-through drop is mush / no hit</td>
+<td>Arrangement lines too long, or Enhance rewrote <code>[inst]</code></td>
+<td>Seeded EDM graphs pin Enhance <strong>off</strong>. Short percussive lines in the drop blocks (<code>warp</code>, <code>growl</code>, <code>reese</code>, <code>wobble</code>); do not turn Rewrite prompt on unless you want the 4B rewriter</td>
+</tr>
+<tr>
+<td>Drive-through take is tinny / bright leads</td>
+<td>Tags still name plucks, anthems, or mainstage house</td>
+<td>Re-open the seeded graph. Keep hybrid-trap / riddim / tearout / warp bass tags. Do not add supersaw, pluck, piano, or big-room language</td>
+</tr>
+<tr>
+<td>Drive-through take goes quiet mid-song</td>
+<td>Score has mix-in, bass-cut, or fade cues</td>
+<td>Seeded scores drop first and keep hats + 808 on every fill. Do not add <code>hats skip</code> / <code>bass cut</code> / filter mix-ins</td>
+</tr>
+<tr>
+<td><code>kokoro-onnx</code> / <code>onnxruntime</code> import miss on aarch64</td>
+<td>Optional runtime wheel not installed (not baked in the image)</td>
+<td>Inside the container venv: <code>pip install kokoro-onnx onnxruntime</code> (CPU). Baking that into the image invalidates <strong>venv-extra</strong> (not the multi‑GB torch layer). Visual graphs still Queue without it</td>
+</tr>
+<tr>
+<td>Podcast script unchanged with Enhance on / GGUF fail-soft</td>
+<td>Same as prompt enhance: missing GGUF or llama.cpp</td>
+<td>Widget text is passed through. <code>./scripts/manage.sh download-models</code> for the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct GGUF. <code>llama.cpp unavailable</code> → Queue self-heals, then force-reinstalls the GitHub manylinux wheel; run the <code>docker exec … pip install --force-reinstall</code> line if status still names it. Confirm Llama imports. Seeded podcast graphs pin Enhance <strong>off</strong> so <code>Speaker A:</code> / <code>Speaker B:</code> stay parser input</td>
+</tr>
+<tr>
+<td>Dub SRT / mix still in the source language</td>
+<td>ASR never filled <code>text</code>, or a turn-level GGUF timeout copied one line</td>
+<td>Rewrite translation <strong>on</strong>, Stage <strong>analyze</strong>, then edit JSON. <strong>Dub status</strong> must show <code>translated N/M</code>. A full llama.cpp / GGUF miss is now <strong>blocking</strong> (empty mix, empty <code>text_target</code>), not English cloned as <code>es</code>. Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>. Whisper needs <code>config.json</code> next to <code>model.bin</code>. Clone needs the complete V3 snapshot (<code>conds.pt</code> included). <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> <code>language_id</code> is ISO (<code>es</code>, not <code>Spanish</code>). Missing engine: empty mix, not the original recording.</td>
+</tr>
+<tr>
+<td>Rap bars slur / tags BPM fights the encoder</td>
+<td>Enhance rewrote ACE tags/lyrics (BPM, language, <code>[verse]</code>)</td>
+<td>Seeded rap graphs pin Enhance <strong>off</strong>. Turn Rewrite prompt on only for a lazy tags line</td>
+</tr>
+<tr>
+<td>Master is not −16 LUFS</td>
+<td>Comfy has no <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../../glossary/#loudnorm" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span> node</td>
+<td><code>./scripts/utilities/podcast-loudnorm.sh run --in FILE</code> (ffmpeg). Missing ffmpeg is a hard failure — it will not skip</td>
+</tr>
+<tr>
+<td>YouTube wants a video, I only have FLAC / MP3</td>
+<td>Audio lab graphs do not emit MP4</td>
+<td><code>./scripts/manage.sh audio-still-video --audio FILE --image FILE</code> (host libx264; compose may stay up). Missing ffmpeg is a hard failure — it will not skip. Do not add VHS to the rap/podcast graphs</td>
+</tr>
+<tr>
+<td>Black bars on a square cover in the YouTube MP4</td>
+<td>Default <code>--fit letterbox</code> onto 1920×1080</td>
+<td><code>--fit crop</code>, or Queue <strong>klein/thumbnail</strong> (1280×720) instead of the 1024² podcast cover</td>
+</tr>
+<tr>
+<td><code>audio-still-video</code> fails immediately</td>
+<td>ffmpeg not on PATH</td>
+<td>Install host ffmpeg. Same hard-fail as <code>podcast-loudnorm.sh</code> — it will not skip</td>
+</tr>
+<tr>
+<td>Enhance on but prompt unchanged / <strong>Enhance status</strong> says GGUF missing</td>
+<td>Snapshot not downloaded, or <code>comfy/llm/</code> link missing/broken. Fail-soft: style still applies, generation still runs; the 4B rewriter did not</td>
+<td>Not an error in the CLIP string. <strong>CLIP prompt</strong> is what CLIP encoded; <strong>Enhance status</strong> is the reason. Run <code>./scripts/manage.sh download-models</code> (includes <code>comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf</code>). <code>doctor</code>/<code>start</code> relink a snapshot already under <code>MODELS_DIR/unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/</code>. Restart the container after the pull. <strong>Enhance status</strong> <code>llama.cpp unavailable</code> means <code>from llama_cpp import Llama</code> failed, not a missing GGUF — Queue self-heals <code>llama-cpp-python</code> from the official CPU extra-index, then force-reinstalls the GitHub manylinux wheel if pip is already satisfied (PyPI has no wheel; do not rebuild only for this). If status still names a <code>docker exec … pip install --force-reinstall</code> command, run that line. Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'from llama_cpp import Llama'</code>. Pip “already satisfied” is not the check. Logs: <code>[ez_prompt_enhance]</code>. Default timeout <strong>180s</strong> (<code>EZ_LLM_TIMEOUT_S</code>), <strong>8</strong> CPU threads (<code>EZ_LLM_N_THREADS</code>). Status <code>timeout or empty model output</code> means raise those env vars and restart — do not drop a GGUF into Comfy Manager</td>
+</tr>
+<tr>
+<td>Enhance CLIP prompt box stays empty after Queue</td>
+<td>Pack JS not copied, or the browser is holding an old frontend</td>
+<td>Restart the container so entrypoint copies <code>ez_prompt_enhance/js/</code>. Hard-refresh the Comfy tab. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_prompt_enhance/js/ez_prompt_enhance.js</code></td>
+</tr>
+<tr>
+<td>Style selected but still looks like the lab photoreal prompt</td>
+<td>Style is <code>none</code>, mode is I2V, or reading the source widget instead of <strong>CLIP prompt</strong></td>
+<td>Set <strong>style</strong> to a preset (not <code>none</code>). Mode must be <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">t2i</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2v" data-href="../../glossary/#t2v" title="Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.">t2v</span> / Klein edit. Read the <strong>CLIP prompt</strong> box — it should front-load the medium and drop <code>photoreal still</code> / <code>game-engine</code> fights. I2V ignores style (start image owns look)</td>
+</tr>
+<tr>
+<td>Multi-shot Klein pack drifts (cups, houses, streets change)</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="world-bible" data-href="../../glossary/#world-bible" title="Locked description of a place or character with no camera. Shared across shots.">World bible</span> edited per shot, or an old graph</td>
+<td>Re-open the seeded JSON. Edit <strong>IDENTITY</strong> / <strong>HOUSE IDENTITY</strong> once (App Mode is one prompt; dream-house inventory widgets stay empty). View packs (dream-house, style-lock, camera-angles, storyboard) are independent T2I with <code>lock=view</code> (shot first). State packs (lighting, moods, time-of-day, before/after) still Klein-edit from shot 01 via <code>ReferenceLatent</code> — do not bypass KEY / GOLDEN / WARM / BEFORE on a cold canvas</td>
+</tr>
+<tr>
+<td>Enhance rewrites a locked shorts identity</td>
+<td>Enhance left on for a bible/bridge Queue</td>
+<td>Set Enhance <strong>false</strong>. Canned identity/motion text is already model-native</td>
+</tr>
+<tr>
+<td>LTX finished but I only see PNGs / no MP4 preview</td>
+<td>Old <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../../glossary/#workflow" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">workflow</span> JSON without VHS, or looking only at SaveImage</td>
+<td>Re-open current <strong>ltx/</strong><em> from <code>user/default/workflows/</code> (entrypoint re-copies host <code>workflows/</code>). After Queue, open </em><em>Save video (MP4) — open node for preview</em><em>; MP4 is on the host at <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_ltx_*_video_*.mp4</code>. Confirm: <code>ls "${COMFY_OUTPUT_DIR}"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. </em><em>Save frames (secondary)</em>* PNGs are optional — <a href="../../visual-generative-ai/#watch-the-video-wan-ltx">Visual Generative AI → Watch the video</a></td>
+</tr>
+<tr>
+<td>Where is my 90s MP4? / how do I download it?</td>
+<td>Looking only at SaveImage PNGs, or an old concat-copy file that browsers refuse</td>
+<td>After Queue a <strong>90s film ready</strong> overlay plays and downloads the master. Files: <code>${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4</code> (H.264 + AAC + faststart) and <code>ez_gosee_90s.html</code>. Optional: <code>docker compose --profile studio-ui up studio-ui</code> then http://localhost:8190/watch/gosee. Confirm: <code>ls "${COMFY_OUTPUT_DIR}/ez_*_90s.mp4"</code> and <code>docker exec ez-comfy-studio ls /outputs</code>. Copy off the Spark with <code>scp</code>. <code>cleanup</code> does not delete this folder — <a href="../../shorts/">90s shorts</a></td>
+</tr>
+<tr>
+<td><strong>EZFilmConcat</strong> <code>shot duration 4.708333 (need 5.0±0.05)</code></td>
+<td>LTX <code>length=120</code> is not <code>1+8n</code>; the video VAE floors to <strong>113 frames</strong> (4.708 s @ 24 fps)</td>
+<td>The 18 LTX prints already finished — <strong>do not</strong> re-Queue the full graph. Pull latest, <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>ez_film</code> / <code>ez_ltx_spatial</code> copy. Queue <strong>only</strong> EZFilmConcat (node 900), or <code>./scripts/utilities/concat-shots.sh --film go-see --xfade 8 --yes</code>. Stitch pads 113-frame stems to 5.00 s (cloned last frame). Confirm: <code>ls "${COMFY_OUTPUT_DIR}"/ez_gosee_b*_s*_ltx_video*-audio.mp4</code>. New printers are <strong>121</strong> frames</td>
+</tr>
+<tr>
+<td><strong>EZFilmConcat</strong> <code>xfade requires audio</code> / path ends in <code>.png</code></td>
+<td>VHS_FILENAMES lists the metadata PNG first, then silent <code>.mp4</code>, then muxed <code>*-audio.mp4</code>. Old <code>ez_film</code> took the PNG. go-see <code>xfade_cs=8</code> then refuses</td>
+<td>The 18 LTX prints already finished — <strong>do not</strong> re-Queue the full graph. Pull latest, <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>ez_film</code> copies. Stitch existing files: <code>./scripts/utilities/concat-shots.sh --film go-see --xfade 8 --yes</code>. Confirm: <code>ls "${COMFY_OUTPUT_DIR}"/ez_gosee_b*_s*_ltx_video*-audio.mp4</code>. After the pack update you can also Queue <strong>only</strong> EZFilmConcat (node 900)</td>
+</tr>
+<tr>
+<td>LTX MP4 plays but has no sound</td>
+<td>Graph missing <code>LTXVAudioVAEDecode</code> → VHS audio, or old seeded JSON</td>
+<td>Pull latest workflows; confirm the canvas has <strong>Audio VAE Decode</strong> linked into <strong>Save video (MP4)</strong>. Re-copy via container restart. World audio is muxed into the MP4 — there is no separate WAV by default</td>
+</tr>
+<tr>
+<td>Cannot find generated PNG/MP4 on the Spark host</td>
+<td>Looking in the git repo or only inside <code>ez-comfy-state</code></td>
+<td>Media is bind-mounted to <strong><code>COMFY_OUTPUT_DIR</code></strong> (default <code>/mnt/comfy-output</code>). <code>./scripts/manage.sh setup</code> creates it. <code>status</code> prints the path. <code>cleanup</code> does not delete it</td>
+</tr>
+<tr>
+<td>GIF moonwalks / plays backwards unnaturally</td>
+<td>VHS <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ping-pong" data-href="../../glossary/#ping-pong" title="Play a clip forward then reverse so the join frame equals the start (GIF/bumper loops).">ping-pong</span></strong> reversing a one-way move (walk, dolly)</td>
+<td>On <strong>wan/gif-loop</strong>, set <strong>Infinite loop (ping-pong)</strong> to false, or rewrite Motion for locked-camera cyclic motion (breeze, curtains). Ping-pong is the easy first=last loop</td>
+</tr>
+<tr>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../../glossary/#unet" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span> missing after swapping to Klein base / NVFP4 on <strong>klein-still-daily</strong></td>
+<td>Optional still not downloaded</td>
+<td>Stay on <code>flux-2-klein-4b-fp8.safetensors</code>, or <code>./scripts/utilities/download-image.sh run --tier base</code> / <code>--tier nvfp4</code> then restart Comfy so the filename appears</td>
+</tr>
+<tr>
+<td>Dream-house Queue too slow / only need a few rooms</td>
+<td>All ten SHOT groups enabled</td>
+<td>Bypass unused SHOT groups (Ctrl+B). Identity and seed stay shared; 02–10 do not consume shot 01’s pixels</td>
+</tr>
+<tr>
+<td>Dream-house 02–10 look like the same photo as 01</td>
+<td>Old graph still wraps 02–10 in <code>ReferenceLatent</code>, or the world bible still names a camera</td>
+<td>Pull latest, re-open <strong>klein/dream-house</strong>. Confirm Prompt Join <code>lock=view</code>, no <code>Ref from 01</code> nodes, and the shot is first in the joined CLIP string. HOUSE IDENTITY must be camera-free; shot cards own the camera. If they are <em>similar facades</em> rather than copies, see the next row</td>
+</tr>
+<tr>
+<td>Dream-house stills are ten similar facades</td>
+<td>Old <code>place_10</code> roles (approach / context / day-night copies of the same three-quarter) or bible-first join</td>
+<td>Pull latest, re-open <strong>klein/dream-house</strong>. Shot groups should read tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study. Prompt Join <code>lock=view</code> front-loads the shot. Dawn / noon / night of one camera is <strong>klein/time-of-day</strong>. For rooms that must share a floorplan, dump <code>house-views</code> and Queue <strong>klein/dream-house-clay</strong></td>
+</tr>
+<tr>
+<td>Dream-house kitchen or bath shows the lounge skyline</td>
+<td>Old lock line forced “same sky and background” into every room, or the bible still leads with one bay/skyline in every CLIP string</td>
+<td>Pull latest. Kitchen / dining / bedroom / bath / study cards name an interior wall that fills the entire backdrop. Only lounge looks out the main opening. Re-open the seeded JSON</td>
+</tr>
+<tr>
+<td>Dream-house rooms look like the house changed, not a new room</td>
+<td>Joined CLIP still pastes one skyline behind every interior, or shot 01 is a ground-level three-quarter of the penthouse</td>
+<td>Pull latest. Shot 01 looks <strong>up</strong> at the tower in a dense canyon. Prompt Join repeats “this still is only the room and backdrop the shot names” after the bible. HOUSE IDENTITY names each room’s facing wall</td>
+</tr>
+<tr>
+<td>Dream-house interiors do not match the sofa seen through the glass</td>
+<td>HOUSE IDENTITY omitted the seating or outdoor lamps, or a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="shot-card" data-href="../../glossary/#shot-card" title="Per-shot YAML extras: script, camera, clay required, audio policy, stems.">shot card</span> invents new furniture</td>
+<td>Name lounge, kitchen, dining, bath, bedroom, terrace, study, outdoor lamps, and the view beyond the glass in HOUSE IDENTITY (App Mode is one prompt). Lounge looks out the main opening; other rooms do not reuse that backdrop</td>
+</tr>
+<tr>
+<td>Dream-house rooms look like different penthouses</td>
+<td>Shot card restyles massing, or identity enhance drifted</td>
+<td>Keep HOUSE IDENTITY in <strong>identity</strong> mode. Shot cards are camera / room only. Turn Enhance off only to pin a frozen bible. Do not Klein-t2i-enhance joined shot cards. Massing, rooms, furniture, and surroundings must not change across the tour</td>
+</tr>
+<tr>
+<td>OOM / multi-minute hang on a 90s (or 30s / 60s) <strong>latent</strong></td>
+<td>241+ frame widget</td>
+<td>Do not Queue a 90s denoise. Film graphs are 18 × <strong>5.00 s</strong> (121 frames, <code>1+8n</code>) + stitch. See <a href="../../shorts/">90s shorts</a>. Confirm <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../../glossary/#headroom" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span> preflight; close other GPU jobs</td>
+</tr>
+<tr>
+<td>One-click 90s film Queue runs for a long time</td>
+<td>18 sequential LTX 5s prints</td>
+<td>Expected. The <strong>90s film ready</strong> overlay appears when stitch finishes. A true hang is 0 GPU / 241+ frames</td>
+</tr>
+<tr>
+<td>90s film / shot graph missing in the Comfy UI</td>
+<td>Looking at the old flat <code>user/default/workflows/</code> list, or seed skipped</td>
+<td>Look under <strong><code>_lab/shorts/</code></strong> (and <code>_lab/klein</code>, <code>_lab/wan</code>, <code>_lab/ltx</code>, …). Restart so <code>install_lab_workflows</code> rsyncs into <code>_lab/</code> only. Load <strong>shorts/go-see</strong> (or still-here / switchyard). YAML shot lists stay on the host at <code>workflows/shorts/*.shots.yaml</code></td>
+</tr>
+<tr>
+<td>My edit to a lab graph vanished after restart</td>
+<td>You edited the live <code>_lab/</code> copy</td>
+<td>Live <code>_lab/</code> is overwritten on every start. Copy the graph to <strong><code>_user/</code></strong> (or Save As) before editing. Operator files outside <code>_lab/</code> are never deleted</td>
+</tr>
+<tr>
+<td>Manager-installed custom nodes vanished after pin refresh</td>
+<td>Pack lived in <code>custom_nodes/</code> but not <code>_user/</code></td>
+<td>Install operator packs under <code>${COMFY_OUTPUT_DIR}/custom-nodes-user</code> (container <code>$COMFY_HOME/custom_nodes/_user</code>). Lab <code>ez_*</code> packs still overwrite from git</td>
+</tr>
+<tr>
+<td>Lab graph is in Workflows but not in Apps</td>
+<td>Seeded as <code>*.json</code> (film default, or pre-<code>.app.json</code> volume)</td>
+<td>App Mode graphs seed as <code>*.app.json</code>. Pull latest and restart so the entrypoint re-copies and removes the old <code>.json</code> sibling. 90s films stay Workflows-only (<code>default_view: graph</code>). This is not <code>studio-ui</code>.</td>
+</tr>
+<tr>
+<td>App panel shows occupancy / Run but no Prompt, Style, or Rewrite</td>
+<td>Old <code>linearData</code> used two-part ids (<code>"11:prompt"</code>). ComfyUI frontend 1.49.6 treats a colon as a subgraph locator and drops the widget</td>
+<td>Pull latest, <code>./scripts/manage.sh stop</code> then <code>start</code> (type <strong>yes</strong>) so <code>_lab/</code> reseeds. Hard-refresh the Comfy tab. The first <code>linearData.inputs</code> id must be a number (<code>11</code>), not <code>11:prompt</code></td>
+</tr>
+<tr>
+<td>App Mode shows three identical Prompt boxes / 18 “Shot card”s</td>
+<td>Old JSON or <code>ez_studio_app</code> JS not copied</td>
+<td>Pull latest, restart so graphs restamp unique <code>label</code>s and <code>custom_nodes/ez_studio_app/js</code> copies. Prompt Forge should read Klein / Wan / LTX; beat sheet should read Beat 1 enter …</td>
+</tr>
+<tr>
+<td>Klein plate App has a Start image that does nothing</td>
+<td>Unwired <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../../glossary/#loadimage" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> on a t2i plate (old stamp)</td>
+<td>Pull latest. App Mode only exposes LoadImage when it is wired (I2V / character tweak / clay). Optional plate LoadImage stays graph-only</td>
+</tr>
+<tr>
+<td>Occupancy chip covers the App Run button</td>
+<td>Old <code>ez_studio_app</code> banner at bottom-left</td>
+<td>Restart so the new JS mounts the chip at the top of the widget list (or under the menu in graph view)</td>
+</tr>
+<tr>
+<td>Queuing a 90s film OOMs with Klein and LTX both resident</td>
+<td><code>EZUnloadModels</code> missing on an old graph</td>
+<td>Pull latest film JSON; confirm <strong>Unload models (pass IMAGE)</strong> sits between Klein decode and LTX shot 1 — <a href="../../shorts/">90s shorts</a></td>
+</tr>
+<tr>
+<td>Missing <strong>EZFilmConcat</strong> / Unload models node</td>
+<td>Host pack not mounted or entrypoint copy skipped</td>
+<td>Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_film</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_film/__init__.py</code></td>
+</tr>
+<tr>
+<td>Missing <strong>Load guide still</strong> node</td>
+<td>Host pack not mounted or entrypoint copy skipped</td>
+<td>Restart so <code>install_all_lab_custom_nodes</code> copies <code>ez_dcc</code>. Confirm: <code>docker exec ez-comfy-studio test -f /comfy-state/ComfyUI/custom_nodes/ez_dcc/__init__.py</code>. Load <strong>dcc/klein/from-guide-loader</strong> from <code>_lab/dcc/</code></td>
+</tr>
+<tr>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ezdcc-occupancy-gate" data-href="../../glossary/#ezdcc-occupancy-gate" title="In-canvas node that reads occupancy JSON only. Does not start Compose or spawn Blender.">Occupancy gate</span> refused <code>blender-desk</code></td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="park" data-href="../../glossary/#park" title="occupancy enter blender-desk / llm-desk POST /free; Compose may stay up.">Park</span> is for dumps; Klein / LTX / Wan / TRELLIS need the matching heavy mode</td>
+<td>Stop Blender, then <code>./scripts/manage.sh occupancy enter klein\|ltx\|wan\|trellis --yes</code>. The node does not <code>POST /free</code> or spawn Blender. <a href="../../learn/comfy-first-blender/">Stay in Comfy after a Blender dump</a></td>
+</tr>
+<tr>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="doctor" data-href="../../glossary/#doctor" title="Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.">Doctor</span> warns <code>banned MiniMax H3 weight present</code></td>
+<td>Leftover files from an old <code>download-h3</code> run</td>
+<td>After <code>./scripts/manage.sh stop</code>, delete those files under <code>${MODELS_DIR}/comfy/</code> (<code>minimax_h3_*.safetensors</code>, <code>qwen3vl_32b_minimax_h3_*.safetensors</code>). Do not Queue MiniMaxH3 nodes. See <a href="../../licenses/">Model licenses</a></td>
+</tr>
+<tr>
+<td>Pin mismatch / old volume Comfy</td>
+<td><code>.lab-comfyui-ref</code> lags <code>COMFYUI_REF</code></td>
+<td><code>git pull</code>, <code>stop</code> + <code>start</code> so entrypoint reseeds from the image. Do <strong>not</strong> treat a 10s <code>compose restart</code> as done. Last resort: <code>LAB_FORCE_COLD_INSTALL=1</code> or <code>cleanup</code> then start</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/glossary.js"></script>
+      
+        <script src="../../javascripts/commands.js"></script>
+      
+        <script src="../../javascripts/tables.js"></script>
+      
+        <script src="../../javascripts/published.js"></script>
+      
+    
+  <script type="application/json" id="ez-cmd-data">{"variables":[{"id":"SPARK_HOST","label":"Spark IP / DNS","default":"127.0.0.1"},{"id":"SPARK_USER","label":"SSH user","default":"spark"},{"id":"MODELS_DIR","label":"MODELS_DIR","default":"/mnt/models"},{"id":"COMFY_OUTPUT_DIR","label":"COMFY_OUTPUT_DIR","default":"/mnt/comfy-output"},{"id":"COMFY_PORT","label":"ComfyUI port","default":"8188"},{"id":"DOWNLOAD_LIMIT","label":"Download limit","default":"auto"}],"commands":[{"id":"download-models","title":"download-models","description":"Default pack only (Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF). No --tier. --limit is bandwidth, not quality.","argv":["./scripts/manage.sh","download-models"],"flags":[{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto (85% of speedtest when HTB works)"},{"value":"off","label":"off (SSH risk — full-rate pull)"}]},{"name":"drop-incomplete","kind":"bool","default":false,"label":"Delete stuck *.incomplete then re-pull"}]},{"id":"download-image","title":"download-image --tier","description":"Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder.","argv":["./scripts/utilities/download-image.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"fast","choices":[{"value":"fast","label":"fast — Klein 4B distilled FP8 + TE + VAE (default, in download-models)"},{"value":"nvfp4","label":"nvfp4 — Klein 4B NVFP4 still UNET (optional)"},{"value":"base","label":"base — Klein 4B base FP8 still UNET (optional)"},{"value":"zimage","label":"zimage — Z-Image Turbo stills (optional)"},{"value":"all","label":"all — fast + nvfp4 + base + zimage"}]}]},{"id":"download-wan","title":"download-wan --tier","description":"Different Wan graphs, not a quality ladder. all does not include vace or s2v. Unload LTX before Fun InP / VACE / S2V.","argv":["./scripts/utilities/download-wan.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"5b","choices":[{"value":"5b","label":"5b — Wan 2.2 TI2V-5B silent (~12 GB, in download-models)"},{"value":"a14b","label":"a14b — Wan 2.2 I2V A14B FP8 (~20 GB, opt-in)"},{"value":"fun-inp","label":"fun-inp — Fun InP A14B first-last-frame (~40 GB)"},{"value":"vace","label":"vace — Wan 2.1 VACE 1.3B join (~6 GB, not in all)"},{"value":"s2v","label":"s2v — Wan 2.2 S2V-14B talking-head (~20 GB, not in all)"},{"value":"all","label":"all — 5b + a14b + fun-inp (not vace, not s2v)"}]}]},{"id":"download-ltx","title":"download-ltx --tier","description":"LTX generation selector, not “better”. 2.5 is the lab default. 2.3 is a retired fallback.","argv":["./scripts/utilities/download-ltx.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"2.5","choices":[{"value":"2.5","label":"2.5 — distilled INT8-convrot AV (~30 GB, in download-models)"},{"value":"2.3","label":"2.3 — retired distilled FP8 fallback (~20 GB)"},{"value":"iclora","label":"iclora — IC-LoRA Union Control (~1 GB, opt-in)"},{"value":"gemma","label":"gemma — LTX-2.3 Gemma DualCLIP (~8 GB)"}]}]},{"id":"download-podcast","title":"download-podcast --tier","description":"Opt-in audio packs. analog is Kokoro only. acestep shares the ~10 GB AIO with download-music --tier turbo. Missing pack is not a doctor failure.","argv":["./scripts/manage.sh","download-podcast"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"analog","choices":[{"value":"analog","label":"analog — Kokoro-82M ONNX + voices (tiny, default)"},{"value":"acestep","label":"acestep — ACE-Step 1.5 turbo AIO (~10 GB, shared with music turbo)"},{"value":"chatterbox","label":"chatterbox — optional MIT GPU TTS"},{"value":"qwen3tts","label":"qwen3tts — optional Qwen3-TTS 0.6B"},{"value":"all","label":"all — analog + acestep + chatterbox + qwen3tts"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-dub","title":"download-dub --tier","description":"Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt). With the stack up, pip-installs faster-whisper, setuptools\u003c82 (PerTh / pkg_resources), then the Chatterbox V3 GitHub zip --no-deps --force-reinstall (does not pin torch; PyPI 0.1.7 has no t3_model=v3). Missing pack is not a doctor failure.","argv":["./scripts/manage.sh","download-dub"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"asr","choices":[{"value":"asr","label":"asr — Silero VAD + faster-whisper large-v3 (default)"},{"value":"clone","label":"clone — Chatterbox Multilingual V3 (MIT, PerTh on)"},{"value":"all","label":"all — asr + clone"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-music","title":"download-music --tier","description":"Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep — do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.","argv":["./scripts/manage.sh","download-music"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"turbo","choices":[{"value":"turbo","label":"turbo — ACE-Step 1.5 AIO (~10 GB, default rap/podcast beds)"},{"value":"xl","label":"xl — split XL files (larger; not the default)"},{"value":"all","label":"all — turbo + xl"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-3d","title":"download-3d --tier","description":"Opt-in 3D. da3-large is refused. Unload LTX first. SuperSplat is a host viewer, not this downloader.","argv":["./scripts/manage.sh","download-3d"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"trellis2","choices":[{"value":"trellis2","label":"trellis2 — Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"},{"value":"da3-base","label":"da3-base — Depth Anything 3 BASE Apache (~1 GB)"},{"value":"all","label":"all — trellis2 + da3-base"}]}]},{"id":"download-longcat","title":"download-longcat --tier","description":"Opt-in MIT LongCat. No NCCL in this sample stack.","argv":["./scripts/manage.sh","download-longcat"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"video","choices":[{"value":"video","label":"video — LongCat-Video"},{"value":"avatar","label":"avatar — LongCat-Video-Avatar"},{"value":"all","label":"all — video + avatar"}]}]},{"id":"download-dreamx","title":"download-dreamx --tier","description":"Apache DreamX-Creator only. DreamX-World is refused.","argv":["./scripts/manage.sh","download-dreamx"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"creator","choices":[{"value":"creator","label":"creator — DreamX-Creator 1.0 Apache (~8 GB)"}]}]},{"id":"download-restore","title":"download-restore --tier","description":"Post-concat SeedVR2 restore pack. Not part of download-models.","argv":["./scripts/manage.sh","download-restore"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"seedvr2-3b","choices":[{"value":"seedvr2-3b","label":"seedvr2-3b — SeedVR2-3B Apache (~15 GB)"}]}]},{"id":"download-llm","title":"download-llm --tier","description":"Default enhance is the Qwen3-4B prompt-enhance GGUF (already in download-models). qwen36-35b-a3b is the opt-in ~23 GB occupancy llm-desk pack. Missing 35B is not a doctor failure.","argv":["./scripts/manage.sh","download-llm"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"enhance","choices":[{"value":"enhance","label":"enhance — Qwen3-4B Q4_K_M (default, in download-models)"},{"value":"qwen36-35b-a3b","label":"qwen36-35b-a3b — Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"},{"value":"all","label":"all — enhance + qwen36-35b-a3b"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"occupancy","title":"occupancy enter","description":"Park Comfy for blender-desk (POST /free) or llm-desk (35B sidecar), or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up. Graph occupancy label llm is not a CLI mode.","argv":["./scripts/manage.sh","occupancy","enter"],"flags":[{"name":"mode","kind":"choice","required":true,"default":"blender-desk","choices":[{"value":"blender-desk","label":"blender-desk — park Comfy, Workbench dumps"},{"value":"llm-desk","label":"llm-desk — park Comfy, host 35B llama-server"},{"value":"klein","label":"klein — stop Blender and 35B sidecar, Queue stills"},{"value":"trellis","label":"trellis — stop Blender and 35B sidecar, Queue TRELLIS.2"},{"value":"wan","label":"wan — stop Blender and 35B sidecar, Queue silent motion"},{"value":"ltx","label":"ltx — stop Blender and 35B sidecar, Queue AV print"},{"value":"idle","label":"idle — stop Blender, 35B sidecar, and Compose"}]}]},{"id":"research-mcp","title":"research-mcp","description":"In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF. No execute_code. Does not refuse a GPU session.","argv":["./scripts/manage.sh","research-mcp"],"flags":[]},{"id":"ssh-forward","title":"SSH port-forward","description":"Laptop tunnel to ComfyUI on the Spark. Then open http://127.0.0.1:${COMFY_PORT}.","argv":["ssh","-L","${COMFY_PORT}:127.0.0.1:${COMFY_PORT}","${SPARK_USER}@${SPARK_HOST}"],"flags":[]},{"id":"open-ui","title":"Open ComfyUI URL","description":"On-box / LAN URL. Use ssh-forward from a laptop instead.","argv":["echo","http://${SPARK_HOST}:${COMFY_PORT}"],"flags":[]},{"id":"doctor","title":"doctor","description":"Preflight. Missing weights are a warning, not a hard fail.","argv":["./scripts/manage.sh","doctor"],"flags":[]},{"id":"start","title":"start","description":"Type yes. Headroom preflight. Compose restart: no.","argv":["./scripts/manage.sh","start"],"flags":[]},{"id":"stop","title":"stop","description":"Stop containers. Keeps models, outputs, and the comfy-state volume.","argv":["./scripts/manage.sh","stop"],"flags":[]},{"id":"reap-models-plan","title":"reap-models --plan","description":"MODELS_DIR class plan only. Does not delete. cleanup does not delete weights.","argv":["./scripts/manage.sh","reap-models","--plan"],"flags":[]},{"id":"disk-wizard-plan","title":"disk-wizard --plan","description":"Host-wide leftover survey. Read-only. Never docker system prune -a --volumes.","argv":["./scripts/manage.sh","disk-wizard","--plan"],"flags":[]},{"id":"help","title":"help","description":"Print the manage.sh command list.","argv":["./scripts/manage.sh","help"],"flags":[]},{"id":"setup","title":"setup","description":".env, MODELS_DIR, COMFY_OUTPUT_DIR, optional Docker CE, hf CLI, then doctor.","argv":["./scripts/manage.sh","setup"],"flags":[{"name":"install-docker","kind":"bool","default":false,"label":"Install Docker CE + compose plugin when missing"}]},{"id":"status","title":"status","description":"Compose project status. Prints MODELS_DIR, COMFY_OUTPUT_DIR, port.","argv":["./scripts/manage.sh","status"],"flags":[]},{"id":"restart","title":"restart","description":"stop then start. Full yes confirm and headroom again.","argv":["./scripts/manage.sh","restart"],"flags":[]},{"id":"logs","title":"logs","description":"Follow compose logs.","argv":["./scripts/manage.sh","logs"],"flags":[]},{"id":"download-limit","title":"download-limit","description":"Throttle Hugging Face pulls. wrap always clears on exit.","argv":["./scripts/manage.sh","download-limit","status"],"flags":[]},{"id":"clear-hf-locks","title":"clear-hf-locks","description":"Remove stale Hugging Face .lock files under MODELS_DIR.","argv":["./scripts/manage.sh","clear-hf-locks"],"flags":[]},{"id":"reset-hf-partials","title":"reset-hf-partials","description":"Delete *.incomplete under MODELS_DIR. Finished weights kept.","argv":["./scripts/manage.sh","reset-hf-partials"],"flags":[]},{"id":"print-shot","title":"print-shot","description":"Queue one compiled 90s shot into films/\u003cslug>/shots/.","argv":["./scripts/manage.sh","print-shot"],"flags":[]},{"id":"film-resume","title":"film-resume","description":"Reprint failed 90s shots only. Skip ok 5.00s takes.","argv":["./scripts/manage.sh","film-resume"],"flags":[]},{"id":"film-export-otio","title":"film-export-otio","description":"Write films/\u003cslug>/publish OTIO from the jobstore. Host-side.","argv":["./scripts/manage.sh","film-export-otio"],"flags":[]},{"id":"film-proxies","title":"film-proxies","description":"NVENC proxies. Refuse if compose is up. Never rewrite masters.","argv":["./scripts/manage.sh","film-proxies"],"flags":[]},{"id":"take-promote","title":"take-promote","description":"Copy a take into shots/NN.mp4 and mark the shot ok.","argv":["./scripts/manage.sh","take-promote"],"flags":[]},{"id":"promote-workflow","title":"promote-workflow","description":"Copy a live _user graph into workflows/_lab/\u003clane>/. Does not commit.","argv":["./scripts/manage.sh","promote-workflow"],"flags":[]},{"id":"album-render","title":"album-render","description":"Queue one shipped album then zip. Compose must already be up.","argv":["./scripts/manage.sh","album-render"],"flags":[]},{"id":"llm-sidecar","title":"llm-sidecar","description":"Host llama-server for occupancy llm-desk (127.0.0.1:30000). Prefer occupancy enter llm-desk.","argv":["./scripts/manage.sh","llm-sidecar","status"],"flags":[]},{"id":"blender-mcp","title":"blender-mcp","description":"In-tree typed Blender MCP. bpy tools need blender-desk. No execute_code.","argv":["./scripts/manage.sh","blender-mcp"],"flags":[]},{"id":"blender-llm","title":"blender-llm","description":"Optional host Qwen3-4B CPU client for blender-mcp. Path D if llama.cpp missing.","argv":["./scripts/manage.sh","blender-llm"],"flags":[]},{"id":"blender","title":"blender","description":"Host Blender sidecar. Workbench in blender-desk. Dies if Comfy is a heavy job.","argv":["./scripts/manage.sh","blender"],"flags":[]},{"id":"export-guides","title":"export-guides","description":"Dump a 1280x704 (or 768x1280) / 120f clay+depth+canny pack. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","export-guides"],"flags":[]},{"id":"blender-stills","title":"blender-stills","description":"Dump a single-frame clay/depth/canny still. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","blender-stills"],"flags":[]},{"id":"house-views","title":"house-views","description":"Dump 1024x1280 Instagram clay stills + GLB. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","house-views"],"flags":[]},{"id":"asset-ls","title":"asset-ls","description":"Read-only Asset Bible catalog under COMFY_OUTPUT_DIR/assets.","argv":["./scripts/manage.sh","asset-ls"],"flags":[]},{"id":"film-accept","title":"film-accept","description":"Fail-closed 90s gate: 5.00s, 1280x704, LTX audio.","argv":["./scripts/manage.sh","film-accept"],"flags":[]},{"id":"shot-sheet","title":"shot-sheet","description":"Write films/\u003cslug>/shots.yaml with shot-card defaults.","argv":["./scripts/manage.sh","shot-sheet"],"flags":[]},{"id":"overlay-qc","title":"overlay-qc","description":"50% clay/look overlay. Host ffmpeg; compose may stay up.","argv":["./scripts/manage.sh","overlay-qc"],"flags":[]},{"id":"film-animatic","title":"film-animatic","description":"Cheap 90s animatic from clay.mp4 or stills. Host ffmpeg.","argv":["./scripts/manage.sh","film-animatic"],"flags":[]},{"id":"stem-mix","title":"stem-mix","description":"Picture-lock stems; duck -15 dB; YouTube loudnorm. Occupancy audio.","argv":["./scripts/manage.sh","stem-mix"],"flags":[]},{"id":"audio-still-video","title":"audio-still-video","description":"Mux a still + audio master to YouTube MP4. Host ffmpeg; compose may stay up.","argv":["./scripts/manage.sh","audio-still-video"],"flags":[]},{"id":"spark-timing","title":"spark-timing","description":"Kitchen wall-clock table. Do not record on pytorch-fallback.","argv":["./scripts/manage.sh","spark-timing","show"],"flags":[]},{"id":"models-status","title":"models-status","description":"Disk bible: keep-set + refuse list. Does not delete.","argv":["./scripts/manage.sh","models-status"],"flags":[]},{"id":"cleanup","title":"cleanup","description":"Type DELETE. Removes ez-comfy-state only. Keeps MODELS_DIR and COMFY_OUTPUT_DIR.","argv":["./scripts/manage.sh","cleanup"],"flags":[]},{"id":"spark-farm-status","title":"spark-farm status","description":"Probe independent Spark workers. Never starts compose remotely. No NCCL.","argv":["./scripts/utilities/spark-farm.sh","status"],"flags":[]}]}</script>
+<script type="application/json" id="ez-glossary-data">{"klein":{"title":"Klein 4B","short":"Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.","see_also":["t2i","qwen","wan","ltx","prompt-enhance"]},"wan":{"title":"Wan 2.2","short":"Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.","see_also":["i2v","t2v","umt5","ltx","ping-pong"]},"ltx":{"title":"LTX-2.5","short":"Joint audio/video model (Community License, gated, $10M company-revenue cap).","see_also":["av","i2v","community-license","gated","vhs"]},"qwen":{"title":"Qwen3-4B","short":"Klein's text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.","see_also":["klein","clip","gguf","prompt-enhance"]},"umt5":{"title":"UMT5-XXL","short":"Wan 2.2 text encoder (CLIP type wan).","see_also":["wan","clip","t2v","i2v"]},"gemma4":{"title":"Gemma 4","short":"LTX-2.5 text encoder: Gemma4-12B-with-proj, CLIP type ltxv.","see_also":["ltx","clip","av"]},"ace-step":{"title":"ACE-Step","short":"MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.","see_also":["occupancy","kokoro","tts"]},"kokoro":{"title":"Kokoro","short":"Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.","see_also":["tts","ace-step","disclosure"]},"chatterbox":{"title":"Chatterbox","short":"Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.","see_also":["kokoro","tts","dub"]},"dub":{"title":"Local dub","short":"Clone-and-translate a recorded show into a duration-locked second audio track.","see_also":["chatterbox","tts","occupancy","disclosure","multi-language-audio"]},"chatterbox-ml":{"title":"Chatterbox Multilingual","short":"MIT 23-language zero-shot clone. PerTh watermark stays on. Opt-in download-dub --tier clone.","see_also":["chatterbox","dub","tts"]},"multi-language-audio":{"title":"YouTube multi-language audio","short":"YouTube Studio Languages tab: upload an audio-only dub the same length as the video.","see_also":["dub","loudnorm"]},"clip":{"title":"CLIP","short":"Text encoder that turns a prompt into conditioning for the sampler.","see_also":["qwen","umt5","gemma4","sampler"]},"vae":{"title":"VAE","short":"Encoder/decoder between pixels and latent space. Each model family has its own.","see_also":["latent","ltx","klein","wan"]},"unet":{"title":"UNET","short":"Denoiser / transformer weights that turn noise + conditioning into a sample.","see_also":["sampler","latent","models-dir"]},"gguf":{"title":"GGUF","short":"llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.","see_also":["prompt-enhance","qwen","occupancy"]},"magcache":{"title":"MagCache","short":"Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.","see_also":["wan","i2v"]},"nunchaku":{"title":"Nunchaku","short":"Optional quantized engine. Lab graphs do not require it; PyPI nunchaku is the wrong package.","see_also":["klein","unet"]},"seedvr2":{"title":"SeedVR2","short":"Optional Apache restorer for a stitched 90s master. Not part of download-models.","see_also":["occupancy","last-frame"]},"trellis":{"title":"TRELLIS.2","short":"Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.","see_also":["sidecar","occupancy","da3"]},"asset-bible":{"title":"Asset Bible","short":"Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets. Outputs, never MODELS_DIR.","see_also":["klein","ltx","trellis"]},"da3":{"title":"DA3-BASE","short":"Optional Apache depth model. DA3-LARGE is refused.","see_also":["trellis","occupancy"]},"longcat":{"title":"LongCat-Video","short":"Optional MIT video pack. No NCCL. Not a 90s default.","see_also":["spark-farm","wan"]},"dreamx":{"title":"DreamX-Creator","short":"Optional Apache joint-AV pack. DreamX-World is refused.","see_also":["av","ltx"]},"fun-inp":{"title":"Fun InP","short":"Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.","see_also":["flf","wan","vace"]},"vace":{"title":"VACE","short":"Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.","see_also":["fun-inp","last-frame","wan"]},"z-image":{"title":"Z-Image Turbo","short":"Optional Apache still runner-up. Not the default Klein path.","see_also":["klein","t2i"]},"vhs":{"title":"VideoHelperSuite","short":"Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview.","see_also":["ltx","wan","comfy-output-dir"]},"qwen3-tts":{"title":"Qwen3-TTS","short":"Optional Apache TTS + voice design. Not the Kokoro default.","see_also":["kokoro","tts"]},"fp8":{"title":"FP8","short":"8-bit float weight format used by default Klein distilled and some Wan packs.","see_also":["klein","int8-convrot"]},"int8-convrot":{"title":"INT8-convrot","short":"Quantized LTX-2.5 transformer format used by the lab distilled weights.","see_also":["ltx","fp8"]},"t2i":{"title":"T2I","short":"Text-to-image: a prompt becomes a still (PNG). Klein's job.","see_also":["klein","i2v","queue"]},"i2v":{"title":"I2V","short":"Image-to-video: a start still plus motion text becomes a clip. Start image owns look.","see_also":["t2v","loadimage","wan","ltx"]},"t2v":{"title":"T2V","short":"Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.","see_also":["i2v","wan","ltx"]},"a2v":{"title":"A2V","short":"Audio-to-video: picture follows a soundtrack (talking-head freeze, not lip-sync OSS).","see_also":["s2v","ltx"]},"s2v":{"title":"S2V","short":"Speech-to-video (optional Wan 2.2 S2V 14B). Not a download-models default.","see_also":["a2v","wan"]},"av":{"title":"joint AV","short":"Audio and video in one transformer pass. LTX-2.5's job; Wan cannot do this.","see_also":["ltx","wan","vhs"]},"flf":{"title":"first-last-frame","short":"Condition a clip on both a first and last still (Wan Fun InP).","see_also":["fun-inp","last-frame","i2v"]},"ping-pong":{"title":"ping-pong","short":"Play a clip forward then reverse so the join frame equals the start (GIF/bumper loops).","see_also":["wan","vhs"]},"comfyui":{"title":"ComfyUI","short":"Node-graph UI for local image, video, and audio generation. This stack's studio.","see_also":["queue","widget","workflow","manage-sh"]},"workflow":{"title":"workflow","short":"A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.","see_also":["lab-example","note-node","widget","comfyui"]},"queue":{"title":"Queue","short":"One run of the current graph: encode, sample, decode, save.","see_also":["comfyui","sampler","seed"]},"widget":{"title":"widget","short":"A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).","see_also":["queue","workflow","enhance","app-mode"]},"app-mode":{"title":"App Mode","short":"ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.","see_also":["lab-app-mode","widget","occupancy","workflow","studio-ui"]},"lab-app-mode":{"title":"lab_app_mode","short":"Lab extra on shipped graphs: lane, occupancy, handoff, frontend_min.","see_also":["app-mode","occupancy","lab-example"]},"latent":{"title":"latent","short":"Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.","see_also":["vae","sampler","ltx"]},"sampler":{"title":"KSampler","short":"Node that denoises latents for N steps at a CFG, seed, and scheduler.","see_also":["cfg","seed","latent","queue"]},"cfg":{"title":"CFG","short":"Classifier-free guidance scale. Distilled Klein wants 1.0 — do not 'turn it up for quality'.","see_also":["klein","sampler"]},"seed":{"title":"seed","short":"RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.","see_also":["queue","identity-still"]},"prompt-enhance":{"title":"Prompt Enhance","short":"In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.","see_also":["enhance","gguf","qwen"]},"world-bible":{"title":"world bible","short":"Locked description of a place or character with no camera. Shared across shots.","see_also":["identity-still","prompt-enhance"]},"identity-still":{"title":"identity still","short":"Klein frame that locks wardrobe/place so later I2V shots stay the same person or house.","see_also":["klein","world-bible","last-frame"]},"lab-example":{"title":"lab-example","short":"A seeded `_lab/\u003clane>/` graph. Load these; do not start from a blank canvas.","see_also":["workflow","note-node"]},"note-node":{"title":"Note node","short":"On-canvas operator note: purpose, models, sampler, prompting tips, run steps.","see_also":["lab-example","workflow"]},"loadimage":{"title":"LoadImage","short":"Node that feeds a PNG into I2V. Point it at your still, not only example.png.","see_also":["i2v","comfy-output-dir"]},"enhance":{"title":"Enhance","short":"Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.","see_also":["prompt-enhance","world-bible"]},"dgx-spark":{"title":"DGX Spark","short":"NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.","see_also":["gb10","headroom","spark-farm","restart-no"]},"gb10":{"title":"GB10","short":"Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.","see_also":["unified-memory","headroom","occupancy"]},"unified-memory":{"title":"unified memory","short":"CPU and GPU share one memory pool on GB10. Weight copies can double unless patched.","see_also":["gb10","headroom","kitchen"]},"occupancy":{"title":"occupancy","short":"One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.","see_also":["sidecar","ace-step","gb10","app-mode","park","xor-desk","blender-desk","llm-desk","path-d"]},"headroom":{"title":"headroom","short":"Free host RAM/disk checked before start so SSH still works under load.","see_also":["restart-no","doctor","unified-memory"]},"restart-no":{"title":"restart: no","short":"Compose never auto-starts Comfy after reboot. Manual start only (type yes).","see_also":["headroom","manage-sh","dgx-spark"]},"download-limit":{"title":"download-limit","short":"Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.","see_also":["htb","headroom","models-dir","download-tier"]},"download-tier":{"title":"--tier","short":"Pack selector on one downloader. Not a studio-wide quality ladder. --limit is Mbps.","see_also":["download-models","download-limit","models-dir"]},"download-models":{"title":"download-models","short":"Default pack only: Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. No --tier.","see_also":["download-tier","download-limit","models-dir"]},"disk-wizard":{"title":"disk-wizard","short":"Guided host reclaim. Default --plan. Does not replace cleanup or reap-models.","see_also":["quarantine","models-dir","download-models"]},"quarantine":{"title":"quarantine","short":"Move-aside instead of delete so a leftover pack can be restored.","see_also":["disk-wizard","models-dir"]},"htb":{"title":"HTB","short":"Kernel traffic shaping used by download-limit. Often missing on Spark; then the wrap soft-fails.","see_also":["download-limit"]},"models-dir":{"title":"MODELS_DIR","short":"Host weight cache (default /mnt/models). Bind-mounted into Comfy. Never baked into the image.","see_also":["comfy-state","ghcr","comfy-output-dir","three-stores"]},"comfy-output-dir":{"title":"COMFY_OUTPUT_DIR","short":"Host folder for PNG/MP4 (default /mnt/comfy-output). Container path /outputs.","see_also":["models-dir","vhs"]},"comfy-state":{"title":"comfy-state","short":"Docker volume for the Comfy install (venv, custom nodes). cleanup DELETE removes this only.","see_also":["ghcr","models-dir","three-stores"]},"ghcr":{"title":"GHCR","short":"GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.","see_also":["comfy-state","models-dir","us-safe-studio","three-stores"]},"us-safe":{"title":"US-safe","short":"Local weights this lab will download for a US casual-commercial operator. Not legal advice.","see_also":["community-license","apache","h3"]},"manage-sh":{"title":"manage.sh","short":"Operator CLI: setup, doctor, download-models, start (type yes), stop, status.","see_also":["doctor","restart-no","download-limit","ezcmd","promote-workflow"]},"doctor":{"title":"doctor","short":"Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.","see_also":["manage-sh","headroom","kitchen"]},"hf-token":{"title":"HF_TOKEN","short":"Hugging Face token in .env. Required for gated LTX-2.5. Not a license click by itself.","see_also":["gated","ltx"]},"gated":{"title":"gated model","short":"Hugging Face repo that requires a license click plus a token. LTX-2.5 is gated.","see_also":["hf-token","ltx","community-license"]},"kitchen":{"title":"Comfy Kitchen","short":"Default attention backend (--use-ck-attention). pytorch-fallback is a 10–20× slow path.","see_also":["pytorch-fallback","doctor"]},"pytorch-fallback":{"title":"pytorch-fallback","short":"Slow PyTorch attention. On a real Spark this is a defect, not a default.","see_also":["kitchen"]},"nvidia-container-toolkit":{"title":"NVIDIA Container Toolkit","short":"Lets Docker see the GPU. Required on the Spark host before start.","see_also":["dgx-spark","manage-sh"]},"last-frame":{"title":"last-frame continuity","short":"Shot N's last PNG becomes shot N+1's I2V start. How 90s films work without a 90s denoise.","see_also":["identity-still","ltx","film-accept"]},"otio":{"title":"OTIO","short":"OpenTimelineIO JSON for Kdenlive/Shotcut. Host-side; never in the Docker image.","see_also":["sidecar","jobstore"]},"nvenc":{"title":"NVENC","short":"Hardware encoder for proxies/previews. Comfy must be stopped (encoder contention on GB10).","see_also":["occupancy","film-accept"]},"film-accept":{"title":"film-accept","short":"Fail-closed gate: 5.00 s, 1280×704, LTX audio present before concat.","see_also":["last-frame","ltx"]},"jobstore":{"title":"jobstore","short":"Per-film state.json + shot MP4s under COMFY_OUTPUT_DIR/films/\u003cslug>/ for resume.","see_also":["last-frame","film-accept","studio-ui"]},"shot-card":{"title":"Shot card","short":"Per-shot YAML extras: script, camera, clay required, audio policy, stems.","see_also":["guide-pack","film-accept"]},"overlay-qc":{"title":"overlay-qc","short":"50% blend of clay first.png vs Klein look plate. Fail-closed 1280×704.","see_also":["guide-pack","occupancy"]},"film-animatic":{"title":"film-animatic","short":"Cheap 90s pacing gate from clay.mp4 or held stills. Host ffmpeg.","see_also":["guide-pack","shot-card"]},"stem-mix":{"title":"stem-mix","short":"Picture-lock mix: DX / BG / FX / MX, duck −15 dB, YouTube loudnorm −14 LUFS.","see_also":["loudnorm","film-accept"]},"audio-still-video":{"title":"audio-still-video","short":"Mux a FLAC/MP3 master with a still into a YouTube MP4. Host ffmpeg.","see_also":["loudnorm"]},"loudnorm":{"title":"loudnorm","short":"ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.","see_also":["tts","vhs"]},"sidecar":{"title":"sidecar","short":"Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.","see_also":["occupancy","trellis","xor-desk","blender-desk"]},"spark-farm":{"title":"Spark farm","short":"Independent Sparks as parallel 5 s workers with one weight copy. No NCCL.","see_also":["dgx-spark","models-dir","restart-no"]},"concat-shots":{"title":"concat-shots","short":"Host ffmpeg stitch for 5 s takes. In-graph EZFilmConcat is the one-click 90s path.","see_also":["last-frame","film-accept"]},"tts":{"title":"TTS","short":"Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.","see_also":["kokoro","disclosure","ace-step"]},"disclosure":{"title":"disclosure bumper","short":"Spoken line that the podcast graph prepends: voices and music are synthesized.","see_also":["tts","kokoro"]},"apache":{"title":"Apache 2.0","short":"License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.","see_also":["klein","wan","community-license","us-safe"]},"community-license":{"title":"LTX Community License","short":"LTX-2.5 terms: free commercial under $10M COMPANY revenue (affiliates count); disclose AI; no distill.","see_also":["ltx","gated","us-safe"]},"research-chat":{"title":"Research Chat","short":"Inspire App: CPU chat + web search + sequential research subagents. Occupancy llm.","see_also":["prompt-enhance","occupancy","qwen"]},"research-mcp":{"title":"research-mcp","short":"In-tree MCP for chat, web search, research, and lab-app discovery. No execute_code.","see_also":["research-chat","occupancy","path-d"]},"h3":{"title":"MiniMax H3","short":"Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.","see_also":["us-safe","klein"]},"guide-pack":{"title":"Guide pack","short":"DCC handshake: 1280×704 clay/depth/canny/first+last for a 5.00s print.","see_also":["ltx","occupancy","sidecar"]},"house-views":{"title":"house-views","short":"Blender greybox + ten 1024×1280 Instagram clay stills. Occupancy XOR.","see_also":["guide-pack","occupancy","sidecar","klein"]},"blender-stills":{"title":"blender-stills","short":"Single-frame clay/depth/canny dump at creator sizes. Occupancy: blender-desk.","see_also":["guide-pack","house-views","occupancy","sidecar","klein"]},"park":{"title":"park","short":"occupancy enter blender-desk / llm-desk POST /free; Compose may stay up.","see_also":["occupancy","blender-desk","llm-desk","xor-desk"]},"xor-desk":{"title":"XOR desk","short":"One heavy GPU job. NVENC, Cycles, LTX, TRELLIS, and llm-desk XOR with each other.","see_also":["occupancy","park","blender-desk","llm-desk","nvenc"]},"ezcmd":{"title":"ezcmd","short":"Interactive docs fence: body `id: \u003crecipe>` matching includes/command-builder.json.","see_also":["manage-sh"]},"us-safe-studio":{"title":"us-safe-studio","short":"GHCR tag and Compose visual profile. Weights stay on MODELS_DIR.","see_also":["ghcr","us-safe","three-stores"]},"path-d":{"title":"Path D","short":"Laptop SSH tunnel to MCP or llm-desk. Not a fourth occupancy CLI mode.","see_also":["occupancy","llm-desk","research-mcp"]},"ezdcc-occupancy-gate":{"title":"Occupancy gate","short":"In-canvas node that reads occupancy JSON only. Does not start Compose or spawn Blender.","see_also":["occupancy","xor-desk","blender-desk"]},"promote-workflow":{"title":"promote-workflow","short":"manage.sh copies a keeper graph into workflows/_lab/\u003clane>/. Does not commit.","see_also":["workflow","lab-example","manage-sh"]},"studio-ui":{"title":"studio-ui","short":"Optional Compose profile jobstore board on :8190. Not App Mode.","see_also":["jobstore","app-mode"]},"blender-desk":{"title":"blender-desk","short":"Occupancy CLI mode: park Comfy (POST /free) for host Workbench dumps.","see_also":["park","occupancy","xor-desk","sidecar"]},"llm-desk":{"title":"llm-desk","short":"Occupancy CLI mode: park Comfy and run the host 35B llama-server sidecar.","see_also":["park","occupancy","xor-desk","path-d"]},"three-stores":{"title":"three stores","short":"GHCR image vs MODELS_DIR weights vs comfy-state volume. cleanup deletes the volume only.","see_also":["ghcr","models-dir","comfy-state"]}}</script>
+<dialog class="ez-glossary-dialog" id="ez-glossary-dialog" aria-labelledby="ez-glossary-title"><div class="ez-glossary-dialog__panel"><button type="button" class="ez-glossary-dialog__close" id="ez-glossary-close" aria-label="Close definition">Close</button><h2 class="ez-glossary-dialog__title" id="ez-glossary-title"></h2><p class="ez-glossary-dialog__body" id="ez-glossary-body"></p><p class="ez-glossary-dialog__see" id="ez-glossary-see" hidden></p><p class="ez-glossary-dialog__more"><a class="ez-glossary-dialog__link" id="ez-glossary-link" href="#">Open full glossary entry</a></p></div></dialog>
+</body>
+</html>

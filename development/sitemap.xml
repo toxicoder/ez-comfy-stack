@@ -109,7 +109,59 @@
          <lastmod>2026-09-14</lastmod>
     </url>
     <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/contribute/contributing/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/contribute/docs-style/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/contribute/security/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/contribute/testing-docs/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/create/music-disclosure/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/create/music-edm/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/create/music-rap/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/create/workflows-audio/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/create/workflows-film/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/create/workflows-motion/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/create/workflows-stills/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/shell/reference/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/learn/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/learn/architecture/</loc>
          <lastmod>2026-09-14</lastmod>
     </url>
     <url>
@@ -142,6 +194,74 @@
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/learn/pipeline/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/backup-restore/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/mcp/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/models-packs/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/models-sharing/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/models-tokens/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/occupancy-matrix/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/troubleshooting-canvas/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/troubleshooting-docs-site/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/troubleshooting-downloads/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/troubleshooting-host-docker/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/troubleshooting-models-workflows/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/operate/troubleshooting-start-runtime/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/reference/config-and-schemas/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/reference/custom-nodes/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/reference/studio-ui/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/start/faq/</loc>
+         <lastmod>2026-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/start/when-to-use-vs-spark-lab/</loc>
          <lastmod>2026-09-14</lastmod>
     </url>
 </urlset>
