@@ -2240,6 +2240,46 @@ def test_clone_cfg_weight_auto_and_override() -> None:
     assert pipeline.clone_cfg_weight("en", "es", "nope") == 0.0
 
 
+def test_try_chatterbox_caps_max_new_tokens(tmp_path: Path, monkeypatch) -> None:
+    class _T3:
+        def __init__(self) -> None:
+            self.seen: list[int | None] = []
+
+        def inference(self, **kwargs):
+            self.seen.append(kwargs.get("max_new_tokens"))
+            return None
+
+    class _Fake:
+        sr = 24000
+
+        def __init__(self) -> None:
+            self.t3 = _T3()
+            self._infer = self.t3.inference
+
+        def generate(self, text: str, **kwargs):
+            del text, kwargs
+            self.t3.inference(max_new_tokens=1000)
+            return [0.1] * 240
+
+    fake = _Fake()
+    monkeypatch.setattr(pipeline, "_get_chatterbox", lambda: (fake, ""))
+    monkeypatch.setattr(pipeline, "clone_ckpt_dir", lambda: None)
+    pcm, rate, err = pipeline._try_chatterbox(
+        "Hola",
+        "es",
+        "",
+        exaggeration=0.5,
+        cfg_weight=0.0,
+        temperature=0.8,
+    )
+    assert err == ""
+    assert rate == 24000
+    assert pcm
+    budget = pipeline.clone_token_budget("Hola")
+    assert fake.t3.seen == [budget]
+    assert fake.t3.inference == fake._infer
+
+
 def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch) -> None:
     seen: list[dict] = []
 
@@ -2509,6 +2549,19 @@ def test_fit_turn_does_not_crush_extreme() -> None:
     assert abs(_f0(fitted, rate) - 440) < 30
 
 
+def _am_speech(
+    rate: int, seconds: float, f0: float = 160.0, fmod: float = 4.5
+) -> list[float]:
+    """Amplitude-modulated tone: speech-like envelope, not a steady drone."""
+    n = int(rate * seconds)
+    out: list[float] = []
+    for i in range(n):
+        t = i / float(rate)
+        env = 0.35 + 0.55 * abs(math.sin(2.0 * math.pi * fmod * t))
+        out.append(env * math.sin(2.0 * math.pi * f0 * t))
+    return out
+
+
 def test_crop_hallucination_tail_keeps_voiced_prefix() -> None:
     rate = 24000
     voiced = [0.2] * (rate * 2)
@@ -2518,6 +2571,41 @@ def test_crop_hallucination_tail_keeps_voiced_prefix() -> None:
     assert 0.5 < dur < 2.5
     expected = pipeline.expected_speech_s("Hola equipo") * pipeline.TAIL_SLACK
     assert dur <= expected + 0.05
+
+
+def test_speech_onset_drops_watermark_hush() -> None:
+    rate = 24000
+    hush = [0.012] * (rate * 2)
+    speech = _am_speech(rate, 1.0)
+    out = pipeline.speech_onset_slice(hush + speech, rate)
+    assert out
+    assert len(out) / rate < 1.4
+    head = out[: max(1, rate // 10)]
+    assert pipeline.rms(head) > 0.05
+    assert pipeline.speech_onset_slice([0.012] * rate, rate) == []
+
+
+def test_crop_hallucination_tail_starts_at_onset() -> None:
+    rate = 24000
+    hush = [0.012] * (rate * 2)
+    speech = _am_speech(rate, 1.0)
+    out = pipeline.crop_hallucination_tail(hush + speech, rate, "Hola equipo")
+    assert out
+    assert len(out) / rate < 2.0
+    head = out[: max(1, rate // 10)]
+    assert pipeline.rms(head) > 0.05
+    expected = pipeline.expected_speech_s("Hola equipo") * pipeline.TAIL_SLACK
+    assert len(out) / rate <= expected + 0.08
+
+
+def test_clone_token_budget_scales_with_text() -> None:
+    short = pipeline.clone_token_budget("Hola")
+    long = pipeline.clone_token_budget("palabra " * 80)
+    assert short >= pipeline.CLONE_TOKEN_MIN
+    assert short < 250
+    assert long <= pipeline.CLONE_TOKEN_MAX
+    assert long > short
+    assert pipeline.clone_token_budget("") >= pipeline.CLONE_TOKEN_MIN
 
 
 def test_normalize_clone_pcm_rescales_int_range() -> None:
@@ -2535,9 +2623,69 @@ def test_is_speech_like_rejects_nyquist_square() -> None:
     noise = [0.3 if i % 2 == 0 else -0.3 for i in range(rate)]
     sine = [math.sin(2 * math.pi * 440 * i / rate) for i in range(rate)]
     assert pipeline.is_speech_like(noise, rate) is False
-    assert pipeline.is_speech_like(sine, rate) is True
+    assert pipeline.is_speech_like(sine, rate) is False
+    assert pipeline.is_speech_like(_am_speech(rate, 1.0), rate) is True
     assert pipeline.is_speech_like([0.0001] * rate, rate) is False
     assert pipeline.is_speech_like([], rate) is False
+
+
+def test_render_mix_strips_leading_clone_hush(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 4
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "",
+        "turns": [
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 0.0,
+                "t1": 2.0,
+                "text": "Hello team",
+                "text_target": "Hola equipo",
+                "overlap": False,
+                "rms": 0.2,
+            }
+        ],
+    }
+
+    def _tts(text, language, ref_wav, engine):
+        del text, language, ref_wav, engine
+        hush = [0.012] * (rate * 2)
+        return hush + _am_speech(rate, 1.0), rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=False,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert mix
+    assert "cloned" in status
+    raw_path = dest / "render" / "turn_0001.raw.wav"
+    assert raw_path.is_file()
+    raw, _sr = dub_audio.read_wav(raw_path)
+    head = raw[: max(1, rate // 10)]
+    assert pipeline.rms(head) > 0.05
+    head_mix = mix[: max(1, rate // 5)]
+    assert pipeline.rms(head_mix) > 0.04
 
 
 def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch) -> None:
@@ -2577,6 +2725,41 @@ def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch) -> None:
     assert "clone_unvoiced" in qc
 
 
+def test_render_mix_skips_steady_tone_clone(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = [0.05] * rate * 8
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+
+    def _tts(text, language, ref_wav, engine):
+        del text, language, ref_wav, engine
+        return [
+            math.sin(2 * math.pi * 440 * i / rate) for i in range(rate * 2)
+        ], rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert mix
+    assert "unvoiced" in status
+    assert "0 turns cloned" in status
+
+
 def test_render_mix_speed_widget_does_not_stack(
     tmp_path: Path, monkeypatch
 ) -> None:
@@ -2614,7 +2797,7 @@ def test_render_mix_speed_widget_does_not_stack(
     def _tts(text, language, ref_wav, engine):
         del language, ref_wav, engine
         n = max(rate, len(text) * 80)
-        return [0.2] * n, rate
+        return _am_speech(rate, n / float(rate)), rate
 
     pipeline.tts_hook = _tts
     try:
