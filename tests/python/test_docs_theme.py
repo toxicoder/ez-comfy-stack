@@ -15,6 +15,7 @@ EXTRA_CSS = ROOT / "docs" / "stylesheets" / "extra.css"
 TABLES_JS = ROOT / "docs" / "javascripts" / "tables.js"
 PUBLISHED_JS = ROOT / "docs" / "javascripts" / "published.js"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
+DOCS_STYLE = ROOT / "docs" / "contribute" / "docs-style.md"
 
 
 def _read(path: Path) -> str:
@@ -78,6 +79,56 @@ def test_extra_css_bumps_typeset_font_not_html() -> None:
         re.S,
     )
     assert re.search(r"html\s*\{[^}]*font-size", css, re.S) is None
+
+
+def test_extra_css_adopts_spark_lab_code_block_text() -> None:
+    """Fenced blocks match spark-lab padding/radius/line-height; pygments stay colored."""
+    css = _read(EXTRA_CSS)
+    fenced = re.search(
+        r"\.md-typeset pre\s*>\s*code\s*\{[^}]+\}",
+        css,
+        re.S,
+    )
+    assert fenced is not None, "missing .md-typeset pre > code rule"
+    body = fenced.group(0)
+    assert re.search(r"padding:\s*0\.9em 1\.05em", body)
+    assert re.search(r"border-radius:\s*0\.25rem", body)
+    assert re.search(r"line-height:\s*1\.55", body)
+
+    inline_box = re.search(
+        r"\.md-typeset code\s*\{[^}]+\}",
+        css,
+        re.S,
+    )
+    assert inline_box is not None, "missing .md-typeset code rule"
+    box = inline_box.group(0)
+    assert re.search(r"border-radius:\s*0\.2rem", box)
+    assert re.search(r"padding:\s*0\.05em 0\.35em", box)
+
+    assert re.search(
+        r"\.md-typeset p code,\s*"
+        r"\.md-typeset li code,\s*"
+        r"\.md-typeset td code,\s*"
+        r"\.md-typeset :not\(pre\)\s*>\s*code\s*\{[^}]*"
+        r"color:\s*rgb\(\s*134,\s*183,\s*55\s*\)",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"pre\s*>\s*code\s*\{[^}]*color:\s*rgb\(\s*134,\s*183,\s*55\s*\)",
+        css,
+        re.S,
+    ) is None
+
+
+def test_mkdocs_wires_spark_lab_code_font_and_highlight() -> None:
+    """Roboto Mono + Material highlight line spans stay explicit."""
+    text = _read(MKDOCS_YML)
+    assert re.search(r"^  font:\s*$", text, re.M)
+    assert re.search(r"^    code:\s*Roboto Mono\s*$", text, re.M)
+    assert re.search(r"^      anchor_linenums:\s*true\s*$", text, re.M)
+    assert re.search(r"^      line_spans:\s*__span\s*$", text, re.M)
+    assert re.search(r"^      pygments_lang_class:\s*true\s*$", text, re.M)
 
 
 def test_extra_css_sticks_table_headers_under_tabs() -> None:
@@ -159,6 +210,19 @@ def test_conventions_document_sticky_header() -> None:
     assert "ez-published-chip" in text
     assert "EZ_DOCS_PUBLISHED_AT" in text
     assert "Last published" in text or "last published" in text.lower()
+
+
+def test_conventions_document_spark_lab_code_text() -> None:
+    """Docs publish and style pages keep the spark-lab code contract."""
+    text = _read(CONVENTIONS)
+    assert "1.55" in text
+    assert "rgb(134, 183, 55)" in text
+    assert "Roboto Mono" in text
+    assert "pre > code" in text or "pre > code" in text.replace("`", "")
+    style = _read(DOCS_STYLE)
+    assert "1.55" in style
+    assert "rgb(134, 183, 55)" in style
+    assert "Roboto Mono" in style
 
 
 def test_extra_css_styles_published_chip() -> None:

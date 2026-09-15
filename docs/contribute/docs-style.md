@@ -13,11 +13,13 @@ tags: [docs, contributing, mkdocs, style]
 - **glossary.json** — do not inline a second glossary
 - **`docs/hooks.py` page-brief** and session vars
 - **What not to do** — fork Material templates, MkDocs 2.x, `header.autohide`
+- **Code appearance** — Roboto Mono, fenced line-height from nvidia-dgx-spark-lab, inline terminal green
 
 **What this enables**
 
 - **Matching** the scan card every operator page already uses
 - **Keeping** MkDocs 1.x + Material pins
+- **Matching** nvidia-dgx-spark-lab fenced line-height and inline terminal-green `code`
 - **Remembering** that **AI-drafted docs still need a human pass**
 
 Canonical conventions (shell, Docker, testing): [Project conventions](../project-conventions.md). Workflow: [Contributing](contributing.md).
@@ -89,6 +91,16 @@ Operator fences **and** inline `code` reuse:
 `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT`
 
 Defaults match `.env.example`. Do not hardcode `<spark-ip>` or real IPs. `docs/javascripts/commands.js` substitutes `${VAR}` / `${VAR:-default}` from `localStorage` (`ez-comfy.cmdvars`).
+
+---
+
+## Code appearance
+
+Fenced blocks and inline `code` follow [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) (`docs/stylesheets/extra.css`, `theme.font.code: Roboto Mono`, `pymdownx.highlight` `line_spans` / `pygments_lang_class`):
+
+- Fenced `pre > code`: `line-height: 1.55`, padding `0.9em 1.05em`, radius `0.25rem`. Pygments token colors stay.
+- Prose / list / table `code`: terminal green `rgb(134, 183, 55)`. Do not apply that color to `pre > code`.
+- Keep this site’s `.md-typeset { font-size: 0.875rem }` and sticky table pin. Do not copy spark-lab’s `0.82rem` typeset or table `overflow: hidden`.
 
 ---
 
