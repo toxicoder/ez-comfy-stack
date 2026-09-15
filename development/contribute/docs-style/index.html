@@ -2532,6 +2532,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#code-appearance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code appearance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#material-mkdocs-do-not" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2713,6 +2724,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#code-appearance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code appearance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#material-mkdocs-do-not" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2734,7 +2756,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2749,19 +2771,21 @@
 <li><strong>glossary.json</strong> — do not inline a second glossary</li>
 <li><strong><code>docs/hooks.py</code> page-brief</strong> and session vars</li>
 <li><strong>What not to do</strong> — fork Material templates, MkDocs 2.x, <code>header.autohide</code></li>
+<li><strong>Code appearance</strong> — Roboto Mono, fenced line-height from nvidia-dgx-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">spark</span>-lab, inline terminal green</li>
 </ul></div><div class="ez-page-brief__col ez-page-brief__enables"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg><span class="ez-page-brief__label">What this enables</span></p><ul>
 <li><strong>Matching</strong> the scan card every operator page already uses</li>
 <li><strong>Keeping</strong> MkDocs 1.x + Material pins</li>
+<li><strong>Matching</strong> nvidia-dgx-spark-lab fenced line-height and inline terminal-green <code>code</code></li>
 <li><strong>Remembering</strong> that <strong>AI-drafted docs still need a human pass</strong></li>
 </ul></div></div>
 <p>Canonical conventions (shell, Docker, testing): <a href="../../project-conventions/">Project conventions</a>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../../glossary/#workflow" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">Workflow</span>: <a href="../contributing/">Contributing</a>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_USER</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="k">:-</span><span class="nv">$USER</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="k">:-</span><span class="p">/mnt/comfy-output</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_PORT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="k">:-</span><span class="nv">8188</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DOWNLOAD_LIMIT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_LIMIT</span><span class="k">:-</span><span class="nv">auto</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_USER</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="k">:-</span><span class="nv">$USER</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="k">:-</span><span class="p">/mnt/comfy-output</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_PORT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="k">:-</span><span class="nv">8188</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DOWNLOAD_LIMIT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_LIMIT</span><span class="k">:-</span><span class="nv">auto</span><span class="si">}</span><span class="s2">"</span>
+</span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Human review</p>
 <p><strong>AI-drafted docs still need a human pass</strong> before merge. Invented product features, TBD headings, real IPs, and secrets are defects.</p>
@@ -2782,10 +2806,10 @@
 <hr />
 <h2 id="ezcmd">ezcmd<a class="headerlink" href="#ezcmd" title="Permanent link">&para;</a></h2>
 <p>Interactive command widgets:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>&lt;div class="ez-cmd-builder" data-ez-cmd="doctor"&gt;
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>&lt;noscript&gt;&lt;pre&gt;&lt;code&gt;./scripts/manage.sh doctor&lt;/code&gt;&lt;/pre&gt;&lt;/noscript&gt;
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>&lt;/div&gt;
-</code></pre></div>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>&lt;div class="ez-cmd-builder" data-ez-cmd="doctor"&gt;
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>&lt;noscript&gt;&lt;pre&gt;&lt;code&gt;./scripts/manage.sh doctor&lt;/code&gt;&lt;/pre&gt;&lt;/noscript&gt;
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>&lt;/div&gt;
+</span></code></pre></div>
 <p>The <code>id</code> <strong>must</strong> exist in <code>includes/command-builder.json</code>. <code>docs/hooks.py</code> expands the fence via <code>docs/commands.py</code>. Do <strong>not</strong> add <code>mkdocs-placeholder-plugin</code> (<code>xNAMEx</code> tokens fight bash <code>${VAR}</code>). Keep <code>docs/javascripts/commands.js</code> aligned with <code>substitute_vars</code> / <code>render_command</code>. <code>--tier</code> is a per-utility <strong>pack id</strong> (<a href="../../download-tiers/">Download tiers</a>), not a global quality flag.</p>
 <p>Unknown ids fail the hermetic command tests. Do not invent recipe ids in prose.</p>
 <hr />
@@ -2798,6 +2822,14 @@
 <p>Operator fences <strong>and</strong> inline <code>code</code> reuse:</p>
 <p><code>SPARK_HOST</code>, <code>SPARK_USER</code>, <code>MODELS_DIR</code>, <code>COMFY_OUTPUT_DIR</code>, <code>COMFY_PORT</code>, <code>DOWNLOAD_LIMIT</code></p>
 <p>Defaults match <code>.env.example</code>. Do not hardcode <code>&lt;spark-ip&gt;</code> or real IPs. <code>docs/javascripts/commands.js</code> substitutes <code>${VAR}</code> / <code>${VAR:-default}</code> from <code>localStorage</code> (<code>ez-comfy.cmdvars</code>).</p>
+<hr />
+<h2 id="code-appearance">Code appearance<a class="headerlink" href="#code-appearance" title="Permanent link">&para;</a></h2>
+<p>Fenced blocks and inline <code>code</code> follow <a href="https://github.com/toxicoder/nvidia-dgx-spark-lab">nvidia-dgx-spark-lab</a> (<code>docs/stylesheets/extra.css</code>, <code>theme.font.code: Roboto Mono</code>, <code>pymdownx.highlight</code> <code>line_spans</code> / <code>pygments_lang_class</code>):</p>
+<ul>
+<li>Fenced <code>pre &gt; code</code>: <code>line-height: 1.55</code>, padding <code>0.9em 1.05em</code>, radius <code>0.25rem</code>. Pygments token colors stay.</li>
+<li>Prose / list / table <code>code</code>: terminal green <code>rgb(134, 183, 55)</code>. Do not apply that color to <code>pre &gt; code</code>.</li>
+<li>Keep this site’s <code>.md-typeset { font-size: 0.875rem }</code> and sticky table pin. Do not copy spark-lab’s <code>0.82rem</code> typeset or table <code>overflow: hidden</code>.</li>
+</ul>
 <hr />
 <h2 id="material-mkdocs-do-not">Material / MkDocs — do not<a class="headerlink" href="#material-mkdocs-do-not" title="Permanent link">&para;</a></h2>
 <table>

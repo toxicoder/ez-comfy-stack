@@ -2646,7 +2646,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2667,12 +2667,12 @@
 <hr />
 <h2 id="gated-models-hf_token">Gated models / HF_TOKEN<a class="headerlink" href="#gated-models-hf_token" title="Permanent link">&para;</a></h2>
 <p><strong>LTX-2.5</strong> (<code>Lightricks/LTX-2.5</code>) is gated. Klein 4B distilled and Wan 2.2 5B are Apache and do not need a license click. A token in <code>.env</code> is <strong>not</strong> the same as accepting the Lightricks license.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># .env</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_...
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># or: hf auth login</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>hf<span class="w"> </span>auth<span class="w"> </span>whoami
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># .env</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_...
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Browser, same account: https://huggingface.co/Lightricks/LTX-2.5 → Agree</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># or: hf auth login</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>hf<span class="w"> </span>auth<span class="w"> </span>whoami
+</span></code></pre></div>
 <p>Fine-grained tokens need <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gated" data-href="../../glossary/#gated" title="Hugging Face repo that requires a license click plus a token. LTX-2.5 is gated.">gated repo</span></strong> read. <code>download-models</code> passes <code>--token</code> from <code>HF_TOKEN</code> so it wins over a leftover <code>hf auth login</code>.</p>
 <p>Do not put <code>HF_TOKEN</code> in the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ghcr" data-href="../../glossary/#ghcr" title="GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.">GHCR</span> image, compose YAML, or git. The prebuilt image does <strong>not</strong> contain <code>HF_TOKEN</code>, <code>.env</code>, or host PII. See <a href="../models-packs/#prebuilt-container-image-ghcr">Download packs</a>.</p>
 

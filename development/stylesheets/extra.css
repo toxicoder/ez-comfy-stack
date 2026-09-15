@@ -9,6 +9,28 @@
   font-size: 0.875rem;
 }
 
+/* Code typography from nvidia-dgx-spark-lab extra.css / command-vars.css.
+   Fenced pre > code keeps Material pygments token colors. Inline / table /
+   list code is terminal green. Do not copy spark-lab table overflow:hidden
+   (breaks .ez-table-pin) or their 0.82rem typeset (this file uses 0.875rem). */
+.md-typeset pre > code {
+  padding: 0.9em 1.05em;
+  border-radius: 0.25rem;
+  line-height: 1.55;
+}
+
+.md-typeset code {
+  border-radius: 0.2rem;
+  padding: 0.05em 0.35em;
+}
+
+.md-typeset p code,
+.md-typeset li code,
+.md-typeset td code,
+.md-typeset :not(pre) > code {
+  color: rgb(134, 183, 55) !important;
+}
+
 .md-header .md-header__title,
 .md-header .md-tabs__item,
 .md-header .md-tabs__link {

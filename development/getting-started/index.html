@@ -2944,7 +2944,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -3004,13 +3004,13 @@
 <li><strong>Shell exports</strong> on the Spark (markdown source below) — <code>manage.sh</code> still loads <code>.env</code>; these exports are for <em>your</em> shell (<code>ls</code>, <code>ssh -L</code>, the browser URL) when docs JS is off.</li>
 </ol>
 <p>Defaults match <code>.env.example</code>. Set <code>SPARK_HOST</code> to this machine’s LAN IP or DNS if you will open the UI from another computer.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_USER</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="k">:-</span><span class="nv">$USER</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="k">:-</span><span class="p">/mnt/comfy-output</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_PORT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="k">:-</span><span class="nv">8188</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DOWNLOAD_LIMIT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_LIMIT</span><span class="k">:-</span><span class="nv">auto</span><span class="si">}</span><span class="s2">"</span><span class="w">   </span><span class="c1"># auto | off | integer Mbps</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_USER</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="k">:-</span><span class="nv">$USER</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="k">:-</span><span class="p">/mnt/comfy-output</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_PORT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="k">:-</span><span class="nv">8188</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DOWNLOAD_LIMIT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_LIMIT</span><span class="k">:-</span><span class="nv">auto</span><span class="si">}</span><span class="s2">"</span><span class="w">   </span><span class="c1"># auto | off | integer Mbps</span>
+</span></code></pre></div>
 <p><code>--tier</code> on download commands is a <strong>pack id</strong>, not a global quality flag. Map: <a href="../download-tiers/">Download tiers</a>. <code>--limit</code> is bandwidth.</p>
 <hr />
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
@@ -3049,30 +3049,30 @@
 </tbody>
 </table>
 <p><code>setup</code> creates and chowns both dirs. Manual last resort:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>
+</span></code></pre></div>
 <hr />
 <h2 id="operator-steps">Operator steps<a class="headerlink" href="#operator-steps" title="Permanent link">&para;</a></h2>
 <p>Clone the <strong>same long-lived branch these docs describe</strong> (<code>main</code> for <a href="https://toxicoder.github.io/ez-comfy-stack/latest/">latest</a>, <code>development</code> for <a href="https://toxicoder.github.io/ez-comfy-stack/development/">development</a>). Feature work still branches from <code>development</code> (<a href="../project-conventions/">Conventions</a>).</p>
 <h3 id="1-clone-matching-these-docs">1. Clone matching these docs<a class="headerlink" href="#1-clone-matching-these-docs" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
+</span></code></pre></div>
 <p><strong>Verify:</strong> <code>git branch --show-current</code> is <code>development</code>, and you are in the repo root (<code>ls scripts/manage.sh</code>).</p>
 <hr />
 <h3 id="2-setup-install-docker">2. <code>setup --install-docker</code><a class="headerlink" href="#2-setup-install-docker" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Interactive</label><label for="__tabbed_1_2">Non-interactive</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># approve sudo + type yes if prompted; edit .env for HF_TOKEN (step 4)</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># approve sudo + type yes if prompted; edit .env for HF_TOKEN (step 4)</span>
+</span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">LAB_NON_INTERACTIVE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">LAB_CONFIRM_TOKEN</span><span class="o">=</span>yes<span class="w"> </span><span class="nv">SETUP_INSTALL_DOCKER</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>./scripts/manage.sh<span class="w"> </span>setup
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">LAB_NON_INTERACTIVE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">LAB_CONFIRM_TOKEN</span><span class="o">=</span>yes<span class="w"> </span><span class="nv">SETUP_INSTALL_DOCKER</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>./scripts/manage.sh<span class="w"> </span>setup
+</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -3088,9 +3088,9 @@
 <p><strong>Fail:</strong> <a href="../operate/troubleshooting-host-docker/">Host and Docker</a>.</p>
 <details class="tip">
 <summary>Docker group not active in this shell</summary>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>newgrp<span class="w"> </span>docker<span class="w">   </span><span class="c1"># or re-login SSH</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>./scripts/manage.sh<span class="w"> </span>doctor
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>newgrp<span class="w"> </span>docker<span class="w">   </span><span class="c1"># or re-login SSH</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>./scripts/manage.sh<span class="w"> </span>doctor
+</span></code></pre></div>
 </details>
 <hr />
 <h3 id="3-doctor">3. <code>doctor</code><a class="headerlink" href="#3-doctor" title="Permanent link">&para;</a></h3>
@@ -3099,10 +3099,10 @@
 </div>
 
 <p>Expect a passing run to print (among other lines) <strong><code>Doctor OK</code></strong>. Real doctor lines to look for:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>attention: unknown
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Doctor OK
-</code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>attention: unknown
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>License policy: Apache Klein 4B still + Apache Wan 2.2 5B silent + LTX-2.5 AV (Community, under 10M company USD). Not legal advice. See docs/licenses.md
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Doctor OK
+</span></code></pre></div>
 <p><code>attention:</code> is <code>kitchen</code>, <code>sage</code>, <code>pytorch-fallback</code>, or <code>unknown</code> (unknown is normal while Compose is down). On a running Spark, <code>attention: pytorch-fallback</code> is a 10–20× slow path — <a href="../operate/troubleshooting-start-runtime/">Start and runtime</a>.</p>
 <p><strong>Verify:</strong> stderr ends with <code>Doctor OK</code>. Doctor also prints pack JSON (<code>image status</code>, <code>wan status</code>, <code>ltx status</code>, <code>llm status</code>) and the image tag for this git branch. <strong>Missing lab weights are a warning</strong>, not a hard fail (<code>lab workflow models incomplete (not a hard doctor failure)</code>).</p>
 <p><strong>Fail (hard):</strong> docker missing, compose missing, host headroom, or dirs not writable → <a href="../operate/troubleshooting-host-docker/">Host and Docker</a>. Prefer <code>setup</code> first.</p>
@@ -3226,8 +3226,8 @@
 <details class="tip">
 <summary>Stuck resume (0 MiB/s, incomplete file)</summary>
 <p>Heartbeats showing <code>found N incomplete</code> and <code>0 MiB/s</code> mean <code>hf</code> is alive but the partial is not growing. <strong>Do not</strong> <code>HF_LOCK_CLEAR_FORCE=1</code> while it runs. <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span>, then check <strong>Delete stuck *.incomplete</strong> on the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span>, or:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w"> </span>--drop-incomplete<span class="w"> </span>--limit<span class="w"> </span><span class="m">1000</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w"> </span>--drop-incomplete<span class="w"> </span>--limit<span class="w"> </span><span class="m">1000</span>
+</span></code></pre></div>
 <p>That deletes <code>*.incomplete</code> (finished weights stay) and re-pulls. See <a href="../operate/models-packs/#resume-cache">Download packs</a>.</p>
 </details>
 <hr />
@@ -3256,8 +3256,8 @@
 </div>
 
 <p>Equivalent shell (docs JS off):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ssh<span class="w"> </span>-L<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="si">}</span><span class="s2">:127.0.0.1:</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ssh<span class="w"> </span>-L<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="si">}</span><span class="s2">:127.0.0.1:</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="si">}</span><span class="s2">"</span>
+</span></code></pre></div>
 <p><strong>Verify:</strong> <code>status</code> shows the project; ComfyUI port open; <code>MODELS_DIR</code> / <code>COMFY_OUTPUT_DIR</code> / <code>COMFY_PORT</code> printed; browser loads the UI. Headroom was already checked — a refuse is a hard fail, not a warning.</p>
 <p><strong>Fail:</strong> <a href="../operate/troubleshooting-start-runtime/">Start and runtime</a>.</p>
 <p>GHCR pull vs a local Dockerfile build (same <code>start</code> path, same safety): <a href="#build-the-image-locally-optional">collapsed below</a>.</p>
@@ -3315,17 +3315,17 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">One-shot env</label><label for="__tabbed_2_2">Persist in .env</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/manage.sh<span class="w"> </span>start
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># type: yes</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/manage.sh<span class="w"> </span>start
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># type: yes</span>
+</span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># in .env (see .env.example)</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>./scripts/manage.sh<span class="w"> </span>start
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># type: yes</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># in .env (see .env.example)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">LAB_STACK_FORCE_BUILD</span><span class="o">=</span><span class="m">1</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>./scripts/manage.sh<span class="w"> </span>start
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># type: yes</span>
+</span></code></pre></div>
 </div>
 </div>
 </div>

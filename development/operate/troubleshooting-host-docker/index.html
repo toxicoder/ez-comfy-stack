@@ -2702,7 +2702,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2786,37 +2786,37 @@
 </table>
 <h3 id="docker-missing-on-dgx-spark">Docker missing on DGX Spark<a class="headerlink" href="#docker-missing-on-dgx-spark" title="Permanent link">&para;</a></h3>
 <p>Docker is usually pre-installed on DGX Spark, but updates or OS reimages can remove it. Prefer <strong>apt Docker CE</strong> (not snap) so the NVIDIA Container Toolkit can attach GPUs.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># sudo password + type yes if prompted</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>newgrp<span class="w"> </span>docker<span class="w">   </span><span class="c1"># if permission denied in this shell</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>doctor
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># sudo password + type yes if prompted</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>newgrp<span class="w"> </span>docker<span class="w">   </span><span class="c1"># if permission denied in this shell</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>doctor
+</span></code></pre></div>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Interactive</label><label for="__tabbed_1_2">Non-interactive</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>setup<span class="w"> </span>--install-docker
+</span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">LAB_NON_INTERACTIVE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">LAB_CONFIRM_TOKEN</span><span class="o">=</span>yes<span class="w"> </span><span class="nv">SETUP_INSTALL_DOCKER</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>./scripts/manage.sh<span class="w"> </span>setup
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">LAB_NON_INTERACTIVE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">LAB_CONFIRM_TOKEN</span><span class="o">=</span>yes<span class="w"> </span><span class="nv">SETUP_INSTALL_DOCKER</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>./scripts/manage.sh<span class="w"> </span>setup
+</span></code></pre></div>
 </div>
 </div>
 </div>
 <h3 id="models_dir-permission-denied">MODELS_DIR permission denied<a class="headerlink" href="#models_dir-permission-denied" title="Permanent link">&para;</a></h3>
 <p>Default cache is <code>/mnt/models</code> (shared with nvidia-dgx-spark-lab). Prefer bootstrap:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>setup
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># creates/chowns MODELS_DIR and MODELS_DIR/comfy with sudo when needed</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>setup
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># creates/chowns MODELS_DIR and MODELS_DIR/comfy with sudo when needed</span>
+</span></code></pre></div>
 <p><code>download-models</code> and <code>start</code> also sudo-heal nested <code>comfy/</code> (HF snapshots at the top level can be writable while <code>comfy/</code> is still root-owned). Do not prefix those commands with <code>sudo</code>.</p>
 <p>Manual last resort:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">/comfy"</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># or in .env:</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># MODELS_DIR=$HOME/models</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">/comfy"</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># or in .env:</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># MODELS_DIR=$HOME/models</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
+</span></code></pre></div>
 <hr />
 
 

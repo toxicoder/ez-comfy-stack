@@ -2668,7 +2668,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2689,25 +2689,25 @@
 <div class="admonition danger">
 <p class="admonition-title">One heavy GPU job</p>
 <p><code>blender.sh</code> <strong>dies</strong> if Compose is up and <strong>not</strong> parked. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="park" data-href="../glossary/#park" title="occupancy enter blender-desk / llm-desk POST /free; Compose may stay up.">Park</span> first:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w"> </span>--<span class="w"> </span>--background
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w"> </span>--<span class="w"> </span>--background
+</span></code></pre></div>
 <p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nvenc" data-href="../glossary/#nvenc" title="Hardware encoder for proxies/previews. Comfy must be stopped (encoder contention on GB10).">NVENC</span> proxies still die if compose is up (encoder is a GPU job). Cycles CUDA while Compose is up is refused. <code>restart: "no"</code> is unchanged. See <a href="../occupancy/">Occupancy desk</a>.</p>
 </div>
 <hr />
 <h2 id="operator-path">Operator path<a class="headerlink" href="#operator-path" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w"> </span>--<span class="w"> </span>--background
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># or: ./scripts/utilities/blender.sh -- /path/to/scene.blend</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>./scripts/manage.sh<span class="w"> </span>export-guides<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--blend<span class="w"> </span>/path/to/shot.blend
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>./scripts/manage.sh<span class="w"> </span>blender-stills<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--plate<span class="w"> </span>mug<span class="w"> </span>--blend<span class="w"> </span>/path/to/prop.blend<span class="w"> </span>--size<span class="w"> </span>1024x1024
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># hammer: ./scripts/manage.sh occupancy idle</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/manage.sh<span class="w"> </span>blender<span class="w"> </span>--<span class="w"> </span>--background
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># or: ./scripts/utilities/blender.sh -- /path/to/scene.blend</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>./scripts/manage.sh<span class="w"> </span>export-guides<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--blend<span class="w"> </span>/path/to/shot.blend
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>./scripts/manage.sh<span class="w"> </span>blender-stills<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--plate<span class="w"> </span>mug<span class="w"> </span>--blend<span class="w"> </span>/path/to/prop.blend<span class="w"> </span>--size<span class="w"> </span>1024x1024
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># hammer: ./scripts/manage.sh occupancy idle</span>
+</span></code></pre></div>
 <p>If <code>blender</code> is not on <code>PATH</code>, the script prints an install hint and exits 1. This stack does <strong>not</strong> apt/pip/Docker-install Blender. Ubuntu aarch64 <code>blender</code> is enough for Workbench. Community <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> CUDA builds are Path A Cycles <strong>after</strong> <code>occupancy idle</code> only.</p>
 <p>Exit <strong>2</strong> means Compose is a heavy job (not parked, or the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">queue</span> is busy):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/manage.sh<span class="w"> </span>blender
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/manage.sh<span class="w"> </span>blender
+</span></code></pre></div>
 <h2 id="what-this-is-not">What this is not<a class="headerlink" href="#what-this-is-not" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Not a Compose profile (unlike optional <a href="../shorts/">studio-ui</a>)</li>

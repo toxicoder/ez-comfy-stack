@@ -2734,7 +2734,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2757,13 +2757,13 @@
 <li><strong>Unchanged <code>restart: "no"</code></strong> and local heavy confirm on <code>start</code></li>
 </ul></div></div>
 <p>This remains a <strong>per-node Comfy demo</strong>. Tensor-parallel LLMs belong in <a href="https://github.com/toxicoder/nvidia-dgx-spark-lab">nvidia-dgx-spark-lab</a>. You still have <strong>no NCCL</strong> and <strong>no multi-GPU graph</strong> in this sample stack — three UIs, one weight copy, independent 5 s Queues. Why this repo stays Compose: <a href="../start/when-to-use-vs-spark-lab/">When to use vs spark-lab</a>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" title="One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.">Occupancy</span> is <strong>per <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span></strong>: <a href="../occupancy/">Occupancy</a> · <a href="../operate/occupancy-matrix/">Occupancy matrix</a>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_USER</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="k">:-</span><span class="nv">$USER</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="k">:-</span><span class="p">/mnt/comfy-output</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_PORT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="k">:-</span><span class="nv">8188</span><span class="si">}</span><span class="s2">"</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DOWNLOAD_LIMIT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_LIMIT</span><span class="k">:-</span><span class="nv">auto</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_USER</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="k">:-</span><span class="nv">$USER</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="k">:-</span><span class="p">/mnt/comfy-output</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_PORT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="k">:-</span><span class="nv">8188</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DOWNLOAD_LIMIT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_LIMIT</span><span class="k">:-</span><span class="nv">auto</span><span class="si">}</span><span class="s2">"</span>
+</span></code></pre></div>
 <p>Farm hosts use the example env (placeholders), not a single <code>${SPARK_HOST}</code>. Status probe:</p>
 <div class="ez-cmd-builder" data-ez-cmd="spark-farm-status">
 <noscript><pre><code>./scripts/utilities/spark-farm.sh status</code></pre></noscript>
@@ -2779,28 +2779,28 @@
 <ol>
 <li><strong>Copy the example env</strong></li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cp<span class="w"> </span>config/spark-farm.example.env<span class="w"> </span>config/spark-farm.env<span class="w">   </span><span class="c1"># local, untracked</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cp<span class="w"> </span>config/spark-farm.example.env<span class="w"> </span>config/spark-farm.env<span class="w">   </span><span class="c1"># local, untracked</span>
+</span></code></pre></div>
 <ol>
 <li><strong>Fill placeholders</strong> — <code>SPARK_HOSTS</code>, <code>SPARK_USER</code>, <code>SPARK_COMFY_URLS</code>, <code>SPARK_FABRIC_IPS</code>, <code>MODELS_DIR</code> (and <code>COMFY_OUTPUT_DIR</code> / <code>FARM_SHARE</code> if you do not want the defaults):</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Management / SSH network (not the 200 GbE fabric)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">SPARK_HOSTS</span><span class="o">=</span>spark-0.local,spark-1.local,spark-2.local
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">SPARK_USER</span><span class="o">=</span>nvidia
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">SPARK_COMFY_URLS</span><span class="o">=</span>http://spark-0.local:8188,http://spark-1.local:8188,http://spark-2.local:8188
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Fabric (ConnectX-7 / RoCE) — NFS and rsync only</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nv">SPARK_FABRIC_IPS</span><span class="o">=</span><span class="m">10</span>.0.0.1,10.0.0.2,10.0.0.3
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nv">MODELS_DIR</span><span class="o">=</span>/mnt/models
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span>/mnt/comfy-output
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nv">FARM_SHARE</span><span class="o">=</span>/mnt/comfy-output/shots
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Management / SSH network (not the 200 GbE fabric)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">SPARK_HOSTS</span><span class="o">=</span>spark-0.local,spark-1.local,spark-2.local
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">SPARK_USER</span><span class="o">=</span>nvidia
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">SPARK_COMFY_URLS</span><span class="o">=</span>http://spark-0.local:8188,http://spark-1.local:8188,http://spark-2.local:8188
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Fabric (ConnectX-7 / RoCE) — NFS and rsync only</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nv">SPARK_FABRIC_IPS</span><span class="o">=</span><span class="m">10</span>.0.0.1,10.0.0.2,10.0.0.3
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nv">MODELS_DIR</span><span class="o">=</span>/mnt/models
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span>/mnt/comfy-output
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nv">FARM_SHARE</span><span class="o">=</span>/mnt/comfy-output/shots
+</span></code></pre></div>
 <ol>
 <li><strong>Source it</strong> in the operator shell:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">set</span><span class="w"> </span>-a
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">source</span><span class="w"> </span>config/spark-farm.env
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">set</span><span class="w"> </span>+a
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">set</span><span class="w"> </span>-a
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">source</span><span class="w"> </span>config/spark-farm.env
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">set</span><span class="w"> </span>+a
+</span></code></pre></div>
 <ol>
 <li>
 <p><strong>Share weights: NFS vs rsync over fabric</strong> (pick one)</p>
@@ -2815,30 +2815,30 @@
 <p><strong>Per-node setup / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="doctor" data-href="../glossary/#doctor" title="Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.">doctor</span> / download / start</strong> — on <strong>each</strong> Spark, operator, with confirm. Type <strong>yes</strong> locally. Never <code>ssh … compose up</code>.</p>
 </li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./scripts/manage.sh<span class="w"> </span>setup
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">      </span><span class="c1"># cache owner, or after NFS is up</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./scripts/manage.sh<span class="w"> </span>setup
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">      </span><span class="c1"># cache owner, or after NFS is up</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
+</span></code></pre></div>
 <ol>
 <li><strong>Probe</strong> (does not start compose):</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span></code></pre></div>
 <ol>
 <li><strong>Dispatch</strong> <code>print-shot</code> (shots <strong>01–06 / 07–12 / 13–18</strong> on three hosts, or an even split on two). SSH-runs <strong>local</strong> <code>./scripts/manage.sh print-shot</code> only:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>dispatch<span class="w"> </span>--film<span class="w"> </span>go-see
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>dispatch<span class="w"> </span>--film<span class="w"> </span>go-see
+</span></code></pre></div>
 <ol>
 <li><strong>Concat locally</strong> (gather is under <code>${FARM_SHARE}/out</code>; concat on spark-0):</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--yes
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--yes
+</span></code></pre></div>
 <p>Director is <strong>off</strong> this path. See <a href="../shorts/">90s shorts</a>.</p>
 <hr />
 <h2 id="farm-vs-relay">Farm vs relay<a class="headerlink" href="#farm-vs-relay" title="Permanent link">&para;</a></h2>
@@ -2878,29 +2878,29 @@
 <li><strong>Replica:</strong> <code>./scripts/utilities/spark-farm.sh sync-models</code> rsyncs <code>MODELS_DIR/comfy</code> over fabric IPs.</li>
 </ol>
 <p>Copy <code>config/spark-farm.example.env</code>, edit hostnames/IPs, then:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nb">set</span><span class="w"> </span>-a
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">source</span><span class="w"> </span>config/spark-farm.example.env<span class="w">   </span><span class="c1"># after you filled in real hosts</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nb">set</span><span class="w"> </span>+a
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nb">set</span><span class="w"> </span>-a
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">source</span><span class="w"> </span>config/spark-farm.example.env<span class="w">   </span><span class="c1"># after you filled in real hosts</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nb">set</span><span class="w"> </span>+a
+</span></code></pre></div>
 <hr />
 <h2 id="per-node-process">Per-node process<a class="headerlink" href="#per-node-process" title="Permanent link">&para;</a></h2>
 <p>On <strong>each</strong> Spark (operator, with confirm):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>./scripts/manage.sh<span class="w"> </span>setup
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">      </span><span class="c1"># cache owner, or after NFS is up</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>development<span class="w"> </span>https://github.com/toxicoder/ez-comfy-stack.git
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">cd</span><span class="w"> </span>ez-comfy-stack
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>./scripts/manage.sh<span class="w"> </span>setup
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># set MODELS_DIR and HF_TOKEN in .env (same MODELS_DIR on every node)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>./scripts/manage.sh<span class="w"> </span>doctor
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>./scripts/manage.sh<span class="w"> </span>download-models<span class="w">      </span><span class="c1"># cache owner, or after NFS is up</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>./scripts/manage.sh<span class="w"> </span>start<span class="w">                </span><span class="c1"># type yes</span>
+</span></code></pre></div>
 <p>Three UIs (replace hostnames from <code>SPARK_COMFY_URLS</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># After sourcing spark-farm.example.env</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># After sourcing spark-farm.example.env</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># http://spark-0.local:8188  http://spark-1.local:8188  http://spark-2.local:8188</span>
+</span></code></pre></div>
 <p>The one-click <strong>shorts/go-see</strong> graph is sequential on one host. For a farm, load <strong>ltx/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">i2v</span>-shot</strong> (or optional <strong>wan/i2v-shot</strong>) on each UI and <strong>Queue</strong> independent <strong>5 s</strong> shots — different beats in parallel. Concat locally:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--yes
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">FILM</span><span class="o">=</span>go-see<span class="w">   </span><span class="c1"># or still-here | switchyard</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">FILM</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--yes
+</span></code></pre></div>
 <p>See <a href="../shorts/">90s shorts</a>. MiniMax H3 films are banned (see <a href="../licenses/">licenses</a>).</p>
 <p><code>spark-farm.sh</code> <strong>never</strong> starts compose remotely. It prints the exact <code>./scripts/manage.sh start</code> you must run locally (heavy confirm stays on that node). Containers still use <code>restart: "no"</code>.</p>
 <p>The <code>run</code> subcommand prints a <strong>shorts/go-see / wan/i2v-shot / ltx/i2v-shot</strong> Queue reminder for <code>--film go-see</code> (or still-here / switchyard). It does <strong>not</strong> POST graphs. It refuses MiniMax H3 names (<code>*h3*</code> / <code>*MiniMax*</code>).</p>
@@ -2908,11 +2908,11 @@
 <p>Memory: keep <code>MEM_LIMIT=90g</code>, <code>MEM_RESERVATION=80g</code>, <code>MIN_HOST_FREE_GIB=28</code>, <code>shm_size: 16gb</code>.</p>
 <hr />
 <h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>run<span class="w"> </span>--film<span class="w"> </span>go-see
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>dispatch<span class="w"> </span>--film<span class="w"> </span>go-see
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>run<span class="w"> </span>--film<span class="w"> </span>go-see
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>./scripts/utilities/spark-farm.sh<span class="w"> </span>dispatch<span class="w"> </span>--film<span class="w"> </span>go-see
+</span></code></pre></div>
 <p>Start compose yourself on each node (<code>./scripts/manage.sh start</code>, type yes). Then dispatch.</p>
 
 

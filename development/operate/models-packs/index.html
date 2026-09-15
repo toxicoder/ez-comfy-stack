@@ -2834,7 +2834,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2856,36 +2856,36 @@
 <p><strong>Who this is for:</strong> operators after <code>MODELS_DIR</code> is writable. Layout: <a href="../../models-and-cache/">Models and cache</a>. Gated LTX: <a href="../models-tokens/">HF_TOKEN</a>. Sharing: <a href="../models-sharing/">Multi-stack sharing</a>. <code>--tier</code> pack ids: <a href="../../download-tiers/">Download tiers</a>.</p>
 <h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
 <p><code>download-models</code> has <strong>no</strong> <code>--tier</code>. It always pulls the default still + Wan 5B + LTX-2.5 set. On every other downloader, <code>--tier</code> is <strong>which pack</strong>, not a global quality ladder. <code>--limit</code> is Mbps. Full flag map and live builders: <a href="../../download-tiers/">Download tiers</a>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-models
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Exits non-zero until every lab basename under MODELS_DIR/comfy is present</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Klein TE + flux2-vae use file-level readiness so a TE-only</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># partial cannot cache-hit skip the VAE.</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-models
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Exits non-zero until every lab basename under MODELS_DIR/comfy is present</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Klein TE + flux2-vae use file-level readiness so a TE-only</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># partial cannot cache-hit skip the VAE.</span>
+</span></code></pre></div>
 <div class="ez-cmd-builder" data-ez-cmd="download-models">
 <noscript><pre><code>./scripts/manage.sh download-models --limit auto</code></pre></noscript>
 </div>
 
 <p>Per-utility status (read-only) still uses the default pack ids:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/utilities/download-image.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>fast<span class="w"> </span>--json
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>5b<span class="w"> </span>--json
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5<span class="w"> </span>--json
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>./scripts/utilities/download-llm.sh<span class="w"> </span>run
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/utilities/download-image.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>fast<span class="w"> </span>--json
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>5b<span class="w"> </span>--json
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5<span class="w"> </span>--json
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>./scripts/utilities/download-llm.sh<span class="w"> </span>run
+</span></code></pre></div>
 <p><code>--tier fast</code> also pulls Klein companions (<code>te</code> + <code>vae</code>). Opt-in packs (Wan A14B, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fun-inp" data-href="../../glossary/#fun-inp" title="Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.">Fun InP</span>, LTX 2.3, music, podcast, 3D, …) live on <a href="../../download-tiers/">Download tiers</a>.</p>
 <p>Downloads use the modern <strong><code>hf download</code></strong> CLI (not deprecated <code>huggingface-cli</code>). <code>setup</code> and <code>download-models</code> auto-install it into <code>~/.local/bin</code> (or the original user's home when the command is run with <code>sudo</code>). Do not prefix <code>download-models</code> with <code>sudo</code> — <code>download-limit</code> uses sudo internally.</p>
 <p>Progress UI is owned by the stack. <code>download-models</code> prints <code>══ 1/4 ══</code> … <code>4/4</code> for Klein, Wan, LTX, and the prompt-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../../glossary/#gguf" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span>. Each <code>hf download</code> shows disk size + MiB/s + elapsed on one rewriting TTY line (or a newline every <code>HF_PROGRESS_INTERVAL</code> seconds when piped). Hub/tqdm file-count bars stay disabled so they do not smash the heartbeat. <code>HF_PROGRESS=0</code> or <code>EZ_COMFY_PROGRESS=0</code> turns progress lines off; <code>HF_EXPECTED_KIB</code> adds a best-effort ETA.</p>
 <h2 id="opt-in-packs">Opt-in packs<a class="headerlink" href="#opt-in-packs" title="Permanent link">&para;</a></h2>
 <p>Opt-in packs (not <code>download-models</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>fun-inp<span class="w">   </span><span class="c1"># Fun InP A14B FLF, ~47 GB Apache</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/manage.sh<span class="w"> </span>download-restore<span class="w"> </span>--tier<span class="w"> </span>seedvr2-3b<span class="w">   </span><span class="c1"># SeedVR2-3B post-concat, ~15 GB Apache</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>trellis2<span class="w">          </span><span class="c1"># Comfy-Org TRELLIS.2 INT8 + DINOv3, no nvdiffrast</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>da3-base<span class="w">          </span><span class="c1"># DA3-BASE Apache (DA3-LARGE refused)</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>vace<span class="w">      </span><span class="c1"># Wan 2.1 VACE 1.3B join, ~6 GB Apache</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>a14b<span class="w">      </span><span class="c1"># A14B FP8 silent hero; unload 5B first</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>s2v<span class="w">       </span><span class="c1"># S2V-14B talking-head opt-in</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>./scripts/manage.sh<span class="w"> </span>download-longcat<span class="w"> </span>--tier<span class="w"> </span>video<span class="w">        </span><span class="c1"># LongCat-Video MIT; no NCCL</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>./scripts/manage.sh<span class="w"> </span>download-dreamx<span class="w"> </span>--tier<span class="w"> </span>creator<span class="w">       </span><span class="c1"># DreamX-Creator 1.0 Apache; not World</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>fun-inp<span class="w">   </span><span class="c1"># Fun InP A14B FLF, ~47 GB Apache</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/manage.sh<span class="w"> </span>download-restore<span class="w"> </span>--tier<span class="w"> </span>seedvr2-3b<span class="w">   </span><span class="c1"># SeedVR2-3B post-concat, ~15 GB Apache</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>trellis2<span class="w">          </span><span class="c1"># Comfy-Org TRELLIS.2 INT8 + DINOv3, no nvdiffrast</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>./scripts/manage.sh<span class="w"> </span>download-3d<span class="w"> </span>--tier<span class="w"> </span>da3-base<span class="w">          </span><span class="c1"># DA3-BASE Apache (DA3-LARGE refused)</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>vace<span class="w">      </span><span class="c1"># Wan 2.1 VACE 1.3B join, ~6 GB Apache</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>a14b<span class="w">      </span><span class="c1"># A14B FP8 silent hero; unload 5B first</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span>s2v<span class="w">       </span><span class="c1"># S2V-14B talking-head opt-in</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>./scripts/manage.sh<span class="w"> </span>download-longcat<span class="w"> </span>--tier<span class="w"> </span>video<span class="w">        </span><span class="c1"># LongCat-Video MIT; no NCCL</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>./scripts/manage.sh<span class="w"> </span>download-dreamx<span class="w"> </span>--tier<span class="w"> </span>creator<span class="w">       </span><span class="c1"># DreamX-Creator 1.0 Apache; not World</span>
+</span></code></pre></div>
 <p>Unload LTX before Fun InP / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="trellis" data-href="../../glossary/#trellis" title="Optional MIT 3D pack on MODELS_DIR. No nvdiffrast. Host occupancy with Comfy.">TRELLIS</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vace" data-href="../../glossary/#vace" title="Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.">VACE</span>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seedvr2" data-href="../../glossary/#seedvr2" title="Optional Apache restorer for a stitched 90s master. Not part of download-models.">SeedVR2</span> is restore-only after concat. <code>reap-models --drop-pack</code> cannot eat shared VAEs. SuperSplat is a <a href="../../splat-sidecar/">host viewer</a>, not a download.</p>
 <p>Relative <code>comfy/</code> symlinks and the <code>MODELS_DIR</code> tree: <a href="../../models-and-cache/#layout">Models and cache</a>.</p>
 <hr />
@@ -2974,9 +2974,9 @@
 </tbody>
 </table>
 <p>Opt-in music (<code>./scripts/manage.sh download-music --tier turbo</code>, <strong>not</strong> <code>download-models</code>). Turbo <strong>reuses</strong> the podcast acestep snapshot — do not pull the ~10 GB AIO twice:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>download-music<span class="w"> </span>--tier<span class="w"> </span>turbo
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w"> </span>--json
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>download-music<span class="w"> </span>--tier<span class="w"> </span>turbo
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>turbo<span class="w"> </span>--json
+</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -3329,19 +3329,19 @@
 <details class="tip">
 <summary>Cleanup extra LTX monorepo files</summary>
 <p>If an older run pulled the full <code>Kijai/LTX2.3_comfy</code> snapshot into a 2.3/balanced/quality local-dir, reclaim disk by deleting everything outside the selective keep set:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Preview (default)</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Delete extras (keeps FP8 transformer + TE + VAEs only)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3<span class="w"> </span>--yes
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Preview (default)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Delete extras (keeps FP8 transformer + TE + VAEs only)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3<span class="w"> </span>--yes
+</span></code></pre></div>
 <p>Does <strong>not</strong> touch Klein, Wan, or other trees under <code>MODELS_DIR</code>.</p>
 </details>
 <details class="warning">
 <summary>Full monorepo escape hatch</summary>
 <p>Operators who really want every precision/lora:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">LTX_FULL_REPO</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">LTX_FULL_REPO</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.3
+</span></code></pre></div>
 <p>After a full-repo mistake, use <code>cleanup --yes</code> instead of wiping all of <code>MODELS_DIR</code>.</p>
 </details>
 <hr />

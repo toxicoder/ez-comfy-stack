@@ -2756,7 +2756,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2863,9 +2863,9 @@
 <li>Optional audio: <strong>ltx/i2v-5s</strong>, same first frame, same seed note, Queue ~5 s AV at <strong>1280×704</strong>.</li>
 <li>
 <p>Short six-shot demo: Queue <strong>wan/i2v-shot</strong> six times (<code>ez_shot_01</code> … <code>06</code>) then:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--yes
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/utilities/concat-shots.sh<span class="w"> </span>--yes
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># default dir is ${COMFY_OUTPUT_DIR}; writes ez_concat_shots.mp4</span>
+</span></code></pre></div>
 </li>
 <li>
 <p><strong>90s films</strong> (go-see first-person parkour / still-here / switchyard): load one <strong>film-*-90s</strong> graph → Queue <strong>once</strong> → the MP4 is already at <code>${COMFY_OUTPUT_DIR}/ez_&lt;slug&gt;_90s.mp4</code> (faststart). A <strong>90s film ready</strong> overlay plays and downloads it; <code>ez_&lt;slug&gt;_90s.html</code> is a local player. See <a href="../shorts/">90s shorts</a>.</p>
@@ -2880,9 +2880,9 @@
 <p class="admonition-title">Primary output is MP4</p>
 <p>Seeded <strong>wan-</strong><em> and </em><em>ltx-</em><strong> graphs install </strong>ComfyUI-VideoHelperSuite<strong> and wire </strong><code>VHS_VideoCombine</code><strong> after video <code>VAEDecode</code> (<code>save_output: true</code>). LTX graphs also run </strong><code>LTXVAudioVAEDecode</code><strong> into the VHS </strong>audio<strong> input so world audio is muxed into the MP4. After </strong>Queue<strong>, open </strong>Save video (MP4) — open node for preview<strong> for an </strong>inline preview<strong>. PNG </strong>Save frames (secondary)<strong> is optional. Files are on the </strong>host<strong> at <code>${COMFY_OUTPUT_DIR}</code> (container <code>/outputs</code>). <code>cleanup</code> does </strong>not** delete this folder.</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ls<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>/ez_still_draft_*.png
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ls<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>/ez_ltx_*_video_*.mp4
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ls<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>/ez_still_draft_*.png
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ls<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">"</span>/ez_ltx_*_video_*.mp4
+</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -2942,12 +2942,12 @@
 <hr />
 <h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
 <p>First-run commands live on <a href="../getting-started/">Getting Started</a>. Day-to-day: <a href="../manage-cli/">manage.sh reference</a>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>doctor
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/manage.sh<span class="w"> </span>status
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>./scripts/manage.sh<span class="w"> </span>logs
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>./scripts/manage.sh<span class="w"> </span>spark-timing<span class="w"> </span>show
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>./scripts/manage.sh<span class="w"> </span>stop
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>doctor
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./scripts/manage.sh<span class="w"> </span>status
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>./scripts/manage.sh<span class="w"> </span>logs
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>./scripts/manage.sh<span class="w"> </span>spark-timing<span class="w"> </span>show
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>./scripts/manage.sh<span class="w"> </span>stop
+</span></code></pre></div>
 <hr />
 <h2 id="safety">Safety<a class="headerlink" href="#safety" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">

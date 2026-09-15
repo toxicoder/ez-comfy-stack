@@ -2690,7 +2690,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2711,20 +2711,20 @@
 <p><strong>Who this is for:</strong> studio users after the first still-draft <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" title="One run of the current graph: encode, sample, decode, save.">Queue</span>.</p>
 <p>After <code>download-models</code> + <code>start</code>, load from Comfy’s <strong>Workflows</strong> sidebar under <strong><code>_lab/&lt;lane&gt;/</code></strong> (seeded from host <code>workflows/_lab/</code>). Filenames are short stems in lane folders (<code>klein/still-draft.json</code>); the unique id is <code>extra.lab_rel</code>. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span> graphs also appear under Comfy’s <strong>Apps</strong> sidebar (<code>*.app.json</code> on disk under the same lane folder; same stem). Save your own graphs in <strong><code>_user/</code></strong>. Do <strong>not</strong> edit live <code>_lab/</code> copies — they are overwritten on start. Do <strong>not</strong> edit raw JSON — change widgets on the canvas.</p>
 <p>Sidebar tree after start:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>user/default/workflows/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  _lab/
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, …
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    shorts/    go-see, still-here, switchyard (90s one-click)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    optional/  a14b, longcat stub, klein-trellis2
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    audio/     podcast, dub, music/rap-draft, music/rap-full
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      albums/nill-bye/&lt;album&gt;/     nine Nill Bye albums (numbered tracks + cover + album)
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      albums/drive-through/&lt;album&gt;/  five Drive-through albums
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    inspire/   prompt-forge, research-chat, beat-sheet
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  _user/       your graphs (never overwritten)
-</code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>user/default/workflows/
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  _lab/
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, …
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    shorts/    go-see, still-here, switchyard (90s one-click)
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    optional/  a14b, longcat stub, klein-trellis2
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    audio/     podcast, dub, music/rap-draft, music/rap-full
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      albums/nill-bye/&lt;album&gt;/     nine Nill Bye albums (numbered tracks + cover + album)
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      albums/drive-through/&lt;album&gt;/  five Drive-through albums
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    inspire/   prompt-forge, research-chat, beat-sheet
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  _user/       your graphs (never overwritten)
+</span></code></pre></div>
 <p>Reusable printer blocks live in the node library after start (<code>custom_nodes/ez_studio_blocks/subgraphs/</code>): <strong>klein-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../glossary/#t2i" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">t2i</span>-backbone</strong>, <strong>wan-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">i2v</span>-5s</strong>, <strong>ltx-av-5s</strong>, <strong>ltx-film-shot</strong>. Drop them from the subgraph menu instead of copy-pasting chains.</p>
 <pre class="mermaid"><code>flowchart TB
   Need{"What do you need?"} --&gt; Still["A still"]

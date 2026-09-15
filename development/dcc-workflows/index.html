@@ -2778,7 +2778,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2809,25 +2809,25 @@
 </div>
 <hr />
 <h2 id="operator-loop-path-b">Operator loop (Path B)<a class="headerlink" href="#operator-loop-path-b" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>export-guides<span class="w"> </span>--engine<span class="w"> </span>blender<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--blend<span class="w"> </span>/path/to/shot.blend<span class="w"> </span>--print<span class="w"> </span>ltx-iclora-depth
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>klein<span class="w"> </span>--yes
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Queue workflows/_lab/dcc/klein/from-clay.json on first.png</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/manage.sh<span class="w"> </span>overlay-qc<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--look<span class="w"> </span>/path/to/ez_clay_hero.png
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># After download-ltx --tier iclora: Templates → LTX-2.5 Union Control, depth from depth.mp4</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Stop LTX. Stem mix (occupancy audio):</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>./scripts/manage.sh<span class="w"> </span>stem-mix<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--bg<span class="w"> </span>/path/to/print.mp4
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>export-guides<span class="w"> </span>--engine<span class="w"> </span>blender<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--blend<span class="w"> </span>/path/to/shot.blend<span class="w"> </span>--print<span class="w"> </span>ltx-iclora-depth
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>klein<span class="w"> </span>--yes
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Queue workflows/_lab/dcc/klein/from-clay.json on first.png</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/manage.sh<span class="w"> </span>overlay-qc<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--look<span class="w"> </span>/path/to/ez_clay_hero.png
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># After download-ltx --tier iclora: Templates → LTX-2.5 Union Control, depth from depth.mp4</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Stop LTX. Stem mix (occupancy audio):</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>./scripts/manage.sh<span class="w"> </span>stem-mix<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--shot<span class="w"> </span><span class="m">12</span><span class="w"> </span>--bg<span class="w"> </span>/path/to/print.mp4
+</span></code></pre></div>
 <p>Cheap pacing gate (host ffmpeg; compose may stay up):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>film-animatic<span class="w"> </span>--film<span class="w"> </span>go-see
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>film-animatic<span class="w"> </span>--film<span class="w"> </span>go-see
+</span></code></pre></div>
 <p>Script desk writes <code>films/&lt;slug&gt;/shots.yaml</code> (does not clobber lab YAML):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>shot-sheet<span class="w"> </span>run<span class="w"> </span>--film<span class="w"> </span>go-see
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/manage.sh<span class="w"> </span>shot-sheet<span class="w"> </span>run<span class="w"> </span>--film<span class="w"> </span>go-see
+</span></code></pre></div>
 <p>Default on one GB10 is <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="path-d" data-href="../glossary/#path-d" title="Laptop SSH tunnel to MCP or llm-desk. Not a fourth occupancy CLI mode.">Path D</span></strong>: block and MCP on the laptop, rsync <code>guides/</code> to the Spark, Spark only runs Comfy.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>rsync<span class="w"> </span>-a<span class="w"> </span>guides/go-see/12/<span class="w"> </span>spark-0:/mnt/comfy-output/guides/go-see/12/
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/manage.sh<span class="w"> </span>start
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>rsync<span class="w"> </span>-a<span class="w"> </span>guides/go-see/12/<span class="w"> </span>spark-0:/mnt/comfy-output/guides/go-see/12/
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>./scripts/manage.sh<span class="w"> </span>start
+</span></code></pre></div>
 <h2 id="pack-contract">Pack contract<a class="headerlink" href="#pack-contract" title="Permanent link">&para;</a></h2>
 <p><code>${COMFY_OUTPUT_DIR}/guides/&lt;slug&gt;/&lt;shot_id&gt;/</code></p>
 <table>
@@ -2872,11 +2872,11 @@
 <p>Clay is Workbench. <strong>Beauty MP4 is Path A only</strong> (engine-final ingest in a later PR).</p>
 <h2 id="still-packs-not-120-frames">Still packs (not 120 frames)<a class="headerlink" href="#still-packs-not-120-frames" title="Permanent link">&para;</a></h2>
 <p><code>${COMFY_OUTPUT_DIR}/guides/&lt;slug&gt;/stills/&lt;plate&gt;/</code> — <code>ez.guide.still.v1</code>. Allowed sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (thumb, Klein only).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/manage.sh<span class="w"> </span>blender-stills<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--plate<span class="w"> </span>mug<span class="w"> </span>--blend<span class="w"> </span>/path/to/prop.blend<span class="w"> </span>--size<span class="w"> </span>1024x1024
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>klein<span class="w"> </span>--yes
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Queue klein-from-clay-plates or klein-from-canny</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/manage.sh<span class="w"> </span>blender-stills<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--plate<span class="w"> </span>mug<span class="w"> </span>--blend<span class="w"> </span>/path/to/prop.blend<span class="w"> </span>--size<span class="w"> </span>1024x1024
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>klein<span class="w"> </span>--yes
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Queue klein-from-clay-plates or klein-from-canny</span>
+</span></code></pre></div>
 <p><code>--install-inputs</code> copies <code>first.png</code> into <code>${COMFY_OUTPUT_DIR}/input</code> (compose may stay up). Playbook: <a href="../learn/blender-creator/">Blender creator suite</a>.</p>
 <h2 id="graphs">Graphs<a class="headerlink" href="#graphs" title="Permanent link">&para;</a></h2>
 <table>
@@ -2951,8 +2951,8 @@
 </tbody>
 </table>
 <p>Print modes <code>wan-vace</code>, <code>wan-denk-cn</code>, and <code>dcc-final</code> stay valid on <code>shot.yaml</code> but are <strong>not</strong> lab printers in this suite (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vace" data-href="../glossary/#vace" title="Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.">VACE</span> stays 17-frame join; Fun Control / Path A beauty are later).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/manage.sh<span class="w"> </span>download-ltx<span class="w"> </span>--tier<span class="w"> </span>iclora<span class="w">   </span><span class="c1"># not download-models</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/manage.sh<span class="w"> </span>download-ltx<span class="w"> </span>--tier<span class="w"> </span>iclora<span class="w">   </span><span class="c1"># not download-models</span>
+</span></code></pre></div>
 <p>Official 2.5 Union Control distilled widgets <code>ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors</code> onto the <strong>distilled</strong> transformer. Distilled-only. <strong>Refuse 19B Union.</strong> MagCache off.</p>
 <h2 id="paths">Paths<a class="headerlink" href="#paths" title="Permanent link">&para;</a></h2>
 <table>
@@ -2980,9 +2980,9 @@
 <p>Godot is a first-class blocking engine in a later PR, not a second Blender. OpenToonz / Krita are plate emitters into the same pack, not v1 engines.</p>
 <h2 id="instagram-clay-stills-not-this-pack">Instagram clay stills (not this pack)<a class="headerlink" href="#instagram-clay-stills-not-this-pack" title="Permanent link">&para;</a></h2>
 <p><code>house-views</code> is a <strong>different</strong> contract: ten 1024×1280 Workbench stills + greybox GLB under <code>assets/sets/&lt;slug&gt;/</code>, then <strong>klein/dream-house-clay</strong>. Do not dump Instagram 4:5 into <code>guides/</code> or reuse <code>ez.guide.shot.v1</code> (that QC is 1280×704 / 120 frames). Playbook: <a href="../learn/dream-house/">Dream-house tours</a>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>./scripts/manage.sh<span class="w"> </span>house-views<span class="w"> </span>--slug<span class="w"> </span>lab-penthouse
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/manage.sh<span class="w"> </span>occupancy<span class="w"> </span>enter<span class="w"> </span>blender-desk
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>./scripts/manage.sh<span class="w"> </span>house-views<span class="w"> </span>--slug<span class="w"> </span>lab-penthouse
+</span></code></pre></div>
 <p>Park Comfy before a live Blender MCP socket (<code>occupancy enter blender-desk</code>). Do not run Cycles CUDA next to a loaded denoise.</p>
 <h2 id="safety">Safety<a class="headerlink" href="#safety" title="Permanent link">&para;</a></h2>
 <ul>

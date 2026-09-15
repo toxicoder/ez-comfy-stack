@@ -2822,7 +2822,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 14 Sep 2026, 03:29 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-14T03:29:54+00:00">14 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 19:41 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T19:41:30+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2929,17 +2929,17 @@
 <noscript><pre><code>./scripts/manage.sh download-dub --tier asr --limit auto</code></pre></noscript>
 </div>
 
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>asr<span class="w">        </span><span class="c1"># Silero VAD + faster-whisper large-v3</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>clone<span class="w">      </span><span class="c1"># Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt)</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>all
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># same --limit auto|N|off wrap as download-models (always clears on exit)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># with compose up: pip install faster-whisper, llama-cpp-python CPU wheel,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># setuptools&lt;82 (PerTh), then Chatterbox V3 zip --no-deps</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># (Queue also self-heals llama.cpp; restart heals PerTh)</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>asr<span class="w">        </span><span class="c1"># Silero VAD + faster-whisper large-v3</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>clone<span class="w">      </span><span class="c1"># Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/manage.sh<span class="w"> </span>download-dub<span class="w"> </span>--tier<span class="w"> </span>all
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># same --limit auto|N|off wrap as download-models (always clears on exit)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># with compose up: pip install faster-whisper, llama-cpp-python CPU wheel,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># setuptools&lt;82 (PerTh), then Chatterbox V3 zip --no-deps</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># (Queue also self-heals llama.cpp; restart heals PerTh)</span>
+</span></code></pre></div>
 <p>URL ingest on the host (optional):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>yt-dlp
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>yt-dlp
+</span></code></pre></div>
 <h2 id="app">App<a class="headerlink" href="#app" title="Permanent link">&para;</a></h2>
 <p>Graph: <strong>audio/dub/localize</strong> (<code>extra.lab_profile</code> <code>us-safe-dub</code>). Occupancy <strong>audio</strong>.</p>
 <table>
@@ -3026,11 +3026,11 @@
 <li>MLA file is <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt.wav</code> (duration-locked). Optional <code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/ez_dub_yt_48k.mp3</code>. Comfy <code>outputs/ez_dub_mix_*.flac</code> / <code>ez_dub_yt_*.mp3</code> is a 24 kHz preview — do not call the numbered MP3 a 320k master.</li>
 <li>Loudness is in-graph raise-to-peak plus optional ffmpeg −14 LUFS. Operator fallback (not required):</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>run<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/dubs/episode/ez_dub_yt.wav"</span><span class="w"> </span>--target<span class="w"> </span>youtube
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>run<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/dubs/episode/ez_dub_yt.wav"</span><span class="w"> </span>--target<span class="w"> </span>youtube
+</span></code></pre></div>
 <p>URL helper (host, writes <code>${COMFY_OUTPUT_DIR}/input</code>, survives <code>cleanup</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/utilities/dub-fetch.sh<span class="w"> </span>run<span class="w"> </span>--url<span class="w"> </span><span class="s1">'https://www.youtube.com/watch?v=YOUR_VIDEO'</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/utilities/dub-fetch.sh<span class="w"> </span>run<span class="w"> </span>--url<span class="w"> </span><span class="s1">'https://www.youtube.com/watch?v=YOUR_VIDEO'</span>
+</span></code></pre></div>
 <p>Reload the App if it was already open, then pick that wav/mp4 in <strong>Source file</strong>.</p>
 <h2 id="youtube-multi-language-audio">YouTube multi-language audio<a class="headerlink" href="#youtube-multi-language-audio" title="Permanent link">&para;</a></h2>
 <p>Do <strong>not</strong> rely on muxing two AAC tracks into one MP4 as the YouTube path. Studio wants an <strong>audio-only</strong> file roughly the same length as the video.</p>
@@ -3045,10 +3045,10 @@
 <p>MLA is rolling out; not every channel has it. Duration lock exists so Studio accepts the file.</p>
 <p>Optional local mux (VLC/archive, not the documented YouTube upload) can use ffmpeg against <code>source_video.mp4</code> in the job dir.</p>
 <p>When there is <strong>no</strong> source video and you want a still-image YouTube file (cover + dubbed audio), keep the graph as FLAC/MP3 and mux on the host:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/manage.sh<span class="w"> </span>audio-still-video<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--audio<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/dubs/episode/ez_dub_yt.wav"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--image<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_podcast_00001_.png"</span>
-</code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/manage.sh<span class="w"> </span>audio-still-video<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--audio<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/dubs/episode/ez_dub_yt.wav"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--image<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_podcast_00001_.png"</span>
+</span></code></pre></div>
 <p>Do not treat that MP4 as the YouTube Languages extra-audio path — Studio still wants the duration-locked WAV.</p>
 <h2 id="what-runs-on-queue">What runs on Queue<a class="headerlink" href="#what-runs-on-queue" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>sequenceDiagram
