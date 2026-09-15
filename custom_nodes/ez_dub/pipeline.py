@@ -230,6 +230,7 @@ TRANSLATE_TIMEOUT_S = 120
 CLONE_TEXT_LIMIT = 300
 CFG_AUTO = -1.0
 CFG_CROSS_LANG = 0.0
+CFG_CROSS_LANG_RETRY = 0.25
 CFG_SAME_LANG = 0.5
 EXAGGERATION_DEFAULT = 0.5
 CLONE_TEMPERATURE = 0.8
@@ -238,7 +239,11 @@ EXPECTED_WORDS_PER_S = 2.7
 TAIL_SLACK = 1.6
 VOICED_MIN_FRAC = 0.20
 ZCR_NOISE_FRAC = 0.25
+ZCR_SPEECH_MIN = 150.0
+ZC_INTERVAL_CV_MIN = 0.18
+ZC_INTERVAL_MIN_GAPS = 8
 ENVELOPE_CV_MIN = 0.12
+CLONE_UNVOICED_STATUS = "clone unvoiced — empty mix"
 ONSET_ABS = 0.02
 ONSET_REL = 0.12
 ONSET_HOLD_S = 0.08
@@ -1639,21 +1644,55 @@ def normalize_clone_pcm(
     return [float(x) * scale for x in pcm]
 
 
+def _zero_cross_indices(pcm: list[float]) -> list[int]:
+    """Sample indices where the sign flips (zeros skipped, matching ZCR)."""
+    if len(pcm) < 2:
+        return []
+    out: list[int] = []
+    prev = float(pcm[0])
+    for i, raw in enumerate(pcm[1:], 1):
+        cur = float(raw)
+        if prev != 0.0 and cur != 0.0 and (prev >= 0.0) != (cur >= 0.0):
+            out.append(i)
+        prev = cur
+    return out
+
+
 def zero_crossing_rate(pcm: list[float], rate: int) -> float:
     """Zero-crossings per second. Noise sits near ``rate / 2``."""
     if len(pcm) < 2:
         return 0.0
-    zc = 0
-    prev = float(pcm[0])
-    for sample in pcm[1:]:
-        cur = float(sample)
-        if prev != 0.0 and cur != 0.0 and (prev >= 0.0) != (cur >= 0.0):
-            zc += 1
-        prev = cur
     dur = len(pcm) / float(int(rate) or SAMPLE_RATE)
     if dur <= 0.0:
         return 0.0
-    return zc / dur
+    return len(_zero_cross_indices(pcm)) / dur
+
+
+def zc_interval_cv(pcm: list[float]) -> float:
+    """Coefficient of variation of zero-crossing gaps.
+
+    A pure / AM tone has nearly constant period (CV near 0). Speech and
+    modulated noise have irregular gaps.
+
+    Arguments:
+        pcm: Mono PCM.
+    Returns:
+        ``std / mean`` of successive ZC gaps, or 0.0 when too few gaps.
+    """
+    idxs = _zero_cross_indices(pcm)
+    if len(idxs) < ZC_INTERVAL_MIN_GAPS + 1:
+        return 0.0
+    gaps = [float(idxs[i] - idxs[i - 1]) for i in range(1, len(idxs))]
+    if len(gaps) < ZC_INTERVAL_MIN_GAPS:
+        return 0.0
+    mean = sum(gaps) / len(gaps)
+    if mean < 1e-8:
+        return 0.0
+    acc = 0.0
+    for gap in gaps:
+        delta = gap - mean
+        acc += delta * delta
+    return (acc / len(gaps)) ** 0.5 / mean
 
 
 def voiced_fraction(
@@ -1682,17 +1721,30 @@ def voiced_fraction(
 
 
 def is_speech_like(pcm: list[float], rate: int) -> bool:
-    """False for silence, square-wave clip, white-noise ZCR, or a steady tone."""
+    """False for silence, noise, a steady tone, or a PerTh/Chatterbox drone.
+
+    Arguments:
+        pcm: Mono PCM.
+        rate: Sample rate.
+    Returns:
+        True only when RMS, ZCR, voicing, envelope, and ZC irregularity
+        all look like speech (not a 60–120 Hz leftover tone).
+    """
     if not pcm:
         return False
     if rms(pcm) < REF_MIN_RMS:
         return False
     sr = int(rate) or SAMPLE_RATE
-    if zero_crossing_rate(pcm, sr) > sr * ZCR_NOISE_FRAC:
+    zcr = zero_crossing_rate(pcm, sr)
+    if zcr > sr * ZCR_NOISE_FRAC:
+        return False
+    if zcr < ZCR_SPEECH_MIN:
         return False
     if voiced_fraction(pcm, sr) < VOICED_MIN_FRAC:
         return False
-    return envelope_cv(pcm, sr) >= ENVELOPE_CV_MIN
+    if envelope_cv(pcm, sr) < ENVELOPE_CV_MIN:
+        return False
+    return zc_interval_cv(pcm) >= ZC_INTERVAL_CV_MIN
 
 
 def crop_hallucination_tail(
@@ -2293,6 +2345,35 @@ def _maybe_yt_mp3_48k(dest: Path) -> None:
     )
 
 
+def _write_render_qc(
+    dest: Path,
+    mix: list[float],
+    rate: int,
+    turns: list[dict[str, Any]],
+    lang: str,
+    flags: list[str],
+    *,
+    extra_qc: list[str],
+    peak: float,
+) -> None:
+    """Write qc.json and append ``qc:`` onto ``flags``. Never raises."""
+    try:
+        report = evaluate_qc(
+            mix,
+            rate,
+            turns,
+            target_language=lang,
+            peak=peak,
+            extra_flags=extra_qc,
+        )
+        write_json(dest / "qc.json", report)
+        qc_flags = [str(x) for x in (report.get("flags") or [])]
+        if qc_flags:
+            flags.append("qc: " + ",".join(qc_flags))
+    except Exception as exc:  # noqa: BLE001 — QC must not fail the mix
+        _log(f"qc failed: {exc}")
+
+
 def render_mix(
     samples: list[float],
     rate: int,
@@ -2355,6 +2436,16 @@ def render_mix(
     cloned = False
     cloned_n = 0
     last_err = ""
+    cross_cfg = abs(cfg - CFG_CROSS_LANG) < 1e-9
+
+    def _prep_clone(raw_pcm: list[float], raw_sr: int, text: str) -> list[float]:
+        out = raw_pcm
+        if raw_sr != rate:
+            out = resample_linear(
+                out, int(round(len(out) * rate / max(raw_sr, 1)))
+            )
+        return crop_hallucination_tail(out, rate, text)
+
     _log(f"render {len(turns)} turns ({name})")
     bar = _progress(max(len(turns), 1))
     for i, turn in enumerate(turns):
@@ -2382,15 +2473,35 @@ def render_mix(
             if err:
                 last_err = err
             continue
-        if sr != rate:
-            pcm = resample_linear(
-                pcm, int(round(len(pcm) * rate / max(sr, 1)))
-            )
-        pcm = crop_hallucination_tail(pcm, rate, spoken)
+        pcm = _prep_clone(pcm, sr, spoken)
         write_wav(render_dir / f"turn_{int(turn['id']):04d}.raw.wav", pcm, rate)
         if not is_speech_like(pcm, rate):
-            flags.append(f"turn {turn['id']} clone unvoiced")
-            continue
+            used_retry = False
+            if cross_cfg:
+                pcm2, sr2, err2 = synthesize_turn(
+                    spoken,
+                    lang,
+                    str(ref) if ref else "",
+                    engine if engine in ENGINES else ENGINE_CHATTERBOX,
+                    exaggeration=exag,
+                    cfg_weight=CFG_CROSS_LANG_RETRY,
+                    ref_text=_speaker_ref_text(ref) if ref else "",
+                )
+                if err2:
+                    last_err = err2
+                if pcm2:
+                    pcm2 = _prep_clone(pcm2, sr2, spoken)
+                    write_wav(
+                        render_dir / f"turn_{int(turn['id']):04d}.raw.wav",
+                        pcm2,
+                        rate,
+                    )
+                    if is_speech_like(pcm2, rate):
+                        pcm = pcm2
+                        used_retry = True
+            if not used_retry:
+                flags.append(f"turn {turn['id']} clone unvoiced")
+                continue
         cloned = True
         cloned_n += 1
         src_chunk = _slice_pcm(samples, rate, float(turn["t0"]), float(turn["t1"]))
@@ -2450,9 +2561,55 @@ def render_mix(
             },
         )
         return [], rate, status
+    cross_lang = not _same_language(src_lang, tgt_lang)
+    if not cloned and unvoiced_only and cross_lang:
+        status = CLONE_UNVOICED_STATUS
+        flags.append(status)
+        _write_render_qc(
+            dest,
+            [],
+            rate,
+            turns,
+            lang,
+            flags,
+            extra_qc=["clone_unvoiced", "mix_not_speech"],
+            peak=0.0,
+        )
+        save_state(
+            dest,
+            {
+                "slug": dest.name,
+                "stage": "export",
+                "status": status,
+                "error": None,
+                "flags": flags,
+            },
+        )
+        return [], rate, status
     mix = build_timeline(samples, clones, rate, keep_bed=keep_bed)
     room = collect_room_tone(samples, turns, rate)
     mix, lock_flags = lock_duration(mix, len(samples), room=room, rate=rate)
+    if not is_speech_like(mix, rate):
+        status = CLONE_UNVOICED_STATUS
+        flags.append(status)
+        extra_qc = ["mix_not_speech"]
+        if any("unvoiced" in f for f in flags):
+            extra_qc.append("clone_unvoiced")
+        peak_raw = max((abs(float(x)) for x in mix), default=0.0)
+        _write_render_qc(
+            dest, mix, rate, turns, lang, flags, extra_qc=extra_qc, peak=peak_raw
+        )
+        save_state(
+            dest,
+            {
+                "slug": dest.name,
+                "stage": "export",
+                "status": status,
+                "error": None,
+                "flags": flags,
+            },
+        )
+        return [], rate, status
     mix = raise_to_peak(mix)
     write_wav(dest / "ez_dub_yt.wav", mix, rate)
     mix = _maybe_loudnorm_yt(dest, mix, rate, len(samples), room)
@@ -2482,26 +2639,14 @@ def render_mix(
     flags.append(f"peak={peak:.2f}")
     if peak < 0.25:
         flags.append("quiet mix")
-    extra_qc: list[str] = []
+    qc_extra: list[str] = []
     if any(" trimmed" in f or f.endswith(" trimmed") for f in flags):
-        extra_qc.append("trimmed_clone")
+        qc_extra.append("trimmed_clone")
     if any("unvoiced" in f for f in flags):
-        extra_qc.append("clone_unvoiced")
-    try:
-        report = evaluate_qc(
-            mix,
-            rate,
-            turns,
-            target_language=lang,
-            peak=peak,
-            extra_flags=extra_qc,
-        )
-        write_json(dest / "qc.json", report)
-        qc_flags = [str(x) for x in (report.get("flags") or [])]
-        if qc_flags:
-            flags.append("qc: " + ",".join(qc_flags))
-    except Exception as exc:  # noqa: BLE001 — QC must not fail the mix
-        _log(f"qc failed: {exc}")
+        qc_extra.append("clone_unvoiced")
+    _write_render_qc(
+        dest, mix, rate, turns, lang, flags, extra_qc=qc_extra, peak=peak
+    )
     status = f"{len(refs)} speakers, {cloned_n} turns cloned"
     if lock_flags.get("trimmed"):
         flags.append("duration trimmed")

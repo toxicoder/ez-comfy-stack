@@ -65,6 +65,7 @@ app.registerExtension({
       });
       uploadWidget.label = "Upload media";
       uploadWidget.serialize = false;
+      uploadWidget.serializeValue = async () => undefined;
       const widgets = this.widgets;
       const from = widgets.indexOf(uploadWidget);
       const after = widgets.indexOf(sourceWidget);

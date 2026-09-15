@@ -16,13 +16,15 @@ def sanitize_slug(slug: object, default: str = "episode") -> str:
     """Keep job folder names host-safe.
 
     Arguments:
-        slug: Operator widget text.
+        slug: Operator widget text. Non-strings (bool, int, None) use
+            ``default`` — never ``str(True)``.
         default: Fallback when empty after sanitizing.
     Returns:
         Non-empty slug.
     """
-    raw = slug if isinstance(slug, str) else str(slug or "")
-    cleaned = SLUG_RE.sub("-", raw.strip()).strip(".-")
+    if not isinstance(slug, str):
+        return default
+    cleaned = SLUG_RE.sub("-", slug.strip()).strip(".-")
     return cleaned or default
 
 

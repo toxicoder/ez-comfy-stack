@@ -271,6 +271,8 @@ def fit_turn(
         min_stretch: Ignored (legacy stacked floor). Cap is max_speed only.
     Returns:
         ``(pcm, flags)`` with speed/stretch/trimmed/padded/spill.
+        Short synth is **not** zero-padded; ``build_timeline`` overlays
+        ``len(pcm)`` only so trailing window keeps the bed.
     """
     del min_stretch
     flags: dict[str, Any] = {
@@ -286,11 +288,11 @@ def fit_turn(
     n = len(synth)
     if n == 0:
         flags["padded"] = True
-        return [0.0] * target, flags
+        return [], flags
     if n <= target:
         if n < target:
             flags["padded"] = True
-            return [float(x) for x in synth] + [0.0] * (target - n), flags
+            return [float(x) for x in synth], flags
         return [float(x) for x in synth], flags
     if n <= max_len:
         flags["spill"] = True

@@ -93,8 +93,18 @@ class EZDubIngest:
         "is on. No celebrity refs."
     )
 
-    def run(self, source, have_rights=False, job_slug="episode", source_url=""):
-        slug = sanitize_slug(job_slug)
+    def run(
+        self,
+        source,
+        have_rights=False,
+        job_slug: object = "episode",
+        source_url="",
+        **kwargs: object,
+    ):
+        del kwargs
+        slug = sanitize_slug(
+            job_slug if isinstance(job_slug, str) else "episode"
+        )
         dest = dub_dir(slug)
         try:
             resolved = resolve_media_source(source, source_url)
