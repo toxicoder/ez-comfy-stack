@@ -2822,7 +2822,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 20:37 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T20:37:16+00:00">15 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 21:25 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T21:25:37+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2868,7 +2868,7 @@
 </ul>
 <p>Do not paste celebrity reference WAVs. Refs are extracted from <strong>this</strong> job’s audio. URL ingest is for operator-owned or licensed URLs only. YouTube’s terms of service still apply to <code>yt-dlp</code>.</p>
 <h2 id="quality-bar">Quality bar<a class="headerlink" href="#quality-bar" title="Permanent link">&para;</a></h2>
-<p>Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), <strong>Clone CFG</strong> 0 on EN→ES (less English accent), onset-crop of <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> hush / PerTh floor before fit, duration lock that pitch-preserves <strong>up to 1.25×</strong> then spills into the following gap then fade-trims (it does not crush a 40 s clone into a 2 s window), same-speaker merge when the gap is under 0.35 s, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and <code>qc.json</code>. After render, A/B <code>dubs/&lt;slug&gt;/render/turn_NNNN.raw.wav</code> (onset-cropped <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>) vs <code>turn_NNNN.wav</code> (fitted). Unvoiced / steady-tone clones skip overlay. Editable translation JSON is the other lever (Stage <strong>analyze</strong>, edit, Rewrite <strong>off</strong>, Stage <strong>render</strong>). Default Stage <strong>all</strong> runs analyze then clone in one Queue. Do not disable PerTh.</p>
+<p>Production-usable for podcasts with 2–6 speakers and mostly turn-taking, <strong>and for a ~64 s single-speaker monologue</strong>. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), <strong>Clone CFG</strong> 0 on EN→ES (less English accent; one retry at 0.25 if the auto-0 take is not speech-like), onset-crop of <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> hush / PerTh floor before fit, duration lock that pitch-preserves <strong>up to 1.25×</strong> then spills into the following gap then fade-trims (it does not crush a 40 s clone into a 2 s window), same-speaker merge when the gap is under 0.35 s capped at 12 s so <code>fit_turn</code> stays speakable, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and <code>qc.json</code>. After render, A/B <code>dubs/&lt;slug&gt;/render/turn_NNNN.raw.wav</code> (onset-cropped <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>) vs <code>turn_NNNN.wav</code> (fitted). Unvoiced / steady-tone / PerTh-drone clones are a <strong>blocking miss</strong> on a cross-language job: empty mix + Dub status <code>clone unvoiced — empty mix</code>, never a duration-locked YT wav of a tone, hush, or ducked English. <code>qc.json</code> <code>mix_not_speech</code> is a fail even when peak ≥ 0.25. <strong>Job slug</strong> is always a string (<code>episode</code> when a bool leaks in); <strong>Upload media</strong> is a button only and does not occupy a serialized widget slot. Editable translation JSON is the other lever (Stage <strong>analyze</strong>, edit, Rewrite <strong>off</strong>, Stage <strong>render</strong>). Default Stage <strong>all</strong> runs analyze then clone in one Queue. Do not disable PerTh.</p>
 <p>Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera lip sync. <strong>No lip-sync OSS</strong> (Wav2Lip stays banned). Mouths will not match on talking-head video.</p>
 <h2 id="engines">Engines<a class="headerlink" href="#engines" title="Permanent link">&para;</a></h2>
 <table>
@@ -2956,7 +2956,7 @@
 </tr>
 <tr>
 <td><strong>Upload media</strong></td>
-<td>Choose a local file; Comfy stores it in <code>input/</code></td>
+<td>Choose a local file; Comfy stores it in <code>input/</code>. Button only — it does not occupy a <code>widgets_values</code> slot</td>
 </tr>
 <tr>
 <td><strong>Source URL</strong></td>
@@ -2968,7 +2968,7 @@
 </tr>
 <tr>
 <td><strong>Job slug</strong></td>
-<td><code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/</code></td>
+<td><code>${COMFY_OUTPUT_DIR}/dubs/&lt;slug&gt;/</code>. Always a string (default <code>episode</code>). A leaked boolean must not create <code>dubs/True/</code></td>
 </tr>
 <tr>
 <td><strong>Target language</strong></td>
@@ -3008,7 +3008,7 @@
 </tr>
 <tr>
 <td><strong>Clone CFG</strong></td>
-<td>−1 auto: 0 when source ≠ target (EN→ES). 0.5 same-language. Raise toward 0.5 if you want more of the original accent</td>
+<td>−1 auto: 0 when source ≠ target (EN→ES). 0.5 same-language. Auto-0 retries once at 0.25 if that take is not speech-like. Raise toward 0.5 if you want more of the original accent</td>
 </tr>
 <tr>
 <td><strong>Exaggeration</strong></td>
