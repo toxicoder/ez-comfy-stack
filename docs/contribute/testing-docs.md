@@ -60,10 +60,11 @@ Pyright errors and mypy errors are **defects**. Do not skip the gate.
 - `patch_get_free_memory`
 - `patch_unified_memory_copy`
 - `patch_magcache_compat`
+- `patch_vhs_widget_inputs`
 - `seed_clay_inputs`
 - **`ez_ltx_spatial`**
 
-That is **UM / MagCache / clay seed / LTX spatial** — **not** `docs/generate_shell_docs.py` and not the rest of `custom_nodes/`. The shell generator is exercised by pytest (`tests/python/test_generate_shell_docs.py`) without a 100% line gate.
+That is **UM / MagCache / VHS widgetInputs / clay seed / LTX spatial** — **not** `docs/generate_shell_docs.py` and not the rest of `custom_nodes/`. The shell generator is exercised by pytest (`tests/python/test_generate_shell_docs.py`) without a 100% line gate.
 
 `PYTHONPATH=docker:custom_nodes`.
 

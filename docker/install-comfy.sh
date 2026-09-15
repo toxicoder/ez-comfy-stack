@@ -253,10 +253,11 @@ main() {
     ensure_lab_manager
     step 4 "${total}" "Remove wrong PyPI nunchaku if present"
     cleanup_wrong_nunchaku
-    step 5 "${total}" "Apply Spark free-memory, copy=False, and MagCache compat patches"
+    step 5 "${total}" "Apply Spark free-memory, copy=False, MagCache, and VHS widgetInputs patches"
     apply_free_memory_patch
     apply_unified_memory_copy_patch
     apply_magcache_compat_patch
+    apply_vhs_widget_inputs_patch
     step 6 "${total}" "Refresh complete"
   fi
 

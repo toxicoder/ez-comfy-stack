@@ -118,5 +118,6 @@ phase_finalize() {
   apply_free_memory_patch
   apply_unified_memory_copy_patch
   apply_magcache_compat_patch
+  apply_vhs_widget_inputs_patch
   package_prebuilt_parts
 }
