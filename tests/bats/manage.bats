@@ -531,6 +531,16 @@ FROZEN_MANAGE_VERBS=(
   [[ "${output}" == *"sudo-heal"* ]]
 }
 
+@test "doctor warns when COMFY_OUTPUT_DIR nested layout is not writable" {
+  mkdir -p "${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user"
+  chmod a-w "${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user"
+  run cmd_doctor
+  chmod -R u+w "${COMFY_OUTPUT_DIR}/comfy-user" 2>/dev/null || true
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  [[ "${output}" == *"sudo-heal"* ]]
+}
+
 @test "download-models --limit accepts manual Mbps and overrides env" {
   export LAB_MOCK_HF_DOWNLOAD=1
   export DOWNLOAD_LIMIT=auto

@@ -26,6 +26,7 @@ tags: [troubleshooting, start, docker, kitchen, comfyui]
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | `start` refused | Headroom check | Free RAM/disk; stop other GPU jobs |
+| `mkdir: …/comfy-user/…/_rescued: Permission denied` then `start` exits | Nested `comfy-user` / `_user` is root-owned; host mkdir of `_rescued` ran without sudo-heal | Pull latest. Re-run `./scripts/manage.sh start` (type **yes**) — start sudo-heals those layout dirs. Details: [Host and Docker](troubleshooting-host-docker.md#comfy_output_dir-nested-permission-denied) |
 | Extreme model thrash / 5–15× slow | Unpatched free-memory | Confirm patch in container logs; re-run entrypoint install |
 | 10–20× slow / mushy video vs a 4090 | Silent PyTorch attention fallback (Kitchen/Sage not active) | `./scripts/manage.sh doctor` must **not** say `attention: pytorch-fallback` on a running Spark. Logs should contain `Using Comfy Kitchen attention`. Launch uses `--use-ck-attention` (never `--use-sage-attention` next to it). Do **not** `pip install sageattention` from PyPI on aarch64. Do **not** `spark-timing record` on that path (the command refuses) |
 | Empty Kitchen timing table | CI has no GPU; seconds are operator-measured | `attention: kitchen`, Queue the three smokes, then `./scripts/manage.sh spark-timing record --klein N --wan N --ltx N`. File: `${COMFY_OUTPUT_DIR}/spark-timing.json`. Record refuses if compose is up and attention is not `kitchen` |

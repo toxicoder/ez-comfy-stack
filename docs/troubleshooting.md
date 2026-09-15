@@ -50,7 +50,7 @@ tags: [troubleshooting, comfyui, docker]
 
     ---
 
-    Docker missing, `MODELS_DIR` permission, Spark farm SSH (`SPARK_HOSTS` / `SPARK_FABRIC_IPS`).
+    Docker missing, `MODELS_DIR` / `COMFY_OUTPUT_DIR` permission, Spark farm SSH (`SPARK_HOSTS` / `SPARK_FABRIC_IPS`).
 
     [:octicons-arrow-right-24: Host and Docker](operate/troubleshooting-host-docker.md)
 
@@ -105,7 +105,7 @@ Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixt
 flowchart TB
   Q["What is broken?"]
   Q --> Docker{"doctor: docker missing?"}
-  Q --> Models{"MODELS_DIR not writable?"}
+  Q --> Models{"MODELS_DIR or COMFY_OUTPUT_DIR not writable?"}
   Q --> Qdisc{"wondershaper / qdisc errors?"}
   Q --> SSH{"SSH freezes<br/>or host sluggish?"}
   Q --> Start{"start refused?"}
@@ -115,7 +115,7 @@ flowchart TB
   Q --> Limit{"Bandwidth limit stuck?"}
 
   Docker --> A0["apt docker-ce + compose plugin<br/>docker group · re-login"]
-  Models --> A0b["sudo mkdir/chown MODELS_DIR<br/>or MODELS_DIR in .env"]
+  Models --> A0b["setup / start sudo-heal layout dirs<br/>or MODELS_DIR / COMFY_OUTPUT_DIR in .env"]
   Qdisc --> A0c["soft-fail unthrottled warn OK<br/>modprobe sch_htb · clear"]
   SSH -->|during download| A1["download-models / lower Mbps<br/>or download-limit clear"]
   Start --> A2["Free RAM/disk<br/>stop other GPU jobs · doctor"]

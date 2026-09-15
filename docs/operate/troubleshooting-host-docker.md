@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting — host and Docker
-description: Docker missing, group/daemon, MODELS_DIR permissions, and Spark farm SSH on DGX Spark.
+description: Docker missing, group/daemon, MODELS_DIR and COMFY_OUTPUT_DIR permissions, and Spark farm SSH on DGX Spark.
 tags: [troubleshooting, docker, models-dir, spark-farm]
 ---
 
@@ -10,6 +10,7 @@ tags: [troubleshooting, docker, models-dir, spark-farm]
 
 - **Docker missing** / group / daemon on a reimaged Spark
 - **MODELS_DIR** not writable and nested `comfy/` permission
+- **COMFY_OUTPUT_DIR** nested `comfy-user/` permission (`_user/_rescued` on `start`)
 - **Spark farm SSH** — `SPARK_HOSTS` / `SPARK_FABRIC_IPS` from `config/spark-farm.example.env`
 
 **What this enables**
@@ -34,6 +35,7 @@ tags: [troubleshooting, docker, models-dir, spark-farm]
 | docker daemon not reachable | dockerd not running | `sudo systemctl start docker` |
 | `MODELS_DIR … not writable` | `${MODELS_DIR}` missing or root-owned | `./scripts/manage.sh setup` (sudo mkdir + chown). Last resort: `sudo mkdir -p "${MODELS_DIR}" && sudo chown "$USER:$USER" "${MODELS_DIR}"` **or** `MODELS_DIR=$HOME/models` |
 | `mkdir: …/comfy/…: Permission denied` during `download-models` | Nested `comfy/<subdir>` is root-owned (container `mkdir` on the bind-mount) while snapshots under `${MODELS_DIR}` are writable. Cache-hit still needs a writable layout dir to symlink. | Re-run `./scripts/manage.sh download-models` — linking now sudo-heals each layout dir (same heal on `setup` / `start`). Last resort: `sudo chown -R "$USER:$USER" "${MODELS_DIR}/comfy"` |
+| `mkdir: …/comfy-user/…/_rescued: Permission denied` during `start` | Nested `${COMFY_OUTPUT_DIR}/comfy-user` (or `_user`) is root-owned from the container bind while the output **root** is writable. `start` needs `_user/_rescued` for lab-graph rescue. | Re-run `./scripts/manage.sh start` (type **yes**) — `start` / `setup` sudo-heal each output layout dir (not recursive over PNG/MP4). Last resort: `sudo chown "$USER:$USER"` those layout dirs. Do not `sudo ./scripts/manage.sh start` |
 | `ln: … comfy/llm/….gguf: Permission denied` then `GGUF ready` | Relink into a nested dir the user cannot write; the GGUF is already present | Start is OK — Enhance works if that path exists. Heal: `./scripts/manage.sh download-models` **or** `setup` / `start` (sudo-chown `comfy/`). Do not abort start |
 | Pending / can't start container | Docker/GPU runtime | `nvidia-smi`, Container Toolkit install |
 | `failed to fetch oauth token: denied` / `nvcr.io` Access Denied on `start` | NGC base image pull without login | Pull latest (default bases are **Docker Hub** `nvidia/cuda` **runtime** for builder and final). Rebuild: `./scripts/manage.sh start`. If you set `CUDA_BASE_IMAGE` / `CUDA_RUNTIME_IMAGE` to `nvcr.io/...`, run `docker login nvcr.io` (user `$oauthtoken`, password = NGC API key) |
@@ -82,6 +84,33 @@ sudo chown -R "$USER:$USER" "${MODELS_DIR:-/mnt/models}"
 # or in .env:
 # MODELS_DIR=$HOME/models
 ./scripts/manage.sh doctor
+```
+
+### COMFY_OUTPUT_DIR nested permission denied
+
+Default media tree is `/mnt/comfy-output`. The root can be writable while `comfy-user/default/workflows/_user` is still root-owned (Comfy runs as root on the bind). `start` creates `_user/_rescued` on the host before compose up.
+
+Prefer bootstrap or a second `start` after pulling this heal:
+
+```bash
+./scripts/manage.sh setup
+./scripts/manage.sh start
+# sudo mkdir + chown for COMFY_OUTPUT_DIR layout dirs when needed
+```
+
+`setup` and `start` sudo-heal `input/`, `custom-nodes-user/`, and the `comfy-user/…/_user/_rescued` chain. They do **not** recurse `chown` over generated PNG/MP4 or operator JSON. `doctor` warns (does not hard-fail) when a nested layout dir is not writable. Do not prefix `start` with `sudo`.
+
+Manual last resort:
+
+```bash
+sudo mkdir -p "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user/default/workflows/_user/_rescued"
+sudo chown "$USER:$USER" \
+  "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user" \
+  "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user/default" \
+  "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user/default/workflows" \
+  "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user/default/workflows/_user" \
+  "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}/comfy-user/default/workflows/_user/_rescued"
+./scripts/manage.sh start
 ```
 
 ---

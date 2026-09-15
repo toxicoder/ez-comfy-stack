@@ -662,7 +662,58 @@ ensure_models_dir() {
 }
 
 #######################################
-# Ensure COMFY_OUTPUT_DIR exists and is writable (generated PNG/MP4).
+# Host layout dirs under COMFY_OUTPUT_DIR (input, operator nodes, Comfy user/).
+# Includes ancestors so sudo-heal can chown a root-owned _user before mkdir
+# of _rescued. Does not list generated media files.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   One relative directory path per line on stdout
+# Returns:
+#   0
+#######################################
+lab_comfy_output_layout_dirs() {
+  cat <<'EOF'
+input
+custom-nodes-user
+comfy-user
+comfy-user/default
+comfy-user/default/workflows
+comfy-user/default/workflows/_user
+comfy-user/default/workflows/_user/_rescued
+EOF
+}
+
+#######################################
+# Soft-warn when a COMFY_OUTPUT_DIR layout dir exists but is not writable.
+# Doctor stays a check: setup / start sudo-heal. Does not recurse into media.
+# Globals:
+#   COMFY_OUTPUT_DIR
+# Arguments:
+#   $1 - Output root (default COMFY_OUTPUT_DIR or /mnt/comfy-output)
+# Outputs:
+#   warn on stderr when a nested layout dir is not writable
+# Returns:
+#   0
+#######################################
+warn_unwritable_comfy_output_layout() {
+  local dir="${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
+  local rel
+  while IFS= read -r rel; do
+    [[ -z ${rel} ]] && continue
+    if [[ -d ${dir}/${rel} && ! -w ${dir}/${rel} ]]; then
+      warn "COMFY_OUTPUT_DIR/${rel}=${dir}/${rel} is not writable — setup / start will sudo-heal"
+      return 0
+    fi
+  done < <(lab_comfy_output_layout_dirs)
+  return 0
+}
+
+#######################################
+# Ensure COMFY_OUTPUT_DIR and layout dirs exist and are writable.
+# Tries mkdir -p as the current user; never uses sudo.
 # Globals:
 #   COMFY_OUTPUT_DIR (read when $1 omitted)
 # Arguments:
@@ -674,14 +725,24 @@ ensure_models_dir() {
 #######################################
 ensure_comfy_output_dir() {
   local dir="${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
+  local rel user group
+  user="$(id -un)"
+  group="$(id -gn)"
   ensure_writable_host_dir COMFY_OUTPUT_DIR "${dir}" || return 1
   # Start images, Comfy user/ (history, operator workflows), and operator
   # custom-node packs live beside generated PNG/MP4 so they survive image
   # pulls, pin refresh, and volume cleanup.
-  mkdir -p \
-    "${dir}/input" \
-    "${dir}/custom-nodes-user" \
-    "${dir}/comfy-user/default/workflows/_user/_rescued" || return 1
+  while IFS= read -r rel; do
+    [[ -z ${rel} ]] && continue
+    mkdir -p "${dir}/${rel}" 2>/dev/null || true
+    if [[ -d ${dir}/${rel} && -w ${dir}/${rel} ]]; then
+      continue
+    fi
+    err "COMFY_OUTPUT_DIR layout ${dir}/${rel} is not writable."
+    err "  ./scripts/manage.sh setup"
+    err "  # or: sudo mkdir -p '${dir}/${rel}' && sudo chown ${user}:${group} '${dir}/${rel}'"
+    return 1
+  done < <(lab_comfy_output_layout_dirs)
 }
 
 #######################################
@@ -736,7 +797,9 @@ prepare_models_dir() {
 }
 
 #######################################
-# Create COMFY_OUTPUT_DIR with sudo/chown when needed.
+# Create COMFY_OUTPUT_DIR and layout dirs; sudo-heal each dir when needed.
+# Does not recurse chown over generated PNG/MP4 or operator JSON.
+# Skips sudo when LAB_NO_SUDO=1 (tests / restricted environments).
 # Globals:
 #   LAB_NO_SUDO, COMFY_OUTPUT_DIR
 # Arguments:
@@ -744,10 +807,16 @@ prepare_models_dir() {
 # Outputs:
 #   Status via log/warn/err
 # Returns:
-#   0 when writable afterward; 1 on failure
+#   0 when the root and layout dirs exist and are writable; 1 on failure
 #######################################
 prepare_comfy_output_dir() {
-  prepare_writable_host_dir COMFY_OUTPUT_DIR "${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
+  local dir="${1:-${COMFY_OUTPUT_DIR:-/mnt/comfy-output}}"
+  local rel
+  prepare_writable_host_dir COMFY_OUTPUT_DIR "${dir}" || return 1
+  while IFS= read -r rel; do
+    [[ -z ${rel} ]] && continue
+    prepare_writable_layout_dir "${dir}/${rel}" || return 1
+  done < <(lab_comfy_output_layout_dirs)
 }
 
 #######################################
@@ -820,8 +889,9 @@ warn_unwritable_comfy_layout() {
 
 #######################################
 # Create one layout directory; sudo-heal mkdir/chown/chmod when not writable.
-# Used for MODELS_DIR/comfy/<sub> and ln_sfn_relative dest dirs. Does not
-# recurse into HF snapshots. Skips sudo when LAB_NO_SUDO=1.
+# Used for MODELS_DIR/comfy/<sub>, COMFY_OUTPUT_DIR layout dirs, and
+# ln_sfn_relative dest dirs. Does not recurse into HF snapshots or media.
+# Skips sudo when LAB_NO_SUDO=1.
 # Globals:
 #   LAB_NO_SUDO
 # Arguments:
