@@ -45,7 +45,7 @@ flowchart TB
 | **klein/dream-house** | Prompt Join `lock=view`. Independent T2I | No Blender, or you want a one-Queue draft |
 | **klein/dream-house-clay** | One greybox + ten cameras. Klein edit + `ReferenceLatent` | You want the kitchen to stay next to the lounge. `start` seeds plates; Blender dump is optional Workbench quality |
 
-Same ten cameras (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same 1024×1280 Instagram 4:5. Same optional style dropdown on the bible. Prefixes do **not** collide. Language-tour shot cards are walkthrough cameras (lens, height, room volume, near/far, which room); type the place — materials, time of day, architecture — in **HOUSE IDENTITY**. Interiors ask for an unoccupied full-room volume so a Queue reads as a tour of the whole house, not ten similar facades.
+Same ten cameras (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same 1024×1280 Instagram 4:5. Same optional style dropdown on the bible. Prefixes do **not** collide. Language-tour shot cards are walkthrough cameras (lens, height, a distinct room program, near/far, which room); type the place — materials, time of day, architecture — in **HOUSE IDENTITY**. Each still names its own room (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room) so a Queue reads as a tour, not one volume with different finishes.
 
 TRELLIS.2 is a hero-piece tool, not a walkable house. Do not TRELLIS a full-scene still and expect a foyer. Godot is P2 — `house-views` is Blender only.
 

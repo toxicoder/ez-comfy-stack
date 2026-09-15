@@ -327,11 +327,13 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert "behind the camera" in blobs["02 foyer"]
     assert "threshold" in blobs["02 foyer"]
     assert "depth" in blobs["02 foyer"]
+    assert "entrance hall" in blobs["02 foyer"]
+    assert "arrival corridor" in blobs["02 foyer"]
     assert "unoccupied" in blobs["02 foyer"]
     assert "24mm" in blobs["02 foyer"]
     assert "bible named" in blobs["03 lounge"]
     assert "main opening" in blobs["03 lounge"]
-    assert "living volume" in blobs["03 lounge"]
+    assert "living hall" in blobs["03 lounge"]
     assert "near field" in blobs["03 lounge"]
     assert "far plane" in blobs["03 lounge"]
     assert "unoccupied" in blobs["03 lounge"]
@@ -345,23 +347,27 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     ]
     assert toward_opening == ["03 lounge"]
     assert "kitchen" in blobs["04 kitchen"]
-    assert "work wall" in blobs["04 kitchen"]
-    assert "work surfaces" in blobs["04 kitchen"]
-    assert "work volume" in blobs["04 kitchen"]
+    assert "cook line" in blobs["04 kitchen"]
+    assert "cook room" in blobs["04 kitchen"]
+    assert "counters" in blobs["04 kitchen"]
+    assert "cooking appliances" in blobs["04 kitchen"]
     assert "interior only" in blobs["04 kitchen"]
     assert "bible named for this room" in blobs["04 kitchen"]
-    assert "dining" in blobs["05 dining"]
+    assert "dining hall" in blobs["05 dining"]
     assert "seated-height" in blobs["05 dining"]
     assert "along the table" in blobs["05 dining"]
-    assert "gathering volume" in blobs["05 dining"]
+    assert "chairs" in blobs["05 dining"]
+    assert "end wall" in blobs["05 dining"]
     assert "interior only" in blobs["05 dining"]
     assert "bible named for this room" in blobs["05 dining"]
     assert "bedroom" in blobs["06 bedroom"]
-    assert "private volume" in blobs["06 bedroom"]
-    assert "sleep furniture" in blobs["06 bedroom"]
+    assert "sleep chamber" in blobs["06 bedroom"]
+    assert "standing at the foot" in blobs["06 bedroom"]
+    assert "the bed the bible named" in blobs["06 bedroom"]
     assert "interior only" in blobs["06 bedroom"]
     assert "bible named for this room" in blobs["06 bedroom"]
     assert "bath" in blobs["07 bath"]
+    assert "small wet room" in blobs["07 bath"]
     assert "enclosed" in blobs["07 bath"]
     assert "fixtures" in blobs["07 bath"]
     assert "closer" in blobs["07 bath"]
@@ -369,6 +375,8 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert "bible named for this room" in blobs["07 bath"]
     assert "along" in blobs["08 terrace"]
     assert "outdoor" in blobs["08 terrace"]
+    assert "open-air" in blobs["08 terrace"]
+    assert "sky overhead" in blobs["08 terrace"]
     assert "near field" in blobs["08 terrace"]
     assert "unoccupied" in blobs["08 terrace"]
     assert "surroundings are only what the bible named" in blobs["08 terrace"]
@@ -379,22 +387,25 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert "unoccupied" in blobs["09 drone"]
     assert "surroundings are only what the bible named" in blobs["09 drone"]
     assert "study" in blobs["10 study"]
-    assert "intimate" in blobs["10 study"]
+    assert "writing room" in blobs["10 study"]
+    assert "writing surface" in blobs["10 study"]
+    assert "storage wall" in blobs["10 study"]
     assert "closer" in blobs["10 study"]
-    assert "work wall" in blobs["10 study"]
-    assert "work volume" in blobs["10 study"]
     assert "interior only" in blobs["10 study"]
     assert "bible named for this room" in blobs["10 study"]
     for lab in ("04 kitchen", "05 dining", "06 bedroom", "07 bath", "10 study"):
         assert "interior only" in blobs[lab]
         assert "bible named for this room" in blobs[lab]
         assert "35mm" in blobs[lab]
-        assert "volume" in blobs[lab]
         assert "unoccupied" in blobs[lab]
-    for lab in ("03 lounge", "04 kitchen", "05 dining", "06 bedroom", "10 study"):
-        assert "floor" in blobs[lab]
-        assert "walls" in blobs[lab]
-        assert "ceiling" in blobs[lab]
+    kitchen = blobs["04 kitchen"]
+    study = blobs["10 study"]
+    assert "cook line" not in study
+    assert "cooking appliances" not in study
+    assert "writing surface" not in kitchen
+    assert "storage wall" not in kitchen
+    assert "sleep chamber" not in kitchen
+    assert "dining hall" not in kitchen
     joined_cards = " ".join(blobs.values())
     assert "just inside" not in joined_cards
     assert "daylight exterior" not in joined_cards
@@ -402,6 +413,14 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert "nook" not in joined_cards
     assert "fills the entire backdrop" not in joined_cards
     assert "not a second facade" not in joined_cards
+    assert "floor, walls, and ceiling" not in joined_cards
+    assert "work volume" not in joined_cards
+    assert "work wall" not in joined_cards
+    assert "living volume" not in joined_cards
+    assert "gathering volume" not in joined_cards
+    assert "private volume" not in joined_cards
+    shots = [card["shot"] for card in pack10]
+    assert len(set(shots)) == 10
     interiors = [
         blobs["04 kitchen"],
         blobs["05 dining"],
@@ -412,6 +431,8 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     assert len(set(interiors)) == 5
     assert blobs["03 lounge"] != blobs["04 kitchen"]
     assert blobs["05 dining"] != blobs["08 terrace"]
+    assert blobs["02 foyer"] != blobs["03 lounge"]
+    assert blobs["06 bedroom"] != blobs["10 study"]
 
 
 def test_place_10_shots_stay_generic_when_identity_swaps() -> None:

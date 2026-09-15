@@ -50,7 +50,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 | **klein/still-draft** | Spark Still. 768×432, Enhance on. Prefix `ez_still_draft` |
 | **klein/identity-sheet** | 3-angle sheet of the identity you type, seed **42**, **1280×704** |
 | **klein/storyboard-6up** | Six new cameras of one scene (`ez_board_01`…`06`) |
-| **klein/dream-house** | World bible. Ten Instagram 4:5 stills: virtual tour of one place (tower, foyer, rooms, terrace, drone, study) |
+| **klein/dream-house** | World bible. Ten Instagram 4:5 stills: virtual tour of one place, each a different room or view (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study) |
 | **klein/dream-house-clay** | Same tour as Klein **edit** of clay (`ez_house_clay_01`…`10`). `start` seeds plates; optional `house-views` dump. Prefix `ez_dream_house_clay_*` |
 | **klein/character-draft** | Character still, 1024×1280, style dropdown, prefix `ez_character` |
 | **klein/character-tweak** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |

@@ -80,7 +80,7 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein/still-draft** | Spark Still. 768×432, seed 42, Enhance on. Prefix `ez_still_draft` |
 | **klein/identity-sheet** | Front / three-quarter / profile. 1280×704, Enhance on (identity mode) |
 | **klein/storyboard-6up** | Six new cameras of one scene (`ez_board_01`…`06`) |
-| **klein/dream-house** | Virtual tour. Ten 4:5 stills of **one place**, one room or angle each (tower, foyer, rooms, terrace, drone, study; default placeholder is a full-floor penthouse in a dense city) |
+| **klein/dream-house** | Virtual tour. Ten 4:5 stills of **one place**, each a different room or view (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study; default placeholder is a full-floor penthouse in a dense city) |
 | **klein/dream-house-clay** | Same walkthrough as Klein edit of clay plates (`ez_house_clay_01`…`10`). `start` seeds LoadImage; optional `house-views` dump. Prefix `ez_dream_house_clay_01`…`10` |
 | **klein/style-lock** | One place, four cameras |
 | **klein/lighting-trio** | Same subject, three lights |
