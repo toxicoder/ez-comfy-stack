@@ -53,7 +53,7 @@ Do not paste celebrity reference WAVs. Refs are extracted from **this** job’s 
 
 ## Quality bar
 
-Production-usable for podcasts with 2–6 speakers and mostly turn-taking. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent), onset-crop of Chatterbox hush / PerTh floor before fit, duration lock that pitch-preserves **up to 1.25×** then spills into the following gap then fade-trims (it does not crush a 40 s clone into a 2 s window), same-speaker merge when the gap is under 0.35 s, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and `qc.json`. After render, A/B `dubs/<slug>/render/turn_NNNN.raw.wav` (onset-cropped TTS) vs `turn_NNNN.wav` (fitted). Unvoiced / steady-tone clones skip overlay. Editable translation JSON is the other lever (Stage **analyze**, edit, Rewrite **off**, Stage **render**). Default Stage **all** runs analyze then clone in one Queue. Do not disable PerTh.
+Production-usable for podcasts with 2–6 speakers and mostly turn-taking, **and for a ~64 s single-speaker monologue**. Clone quality levers: clean 6–10 s per-speaker refs (one take when possible), **Clone CFG** 0 on EN→ES (less English accent; one retry at 0.25 if the auto-0 take is not speech-like), onset-crop of Chatterbox hush / PerTh floor before fit, duration lock that pitch-preserves **up to 1.25×** then spills into the following gap then fade-trims (it does not crush a 40 s clone into a 2 s window), same-speaker merge when the gap is under 0.35 s capped at 12 s so `fit_turn` stays speakable, in-graph raise-to-peak (optional ffmpeg −14 LUFS), and `qc.json`. After render, A/B `dubs/<slug>/render/turn_NNNN.raw.wav` (onset-cropped TTS) vs `turn_NNNN.wav` (fitted). Unvoiced / steady-tone / PerTh-drone clones are a **blocking miss** on a cross-language job: empty mix + Dub status `clone unvoiced — empty mix`, never a duration-locked YT wav of a tone, hush, or ducked English. `qc.json` `mix_not_speech` is a fail even when peak ≥ 0.25. **Job slug** is always a string (`episode` when a bool leaks in); **Upload media** is a button only and does not occupy a serialized widget slot. Editable translation JSON is the other lever (Stage **analyze**, edit, Rewrite **off**, Stage **render**). Default Stage **all** runs analyze then clone in one Queue. Do not disable PerTh.
 
 Hard cases: heavy overlap, stadium noise, singing, very fast banter, on-camera lip sync. **No lip-sync OSS** (Wav2Lip stays banned). Mouths will not match on talking-head video.
 
@@ -107,10 +107,10 @@ Graph: **audio/dub/localize** (`extra.lab_profile` `us-safe-dub`). Occupancy **a
 | Widget | Role |
 | --- | --- |
 | **Source file** | Dropdown of wav/mp4/mkv/mp3 already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`). Default `(none)` |
-| **Upload media** | Choose a local file; Comfy stores it in `input/` |
+| **Upload media** | Choose a local file; Comfy stores it in `input/`. Button only — it does not occupy a `widgets_values` slot |
 | **Source URL** | Optional http(s) you have rights to fetch. Overrides Source file when set |
 | **I have rights** | Required. Off refuses Queue |
-| **Job slug** | `${COMFY_OUTPUT_DIR}/dubs/<slug>/` |
+| **Job slug** | `${COMFY_OUTPUT_DIR}/dubs/<slug>/`. Always a string (default `episode`). A leaked boolean must not create `dubs/True/` |
 | **Target language** | Default Spanish |
 | **Source language** | `auto` or pin |
 | **Rewrite translation** | On: ASR + speaker cluster + per-turn GGUF into `text_target`. Off: pin the JSON |
@@ -120,7 +120,7 @@ Graph: **audio/dub/localize** (`extra.lab_profile` `us-safe-dub`). Occupancy **a
 | **Keep original bed** | Gaps keep ambience |
 | **Spoken disclosure** | Default **off**. Localized bumper on `ez_dub_mix` only; sidecar always written |
 | **Speaking speed** | 1.0 default. Pitch-preserving stretch when fitting the original window |
-| **Clone CFG** | −1 auto: 0 when source ≠ target (EN→ES). 0.5 same-language. Raise toward 0.5 if you want more of the original accent |
+| **Clone CFG** | −1 auto: 0 when source ≠ target (EN→ES). 0.5 same-language. Auto-0 retries once at 0.25 if that take is not speech-like. Raise toward 0.5 if you want more of the original accent |
 | **Exaggeration** | 0.5 neutral. Higher is more intense and faster |
 
 ## Sequential Queue

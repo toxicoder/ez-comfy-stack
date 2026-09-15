@@ -143,6 +143,7 @@ def assign_overlap(turns: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 MERGE_GAP_S = 0.35
+MERGE_MAX_S = 12.0
 
 
 def _join_turn_text(left: str, right: str) -> str:
@@ -162,7 +163,8 @@ def merge_adjacent_turns(
 
     Concatenate text with a single space. Union [t0, t1].
     rms = max of the two. overlap stays True if either was.
-    Call AFTER assign_overlap, BEFORE translate.
+    Call AFTER assign_overlap, BEFORE translate. A merged window longer
+    than ``MERGE_MAX_S`` starts a new turn so ``fit_turn`` stays speakable.
     """
     ordered = sorted((dict(t) for t in turns), key=lambda t: (t["t0"], t["t1"]))
     if not ordered:
@@ -175,7 +177,10 @@ def merge_adjacent_turns(
         gap = float(turn["t0"]) - float(prev["t1"])
         a = str(prev.get("text") or "").strip()
         b = str(turn.get("text") or "").strip()
-        if not same or gap >= limit:
+        union_s = max(float(prev["t1"]), float(turn["t1"])) - min(
+            float(prev["t0"]), float(turn["t0"])
+        )
+        if not same or gap >= limit or union_s > MERGE_MAX_S:
             out.append(dict(turn))
             continue
         prev["t0"] = min(float(prev["t0"]), float(turn["t0"]))

@@ -230,6 +230,8 @@ ENHANCE_TYPES = (
 
 
 # App Mode widget order: the thing the user types first, then look, then Run knobs.
+# EZDubIngest: ``upload`` is an App button label only. Serialized node
+# widgets_values stay source, have_rights, job_slug, source_url (4-wide).
 WIDGET_ORDER = (
     "source",
     "upload",

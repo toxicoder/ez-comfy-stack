@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import math
 import os
 import shutil
@@ -104,6 +105,7 @@ def test_pack_imports_without_whisper() -> None:
     assert "EZDubIngest" in body
     assert "/upload/image" in body
     assert "Upload media" in body
+    assert "serializeValue" in body
     assert "audio/*" in body
     assert "video/*" in body
     status_js = CUSTOM / "ez_dub" / "js" / "ez_dub_status.js"
@@ -126,6 +128,7 @@ def test_pack_imports_without_whisper() -> None:
 def test_ingest_source_is_input_combo(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     spec = EZDubIngest.INPUT_TYPES()["required"]
+    assert list(spec) == ["source", "have_rights", "job_slug", "source_url"]
     source = spec["source"]
     assert isinstance(source[0], list)
     assert source[0][0] == pipeline.SOURCE_NONE
@@ -310,6 +313,20 @@ def test_resolve_media_source_basename_url_and_none(
         assert "source missing" in str(exc)
 
 
+def test_ingest_ignores_upload_kwarg_and_bool_slug(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    wav = tmp_path / "in.wav"
+    dub_audio.write_wav(wav, [0.1, -0.1] * 100, 24000)
+    out = EZDubIngest().run(str(wav), True, True, "", upload=None)
+    assert out["result"][0] == "episode"
+    dest = tmp_path / "dubs" / "episode"
+    assert (dest / "source.wav").is_file()
+    assert not (tmp_path / "dubs" / "True").exists()
+
+
 def test_ingest_none_source_fail_soft(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     out = EZDubIngest().run(pipeline.SOURCE_NONE, True, "episode")
@@ -444,11 +461,39 @@ def test_merge_adjacent_does_not_merge_other_speaker() -> None:
     assert merged[1]["speaker"] == "spk01"
 
 
+def test_merge_adjacent_caps_monologue() -> None:
+    turns = []
+    for i in range(20):
+        t0 = i * 2.1
+        turns.append(
+            dub_turns.normalize_turn(
+                {
+                    "id": i + 1,
+                    "speaker": "spk00",
+                    "t0": t0,
+                    "t1": t0 + 2.0,
+                    "text": f"Line {i}.",
+                    "rms": 0.2,
+                },
+                i + 1,
+            )
+        )
+    merged = dub_turns.merge_adjacent_turns(turns)
+    assert len(merged) > 1
+    span = float(merged[-1]["t1"]) - float(merged[0]["t0"])
+    assert span > dub_turns.MERGE_MAX_S
+    for turn in merged:
+        assert float(turn["t1"]) - float(turn["t0"]) <= dub_turns.MERGE_MAX_S + 1e-6
+
+
 def test_fit_turn_pad_spill_trim() -> None:
     rate = 24000
     short, flags = align.fit_turn([0.2] * 100, rate, 0.02)
     assert flags["padded"] is True
-    assert len(short) == int(round(0.02 * rate))
+    assert len(short) == 100
+    empty, empty_flags = align.fit_turn([], rate, 0.02)
+    assert empty_flags["padded"] is True
+    assert empty == []
     window = 0.05
     long_pcm = [0.2] * int(0.2 * rate)
     fitted, meta = align.fit_turn(long_pcm, rate, window, spill_s=0.0)
@@ -460,6 +505,25 @@ def test_fit_turn_pad_spill_trim() -> None:
     assert spill_flags["spill"] is True
     assert len(spilled) == len(long_pcm)
     assert len(spilled) > len(fitted)
+
+
+def test_fit_turn_short_clone_does_not_duck_bed() -> None:
+    rate = 24000
+    source = _am_speech(rate, 4.0)
+    synth = _am_speech(rate, 0.4)
+    fitted, flags = align.fit_turn(synth, rate, 4.0)
+    assert flags["padded"] is True
+    assert len(fitted) == len(synth)
+    mix = align.build_timeline(
+        source,
+        [{"t0": 0.0, "pcm": fitted}],
+        rate,
+        keep_bed=True,
+        xfade_ms=30,
+    )
+    fade = int(rate * 0.030)
+    start = len(fitted) + fade
+    assert mix[start:] == source[start:]
 
 
 def test_raise_to_peak_amplifies_quiet_pcm() -> None:
@@ -529,6 +593,13 @@ def test_jobstore_roundtrip(tmp_path: Path) -> None:
     assert jobstore.sanitize_slug("***") == "episode"
 
 
+def test_sanitize_slug_rejects_bool() -> None:
+    assert jobstore.sanitize_slug(True) == "episode"
+    assert jobstore.sanitize_slug(False) == "episode"
+    assert jobstore.sanitize_slug(1) == "episode"
+    assert jobstore.sanitize_slug(None) == "episode"
+
+
 def test_pcm_list_flattens_nested() -> None:
     assert pipeline._pcm_list(None) == []
     assert pipeline._pcm_list(0.5) == [0.5]
@@ -552,14 +623,13 @@ def test_render_uses_tts_hook(tmp_path: Path, monkeypatch) -> None:
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
-    samples = [0.05] * rate * 8
+    samples = _am_speech(rate, 8.0)
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
     def _tts(text, language, ref_wav, engine):
         del language, ref_wav, engine
-        n = max(100, len(text) * 40)
-        return [0.3] * n, rate
+        return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
 
     pipeline.tts_hook = _tts
     try:
@@ -596,14 +666,13 @@ def test_render_mix_yt_wav_equals_source_length(
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
-    samples = [0.05] * rate * 8
+    samples = _am_speech(rate, 8.0)
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
     def _tts(text, language, ref_wav, engine):
         del language, ref_wav, engine
-        n = max(100, len(text) * 40)
-        return [0.3] * n, rate
+        return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
 
     pipeline.tts_hook = _tts
     try:
@@ -641,14 +710,13 @@ def test_render_mix_optional_48k_mp3_argv(tmp_path: Path, monkeypatch) -> None:
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
-    samples = [0.05] * rate * 8
+    samples = _am_speech(rate, 8.0)
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
     def _tts(text, language, ref_wav, engine):
         del language, ref_wav, engine
-        n = max(100, len(text) * 40)
-        return [0.3] * n, rate
+        return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
 
     pipeline.tts_hook = _tts
     try:
@@ -681,14 +749,14 @@ def test_mix_loudness_raises_quiet_render(tmp_path: Path, monkeypatch) -> None:
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
-    samples = [0.05] * rate * 8
+    samples = [0.25 * x for x in _am_speech(rate, 8.0)]
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
     def _tts(text, language, ref_wav, engine):
         del language, ref_wav, engine
-        n = max(100, len(text) * 40)
-        return [0.05] * n, rate
+        quiet = [0.25 * x for x in _am_speech(rate, max(0.4, len(text) * 40 / float(rate)))]
+        return quiet, rate
 
     pipeline.tts_hook = _tts
     try:
@@ -840,6 +908,23 @@ def test_qc_flags_leak_and_empty_target() -> None:
     flags = report.get("flags") or []
     assert "empty_target" in flags
     assert "leak" in flags
+
+
+def test_qc_mix_not_speech_is_fail() -> None:
+    from ez_dub.qc import evaluate_qc
+
+    rate = 24000
+    mix = _perth_drone(rate, hush_s=1.0, tone_s=1.0, f0=90.0)
+    peak = max(abs(x) for x in mix)
+    assert peak >= 0.25
+    report = evaluate_qc(mix, rate, [], target_language="es", peak=peak)
+    assert report["ok"] is False
+    assert "mix_not_speech" in (report.get("flags") or [])
+    checks = report.get("checks") or []
+    assert any(
+        str(item.get("id")) == "mix_not_speech" and item.get("level") == "fail"
+        for item in checks
+    )
 
 
 def test_qc_flags_gap_passthrough_quiet_and_english() -> None:
@@ -1962,8 +2047,7 @@ def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch) -> None:
 
     def _tts(text, language, ref_wav, engine):
         del language, ref_wav, engine
-        n = max(100, len(text) * 40)
-        return [0.3] * n, rate
+        return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
 
     pipeline.asr_hook = _asr
     pipeline.translate_hook = _tr
@@ -2333,7 +2417,7 @@ def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch) -> None
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
-    samples = [0.2] * rate * 8
+    samples = _am_speech(rate, 8.0)
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     seen: list[dict] = []
 
@@ -2343,7 +2427,7 @@ def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch) -> None
         def generate(self, text: str, **kwargs):
             del text
             seen.append(dict(kwargs))
-            return [0.1] * 800
+            return _am_speech(24000, 0.5)
 
     monkeypatch.setattr(pipeline, "_get_chatterbox", lambda: (_Fake(), ""))
     monkeypatch.setattr(pipeline, "preflight_clone", lambda: "")
@@ -2555,14 +2639,47 @@ def test_fit_turn_does_not_crush_extreme() -> None:
 def _am_speech(
     rate: int, seconds: float, f0: float = 160.0, fmod: float = 4.5
 ) -> list[float]:
-    """Amplitude-modulated tone: speech-like envelope, not a steady drone."""
-    n = int(rate * seconds)
+    """Speech-shaped PCM: formant bursts plus gated noise, not a carrier drone."""
+    del f0
+    n = max(1, int(round(rate * seconds)))
     out: list[float] = []
+    seed = 12345
+    sr = float(rate)
+    for i in range(n):
+        t = i / sr
+        env = 0.40 + 0.60 * abs(math.sin(2.0 * math.pi * fmod * t))
+        voiced = (
+            math.sin(2.0 * math.pi * 540.0 * t)
+            + 0.55 * math.sin(2.0 * math.pi * 1650.0 * t)
+            + 0.30 * math.sin(2.0 * math.pi * 2450.0 * t)
+        )
+        seed = (1103515245 * seed + 12345) & 0x7FFFFFFF
+        noise = (seed / 0x7FFFFFFF) * 2.0 - 1.0
+        burst = abs(math.sin(2.0 * math.pi * 9.0 * t))
+        sample = env * (0.55 * voiced + 0.45 * noise * burst)
+        if sample > 1.0:
+            sample = 1.0
+        elif sample < -1.0:
+            sample = -1.0
+        out.append(0.45 * sample)
+    return out
+
+
+def _perth_drone(
+    rate: int,
+    hush_s: float = 8.0,
+    tone_s: float = 4.0,
+    f0: float = 90.0,
+) -> list[float]:
+    """Fixture-like leftover: hush, then a loud low-ZCR AM tone (peak ~0.8)."""
+    hush = [0.0015] * int(rate * hush_s)
+    n = int(rate * tone_s)
+    tone: list[float] = []
     for i in range(n):
         t = i / float(rate)
-        env = 0.35 + 0.55 * abs(math.sin(2.0 * math.pi * fmod * t))
-        out.append(env * math.sin(2.0 * math.pi * f0 * t))
-    return out
+        env = 0.55 + 0.45 * abs(math.sin(2.0 * math.pi * 0.7 * t))
+        tone.append(0.80 * env * math.sin(2.0 * math.pi * f0 * t))
+    return hush + tone
 
 
 def test_crop_hallucination_tail_keeps_voiced_prefix() -> None:
@@ -2632,6 +2749,15 @@ def test_is_speech_like_rejects_nyquist_square() -> None:
     assert pipeline.is_speech_like([], rate) is False
 
 
+def test_is_speech_like_rejects_perth_drone() -> None:
+    rate = 24000
+    drone = _perth_drone(rate, hush_s=8.0, tone_s=4.0, f0=90.0)
+    assert pipeline.is_speech_like(drone, rate) is False
+    tone_only = drone[rate * 8 :]
+    assert pipeline.is_speech_like(tone_only, rate) is False
+    assert pipeline.zero_crossing_rate(tone_only, rate) < 250.0
+
+
 def test_render_mix_strips_leading_clone_hush(
     tmp_path: Path, monkeypatch
 ) -> None:
@@ -2640,7 +2766,7 @@ def test_render_mix_strips_leading_clone_hush(
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
-    samples = [0.05] * rate * 4
+    samples = _am_speech(rate, 4.0)
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = {
         "target_language": "es",
@@ -2719,13 +2845,12 @@ def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch) -> None:
     finally:
         pipeline.tts_hook = None
     assert out_rate == rate
-    assert mix
-    assert len(mix) == len(samples)
+    assert mix == []
     assert "unvoiced" in status
-    assert "0 turns cloned" in status
-    assert (dest / "ez_dub_yt.wav").is_file()
+    assert "empty mix" in status
+    assert not (dest / "ez_dub_yt.wav").is_file()
     qc = (dest / "qc.json").read_text(encoding="utf-8")
-    assert "clone_unvoiced" in qc
+    assert "clone_unvoiced" in qc or "mix_not_speech" in qc
 
 
 def test_render_mix_skips_steady_tone_clone(tmp_path: Path, monkeypatch) -> None:
@@ -2758,9 +2883,124 @@ def test_render_mix_skips_steady_tone_clone(tmp_path: Path, monkeypatch) -> None
     finally:
         pipeline.tts_hook = None
     assert out_rate == rate
-    assert mix
+    assert mix == []
     assert "unvoiced" in status
-    assert "0 turns cloned" in status
+    assert "empty mix" in status
+    assert not (dest / "ez_dub_yt.wav").is_file()
+
+
+def test_render_mix_drone_is_blocking_empty_mix(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = _am_speech(rate, 3.0)
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "",
+        "turns": [
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 0.0,
+                "t1": 2.5,
+                "text": "Hello from the station.",
+                "text_target": "Hola desde la estación.",
+                "overlap": False,
+                "rms": 0.2,
+            }
+        ],
+    }
+
+    def _tts(text, language, ref_wav, engine):
+        del text, language, ref_wav, engine
+        return _perth_drone(rate, hush_s=0.5, tone_s=1.5, f0=90.0), rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert mix == []
+    assert "unvoiced" in status
+    assert "empty mix" in status
+    assert not (dest / "ez_dub_yt.wav").is_file()
+    qc = json.loads((dest / "qc.json").read_text(encoding="utf-8"))
+    assert qc["ok"] is False
+    assert "mix_not_speech" in qc["flags"] or "clone_unvoiced" in qc["flags"]
+
+
+def test_clone_cfg_retries_when_unvoiced(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = _am_speech(rate, 3.0)
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "",
+        "turns": [
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 0.0,
+                "t1": 1.5,
+                "text": "Hello team",
+                "text_target": "Hola equipo",
+                "overlap": False,
+                "rms": 0.2,
+            }
+        ],
+    }
+    calls: list[int] = []
+
+    def _tts(text, language, ref_wav, engine):
+        del text, language, ref_wav, engine
+        calls.append(1)
+        if len(calls) == 1:
+            return _perth_drone(rate, hush_s=0.3, tone_s=1.0, f0=90.0), rate
+        return _am_speech(rate, 0.8), rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+            cfg_weight=-1.0,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert mix
+    assert "cloned" in status
+    assert len(calls) >= 2
+    assert (dest / "ez_dub_yt.wav").is_file()
+    yt, _sr = dub_audio.read_wav(dest / "ez_dub_yt.wav")
+    assert pipeline.is_speech_like(yt, rate) is True
 
 
 def test_render_mix_speed_widget_does_not_stack(
@@ -2771,7 +3011,7 @@ def test_render_mix_speed_widget_does_not_stack(
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
     rate = 24000
-    samples = [0.2] * rate * 8
+    samples = _am_speech(rate, 8.0)
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
     seen_cap: list[float] = []
@@ -2869,7 +3109,9 @@ def test_clone_prep_helpers_edge_cases() -> None:
     assert align.pitch_preserving_stretch(same, 3, 24000) == same
     empty_fit, flags = align.fit_turn([], 24000, 0.01)
     assert flags["padded"] is True
-    assert len(empty_fit) == int(round(0.01 * 24000))
+    assert empty_fit == []
+    assert pipeline.zc_interval_cv([0.1] * 100) == 0.0
+    assert pipeline.zc_interval_cv([]) == 0.0
     stretched = align.pitch_preserving_stretch([0.2] * 2400, 2000, 24000)
     assert len(stretched) == 2000
 

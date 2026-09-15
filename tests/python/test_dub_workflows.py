@@ -63,9 +63,9 @@ def test_dub_localize_graph() -> None:
     assert DISCLOSURE in blob
     assert "I have rights" in blob or "have_rights" in blob
     ingest = next(n for n in graph["nodes"] if n["type"] == "EZDubIngest")
-    assert ingest["widgets_values"][0] == "(none)"
-    assert ingest["widgets_values"][1] is False
-    assert ingest["widgets_values"][3] == ""
+    assert ingest["widgets_values"] == ["(none)", False, "episode", ""]
+    types = [type(v) for v in ingest["widgets_values"]]
+    assert types == [str, bool, str, str]
     script = next(n for n in graph["nodes"] if n["type"] == "EZDubScript")
     assert script["widgets_values"][1] is True
     assert script["widgets_values"][2] == "es"
@@ -118,5 +118,23 @@ def test_dub_localize_graph() -> None:
     assert "Stage all" in note or "Stage **all**" in note
     assert "320 kbps MP3 (duration-locked)" not in note
     assert "ez_dub_yt.wav" in note
+    assert "empty mix" in note
     outputs = graph["extra"]["linearData"]["outputs"]
     assert 3 in outputs
+
+
+def test_ingest_widgets_values_stay_four_wide() -> None:
+    graph = _load("audio/dub/localize")
+    ingest = next(n for n in graph["nodes"] if n["type"] == "EZDubIngest")
+    values = ingest["widgets_values"]
+    assert len(values) == 4
+    assert values == ["(none)", False, "episode", ""]
+    assert isinstance(values[0], str)
+    assert isinstance(values[1], bool)
+    assert isinstance(values[2], str)
+    assert isinstance(values[3], str)
+    names = _app_names(graph)
+    assert names[0] == "source"
+    assert "upload" in names
+    labels = _app_labels(graph)
+    assert "Upload media" in labels

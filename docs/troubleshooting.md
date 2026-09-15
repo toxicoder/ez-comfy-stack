@@ -42,7 +42,7 @@ tags: [troubleshooting, comfyui, docker]
 
     ---
 
-    Missing Models, LTX 720, dub, occupancy XOR, studio-ui `:8190` (not App Mode).
+    Missing Models, LTX 720, dub (duration-locked YT tone / `job_slug=True`), occupancy XOR, studio-ui `:8190` (not App Mode).
 
     [:octicons-arrow-right-24: Studio canvas](operate/troubleshooting-canvas.md)
 
@@ -88,6 +88,14 @@ tags: [troubleshooting, comfyui, docker]
 | Downloads and bandwidth | [Troubleshooting — downloads and bandwidth](operate/troubleshooting-downloads.md) |
 | Start and runtime | [Troubleshooting — start and runtime](operate/troubleshooting-start-runtime.md) |
 | Models and workflows | [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md) |
+
+## Dub (localize)
+
+Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixture that shipped a 64 s YT tone:
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| YT preview `ez_dub_yt_*.mp3` is ~source length but has no Spanish (tone, hush, or ducked English) | Clone failed `is_speech_like` or ingest `job_slug` became `True` from the upload button | Pull latest. Check Dub status. Inspect `dubs/<slug>/render/turn_*.raw.wav`. `download-dub --tier asr` then `--tier clone` with compose up. Never treat a duration-matched drone as success. Job dir must be `dubs/episode/`, not `dubs/True/`. |
 
 ---
 

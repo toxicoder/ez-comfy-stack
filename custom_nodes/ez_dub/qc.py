@@ -40,6 +40,16 @@ def evaluate_qc(
             checks.append(
                 {"id": "quiet_mix", "level": "warn", "rule": "max abs < 0.25"}
             )
+        from .pipeline import is_speech_like
+
+        if not is_speech_like(samples, int(rate) or 0):
+            checks.append(
+                {
+                    "id": "mix_not_speech",
+                    "level": "fail",
+                    "rule": "mix is not speech-like (drone, hush, or tone)",
+                }
+            )
         ordered = []
         for raw in turns or []:
             if not isinstance(raw, dict):
@@ -99,10 +109,12 @@ def evaluate_qc(
                         "rule": "text_target equals source on cross-lang turn",
                     }
                 )
+        fail_extra = {"mix_not_speech"}
         for ident in extra_flags or []:
             name = str(ident or "").strip()
             if name:
-                checks.append({"id": name, "level": "warn", "rule": name})
+                level = "fail" if name in fail_extra else "warn"
+                checks.append({"id": name, "level": level, "rule": name})
     except Exception:  # noqa: BLE001 — never raise
         return {"ok": False, "flags": [], "checks": []}
     flags: list[str] = []
