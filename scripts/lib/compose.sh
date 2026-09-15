@@ -603,7 +603,7 @@ stack_start() {
   HOST_GID="$(id -g)"
   export HOST_UID HOST_GID
   prepare_comfy_layout "${MODELS_DIR}" || return 1
-  ensure_comfy_output_dir "${COMFY_OUTPUT_DIR}" || return 1
+  prepare_comfy_output_dir "${COMFY_OUTPUT_DIR}" || return 1
   seed_house_clay_inputs
   log "══ start ══ unified us-safe-studio (mem_limit=${MEM_LIMIT})"
   log "Image: ${EZ_COMFY_IMAGE} (branch=${branch})"

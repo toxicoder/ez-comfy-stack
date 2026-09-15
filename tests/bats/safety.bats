@@ -337,6 +337,12 @@ if missing:
   [ "$status" -eq 0 ]
   run grep -E 'COMFY_OUTPUT_DIR are NOT deleted' "${REPO_ROOT}/scripts/lib/compose.sh"
   [ "$status" -eq 0 ]
+  run grep -E 'prepare_comfy_output_dir "\$\{COMFY_OUTPUT_DIR\}"' \
+    "${REPO_ROOT}/scripts/lib/compose.sh"
+  [ "$status" -eq 0 ]
+  run grep -E 'ensure_comfy_output_dir "\$\{COMFY_OUTPUT_DIR\}"' \
+    "${REPO_ROOT}/scripts/lib/compose.sh"
+  [ "$status" -ne 0 ]
 }
 
 @test "prebuilt image defaults to GHCR and never bakes HF_TOKEN in Dockerfile" {

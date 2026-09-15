@@ -288,11 +288,16 @@ teardown() {
   [ -d "${TEST_TMP_DIR}/comfy-out-ok/comfy-user/default/workflows" ]
   [ -d "${TEST_TMP_DIR}/comfy-out-ok/comfy-user/default/workflows/_user" ]
   [ -d "${TEST_TMP_DIR}/comfy-out-ok/comfy-user/default/workflows/_user/_rescued" ]
+  run lab_comfy_output_layout_dirs
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"custom-nodes-user"* ]]
+  [[ "${output}" == *"comfy-user/default/workflows/_user/_rescued"* ]]
   run ensure_writable_host_dir COMFY_OUTPUT_DIR "${TEST_TMP_DIR}/comfy-out-ok"
   [ "${status}" -eq 0 ]
   run prepare_comfy_output_dir "${TEST_TMP_DIR}/prepared_output"
   [ "${status}" -eq 0 ]
   [ -d "${TEST_TMP_DIR}/prepared_output" ]
+  [ -d "${TEST_TMP_DIR}/prepared_output/comfy-user/default/workflows/_user/_rescued" ]
   run prepare_writable_host_dir COMFY_OUTPUT_DIR "${TEST_TMP_DIR}/prepared_output2"
   [ "${status}" -eq 0 ]
   [ -d "${TEST_TMP_DIR}/prepared_output2" ]
@@ -323,6 +328,36 @@ teardown() {
   [[ "${output}" == *"sudo-heal"* ]]
   chmod u+w "${TEST_TMP_DIR}/layout_blocked/comfy"
   unset LAB_NO_SUDO
+
+  local out_blocked out_user
+  out_blocked="${TEST_TMP_DIR}/out_layout_blocked"
+  mkdir -p "${out_blocked}/comfy-user/default/workflows/_user"
+  chmod a-w "${out_blocked}/comfy-user/default/workflows/_user"
+  export LAB_NO_SUDO=1
+  run ensure_comfy_output_dir "${out_blocked}"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  [[ "${output}" == *"manage.sh setup"* ]]
+  [[ "${output}" != *"cannot create directory"* ]]
+  run prepare_comfy_output_dir "${out_blocked}"
+  [ "${status}" -ne 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  run warn_unwritable_comfy_output_layout "${out_blocked}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not writable"* ]]
+  [[ "${output}" == *"sudo-heal"* ]]
+  chmod u+w "${out_blocked}/comfy-user/default/workflows/_user"
+  unset LAB_NO_SUDO
+  out_user="${TEST_TMP_DIR}/out_layout_heal/comfy-user/default/workflows/_user"
+  mkdir -p "${out_user}"
+  chmod a-w "${out_user}"
+  install_sudo_heal_mock
+  run prepare_comfy_output_dir "${TEST_TMP_DIR}/out_layout_heal"
+  [ "${status}" -eq 0 ]
+  [ -d "${out_user}/_rescued" ]
+  [ -w "${out_user}" ]
+  [ -w "${out_user}/_rescued" ]
+
   mkdir -p "${TEST_TMP_DIR}/layout_heal/comfy"
   chmod a-w "${TEST_TMP_DIR}/layout_heal/comfy"
   install_sudo_heal_mock

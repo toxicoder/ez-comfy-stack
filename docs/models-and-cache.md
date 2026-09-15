@@ -9,7 +9,7 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 **What's on this page**
 
 - **Three stores** (GHCR image, `MODELS_DIR`, comfy-state volume)
-- **Default location** and permissions for `${MODELS_DIR}`
+- **Default location** and permissions for `${MODELS_DIR}` and `${COMFY_OUTPUT_DIR}` layout dirs
 - **Layout** (tier dirs, relative `comfy/` symlinks, reap)
 - **Pack map** pointing at download utilities (`download-image.sh`, `download-wan.sh`, `download-ltx.sh`, `download-llm.sh`)
 
@@ -117,6 +117,27 @@ Override in `.env` if needed. Prefer a large, durable disk on the Spark.
     ```bash
     # .env
     MODELS_DIR=$HOME/models
+    ```
+
+### Output layout permissions
+
+`doctor` requires `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) to be **writable by the current user** (check only; no sudo). Nested `comfy-user/` (and `_user/_rescued`) can still be root-owned after a container start — that is a **warning**, not a hard doctor failure.
+
+`setup` and `start` **sudo-heal** each output layout dir (`input/`, `custom-nodes-user/`, `comfy-user/…/_user/_rescued`) when they are not writable. They do **not** recurse `chown` over generated PNG/MP4 or operator JSON.
+
+=== "Preferred (setup / start)"
+
+    ```bash
+    ./scripts/manage.sh setup
+    ./scripts/manage.sh start
+    # sudo mkdir -p + chown for COMFY_OUTPUT_DIR layout dirs when needed
+    ```
+
+=== "Manual last resort"
+
+    ```bash
+    sudo mkdir -p "${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/_rescued"
+    sudo chown "$USER:$USER" "${COMFY_OUTPUT_DIR}/comfy-user"
     ```
 
 ---

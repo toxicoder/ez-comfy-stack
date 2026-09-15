@@ -607,8 +607,9 @@ cmd_doctor() {
     ok=1
   fi
   log "COMFY_OUTPUT_DIR=${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
-  if ensure_comfy_output_dir "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"; then
+  if ensure_writable_host_dir COMFY_OUTPUT_DIR "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"; then
     log "output dir exists and is writable"
+    warn_unwritable_comfy_output_layout "${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
   else
     ok=1
   fi
