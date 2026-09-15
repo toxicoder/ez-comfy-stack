@@ -1975,6 +1975,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#output-layout-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output layout permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2753,6 +2764,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#output-layout-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output layout permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2802,7 +2824,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 22:18 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T22:18:45+00:00">15 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 22:38 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T22:38:48+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2813,7 +2835,7 @@
 
 <h1 id="models-cache">Models &amp; Cache<a class="headerlink" href="#models-cache" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
 <li><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="three-stores" data-href="../glossary/#three-stores" title="GHCR image vs MODELS_DIR weights vs comfy-state volume. cleanup deletes the volume only.">Three stores</span></strong> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ghcr" data-href="../glossary/#ghcr" title="GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.">GHCR</span> image, <code>MODELS_DIR</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfy-state" data-href="../glossary/#comfy-state" title="Docker volume for the Comfy install (venv, custom nodes). cleanup DELETE removes this only.">comfy-state</span> volume)</li>
-<li><strong>Default location</strong> and permissions for <code>${MODELS_DIR}</code></li>
+<li><strong>Default location</strong> and permissions for <code>${MODELS_DIR}</code> and <code>${COMFY_OUTPUT_DIR}</code> layout dirs</li>
 <li><strong>Layout</strong> (tier dirs, relative <code>comfy/</code> symlinks, reap)</li>
 <li><strong>Pack map</strong> pointing at download utilities (<code>download-image.sh</code>, <code>download-wan.sh</code>, <code>download-ltx.sh</code>, <code>download-llm.sh</code>)</li>
 </ul></div><div class="ez-page-brief__col ez-page-brief__enables"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg><span class="ez-page-brief__label">What this enables</span></p><ul>
@@ -2984,32 +3006,50 @@
 </div>
 </div>
 </div>
+<h3 id="output-layout-permissions">Output layout permissions<a class="headerlink" href="#output-layout-permissions" title="Permanent link">&para;</a></h3>
+<p><code>doctor</code> requires <code>${COMFY_OUTPUT_DIR}</code> (default <code>/mnt/comfy-output</code>) to be <strong>writable by the current user</strong> (check only; no sudo). Nested <code>comfy-user/</code> (and <code>_user/_rescued</code>) can still be root-owned after a container start — that is a <strong>warning</strong>, not a hard doctor failure.</p>
+<p><code>setup</code> and <code>start</code> <strong>sudo-heal</strong> each output layout dir (<code>input/</code>, <code>custom-nodes-user/</code>, <code>comfy-user/…/_user/_rescued</code>) when they are not writable. They do <strong>not</strong> recurse <code>chown</code> over generated PNG/MP4 or operator JSON.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Preferred (setup / start)</label><label for="__tabbed_2_2">Manual last resort</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/manage.sh<span class="w"> </span>setup
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/manage.sh<span class="w"> </span>start
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># sudo mkdir -p + chown for COMFY_OUTPUT_DIR layout dirs when needed</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/comfy-user/default/workflows/_user/_rescued"</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">:</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/comfy-user"</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
 <hr />
 <h2 id="layout">Layout<a class="headerlink" href="#layout" title="Permanent link">&para;</a></h2>
 <p>Each utility writes to <code>${MODELS_DIR}/&lt;org__repo&gt;_&lt;tier&gt;</code> (<code>tier_dir</code>), then <strong>relative</strong> symlinks into <code>comfy/</code>:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>${MODELS_DIR}/
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  black-forest-labs__FLUX.2-klein-4b-fp8_fast/
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  Comfy-Org__z_image_turbo_te/                # qwen_3_4b
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  Comfy-Org__flux2-dev_vae/                   # flux2-vae
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b/
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  Lightricks__LTX-2.5_2.5/
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  comfy/
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    diffusion_models/   # relative symlinks into tier repos above
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    text_encoders/
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    vae/
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog) + Silero VAD (download-dub)
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    tts/                # opt-in Kokoro voices + Chatterbox / Qwen3-TTS / Chatterbox ML V3
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    whisper/            # opt-in faster-whisper large-v3 (download-dub --tier asr)
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    checkpoints/        # opt-in ACE-Step 1.5 AIO (download-music --tier turbo / download-podcast --tier acestep)
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>  hub/                  # HF cache (optional)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>${MODELS_DIR}/
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  black-forest-labs__FLUX.2-klein-4b-fp8_fast/
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  Comfy-Org__z_image_turbo_te/                # qwen_3_4b
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  Comfy-Org__flux2-dev_vae/                   # flux2-vae
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  Comfy-Org__Wan_2.2_ComfyUI_Repackaged_5b/
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  Lightricks__LTX-2.5_2.5/
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  unsloth__Qwen3-4B-Instruct-2507-GGUF_llm/
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  comfy/
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    diffusion_models/   # relative symlinks into tier repos above
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    text_encoders/
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    vae/
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    llm/                # Qwen3-4B-Instruct-2507 Q4_K_M GGUF
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    onnx/               # opt-in Kokoro ONNX (download-podcast --tier analog) + Silero VAD (download-dub)
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    tts/                # opt-in Kokoro voices + Chatterbox / Qwen3-TTS / Chatterbox ML V3
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    whisper/            # opt-in faster-whisper large-v3 (download-dub --tier asr)
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    checkpoints/        # opt-in ACE-Step 1.5 AIO (download-music --tier turbo / download-podcast --tier acestep)
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>  hub/                  # HF cache (optional)
 </span></code></pre></div>
 <p>Host-wide leftovers (HF hub, Docker layers, Ollama, other inference backends) are <strong>not</strong> <code>reap-models</code> — use <a href="../disk-wizard/">disk-wizard</a> (<code>--plan</code> first). When the default pack moves (LTX 2.3 → 2.5 already happened), <strong>reap</strong> the old tree — do not wait for disk-full:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./scripts/manage.sh<span class="w"> </span>models-status
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>./scripts/manage.sh<span class="w"> </span>reap-models<span class="w"> </span>--plan
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>./scripts/manage.sh<span class="w"> </span>reap-models<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>junk<span class="w"> </span>--yes
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>./scripts/manage.sh<span class="w"> </span>reap-models<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>superseded<span class="w"> </span>--quarantine<span class="w"> </span>--yes
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./scripts/manage.sh<span class="w"> </span>models-status
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./scripts/manage.sh<span class="w"> </span>reap-models<span class="w"> </span>--plan
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>./scripts/manage.sh<span class="w"> </span>reap-models<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>junk<span class="w"> </span>--yes
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>./scripts/manage.sh<span class="w"> </span>reap-models<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>superseded<span class="w"> </span>--quarantine<span class="w"> </span>--yes
 </span></code></pre></div>
 <p><code>manage.sh cleanup</code> is <strong>volume-only</strong> (named volume <code>comfy-state</code>). It does <strong>not</strong> delete weights. <code>reap-models --plan</code> is the default; <code>--apply</code> requires <code>--yes</code>. Shared files (<code>flux2-vae</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> AIO) stay in the keep-set so <code>--drop-pack</code> cannot eat them.</p>
 <p><code>download-models</code> links weights into <code>comfy/*</code> with <strong>relative</strong> symlinks (e.g. <code>../../Comfy-Org__flux2-dev_vae/split_files/vae/flux2-vae.safetensors</code>). That way the same tree resolves on the host (<code>MODELS_DIR=/mnt/models</code>) and inside the container (bind-mounted at <code>/models</code>). Absolute <code>/mnt/models/…</code> file links look fine on the host but break Comfy with “exists but doesn't link anywhere”.</p>
@@ -3074,10 +3114,10 @@
 </tr>
 </tbody>
 </table>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/utilities/download-image.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>fast<span class="w"> </span>--json
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>5b<span class="w"> </span>--json
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5<span class="w"> </span>--json
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>./scripts/utilities/download-llm.sh<span class="w"> </span>run
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>./scripts/utilities/download-image.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>fast<span class="w"> </span>--json
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>./scripts/utilities/download-wan.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span>5b<span class="w"> </span>--json
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>./scripts/utilities/download-ltx.sh<span class="w"> </span>status<span class="w"> </span>--tier<span class="w"> </span><span class="m">2</span>.5<span class="w"> </span>--json
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>./scripts/utilities/download-llm.sh<span class="w"> </span>run
 </span></code></pre></div>
 <p><code>download-models</code> has <strong>no</strong> <code>--tier</code>. It always pulls the default still + Wan 5B + LTX-2.5 set.</p>
 <h2 id="disk-headroom">Disk headroom<a class="headerlink" href="#disk-headroom" title="Permanent link">&para;</a></h2>

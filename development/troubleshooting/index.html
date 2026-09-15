@@ -2734,7 +2734,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 22:18 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T22:18:45+00:00">15 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 22:38 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T22:38:48+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2776,7 +2776,7 @@
 <li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1M9 5h1V3H9zm0 8h1v-2H9zm0 8h1v-2H9zM5 3v2h2V3zm0 8v2h2v-2zm0 8v2h2v-2z"/></svg></span> <strong>Host and Docker</strong></p>
 <hr />
-<p>Docker missing, <code>MODELS_DIR</code> permission, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="spark-farm" data-href="../glossary/#spark-farm" title="Independent Sparks as parallel 5 s workers with one weight copy. No NCCL.">Spark farm</span> SSH (<code>SPARK_HOSTS</code> / <code>SPARK_FABRIC_IPS</code>).</p>
+<p>Docker missing, <code>MODELS_DIR</code> / <code>COMFY_OUTPUT_DIR</code> permission, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="spark-farm" data-href="../glossary/#spark-farm" title="Independent Sparks as parallel 5 s workers with one weight copy. No NCCL.">Spark farm</span> SSH (<code>SPARK_HOSTS</code> / <code>SPARK_FABRIC_IPS</code>).</p>
 <p><a href="../operate/troubleshooting-host-docker/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Host and Docker</a></p>
 </li>
 <li>
@@ -2856,7 +2856,7 @@
 <pre class="mermaid"><code>flowchart TB
   Q["What is broken?"]
   Q --&gt; Docker{"doctor: docker missing?"}
-  Q --&gt; Models{"MODELS_DIR not writable?"}
+  Q --&gt; Models{"MODELS_DIR or COMFY_OUTPUT_DIR not writable?"}
   Q --&gt; Qdisc{"wondershaper / qdisc errors?"}
   Q --&gt; SSH{"SSH freezes&lt;br/&gt;or host sluggish?"}
   Q --&gt; Start{"start refused?"}
@@ -2866,7 +2866,7 @@
   Q --&gt; Limit{"Bandwidth limit stuck?"}
 
   Docker --&gt; A0["apt docker-ce + compose plugin&lt;br/&gt;docker group · re-login"]
-  Models --&gt; A0b["sudo mkdir/chown MODELS_DIR&lt;br/&gt;or MODELS_DIR in .env"]
+  Models --&gt; A0b["setup / start sudo-heal layout dirs&lt;br/&gt;or MODELS_DIR / COMFY_OUTPUT_DIR in .env"]
   Qdisc --&gt; A0c["soft-fail unthrottled warn OK&lt;br/&gt;modprobe sch_htb · clear"]
   SSH --&gt;|during download| A1["download-models / lower Mbps&lt;br/&gt;or download-limit clear"]
   Start --&gt; A2["Free RAM/disk&lt;br/&gt;stop other GPU jobs · doctor"]
