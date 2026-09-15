@@ -54,20 +54,27 @@ def log(message: str) -> None:
 
 
 def output_directory() -> Path:
-    """Comfy output dir, then ``COMFY_OUTPUT_DIR``, then ``output``.
+    """Comfy output dir, then ``/outputs``, then ``COMFY_OUTPUT_DIR``, then ``output``.
 
     Returns:
         Directory path (may not exist yet).
     """
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        from ez_common import output_root
 
-        return Path(folder_paths.get_output_directory())
+        return output_root(default="output")
     except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
-        env = os.environ.get("COMFY_OUTPUT_DIR")
-        if env:
-            return Path(env)
-        return Path("output")
+        try:
+            import folder_paths  # type: ignore[import-not-found]
+
+            return Path(folder_paths.get_output_directory())
+        except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+            if Path("/outputs").is_dir():
+                return Path("/outputs")
+            env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
+            if env:
+                return Path(env)
+            return Path("output")
 
 
 def find_ffmpeg() -> str:

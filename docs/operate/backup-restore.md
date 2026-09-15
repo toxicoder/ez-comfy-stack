@@ -43,7 +43,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | --- | --- | --- |
 | **`${MODELS_DIR}`** (default `/mnt/models`) | Klein / Wan / LTX / GGUF weights + `comfy/` relative symlinks | Largest. Shareable across Sparks. **Not** deleted by `cleanup` |
 | **`ez-comfy-state` volume** | Comfy install, venv, lab `ez_*` packs | `cleanup` **DELETE** removes this. After a wipe, `start` reseeds from the GHCR prebuilt |
-| **`${COMFY_OUTPUT_DIR}`** (default `/mnt/comfy-output`) | PNG/MP4/audio, `input/` LoadImage, `comfy-user/` graphs, `custom-nodes-user/`, `films/`, `guides/`, `assets/`, `research/` | Survives `stop` and `cleanup` |
+| **`${COMFY_OUTPUT_DIR}`** (default `/mnt/comfy-output`) | PNG/MP4/audio, `input/` LoadImage, `comfy-user/` graphs (including `_user/` and `_user/_rescued/`), `custom-nodes-user/`, `films/`, `guides/`, `assets/`, `research/` | Survives `stop` and `cleanup` |
 | **`${COMFY_OUTPUT_DIR}/.occupancy.json`** | Occupancy desk state | Outputs tree, never `${MODELS_DIR}` |
 
 Three stores (image / weights / volume) are the mental model: the GHCR image is re-pullable; back up **weights** and **outputs**. The volume is optional — `start` can rebuild the install from the image.

@@ -10,6 +10,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 
 - How App Mode relates to the node graph
 - Apps sidebar (`.app.json`) vs Workflows
+- Where operator Apps persist (`_user/`, rescue from `_lab/`)
 - Creator widgets: Prompt, Style, Rewrite prompt, Seed (unique labels, wired LoadImage only)
 - Occupancy (one GB10 job) — chip at the top of the widget list
 - Lane A (Inspire) vs Lane B (Produce)
@@ -48,6 +49,8 @@ Official persist is `extra.linearData` (`inputs` / `outputs`). Each input is `[n
 Comfy’s **Apps** sidebar lists files whose name ends in `.app.json`. On `start`, the entrypoint seeds every App Mode graph (`default_view: app`) as `_lab/<lane>/*.app.json`. The same stem still appears under **Workflows** in that folder. 90s film graphs stay `default_view: graph` (too many widgets) and keep the `.json` suffix — App Mode is still **enabled**, but they stay Workflows-only. Folders do not add `workflows/apps/`.
 
 Filenames: [Workflow catalog](studio-workflows.md). Playbook: [Still to motion to AV](visual-generative-ai.md). Restart the container after a pull so the `.app.json` copy runs.
+
+Save your own Apps under **`_user/`**. A Save that overwrites live `_lab/<lane>/*.app.json` is rescued into `_user/_rescued/` on the next `start`; extras that were never in git move to `_user/`. Re-open the rescued file — `_lab/` is the shipped catalog.
 
 ---
 

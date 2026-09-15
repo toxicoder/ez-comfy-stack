@@ -87,7 +87,7 @@ Lab flags (do not “optimize” these away):
 | **MODELS_DIR** | Klein / Wan / LTX / GGUF on the host (default `/mnt/models`) | You, or `reap-models`. **Not** `cleanup` |
 | **comfy-state volume** | Comfy install, custom nodes, seeded workflows | `cleanup` (type `DELETE`) |
 
-Outputs live in **COMFY_OUTPUT_DIR** (default `/mnt/comfy-output`). `cleanup` does not delete them.
+Outputs live in **COMFY_OUTPUT_DIR** (default `/mnt/comfy-output`). The container sees that tree as `/outputs`. `cleanup` does not delete them.
 
 ```mermaid
 flowchart TB

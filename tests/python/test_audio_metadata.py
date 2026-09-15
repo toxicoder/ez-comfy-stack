@@ -104,9 +104,30 @@ def test_write_sidecar_and_album_dir(tmp_path: Path, monkeypatch: pytest.MonkeyP
     sidecar = write_sidecar(wav, _meta(), cover=None)
     assert sidecar.is_file()
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
     dest = album_dir_from_env("Nill Bye", "Peer Review")
     assert dest == tmp_path / "albums" / "Nill Bye" / "Peer Review"
     assert dest.is_dir()
+
+
+def test_album_dir_prefers_container_outputs(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    dest = tmp_path / "outputs"
+    dest.mkdir()
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", "/mnt/comfy-output")
+    sys.modules.pop("folder_paths", None)
+    monkeypatch.setattr("ez_common.output_root", lambda **_k: dest)
+    album = album_dir_from_env("Nill Bye", "Peer Review")
+    assert album == dest / "albums" / "Nill Bye" / "Peer Review"
 
 
 def test_stamp_missing_file(tmp_path: Path) -> None:

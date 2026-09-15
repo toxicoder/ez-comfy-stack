@@ -322,15 +322,20 @@ def _save_cover_tensor(image: object, dest: Path) -> Path:
 
 def _output_root(album_dir: Path) -> Path:
     """Comfy output dir, else the album folder (tests)."""
-    env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
-    if env:
-        return Path(env)
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        from ez_common import output_root
 
-        return Path(folder_paths.get_output_directory())
+        return output_root(default=str(album_dir))
     except Exception:  # noqa: BLE001 — pytest / missing Comfy
-        return album_dir
+        env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
+        if env:
+            return Path(env)
+        try:
+            import folder_paths  # type: ignore[import-not-found]
+
+            return Path(folder_paths.get_output_directory())
+        except Exception:  # noqa: BLE001 — pytest / missing Comfy
+            return album_dir
 
 
 def _stamp_output_masters(

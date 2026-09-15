@@ -322,9 +322,16 @@ if missing:
   [ "$status" -eq 0 ]
   run grep -F 'COMFY_OUTPUT_DIR:-/mnt/comfy-output}/custom-nodes-user:/comfy-state/ComfyUI/custom_nodes/_user' "${compose}"
   [ "$status" -eq 0 ]
+  # Container env is the bind, not the host interpolation.
+  run grep -E '^[[:space:]]+COMFY_OUTPUT_DIR: /outputs$' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -F 'COMFY_OUTPUT_DIR: ${COMFY_OUTPUT_DIR:-/mnt/comfy-output}' "${compose}"
+  [ "$status" -ne 0 ]
   run grep -E 'output-directory|/outputs' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "$status" -eq 0 ]
   run grep -F -- '--input-directory' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "$status" -eq 0 ]
+  run grep -F -- '--user-directory' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "$status" -eq 0 ]
   run grep -E 'down -v' "${REPO_ROOT}/scripts/lib/compose.sh"
   [ "$status" -eq 0 ]

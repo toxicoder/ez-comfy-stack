@@ -68,11 +68,12 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | What | Host | Container | On `start` |
 | --- | --- | --- | --- |
 | Model weights | `${MODELS_DIR:-/mnt/models}` | `/models` | persist |
-| Generated PNG/MP4/audio | `${COMFY_OUTPUT_DIR:-/mnt/comfy-output}` | `/outputs` | persist |
+| Generated PNG/MP4/audio | `${COMFY_OUTPUT_DIR:-/mnt/comfy-output}` | `/outputs` (`COMFY_OUTPUT_DIR=/outputs` in the container) | persist |
 | LoadImage inputs | `${COMFY_OUTPUT_DIR}/input` | `/inputs` | persist |
-| Comfy `user/` (sidebar, history) | `${COMFY_OUTPUT_DIR}/comfy-user` | `/comfy-state/ComfyUI/user` | persist |
-| Live lab graphs | `…/comfy-user/default/workflows/_lab/` | same | **overwrite** from repo `workflows/` (or `workflows/_lab/` when present) |
-| Live operator graphs | `…/comfy-user/default/workflows/_user/` | same | **never touch** |
+| Comfy `user/` (sidebar, history) | `${COMFY_OUTPUT_DIR}/comfy-user` | `/comfy-state/ComfyUI/user` (`--user-directory`) | persist |
+| Live lab graphs | `…/comfy-user/default/workflows/_lab/` | same | **overwrite** from repo `workflows/_lab/` |
+| Live operator graphs | `…/comfy-user/default/workflows/_user/` | same | **never overwrite** |
+| Operator JSON saved under `_lab/` | same tree | same | **rescue** into `_user/` (extras) or `_user/_rescued/` (edited lab graphs), then lab overwrite |
 | Other files under live workflows | same tree | same | **never touch** |
 | Lab custom nodes `ez_*` | git `custom_nodes/` | `$COMFY_HOME/custom_nodes/ez_*` | overwrite |
 | Operator custom nodes | `${COMFY_OUTPUT_DIR}/custom-nodes-user` | `$COMFY_HOME/custom_nodes/_user` | persist (pin refresh excludes this tree) |

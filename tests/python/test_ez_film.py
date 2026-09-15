@@ -144,6 +144,22 @@ def test_parse_go_see_yaml() -> None:
     assert "score" not in first["wan_i2v"].lower()
 
 
+def test_concat_output_directory_prefers_container(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", "/mnt/comfy-output")
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return True
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert film_concat.output_directory() == Path("/outputs")
+
+
 def test_resolve_shot_path_payloads() -> None:
     assert resolve_shot_path("/tmp/a.mp4") == "/tmp/a.mp4"
     assert resolve_shot_path(Path("/tmp/b.mp4")) == "/tmp/b.mp4"

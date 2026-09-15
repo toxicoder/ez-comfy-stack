@@ -202,16 +202,21 @@ def album_dir_from_env(artist: str, album: str, *, output_dir: Path | None = Non
     from .naming import album_output_dir
 
     if output_dir is None:
-        env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
-        if env:
-            output_dir = Path(env)
-        else:
-            try:
-                import folder_paths  # type: ignore[import-not-found]
+        try:
+            from ez_common import output_root
 
-                output_dir = Path(folder_paths.get_output_directory())
-            except Exception:  # noqa: BLE001 — pytest / missing Comfy
-                output_dir = Path("output")
+            output_dir = output_root(default="output")
+        except Exception:  # noqa: BLE001 — pytest / missing Comfy
+            env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
+            if env:
+                output_dir = Path(env)
+            else:
+                try:
+                    import folder_paths  # type: ignore[import-not-found]
+
+                    output_dir = Path(folder_paths.get_output_directory())
+                except Exception:  # noqa: BLE001 — pytest / missing Comfy
+                    output_dir = Path("output")
     dest = output_dir / album_output_dir(artist, album)
     dest.mkdir(parents=True, exist_ok=True)
     return dest

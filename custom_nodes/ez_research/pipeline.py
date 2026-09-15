@@ -286,10 +286,27 @@ def write_brief(
     Never writes under MODELS_DIR.
     """
     if output_dir is None:
-        env = os.environ.get("COMFY_OUTPUT_DIR")
-        if not env:
+        try:
+            from ez_common import output_root
+
+            env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
+            if env or Path("/outputs").is_dir():
+                output_dir = output_root()
+            else:
+                try:
+                    import folder_paths  # type: ignore[import-not-found]
+
+                    raw = folder_paths.get_output_directory()
+                    output_dir = Path(raw) if raw else None
+                except Exception:  # noqa: BLE001 — pytest / missing Comfy
+                    output_dir = None
+        except Exception:  # noqa: BLE001 — pytest / missing pack
+            env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
+            if not env:
+                return None
+            output_dir = Path(env)
+        if output_dir is None:
             return None
-        output_dir = Path(env)
     models = os.environ.get("MODELS_DIR")
     try:
         dest_dir = (output_dir / "research").resolve()

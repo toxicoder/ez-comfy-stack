@@ -818,6 +818,81 @@ teardown() {
   [ ! -f "${dest}/_lab/klein/still-draft.json" ]
 }
 
+@test "install_lab_workflows rescues operator _lab JSON into _user" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local src dest
+  src="${TEST_TMP_DIR}/wf_rescue"
+  dest="${TEST_TMP_DIR}/user_wf_rescue"
+  mkdir -p "${src}/_lab/klein" "${dest}/_lab/klein" "${dest}/_user/klein"
+  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
+    >"${src}/_lab/klein/still-draft.json"
+  echo '{}' >"${src}/_lab/klein/plain.json"
+  echo 'user-hook' >"${dest}/_lab/klein/my-hook.app.json"
+  echo 'edited-lab' >"${dest}/_lab/klein/still-draft.app.json"
+  echo 'stale' >"${dest}/_lab/klein/stale-gone.json"
+  echo 'poison' >"${dest}/_user/keep-me.json"
+  echo 'mine' >"${dest}/_user/klein/my-hook.app.json"
+  run lab_src_json_for_dest "${src}/_lab" "klein/still-draft.app.json"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"/klein/still-draft.json" ]]
+  run lab_src_json_for_dest "${src}/_lab" "klein/missing.json"
+  [ "${status}" -ne 0 ]
+  run rescue_unique_path "${dest}/_user/keep-me.json" "${dest}/_user/keep-me.json"
+  [ "${status}" -eq 0 ]
+  [ -z "${output}" ]
+  echo 'other' >"${TEST_TMP_DIR}/other.json"
+  run rescue_unique_path "${dest}/_user/keep-me.json" "${TEST_TMP_DIR}/other.json"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *".rescued-"* ]]
+  run rescue_operator_lab_json "${src}/_lab" "${TEST_TMP_DIR}/missing_dest_lab" "${dest}/_user"
+  [ "${status}" -eq 0 ]
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"rescued"* ]]
+  [[ "${output}" == *"_rescued"* ]]
+  [ ! -f "${dest}/_lab/klein/my-hook.app.json" ]
+  [ ! -f "${dest}/_lab/klein/stale-gone.json" ]
+  [ -f "${dest}/_lab/klein/still-draft.app.json" ]
+  [ "$(cat "${dest}/_lab/klein/still-draft.app.json")" = "$(cat "${src}/_lab/klein/still-draft.json")" ]
+  [ -f "${dest}/_user/_rescued/klein/still-draft.app.json" ]
+  [ "$(cat "${dest}/_user/_rescued/klein/still-draft.app.json")" = "edited-lab" ]
+  [ -f "${dest}/_user/klein/stale-gone.json" ]
+  [ "$(cat "${dest}/_user/klein/stale-gone.json")" = "stale" ]
+  [ "$(cat "${dest}/_user/keep-me.json")" = "poison" ]
+  [ "$(cat "${dest}/_user/klein/my-hook.app.json")" = "mine" ]
+  shopt -s nullglob
+  local -a collided=("${dest}/_user/klein/my-hook.rescued-"*.app.json)
+  [ "${#collided[@]}" -eq 1 ]
+  [ "$(cat "${collided[0]}")" = "user-hook" ]
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  local -a rescued_edits=("${dest}/_user/_rescued/klein/still-draft.app.json")
+  [ "${#rescued_edits[@]}" -eq 1 ]
+  local -a collided2=("${dest}/_user/klein/my-hook.rescued-"*.app.json)
+  [ "${#collided2[@]}" -eq 1 ]
+}
+
+@test "heal_misplaced_host_output_dir copies overlay into outputs bind" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local misplaced mount
+  misplaced="${TEST_TMP_DIR}/mnt_comfy_output"
+  mount="${TEST_TMP_DIR}/outputs_heal"
+  mkdir -p "${misplaced}" "${mount}"
+  echo album >"${misplaced}/ez_rap.flac"
+  echo keep >"${mount}/keep.png"
+  export LAB_MISPLACED_OUTPUT_DIR="${misplaced}"
+  export LAB_OUTPUTS_MOUNT="${mount}"
+  run heal_misplaced_host_output_dir
+  [ "${status}" -eq 0 ]
+  [ -f "${mount}/ez_rap.flac" ]
+  [ -f "${mount}/keep.png" ]
+  export LAB_MISPLACED_OUTPUT_DIR="${mount}"
+  run heal_misplaced_host_output_dir
+  [ "${status}" -eq 0 ]
+}
+
 @test "main with mocked install and NO_EXEC" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
@@ -1379,6 +1454,8 @@ teardown() {
   [[ "${args}" == *"--bf16-unet"* ]]
   [[ "${args}" == *"--input-directory"* ]]
   [[ "${args}" == *"--output-directory"* ]]
+  [[ "${args}" == *"--user-directory"* ]]
+  [[ "${args}" == *"/comfy-state/ComfyUI/user"* ]]
   [[ "${args}" == *"--enable-manager"* ]]
   # One token per line from comfy_exec_args. grep -Fx so bash 3.2 set -e
   # does not swallow a failed [[ != ]] in the middle of the test function.
