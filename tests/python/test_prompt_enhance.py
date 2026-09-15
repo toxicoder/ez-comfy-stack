@@ -244,7 +244,25 @@ PLACE_10_IDENTITY_LEAKS = (
     "shelf",
     "seating",
     "warm practical",
+    "teak",
+    "linen",
+    "marble",
+    "sofa",
+    "tub",
+    "villa",
+    "cabin",
+    "cottage",
+    "mansion",
+    "loft",
+    "bungalow",
+    "penthouse",
+    "walnut",
+    "oak",
+    "brass",
+    "concrete",
+    "stucco",
 )
+PLACE_10_JOIN_CAP = 220
 
 
 def test_view_packs_are_camera_roles_without_lab_identity() -> None:
@@ -296,15 +314,27 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
         assert "24mm" in text or "35mm" in text
     assert "ground-level" not in blobs["01 tower"]
     assert "three-quarter" not in blobs["01 tower"]
+    assert "tower" not in blobs["01 tower"]
     assert "looking up" in blobs["01 tower"]
     assert "establishing" in blobs["01 tower"]
+    assert "arrival" in blobs["01 tower"]
+    assert "lower third" in blobs["01 tower"]
+    assert "vertical" in blobs["01 tower"]
+    assert "unoccupied" in blobs["01 tower"]
     assert "surroundings are only what the bible named" in blobs["01 tower"]
     assert "24mm" in blobs["01 tower"]
     assert "way in" in blobs["02 foyer"]
     assert "behind the camera" in blobs["02 foyer"]
+    assert "threshold" in blobs["02 foyer"]
+    assert "depth" in blobs["02 foyer"]
+    assert "unoccupied" in blobs["02 foyer"]
     assert "24mm" in blobs["02 foyer"]
     assert "bible named" in blobs["03 lounge"]
     assert "main opening" in blobs["03 lounge"]
+    assert "living volume" in blobs["03 lounge"]
+    assert "near field" in blobs["03 lounge"]
+    assert "far plane" in blobs["03 lounge"]
+    assert "unoccupied" in blobs["03 lounge"]
     assert "backdrop is only what the bible named for this room" in blobs["03 lounge"]
     toward_opening = [
         lab
@@ -315,38 +345,97 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     ]
     assert toward_opening == ["03 lounge"]
     assert "kitchen" in blobs["04 kitchen"]
+    assert "work wall" in blobs["04 kitchen"]
+    assert "work surfaces" in blobs["04 kitchen"]
+    assert "work volume" in blobs["04 kitchen"]
     assert "interior only" in blobs["04 kitchen"]
     assert "bible named for this room" in blobs["04 kitchen"]
     assert "dining" in blobs["05 dining"]
+    assert "seated-height" in blobs["05 dining"]
+    assert "along the table" in blobs["05 dining"]
+    assert "gathering volume" in blobs["05 dining"]
     assert "interior only" in blobs["05 dining"]
     assert "bible named for this room" in blobs["05 dining"]
     assert "bedroom" in blobs["06 bedroom"]
+    assert "private volume" in blobs["06 bedroom"]
+    assert "sleep furniture" in blobs["06 bedroom"]
     assert "interior only" in blobs["06 bedroom"]
     assert "bible named for this room" in blobs["06 bedroom"]
     assert "bath" in blobs["07 bath"]
+    assert "enclosed" in blobs["07 bath"]
+    assert "fixtures" in blobs["07 bath"]
+    assert "closer" in blobs["07 bath"]
     assert "interior only" in blobs["07 bath"]
     assert "bible named for this room" in blobs["07 bath"]
     assert "along" in blobs["08 terrace"]
     assert "outdoor" in blobs["08 terrace"]
+    assert "near field" in blobs["08 terrace"]
+    assert "unoccupied" in blobs["08 terrace"]
     assert "surroundings are only what the bible named" in blobs["08 terrace"]
     assert "overhead" in blobs["09 drone"]
     assert "looking down" in blobs["09 drone"]
+    assert "straight-down" in blobs["09 drone"]
+    assert "plan still" in blobs["09 drone"]
+    assert "unoccupied" in blobs["09 drone"]
     assert "surroundings are only what the bible named" in blobs["09 drone"]
     assert "study" in blobs["10 study"]
+    assert "intimate" in blobs["10 study"]
+    assert "closer" in blobs["10 study"]
+    assert "work wall" in blobs["10 study"]
+    assert "work volume" in blobs["10 study"]
     assert "interior only" in blobs["10 study"]
     assert "bible named for this room" in blobs["10 study"]
     for lab in ("04 kitchen", "05 dining", "06 bedroom", "07 bath", "10 study"):
         assert "interior only" in blobs[lab]
         assert "bible named for this room" in blobs[lab]
         assert "35mm" in blobs[lab]
+        assert "volume" in blobs[lab]
+        assert "unoccupied" in blobs[lab]
+    for lab in ("03 lounge", "04 kitchen", "05 dining", "06 bedroom", "10 study"):
+        assert "floor" in blobs[lab]
+        assert "walls" in blobs[lab]
+        assert "ceiling" in blobs[lab]
     joined_cards = " ".join(blobs.values())
     assert "just inside" not in joined_cards
     assert "daylight exterior" not in joined_cards
     assert "night exterior" not in joined_cards
     assert "nook" not in joined_cards
     assert "fills the entire backdrop" not in joined_cards
+    assert "not a second facade" not in joined_cards
+    interiors = [
+        blobs["04 kitchen"],
+        blobs["05 dining"],
+        blobs["06 bedroom"],
+        blobs["07 bath"],
+        blobs["10 study"],
+    ]
+    assert len(set(interiors)) == 5
     assert blobs["03 lounge"] != blobs["04 kitchen"]
     assert blobs["05 dining"] != blobs["08 terrace"]
+
+
+def test_place_10_shots_stay_generic_when_identity_swaps() -> None:
+    cabin = (
+        "A photoreal still of a one-room unmarked cedar cabin by a lake, "
+        "hip roof, gravel path, one wood stove. Unmarked home, empty of lettering."
+    )
+    pack10 = client.load_view_pack("place_10")
+    assert pack10
+    for card in pack10:
+        shot = card["shot"]
+        shot_l = shot.lower()
+        for leak in PLACE_10_IDENTITY_LEAKS:
+            assert leak not in shot_l, (card["label"], leak)
+        assert "cedar" not in shot_l
+        assert "lake" not in shot_l
+        joined = client.join_prompt(cabin, shot, "", "view")
+        assert joined.startswith(shot)
+        assert cabin in joined
+        assert "cedar cabin" in joined.lower()
+        assert len(joined.split()) <= PLACE_10_JOIN_CAP, (
+            card["label"],
+            len(joined.split()),
+        )
 
 
 def test_studio_app_chrome_pack_exists() -> None:
