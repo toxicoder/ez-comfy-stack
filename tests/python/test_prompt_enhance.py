@@ -217,6 +217,36 @@ def test_strip_fences_quotes_and_think() -> None:
     assert client.strip_model_wrapping(think) == "A techno wizard stands on a rooftop terrace."
 
 
+# Identity nouns that place_10 shots must not bake in. Labels may still
+# name camera stations (tower, foyer, kitchen); CLIP text is camera-only.
+PLACE_10_IDENTITY_LEAKS = (
+    "dusk",
+    "elevator",
+    "stone",
+    "unmarked tower",
+    "canyon",
+    "neighboring",
+    "skyline",
+    "roofs",
+    "frosted",
+    "opaque",
+    "cook wall",
+    "headboard",
+    "lantern",
+    "planting",
+    "master",
+    "crown",
+    "street",
+    "city",
+    "cabinet",
+    "bedding",
+    "desk",
+    "shelf",
+    "seating",
+    "warm practical",
+)
+
+
 def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     nouns = (
         "penthouse",
@@ -259,16 +289,23 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
         "10 study",
     ]
     blobs = {card["label"]: card["shot"].lower() for card in pack10}
+    for lab, text in blobs.items():
+        for leak in PLACE_10_IDENTITY_LEAKS:
+            assert leak not in text, (lab, leak)
+        assert "instagram 4:5" in text
+        assert "24mm" in text or "35mm" in text
     assert "ground-level" not in blobs["01 tower"]
     assert "three-quarter" not in blobs["01 tower"]
     assert "looking up" in blobs["01 tower"]
-    assert "street" in blobs["01 tower"]
-    assert "canyon" in blobs["01 tower"] or "neighboring" in blobs["01 tower"]
-    assert "dusk" in blobs["01 tower"]
-    assert "elevator" in blobs["02 foyer"] or "landing" in blobs["02 foyer"]
+    assert "establishing" in blobs["01 tower"]
+    assert "surroundings are only what the bible named" in blobs["01 tower"]
+    assert "24mm" in blobs["01 tower"]
     assert "way in" in blobs["02 foyer"]
     assert "behind the camera" in blobs["02 foyer"]
-    assert "seating" in blobs["03 lounge"] and "main opening" in blobs["03 lounge"]
+    assert "24mm" in blobs["02 foyer"]
+    assert "bible named" in blobs["03 lounge"]
+    assert "main opening" in blobs["03 lounge"]
+    assert "backdrop is only what the bible named for this room" in blobs["03 lounge"]
     toward_opening = [
         lab
         for lab, text in blobs.items()
@@ -278,33 +315,36 @@ def test_view_packs_are_camera_roles_without_lab_identity() -> None:
     ]
     assert toward_opening == ["03 lounge"]
     assert "kitchen" in blobs["04 kitchen"]
-    assert "cabinets" in blobs["04 kitchen"] or "work surface" in blobs["04 kitchen"]
-    assert "cook wall" in blobs["04 kitchen"]
-    assert "fills the entire backdrop" in blobs["04 kitchen"]
+    assert "interior only" in blobs["04 kitchen"]
+    assert "bible named for this room" in blobs["04 kitchen"]
     assert "dining" in blobs["05 dining"]
-    assert "interior wall" in blobs["05 dining"]
-    assert "fills the entire backdrop" in blobs["05 dining"]
-    assert "bedroom" in blobs["06 bedroom"] and "bedding" in blobs["06 bedroom"]
-    assert "headboard" in blobs["06 bedroom"]
-    assert "fills the entire backdrop" in blobs["06 bedroom"]
-    assert "bathroom" in blobs["07 bath"] or "bathing" in blobs["07 bath"]
-    assert "frosted" in blobs["07 bath"] or "opaque" in blobs["07 bath"]
-    assert "fills the entire backdrop" in blobs["07 bath"]
+    assert "interior only" in blobs["05 dining"]
+    assert "bible named for this room" in blobs["05 dining"]
+    assert "bedroom" in blobs["06 bedroom"]
+    assert "interior only" in blobs["06 bedroom"]
+    assert "bible named for this room" in blobs["06 bedroom"]
+    assert "bath" in blobs["07 bath"]
+    assert "interior only" in blobs["07 bath"]
+    assert "bible named for this room" in blobs["07 bath"]
     assert "along" in blobs["08 terrace"]
-    assert "tower" in blobs["08 terrace"]
-    assert "overhead" in blobs["09 drone"] or "drone" in blobs["09 drone"]
-    assert "looking down" in blobs["09 drone"] or "roof" in blobs["09 drone"]
-    assert "skyline" in blobs["09 drone"] or "roofs" in blobs["09 drone"]
+    assert "outdoor" in blobs["08 terrace"]
+    assert "surroundings are only what the bible named" in blobs["08 terrace"]
+    assert "overhead" in blobs["09 drone"]
+    assert "looking down" in blobs["09 drone"]
+    assert "surroundings are only what the bible named" in blobs["09 drone"]
     assert "study" in blobs["10 study"]
-    assert "desk" in blobs["10 study"] or "shelf" in blobs["10 study"]
-    assert "fills the entire backdrop" in blobs["10 study"]
+    assert "interior only" in blobs["10 study"]
+    assert "bible named for this room" in blobs["10 study"]
     for lab in ("04 kitchen", "05 dining", "06 bedroom", "07 bath", "10 study"):
-        assert "fills the entire backdrop" in blobs[lab]
+        assert "interior only" in blobs[lab]
+        assert "bible named for this room" in blobs[lab]
+        assert "35mm" in blobs[lab]
     joined_cards = " ".join(blobs.values())
     assert "just inside" not in joined_cards
     assert "daylight exterior" not in joined_cards
     assert "night exterior" not in joined_cards
     assert "nook" not in joined_cards
+    assert "fills the entire backdrop" not in joined_cards
     assert blobs["03 lounge"] != blobs["04 kitchen"]
     assert blobs["05 dining"] != blobs["08 terrace"]
 
@@ -1025,9 +1065,11 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         "three-bay",
         "linen sofa",
         "stone tub",
+        *PLACE_10_IDENTITY_LEAKS,
     )
     inventories = set()
     assert "linen sofa" in ident_l
+    pack10 = client.load_view_pack("place_10")
     for i, join in enumerate(sorted(joins, key=lambda n: n["id"])):
         shot = join["widgets_values"][0]
         inventory = join["widgets_values"][1]
@@ -1035,6 +1077,7 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         inventories.add(inventory)
         assert lock == "view"
         assert inventory.strip() == ""
+        assert shot == pack10[i]["shot"]
         shot_l = shot.lower()
         assert not any(noun in shot_l for noun in hidden_nouns)
         joined = client.join_prompt(ident_text, shot, inventory, lock)
@@ -1067,6 +1110,19 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
         lat_src = by_id[incoming[(ks_id, 3)][0][1]]["type"]
         assert lat_src == "EmptyFlux2LatentImage"
         assert pos_src == "CLIPTextEncode"
+
+
+def test_dream_house_graphs_use_place_10_shots() -> None:
+    from _lab_paths import lab_json
+
+    pack = [card["shot"] for card in client.load_view_pack("place_10")]
+    for rel in ("klein/dream-house.json", "klein/dream-house-clay.json"):
+        graph = json.loads(lab_json(rel).read_text(encoding="utf-8"))
+        joins = sorted(
+            [n for n in graph["nodes"] if n.get("type") == "EZPromptJoin"],
+            key=lambda n: n["id"],
+        )
+        assert [n["widgets_values"][0] for n in joins] == pack, rel
 
 
 def test_node_mappings_modes_preview_and_style() -> None:

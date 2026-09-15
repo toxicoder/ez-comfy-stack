@@ -19,7 +19,8 @@ STYLE_LOCK = "photoreal still"
 STYLE_LOCK_VIDEO = "photoreal shot"
 
 # Camera-free place bible for klein-dream-house and klein-style-lock.
-# Shot cards own lens, time, and weather. Do not name a camera here.
+# Shot cards own lens, camera station, and aspect. Time, weather,
+# materials, and architecture live here. Do not name a camera here.
 # Outdoor lamps are fixtures (inventory), not a time of day.
 HOUSE_IDENTITY = (
     f"A {STYLE_LOCK} of one full-floor warm-glass crown penthouse on a very "
