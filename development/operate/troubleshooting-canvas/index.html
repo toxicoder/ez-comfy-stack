@@ -2646,7 +2646,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 22:55 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T22:55:43+00:00">15 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 15 Sep 2026, 23:13 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-15T23:13:13+00:00">15 Sep 2026</time></span>
                 
                   
 
@@ -2763,6 +2763,11 @@ tags: [troubleshooting, <span class="ez-term" tabindex="0" role="button" aria-ha
 <td>Pull latest. Restart (entrypoint pip-installs <code>setuptools&lt;82</code> when PerTh is not callable) or <code>download-dub --tier clone</code> with the stack <strong>up</strong>, then restart so perth reimports. Confirm: <code>docker exec ez-comfy-studio /comfy-state/ComfyUI/.venv/bin/python -c 'import perth; assert callable(perth.PerthImplicitWatermarker)'</code>. Do <strong>not</strong> disable PerTh.</td>
 </tr>
 <tr>
+<td>Dub <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span> logs <code>LoRACompatibleLinear is deprecated</code> / <code>sdp_kernel() is deprecated</code></td>
+<td>Chatterbox Matcha still constructs diffusers' deprecated Linear; generate uses torch's old SDPA context manager</td>
+<td>Pull latest and restart (<code>pythonpath/</code> is bind-mounted). Lab sitecustomize maps <code>sdp_kernel</code> → <code>sdpa_kernel</code> and aliases <code>LoRACompatibleLinear</code> to <code>nn.Linear</code>. Do <strong>not</strong> <code>pip install peft</code> (that flips diffusers' LoRA backend). <code>loaded PerthNet (Implicit)</code> is expected — PerTh stays on.</td>
+</tr>
+<tr>
 <td>Dub status <code>faster-whisper not installed</code></td>
 <td>Combined pip failed (chatterbox torch pin), named volume predates the wheel bake, or pip landed in the volume venv while Comfy runs <code>/opt/comfy-prebuilt/.venv</code></td>
 <td><code>git pull</code>, stack <strong>up</strong> (entrypoint heals the interpreter Comfy actually execs). <code>./scripts/manage.sh download-dub --tier asr</code>. Status should include the ImportError detail (e.g. <code>onnxruntime</code>). Then Queue; <strong>Dub status</strong> must list speaker/turn counts, not the wheel miss.</td>
@@ -2790,7 +2795,7 @@ tags: [troubleshooting, <span class="ez-term" tabindex="0" role="button" aria-ha
 <tr>
 <td>Dub mix is noise / not talking</td>
 <td>Duration lock used to WSOLA-crush a long Chatterbox take (up to ~40 s) into the original window</td>
-<td>Pull latest. Fit pitch-preserves <strong>up to 1.25×</strong>, then spills, then fade-trims. A/B <code>dubs/&lt;slug&gt;/render/turn_NNNN.raw.wav</code> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../../glossary/#tts" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>) vs <code>turn_NNNN.wav</code> (fitted). If raw is speech, it was the old crush. If raw is also noise, check clone pack / speaker refs. Unvoiced clones skip overlay (<code>clone unvoiced</code> in Dub status / <code>qc.json</code>)</td>
+<td>Pull latest. Fit pitch-preserves <strong>up to 1.25×</strong>, then spills, then fade-trims. A/B <code>dubs/&lt;slug&gt;/render/turn_NNNN.raw.wav</code> (TTS) vs <code>turn_NNNN.wav</code> (fitted). If raw is speech, it was the old crush. If raw is also noise, check clone pack / speaker refs. Unvoiced clones skip overlay (<code>clone unvoiced</code> in Dub status / <code>qc.json</code>)</td>
 </tr>
 <tr>
 <td>Dub mix starts silent then hums / sounds like creepy music</td>
