@@ -106,9 +106,12 @@ teardown() {
   [[ -f ${REPO_ROOT}/docker/pythonpath/sitecustomize.py ]]
   run grep -E '^!patch_magcache_compat\.py$' "${di}"
   [ "$status" -eq 0 ]
+  run grep -E '^!patch_vhs_widget_inputs\.py$' "${di}"
+  [ "$status" -eq 0 ]
   run grep -E '^!seed_clay_inputs\.py$' "${di}"
   [ "$status" -eq 0 ]
   [[ -f ${REPO_ROOT}/docker/patch_magcache_compat.py ]]
+  [[ -f ${REPO_ROOT}/docker/patch_vhs_widget_inputs.py ]]
   [[ -f ${REPO_ROOT}/docker/seed_clay_inputs.py ]]
   # Guard future COPY lines: every context source must have a `!` exception.
   run python3 -c '
@@ -203,6 +206,7 @@ if missing:
   [[ "${torch_copy}" != *patch_get_free_memory* ]]
   [[ "${torch_copy}" != *patch_unified_memory_copy* ]]
   [[ "${torch_copy}" != *patch_magcache_compat* ]]
+  [[ "${torch_copy}" != *patch_vhs_widget_inputs* ]]
   [[ "${torch_copy}" != *seed_clay_inputs* ]]
   [[ "${torch_copy}" != *install-comfy.sh* ]]
   [[ "${torch_pins}" == *TORCH_VERSION* ]]
@@ -274,6 +278,8 @@ if missing:
   run grep -E 'patch_unified_memory_copy\.py:/opt/ez-comfy/patch_unified_memory_copy\.py' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'patch_magcache_compat\.py:/opt/ez-comfy/patch_magcache_compat\.py' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'patch_vhs_widget_inputs\.py:/opt/ez-comfy/patch_vhs_widget_inputs\.py' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'seed_clay_inputs\.py:/opt/ez-comfy/seed_clay_inputs\.py' "${compose}"
   [ "$status" -eq 0 ]

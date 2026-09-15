@@ -1421,7 +1421,7 @@ main() {
   # shellcheck disable=SC1091
   source "${venv}/bin/activate"
 
-  ep_log "phase 2/4: free-memory + unified-memory copy + MagCache compat patches (best-effort)"
+  ep_log "phase 2/4: free-memory + unified-memory copy + MagCache + VHS widgetInputs patches (best-effort)"
   if [[ -f /opt/ez-comfy/patch_get_free_memory.py ]]; then
     python3 /opt/ez-comfy/patch_get_free_memory.py "${comfy_home}" || true
   fi
@@ -1430,6 +1430,9 @@ main() {
   fi
   if [[ -f /opt/ez-comfy/patch_magcache_compat.py ]]; then
     python3 /opt/ez-comfy/patch_magcache_compat.py "${comfy_home}" || true
+  fi
+  if [[ -f /opt/ez-comfy/patch_vhs_widget_inputs.py ]]; then
+    python3 /opt/ez-comfy/patch_vhs_widget_inputs.py "${comfy_home}" || true
   fi
 
   ep_log "phase 3/4: install lab workflows and custom nodes"

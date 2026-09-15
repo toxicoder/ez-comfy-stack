@@ -120,6 +120,7 @@ services:
       - ./patch_get_free_memory.py:/opt/ez-comfy/patch_get_free_memory.py:ro
       - ./patch_unified_memory_copy.py:/opt/ez-comfy/patch_unified_memory_copy.py:ro
       - ./patch_magcache_compat.py:/opt/ez-comfy/patch_magcache_compat.py:ro
+      - ./patch_vhs_widget_inputs.py:/opt/ez-comfy/patch_vhs_widget_inputs.py:ro
       - ./seed_clay_inputs.py:/opt/ez-comfy/seed_clay_inputs.py:ro
       - ./pythonpath:/opt/ez-comfy/pythonpath:ro
     gpus: all

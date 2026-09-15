@@ -399,6 +399,25 @@ apply_magcache_compat_patch() {
 }
 
 #######################################
+# Rewrite VHS.core.js off deprecated /extensions/core/widgetInputs.js.
+# Globals:
+#   COMFY_HOME
+# Arguments:
+#   None
+# Outputs:
+#   Progress via log/warn
+# Returns:
+#   0 (patch failures are soft)
+#######################################
+apply_vhs_widget_inputs_patch() {
+  if [[ -f /opt/ez-comfy/patch_vhs_widget_inputs.py ]]; then
+    python3 /opt/ez-comfy/patch_vhs_widget_inputs.py "${COMFY_HOME}" || warn "vhs widgetInputs patch failed"
+  else
+    warn "patch_vhs_widget_inputs.py not found in image"
+  fi
+}
+
+#######################################
 # Copy comfy_api/ from prebuilt when the volume is missing comfy_api/input.
 # Unanchored rsync --exclude input/ used to drop that nested v0.34+ package.
 # No-op when the package is already present or prebuilt lacks it.

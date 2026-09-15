@@ -59,6 +59,7 @@ main() {
       --cov=patch_get_free_memory \
       --cov=patch_unified_memory_copy \
       --cov=patch_magcache_compat \
+      --cov=patch_vhs_widget_inputs \
       --cov=seed_clay_inputs \
       --cov=ez_ltx_spatial \
       --cov-report=term-missing \

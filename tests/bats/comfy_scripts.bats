@@ -186,6 +186,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'patch_magcache_compat' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "${status}" -eq 0 ]
+  run grep -F 'apply_vhs_widget_inputs_patch' "${REPO_ROOT}/docker/install-comfy.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'patch_vhs_widget_inputs' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
   run grep -F 'configure_nunchaku_pack' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'LAB_ENABLE_LTX_DIRECTOR' "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
@@ -1074,6 +1078,10 @@ teardown() {
   run apply_magcache_compat_patch
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"not found"* || "${output}" == *"patch"* || "${output}" == *"magcache"* || -z ${output} ]]
+
+  run apply_vhs_widget_inputs_patch
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || "${output}" == *"vhs"* || "${output}" == *"widgetInputs"* || -z ${output} ]]
 
   # finalize with mocked strip deps
   run phase_finalize

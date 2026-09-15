@@ -48,6 +48,7 @@ tags: [troubleshooting, start, docker, kitchen, comfyui]
 | `Cannot import …/custom_nodes/_user` / missing `__init__.py` | Empty host bind `${COMFY_OUTPUT_DIR}/custom-nodes-user` | Restart. Entrypoint writes an empty stub `__init__.py` when missing; never overwrites an operator pack |
 | `ModuleNotFoundError: No module named 'comfy_api.input'` then container exit 1 (after Kitchen attention) | Volume seed used unanchored rsync `--exclude input/`, which also dropped ComfyUI v0.34+ `comfy_api/input` | Pull latest (`entrypoint.sh` + `install-comfy` are bind-mounted — no image rebuild). `./scripts/manage.sh stop` then `start` (type **yes**). Stamp-present refresh heals `comfy_api/` from `/opt/comfy-prebuilt`. Do **not** need `LAB_FORCE_COLD_INSTALL`. Last resort: `docker volume rm ez-comfy-state` then start |
 | `git clone` into `ComfyUI-VideoHelperSuite` “already exists and is not an empty directory” | Prebuilt strip removes `.git`; refresh used to clone into the leftover tree | Pull latest and restart. Clone is skipped when the pack is already present; pip requirements still run. LTX lab MP4 is unaffected |
+| `[DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/widgetInputs.js` | VideoHelperSuite `VHS.core.js` still imports that internal frontend path | Pull latest. `./scripts/manage.sh stop` then `start` (type **yes**) — `patch_vhs_widget_inputs.py` is bind-mounted, no image rebuild. Lab `ez_*` JS does not import that path. Operator packs under `${COMFY_OUTPUT_DIR}/custom-nodes-user` can still warn |
 
 ---
 
