@@ -31,13 +31,18 @@ def sanitize_slug(slug: object, default: str = "episode") -> str:
 def output_root() -> Path:
     """Resolve the Comfy output directory (container mount or host).
 
-    Compose passes the host path as ``COMFY_OUTPUT_DIR`` (``/mnt/comfy-output``)
-    while the bind-mount inside the container is ``/outputs``. Prefer Comfy's
+    Compose sets container ``COMFY_OUTPUT_DIR=/outputs``. Prefer Comfy's
     output folder, then ``/outputs`` when that directory exists.
 
     Returns:
         Directory that should hold ``dubs/<slug>/``.
     """
+    try:
+        from ez_common import output_root as shared_output_root
+
+        return shared_output_root()
+    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
+        pass
     try:
         import folder_paths  # type: ignore[import-not-found]
 

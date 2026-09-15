@@ -260,12 +260,36 @@ def test_run_chat_with_search(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_write_brief_from_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path / "out"))
     monkeypatch.delenv("MODELS_DIR", raising=False)
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
     result = pipeline.ResearchResult("hello", "src", "ok", [])
     path = pipeline.write_brief(result, "hello")
     assert path is not None
     text = path.read_text(encoding="utf-8")
     assert "hello" in text
     assert "src" in text
+    assert path.parent == tmp_path / "out" / "research"
+
+
+def test_write_brief_prefers_container_outputs(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    dest = tmp_path / "outputs"
+    dest.mkdir()
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", "/mnt/comfy-output")
+    monkeypatch.delenv("MODELS_DIR", raising=False)
+    sys.modules.pop("folder_paths", None)
+    monkeypatch.setattr("ez_common.output_root", lambda **_k: dest)
+    result = pipeline.ResearchResult("hello", "src", "ok", [])
+    path = pipeline.write_brief(result, "hello")
+    assert path == dest / "research" / "ez_research_hello.md"
 
 
 def test_run_chat_fail_soft_without_llama(monkeypatch: pytest.MonkeyPatch) -> None:

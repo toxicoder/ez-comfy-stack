@@ -382,6 +382,36 @@ link_comfy_input_dir() {
 }
 
 #######################################
+# Copy leftover files from a host-path overlay into the /outputs bind.
+# Soft-fail. No-op when the two paths are the same inode.
+# Globals:
+#   LAB_MISPLACED_OUTPUT_DIR, LAB_OUTPUTS_MOUNT
+# Arguments:
+#   None
+# Outputs:
+#   Progress logs
+# Returns:
+#   0
+#######################################
+heal_misplaced_host_output_dir() {
+  local misplaced="${LAB_MISPLACED_OUTPUT_DIR:-/mnt/comfy-output}"
+  local mount="${LAB_OUTPUTS_MOUNT:-/outputs}"
+  if [[ ! -d ${misplaced} || ! -d ${mount} ]]; then
+    return 0
+  fi
+  if [[ ${misplaced} -ef ${mount} ]]; then
+    return 0
+  fi
+  ep_log "Healing misplaced outputs from ${misplaced} into ${mount}"
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a "${misplaced}/" "${mount}/" || true
+  else
+    cp -a "${misplaced}/." "${mount}/" || true
+  fi
+  return 0
+}
+
+#######################################
 # Prefer working Triton; disable torch python_native Triton when deps missing.
 # Globals:
 #   LAB_DISABLE_TORCH_NATIVE_TRITON, PYTHONPATH
@@ -644,11 +674,151 @@ log_lab_seed_counts() {
 }
 
 #######################################
+# Map a dest _lab relative JSON path onto the matching src file.
+# Accepts stem.app.json ↔ stem.json so App Mode renames still match git.
+# Globals:
+#   None
+# Arguments:
+#   $1  source _lab directory
+#   $2  path relative to dest _lab
+# Outputs:
+#   Absolute src path on stdout when found
+# Returns:
+#   0 when a src counterpart exists; 1 otherwise
+#######################################
+lab_src_json_for_dest() {
+  local src_lab="${1:?}"
+  local rel="${2:?}"
+  local alt
+  if [[ -f ${src_lab}/${rel} ]]; then
+    printf '%s\n' "${src_lab}/${rel}"
+    return 0
+  fi
+  case "${rel}" in
+    *.app.json)
+      alt="${rel%.app.json}.json"
+      ;;
+    *.json)
+      alt="${rel%.json}.app.json"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+  if [[ -f ${src_lab}/${alt} ]]; then
+    printf '%s\n' "${src_lab}/${alt}"
+    return 0
+  fi
+  return 1
+}
+
+#######################################
+# Choose a dest path that does not clobber a different existing file.
+# Empty stdout means dest already has identical content (caller skips).
+# Globals:
+#   None
+# Arguments:
+#   $1  preferred destination path
+#   $2  source file to place
+# Outputs:
+#   Destination path on stdout, or empty when identical
+# Returns:
+#   0
+#######################################
+rescue_unique_path() {
+  local dest="${1:?}"
+  local src_file="${2:?}"
+  local dir base stem utc
+  if [[ ! -e ${dest} ]]; then
+    printf '%s\n' "${dest}"
+    return 0
+  fi
+  if cmp -s "${src_file}" "${dest}"; then
+    return 0
+  fi
+  dir="$(dirname "${dest}")"
+  base="$(basename "${dest}")"
+  utc="$(date -u +%Y%m%dT%H%M%SZ)"
+  case "${base}" in
+    *.app.json)
+      stem="${base%.app.json}"
+      printf '%s\n' "${dir}/${stem}.rescued-${utc}.app.json"
+      ;;
+    *.json)
+      stem="${base%.json}"
+      printf '%s\n' "${dir}/${stem}.rescued-${utc}.json"
+      ;;
+    *)
+      printf '%s\n' "${dest}.rescued-${utc}"
+      ;;
+  esac
+}
+
+#######################################
+# Move operator JSON out of dest _lab before rsync --delete.
+# Extras (not in src) go to dest/_user/<rel>. Edited lab graphs go to
+# dest/_user/_rescued/<rel>. Never overwrites a different _user file.
+# Globals:
+#   None
+# Arguments:
+#   $1  source _lab directory
+#   $2  destination _lab directory
+#   $3  destination _user directory
+# Outputs:
+#   ep_log lines when any files move or copy
+# Returns:
+#   0
+#######################################
+rescue_operator_lab_json() {
+  local src_lab="${1:?}"
+  local dest_lab="${2:?}"
+  local dest_user="${3:?}"
+  local path rel src_json unique target extras=0 edits=0
+  if [[ ! -d ${dest_lab} ]]; then
+    return 0
+  fi
+  mkdir -p "${dest_user}"
+  while IFS= read -r -d '' path; do
+    rel="${path#"${dest_lab}"/}"
+    src_json="$(lab_src_json_for_dest "${src_lab}" "${rel}" || true)"
+    if [[ -z ${src_json} ]]; then
+      target="${dest_user}/${rel}"
+      mkdir -p "$(dirname "${target}")"
+      unique="$(rescue_unique_path "${target}" "${path}")"
+      if [[ -z ${unique} ]]; then
+        rm -f "${path}"
+      else
+        mkdir -p "$(dirname "${unique}")"
+        mv "${path}" "${unique}"
+        extras=$((extras + 1))
+      fi
+      continue
+    fi
+    if ! cmp -s "${path}" "${src_json}"; then
+      target="${dest_user}/_rescued/${rel}"
+      mkdir -p "$(dirname "${target}")"
+      unique="$(rescue_unique_path "${target}" "${path}")"
+      if [[ -n ${unique} ]]; then
+        mkdir -p "$(dirname "${unique}")"
+        cp -a "${path}" "${unique}"
+        edits=$((edits + 1))
+      fi
+    fi
+  done < <(find "${dest_lab}" -type f -name '*.json' -print0)
+  if ((extras > 0)); then
+    ep_log "rescued ${extras} operator graph(s) from _lab to _user"
+  fi
+  if ((edits > 0)); then
+    ep_log "copied ${edits} edited lab graph(s) to _user/_rescued"
+  fi
+}
+
+#######################################
 # Copy host lab JSON into Comfy user/default/workflows/_lab/<lane>/.
-# Preferred: rsync -a --delete src/_lab/ → dest/_lab/ (JSON only).
-# Transition: when src/_lab is missing, map legacy flat globs into _lab/.
+# Preferred: rescue operator JSON, then rsync -a --delete src/_lab/ → dest/_lab/
+# (JSON only). Transition: when src/_lab is missing, map legacy flat globs.
 # Then rename App Mode graphs to stem.app.json in dest only.
-# Never writes dest/_user/ or dest root. Never copies YAML, NOTICE, quality/.
+# Never overwrites dest/_user/ or dest root. Never copies YAML, NOTICE, quality/.
 # Globals:
 #   None
 # Arguments:
@@ -668,6 +838,7 @@ install_lab_workflows() {
     return 0
   fi
   if [[ -d ${src}/_lab ]]; then
+    rescue_operator_lab_json "${src}/_lab" "${dest}/_lab" "${dest}/_user"
     sync_lab_json_dir "${src}/_lab" "${dest}/_lab"
   else
     seed_legacy_lab_workflows "${src}" "${dest}/_lab"
@@ -709,7 +880,7 @@ install_lab_custom_nodes() {
 # Default VRAM (omit --highvram / --gpu-only / --lowvram). ComfyUI v0.34+
 # dropped --normalvram; passing it exits with unrecognized arguments.
 # Globals:
-#   LAB_OUTPUTS_MOUNT
+#   LAB_OUTPUTS_MOUNT, LAB_INPUTS_MOUNT, LAB_USER_MOUNT
 # Arguments:
 #   None
 # Outputs:
@@ -728,6 +899,8 @@ comfy_exec_args() {
     "${LAB_OUTPUTS_MOUNT:-/outputs}" \
     --input-directory \
     "${LAB_INPUTS_MOUNT:-/inputs}" \
+    --user-directory \
+    "${LAB_USER_MOUNT:-/comfy-state/ComfyUI/user}" \
     --use-ck-attention \
     --disable-dynamic-vram \
     --disable-pinned-memory \
@@ -1279,6 +1452,7 @@ main() {
   cd "${comfy_home}"
   link_comfy_output_dir "${comfy_home}/output"
   link_comfy_input_dir "${comfy_home}/input"
+  heal_misplaced_host_output_dir
   seed_clay_inputs_if_missing
   ep_log "phase 4/4: exec ComfyUI → 0.0.0.0:8188 (output ${LAB_OUTPUTS_MOUNT:-/outputs}; input ${LAB_INPUTS_MOUNT:-/inputs}; Kitchen attention)"
   if [[ ${LAB_ENTRYPOINT_NO_EXEC:-} == "1" ]]; then

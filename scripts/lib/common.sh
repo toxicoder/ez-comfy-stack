@@ -681,7 +681,7 @@ ensure_comfy_output_dir() {
   mkdir -p \
     "${dir}/input" \
     "${dir}/custom-nodes-user" \
-    "${dir}/comfy-user/default/workflows/_user" || return 1
+    "${dir}/comfy-user/default/workflows/_user/_rescued" || return 1
 }
 
 #######################################

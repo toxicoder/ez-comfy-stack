@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -35,3 +36,59 @@ def test_node_log_stderr(capsys: pytest.CaptureFixture[str]) -> None:
     captured = capsys.readouterr()
     assert captured.err == "[ez_dub] ASR 3/12\n"
     assert captured.out == ""
+
+
+def test_output_root_prefers_folder_paths(monkeypatch: pytest.MonkeyPatch) -> None:
+    fake = types.SimpleNamespace(get_output_directory=lambda: "/comfy/output")
+    monkeypatch.setitem(sys.modules, "folder_paths", fake)
+    assert ec.output_root() == Path("/comfy/output")
+
+
+def test_output_root_prefers_container_outputs(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", "/mnt/comfy-output")
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return True
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert ec.output_root() == Path("/outputs")
+
+
+def test_output_root_uses_existing_env(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert ec.output_root() == tmp_path
+
+
+def test_output_root_default_when_unset(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("COMFY_OUTPUT_DIR", raising=False)
+    monkeypatch.delenv("COMFY_OUTPUT", raising=False)
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert ec.output_root() == Path("/mnt/comfy-output")
+    assert ec.output_root(default="/outputs") == Path("/outputs")

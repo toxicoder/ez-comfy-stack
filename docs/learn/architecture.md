@@ -75,7 +75,7 @@ flowchart TB
 | **`${MODELS_DIR}`** | Weights + `comfy/` relative symlinks | You, `reap-models`, or disk-wizard — **not** `cleanup` |
 | **`comfy-state` volume** (`ez-comfy-state`) | Comfy install, venv, lab `ez_*` packs | `cleanup` (type **DELETE**) only |
 
-Generated media, LoadImage inputs, Comfy `user/`, occupancy JSON, and operator `_user` node packs live on **`${COMFY_OUTPUT_DIR}`**. `cleanup` does not delete that tree. Layout: [Hardware, memory, and safety](hardware.md) · [Models and cache](../models-and-cache.md) · [Backup and restore](../operate/backup-restore.md).
+Generated media, LoadImage inputs, Comfy `user/`, occupancy JSON, and operator `_user` node packs live on **`${COMFY_OUTPUT_DIR}`**. Inside the container that tree is `/outputs` (`COMFY_OUTPUT_DIR=/outputs`) plus the `comfy-user` bind at `/comfy-state/ComfyUI/user`. `cleanup` does not delete the host tree. Layout: [Hardware, memory, and safety](hardware.md) · [Models and cache](../models-and-cache.md) · [Backup and restore](../operate/backup-restore.md).
 
 ```mermaid
 flowchart LR

@@ -130,7 +130,7 @@ Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
 
 ## Example graphs
 
-Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. App Mode graphs land as **`*.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](../visual-generative-ai.md).
+Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. App Mode graphs land as **`*.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). JSON that landed in live `_lab/` is rescued into `_user/` or `_user/_rescued/` before the catalog overwrite. YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](../visual-generative-ai.md).
 
 | Graph | Notes |
 | --- | --- |

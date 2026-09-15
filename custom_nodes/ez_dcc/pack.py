@@ -17,23 +17,27 @@ VIDEO_FILENAMES = {
 
 
 def output_directory() -> Path:
-    """Operator output dir: env, then Comfy folder_paths, then ``/outputs``.
+    """Operator output dir: folder_paths, then ``/outputs``, then env.
 
-    Prefer ``COMFY_OUTPUT_DIR`` so occupancy state matches ``occupancy.sh``.
-    Never hardcode ``/mnt/comfy-output``. Never write ``MODELS_DIR``.
+    Container env is ``/outputs`` (the host bind). Never write ``MODELS_DIR``.
 
     Returns:
         Directory path (may not exist yet).
     """
-    env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
-    if env:
-        return Path(env)
     try:
-        import folder_paths  # type: ignore[import-not-found]
+        from ez_common import output_root
 
-        return Path(folder_paths.get_output_directory())
+        return output_root(default="/outputs")
     except Exception:  # noqa: BLE001 — Comfy optional in unit tests
-        return Path("/outputs")
+        env = (os.environ.get("COMFY_OUTPUT_DIR") or "").strip()
+        if env:
+            return Path(env)
+        try:
+            import folder_paths  # type: ignore[import-not-found]
+
+            return Path(folder_paths.get_output_directory())
+        except Exception:  # noqa: BLE001 — Comfy optional in unit tests
+            return Path("/outputs")
 
 
 def shot_dir(slug: str, shot_id: str) -> Path:

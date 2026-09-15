@@ -378,11 +378,36 @@ def test_output_directory_prefers_env(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return False
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
     assert dcc_pack.output_directory() == tmp_path
     monkeypatch.delenv("COMFY_OUTPUT_DIR")
     fallback = dcc_pack.output_directory()
     assert str(fallback) != "/mnt/comfy-output"
     assert fallback == Path("/outputs") or fallback.name in {"outputs", "output"}
+
+
+def test_output_directory_prefers_container_outputs(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", "/mnt/comfy-output")
+    sys.modules.pop("folder_paths", None)
+    original = Path.is_dir
+
+    def fake_is_dir(self: Path) -> bool:
+        if str(self) == "/outputs":
+            return True
+        return original(self)
+
+    monkeypatch.setattr(Path, "is_dir", fake_is_dir)
+    assert dcc_pack.output_directory() == Path("/outputs")
 
 
 def test_defaults_slug_shot_plate() -> None:
