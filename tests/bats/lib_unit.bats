@@ -1171,35 +1171,50 @@ exit 0
   export HOME="${TEST_TMP_DIR}/home"
   mkdir -p "${HOME}"
   unset BLENDER_BIN
-  export PATH="${TEST_TMP_DIR}/empty:/usr/bin:/bin"
   mkdir -p "${TEST_TMP_DIR}/empty"
+  # Ubuntu 24.04 merges /bin → /usr/bin; keep grep/rm on PATH, hide blender
+  # only for the resolver calls.
+  local keep_path="${PATH}"
+  local hermetic_cands open_cands hint_out req_out
+  local hermetic_st open_st bin_st hint_st req_st
+  export PATH="${TEST_TMP_DIR}/empty"
   hash -r
   export LAB_HERMETIC=1
   run blender_host_candidates
-  [ "${status}" -eq 0 ]
-  local hermetic_cands="${output}"
+  hermetic_st="${status}"
+  hermetic_cands="${output}"
+  unset LAB_HERMETIC
+  run blender_host_candidates
+  open_st="${status}"
+  open_cands="${output}"
+  export LAB_HERMETIC=1
+  run blender_host_bin
+  bin_st="${status}"
+  run print_blender_host_hint
+  hint_st="${status}"
+  hint_out="${output}"
+  run require_blender
+  req_st="${status}"
+  req_out="${output}"
+  export PATH="${keep_path}"
+  hash -r
+  [ "${hermetic_st}" -eq 0 ]
   [[ "${hermetic_cands}" == *"${HOME}/.local/bin/blender"* ]]
   # Line-exact: ${HOME}/.local/opt/blender/blender contains the substring
   # /opt/blender/blender, which bash 5 [[ *glob* ]] matches across newlines.
   ! grep -Fxq "/opt/blender/blender" <<<"${hermetic_cands}"
   ! grep -Fxq "/usr/bin/blender" <<<"${hermetic_cands}"
-  unset LAB_HERMETIC
-  run blender_host_candidates
-  [ "${status}" -eq 0 ]
-  grep -Fxq "/opt/blender/blender" <<<"${output}"
-  grep -Fxq "/usr/bin/blender" <<<"${output}"
-  export LAB_HERMETIC=1
-  run blender_host_bin
-  [ "${status}" -eq 1 ]
-  run print_blender_host_hint
-  [ "${status}" -eq 0 ]
-  [[ "${output}" == *"not on PATH"* ]]
-  [[ "${output}" == *"blender-install"* ]]
-  [[ "${output}" == *"apt-get install -y blender"* ]]
-  [[ "${output}" == *"does not install Blender"* ]]
-  run require_blender
-  [ "${status}" -eq 1 ]
-  [[ "${output}" == *"blender-install"* ]]
+  [ "${open_st}" -eq 0 ]
+  grep -Fxq "/opt/blender/blender" <<<"${open_cands}"
+  grep -Fxq "/usr/bin/blender" <<<"${open_cands}"
+  [ "${bin_st}" -eq 1 ]
+  [ "${hint_st}" -eq 0 ]
+  [[ "${hint_out}" == *"not on PATH"* ]]
+  [[ "${hint_out}" == *"blender-install"* ]]
+  [[ "${hint_out}" == *"apt-get install -y blender"* ]]
+  [[ "${hint_out}" == *"does not install Blender"* ]]
+  [ "${req_st}" -eq 1 ]
+  [[ "${req_out}" == *"blender-install"* ]]
 
   local off="${TEST_TMP_DIR}/offpath/blender"
   mkdir -p "$(dirname "${off}")"
