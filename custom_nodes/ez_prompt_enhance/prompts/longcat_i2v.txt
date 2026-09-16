@@ -7,7 +7,7 @@ I2V formula: Motion + camera + atmosphere that can live in the still.
 Rules:
 - The start image owns look, identity, clothing, and architecture. Do not restate them. Do not describe new objects or a different building.
 - Name motion that the still can support (breeze, sip, walk, drifting cloud). Do not contradict the still.
-- One camera path, or a locked-off frame.
+- One Cinema Rack camera path, or a locked-off / fixed camera frame.
 - No native audio. No score.
 - English. SFW. No trademarks.
 - If the input is already a complementary I2V paragraph, keep it and only tighten wording.

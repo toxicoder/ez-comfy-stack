@@ -339,7 +339,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Motion / prompt | `The start image holds as the first frame. The camera moves slowly toward the su…` |
+| Motion / prompt | `The start image holds as the first frame. The camera dollies in slowly toward t…` |
 | Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
 
 ### `LTXVImgToVideo` — LTX Image to Video
@@ -862,10 +862,10 @@ Lazy sentence or authored LTX paragraph.
 
 **How it affects generation:** I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in "quotes" only if you asked for speech.
 
-**This graph:** `The start image holds as the first frame. The camera moves slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every…`
+**This graph:** `The start image holds as the first frame. The camera dollies in slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep …`
 
 ```text
-The start image holds as the first frame. The camera moves slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score.
+The start image holds as the first frame. The camera dollies in slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score.
 ```
 
 #### `enhance`

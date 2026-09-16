@@ -64,9 +64,11 @@ def _klein_still(lens: str) -> str:
         "An original techno wizard in an unmarked sun-washed teal technical running coat "
         "with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan "
         "holographic glyph rings blooming from a compact unmarked data-staff as if the "
-        "code were a spell. Palms and unmarked glass towers recede toward a bright bay. "
-        "Shot on a "
-        f"{lens} lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, "
+        "code were a spell. Hold a wide environmental terrace so palms and unmarked glass "
+        "towers recede toward a bright bay. Match a standing eyeline. "
+        f"{lens}-equivalent wide. Rake amber sidelight along fabric and terrace grit so "
+        "long shadows stripe the terrace and highlights go honey. Locked as if a crawl "
+        "dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, "
         "empty of lettering."
     )
 
@@ -86,14 +88,16 @@ WAN_T2V = (
     "faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace "
     "at golden hour, warm gold-cyan holographic glyph rings blooming from a compact unmarked "
     "data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay "
-    "breeze while palms and unmarked glass towers hold a bright waterfront. The camera dollies "
-    "in slowly toward the wizard over five seconds. Photoreal, physically plausible light, "
-    "natural materials, 24mm, YouTube 16:9."
+    "breeze while palms and unmarked glass towers hold a bright waterfront. Rake amber "
+    "sidelight along fabric and terrace grit, golden-hour amber rims. 24mm-equivalent wide. "
+    "The camera dollies in slowly toward the wizard over five seconds. Photoreal, "
+    "YouTube 16:9. No audio."
 )
 WAN_I2V = (
-    "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or "
+    "Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or "
     "foliage. Keep the start-image identity locked. Keep every object and surface from "
-    "the start image; do not redesign. One continuous five-second take at 24 fps."
+    "the start image; do not redesign. One continuous five-second take at 24 fps. "
+    "dolly in. No audio."
 )
 
 LTX_AUDIO_HINT = "world SFX matching the start image, no score"
@@ -103,19 +107,20 @@ LTX_T2V = (
     "faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic "
     "glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem "
     "and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a "
-    "bright waterfront. The camera dollies in slowly toward the wizard. A warm terrace breeze "
+    "bright waterfront. Match a standing eyeline. 24mm-equivalent wide. The camera dollies in "
+    "on a locked wheeled support, tightening without zooming. A warm terrace breeze "
     "and palm rustle sit under distant bay traffic, then a glyph chime. Clean unmarked "
     "surfaces sit empty of lettering. No music and no score."
 )
 LTX_I2V = (
-    "The start image holds as the first frame. The camera moves slowly toward the "
+    "The start image holds as the first frame. The camera dollies in slowly toward the "
     "subject while fabric or foliage drifts. Light wind and world SFX matching the "
     "start image sit under the action. Keep every object and surface from the start "
     "image; do not redesign. No music and no score."
 )
 
 GIF_MOTION = (
-    "Locked camera. Gentle cyclic breeze in fabric or leaves. Lights shimmer, "
+    "Locked camera, fixed camera. Gentle cyclic breeze in fabric or leaves. Lights shimmer, "
     "then settle. Keep the start-image identity locked. "
     "Keep every object and surface from the start image; do not redesign. "
     "Gentle cyclic motion for a looping GIF."
@@ -125,7 +130,8 @@ KLEIN_SHORTS = (
     f"A {STYLE_LOCK} vertical still for Shorts. An original "
     "techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams "
     "stands mid-stride on a tropical rooftop terrace at golden hour. Warm gold-cyan holographic glyph rings "
-    "bloom from a compact unmarked data-staff, empty of lettering. Shot on a 35mm lens, framed "
+    "bloom from a compact unmarked data-staff, empty of lettering. Match a standing eyeline. "
+    "35mm-equivalent classic reportage view, framed "
     "for 9:16 with headroom for captions."
 )
 KLEIN_THUMBNAIL = (
@@ -144,13 +150,14 @@ KLEIN_HOOK = (
 
 WAN_SHORTS_I2V = (
     "Locked vertical framing for Shorts. Gentle subject motion. Camera holds, then a "
-    "slow push-in. Keep the start-image identity locked. Keep every object and surface "
-    "from the start image; do not redesign. One continuous ~5 s take at 24 fps. No audio."
+    "slow dolly in. Keep the start-image identity locked. Keep every object and surface "
+    "from the start image; do not redesign. One continuous ~5 s take at 24 fps. "
+    "dolly in. No audio."
 )
 WAN_ORBIT = (
     "Slow orbit around the start-image subject. Camera arcs a few degrees right while "
     "keeping the product or hero identity locked. Keep every object and surface from "
-    "the start image; do not redesign. One continuous ~5 s take, no cuts."
+    "the start image; do not redesign. One continuous ~5 s take, no cuts. orbit."
 )
 WAN_VACE = (
     "Hold identity from Shot A last frame and travel toward Shot B first frame. "
@@ -160,26 +167,26 @@ WAN_VACE = (
 LTX_SHORTS_AUDIO = "world SFX matching the start image, no score"
 LTX_SHORTS_I2V = (
     "The start image holds as the first frame in vertical Shorts framing. World SFX "
-    "matching the start image sit under a slow push-in. Keep every object and surface "
+    "matching the start image sit under a slow dolly in. Keep every object and surface "
     "from the start image; do not redesign. No music and no score."
 )
 LTX_BROLL_AUDIO = "warm terrace breeze, palm rustle, distant bay traffic, glyph chime, no score"
 LTX_BROLL = (
-    f"Locked-camera ambient B-roll of a tropical coastal city rooftop terrace at golden hour. Coat hem "
+    f"fixed-camera ambient B-roll of a tropical coastal city rooftop terrace at golden hour. Coat hem "
     "stirs, holographic glyph motes drift, palm fronds move, distant bay traffic and a warm breeze, "
     f"a glyph chime once. {STYLE_LOCK_VIDEO}, unmarked surfaces, "
     "empty of lettering. No music and no score. Five seconds."
 )
 LTX_WEATHER_AUDIO = "tropical rain, thunder far off, water on glass, palm slap, no score"
 LTX_WEATHER = (
-    "Locked-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a "
+    "fixed-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a "
     "sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, "
     "rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds."
 )
 LTX_HOOK_AUDIO = "world SFX matching the start image, no score"
 LTX_HOOK_AV = (
-    "A five-second AV cold open. Camera snaps to the start-image subject with fast "
-    "present-tense energy. World SFX matching the start image. Unmarked surfaces. "
+    "A five-second AV cold open. Camera snap-zooms to the start-image subject with fast "
+    "present-tense energy, then holds. World SFX matching the start image. Unmarked surfaces. "
     "No music and no score."
 )
 LTX_TALKING_AUDIO = "room tone matching the start image, modest speech, no score"
@@ -195,7 +202,7 @@ LTX_DIALOGUE = (
     "A medium photoreal shot of a tropical coastal city rooftop terrace at golden hour. "
     "An original techno wizard in an unmarked sun-washed teal technical running coat with "
     "faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings "
-    "hovering over a compact unmarked data-staff. The camera holds, then eases in as the "
+    "hovering over a compact unmarked data-staff. The camera holds a locked-off frame, then dollies in as the "
     "wizard turns toward lens, eyes bright, and says, \"The tools are already here — we "
     "just have to use them well.\" A warm terrace breeze and palm rustle sit under distant "
     "bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, "
@@ -240,12 +247,12 @@ LTX_A2V = (
 )
 
 STORYBOARD = (
-    ("ez_board_01", "Wide establishing of this scene, 24mm."),
-    ("ez_board_02", "Enter: the bible subject arriving into this scene, 35mm."),
-    ("ez_board_03", "Traverse: moving through this scene, 35mm."),
-    ("ez_board_04", "Insert: a material or prop detail named in the bible, 50mm."),
-    ("ez_board_05", "Exit: turning toward the way out of this scene, 35mm."),
-    ("ez_board_06", "Closer hook of the same scene, 24mm."),
+    ("ez_board_01", "Wide establishing of this scene, 24mm-equivalent wide."),
+    ("ez_board_02", "Enter: the bible subject arriving into this scene, 35mm-equivalent classic."),
+    ("ez_board_03", "Traverse: moving through this scene, 35mm-equivalent classic."),
+    ("ez_board_04", "Insert: a material or prop detail named in the bible, 50mm-equivalent."),
+    ("ez_board_05", "Exit: turning toward the way out of this scene, 35mm-equivalent classic."),
+    ("ez_board_06", "Closer hook of the same scene, 24mm-equivalent wide."),
 )
 
 GOSEE_IDENTITY = (
@@ -257,7 +264,8 @@ GOSEE_IDENTITY = (
     "warm-gold inner lining streams at the left and right frame edges. Tiny floating warm-gold "
     "rune motes hover near the wrists only. Unmarked palm trees and glass towers rush toward a "
     "bright bay beyond the gap. Late-sun rim light, fabric weave and stone grit, mild film "
-    "grain. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 "
+    "grain. Mount at sternum height. Wide 24mm body-cam, slight barrel, a full-bleed "
+    "photographic plate in YouTube 16:9 "
     "with bare frame edges and a clean unmarked lens, empty of lettering."
 )
 GOSEE_WAN_I2V_01 = (
@@ -281,7 +289,7 @@ LAZY_FORGE = "A techno wizard on a sunny tropical city rooftop."
 CHARACTER_DRAFT = (
     f"A {STYLE_LOCK} of an original character, standing, full body with headroom, "
     "Instagram 4:5. Distinct face, wardrobe, and one signature prop. Unmarked surfaces, "
-    "empty of lettering. Eye-level 35mm."
+    "empty of lettering. Match a standing eyeline. 35mm-equivalent classic."
 )
 CHARACTER_TWEAK = (
     "Keep this character's face, wardrobe, and proportions. Change only what this prompt names."

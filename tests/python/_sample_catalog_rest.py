@@ -2491,7 +2491,7 @@ def film_still_here() -> list[dict[str, str]]:
                 "A photoreal third-person household morning still. One cream ceramic mug with a hairline chip "
                 f"on the rim sits on a honey-oak table. {extra.capitalize()}. White subway tile backsplash, "
                 "one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp "
-                "in the foreground. Eye-level on a 35mm lens, framed for YouTube 16:9.",
+                "in the foreground. Match a standing eyeline. 35mm-equivalent classic reportage view, framed for YouTube 16:9.",
             )
         )
     return [_row(sid, label, prompt) for sid, label, prompt in extras]
@@ -2527,7 +2527,7 @@ def film_switchyard() -> list[dict[str, str]]:
                 label,
                 "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet "
                 f"ballast. {extra.capitalize()}. Rain streaks in the lamp glow, gravel shining, empty of "
-                "railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked "
+                "railroad company marks. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9. Clean unmarked "
                 "steel, empty of lettering.",
             )
         )

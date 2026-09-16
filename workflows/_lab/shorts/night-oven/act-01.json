@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal third-person bakery still at 2 a.m. A flour-dusted linen apron hangs on a steel bench in the foreground, unmarked mixer bowls and a dark oven mouth behind. Warm tungsten versus a sodium alley through one high window. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens."
+        "A photoreal third-person bakery still at 2 a.m. A flour-dusted linen apron hangs on a steel bench in the foreground, unmarked mixer bowls and a dark oven mouth behind. Warm tungsten versus a sodium alley through one high window. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens."
       ],
       "title": "Positive"
     },
@@ -442,7 +442,7 @@
       },
       "widgets_values": [
         "custom",
-        "A photoreal third-person bakery still at 2 a.m. A flour-dusted linen apron hangs on a steel bench in the foreground, unmarked mixer bowls and a dark oven mouth behind. Warm tungsten versus a sodium alley through one high window. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.",
+        "A photoreal third-person bakery still at 2 a.m. A flour-dusted linen apron hangs on a steel bench in the foreground, unmarked mixer bowls and a dark oven mouth behind. Warm tungsten versus a sodium alley through one high window. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.",
         false,
         "identity",
         "YouTube 16:9 still",
@@ -543,7 +543,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## night-oven (overnight bakery \u00b7 Tie the apron)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film night-oven --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal third-person bakery still at 2 a.m. A flour-dusted linen apron hangs on a steel bench in the foreground, unmarked mixer bowls and a dark oven mouth behind. Warm tungsten versus a sodium alley through one high window. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Bench | The apron hangs still in tungsten | A hand lifts the apron | The apron is tied |\n| 2 | Tie | The knot sits at the waist | Flour dust lifts | The bench is empty |\n| 3 | Empty steel | Bowls wait unmarked | A pour of water | A mixer starts |\n| 4 | Mixer | The bowl turns slow | A scrape of the hook | The mixer stops |\n| 5 | Dough | Hands fold the dough | A dust of flour | The dough rests |\n| 6 | Rest | The oven mouth is dark | A match of warmth | The door opens |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## night-oven (overnight bakery \u00b7 Tie the apron)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film night-oven --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal third-person bakery still at 2 a.m. A flour-dusted linen apron hangs on a steel bench in the foreground, unmarked mixer bowls and a dark oven mouth behind. Warm tungsten versus a sodium alley through one high window. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Bench | The apron hangs still in tungsten | A hand lifts the apron | The apron is tied |\n| 2 | Tie | The knot sits at the waist | Flour dust lifts | The bench is empty |\n| 3 | Empty steel | Bowls wait unmarked | A pour of water | A mixer starts |\n| 4 | Mixer | The bowl turns slow | A scrape of the hook | The mixer stops |\n| 5 | Dough | Hands fold the dough | A dust of flour | The dough rests |\n| 6 | Rest | The oven mouth is dark | A match of warmth | The door opens |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "night-oven 90s shot map"
     },

@@ -691,6 +691,25 @@ def with_style_system(system: str, style_id: str) -> str:
     return f"{system.rstrip()}\n\n{STYLE_SYSTEM_ADDENDUM}"
 
 
+def with_cinema_system(system: str, system_name: str = "", mode: str = "") -> str:
+    """Append the Cinema Rack language block for visual families.
+
+    Args:
+        system: Family system prompt.
+        system_name: Prompt file stem (``klein_t2i``, ``ace_tags``, …).
+        mode: Optional node mode (``i2v``, ``iclora``, …).
+
+    Returns:
+        System text. Unchanged for ACE stems or when the addendum is empty.
+    """
+    from . import cinema
+
+    addendum = cinema.cinema_language_addendum(system_name, mode)
+    if not addendum:
+        return system
+    return f"{system.rstrip()}\n\n{addendum}"
+
+
 def with_context_system(system: str, context: str) -> str:
     """Append the Context-block addendum when supporting text is present.
 

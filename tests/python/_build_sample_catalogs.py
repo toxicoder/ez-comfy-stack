@@ -73,11 +73,11 @@ CLAY_FINISH = (
 )
 
 WAN_PUSH = (
-    "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or "
-    f"foliage. {I2V_LOCK} One continuous five-second take at 24 fps. No audio."
+    "Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or "
+    f"foliage. {I2V_LOCK} One continuous five-second take at 24 fps. dolly in. No audio."
 )
 WAN_PARALLAX = (
-    "Locked camera with a slight lateral slide so near objects drift against the "
+    "Locked camera, fixed camera with a slight lateral slide so near objects drift against the "
     f"far plane. Gentle breeze in fabric or leaves. {I2V_LOCK} One continuous "
     "five-second take at 24 fps. No audio."
 )
@@ -86,14 +86,14 @@ STILL_HERE_IDENTITY = (
     "A photoreal third-person household morning still. One cream ceramic mug with a "
     "hairline chip on the rim sits on a honey-oak table in first light. White subway "
     "tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of "
-    "lettering. The mug is sharp in the foreground. Eye-level on a 35mm lens, framed "
-    "for YouTube 16:9."
+    "lettering. The mug is sharp in the foreground. Match a standing eyeline. "
+    "35mm-equivalent classic reportage view, framed for YouTube 16:9."
 )
 SWITCHYARD_IDENTITY = (
     "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit "
     "on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, "
-    "empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. "
-    "Clean unmarked steel, empty of lettering."
+    "empty of railroad company marks. Match a standing eyeline. 24mm-equivalent wide, "
+    "framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
 )
 
 RESEARCH_DEFAULT = _DEFAULT_MESSAGE
@@ -125,7 +125,7 @@ def _klein(subject: str, place: str, light: str, camera: str) -> str:
 def _wan_t2v(entity: str, scene: str, motion: str, camera: str) -> str:
     return (
         f"{entity} {scene} {motion} The camera {camera} over five seconds. "
-        "Photoreal, physically plausible light, natural materials, 24mm, YouTube 16:9. "
+        "Photoreal, 24mm-equivalent wide, physically plausible light. YouTube 16:9. "
         "No audio."
     )
 
@@ -166,7 +166,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams",
                 "stands at a tropical rooftop rail above a dense unmarked city and a dark bay",
                 "Practical terrace lanterns and distant tower lights; cool rim from the bay, warm coat lining.",
-                "Shot on a 35mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -176,7 +176,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked sun-washed teal technical running coat",
                 "pauses under a terrace overhang while tropical rain sheets off unmarked glass",
                 "Overcast daylight, wet stone grit, rain beads on fabric weave.",
-                "Shot on a 24mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -186,7 +186,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal running coat with a compact unmarked data-staff",
                 "walks a high unmarked switchback above a tropical valley of palms",
                 "First light rakes the ridge; long cool shadows, clear air.",
-                "Shot on a 35mm lens, slightly below eye level, framed for YouTube 16:9.",
+                "Slightly below eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -196,7 +196,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat",
                 "leans over a teak workbench with warm-gold holographic glyph rings blooming from a compact unmarked data-staff",
                 "A single practical lamp, tight falloff, metal filings and wood grain.",
-                "Shot on a 50mm lens at chest height, framed for YouTube 16:9.",
+                "Chest-cam height. 50mm-equivalent. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -206,7 +206,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal running coat",
                 "stands on an unmarked concrete pier as fog holds a quiet tropical harbor",
                 "Soft overcast, low contrast, wet concrete and rope texture.",
-                "Shot on a 35mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -216,7 +216,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat",
                 "walks a long unmarked greenhouse aisle of palms and broad leaves",
                 "Dappled glass light, humid air, leaf sheen and condensation.",
-                "Shot on a 35mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -226,7 +226,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal running coat",
                 "stands on a high unmarked mesa as the last sun hits red stone",
                 "Hard warm sidelight, long shadows, grit in the air.",
-                "Shot on a 24mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -236,7 +236,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat",
                 "pauses between tall unmarked wood stacks in a quiet reading hall",
                 "Warm practicals, dust in a window shaft, paper and wood texture.",
-                "Shot on a 50mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -246,7 +246,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal running coat",
                 "waits on an unmarked underground platform as a train smear passes",
                 "Cool overhead fluorescents, warm coat lining, tiled grit.",
-                "Shot on a 35mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -256,7 +256,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat with glyph rings at the staff",
                 "stands on an unmarked cliff path above bright surf",
                 "Hard noon sun, salt haze, fabric snap in wind.",
-                "Shot on a 24mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -266,7 +266,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal running coat",
                 "crosses a high unmarked ridge among snow-loaded pines",
                 "Thin winter sun, blue shadow, breath in cold air.",
-                "Shot on a 35mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -276,7 +276,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat",
                 "walks a narrow unmarked covered alley of stone and hanging cloth",
                 "Dappled bounce light, warm cloth, cool stone.",
-                "Shot on a 35mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -286,7 +286,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat",
                 "stands inside an unmarked dome with a slit of night sky",
                 "Cool moonlight mix with a warm floor practical, metal and stone.",
-                "Shot on a 24mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -296,7 +296,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal running coat",
                 "stands at the rail of a small unmarked ferry on a wide river at dusk",
                 "Warm low sun, water glitter, paint and rust texture.",
-                "Shot on a 35mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -306,7 +306,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat",
                 "walks an unmarked indoor arcade of colored practicals and empty cabinets",
                 "Mixed neon bounce, no readable cabinet art, floor shine.",
-                "Shot on a 24mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -316,7 +316,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat",
                 "sits at an unmarked stone fountain in a quiet courtyard of palms",
                 "Open shade, specular water, warm stone.",
-                "Shot on a 35mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -326,7 +326,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal running coat mid-stride",
                 "crosses a vast unmarked concourse of concrete and glass",
                 "Cool overhead banks, motion blur in the far crowd only, coat sharp.",
-                "Shot on a 24mm lens at hip height, framed for YouTube 16:9.",
+                "Hip height. 24mm-equivalent wide. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -336,7 +336,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat with a short storm-cloak",
                 "braces on a tropical rooftop as wind pulls the cloak",
                 "Lightning far off, wet stone, warm lining flash.",
-                "Shot on a 24mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
             ),
         ),
         _row(
@@ -346,7 +346,7 @@ def klein_t2i() -> list[dict[str, str]]:
                 "an original techno wizard in an unmarked teal coat",
                 "sits at an unmarked teak desk with a compact data-staff resting beside a blank notebook",
                 "Soft north window, paper tooth, wood grain.",
-                "Shot on a 50mm lens at eye level, framed for YouTube 16:9.",
+                "Match a standing eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
             ),
         ),
     ]

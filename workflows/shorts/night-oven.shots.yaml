@@ -15,8 +15,9 @@ identity_enhance: true
 identity_look: |
   A photoreal third-person bakery still at 2 a.m. A flour-dusted linen apron hangs on a
   steel bench in the foreground, unmarked mixer bowls and a dark oven mouth behind. Warm
-  tungsten versus a sodium alley through one high window. Eye-level 35mm lens, framed for
-  YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
+  tungsten versus a sodium alley through one high window. Match a standing eyeline.
+  35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain,
+  clean unmarked lens.
 shots:
   - beat: 1
     shot: 1
@@ -31,9 +32,9 @@ shots:
     end_state: apron on steel
     ltx_i2v: |
       The start image holds as the first frame. The apron hangs still in tungsten cloth, hum
-      The camera tracks forward, no cut. The flour-dusted linen apron on the steel bench stays
-      in the foreground, unmarked, empty of lettering. Last frames hold apron on steel. No
-      music and no score.
+      The camera tracks forward on a locked support, no cut. The flour-dusted linen apron on
+      the steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      apron on steel. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron hangs still in
       tungsten tracking, no cut, locked identity. Last frames hold apron on steel.
@@ -50,9 +51,9 @@ shots:
     end_state: apron in hand
     ltx_i2v: |
       The start image holds as the first frame. A hand lifts the apron cloth, metal tick The
-      camera tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in
-      the foreground, unmarked, empty of lettering. Last frames hold apron in hand. No music
-      and no score.
+      camera tracks forward on a locked support, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      apron in hand. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A hand lifts the apron tracking,
       no cut, locked identity. Last frames hold apron in hand.
@@ -69,9 +70,9 @@ shots:
     end_state: tied waist
     ltx_i2v: |
       The start image holds as the first frame. The apron is tied fabric, click The camera
-      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold tied waist. No music and no
-      score.
+      tracks forward on a locked support, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold tied
+      waist. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron is tied tracking, no
       cut, locked identity. Last frames hold tied waist.
@@ -88,8 +89,9 @@ shots:
     end_state: knot
     ltx_i2v: |
       The start image holds as the first frame. The knot sits at the waist cloth, hum The
-      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold knot. No music and no score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      flour-dusted linen apron on the steel bench stays in the foreground, unmarked, empty of
+      lettering. Last frames hold knot. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The knot sits at the waist dolly
       in, no cut, locked identity. Last frames hold knot.
@@ -106,9 +108,9 @@ shots:
     end_state: dust in tungsten
     ltx_i2v: |
       The start image holds as the first frame. Flour dust lifts grit, steam The camera
-      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold dust in tungsten. No music
-      and no score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The flour-dusted
+      linen apron on the steel bench stays in the foreground, unmarked, empty of lettering.
+      Last frames hold dust in tungsten. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Flour dust lifts dolly in, no
       cut, locked identity. Last frames hold dust in tungsten.
@@ -125,9 +127,9 @@ shots:
     end_state: empty steel
     ltx_i2v: |
       The start image holds as the first frame. The bench is empty metal scrape, tick The
-      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold empty steel. No music and no
-      score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      flour-dusted linen apron on the steel bench stays in the foreground, unmarked, empty of
+      lettering. Last frames hold empty steel. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The bench is empty dolly in, no
       cut, locked identity. Last frames hold empty steel.
@@ -144,8 +146,9 @@ shots:
     end_state: bowls
     ltx_i2v: |
       The start image holds as the first frame. Bowls wait unmarked metal tick, hum The camera
-      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold bowls. No music and no score.
+      pans left on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold bowls. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Bowls wait unmarked pan left, no
       cut, locked identity. Last frames hold bowls.
@@ -162,8 +165,9 @@ shots:
     end_state: wet bowl
     ltx_i2v: |
       The start image holds as the first frame. A pour of water pour, splash The camera pans
-      left, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold wet bowl. No music and no score.
+      left on a locked tripod head, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold wet bowl. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A pour of water pan left, no
       cut, locked identity. Last frames hold wet bowl.
@@ -179,9 +183,10 @@ shots:
     audio_world: "hum, metal"
     end_state: turning bowl
     ltx_i2v: |
-      The start image holds as the first frame. A mixer starts hum, metal The camera pans
-      left, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold turning bowl. No music and no score.
+      The start image holds as the first frame. A mixer starts hum, metal The camera pans left
+      on a locked tripod head, no cut. The flour-dusted linen apron on the steel bench stays
+      in the foreground, unmarked, empty of lettering. Last frames hold turning bowl. No music
+      and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A mixer starts pan left, no cut,
       locked identity. Last frames hold turning bowl.
@@ -198,8 +203,9 @@ shots:
     end_state: dough
     ltx_i2v: |
       The start image holds as the first frame. The bowl turns slow hum, scrape The camera
-      pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold dough. No music and no score.
+      pans right on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold dough. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The bowl turns slow pan right,
       no cut, locked identity. Last frames hold dough.
@@ -216,8 +222,9 @@ shots:
     end_state: hook
     ltx_i2v: |
       The start image holds as the first frame. A scrape of the hook metal scrape, tick The
-      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold hook. No music and no score.
+      camera pans right on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      hook. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A scrape of the hook pan right,
       no cut, locked identity. Last frames hold hook.
@@ -234,8 +241,9 @@ shots:
     end_state: resting dough
     ltx_i2v: |
       The start image holds as the first frame. The mixer stops click, hum The camera pans
-      right, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold resting dough. No music and no score.
+      right on a locked tripod head, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold resting dough.
+      No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The mixer stops pan right, no
       cut, locked identity. Last frames hold resting dough.
@@ -252,9 +260,9 @@ shots:
     end_state: folded dough
     ltx_i2v: |
       The start image holds as the first frame. Hands fold the dough cloth, scrape The camera
-      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold folded dough. No music and no
-      score.
+      holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold folded
+      dough. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Hands fold the dough fixed
       camera, no cut, locked identity. Last frames hold folded dough.
@@ -270,9 +278,10 @@ shots:
     audio_world: "grit, cloth"
     end_state: white bench
     ltx_i2v: |
-      The start image holds as the first frame. A dust of flour grit, cloth The camera stays
-      fixed, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold white bench. No music and no score.
+      The start image holds as the first frame. A dust of flour grit, cloth The camera holds a
+      locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold white bench. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A dust of flour fixed camera, no
       cut, locked identity. Last frames hold white bench.
@@ -288,9 +297,10 @@ shots:
     audio_world: "hum, tick"
     end_state: resting mound
     ltx_i2v: |
-      The start image holds as the first frame. The dough rests hum, tick The camera stays
-      fixed, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold resting mound. No music and no score.
+      The start image holds as the first frame. The dough rests hum, tick The camera holds a
+      locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold resting mound.
+      No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The dough rests fixed camera, no
       cut, locked identity. Last frames hold resting mound.
@@ -307,9 +317,9 @@ shots:
     end_state: dark mouth
     ltx_i2v: |
       The start image holds as the first frame. The oven mouth is dark hum, metal tick The
-      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold dark mouth. No music and no
-      score.
+      camera dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold dark
+      mouth. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The oven mouth is dark dolly
       out, no cut, locked identity. Last frames hold dark mouth.
@@ -326,9 +336,9 @@ shots:
     end_state: warm door
     ltx_i2v: |
       The start image holds as the first frame. A match of warmth steam, click The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold warm door. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold warm door. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A match of warmth dolly out, no
       cut, locked identity. Last frames hold warm door.
@@ -345,9 +355,9 @@ shots:
     end_state: open oven
     ltx_i2v: |
       The start image holds as the first frame. The door opens metal scrape, steam The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold open oven. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold open oven. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The door opens dolly out, no
       cut, locked identity. Last frames hold open oven.
@@ -364,9 +374,9 @@ shots:
     end_state: orange mouth
     ltx_i2v: |
       The start image holds as the first frame. Heat rolls out steam, hum The camera tracks
-      forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold orange mouth. No music and no
-      score.
+      forward on a locked support, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold orange mouth. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Heat rolls out tracking, no cut,
       locked identity. Last frames hold orange mouth.
@@ -383,9 +393,9 @@ shots:
     end_state: tray in
     ltx_i2v: |
       The start image holds as the first frame. A tray slides in metal scrape, tick The camera
-      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold tray in. No music and no
-      score.
+      tracks forward on a locked support, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold tray in.
+      No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A tray slides in tracking, no
       cut, locked identity. Last frames hold tray in.
@@ -402,9 +412,9 @@ shots:
     end_state: closed door
     ltx_i2v: |
       The start image holds as the first frame. The door shuts click, steam The camera tracks
-      forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold closed door. No music and no
-      score.
+      forward on a locked support, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold closed door. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The door shuts tracking, no cut,
       locked identity. Last frames hold closed door.
@@ -421,9 +431,9 @@ shots:
     end_state: orange window
     ltx_i2v: |
       The start image holds as the first frame. The window shows sodium alley hum, wind The
-      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold orange window. No music and
-      no score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      flour-dusted linen apron on the steel bench stays in the foreground, unmarked, empty of
+      lettering. Last frames hold orange window. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The window shows sodium alley
       dolly in, no cut, locked identity. Last frames hold orange window.
@@ -440,9 +450,9 @@ shots:
     end_state: wet asphalt
     ltx_i2v: |
       The start image holds as the first frame. A look at the alley wind, grit The camera
-      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold wet asphalt. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The flour-dusted
+      linen apron on the steel bench stays in the foreground, unmarked, empty of lettering.
+      Last frames hold wet asphalt. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A look at the alley dolly in, no
       cut, locked identity. Last frames hold wet asphalt.
@@ -459,9 +469,9 @@ shots:
     end_state: oven door
     ltx_i2v: |
       The start image holds as the first frame. Back to the oven steam, cloth The camera
-      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold oven door. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The flour-dusted
+      linen apron on the steel bench stays in the foreground, unmarked, empty of lettering.
+      Last frames hold oven door. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Back to the oven dolly in, no
       cut, locked identity. Last frames hold oven door.
@@ -478,9 +488,9 @@ shots:
     end_state: steel bar
     ltx_i2v: |
       The start image holds as the first frame. Sodium light on steel hum, metal tick The
-      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold steel bar. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      steel bar. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Sodium light on steel pan left,
       no cut, locked identity. Last frames hold steel bar.
@@ -497,9 +507,9 @@ shots:
     end_state: pale apron
     ltx_i2v: |
       The start image holds as the first frame. The apron is a pale shape cloth, grit The
-      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold pale apron. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold pale
+      apron. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron is a pale shape pan
       left, no cut, locked identity. Last frames hold pale apron.
@@ -516,9 +526,9 @@ shots:
     end_state: hot handle
     ltx_i2v: |
       The start image holds as the first frame. Hands check the door click, steam The camera
-      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold hot handle. No music and no
-      score.
+      pans left on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold hot
+      handle. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Hands check the door pan left,
       no cut, locked identity. Last frames hold hot handle.
@@ -535,9 +545,9 @@ shots:
     end_state: cloth on handle
     ltx_i2v: |
       The start image holds as the first frame. The handle is too hot metal tick, cloth The
-      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold cloth on handle. No music and
-      no score.
+      camera pans right on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      cloth on handle. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The handle is too hot pan right,
       no cut, locked identity. Last frames hold cloth on handle.
@@ -553,9 +563,10 @@ shots:
     audio_world: "hum, steam"
     end_state: waiting door
     ltx_i2v: |
-      The start image holds as the first frame. A wait hum, steam The camera pans right, no
-      cut. The flour-dusted linen apron on the steel bench stays in the foreground, unmarked,
-      empty of lettering. Last frames hold waiting door. No music and no score.
+      The start image holds as the first frame. A wait hum, steam The camera pans right on a
+      locked tripod head, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold waiting door. No music and no
+      score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A wait pan right, no cut, locked
       identity. Last frames hold waiting door.
@@ -572,9 +583,9 @@ shots:
     end_state: gold bread
     ltx_i2v: |
       The start image holds as the first frame. The door opens again scrape, steam The camera
-      pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold gold bread. No music and no
-      score.
+      pans right on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold gold
+      bread. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The door opens again pan right,
       no cut, locked identity. Last frames hold gold bread.
@@ -591,9 +602,9 @@ shots:
     end_state: loaves
     ltx_i2v: |
       The start image holds as the first frame. Unmarked loaves, no brand steam, tick The
-      camera stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold loaves. No music and no
-      score.
+      camera holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on
+      the steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      loaves. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Unmarked loaves, no brand fixed
       camera, no cut, locked identity. Last frames hold loaves.
@@ -610,9 +621,9 @@ shots:
     end_state: tray on bench
     ltx_i2v: |
       The start image holds as the first frame. A tray slides out metal scrape, cloth The
-      camera stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold tray on bench. No music and
-      no score.
+      camera holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on
+      the steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      tray on bench. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A tray slides out fixed camera,
       no cut, locked identity. Last frames hold tray on bench.
@@ -629,9 +640,9 @@ shots:
     end_state: dusted apron
     ltx_i2v: |
       The start image holds as the first frame. The apron is dusted again grit, fabric The
-      camera stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold dusted apron. No music and no
-      score.
+      camera holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on
+      the steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      dusted apron. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron is dusted again fixed
       camera, no cut, locked identity. Last frames hold dusted apron.
@@ -648,8 +659,9 @@ shots:
     end_state: rack
     ltx_i2v: |
       The start image holds as the first frame. Cooling rack, unmarked hum, metal tick The
-      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold rack. No music and no score.
+      camera dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold rack. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Cooling rack, unmarked dolly
       out, no cut, locked identity. Last frames hold rack.
@@ -666,9 +678,9 @@ shots:
     end_state: one loaf
     ltx_i2v: |
       The start image holds as the first frame. A loaf is set down tick, steam The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold one loaf. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold one loaf. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A loaf is set down dolly out, no
       cut, locked identity. Last frames hold one loaf.
@@ -685,9 +697,9 @@ shots:
     end_state: pale sodium
     ltx_i2v: |
       The start image holds as the first frame. The alley window brightens wind, hum The
-      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold pale sodium. No music and no
-      score.
+      camera dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold pale
+      sodium. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The alley window brightens dolly
       out, no cut, locked identity. Last frames hold pale sodium.
@@ -704,9 +716,9 @@ shots:
     end_state: grey alley
     ltx_i2v: |
       The start image holds as the first frame. Night thinning wind, cloth The camera tracks
-      forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold grey alley. No music and no
-      score.
+      forward on a locked support, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold grey alley. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Night thinning tracking, no cut,
       locked identity. Last frames hold grey alley.
@@ -723,9 +735,9 @@ shots:
     end_state: wet steel
     ltx_i2v: |
       The start image holds as the first frame. The mixer is washed pour, splash The camera
-      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold wet steel. No music and no
-      score.
+      tracks forward on a locked support, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold wet steel.
+      No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The mixer is washed tracking, no
       cut, locked identity. Last frames hold wet steel.
@@ -742,9 +754,9 @@ shots:
     end_state: clean steel
     ltx_i2v: |
       The start image holds as the first frame. A cloth on the bench cloth, scrape The camera
-      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold clean steel. No music and no
-      score.
+      tracks forward on a locked support, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold clean
+      steel. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A cloth on the bench tracking,
       no cut, locked identity. Last frames hold clean steel.
@@ -761,8 +773,9 @@ shots:
     end_state: sheet of water
     ltx_i2v: |
       The start image holds as the first frame. Water on steel pour, splash The camera dollies
-      in, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold sheet of water. No music and no score.
+      in on silent dolly wheels, tightening without zooming, no cut. The flour-dusted linen
+      apron on the steel bench stays in the foreground, unmarked, empty of lettering. Last
+      frames hold sheet of water. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Water on steel dolly in, no cut,
       locked identity. Last frames hold sheet of water.
@@ -779,9 +792,9 @@ shots:
     end_state: wrung cloth
     ltx_i2v: |
       The start image holds as the first frame. A wring of the cloth cloth, tick The camera
-      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold wrung cloth. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The flour-dusted
+      linen apron on the steel bench stays in the foreground, unmarked, empty of lettering.
+      Last frames hold wrung cloth. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A wring of the cloth dolly in,
       no cut, locked identity. Last frames hold wrung cloth.
@@ -798,9 +811,9 @@ shots:
     end_state: untied apron
     ltx_i2v: |
       The start image holds as the first frame. The apron is untied fabric, click The camera
-      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold untied apron. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The flour-dusted
+      linen apron on the steel bench stays in the foreground, unmarked, empty of lettering.
+      Last frames hold untied apron. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron is untied dolly in, no
       cut, locked identity. Last frames hold untied apron.
@@ -817,9 +830,9 @@ shots:
     end_state: hook
     ltx_i2v: |
       The start image holds as the first frame. The apron returns to the hook cloth, metal
-      tick The camera pans left, no cut. The flour-dusted linen apron on the steel bench stays
-      in the foreground, unmarked, empty of lettering. Last frames hold hook. No music and no
-      score.
+      tick The camera pans left on a locked tripod head, no cut. The flour-dusted linen apron
+      on the steel bench stays in the foreground, unmarked, empty of lettering. Last frames
+      hold hook. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron returns to the hook
       pan left, no cut, locked identity. Last frames hold hook.
@@ -835,9 +848,10 @@ shots:
     audio_world: "hum, grit"
     end_state: hanging apron
     ltx_i2v: |
-      The start image holds as the first frame. It hangs hum, grit The camera pans left, no
-      cut. The flour-dusted linen apron on the steel bench stays in the foreground, unmarked,
-      empty of lettering. Last frames hold hanging apron. No music and no score.
+      The start image holds as the first frame. It hangs hum, grit The camera pans left on a
+      locked tripod head, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold hanging apron. No music and
+      no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. It hangs pan left, no cut,
       locked identity. Last frames hold hanging apron.
@@ -854,9 +868,9 @@ shots:
     end_state: dark mouth
     ltx_i2v: |
       The start image holds as the first frame. The oven is dark again click, steam The camera
-      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold dark mouth. No music and no
-      score.
+      pans left on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold dark
+      mouth. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The oven is dark again pan left,
       no cut, locked identity. Last frames hold dark mouth.
@@ -873,9 +887,9 @@ shots:
     end_state: still bowls
     ltx_i2v: |
       The start image holds as the first frame. The bakery is almost still hum, tick The
-      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold still bowls. No music and no
-      score.
+      camera pans right on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      still bowls. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The bakery is almost still pan
       right, no cut, locked identity. Last frames hold still bowls.
@@ -892,9 +906,9 @@ shots:
     end_state: one loaf
     ltx_i2v: |
       The start image holds as the first frame. A last look at the loaf steam, cloth The
-      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold one loaf. No music and no
-      score.
+      camera pans right on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold one
+      loaf. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A last look at the loaf pan
       right, no cut, locked identity. Last frames hold one loaf.
@@ -911,9 +925,9 @@ shots:
     end_state: blue window
     ltx_i2v: |
       The start image holds as the first frame. The window goes towards dawn wind, hum The
-      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold blue window. No music and no
-      score.
+      camera pans right on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold blue
+      window. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The window goes towards dawn pan
       right, no cut, locked identity. Last frames hold blue window.
@@ -930,9 +944,9 @@ shots:
     end_state: blue steel
     ltx_i2v: |
       The start image holds as the first frame. Tungsten loses to blue hum, cloth The camera
-      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold blue steel. No music and no
-      score.
+      holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold blue
+      steel. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Tungsten loses to blue fixed
       camera, no cut, locked identity. Last frames hold blue steel.
@@ -948,9 +962,10 @@ shots:
     audio_world: "tick, steam"
     end_state: loaf
     ltx_i2v: |
-      The start image holds as the first frame. The loaf sits tick, steam The camera stays
-      fixed, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold loaf. No music and no score.
+      The start image holds as the first frame. The loaf sits tick, steam The camera holds a
+      locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold loaf. No music
+      and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The loaf sits fixed camera, no
       cut, locked identity. Last frames hold loaf.
@@ -967,9 +982,9 @@ shots:
     end_state: untouched loaf
     ltx_i2v: |
       The start image holds as the first frame. Hands do not take it cloth, grit The camera
-      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold untouched loaf. No music and
-      no score.
+      holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold untouched
+      loaf. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Hands do not take it fixed
       camera, no cut, locked identity. Last frames hold untouched loaf.
@@ -986,9 +1001,9 @@ shots:
     end_state: hooked apron
     ltx_i2v: |
       The start image holds as the first frame. The apron on the hook fabric, hum The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold hooked apron. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold hooked apron. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron on the hook dolly out,
       no cut, locked identity. Last frames hold hooked apron.
@@ -1005,9 +1020,9 @@ shots:
     end_state: floor dust
     ltx_i2v: |
       The start image holds as the first frame. Flour on the floor grit, tick The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold floor dust. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold floor dust. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Flour on the floor dolly out, no
       cut, locked identity. Last frames hold floor dust.
@@ -1024,9 +1039,9 @@ shots:
     end_state: clean path
     ltx_i2v: |
       The start image holds as the first frame. A broom somewhere off scrape, cloth The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold clean path. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold clean path. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A broom somewhere off dolly out,
       no cut, locked identity. Last frames hold clean path.
@@ -1043,8 +1058,9 @@ shots:
     end_state: door
     ltx_i2v: |
       The start image holds as the first frame. The path to the door grit, hum The camera
-      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold door. No music and no score.
+      tracks forward on a locked support, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold door. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The path to the door tracking,
       no cut, locked identity. Last frames hold door.
@@ -1061,9 +1077,9 @@ shots:
     end_state: closed door
     ltx_i2v: |
       The start image holds as the first frame. The door is unmarked click, wind The camera
-      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold closed door. No music and no
-      score.
+      tracks forward on a locked support, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold closed
+      door. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The door is unmarked tracking,
       no cut, locked identity. Last frames hold closed door.
@@ -1080,9 +1096,9 @@ shots:
     end_state: hand on door
     ltx_i2v: |
       The start image holds as the first frame. A pause at the door cloth, tick The camera
-      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold hand on door. No music and no
-      score.
+      tracks forward on a locked support, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold hand on
+      door. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A pause at the door tracking, no
       cut, locked identity. Last frames hold hand on door.
@@ -1099,9 +1115,9 @@ shots:
     end_state: sodium alley
     ltx_i2v: |
       The start image holds as the first frame. The door opens on the alley wind, click The
-      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold sodium alley. No music and no
-      score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      flour-dusted linen apron on the steel bench stays in the foreground, unmarked, empty of
+      lettering. Last frames hold sodium alley. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The door opens on the alley
       dolly in, no cut, locked identity. Last frames hold sodium alley.
@@ -1118,9 +1134,9 @@ shots:
     end_state: cold steam
     ltx_i2v: |
       The start image holds as the first frame. Steam of cold in the alley steam, wind The
-      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold cold steam. No music and no
-      score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      flour-dusted linen apron on the steel bench stays in the foreground, unmarked, empty of
+      lettering. Last frames hold cold steam. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Steam of cold in the alley dolly
       in, no cut, locked identity. Last frames hold cold steam.
@@ -1137,9 +1153,9 @@ shots:
     end_state: warm interior
     ltx_i2v: |
       The start image holds as the first frame. The bakery stays behind hum, metal tick The
-      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold warm interior. No music and
-      no score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      flour-dusted linen apron on the steel bench stays in the foreground, unmarked, empty of
+      lettering. Last frames hold warm interior. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The bakery stays behind dolly
       in, no cut, locked identity. Last frames hold warm interior.
@@ -1156,9 +1172,9 @@ shots:
     end_state: asphalt
     ltx_i2v: |
       The start image holds as the first frame. Wet asphalt, unmarked wind, grit The camera
-      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold asphalt. No music and no
-      score.
+      pans left on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold asphalt.
+      No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Wet asphalt, unmarked pan left,
       no cut, locked identity. Last frames hold asphalt.
@@ -1175,9 +1191,9 @@ shots:
     end_state: warm window
     ltx_i2v: |
       The start image holds as the first frame. A look back at the window hum, cloth The
-      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold warm window. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold warm
+      window. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A look back at the window pan
       left, no cut, locked identity. Last frames hold warm window.
@@ -1194,9 +1210,9 @@ shots:
     end_state: apron in window
     ltx_i2v: |
       The start image holds as the first frame. The window holds the apron fabric, tick The
-      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold apron in window. No music and
-      no score.
+      camera pans left on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      apron in window. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The window holds the apron pan
       left, no cut, locked identity. Last frames hold apron in window.
@@ -1213,9 +1229,9 @@ shots:
     end_state: pale square
     ltx_i2v: |
       The start image holds as the first frame. The apron is a pale square cloth, wind The
-      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold pale square. No music and no
-      score.
+      camera pans right on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold pale
+      square. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron is a pale square pan
       right, no cut, locked identity. Last frames hold pale square.
@@ -1231,9 +1247,10 @@ shots:
     audio_world: "hum, grit"
     end_state: held square
     ltx_i2v: |
-      The start image holds as the first frame. A hold hum, grit The camera pans right, no
-      cut. The flour-dusted linen apron on the steel bench stays in the foreground, unmarked,
-      empty of lettering. Last frames hold held square. No music and no score.
+      The start image holds as the first frame. A hold hum, grit The camera pans right on a
+      locked tripod head, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold held square. No music and no
+      score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A hold pan right, no cut, locked
       identity. Last frames hold held square.
@@ -1250,9 +1267,9 @@ shots:
     end_state: grey dawn
     ltx_i2v: |
       The start image holds as the first frame. Dawn lifts the sodium wind, steam The camera
-      pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold grey dawn. No music and no
-      score.
+      pans right on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold grey dawn.
+      No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Dawn lifts the sodium pan right,
       no cut, locked identity. Last frames hold grey dawn.
@@ -1269,9 +1286,9 @@ shots:
     end_state: grey brick
     ltx_i2v: |
       The start image holds as the first frame. The alley goes grey wind, grit The camera
-      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold grey brick. No music and no
-      score.
+      holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold grey
+      brick. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The alley goes grey fixed
       camera, no cut, locked identity. Last frames hold grey brick.
@@ -1287,9 +1304,10 @@ shots:
     audio_world: "tick, cloth"
     end_state: blank brick
     ltx_i2v: |
-      The start image holds as the first frame. No signage tick, cloth The camera stays fixed,
-      no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold blank brick. No music and no score.
+      The start image holds as the first frame. No signage tick, cloth The camera holds a
+      locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold blank brick. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. No signage fixed camera, no cut,
       locked identity. Last frames hold blank brick.
@@ -1306,9 +1324,9 @@ shots:
     end_state: cool glass
     ltx_i2v: |
       The start image holds as the first frame. The bakery window cools hum, steam The camera
-      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold cool glass. No music and no
-      score.
+      holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold cool
+      glass. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The bakery window cools fixed
       camera, no cut, locked identity. Last frames hold cool glass.
@@ -1325,9 +1343,9 @@ shots:
     end_state: silhouette loaf
     ltx_i2v: |
       The start image holds as the first frame. The loaf is a silhouette tick, cloth The
-      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold silhouette loaf. No music and
-      no score.
+      camera dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold silhouette
+      loaf. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The loaf is a silhouette dolly
       out, no cut, locked identity. Last frames hold silhouette loaf.
@@ -1344,9 +1362,9 @@ shots:
     end_state: hanging
     ltx_i2v: |
       The start image holds as the first frame. The apron still hangs fabric, hum The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold hanging. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold hanging. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron still hangs dolly out,
       no cut, locked identity. Last frames hold hanging.
@@ -1363,9 +1381,9 @@ shots:
     end_state: dark shop
     ltx_i2v: |
       The start image holds as the first frame. A last tungsten click click, metal The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold dark shop. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold dark shop. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A last tungsten click dolly out,
       no cut, locked identity. Last frames hold dark shop.
@@ -1382,9 +1400,9 @@ shots:
     end_state: dark bench
     ltx_i2v: |
       The start image holds as the first frame. Lights out click, hum The camera tracks
-      forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold dark bench. No music and no
-      score.
+      forward on a locked support, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold dark bench. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Lights out tracking, no cut,
       locked identity. Last frames hold dark bench.
@@ -1401,9 +1419,9 @@ shots:
     end_state: dark apron
     ltx_i2v: |
       The start image holds as the first frame. The apron in the dark cloth, grit The camera
-      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold dark apron. No music and no
-      score.
+      tracks forward on a locked support, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold dark
+      apron. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron in the dark tracking,
       no cut, locked identity. Last frames hold dark apron.
@@ -1420,9 +1438,9 @@ shots:
     end_state: hook
     ltx_i2v: |
       The start image holds as the first frame. A hold on the hook metal tick, fabric The
-      camera tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in
-      the foreground, unmarked, empty of lettering. Last frames hold hook. No music and no
-      score.
+      camera tracks forward on a locked support, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      hook. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A hold on the hook tracking, no
       cut, locked identity. Last frames hold hook.
@@ -1439,8 +1457,9 @@ shots:
     end_state: hook
     ltx_i2v: |
       The start image holds as the first frame. The hook is a black mark metal tick, cloth The
-      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold hook. No music and no score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      flour-dusted linen apron on the steel bench stays in the foreground, unmarked, empty of
+      lettering. Last frames hold hook. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The hook is a black mark dolly
       in, no cut, locked identity. Last frames hold hook.
@@ -1457,9 +1476,9 @@ shots:
     end_state: settled dust
     ltx_i2v: |
       The start image holds as the first frame. Flour dust settles grit, steam The camera
-      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold settled dust. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The flour-dusted
+      linen apron on the steel bench stays in the foreground, unmarked, empty of lettering.
+      Last frames hold settled dust. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Flour dust settles dolly in, no
       cut, locked identity. Last frames hold settled dust.
@@ -1476,9 +1495,9 @@ shots:
     end_state: empty bench
     ltx_i2v: |
       The start image holds as the first frame. The bench is empty hum, scrape The camera
-      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold empty bench. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The flour-dusted
+      linen apron on the steel bench stays in the foreground, unmarked, empty of lettering.
+      Last frames hold empty bench. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The bench is empty dolly in, no
       cut, locked identity. Last frames hold empty bench.
@@ -1495,8 +1514,9 @@ shots:
     end_state: steel
     ltx_i2v: |
       The start image holds as the first frame. Steel and night metal tick, wind The camera
-      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold steel. No music and no score.
+      pans left on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold steel. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Steel and night pan left, no
       cut, locked identity. Last frames hold steel.
@@ -1513,9 +1533,9 @@ shots:
     end_state: mixer shape
     ltx_i2v: |
       The start image holds as the first frame. The mixer is a shape hum, scrape The camera
-      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold mixer shape. No music and no
-      score.
+      pans left on a locked tripod head, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold mixer
+      shape. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The mixer is a shape pan left,
       no cut, locked identity. Last frames hold mixer shape.
@@ -1532,9 +1552,9 @@ shots:
     end_state: black mouth
     ltx_i2v: |
       The start image holds as the first frame. The oven mouth is black click, steam The
-      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold black mouth. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The flour-dusted linen apron on the
+      steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      black mouth. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The oven mouth is black pan
       left, no cut, locked identity. Last frames hold black mouth.
@@ -1550,9 +1570,10 @@ shots:
     audio_world: "tick, cloth"
     end_state: cold door
     ltx_i2v: |
-      The start image holds as the first frame. No fire tick, cloth The camera pans right, no
-      cut. The flour-dusted linen apron on the steel bench stays in the foreground, unmarked,
-      empty of lettering. Last frames hold cold door. No music and no score.
+      The start image holds as the first frame. No fire tick, cloth The camera pans right on a
+      locked tripod head, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold cold door. No music and no
+      score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. No fire pan right, no cut,
       locked identity. Last frames hold cold door.
@@ -1569,8 +1590,9 @@ shots:
     end_state: ghost
     ltx_i2v: |
       The start image holds as the first frame. A last steam ghost steam, hum The camera pans
-      right, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold ghost. No music and no score.
+      right on a locked tripod head, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold ghost. No music
+      and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. A last steam ghost pan right, no
       cut, locked identity. Last frames hold ghost.
@@ -1587,8 +1609,9 @@ shots:
     end_state: still air
     ltx_i2v: |
       The start image holds as the first frame. The ghost dies wind, grit The camera pans
-      right, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold still air. No music and no score.
+      right on a locked tripod head, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold still air. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The ghost dies pan right, no
       cut, locked identity. Last frames hold still air.
@@ -1605,9 +1628,9 @@ shots:
     end_state: waiting shop
     ltx_i2v: |
       The start image holds as the first frame. The unmarked bakery waits hum, cloth The
-      camera stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold waiting shop. No music and no
-      score.
+      camera holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on
+      the steel bench stays in the foreground, unmarked, empty of lettering. Last frames hold
+      waiting shop. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The unmarked bakery waits fixed
       camera, no cut, locked identity. Last frames hold waiting shop.
@@ -1623,9 +1646,10 @@ shots:
     audio_world: "fabric, tick"
     end_state: waiting apron
     ltx_i2v: |
-      The start image holds as the first frame. The apron waits fabric, tick The camera stays
-      fixed, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
-      unmarked, empty of lettering. Last frames hold waiting apron. No music and no score.
+      The start image holds as the first frame. The apron waits fabric, tick The camera holds
+      a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold waiting apron.
+      No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron waits fixed camera, no
       cut, locked identity. Last frames hold waiting apron.
@@ -1642,9 +1666,9 @@ shots:
     end_state: held apron
     ltx_i2v: |
       The start image holds as the first frame. The camera holds metal tick, grit The camera
-      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold held apron. No music and no
-      score.
+      holds a locked-off tripod, zero drift, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold held
+      apron. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The camera holds fixed camera,
       no cut, locked identity. Last frames hold held apron.
@@ -1661,9 +1685,9 @@ shots:
     end_state: high window
     ltx_i2v: |
       The start image holds as the first frame. Dawn at the high window only wind, steam The
-      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold high window. No music and no
-      score.
+      camera dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold high
+      window. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. Dawn at the high window only
       dolly out, no cut, locked identity. Last frames hold high window.
@@ -1680,9 +1704,9 @@ shots:
     end_state: grey apron
     ltx_i2v: |
       The start image holds as the first frame. The apron in first grey cloth, hum The camera
-      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
-      foreground, unmarked, empty of lettering. Last frames hold grey apron. No music and no
-      score.
+      dollies out on silent wheels, no cut. The flour-dusted linen apron on the steel bench
+      stays in the foreground, unmarked, empty of lettering. Last frames hold grey apron. No
+      music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The apron in first grey dolly
       out, no cut, locked identity. Last frames hold grey apron.
@@ -1699,9 +1723,9 @@ shots:
     end_state: held bench
     ltx_i2v: |
       The start image holds as the first frame. The frame holds the apron on steel fabric,
-      metal tick The camera dollies out, no cut. The flour-dusted linen apron on the steel
-      bench stays in the foreground, unmarked, empty of lettering. Last frames hold held
-      bench. No music and no score.
+      metal tick The camera dollies out on silent wheels, no cut. The flour-dusted linen apron
+      on the steel bench stays in the foreground, unmarked, empty of lettering. Last frames
+      hold held bench. No music and no score.
     wan_i2v: |
       Third-person flour-dusted linen apron on a steel bench. The frame holds the apron on
       steel dolly out, no cut, locked identity. Last frames hold held bench.

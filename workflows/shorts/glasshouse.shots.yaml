@@ -15,8 +15,8 @@ identity_enhance: true
 identity_look: |
   A photoreal third-person still inside a botanical glasshouse. An unmarked copper
   watering can sits on wet flagstone, rain already ticking the glass roof, unmarked palms
-  and ferns, no readable signs. Eye-level 35mm lens, framed for YouTube 16:9, empty of
-  lettering, mild film grain, clean unmarked lens.
+  and ferns, no readable signs. Match a standing eyeline. 35mm-equivalent classic, framed
+  for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
 shots:
   - beat: 1
     shot: 1
@@ -31,9 +31,9 @@ shots:
     end_state: roof ticks
     ltx_i2v: |
       The start image holds as the first frame. Rain ticks the glass roof rain, tick The
-      camera tracks forward, no cut. The unmarked copper watering can stays in the foreground
-      on wet flagstone, empty of lettering. Last frames hold roof ticks. No music and no
-      score.
+      camera tracks forward on a locked support, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold roof
+      ticks. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Rain ticks the glass roof
       tracking, no cut, locked identity. Last frames hold roof ticks.
@@ -50,8 +50,9 @@ shots:
     end_state: wet can
     ltx_i2v: |
       The start image holds as the first frame. The can sits copper-wet metal tick, cloth The
-      camera tracks forward, no cut. The unmarked copper watering can stays in the foreground
-      on wet flagstone, empty of lettering. Last frames hold wet can. No music and no score.
+      camera tracks forward on a locked support, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold wet can.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can sits copper-wet
       tracking, no cut, locked identity. Last frames hold wet can.
@@ -68,8 +69,9 @@ shots:
     end_state: drip on copper
     ltx_i2v: |
       The start image holds as the first frame. A drip hits the can splash, rain The camera
-      tracks forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold drip on copper. No music and no score.
+      tracks forward on a locked support, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold drip on copper. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A drip hits the can
       tracking, no cut, locked identity. Last frames hold drip on copper.
@@ -86,8 +88,9 @@ shots:
     end_state: sheet on glass
     ltx_i2v: |
       The start image holds as the first frame. Drips become a sheet rain, splash The camera
-      dollies in, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold sheet on glass. No music and no score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The unmarked
+      copper watering can stays in the foreground on wet flagstone, empty of lettering. Last
+      frames hold sheet on glass. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Drips become a sheet dolly
       in, no cut, locked identity. Last frames hold sheet on glass.
@@ -103,9 +106,10 @@ shots:
     audio_world: "wind, cloth"
     end_state: bowed fern
     ltx_i2v: |
-      The start image holds as the first frame. Ferns bow wind, cloth The camera dollies in,
-      no cut. The unmarked copper watering can stays in the foreground on wet flagstone, empty
-      of lettering. Last frames hold bowed fern. No music and no score.
+      The start image holds as the first frame. Ferns bow wind, cloth The camera dollies in on
+      silent dolly wheels, tightening without zooming, no cut. The unmarked copper watering
+      can stays in the foreground on wet flagstone, empty of lettering. Last frames hold bowed
+      fern. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Ferns bow dolly in, no cut,
       locked identity. Last frames hold bowed fern.
@@ -122,8 +126,9 @@ shots:
     end_state: can in hand
     ltx_i2v: |
       The start image holds as the first frame. The can is moved metal scrape, grit The camera
-      dollies in, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold can in hand. No music and no score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The unmarked
+      copper watering can stays in the foreground on wet flagstone, empty of lettering. Last
+      frames hold can in hand. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can is moved dolly in,
       no cut, locked identity. Last frames hold can in hand.
@@ -140,8 +145,9 @@ shots:
     end_state: pot
     ltx_i2v: |
       The start image holds as the first frame. A pour into a clay pot pour, splash The camera
-      pans left, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold pot. No music and no score.
+      pans left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold pot. No music and no
+      score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A pour into a clay pot pan
       left, no cut, locked identity. Last frames hold pot.
@@ -158,8 +164,9 @@ shots:
     end_state: dark soil
     ltx_i2v: |
       The start image holds as the first frame. The pot drinks water tick, grit The camera
-      pans left, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold dark soil. No music and no score.
+      pans left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold dark soil. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The pot drinks pan left, no
       cut, locked identity. Last frames hold dark soil.
@@ -176,8 +183,9 @@ shots:
     end_state: can on stone
     ltx_i2v: |
       The start image holds as the first frame. The can lowers metal tick, cloth The camera
-      pans left, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold can on stone. No music and no score.
+      pans left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold can on stone. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can lowers pan left, no
       cut, locked identity. Last frames hold can on stone.
@@ -194,8 +202,9 @@ shots:
     end_state: puddle
     ltx_i2v: |
       The start image holds as the first frame. Puddle around the can splash, rain The camera
-      pans right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold puddle. No music and no score.
+      pans right on a locked tripod head, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold puddle. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Puddle around the can pan
       right, no cut, locked identity. Last frames hold puddle.
@@ -212,8 +221,9 @@ shots:
     end_state: glass nave
     ltx_i2v: |
       The start image holds as the first frame. A look up the nave of glass wind, rain The
-      camera pans right, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold glass nave. No music and no score.
+      camera pans right on a locked tripod head, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold glass
+      nave. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A look up the nave of glass
       pan right, no cut, locked identity. Last frames hold glass nave.
@@ -230,8 +240,9 @@ shots:
     end_state: spars
     ltx_i2v: |
       The start image holds as the first frame. Unmarked spars, no brand metal tick, wind The
-      camera pans right, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold spars. No music and no score.
+      camera pans right on a locked tripod head, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold spars. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Unmarked spars, no brand pan
       right, no cut, locked identity. Last frames hold spars.
@@ -247,9 +258,10 @@ shots:
     audio_world: "rain, tick"
     end_state: ridge
     ltx_i2v: |
-      The start image holds as the first frame. Rain on the ridge rain, tick The camera stays
-      fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold ridge. No music and no score.
+      The start image holds as the first frame. Rain on the ridge rain, tick The camera holds
+      a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold ridge. No music and no
+      score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Rain on the ridge fixed
       camera, no cut, locked identity. Last frames hold ridge.
@@ -266,8 +278,9 @@ shots:
     end_state: leaf
     ltx_i2v: |
       The start image holds as the first frame. A leaf dumps water splash, cloth The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold leaf. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold leaf. No music and
+      no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A leaf dumps water fixed
       camera, no cut, locked identity. Last frames hold leaf.
@@ -284,8 +297,9 @@ shots:
     end_state: full can
     ltx_i2v: |
       The start image holds as the first frame. The can is filled from a barrel pour, metal
-      The camera stays fixed, no cut. The unmarked copper watering can stays in the foreground
-      on wet flagstone, empty of lettering. Last frames hold full can. No music and no score.
+      The camera holds a locked-off tripod, zero drift, no cut. The unmarked copper watering
+      can stays in the foreground on wet flagstone, empty of lettering. Last frames hold full
+      can. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can is filled from a
       barrel fixed camera, no cut, locked identity. Last frames hold full can.
@@ -302,8 +316,9 @@ shots:
     end_state: barrel
     ltx_i2v: |
       The start image holds as the first frame. The barrel is unmarked pour, splash The camera
-      dollies out, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold barrel. No music and no score.
+      dollies out on silent wheels, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold barrel. No music and
+      no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The barrel is unmarked dolly
       out, no cut, locked identity. Last frames hold barrel.
@@ -320,8 +335,9 @@ shots:
     end_state: heavy can
     ltx_i2v: |
       The start image holds as the first frame. Hands lift the full can metal scrape, cloth
-      The camera dollies out, no cut. The unmarked copper watering can stays in the foreground
-      on wet flagstone, empty of lettering. Last frames hold heavy can. No music and no score.
+      The camera dollies out on silent wheels, no cut. The unmarked copper watering can stays
+      in the foreground on wet flagstone, empty of lettering. Last frames hold heavy can. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Hands lift the full can
       dolly out, no cut, locked identity. Last frames hold heavy can.
@@ -338,8 +354,9 @@ shots:
     end_state: aisle
     ltx_i2v: |
       The start image holds as the first frame. A walk down the aisle footstep, rain The
-      camera dollies out, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold aisle. No music and no score.
+      camera dollies out on silent wheels, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold aisle. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A walk down the aisle dolly
       out, no cut, locked identity. Last frames hold aisle.
@@ -356,8 +373,9 @@ shots:
     end_state: palms
     ltx_i2v: |
       The start image holds as the first frame. Palms left and right rain, wind The camera
-      tracks forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold palms. No music and no score.
+      tracks forward on a locked support, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold palms. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Palms left and right
       tracking, no cut, locked identity. Last frames hold palms.
@@ -374,8 +392,9 @@ shots:
     end_state: second pot
     ltx_i2v: |
       The start image holds as the first frame. The can pours again pour, tick The camera
-      tracks forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold second pot. No music and no score.
+      tracks forward on a locked support, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold second pot. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can pours again
       tracking, no cut, locked identity. Last frames hold second pot.
@@ -392,9 +411,9 @@ shots:
     end_state: loud roof
     ltx_i2v: |
       The start image holds as the first frame. Thunder is only rain louder rain, metal tick
-      The camera tracks forward, no cut. The unmarked copper watering can stays in the
-      foreground on wet flagstone, empty of lettering. Last frames hold loud roof. No music
-      and no score.
+      The camera tracks forward on a locked support, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold loud
+      roof. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Thunder is only rain louder
       tracking, no cut, locked identity. Last frames hold loud roof.
@@ -411,8 +430,9 @@ shots:
     end_state: drumming glass
     ltx_i2v: |
       The start image holds as the first frame. The glass drums rain, tick The camera dollies
-      in, no cut. The unmarked copper watering can stays in the foreground on wet flagstone,
-      empty of lettering. Last frames hold drumming glass. No music and no score.
+      in on silent dolly wheels, tightening without zooming, no cut. The unmarked copper
+      watering can stays in the foreground on wet flagstone, empty of lettering. Last frames
+      hold drumming glass. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The glass drums dolly in, no
       cut, locked identity. Last frames hold drumming glass.
@@ -429,9 +449,9 @@ shots:
     end_state: racing puddle
     ltx_i2v: |
       The start image holds as the first frame. A puddle races the flagstone splash, grit The
-      camera dollies in, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold racing puddle. No music and no
-      score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      unmarked copper watering can stays in the foreground on wet flagstone, empty of
+      lettering. Last frames hold racing puddle. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A puddle races the flagstone
       dolly in, no cut, locked identity. Last frames hold racing puddle.
@@ -448,8 +468,9 @@ shots:
     end_state: waiting can
     ltx_i2v: |
       The start image holds as the first frame. The can waits metal tick, cloth The camera
-      dollies in, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold waiting can. No music and no score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The unmarked
+      copper watering can stays in the foreground on wet flagstone, empty of lettering. Last
+      frames hold waiting can. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can waits dolly in, no
       cut, locked identity. Last frames hold waiting can.
@@ -466,8 +487,9 @@ shots:
     end_state: green dark
     ltx_i2v: |
       The start image holds as the first frame. Storm light, green wind, rain The camera pans
-      left, no cut. The unmarked copper watering can stays in the foreground on wet flagstone,
-      empty of lettering. Last frames hold green dark. No music and no score.
+      left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold green dark. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Storm light, green pan left,
       no cut, locked identity. Last frames hold green dark.
@@ -484,8 +506,9 @@ shots:
     end_state: fern and copper
     ltx_i2v: |
       The start image holds as the first frame. A fern against the can cloth, tick The camera
-      pans left, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold fern and copper. No music and no score.
+      pans left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold fern and copper. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A fern against the can pan
       left, no cut, locked identity. Last frames hold fern and copper.
@@ -502,8 +525,9 @@ shots:
     end_state: drip on can
     ltx_i2v: |
       The start image holds as the first frame. The fern drips on copper splash, metal The
-      camera pans left, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold drip on can. No music and no score.
+      camera pans left on a locked tripod head, no cut. The unmarked copper watering can stays
+      in the foreground on wet flagstone, empty of lettering. Last frames hold drip on can. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The fern drips on copper pan
       left, no cut, locked identity. Last frames hold drip on can.
@@ -520,8 +544,9 @@ shots:
     end_state: dark copper
     ltx_i2v: |
       The start image holds as the first frame. Copper darkens rain, metal tick The camera
-      pans right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold dark copper. No music and no score.
+      pans right on a locked tripod head, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold dark copper. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Copper darkens pan right, no
       cut, locked identity. Last frames hold dark copper.
@@ -538,8 +563,9 @@ shots:
     end_state: far bench
     ltx_i2v: |
       The start image holds as the first frame. A pour at the far bench pour, splash The
-      camera pans right, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold far bench. No music and no score.
+      camera pans right on a locked tripod head, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold far
+      bench. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A pour at the far bench pan
       right, no cut, locked identity. Last frames hold far bench.
@@ -556,8 +582,9 @@ shots:
     end_state: wet wood
     ltx_i2v: |
       The start image holds as the first frame. The bench is wet wood wood creak, rain The
-      camera pans right, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold wet wood. No music and no score.
+      camera pans right on a locked tripod head, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold wet wood.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The bench is wet wood pan
       right, no cut, locked identity. Last frames hold wet wood.
@@ -574,8 +601,9 @@ shots:
     end_state: row
     ltx_i2v: |
       The start image holds as the first frame. Pots in a row, unmarked tick, grit The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold row. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold row. No music and
+      no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Pots in a row, unmarked
       fixed camera, no cut, locked identity. Last frames hold row.
@@ -592,8 +620,9 @@ shots:
     end_state: overflow
     ltx_i2v: |
       The start image holds as the first frame. One pot overflows splash, pour The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold overflow. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold overflow. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. One pot overflows fixed
       camera, no cut, locked identity. Last frames hold overflow.
@@ -610,8 +639,9 @@ shots:
     end_state: runnel
     ltx_i2v: |
       The start image holds as the first frame. The overflow runs to stone water tick, rain
-      The camera stays fixed, no cut. The unmarked copper watering can stays in the foreground
-      on wet flagstone, empty of lettering. Last frames hold runnel. No music and no score.
+      The camera holds a locked-off tripod, zero drift, no cut. The unmarked copper watering
+      can stays in the foreground on wet flagstone, empty of lettering. Last frames hold
+      runnel. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The overflow runs to stone
       fixed camera, no cut, locked identity. Last frames hold runnel.
@@ -628,8 +658,9 @@ shots:
     end_state: aisle water
     ltx_i2v: |
       The start image holds as the first frame. The runnel finds the aisle splash, grit The
-      camera dollies out, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold aisle water. No music and no score.
+      camera dollies out on silent wheels, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold aisle water. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The runnel finds the aisle
       dolly out, no cut, locked identity. Last frames hold aisle water.
@@ -646,8 +677,9 @@ shots:
     end_state: walking can
     ltx_i2v: |
       The start image holds as the first frame. A walk with the can footstep, metal The camera
-      dollies out, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold walking can. No music and no score.
+      dollies out on silent wheels, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold walking can. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A walk with the can dolly
       out, no cut, locked identity. Last frames hold walking can.
@@ -664,8 +696,9 @@ shots:
     end_state: glass door
     ltx_i2v: |
       The start image holds as the first frame. The door at the end is glass wind, rain The
-      camera dollies out, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold glass door. No music and no score.
+      camera dollies out on silent wheels, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold glass door. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The door at the end is glass
       dolly out, no cut, locked identity. Last frames hold glass door.
@@ -682,8 +715,9 @@ shots:
     end_state: outside sheet
     ltx_i2v: |
       The start image holds as the first frame. Rain outside harder rain, wind The camera
-      tracks forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold outside sheet. No music and no score.
+      tracks forward on a locked support, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold outside sheet. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Rain outside harder
       tracking, no cut, locked identity. Last frames hold outside sheet.
@@ -700,8 +734,9 @@ shots:
     end_state: shut door
     ltx_i2v: |
       The start image holds as the first frame. The door stays shut click, cloth The camera
-      tracks forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold shut door. No music and no score.
+      tracks forward on a locked support, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold shut door. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The door stays shut
       tracking, no cut, locked identity. Last frames hold shut door.
@@ -718,9 +753,9 @@ shots:
     end_state: can and door
     ltx_i2v: |
       The start image holds as the first frame. A hold on the can against the door metal tick,
-      rain The camera tracks forward, no cut. The unmarked copper watering can stays in the
-      foreground on wet flagstone, empty of lettering. Last frames hold can and door. No music
-      and no score.
+      rain The camera tracks forward on a locked support, no cut. The unmarked copper watering
+      can stays in the foreground on wet flagstone, empty of lettering. Last frames hold can
+      and door. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A hold on the can against
       the door tracking, no cut, locked identity. Last frames hold can and door.
@@ -737,8 +772,9 @@ shots:
     end_state: fogged glass
     ltx_i2v: |
       The start image holds as the first frame. Steam fogs the glass steam, wind The camera
-      dollies in, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold fogged glass. No music and no score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The unmarked
+      copper watering can stays in the foreground on wet flagstone, empty of lettering. Last
+      frames hold fogged glass. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Steam fogs the glass dolly
       in, no cut, locked identity. Last frames hold fogged glass.
@@ -754,9 +790,10 @@ shots:
     audio_world: "cloth, tick"
     end_state: cleared pane
     ltx_i2v: |
-      The start image holds as the first frame. A wipe cloth, tick The camera dollies in, no
-      cut. The unmarked copper watering can stays in the foreground on wet flagstone, empty of
-      lettering. Last frames hold cleared pane. No music and no score.
+      The start image holds as the first frame. A wipe cloth, tick The camera dollies in on
+      silent dolly wheels, tightening without zooming, no cut. The unmarked copper watering
+      can stays in the foreground on wet flagstone, empty of lettering. Last frames hold
+      cleared pane. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A wipe dolly in, no cut,
       locked identity. Last frames hold cleared pane.
@@ -773,8 +810,9 @@ shots:
     end_state: wet garden
     ltx_i2v: |
       The start image holds as the first frame. The garden outside is unmarked rain, grit The
-      camera dollies in, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold wet garden. No music and no score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      unmarked copper watering can stays in the foreground on wet flagstone, empty of
+      lettering. Last frames hold wet garden. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The garden outside is
       unmarked dolly in, no cut, locked identity. Last frames hold wet garden.
@@ -790,9 +828,10 @@ shots:
     audio_world: "rain, wind"
     end_state: blank garden
     ltx_i2v: |
-      The start image holds as the first frame. No path signs rain, wind The camera pans left,
-      no cut. The unmarked copper watering can stays in the foreground on wet flagstone, empty
-      of lettering. Last frames hold blank garden. No music and no score.
+      The start image holds as the first frame. No path signs rain, wind The camera pans left
+      on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold blank garden. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. No path signs pan left, no
       cut, locked identity. Last frames hold blank garden.
@@ -809,8 +848,9 @@ shots:
     end_state: nave
     ltx_i2v: |
       The start image holds as the first frame. Back to the nave footstep, splash The camera
-      pans left, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold nave. No music and no score.
+      pans left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold nave. No music and no
+      score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Back to the nave pan left,
       no cut, locked identity. Last frames hold nave.
@@ -827,8 +867,9 @@ shots:
     end_state: can on flag
     ltx_i2v: |
       The start image holds as the first frame. The can is set down metal scrape, grit The
-      camera pans left, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold can on flag. No music and no score.
+      camera pans left on a locked tripod head, no cut. The unmarked copper watering can stays
+      in the foreground on wet flagstone, empty of lettering. Last frames hold can on flag. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can is set down pan
       left, no cut, locked identity. Last frames hold can on flag.
@@ -845,8 +886,9 @@ shots:
     end_state: softer roof
     ltx_i2v: |
       The start image holds as the first frame. Storm eases a hair rain, tick The camera pans
-      right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold softer roof. No music and no score.
+      right on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold softer roof. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Storm eases a hair pan
       right, no cut, locked identity. Last frames hold softer roof.
@@ -863,8 +905,9 @@ shots:
     end_state: bright copper
     ltx_i2v: |
       The start image holds as the first frame. Light finds copper metal tick, wind The camera
-      pans right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold bright copper. No music and no score.
+      pans right on a locked tripod head, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold bright copper. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Light finds copper pan
       right, no cut, locked identity. Last frames hold bright copper.
@@ -880,9 +923,10 @@ shots:
     audio_world: "pour, splash"
     end_state: last pot
     ltx_i2v: |
-      The start image holds as the first frame. A last pour pour, splash The camera pans
-      right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold last pot. No music and no score.
+      The start image holds as the first frame. A last pour pour, splash The camera pans right
+      on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold last pot. No music and
+      no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A last pour pan right, no
       cut, locked identity. Last frames hold last pot.
@@ -899,8 +943,9 @@ shots:
     end_state: fern pot
     ltx_i2v: |
       The start image holds as the first frame. The last pot is a fern pour, cloth The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold fern pot. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold fern pot. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The last pot is a fern fixed
       camera, no cut, locked identity. Last frames hold fern pot.
@@ -917,8 +962,9 @@ shots:
     end_state: dark soil
     ltx_i2v: |
       The start image holds as the first frame. Soil goes dark water tick, grit The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold dark soil. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold dark soil. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Soil goes dark fixed camera,
       no cut, locked identity. Last frames hold dark soil.
@@ -935,8 +981,9 @@ shots:
     end_state: empty can
     ltx_i2v: |
       The start image holds as the first frame. The can is empty metal tick, scrape The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold empty can. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold empty can. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can is empty fixed
       camera, no cut, locked identity. Last frames hold empty can.
@@ -953,8 +1000,9 @@ shots:
     end_state: last drops
     ltx_i2v: |
       The start image holds as the first frame. A shake metal tick, splash The camera dollies
-      out, no cut. The unmarked copper watering can stays in the foreground on wet flagstone,
-      empty of lettering. Last frames hold last drops. No music and no score.
+      out on silent wheels, no cut. The unmarked copper watering can stays in the foreground
+      on wet flagstone, empty of lettering. Last frames hold last drops. No music and no
+      score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A shake dolly out, no cut,
       locked identity. Last frames hold last drops.
@@ -971,8 +1019,9 @@ shots:
     end_state: drops
     ltx_i2v: |
       The start image holds as the first frame. The drops hit stone tick, rain The camera
-      dollies out, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold drops. No music and no score.
+      dollies out on silent wheels, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold drops. No music and no
+      score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The drops hit stone dolly
       out, no cut, locked identity. Last frames hold drops.
@@ -989,8 +1038,9 @@ shots:
     end_state: resting can
     ltx_i2v: |
       The start image holds as the first frame. The can rests cloth, grit The camera dollies
-      out, no cut. The unmarked copper watering can stays in the foreground on wet flagstone,
-      empty of lettering. Last frames hold resting can. No music and no score.
+      out on silent wheels, no cut. The unmarked copper watering can stays in the foreground
+      on wet flagstone, empty of lettering. Last frames hold resting can. No music and no
+      score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can rests dolly out, no
       cut, locked identity. Last frames hold resting can.
@@ -1007,8 +1057,9 @@ shots:
     end_state: drip roof
     ltx_i2v: |
       The start image holds as the first frame. Rain becomes drip rain, tick The camera tracks
-      forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold drip roof. No music and no score.
+      forward on a locked support, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold drip roof. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Rain becomes drip tracking,
       no cut, locked identity. Last frames hold drip roof.
@@ -1025,8 +1076,9 @@ shots:
     end_state: gutter
     ltx_i2v: |
       The start image holds as the first frame. Gutters somewhere pour, metal The camera
-      tracks forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold gutter. No music and no score.
+      tracks forward on a locked support, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold gutter. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Gutters somewhere tracking,
       no cut, locked identity. Last frames hold gutter.
@@ -1043,8 +1095,9 @@ shots:
     end_state: bright green
     ltx_i2v: |
       The start image holds as the first frame. The nave brightens wind, cloth The camera
-      tracks forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold bright green. No music and no score.
+      tracks forward on a locked support, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold bright green. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The nave brightens tracking,
       no cut, locked identity. Last frames hold bright green.
@@ -1061,8 +1114,9 @@ shots:
     end_state: steam
     ltx_i2v: |
       The start image holds as the first frame. Steam off flagstone steam, rain The camera
-      dollies in, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold steam. No music and no score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The unmarked
+      copper watering can stays in the foreground on wet flagstone, empty of lettering. Last
+      frames hold steam. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Steam off flagstone dolly
       in, no cut, locked identity. Last frames hold steam.
@@ -1079,8 +1133,9 @@ shots:
     end_state: warm copper
     ltx_i2v: |
       The start image holds as the first frame. The can is a warm coin metal tick, wind The
-      camera dollies in, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold warm copper. No music and no score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      unmarked copper watering can stays in the foreground on wet flagstone, empty of
+      lettering. Last frames hold warm copper. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can is a warm coin dolly
       in, no cut, locked identity. Last frames hold warm copper.
@@ -1096,9 +1151,10 @@ shots:
     audio_world: "cloth, tick"
     end_state: held can
     ltx_i2v: |
-      The start image holds as the first frame. A hold cloth, tick The camera dollies in, no
-      cut. The unmarked copper watering can stays in the foreground on wet flagstone, empty of
-      lettering. Last frames hold held can. No music and no score.
+      The start image holds as the first frame. A hold cloth, tick The camera dollies in on
+      silent dolly wheels, tightening without zooming, no cut. The unmarked copper watering
+      can stays in the foreground on wet flagstone, empty of lettering. Last frames hold held
+      can. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A hold dolly in, no cut,
       locked identity. Last frames hold held can.
@@ -1115,8 +1171,9 @@ shots:
     end_state: empty nave
     ltx_i2v: |
       The start image holds as the first frame. No one else in the nave rain, wind The camera
-      pans left, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold empty nave. No music and no score.
+      pans left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold empty nave. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. No one else in the nave pan
       left, no cut, locked identity. Last frames hold empty nave.
@@ -1132,9 +1189,10 @@ shots:
     audio_world: "splash, cloth"
     end_state: dripping palms
     ltx_i2v: |
-      The start image holds as the first frame. Palms drip splash, cloth The camera pans left,
-      no cut. The unmarked copper watering can stays in the foreground on wet flagstone, empty
-      of lettering. Last frames hold dripping palms. No music and no score.
+      The start image holds as the first frame. Palms drip splash, cloth The camera pans left
+      on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold dripping palms. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Palms drip pan left, no cut,
       locked identity. Last frames hold dripping palms.
@@ -1151,9 +1209,9 @@ shots:
     end_state: can center
     ltx_i2v: |
       The start image holds as the first frame. The camera finds the can again metal tick,
-      grit The camera pans left, no cut. The unmarked copper watering can stays in the
-      foreground on wet flagstone, empty of lettering. Last frames hold can center. No music
-      and no score.
+      grit The camera pans left on a locked tripod head, no cut. The unmarked copper watering
+      can stays in the foreground on wet flagstone, empty of lettering. Last frames hold can
+      center. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The camera finds the can
       again pan left, no cut, locked identity. Last frames hold can center.
@@ -1170,8 +1228,9 @@ shots:
     end_state: copper stone
     ltx_i2v: |
       The start image holds as the first frame. Copper and wet stone tick, rain The camera
-      pans right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold copper stone. No music and no score.
+      pans right on a locked tripod head, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold copper stone. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Copper and wet stone pan
       right, no cut, locked identity. Last frames hold copper stone.
@@ -1188,8 +1247,9 @@ shots:
     end_state: drip circle
     ltx_i2v: |
       The start image holds as the first frame. A slow circle of drips splash, wind The camera
-      pans right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold drip circle. No music and no score.
+      pans right on a locked tripod head, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold drip circle. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A slow circle of drips pan
       right, no cut, locked identity. Last frames hold drip circle.
@@ -1206,8 +1266,9 @@ shots:
     end_state: soft rain
     ltx_i2v: |
       The start image holds as the first frame. The storm is a memory rain, cloth The camera
-      pans right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold soft rain. No music and no score.
+      pans right on a locked tripod head, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold soft rain. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The storm is a memory pan
       right, no cut, locked identity. Last frames hold soft rain.
@@ -1224,8 +1285,9 @@ shots:
     end_state: ticks
     ltx_i2v: |
       The start image holds as the first frame. The roof is only ticks tick, wind The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold ticks. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold ticks. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The roof is only ticks fixed
       camera, no cut, locked identity. Last frames hold ticks.
@@ -1241,9 +1303,10 @@ shots:
     audio_world: "cloth, grit"
     end_state: quiet
     ltx_i2v: |
-      The start image holds as the first frame. A birdless quiet cloth, grit The camera stays
-      fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold quiet. No music and no score.
+      The start image holds as the first frame. A birdless quiet cloth, grit The camera holds
+      a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold quiet. No music and no
+      score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A birdless quiet fixed
       camera, no cut, locked identity. Last frames hold quiet.
@@ -1260,8 +1323,9 @@ shots:
     end_state: still can
     ltx_i2v: |
       The start image holds as the first frame. The can does not move metal tick, rain The
-      camera stays fixed, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold still can. No music and no score.
+      camera holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold still
+      can. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can does not move fixed
       camera, no cut, locked identity. Last frames hold still can.
@@ -1278,8 +1342,9 @@ shots:
     end_state: gold-green
     ltx_i2v: |
       The start image holds as the first frame. Light goes gold-green wind, steam The camera
-      dollies out, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold gold-green. No music and no score.
+      dollies out on silent wheels, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold gold-green. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Light goes gold-green dolly
       out, no cut, locked identity. Last frames hold gold-green.
@@ -1296,8 +1361,9 @@ shots:
     end_state: lace shadow
     ltx_i2v: |
       The start image holds as the first frame. Fern lace on copper cloth, tick The camera
-      dollies out, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold lace shadow. No music and no score.
+      dollies out on silent wheels, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold lace shadow. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Fern lace on copper dolly
       out, no cut, locked identity. Last frames hold lace shadow.
@@ -1314,8 +1380,9 @@ shots:
     end_state: moving lace
     ltx_i2v: |
       The start image holds as the first frame. The shadow slides rain, metal The camera
-      dollies out, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold moving lace. No music and no score.
+      dollies out on silent wheels, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold moving lace. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The shadow slides dolly out,
       no cut, locked identity. Last frames hold moving lace.
@@ -1332,9 +1399,9 @@ shots:
     end_state: clear ridge
     ltx_i2v: |
       The start image holds as the first frame. The storm has passed the ridge wind, rain The
-      camera tracks forward, no cut. The unmarked copper watering can stays in the foreground
-      on wet flagstone, empty of lettering. Last frames hold clear ridge. No music and no
-      score.
+      camera tracks forward on a locked support, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold clear
+      ridge. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The storm has passed the
       ridge tracking, no cut, locked identity. Last frames hold clear ridge.
@@ -1351,8 +1418,9 @@ shots:
     end_state: puddles
     ltx_i2v: |
       The start image holds as the first frame. Puddles remain splash, grit The camera tracks
-      forward, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold puddles. No music and no score.
+      forward on a locked support, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold puddles. No music and
+      no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Puddles remain tracking, no
       cut, locked identity. Last frames hold puddles.
@@ -1369,9 +1437,9 @@ shots:
     end_state: can in puddle
     ltx_i2v: |
       The start image holds as the first frame. The can sits in a puddle metal tick, water
-      tick The camera tracks forward, no cut. The unmarked copper watering can stays in the
-      foreground on wet flagstone, empty of lettering. Last frames hold can in puddle. No
-      music and no score.
+      tick The camera tracks forward on a locked support, no cut. The unmarked copper watering
+      can stays in the foreground on wet flagstone, empty of lettering. Last frames hold can
+      in puddle. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can sits in a puddle
       tracking, no cut, locked identity. Last frames hold can in puddle.
@@ -1388,8 +1456,9 @@ shots:
     end_state: sky puddle
     ltx_i2v: |
       The start image holds as the first frame. A sky in the puddle wind, splash The camera
-      dollies in, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold sky puddle. No music and no score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The unmarked
+      copper watering can stays in the foreground on wet flagstone, empty of lettering. Last
+      frames hold sky puddle. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A sky in the puddle dolly
       in, no cut, locked identity. Last frames hold sky puddle.
@@ -1406,9 +1475,9 @@ shots:
     end_state: broken sky
     ltx_i2v: |
       The start image holds as the first frame. The copper breaks the sky metal tick, cloth
-      The camera dollies in, no cut. The unmarked copper watering can stays in the foreground
-      on wet flagstone, empty of lettering. Last frames hold broken sky. No music and no
-      score.
+      The camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      unmarked copper watering can stays in the foreground on wet flagstone, empty of
+      lettering. Last frames hold broken sky. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The copper breaks the sky
       dolly in, no cut, locked identity. Last frames hold broken sky.
@@ -1425,8 +1494,9 @@ shots:
     end_state: held break
     ltx_i2v: |
       The start image holds as the first frame. A hold on that break tick, rain The camera
-      dollies in, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold held break. No music and no score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The unmarked
+      copper watering can stays in the foreground on wet flagstone, empty of lettering. Last
+      frames hold held break. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A hold on that break dolly
       in, no cut, locked identity. Last frames hold held break.
@@ -1443,8 +1513,9 @@ shots:
     end_state: evening glass
     ltx_i2v: |
       The start image holds as the first frame. Evening in the glass wind, steam The camera
-      pans left, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold evening glass. No music and no score.
+      pans left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold evening glass. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Evening in the glass pan
       left, no cut, locked identity. Last frames hold evening glass.
@@ -1461,8 +1532,9 @@ shots:
     end_state: cool copper
     ltx_i2v: |
       The start image holds as the first frame. The can cools metal tick, grit The camera pans
-      left, no cut. The unmarked copper watering can stays in the foreground on wet flagstone,
-      empty of lettering. Last frames hold cool copper. No music and no score.
+      left on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold cool copper. No music
+      and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can cools pan left, no
       cut, locked identity. Last frames hold cool copper.
@@ -1478,9 +1550,10 @@ shots:
     audio_world: "cloth, tick"
     end_state: idle can
     ltx_i2v: |
-      The start image holds as the first frame. No more pours cloth, tick The camera pans
-      left, no cut. The unmarked copper watering can stays in the foreground on wet flagstone,
-      empty of lettering. Last frames hold idle can. No music and no score.
+      The start image holds as the first frame. No more pours cloth, tick The camera pans left
+      on a locked tripod head, no cut. The unmarked copper watering can stays in the
+      foreground on wet flagstone, empty of lettering. Last frames hold idle can. No music and
+      no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. No more pours pan left, no
       cut, locked identity. Last frames hold idle can.
@@ -1497,8 +1570,9 @@ shots:
     end_state: still palms
     ltx_i2v: |
       The start image holds as the first frame. The nave empties of weather wind, cloth The
-      camera pans right, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold still palms. No music and no score.
+      camera pans right on a locked tripod head, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold still
+      palms. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The nave empties of weather
       pan right, no cut, locked identity. Last frames hold still palms.
@@ -1515,8 +1589,9 @@ shots:
     end_state: last drip
     ltx_i2v: |
       The start image holds as the first frame. A last drip from the ridge tick, splash The
-      camera pans right, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold last drip. No music and no score.
+      camera pans right on a locked tripod head, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold last
+      drip. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. A last drip from the ridge
       pan right, no cut, locked identity. Last frames hold last drip.
@@ -1533,8 +1608,9 @@ shots:
     end_state: missed drip
     ltx_i2v: |
       The start image holds as the first frame. The drip misses the can grit, rain The camera
-      pans right, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold missed drip. No music and no score.
+      pans right on a locked tripod head, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold missed drip. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The drip misses the can pan
       right, no cut, locked identity. Last frames hold missed drip.
@@ -1551,8 +1627,9 @@ shots:
     end_state: stone splash
     ltx_i2v: |
       The start image holds as the first frame. The drip hits stone splash, tick The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold stone splash. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold stone splash. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The drip hits stone fixed
       camera, no cut, locked identity. Last frames hold stone splash.
@@ -1569,8 +1646,9 @@ shots:
     end_state: dry copper
     ltx_i2v: |
       The start image holds as the first frame. The can is dry-topped metal tick, cloth The
-      camera stays fixed, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold dry copper. No music and no score.
+      camera holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold dry
+      copper. No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The can is dry-topped fixed
       camera, no cut, locked identity. Last frames hold dry copper.
@@ -1587,8 +1665,9 @@ shots:
     end_state: night glass
     ltx_i2v: |
       The start image holds as the first frame. Night at the glass wind, steam The camera
-      stays fixed, no cut. The unmarked copper watering can stays in the foreground on wet
-      flagstone, empty of lettering. Last frames hold night glass. No music and no score.
+      holds a locked-off tripod, zero drift, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold night glass. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Night at the glass fixed
       camera, no cut, locked identity. Last frames hold night glass.
@@ -1605,8 +1684,9 @@ shots:
     end_state: night nave
     ltx_i2v: |
       The start image holds as the first frame. Night glasshouse, unmarked wind, tick The
-      camera dollies out, no cut. The unmarked copper watering can stays in the foreground on
-      wet flagstone, empty of lettering. Last frames hold night nave. No music and no score.
+      camera dollies out on silent wheels, no cut. The unmarked copper watering can stays in
+      the foreground on wet flagstone, empty of lettering. Last frames hold night nave. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. Night glasshouse, unmarked
       dolly out, no cut, locked identity. Last frames hold night nave.
@@ -1623,9 +1703,9 @@ shots:
     end_state: lamp copper
     ltx_i2v: |
       The start image holds as the first frame. The copper can in one lamp metal tick, cloth
-      The camera dollies out, no cut. The unmarked copper watering can stays in the foreground
-      on wet flagstone, empty of lettering. Last frames hold lamp copper. No music and no
-      score.
+      The camera dollies out on silent wheels, no cut. The unmarked copper watering can stays
+      in the foreground on wet flagstone, empty of lettering. Last frames hold lamp copper. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The copper can in one lamp
       dolly out, no cut, locked identity. Last frames hold lamp copper.
@@ -1642,9 +1722,9 @@ shots:
     end_state: held can
     ltx_i2v: |
       The start image holds as the first frame. The frame holds the can on wet flagstone rain,
-      grit The camera dollies out, no cut. The unmarked copper watering can stays in the
-      foreground on wet flagstone, empty of lettering. Last frames hold held can. No music and
-      no score.
+      grit The camera dollies out on silent wheels, no cut. The unmarked copper watering can
+      stays in the foreground on wet flagstone, empty of lettering. Last frames hold held can.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked copper watering can on wet flagstone. The frame holds the can on
       wet flagstone dolly out, no cut, locked identity. Last frames hold held can.

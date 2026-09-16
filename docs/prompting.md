@@ -24,7 +24,7 @@ tags: [prompting, klein, wan, ltx, zimage, longcat, dreamx, comfyui]
 - Writing (or pasting) a prompt that matches the encoder in front of you instead of SD1.5 tag soup
 - Picking a lab sample prompt from the App dropdown, or Custom to type a lazy sentence the on-box Qwen3 rewriter expands for Klein / Wan / LTX / Z-Image / LongCat / DreamX
 - Optional style dropdown (150 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
-- **Cinema Rack** (`inspire/cinema-rack`): pick one cinematography technique per axis (shot size, angle, move, lens, light, …) and splice a Klein / Wan / LTX string. Deterministic — no LLM. Wan emits one camera verb. [Cinema Rack](create/cinema-rack.md)
+- **Cinema Rack** (`inspire/cinema-rack`): pick one cinematography technique per axis (shot size, angle, move, lens, light, …) and splice a Klein / Wan / LTX string. Deterministic — no LLM. Wan emits one camera verb. Lazy Prompt Enhance uses the same catalog language (clauses, recipes, Wan tokens) when it rewrites. [Cinema Rack](create/cinema-rack.md)
 
 !!! tip "Lab graphs already ship model-native prompts"
 
@@ -35,11 +35,11 @@ flowchart TB
   Which{"Which graph is loaded?"} --> K["Klein still / edit"]
   Which --> W["Wan T2V or I2V"]
   Which --> L["LTX T2V or I2V"]
-  K --> Kp["Sentences: subject → place → light → camera"]
+  K --> Kp["Sentences: subject → shot size → angle → lens → light"]
   W --> Wp{"I2V?"}
-  Wp -->|yes| Wi["Motion + one camera only"]
-  Wp -->|no| Wt["Entity + scene + motion + aesthetic + one camera"]
-  L --> Lp["Present-tense paragraph · sound interleaved"]
+  Wp -->|yes| Wi["Motion + one Cinema Rack camera token"]
+  Wp -->|no| Wt["Entity + scene + motion + aesthetic + one camera token"]
+  L --> Lp["Present-tense paragraph · Cinema Rack + foley interleaved"]
 ```
 
 Why the three models exist: [Klein, Wan, and LTX](learn/pipeline.md).
@@ -50,10 +50,10 @@ Why the three models exist: [Klein, Wan, and LTX](learn/pipeline.md).
 
 | Model | Encoder | CLIP type | Prompt shape | Negative |
 | --- | --- | --- | --- | --- |
-| FLUX.2 Klein 4B distilled / NVFP4 | Qwen3-4B | `flux2` | Sentences. Subject → place → light → camera. Under ~150 words. Positive opposites, not “no logos”. | CFG 1.0 — ignored unless you raise CFG or swap **base** |
+| FLUX.2 Klein 4B distilled / NVFP4 | Qwen3-4B | `flux2` | Sentences. Subject → shot size → angle → lens → light (Cinema Rack). Under ~150 words. Positive opposites, not “no logos”. | CFG 1.0 — ignored unless you raise CFG or swap **base** |
 | FLUX.2 Klein 4B base | Qwen3-4B | `flux2` | Same sentences. 20–50 steps, CFG ~4. | Live. Same artifact list |
 | Z-Image Turbo | Qwen3-4B | `flux2` / Z-Image wrap | 80–250 words. Shot & subject → appearance → clothing → environment → lighting → mood → medium → in-prompt constraints. | Official pipeline ignores `negative_prompt`. Fold exclusions into the positive |
-| Wan 2.2 TI2V-5B | UMT5-XXL | `wan` | T2V: Entity + Scene + Motion + Aesthetic + one camera (~80–120 words). I2V: **Motion + Camera only**. Silent. | Often CFG 1 on MagCache drafts |
+| Wan 2.2 TI2V-5B | UMT5-XXL | `wan` | T2V: Entity + Scene + Motion + Aesthetic + one Cinema Rack token (~80–120 words). I2V: **Motion + Camera only**. Silent. | Often CFG 1 on MagCache drafts |
 | Wan 2.2 A14B | UMT5-XXL | `wan` | Same formula. Cinematic aesthetic labels. MagCache **off**. Official guide scale ~3–4. | Live |
 | Wan Fun InP / VACE | UMT5 | `wan` | FLF: motion between two frames. VACE: motion through the seam. One camera. Silent. | Same Wan artifacts |
 | Wan S2V-14B | UMT5 + wav2vec | `wan` | Look lock + talking/singing action + one camera. **Wav owns lip-sync and duration.** | Live (CFG ~4.5). Do not negate the wav |
@@ -76,13 +76,13 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
     Front-load the subject. Write prose.
 
-    **Do:** `A chest-mounted first-person body-cam still, eye-level, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge, empty palms, hands free. An open short storm-cloak with warm-gold lining streams at the edges. Late-sun rim light, fabric weave and stone grit. Full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens…`
+    **Do:** `A chest-mounted first-person body-cam still, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Mount at sternum height. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge, empty palms, hands free. An open short storm-cloak with warm-gold lining streams at the edges. Late-sun rim light, fabric weave and stone grit. Wide 24mm body-cam, YouTube 16:9, bare frame edges and a clean unmarked lens…`
 
     **Don’t:** `rooftop, techno wizard, photo, 24mm, no logos, no text`
 
 === "Wan 2.2 T2V"
 
-    Entity + scene + motion + **one** camera verb (`dolly in`, `pan`, `tracking`, `fixed camera`). About 80–120 words. No audio, no score.
+    Entity + scene + motion + **one** Cinema Rack camera token (`dolly in`, `pan left`, `tracking`, `orbit`, `fixed camera`). About 80–120 words. No audio, no score. Lighting and lens use catalog look language (golden-hour amber, 24mm-equivalent wide), not tag soup.
 
 === "Wan 2.2 I2V"
 

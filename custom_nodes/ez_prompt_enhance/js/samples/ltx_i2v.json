@@ -2,7 +2,7 @@
   {
     "id": "start-push",
     "label": "Start-image push",
-    "prompt": "The start image holds as the first frame. The camera moves slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score."
+    "prompt": "The start image holds as the first frame. The camera dollies in slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score."
   },
   {
     "id": "hold-push",

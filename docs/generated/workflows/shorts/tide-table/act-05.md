@@ -896,7 +896,7 @@ Lazy sentence or authored still prompt.
 **This graph:** `A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmar…`
 
 ```text
-A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
+A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
 ```
 
 #### `enhance`
@@ -1221,7 +1221,7 @@ Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame c
 
 18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.
 
-**Identity look:** A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
+**Identity look:** A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
 
 | Beat | Place | s1 | s2 | s3 |
 | --- | --- | --- | --- | --- |

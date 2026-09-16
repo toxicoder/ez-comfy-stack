@@ -15,8 +15,9 @@ identity_enhance: false
 identity_look: |
   A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash,
   blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms,
-  headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Eye-level
-  24mm lens, framed for YouTube 16:9, mild film grain, clean unmarked lens.
+  headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Match a
+  standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9, mild film grain, clean
+  unmarked lens.
 shots:
   - beat: 1
     shot: 1
@@ -31,9 +32,9 @@ shots:
     end_state: gravel road
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone finds
-      pale gravel grit, wind The camera tracks forward, no cut. Blank matte-black gloves stay
-      on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold gravel road. No speech. No music and no score.
+      pale gravel grit, wind The camera tracks forward on a locked support, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold gravel road. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone finds pale gravel
       tracking, no cut, locked identity. Last frames hold gravel road.
@@ -50,9 +51,9 @@ shots:
     end_state: wheel ease
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Gloves ease the
-      wheel cloth, tick The camera tracks forward, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold wheel ease. No speech. No music and no score.
+      wheel cloth, tick The camera tracks forward on a locked support, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold wheel ease. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Gloves ease the wheel
       tracking, no cut, locked identity. Last frames hold wheel ease.
@@ -69,9 +70,9 @@ shots:
     end_state: sage
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A sage bush slides
-      past wind, scrape The camera tracks forward, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold sage. No speech. No music and no score.
+      past wind, scrape The camera tracks forward on a locked support, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold sage. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A sage bush slides past
       tracking, no cut, locked identity. Last frames hold sage.
@@ -88,9 +89,10 @@ shots:
     end_state: glass ticks
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Bugs tick the
-      unmarked glass tick, wind The camera dollies in, no cut. Blank matte-black gloves stay
-      on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold glass ticks. No speech. No music and no score.
+      unmarked glass tick, wind The camera dollies in on silent dolly wheels, tightening
+      without zooming, no cut. Blank matte-black gloves stay on the unmarked wheel along the
+      bottom edge, empty palms, dusty dash, no badges. Last frames hold glass ticks. No
+      speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Bugs tick the unmarked glass
       dolly in, no cut, locked identity. Last frames hold glass ticks.
@@ -107,9 +109,10 @@ shots:
     end_state: two ruts
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The lane is only
-      two ruts grit, hum The camera dollies in, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold two ruts. No speech. No music and no score.
+      two ruts grit, hum The camera dollies in on silent dolly wheels, tightening without
+      zooming, no cut. Blank matte-black gloves stay on the unmarked wheel along the bottom
+      edge, empty palms, dusty dash, no badges. Last frames hold two ruts. No speech. No music
+      and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The lane is only two ruts
       dolly in, no cut, locked identity. Last frames hold two ruts.
@@ -126,9 +129,9 @@ shots:
     end_state: rise
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A rise ahead wind,
-      cloth The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked wheel
-      along the bottom edge, empty palms, dusty dash, no badges. Last frames hold rise. No
-      speech. No music and no score.
+      cloth The camera dollies in on silent dolly wheels, tightening without zooming, no cut.
+      Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms,
+      dusty dash, no badges. Last frames hold rise. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A rise ahead dolly in, no
       cut, locked identity. Last frames hold rise.
@@ -145,9 +148,9 @@ shots:
     end_state: crest
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone climbs
-      hum, grit The camera pans left, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold crest.
-      No speech. No music and no score.
+      hum, grit The camera pans left on a locked tripod head, no cut. Blank matte-black gloves
+      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
+      Last frames hold crest. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone climbs pan left, no
       cut, locked identity. Last frames hold crest.
@@ -164,9 +167,9 @@ shots:
     end_state: more lane
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A crest, then more
-      lane wind, tick The camera pans left, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold more lane. No speech. No music and no score.
+      lane wind, tick The camera pans left on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold more lane. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A crest, then more lane pan
       left, no cut, locked identity. Last frames hold more lane.
@@ -183,9 +186,9 @@ shots:
     end_state: static
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Radio is only
-      static hiss hum, wind The camera pans left, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold static. No speech. No music and no score.
+      static hiss hum, wind The camera pans left on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold static. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Radio is only static hiss pan
       left, no cut, locked identity. Last frames hold static.
@@ -202,9 +205,9 @@ shots:
     end_state: hiss
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. No song, only hiss
-      hum, tick The camera pans right, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold hiss.
-      No speech. No music and no score.
+      hum, tick The camera pans right on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold hiss. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. No song, only hiss pan right,
       no cut, locked identity. Last frames hold hiss.
@@ -221,9 +224,9 @@ shots:
     end_state: hands on wheel
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Gloves do not
-      reach a dial cloth, grit The camera pans right, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold hands on wheel. No speech. No music and no score.
+      reach a dial cloth, grit The camera pans right on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold hands on wheel. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Gloves do not reach a dial
       pan right, no cut, locked identity. Last frames hold hands on wheel.
@@ -240,9 +243,9 @@ shots:
     end_state: grid
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A cattle-grid
-      rumble, unmarked metal, scrape The camera pans right, no cut. Blank matte-black gloves
-      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
-      Last frames hold grid. No speech. No music and no score.
+      rumble, unmarked metal, scrape The camera pans right on a locked tripod head, no cut.
+      Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms,
+      dusty dash, no badges. Last frames hold grid. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A cattle-grid rumble,
       unmarked pan right, no cut, locked identity. Last frames hold grid.
@@ -259,9 +262,9 @@ shots:
     end_state: past grid
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The grid ends
-      metal tick, grit The camera stays fixed, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold past grid. No speech. No music and no score.
+      metal tick, grit The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold past grid. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The grid ends fixed camera,
       no cut, locked identity. Last frames hold past grid.
@@ -278,9 +281,9 @@ shots:
     end_state: straight cone
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The lane
-      straightens wind, hum The camera stays fixed, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold straight cone. No speech. No music and no score.
+      straightens wind, hum The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold straight cone. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The lane straightens fixed
       camera, no cut, locked identity. Last frames hold straight cone.
@@ -297,9 +300,9 @@ shots:
     end_state: no sign
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A pale mile with
-      no sign grit, cloth The camera stays fixed, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold no sign. No speech. No music and no score.
+      no sign grit, cloth The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold no sign. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A pale mile with no sign
       fixed camera, no cut, locked identity. Last frames hold no sign.
@@ -316,9 +319,9 @@ shots:
     end_state: blank night
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Empty of
-      lettering, always wind, tick The camera dollies out, no cut. Blank matte-black gloves
-      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
-      Last frames hold blank night. No speech. No music and no score.
+      lettering, always wind, tick The camera dollies out on silent wheels, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold blank night. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Empty of lettering, always
       dolly out, no cut, locked identity. Last frames hold blank night.
@@ -335,9 +338,9 @@ shots:
     end_state: shadow gone
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A
-      jackrabbit-shadow only grit, scrape The camera dollies out, no cut. Blank matte-black
-      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
-      badges. Last frames hold shadow gone. No speech. No music and no score.
+      jackrabbit-shadow only grit, scrape The camera dollies out on silent wheels, no cut.
+      Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms,
+      dusty dash, no badges. Last frames hold shadow gone. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A jackrabbit-shadow only
       dolly out, no cut, locked identity. Last frames hold shadow gone.
@@ -354,9 +357,9 @@ shots:
     end_state: only cone
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone is the
-      only light hum, wind The camera dollies out, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold only cone. No speech. No music and no score.
+      only light hum, wind The camera dollies out on silent wheels, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold only cone. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone is the only light
       dolly out, no cut, locked identity. Last frames hold only cone.
@@ -373,9 +376,9 @@ shots:
     end_state: cracked dash
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Dash cracks in the
-      glow tick, cloth The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold cracked dash. No speech. No music and no score.
+      glow tick, cloth The camera tracks forward on a locked support, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold cracked dash. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Dash cracks in the glow
       tracking, no cut, locked identity. Last frames hold cracked dash.
@@ -392,9 +395,9 @@ shots:
     end_state: gloves
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Gloves at ten and
-      two fabric, hum The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold gloves. No speech. No music and no score.
+      two fabric, hum The camera tracks forward on a locked support, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold gloves. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Gloves at ten and two
       tracking, no cut, locked identity. Last frames hold gloves.
@@ -411,9 +414,9 @@ shots:
     end_state: dip
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A dip grit, wind
-      The camera tracks forward, no cut. Blank matte-black gloves stay on the unmarked wheel
-      along the bottom edge, empty palms, dusty dash, no badges. Last frames hold dip. No
-      speech. No music and no score.
+      The camera tracks forward on a locked support, no cut. Blank matte-black gloves stay on
+      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
+      frames hold dip. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A dip tracking, no cut,
       locked identity. Last frames hold dip.
@@ -430,9 +433,10 @@ shots:
     end_state: low cone
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone dives
-      hum, grit The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold low
-      cone. No speech. No music and no score.
+      hum, grit The camera dollies in on silent dolly wheels, tightening without zooming, no
+      cut. Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty
+      palms, dusty dash, no badges. Last frames hold low cone. No speech. No music and no
+      score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone dives dolly in, no
       cut, locked identity. Last frames hold low cone.
@@ -449,9 +453,9 @@ shots:
     end_state: dust
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Dust lifts wind,
-      scrape The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold dust.
-      No speech. No music and no score.
+      scrape The camera dollies in on silent dolly wheels, tightening without zooming, no cut.
+      Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms,
+      dusty dash, no badges. Last frames hold dust. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Dust lifts dolly in, no cut,
       locked identity. Last frames hold dust.
@@ -468,9 +472,10 @@ shots:
     end_state: out of dip
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The dip climbs out
-      tick, cloth The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold out of
-      dip. No speech. No music and no score.
+      tick, cloth The camera dollies in on silent dolly wheels, tightening without zooming, no
+      cut. Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty
+      palms, dusty dash, no badges. Last frames hold out of dip. No speech. No music and no
+      score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The dip climbs out dolly in,
       no cut, locked identity. Last frames hold out of dip.
@@ -487,9 +492,9 @@ shots:
     end_state: fork
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A fork, both
-      unmarked wind, grit The camera pans left, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold fork. No speech. No music and no score.
+      unmarked wind, grit The camera pans left on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold fork. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A fork, both unmarked pan
       left, no cut, locked identity. Last frames hold fork.
@@ -506,9 +511,9 @@ shots:
     end_state: left rut
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The wheel takes
-      the left cloth, tick The camera pans left, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold left rut. No speech. No music and no score.
+      the left cloth, tick The camera pans left on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold left rut. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The wheel takes the left pan
       left, no cut, locked identity. Last frames hold left rut.
@@ -525,9 +530,9 @@ shots:
     end_state: left only
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The right dies in
-      sage scrape, hum The camera pans left, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold left only. No speech. No music and no score.
+      sage scrape, hum The camera pans left on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold left only. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The right dies in sage pan
       left, no cut, locked identity. Last frames hold left only.
@@ -544,9 +549,9 @@ shots:
     end_state: worse gravel
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The left is worse
-      gravel grit, wind The camera pans right, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold worse gravel. No speech. No music and no score.
+      gravel grit, wind The camera pans right on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold worse gravel. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The left is worse gravel pan
       right, no cut, locked identity. Last frames hold worse gravel.
@@ -563,9 +568,9 @@ shots:
     end_state: pop
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A stone pops the
-      wheel well tick, metal The camera pans right, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold pop. No speech. No music and no score.
+      wheel well tick, metal The camera pans right on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold pop. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A stone pops the wheel well
       pan right, no cut, locked identity. Last frames hold pop.
@@ -582,9 +587,9 @@ shots:
     end_state: wash
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone finds a
-      wash splash, grit The camera pans right, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold wash. No speech. No music and no score.
+      wash splash, grit The camera pans right on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold wash. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone finds a wash pan
       right, no cut, locked identity. Last frames hold wash.
@@ -601,9 +606,9 @@ shots:
     end_state: wet line
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A thin wet line
-      splash, wind The camera stays fixed, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold wet line. No speech. No music and no score.
+      splash, wind The camera holds a locked-off tripod, zero drift, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold wet line. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A thin wet line fixed camera,
       no cut, locked identity. Last frames hold wet line.
@@ -620,9 +625,9 @@ shots:
     end_state: held wheel
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Gloves hold
-      through it cloth, hum The camera stays fixed, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold held wheel. No speech. No music and no score.
+      through it cloth, hum The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold held wheel. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Gloves hold through it fixed
       camera, no cut, locked identity. Last frames hold held wheel.
@@ -639,9 +644,9 @@ shots:
     end_state: far bank
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The wash is
-      crossed grit, tick The camera stays fixed, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold far bank. No speech. No music and no score.
+      crossed grit, tick The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold far bank. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The wash is crossed fixed
       camera, no cut, locked identity. Last frames hold far bank.
@@ -658,9 +663,9 @@ shots:
     end_state: sage again
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Sage again wind,
-      scrape The camera dollies out, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold sage
-      again. No speech. No music and no score.
+      scrape The camera dollies out on silent wheels, no cut. Blank matte-black gloves stay on
+      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
+      frames hold sage again. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Sage again dolly out, no cut,
       locked identity. Last frames hold sage again.
@@ -677,9 +682,9 @@ shots:
     end_state: long cone
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A long straight
-      hum, grit The camera dollies out, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold long
-      cone. No speech. No music and no score.
+      hum, grit The camera dollies out on silent wheels, no cut. Blank matte-black gloves stay
+      on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
+      frames hold long cone. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A long straight dolly out, no
       cut, locked identity. Last frames hold long cone.
@@ -696,9 +701,9 @@ shots:
     end_state: ghost
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Heat-ghost of the
-      day still steam, wind The camera dollies out, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold ghost. No speech. No music and no score.
+      day still steam, wind The camera dollies out on silent wheels, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold ghost. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Heat-ghost of the day still
       dolly out, no cut, locked identity. Last frames hold ghost.
@@ -715,9 +720,9 @@ shots:
     end_state: clear cone
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The ghost dies
-      wind, tick The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold clear cone. No speech. No music and no score.
+      wind, tick The camera tracks forward on a locked support, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold clear cone. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The ghost dies tracking, no
       cut, locked identity. Last frames hold clear cone.
@@ -734,9 +739,9 @@ shots:
     end_state: dust hang
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Dash dust hangs
-      grit, cloth The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold dust hang. No speech. No music and no score.
+      grit, cloth The camera tracks forward on a locked support, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold dust hang. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Dash dust hangs tracking, no
       cut, locked identity. Last frames hold dust hang.
@@ -753,9 +758,9 @@ shots:
     end_state: far light
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A faint other cone
-      far hum, wind The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold far light. No speech. No music and no score.
+      far hum, wind The camera tracks forward on a locked support, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold far light. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A faint other cone far
       tracking, no cut, locked identity. Last frames hold far light.
@@ -772,9 +777,10 @@ shots:
     end_state: not a town
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. It is not a town
-      tick, grit The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold not a
-      town. No speech. No music and no score.
+      tick, grit The camera dollies in on silent dolly wheels, tightening without zooming, no
+      cut. Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty
+      palms, dusty dash, no badges. Last frames hold not a town. No speech. No music and no
+      score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. It is not a town dolly in, no
       cut, locked identity. Last frames hold not a town.
@@ -791,9 +797,10 @@ shots:
     end_state: gone light
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The other cone
-      turns away wind, cloth The camera dollies in, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold gone light. No speech. No music and no score.
+      turns away wind, cloth The camera dollies in on silent dolly wheels, tightening without
+      zooming, no cut. Blank matte-black gloves stay on the unmarked wheel along the bottom
+      edge, empty palms, dusty dash, no badges. Last frames hold gone light. No speech. No
+      music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The other cone turns away
       dolly in, no cut, locked identity. Last frames hold gone light.
@@ -810,9 +817,9 @@ shots:
     end_state: alone cone
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Alone again hum,
-      scrape The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold alone
-      cone. No speech. No music and no score.
+      scrape The camera dollies in on silent dolly wheels, tightening without zooming, no cut.
+      Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms,
+      dusty dash, no badges. Last frames hold alone cone. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Alone again dolly in, no cut,
       locked identity. Last frames hold alone cone.
@@ -829,9 +836,9 @@ shots:
     end_state: bend
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The lane bends
-      wind, grit The camera pans left, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold bend.
-      No speech. No music and no score.
+      wind, grit The camera pans left on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold bend. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The lane bends pan left, no
       cut, locked identity. Last frames hold bend.
@@ -848,9 +855,9 @@ shots:
     end_state: follow
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Gloves follow
-      cloth, tick The camera pans left, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold
-      follow. No speech. No music and no score.
+      cloth, tick The camera pans left on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold follow. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Gloves follow pan left, no
       cut, locked identity. Last frames hold follow.
@@ -867,9 +874,9 @@ shots:
     end_state: trough
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A tank or trough,
-      unmarked metal, wind The camera pans left, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold trough. No speech. No music and no score.
+      unmarked metal, wind The camera pans left on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold trough. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A tank or trough, unmarked
       pan left, no cut, locked identity. Last frames hold trough.
@@ -886,9 +893,9 @@ shots:
     end_state: past trough
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The trough slides
-      past metal tick, grit The camera pans right, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold past trough. No speech. No music and no score.
+      past metal tick, grit The camera pans right on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold past trough. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The trough slides past pan
       right, no cut, locked identity. Last frames hold past trough.
@@ -905,9 +912,9 @@ shots:
     end_state: empty
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. No cattle in frame
-      wind, cloth The camera pans right, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold empty.
-      No speech. No music and no score.
+      wind, cloth The camera pans right on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold empty. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. No cattle in frame pan right,
       no cut, locked identity. Last frames hold empty.
@@ -924,9 +931,9 @@ shots:
     end_state: open flat
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The bend opens
-      hum, scrape The camera pans right, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold open
-      flat. No speech. No music and no score.
+      hum, scrape The camera pans right on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold open flat. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The bend opens pan right, no
       cut, locked identity. Last frames hold open flat.
@@ -943,9 +950,9 @@ shots:
     end_state: stars
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Stars, no town
-      glow wind, tick The camera stays fixed, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold stars. No speech. No music and no score.
+      glow wind, tick The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold stars. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Stars, no town glow fixed
       camera, no cut, locked identity. Last frames hold stars.
@@ -962,9 +969,9 @@ shots:
     end_state: short world
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone is a
-      short world grit, hum The camera stays fixed, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold short world. No speech. No music and no score.
+      short world grit, hum The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold short world. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone is a short world
       fixed camera, no cut, locked identity. Last frames hold short world.
@@ -981,9 +988,9 @@ shots:
     end_state: slow mile
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A slow mile cloth,
-      wind The camera stays fixed, no cut. Blank matte-black gloves stay on the unmarked wheel
-      along the bottom edge, empty palms, dusty dash, no badges. Last frames hold slow mile.
-      No speech. No music and no score.
+      wind The camera holds a locked-off tripod, zero drift, no cut. Blank matte-black gloves
+      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
+      Last frames hold slow mile. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A slow mile fixed camera, no
       cut, locked identity. Last frames hold slow mile.
@@ -1000,9 +1007,9 @@ shots:
     end_state: eased gloves
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Gloves ease
-      fabric, tick The camera dollies out, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold eased gloves. No speech. No music and no score.
+      fabric, tick The camera dollies out on silent wheels, no cut. Blank matte-black gloves
+      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
+      Last frames hold eased gloves. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Gloves ease dolly out, no
       cut, locked identity. Last frames hold eased gloves.
@@ -1019,9 +1026,9 @@ shots:
     end_state: shallow ruts
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The ruts shallow
-      grit, scrape The camera dollies out, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold shallow ruts. No speech. No music and no score.
+      grit, scrape The camera dollies out on silent wheels, no cut. Blank matte-black gloves
+      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
+      Last frames hold shallow ruts. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The ruts shallow dolly out,
       no cut, locked identity. Last frames hold shallow ruts.
@@ -1038,9 +1045,9 @@ shots:
     end_state: hard pack
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A harder pack hum,
-      wind The camera dollies out, no cut. Blank matte-black gloves stay on the unmarked wheel
-      along the bottom edge, empty palms, dusty dash, no badges. Last frames hold hard pack.
-      No speech. No music and no score.
+      wind The camera dollies out on silent wheels, no cut. Blank matte-black gloves stay on
+      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
+      frames hold hard pack. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A harder pack dolly out, no
       cut, locked identity. Last frames hold hard pack.
@@ -1057,9 +1064,9 @@ shots:
     end_state: fast tick
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Faster gravel tick
-      tick, grit The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold fast tick. No speech. No music and no score.
+      tick, grit The camera tracks forward on a locked support, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold fast tick. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Faster gravel tick tracking,
       no cut, locked identity. Last frames hold fast tick.
@@ -1076,9 +1083,9 @@ shots:
     end_state: still wheel
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The wheel is still
-      cloth, hum The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold still wheel. No speech. No music and no score.
+      cloth, hum The camera tracks forward on a locked support, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold still wheel. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The wheel is still tracking,
       no cut, locked identity. Last frames hold still wheel.
@@ -1095,9 +1102,9 @@ shots:
     end_state: mesa
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A rise of black
-      mesa wind, scrape The camera tracks forward, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold mesa. No speech. No music and no score.
+      mesa wind, scrape The camera tracks forward on a locked support, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold mesa. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A rise of black mesa
       tracking, no cut, locked identity. Last frames hold mesa.
@@ -1114,9 +1121,10 @@ shots:
     end_state: mesa wall
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The mesa is a wall
-      wind, grit The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold mesa
-      wall. No speech. No music and no score.
+      wind, grit The camera dollies in on silent dolly wheels, tightening without zooming, no
+      cut. Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty
+      palms, dusty dash, no badges. Last frames hold mesa wall. No speech. No music and no
+      score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The mesa is a wall dolly in,
       no cut, locked identity. Last frames hold mesa wall.
@@ -1133,9 +1141,9 @@ shots:
     end_state: skirt
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The lane skirts it
-      hum, tick The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold skirt.
-      No speech. No music and no score.
+      hum, tick The camera dollies in on silent dolly wheels, tightening without zooming, no
+      cut. Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty
+      palms, dusty dash, no badges. Last frames hold skirt. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The lane skirts it dolly in,
       no cut, locked identity. Last frames hold skirt.
@@ -1152,9 +1160,10 @@ shots:
     end_state: pull-out
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A pull-out of dirt
-      scrape, cloth The camera dollies in, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold pull-out. No speech. No music and no score.
+      scrape, cloth The camera dollies in on silent dolly wheels, tightening without zooming,
+      no cut. Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty
+      palms, dusty dash, no badges. Last frames hold pull-out. No speech. No music and no
+      score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A pull-out of dirt dolly in,
       no cut, locked identity. Last frames hold pull-out.
@@ -1171,9 +1180,9 @@ shots:
     end_state: pass pull-out
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The wheel does not
-      take it cloth, wind The camera pans left, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold pass pull-out. No speech. No music and no score.
+      take it cloth, wind The camera pans left on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold pass pull-out. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The wheel does not take it
       pan left, no cut, locked identity. Last frames hold pass pull-out.
@@ -1190,9 +1199,9 @@ shots:
     end_state: mesa end
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The mesa ends
-      grit, tick The camera pans left, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold mesa
-      end. No speech. No music and no score.
+      grit, tick The camera pans left on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold mesa end. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The mesa ends pan left, no
       cut, locked identity. Last frames hold mesa end.
@@ -1209,9 +1218,9 @@ shots:
     end_state: more lane
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. More lane hum,
-      scrape The camera pans left, no cut. Blank matte-black gloves stay on the unmarked wheel
-      along the bottom edge, empty palms, dusty dash, no badges. Last frames hold more lane.
-      No speech. No music and no score.
+      scrape The camera pans left on a locked tripod head, no cut. Blank matte-black gloves
+      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
+      Last frames hold more lane. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. More lane pan left, no cut,
       locked identity. Last frames hold more lane.
@@ -1228,9 +1237,9 @@ shots:
     end_state: dry wash
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A second wash, dry
-      grit, wind The camera pans right, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold dry
-      wash. No speech. No music and no score.
+      grit, wind The camera pans right on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold dry wash. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A second wash, dry pan right,
       no cut, locked identity. Last frames hold dry wash.
@@ -1247,9 +1256,9 @@ shots:
     end_state: crossed
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Cross tick, cloth
-      The camera pans right, no cut. Blank matte-black gloves stay on the unmarked wheel along
-      the bottom edge, empty palms, dusty dash, no badges. Last frames hold crossed. No
-      speech. No music and no score.
+      The camera pans right on a locked tripod head, no cut. Blank matte-black gloves stay on
+      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
+      frames hold crossed. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Cross pan right, no cut,
       locked identity. Last frames hold crossed.
@@ -1266,9 +1275,10 @@ shots:
     end_state: open gate
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone finds a
-      gate, unmarked, open metal, scrape The camera pans right, no cut. Blank matte-black
-      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
-      badges. Last frames hold open gate. No speech. No music and no score.
+      gate, unmarked, open metal, scrape The camera pans right on a locked tripod head, no
+      cut. Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty
+      palms, dusty dash, no badges. Last frames hold open gate. No speech. No music and no
+      score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone finds a gate,
       unmarked, open pan right, no cut, locked identity. Last frames hold open gate.
@@ -1285,9 +1295,9 @@ shots:
     end_state: blank gate
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. No sign on the
-      gate metal tick, wind The camera stays fixed, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold blank gate. No speech. No music and no score.
+      gate metal tick, wind The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold blank gate. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. No sign on the gate fixed
       camera, no cut, locked identity. Last frames hold blank gate.
@@ -1304,9 +1314,9 @@ shots:
     end_state: through gate
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Through grit, hum
-      The camera stays fixed, no cut. Blank matte-black gloves stay on the unmarked wheel
-      along the bottom edge, empty palms, dusty dash, no badges. Last frames hold through
-      gate. No speech. No music and no score.
+      The camera holds a locked-off tripod, zero drift, no cut. Blank matte-black gloves stay
+      on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
+      frames hold through gate. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Through fixed camera, no cut,
       locked identity. Last frames hold through gate.
@@ -1323,9 +1333,9 @@ shots:
     end_state: same lane
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The lane is the
-      same cloth, tick The camera stays fixed, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold same lane. No speech. No music and no score.
+      same cloth, tick The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold same lane. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The lane is the same fixed
       camera, no cut, locked identity. Last frames hold same lane.
@@ -1342,9 +1352,9 @@ shots:
     end_state: east pale
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Dawn is a rumour
-      wind, steam The camera dollies out, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold east pale. No speech. No music and no score.
+      wind, steam The camera dollies out on silent wheels, no cut. Blank matte-black gloves
+      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
+      Last frames hold east pale. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Dawn is a rumour dolly out,
       no cut, locked identity. Last frames hold east pale.
@@ -1361,9 +1371,9 @@ shots:
     end_state: staying gloves
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Gloves stay
-      fabric, grit The camera dollies out, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold staying gloves. No speech. No music and no score.
+      fabric, grit The camera dollies out on silent wheels, no cut. Blank matte-black gloves
+      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
+      Last frames hold staying gloves. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Gloves stay dolly out, no
       cut, locked identity. Last frames hold staying gloves.
@@ -1380,9 +1390,9 @@ shots:
     end_state: more pale
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The pale grows
-      hum, tick The camera dollies out, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold more
-      pale. No speech. No music and no score.
+      hum, tick The camera dollies out on silent wheels, no cut. Blank matte-black gloves stay
+      on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
+      frames hold more pale. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The pale grows dolly out, no
       cut, locked identity. Last frames hold more pale.
@@ -1399,9 +1409,9 @@ shots:
     end_state: grey sage
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Sage goes from
-      black to grey wind, scrape The camera tracks forward, no cut. Blank matte-black gloves
-      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
-      Last frames hold grey sage. No speech. No music and no score.
+      black to grey wind, scrape The camera tracks forward on a locked support, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold grey sage. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Sage goes from black to grey
       tracking, no cut, locked identity. Last frames hold grey sage.
@@ -1418,9 +1428,9 @@ shots:
     end_state: weak cone
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone weakens
-      tick, cloth The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold weak cone. No speech. No music and no score.
+      tick, cloth The camera tracks forward on a locked support, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold weak cone. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone weakens tracking, no
       cut, locked identity. Last frames hold weak cone.
@@ -1437,9 +1447,9 @@ shots:
     end_state: day dash
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Day wants the dash
-      grit, hum The camera tracks forward, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold day dash. No speech. No music and no score.
+      grit, hum The camera tracks forward on a locked support, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold day dash. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Day wants the dash tracking,
       no cut, locked identity. Last frames hold day dash.
@@ -1456,9 +1466,10 @@ shots:
     end_state: grey dust
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Dust on the dash
-      in grey grit, tick The camera dollies in, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold grey dust. No speech. No music and no score.
+      in grey grit, tick The camera dollies in on silent dolly wheels, tightening without
+      zooming, no cut. Blank matte-black gloves stay on the unmarked wheel along the bottom
+      edge, empty palms, dusty dash, no badges. Last frames hold grey dust. No speech. No
+      music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Dust on the dash in grey
       dolly in, no cut, locked identity. Last frames hold grey dust.
@@ -1475,9 +1486,10 @@ shots:
     end_state: clear wheel
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The wheel is
-      clearer cloth, wind The camera dollies in, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold clear wheel. No speech. No music and no score.
+      clearer cloth, wind The camera dollies in on silent dolly wheels, tightening without
+      zooming, no cut. Blank matte-black gloves stay on the unmarked wheel along the bottom
+      edge, empty palms, dusty dash, no badges. Last frames hold clear wheel. No speech. No
+      music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The wheel is clearer dolly
       in, no cut, locked identity. Last frames hold clear wheel.
@@ -1494,9 +1506,10 @@ shots:
     end_state: blank wheel
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. No badges still
-      hum, scrape The camera dollies in, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold blank
-      wheel. No speech. No music and no score.
+      hum, scrape The camera dollies in on silent dolly wheels, tightening without zooming, no
+      cut. Blank matte-black gloves stay on the unmarked wheel along the bottom edge, empty
+      palms, dusty dash, no badges. Last frames hold blank wheel. No speech. No music and no
+      score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. No badges still dolly in, no
       cut, locked identity. Last frames hold blank wheel.
@@ -1513,9 +1526,9 @@ shots:
     end_state: keeps
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The lane keeps
-      wind, grit The camera pans left, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold keeps.
-      No speech. No music and no score.
+      wind, grit The camera pans left on a locked tripod head, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold keeps. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The lane keeps pan left, no
       cut, locked identity. Last frames hold keeps.
@@ -1532,9 +1545,9 @@ shots:
     end_state: bug
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A last night bug
-      on the glass tick, cloth The camera pans left, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold bug. No speech. No music and no score.
+      on the glass tick, cloth The camera pans left on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold bug. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A last night bug on the glass
       pan left, no cut, locked identity. Last frames hold bug.
@@ -1551,9 +1564,9 @@ shots:
     end_state: clean glass
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The bug is gone
-      hum, wind The camera pans left, no cut. Blank matte-black gloves stay on the unmarked
-      wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames hold clean
-      glass. No speech. No music and no score.
+      hum, wind The camera pans left on a locked tripod head, no cut. Blank matte-black gloves
+      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
+      Last frames hold clean glass. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The bug is gone pan left, no
       cut, locked identity. Last frames hold clean glass.
@@ -1570,9 +1583,9 @@ shots:
     end_state: dawn country
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Dawn on unmarked
-      country wind, steam The camera pans right, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold dawn country. No speech. No music and no score.
+      country wind, steam The camera pans right on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold dawn country. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Dawn on unmarked country pan
       right, no cut, locked identity. Last frames hold dawn country.
@@ -1589,9 +1602,9 @@ shots:
     end_state: resting gloves
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Gloves at rest on
-      the wheel fabric, tick The camera pans right, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold resting gloves. No speech. No music and no score.
+      the wheel fabric, tick The camera pans right on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold resting gloves. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Gloves at rest on the wheel
       pan right, no cut, locked identity. Last frames hold resting gloves.
@@ -1608,9 +1621,9 @@ shots:
     end_state: daylight ruts
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The cone is
-      nothing grit, cloth The camera pans right, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold daylight ruts. No speech. No music and no score.
+      nothing grit, cloth The camera pans right on a locked tripod head, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold daylight ruts. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The cone is nothing pan
       right, no cut, locked identity. Last frames hold daylight ruts.
@@ -1627,9 +1640,9 @@ shots:
     end_state: sun ruts
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The two-lane in
-      first sun wind, grit The camera stays fixed, no cut. Blank matte-black gloves stay on
-      the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last
-      frames hold sun ruts. No speech. No music and no score.
+      first sun wind, grit The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold sun ruts. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The two-lane in first sun
       fixed camera, no cut, locked identity. Last frames hold sun ruts.
@@ -1646,9 +1659,9 @@ shots:
     end_state: held gloves
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. A hold on the
-      gloves cloth, tick The camera stays fixed, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold held gloves. No speech. No music and no score.
+      gloves cloth, tick The camera holds a locked-off tripod, zero drift, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold held gloves. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. A hold on the gloves fixed
       camera, no cut, locked identity. Last frames hold held gloves.
@@ -1665,9 +1678,9 @@ shots:
     end_state: sun dash
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The dash in sun
-      hum, scrape The camera stays fixed, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold sun dash. No speech. No music and no score.
+      hum, scrape The camera holds a locked-off tripod, zero drift, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold sun dash. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The dash in sun fixed camera,
       no cut, locked identity. Last frames hold sun dash.
@@ -1684,9 +1697,9 @@ shots:
     end_state: gloves and wheel
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. Blank gloves on
-      the unmarked wheel cloth, wind The camera dollies out, no cut. Blank matte-black gloves
-      stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no badges.
-      Last frames hold gloves and wheel. No speech. No music and no score.
+      the unmarked wheel cloth, wind The camera dollies out on silent wheels, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold gloves and wheel. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. Blank gloves on the unmarked
       wheel dolly out, no cut, locked identity. Last frames hold gloves and wheel.
@@ -1703,9 +1716,9 @@ shots:
     end_state: gold sage
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The country goes
-      gold grit, tick The camera dollies out, no cut. Blank matte-black gloves stay on the
-      unmarked wheel along the bottom edge, empty palms, dusty dash, no badges. Last frames
-      hold gold sage. No speech. No music and no score.
+      gold grit, tick The camera dollies out on silent wheels, no cut. Blank matte-black
+      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
+      badges. Last frames hold gold sage. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The country goes gold dolly
       out, no cut, locked identity. Last frames hold gold sage.
@@ -1722,9 +1735,9 @@ shots:
     end_state: held dash
     ltx_i2v: |
       The start image holds as the first frame. Wordless mix: silent mouth. The frame holds
-      the dash and the lane fabric, hum The camera dollies out, no cut. Blank matte-black
-      gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty dash, no
-      badges. Last frames hold held dash. No speech. No music and no score.
+      the dash and the lane fabric, hum The camera dollies out on silent wheels, no cut. Blank
+      matte-black gloves stay on the unmarked wheel along the bottom edge, empty palms, dusty
+      dash, no badges. Last frames hold held dash. No speech. No music and no score.
     wan_i2v: |
       Dashboard first-person, blank gloves on an unmarked wheel. The frame holds the dash and
       the lane dolly out, no cut, locked identity. Last frames hold held dash.

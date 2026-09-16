@@ -96,12 +96,12 @@ def _parsed(film: str, spec: FilmSpec) -> dict[str, Any]:
             camera = CAMERAS[(beat_no - 1) % len(CAMERAS)]
             prefix = f"ez_{slug}_b{beat_no}_s{shot_no}"
             cam_prose = {
-                "tracking": "The camera tracks forward, no cut.",
-                "dolly in": "The camera dollies in, no cut.",
-                "pan left": "The camera pans left, no cut.",
-                "pan right": "The camera pans right, no cut.",
-                "fixed camera": "The camera stays fixed, no cut.",
-                "dolly out": "The camera dollies out, no cut.",
+                "tracking": "The camera tracks forward on a locked support, no cut.",
+                "dolly in": "The camera dollies in on silent dolly wheels, tightening without zooming, no cut.",
+                "pan left": "The camera pans left on a locked tripod head, no cut.",
+                "pan right": "The camera pans right on a locked tripod head, no cut.",
+                "fixed camera": "The camera holds a locked-off tripod, zero drift, no cut.",
+                "dolly out": "The camera dollies out on silent wheels, no cut.",
             }[camera]
             shots.append(
                 {
@@ -163,7 +163,7 @@ TIDE_TABLE: FilmSpec = {
         "A photoreal third-person dawn still. A weathered unmarked wooden skiff "
         "bow fills the lower third, wet grain and a blank painter coil on the "
         "thwart, looking out from a stone hard toward a cut of unmarked piles "
-        "and grey-pink water. Eye-level 35mm lens, framed for YouTube 16:9, "
+        "and grey-pink water. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, "
         "empty of lettering, mild film grain, clean unmarked lens."
     ),
     "beats": [
@@ -213,7 +213,7 @@ NIGHT_OVEN: FilmSpec = {
         "A photoreal third-person bakery still at 2 a.m. A flour-dusted linen "
         "apron hangs on a steel bench in the foreground, unmarked mixer bowls "
         "and a dark oven mouth behind. Warm tungsten versus a sodium alley "
-        "through one high window. Eye-level 35mm lens, framed for YouTube 16:9, "
+        "through one high window. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, "
         "empty of lettering, mild film grain, clean unmarked lens."
     ),
     "beats": [
@@ -263,7 +263,7 @@ GLASSHOUSE: FilmSpec = {
         "A photoreal third-person still inside a botanical glasshouse. An "
         "unmarked copper watering can sits on wet flagstone, rain already "
         "ticking the glass roof, unmarked palms and ferns, no readable signs. "
-        "Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, "
+        "Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, "
         "mild film grain, clean unmarked lens."
     ),
     "beats": [
@@ -313,7 +313,7 @@ LAST_LANE: FilmSpec = {
         "A dashboard first-person still at night on an unmarked two-lane. Dusty "
         "cracked dash, blank matte-black gloves on an unmarked wheel along the "
         "bottom edge, empty palms, headlight cone on pale gravel and sage. No "
-        "vehicle badges, empty of lettering. Eye-level 24mm lens, framed for "
+        "vehicle badges, empty of lettering. Match a standing eyeline. 24mm-equivalent wide, framed for "
         "YouTube 16:9, mild film grain, clean unmarked lens."
     ),
     "beats": [
@@ -363,13 +363,13 @@ BREAKWATER: FilmSpec = {
         "gloves along the bottom edge."
     ),
     "identity": (
-        "A chest-mounted first-person body-cam still, eye-level, already walking "
+        "A chest-mounted first-person body-cam still, already walking "
         "a wet granite storm wall. Only the wearer's own yellow unmarked slicker "
         "sleeves and blank matte-black gloves enter from the bottom edge: "
         "contralateral swing, empty palms, hands free. Grey sea to the left, "
-        "unmarked concrete to the right. Wide 24mm body-cam, slight barrel, a "
-        "full-bleed photographic plate in YouTube 16:9 with bare frame edges and "
-        "a clean unmarked lens, empty of lettering."
+        "unmarked concrete to the right. Mount at sternum height. Wide 24mm body-cam, "
+        "slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare "
+        "frame edges and a clean unmarked lens, empty of lettering."
     ),
     "beats": [
         _beat("Wall walk", "A walk already underway on wet granite", "boot, wind", "granite blocks", "Gloves swing contralateral", "cloth, fabric", "swing", "Spray from the left", "splash, wind", "spray"),

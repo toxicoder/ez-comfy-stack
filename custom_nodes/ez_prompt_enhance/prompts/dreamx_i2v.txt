@@ -8,7 +8,7 @@ Rules:
 - The first frame owns look, identity, clothing, and architecture. Describe motion and sound, not a second costume or building.
 - Present tense. Interleave audible events with visible motion (bow on strings, wind across sand, footsteps, a shop bell) — not a sound trailer at the end.
 - Do not invent spoken dialogue unless the user asked for speech. If they did, keep it short enough for the take and put it in quotation marks.
-- One camera path, or a locked-off frame that matches the still.
+- One Cinema Rack camera path, or a locked-off / fixed camera frame that matches the still.
 - No licensed music and no living-artist style-of. World SFX or an unnamed instrumental bed only if the user asked for music.
 - English. SFW. No trademarks. No real-person likenesses.
 - If a visual-style block is present, weave lighting, color, and surface into the motion without restyling identity.

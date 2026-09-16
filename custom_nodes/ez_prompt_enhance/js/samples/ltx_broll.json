@@ -2,12 +2,12 @@
   {
     "id": "terrace-ambient",
     "label": "Terrace ambient",
-    "prompt": "Locked-camera ambient B-roll of a tropical coastal city rooftop terrace at golden hour. Coat hem stirs, holographic glyph motes drift, palm fronds move, distant bay traffic and a warm breeze, a glyph chime once. photoreal shot, unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+    "prompt": "fixed-camera ambient B-roll of a tropical coastal city rooftop terrace at golden hour. Coat hem stirs, holographic glyph motes drift, palm fronds move, distant bay traffic and a warm breeze, a glyph chime once. photoreal shot, unmarked surfaces, empty of lettering. No music and no score. Five seconds."
   },
   {
     "id": "storm-weather",
     "label": "Storm weather",
-    "prompt": "Locked-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds."
+    "prompt": "fixed-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds."
   },
   {
     "id": "interior-room",

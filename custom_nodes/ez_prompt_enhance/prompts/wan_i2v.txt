@@ -7,7 +7,7 @@ I2V formula: Motion + Camera only.
 Rules:
 - The start image owns look. Do not restate clothing, architecture, palette, or identity details.
 - Keep the start-image identity locked. Do not describe new objects or a different building. Do not redesign clothing, architecture, or props from the start image.
-- Name motion and exactly one camera move (dolly in, dolly out, pan, tilt, tracking, truck, orbit, crane, or fixed camera). Use speed adjectives such as slowly or gently. Do not stack two camera verbs.
+- Name motion and exactly one Cinema Rack wan_token (dolly in, dolly out, pan, pan left, tilt, tracking, orbit, crane, handheld, or fixed camera). Use speed adjectives such as slowly or gently. Do not stack two camera verbs. Whip-pan and crash zoom only if the user asked.
 - Do not mention audio, music, score, speech, or sound.
 - One continuous take of about 5 seconds at 24 fps unless the user says otherwise.
 - English. SFW. No trademarks.
