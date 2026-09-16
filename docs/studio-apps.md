@@ -122,7 +122,7 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 | **ltx/a2v-5s** | ltx | Freeze a ~5 s wav; mux original audio. Prefix `ez_ltx_a2v` |
 | **klein/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
 
-Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
+Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). One hundred extra platform Apps live under `_lab/<lane>/creator/` (YouTube channel art, IG 4:5, Pinterest 2:3, Twitch BRB, Spotify Canvas, merch mocks): [Creator pack](create/workflows-creator.md). Example chain: **klein/creator/ig-portrait** → **wan/creator/ig-story-loop** → **ltx/creator/ig-reel-lifestyle**. Klein stills may use 1280×720; LTX feeders stay **1280×704**. Lab sizes match platform **aspect**; scale in an editor if a host wants more pixels.
 
 Audio Apps (`podcast-*`, `dub-*`, `audio/music/rap-draft`, `audio/music/rap-full`, **audio/finish**) are occupancy **audio**. Catalog albums live under `_lab/audio/albums/<artist>/<album>/` with numbered tracks, `cover.json` (klein), and `album.json` (zip). Outputs are FLAC + MP3 tagged with artist/album/title; optional cover is in the tags. One-go: `./scripts/manage.sh album-render --album nill-bye/peer-review`. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film graphs under `_lab/shorts/` are occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
 
@@ -167,6 +167,10 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | Guide pack first+last | `wan-flf-from-guide` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |
 | Clay dream-house | `start` (or `house-views` dump) → **klein/dream-house-clay** → same loop kit |
+| IG 4:5 (`klein/creator/ig-portrait`) | `wan/creator/ig-story-loop` → `ltx/creator/ig-reel-lifestyle` |
+| Shorts thumb (`klein/creator/yt-shorts-thumb`) | `wan/creator/zoom-punch` → `ltx/shorts-i2v` |
+| Canvas still (`klein/creator/spotify-canvas-still`) | `wan/creator/spotify-canvas` (silent rebound) |
+| Twitch starting (`klein/creator/twitch-starting`) | `wan/creator/twitch-starting-loop` → `ltx/creator/twitch-starting-av` |
 
 Set I2V **LoadImage** to the still prefix you just saved (`ez_still_draft_*.png`, `ez_hook_still_*.png`, …). I2V graphs also Queue on Comfy’s `example.png`.
 

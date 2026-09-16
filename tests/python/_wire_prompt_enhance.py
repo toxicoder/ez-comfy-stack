@@ -90,6 +90,10 @@ def enhance_pin_off(graph_id: str) -> bool:
         return True
     if gid.startswith("audio/dub/"):
         return True
+    from _creator_pack3 import pack3_pin_off
+
+    if gid in pack3_pin_off():
+        return True
     return False
 SHIFT = 460
 ENHANCE_H = 420

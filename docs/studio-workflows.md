@@ -10,7 +10,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 
 - **Which graph** for which job
 - **Sidebar tree** after `start`, plus the still vs motion vs AV decision
-- **Catalog children** for Klein stills, Wan/LTX motion, 90s/DCC film, and audio
+- **Catalog children** for Klein stills, Wan/LTX motion, creator platform Apps, 90s/DCC film, and audio
 - **Notes** that apply to every seeded lab graph
 - Nodes 2.0 (`Vue-corrected`) as the default canvas for every seeded graph
 
@@ -28,9 +28,9 @@ Sidebar tree after start:
 ```text
 user/default/workflows/
   _lab/
-    klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, …
-    wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
-    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot, dialogue, multishot, product, FLF, A2V
+    klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, creator/…
+    wan/       silent 5s, gif/bumper/sticker, flf, vace, shot, creator/…
+    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot, dialogue, multishot, product, FLF, A2V, creator/…
     shorts/    go-see, still-here, switchyard (90s one-click)
     dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
     optional/  a14b, longcat stub, klein-trellis2
@@ -90,6 +90,14 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
     One-click 90s shorts plus clay → print, IC-LoRA envelopes, and in-canvas guide loaders.
 
     [:octicons-arrow-right-24: Film catalog](create/workflows-film.md)
+
+-   :material-palette:{ .lg .middle } **Creator pack**
+
+    ---
+
+    One hundred extra platform Apps: YouTube, Instagram, TikTok, X, LinkedIn, Pinterest, Twitch, Spotify, merch, production plates.
+
+    [:octicons-arrow-right-24: Creator catalog](create/workflows-creator.md)
 
 -   :material-music:{ .lg .middle } **Audio**
 

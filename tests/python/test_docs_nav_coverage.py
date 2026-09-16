@@ -115,6 +115,7 @@ def test_nav_includes_planned_homes() -> None:
         "start/when-to-use-vs-spark-lab.md",
         "create/workflows-stills.md",
         "create/workflows-motion.md",
+        "create/workflows-creator.md",
         "create/workflows-film.md",
         "create/workflows-audio.md",
         "create/workflows-index.md",

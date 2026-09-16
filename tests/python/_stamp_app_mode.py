@@ -1190,6 +1190,21 @@ def _register_album_stamps() -> None:
 _register_album_stamps()
 
 
+def _register_pack3_stamps() -> None:
+    from _creator_pack3 import pack3_stamp_rows
+
+    for rel, occupancy, handoff, pin in pack3_stamp_rows():
+        STAMP_SPECS[rel] = _spec(
+            "produce",
+            occupancy,
+            *handoff,
+            enhance_off_identity=pin,
+        )
+
+
+_register_pack3_stamps()
+
+
 def occupancy_stanza(occupancy: str) -> str:
     stop = OCCUPANCY_STOP[occupancy]
     return f"Occupancy: {occupancy} — stop {stop}. One GB10 job."

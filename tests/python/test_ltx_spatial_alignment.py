@@ -14,12 +14,18 @@ WF = ROOT / "workflows"
 
 LTX_SPATIAL_TYPES = ("LTXVImgToVideo", "EmptyLTXVLatentVideo")
 BROADCAST_ILLEGAL = {720, 1080}
-PORTRAIT_STEMS = frozenset(
-    {
-        "shorts-i2v",
-        "iclora-depth-shorts",
+def _portrait_stems() -> frozenset[str]:
+    from _creator_pack3 import PACK3
+
+    extra = {
+        spec.rel.rsplit("/", 1)[-1]
+        for spec in PACK3
+        if spec.occupancy == "ltx" and spec.portrait
     }
-)
+    return frozenset({"shorts-i2v", "iclora-depth-shorts"}) | extra
+
+
+PORTRAIT_STEMS = _portrait_stems()
 LANDSCAPE_SIZE = (1280, 704)
 PORTRAIT_SIZE = (768, 1280)
 

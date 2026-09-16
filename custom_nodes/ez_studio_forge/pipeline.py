@@ -107,6 +107,21 @@ SLOT_ALIASES = {
 
 # First matching substring wins. More specific tokens first.
 _TEMPLATE_RULES: tuple[tuple[str, str], ...] = (
+    ("pinterest", "klein/creator/pin-standard"),
+    ("idea pin", "klein/creator/pin-story"),
+    ("twitch overlay", "klein/creator/twitch-overlay"),
+    ("starting soon", "klein/creator/twitch-starting"),
+    ("spotify canvas", "wan/creator/spotify-canvas"),
+    ("playlist cover", "klein/creator/spotify-playlist"),
+    ("highlight", "klein/creator/ig-highlight"),
+    ("carousel", "klein/creator/ig-carousel-5"),
+    ("channel art", "klein/creator/yt-channel-art"),
+    ("channel icon", "klein/creator/yt-channel-icon"),
+    ("shorts thumb", "klein/creator/yt-shorts-thumb"),
+    ("audiogram", "klein/creator/audiogram-wide"),
+    ("linkedin banner", "klein/creator/li-banner"),
+    ("zoom background", "klein/creator/zoom-bg"),
+    ("merch", "klein/creator/merch-tee"),
     ("ig-square", "klein/ig-square"),
     ("1:1", "klein/ig-square"),
     ("square", "klein/ig-square"),

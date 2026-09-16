@@ -49,6 +49,8 @@ def test_pack_exports_node() -> None:
 
 def test_pick_template_heuristic() -> None:
     assert pick_template("1:1 IG still of a mug", "auto") == "klein/ig-square"
+    assert pick_template("pinterest pin of a mug", "auto") == "klein/creator/pin-standard"
+    assert pick_template("spotify canvas loop", "auto") == "wan/creator/spotify-canvas"
     assert pick_template("silent 5s from a still", "auto") == "wan/i2v-5s"
     assert pick_template("hello world", "auto") == "klein/still-draft"
     assert pick_template("anything", "klein/still-hero") == "klein/still-hero"
